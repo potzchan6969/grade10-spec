@@ -91,6 +91,7 @@ accepted tender through existing checkout creation.
 - **THEN** held price and availability are not presented as current
 - **AND** Pay is unavailable and the existing retry is offered
 
+<!-- trace:scenario id=g10.store-checkout.SC-vsd rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-37 - Existing verification feedback keeps the account gate
 **Serves:** grade10-site-store-checkout-US-01 - The collector verifies the account before payment
 
@@ -153,6 +154,7 @@ remain unchanged; typed email SHALL not substitute for sign-in on this frontend.
 - **AND** no paid outcome is invented
 - **AND** a fresh submission is available after the basket is ready
 
+<!-- trace:scenario id=g10.store-checkout.SC-dwk rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-33 - A later Pay creates a fresh invoice
 **Serves:** grade10-site-store-checkout-US-01 - The collector starts another payment attempt
 
@@ -162,6 +164,7 @@ remain unchanged; typed email SHALL not substitute for sign-in on this frontend.
 - **AND** it neither reuses nor cancels the earlier invoice
 - **AND** it can open a different returned invoice without promising deduplication
 
+<!-- trace:scenario id=g10.store-checkout.SC-5x2 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-34 - A pending request blocks another frontend submission
 **Serves:** grade10-site-store-checkout-US-01 - The collector waits for the current response
 
@@ -170,6 +173,7 @@ remain unchanged; typed email SHALL not substitute for sign-in on this frontend.
 - **THEN** the control remains unavailable and no second frontend request is sent
 - **AND** the request's resolution restores the appropriate ready or outcome state
 
+<!-- trace:scenario id=g10.store-checkout.SC-cc7 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-35 - Later edits leave the invoice purchase fixed
 **Serves:** grade10-site-store-checkout-US-01 - The collector pays the invoice's purchase
 
@@ -178,6 +182,7 @@ remain unchanged; typed email SHALL not substitute for sign-in on this frontend.
 - **THEN** this frontend does not update, reprice or reconcile the existing invoice
 - **AND** a later Pay submits the then-current cart as a new purchase
 
+<!-- trace:scenario id=g10.store-checkout.SC-8hm rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-38 - A lost response offers the existing failure treatment
 **Serves:** grade10-site-store-checkout-US-02 - The collector can act after a request failure
 
@@ -233,6 +238,7 @@ native Continue shopping action or Shopify account path is required.
 - **AND** it shows the matching purchase when answered by the existing backend
 - **AND** the link does not depend on Continue shopping or a Shopify account page
 
+<!-- trace:scenario id=g10.store-checkout.SC-2n2 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-36 - Cart refresh reflects unchanged whole-line cleanup
 **Serves:** grade10-site-store-checkout-US-03 - The collector sees existing cleanup after payment
 

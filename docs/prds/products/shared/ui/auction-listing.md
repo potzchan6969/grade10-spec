@@ -15,7 +15,7 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 | --- | --- |
 | Buyer fee on the panel | 🚧 **20%** on top of the winning bid, always on, never behind a tooltip |
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment |
-| Custom maximum | 🚧 Whole major units only, up to **9,999,999,999** |
+| Custom maximum | Whole major units only, up to **9,999,999,999** |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
 | Empty bid count | **No bids yet** while the lot is open; **No bids** when it is closed |
 | Lot title under the breadcrumb | Smaller title size on a small viewport; larger from tablet |
@@ -38,14 +38,21 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 ## Bid History
 
 - **Accepted instants** — each row keeps the accepted time as data
-- **Localized** — recent activity reads in relative form and older activity
-  in the stated local time zone; the application supplies the locale, the
+- 🚧 **Localized** — recent activity reads in relative form and older activity
+  in the viewer's local zone; the application supplies the locale, the
   time zone and the activity copy, and a non-timestamp state may supply its
-  own display text; collector deadline lines use the same locale and zone
-- 🚧 **Winner after close** — when the lot is closed and sold, the winning
+  own display text; collector deadline and catalogue tile close lines use
+  the same locale and zone, and a deadline that shows a clock names the
+  viewer's zone: its short name in US English, HKT in Hong Kong, or an offset
+  such as GMT+9 where US English has none
+- 🚧 **Closed lot** - the bid card names the viewer's zone after a closed lot's
+  close time when it shows a clock, as it does after an open lot's deadline; a
+  close day alone names none
+  ([Dates and Times](/p/platform/shared/dates-and-times))
+- **Winner after close** — when the lot is closed and sold, the winning
   public row shows a primary crown after the amount (`isWinner`; accessible
   name from consumer copy)
-- 🚧 **Equal-max tip** — a row tied on amount with a row above it shows an
+- **Equal-max tip** — a row tied on amount with a row above it shows an
   Info tip in the amount tone, at the current price or lower down: when
   maximums match, the earlier one leads
 
@@ -93,7 +100,7 @@ cancelled.
 
 - **Whole units only** — a typed decimal mark is refused, and a pasted
   fraction keeps its whole major units with no rounding
-- 🚧 **Ceiling** — a maximum above 9,999,999,999 whole major units cannot be
+- **Ceiling** — a maximum above 9,999,999,999 whole major units cannot be
   typed or pasted; the previous valid draft stays, nothing is clamped, and
   no message says why
 - 🚧 **Quick bids** — three chips at 1×, 2× and 4× the listing increment:

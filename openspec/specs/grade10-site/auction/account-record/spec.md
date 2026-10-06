@@ -54,6 +54,10 @@ Owner-only — nobody but the collector sees their record.
 - **Row actions**
   - Ended alerts: Email alerts show disabled on a closed lot.
   - Won entry: a Won row opens its auction order.
+- Won Status
+  - Preparing Shipment: paid, undispatched auction order on My Auctions (was Processing)
+- After a close
+  - Partially Paid row: tells a winner that an operator is collecting the invoice
 
 ## Requirements
 
@@ -285,6 +289,7 @@ Active/Completed filtering.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Didn't win
 
+<!-- trace:scenario id=g10.auction-account-record.SC-b5w rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-66 - Every bidder's row shows the final price
 **Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
 
@@ -295,6 +300,7 @@ Active/Completed filtering.
 - **AND** the winner's row on their own My Auctions shows 150000 HKD minor
   units
 
+<!-- trace:scenario id=g10.auction-account-record.SC-fkr rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-67 - A result appears only once the close is recorded
 **Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
 
@@ -320,11 +326,13 @@ or shipment state.
 | Pending Payment | Invoice status is `pending` and the payment deadline has not passed |
 | Setup Overdue | The setup deadline has passed without a confirmed delivery address |
 | Payment Overdue | Invoice status is `expired` after the payment deadline |
-| Processing | Invoice status is `paid`, and fulfilment status is `unfulfilled` |
+| Preparing Shipment | Invoice status is `paid`, and fulfilment status is `unfulfilled` |
 | Shipped | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is not confirmed |
 | Delivered | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is confirmed |
 | Cancelled | Invoice status is `cancelled` |
 | Refunded | Invoice status is `refunded` |
+
+Preparing Shipment and Shipped SHALL use Badge `default` on a Won row.
 
 This surface SHALL remain read-only. It SHALL offer no control that records
 payment, uploads payment proof, requests a wire, records shipment, changes an
@@ -339,9 +347,8 @@ A Won listing SHALL NOT carry secondary helper detail lines under its standing
 How to reach Grade10 when the invoice is `expired` SHALL appear on Winner Order
 only.
 
-Didn’t win hold being-released and released copy remains governed by the durable
-hold requirements folded with `redesign-my-auctions-table`; this change does not
-remove them.
+A Didn’t win listing reads "Your card was not charged.", under "A losing bidder
+reads that their card was not charged".
 
 <!-- trace:scenario id=g10.auction-account-record.SC-1lv rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-20 - Card capture reads as Paid
@@ -349,7 +356,8 @@ remove them.
 
 - **GIVEN** a won listing whose invoice status is `paid` and whose fulfilment status is `unfulfilled`
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Processing
+- **THEN** that listing's state is Preparing Shipment
+- **AND** its status badge uses Badge `default`
 
 <!-- trace:scenario id=g10.auction-account-record.SC-pu6 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-21 - Manual collection reads as the same Paid
@@ -357,7 +365,7 @@ remove them.
 
 - **GIVEN** a won listing whose collection an operator recorded outside Stripe is `paid`, and which has not shipped
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Processing
+- **THEN** that listing's state is Preparing Shipment
 
 <!-- trace:scenario id=g10.auction-account-record.SC-m3u rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-22 - An expired payment reads Payment Overdue
@@ -376,6 +384,7 @@ remove them.
 - **GIVEN** one won listing whose paid order is fulfilled without delivery confirmation and one whose paid order has delivery confirmation
 - **WHEN** the winner opens their Bidding page
 - **THEN** the first listing's state is Shipped
+- **AND** its status badge uses Badge `default`
 - **AND** the second listing's state is Delivered
 
 <!-- trace:scenario id=g10.auction-account-record.SC-4sy rev=1 -->
@@ -459,7 +468,7 @@ remove them.
 - **GIVEN** one won listing whose proof an operator returned, and one whose proof an operator confirmed, neither shipped
 - **WHEN** the winner opens their Bidding page
 - **THEN** the first listing's state is Pending Payment
-- **AND** the second listing's state is Processing
+- **AND** the second listing's state is Preparing Shipment
 
 ### Requirement: The record belongs to its owner alone
 
@@ -672,6 +681,7 @@ three tabs.
 A tab with no rows while another tab has rows SHALL say that tab has no lots,
 and SHALL NOT be presented as a failure.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-11c rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-49 - Each listing sits in the tab its window names
 **Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
@@ -681,6 +691,7 @@ and SHALL NOT be presented as a failure.
 - **THEN** Upcoming lists only the first, Active only the second, and Ended
   only the third
 
+<!-- trace:scenario id=g10.auction-account-record.SC-slt rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-50 - A listing moves tab when its window opens
 **Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
@@ -689,6 +700,7 @@ and SHALL NOT be presented as a failure.
 - **THEN** the listing is in the Active tab
 - **AND** it is not in the Upcoming tab
 
+<!-- trace:scenario id=g10.auction-account-record.SC-evx rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-51 - An empty tab is not a failure
 **Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
@@ -697,6 +709,7 @@ and SHALL NOT be presented as a failure.
 - **THEN** the tab says it has no lots
 - **AND** it does not report an error
 
+<!-- trace:scenario id=g10.auction-account-record.SC-vlf rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-53 - My Auctions opens on Active
 **Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
@@ -704,6 +717,7 @@ and SHALL NOT be presented as a failure.
 - **WHEN** they open My Auctions
 - **THEN** the Active tab is shown
 
+<!-- trace:scenario id=g10.auction-account-record.SC-doc rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-54 - The title count covers every tab
 **Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
@@ -716,6 +730,7 @@ and SHALL NOT be presented as a failure.
 A row in the Ended tab SHALL show Email alerts disabled, SHALL NOT let the
 collector change them, and SHALL leave the listing's alert setting unchanged.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-r26 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-52 - Ended rows lock Email alerts
 **Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
@@ -731,6 +746,7 @@ auction order. Selecting it SHALL open the matching order, per
 `grade10-site/auction/auction-orders`. The row SHALL remain read-only: it
 SHALL NOT record payment, confirm or change an address, or change order status.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-we1 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-55 - A Won row opens its order
 **Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
@@ -790,6 +806,7 @@ code.
 - **AND** the row carries the minimum next valid bid as an integer count of
   minor units with its ISO 4217 currency code
 
+<!-- trace:scenario id=g10.auction-account-record.SC-n1y rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-69 - A leader whose raise is refused stays Leading
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -799,6 +816,7 @@ code.
 - **THEN** that listing's Status is Leading
 - **AND** the refused raise has not moved the row's price
 
+<!-- trace:scenario id=g10.auction-account-record.SC-8te rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-70 - A refused first bid adds no row
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -807,6 +825,7 @@ code.
 - **AND** they open My Auctions
 - **THEN** no row for that listing appears in any tab
 
+<!-- trace:scenario id=g10.auction-account-record.SC-dsc rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-71 - An outbid collector whose raise is refused stays Outbid
 **Serves:** grade10-site-auction-account-record-US-02 - a refused raise leaves the collector reading the standing they had
 
@@ -819,6 +838,7 @@ code.
 - **THEN** that listing's Status is Outbid
 - **AND** the row's price is still 30000 HKD minor units
 
+<!-- trace:scenario id=g10.auction-account-record.SC-fao rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-64 - An outbid row shows the auction's price
 **Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
 
@@ -827,6 +847,7 @@ code.
 - **WHEN** they open My Auctions
 - **THEN** that row's price is 120000 HKD minor units
 
+<!-- trace:scenario id=g10.auction-account-record.SC-abi rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-65 - A lot past its close keeps its standing until the close is recorded
 **Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
 
@@ -844,6 +865,7 @@ not charged. A listing the collector bid on that was called off SHALL appear
 with Didn't win standing carrying the same statement, while the listing
 remains published. A Won listing SHALL NOT carry it.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-n9l rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-68 - A lot lost at the close says the card was not charged
 **Serves:** grade10-site-auction-account-record-US-04 - Losing bidder knows they were not charged
 
@@ -861,3 +883,19 @@ remains published. A Won listing SHALL NOT carry it.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Didn't win
 - **AND** the row says their card was not charged
+
+### Requirement: My Auctions keeps a partially paid Won row linked to the order
+
+The My Auctions account record SHALL keep a partially paid auction in the Won
+list, label its order state Partially Paid, show the winning lot and amount,
+and open the same Winner Order when the winner selects View order. It SHALL
+not relabel the row as a new bid standing.
+
+<!-- trace:scenario id=g10.auction-account-record.SC-chv rev=1 -->
+#### Scenario: grade10-site-auction-account-record-SC-62 - A partially paid Won row opens Winner Order
+**Serves:** grade10-site-auction-account-record-US-08 - Winner revisits a partially paid order
+
+- **GIVEN** a winner whose auction order is Partially Paid
+- **WHEN** they open My Auctions and select the Won row
+- **THEN** the row is labelled Partially Paid
+- **AND** View order opens that order's Winner Order

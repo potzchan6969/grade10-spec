@@ -18,6 +18,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **I want** the first visit to say what grading is, the four steps and the price sheet with its cover line, and to let me start a submission or book a drop-off without a list,
 **so that** I know the fee and the return date before I give anyone my name.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-6v4 rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
 ### grade10-site-grading-submission-plan-US1-TC1-1: The signed-out home explains grading before any details are given
 
 **Classification:**
@@ -50,6 +51,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The fee sheet lists the first grader's levels, each with its declared-value ceiling, cards a submission, fee a card and weeks back.
 * Start a submission and Book a drop-off without a list are both offered.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-c4r rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
 ### grade10-site-grading-submission-plan-US1-TC2-1: The fee sheet's cover line shows only at Express and Super Express
 
 **Classification:**
@@ -80,6 +82,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Value, Regular and Bulk name no cover rate.
 * Express and Super Express each name a cover rate of 150 basis points (1.5%) of the declared value a card.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-34d rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
 ### grade10-site-grading-submission-plan-US1-TC3-1: Multiple graders show as a tab per grader on the fee sheet
 
 **Classification:**
@@ -111,6 +114,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * A tab per grader shows above the fee sheet: PSA, CGC, BGS.
 * CGC's tab shows CGC's own levels, replacing PSA's.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-0gh rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
 ### grade10-site-grading-submission-plan-US1-TC4-1: Starting a submission opens an empty plan wizard
 
 **Classification:**
@@ -139,6 +143,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The plan wizard opens at `<grade10 plan wizard url>` on the Cards step, with no card listed.
 * Add a card and Paste a list are both offered.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-u6c rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
 ### grade10-site-grading-submission-plan-US1-TC5-1: Booking without a list leaves the grading home with no list started
 
 **Classification:**
@@ -167,6 +172,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The browser leaves `<grade10 grading url>` for the walk-in booking at `<grade10 book url>`.
 * No card list is created for this visit.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-2jb rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
 ### grade10-site-grading-submission-plan-US1-TC6-1: The fee sheet names the counter for a card above the top ceiling
 
 **Classification:**
@@ -204,6 +210,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **I want** to add each card with its set matched in the card price reference, its declared value and the recent sales beside it as a reference, and to set a minimum grade on a card I do not want slabbed below it,
 **so that** the level and the cover are set by what I would insure each card for, and not by a guess.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-thx rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC1-1: Adding a matched card shows its reference sales
 
 **Classification:**
@@ -243,6 +250,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The recent sales at ungraded, PSA 9 and PSA 10 show beside the card as a reference, not a valuation.
 * The declared value entered is held on the card.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-a07 rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC2-1: Setting a minimum grade shows the fee applies either way
 
 **Classification:**
@@ -272,6 +280,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The card shows a caption that it will only be encapsulated at PSA 9 or above.
 * The caption states the fee applies whether or not the minimum is met.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-nyh rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC3-1: An empty card list disables Continue
 
 **Classification:**
@@ -302,6 +311,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Add a card and Paste a list are both offered.
 * Continue is disabled.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-t4a rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC4-1: Removing a card takes it off the list
 
 **Classification:**
@@ -339,6 +349,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * One card remains listed: `<card B>`.
 * `<card B>` keeps its declared value of 50000 (HKD minor units, HK$500.00).
 
+<!-- trace:case id=g10.grading-submission-plan.TC-3mk rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC5-1: The wizard rail marks the cards step in progress
 
 **Classification:**
@@ -369,6 +380,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * On the Cards step, The cards reads in progress, and The service and Book read as still to come.
 * On the Service step, The cards reads done, The service reads in progress and Book reads as still to come.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-9ot rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC6-1: Contact details are filled in for a signed-in collector and asked of a signed-out one
 
 **Classification:**
@@ -407,6 +419,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Signed in, the name, the email and the phone are filled in from the account.
 * The changed phone is held on this submission, and the account is unchanged.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-njt rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC7-1: A card added by hand that the reference does not answer for is kept as typed
 
 **Classification:**
@@ -446,6 +459,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * No reference sales show beside it.
 * The declared value is asked for and held on the card.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-aq7 rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC8-1: A reference outage keeps a hand-added card unasked and still asks its value
 
 **Classification:**
@@ -487,6 +501,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Nothing on the step waits on the reference.
 * Continue is enabled: the list can be finished.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-eiq rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC9-1: A minimum grade is carried to the review and costs nothing
 
 **Classification:**
@@ -526,6 +541,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * `<card D>` carries a minimum grade of PSA 9 beside it on the schedule.
 * The fee at the counter reads 60000 (HKD minor units, HK$600.00), Regular's fee a card for one card, unchanged by the minimum.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-pkr rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
 ### grade10-site-grading-submission-plan-US2-TC10-1: Contact details are asked of a signed-out collector
 
 **Classification:**
@@ -562,6 +578,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **I want** to paste one card a line and be told which lines matched the reference, which kept the name I typed, which still need a value and which sit above the level's ceiling,
 **so that** a long list takes a minute and nothing on it is silently dropped or guessed.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-ad1 rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
 ### grade10-site-grading-submission-plan-US3-TC1-1: Pasted lines matched in the reference report as matched
 
 **Classification:**
@@ -600,6 +617,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Both lines report as matched in the card price reference.
 * The matched count reads 2, with the references-show line offered.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-vve rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
 ### grade10-site-grading-submission-plan-US3-TC2-1: A pasted line with no reference match is kept as typed
 
 **Classification:**
@@ -637,6 +655,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The line reports as kept as typed, naming it as the collector wrote it.
 * No reference sales row shows for that line.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-js6 rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
 ### grade10-site-grading-submission-plan-US3-TC3-1: A pasted line missing a value blocks Continue
 
 **Classification:**
@@ -677,6 +696,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The card is added to the list with its declared value still asked for.
 * Continue is disabled, naming the one card missing a value.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-y5f rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
 ### grade10-site-grading-submission-plan-US3-TC4-1: A pasted line above the top ceiling is sent to the counter
 
 **Classification:**
@@ -715,6 +735,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The collector is told to ask at the counter or on WhatsApp, 4200000 (HKD minor units) being above the top level's 3900000 (HKD minor units) ceiling.
 * No second submission is named for it.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-3ke rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
 ### grade10-site-grading-submission-plan-US3-TC5-1: A pasted duplicate of a listed card is skipped
 
 **Classification:**
@@ -757,6 +778,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The skipped count reads 1.
 * The card is listed once.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-6s3 rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
 ### grade10-site-grading-submission-plan-US3-TC6-1: An empty paste leaves Add disabled
 
 **Classification:**
@@ -786,6 +808,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Add stays disabled with nothing read.
 * No outcome row shows.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-rfw rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
 ### grade10-site-grading-submission-plan-US3-TC7-1: A reference outage keeps every pasted line as typed
 
 **Classification:**
@@ -824,6 +847,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Both lines report with the reference-unavailable line rather than kept as typed.
 * Add stays enabled, and each line's declared value is still asked for.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-iiu rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
 ### grade10-site-grading-submission-plan-US3-TC8-1: The paste counts every line back before any card is added
 
 **Classification:**
@@ -874,6 +898,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **I want** the paste to tell me Bulk is the only level open, what it costs a card and that it takes the longer drop-off, and a card above Bulk's ceiling to be named for a second submission on the same drop-off,
 **so that** the whole box goes in on one visit at the right level.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-3pr rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
 ### grade10-site-grading-submission-plan-US4-TC1-1: More than twenty pasted cards leave Bulk the only open level
 
 **Classification:**
@@ -911,6 +936,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The sheet says Bulk is the only level open at the next step, at 18000 (HKD minor units, HK$180.00) a card, cards up to 150000 (HKD minor units, HK$1,500.00), back in about 10 weeks, up to 100 cards a submission.
 * It names the longer drop-off.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-6co rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
 ### grade10-site-grading-submission-plan-US4-TC2-1: Exactly twenty cards leave every level open
 
 **Classification:**
@@ -949,6 +975,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * Value, Regular, Express, Super Express and Bulk each show open, naming their own ceiling and fee.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-41m rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
 ### grade10-site-grading-submission-plan-US4-TC3-1: 21 pasted cards force Bulk as the only open level
 
 **Classification:**
@@ -988,6 +1015,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Value, Regular, Express and Super Express each show closed, naming the count that closes them.
 * Bulk shows open.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-3nj rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
 ### grade10-site-grading-submission-plan-US4-TC4-1: A card above Bulk's ceiling is named for a second submission
 
 **Classification:**
@@ -1028,6 +1056,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Step 4: the row shows its declared value, 200000 (HKD minor units, HK$2,000.00), and says it goes in a second submission on the same drop-off.
 * Step 4: the other 21 lines are held in this submission at Bulk.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-wt4 rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
 ### grade10-site-grading-submission-plan-US4-TC5-1: The 101st pasted card is refused at Bulk's cap
 
 **Classification:**
@@ -1067,6 +1096,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The card is refused, naming a second submission on another day.
 * The list still holds 100 cards.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-00e rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
 ### grade10-site-grading-submission-plan-US4-TC6-1: The 100th pasted card is accepted at Bulk's cap
 
 **Classification:**
@@ -1114,6 +1144,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **I want** a closed level to name the card declared above its ceiling, or the count that closes it, and an open one to read its ceiling, fee, cover line and return date,
 **so that** I can change a declared value or split the list instead of wondering why a level is grey.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-3x7 rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC1-1: An open level reads its ceiling, fee and return date
 
 **Classification:**
@@ -1150,6 +1181,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Regular shows open, naming its ceiling of 1170000 (HKD minor units, HK$11,700.00), its fee a card of 60000 (HKD minor units, HK$600.00) and its return date about 5 weeks out.
 * Express additionally names a cover line at 150 basis points (1.5%) of the declared value a card.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-6rf rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC2-1: A level closed by value names the card declared above it
 
 **Classification:**
@@ -1186,6 +1218,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Value shows closed, naming the card declared at 850000 (HKD minor units, HK$8,500.00) as above its 390000 (HKD minor units, HK$3,900.00) ceiling.
 * Regular shows open.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-iqq rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC3-1: Bulk closed by count names how many more cards are needed
 
 **Classification:**
@@ -1214,6 +1247,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * Bulk shows closed, naming that Bulk starts at 20 cards and the list holds 4.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-8mg rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC4-1: A card above every ceiling closes every level
 
 **Classification:**
@@ -1251,6 +1285,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The step names asking at the counter or on WhatsApp before a level can be picked.
 * Continue is disabled.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-gi9 rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC5-1: No level picked shows no estimate
 
 **Classification:**
@@ -1280,6 +1315,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * No estimate shows.
 * Continue is disabled.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-iej rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC6-1: A grader with no figures yet still shows its levels
 
 **Classification:**
@@ -1310,6 +1346,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * CGC's levels show, marked as carrying no figures.
 * None of CGC's levels can be picked, so the step does not continue on one.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-qwl rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC7-1: The level picked covers every card on the list
 
 **Classification:**
@@ -1341,6 +1378,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * All four cards read as PSA Regular on the schedule.
 * No card on the submission carries another grader or another level.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-2kx rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC8-1: The estimate reads the cards times the fee, paid at the counter
 
 **Classification:**
@@ -1380,6 +1418,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * It reads about 5 weeks back, counted from the day the batch leaves the shop.
 * It says everything on it is paid at the counter.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-31a rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
 ### grade10-site-grading-submission-plan-US5-TC9-1: The estimate at Express carries a cover line per card
 
 **Classification:**
@@ -1426,6 +1465,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **I want** the plan kept under the email I gave and its link mailed to me once by the next daily sweep while it stays unbooked, opening on any device with no account, and the home page to list every submission under that email once I sign in with it and no password,
 **so that** I can finish on another day, and find every old submission, without a password or a second list.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-26o rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC1-1: Finishing later keeps the plan and the daily sweep mails its link
 
 **Classification:**
@@ -1463,6 +1503,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The plan is kept under the email entered.
 * Nothing is sent on leaving the page; the daily sweep sends one email carrying the plan's link.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-9as rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC2-1: Finishing later with no email asks for one first
 
 **Classification:**
@@ -1501,6 +1542,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The email field is asked for before the plan can be kept.
 * Once the email is given, the plan is kept.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-k1k rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC3-1: The emailed link opens the kept plan on another device
 
 **Classification:**
@@ -1534,6 +1576,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The day it is kept until shows.
 * Booking the drop-off is offered.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-am9 rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC4-1: Signing in with no password lists every submission
 
 **Classification:**
@@ -1574,6 +1617,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Both submissions list under Your submissions, each with its summary, status word and chip.
 * Each opens its own page at `<grade10 grading submission url>`.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-bxv rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC5-1: A signed-in collector with no submissions sees the empty state
 
 **Classification:**
@@ -1602,6 +1646,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Your submissions shows the empty state.
 * Start a submission is offered.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-8q8 rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC6-1: A failed submissions read shows the error state
 
 **Classification:**
@@ -1631,6 +1676,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The failure shows in the error tone.
 * No submission list renders.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-01a rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC7-1: A sheet changed after booking leaves the submission's figures alone
 
 **Classification:**
@@ -1670,6 +1716,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The submission still reads 60000 (HKD minor units) a card.
 * Its estimate and its totals are unchanged.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-jrd rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC8-1: A sheet changed before booking reaches the reopened plan
 
 **Classification:**
@@ -1707,6 +1754,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * The estimate reads 70000 (HKD minor units) a card.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-ycj rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC9-1: A plan saved unticked asks for the statement before its drop-off
 
 **Classification:**
@@ -1740,6 +1788,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Step 3: the days are offered.
 * Step 4: the drop-off is booked, and on reload the plan holds the tick with it.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-njb rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
 ### grade10-site-grading-submission-plan-US6-TC10-1: A plan kept with no level asks for one before its drop-off
 
 **Classification:**
@@ -1792,6 +1841,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **I want** the review to total the declared value, the fee and the cover line, to name each card that could grade above the level's ceiling with the level the grader would move it to, the sheet's difference due at the counter and what the higher level would cost now, and to say that a fee is charged on a card returned ungraded, that a card can move up a level, that the return date is an estimate, that nothing is paid or signed before the cards are checked with me, and that slabs are not shipped back,
 **so that** I choose the level knowing both prices and agree to the terms the agreement will later print rather than meet them on the iPad.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-9a6 rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC1-1: The review totals the fee and lists Good to know
 
 **Classification:**
@@ -1828,6 +1878,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The totals show the fee at the counter of 240000 (HKD minor units) from **Test data**, with no cover line at Regular.
 * Good to know lists, in order: a fee is charged on a card returned ungraded, a card can move up a level, the return date is an estimate, nothing is paid or signed before the cards are checked, and slabs are not shipped back.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-ztl rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC2-1: The upcharge warning names the level and both prices
 
 **Classification:**
@@ -1865,6 +1916,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The difference due at the counter before collection reads 60000 (HKD minor units), Express's fee less Regular's fee from **Test data**.
 * Express's fee now, 120000 (HKD minor units), shows beside it.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-jn5 rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC3-1: No card above the ceiling shows no upcharge warning
 
 **Classification:**
@@ -1892,6 +1944,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 * No upcharge warning block shows.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-ipn rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC4-1: An unticked consent statement disables booking
 
 **Classification:**
@@ -1922,6 +1975,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Book the drop-off is disabled while the statement is unticked.
 * Book the drop-off becomes enabled once ticked.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-vhf rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC5-1: The review totals include the cover line
 
 **Classification:**
@@ -1958,6 +2012,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * `Homebrew Umbreon` carries a cover line of 12750 (HKD minor units) from **Test data**.
 * `Homebrew Charizard` carries a cover line of 6000 (HKD minor units) from **Test data**.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-vru rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC6-1: Booking shows pending and disables both buttons
 
 **Classification:**
@@ -1987,6 +2042,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Book the drop-off shows pending.
 * Book the drop-off and Save and book later are both disabled while booking is in progress.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-18q rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC7-1: Saving the plan for later works with the statement unticked
 
 **Classification:**
@@ -2019,6 +2075,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The statement is still unticked on the plan.
 * Book the drop-off was the only action the unticked statement refused.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-bxu rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC8-1: A USD reference sale is warned about at the rate staff set
 
 **Classification:**
@@ -2059,6 +2116,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Umbreon VMAX is named with Express as the level the grader would move it to.
 * The difference due at the counter reads 60000 (HKD minor units).
 
+<!-- trace:case id=g10.grading-submission-plan.TC-65d rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC9-1: A plan booked from a ticked review opens on the picker with nothing asked
 
 **Classification:**
@@ -2089,6 +2147,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Step 2: the submission page opens on the drop-off picker, and the statement is not asked for.
 * Step 3: the page still opens on the picker with no statement asked: the plan was kept ticked.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-68a rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
 ### grade10-site-grading-submission-plan-US7-TC10-1: The review totals the declared value, the fee and the cover
 
 **Classification:**
@@ -2135,6 +2194,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 **I want** one reminder with the link and then a short email saying the list has expired with nothing paid and nothing owed,
 **so that** I am prompted once and not left with an old list at stale prices.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-8pw rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
 ### grade10-site-grading-submission-plan-US8-TC1-1: An unbooked plan at day 21 shows the nudge
 
 **Classification:**
@@ -2169,6 +2229,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * Step 4: the second pass sends no second nudge.
 * The page reads a kept-until line naming the expiry day, 30 days from when the plan was kept.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-8ro rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
 ### grade10-site-grading-submission-plan-US8-TC2-1: An unbooked plan at day 30 expires
 
 **Classification:**
@@ -2202,6 +2263,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The page states nothing is paid and nothing is owed.
 * Start a submission is offered.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-guj rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
 ### grade10-site-grading-submission-plan-US8-TC3-1: Booking an expired plan is refused
 
 **Classification:**
@@ -2232,6 +2294,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * The collector is offered starting a submission again.
 * Book stays withdrawn.
 
+<!-- trace:case id=g10.grading-submission-plan.TC-ro2 rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
 ### grade10-site-grading-submission-plan-US8-TC4-1: A booked plan does not expire at day 30
 
 **Classification:**
@@ -2265,6 +2328,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 ---
 
+<!-- trace:case id=g10.grading-submission-plan.TC-ky4 rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
 ### grade10-site-grading-submission-plan-US8-TC5-1: A cancelled visit restarts the plan's clock and its nudge
 
 **Classification:**

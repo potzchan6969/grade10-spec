@@ -30,6 +30,7 @@
 **I want** the batch closed at Thursday 19:00 with its packing list, the grader's order number, one or more shipments each with its courier, tracking and insured total at or under the courier's cover, and the estimate from the ship day, and one act that marks every submission in it as sent and emails every collector,
 **so that** one parcel to one grader at one level leaves with one record.
 
+<!-- trace:case id=g10adm.grading-batches.TC-s7t rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC1-1: Operator ships a closed batch with a complete ship form
 
 **Classification:**
@@ -80,6 +81,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-qir rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC2-1: A batch still open before its cut-off offers no shipping action
 
 **Classification:**
@@ -118,6 +120,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-msb rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC3-1: The ship form refuses a shipped-on date set in the future
 
 **Classification:**
@@ -165,6 +168,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-m0v rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC4-1: The ship form withholds shipping while a required field is missing
 
 **Classification:**
@@ -210,6 +214,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-68x rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC5-1: A shipment insured past the courier's cover is flagged before shipping
 
 **Classification:**
@@ -254,6 +259,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-lfs rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC6-1: Marking a batch shipped moves every submission in it, however many
 
 **Classification:**
@@ -302,6 +308,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-2u1 rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC7-1: A new batch is opened for one grader and one level
 
 **Classification:**
@@ -344,6 +351,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-33l rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC8-1: A shop-staff holding only the read grant cannot ship a batch
 
 **Classification:**
@@ -379,6 +387,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-mny rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC9-1: The ship form stays busy while a batch is being marked shipped
 
 **Classification:**
@@ -423,6 +432,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-sgd rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC10-1: The first submission handed in for a grader and level opens the batch
 
 **Classification:**
@@ -461,6 +471,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-phr rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC11-1: A second submission at the same grader and level joins the standing batch
 
 **Classification:**
@@ -502,6 +513,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-kpa rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC12-1: A batch reads Closed once its cut-off passes, with no act
 
 **Classification:**
@@ -543,6 +555,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-m7m rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC13-1: A submission handed in after the cut-off joins the next batch
 
 **Classification:**
@@ -583,6 +596,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-8mq rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC14-1: An unset courier cover holds the ship
 
 **Classification:**
@@ -626,6 +640,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-rff rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC15-1: The ship form reads the insured total off the batch's cards and will not take a typed figure
 
 **Classification:**
@@ -674,6 +689,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-ng7 rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC16-1: The batches list puts what waits on the shop first and pages the received batches behind it
 
 **Classification:**
@@ -721,6 +737,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-xb9 rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC17-1: A submission at another level joins its own batch and leaves the open one unchanged
 
 **Classification:**
@@ -763,6 +780,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-lvg rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC18-1: A batch above the courier's cover ships split into shipments each under it
 
 **Classification:**
@@ -805,6 +823,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-39y rev=1 covers=g10adm.grading-batches.SC-jam,g10adm.grading-batches.SC-uzm,g10adm.grading-batches.SC-e4n,g10adm.grading-batches.SC-yte,g10adm.grading-batches.SC-24g,g10adm.grading-batches.SC-ucf,g10adm.grading-batches.SC-uso,g10adm.grading-batches.SC-tky,g10adm.grading-batches.SC-3kj,g10adm.grading-batches.SC-z6w,g10adm.grading-batches.SC-p89,g10adm.grading-batches.SC-bll,g10adm.grading-batches.SC-ppx,g10adm.grading-batches.SC-26l,g10adm.grading-batches.SC-uis,g10adm.grading-batches.SC-x8i,g10adm.grading-batches.SC-vk6 -->
 ### grade10-admin-grading-batches-US1-TC19-1: A ship date before the cut-off is refused
 
 **Classification:**
@@ -850,6 +869,7 @@
 **I want** the manifest and the invoice entered first, a manifest line naming no intake id held until I resolve it, each slab scanned and matched to a card by intake id with a cert already held elsewhere refused by name, an upcharge recorded as the sheet's difference with the invoice reconciled against it, counters of scanned, matched, ungraded and upcharges, a half-scanned batch keeping its scans until I come back, and a finish that makes every submission in the batch ready at once with its pickup code emailed,
 **so that** a slab can never be handed to the wrong collector, the collector owes what they were quoted, and nobody is told ready twice.
 
+<!-- trace:case id=g10adm.grading-batches.TC-fob rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC1-1: Scanning is withheld until the manifest and the invoice are entered
 
 **Classification:**
@@ -889,6 +909,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-ewv rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC2-1: The manifest and the invoice are entered before the first scan
 
 **Classification:**
@@ -931,6 +952,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-ruj rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC3-1: Scanning a matched cert records the card as matched
 
 **Classification:**
@@ -972,6 +994,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-90l rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC4-1: A scan is refused by name when the cert is already held elsewhere
 
 **Classification:**
@@ -1017,6 +1040,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-4dz rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC5-1: A scan is refused by name when the cert names no manifest line
 
 **Classification:**
@@ -1058,6 +1082,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-oto rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC6-1: A manifest line naming no intake id in the batch is held as unmatched
 
 **Classification:**
@@ -1100,6 +1125,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-4n2 rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC7-1: A card returned with no grade is recorded as ungraded
 
 **Classification:**
@@ -1141,6 +1167,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-rnb rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC8-1: A card moved up a level is recorded as an upcharge reconciled against the invoice
 
 **Classification:**
@@ -1185,6 +1212,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-66a rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC9-1: An invoice gap against the fee sheet is marked Commercial's
 
 **Classification:**
@@ -1227,6 +1255,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-sej rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC10-1: A batch saved part-scanned keeps its scans
 
 **Classification:**
@@ -1272,6 +1301,7 @@
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-jef rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC11-1: Finish is held while an unmatched line or an unscanned slab remains
 
 Runs once per row of **Test data**.
@@ -1313,6 +1343,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-ca2 rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC12-1: Finishing receiving readies every submission in the batch at once
 
 **Classification:**
@@ -1354,6 +1385,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-wfw rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC13-1: A shop-staff holding only the read grant cannot scan, import or finish
 
 **Classification:**
@@ -1389,6 +1421,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-6vw rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC14-1: A batch recorded arrived back reads back, unchecked and is badged after a day
 
 **Classification:**
@@ -1429,6 +1462,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-u47 rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC15-1: A cert that grader returned in an earlier batch is refused by name
 
 **Classification:**
@@ -1473,6 +1507,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-20c rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC16-1: An unmatched line is resolved by naming its card or closing it as the grader's error
 
 **Classification:**
@@ -1521,6 +1556,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-cph rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC17-1: Arrived is withheld while a submission in the batch is not yet graded
 
 **Classification:**
@@ -1561,6 +1597,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-an8 rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC18-1: A slab the manifest leaves out is added as the grader's omission and then scanned
 
 **Classification:**
@@ -1607,6 +1644,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-m8p rev=1 covers=g10adm.grading-batches.SC-oj1,g10adm.grading-batches.SC-fxt,g10adm.grading-batches.SC-s4w,g10adm.grading-batches.SC-xx9,g10adm.grading-batches.SC-n7i,g10adm.grading-batches.SC-t91,g10adm.grading-batches.SC-pqo,g10adm.grading-batches.SC-5j9,g10adm.grading-batches.SC-1hw,g10adm.grading-batches.SC-06a,g10adm.grading-batches.SC-x40,g10adm.grading-batches.SC-uhm,g10adm.grading-batches.SC-u0i,g10adm.grading-batches.SC-mg6,g10adm.grading-batches.SC-21a,g10adm.grading-batches.SC-8ys,g10adm.grading-batches.SC-y5i,g10adm.grading-batches.SC-j3q,g10adm.grading-batches.SC-xay -->
 ### grade10-admin-grading-batches-US2-TC19-1: A card the grader held comes home in a later box
 
 **Classification:**
@@ -1655,6 +1693,7 @@ Runs once per row of **Test data**.
 **I want** a card on the manifest but not in the box recorded as held by the grader with its expected date or as not returned, a damaged slab photographed before it leaves the box, and the collector emailed the same day either way,
 **so that** every exception is a fact on one card with the money it changes.
 
+<!-- trace:case id=g10adm.grading-batches.TC-9r7 rev=1 covers=g10adm.grading-batches.SC-dn8,g10adm.grading-batches.SC-jze,g10adm.grading-batches.SC-awd,g10adm.grading-batches.SC-y6t,g10adm.grading-batches.SC-dpc,g10adm.grading-batches.SC-lnj -->
 ### grade10-admin-grading-batches-US3-TC1-1: A card kept back by the grader is recorded held with its expected date
 
 **Classification:**
@@ -1699,6 +1738,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-35a rev=1 covers=g10adm.grading-batches.SC-dn8,g10adm.grading-batches.SC-jze,g10adm.grading-batches.SC-awd,g10adm.grading-batches.SC-y6t,g10adm.grading-batches.SC-dpc,g10adm.grading-batches.SC-lnj -->
 ### grade10-admin-grading-batches-US3-TC2-1: A card missing from the box with no expected return is recorded not returned
 
 **Classification:**
@@ -1740,6 +1780,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-3ua rev=1 covers=g10adm.grading-batches.SC-dn8,g10adm.grading-batches.SC-jze,g10adm.grading-batches.SC-awd,g10adm.grading-batches.SC-y6t,g10adm.grading-batches.SC-dpc,g10adm.grading-batches.SC-lnj -->
 ### grade10-admin-grading-batches-US3-TC3-1: A damaged slab is photographed inside the box before it is removed
 
 **Classification:**
@@ -1783,6 +1824,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-xpf rev=1 covers=g10adm.grading-batches.SC-dn8,g10adm.grading-batches.SC-jze,g10adm.grading-batches.SC-awd,g10adm.grading-batches.SC-y6t,g10adm.grading-batches.SC-dpc,g10adm.grading-batches.SC-lnj -->
 ### grade10-admin-grading-batches-US3-TC4-1: The rest of a submission's cards finish while one card is held
 
 **Classification:**
@@ -1827,6 +1869,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-x1b rev=1 covers=g10adm.grading-batches.SC-dn8,g10adm.grading-batches.SC-jze,g10adm.grading-batches.SC-awd,g10adm.grading-batches.SC-y6t,g10adm.grading-batches.SC-dpc,g10adm.grading-batches.SC-lnj -->
 ### grade10-admin-grading-batches-US3-TC5-1: Recording a card as held by the grader without an expected date is refused
 
 **Classification:**
@@ -1868,6 +1911,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-vxy rev=1 covers=g10adm.grading-batches.SC-dn8,g10adm.grading-batches.SC-jze,g10adm.grading-batches.SC-awd,g10adm.grading-batches.SC-y6t,g10adm.grading-batches.SC-dpc,g10adm.grading-batches.SC-lnj -->
 ### grade10-admin-grading-batches-US3-TC6-1: A card no manifest line names holds Finish until it is recorded
 
 **Classification:**
@@ -1919,6 +1963,7 @@ Runs once per row of **Test data**.
 **I want** to type the grader's stage onto the batch, set a new estimate with a reason, and have every collector in it emailed the day I set it,
 **so that** the shop tells the collector before the collector asks.
 
+<!-- trace:case id=g10adm.grading-batches.TC-hzz rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC1-1: The morning read records the grader's own stage on the batch
 
 **Classification:**
@@ -1962,6 +2007,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-fad rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC2-1: A batch past its estimate reads Due back in the warning tone
 
 **Classification:**
@@ -2001,6 +2047,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-46a rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC3-1: Re-estimating with a new date and a reason emails every collector in the batch
 
 **Classification:**
@@ -2045,6 +2092,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-wuw rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC4-1: Re-estimating with no reason is refused
 
 **Classification:**
@@ -2087,6 +2135,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-xyz rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC5-1: A shop-staff holding only the read grant cannot re-estimate a batch
 
 **Classification:**
@@ -2122,6 +2171,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-mv7 rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC6-1: The stage that is the move puts every submission in the batch at grades are in
 
 **Classification:**
@@ -2163,6 +2213,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-3t2 rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC7-1: The same stage recorded a second morning emails nobody again
 
 **Classification:**
@@ -2204,6 +2255,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-xyp rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC8-1: A re-estimate to the date already set emails nobody again
 
 **Classification:**
@@ -2247,6 +2299,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-4ij rev=1 covers=g10adm.grading-batches.SC-7sk,g10adm.grading-batches.SC-pxd,g10adm.grading-batches.SC-wfu,g10adm.grading-batches.SC-08v,g10adm.grading-batches.SC-8c6,g10adm.grading-batches.SC-xgu -->
 ### grade10-admin-grading-batches-US4-TC9-1: The due-back badge stands from the estimated day and gives way to running late
 
 **Classification:**
@@ -2294,6 +2347,7 @@ Runs once per row of **Test data**.
 **I want** the tiles to read what is closing, what is with graders and past its estimate, what is back unchecked, and the declared value in the safe, ready slabs included, against its cap, and a hand-in that would pass the cap refused at the desk with the next drop-off booked instead,
 **so that** the shop never holds more than it is covered for.
 
+<!-- trace:case id=g10adm.grading-batches.TC-61i rev=1 covers=g10adm.grading-batches.SC-7n8,g10adm.grading-batches.SC-7rg,g10adm.grading-batches.SC-nmc,g10adm.grading-batches.SC-5n2 -->
 ### grade10-admin-grading-batches-US5-TC1-1: The tiles read the batch closing, with graders, back unchecked and the safe
 
 **Classification:**
@@ -2340,6 +2394,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-yhm rev=1 covers=g10adm.grading-batches.SC-7n8,g10adm.grading-batches.SC-7rg,g10adm.grading-batches.SC-nmc,g10adm.grading-batches.SC-5n2 -->
 ### grade10-admin-grading-batches-US5-TC2-1: The safe's tile counts ready slabs still held toward the declared value
 
 **Classification:**
@@ -2381,6 +2436,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-x20 rev=1 covers=g10adm.grading-batches.SC-7n8,g10adm.grading-batches.SC-7rg,g10adm.grading-batches.SC-nmc,g10adm.grading-batches.SC-5n2 -->
 ### grade10-admin-grading-batches-US5-TC3-1: The safe's tile turns to the warning tone at its cap
 
 **Classification:**
@@ -2421,6 +2477,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-hwf rev=1 covers=g10adm.grading-batches.SC-7n8,g10adm.grading-batches.SC-7rg,g10adm.grading-batches.SC-nmc,g10adm.grading-batches.SC-5n2 -->
 ### grade10-admin-grading-batches-US5-TC4-1: A hand-in that would carry the safe past its cap is refused, the next drop-off booked instead
 
 **Classification:**
@@ -2463,6 +2520,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-batches.TC-84a rev=1 covers=g10adm.grading-batches.SC-7n8,g10adm.grading-batches.SC-7rg,g10adm.grading-batches.SC-nmc,g10adm.grading-batches.SC-5n2 -->
 ### grade10-admin-grading-batches-US5-TC5-1: A hand-in that keeps the safe at or under its cap proceeds
 
 **Classification:**

@@ -1,0 +1,90 @@
+## Goals
+
+- Collector in-app clocks, and the day of a deadline that shows only a day, follow the viewer's local zone, except on a page that books or confirms a visit, or a vault or signing page, which keeps the shop's clock; how those pages name the zone is left out (Q27).
+- A named zone on the surfaces that follow the viewer is the viewer's: its short name in US English, or its offset in English where US English has none.
+- Every collector deadline in the viewer's zone that shows a clock names that zone, closed lots included; a deadline that shows only a day reads that day in the viewer's zone and names none.
+- Invoices, including the application's invoice page, receipts, T&C, and emails always read GMT+8; grading letters and vault letters too.
+- One naming rule on every collector surface that follows the viewer: the application's catalogue tile, My Auctions and Winner Order use the store's names, not their own.
+
+## Non-Goals
+
+- Changing operator tables off UTC.
+- Changing how a brand judges a calendar day (a due date, an expiry, a queue, an age, a report's month; shop midnight stays the brand zone). The day of a collector deadline is not judged this way: it reads in the viewer's zone (Q20).
+- Relative countdowns (`Ends in`).
+- Rewording T&C last-updated dates that carry no clock.
+- Moving appointment shop hours off the desk's zone as a booking constraint.
+- Moving a shop-clock page (appointment booking, drop-off, vault case deadlines, signing) onto the viewer's zone: it keeps the shop's clock.
+- Naming the shop's zone on those pages: how they name it is left out of this change, as a follow-up (Q27).
+- Translating zone names, or the tile's `Ends`, `Opens` and `Closed` words, into the collector's language.
+- Choosing the arrangement and month words of a date on an invoice or receipt.
+- Naming a shop's own zone in a message for a shop outside Hong Kong: sent messages keep one rule, Asia/Hong_Kong as GMT+8. `add-multi-store-appointments` owes a delta on the message requirement for mail about such a shop.
+- Rewording a grading letter's weekly shop-hours line: a weekly schedule is not a date or a time of an event, and keeps its own wording (Q28).
+
+## Decisions
+
+| Q | Asked | Decided | Instead of | Carried by |
+| --- | --- | --- | --- | --- |
+| Q1 | Which zone do collector surfaces use? | The viewer's local zone, supplied as `timeZone` | Always HKT; always UTC | Dates and Times, Viewer local; dates requirement Each rendering states the zone its surface requires |
+| Q2 | If a collector surface names a zone, which name? | The viewer's short name at that instant (HKT, EDT) | The same HKT suffix for every reader; drop the suffix | Dates and Times, Every deadline named and Zone names; dates requirement A deadline names its time zone |
+| Q3 | What do PDFs, T&C, and emails name? | GMT+8 on Asia/Hong_Kong | HKT; winner's own zone on the PDF | Dates and Times, GMT+8; Invoice and Receipt PDF Blocks, GMT+8; dates requirements A deadline names its time zone and Each rendering states the zone its surface requires; PDF requirement Dates render in Hong Kong as GMT+8 |
+| Q4 | Do mail and PDF share one label? | Yes, GMT+8 | HKT on paper, GMT+8 in mail | Dates and Times, GMT+8; dates requirement A message the platform sends states one zone; PDF requirement Dates render in Hong Kong as GMT+8 |
+| Q5 | What name follows a deadline for a zone with no regional short name, and does it follow the reader's language? | The offset, always in English (`GMT+9`, `GMT+5:30`); North America reads EDT, EST, PDT; Hong Kong stays HKT | A regional abbreviation (KST, IST); a name in the reader's language | Dates and Times, Zone names; Listing Page Blocks, Localized; dates requirement A deadline names its time zone; listing requirement Bid history components format activity time |
+| Q6 | Must every collector deadline name the viewer's zone? | Yes, a closed lot's close time too | Naming left to each surface | Dates and Times, Every deadline named; Listing Page Blocks, Closed lot; dates requirement A deadline names its time zone; listing requirement Bid history components format activity time |
+| Q7 | Which application surfaces move in this change? | Three pages (catalogue tile, My Auctions, Winner Order) take the viewer's zone and the store's names; the invoice page states GMT+8 (Q19); all in `grade10`, in group 4 after the submodule bump that group 3 lands; shop-clock pages stay out and keep the shop's clock (Q22, Q27) | A follow-up change for those four pages | Dates and Times, Viewer local and GMT+8; dates requirement Each rendering states the zone its surface requires; tasks groups 3 and 4 |
+| Q8 | Must every sent message name GMT+8? | Yes, grading letters included: "Dates and times are Hong Kong time (GMT+8)." | Auction emails only | Dates and Times, GMT+8 and Grading letters; What the Collector Hears, Hong Kong time named; dates requirement A message the platform sends states one zone |
+| Q9 | On a document in the winner's language, do the date's words and GMT+8 follow that language? | No: English words, `GMT+8` as printed | The renderer follows the winner's language | Dates and Times, GMT+8; Invoice and Receipt PDF Blocks, GMT+8; PDF requirement Dates render in Hong Kong as GMT+8 |
+| Q10 | What happens when a collector clock gets an unrecognised zone? | The render stops and names the zone, like an invalid instant | Fall back to UTC; use the machine's zone | Dates and Times, Other Surfaces; dates requirement Each rendering states the zone its surface requires |
+| Q11 | May the first paint read UTC before the browser's zone is known? | Yes, labelled `GMT`, then it switches | No dated line until the zone is known | Dates and Times, First paint; dates requirement A deadline names its time zone |
+| Q12 | Does a date with no clock name GMT+8? | No: a zone belongs to a clock, and the day in a message or a document is the brand's; the footer of a letter that states only a day still names GMT+8 once (Q8, Q17), and no zone follows the day itself | Every date in a message ends in GMT+8 | Dates and Times, A day with no clock; dates requirement A message the platform sends states one zone |
+| Q13 | Does any terms page show a date with a clock? | Left out of this change; none shows one today, and the rule binds any terms page that gains one | Naming a page and a date now | Dates and Times, GMT+8; dates requirement A deadline names its time zone |
+| Q14 | What arrangement and month words does a document date use? | Left out of this change; the contract checks the Hong Kong day, the clock and `GMT+8` | Adopting the platform's deadline shape on documents now | A non-goal: Dates and Times, Product decisions (Not in scope); no requirement |
+| Q15 | Are the tile's words English in every language, and may a Chinese month read as a bare number? | Left out of this change; the bare month number goes to the bug lane | Deciding both here | A non-goal: no page line or requirement; the proposal's Open Questions |
+| Q16 | Is the appointment-booking blocks' zone label meant to change? | No: the blocks keep the shop's clock and their default label, `HKT` for Hong Kong, and a page may pass its own; how they name the zone is left out of this change (Q27) | The blocks moving to the viewer's zone; a label that follows the platform's zone names | Booking Blocks, Time Zone; tech-design Decisions 2 and 11 |
+| Q17 | Do vault letters name GMT+8 too? | Yes: "Dates and times are in Hong Kong time (GMT+8)." | Leaving them on Hong Kong Standard Time | Collector Pages, Hong Kong time named; Dates and Times, Vault letters; dates requirement A message the platform sends states one zone |
+| Q18 | What rule decides the name a collector deadline carries? | The zone's short name in US English, `HKT` for Hong Kong, and the offset in English (`GMT+9`, `GMT+5:30`, `GMT-2:30`) where US English has no short name; a zero-offset zone reads `GMT` | A fixed list of regional names | Dates and Times, Zone names; dates requirement A deadline names its time zone |
+| Q19 | Does the application's invoice page read the viewer's zone? | No: it is the invoice document, so it states Asia/Hong_Kong as `GMT+8`, like the PDF | The viewer's zone, as Q7 first read | Dates and Times, GMT+8 and its Product decisions row for the invoice page; dates requirements A deadline names its time zone and Each rendering states the zone its surface requires |
+| Q20 | Does a collector deadline name a zone when it shows only a day? | A deadline that shows a clock names the viewer's zone; a deadline that shows only a day names none, as Q12 says for messages and documents, and reads that day in the viewer's zone (Q1), as the durable winner-order spec reads its step subtext: the brand's zone is kept for a day the business judges, not for a deadline; narrowed by Q21 and Q29 | Every dated collector deadline naming a zone | Dates and Times, Viewer local and Every deadline named; Listing Page Blocks, Closed lot; dates requirements A deadline names its time zone and Each rendering states the zone its surface requires; listing requirement Bid history components format activity time |
+| Q21 | Which collector clocks name a zone? | Deadlines only: a deadline that shows a clock names the viewer's zone, and a deadline that shows only a day reads that day in the viewer's zone and names none (Q20); an older activity row and a local moment keep no zone name; narrowed by Q29 | Every clock on a collector surface naming the zone | Dates and Times, Viewer local, Every deadline named and Activity; dates requirements A deadline names its time zone and Each rendering states the zone its surface requires; the unchanged local-moment requirement |
+| Q22 | Which zone does a shop-clock page show: appointment booking, drop-off, vault case deadlines, signing? | The shop's, Hong Kong, whatever zone the viewer is in: the visit, and the deadlines on the vault and signing pages, are the shop's, so those pages keep the shop's clock; how they name the zone is left out, Q27; narrowed by Q23, Q25 and Q27 | The viewer's zone on those pages | Dates and Times, Shop's clock; Booking Blocks, Time Zone; Collector Pages, Clocks; dates requirements A deadline names its time zone and Each rendering states the zone its surface requires |
+| Q23 | Does a shop-clock page name a zone beside a deadline that shows only a day, and which pages are shop-clock pages? | Wherever a zone is named, it follows a clock and never a day alone, because a zone belongs to a clock (Q12, Q21). Which pages: page list, see Q25 | Always naming a zone | Collector Pages, Clocks; Dates and Times, Every deadline named; dates requirement A deadline names its time zone, for the viewer's zone |
+| Q24 | Does a message for a shop outside Hong Kong name that shop's zone? | No: one rule for sent messages, Asia/Hong_Kong as GMT+8 (Q3, Q4, Q8); mail for a shop outside Hong Kong is for the change that adds such a shop, which owes its own delta on the message requirement | A shop-zone carve-out now | A non-goal: Dates and Times, Product decisions (Not in scope); dates requirement A message the platform sends states one zone |
+| Q25 | Which pages keep the shop's clock, and does who sets a deadline decide it? | A page list: a page that books or confirms a visit, or a vault or signing page, keeps the shop's clock; how it names the zone is left out, Q27. These are the booking, drop-off, vault and signing pages and no others. Winner Order's payment and address-confirmation deadlines are collector deadlines in the viewer's zone (Q7) | By who sets the deadline | Dates and Times, Shop's clock; Collector Pages, Clocks; dates requirements A deadline names its time zone and Each rendering states the zone its surface requires; tech-design Decision 11 |
+| Q26 | Does the Invoice and Receipt PDF suite keep its older drafts-styled stamp? | Yes: the suite's delta header reads `2026-09-23, tcs-rules r3`, so the fold leaves the durable stamp and the stale report keeps listing the suite's untouched drafts | The delta's `2026-10-06, tcs-rules r4`, which the fold would take | Invoice and Receipt PDF suite, header and Reconciliation |
+| Q27 | Does this change promise how a shop-clock page names the shop's zone? | No: the booking, drop-off, vault and signing pages keep the shop's clock, and how they name the zone is left out of this change, as a follow-up; the drop-off cut-off lines, the joined-visit time and the vault visit time print an unnamed Hong Kong clock today, and the booking blocks' default label is `HKT` for Hong Kong, which a page may replace with its own, as the drop-off page does with the zone's long name; vault timeline stamps stay UTC | Promising the shop's zone, named, on those pages now; moving those pages in this change | A non-goal: Dates and Times, Shop's clock and Product decisions (Not in scope); dates requirements A deadline names its time zone and Each rendering states the zone its surface requires; tech-design Decision 11 |
+| Q28 | Does a grading letter's shop-hours line, which ends in the shop's zone name, change with the footer's line? | No, confirmed by the human: a weekly shop-hours schedule is not a date or a time of an event, so it keeps its own wording, with the shop's long zone name; the footer's line is the one that names GMT+8 (Q8) | Rewording the hours line to GMT+8; dropping its zone name | A non-goal: tech-design Decision 8; no page line or requirement |
+| Q29 | Does a surface whose own spec already fixes its zone read a day-only collector deadline in the viewer's zone? | No: a surface whose own spec fixes its zone keeps it. The viewer's day for a day-only collector deadline applies where no spec says otherwise. Loyalty expiry days stay on the programme's zone, as the loyalty programme spec and profile page say; this change adds no loyalty task and edits no loyalty file | The viewer's day everywhere | Dates and Times, Viewer local and Other Surfaces; dates requirements A deadline names its time zone and Each rendering states the zone its surface requires; tech-design Decisions 4 and 11; proposal Impact |
+
+## Raised
+
+| Capability | Raised | Landed |
+| --- | --- | --- |
+| `shared/dates-and-times` | Machine zone vs stated zone | Q1 |
+| `shared/dates-and-times` | HKT vs GMT+8 on documents | Q3 |
+| `shared/ui/invoice-and-receipt-pdf` | Winner zone vs brand GMT+8 | Q3 |
+| `shared/dates-and-times` | What does a deadline name for a zone with no regional abbreviation (Seoul, Kolkata), and does the name follow the reader's language? | Q5 |
+| `shared/ui/auction-listing` | Does a tile's zone name follow a Chinese locale or stay in English? | Q5 |
+| `shared/dates-and-times` | Must every dated collector deadline name its zone, or only when a surface chooses to? | Q6 |
+| `shared/ui/auction-listing` | Does the lot page's closed block name the viewer's zone, as the tile's Closed line does? | Q6 |
+| `shared/dates-and-times` | Do the catalogue tile, My Auctions, Winner Order and the invoice page move onto the viewer's zone in this change? | Q7 |
+| `shared/dates-and-times` | Must every sent message name GMT+8, grading letters included? | Q8 |
+| `shared/ui/invoice-and-receipt-pdf` | Do a document's date words and GMT+8 follow the document's language? | Q9 |
+| `shared/dates-and-times` | What happens when a collector clock is given an unrecognised zone, or none? | Q10 |
+| `shared/dates-and-times` | May the first paint read UTC before the browser's zone is known? | Q11 |
+| `shared/dates-and-times` | Does a date with no clock, in a message or a document, name GMT+8? | Q12 |
+| `shared/dates-and-times` | Does any terms page show a date with a clock? | Q13 |
+| `shared/ui/invoice-and-receipt-pdf` | What arrangement and month words does a document date use? | Q14 |
+| `shared/ui/auction-listing` | Are the tile's Ends, Opens and Closed words English in every language, and may a Chinese month read as a bare number? | Q15 |
+| `shared/dates-and-times` | Are the appointment-booking blocks' zone labels meant to change? | Q16 |
+| `shared/dates-and-times` | Do vault letters, whose footer names the zone once, move to GMT+8 with the other sent messages? | Q17 |
+| `shared/dates-and-times` | Is the name a collector deadline carries decided by a rule or by a list of names, and what does a zone at zero offset read? | Q18 |
+| `shared/dates-and-times` | Does the application's own invoice page read in the viewer's zone, or in Hong Kong's like the invoice PDF? | Q19 |
+| `shared/dates-and-times` | Does a collector deadline that shows only a day, such as a closed lot's close day, name a zone? | Q20 |
+| `shared/dates-and-times` | Which collector clocks name a zone: every clock, or only a deadline? | Q21 |
+| `shared/dates-and-times` | Does a page that books or confirms a visit, or a vault or signing page, read in the viewer's zone or in the shop's? | Q22 |
+| `shared/dates-and-times` | Does a deadline that shows only a day, on a page that keeps the shop's clock, name a zone, and which pages are shop-clock pages? | Q23 |
+| `shared/dates-and-times` | Does mail for a shop outside Hong Kong name that shop's zone, or GMT+8? | Q24 |
+| `shared/dates-and-times` | Are the shop-clock pages a list of pages, or decided by who sets a deadline? | Q25 |
+| `shared/ui/invoice-and-receipt-pdf` | Does the suite keep its older drafts-styled stamp, or take the delta's newer one? | Q26 |
+| `shared/dates-and-times` | Does this change promise how a page that books or confirms a visit, or a vault or signing page, names the shop's zone, or only that it keeps the shop's clock? | Q27 |
+| `shared/dates-and-times` | Does a grading letter's shop-hours line, which ends in the shop's zone name, move to GMT+8 with the letter's footer? | Q28 |
+| `shared/dates-and-times` | Does a surface whose own spec already fixes its zone, such as the loyalty programme's expiry days, read a day-only collector deadline in the viewer's zone, or keep its own? | Q29 |

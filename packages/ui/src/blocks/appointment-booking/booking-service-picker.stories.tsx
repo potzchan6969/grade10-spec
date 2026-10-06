@@ -6,6 +6,7 @@ import {
   CONSULTATION_SERVICE,
   GRADING_SERVICE,
   SERVICE_PICKER_COPY,
+  VAULTING_SERVICE,
 } from "./fixtures";
 
 const { common } = getMessages("grade10", "en");
@@ -19,7 +20,7 @@ const meta = {
     copy: SERVICE_PICKER_COPY,
     services: {
       status: "ready",
-      data: [GRADING_SERVICE, CONSULTATION_SERVICE],
+      data: [GRADING_SERVICE, VAULTING_SERVICE, CONSULTATION_SERVICE],
     },
     onSelect: fn(),
   },
@@ -32,23 +33,24 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("Card Grading")).toBeVisible();
+    expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
+    expect(canvas.getByText("Collection Consultation")).toBeVisible();
     await userEvent.click(
-      canvas.getByRole("button", { name: /Collection consultation/ }),
+      canvas.getByRole("radio", { name: /Collection Consultation/ }),
     );
     expect(args.onSelect).toHaveBeenCalledWith("svc_consultation");
   },
 };
 
 export const Selected: Story = {
-  args: { selectedId: "svc_consultation" },
+  args: { selectedId: "svc_grading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByRole("radio", { name: /Card Grading/ })).toBeChecked();
     expect(
-      canvas.getByRole("button", { name: /Collection consultation/ }),
-    ).toHaveAttribute("aria-pressed", "true");
-    expect(
-      canvas.getByRole("button", { name: /Card grading/ }),
-    ).toHaveAttribute("aria-pressed", "false");
+      canvas.getByRole("radio", { name: /Vault Drop-Off/ }),
+    ).not.toBeChecked();
   },
 };
 

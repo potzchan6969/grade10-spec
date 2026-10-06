@@ -1,0 +1,207 @@
+{
+  "version": 2,
+  "change": "close-overdue-address-confirmation",
+  "baseline": "6ed0f50067567974ab20e9752e234de7a5f84a4cf62e28d63be18cc4cd0ccd3c",
+  "fingerprint": "7a2528b25e7c03309cecdf6c5691caf3a46f1250d48e7632ddcccc67ccea3986",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-06T17:51:56.391Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#address-confirmation-window",
+      "sha256": "89e0fdd760845d86ac312122e309a30a84150aad11a1eb78dbb30ea25e28cfb1",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#manual-payment-collection",
+      "sha256": "521f80c7103eb8ccfc2cac1369bc3826533e17a5812e741d7071f6d68089e5dd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#post-sale-queue",
+      "sha256": "37e5d05d356567ff1fd174c9e8bf9a7c5d4f852d7dd2f9860b9b594ed3432191",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#address-deadline",
+      "sha256": "80ffb2fa044cb72563dc56ed4f157fbb36fce034c198c54c8347a048563a3947",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#by-card",
+      "sha256": "ae963f75824e312e2591a45cc3ec073759da1f907f051d5f1a11524a3c7f1351",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#missed-address-deadline",
+      "sha256": "d4345a4c56a0e7850f31acf53f2c1070da3673d08b2748b02ae33825ed1d8bd7",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#order-status",
+      "sha256": "ca46634ceb7eee39b034b013c0853af1869223909e3c2bc94a242372cecd8560",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/decisions.md",
+      "sha256": "d3c82e75a5d74d49dceaf4e5e861916fbb59668e369c217a4d5deb27faf57818",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/proposal.md",
+      "sha256": "dc621e2a24de2069f8dd57ab1c923eb1065f7da1225ce133cde928209f122155",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "da187ca12abd431774933edb87c1b22de0e2345549cc4322bbc6fc74d9a8b299",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "660bfa70738cde95e795e1c78cb9a43321bcff8efed0c11133f79de802efda1e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "a8646c8636c21e3744e2d7eae7559758aeaf094aef0720eac9b3a4ec4eabf15c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "sha256": "192529b41e6ec07a9da1a82d8453bb5dd5a8ccedb2ebee5ff3bc673518efff75",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-site/auction/order-status/spec.md",
+      "sha256": "687a7bbb395e261e8d5f6ad3f1dffde7be1f7cd2db6bc29b77308e83121142df",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-site/auction/order-status/user-journeys.md",
+      "sha256": "3ca59fb95fe002636b58361579401e61fd02614b03863f3835b8cbacc3bae07d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "3615185d92d84356c4986464a376b9514185325bf1fec14f5f5758e86465b7c5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "fe05cec8c8e171fe196e349ae90749efb039debfccf55690b5f6eb7a0ab783d7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "a1ef29b315278e2b73b369e9e4d3367fe1d41a3a9ad021dd1c3bb6a957ab81d1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/tech-design.md",
+      "sha256": "9a0fde61eeee3c046dcec9e9540ee13e3d7eefd31618397c5a9b6b05ede2f5fc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/ui-design.md",
+      "sha256": "62981cefe10db0e1fb331a18e16bbc20a508783d594b41930a2222e1ced48a60",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "997bde831fe79bb3b0fa726141e24667637832e55994fc1b344aed432d06d56b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "a51449ee189b3ffb6679e43bde0f7dc523373b933ad0f913fcb13dded4318b55",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "37a360bf65ec9ad3e12a2a40e3cd17f1015681963e782505eb0633ae0a2666bf",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "sha256": "3c5a0212591181d6d0aed2f5e10426a5e340f05cf5692a2f053f6f967095b9cb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+      "sha256": "2a44b8801c5b298dfe0d14d6dd648dacf3004992898d70b78d902fabe79dc7e6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+      "sha256": "3193e343a7a89358be2c996653716d9d94b5f22a2c0765ff9552f0a97a8b015c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "d4d6207fc5650552298c0d5d90018030aff704acebba047aed11372190edbc82",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "a7d5ab81a799e4dca3f3bebc9e92b1e73a4bd309f3416fd9a5798baa8e6945f6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "bbc928ccc871579d475b786777bd05ff31ebd260305d313b5c3f5e1f4d29cda4",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/close-overdue-address-confirmation/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Only an operator settles an expired invoice"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The address deadline gates the winner's address write"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A missed address deadline closes the address form",
+        "Requirement: The payment deadline is fixed when the invoice is sent"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -24,6 +24,7 @@ bounds allow,
 **so that** no loan leaves the counter above what the item is worth or outside
 what the business lends.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-fwb rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC1-1: Offer is made when every lending bound is met
 
 **Classification:**
@@ -59,6 +60,7 @@ what the business lends.
   late-day figure it derives from what was entered.
 * The case moves to `offer_made` carrying the one offer just sent.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-w1x rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC2-1: A counter-offer supersedes the case's live offer
 
 **Classification:**
@@ -93,6 +95,7 @@ what the business lends.
 * `<offer_1>` reads closed, superseded by the counter-offer.
 * The counter-offer is the case's one live offer.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-kwy rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC3-1: Storage-lane terms are agreed with no offer written
 
 **Classification:**
@@ -125,6 +128,7 @@ what the business lends.
 * The case moves to `accepted` with no offer written.
 * The custody terms are recorded against the valuation alone.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-1n7 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC4-1: Every lending bound unset outside production allows the offer
 
 **Classification:**
@@ -159,6 +163,7 @@ what the business lends.
 * The dialog reads every gate as not set before the act.
 * The offer is made despite values no brand bound would otherwise allow.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-cxv rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC5-1: Offer principal is judged against the loan-to-value cap
 
 Runs once per row of **Test data**.
@@ -201,6 +206,7 @@ Runs once per row of **Test data**.
 * Step 2 returns the row's result.
 * The refused row names the loan-to-value cap as the reason.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-too rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC6-1: Offer principal is judged against the valuation alone
 
 Runs once per row of **Test data**.
@@ -242,6 +248,7 @@ Runs once per row of **Test data**.
 * Step 2 returns the row's result.
 * The refused row names the valuation as the reason.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-0p9 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC7-1: Offer rate is judged against the brand's rate band
 
 Runs once per row of **Test data**.
@@ -286,6 +293,7 @@ Runs once per row of **Test data**.
 * Step 2 returns the row's result.
 * A refused row names the rate band as the reason.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-8g9 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC8-1: Offer expiry is judged against the validity window and the present
 
 Runs once per row of **Test data**.
@@ -330,6 +338,7 @@ Runs once per row of **Test data**.
 * The 8-days-from-now row names the offer-validity window as the reason.
 * The now row names that the expiry must be after now.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-29t rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC9-1: Offer term outside every brand preset is refused
 
 **Classification:**
@@ -363,6 +372,7 @@ Runs once per row of **Test data**.
 * The offer is refused.
 * The dialog names the brand's term presets as the reason.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-uy5 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC10-1: A lending bound unset in production refuses the offer
 
 **Classification:**
@@ -396,6 +406,7 @@ Runs once per row of **Test data**.
 * The dialog names the unset loan-to-value cap before step 2.
 * Step 2 is refused, naming the same unset cap.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-31i rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC11-1: The lender's unset registered name refuses the offer in production
 
 **Classification:**
@@ -428,6 +439,7 @@ Runs once per row of **Test data**.
 * The dialog names the unset registered name before step 2.
 * Step 2 is refused, naming the same reason.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-6mn rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC12-1: A valuation below a standing offer is refused
 
 **Classification:**
@@ -459,6 +471,7 @@ Runs once per row of **Test data**.
 * The valuation is refused.
 * The refusal names `<offer_1>` as the standing offer it would fall below.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-p9q rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC13-1: Staff without the approve grant cannot make an offer
 
 **Classification:**
@@ -489,6 +502,7 @@ Runs once per row of **Test data**.
 * The attempt is refused for want of `vault:approve`.
 * The case carries no offer.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-o7g rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC14-1: An unset loan particular refuses the offer in production
 
 **Classification:**
@@ -526,6 +540,7 @@ Runs once per row of **Test data**.
 
 * Every row is refused by name, naming the row's value, and no offer is written.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-46u rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
 ### grade10-site-vault-valuation-and-offer-US1-TC15-1: Recording a valuation never changes the register's slab
 
 **Classification:**
@@ -564,6 +579,7 @@ Runs once per row of **Test data**.
 **so that** I can say yes before I come in, or say no and still be offered
 something else.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-xf4 rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC1-2: The collector accepts the live offer as an act on their own case
 
 **Classification:**
@@ -600,6 +616,7 @@ something else.
 * Step 1 is accepted, and its answer carries `<case_1>` as `accepted`.
 * Step 2 reads `<case_1>` `accepted`, `<offer_1>` accepted, `<visit_1>` as it was, no other visit booked, and nothing owed.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-1dp rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC2-2: The collector declines the live offer and the request stays open
 
 **Classification:**
@@ -637,6 +654,7 @@ something else.
 * Step 2 reads `<offer_1>` closed as declined by the collector.
 * Step 2 reads `<case_1>` `under_valuation`, with `<visit_1>` still booked.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-z9w rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC3-2: An accept a minute before the offer runs out is taken
 
 **Classification:**
@@ -674,6 +692,7 @@ something else.
 * Step 1 is accepted.
 * Step 2 reads `<case_1>` `accepted`.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-xvu rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC4-2: An answer after the offer ran out
 
 Runs once per row of **Test data**.
@@ -715,6 +734,7 @@ Runs once per row of **Test data**.
 * Step 1 is answered as the row says.
 * Step 2 reads what the row's last column says.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-oac rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC5-2: An answer on a case that moved under it is refused by name
 
 Runs once per row of **Test data**.
@@ -754,6 +774,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name, naming that the case moved.
 * Step 2 reads `<case_1>` as the row's move left it.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-amv rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC6-2: A collector cannot answer another collector's offer
 
 **Classification:**
@@ -790,6 +811,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused, and the response carries none of `<case_1>`'s facts.
 * Step 2 still reads `<offer_1>` live.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-wlm rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC7-2: The collector's read of the offer carries its terms, its valuation and the day to answer by
 
 **Classification:**
@@ -828,6 +850,7 @@ Runs once per row of **Test data**.
 * Step 2 carries `<valuation>` as what the offer was judged against.
 * Step 2 carries no due date.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-tnl rev=1 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC8-1: Going back from a confirmation leaves the offer live
 
 Runs once per row of **Test data**.
@@ -870,6 +893,7 @@ Runs once per row of **Test data**.
 * `<offer_1>` is still live, with Accept this offer and Decline this offer
   on it.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-gdr rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC9-2: The same accept sent twice lands once
 
 **Classification:**
@@ -902,6 +926,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused by name.
 * Step 3 reads `<case_1>` `accepted` once, with one accepted `<offer_1>` and nothing else changed by step 2.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-xam rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC10-2: The day to answer by reads on own cases only while the offer is open
 
 **Classification:**
@@ -932,6 +957,7 @@ Runs once per row of **Test data**.
 * Step 1 carries `<case_1>` with `<expiry>` as its day to answer by.
 * Step 2 carries `<case_1>` with no day to answer by.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-hp1 rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC11-2: An accept after the offer ran out under the reader is refused as run out
 
 **Classification:**
@@ -973,6 +999,7 @@ with Accept and Decline on it,
 **so that** I answer the offer that stands and never the one that was
 withdrawn.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-tti rev=2 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
 ### grade10-site-vault-valuation-and-offer-US5-TC1-2: The collector's own read names the replaced offer closed and the live one's terms
 
 **Classification:**
@@ -1011,6 +1038,7 @@ withdrawn.
 * Step 2 reads `<offer_2>`'s terms as the live offer.
 * Step 2 reads the case's history carrying the day `<offer_1>` closed.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-ggw rev=2 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
 ### grade10-site-vault-valuation-and-offer-US5-TC2-2: The offer that replaced the last is accepted like any live offer
 
 **Classification:**
@@ -1047,6 +1075,7 @@ withdrawn.
 * Step 1 is accepted.
 * Step 2 reads `<case_1>` `accepted` on `<offer_2>`'s terms, `<offer_1>` still closed.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-t5t rev=2 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
 ### grade10-site-vault-valuation-and-offer-US5-TC3-2: An answer naming the replaced offer is refused
 
 Runs once per row of **Test data**.
@@ -1086,6 +1115,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 reads `<offer_1>` closed and `<offer_2>` open and unanswered.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-htu rev=1 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
 ### grade10-site-vault-valuation-and-offer-US5-TC4-1: A twice-superseded case reads only the most recent close
 
 **Classification:**
@@ -1129,6 +1159,7 @@ the item register and corrected there when the slab in my hand says otherwise,
 **so that** the figure I record is for the slab in front of me, not one typed
 from memory.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-qt8 rev=1 covers=g10.vault-valuation-and-offer.SC-1yc,g10.vault-valuation-and-offer.SC-e0k,g10.vault-valuation-and-offer.SC-s2f -->
 ### grade10-site-vault-valuation-and-offer-US6-TC1-1: The valuation dialog reads the slab from the register
 
 **Classification:**
@@ -1161,6 +1192,7 @@ from memory.
 * The valuation is recorded at HKD 25,000.00.
 * `<item_1>` still carries PSA, grade 10 and `AB12345`.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-b8l rev=1 covers=g10.vault-valuation-and-offer.SC-1yc,g10.vault-valuation-and-offer.SC-e0k,g10.vault-valuation-and-offer.SC-s2f -->
 ### grade10-site-vault-valuation-and-offer-US6-TC2-1: A correction on the Case tab reaches the valuation dialog
 
 **Classification:**
@@ -1191,6 +1223,7 @@ from memory.
 
 * Step 3's line reads PSA, grade 10 and `AB12345`.
 
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-49b rev=1 covers=g10.vault-valuation-and-offer.SC-1yc,g10.vault-valuation-and-offer.SC-e0k,g10.vault-valuation-and-offer.SC-s2f -->
 ### grade10-site-vault-valuation-and-offer-US6-TC3-1: An item with no grader shows no slab line
 
 **Classification:**

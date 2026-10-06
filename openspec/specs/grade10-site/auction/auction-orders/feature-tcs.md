@@ -9,6 +9,7 @@
 **I want** one list of my auction orders, each with the action it needs
 **so that** I complete order setupes and pay invoices without guessing which order is waiting on me.
 
+<!-- trace:case id=g10.auction-auction-orders.TC-ci3 rev=1 covers=g10.auction-auction-orders.SC-nv4,g10.auction-auction-orders.SC-czj,g10.auction-auction-orders.SC-c1n,g10.auction-auction-orders.SC-lqy,g10.auction-auction-orders.SC-xrg,g10.auction-auction-orders.SC-82x,g10.auction-auction-orders.SC-0y5,g10.auction-auction-orders.SC-oor,g10.auction-auction-orders.SC-wgn,g10.auction-auction-orders.SC-yt5,g10.auction-auction-orders.SC-t2o -->
 ### grade10-site-auction-auction-orders-US1-TC1-1: Every won order is listed once with its details
 
 **Classification:**
@@ -37,6 +38,7 @@
 * Three rows are listed, one per order.
 * Each row shows lot image, title, auction, winning bid, order status.
 
+<!-- trace:case id=g10.auction-auction-orders.TC-rqf rev=1 covers=g10.auction-auction-orders.SC-nv4,g10.auction-auction-orders.SC-czj,g10.auction-auction-orders.SC-c1n,g10.auction-auction-orders.SC-lqy,g10.auction-auction-orders.SC-xrg,g10.auction-auction-orders.SC-82x,g10.auction-auction-orders.SC-0y5,g10.auction-auction-orders.SC-oor,g10.auction-auction-orders.SC-wgn,g10.auction-auction-orders.SC-yt5,g10.auction-auction-orders.SC-t2o -->
 ### grade10-site-auction-auction-orders-US1-TC2-1: Orders waiting on the winner are listed first
 
 **Classification:**
@@ -74,6 +76,7 @@
 * <order_2> is listed before <order_1>.
 * <order_3> is listed before <order_4>.
 
+<!-- trace:case id=g10.auction-auction-orders.TC-d48 rev=1 covers=g10.auction-auction-orders.SC-nv4,g10.auction-auction-orders.SC-czj,g10.auction-auction-orders.SC-c1n,g10.auction-auction-orders.SC-lqy,g10.auction-auction-orders.SC-xrg,g10.auction-auction-orders.SC-82x,g10.auction-auction-orders.SC-0y5,g10.auction-auction-orders.SC-oor,g10.auction-auction-orders.SC-wgn,g10.auction-auction-orders.SC-yt5,g10.auction-auction-orders.SC-t2o -->
 ### grade10-site-auction-auction-orders-US1-TC3-1: Each order status offers its own action
 
 Runs once per row of **Test data**.
@@ -119,6 +122,7 @@ Runs once per row of **Test data**.
 * The row action reads <action>.
 * Step 2 opens that order.
 
+<!-- trace:case id=g10.auction-auction-orders.TC-v2e rev=1 covers=g10.auction-auction-orders.SC-nv4,g10.auction-auction-orders.SC-czj,g10.auction-auction-orders.SC-c1n,g10.auction-auction-orders.SC-lqy,g10.auction-auction-orders.SC-xrg,g10.auction-auction-orders.SC-82x,g10.auction-auction-orders.SC-0y5,g10.auction-auction-orders.SC-oor,g10.auction-auction-orders.SC-wgn,g10.auction-auction-orders.SC-yt5,g10.auction-auction-orders.SC-t2o -->
 ### grade10-site-auction-auction-orders-US1-TC4-1: View lot opens the lot's listing page
 
 **Classification:**
@@ -147,6 +151,7 @@ Runs once per row of **Test data**.
 
 * The lot's listing page opens.
 
+<!-- trace:case id=g10.auction-auction-orders.TC-s1m rev=1 covers=g10.auction-auction-orders.SC-nv4,g10.auction-auction-orders.SC-czj,g10.auction-auction-orders.SC-c1n,g10.auction-auction-orders.SC-lqy,g10.auction-auction-orders.SC-xrg,g10.auction-auction-orders.SC-82x,g10.auction-auction-orders.SC-0y5,g10.auction-auction-orders.SC-oor,g10.auction-auction-orders.SC-wgn,g10.auction-auction-orders.SC-yt5,g10.auction-auction-orders.SC-t2o -->
 ### grade10-site-auction-auction-orders-US1-TC5-1: Another collector's orders are never listed
 
 **Classification:**
@@ -176,6 +181,7 @@ Runs once per row of **Test data**.
 * Only customer A's order is listed.
 * customer B's order does not appear.
 
+<!-- trace:case id=g10.auction-auction-orders.TC-lp9 rev=1 covers=g10.auction-auction-orders.SC-nv4,g10.auction-auction-orders.SC-czj,g10.auction-auction-orders.SC-c1n,g10.auction-auction-orders.SC-lqy,g10.auction-auction-orders.SC-xrg,g10.auction-auction-orders.SC-82x,g10.auction-auction-orders.SC-0y5,g10.auction-auction-orders.SC-oor,g10.auction-auction-orders.SC-wgn,g10.auction-auction-orders.SC-yt5,g10.auction-auction-orders.SC-t2o -->
 ### grade10-site-auction-auction-orders-US1-TC6-1: An empty list points to My Auctions
 
 **Classification:**
@@ -205,6 +211,7 @@ Runs once per row of **Test data**.
 * No error is reported.
 * Step 2 opens <grade10 my auctions url>.
 
+<!-- trace:case id=g10.auction-auction-orders.TC-k0c rev=1 covers=g10.auction-auction-orders.SC-nv4,g10.auction-auction-orders.SC-czj,g10.auction-auction-orders.SC-c1n,g10.auction-auction-orders.SC-lqy,g10.auction-auction-orders.SC-xrg,g10.auction-auction-orders.SC-82x,g10.auction-auction-orders.SC-0y5,g10.auction-auction-orders.SC-oor,g10.auction-auction-orders.SC-wgn,g10.auction-auction-orders.SC-yt5,g10.auction-auction-orders.SC-t2o -->
 ### grade10-site-auction-auction-orders-US1-TC7-1: A failed read offers retry, not an empty list
 
 **Classification:**

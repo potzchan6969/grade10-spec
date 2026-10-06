@@ -9,6 +9,7 @@
 **I want** to pick a shop and a time and book the visit with nothing but my name and email,
 **so that** I arrive at a desk that is expecting me instead of queueing as a walk-in.
 
+<!-- trace:case id=g10.appointment-booking.TC-f65 rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC1-1: Grading visit booked with a name and an email
 
 **Classification:**
@@ -56,6 +57,7 @@
 * Step 7 shows the confirmation naming `<grading service>`, `<shop_1>` and its address, `<a free time>` in the shop's zone with the zone named, and the link that manages the visit.
 * Step 8 holds one confirmation for the visit, carrying a calendar file and the same link.
 
+<!-- trace:case id=g10.appointment-booking.TC-ldl rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC2-1: Service address opens the flow at that service
 
 **Classification:**
@@ -85,6 +87,7 @@
 * `<grading service>` is shown as picked.
 * The flow is on the shop step.
 
+<!-- trace:case id=g10.appointment-booking.TC-tg9 rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC3-1: Product-bound services stay off the public list
 
 **Classification:**
@@ -122,6 +125,7 @@
 * `<grading service>` is listed.
 * `<vault visit service>` is not.
 
+<!-- trace:case id=g10.appointment-booking.TC-om9 rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC4-1: Times shown are the diary's, in the shop's zone
 
 **Classification:**
@@ -162,6 +166,7 @@
 * 10:00 is listed and no time between 10:05 and 11:55 is.
 * Times from 12:00 to 13:00 are listed and nothing after 13:00 is.
 
+<!-- trace:case id=g10.appointment-booking.TC-53x rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC5-1: Closed days and days past the horizon cannot be picked
 
 **Classification:**
@@ -202,6 +207,7 @@
 * Step 1 picks nothing; the day is shown as unavailable.
 * Step 3 picks nothing; every day from `<a day past the horizon>` on is shown as unavailable.
 
+<!-- trace:case id=g10.appointment-booking.TC-ei6 rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC6-1: Questions are asked in the service's order
 
 **Classification:**
@@ -236,6 +242,7 @@
 
 * The contact fields come first, then the `choice` question marked required, then the `text` question.
 
+<!-- trace:case id=g10.appointment-booking.TC-10a rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC7-1: Missing details are refused before anything is sent
 
 **Classification:**
@@ -268,6 +275,7 @@
 * The form names the email address and the question as missing.
 * No booking request was sent.
 
+<!-- trace:case id=g10.appointment-booking.TC-b3e rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC8-1: Time taken meanwhile is refused and the times refresh
 
 **Classification:**
@@ -306,6 +314,7 @@
 * `<the last time>` is no longer listed; user A's name and address are still filled in.
 * Only user B holds a booking at `<the last time>`.
 
+<!-- trace:case id=g10.appointment-booking.TC-o7m rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC9-1: Second live visit for the same service is told so
 
 **Classification:**
@@ -344,6 +353,7 @@
 * The page says a visit is already booked and shows `<the first time>`.
 * No second booking exists for `<user email>`.
 
+<!-- trace:case id=g10.appointment-booking.TC-ak8 rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
 ### grade10-site-appointment-booking-US1-TC10-1: Booking surface is served and listed per locale
 
 **Classification:**
@@ -383,6 +393,7 @@ Client-side JavaScript execution is disabled in the browser settings.
 **I want** to see, move or cancel it from the link in my mail, and to find all my visits when I am signed in,
 **so that** a change of plans costs me a minute rather than a phone call.
 
+<!-- trace:case id=g10.appointment-booking.TC-ypj rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC1-1: Mailed link opens the booking
 
 **Classification:**
@@ -418,6 +429,7 @@ Client-side JavaScript execution is disabled in the browser settings.
 * The page shows the service, `<shop_1>` and its address, and the start in the shop's zone.
 * The page offers to move the visit and to cancel it.
 
+<!-- trace:case id=g10.appointment-booking.TC-wxi rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC2-1: Visit moved from the link
 
 **Classification:**
@@ -456,6 +468,7 @@ Client-side JavaScript execution is disabled in the browser settings.
 * The page shows the visit at `<another free time>` with the same service and shop.
 * Step 4 holds an update naming `<another free time>` and carrying a calendar file.
 
+<!-- trace:case id=g10.appointment-booking.TC-qa0 rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC3-1: Visit cancelled from the link after confirming
 
 **Classification:**
@@ -486,6 +499,7 @@ Client-side JavaScript execution is disabled in the browser settings.
 * The page shows the visit as cancelled and offers neither a move nor a cancel.
 * Step 3 holds a cancellation for the visit.
 
+<!-- trace:case id=g10.appointment-booking.TC-4zc rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC4-1: Closed booking's link offers nothing
 
 **Classification:**
@@ -521,6 +535,7 @@ Client-side JavaScript execution is disabled in the browser settings.
 * The page shows the visit as completed.
 * No move and no cancel is offered.
 
+<!-- trace:case id=g10.appointment-booking.TC-3p9 rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC5-1: Unknown secret answers not found
 
 **Classification:**
@@ -555,6 +570,7 @@ None.
 * The page answers not found.
 * No booking is shown.
 
+<!-- trace:case id=g10.appointment-booking.TC-dsr rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC6-1: Secret never leaves the browser in a path or query
 
 **Classification:**
@@ -585,6 +601,7 @@ None.
 * The page request carries the secret in neither its path nor its query.
 * The secret appears only in the body of the booking's own reads and writes.
 
+<!-- trace:case id=g10.appointment-booking.TC-2cn rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC7-1: Signed-in list holds the visits under the address
 
 **Classification:**
@@ -616,6 +633,7 @@ None.
 * `<a live booking>` is listed first as upcoming; `<a completed booking>` is listed after it as past.
 * Step 3 opens the page that manages `<a live booking>`.
 
+<!-- trace:case id=g10.appointment-booking.TC-c65 rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC8-1: Signed out, the list invites sign-in
 
 **Classification:**
@@ -644,6 +662,7 @@ The user has no session.
 * The page invites the user to sign in.
 * No visit is listed.
 
+<!-- trace:case id=g10.appointment-booking.TC-tm5 rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
 ### grade10-site-appointment-booking-US2-TC9-1: Private addresses are never listed or indexed
 
 **Classification:**
@@ -683,6 +702,7 @@ None.
 budget,
 **so that** a script cannot flood the diary or hold every seat for itself.
 
+<!-- trace:case id=g10.appointment-booking.TC-c1t rev=1 covers=g10.appointment-booking.SC-mb6,g10.appointment-booking.SC-zhe,g10.appointment-booking.SC-fg8 -->
 ### grade10-site-appointment-booking-US3-TC1-1: Address that has spent its budget is refused at the limit
 
 **Classification:**
@@ -719,6 +739,7 @@ budget,
 * The attempt is refused `TOO_MANY_REQUESTS`.
 * The refusal carries the reason `budget`, so the site can word the wait itself.
 
+<!-- trace:case id=g10.appointment-booking.TC-a4n rev=1 covers=g10.appointment-booking.SC-mb6,g10.appointment-booking.SC-zhe,g10.appointment-booking.SC-fg8 -->
 ### grade10-site-appointment-booking-US3-TC2-1: Request with no challenge token is refused where the secret is set
 
 **Classification:**
@@ -747,6 +768,7 @@ budget,
 
 * The request is refused `FORBIDDEN`.
 
+<!-- trace:case id=g10.appointment-booking.TC-wey rev=1 covers=g10.appointment-booking.SC-mb6,g10.appointment-booking.SC-zhe,g10.appointment-booking.SC-fg8 -->
 ### grade10-site-appointment-booking-US3-TC3-1: Refused request holds no seat
 
 **Classification:**

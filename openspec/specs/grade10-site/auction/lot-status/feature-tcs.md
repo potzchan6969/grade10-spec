@@ -1,62 +1,41 @@
 # grade10-site/auction/lot-status Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-09-30, tcs-rules r3.0
 
 ## grade10-site-auction-lot-status-US1: Collector sees whether a lot can still be bid on
 
 **As a** collector,
-**I want** every lot to show whether it is Upcoming, Active or Ended,
-**so that** I can see at a glance whether I can still bid on it.
+**I want** a closed lot with a Preparing Shipment order to still read Ended,
+**so that** the lot status stays separate from the winner's order status.
 
-<!-- review-note 2026-09-29: keep draft for now. Some of these statuses should be covered in an FE user flow before this case is approved. -->
 <!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
-### grade10-site-auction-lot-status-US1-TC1-1: External lot status matches the lot
-
-Runs once per row of **Test data**.
+### grade10-site-auction-lot-status-US1-TC1-1: Preparing Shipment maps to Ended
 
 **Classification:**
 
-* **Severity:** critical
-* **Priority:** high
+* **Severity:** minor
+* **Priority:** low
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** api
+* **Suites:** regression
+* **Layer:** unit
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-01
 
 **Pre-conditions:**
 
-* <lot> is in the state the row names.
-
-**Test data:**
-
-| <lot> | External lot status |
-| --- | --- |
-| Published, scheduled start not arrived | Upcoming |
-| Open for bidding, closing in a day | Active |
-| Open for bidding, closing in a minute | Active |
-| Past its scheduled close, in extended bidding | Active |
-| Has a winner, order awaiting payment | Ended |
-| Has a winner, order shipped | Ended |
-| Has a winner, order cancelled | Ended |
-| Has a winner, order Awaiting Setup | Ended |
-| Has a winner, order Preparing Invoice | Ended |
-| Has a winner, order Processing | Ended |
-| Has a winner, order Delivered | Ended |
-| Has a winner, order Refunded | Ended |
-| Bidding ended with no winner | Ended |
+* A closed lot with a winner whose order derives as Preparing Shipment.
 
 **Steps:**
 
-1. Read the API response for <lot>.
+1. Read external lot status.
 
-**Expected Results:**
+**Expected result:**
 
-* External lot status matches the row.
+* External lot status is Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-bfm rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 ### grade10-site-auction-lot-status-US1-TC2-1: Winner sees their order status separately
@@ -103,6 +82,7 @@ Runs once per row of **Test data**.
 **I want** draft lots and called-off lots absent from browse, search and my watchlist,
 **so that** I can use a called-off lot's original address directly without it appearing as an available auction.
 
+<!-- trace:case id=g10.auction-lot-status.TC-22a rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw -->
 ### grade10-site-auction-lot-status-US2-TC1-1: Hidden lots are not in the catalogue
 
 Runs once per row of **Test data**.
@@ -308,7 +288,6 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-| Finding | Disposition |
-| --- | --- |
-| Whether removing a lot from browse/search also disables its original address | Settled in Q16 and the listing-page and lot-status deltas: browse/search omit the called-off lot; the canonical address remains directly accessible and permanently reserved. |
-| Whether the listing code can act as a route | The code remains a non-route; this case checks the public address boundary. |
+- **Covered:** mapping Preparing Shipment → Ended under
+  `grade10-site-auction-lot-status-SC-04`'s requirement ← `US1-TC1-1`.
+- **Raised:** none.

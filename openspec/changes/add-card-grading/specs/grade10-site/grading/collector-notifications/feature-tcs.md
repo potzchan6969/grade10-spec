@@ -21,6 +21,7 @@
 **I want** one email for each thing that happens to my submission, the drop-off's booked, moved, cancelled, missed and day-before messages among them, in English, with a link straight to the page that needs no account,
 **so that** I never have to ask the shop what stage my cards are at.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-66y rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC1-1: Drop-off booked email comes from grading, not the diary
 
 **Classification:**
@@ -59,6 +60,7 @@
 * One drop-off booked email arrives, sent by grading.
 * No separate booking confirmation arrives from the diary.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-hs8 rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC2-1: Every message sends by email only, in English
 
 **Classification:**
@@ -100,6 +102,7 @@
 * Step 3: the message reads entirely in English.
 * Step 4: no SMS or WhatsApp message arrives.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-x5j rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC3-1: The message link opens the submission with no account
 
 **Classification:**
@@ -130,6 +133,7 @@
 * The submission's own page opens directly, at its own address.
 * No sign-in or account creation is asked for.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-ovq rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC4-1: A message with a document attaches it
 
 Runs once per row of **Test data**.
@@ -171,6 +175,7 @@ Runs once per row of **Test data**.
 * What was paid names what the row's What was paid names.
 * The signed agreement and the intake receipt are attached.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-ofx rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC5-1: A message with no document carries no attachment
 
 **Classification:**
@@ -202,6 +207,7 @@ Runs once per row of **Test data**.
 * The on-their-way email arrives.
 * No document is attached.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-st9 rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC6-1: The footer prints the shop's real facts in production
 
 **Classification:**
@@ -234,6 +240,7 @@ Runs once per row of **Test data**.
 * Step 3: the footer names the custodian's registered name trading as Grade10, the shop and its address, and the complaints contact.
 * Every date and time in the message reads Hong Kong time, and the footer says so.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-twi rev=1 covers=g10.grading-collector-notifications.SC-r9o,g10.grading-collector-notifications.SC-0qd -->
 ### grade10-site-grading-collector-notifications-US1-TC7-1: The footer marks an unset fact outside production
 
 **Classification:**
@@ -266,6 +273,7 @@ Runs once per row of **Test data**.
 * The unset fact prints inside brackets, marked.
 * Every other footer fact prints unmarked.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-ygx rev=1 covers=g10.vault-collector-notifications.SC-r3s,g10.grading-collector-notifications.SC-8jz -->
 ### grade10-site-grading-collector-notifications-US1-TC8-1: A cancelled visit reads the same whoever cancelled it
 
 **Classification:**
@@ -302,6 +310,7 @@ Runs once per row of **Test data**.
 * The two emails carry the same wording.
 * Neither names who cancelled the visit.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-cg3 rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC9-1: The grades email leaves out what this submission does not owe
 
 **Classification:**
@@ -332,6 +341,7 @@ Runs once per row of **Test data**.
 * No paragraph about settling appears.
 * No paragraph about an ungraded card appears.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-c3c rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC10-1: The reminder arrives the day before the visit
 
 **Classification:**
@@ -371,6 +381,7 @@ Runs once per row of **Test data**.
 * One reminder email arrives.
 * It names the visit's day, time and shop, and what to bring.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-i98 rev=1 covers=g10.grading-collector-notifications.SC-1tw -->
 ### grade10-site-grading-collector-notifications-US1-TC11-1: A rung already told is not told again
 
 **Classification:**
@@ -405,6 +416,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-fxc rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC12-1: The daily sweep sends a plan left unbooked its link once
 
 **Classification:**
@@ -445,6 +457,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-c3n rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC13-1: A plan with no visit names the brand's main shop, its hours and its phone
 
 **Classification:**
@@ -480,6 +493,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-25a rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC14-1: A plan whose visit was cancelled before the sweep is sent its link
 
 **Classification:**
@@ -520,6 +534,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-o0b rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC15-1: A collector whose cards travel in two shipments is told both
 
 **Classification:**
@@ -557,6 +572,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-1lh rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### grade10-site-grading-collector-notifications-US1-TC16-1: A sweep letter waits for an unset value in production
 
 **Classification:**
@@ -600,6 +616,7 @@ Runs once per row of **Test data**.
 **I want** no email about it, the receipt and History carrying it instead,
 **so that** my inbox holds only what I could not already see.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-d0s rev=1 covers=g10.grading-collector-notifications.SC-pte,g10.grading-collector-notifications.SC-95a -->
 ### grade10-site-grading-collector-notifications-US2-TC1-1: A refused card sends no email while hand-in proceeds
 
 **Classification:**
@@ -645,6 +662,7 @@ Runs once per row of **Test data**.
 * Step 7: the handed-in email still arrives, naming only the accepted cards.
 * Steps 7 and 8: the intake receipt and the submission page carry the refused card's badge and reason.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-1to rev=1 covers=g10.grading-collector-notifications.SC-pte,g10.grading-collector-notifications.SC-95a -->
 ### grade10-site-grading-collector-notifications-US2-TC2-1: Naming, changing or removing a collector sends no email
 
 Runs once per row of **Test data**.
@@ -694,6 +712,7 @@ Runs once per row of **Test data**.
 **I want** a submission to be flagged when a message to its collector ran out of attempts, and to be able to send it again,
 **so that** a provider outage costs a delay rather than a collector who was never told.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-msu rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
 ### grade10-site-grading-collector-notifications-US3-TC1-1: A submission is flagged when a message runs out
 
 **Classification:**
@@ -729,6 +748,7 @@ Runs once per row of **Test data**.
 * Step 3: Send again is offered.
 * No further attempt is made to send the letter.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-wi1 rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
 ### grade10-site-grading-collector-notifications-US3-TC2-1: Staff resend a parked message from the submission
 
 **Classification:**
@@ -757,6 +777,7 @@ Runs once per row of **Test data**.
 
 * The message resends to the collector.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-doy rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
 ### grade10-site-grading-collector-notifications-US3-TC3-1: A failed send never blocks the event it reports
 
 **Classification:**
@@ -790,6 +811,7 @@ Runs once per row of **Test data**.
 * The submission's status still reflects the event, unaffected by the failed send.
 * The failed send is recorded as still owed.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-iy5 rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
 ### grade10-site-grading-collector-notifications-US3-TC4-1: The queue shows no flag when every message sent
 
 **Classification:**
@@ -821,6 +843,7 @@ Runs once per row of **Test data**.
 
 * No row carries the Message not sent badge.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-6jb rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
 ### grade10-site-grading-collector-notifications-US3-TC5-1: A read-only grant cannot resend a parked message
 
 **Classification:**
@@ -850,6 +873,7 @@ Runs once per row of **Test data**.
 * The failed letter and its reason still show.
 * No Send again action is offered.
 
+<!-- trace:case id=g10.grading-collector-notifications.TC-g6j rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
 ### grade10-site-grading-collector-notifications-US3-TC6-1: The flag clears when the channel accepts the resend
 
 **Classification:**

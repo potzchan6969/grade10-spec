@@ -12,6 +12,7 @@ week it stays late,
 **so that** I know what I owe and what a late week costs before anything is
 taken.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-ti5 rev=1 covers=g10.vault-collector-notifications.SC-jys,g10.vault-collector-notifications.SC-vqz,g10.vault-collector-notifications.SC-gdg,g10.vault-collector-notifications.SC-3f7,g10.vault-collector-notifications.SC-tgx,g10.vault-collector-notifications.SC-3ke,g10.vault-collector-notifications.SC-0ul,g10.vault-collector-notifications.SC-k1j -->
 ### grade10-site-vault-collector-notifications-US1-TC1-1: Reminder is sent before the due date at both scheduled points
 
 Runs once per row of **Test data**.
@@ -49,6 +50,7 @@ Runs once per row of **Test data**.
 * The borrower receives a reminder email.
 * The email names the amount owed and <the due date>.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-qos rev=1 covers=g10.vault-collector-notifications.SC-jys,g10.vault-collector-notifications.SC-vqz,g10.vault-collector-notifications.SC-gdg,g10.vault-collector-notifications.SC-3f7,g10.vault-collector-notifications.SC-tgx,g10.vault-collector-notifications.SC-3ke,g10.vault-collector-notifications.SC-0ul,g10.vault-collector-notifications.SC-k1j -->
 ### grade10-site-vault-collector-notifications-US1-TC2-1: Reminder is sent every seven days while the loan is overdue
 
 Runs once per row of **Test data**.
@@ -86,6 +88,7 @@ Runs once per row of **Test data**.
 * The borrower receives an overdue reminder email.
 * The email names the outstanding balance and that interest keeps accruing at the same daily rate.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-1kf rev=1 covers=g10.vault-collector-notifications.SC-jys,g10.vault-collector-notifications.SC-vqz,g10.vault-collector-notifications.SC-gdg,g10.vault-collector-notifications.SC-3f7,g10.vault-collector-notifications.SC-tgx,g10.vault-collector-notifications.SC-3ke,g10.vault-collector-notifications.SC-0ul,g10.vault-collector-notifications.SC-k1j -->
 ### grade10-site-vault-collector-notifications-US1-TC3-1: The reminder ladder stops once a forfeiture notice is sent
 
 **Classification:**
@@ -124,6 +127,7 @@ Runs once per row of **Test data**.
 straight to it,
 **so that** I never have to ask the shop what stage my item is at.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-v95 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC1-1: A message's link opens the case at its own address
 
 **Classification:**
@@ -153,6 +157,7 @@ straight to it,
 * The browser opens the case's own address.
 * The case shown is the one the message was about.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-lky rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC2-1: An event decided silent sends no message to the collector
 
 **Classification:**
@@ -182,6 +187,7 @@ straight to it,
 * No entry appears for the event.
 * No email is queued for it.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-ipr rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC3-1: A parked message is handed back to the queue and sent
 
 **Classification:**
@@ -212,6 +218,7 @@ straight to it,
 * The message no longer shows as parked.
 * The collector receives the message.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-c1h rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC4-1: The signed document set is delivered once per packet
 
 **Classification:**
@@ -240,6 +247,7 @@ straight to it,
 * No second copy of the signed set is sent.
 * The packet's delivery claim still names its first successful send.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-9an rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC5-1: A message still sends when its documents cannot attach
 
 **Classification:**
@@ -269,6 +277,7 @@ straight to it,
 * The message still sends.
 * The message links to the case's own address instead of carrying the documents.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-syo rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC6-1: A message reads the case as it stands when sent
 
 **Classification:**
@@ -296,6 +305,7 @@ straight to it,
 
 * The message's address, item title and currency match the case as it now stands, not as it stood when queued.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-vxt rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC7-1: WhatsApp opens only when staff press its link
 
 **Classification:**
@@ -326,6 +336,7 @@ straight to it,
 * The chat app opens pre-filled with the chosen template, addressed to the collector's WhatsApp number.
 * No message is queued or sent by the vault's own notification system.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-0cu rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC8-1: A failed send retries on the five-attempt ladder
 
 Runs once per row of **Test data**.
@@ -363,6 +374,7 @@ Runs once per row of **Test data**.
 * The message is attempted again.
 * The message remains owed rather than closed off.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-fys rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC9-1: A message exhausting the ladder is parked and badged
 
 **Classification:**
@@ -391,6 +403,7 @@ Runs once per row of **Test data**.
 * The message is parked with the reason it failed.
 * The case badges for staff.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-we6 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC10-1: A hanging send gives up at ten seconds
 
 **Classification:**
@@ -419,6 +432,7 @@ Runs once per row of **Test data**.
 * The attempt is treated as failed.
 * The message re-enters the retry ladder.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-8zc rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC11-1: A case with no address is counted, not mailed
 
 **Classification:**
@@ -448,6 +462,7 @@ Runs once per row of **Test data**.
 * No email is attempted.
 * The event is counted as one the vault could not tell the collector, rather than as a send.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-vz9 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC12-1: A money record taken back reaches the borrower without naming who took it back
 
 **Classification:**
@@ -477,6 +492,7 @@ Runs once per row of **Test data**.
 * The borrower receives a message naming the amount taken back and what the case owes after it.
 * The message names nobody who recorded or took back the money.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-1wp rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC13-1: A message with no money in it names the custodian, not the lender
 
 **Classification:**
@@ -507,6 +523,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-blx rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC14-1: Cancelling a draft staff opened sends nothing, and a sent one is told as any case
 
 Runs once per row of **Test data**.
@@ -547,6 +564,7 @@ Runs once per row of **Test data**.
 
 * The message matches the row.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-qm8 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
 ### grade10-site-vault-collector-notifications-US2-TC15-1: A draft staff opened expires with no untouched email
 
 Runs once per row of **Test data**.
@@ -595,6 +613,7 @@ Runs once per row of **Test data**.
 **I want** the sealed set mailed to me once, with the documents attached,
 **so that** I hold my own copy without asking for one.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-1xt rev=1 covers=g10.vault-collector-notifications.SC-r2t,g10.vault-collector-notifications.SC-lmz,g10.vault-collector-notifications.SC-4ig -->
 ### grade10-site-vault-collector-notifications-US3-TC1-1: A retried delivery reads the documents from the packet again
 
 **Classification:**
@@ -633,6 +652,7 @@ attempts, and to be able to send it again,
 **so that** a provider outage costs a delay rather than a customer who was
 never told.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-fvw rev=1 covers=g10.vault-collector-notifications.SC-6iy,g10.vault-collector-notifications.SC-qld,g10.vault-collector-notifications.SC-lzl,g10.vault-collector-notifications.SC-xyv -->
 ### grade10-site-vault-collector-notifications-US4-TC1-1: The vaulting act stands even though the message failed
 
 **Classification:**
@@ -671,6 +691,7 @@ costs and how to pay, and the notice to name the clause, the date to pay by
 and that a person decides,
 **so that** the message is a record I can act on without opening the page.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-p0d rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
 ### grade10-site-vault-collector-notifications-US5-TC1-1: A money message tables its figures instead of prose
 
 **Classification:**
@@ -701,6 +722,7 @@ and that a person decides,
 * The amount, the due date and what a late day costs appear as a table.
 * The figures do not also appear written into a sentence elsewhere in the message.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-zt1 rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
 ### grade10-site-vault-collector-notifications-US5-TC2-1: A money message carries the loan's own how-to-pay block
 
 **Classification:**
@@ -731,6 +753,7 @@ and that a person decides,
 
 * Both blocks name the same FPS id, bank account and the case reference as the transfer reference.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-meg rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
 ### grade10-site-vault-collector-notifications-US5-TC3-1: A reminder states its own schedule and that it is free
 
 **Classification:**
@@ -759,6 +782,7 @@ and that a person decides,
 * The email states when the borrower will hear from the vault next.
 * The email states that a reminder costs nothing.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-w3y rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
 ### grade10-site-vault-collector-notifications-US5-TC4-1: The forfeiture notice names its clause, date and consequence
 
 **Classification:**
@@ -788,6 +812,7 @@ and that a person decides,
 * The email states what each further day adds and the condition the item lapses on.
 * The email states that taking the item is a person's decision, and that no further reminder follows.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-pfx rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
 ### grade10-site-vault-collector-notifications-US5-TC5-1: Every message carries the case line and lender footer
 
 **Classification:**
@@ -818,6 +843,7 @@ and that a person decides,
 * The message carries the case reference and the item.
 * The footer names the sending party under its registered name and the complaints contact, with the lender's licence line on a money message.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-bh4 rev=1 covers=g10.vault-collector-notifications.SC-tz5 -->
 ### grade10-site-vault-collector-notifications-US5-TC6-1: An unset value prints as a marked placeholder outside production
 
 **Classification:**
@@ -847,6 +873,7 @@ and that a person decides,
 * The unset value prints as a bracketed, marked placeholder.
 * The message still sends.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-qu7 rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
 ### grade10-site-vault-collector-notifications-US5-TC7-1: Production refuses a message that would print an unset value
 
 **Classification:**
@@ -876,6 +903,7 @@ and that a person decides,
 * The act is refused before anything is written or sent.
 * No message carrying the unset value reaches the borrower.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-ht8 rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
 ### grade10-site-vault-collector-notifications-US5-TC8-1: The offer's message tables the term, the interest and the day it is open until
 
 **Classification:**
@@ -912,6 +940,7 @@ and that a person decides,
 **I want** the invitation to name the visit, the slot and what to bring,
 **so that** I can verify at home and turn up prepared.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-wk8 rev=1 covers=g10.vault-collector-notifications.SC-kz4,g10.vault-collector-notifications.SC-fcf -->
 ### grade10-site-vault-collector-notifications-US6-TC1-1: The invitation names the visit's shop, slot and checklist
 
 **Classification:**
@@ -939,6 +968,7 @@ and that a person decides,
 
 * The email names the shop, the slot, and what to bring to the visit.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-dxp rev=1 covers=g10.vault-collector-notifications.SC-kz4,g10.vault-collector-notifications.SC-fcf -->
 ### grade10-site-vault-collector-notifications-US6-TC2-1: The invitation's link opens the hosted identity check
 
 **Classification:**
@@ -967,6 +997,7 @@ and that a person decides,
 
 * The hosted identity check opens.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-x7v rev=1 covers=g10.vault-collector-notifications.SC-kz4,g10.vault-collector-notifications.SC-fcf -->
 ### grade10-site-vault-collector-notifications-US6-TC3-1: An operator resends the invitation before custody closes it
 
 **Classification:**
@@ -996,6 +1027,7 @@ and that a person decides,
 * The collector receives a new invitation email.
 * The case's identity state shows Out with the new invitation's date.
 
+<!-- trace:case id=g10.vault-collector-notifications.TC-w6w rev=1 covers=g10.vault-collector-notifications.SC-kz4,g10.vault-collector-notifications.SC-fcf -->
 ### grade10-site-vault-collector-notifications-US6-TC4-1: The invitation is withheld when it is not owed
 
 Runs once per row of **Test data**.

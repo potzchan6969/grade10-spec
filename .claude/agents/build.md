@@ -19,8 +19,12 @@ them. The smaller shape is the simpler thing's, which reads every group.
 ## What You Are Given
 
 - **The landing** — the group's commits: its tests, then its code
-- **What is before it** — the group's tasks, the scenarios its tasks name, the
-  requirements those scenarios sit in, and `tech-design.md`
+- **What is before it** — the plan's opening and the group's own section, the
+  requirements, journeys and cases the group cites, the proposal, the
+  decisions, the designs and the page sections the change links
+- **Reading it** — every entry in one message: a path whole, a `path#La-Lb`
+  entry by `offset` a and `limit` b - a + 1. The rest of the change is open
+  where a finding turns on it
 - **Nothing else** — never another reader's findings, never a verifier's
   verdict, never the thread
 

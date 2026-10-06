@@ -1,14 +1,11 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@grade10/design-system/components/display/card";
+import { Separator } from "@grade10/design-system/components/display/separator";
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
+import { Storefront } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
+import { formatLocalDay, formatLocalTime } from "../../lib/format-datetime";
 import type { LocaleProps } from "./booking-copy";
-import { formatBookingWhen } from "./booking-when";
 
 type BookingSummaryCopy = {
   title: string;
@@ -20,10 +17,14 @@ type BookingSummaryCopy = {
 type BookingSummaryProps = LocaleProps & {
   copy: BookingSummaryCopy;
   service?: ReactNode;
+  /** Control beside the service — typically a change-service action. */
+  serviceAction?: ReactNode;
   location?: ReactNode;
   address?: ReactNode;
   start?: number;
   end?: number;
+  /** Control beside the booked time — typically a change-date action. */
+  whenAction?: ReactNode;
   timeZone?: string;
   timeZoneLabel?: string;
   className?: string;
@@ -33,58 +34,81 @@ type BookingSummaryProps = LocaleProps & {
 function BookingSummary({
   copy,
   service,
+  serviceAction,
   location,
   address,
   start,
-  end,
+  whenAction,
   timeZone,
-  timeZoneLabel,
-  locale,
+  locale = "en",
   className,
 }: BookingSummaryProps) {
   const when =
-    start !== undefined && end !== undefined && timeZone !== undefined
-      ? formatBookingWhen({ start, end, timeZone, timeZoneLabel, locale })
-      : undefined;
+    start !== undefined && timeZone !== undefined ? (
+      <span className="whitespace-nowrap">
+        {`${formatLocalDay(start, { locale, timeZone })}, ${formatLocalTime(start, { locale, timeZone })}`}
+      </span>
+    ) : undefined;
   return (
-    <Card className={className} data-slot="booking-summary">
-      <CardHeader>
-        <CardTitle>{copy.title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <VStack gap="sm" hAlign="stretch">
-          {service ? <Row label={copy.service} value={service} /> : null}
-          {location ? (
-            <Row
-              label={copy.location}
-              value={
-                <>
-                  {location}
-                  {address ? (
-                    <Text as="span" size="sm" tone="secondary">
-                      {address}
-                    </Text>
-                  ) : null}
-                </>
-              }
-            />
-          ) : null}
-          {when ? <Row label={copy.when} value={when} /> : null}
-        </VStack>
-      </CardContent>
-    </Card>
+    <VStack
+      className={cn("rounded-2xl border border-border px-4 py-4", className)}
+      data-slot="booking-summary"
+      gap="md"
+      hAlign="stretch"
+    >
+      <Text as="h2" size="lg" weight="medium">
+        {copy.title}
+      </Text>
+      {service ? (
+        <Row action={serviceAction} label={copy.service} value={service} />
+      ) : null}
+      {service && location ? <Separator /> : null}
+      {location ? (
+        <Row
+          label={copy.location}
+          value={
+            <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-2">
+              <span className="col-start-1 row-start-1 flex size-4 items-center self-center text-primary">
+                <Storefront aria-hidden size={16} />
+              </span>
+              <span className="col-start-2 row-start-1">{location}</span>
+              {address ? (
+                <Text
+                  as="span"
+                  className="col-start-2 row-start-2 font-normal text-secondary-foreground"
+                  size="sm"
+                >
+                  {address}
+                </Text>
+              ) : null}
+            </div>
+          }
+        />
+      ) : null}
+      {(service || location) && when ? <Separator /> : null}
+      {when ? <Row action={whenAction} label={copy.when} value={when} /> : null}
+    </VStack>
   );
 }
 
-function Row({ label, value }: { label: string; value: ReactNode }) {
+function Row({
+  action,
+  label,
+  value,
+}: {
+  action?: ReactNode;
+  label: string;
+  value: ReactNode;
+}) {
   return (
-    <VStack data-slot="booking-summary-row" gap="none" hAlign="stretch">
-      <Text as="span" size="xs" tone="secondary">
-        {label}
-      </Text>
-      <Text as="span" weight="medium">
-        {value}
-      </Text>
+    <VStack data-slot="booking-summary-row" gap="xs" hAlign="stretch">
+      <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-2">
+        <Text as="span" size="xs" tone="secondary">
+          {label}
+        </Text>
+        {action}
+      </div>
+      <div className="min-w-0 font-medium">{value}</div>
     </VStack>
   );
 }

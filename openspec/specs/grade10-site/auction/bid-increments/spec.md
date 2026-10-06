@@ -115,6 +115,7 @@ refuse an amount below it. It SHALL not create intermediate bids.
 - **WHEN** Grade10 calculates the next minimum
 - **THEN** the minimum is 820000 minor units
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-w8f rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-12 - A 0 start opens at the lowest increment
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector enters the opening bid on a lot that starts at nothing
 

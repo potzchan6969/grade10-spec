@@ -407,7 +407,7 @@ function journeysUnder(text, heading) {
 
 /** Every in-flight delta file, read once and parsed by the store's own
  * reader: the sections the fold splits on, and the requirements under them. */
-function readDeltaFiles(root, changes) {
+export function readDeltaFiles(root, changes) {
   const files = [];
   for (const change of changes) {
     for (const delta of change.deltas) {
@@ -571,13 +571,9 @@ function checkFolded(ctx, files, shape) {
   }
 }
 
-/** RULE `overlap`: two changes folding one requirement. A MODIFIED or a
- * REMOVED block archived second writes the first's text away, silently; an
- * ADDED block archived second fails outright, since the fold refuses to add
- * a name that exists. Either way each change is named to the other, with the
- * other's heading, so a person reads both before building on either
- * (`shared-planning-agent-rounds-SC-102`). */
-function checkOverlap(files, add) {
+/** Every requirement a delta folds, keyed by capability and name, with the
+ * claims held on it; two changes in one list is an overlap. */
+export function overlapClaims(files) {
   const claims = new Map();
   for (const one of files) {
     for (const requirement of one.requirements) {
@@ -587,6 +583,17 @@ function checkOverlap(files, add) {
       claims.set(key, held);
     }
   }
+  return claims;
+}
+
+/** RULE `overlap`: two changes folding one requirement. A MODIFIED or a
+ * REMOVED block archived second writes the first's text away, silently; an
+ * ADDED block archived second fails outright, since the fold refuses to add
+ * a name that exists. Either way each change is named to the other, with the
+ * other's heading, so a person reads both before building on either
+ * (`shared-planning-agent-rounds-SC-102`). */
+function checkOverlap(files, add) {
+  const claims = overlapClaims(files);
 
   for (const held of claims.values()) {
     if (new Set(held.map((one) => one.change)).size < 2) continue;

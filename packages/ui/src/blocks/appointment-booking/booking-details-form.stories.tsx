@@ -20,8 +20,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-/** A missing address and an unanswered required question are named, and
- * nothing is reported. */
+/** A missing address is named, and nothing is reported. */
 export const MissingDetails: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -32,13 +31,12 @@ export const MissingDetails: Story = {
     expect(
       canvas.getByText("Tell us where to send the confirmation."),
     ).toBeVisible();
-    expect(canvas.getByText("Pick one to continue.")).toBeVisible();
+    expect(canvas.queryByText("Pick one to continue.")).toBeNull();
     expect(args.onSubmit).not.toHaveBeenCalled();
   },
 };
 
-/** Values come back trimmed, the address lowercased, and answers keyed by
- * question id — an optional question left blank is absent. */
+/** Values come back trimmed and the address lowercased. */
 export const ReportsTrimmedValues: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -50,7 +48,6 @@ export const ReportsTrimmedValues: Story = {
       canvas.getByRole("textbox", { name: "Email" }),
       "Ada@Example.com",
     );
-    await userEvent.click(canvas.getByRole("radio", { name: "Slabbed" }));
     await userEvent.click(
       canvas.getByRole("button", { name: "Book the visit" }),
     );
@@ -59,8 +56,23 @@ export const ReportsTrimmedValues: Story = {
       email: "ada@example.com",
       phone: "",
       notes: "",
-      answers: { format: "Slabbed" },
+      answers: {},
     });
+  },
+};
+
+/** The account email is shown and submitted, and cannot be typed over. */
+export const LockedEmail: Story = {
+  args: {
+    emailReadOnly: true,
+    initialValues: { email: "collector@example.com" },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole("textbox", { name: "Email" });
+    expect(field).toHaveValue("collector@example.com");
+    expect(field).toHaveProperty("readOnly", true);
+    expect(field).not.toBeDisabled();
   },
 };
 

@@ -10,6 +10,7 @@
 page for the Hong Kong shop,
 **so that** I can read the address and hours without hunting for a dead link.
 
+<!-- trace:case id=g10.store-store-locator.TC-93l rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC1-1: Store Locator answers whole before scripts run
 
 **Classification:**
@@ -45,6 +46,7 @@ page for the Hong Kong shop,
 * Page source carries that headline, name, address and hours without scripts.
 * URL contains <lang>.
 
+<!-- trace:case id=g10.store-store-locator.TC-zh8 rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC2-1: One shop detail, not a finder
 
 **Classification:**
@@ -74,6 +76,7 @@ page for the Hong Kong shop,
 * The one Hong Kong shop is shown.
 * No search field, store list, distance, filter controls or store picker appears.
 
+<!-- trace:case id=g10.store-store-locator.TC-vei rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC3-1: Store Locator title differs from other public surfaces
 
 **Classification:**
@@ -103,6 +106,7 @@ page for the Hong Kong shop,
 * Titles differ.
 * Meta descriptions differ.
 
+<!-- trace:case id=g10.store-store-locator.TC-2pc rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC4-1: Header Store Locator opens the page
 
 **Classification:**
@@ -133,6 +137,7 @@ page for the Hong Kong shop,
 * Store Locator renders with Location & Hours.
 * Store Locator is marked as the current page in the header.
 
+<!-- trace:case id=g10.store-store-locator.TC-jei rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC5-1: Footer Store Locator opens the page
 
 **Classification:**
@@ -162,6 +167,7 @@ page for the Hong Kong shop,
 
 * Store Locator renders with Location & Hours.
 
+<!-- trace:case id=g10.store-store-locator.TC-cxo rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC6-1: Narrow viewport stays usable
 
 **Classification:**
@@ -201,6 +207,7 @@ page for the Hong Kong shop,
 **I want** activating the map to open Google Maps for the shop,
 **so that** I get directions without a second control on the page.
 
+<!-- trace:case id=g10.store-store-locator.TC-ifh rev=1 covers=g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-w6y -->
 ### grade10-site-store-store-locator-US2-TC1-1: Map opens Google Maps for the shop
 
 **Classification:**
@@ -230,6 +237,7 @@ page for the Hong Kong shop,
 
 * Google Maps opens for Hong Kong Grade10 Store at 13 Pak Sha Road, Causeway Bay, Hong Kong.
 
+<!-- trace:case id=g10.store-store-locator.TC-3ij rev=1 covers=g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-w6y -->
 ### grade10-site-store-store-locator-US2-TC2-1: No separate Get directions control
 
 **Classification:**

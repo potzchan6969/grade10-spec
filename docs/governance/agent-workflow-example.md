@@ -53,7 +53,7 @@ the run resolves every such question, check and accept the completed artifacts:
 
 ```bash
 pnpm accept:preflight add-store-cross-sell
-pnpm spec:accept add-store-cross-sell --baseline <printed-fingerprint> --reviewed-by <human>
+pnpm spec:accept add-store-cross-sell --baseline <printed-baseline> --reviewed-by <human>
 ```
 
 Acceptance records the reviewer, timestamp, baseline fingerprint, artifact

@@ -9,6 +9,7 @@
 **I want** to choose one of my Store orders and inspect its detail,
 **so that** the order list and detail page preserve the same order and owner scope.
 
+<!-- trace:case id=g10.store-domain.TC-3id rev=1 covers=g10.store-order-history.SC-u2y,g10.store-order-history.SC-zre,g10.store-order-history.SC-4i0,g10.store-order-history.SC-fun,g10.store-order-history.SC-yhz,g10.store-order-history.SC-3eo,g10.store-order-history.SC-71g,g10.store-order-history.SC-raj,g10.store-order-history.SC-ab2,g10.store-order-history.SC-dta,g10.store-order-history.SC-g9j,g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-e2e-US6-TC1-1: View Details preserves the selected order
 
 **Classification:**

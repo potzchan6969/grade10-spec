@@ -18,7 +18,12 @@ group. On `tasks.md` you always read the order the plan lands in too.
 
 - **The draft** — the artifact as it stands on the change's branch
 - **What is before it** — the page sections the change links and the change's
-  earlier artifacts, in the schema's order
+  earlier artifacts, in the schema's order; on a task group, the plan's
+  opening and the group's own section, and of the journeys, requirements and
+  cases only the blocks the group cites
+- **Reading it** — every entry in one message: a path whole, a `path#La-Lb`
+  entry by `offset` a and `limit` b - a + 1. The rest of the change is open
+  where a finding turns on it
 - **Nothing else** — never another reader's findings, never a verifier's
   verdict, never the thread
 

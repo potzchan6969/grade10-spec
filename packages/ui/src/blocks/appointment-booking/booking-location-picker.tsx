@@ -1,8 +1,9 @@
 import { Text } from "@grade10/design-system/components/display/text";
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
+import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
-import { ChoiceCard } from "./choice-card";
 import type { BookingLocation } from "./types";
 
 type BookingLocationPickerCopy = { title: string };
@@ -15,7 +16,7 @@ type BookingLocationPickerProps = {
   className?: string;
 };
 
-/** The shops offering the picked service, one card each, reported by id. */
+/** The shops offering the picked service. One shop is still a radio card. */
 function BookingLocationPicker({
   copy,
   locations,
@@ -30,18 +31,25 @@ function BookingLocationPicker({
       </Text>
       <AsyncRegion slot="booking-locations" state={locations}>
         {(list) => (
-          <VStack gap="sm" hAlign="stretch">
+          <RadioList
+            aria-label={copy.title}
+            className="max-w-xl"
+            onValueChange={(value) => {
+              if (value) {
+                onSelect(value);
+              }
+            }}
+            value={selectedId}
+          >
             {list.map((location) => (
-              <ChoiceCard
+              <RadioCard
                 description={location.address}
                 key={location.id}
-                onSelect={() => onSelect(location.id)}
-                selected={location.id === selectedId}
-                slot="booking-location"
                 title={location.name}
+                value={location.id}
               />
             ))}
-          </VStack>
+          </RadioList>
         )}
       </AsyncRegion>
     </VStack>

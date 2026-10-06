@@ -9,6 +9,7 @@
 **I want** a locked order with Contact Us and a receipt for every payment,
 **so that** I have proof of what I paid without tracking a running balance.
 
+<!-- trace:case id=g10.auction-winner-order.TC-sv8 rev=1 covers=g10.auction-winner-order.SC-34b -->
 ### winner-order-US20-TC1-1: The partially paid order is locked
 
 **Classification:**
@@ -36,7 +37,7 @@
 
 * The page reads Partially Paid.
 * Pay, Submit Payment Proof, View Bank Details and a payment deadline are absent.
-* The page offers Contact Us and no running balance.
+* The page offers Contact Us, shows the full invoice amount and no remaining balance.
 * Each recorded payment has a separate receipt link, oldest first.
 
 ## Settled

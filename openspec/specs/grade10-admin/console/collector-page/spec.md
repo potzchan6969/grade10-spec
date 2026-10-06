@@ -57,6 +57,7 @@ of its own.
 An operator holding the vault read grant SHALL open it — staff, treasurers and
 admins — and an operator without it SHALL be refused, with no section loaded.
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-80w rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-01 - The page opens under the Vault entry
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator lands on one page for the person in front of them
 
@@ -79,6 +80,7 @@ admins — and an operator without it SHALL be refused, with no section loaded.
   opening the page of the case's collector, for every operator holding the
   vault read grant. A case no account holds SHALL carry no such link.
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-hy5 rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-03 - A name opens the collector's page
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator goes from a row to everything that customer holds
 
@@ -86,6 +88,7 @@ admins — and an operator without it SHALL be refused, with no section loaded.
 - **WHEN** a member of staff follows the link beside the name
 - **THEN** that collector's page opens
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-4hc rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-04 - A case's header opens its collector's page for a treasurer too
 **Serves:** grade10-admin-console-collector-page-US-02 - the treasurer goes from one borrower's case to their others
 
@@ -108,6 +111,7 @@ filed under that collector so their openings are pulled by their id. No
 column of the entry SHALL hold the collector's name or email. An opening whose
 entry cannot be written SHALL be refused rather than shown.
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-zvu rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-06 - An opening leaves an entry naming who read whom
 **Serves:** grade10-admin-console-collector-page-US-01 - the shop can answer who looked at a customer
 
@@ -144,6 +148,7 @@ has held, a vault case.
 An account a walk-in created SHALL read by its email handle until the customer
 names themselves, as `grade10-admin/vault/operator-queue` states.
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-liq rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-08 - Staff read the collector's name and email
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator confirms who they are talking to
 
@@ -151,6 +156,7 @@ names themselves, as `grade10-admin/vault/operator-queue` states.
 - **WHEN** a member of staff opens their page
 - **THEN** the header reads `Mei Chan` and `mei.chan@example.com`
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-olt rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-09 - A treasurer reads the short id and no name
 **Serves:** grade10-admin-console-collector-page-US-02 - the treasurer follows a borrower without their name
 
@@ -158,6 +164,7 @@ names themselves, as `grade10-admin/vault/operator-queue` states.
 - **WHEN** a treasurer opens their page
 - **THEN** the header reads `u7k2m9qa` and no name or email
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-q24 rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-10 - A name that cannot be read leaves the page standing
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator answers the customer while names cannot be read
 
@@ -166,6 +173,7 @@ names themselves, as `grade10-admin/vault/operator-queue` states.
 - **THEN** the header shows the short id, no email, and says the name is unavailable
 - **AND** the vault cases section lists both cases
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-2do rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-11 - An id nobody answers to says so
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator learns a link went nowhere rather than to an empty customer
 
@@ -173,6 +181,7 @@ names themselves, as `grade10-admin/vault/operator-queue` states.
 - **WHEN** a member of staff or a treasurer opens the page at that id
 - **THEN** the page says nobody answers to that id
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-cf6 rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-18 - The header's read is refused without the identity grant
 **Serves:** grade10-admin-console-collector-page-US-02 - the treasurer is never handed the name by another route
 
@@ -181,6 +190,7 @@ names themselves, as `grade10-admin/vault/operator-queue` states.
 - **THEN** it is refused by name, and no name or email comes back
 - **AND** the collector's vault cases still answer
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-ls5 rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-19 - The header opens the queue narrowed to the collector
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator works the customer's cases among the shop's queue
 
@@ -188,6 +198,7 @@ names themselves, as `grade10-admin/vault/operator-queue` states.
 - **WHEN** a member of staff follows **Their cases on the queue** in the header
 - **THEN** the queue opens narrowed to that collector, listing both cases
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-ybv rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-20 - A header whose read fails shows its error and a retry
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator keeps the cases while the name is down
 
@@ -195,6 +206,7 @@ names themselves, as `grade10-admin/vault/operator-queue` states.
 - **WHEN** a member of staff opens their page
 - **THEN** the header shows its own error and a retry, and the vault cases section lists both cases
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-m8a rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-22 - An account that never held a vault case is not named
 **Serves:** grade10-admin-console-collector-page-US-01 - the page is never a way to read any account's name
 
@@ -216,6 +228,7 @@ every status, newest-touched first.
 - **Not theirs any more** — a case removed from the account or erased SHALL
   NOT be listed.
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-0o4 rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-12 - Every case the collector holds is listed
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator answers about all of a customer's cases at once
 
@@ -224,6 +237,7 @@ every status, newest-touched first.
 - **THEN** all three are listed newest-touched first, each with its reference, item, status word, lane and when it was last touched
 - **AND** following a row opens that case
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-bfq rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-21 - A removed walk-in and an erased case are not listed
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator reads only what the collector still holds
 
@@ -231,6 +245,7 @@ every status, newest-touched first.
 - **WHEN** a member of staff opens their page
 - **THEN** only the released case is listed
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-frx rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-13 - Cases page fifty at a time
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator reads a long-standing customer's history
 
@@ -239,6 +254,7 @@ every status, newest-touched first.
 - **THEN** 50 cases are listed and the section says more remain
 - **AND** loading more lists the other 10, none of them seen twice
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-k7t rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-14 - A collector with no vault case reads as holding none
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator learns the customer has nothing with the vault
 
@@ -246,6 +262,7 @@ every status, newest-touched first.
 - **WHEN** a member of staff opens its page
 - **THEN** the vault cases section says the collector holds no vault case
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-zfs rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-15 - A treasurer reads the same cases
 **Serves:** grade10-admin-console-collector-page-US-02 - the treasurer follows a borrower's money across their cases
 
@@ -261,6 +278,7 @@ say so in its own place — the header reading the short id and no name — and
 the others SHALL load. A section that fails SHALL show its own error and a
 retry, and the others SHALL stand.
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-9ct rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-16 - A failed section leaves the others standing
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator keeps the half of the page that answered
 
@@ -269,6 +287,7 @@ retry, and the others SHALL stand.
 - **THEN** the vault cases section shows its own error and a retry, and the header names the collector
 - **AND** a retry once the cases can be read lists them
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-ogo rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-17 - A section does not wait for another
 **Serves:** grade10-admin-console-collector-page-US-01 - the operator reads the cases while the name is still on its way
 
@@ -289,6 +308,7 @@ marked, each opening its item, paged on a cursor. The item register is
   section that fails SHALL show its own error with a retry; the page's other
   sections SHALL stand either way.
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-tu2 rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-23 - A collector's live items are on their page
 **Serves:** grade10-admin-console-collector-page-US-03 - staff see everything a collector has with the house
 
@@ -297,6 +317,7 @@ marked, each opening its item, paged on a cursor. The item register is
 - **THEN** the Items section lists the first two, each saying whether it is marked and opening its item, a page at a time
 - **AND** the retired item is not listed, and its own page keeps its history
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-z9y rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-24 - A collector who owns nothing reads as owning nothing
 **Serves:** grade10-admin-console-collector-page-US-03 - staff are not left wondering whether the section loaded
 
@@ -304,6 +325,7 @@ marked, each opening its item, paged on a cursor. The item register is
 - **WHEN** staff open their page
 - **THEN** the Items section says they own none
 
+<!-- trace:scenario id=g10adm.console-collector-page.SC-21h rev=1 -->
 #### Scenario: grade10-admin-console-collector-page-SC-25 - The section refuses or fails on its own
 **Serves:** grade10-admin-console-collector-page-US-03 - the rest of the page still answers the collector
 

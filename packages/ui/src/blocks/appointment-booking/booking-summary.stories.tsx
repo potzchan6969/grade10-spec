@@ -11,9 +11,9 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     copy: SUMMARY_COPY,
-    service: "Card grading",
-    location: "Grade10 Central",
-    address: "12 Queen’s Road Central, Hong Kong",
+    service: "Card Grading",
+    location: "Hong Kong Grade10 Store",
+    address: "13 Pak Sha Road, Causeway Bay, Hong Kong",
     start: LIVE_RECORD.start,
     end: LIVE_RECORD.end,
     timeZone: FIXTURE_TIME_ZONE,
@@ -27,9 +27,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("3 Sep 2026, 10:15–10:45 (Hong Kong time)"),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("Shop")).toBeInTheDocument();
+    expect(canvas.getByText("3 Sep 2026, 10:15")).toBeInTheDocument();
+    expect(canvas.queryByText("HKT")).toBeNull();
   },
 };
 
@@ -43,7 +43,7 @@ export const ServiceOnly: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Card grading")).toBeInTheDocument();
+    expect(canvas.getByText("Card Grading")).toBeInTheDocument();
     expect(canvas.queryByText("Shop")).toBeNull();
   },
 };

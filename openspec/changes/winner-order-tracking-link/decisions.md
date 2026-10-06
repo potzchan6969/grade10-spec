@@ -19,7 +19,7 @@
 | Q2 | Show carrier name in Order Progress? | No — number only | Carrier · number row |
 | Q3 | Keep the link after Delivered? | Yes — while fulfilment stays `fulfilled` | Hide tracker once delivery is confirmed |
 | Q4 | OpenSpec vehicle? | New change `winner-order-tracking-link` | Fold into payment-proof feedback |
-| Q5 | Does the tracker revise the winner's retained records? | No - it is a separate live Winner Order presentation requirement; receipt identifiers and contents stay with their own requirement | Fold the tracker into Records the winner keeps |
+| Q5 | Does the tracker revise the winner's retained records? | No - it is a separate live Winner Order presentation requirement; the shipped record's tracker contents are carried by `add-winner-order-tax-line` | Fold the tracker into Records the winner keeps |
 
 ## Raised
 

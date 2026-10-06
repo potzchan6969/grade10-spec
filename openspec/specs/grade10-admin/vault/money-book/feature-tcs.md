@@ -9,6 +9,7 @@
 **I want** every advance, repayment and correction written down in that period, in one order, with totals for the whole range,
 **so that** I can tie what we recorded to what the bank says without the figures moving as I page.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-imi rev=1 covers=g10adm.vault-money-book.SC-wbb,g10adm.vault-money-book.SC-n97,g10adm.vault-money-book.SC-uzx,g10adm.vault-money-book.SC-l0b,g10adm.vault-money-book.SC-2gi -->
 ### grade10-admin-vault-money-book-US1-TC1-1: Register lists every advance, repayment and correction in one order
 
 **Classification:**
@@ -39,6 +40,7 @@
 
 * The register lists the advance, the two repayments and the correction in the order they were recorded.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-4j7 rev=1 covers=g10adm.vault-money-book.SC-wbb,g10adm.vault-money-book.SC-n97,g10adm.vault-money-book.SC-uzx,g10adm.vault-money-book.SC-l0b,g10adm.vault-money-book.SC-2gi -->
 ### grade10-admin-vault-money-book-US1-TC2-1: Totals for the whole range are read together with the page
 
 **Classification:**
@@ -68,6 +70,7 @@
 * The totals cover the whole range, not only the page shown.
 * The totals arrive with the same read as the page, not a second one.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-8lj rev=1 covers=g10adm.vault-money-book.SC-wbb,g10adm.vault-money-book.SC-n97,g10adm.vault-money-book.SC-uzx,g10adm.vault-money-book.SC-l0b,g10adm.vault-money-book.SC-2gi -->
 ### grade10-admin-vault-money-book-US1-TC3-1: A backdated value date does not move a row already paged past
 
 **Classification:**
@@ -97,6 +100,7 @@
 * The rows already shown keep their place.
 * The new repayment appears at the point it was recorded, not reordered to its value date.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-khw rev=1 covers=g10adm.vault-money-book.SC-wbb,g10adm.vault-money-book.SC-n97,g10adm.vault-money-book.SC-uzx,g10adm.vault-money-book.SC-l0b,g10adm.vault-money-book.SC-2gi -->
 ### grade10-admin-vault-money-book-US1-TC4-1: Register reads no record in the range
 
 **Classification:**
@@ -126,6 +130,7 @@
 * The register reads that the range holds no record.
 * The totals read zero.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-uj8 rev=1 covers=g10adm.vault-money-book.SC-wbb,g10adm.vault-money-book.SC-n97,g10adm.vault-money-book.SC-uzx,g10adm.vault-money-book.SC-l0b,g10adm.vault-money-book.SC-2gi -->
 ### grade10-admin-vault-money-book-US1-TC5-1: The register read fails and shows the error
 
 **Classification:**
@@ -154,6 +159,7 @@
 
 * The register's status shows the failure message in place of the rows.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-8c8 rev=1 covers=g10adm.vault-money-book.SC-wbb,g10adm.vault-money-book.SC-n97,g10adm.vault-money-book.SC-uzx,g10adm.vault-money-book.SC-l0b,g10adm.vault-money-book.SC-2gi -->
 ### grade10-admin-vault-money-book-US1-TC6-1: The register is refused without the money grant
 
 **Classification:**
@@ -191,6 +197,7 @@
 **I want** the principal and interest outstanding across every loan on the book at an instant — now, or a month-end I name — in one unit,
 **so that** what the business is owed is one figure I can quote and check against the cases behind it, and tie to the month it belongs to.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-8gb rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
 ### grade10-admin-vault-money-book-US2-TC1-1: The position agrees with the case screens behind it
 
 **Classification:**
@@ -221,6 +228,7 @@
 * The position's outstanding is the sum of the three case figures.
 * The position counts three loans on the book.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-1ph rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
 ### grade10-admin-vault-money-book-US2-TC2-1: A book holding two currencies is refused, not summed
 
 **Classification:**
@@ -250,6 +258,7 @@
 * The position is refused by name.
 * No figure sums the two currencies.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-9ls rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
 ### grade10-admin-vault-money-book-US2-TC3-1: A past instant replays the book as it stood
 
 Runs once per row of **Test data**.
@@ -288,6 +297,7 @@ Runs once per row of **Test data**.
 
 * The position reads the loan as <The loan reads>.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-ql7 rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
 ### grade10-admin-vault-money-book-US2-TC4-1: A position as at a future instant is refused
 
 **Classification:**
@@ -316,6 +326,7 @@ Runs once per row of **Test data**.
 * The position is refused by name.
 * No figure is given.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-1tw rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
 ### grade10-admin-vault-money-book-US2-TC5-1: The position is refused without the money grant
 
 **Classification:**
@@ -352,6 +363,7 @@ Runs once per row of **Test data**.
 **I want** every loan past its due date, longest overdue first and pageable to the end,
 **so that** nobody in arrears is hidden behind a page while I chase the rest.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-0t2 rev=1 covers=g10adm.vault-money-book.SC-2p3,g10adm.vault-money-book.SC-shu,g10adm.vault-money-book.SC-lzq,g10adm.vault-money-book.SC-zp0,g10adm.vault-money-book.SC-ucd,g10adm.vault-money-book.SC-h9j,g10adm.vault-money-book.SC-xz0 -->
 ### grade10-admin-vault-money-book-US3-TC1-1: Arrears list orders every live loan longest overdue first
 
 **Classification:**
@@ -380,6 +392,7 @@ Runs once per row of **Test data**.
 
 * The loans are ordered longest overdue first, judged on each loan's due date.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-x05 rev=1 covers=g10adm.vault-money-book.SC-2p3,g10adm.vault-money-book.SC-shu,g10adm.vault-money-book.SC-lzq,g10adm.vault-money-book.SC-zp0,g10adm.vault-money-book.SC-ucd,g10adm.vault-money-book.SC-h9j,g10adm.vault-money-book.SC-xz0 -->
 ### grade10-admin-vault-money-book-US3-TC2-1: The arrears list pages to the end through a tie on the due date without hiding or duplicating a loan
 
 **Classification:**
@@ -410,6 +423,7 @@ Runs once per row of **Test data**.
 * Every overdue loan appears exactly once across the pages.
 * The two loans sharing a due date both appear, neither skipped nor repeated.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-svs rev=1 covers=g10adm.vault-money-book.SC-2p3,g10adm.vault-money-book.SC-shu,g10adm.vault-money-book.SC-lzq,g10adm.vault-money-book.SC-zp0,g10adm.vault-money-book.SC-ucd,g10adm.vault-money-book.SC-h9j,g10adm.vault-money-book.SC-xz0 -->
 ### grade10-admin-vault-money-book-US3-TC3-1: No live loan is overdue
 
 **Classification:**
@@ -441,6 +455,7 @@ Runs once per row of **Test data**.
 * The list reads that no loan is late.
 * Every tile above the list reads zero.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-mfc rev=1 covers=g10adm.vault-money-book.SC-2p3,g10adm.vault-money-book.SC-shu,g10adm.vault-money-book.SC-lzq,g10adm.vault-money-book.SC-zp0,g10adm.vault-money-book.SC-ucd,g10adm.vault-money-book.SC-h9j,g10adm.vault-money-book.SC-xz0 -->
 ### grade10-admin-vault-money-book-US3-TC4-1: The arrears read fails and shows the error
 
 **Classification:**
@@ -469,6 +484,7 @@ Runs once per row of **Test data**.
 
 * The list's status shows the failure message in place of the rows.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-1av rev=1 covers=g10adm.vault-money-book.SC-2p3,g10adm.vault-money-book.SC-shu,g10adm.vault-money-book.SC-lzq,g10adm.vault-money-book.SC-zp0,g10adm.vault-money-book.SC-ucd,g10adm.vault-money-book.SC-h9j,g10adm.vault-money-book.SC-xz0 -->
 ### grade10-admin-vault-money-book-US3-TC5-1: The arrears list is refused without the read grant
 
 **Classification:**
@@ -497,6 +513,7 @@ Runs once per row of **Test data**.
 * The list is refused; no row or tile is shown.
 
 
+<!-- trace:case id=g10adm.vault-money-book.TC-vnd rev=1 covers=g10adm.vault-money-book.SC-k1b -->
 ### grade10-admin-vault-money-book-US3-TC6-1: Each arrears row prints in its loan's own currency
 
 **Classification:**
@@ -526,6 +543,7 @@ Runs once per row of **Test data**.
 * Each row's outstanding is in its own loan's currency.
 * Neither row is read in the book's default currency.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-c8z rev=1 covers=g10adm.vault-money-book.SC-2p3,g10adm.vault-money-book.SC-shu,g10adm.vault-money-book.SC-lzq,g10adm.vault-money-book.SC-zp0,g10adm.vault-money-book.SC-ucd,g10adm.vault-money-book.SC-h9j,g10adm.vault-money-book.SC-xz0 -->
 ### grade10-admin-vault-money-book-US3-TC7-1: A loan whose advance is taken back leaves the arrears
 
 **Classification:**
@@ -563,6 +581,7 @@ Runs once per row of **Test data**.
 **I want** the ledger filtered by kind, its net out of the business, and the range as a CSV,
 **so that** I tie the period to the statement outside the console.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-rad rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC1-1: The kind filter narrows the register, composed with the method filter
 
 Runs once per row of **Test data**.
@@ -605,6 +624,7 @@ Runs once per row of **Test data**.
 * The register narrows to <Rows shown>.
 * The method filter still narrows further within it.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-l8j rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC2-1: Net out of the business folds payouts less repayments, a correction netting the row it took back once
 
 **Classification:**
@@ -635,6 +655,7 @@ Runs once per row of **Test data**.
 
 * The net out reads HKD 7000000 — the payout less the one repayment the correction did not take back.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-hb2 rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC3-1: A correction row names the row it took back
 
 **Classification:**
@@ -665,6 +686,7 @@ Runs once per row of **Test data**.
 
 * The correction names the repayment row it took back, without a second query.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-f2e rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC4-1: The net out prints per currency and is never summed across currencies
 
 **Classification:**
@@ -694,6 +716,7 @@ Runs once per row of **Test data**.
 * A net-out figure is shown per currency.
 * No combined figure sums the two currencies.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-b8h rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC5-1: Export CSV downloads the range exactly as filtered
 
 **Classification:**
@@ -724,6 +747,7 @@ Runs once per row of **Test data**.
 
 * The CSV holds the rows the filtered register itself pages, and no row outside it.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-5af rev=1 covers=g10adm.vault-money-book.SC-xv3 -->
 ### grade10-admin-vault-money-book-US4-TC6-1: The export is recorded on the audit chain without the row data
 
 **Classification:**
@@ -753,6 +777,7 @@ Runs once per row of **Test data**.
 * An audit entry records who exported, when, the filter used and how many rows.
 * The audit entry does not carry the rows themselves.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-hgu rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC7-1: Export is disabled while the filtered range holds no row
 
 **Classification:**
@@ -783,6 +808,7 @@ Runs once per row of **Test data**.
 
 * The button is disabled.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-dzl rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC8-1: Export failed shows an error beside the button
 
 **Classification:**
@@ -814,6 +840,7 @@ Runs once per row of **Test data**.
 * No file downloads.
 
 
+<!-- trace:case id=g10adm.vault-money-book.TC-7i4 rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC9-1: The export is refused without the money grant
 
 **Classification:**
@@ -842,6 +869,7 @@ Runs once per row of **Test data**.
 * The request is refused by name.
 * No file is served.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-f4z rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC10-1: The net out answers the range as narrowed
 
 **Classification:**
@@ -879,6 +907,7 @@ Runs once per row of **Test data**.
 **I want** the loans in arrears summed above the list — what is outstanding across them and how many carry no notice — with each row naming the borrower, their contact, the notice and the last reminder sent,
 **so that** I know who to chase first without adding the list up myself.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-xlv rev=1 covers=g10adm.vault-money-book.SC-dgv,g10adm.vault-money-book.SC-fao,g10adm.vault-money-book.SC-lzi -->
 ### grade10-admin-vault-money-book-US5-TC1-1: Tiles above the list sum the arrears the list holds
 
 **Classification:**
@@ -909,6 +938,7 @@ Runs once per row of **Test data**.
 * A tile reads what is outstanding across them.
 * A tile reads how many carry no notice.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-qcy rev=1 covers=g10adm.vault-money-book.SC-dgv,g10adm.vault-money-book.SC-fao,g10adm.vault-money-book.SC-lzi -->
 ### grade10-admin-vault-money-book-US5-TC2-1: Outstanding in arrears prints per currency and is never summed
 
 **Classification:**
@@ -938,6 +968,7 @@ Runs once per row of **Test data**.
 * The outstanding figure is shown per currency.
 * No combined figure sums the two currencies.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-jb1 rev=1 covers=g10adm.vault-money-book.SC-dgv,g10adm.vault-money-book.SC-fao,g10adm.vault-money-book.SC-lzi -->
 ### grade10-admin-vault-money-book-US5-TC3-1: Each row names the case reference, the item, the contact, the notice and the last reminder sent
 
 **Classification:**
@@ -968,6 +999,7 @@ Runs once per row of **Test data**.
 * The row names the phone number and the email address the case holds, and no name.
 * The row names the day the notice was sent with the day it gives to pay by, and the day the last reminder was sent.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-u8m rev=1 covers=g10adm.vault-money-book.SC-dgv,g10adm.vault-money-book.SC-fao,g10adm.vault-money-book.SC-lzi -->
 ### grade10-admin-vault-money-book-US5-TC4-1: A loan with no notice sent reads none yet
 
 **Classification:**
@@ -997,6 +1029,7 @@ Runs once per row of **Test data**.
 * The notice cell reads none yet.
 * The loan counts toward the without-a-notice tile.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-n1h rev=1 covers=g10adm.vault-money-book.SC-dgv,g10adm.vault-money-book.SC-fao,g10adm.vault-money-book.SC-lzi -->
 ### grade10-admin-vault-money-book-US5-TC5-1: A loan with a notice sent reads its date to pay by and stops its reminders
 
 **Classification:**
@@ -1026,6 +1059,7 @@ Runs once per row of **Test data**.
 * The notice cell reads the date it was sent and the date to pay by.
 * The last-reminder cell reads that reminders were stopped by the notice.
 
+<!-- trace:case id=g10adm.vault-money-book.TC-j7r rev=1 covers=g10adm.vault-money-book.SC-dgv,g10adm.vault-money-book.SC-fao,g10adm.vault-money-book.SC-lzi -->
 ### grade10-admin-vault-money-book-US5-TC6-1: The reminder ladder is shown in words under the list
 
 **Classification:**

@@ -33,6 +33,7 @@ HTML with no script executing.
 **Not a finder** - The page SHALL NOT offer store search, a store list,
 distance, filters, or a store picker.
 
+<!-- trace:scenario id=g10.store-store-locator.SC-ny2 rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-01 - The page answers whole
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
@@ -40,6 +41,7 @@ distance, filters, or a store picker.
 - **THEN** the response HTML contains the Location & Hours headline, the
   store name, the street address, and the week's hours
 
+<!-- trace:scenario id=g10.store-store-locator.SC-t9d rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-02 - One shop, not a finder
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
@@ -48,6 +50,7 @@ distance, filters, or a store picker.
 - **AND** nothing offers search, a store list, distance, filters, or a store
   picker
 
+<!-- trace:scenario id=g10.store-store-locator.SC-la1 rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-03 - Store Locator names itself
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
@@ -64,6 +67,7 @@ the map SHALL open Google Maps for that shop's address.
 **No second control** - The page SHALL NOT offer a second Get directions
 control beside the map.
 
+<!-- trace:scenario id=g10.store-store-locator.SC-gk9 rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-04 - Activating the map opens Maps
 **Serves:** grade10-site-store-store-locator-US-02 - Collector opens Google Maps from the page
 
@@ -71,6 +75,7 @@ control beside the map.
 - **THEN** Google Maps opens for Hong Kong Grade10 Store at 13 Pak Sha Road,
   Causeway Bay, Hong Kong
 
+<!-- trace:scenario id=g10.store-store-locator.SC-w6y rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-05 - No second directions control
 **Serves:** grade10-site-store-store-locator-US-02 - Collector opens Google Maps from the page
 
@@ -85,18 +90,21 @@ Store Locator in the header and the footer, each leading to that address. While
 a collector is on Store Locator, the chrome SHALL mark Store Locator as the
 current surface.
 
+<!-- trace:scenario id=g10.store-store-locator.SC-ux5 rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-06 - Header reaches Store Locator
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **WHEN** a collector follows Store Locator in the header
 - **THEN** Store Locator renders
 
+<!-- trace:scenario id=g10.store-store-locator.SC-1zq rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-07 - Footer reaches Store Locator
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **WHEN** a collector follows Store Locator in the footer
 - **THEN** Store Locator renders
 
+<!-- trace:scenario id=g10.store-store-locator.SC-l9w rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-08 - Chrome marks Store Locator
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
@@ -110,6 +118,7 @@ The site SHALL render Store Locator without horizontal overflow at a viewport
 375 CSS pixels wide. Map, address, hours, and chrome SHALL reflow rather than
 be clipped.
 
+<!-- trace:scenario id=g10.store-store-locator.SC-bfr rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-09 - A narrow viewport
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 

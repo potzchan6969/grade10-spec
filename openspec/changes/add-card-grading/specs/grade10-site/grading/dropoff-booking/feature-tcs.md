@@ -20,6 +20,7 @@
 **I want** to pick the shop, a day the diary offers and a time in the shop's own zone, seeing beside the day the batch it makes and the day the cards would leave, and then a booked page and email that say what to bring, that staff check each card against the list, that I sign and then pay, and the estimated day back,
 **so that** I arrive at a desk expecting my list, know which batch my cards join, and forget nothing at home.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-2kk rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC1-1: Collector books a drop-off within the horizon before cut-off
 
 **Classification:**
@@ -72,6 +73,7 @@
 * Step 6: a confirmation email has arrived.
 * Step 6: the email is grading's own; no message from the diary about the visit arrives.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-5ce rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC2-1: Booking after the cut-off shows the next batch's dates
 
 **Classification:**
@@ -106,6 +108,7 @@
 
 * Step 2: the batch line names the following batch's close and ship days rather than the current week's.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-tt7 rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC3-1: Booking exactly at the cut-off stays in that batch, at the limit
 
 **Classification:**
@@ -142,6 +145,7 @@
 
 * Step 3: the batch line reads hand-in by that same Thursday's cut-off, with the cards leaving the next day.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-80t rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC4-1: Shop and days render as skeletons while the diary loads
 
 **Classification:**
@@ -171,6 +175,7 @@
 
 * Step 2: the shop and the days render as loading skeletons; no day reads as bookable yet.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-sfa rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC5-1: No free slot leaves every day in the horizon unbookable
 
 **Classification:**
@@ -200,6 +205,7 @@
 
 * Step 2: every day in the horizon reads with nothing free, and none is selectable.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-l9y rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC6-1: A day past the booking horizon is disabled, at the limit
 
 **Classification:**
@@ -239,6 +245,7 @@
 * Step 2: <last horizon day> is selectable, with its times offered.
 * Step 3: <first day past> is disabled and cannot be selected.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-qqg rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC7-1: The diary's own refusal words offer another day to book
 
 Runs once per row of **Test data**.
@@ -281,6 +288,7 @@ Runs once per row of **Test data**.
 * Step 2: another day is offered, and the day's times are read again.
 * Step 2: the submission holds no visit: no visit card shows on the page.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-hg7 rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC8-1: Diary failure reads in the error tone with no free day
 
 **Classification:**
@@ -311,6 +319,7 @@ Runs once per row of **Test data**.
 * Step 2: the failure reads in the page's error tone.
 * Step 2: no day reads as free, and none can be picked.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-wu4 rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC9-1: The estimated day back counts from the day the batch leaves
 
 **Classification:**
@@ -351,6 +360,7 @@ Runs once per row of **Test data**.
 * Steps 2 and 4: the estimated day back is <ship day> plus <weeks back>.
 * It is not <picked day> plus <weeks back>, nor today plus <weeks back>.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-77t rev=1 covers=g10.grading-dropoff-booking.SC-l56,g10.grading-dropoff-booking.SC-q6n,g10.grading-dropoff-booking.SC-nt0,g10.grading-dropoff-booking.SC-gbe,g10.grading-dropoff-booking.SC-9xv,g10.grading-dropoff-booking.SC-qk1,g10.grading-dropoff-booking.SC-v5k,g10.grading-dropoff-booking.SC-h89,g10.grading-dropoff-booking.SC-y97,g10.grading-dropoff-booking.SC-uzm,g10.grading-dropoff-booking.SC-wxh,g10.grading-dropoff-booking.SC-leu -->
 ### grade10-site-grading-dropoff-booking-US1-TC10-1: The booked page offers a vault case on the same visit
 
 **Classification:**
@@ -387,6 +397,7 @@ Runs once per row of **Test data**.
 **I want** to move or cancel it from the submission page any time before it starts and to be emailed either way,
 **so that** a change of plans costs me a minute and not the list.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-7t5 rev=1 covers=g10.grading-dropoff-booking.SC-44v,g10.grading-dropoff-booking.SC-9xj,g10.grading-dropoff-booking.SC-mrb,g10.grading-dropoff-booking.SC-wlp,g10.grading-dropoff-booking.SC-1v3 -->
 ### grade10-site-grading-dropoff-booking-US2-TC1-1: Collector moves the drop-off to a new day and time
 
 **Classification:**
@@ -428,6 +439,7 @@ Runs once per row of **Test data**.
 * Steps 2 and 3: the visit card reads the old day and time until step 3 books the new one; the page never holds no visit.
 * Step 5: a moved email has arrived naming <new day> and <new time>.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-9ic rev=1 covers=g10.grading-dropoff-booking.SC-44v,g10.grading-dropoff-booking.SC-9xj,g10.grading-dropoff-booking.SC-mrb,g10.grading-dropoff-booking.SC-wlp,g10.grading-dropoff-booking.SC-1v3 -->
 ### grade10-site-grading-dropoff-booking-US2-TC4-1: Moving the drop-off never offers its own current slot back
 
 **Classification:**
@@ -465,6 +477,7 @@ Runs once per row of **Test data**.
 * Step 3: <held time> is not offered.
 * Step 3: every other time in <times seen when booking> is offered as before.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-7fc rev=1 covers=g10.grading-dropoff-booking.SC-44v,g10.grading-dropoff-booking.SC-9xj,g10.grading-dropoff-booking.SC-mrb,g10.grading-dropoff-booking.SC-wlp,g10.grading-dropoff-booking.SC-1v3 -->
 ### grade10-site-grading-dropoff-booking-US2-TC2-1: Collector cancels the drop-off and keeps the card list
 
 **Classification:**
@@ -505,6 +518,7 @@ Runs once per row of **Test data**.
 * Step 4: Book another drop-off is offered.
 * Step 5: a cancelled email has arrived.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-gkc rev=1 covers=g10.grading-dropoff-booking.SC-44v,g10.grading-dropoff-booking.SC-9xj,g10.grading-dropoff-booking.SC-mrb,g10.grading-dropoff-booking.SC-wlp,g10.grading-dropoff-booking.SC-1v3 -->
 ### grade10-site-grading-dropoff-booking-US2-TC3-1: Neither Move nor Cancel is offered once the visit has started
 
 **Classification:**
@@ -533,6 +547,7 @@ Runs once per row of **Test data**.
 
 * Step 1: neither Move nor Cancel visit is offered.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-tms rev=1 covers=g10.grading-dropoff-booking.SC-44v,g10.grading-dropoff-booking.SC-9xj,g10.grading-dropoff-booking.SC-mrb,g10.grading-dropoff-booking.SC-wlp,g10.grading-dropoff-booking.SC-1v3 -->
 ### grade10-site-grading-dropoff-booking-US2-TC5-1: A cancelled visit restarts the plan's clock from the day of the cancel
 
 **Classification:**
@@ -570,6 +585,7 @@ Runs once per row of **Test data**.
 **I want** the visit to close once the shop marks it missed, the submission to tell me within the hour with the list and the estimate exactly as they were, and a line on the page to book again,
 **so that** one missed day does not cost me the plan.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-2cl rev=1 covers=g10.grading-dropoff-booking.SC-qae,g10.grading-dropoff-booking.SC-u2b,g10.grading-dropoff-booking.SC-r0l,g10.grading-dropoff-booking.SC-4vc -->
 ### grade10-site-grading-dropoff-booking-US3-TC1-1: A missed visit closes within the hour, list unchanged
 
 **Classification:**
@@ -608,6 +624,7 @@ Runs once per row of **Test data**.
 * Steps 2 and 3: the list and the estimate show exactly as they were, and a missed email confirms it.
 * Step 2: a Book another drop-off line is offered.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-dxx rev=1 covers=g10.grading-dropoff-booking.SC-qae,g10.grading-dropoff-booking.SC-u2b,g10.grading-dropoff-booking.SC-r0l,g10.grading-dropoff-booking.SC-4vc -->
 ### grade10-site-grading-dropoff-booking-US3-TC2-1: Booking again after a miss reuses the same list
 
 **Classification:**
@@ -641,6 +658,7 @@ Runs once per row of **Test data**.
 * Step 5: the new visit books against the same list and estimate noted at step 1.
 * Step 5: the submission reads Drop-off booked with the new day.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-xy1 rev=1 covers=g10.grading-dropoff-booking.SC-qae,g10.grading-dropoff-booking.SC-u2b,g10.grading-dropoff-booking.SC-r0l,g10.grading-dropoff-booking.SC-4vc -->
 ### grade10-site-grading-dropoff-booking-US3-TC4-1: A missed visit restarts the plan's clock from the day of the miss
 
 **Classification:**
@@ -672,6 +690,7 @@ Runs once per row of **Test data**.
 * The plan has not expired after step 1.
 * The plan expires only once `plan_expiry_days` has run from the day of the miss, not from the day it was first kept.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-wx2 rev=1 covers=g10.grading-dropoff-booking.SC-qae,g10.grading-dropoff-booking.SC-u2b,g10.grading-dropoff-booking.SC-r0l,g10.grading-dropoff-booking.SC-4vc -->
 ### grade10-site-grading-dropoff-booking-US3-TC3-1: The page reads the visit as booked until the diary closes it
 
 **Classification:**
@@ -716,6 +735,7 @@ Runs once per row of **Test data**.
 **I want** the second submission to join the drop-off the first one booked, listed under the same day and time with the slot sized for both lists,
 **so that** I make one trip to the shop.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-fx7 rev=1 covers=g10.grading-dropoff-booking.SC-xaq,g10.grading-dropoff-booking.SC-tgw,g10.grading-dropoff-booking.SC-shj,g10.grading-dropoff-booking.SC-mb2 -->
 ### grade10-site-grading-dropoff-booking-US4-TC1-1: Second submission joins the visit the first one booked
 
 **Classification:**
@@ -752,6 +772,7 @@ Runs once per row of **Test data**.
 * Step 1: no shop or day picker is shown; the step reads the existing visit as joined instead.
 * Step 2: the second submission's page shows <owner's visit> and its shop, read through the owning submission.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-dgw rev=1 covers=g10.grading-dropoff-booking.SC-xaq,g10.grading-dropoff-booking.SC-tgw,g10.grading-dropoff-booking.SC-shj,g10.grading-dropoff-booking.SC-mb2 -->
 ### grade10-site-grading-dropoff-booking-US4-TC2-1: Two joined lists passing twenty resize to the Bulk slot
 
 **Classification:**
@@ -789,6 +810,7 @@ Runs once per row of **Test data**.
 
 * Steps 2 and 3: the visit is the longer Bulk service at the same day and time, moved once in the diary and never cancelled.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-ivv rev=1 covers=g10.grading-dropoff-booking.SC-xaq,g10.grading-dropoff-booking.SC-tgw,g10.grading-dropoff-booking.SC-shj,g10.grading-dropoff-booking.SC-mb2 -->
 ### grade10-site-grading-dropoff-booking-US4-TC3-1: Owner's cancelled or missed visit detaches every joiner
 
 Runs once per row of **Test data**.
@@ -837,6 +859,7 @@ Runs once per row of **Test data**.
 **I want** to book the Grading visit with a name and an email and have the cards listed with me at the counter,
 **so that** I can still hand cards in on a booked slot.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-rrq rev=1 covers=g10.grading-dropoff-booking.SC-55a,g10.grading-dropoff-booking.SC-qam,g10.grading-dropoff-booking.SC-nqy -->
 ### grade10-site-grading-dropoff-booking-US5-TC1-1: Walk-in books the Grading visit with a name and email
 
 **Classification:**
@@ -879,6 +902,7 @@ Runs once per row of **Test data**.
 * Steps 3 and 4: the visit books with no card list attached.
 * Step 5: no grading submission is created: the queue holds none under <walk-in email>.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-1si rev=1 covers=g10.grading-dropoff-booking.SC-55a,g10.grading-dropoff-booking.SC-qam,g10.grading-dropoff-booking.SC-nqy -->
 ### grade10-site-grading-dropoff-booking-US5-TC2-1: Walk-in booking is refused missing a name or email
 
 Runs once per row of **Test data**.
@@ -916,6 +940,7 @@ Runs once per row of **Test data**.
 
 * The booking is refused until the <Blank field> is filled in.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-iw2 rev=1 covers=g10.grading-dropoff-booking.SC-55a,g10.grading-dropoff-booking.SC-qam,g10.grading-dropoff-booking.SC-nqy -->
 ### grade10-site-grading-dropoff-booking-US5-TC3-1: The booking page lists the Grading visit and neither drop-off
 
 **Classification:**
@@ -946,6 +971,7 @@ Runs once per row of **Test data**.
 * Step 1: the Grading visit is listed.
 * Step 1: neither the Grading drop-off nor its Bulk variant is offered there.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-4q1 rev=1 covers=g10.grading-dropoff-booking.SC-55a,g10.grading-dropoff-booking.SC-qam,g10.grading-dropoff-booking.SC-nqy -->
 ### grade10-site-grading-dropoff-booking-US5-TC4-1: The walk-in's cards are listed at the desk and grading says nothing about the visit
 
 **Classification:**
@@ -993,6 +1019,7 @@ Runs once per row of **Test data**.
 **I want** the booking to take the longer Bulk drop-off with its slots, and the booked page to say how long the visit takes,
 **so that** the desk has the time to check every card and I am not sent away with half a box.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-t5j rev=1 covers=g10.grading-dropoff-booking.SC-hgq,g10.grading-dropoff-booking.SC-09j,g10.grading-dropoff-booking.SC-he4 -->
 ### grade10-site-grading-dropoff-booking-US6-TC1-1: Twenty or more cards book the longer Bulk drop-off
 
 **Classification:**
@@ -1029,6 +1056,7 @@ Runs once per row of **Test data**.
 * Step 1: the Bulk drop-off's longer slots, about 45 minutes, are offered rather than the standard visit.
 * Step 3: the booked page names the visit's length as about 45 minutes.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-nen rev=1 covers=g10.grading-dropoff-booking.SC-hgq,g10.grading-dropoff-booking.SC-09j,g10.grading-dropoff-booking.SC-he4 -->
 ### grade10-site-grading-dropoff-booking-US6-TC2-1: Nineteen and twenty cards split on either side, at the limit
 
 Runs once per row of **Test data**.
@@ -1066,6 +1094,7 @@ Runs once per row of **Test data**.
 
 * Steps 1 and 2: the slot offered matches <Slot offered>.
 
+<!-- trace:case id=g10.grading-dropoff-booking.TC-bdo rev=1 covers=g10.grading-dropoff-booking.SC-hgq,g10.grading-dropoff-booking.SC-09j,g10.grading-dropoff-booking.SC-he4 -->
 ### grade10-site-grading-dropoff-booking-US6-TC3-1: A booked list edited past twenty cards takes the Bulk drop-off at the same slot
 
 **Classification:**

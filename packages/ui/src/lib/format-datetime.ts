@@ -177,6 +177,14 @@ export function formatLocalMoment(
   return `${day} ${month} ${year}, ${hours}:${minutes}`;
 }
 
+/** Deadline shape: `24 Aug 2026, 18:00 HKT` or `23 Aug 2026, 22:00 EDT`. */
+export function formatZonedLocalMoment(
+  at: Date | number,
+  options: { locale?: ShippedLocale; timeZone: string },
+): string {
+  return `${formatLocalMoment(at, options)} ${formatViewerZoneName(options.timeZone, at)}`;
+}
+
 /** Collector local calendar day: `24 Aug 2026`. */
 export function formatLocalDay(
   at: Date | number,
@@ -203,7 +211,64 @@ export function formatCollectorDeadline(
     prefix,
   }: { locale?: ShippedLocale; timeZone: string; prefix: string },
 ): string {
-  return `${prefix} ${formatLocalMoment(at, { locale, timeZone })}`;
+  return `${prefix} ${formatZonedLocalMoment(at, { locale, timeZone })}`;
+}
+
+type CollectorClockOptions = {
+  locale?: ShippedLocale;
+  timeZone: string;
+};
+
+/** Viewer zone as an offset, e.g. `GMT+8`. Documents use this, not `HKT`. */
+export function formatZoneOffset(timeZone: string, at: Date | number): string {
+  const raw =
+    new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      timeZoneName: "shortOffset",
+    })
+      .formatToParts(parseInstant(at))
+      .find((part) => part.type === "timeZoneName")?.value ?? "GMT";
+  return raw.replace(/^UTC/, "GMT").replace(/([+-])0(\d)(?::00)?$/, "$1$2");
+}
+
+/** Viewer short name at that instant: `HKT`, `EDT`. Hong Kong is always `HKT`. */
+export function formatViewerZoneName(
+  timeZone: string,
+  at: Date | number,
+): string {
+  if (timeZone === "Asia/Hong_Kong") return "HKT";
+  const raw =
+    new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      timeZoneName: "short",
+    })
+      .formatToParts(parseInstant(at))
+      .find((part) => part.type === "timeZoneName")?.value ?? "GMT";
+  return raw.replace(/^UTC/, "GMT");
+}
+
+/** Auction listing close prefix in the viewer's zone. */
+export function formatListingEnds(
+  at: Date | number,
+  options: CollectorClockOptions,
+): string {
+  return formatCollectorDeadline(at, { ...options, prefix: "Ends" });
+}
+
+/** Auction listing closed prefix in the viewer's zone. */
+export function formatListingClosed(
+  at: Date | number,
+  options: CollectorClockOptions,
+): string {
+  return formatCollectorDeadline(at, { ...options, prefix: "Closed" });
+}
+
+/** Auction listing opens prefix in the viewer's zone. */
+export function formatListingOpens(
+  at: Date | number,
+  options: CollectorClockOptions,
+): string {
+  return formatCollectorDeadline(at, { ...options, prefix: "Opens" });
 }
 
 export function formatClosedAt(
@@ -214,7 +279,7 @@ export function formatClosedAt(
     template,
   }: { locale?: ShippedLocale; timeZone: string; template: string },
 ): string {
-  const when = formatLocalMoment(at, { locale, timeZone });
+  const when = formatZonedLocalMoment(at, { locale, timeZone });
   return template.replace("{when}", when);
 }
 
@@ -315,30 +380,6 @@ export function resolveShippedLocale(input: string): ShippedLocale {
     return input as ShippedLocale;
   }
   return "en";
-}
-
-/** Auction listing close prefix. */
-export function formatListingEnds(
-  at: Date | number,
-  locale: ShippedLocale = "en",
-): string {
-  return `Ends ${formatDeadline(at, locale)}`;
-}
-
-/** Auction listing closed prefix. */
-export function formatListingClosed(
-  at: Date | number,
-  locale: ShippedLocale = "en",
-): string {
-  return `Closed ${formatDeadline(at, locale)}`;
-}
-
-/** Auction listing opens prefix. */
-export function formatListingOpens(
-  at: Date | number,
-  locale: ShippedLocale = "en",
-): string {
-  return `Opens ${formatDeadline(at, locale)}`;
 }
 
 /** @deprecated Use {@link formatMoment}. */

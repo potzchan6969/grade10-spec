@@ -446,6 +446,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the bid.
 * No accepted bid is added and the recorded close is unchanged.
 
+<!-- trace:case id=g10.auction-auction.TC-edh rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
 ### grade10-site-auction-auction-US2-TC15-2: First bid at the opening price is accepted
 
 Runs once per row of **Test data**.
@@ -492,6 +493,7 @@ Runs once per row of **Test data**.
 * The bid count reads 1, and Recent Bids shows the bid as You.
 * Step 4 reads `<next minimum>`, `<opening price>` plus its tier increment.
 
+<!-- trace:case id=g10.auction-auction.TC-8rd rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
 ### grade10-site-auction-auction-US2-TC16-2: First bid below the opening price is refused, naming it
 
 Runs once per row of **Test data**.
@@ -536,6 +538,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the bid, naming `<opening price>` as the minimum.
 * No accepted bid is recorded, and the bid count stays 0.
 
+<!-- trace:case id=g10.auction-auction.TC-94a rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
 ### grade10-site-auction-auction-US2-TC17-1: Start on a tier boundary takes that tier's increment, not the one below
 
 Runs once per row of **Test data**.
@@ -578,6 +581,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the bid, naming `<first-bid minimum>` as the minimum.
 * No accepted bid is recorded, and the bid count stays 0.
 
+<!-- trace:case id=g10.auction-auction.TC-m75 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
 ### grade10-site-auction-auction-US2-TC18-1: Minimum next bid before any bid is the starting price plus its increment
 
 Runs once per row of **Test data**.
@@ -619,6 +623,7 @@ Runs once per row of **Test data**.
 * The minimum next bid reads `<start>` plus `<tier increment>` = `<first-bid minimum>`.
 * It never reads `<start>` itself, and never 0.
 
+<!-- trace:case id=g10.auction-auction.TC-5m3 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
 ### grade10-site-auction-auction-US2-TC19-1: Two bids at once are judged one after the other
 
 **Classification:**
@@ -669,7 +674,7 @@ Runs once per row of **Test data**.
 **I want** one authorization per listing, released when I am outbid,
 **so that** a delayed lower hold or a duplicate Stripe event cannot take a second bite.
 
-<!-- trace:case id=g10.auction-auction.TC-tmg rev=1 covers=g10.auction-auction.SC-uha -->
+<!-- trace:case id=g10.auction-auction.TC-tmg rev=1 covers=none -->
 ### grade10-site-auction-auction-US3-TC1-1: Outbid authorization is marked for release
 
 **Classification:**
@@ -747,7 +752,7 @@ Runs once per row of **Test data**.
 * The current bid is the highest valid accepted amount.
 * No lower bid overwrites that current bid.
 
-<!-- trace:case id=g10.auction-auction.TC-m5k rev=1 covers=g10.auction-auction.SC-uha -->
+<!-- trace:case id=g10.auction-auction.TC-m5k rev=1 covers=none -->
 ### grade10-site-auction-auction-US3-TC3-1: Delayed lower authorization cannot land
 
 **Classification:**
@@ -779,7 +784,7 @@ Runs once per row of **Test data**.
 * It does not record that lower bid as accepted.
 * The current bid is unchanged.
 
-<!-- trace:case id=g10.auction-auction.TC-9qw rev=1 covers=g10.auction-auction.SC-uha -->
+<!-- trace:case id=g10.auction-auction.TC-9qw rev=1 covers=none -->
 ### grade10-site-auction-auction-US3-TC4-1: Invalid or duplicate Stripe event changes nothing twice
 
 **Classification:**
@@ -818,7 +823,7 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * No bid, hold, release, capture, invoice or order state is duplicated.
 
-<!-- trace:case id=g10.auction-auction.TC-nna rev=1 covers=g10.auction-auction.SC-uha -->
+<!-- trace:case id=g10.auction-auction.TC-nna rev=1 covers=none -->
 ### grade10-site-auction-auction-US3-TC5-1: Incomplete Stripe configuration fails the operation explicitly
 
 **Classification:**
@@ -848,7 +853,7 @@ Runs once per row of **Test data**.
 * Grade10 fails the operation, naming the unavailable capability.
 * No bid or fixture-backed outcome is created.
 
-<!-- trace:case id=g10.auction-auction.TC-ghi rev=1 covers=g10.auction-auction.SC-uha -->
+<!-- trace:case id=g10.auction-auction.TC-ghi rev=1 covers=none -->
 ### grade10-site-auction-auction-US3-TC6-1: Missed authorization webhook is repaired once
 
 **Classification:**
@@ -1034,6 +1039,7 @@ Runs once per row of **Test data**.
 **I want** All auctions to lead with the lots I can bid on, soonest to close first, and to keep that order as I read on — below Featured when Featured is present, with no category section —,
 **so that** what I can still bid on is in front of me and reading further never shows me a lot twice or skips one.
 
+<!-- trace:case id=g10.auction-auction.TC-91h rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC1-1: Open lots lead the catalogue
 
 **Classification:**
@@ -1071,6 +1077,7 @@ Runs once per row of **Test data**.
 * `<listing_14>` is listed before `<listing_15>`.
 * `<listing_15>` is listed before `<listing_16>`.
 
+<!-- trace:case id=g10.auction-auction.TC-yh1 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC2-1: Each status has its own order
 
 **Classification:**
@@ -1112,6 +1119,7 @@ Runs once per row of **Test data**.
 * `<listing_19>` is listed before `<listing_20>`.
 * `<listing_21>` is listed before `<listing_22>`.
 
+<!-- trace:case id=g10.auction-auction.TC-yj3 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC3-1: A tie is settled the same way every read
 
 **Classification:**
@@ -1147,6 +1155,7 @@ Runs once per row of **Test data**.
 
 * `<listing_23>` and `<listing_24>` are in the same order both times.
 
+<!-- trace:case id=g10.auction-auction.TC-c4u rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC4-1: Paging does not change the order
 
 **Classification:**
@@ -1177,6 +1186,7 @@ Runs once per row of **Test data**.
 * No lot is listed twice.
 * No lot is missing.
 
+<!-- trace:case id=g10.auction-auction.TC-2gb rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC5-1: Empty Featured leaves All auctions only
 
 **Classification:**
@@ -1208,6 +1218,7 @@ Runs once per row of **Test data**.
 * No Featured band is present.
 * All auctions is shown with lots in the catalogue resting order.
 
+<!-- trace:case id=g10.auction-auction.TC-izg rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC6-1: Catalogue shows no category chrome
 
 **Classification:**
@@ -1237,6 +1248,7 @@ Runs once per row of **Test data**.
 * There is no Categories heading, no category tiles, and no busy filter chrome.
 * The only sections are Featured when set, then All auctions.
 
+<!-- trace:case id=g10.auction-auction.TC-j25 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC7-1: Empty All auctions still shows Featured when slots are set
 
 **Classification:**
@@ -1268,6 +1280,7 @@ Runs once per row of **Test data**.
 * Featured still shows the curated slide or slides.
 * All auctions shows a message that there are no auctions.
 
+<!-- trace:case id=g10.auction-auction.TC-yqf rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC8-1: Featured lots also appear in All auctions resting order
 
 **Classification:**
@@ -1305,6 +1318,7 @@ Runs once per row of **Test data**.
 * `<featured lot>` appears in Featured and again in All auctions.
 * All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible lot.
 
+<!-- trace:case id=g10.auction-auction.TC-q56 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC9-1: Catalogue address stays indexable at /auction without category query
 
 **Classification:**
@@ -1333,6 +1347,7 @@ Runs once per row of **Test data**.
 
 * Canonical and share address are `/auction` with no category query.
 
+<!-- trace:case id=g10.auction-auction.TC-90r rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC10-1: More All auctions lots load on scroll
 
 **Classification:**
@@ -1367,6 +1382,7 @@ Runs once per row of **Test data**.
 * The combined list stays in the catalogue resting order.
 * No pagination controls appear.
 
+<!-- trace:case id=g10.auction-auction.TC-apa rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### grade10-site-auction-auction-US5-TC11-1: An Upcoming All auctions card shows no money
 
 **Classification:**
@@ -1412,6 +1428,7 @@ Runs once per row of **Test data**.
 status, countdown, current bid and Bid Now —,
 **so that** the lots the house leads with are what I meet first.
 
+<!-- trace:case id=g10.auction-auction.TC-5my rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
 ### grade10-site-auction-auction-US6-TC01-1: One Featured slide shows front page image title status countdown bid and Bid Now
 
 **Classification:**
@@ -1449,6 +1466,7 @@ status, countdown, current bid and Bid Now —,
 * Featured band is present with one slide.
 * The slide shows `<front page image>` as banner and slab, the lot title, LIVE BIDDING with a live status dot, relative Ends in, the current bid, and Bid Now.
 
+<!-- trace:case id=g10.auction-auction.TC-zwc rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
 ### grade10-site-auction-auction-US6-TC02-1: Current bid rolls when the served amount increases
 
 **Classification:**
@@ -1488,6 +1506,7 @@ status, countdown, current bid and Bid Now —,
 * Step 1 shows `<bid before>`.
 * Step 3 shows `<bid after>` with a rolling number as the amount increases.
 
+<!-- trace:case id=g10.auction-auction.TC-htt rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
 ### grade10-site-auction-auction-US6-TC03-1: Client countdown uses served close or open by lot status
 
 Runs once per row of **Test data**.
@@ -1527,6 +1546,7 @@ Runs once per row of **Test data**.
 * The countdown matches the row (Ends in or Opens in).
 * Upcoming shows UPCOMING with no live status dot and View Auction, and shows no starting bid or money amount.
 
+<!-- trace:case id=g10.auction-auction.TC-d55 rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
 ### grade10-site-auction-auction-US6-TC04-1: Three Featured slides appear in operator order
 
 **Classification:**
@@ -1564,6 +1584,7 @@ Runs once per row of **Test data**.
 
 * Featured shows three slides in order `<lot A>`, then `<lot B>`, then `<lot C>`.
 
+<!-- trace:case id=g10.auction-auction.TC-b8d rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
 ### grade10-site-auction-auction-US6-TC05-1: Incomplete Featured slot is not shown
 
 **Classification:**
@@ -1603,6 +1624,7 @@ Runs once per row of **Test data**.
 viewport also with stage previous/next or a horizontal swipe,
 **so that** I can reach every curated lot without leaving the band.
 
+<!-- trace:case id=g10.auction-auction.TC-72n rev=1 covers=g10.auction-auction.SC-94x -->
 ### grade10-site-auction-auction-US7-TC01-1: Progress advances between two Featured slides
 
 **Classification:**
@@ -1642,6 +1664,7 @@ viewport also with stage previous/next or a horizontal swipe,
 * Step 3 shows `<lot B>`.
 * Progress dots are present for the two slides.
 
+<!-- trace:case id=g10.auction-auction.TC-fbj rev=1 covers=g10.auction-auction.SC-94x -->
 ### grade10-site-auction-auction-US7-TC04-1: On a small viewport, stage next advances between two Featured slides
 
 **Classification:**
@@ -1682,6 +1705,7 @@ viewport also with stage previous/next or a horizontal swipe,
 * The stage image pages horizontally to `<lot B>`.
 * Progress dots mark `<lot B>` current.
 
+<!-- trace:case id=g10.auction-auction.TC-9ji rev=1 covers=g10.auction-auction.SC-94x -->
 ### grade10-site-auction-auction-US7-TC02-1: Progress reaches every slide when three are set
 
 **Classification:**
@@ -1720,6 +1744,7 @@ viewport also with stage previous/next or a horizontal swipe,
 
 * The visible lots are `<lot A>`, then `<lot B>`, then `<lot C>` without leaving the Featured band.
 
+<!-- trace:case id=g10.auction-auction.TC-7lv rev=1 covers=g10.auction-auction.SC-94x -->
 ### grade10-site-auction-auction-US7-TC03-1: A single Featured slide needs no multi-dot advance
 
 **Classification:**
@@ -1760,6 +1785,7 @@ viewport also with stage previous/next or a horizontal swipe,
 to open that lot's details page,
 **so that** I land on the lot the catalogue led with.
 
+<!-- trace:case id=g10.auction-auction.TC-ytf rev=1 covers=g10.auction-auction.SC-sh8,g10.auction-auction.SC-b2i -->
 ### grade10-site-auction-auction-US8-TC01-1: Bid Now opens an Active lot details page
 
 **Classification:**
@@ -1795,6 +1821,7 @@ to open that lot's details page,
 
 * The browser opens `<lot page url>` — the details page for `<featured lot>`.
 
+<!-- trace:case id=g10.auction-auction.TC-2aj rev=1 covers=g10.auction-auction.SC-sh8,g10.auction-auction.SC-b2i -->
 ### grade10-site-auction-auction-US8-TC03-1: View Auction opens an Upcoming lot details page
 
 **Classification:**
@@ -1830,6 +1857,7 @@ to open that lot's details page,
 
 * The browser opens `<lot page url>` — the details page for `<upcoming lot>`.
 
+<!-- trace:case id=g10.auction-auction.TC-0qt rev=1 covers=g10.auction-auction.SC-sh8,g10.auction-auction.SC-b2i -->
 ### grade10-site-auction-auction-US8-TC02-1: Bid Now on a later Active slide opens that slide's lot
 
 **Classification:**
@@ -1875,6 +1903,7 @@ to open that lot's details page,
 **I want** the watch control on a card to watch or unwatch that lot the same way as on the lot page and My Auctions,
 **so that** I do not learn a second watch rule on the catalogue.
 
+<!-- trace:case id=g10.auction-auction.TC-fjy rev=1 covers=g10.auction-auction.SC-na4,g10.auction-auction.SC-epv -->
 ### grade10-site-auction-auction-US9-TC01-1: Watch on from an All auctions card
 
 **Classification:**
@@ -1912,6 +1941,7 @@ to open that lot's details page,
 * The card shows the watched state.
 * `<open lot>` is watched the same way as from the lot page and My Auctions.
 
+<!-- trace:case id=g10.auction-auction.TC-8nw rev=1 covers=g10.auction-auction.SC-na4,g10.auction-auction.SC-epv -->
 ### grade10-site-auction-auction-US9-TC02-1: Watch off from an All auctions card
 
 **Classification:**
@@ -1949,6 +1979,7 @@ to open that lot's details page,
 * The card shows the unwatched state.
 * `<open lot>` is no longer watched, same as unwatching from the lot page or My Auctions.
 
+<!-- trace:case id=g10.auction-auction.TC-txe rev=1 covers=g10.auction-auction.SC-na4,g10.auction-auction.SC-epv -->
 ### grade10-site-auction-auction-US9-TC03-1: Closed lot card shows no watch control
 
 **Classification:**
@@ -1992,6 +2023,7 @@ to open that lot's details page,
 **I want** a lot to stop taking bids at its close for everyone, and a bid to count when it is accepted before then,
 **so that** nobody wins with a bid that arrived after the close.
 
+<!-- trace:case id=g10.auction-auction.TC-piw rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC1-1: Payment confirmed before the effective close counts the bid
 
 Runs once per row of **Test data**.
@@ -2041,6 +2073,7 @@ Runs once per row of **Test data**.
 * The recorded close reads `<recorded close after>`.
 * With no further bid, `<listing_1>` closes at `<recorded close after>` with customer A winning.
 
+<!-- trace:case id=g10.auction-auction.TC-ppq rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC2-1: Payment confirmed after the effective close loses and releases its hold
 
 Runs once per row of **Test data**.
@@ -2093,6 +2126,7 @@ Runs once per row of **Test data**.
 * customer A's authorization for `<bid amount>` is released.
 * `<listing_2>` closes with customer B winning at `<leader price>`.
 
+<!-- trace:case id=g10.auction-auction.TC-2di rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC3-1: Lone first bid still confirming at the scheduled close leaves the lot unsold
 
 **Classification:**
@@ -2138,6 +2172,7 @@ Runs once per row of **Test data**.
 * `<listing_3>` closes unsold at 20:00:00 UTC, reading Ended with No bids.
 * customer A's authorization is released.
 
+<!-- trace:case id=g10.auction-auction.TC-wbb rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC4-1: A bid placed in the last second counts when accepted
 
 **Classification:**
@@ -2178,6 +2213,7 @@ Runs once per row of **Test data**.
 * customer A leads and Highest bid reads `<bid amount>`.
 * The recorded close reads `<new close>`.
 
+<!-- trace:case id=g10.auction-auction.TC-zkx rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC5-1: No bid counts at or after the effective close while the close is unrecorded
 
 Runs once per row of **Test data**.
@@ -2232,6 +2268,7 @@ Runs once per row of **Test data**.
 * At step 2 no accepted bid is added, the recorded close does not move, and `<listing_5>` is still not recorded closed.
 * At step 4 `<listing_5>` is closed with customer B winning.
 
+<!-- trace:case id=g10.auction-auction.TC-x7e rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC6-1: Extension cap of 0 closes the lot at its scheduled close
 
 **Classification:**
@@ -2267,6 +2304,7 @@ Runs once per row of **Test data**.
 * `<listing_6>` never entered extended bidding.
 * It is closed at 20:00:00 UTC, with its one bidder winning.
 
+<!-- trace:case id=g10.auction-auction.TC-xee rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC7-1: A due lot is recorded closed at its close
 
 **Classification:**
@@ -2303,6 +2341,7 @@ Runs once per row of **Test data**.
 
 * Step 2 reads `<listing_7>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`.
 
+<!-- trace:case id=g10.auction-auction.TC-32a rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC8-1: A lot whose alarm missed is still settled
 
 Runs once per row of **Test data**.
@@ -2343,6 +2382,7 @@ Runs once per row of **Test data**.
 * `<listing_8>` is recorded closed `<recorded by>`, with customer A winning.
 * Before then, `<listing_8>` takes no bid and reports no result.
 
+<!-- trace:case id=g10.auction-auction.TC-cr9 rev=2 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC9-2: A lot no page has open is recorded closed at its close
 
 Runs once per row of **Test data**.
@@ -2387,6 +2427,7 @@ Runs once per row of **Test data**.
 * `<listing_11>` reads `<result>`, recorded within seconds of `<close>`.
 * The close is recorded before the next sweep, well inside `<sweep interval>`.
 
+<!-- trace:case id=g10.auction-auction.TC-yrr rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC10-1: Public reads give the close terms and the service's time
 
 **Classification:**
@@ -2426,6 +2467,7 @@ Runs once per row of **Test data**.
 * Steps 2 and 3 each give the auction service's time when it answered, not the caller's.
 * Step 3's answer is about one second after step 2's, not a cached copy.
 
+<!-- trace:case id=g10.auction-auction.TC-lfy rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### grade10-site-auction-auction-US11-TC11-1: Leader's raise confirmed after the close loses, the earlier lead stands
 
 **Classification:**
@@ -2480,6 +2522,7 @@ Runs once per row of **Test data**.
 **I want** extended bidding to restart only when a bid moves the lot's price,
 **so that** a leader cannot keep a lot open by raising their own maximum.
 
+<!-- trace:case id=g10.auction-auction.TC-lmv rev=1 covers=g10.auction-auction.SC-e9w,g10.auction-auction.SC-xd3 -->
 ### grade10-site-auction-auction-US12-TC1-1: Equal maximum at a higher price extends the lot
 
 **Classification:**
@@ -2523,6 +2566,7 @@ Runs once per row of **Test data**.
 * customer A still leads, as the earlier maximum.
 * Time left reads `<extension duration>` from customer B's bid.
 
+<!-- trace:case id=g10.auction-auction.TC-gqo rev=1 covers=g10.auction-auction.SC-e9w,g10.auction-auction.SC-xd3 -->
 ### grade10-site-auction-auction-US12-TC2-1: Leader raising their own maximum leaves the close where it was
 
 **Classification:**
@@ -2575,6 +2619,7 @@ Runs once per row of **Test data**.
 **I want** to take the lead at a price set by the maxima still standing when the leader's account is erased,
 **so that** the lot keeps a leader and I never pay more than the price stood at before.
 
+<!-- trace:case id=g10.auction-auction.TC-ptt rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
 ### grade10-site-auction-auction-US13-TC1-1: Highest maximum left leads, priced from the maxima left
 
 Runs once per row of **Test data**.
@@ -2627,6 +2672,7 @@ Runs once per row of **Test data**.
 * Step 4 reads the row's leader after: customer B leads, with their own maximum unchanged.
 * customer A's maxima appear nowhere on `<listing_27>`.
 
+<!-- trace:case id=g10.auction-auction.TC-y3z rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
 ### grade10-site-auction-auction-US13-TC2-1: Erasing the only bidder leaves the lot with no leader
 
 **Classification:**
@@ -2665,6 +2711,7 @@ Runs once per row of **Test data**.
 * The next bid must reach 20000 minor units (HKD 200.00), the opening price.
 * customer A's maximum appears nowhere on `<listing_28>`.
 
+<!-- trace:case id=g10.auction-auction.TC-lxa rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
 ### grade10-site-auction-auction-US13-TC3-1: Erasing a bidder re-prices the lot from the maxima left, never upward
 
 Runs once per row of **Test data**.
@@ -2723,6 +2770,7 @@ Runs once per row of **Test data**.
 **I want** a refused bid to say why on the bid form and to leave no trace anywhere else,
 **so that** I never read a bid I did not place as one I did.
 
+<!-- trace:case id=g10.auction-auction.TC-r0p rev=1 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv -->
 ### grade10-site-auction-auction-US14-TC1-1: A refused bid says why on the bid form and places nothing
 
 Runs once per row of **Test data**.
@@ -2780,6 +2828,7 @@ Runs once per row of **Test data**.
 * Step 5 shows no row for `<listing_29>`.
 * Step 6 shows no entry for `<listing_29>`.
 
+<!-- trace:case id=g10.auction-auction.TC-dim rev=1 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv -->
 ### grade10-site-auction-auction-US14-TC2-1: A rival's refused bid moves nothing for the leader
 
 **Classification:**
@@ -2822,6 +2871,7 @@ Runs once per row of **Test data**.
 * Step 3's row reads Leading, with Current bid `<current bid>`.
 * Step 4 finds no new-bid or outbid letter.
 
+<!-- trace:case id=g10.auction-auction.TC-m0b rev=1 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv -->
 ### grade10-site-auction-auction-US14-TC3-1: A bid whose answer is lost reads by the bidder's standing
 
 Runs once per row of **Test data**.

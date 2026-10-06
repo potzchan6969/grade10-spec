@@ -67,6 +67,7 @@ If the initial cart read fails before any lines are known, the drawer SHALL
 show a cart-level unchecked state with Retry and SHALL NOT present a total or
 allow checkout.
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-cl3 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-01 - The cart is opened
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -75,6 +76,7 @@ allow checkout.
 - **AND** no line's recorded availability or price is shown as current until
   that read returns
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-nv7 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-02 - Checkout is requested
 **Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
 
@@ -82,6 +84,7 @@ allow checkout.
 - **THEN** availability and price are re-read for every line before any
   checkout order is created
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-iwp rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-03 - A read is still in flight
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -89,6 +92,7 @@ allow checkout.
 - **THEN** the lines being checked are not presented as confirmed
 - **AND** the cart cannot be offered for checkout until the read returns
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-3ei rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-22 - The cart read cannot be completed
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -97,6 +101,7 @@ allow checkout.
 - **AND** no recorded availability, price, or cart total is presented as current
 - **AND** Retry is available while checkout remains unavailable
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-scy rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-23 - The cart cannot be loaded
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -105,6 +110,7 @@ allow checkout.
 - **THEN** the drawer says the cart could not be checked and offers Retry
 - **AND** no line or total is presented as current, and checkout is unavailable
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-3j7 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-04 - A browse cache is not the answer
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -131,6 +137,7 @@ it. The collector SHALL be able to remove it themselves.
 whatever count has since become available. A collector asked for what they
 asked for.
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-cqz rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-05 - More was in the cart than remains
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -139,6 +146,7 @@ asked for.
 - **THEN** the line's quantity becomes 2
 - **AND** the line is reported as adjusted, saying the quantity changed
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-hdi rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-06 - The line sold out entirely
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -147,6 +155,7 @@ asked for.
 - **THEN** the line is reported as out of stock
 - **AND** the line is still shown, and the collector can remove it
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-gut rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-07 - A line is never grown
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -154,6 +163,7 @@ asked for.
 - **WHEN** the store re-reads it
 - **THEN** the line still requests 2
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-c5f rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-08 - A line that is still fillable
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -168,6 +178,7 @@ on the store's sales channel, the store SHALL report that line as unavailable,
 distinctly from out of stock. A collector whose card sold out SHALL be told
 something different from one whose card was withdrawn from sale.
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-93m rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-09 - The product was withdrawn from sale
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -175,6 +186,7 @@ something different from one whose card was withdrawn from sale.
 - **WHEN** the store re-reads it and that product is no longer on the channel
 - **THEN** the line is reported as unavailable, and not as out of stock
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-it2 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-10 - Sold out and withdrawn are told apart
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -202,6 +214,7 @@ reporting it again.
 a browser supplied, a price a line recorded when it was added, or a price
 whose read did not return.
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-bi6 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-11 - A price rose while the line sat in the cart
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -211,6 +224,7 @@ whose read did not return.
 - **THEN** the line shows 12300 minor units `HKD`
 - **AND** the collector is told the price changed before checkout is offered
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-rsl rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-12 - A price fell while the line sat in the cart
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -220,6 +234,7 @@ whose read did not return.
 - **THEN** the line shows 10500 minor units `HKD`
 - **AND** the collector is told the price changed
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-cj2 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-13 - A disclosed price is the line's price
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -229,6 +244,7 @@ whose read did not return.
   12300 minor units `HKD`
 - **THEN** the line is confirmed and no price change is reported
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-eqa rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-14 - A supplied price decides nothing
 **Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
 
@@ -256,6 +272,7 @@ once, not the first one found.
 **Proceed after resolving** - The collector SHALL be able to proceed once the
 cart holds only lines the read confirmed, without rebuilding it from nothing.
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-rpy rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-15 - One line blocks the handoff
 **Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
 
@@ -264,6 +281,7 @@ cart holds only lines the read confirmed, without rebuilding it from nothing.
 - **THEN** no checkout order is created
 - **AND** the collector is returned to the cart with that line identified
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-bl4 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-16 - Every contradicted line is named at once
 **Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
 
@@ -271,6 +289,7 @@ cart holds only lines the read confirmed, without rebuilding it from nothing.
 - **WHEN** the collector offers the cart for checkout
 - **THEN** both lines are identified, each saying what happened to it
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-das rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-17 - The collector proceeds after resolving
 **Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
 
@@ -278,6 +297,7 @@ cart holds only lines the read confirmed, without rebuilding it from nothing.
 - **WHEN** they offer the cart again and the read confirms every line
 - **THEN** the checkout order is created from the confirmed lines
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-6ed rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-18 - An earlier read does not carry a checkout
 **Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
 
@@ -306,6 +326,7 @@ quantity the shop would fill, and SHALL NOT be sold short.
 SHALL NOT invent availability or price, SHALL NOT fall back to what a line
 recorded, and SHALL NOT create a checkout order.
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-wfj rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-19 - The shop refuses what the store had confirmed
 **Serves:** grade10-site-store-cart-validation-US-03 - Collector meets the shop's own refusal
 
@@ -314,6 +335,7 @@ recorded, and SHALL NOT create a checkout order.
 - **THEN** the collector is told which line was refused
 - **AND** the cart is theirs to resolve, with the other lines intact
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-14e rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-20 - The shop would fill a line short
 **Serves:** grade10-site-store-cart-validation-US-03 - Collector meets the shop's own refusal
 
@@ -322,6 +344,7 @@ recorded, and SHALL NOT create a checkout order.
 - **THEN** no checkout order is created
 - **AND** the line is identified with 2 as the quantity the shop would fill
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-3zl rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-21 - The read cannot be completed
 **Serves:** grade10-site-store-cart-validation-US-03 - Collector meets the shop's own refusal
 

@@ -27,6 +27,10 @@ own task, see Impact).
 
 ## What Changes
 
+- **Timezone alignment:** PR #921 fixes invoice and receipt PDF dates to
+  `Asia/Hong_Kong`, labelled `GMT+8`. This amendment removes the proposed
+  winner-selected zone, phone entry, invoice snapshot and `winnerTimeZone`
+  renderer input. Collector screens continue to use the viewer's local zone.
 - **Amendment (`decisions.md` Q18-Q20): the DOM component is retired and
   replaced by `grade10`'s pdf-lib renderer.** `shared/ui/invoice-and-receipt-pdf`
   still exports `InvoicePdf`/`ReceiptPdf`, but each is now a function that
@@ -37,8 +41,7 @@ own task, see Impact).
     Bill To and Ship To, including a phone line when supplied, the lot
     heading, a Description/Amount table of charges ending in a boxed
     Subtotal/Payment Processing Fee/Order Total summary, an optional supplied
-    `taxLine`, an optional `Replaces invoice {id}` row, and the issuer block
-    pinned to the sheet's bottom right.
+    `taxLine`, an optional plain-text `Replaces invoice {id}` row, and the issuer block pinned to the sheet's bottom right.
   - `ReceiptPdf` draws the same title/issuer-mark, meta rows (receipt number,
     the invoice number it pays, date paid, payment method, payment
     reference), Bill To and Ship To, including a phone line when supplied, the
@@ -46,10 +49,9 @@ own task, see Impact).
     optional transfer-reference line, the four-line payment breakdown
     (Original Invoice Total, Previous Payments, Current Payment Received,
     Remaining Balance Due), and the same issuer block.
-  - Every amount arrives pre-formatted; every date arrives as a `Date` and the
-    winner's IANA time-zone identifier; every label routes through a
-    `copy` argument now added for this move (Q20), never hardcoded in the
-    package.
+  - Every amount arrives pre-formatted and every date as a `Date`. Every
+    label routes through a `copy` argument added for this move (Q20), never
+    hardcoded in the package.
 - **Retired as non-goals (`decisions.md` Q19):** receipt status badges, the
   manually-settled mark, the Superseded invoice treatment, and
   `issuerTaxDetails`. The existing optional `taxLine` slot remains part of the
@@ -78,10 +80,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-- `grade10-site/auction/winner-order`: the invoice relationship is aligned
-  with the shared PDF contract and the active identifier change: a new invoice
-  names the prior invoice as `Replaces invoice {invoice ID}`. The prior invoice
-  remains retained and the new invoice is the current payable record.
+None.
 
 ## Impact
 
@@ -92,11 +91,12 @@ See [Non-Goals](decisions.md#non-goals).
 | `@grade10/design-system` | No change before this amendment (composed only); after it, no longer composed at all — the renderer draws directly with pdf-lib, not through design-system primitives. |
 | `@grade10/i18n` | No change — every label still reaches the renderer as a `copy` argument, per the existing component-contract rule (`decisions.md` Q20). |
 | `grade10` (`packages/grade10-auction`) | Already runs an equivalent pdf-lib renderer of its own (`@grade10/auction-contracts`); once it bumps the submodule, it switches its backend service and demo lab to import `InvoicePdf`/`ReceiptPdf` from `@grade10/ui` and can retire its own copy. Named here, built in `grade10`. |
-| `apps/admin/grade10` | None. |
 
 ## References
 
 - [Post-Bidding · The Invoice](../../../docs/prds/products/grade10-site/auction/post-bidding.md#the-invoice)
+- [Post-Bidding · Missed Address Deadline](../../../docs/prds/products/grade10-site/auction/post-bidding.md#missed-address-deadline)
+- [Auction Management · Address Confirmation Window](../../../docs/prds/products/grade10-admin/auction/management.md#address-confirmation-window)
 - [Post-Bidding · Bank Transfer Instructions](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-instructions)
 - [Post-Bidding · Receipt Documents](../../../docs/prds/products/grade10-site/auction/post-bidding.md#receipt-documents)
 - [Auction Invoice and Receipt Contents](../../../docs/references/auction-invoice-and-receipt-contents.md)

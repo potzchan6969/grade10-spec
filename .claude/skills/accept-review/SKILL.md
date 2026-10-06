@@ -13,6 +13,58 @@ review catches that before `pnpm spec:accept`, not at archive.
 Run it in a fresh context that did not write the plan. It reads and reports;
 the owning hand fixes the source.
 
+## Flow
+
+1. **Fresh context** - one that did not write the plan.
+2. **Preflight once** - run `pnpm plan:review-preflight <change> --json`.
+   Its manifest lists the changed requirements, linked PRD lines, durable
+   targets and overlaps. If it is `blocked`, stop and report its blockers as
+   the one blocker; a review of content the gates reject is spent twice. Then
+   run `pnpm accept:preflight <change>` and `pnpm check:manual`; a refusal
+   from either stops the review the same way.
+3. **Ledger** - if `accept-review.md` exists, read it and review only
+   `git diff <reviewed>..HEAD` and what that diff touches. Otherwise review
+   in full.
+4. **Manifest first** - open the manifest's lines, then the full sources and
+   every affected durable file when `expandToFullSources` is true or an
+   overlap or disagreement appears. The manifest bounds the first read; it
+   never narrows a gate or a check below.
+5. **Cluster** - when the change belongs to a cluster, read its
+   reconciliation sheet and review the cluster as one (see Cluster Mode).
+6. **Ledger write** - write the report to the ledger.
+
+## Ledger and Reruns
+
+The first run writes its report to `openspec/changes/<change>/accept-review.md`
+beside the change. No validator reads it: `check:manual` and
+`validate:changes` open named files only, and acceptance hashes the contract
+files, not the directory. The format is small:
+
+```
+reviewed: <store commit sha>
+verdict: <the verdict line>
+
+| # | Severity | Where | Finding | Owner | Fix in | Status |
+```
+
+`Status` is `open`, or `fixed <sha>` once verified. A rerun is still a fresh
+context with a smaller input: verify each prior finding against its source,
+then review the diff since `reviewed` (flow step 3). Rewrite the ledger with
+the new sha.
+
+Only a blocker, or a fix that changes requirement text, calls for a rerun.
+`fix` and `note` findings land without one.
+
+## Cluster Mode
+
+Changes that share a requirement or are linked by `depends_on` are reviewed as
+one cluster, after `planning-dev` has reconciled it. Read the cluster's
+reconciliation sheet first: check each shared requirement has one owner, the
+owner's delta carries the edit, no other delta restates it, and the decision
+log and acceptance order agree with the deltas. Read each shared durable spec
+and page once, keep one table with a `Change` column, and end with a verdict
+per change. Each change keeps its own ledger and verdict.
+
 ## Inputs
 
 Read the store at its `main`, never the pinned copy:
@@ -31,9 +83,9 @@ Read the store at its `main`, never the pinned copy:
 
 ## Checks
 
-1. **Machine gates** - run `pnpm accept:preflight <change>` and `pnpm
-   check:manual`. A refusal is a blocker; a `spec ... changed meaning` warning
-   on a page in scope is a finding.
+1. **Machine gates** - the Flow's preflights passed and `pnpm check:manual`
+   is clean. A `spec ... changed meaning` warning on a page in scope is a
+   finding.
 2. **Page to delta** - every 🚧 line the change adds or keeps on a page is
    served by at least one requirement in its delta. Every ADDED or MODIFIED
    requirement serves a 🚧 or unmarked line on a page. A requirement no line
@@ -48,7 +100,8 @@ Read the store at its `main`, never the pinned copy:
 5. **Folded result** - read the durable files after the fold, not only the
    delta: a MODIFIED or REMOVED requirement names one that exists on `main`; no
    requirement left unchanged now contradicts a new one; an unmarked page line
-   the change makes untrue is rewritten or marked 🚧.
+   the change makes untrue is rewritten or marked 🚧; and the durable
+   capability `Purpose` still carries its existing scope alongside the change.
 6. **Designs** - each `ui-design.md` state ties to an anchor and agrees with
    the requirement for that state; `tech-design.md` delivers every requirement
    and adds no behaviour the spec and page do not state.
@@ -79,7 +132,7 @@ A blocker with one obvious fix stays in the table alone.
 
 End with one verdict line: `Ready to accept`, or `Not ready - <n> blockers`.
 A fix that moves a frozen anchor restarts QA1 and Dev; any other fix reruns QA2
-and then this review, per `planning-dev`.
+and then, for a blocker only, this review, per `planning-dev`.
 
 ## Related
 

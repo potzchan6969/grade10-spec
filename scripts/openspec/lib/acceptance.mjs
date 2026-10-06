@@ -14,6 +14,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import YAML from "yaml";
+import { RULES } from "../../../tools/manual/check/context.mjs";
 import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
 import {
   outline,
@@ -33,7 +34,16 @@ import {
 } from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
+import { foldChecks } from "./fold-checks.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
+
+const TRACE_MARKER_LINE =
+  /^[ \t]*<!--\s*trace:(?:scenario|case)\b[^\n]*-->[ \t]*\n?/gm;
+
+/** Trace markers are stamped onto durable specs by migrations after a
+ * snapshot was taken; a drift check compares wording, so it ignores them. */
+const withoutTraceMarkers = (text) =>
+  (text ?? "").replace(TRACE_MARKER_LINE, "");
 
 const TRACE_MARKER = /<!-- trace:scenario id=(\S+)/g;
 const MARKED_SCENARIO =
@@ -110,7 +120,7 @@ function sectionContent(text, anchor) {
   visit(roots);
   if (all.length === 0) return null;
   const section = all[0];
-  const span = sectionSpan(
+  const _span = sectionSpan(
     text,
     section.heading,
     section.level === 1 ? roots : undefined,
@@ -314,32 +324,6 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   const deltaSections = rootSections(deltaText).sections;
   const deltaFeature = sectionByName(deltaSections, "Feature set");
   const removedFeature = sectionByName(deltaSections, "REMOVED Feature set");
-  const removedGroups = (removedFeature?.raw ?? "")
-    .split("\n")
-    .filter((line) => /^-\s+/.test(line))
-    .map((line) => line.trim());
-  if (!deltaFeature && removedGroups.length === 0) return currentSpec;
-  const currentFeature = sectionByName(
-    rootSections(currentSpec).sections,
-    "Feature set",
-  );
-  if (!currentFeature && removedGroups.length > 0)
-    throw new Error(
-      `${capability}: cannot remove a Feature set group without a durable Feature set`,
-    );
-  if (!currentFeature) {
-    return `${currentSpec.replace(/\n*$/, "\n\n")}## Feature set${deltaFeature.raw ? `\n\n${deltaFeature.raw}` : ""}\n`;
-  }
-  if (priorText) {
-    const priorFeature = sectionByName(
-      rootSections(priorText).sections,
-      "Feature set",
-    );
-    if (currentFeature?.raw !== priorFeature?.raw)
-      throw new Error(
-        `${capability}: accepted Feature set changed since this amendment began; rebase the delta before acceptance`,
-      );
-  }
   const splitGroups = (raw) => {
     const groups = new Map();
     let items = null;
@@ -354,6 +338,36 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
     }
     return groups;
   };
+  const removedGroupNames = (removedFeature?.raw ?? "")
+    .split("\n")
+    .filter((line) => /^-\s+/.test(line))
+    .map((line) => line.trim());
+  const removedGroups = splitGroups(removedFeature?.raw ?? "");
+  if (!deltaFeature && removedGroups.size === 0) return currentSpec;
+  const currentFeature = sectionByName(
+    rootSections(currentSpec).sections,
+    "Feature set",
+  );
+  if (!currentFeature && removedGroups.size > 0)
+    throw new Error(
+      `${capability}: cannot remove a Feature set group without a durable Feature set`,
+    );
+  if (!currentFeature) {
+    return `${currentSpec.replace(/\n*$/, "\n\n")}## Feature set${deltaFeature.raw ? `\n\n${deltaFeature.raw}` : ""}\n`;
+  }
+  if (priorText) {
+    const priorFeature = sectionByName(
+      rootSections(priorText).sections,
+      "Feature set",
+    );
+    if (
+      withoutTraceMarkers(currentFeature?.raw) !==
+      withoutTraceMarkers(priorFeature?.raw)
+    )
+      throw new Error(
+        `${capability}: accepted Feature set changed since this amendment began; rebase the delta before acceptance`,
+      );
+  }
   const textOf = (item) => item.map((line) => line.trim()).join(" ");
   const labelOf = (item) => {
     const text = item[0].trim().replace(/^-\s+/, "");
@@ -362,11 +376,15 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   };
   const baseGroups = splitGroups(currentFeature?.raw ?? "");
   const deltaGroups = splitGroups(deltaFeature?.raw ?? "");
-  if (new Set(removedGroups).size !== removedGroups.length)
+  const holding = (pool, label) =>
+    label
+      ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
+      : [];
+  if (new Set(removedGroupNames).size !== removedGroupNames.length)
     throw new Error(
       `${capability}: REMOVED Feature set names a root group more than once`,
     );
-  if (deltaGroups.size === 0 && removedGroups.length === 0) {
+  if (deltaGroups.size === 0 && removedGroups.size === 0) {
     if (deltaFeature.raw.trim() === currentFeature.raw.trim())
       return currentSpec;
     throw new Error(
@@ -376,10 +394,6 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   for (const [group, deltaItems] of deltaGroups) {
     if (!baseGroups.has(group)) baseGroups.set(group, []);
     const items = baseGroups.get(group);
-    const holding = (pool, label) =>
-      label
-        ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
-        : [];
     for (const item of deltaItems) {
       const label = labelOf(item);
       const matches = holding(items, label);
@@ -396,16 +410,47 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
         items.push(item);
     }
   }
-  for (const group of removedGroups) {
+  for (const [group, removedItems] of removedGroups) {
     if (!baseGroups.has(group))
       throw new Error(
         `${capability}: REMOVED Feature set names a root group that does not exist: ${group.replace(/^-\s+/, "")}`,
       );
-    if (deltaGroups.has(group))
-      throw new Error(
-        `${capability}: Feature set root group cannot be both modified and removed: ${group.replace(/^-\s+/, "")}`,
-      );
-    baseGroups.delete(group);
+    if (removedItems.length === 0) {
+      if (deltaGroups.has(group))
+        throw new Error(
+          `${capability}: Feature set root group cannot be both modified and removed: ${group.replace(/^-\s+/, "")}`,
+        );
+      baseGroups.delete(group);
+      continue;
+    }
+    const items = baseGroups.get(group);
+    const deltaItems = deltaGroups.get(group) ?? [];
+    const removedLabels = new Set();
+    for (const item of removedItems) {
+      const label = labelOf(item);
+      if (!label)
+        throw new Error(
+          `${capability}: REMOVED Feature set item in ${group.replace(/^-\s+/, "")} needs a label ending in a colon`,
+        );
+      if (removedLabels.has(label))
+        throw new Error(
+          `${capability}: REMOVED Feature set names item "${label}" more than once in ${group.replace(/^-\s+/, "")}`,
+        );
+      removedLabels.add(label);
+      if (holding(deltaItems, label).length > 0)
+        throw new Error(
+          `${capability}: Feature set item cannot be both modified and removed: ${label}`,
+        );
+      const matches = holding(items, label);
+      if (matches.length !== 1)
+        throw new Error(
+          matches.length === 0
+            ? `${capability}: REMOVED Feature set item does not exist: ${label}`
+            : `${capability}: Feature set group "${group}" holds label "${label}" more than once in the durable spec; make its labels unique before folding`,
+        );
+      items.splice(matches[0], 1);
+    }
+    if (items.length === 0) baseGroups.delete(group);
   }
   const body = [...baseGroups]
     .map(([group, items]) => [group, ...items.flat()].join("\n"))
@@ -897,7 +942,8 @@ function foldOne(
   const requirements = new Map(requirementBlocks(durable));
   const priorRequirements =
     priorText === null ? new Map() : requirementBlocks(priorText);
-  const sameRequirement = (left, right) => left?.raw === right?.raw;
+  const sameRequirement = (left, right) =>
+    withoutTraceMarkers(left?.raw) === withoutTraceMarkers(right?.raw);
   const sections = deltaSections(deltaText);
   for (const section of sections) {
     const kind = deltaKindOf(section.heading);
@@ -1471,51 +1517,129 @@ export function prepareAcceptance(
   };
 }
 
-/** The checks a folded store must pass, run before anything is written in a
- *  copy of `openspec/` that holds the fold, beside links to the rest of the
- *  store that the checks read: `tcs:validate` as the
- *  `suites` CI job runs it, and that every trace marker in a file the fold
- *  writes sits directly above its heading. The rest of `trace validate` is
- *  not asked: a change's markers repeat in the durable files it folds into
- *  until it archives. `command(args, cwd)` runs `pnpm` with `args`. */
-export function validateFoldedSuites(prepared, command) {
+/** A copy of the store that holds the fold, beside links to the rest of it,
+ *  for the checks that read a whole store. The caller removes it. */
+function foldedTree(prepared) {
   const tree = mkdtempSync(join(tmpdir(), "folded-store-"));
+  for (const entry of readdirSync(prepared.root))
+    if (entry === "openspec")
+      cpSync(join(prepared.root, entry), join(tree, entry), {
+        recursive: true,
+      });
+    else symlinkSync(join(prepared.root, entry), join(tree, entry));
+  for (const [path, content] of prepared.outputs) {
+    mkdirSync(dirname(join(tree, path)), { recursive: true });
+    writeFileSync(join(tree, path), content);
+  }
+  return tree;
+}
+
+/** `pnpm run check:manual` prints a `FAIL  <rule title>` heading over each
+ *  rule's rows; one failure per rule, named by its key. */
+function manualFailures(output) {
+  const found = [];
+  let current = null;
+  for (const line of output.split("\n")) {
+    const head = /^FAIL {2}(.+)$/.exec(line);
+    if (head) {
+      current = {
+        rule: `check:manual/${RULES.find((rule) => rule.title === head[1])?.key ?? head[1]}`,
+        level: "fail",
+        detail: [],
+      };
+      found.push(current);
+    } else if (current && /^ {6}\S/.test(line))
+      current.detail.push(line.trim());
+    else current = null;
+  }
+  return found.map((one) => ({ ...one, detail: one.detail.join("\n") }));
+}
+
+/** Every check `spec:accept` holds a change to, run on the fold before
+ *  anything is written, so `accept:preflight` and `spec:accept` refuse the
+ *  same changes: `validate:changes`, the fold's own checks, `tcs:validate`
+ *  on a copy of the store that holds the fold, the trace markers of the
+ *  files the fold writes, and `check:manual` on that copy with the
+ *  acceptance recorded - the store-wide rules (`overlap`, `issued`) that a
+ *  change accepted beside another one breaks. Nothing stops at the first
+ *  finding. Returns `{ failures, warnings }`, each `{ rule, detail }`.
+ *  `command(args, cwd)` runs `pnpm` with `args`. */
+export function acceptanceGate(prepared, command) {
+  const failures = [];
+  const warnings = [];
+  const refuse = (rule, detail) => failures.push({ rule, detail });
+  const run = (rule, args) => {
+    const result = command(args, prepared.root);
+    if (result.status === 0) return null;
+    return `${result.stdout ?? ""}${result.stderr ?? ""}`.trim() || rule;
+  };
+  const changes = run("validate:changes", [
+    "run",
+    "validate:changes",
+    prepared.changeId,
+  ]);
+  if (changes) refuse("validate:changes", changes);
+  for (const finding of foldChecks(prepared))
+    (finding.level === "warn" ? warnings : failures).push(finding);
+  const tree = foldedTree(prepared);
   try {
-    for (const entry of readdirSync(prepared.root))
-      if (entry === "openspec")
-        cpSync(join(prepared.root, entry), join(tree, entry), {
-          recursive: true,
-        });
-      else symlinkSync(join(prepared.root, entry), join(tree, entry));
-    for (const [path, content] of prepared.outputs) {
-      mkdirSync(dirname(join(tree, path)), { recursive: true });
-      writeFileSync(join(tree, path), content);
-    }
-    const result = command(
-      ["run", "tcs:validate", "--root", tree, "--require-suites"],
-      prepared.root,
-    );
-    if (result.status !== 0)
-      throw new Error(
-        `tcs:validate refused the folded store:\n${result.stdout ?? ""}${result.stderr ?? ""}`,
-      );
+    const suites = run("tcs:validate", [
+      "run",
+      "tcs:validate",
+      "--root",
+      tree,
+      "--require-suites",
+    ]);
+    if (suites) refuse("tcs:validate", suites);
     const markers = parseTraceGraph({ storeRoot: tree }).issues.filter(
       (issue) =>
         issue.code === "marker-adjacency" &&
         prepared.outputs.has(relative(tree, issue.file)),
     );
     if (markers.length > 0)
-      throw new Error(
-        `trace markers in the folded files sit away from their headings:\n${markers
+      refuse(
+        "trace-markers",
+        markers
           .map(
             (issue) =>
-              `- ${relative(tree, issue.file)}:${issue.line} [${issue.code}] ${issue.message}`,
+              `${relative(tree, issue.file)}:${issue.line} [${issue.code}] ${issue.message}`,
           )
-          .join("\n")}`,
+          .join("\n"),
       );
+    try {
+      const recorded = join(
+        tree,
+        "openspec",
+        "changes",
+        prepared.changeId,
+        "acceptance.json",
+      );
+      writeAcceptance(tree, prepared, {
+        reviewedBy: "accept:preflight",
+        supersedes: existsSync(recorded)
+          ? JSON.parse(readFileSync(recorded, "utf8")).fingerprint
+          : null,
+      });
+    } catch (error) {
+      refuse("acceptance", error.message);
+    }
+    const manual = command(["run", "check:manual", tree], prepared.root);
+    if (manual.status !== 0) {
+      const output = `${manual.stdout ?? ""}${manual.stderr ?? ""}`;
+      const named = manualFailures(output);
+      if (named.length > 0) failures.push(...named);
+      else refuse("check:manual", output.trim() || "check:manual failed");
+    }
   } finally {
     rmSync(tree, { recursive: true, force: true });
   }
+  return { failures, warnings };
+}
+
+export function formatFindings(findings) {
+  return findings
+    .map((one) => `- [${one.rule}] ${one.detail.replaceAll("\n", "\n    ")}`)
+    .join("\n");
 }
 
 export function runPnpm(args, cwd) {
@@ -1918,11 +2042,9 @@ export function acceptChange(
       );
   };
   try {
-    validate(
-      ["run", "validate:changes", changeId],
-      "validate:changes before fold",
-    );
-    validateFoldedSuites(prepared, command);
+    const { failures } = acceptanceGate(prepared, (args) => command(args));
+    if (failures.length > 0)
+      throw new Error(`Acceptance refused:\n${formatFindings(failures)}`);
     for (const [path, content] of prepared.outputs) {
       const target = join(root, path);
       preserve(target);
@@ -1951,4 +2073,10 @@ export function acceptChange(
   }
 }
 
-export { contractOutputs, json as prettyJson, mergeFeatureSet, mergeSuite };
+export {
+  contractOutputs,
+  json as prettyJson,
+  mergeFeatureSet,
+  mergeSuite,
+  requirementBlocks,
+};

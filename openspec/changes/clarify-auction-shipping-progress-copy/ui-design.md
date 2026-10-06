@@ -38,4 +38,4 @@ Shipment (`default`), not outline.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Preparing Shipment | Badge `default`; Shipping current + Preparing to ship | `winner-order-SC-55` |
-| Shipped | Badge `default`; Shipping current + date / tracking | `winner-order-SC-20` |
+| Shipped | Badge `default`; Shipping current + date / tracking | `winner-order-SC-253` |

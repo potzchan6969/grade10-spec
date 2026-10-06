@@ -56,8 +56,9 @@ template at `https://email.grade10-stg.com/preview/…` (same path as
 | Payment reminder | Day 6 of the current invoice's running deadline, while invoice status is `pending` | Email | [payment-reminder-day-six.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder-day-six) |
 | Final notice | 24 hours before the payment deadline, while invoice status is `pending` | Email | [payment-reminder-final.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder-final) |
 | Payment overdue | Grade10 sets the invoice to `expired` at its payment deadline | Email | [payment-overdue.tsx](https://email.grade10-stg.com/preview/auction/order/payment-overdue) |
-| Proof not accepted | An operator returns a `payment_verifying` invoice to `pending`. Names the operator's external reason and the new payment deadline as a date and time in the winner's own timezone | Email | — |
+| Proof not accepted | An operator returns a `payment_verifying` invoice to `pending`. Names the operator's external reason and the new payment deadline in `Asia/Hong_Kong` as `GMT+8` | Email | — |
 | Payment received | The winner's card payment is confirmed, an operator confirms bank transfer proof, or an operator commits a manual settlement | Email | [payment-received.tsx](https://email.grade10-stg.com/preview/auction/order/payment-received) |
+| Partial payment received | An operator records a payment whose cumulative total remains below the invoice total. Names the current invoice and receipt IDs, attaches that receipt PDF, and uses the partial-payment Contact Us mailto without a remaining balance | Email | — |
 | Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached. Primary CTA is the carrier track-and-trace link; secondary CTA opens Winner Order | Email | [order-shipped.tsx](https://email.grade10-stg.com/preview/auction/order/order-shipped) |
 | Delivered | The carrier confirms delivery | Email | [order-delivered.tsx](https://email.grade10-stg.com/preview/auction/order/order-delivered) |
 | Order cancelled | An operator cancels the order | Email | [order-cancelled.tsx](https://email.grade10-stg.com/preview/auction/order/order-cancelled) |
@@ -171,7 +172,7 @@ secondary action on the same row.
   units in HKD
 - **THEN** Grade10 sends the winner the payment-reminder letter by email
 - **AND** it names 312000 minor units in HKD as the invoice total and the
-  payment deadline in the winner's own timezone
+  payment deadline in `Asia/Hong_Kong` as `GMT+8`
 - **AND** its primary action opens that lot's Winner Order so the winner can
   check the invoice and pay
 - **AND** the letter carries no invoice PDF attachment
@@ -196,7 +197,7 @@ secondary action on the same row.
 - **GIVEN** a bank transfer invoice that became `payment_verifying` with 3 days left
 - **WHEN** an operator returns it to `pending` at 2026-09-16T09:00:00Z with the external reason "Amount does not match" and an internal reason
 - **THEN** Grade10 sends the winner the proof-not-accepted letter
-- **AND** it names "Amount does not match" and "Pay by" with the deadline 2026-09-19T09:00:00Z as a date and time in the winner's own timezone
+- **AND** it names "Amount does not match" and "Pay by" with the deadline 2026-09-19T09:00:00Z as 2026-09-19 17:00 `GMT+8`
 - **AND** it states no duration left
 - **AND** it does not name the internal reason
 - **AND** its primary action opens that lot's Winner Order

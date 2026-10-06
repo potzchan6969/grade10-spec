@@ -1,3 +1,5 @@
+# grade10-site/auction/order-status Specification
+
 ## Feature set
 
 - Derived order status
@@ -58,6 +60,9 @@ Refunded.
 <!-- trace:scenario id=g10.auction-order-status.SC-aj3 rev=1 -->
 #### Scenario: auction-status-SC-07 - A paid, undispatched order is Processing
 **Serves:** Derived order status - a paid, undispatched order is Preparing Shipment
+
+The scenario title is historical for its permanent trace identity. Its normative
+Given, When and Then use the current Preparing Shipment vocabulary.
 
 - **GIVEN** an auction order with invoice status `paid` and fulfilment status
   `unfulfilled`

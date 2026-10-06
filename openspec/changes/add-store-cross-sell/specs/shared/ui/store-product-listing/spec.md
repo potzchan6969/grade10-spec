@@ -40,6 +40,7 @@ a surface that sells — one supplying a cart handler — a sold-out tile stays
 inert. Its cart action SHALL NOT be activatable, and
 its sold-out treatment SHALL stay.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-vxt rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-91 - A sold-out product still opens where activation is handled
 **Serves:** Tile contract - a surface that carries the shopper on opens a card nobody can buy
 
@@ -53,6 +54,7 @@ its sold-out treatment SHALL stay.
 A tile's cart words SHALL be accepted absent where no cart control is drawn,
 so a surface that does not sell names no cart word.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-rzq rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-92 - A tile drawn without a cart control needs no cart words
 **Serves:** Selling is opt-in - a surface that does not sell names no cart word
 
@@ -70,6 +72,7 @@ activation where a handler is supplied, in place of the link's own
 navigation. A tile that does not open — a sold-out tile where
 the surface sells — SHALL be no link, address or not.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-iye rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-93 - A tile given its address is a link to it
 **Serves:** Tile contract - a tile opens its product the way any link opens
 

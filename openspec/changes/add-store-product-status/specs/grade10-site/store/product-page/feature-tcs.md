@@ -175,6 +175,7 @@ on its own.
 * <A card>'s product page opens without a full page load.
 * The address names <a card>.
 
+<!-- trace:case id=g10.store-product-page.TC-gs9 rev=1 covers=g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
 ### grade10-site-store-product-page-US2-TC3-1: Card name opens the same product address
 
 **Classification:**
@@ -520,6 +521,7 @@ or one with its edges cut off.
 
 * The declared shape is small.
 
+<!-- trace:case id=g10.store-product-page.TC-d8o rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC10-1: Each shared card address unfurls with its own picture
 
 **Classification:**
@@ -550,6 +552,7 @@ or one with its edges cut off.
 * Each preview shows its own card's first picture.
 * Neither preview shows the other card's picture.
 
+<!-- trace:case id=g10.store-product-page.TC-4lv rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC11-1: Small original fills the preview box
 
 **Classification:**
@@ -579,6 +582,7 @@ or one with its edges cut off.
 * The picture is enlarged to fill the preview box.
 * The card remains whole.
 
+<!-- trace:case id=g10.store-product-page.TC-zre rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
 ### grade10-site-store-product-page-US13-TC12-1: Preview opens the card it describes
 
 **Classification:**
@@ -616,6 +620,7 @@ or one with its edges cut off.
 its own page,
 **so that** I can buy the quantity I chose without leaving the product page.
 
+<!-- trace:case id=g10.store-product-page.TC-ow8 rev=2 covers=g10.store-product-page.SC-jt1,g10.store-product-page.SC-b7g,g10.store-product-page.SC-qmb,g10.store-product-page.SC-tl5 -->
 ### grade10-site-store-product-page-US3-TC4-2: Product page offers one item without a shopper choice
 
 **Classification:**
@@ -645,6 +650,7 @@ its own page,
 * The page shows the item's price and availability.
 * No size, option, variant choice or variant label is shown.
 
+<!-- trace:case id=g10.store-product-page.TC-9pw rev=2 covers=g10.store-product-page.SC-jt1,g10.store-product-page.SC-b7g,g10.store-product-page.SC-qmb,g10.store-product-page.SC-tl5 -->
 ### grade10-site-store-product-page-US3-TC5-2: Requested quantity above the count reaches cart review
 
 **Classification:**
@@ -753,6 +759,7 @@ the buying happens, while keeping its price visible,
 * The page says the item is sold out.
 * No usable add control is offered.
 
+<!-- trace:case id=g10.store-product-page.TC-bzn rev=2 covers=g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
 ### grade10-site-store-product-page-US4-TC3-2: Page does not offer another Shopify variant as a choice
 
 **Classification:**

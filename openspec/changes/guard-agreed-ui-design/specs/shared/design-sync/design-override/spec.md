@@ -79,6 +79,7 @@ SHALL NOT stop a commit.
 **Judged per commit** - Each commit SHALL be judged against its first parent,
 never against `main`.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-rls rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-02 - Each look-line kind stops
 **Serves:** Stopping a look change - one commit per kind, each removing one such line from a primitive
 
@@ -86,6 +87,7 @@ never against `main`.
   file under `packages/design-system/src/components`, one commit per kind
 - **THEN** each of those commits stops, naming the removed line
 
+<!-- trace:scenario id=g10.shared-design-override.SC-l0o rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-03 - A block moved in from an older copy stops
 **Serves:** Stopping a look change - a banner is moved into the shared blocks from a copy older than the designer's polish
 
@@ -96,6 +98,7 @@ never against `main`.
 - **THEN** the commit stops, naming both motion lines
 - **AND** names none of the lines added back unchanged
 
+<!-- trace:scenario id=g10.shared-design-override.SC-6go rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-04 - A changed or removed token stops
 **Serves:** Stopping a look change - a token's value is edited, and another token is deleted
 
@@ -103,6 +106,7 @@ never against `main`.
   removes a token path
 - **THEN** each commit stops, naming the token path
 
+<!-- trace:scenario id=g10.shared-design-override.SC-qos rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-05 - An added token passes
 **Serves:** Stopping a look change - a new token is appended after the last one in its group
 
@@ -110,6 +114,7 @@ never against `main`.
   it only to add a comma
 - **THEN** the commit passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-2yb rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-06 - Code moved unchanged passes
 **Serves:** Stopping a look change - a component is lifted from a preview page into a block as it is
 
@@ -117,12 +122,14 @@ never against `main`.
   page and adds the same lines unchanged under `packages/ui/src/blocks`
 - **THEN** the commit passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-22d rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-07 - Formatting passes
 **Serves:** Stopping a look change - a formatter rewrites a block's spacing between tokens
 
 - **WHEN** a commit changes only the whitespace in a block's lines
 - **THEN** the commit passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-j3z rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-08 - Lines that set no look pass
 **Serves:** Stopping a look change - a refactor clears imports, types, comments and logic
 
@@ -131,12 +138,14 @@ never against `main`.
   story
 - **THEN** the commit passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-2f5 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-09 - A path outside the watched paths passes
 **Serves:** Stopping a look change - a script's class list is rewritten
 
 - **WHEN** a commit rewrites a class list in a file under `scripts/`
 - **THEN** the commit passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-vtw rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-46 - A reordered class list stops
 **Serves:** Stopping a look change - a formatter sorts the classes of a block's root
 
@@ -164,6 +173,7 @@ why>`.
 
 **Refused** - A stop SHALL refuse the commit or the push it is met in.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-buk rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-10 - The stop shows before, after and who set it
 **Serves:** Stopping a look change - the person asked reads the stop in place of the diff
 
@@ -174,6 +184,7 @@ why>`.
   replaced it
 - **AND** shows the designer's name, that date and that commit
 
+<!-- trace:scenario id=g10.shared-design-override.SC-qc6 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-11 - A line removed with nothing in its place
 **Serves:** Stopping a look change - a motion line is deleted outright
 
@@ -181,6 +192,7 @@ why>`.
 - **THEN** the stop shows the removed line and who set it
 - **AND** shows no line after it
 
+<!-- trace:scenario id=g10.shared-design-override.SC-qla rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-12 - The stop ends with the line to add
 **Serves:** Stopping a look change - the committer's agent relays the stop to its person
 
@@ -210,6 +222,7 @@ NOT stop a merge.
 
 **Merge rule only** - A merge SHALL NOT be read by the look rule.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-cy5 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-13 - A merge that keeps an old copy stops
 **Serves:** Stopping a lossy merge - `main` is merged into a branch that kept its older product card
 
@@ -219,6 +232,7 @@ NOT stop a merge.
   those lines
 - **THEN** the merge stops, naming each of `main`'s lines it dropped
 
+<!-- trace:scenario id=g10.shared-design-override.SC-l3b rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-14 - A clean pull passes
 **Serves:** Stopping a lossy merge - a branch pulls `main`, which removed look lines the branch never touched
 
@@ -227,6 +241,7 @@ NOT stop a merge.
 - **WHEN** a merge of `main` into the branch keeps `main`'s removal
 - **THEN** the merge passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-7on rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-15 - A line both sides hold is removed by the merge
 **Serves:** Stopping a lossy merge - a conflict is resolved by deleting a line neither side changed
 
@@ -234,6 +249,7 @@ NOT stop a merge.
 - **WHEN** the merge result leaves it out
 - **THEN** the merge stops, naming that line
 
+<!-- trace:scenario id=g10.shared-design-override.SC-re6 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-16 - The designer's merge is held
 **Serves:** Stopping a lossy merge - the designer resolves a pull on her own branch
 
@@ -241,6 +257,7 @@ NOT stop a merge.
 - **WHEN** the merge result drops a line the other parent added
 - **THEN** the merge stops, naming that line
 
+<!-- trace:scenario id=g10.shared-design-override.SC-8vy rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-17 - A merge in the application drops a site page's lines
 **Serves:** Stopping a lossy merge - an engineer merges `main` into a site branch
 
@@ -249,6 +266,7 @@ NOT stop a merge.
 - **WHEN** the merge result leaves those lines out
 - **THEN** the merge stops, naming the page and the dropped lines
 
+<!-- trace:scenario id=g10.shared-design-override.SC-vs0 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-47 - A line dropped outside the watched paths passes
 **Serves:** Stopping a lossy merge - a conflict in a manual page is resolved by taking one side
 
@@ -298,6 +316,7 @@ longer exists or no longer rebuilds a block, SHALL fail the check.
 the block check and refuse on a finding, as the application's checks on
 `main` do.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-vhk rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-18 - A site page imports a dialog primitive
 **Serves:** Refusing a rebuilt block - an engineer composes a dialog by hand on a site page
 
@@ -305,6 +324,7 @@ the block check and refuse on a finding, as the application's checks on
   to a site page that is not listed
 - **THEN** the commit is refused, naming the page and the primitive
 
+<!-- trace:scenario id=g10.shared-design-override.SC-4gl rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-19 - A store block given a class across lines
 **Serves:** Refusing a rebuilt block - a site page restyles a shared block through its props
 
@@ -313,6 +333,7 @@ the block check and refuse on a finding, as the application's checks on
   is not listed
 - **THEN** the commit is refused, naming the page and the element
 
+<!-- trace:scenario id=g10.shared-design-override.SC-u2l rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-20 - A listed page passes
 **Serves:** Refusing a rebuilt block - a page kept on purpose is edited
 
@@ -320,6 +341,7 @@ the block check and refuse on a finding, as the application's checks on
 - **WHEN** a commit edits the page's use of the `card` primitive
 - **THEN** the commit passes the block check
 
+<!-- trace:scenario id=g10.shared-design-override.SC-dmc rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-21 - A primitive outside the set passes
 **Serves:** Refusing a rebuilt block - a site page lays out text and a button
 
@@ -327,6 +349,7 @@ the block check and refuse on a finding, as the application's checks on
   site page
 - **THEN** the commit passes the block check
 
+<!-- trace:scenario id=g10.shared-design-override.SC-1xq rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-22 - The admin frontends are not held
 **Serves:** Refusing a rebuilt block - an operator screen is built from primitives
 
@@ -334,6 +357,7 @@ the block check and refuse on a finding, as the application's checks on
   frontend page
 - **THEN** the commit passes the block check
 
+<!-- trace:scenario id=g10.shared-design-override.SC-d4e rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-23 - The override line does not pass a rebuilt block
 **Serves:** Refusing a rebuilt block - an agent tries the commit line where the page belongs on the list
 
@@ -341,6 +365,7 @@ the block check and refuse on a finding, as the application's checks on
   with `Design-Override: keep the page's own drawer`
 - **THEN** the commit is still refused
 
+<!-- trace:scenario id=g10.shared-design-override.SC-auw rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-48 - A listing that outlived its page fails
 **Serves:** Refusing a rebuilt block - a rebuilt page is moved onto the store's blocks and its listing is left behind
 
@@ -367,6 +392,7 @@ last paragraph SHALL NOT pass the commit. In that paragraph it MAY sit with
 other trailers, such as `Co-authored-by:`, in any order.
 
 
+<!-- trace:scenario id=g10.shared-design-override.SC-b5w rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-24 - The line passes every stop in a commit
 **Serves:** Confirming an override - the person agrees to a padding change across two blocks
 
@@ -376,6 +402,7 @@ other trailers, such as `Co-authored-by:`, in any order.
   designer`
 - **THEN** the commit passes
 
+<!-- trace:scenario id=g10.shared-design-override.SC-wrf rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-25 - An empty reason is refused
 **Serves:** Confirming an override - an agent adds the line with nothing after it
 
@@ -383,6 +410,7 @@ other trailers, such as `Co-authored-by:`, in any order.
   followed only by spaces
 - **THEN** the commit stops, naming the same lines as with no line
 
+<!-- trace:scenario id=g10.shared-design-override.SC-voi rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-26 - The line outside the last paragraph does not count
 **Serves:** Confirming an override - the line is written in the message's body
 
@@ -408,6 +436,7 @@ the heading `Design Override`:
 and the application's `frontend-structure` skill SHALL link that heading
 rather than restate it.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-l1o rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-27 - The rule is in both repositories' instructions
 **Serves:** Confirming an override - an agent reads its instructions before building a block or a page
 
@@ -435,6 +464,7 @@ block.
 **No designer** - When no handle holds the `design` role, no commit SHALL be
 exempt.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-wss rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-28 - The designer as author
 **Serves:** Exempting the designer - the designer polishes a block herself
 
@@ -442,6 +472,7 @@ exempt.
   in a block
 - **THEN** the commit passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-ab0 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-29 - An agent authors, the designer commits
 **Serves:** Exempting the designer - the designer's agent writes the commit and she makes it
 
@@ -449,6 +480,7 @@ exempt.
   designer's e-mail rewrites a motion line in a block
 - **THEN** the commit passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-8ji rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-30 - The designer as co-author
 **Serves:** Exempting the designer - an agent commits for her under its own name
 
@@ -457,6 +489,7 @@ exempt.
   e-mail in capitals, and it rewrites a class line in a block
 - **THEN** the commit passes without a stop
 
+<!-- trace:scenario id=g10.shared-design-override.SC-akl rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-31 - An agent with no known person is held
 **Serves:** Exempting the designer - an agent commits under a name nobody on the team holds
 
@@ -487,6 +520,7 @@ on any remote branch this clone knows.
 commit needs, it SHALL refuse the commit or the push and say what it could
 not read.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-r0e rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-32 - The same answer at commit, push and main
 **Serves:** Checking at commit and push - one commit is read at each of the three places
 
@@ -495,6 +529,7 @@ not read.
 - **THEN** each place names the same stops for the first and none for the
   second
 
+<!-- trace:scenario id=g10.shared-design-override.SC-0f1 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-33 - A rebased commit is checked at push
 **Serves:** Checking at commit and push - a branch is rebased, replaying commits without the commit hook
 
@@ -503,6 +538,7 @@ not read.
 - **WHEN** the branch is pushed
 - **THEN** the push is refused, naming that commit and the line
 
+<!-- trace:scenario id=g10.shared-design-override.SC-jct rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-34 - A merge is checked at commit
 **Serves:** Checking at commit and push - a conflicted merge is concluded with a commit
 
@@ -511,6 +547,7 @@ not read.
 - **WHEN** the merge is committed
 - **THEN** the commit stops, naming that line
 
+<!-- trace:scenario id=g10.shared-design-override.SC-pri rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-35 - A new branch is checked over its own commits
 **Serves:** Checking at commit and push - a first push of a branch cut from `main`
 
@@ -518,6 +555,7 @@ not read.
 - **WHEN** a new branch from `main` adds one commit that passes and is pushed
 - **THEN** the push passes
 
+<!-- trace:scenario id=g10.shared-design-override.SC-zcy rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-36 - Deleting a branch checks nothing
 **Serves:** Checking at commit and push - a finished branch is removed from the remote
 
@@ -525,6 +563,7 @@ not read.
 - **WHEN** a push deletes that branch
 - **THEN** the push passes
 
+<!-- trace:scenario id=g10.shared-design-override.SC-wgf rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-49 - The check refuses when it cannot read the team
 **Serves:** Checking at commit and push - a clone whose `team.yaml` was removed
 
@@ -547,6 +586,7 @@ which holds `commit-msg` and `pre-push`.
 the application's hooks SHALL fail and name the command that fetches the
 submodule.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-5gs rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-37 - Install sets the hooks everywhere
 **Serves:** Checking at commit and push - a teammate installs a fresh clone of each repository
 
@@ -555,6 +595,7 @@ submodule.
 - **THEN** the store, the application and `external/grade10-spec` each have
   their hooks path set to their own `.githooks`
 
+<!-- trace:scenario id=g10.shared-design-override.SC-v77 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-38 - A commit inside the store submodule is checked
 **Serves:** Checking at commit and push - an engineer edits a block from the application's copy of the store
 
@@ -562,6 +603,7 @@ submodule.
   in a block
 - **THEN** the commit stops
 
+<!-- trace:scenario id=g10.shared-design-override.SC-iv0 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-39 - The application's hook with no check fails
 **Serves:** Checking at commit and push - a clone whose submodule was never fetched
 
@@ -594,6 +636,7 @@ commit, against that commit's first parent.
 
 **Never reverted** - The report SHALL NOT revert a commit or block `main`.
 
+<!-- trace:scenario id=g10.shared-design-override.SC-kwf rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-40 - An override reaching main is told
 **Serves:** Telling the designer - a confirmed override is pushed to `main`
 
@@ -602,6 +645,7 @@ commit, against that commit's first parent.
 - **THEN** a comment on that commit mentions every `design` handle and lists
   the lines it changed
 
+<!-- trace:scenario id=g10.shared-design-override.SC-0l1 rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-41 - A commit that skipped the check is told
 **Serves:** Telling the designer - a commit is pushed with the hooks skipped
 
@@ -610,6 +654,7 @@ commit, against that commit's first parent.
   the lines it stops on
 - **AND** the commit stays on `main`
 
+<!-- trace:scenario id=g10.shared-design-override.SC-0kk rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-42 - A passing or exempt commit is not told
 **Serves:** Telling the designer - an ordinary push and the designer's own push
 
@@ -618,6 +663,7 @@ commit, against that commit's first parent.
   `main`
 - **THEN** none gets a comment
 
+<!-- trace:scenario id=g10.shared-design-override.SC-yua rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-43 - A re-run posts nothing twice
 **Serves:** Telling the designer - the report job is run again for the same push
 
@@ -626,12 +672,14 @@ commit, against that commit's first parent.
 - **WHEN** the report runs again over the same push
 - **THEN** no second comment is posted on it
 
+<!-- trace:scenario id=g10.shared-design-override.SC-3wm rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-44 - A comment that cannot be posted fails the job
 **Serves:** Telling the designer - the job is refused permission to comment
 
 - **WHEN** posting a comment on a commit that must be told fails
 - **THEN** the report job fails
 
+<!-- trace:scenario id=g10.shared-design-override.SC-qzc rev=1 -->
 #### Scenario: shared-design-sync-design-override-SC-45 - A push that creates the branch
 **Serves:** Telling the designer - the first push to a new `main`
 

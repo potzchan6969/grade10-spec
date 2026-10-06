@@ -1,0 +1,444 @@
+name: Auto-fix CI
+
+# Collects failed jobs from this repository's completed workflows, then repairs
+# source and test code only when the failure is current and can be verified.
+# The PR trigger bootstraps repairs before this workflow is on the default branch.
+# Product-artifact checks are not repair gates because the agent cannot edit them.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_run:
+    workflows:
+      - "Email templates"
+      - "Test cases"
+      - "Storybook"
+      - "Run sheet"
+      - "OpenSpec changes"
+      - "Weekly digest"
+      - "Test"
+      - "Design sync"
+      - "Manual"
+      - "Typecheck"
+      - "Lint"
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: read
+  statuses: write
+
+concurrency:
+  group: ci-auto-fix-${{ github.event.pull_request.head.repo.full_name || github.event.workflow_run.head_repository.full_name }}-${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 24.14.1
+  CURSOR_CLI_VERSION: 2026.08.11-e8db854
+  CURSOR_CLI_SHA256: bfff4bf6f4e9dd30c1d0ef0a70b6077b074015dd2948e4c50685d53afdcfce5a
+  CURSOR_MODEL: composer-2.5
+
+jobs:
+  repair:
+    if: >-
+      (github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository) ||
+      (github.event_name == 'workflow_run' && (
+      github.event.workflow_run.event == 'push' ||
+      github.event.workflow_run.event == 'pull_request' ||
+      github.event.workflow_run.event == 'workflow_dispatch' ||
+      github.event.workflow_run.event == 'schedule' ||
+      github.event.workflow_run.event == 'workflow_run'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Resolve repair target
+        id: target
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo=$GITHUB_REPOSITORY
+          skip() { echo "$1"; echo repairable=false >> "$GITHUB_OUTPUT"; exit 0; }
+          emit() {
+            echo "repairable=true" >> "$GITHUB_OUTPUT"
+            echo "mode=$1" >> "$GITHUB_OUTPUT"
+            echo "branch=$2" >> "$GITHUB_OUTPUT"
+            echo "sha=$3" >> "$GITHUB_OUTPUT"
+            echo "failed_runs=$4" >> "$GITHUB_OUTPUT"
+            echo "failed_workflows=$5" >> "$GITHUB_OUTPUT"
+            echo "pr_url=$7" >> "$GITHUB_OUTPUT"
+            delimiter="ci_autofix_pr_name_$(printf '%s' "$3" | cut -c1-12)"
+            { echo "pr_name<<$delimiter"; printf '%s\n' "$6"; echo "$delimiter"; } >> "$GITHUB_OUTPUT"
+          }
+          pr_name=; pr_url=
+          if [ "$GITHUB_EVENT_NAME" = pull_request ]; then
+            branch=$(jq -r '.pull_request.head.ref' "$GITHUB_EVENT_PATH")
+            sha=$(jq -r '.pull_request.head.sha' "$GITHUB_EVENT_PATH")
+            event=pull_request
+            head_repo=$(jq -r '.pull_request.head.repo.full_name // empty' "$GITHUB_EVENT_PATH")
+            number=$(jq -r '.pull_request.number' "$GITHUB_EVENT_PATH")
+            [ "$head_repo" = "$repo" ] || skip "$branch belongs to a fork"
+            mode=push
+            pr=$(gh api "repos/$repo/pulls/$number")
+            [ "$(jq -r .state <<< "$pr")" = open ] || skip "$branch pull request is no longer open"
+            tip=$(jq -r .head.sha <<< "$pr")
+            [ "$(jq -r .head.repo.full_name <<< "$pr")" = "$repo" ] || skip "$branch belongs to a fork"
+            pr_name=$(jq -r .title <<< "$pr")
+            pr_url=$(jq -r .html_url <<< "$pr")
+          else
+            payload() { jq -r ".workflow_run.$1" "$GITHUB_EVENT_PATH"; }
+            branch=$(payload head_branch); sha=$(payload head_sha); event=$(payload event)
+            [ "$(payload head_repository.full_name)" = "$repo" ] || skip "$branch belongs to a fork"
+            if [ "$branch" = main ]; then mode=pr; tip=$(gh api "repos/$repo/branches/main" --jq .commit.sha)
+            elif [ "$event" = pull_request ]; then
+              mode=push
+              pr=$(gh api -X GET "repos/$repo/pulls" -f state=open -f "head=${repo%%/*}:$branch" --jq '.[0] // empty')
+              [ -n "$pr" ] || skip "$branch has no open pull request"
+              number=$(jq -r .number <<< "$pr")
+              tip=$(jq -r .head.sha <<< "$pr")
+              pr_name=$(jq -r .title <<< "$pr")
+              pr_url=$(jq -r .html_url <<< "$pr")
+            else skip "$branch is neither main nor a pull request"
+            fi
+          fi
+          [ "$tip" = "$sha" ] || skip "$branch has moved past $sha"
+          workflow_names='["Email templates","Test cases","Storybook","Run sheet","OpenSpec changes","Weekly digest","Test","Design sync","Manual","Typecheck","Lint"]'
+          deadline=$((SECONDS + 900)); previous=; stable=0; selected='[]'
+          while [ "$SECONDS" -lt "$deadline" ]; do
+            runs=$(gh api "repos/$repo/actions/runs?head_sha=$sha&per_page=100")
+            selected=$(jq -c \
+              --arg branch "$branch" \
+              --arg event "$event" \
+              --argjson names "$workflow_names" \
+              '[.workflow_runs[]
+                | select(.head_branch == $branch and .event == $event)
+                | select(.name as $name | $names | index($name) != null)]
+               | group_by(.name)
+               | map(max_by(.id))' <<< "$runs")
+            running=$(jq -r '[.[] | select(.status != "completed") | .name] | unique | join(", ")' <<< "$selected")
+            signature=$(jq -c '[.[] | {id, status, conclusion}]' <<< "$selected")
+            if [ "$(jq length <<< "$selected")" -gt 0 ] && [ -z "$running" ]; then
+              if [ "$signature" = "$previous" ]; then stable=$((stable + 1)); else stable=0; fi
+              [ "$stable" -lt 3 ] || break
+            else stable=0
+            fi
+            previous=$signature
+            sleep 30
+          done
+          [ "$stable" -ge 3 ] || skip "CI runs did not settle within 15 minutes${running:+; still running: $running}"
+          if [ "$mode" = pr ]; then
+            tip=$(gh api "repos/$repo/branches/main" --jq .commit.sha)
+          else
+            pr=$(gh api "repos/$repo/pulls/$number")
+            [ "$(jq -r .state <<< "$pr")" = open ] || skip "$branch pull request is no longer open"
+            tip=$(jq -r .head.sha <<< "$pr")
+          fi
+          [ "$tip" = "$sha" ] || skip "$branch moved while CI was settling"
+          failed_runs=$(jq -c '[.[] | select(.conclusion == "failure") | {id, name}]' <<< "$selected")
+          [ "$failed_runs" != "[]" ] || skip "no failed jobs remain for $sha"
+          attempted=$(gh api "repos/$repo/commits/$sha/status" \
+            --jq '[.statuses[] | select(.context == "ci/auto-fix-attempt")] | length')
+          [ "$attempted" -eq 0 ] || skip "auto-fix already attempted for $sha"
+          gh api -X POST "repos/$repo/statuses/$sha" \
+            -f state=success \
+            -f context=ci/auto-fix-attempt \
+            -f description='Auto-fix attempt recorded for this commit' >/dev/null
+          failed_workflows=$(jq -r '[.[].name] | unique | join(", ")' <<< "$failed_runs")
+          emit "$mode" "$branch" "$sha" "$failed_runs" "$failed_workflows" "$pr_name" "$pr_url"
+
+      - name: Check auto-fix credentials
+        if: steps.target.outputs.repairable == 'true'
+        env:
+          APP_CLIENT_ID: ${{ vars.CI_AUTOFIX_APP_CLIENT_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.CI_AUTOFIX_APP_PRIVATE_KEY }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          set -euo pipefail
+          missing=()
+          [ -n "$APP_CLIENT_ID" ] || missing+=("Actions variable CI_AUTOFIX_APP_CLIENT_ID")
+          [ -n "$APP_PRIVATE_KEY" ] || missing+=("Actions secret CI_AUTOFIX_APP_PRIVATE_KEY")
+          [ -n "$CURSOR_API_KEY" ] || missing+=("Actions secret CURSOR_API_KEY")
+          if [ "${#missing[@]}" -gt 0 ]; then
+            printf '::error::Configure required auto-fix settings:%s\n' "$(printf ' %s' "${missing[@]}")"
+            exit 1
+          fi
+
+      - name: Create CI auto-fix App token
+        id: app-token
+        if: steps.target.outputs.repairable == 'true'
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.CI_AUTOFIX_APP_CLIENT_ID }}
+          private-key: ${{ secrets.CI_AUTOFIX_APP_PRIVATE_KEY }}
+          permission-actions: read
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Check out repair target
+        if: steps.target.outputs.repairable == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.target.outputs.sha }}
+          token: ${{ steps.app-token.outputs.token }}
+          submodules: true
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Prepare repair reports
+        if: steps.target.outputs.repairable == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/ci-auto-fix/reports"
+          touch "$RUNNER_TEMP/ci-auto-fix/reports/verify.log" "$RUNNER_TEMP/ci-auto-fix/reports/lint.log"
+
+      - name: Download failed job logs
+        if: steps.target.outputs.repairable == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          FAILED_RUNS: ${{ steps.target.outputs.failed_runs }}
+        run: |
+          set -euo pipefail
+          repo=$GITHUB_REPOSITORY
+          report="$RUNNER_TEMP/ci-auto-fix/reports/failed-jobs.log"
+          : > "$report"
+          while IFS=$'\t' read -r run_id workflow; do
+            jobs=$(gh api "repos/$repo/actions/runs/$run_id/jobs?per_page=100")
+            while IFS=$'\t' read -r job_id job_name; do
+              archive="$RUNNER_TEMP/ci-auto-fix/reports/job-$job_id.zip"
+              url="$GITHUB_API_URL/repos/$repo/actions/jobs/$job_id/logs"
+              curl --fail --location --silent --show-error \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                "$url" --output "$archive"
+              {
+                printf '\n===== %s / %s / job %s =====\n' "$workflow" "$job_name" "$job_id"
+                while IFS= read -r logfile; do
+                  printf '\n--- %s ---\n' "$logfile"
+                  unzip -p "$archive" "$logfile" | tail -n 300
+                done < <(unzip -Z1 "$archive" | grep -E '\.txt$')
+              } >> "$report"
+            done < <(jq -r '.jobs[] | select(.conclusion == "failure") | [.id, .name] | @tsv' <<< "$jobs")
+          done < <(jq -r '.[] | [.id, .name] | @tsv' <<< "$FAILED_RUNS")
+          tail -c 80000 "$report" > "$report.clipped"
+          mv "$report.clipped" "$report"
+          [ -s "$report" ]
+
+      - name: Set up repair workspace
+        if: steps.target.outputs.repairable == 'true'
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        if: steps.target.outputs.repairable == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        if: steps.target.outputs.repairable == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Cursor CLI
+        if: steps.target.outputs.repairable == 'true'
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          set -euo pipefail; [ -n "$CURSOR_API_KEY" ]
+          curl -fsSL "https://downloads.cursor.com/lab/${CURSOR_CLI_VERSION}/linux/x64/agent-cli-package.tar.gz" -o "$RUNNER_TEMP/cursor.tgz"
+          echo "${CURSOR_CLI_SHA256}  $RUNNER_TEMP/cursor.tgz" | sha256sum --check --status
+          mkdir -p "$RUNNER_TEMP/cursor" "$HOME/.local/bin"; tar --strip-components=1 -xzf "$RUNNER_TEMP/cursor.tgz" -C "$RUNNER_TEMP/cursor"
+          ln -sf "$RUNNER_TEMP/cursor/cursor-agent" "$HOME/.local/bin/agent"; echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Prepare Cursor sandbox
+        if: steps.target.outputs.repairable == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/ci-auto-fix/config"
+          printf '%s' '{"permissions":{"allow":["Read(**)","Write(**)"],"deny":["Shell(*)","Read(.env*)","Write(.env*)"]}}' > "$RUNNER_TEMP/ci-auto-fix/config/cli-config.json"
+          printf '%s' '{"disableTmpWrite":true,"networkPolicy":{"default":"deny","allow":[]}}' > "$RUNNER_TEMP/ci-auto-fix/config/sandbox.json"
+
+      - name: Build repair prompt 1
+        if: steps.target.outputs.repairable == 'true'
+        env:
+          FAILED_WORKFLOWS: ${{ steps.target.outputs.failed_workflows }}
+        run: |
+          {
+            echo 'Repair only source or test code directly responsible for failures in these completed CI jobs:'
+            echo "$FAILED_WORKFLOWS"
+            echo 'Read every failed-job log below. If the failure comes from deployment credentials, secrets, GitHub, Slack, Cloudflare, Google, runner infrastructure, unavailable services, or product requirements, leave files unchanged.'
+            echo 'Only edit .ts, .tsx, .js, .jsx, .mjs, .cjs, .mts, .cts, .css, .scss, or .html files under apps/, packages/, tools/, or scripts/. Do not edit OpenSpec files, PRDs, message catalogs, generated files, manifests, lockfiles, configuration, workflows, or agent instructions.'
+            echo 'Do not use shell or network. End with Diagnosis: and Solution:.'
+            cat "$RUNNER_TEMP/ci-auto-fix/reports/failed-jobs.log"
+          } > "$RUNNER_TEMP/ci-auto-fix/prompt.txt"
+
+      - name: Run Cursor repair 1
+        id: cursor-1
+        if: steps.target.outputs.repairable == 'true'
+        continue-on-error: true
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: CURSOR_CONFIG_DIR="$RUNNER_TEMP/ci-auto-fix/config" agent -p --force --model "$CURSOR_MODEL" --output-format json "$(<"$RUNNER_TEMP/ci-auto-fix/prompt.txt")" > "$RUNNER_TEMP/ci-auto-fix/cursor.json" 2> "$RUNNER_TEMP/ci-auto-fix/cursor.stderr.log"
+
+      - name: Validate repair boundaries 1
+        id: boundaries-1
+        if: always() && steps.cursor-1.outcome == 'success'
+        run: |
+          changed=$({ git diff --name-only; git ls-files --others --exclude-standard; } | sort -u)
+          blocked=
+          while IFS= read -r path; do
+            case "$path" in
+              apps/*|packages/*|tools/*|scripts/*)
+                case "$path" in
+                  *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.mts|*.cts|*.css|*.scss|*.html) ;;
+                  *) blocked=1 ;;
+                esac
+                ;;
+              *) blocked=1 ;;
+            esac
+          done <<< "$changed"
+          if [ -z "$blocked" ] && [ -n "$changed" ]; then echo allowed=true >> "$GITHUB_OUTPUT"; else echo allowed=false >> "$GITHUB_OUTPUT"; fi
+
+      - name: Verify typecheck 1
+        id: typecheck-1
+        if: steps.cursor-1.outcome == 'success' && steps.boundaries-1.outputs.allowed == 'true'
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          report="$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
+          {
+            pnpm run setup:browsers
+            pnpm run typecheck
+            pnpm run test:stories
+            pnpm run test:walk
+            pnpm run test
+            pnpm run design-sync:check
+            pnpm run design-sync:audit --all-blocks --report "$RUNNER_TEMP/ci-auto-fix/design-sync-report.json"
+            pnpm run email:build
+            pnpm run manual:build
+            pnpm run storybook:build:workbench
+          } > "$report" 2>&1
+
+      - name: Verify lint 1
+        id: lint-1
+        if: always() && steps.cursor-1.outcome == 'success' && steps.boundaries-1.outputs.allowed == 'true'
+        continue-on-error: true
+        run: pnpm run lint > "$RUNNER_TEMP/ci-auto-fix/reports/lint.log" 2>&1
+
+      - name: Report repair attempt 1
+        id: report-1
+        if: always() && steps.target.outputs.repairable == 'true'
+        run: |
+          if [ "${{ steps.typecheck-1.outcome }}" = success ] && [ "${{ steps.lint-1.outcome }}" = success ]; then echo state=fixed >> "$GITHUB_OUTPUT"; else echo state=unresolved >> "$GITHUB_OUTPUT"; fi
+          echo "Diagnosis: Cursor attempt 1: ${{ steps.cursor-1.outcome }}."
+          echo "Solution: All applicable repository checks were ${{ steps.typecheck-1.outcome }}; lint was ${{ steps.lint-1.outcome }}."
+          echo "Attempt 1: Cursor ${{ steps.cursor-1.outcome }}, boundaries ${{ steps.boundaries-1.outputs.allowed || 'not checked' }}, repository checks ${{ steps.typecheck-1.outcome }}, lint ${{ steps.lint-1.outcome }}." >> "$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
+          if [ "${{ steps.typecheck-1.outcome }}" = failure ]; then
+            echo 'Repository check failure:'
+            tail -n 100 "$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
+          fi
+          if [ "${{ steps.lint-1.outcome }}" = failure ]; then
+            echo 'Lint failure:'
+            tail -n 100 "$RUNNER_TEMP/ci-auto-fix/reports/lint.log"
+          fi
+
+      - name: Finalize repair result
+        id: repair
+        if: always() && steps.target.outputs.repairable == 'true'
+        run: |
+          state='${{ steps.report-1.outputs.state }}'
+          changed=$({ git diff --name-only; git ls-files --others --exclude-standard; } | sort -u)
+          has_changes=false
+          [ -z "$changed" ] || has_changes=true
+          if [ "$state" = fixed ] && [ "$has_changes" = false ]; then state=unresolved; fi
+          echo "result=$state" >> "$GITHUB_OUTPUT"
+          echo "has-changes=$has_changes" >> "$GITHUB_OUTPUT"
+          [ "$state" != unresolved ]
+
+      - name: Upload repair diagnostics
+        if: always() && steps.target.outputs.repairable == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-auto-fix-diagnostics-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/ci-auto-fix/cursor.json
+            ${{ runner.temp }}/ci-auto-fix/cursor.stderr.log
+            ${{ runner.temp }}/ci-auto-fix/reports/verify.log
+            ${{ runner.temp }}/ci-auto-fix/reports/lint.log
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Commit verified repair to pull request branch
+        id: commit-repair
+        if: steps.repair.outputs.result == 'fixed' && steps.repair.outputs.has-changes == 'true' && steps.target.outputs.mode == 'push'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          BRANCH: ${{ steps.target.outputs.branch }}
+          SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          git config user.name github-actions[bot]; git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -- . && git commit -m 'fix(ci): repair failed checks'
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          git push --force-with-lease="refs/heads/$BRANCH:$SHA" "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$BRANCH"
+
+      - name: Create pull request for verified main repair
+        id: create-repair-pr
+        if: steps.repair.outputs.result == 'fixed' && steps.repair.outputs.has-changes == 'true' && steps.target.outputs.mode == 'pr'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          branch="codex/ci-autofix-${{ github.event.workflow_run.id }}"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          git config user.name github-actions[bot]; git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git switch -c "$branch"; git add -- .; git commit -m 'fix(ci): repair failed checks'
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$branch"
+          pr_url=$(gh pr create --base main --head "$branch" --title 'fix(ci): repair failed checks' --body 'Automated verified CI repair.')
+          pr_name=$(gh pr view "$pr_url" --json title --jq .title)
+          echo "pr_url=$pr_url" >> "$GITHUB_OUTPUT"
+          delimiter="ci_autofix_pr_name_$(git rev-parse --short HEAD)"
+          { echo "pr_name<<$delimiter"; printf '%s\n' "$pr_name"; echo "$delimiter"; } >> "$GITHUB_OUTPUT"
+
+      - name: Notify Slack about repair result
+        if: ${{ !cancelled() && steps.target.outputs.repairable == 'true' && (steps.repair.outputs.result == 'unresolved' || steps.commit-repair.outcome == 'success' || steps.create-repair-pr.outcome == 'success' || failure()) }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ vars.SLACK_CHANNEL_ID }}
+          REPAIR_RESULT: ${{ steps.repair.outputs.result }}
+          REPAIR_BRANCH: ${{ steps.create-repair-pr.outputs.branch || steps.target.outputs.branch }}
+          REPAIR_PR_NAME: ${{ steps.target.outputs.pr_name || steps.create-repair-pr.outputs.pr_name }}
+          REPAIR_PR_URL: ${{ steps.target.outputs.pr_url || steps.create-repair-pr.outputs.pr_url }}
+          REPAIR_COMMIT_SHA: ${{ steps.commit-repair.outputs.sha || steps.create-repair-pr.outputs.sha || steps.target.outputs.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          [ -n "$SLACK_BOT_TOKEN" ] && [ -n "$SLACK_CHANNEL_ID" ] || exit 0
+          if [ "$REPAIR_RESULT" = fixed ]; then
+            message="✅ CI auto-fix verified a repair. <${RUN_URL}|View run>."
+          else
+            message="❌ CI auto-fix failed to produce a verified repair. <${RUN_URL}|View run>."
+          fi
+          if [ -n "$REPAIR_PR_URL" ]; then
+            target_label="Pull request"; target_name="${REPAIR_PR_NAME:-Pull request}"; target_url="$REPAIR_PR_URL"
+          else
+            target_label="Branch"; target_name="$REPAIR_BRANCH"; target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/$REPAIR_BRANCH"
+          fi
+          commit_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/$REPAIR_COMMIT_SHA"
+          jq -n \
+            --arg channel "$SLACK_CHANNEL_ID" \
+            --arg message "$message" \
+            --arg target_label "$target_label" \
+            --arg target_name "$target_name" \
+            --arg target_url "$target_url" \
+            --arg commit_sha "$REPAIR_COMMIT_SHA" \
+            --arg commit_url "$commit_url" \
+            '{
+              "channel": $channel,
+              "text": $message,
+              "blocks": [
+                {"type": "section", "text": {"type": "mrkdwn", "text": $message}},
+                {"type": "section", "fields": [
+                  {"type": "mrkdwn", "text": ("*" + $target_label + "*\n<" + $target_url + "|" + $target_name + ">")},
+                  {"type": "mrkdwn", "text": ("*Commit*\n<" + $commit_url + "|" + ($commit_sha[0:7]) + ">")}
+                ]}
+              ]
+            }' > "$RUNNER_TEMP/slack.json"
+          curl -fsS -X POST https://slack.com/api/chat.postMessage -H "Authorization: Bearer $SLACK_BOT_TOKEN" -H 'Content-Type: application/json' --data @"$RUNNER_TEMP/slack.json" | jq -e '.ok == true' >/dev/null

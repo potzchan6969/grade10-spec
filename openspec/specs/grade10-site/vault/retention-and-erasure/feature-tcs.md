@@ -14,6 +14,7 @@ Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after
 **so that** nothing of mine is kept beyond the record of agreements I actually
 signed.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-8kd rev=1 covers=g10.vault-retention-and-erasure.SC-pi1,g10.vault-retention-and-erasure.SC-krq,g10.vault-retention-and-erasure.SC-3an,g10.vault-retention-and-erasure.SC-1es,g10.vault-retention-and-erasure.SC-8av,g10.vault-retention-and-erasure.SC-syx,g10.vault-retention-and-erasure.SC-z4t -->
 ### grade10-site-vault-retention-and-erasure-US1-TC1-1: Erasure purges everything for a never-signed case
 
 **Classification:**
@@ -45,6 +46,7 @@ signed.
   personal data are purged.
 * The identity binding behind the case is released.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-0ux rev=1 covers=g10.vault-retention-and-erasure.SC-pi1,g10.vault-retention-and-erasure.SC-krq,g10.vault-retention-and-erasure.SC-3an,g10.vault-retention-and-erasure.SC-1es,g10.vault-retention-and-erasure.SC-8av,g10.vault-retention-and-erasure.SC-syx,g10.vault-retention-and-erasure.SC-z4t -->
 ### grade10-site-vault-retention-and-erasure-US1-TC2-1: Erasure holds sealed documents behind a closed case
 
 **Classification:**
@@ -76,6 +78,7 @@ signed.
 * The sealed documents, the identity binding and the case's item
   photographs and text stay retained under the hold, with no expiry clock.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-keu rev=1 covers=g10.vault-retention-and-erasure.SC-pi1,g10.vault-retention-and-erasure.SC-krq,g10.vault-retention-and-erasure.SC-3an,g10.vault-retention-and-erasure.SC-1es,g10.vault-retention-and-erasure.SC-8av,g10.vault-retention-and-erasure.SC-syx,g10.vault-retention-and-erasure.SC-z4t -->
 ### grade10-site-vault-retention-and-erasure-US1-TC3-1: Erasure rewrites the actor id, leaves records intact
 
 **Classification:**
@@ -109,6 +112,7 @@ signed.
   audit-trail row is unchanged.
 * The attempted update or delete in step 2 is refused.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-jyf rev=1 covers=g10.vault-retention-and-erasure.SC-pi1,g10.vault-retention-and-erasure.SC-krq,g10.vault-retention-and-erasure.SC-3an,g10.vault-retention-and-erasure.SC-1es,g10.vault-retention-and-erasure.SC-8av,g10.vault-retention-and-erasure.SC-syx,g10.vault-retention-and-erasure.SC-z4t -->
 ### grade10-site-vault-retention-and-erasure-US1-TC4-1: No case ever held leaves erasure unblocked
 
 **Classification:**
@@ -137,6 +141,7 @@ signed.
 * The vault reports no hold, and nothing blocks the request.
 * The vault names nothing it still holds of the collector.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-eih rev=2 covers=g10.vault-retention-and-erasure.SC-pi1,g10.vault-retention-and-erasure.SC-krq,g10.vault-retention-and-erasure.SC-3an,g10.vault-retention-and-erasure.SC-1es,g10.vault-retention-and-erasure.SC-8av,g10.vault-retention-and-erasure.SC-syx,g10.vault-retention-and-erasure.SC-z4t -->
 ### grade10-site-vault-retention-and-erasure-US1-TC5-2: A hold that opens after the ask is filed is read beside it
 
 **Classification:**
@@ -167,6 +172,7 @@ signed.
 * Step 1 still reads the ask filed on `<filing day>`.
 * Step 1 reads `<case_1>` beside it, by its reference, as an item in the vault.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-0xy rev=2 covers=g10.vault-retention-and-erasure.SC-pi1,g10.vault-retention-and-erasure.SC-krq,g10.vault-retention-and-erasure.SC-3an,g10.vault-retention-and-erasure.SC-1es,g10.vault-retention-and-erasure.SC-8av,g10.vault-retention-and-erasure.SC-syx,g10.vault-retention-and-erasure.SC-z4t -->
 ### grade10-site-vault-retention-and-erasure-US1-TC6-2: Filing the ask while a case is in flight is refused by name
 
 Runs once per row of **Test data**.
@@ -208,6 +214,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name, naming `<case_1>` by its reference and the row's Named as.
 * Step 2 reads no ask filed, and `<case_1>` beside it as what holds the ask.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-4o1 rev=2 covers=g10.vault-retention-and-erasure.SC-pi1,g10.vault-retention-and-erasure.SC-krq,g10.vault-retention-and-erasure.SC-3an,g10.vault-retention-and-erasure.SC-1es,g10.vault-retention-and-erasure.SC-8av,g10.vault-retention-and-erasure.SC-syx,g10.vault-retention-and-erasure.SC-z4t -->
 ### grade10-site-vault-retention-and-erasure-US1-TC7-2: Filing stays refused though one of several cases already closed
 
 **Classification:**
@@ -249,6 +256,7 @@ having them erased,
 **so that** nobody's item or debt disappears from the record while it still
 exists.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-9dv rev=1 covers=g10.vault-retention-and-erasure.SC-7k7,g10.vault-retention-and-erasure.SC-res,g10.vault-retention-and-erasure.SC-qye,g10.vault-retention-and-erasure.SC-qfh -->
 ### grade10-site-vault-retention-and-erasure-US2-TC1-1: A running loan refuses the erasure and names the case
 
 **Classification:**
@@ -278,6 +286,7 @@ exists.
 * The erasure is refused, naming the running case.
 * Neither case is touched.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-0gs rev=1 covers=g10.vault-retention-and-erasure.SC-7k7,g10.vault-retention-and-erasure.SC-res,g10.vault-retention-and-erasure.SC-qye,g10.vault-retention-and-erasure.SC-qfh -->
 ### grade10-site-vault-retention-and-erasure-US2-TC2-1: A case that goes live under the run is refused and the others erased
 
 **Classification:**
@@ -310,6 +319,7 @@ exists.
 * Every other listed case is erased.
 * The run does not fail as a whole.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-k3r rev=1 covers=g10.vault-retention-and-erasure.SC-7k7,g10.vault-retention-and-erasure.SC-res,g10.vault-retention-and-erasure.SC-qye,g10.vault-retention-and-erasure.SC-qfh -->
 ### grade10-site-vault-retention-and-erasure-US2-TC3-1: A recorded payment takes no update and no delete
 
 **Classification:**
@@ -341,6 +351,7 @@ exists.
 
 ---
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-2s8 rev=1 covers=g10.vault-retention-and-erasure.SC-7k7,g10.vault-retention-and-erasure.SC-res,g10.vault-retention-and-erasure.SC-qye,g10.vault-retention-and-erasure.SC-qfh -->
 ### grade10-site-vault-retention-and-erasure-US2-TC4-1: A removed walk-in keeps no trace of the collector
 
 **Classification:**
@@ -383,6 +394,7 @@ told which windows nobody has decided,
 **so that** deleting is a decision somebody makes rather than something that
 happens on a clock.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-guo rev=1 covers=g10.vault-retention-and-erasure.SC-tr9,g10.vault-retention-and-erasure.SC-4ja,g10.vault-retention-and-erasure.SC-2j9 -->
 ### grade10-site-vault-retention-and-erasure-US3-TC1-1: A case past its window is reported and left as it was
 
 **Classification:**
@@ -414,6 +426,7 @@ happens on a clock.
   photograph is deleted, and nothing is stamped.
 * The next pass reports the same case again.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-tlf rev=1 covers=g10.vault-retention-and-erasure.SC-tr9,g10.vault-retention-and-erasure.SC-4ja,g10.vault-retention-and-erasure.SC-2j9 -->
 ### grade10-site-vault-retention-and-erasure-US3-TC2-1: A class nobody has decided is reported undecided and flags no case
 
 **Classification:**
@@ -444,6 +457,7 @@ happens on a clock.
 * No case is flagged for it, and it is not read as zero days.
 * The classes that hold a window are reported as they always are.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-m1o rev=1 covers=g10.vault-retention-and-erasure.SC-tr9,g10.vault-retention-and-erasure.SC-4ja,g10.vault-retention-and-erasure.SC-2j9 -->
 ### grade10-site-vault-retention-and-erasure-US3-TC3-1: The window runs from the case's own ending
 
 **Classification:**
@@ -482,6 +496,7 @@ happens on a clock.
 **I want** the one erasure request to reach my submissions as it reaches my vault cases, refused by name while a submission is between booked and ready, money is still due on one or ready cards are uncollected, and otherwise keeping only the sealed documents and the photographs in the vault's classes and the submission record in the vault's case records, each for the window the table names from the later of the day the submission ended and the day nothing is owed either way, and no identity record at all,
 **so that** grading keeps nothing of mine the vault would not keep, and I ask once.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-ggi rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC1-1: Ended submission's documents, photographs and record survive erasure
 
 **Classification:**
@@ -521,6 +536,7 @@ happens on a clock.
 * The agreement, the hand-back receipt and the hand-in and hand-back photographs are kept under a hold named on `<submission_1>`.
 * The collector's contact details, postal address and the person named to collect are gone.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-0py rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC2-1: Submission record's retention window starts at the end event
 
 Runs once per row of **Test data**.
@@ -560,6 +576,7 @@ Runs once per row of **Test data**.
 
 * Grade10 reads the window start as the row states.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-50v rev=2 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC3-2: Submission cancelled before hand-in is purged with the account
 
 **Classification:**
@@ -605,6 +622,7 @@ Runs once per row of **Test data**.
 * No signing ceremony's personal data remains for `<submission_3>`.
 * No identity record exists for `<submission_3>` at any point.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-lzf rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC4-1: Live grading submission refuses the erasure ask by name
 
 Runs once per row of **Test data**.
@@ -650,6 +668,7 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * `<submission_4>` is not touched.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-ag4 rev=2 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC5-2: Live grading submission blocks an otherwise eligible vault erasure
 
 **Classification:**
@@ -695,6 +714,7 @@ Runs once per row of **Test data**.
 * Step 6 refuses the erasure, naming `<submission_5>` and cards with the grader.
 * `<submission_5>` and `<vault case_1>`'s data are unchanged.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-sth rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC6-1: Submission still with the grader is reported under no class
 
 **Classification:**
@@ -731,6 +751,7 @@ Runs once per row of **Test data**.
 * `<submission_6>` is reported under no class: not agreements, not photos, not case records.
 * Nothing of `<submission_6>` is deleted or flagged for deletion.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-56f rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC7-1: Ended submissions and a never-booked one refuse nothing
 
 Runs once per row of **Test data**.
@@ -778,6 +799,7 @@ Runs once per row of **Test data**.
 * `<submission_7>` refuses nothing: the erasure runs on every row.
 * On the `planned` row, Grade10 leaves `<submission_7>` as the row states.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-1f0 rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC8-1: The ask is withheld in the collector's own words while cards are with the grader
 
 **Classification:**
@@ -816,6 +838,7 @@ Runs once per row of **Test data**.
 * The words name the cards, never a status word and never an internal hold.
 * The block offers no control to file the ask, and the page files nothing while it reads this way.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-kwk rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC9-1: Owed mail goes with the erasure and the history keeps its entries
 
 **Classification:**
@@ -855,6 +878,7 @@ Runs once per row of **Test data**.
 * Every history entry stands, none deleted and none rewritten beyond its actor.
 * The entries that named the collector name an erased collector.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-lhm rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC10-1: The ask stays held while grading cannot say what stands in its way
 
 **Classification:**
@@ -889,6 +913,7 @@ Runs once per row of **Test data**.
 * The ask is not offered, and nothing is filed.
 * What the vault keeps stays on screen.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-l2w rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC11-1: A submission past its window is reported under each class it holds
 
 **Classification:**
@@ -925,6 +950,7 @@ Runs once per row of **Test data**.
 * `<submission_11>` is reported under agreements, photos and case records.
 * It is reported under no identity class.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-trp rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC12-1: A transfer not yet received holds the window
 
 **Classification:**
@@ -959,6 +985,7 @@ Runs once per row of **Test data**.
 
 * Step 2: `<submission_12>` is reported under no class, its windows measured from the day the transfer was marked received.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-8kc rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC13-1: A repayment due on a collected submission refuses the erasure
 
 **Classification:**
@@ -1003,6 +1030,7 @@ Runs once per row of **Test data**.
 stands, and where I ask to be forgotten,
 **so that** I know what I am asking for before I ask.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-p4g rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC1-2: The collector's own read under the account names every retention class with its window
 
 **Classification:**
@@ -1042,6 +1070,7 @@ stands, and where I ask to be forgotten,
 * Step 2 names each class in **Test data** with its window, read as days after the case ends.
 * Step 2 reads no ask filed, and nothing holding one back.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-pb2 rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC2-1: Your data states that review deletes nothing by itself
 
 **Classification:**
@@ -1071,6 +1100,7 @@ stands, and where I ask to be forgotten,
 * The reviewed-not-deleted line shows beside the retention table.
 * The case past its window still lists its class and window unchanged.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-e6v rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC3-2: The identity standing in the read never carries the name or the document
 
 Runs once per row of **Test data**.
@@ -1115,6 +1145,7 @@ Runs once per row of **Test data**.
 * The response carries no legal name, date of birth, document type, document number, document expiry or photograph.
 * The response names no reason for a check that was not accepted.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-fpf rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC4-1: Standing reads no identity on file yet
 
 **Classification:**
@@ -1144,6 +1175,7 @@ Runs once per row of **Test data**.
 
 * Standing reads no identity on file, verified at the next visit.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-8gu rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC5-1: Standing reads a check is out since the date
 
 **Classification:**
@@ -1172,6 +1204,7 @@ Runs once per row of **Test data**.
 
 * Standing reads a check is out since the date it was submitted.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-4ub rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC6-1: Standing reads the last check expired on the date
 
 **Classification:**
@@ -1199,6 +1232,7 @@ Runs once per row of **Test data**.
 
 * Standing reads the last check expired on the date.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-0xv rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC7-1: Your data shows loading cards before data arrives
 
 **Classification:**
@@ -1230,6 +1264,7 @@ Runs once per row of **Test data**.
 * Skeleton cards show in place of the retention table, standing and
   download cards.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-xmu rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC8-2: The read under the account is refused without a session
 
 **Classification:**
@@ -1258,6 +1293,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused.
 * The response names no class, standing, document or ask.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-2ih rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC9-1: Your data keeps its cards after a failed load
 
 **Classification:**
@@ -1289,6 +1325,7 @@ Runs once per row of **Test data**.
 * The error message shows.
 * Any cards that already rendered stay in place.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-s4s rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC10-2: Every signed document is read under the case it belongs to
 
 **Classification:**
@@ -1318,6 +1355,7 @@ Runs once per row of **Test data**.
 
 * Step 2 lists every sealed document of `<case_1>` under `<case_1>`, and every one of `<case_2>` under `<case_2>`.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-rrm rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC12-2: A class whose window nobody has decided is read with no number
 
 **Classification:**
@@ -1348,6 +1386,7 @@ Runs once per row of **Test data**.
 * Step 2 carries identity records with no number of days: neither zero nor a figure for kept forever.
 * Step 2 carries agreements, item photographs and case records with their windows in days.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-52o rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC13-2: A case that ended after custody carries what is kept, and a running one none
 
 Runs once per row of **Test data**.
@@ -1388,6 +1427,7 @@ Runs once per row of **Test data**.
 * Step 1 carries what the row's last column names.
 * Where step 1 carries classes, they are the classes and windows step 2 carries.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-c1m rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC14-1: A check left undecided long enough still reads that a check is out
 
 **Classification:**
@@ -1418,6 +1458,7 @@ Runs once per row of **Test data**.
 * It does not read as no identity on file.
 * It names no reason and no stage of the check.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-e5n rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC15-1: A refused check reads as not accepted and names no reason
 
 **Classification:**
@@ -1449,6 +1490,7 @@ Runs once per row of **Test data**.
 * No legal name, date of birth, document type, document number, expiry or
   photograph shows anywhere on the page.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-7uf rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC16-2: The collector files the ask under their account and the read names its days
 
 **Classification:**
@@ -1488,6 +1530,7 @@ Runs once per row of **Test data**.
 * Step 2 reads the ask filed on `<filing day>`.
 * Step 2 reads that an erasure may run from `<may run>`, and that the ask may be cancelled before then.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-yqx rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC17-2: The collector cancels the ask inside the window
 
 **Classification:**
@@ -1518,6 +1561,7 @@ Runs once per row of **Test data**.
 * Step 1 is accepted.
 * Step 2 reads no ask filed, and that one may be filed.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-rmk rev=2 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC18-2: A cancel at the limit of the window
 
 Runs once per row of **Test data**.
@@ -1558,6 +1602,7 @@ Runs once per row of **Test data**.
 * Step 1 is answered as the row says.
 * Step 2 reads the ask still filed wherever step 1 was refused.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-gih rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
 ### grade10-site-vault-retention-and-erasure-US5-TC27-1: An identity standing that cannot be answered leaves the rest of the read
 
 **Classification:**

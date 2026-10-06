@@ -593,8 +593,8 @@
         "message": "안전을 위해 서명 링크는 짧은 시간만 유효합니다. 직원에게 새 링크를 요청해 주세요."
       },
       "TOKEN_CONSUMED": {
-        "title": "이 서명 링크는 이미 사용되었습니다",
-        "message": "이 링크로 서명하셨다면 사본은 창구와 신청 페이지에 있습니다. 그렇지 않다면 직원에게 새 링크를 요청해 주세요."
+        "title": "이 서명 링크는 새 링크로 바뀌었습니다",
+        "message": "이 문서에 새 링크가 발급되어 가장 최근 링크만 사용할 수 있습니다. 직원에게 요청해 주세요."
       },
       "TOKEN_CONFLICT": {
         "title": "이 링크는 다른 기기에서 열렸습니다",
@@ -611,6 +611,10 @@
       "PACKET_COMPLETED": {
         "title": "이 문서는 이미 서명이 끝났습니다",
         "message": "이 페이지를 닫으셔도 됩니다."
+      },
+      "PACKET_DECLINED": {
+        "title": "서명된 서류가 없습니다",
+        "message": "서명한 문서도, 결제된 금액도 없습니다. 함께 계신 직원이 다음 절차를 도와드립니다."
       },
       "DOCUMENT_UNKNOWN": {
         "title": "그 서류는 이번 서명에 포함되어 있지 않습니다",
@@ -738,7 +742,6 @@
     "signatureTypedCaption": "입력한 서명",
     "submitLabel": "{title} 서명하기",
     "submittingLabel": "서명 중…",
-    "retryLabel": "다시 시도",
     "missingPages": "서명하기 전에 모든 쪽을 읽어 주세요.",
     "missingConsent": "읽으셨음을 확인하는 상자에 표시해 주세요.",
     "missingSignature": "위 상자에 서명해 주세요.",
@@ -756,7 +759,26 @@
     "downloadExpiry": "{when}까지 이 화면에서 내려받으실 수 있습니다. 그 이후에는 옆에 있는 직원이 카운터에서 사본을 인쇄해 드립니다.",
     "sealedIntegrityWarning": "내려받은 사본이 서명하신 서류의 지문과 일치하지 않아 저장되지 않았습니다. 서명은 기록되어 있습니다 — 옆에 있는 직원에게 인쇄본을 요청해 주세요.",
     "signedTitle": "서명이 기록되었습니다",
-    "signedMessage": "서류가 봉인되기 전에 다른 분들의 서명이 남아 있습니다."
+    "signedMessage": "서류가 봉인되기 전에 다른 분들의 서명이 남아 있습니다.",
+    "disclosureTick": "위 내용을 읽었으며 전자 방식으로 검토하고 서명하는 데 동의합니다.",
+    "identityChecked": "신분증은 {day}에 확인되었습니다.",
+    "venueLine": "서명 장소: {venue}",
+    "caseLine": "신청 {reference} · {subject}",
+    "caseOnly": "신청 {reference}",
+    "linkClock": "링크 유효 시간 {remaining}",
+    "readToEndFirst": "먼저 끝까지 읽어 주세요",
+    "continueLabel": "서명하러 가기",
+    "comesNext": "{total}건 중 {position}번째 — 다음은 {next}입니다",
+    "comesLast": "{total}건 중 {position}번째 — 마지막 서류입니다",
+    "readAgainLabel": "다시 읽기",
+    "signSummary": "{title} — {pageCount}쪽 중 {viewed}쪽 읽음",
+    "nextUp": "다음: {title}",
+    "sealedAt": "봉인 시각 {time}",
+    "sealedMessageMailed": "서명된 사본은 신청 페이지에 있으며 {email}(으)로 발송되고 있습니다. 아래 지문을 보관해 주세요 — 바로 이 서류 묶음을 식별하는 값입니다.",
+    "sealedDigest": "{digest} · {when} 봉인",
+    "nextStepsTitle": "이제 진행되는 일",
+    "nothingMore": "이 기기에서 더 하실 일은 없습니다.",
+    "doneLabel": "완료 — iPad를 돌려주세요"
   },
   "console": {
     "cards": "{count, plural, other {카드 #장}}",

@@ -20,13 +20,25 @@ document rules into either application.
 
 ## Ownership
 
-- **The application** resolves the document data, amounts, dates, time zone,
-  payment rails, and copy, then passes them to the renderer
+- **The application** resolves the document data, amounts, dates, payment
+  rails, and copy, then passes them to the renderer
+- 🚧 **GMT+8** — every date on the invoice and the receipt is Hong Kong
+  time, labelled GMT+8, with the date's words in English whatever language the
+  document is written in
 - **The block** lays out the supplied content and returns PDF bytes; it does not
   fetch, store, navigate, calculate totals, or import application copy
 - **UI design** is waived because this change moves an existing PDF renderer
   into the shared package contract and does not add a reader-facing state or
   layout
+
+## On the Page
+
+- 🚧 **A replacement invoice** — names the invoice it replaces as plain
+  text, with no link to that invoice's PDF
+- 🚧 **Bank details** — an invoice shows only the bank rails that are
+  enabled
+
+::changes{spec="shared/ui/invoice-and-receipt-pdf"}
 
 :::detail{title="Code map" for="engineer"}
 - **Exports** - `InvoicePdf` and `ReceiptPdf` in `packages/ui`

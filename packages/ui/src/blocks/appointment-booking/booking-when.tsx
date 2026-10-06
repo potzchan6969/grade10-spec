@@ -8,7 +8,7 @@ type BookingWhenProps = LocaleProps & {
   timeZoneLabel?: string;
 };
 
-/** `24 Aug 2026, 10:00 to 10:30 (Hong Kong time)`. Internal. */
+/** `24 Aug 2026, 10:00 to 10:30 (GMT+8)`. Internal. */
 function formatBookingWhen({
   start,
   end,
@@ -17,7 +17,7 @@ function formatBookingWhen({
   locale = "en",
 }: BookingWhenProps): string {
   const options = { locale, timeZone };
-  return `${formatLocalDay(start, options)}, ${formatLocalTime(start, options)}–${formatLocalTime(end, options)} (${zoneLabel(timeZone, timeZoneLabel)})`;
+  return `${formatLocalDay(start, options)}, ${formatLocalTime(start, options)}–${formatLocalTime(end, options)} (${zoneLabel(timeZone, start, timeZoneLabel)})`;
 }
 
 export type { BookingWhenProps };

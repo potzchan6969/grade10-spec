@@ -17,7 +17,11 @@
  * - **verifier** — whether a verifier reads the findings: a round that
  *   summoned one challenger dispatches none, and that reader argues its own
  * - **bundle** — the draft, and what is before it: the artifact's `upstream:`
- *   set as the change wrote it, and the page sections the proposal marks
+ *   set as the change wrote it, and the page sections the proposal marks; on
+ *   a task group, the plan's opening and the group's section, and only the
+ *   blocks its section cites. Each entry is a path or `path#La-Lb`, at most
+ *   45 KB, so one read takes it; a cited id the change does not issue and a
+ *   link to no section are printed to stderr
  *
  * The size is read from the draft. No key of the change's record is read for
  * that, so none can add a reader or remove one; a size somebody believes is

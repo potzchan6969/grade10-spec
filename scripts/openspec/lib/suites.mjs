@@ -423,6 +423,40 @@ function blockAfter(lines, from) {
   return body;
 }
 
+function cellsOf(row) {
+  return row
+    .trim()
+    .split("|")
+    .slice(1, -1)
+    .map((one) => one.trim());
+}
+
+/** The tables under one `**Test data:**`, in order. A blank line starts a new
+ *  table. The first row of each is its header; a `| --- |` row is the rule
+ *  line and is not a value row. */
+function parseDataTables(lines) {
+  const tables = [];
+  let current = null;
+  const flush = () => {
+    if (current) tables.push(current);
+    current = null;
+  };
+  for (const t of lines) {
+    const row = t.trim();
+    if (!row.startsWith("|")) {
+      flush();
+      continue;
+    }
+    const cells = cellsOf(row);
+    if (cells.length < 2) continue;
+    if (/^-+$/.test(cells[0].replace(/:/g, ""))) continue;
+    if (!current) current = { headers: cells, rows: [] };
+    else current.rows.push(cells);
+  }
+  flush();
+  return tables;
+}
+
 /** One `**Decided by:**` line onto the case: its paths, and what is wrong with
  *  the line itself.
  *
@@ -594,6 +628,7 @@ export function parseSuite(text) {
         propOrder: [],
         preconditions: "",
         testData: [],
+        tables: [],
         stepTexts: [],
         expectedTexts: [],
         steps: 0,
@@ -692,13 +727,12 @@ export function parseSuite(text) {
       }
       // `| Field | Value |`, the placeholders the steps below then name.
       if (/^\*\*Test data:\*\*/.test(line)) {
-        for (const t of blockAfter(lines, i + 1)) {
+        const block = blockAfter(lines, i + 1);
+        tc.tables = parseDataTables(block);
+        for (const t of block) {
           const row = t.trim();
           if (!row.startsWith("|")) continue;
-          const cells = row
-            .split("|")
-            .slice(1, -1)
-            .map((one) => one.trim());
+          const cells = cellsOf(row);
           if (cells.length < 2) continue;
           if (/^-+$/.test(cells[0].replace(/:/g, ""))) continue;
           if (cells[0].toLowerCase() === "field") continue;

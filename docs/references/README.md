@@ -24,8 +24,10 @@ with tables and worked examples. Both:
 - Prefer a table for structured data and a worked example for arithmetic.
 
 [`grade10-vault-digital-twin.md`](grade10-vault-digital-twin.md) is the
-proposal for send-in storage, CFA digitization, and a collector portfolio
-(Storybook `Pages/Vault *` + flow canvas); no change carries it yet.
+proposal for optional Book a Visit (grading, vault drop-off, or other) at
+Causeway Bay, in-store registration, digitization, and a collector
+portfolio (Storybook `Pages/Appointment *` + `Pages/Vault *` + flow canvas);
+no change carries it yet.
 
 The `shopify-*` set is the working notes behind the
 `add-shopify-membership-pos` change: the umbrella plan, the checkout identity

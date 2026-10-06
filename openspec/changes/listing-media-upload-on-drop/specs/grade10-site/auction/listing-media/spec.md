@@ -41,6 +41,7 @@ For direct-upload items, a new gallery order SHALL hold when the operator
 drops the reordered item. While inventory assets are staged, their order SHALL
 continue to wait for the listing's Save.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-41j rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-31 - Choosing a supported file stores it immediately
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -49,6 +50,7 @@ continue to wait for the listing's Save.
 - **THEN** the image is stored in the gallery immediately
 - **AND** no preview, confirm or discard step is required
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-j5f rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-32 - Several chosen files append in selection order
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -57,6 +59,7 @@ continue to wait for the listing's Save.
 - **THEN** the system stores them one after another after the existing item
 - **AND** the gallery keeps the selection order
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-1mk rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-33 - Replacing a file stores immediately
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -65,6 +68,7 @@ continue to wait for the listing's Save.
 - **THEN** the replacement is stored immediately at that position
 - **AND** the other gallery items are unchanged
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-su1 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-34 - A mixed selection names each refused file
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -73,6 +77,7 @@ continue to wait for the listing's Save.
 - **THEN** the supported images are stored
 - **AND** each refused file remains unstored and is named with its refusal reason
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-y9i rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-35 - Direct-upload reorder holds on drop
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -80,6 +85,7 @@ continue to wait for the listing's Save.
 - **WHEN** an operator drags C before A and drops it
 - **THEN** the gallery order becomes C, A, B without a separate Save action
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-dva rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-36 - Staged inventory order waits for Save
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 

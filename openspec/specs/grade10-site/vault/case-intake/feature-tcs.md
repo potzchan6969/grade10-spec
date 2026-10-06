@@ -16,6 +16,7 @@ entered in the brand's own currency; Grade10's is HKD.
 borrow against it,
 **so that** the shop can value it and offer me terms before I carry it in.
 
+<!-- trace:case id=g10.vault-case-intake.TC-hwu rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC1-2: A financed request opened, photographed and sent reads submitted
 
 **Classification:**
@@ -59,6 +60,7 @@ borrow against it,
 * Steps 1, 2 and 3 are accepted.
 * Step 4 reads the request as submitted, in the financed lane, asking 500000 HKD minor units.
 
+<!-- trace:case id=g10.vault-case-intake.TC-pfx rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC2-2: A request with no amount opens in the storage lane
 
 **Classification:**
@@ -100,6 +102,7 @@ borrow against it,
 
 * Step 4 reads the request as submitted, in the storage lane, with no offer to answer.
 
+<!-- trace:case id=g10.vault-case-intake.TC-5ym rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC3-2: A request at the caps or as a comic opens as written
 
 Runs once per row of **Test data**.
@@ -139,6 +142,7 @@ Runs once per row of **Test data**.
 * Step 1 opens the request.
 * Step 2 carries the row's category, title and description as written.
 
+<!-- trace:case id=g10.vault-case-intake.TC-9wo rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC4-2: A title, description or category past its rule refuses the request
 
 Runs once per row of **Test data**.
@@ -180,6 +184,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused by name.
 * Step 3 lists the same cases as step 1, and no new one.
 
+<!-- trace:case id=g10.vault-case-intake.TC-puf rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC5-2: Ten photographs at the size cap all attach
 
 **Classification:**
@@ -216,6 +221,7 @@ Runs once per row of **Test data**.
 * Each attachment in step 1 is accepted.
 * Step 2 carries all ten photographs.
 
+<!-- trace:case id=g10.vault-case-intake.TC-3vw rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC6-2: An eleventh photograph is refused at the limit
 
 **Classification:**
@@ -252,6 +258,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 carries ten photographs.
 
+<!-- trace:case id=g10.vault-case-intake.TC-hqv rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC7-2: A photograph past 20 MB is refused
 
 **Classification:**
@@ -288,6 +295,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 carries the photographs `<case_1>` held before step 1, and no more.
 
+<!-- trace:case id=g10.vault-case-intake.TC-c1c rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC8-2: A file that is not a photograph is refused
 
 **Classification:**
@@ -324,6 +332,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 carries the photographs `<case_1>` held before step 1, and no more.
 
+<!-- trace:case id=g10.vault-case-intake.TC-50g rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC9-2: An empty file is refused
 
 **Classification:**
@@ -360,6 +369,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 carries the photographs `<case_1>` held before step 1, and no more.
 
+<!-- trace:case id=g10.vault-case-intake.TC-9dx rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC10-2: A send with no photograph is refused
 
 **Classification:**
@@ -390,6 +400,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 still reads `<case_1>` as a draft.
 
+<!-- trace:case id=g10.vault-case-intake.TC-qdr rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC11-2: Location metadata is stripped from an uploaded photograph
 
 **Classification:**
@@ -425,6 +436,7 @@ Runs once per row of **Test data**.
 
 * The stored photograph carries no location metadata.
 
+<!-- trace:case id=g10.vault-case-intake.TC-pj7 rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC12-1: A photograph is refused to a collector who does not own the case
 
 **Classification:**
@@ -453,6 +465,7 @@ Runs once per row of **Test data**.
 
 * The request is refused; the photograph is not returned.
 
+<!-- trace:case id=g10.vault-case-intake.TC-y87 rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC13-1: Viewing a photograph is recorded on the read trail
 
 **Classification:**
@@ -480,6 +493,7 @@ Runs once per row of **Test data**.
 
 * A read of the photograph is recorded, naming who read it and when.
 
+<!-- trace:case id=g10.vault-case-intake.TC-csj rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC14-2: A fourth unsent request is refused at the draft cap
 
 **Classification:**
@@ -510,6 +524,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 lists the same three unsent requests, and no fourth.
 
+<!-- trace:case id=g10.vault-case-intake.TC-olr rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC15-2: A request left unsent is listed unsent and still takes an edit and a photograph
 
 **Classification:**
@@ -552,6 +567,7 @@ Runs once per row of **Test data**.
 * Steps 3 and 4 are accepted.
 * Step 5 carries `<new title>` and `<photo_1>`, still unsent.
 
+<!-- trace:case id=g10.vault-case-intake.TC-sfb rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC16-2: A second send of a request already sent is refused
 
 **Classification:**
@@ -583,6 +599,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused by name.
 * Step 3 lists the same cases as step 1, `<case_1>` still submitted, and no second case.
 
+<!-- trace:case id=g10.vault-case-intake.TC-o9n rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC17-2: A WhatsApp number typed differently stores one canonical value
 
 Runs once per row of **Test data**.
@@ -622,6 +639,7 @@ Runs once per row of **Test data**.
 
 * Every row stores the same canonical E.164 number against the case.
 
+<!-- trace:case id=g10.vault-case-intake.TC-p1m rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC18-2: An invalid WhatsApp number refuses the request
 
 **Classification:**
@@ -659,6 +677,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused by name.
 * Step 3 lists the same cases as step 1, and no new one.
 
+<!-- trace:case id=g10.vault-case-intake.TC-msq rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC19-2: A request with no WhatsApp number opens
 
 **Classification:**
@@ -689,6 +708,7 @@ Runs once per row of **Test data**.
 * Step 1 opens the request.
 * Step 2 carries no contact number.
 
+<!-- trace:case id=g10.vault-case-intake.TC-1aq rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC20-1: A case always opens in the brand's own currency
 
 **Classification:**
@@ -716,6 +736,7 @@ Runs once per row of **Test data**.
 
 * The request is refused; the case is never opened in the other currency.
 
+<!-- trace:case id=g10.vault-case-intake.TC-ep5 rev=1 covers=g10.vault-case-intake.SC-nkl,g10.vault-case-intake.SC-90o,g10.vault-case-intake.SC-s1j -->
 ### grade10-site-vault-case-intake-US1-TC21-1: A photograph offered after the request is sent is refused
 
 **Classification:**
@@ -743,6 +764,7 @@ Runs once per row of **Test data**.
 
 * The photograph is refused by name; the case still carries one photograph and nothing is stored.
 
+<!-- trace:case id=g10.vault-case-intake.TC-tr4 rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC22-1: The wizard offers the register's ten categories in each language
 
 Runs once per row of **Test data**.
@@ -786,6 +808,7 @@ Runs once per row of **Test data**.
 * Every category reads in the row's language, none as a raw key.
 * Step 4 moves to the Photograph step with comic kept as the category.
 
+<!-- trace:case id=g10.vault-case-intake.TC-pjg rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC23-2: A draft staff opened with a known slab takes only photo and description edits
 
 **Classification:**
@@ -821,6 +844,7 @@ Runs once per row of **Test data**.
 * Steps 2, 3 and 4 are accepted; the request is submitted carrying the new description and the added photograph.
 * Step 5 still reads trading card, PSA, grade 10 and `AB12345`, its description unchanged.
 
+<!-- trace:case id=g10.vault-case-intake.TC-yxv rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC24-1: An edit to a linked draft's category or title is refused
 
 **Classification:**
@@ -852,6 +876,7 @@ Runs once per row of **Test data**.
 * Steps 1 and 2 are each refused by name.
 * `<draft_1>` still reads trading card and `<title_1>`.
 
+<!-- trace:case id=g10.vault-case-intake.TC-8xk rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC25-1: A loan of zero is refused on the Describe step
 
 Runs once per row of **Test data**.
@@ -903,6 +928,7 @@ Runs once per row of **Test data**.
 * The category, title and description keep what was typed.
 * Step 6 moves on to the Photograph step.
 
+<!-- trace:case id=g10.vault-case-intake.TC-dy2 rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
 ### grade10-site-vault-case-intake-US1-TC26-1: The intake refuses a financing amount that is not more than zero
 
 Runs once per row of **Test data**.
@@ -961,6 +987,7 @@ Runs once per row of **Test data**.
 have read the collection statement,
 **so that** I send what I meant and know what I agreed to.
 
+<!-- trace:case id=g10.vault-case-intake.TC-yjd rev=2 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
 ### grade10-site-vault-case-intake-US4-TC1-2: The send carries the collector's word on the statement and keeps its version
 
 **Classification:**
@@ -1000,6 +1027,7 @@ have read the collection statement,
 * Step 2 is accepted.
 * Step 3 reads `<case_1>` as submitted, its history keeping `<statement version>` on the send.
 
+<!-- trace:case id=g10.vault-case-intake.TC-xwe rev=2 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
 ### grade10-site-vault-case-intake-US4-TC2-2: A draft reads back whole, and each fact changes until the send
 
 **Classification:**
@@ -1046,6 +1074,7 @@ have read the collection statement,
 * Step 4 returns `<new title>`; every other fact and both photographs are unchanged.
 * `<case_1>` is still a draft.
 
+<!-- trace:case id=g10.vault-case-intake.TC-5j6 rev=1 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
 ### grade10-site-vault-case-intake-US4-TC3-1: The review step names what happens next
 
 **Classification:**
@@ -1073,6 +1102,7 @@ have read the collection statement,
 
 * Three items are listed, naming what the shop does with the request.
 
+<!-- trace:case id=g10.vault-case-intake.TC-0my rev=2 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
 ### grade10-site-vault-case-intake-US4-TC4-2: A send without the collector's word on the statement is refused
 
 Runs once per row of **Test data**.
@@ -1113,6 +1143,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 still reads `<case_1>` as a draft.
 
+<!-- trace:case id=g10.vault-case-intake.TC-ye6 rev=1 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
 ### grade10-site-vault-case-intake-US4-TC5-1: The statement reads "Being prepared" outside production
 
 **Classification:**
@@ -1142,6 +1173,7 @@ Runs once per row of **Test data**.
 * The linked page reads "Being prepared".
 * The request still sends.
 
+<!-- trace:case id=g10.vault-case-intake.TC-k5u rev=2 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
 ### grade10-site-vault-case-intake-US4-TC6-2: A send is refused in production while the statement wording is unset
 
 **Classification:**
@@ -1173,6 +1205,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 still reads `<case_1>` as a draft.
 
+<!-- trace:case id=g10.vault-case-intake.TC-ue8 rev=1 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
 ### grade10-site-vault-case-intake-US4-TC7-1: Finish later from the review step saves without sending
 
 **Classification:**
@@ -1203,6 +1236,7 @@ Runs once per row of **Test data**.
 * The request is not sent.
 * It is listed as an unsent request on the collector's own list.
 
+<!-- trace:case id=g10.vault-case-intake.TC-y3j rev=1 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
 ### grade10-site-vault-case-intake-US4-TC11-1: A request already sent takes no change to its facts
 
 **Classification:**
@@ -1249,6 +1283,7 @@ Runs once per row of **Test data**.
 **so that** I can read it out at the counter and type it as the transfer
 reference at my bank.
 
+<!-- trace:case id=g10.vault-case-intake.TC-xis rev=2 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
 ### grade10-site-vault-case-intake-US5-TC1-2: Sending a request answers its six-character reference, and every read names it
 
 **Classification:**
@@ -1281,6 +1316,7 @@ reference at my bank.
 * Step 2 reads six characters, drawn only from digits and capitals without 0, O, 1, I and L.
 * Steps 3 and 4 name the same reference, and key `<case_1>` by its id.
 
+<!-- trace:case id=g10.vault-case-intake.TC-iik rev=1 covers=g10.vault-case-intake.SC-1y5,g10.vault-case-intake.SC-0q4,g10.vault-case-intake.SC-3s9 -->
 ### grade10-site-vault-case-intake-US5-TC2-1: A reference draw that collides is redrawn
 
 **Classification:**
@@ -1308,6 +1344,7 @@ reference at my bank.
 
 * The new case's reference does not match the existing case's; the draw was redrawn rather than shared.
 
+<!-- trace:case id=g10.vault-case-intake.TC-bie rev=1 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
 ### grade10-site-vault-case-intake-US5-TC3-1: A reference is unique per brand, not across brands
 
 **Classification:**
@@ -1335,6 +1372,7 @@ reference at my bank.
 
 * The ZZZ case is issued that reference; the clash with Grade10's case is not checked across brands.
 
+<!-- trace:case id=g10.vault-case-intake.TC-jem rev=1 covers=g10.vault-case-intake.SC-1y5,g10.vault-case-intake.SC-0q4,g10.vault-case-intake.SC-3s9 -->
 ### grade10-site-vault-case-intake-US5-TC4-1: A reference is never reused, even after its case ends
 
 **Classification:**
@@ -1362,6 +1400,7 @@ reference at my bank.
 
 * The new case's reference never matches the ended case's reference.
 
+<!-- trace:case id=g10.vault-case-intake.TC-yga rev=2 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
 ### grade10-site-vault-case-intake-US5-TC5-2: The letter on the send names the reference and links by the case id
 
 **Classification:**
@@ -1394,6 +1433,7 @@ reference at my bank.
 * Step 3's letter carries the reference step 2 read.
 * Its link to the case names the case's id, never its reference.
 
+<!-- trace:case id=g10.vault-case-intake.TC-d4v rev=2 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
 ### grade10-site-vault-case-intake-US5-TC6-2: A second item opens a second request with its own reference
 
 **Classification:**
@@ -1424,6 +1464,7 @@ reference at my bank.
 * Step 1 opens a new request carrying a reference other than `<reference_1>`.
 * Step 2 lists both; `<case_1>` still carries `<reference_1>` and reads submitted.
 
+<!-- trace:case id=g10.vault-case-intake.TC-zqt rev=1 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
 ### grade10-site-vault-case-intake-US5-TC7-1: Not now opens the case that was just sent
 
 **Classification:**
@@ -1453,6 +1494,7 @@ reference at my bank.
 
 * The case opens at its own address instead of starting a visit booking.
 
+<!-- trace:case id=g10.vault-case-intake.TC-5kp rev=2 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
 ### grade10-site-vault-case-intake-US5-TC8-2: An unsent request already carries the reference it keeps
 
 **Classification:**
@@ -1494,6 +1536,7 @@ and tick that I have read the collection statement before I send it,
 **so that** nothing happens to my item on a request I have not seen, and a
 request typed under the wrong address is never emailed.
 
+<!-- trace:case id=g10.vault-case-intake.TC-69j rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
 ### grade10-site-vault-case-intake-US6-TC1-2: The collector finds the draft staff opened and sends it as their own act
 
 **Classification:**
@@ -1540,6 +1583,7 @@ request typed under the wrong address is never emailed.
 * Step 5 is accepted.
 * Step 6 lists `<case_1>`; it has left the Drafts view.
 
+<!-- trace:case id=g10.vault-case-intake.TC-re9 rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
 ### grade10-site-vault-case-intake-US6-TC2-2: A draft staff opened is among the collector's cases and changes like their own
 
 **Classification:**
@@ -1584,6 +1628,7 @@ request typed under the wrong address is never emailed.
 * Step 6 returns the new description, `<contact number>`, `<photo_b>` and `<photo_c>`, and not `<photo_a>`.
 * `<case_1>` is still a draft opened at the counter.
 
+<!-- trace:case id=g10.vault-case-intake.TC-9fk rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
 ### grade10-site-vault-case-intake-US6-TC3-2: The statement shown at the counter does not stand for the collector's word
 
 **Classification:**
@@ -1614,6 +1659,7 @@ request typed under the wrong address is never emailed.
 * Step 1 is refused by name.
 * Step 2 still reads `<case_1>` as a draft opened at the counter.
 
+<!-- trace:case id=g10.vault-case-intake.TC-77a rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
 ### grade10-site-vault-case-intake-US6-TC4-2: A walk-in draft fills the collector's draft cap
 
 Runs once per row of **Test data**.
@@ -1654,6 +1700,7 @@ Runs once per row of **Test data**.
 * Step 1's outcome matches the row.
 * After a refusal, step 2 lists the drafts in the row and no new one.
 
+<!-- trace:case id=g10.vault-case-intake.TC-x77 rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
 ### grade10-site-vault-case-intake-US6-TC5-2: A draft staff opened is in no other collector's read
 
 **Classification:**
@@ -1687,6 +1734,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused, and the response carries none of `<case_1>`'s facts.
 * Step 3 is refused; the photograph is not served.
 
+<!-- trace:case id=g10.vault-case-intake.TC-nxn rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
 ### grade10-site-vault-case-intake-US6-TC6-2: Nothing is valued, booked or emailed on a draft staff opened until it is sent
 
 **Classification:**
@@ -1727,6 +1775,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused by name, and `<case_1>` holds no visit.
 * Step 3 holds no message about `<case_1>`.
 
+<!-- trace:case id=g10.vault-case-intake.TC-clw rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
 ### grade10-site-vault-case-intake-US6-TC7-2: The collector removes a photograph before the send and never after
 
 **Classification:**

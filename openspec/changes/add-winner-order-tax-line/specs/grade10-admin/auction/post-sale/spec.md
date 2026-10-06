@@ -1,16 +1,13 @@
 # Post-Sale — delta
 
-## Purpose
-
-An operator states the Tax a winner owes when sending or reissuing an invoice.
-
 ## Feature set
 
 - Tax on the quote
   - Optional amount: empty means no Tax; an added amount is above zero
   - Send: Tax becomes an invoice line and part of the Subtotal
   - Reissue: Tax can be added, changed, or removed with the other quoted amounts
-  - Audit: a Tax change records its value before and after
+- Resolving an unpaid order
+  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance, tax and deadline, always with a reason and at least one change
 
 ## MODIFIED Requirements
 
@@ -50,6 +47,7 @@ fee in its place. A bank transfer invoice SHALL NOT need the provider's fees.
 An operator without payment-processing SHALL see the send control visible and
 disabled, and Grade10 SHALL refuse the same action on the server.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-7jg rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-48 - Sending the invoice opens the payment window
 **Serves:** Quote and send - sending issues the invoice and starts the deadline
 
@@ -64,6 +62,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **AND** the delivery address and payment method are locked
 - **AND** the order derives as Pending Payment
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-rrz rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-49 - No invoice is sent without a confirmed address
 **Serves:** Quote and send - no invoice without a confirmed address
 
@@ -72,6 +71,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** Grade10 refuses it
 - **AND** the order is still Awaiting Setup
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-sjw rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-50 - Staff cannot send an invoice
 **Serves:** Quote and send - the send needs payment-processing
 
@@ -80,6 +80,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** the send control is visible and disabled
 - **AND** Grade10 refuses a send from them on the server
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-y6v rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-69 - The operator sees the fee before sending
 **Serves:** Quote and send - the card fee read before send
 
@@ -90,6 +91,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** they read a payment processing fee of 11225 and an order total of
   323225 minor units in HKD
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-xd7 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-70 - Unreadable provider fees refuse the send
 **Serves:** Quote and send - a card invoice needs the provider's fees
 
@@ -99,6 +101,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** Grade10 refuses the send and says the fees could not be read
 - **AND** no invoice is issued
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-guq rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-63 - An invoice sends without insurance
 **Serves:** Quote and send - insurance is optional
 
@@ -108,6 +111,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
   of 0, adds no Insurance, and sends
 - **THEN** the invoice is `pending` with an order total of 300000 minor units in HKD
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-xt3 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-68 - Insurance added at zero is refused
 **Serves:** Quote and send - insurance is never zero once added
 
@@ -116,6 +120,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** Grade10 refuses the send
 - **AND** no invoice is issued
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-75y rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-117 - The quote shows the winner's method
 **Serves:** Quote and send - the winner's choice decides how the fee is priced
 
@@ -124,6 +129,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** the quote names bank transfer
 - **AND** asks for a bank transfer fee instead of showing a provider-priced fee
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-0l6 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-118 - A blank bank transfer fee refuses the send
 **Serves:** Quote and send - the bank transfer fee is required
 
@@ -132,6 +138,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** Grade10 refuses the send
 - **AND** no invoice is issued
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-miq rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-119 - A bank transfer fee has no cap and needs no provider fees
 **Serves:** Quote and send - zero or more, with no cap
 
@@ -141,6 +148,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** the invoice is `pending` with an order total of 812000 minor units in HKD
 
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qv1 rev=1 -->
 #### Scenario: post-sale-SC-155 - An invoice sends with tax
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -151,6 +159,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **THEN** the invoice is `pending` with a Subtotal and order total of 318000
   minor units in HKD
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-36t rev=1 -->
 #### Scenario: post-sale-SC-156 - An invoice sends without tax
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -158,6 +167,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **WHEN** an operator leaves Tax empty and sends an otherwise valid quote
 - **THEN** the invoice is sent without Tax
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-g1u rev=1 -->
 #### Scenario: post-sale-SC-157 - Tax added at zero is refused
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
@@ -222,6 +232,7 @@ transfer first, then settled manually at the new invoice's order total. Where
 the money arrived at the subtotal, the operator enters a bank transfer fee of
 0.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-5km rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-107 - A reissue keeps the deadline when the operator says so
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -231,6 +242,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **AND** the payment deadline is still 2026-09-19T09:00:00Z
 - **AND** the operator saw 312000 and 316000 minor units in HKD before sending
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-dmi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-108 - A reissue restarts the deadline when the operator says so
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -238,6 +250,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **WHEN** an operator reissues it, chooses a fresh 7 days, and sends at 2026-09-15T10:00:00Z with a reason
 - **THEN** the payment deadline is 2026-09-22T10:00:00Z
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-vsz rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-109 - A reissue without a reason is refused
 **Serves:** Resolving an unpaid order - always with a reason
 
@@ -246,6 +259,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **THEN** Grade10 refuses it
 - **AND** the current invoice, its amount, and its deadline are unchanged
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-oss rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-110 - A switch from card leaves the bank transfer fee empty
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -255,6 +269,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **AND** Grade10 refuses to send until a fee is entered
 - **AND** with a fee of 3000 entered, the new invoice is bank transfer at 315000 minor units in HKD
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-7fn rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-111 - The bank transfer fee starts from the current invoice
 **Serves:** Resolving an unpaid order - the bank transfer fee starts from the previous invoice
 
@@ -262,6 +277,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **WHEN** an operator opens Reissue on it
 - **THEN** the bank transfer fee reads 5000 minor units in HKD
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-o4m rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-112 - An expired invoice is reissued with a fresh deadline
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -271,6 +287,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **AND** the new invoice is `pending` with a deadline of 2026-10-02T09:00:00Z
 - **AND** the order derives as Pending Payment
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-b9o rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-113 - No reissue while proof is checked or after payment
 **Serves:** Resolving an unpaid order - reissue only on a pending or expired invoice
 
@@ -279,6 +296,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **THEN** neither offers Reissue
 - **AND** Grade10 refuses a reissue attempted on either
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-5sm rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-114 - A card invoice paid by transfer is reissued, then settled
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -287,6 +305,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **THEN** the invoice is `paid` at 312000 minor units in HKD
 - **AND** the replaced card invoice holds no status and is not `cancelled`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-2fi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-115 - A replaced invoice is not cancelled
 **Serves:** Resolving an unpaid order - one Reissue action
 
@@ -295,6 +314,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **THEN** the order's invoice status is the new invoice's, `pending`
 - **AND** the order does not derive as Cancelled and the lot is not returned to available
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-e28 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-125 - A switch to card prices the fee at send
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -304,6 +324,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **THEN** the new invoice is card with a payment processing fee of 11225 and an order total of 323225 minor units in HKD
 - **AND** the operator entered no fee
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-vme rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-126 - Unreadable provider fees refuse a card reissue
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -313,6 +334,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **THEN** Grade10 refuses the reissue and says the fees could not be read
 - **AND** the current invoice is unchanged
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-cu3 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-133 - A reissue that changes only the reason is refused
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -321,6 +343,7 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **THEN** Grade10 refuses it as changing nothing
 - **AND** the current invoice is still `INV-202609-LK7P2Q-01`, at the same amount and deadline
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ysk rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-134 - A fresh deadline alone is a change
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
@@ -330,12 +353,23 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **AND** the reissued entry names the deadline as the only changed part
 
 
-#### Scenario: post-sale-SC-158 - A reissue changes tax and logs the change
-**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qtj rev=1 -->
+#### Scenario: post-sale-SC-158 - A reissue changes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment whose invoice has no Tax
 - **WHEN** an operator reissues it with Tax of 6000 minor units in HKD and a
   reason, changing nothing else
 - **THEN** the new invoice includes Tax of 6000 minor units in HKD
-- **AND** the reissued entry names Tax as the changed part, with no amount before
-  and 6000 minor units in HKD after
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kdq rev=1 -->
+#### Scenario: post-sale-SC-210 - A reissue removes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice includes Tax of 6000
+  minor units in HKD
+- **WHEN** an operator reissues it removing Tax and giving a reason, changing
+  nothing else
+- **THEN** Grade10 accepts it as a change
+- **AND** the new invoice has no Tax line
+- **AND** its Subtotal is 6000 minor units lower than the replaced invoice's

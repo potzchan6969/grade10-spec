@@ -16,6 +16,7 @@ import { SiteHeader } from "@grade10/ui";
 import { Package, Vault } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import {
+  assetSubtitle,
   formatHkd,
   statusBadgeVariant,
   VAULT_FOOTER,
@@ -41,6 +42,20 @@ function VaultPageShell({
               : "flex w-full max-w-5xl flex-col gap-8 md:gap-10"
           }
         >
+          {children}
+        </div>
+      </main>
+      <Footer {...VAULT_FOOTER} />
+    </div>
+  );
+}
+
+function AppointmentPageShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex min-h-screen w-full flex-col bg-background">
+      <SiteHeader {...VAULT_SITE_HEADER} />
+      <main className="flex w-full flex-1 justify-center px-4 py-8 sm:px-6 md:px-8 md:py-10">
+        <div className="flex w-full max-w-6xl flex-col gap-8 md:gap-10">
           {children}
         </div>
       </main>
@@ -154,7 +169,7 @@ function VaultAssetCard({
       >
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
           <img
-            alt={`${asset.name}, ${asset.grade}`}
+            alt={`${asset.name}, ${assetSubtitle(asset)}`}
             className="size-full object-cover transition-transform duration-300 ease-out group-hover/vault-card:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover/vault-card:scale-100"
             height={320}
             src={asset.imageSrc}
@@ -168,9 +183,7 @@ function VaultAssetCard({
         </div>
         <CardHeader className="gap-1 px-4 pt-4">
           <CardTitle className="line-clamp-2 text-base">{asset.name}</CardTitle>
-          <CardDescription>
-            {asset.set} · {asset.grade}
-          </CardDescription>
+          <CardDescription>{assetSubtitle(asset)}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-1 px-4 pb-4">
           <p className="text-base font-medium tabular-nums">
@@ -284,6 +297,7 @@ function FactRow({
 }
 
 export {
+  AppointmentPageShell,
   FactRow,
   PageHeader,
   PortfolioSummary,

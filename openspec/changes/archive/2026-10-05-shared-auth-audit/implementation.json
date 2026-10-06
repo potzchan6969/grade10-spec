@@ -1,0 +1,125 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "78b27d264d0f5e3318ccade84b9a8b29c895d8ad864e32d2d66986f788b1cd9a"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "3f6577f56f30cec90706bd14668142fd65336fc8",
+    "capturedAt": "2026-10-05T08:27:31.842Z",
+    "targets": [
+      {
+        "path": "openspec/changes/shared-auth-audit/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/audit/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/audit/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A no-change account find is not recorded",
+          "Requirement: Account create, verify-flip, and delete are recorded",
+          "Requirement: An entry keeps the reason, not secrets",
+          "Requirement: Second-factor enable, disable, and recovery-code regenerate are recorded",
+          "Requirement: The trail is append-only and fail-closed"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/audit/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/console/audit/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/console/audit/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A row expands without secrets, and ids can be copied or opened",
+          "Requirement: The chain strip stays quiet until a product fails",
+          "Requirement: The trail filters by product, action, people, result, and days",
+          "Requirement: The trail table names subject, action, and time order"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/console/audit/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "e4abe5d15f89c75d0a9ad8a356d12207b1e06376",
+      "components": [
+        "auth",
+        "admin",
+        "zzz-auth",
+        "zzz-admin"
+      ]
+    }
+  ],
+  "notes": "Retroactive attestation after grade10#213 (indexes), #219 (filters + identity writes + Audit UI), #307 (directory-person links). Formal pnpm spec:accept skipped store-wide tcs:validate multi-level tracing debt; fold applied locally via prepareAcceptance.",
+  "compatibilityAcknowledgement": [
+    {
+      "path": "openspec/specs/shared/auth/audit/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Account create, verify-flip, and delete are recorded",
+        "Requirement: A no-change account find is not recorded",
+        "Requirement: Second-factor enable, disable, and recovery-code regenerate are recorded",
+        "Requirement: An entry keeps the reason, not secrets",
+        "Requirement: The trail is append-only and fail-closed"
+      ],
+      "classification": "semantic",
+      "reason": "Accepted fold of shared-auth-audit after implementation; durable contract published retroactively to match shipped code",
+      "evidence": "grade10#219 identityTrail.spec.ts; grade10#307 AuditTrailSection directory-person links"
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/user-journeys.md",
+      "anchors": [],
+      "classification": "semantic",
+      "reason": "Added US-04 and US-05 journeys for lifecycle and second-factor writes",
+      "evidence": "openspec/changes/shared-auth-audit/specs/shared/auth/audit/user-journeys.md"
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/feature-tcs.md",
+      "anchors": [],
+      "classification": "semantic",
+      "reason": "Folded US4/US5 draft cases for the new journeys",
+      "evidence": "identityTrail.spec.ts covers the same behaviours"
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/spec.md",
+      "anchors": [],
+      "classification": "semantic",
+      "reason": "New capability published for the merged Audit section",
+      "evidence": "grade10#219 AuditTrailSection; grade10#307 directory-person link rule"
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/user-journeys.md",
+      "anchors": [],
+      "classification": "semantic",
+      "reason": "New capability journeys US-01 through US-04",
+      "evidence": "ChainStrip.test.tsx and AuditTrailSection.test.tsx"
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/feature-tcs.md",
+      "anchors": [],
+      "classification": "semantic",
+      "reason": "New capability draft suite",
+      "evidence": "packages/audit/admin-frontend trail tests"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/ui-design.md",
+      "anchors": [],
+      "classification": "editorial",
+      "reason": "UI design stays with the archived change; SC-14 wording matched #307"
+    }
+  ]
+}

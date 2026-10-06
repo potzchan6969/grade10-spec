@@ -593,8 +593,8 @@
         "message": "Signing links last a short while for your safety; ask staff for a new one."
       },
       "TOKEN_CONSUMED": {
-        "title": "This signing link has already been used",
-        "message": "If you signed with it, your copy is at the counter and on your submission page; if not, ask staff for a new link."
+        "title": "This signing link was replaced",
+        "message": "A newer link was made for these documents, and only the newest one works. Ask staff for it."
       },
       "TOKEN_CONFLICT": {
         "title": "This link was opened on another device",
@@ -611,6 +611,10 @@
       "PACKET_COMPLETED": {
         "title": "These documents are already signed",
         "message": "You can close this page."
+      },
+      "PACKET_DECLINED": {
+        "title": "Nothing was signed",
+        "message": "Nothing was signed and nothing was paid. The member of staff with you can help with what happens next."
       },
       "DOCUMENT_UNKNOWN": {
         "title": "That document is not part of this signing",
@@ -738,7 +742,6 @@
     "signatureTypedCaption": "Typed signature",
     "submitLabel": "Sign the {title}",
     "submittingLabel": "Signing…",
-    "retryLabel": "Try again",
     "missingPages": "Please read every page before signing.",
     "missingConsent": "Please tick the box to confirm you have read it.",
     "missingSignature": "Please sign in the box above.",
@@ -756,7 +759,26 @@
     "downloadExpiry": "You can download from this screen until {when}. After that, the member of staff with you can print your copies at the counter.",
     "sealedIntegrityWarning": "The copy that downloaded does not match the fingerprint of what you signed, so it has not been saved. Your signature is recorded — ask the member of staff with you for a printed copy.",
     "signedTitle": "Your signatures are recorded",
-    "signedMessage": "Others still have to sign before these documents are sealed."
+    "signedMessage": "Others still have to sign before these documents are sealed.",
+    "disclosureTick": "I have read this and agree to review and sign electronically.",
+    "identityChecked": "Your ID was checked on {day}.",
+    "venueLine": "Signing at {venue}",
+    "caseLine": "Submission {reference} · {subject}",
+    "caseOnly": "Submission {reference}",
+    "linkClock": "Link valid for {remaining}",
+    "readToEndFirst": "Read to the end first",
+    "continueLabel": "Continue to sign",
+    "comesNext": "{position} of {total} — the {next} comes next",
+    "comesLast": "{position} of {total} — the last one",
+    "readAgainLabel": "Read it again",
+    "signSummary": "{title} — read {viewed} of {pageCount} pages",
+    "nextUp": "Next: the {title}",
+    "sealedAt": "Sealed {time}",
+    "sealedMessageMailed": "Your signed copies are on your submission page and on their way to {email}. Keep the fingerprint below — it identifies this exact set of documents.",
+    "sealedDigest": "{digest} · sealed {when}",
+    "nextStepsTitle": "What happens now",
+    "nothingMore": "Nothing more is needed from you on this device.",
+    "doneLabel": "Done — hand the iPad back"
   },
   "console": {
     "cards": "{count, plural, one {# card} other {# cards}}",

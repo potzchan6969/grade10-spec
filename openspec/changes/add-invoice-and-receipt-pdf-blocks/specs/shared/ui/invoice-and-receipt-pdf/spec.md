@@ -28,7 +28,8 @@ removed, per the amendment note above each one.
     charges given, an optional supplied Tax line, and a boxed
     Subtotal/Payment Processing Fee/Order Total summary
   - Replacement relationship: on a replacement invoice, the supplied prior
-    invoice ID appears as `Replaces invoice {id}`
+    invoice ID appears as `Replaces invoice {id}`, plain text with no link to
+    the prior PDF
   - Bank details: every enabled SWIFT, FPS and HK local transfer rail plus the
     bank reference, a full-width section below the order-value summary, shown
     only on a bank-transfer invoice
@@ -56,8 +57,8 @@ removed, per the amendment note above each one.
 - Presentation-only contract
   - Every amount arrives as a preformatted string; neither renderer
     computes, sums or reformats a value
-  - Every date arrives as a `Date` and the winner's IANA time-zone identifier;
-    the renderer formats that instant once in the winner's zone
+  - Every date arrives as a `Date`; the renderer formats that instant once in
+    `Asia/Hong_Kong` and labels it `GMT+8`
   - Every label arrives through a `copy` argument; neither renderer imports
     `@grade10/i18n` or hardcodes a label
 - Reserved extension slots
@@ -82,6 +83,7 @@ deadline, never reordering the invoice number, sent-at date, and payment
 deadline rows before it. **Party blocks** — InvoicePdf SHALL render Bill To
 and Ship To for every invoice, each rendering only its own supplied content.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-a9o rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-1 - An invoice's meta rows and party blocks all render
 
 **Serves:** InvoicePdf export - the invoice's meta rows all render
@@ -92,6 +94,7 @@ and Ship To for every invoice, each rendering only its own supplied content.
 - **THEN** the returned PDF's one page shows every meta row and party block
   given
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-g9l rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-46 - The payment method row appends after payment deadline, never reordering the rows before it
 
 **Serves:** InvoicePdf export - the invoice's meta rows all render
@@ -103,6 +106,7 @@ and Ship To for every invoice, each rendering only its own supplied content.
   date, payment deadline, then payment method
 - **AND** the three original rows keep the order they already had
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-kto rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-19 - Bill To and Ship To never echo each other
 
 **Serves:** InvoicePdf export - Bill To and Ship To each render only their own content
@@ -131,25 +135,28 @@ and omit it when not given.
 "Not recorded" in place of Bill To or Ship To when no address is given for
 it, never a block of blank lines.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-q1g rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-31 - A company address renders every line it is given
 
 **Serves:** Party address fields - every address line renders when supplied
 
-- **GIVEN** a Bill To with a recipient, company, address line 1, address
-  line 2, city, region, postal code, and country
+- **GIVEN** a Bill To with a recipient, company, phone, address line 1,
+  address line 2, city, region, postal code, and country
 - **WHEN** InvoicePdf renders it
 - **THEN** every one of those lines is shown
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-1fi rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-32 - A personal address omits the company line
 
-**Serves:** Party address fields - company and address line 2 are the only optional lines
+**Serves:** Party address fields - omitted optional lines leave no blank rows
 
-- **GIVEN** a Ship To with no company and no address line 2
+- **GIVEN** a Ship To with no company, phone, or address line 2
 - **WHEN** InvoicePdf renders it
-- **THEN** no company line and no address-line-2 line appear
+- **THEN** no company, phone, or address-line-2 line appears
 - **AND** recipient, address line 1, the city/region/postal-code line, and
   country still render
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-jp5 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-33 - No address given renders "Not recorded"
 
 **Serves:** Party address fields - a withheld address renders one line, not a blank block
@@ -162,11 +169,13 @@ it, never a block of blank lines.
 ### Requirement: InvoicePdf renders a supplied replacement relationship
 
 When an invoice replaces an earlier invoice, `InvoicePdfData` SHALL accept a
-`replacesInvoice` value containing the replaced invoice ID and an optional
-document link. InvoicePdf SHALL render `Replaces invoice {invoice ID}`. When
-the value is absent, it SHALL render no replacement row. The relationship does
-not make the replaced invoice the current payable invoice.
+`replacesInvoice` value containing the replaced invoice ID. InvoicePdf SHALL
+render `Replaces invoice {invoice ID}` as plain text, with no link to the
+replaced invoice's PDF. When the relationship is absent, InvoicePdf SHALL
+render no replacement row. The relationship does not make the replaced invoice
+the current payable invoice.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-9et rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-51 - A replacement invoice names the invoice it replaces
 
 **Serves:** InvoicePdf export - a replacement document retains its prior invoice reference
@@ -186,6 +195,7 @@ email for every document. **Position** — The issuer block SHALL follow every
 other section and SHALL align to the right of the sheet. **Emphasis** — The
 issuer's name SHALL render more heavily weighted than its email.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-lrt rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-39 - The issuer block sits at the foot of the invoice, right-aligned
 
 **Serves:** InvoicePdf export - the issuer block renders at the foot of the sheet, right-aligned
@@ -195,6 +205,7 @@ issuer's name SHALL render more heavily weighted than its email.
 - **THEN** the issuer's name and email both show, name above email
 - **AND** the block sits at the bottom of the sheet, right-aligned
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-qqd rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-40 - The issuer block sits at the foot of the receipt, right-aligned
 
 **Serves:** ReceiptPdf export - the issuer block renders at the foot of the sheet, right-aligned
@@ -219,6 +230,7 @@ and Payment Processing Fee inside a boxed summary below the other charges,
 and SHALL render Order Total inside that same summary, set off by a rule and
 rendered more heavily weighted than every other line.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-63o rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-3 - Charges render in the order given, with the summary boxed below them
 
 **Serves:** InvoicePdf export - charges render in the order given, ending in a boxed summary
@@ -231,6 +243,7 @@ rendered more heavily weighted than every other line.
 - **AND** Subtotal, Payment Processing Fee, and Order Total appear together
   in a boxed summary below them, Order Total set off by a rule
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-8b8 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-4 - Omitting a charge does not disturb the others' order
 
 **Serves:** InvoicePdf export - charges render in the order given, ending in a boxed summary
@@ -249,6 +262,7 @@ boxed Subtotal/Payment Processing Fee/Order Total summary. When omitted or
 reformat the tax amount, and the tax line does not define a tax rate,
 jurisdiction or formal tax receipt.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-i50 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-52 - A supplied tax line renders on both documents
 
 **Serves:** InvoicePdf export - the optional tax line renders when supplied
@@ -260,6 +274,7 @@ jurisdiction or formal tax receipt.
   boxed summary
 - **AND** each document shows the amount exactly as supplied
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-m09 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-53 - An omitted tax line does not render
 
 **Serves:** InvoicePdf export - the optional tax line is omitted when not supplied
@@ -278,6 +293,7 @@ header and a divider, directly above the lot title and the first charge.
 `copy.descriptionLabel` and `copy.amountLabel`, followed by a divider,
 immediately above the lot title.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-8ek rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-37 - The charges table header renders above the invoice's lot title
 
 **Serves:** InvoicePdf export - charges render in the order given, ending in a boxed summary
@@ -287,6 +303,7 @@ immediately above the lot title.
 - **THEN** a header row shows `copy.descriptionLabel` and `copy.amountLabel`
 - **AND** a divider separates the header from the lot title
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-1uz rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-38 - The charges table header renders above the receipt's lot title
 
 **Serves:** ReceiptPdf export - the charges table renders the same shape as InvoicePdf's
@@ -306,6 +323,7 @@ the Subtotal/Payment Processing Fee/Order Total summary when the consumer
 supplies `bankRails`. **Withheld** — InvoicePdf SHALL render no such section,
 and SHALL reserve no vertical space for it, when `bankRails` is omitted.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-cys rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-47 - A bank-transfer invoice shows its bank details below Order Total
 
 **Serves:** InvoicePdf export - the Bank details section renders where the invoice carries bank rails
@@ -317,6 +335,7 @@ and SHALL reserve no vertical space for it, when `bankRails` is omitted.
 - **AND** every other meta row, party block, and the lot/charges table still
   renders
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-14c rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-48 - A card invoice shows no bank details section, and no gap where it would sit
 
 **Serves:** InvoicePdf export - the Bank details section renders where the invoice carries bank rails
@@ -341,6 +360,7 @@ SHALL follow the enabled rails with a divider and one line naming
 `bankRails.reference`, rendered more heavily weighted than the rest of that
 line.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-tt8 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-49 - Bank details lists every enabled rail under its own heading
 
 **Serves:** InvoicePdf export - the Bank details section names every enabled transfer rail
@@ -352,6 +372,7 @@ line.
 - **AND** an FPS rail shows FPS ID and Beneficiary
 - **AND** no HK local transfer rail appears
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-xeu rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-50 - Bank details' reference note bolds the quoted reference
 
 **Serves:** InvoicePdf export - the Bank details section names every enabled transfer rail
@@ -372,6 +393,7 @@ number it pays, the date paid, and the payment method for every receipt,
 each as its own row. **Party blocks** — ReceiptPdf SHALL render Bill To and
 Ship To for every receipt, each rendering only its own supplied content.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-rzk rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-7 - A receipt's meta rows and party blocks all render
 
 **Serves:** ReceiptPdf export - the receipt's meta rows and party blocks all render
@@ -381,6 +403,7 @@ Ship To for every receipt, each rendering only its own supplied content.
 - **WHEN** ReceiptPdf renders them
 - **THEN** every meta row and party block given is shown
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-4tl rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-20 - Receipt number and the invoice number it pays never conflate
 
 **Serves:** ReceiptPdf export - the receipt number and the invoice number it pays render as distinct rows
@@ -390,6 +413,7 @@ Ship To for every receipt, each rendering only its own supplied content.
 - **THEN** the receipt-number row shows its own content
 - **AND** the invoice-number row shows its own, distinct, content
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-f0x rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-29 - A receipt's Bill To and Ship To never echo each other
 
 **Serves:** ReceiptPdf export - Bill To and Ship To each render only their own content
@@ -410,6 +434,7 @@ invoice's bank-payment instruction reference.
 provider reference when the consumer supplies one. **Withheld** — ReceiptPdf
 SHALL render no such section when no provider reference is supplied.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-zks rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-41 - A bank-transfer receipt names its recorded provider reference
 
 **Serves:** ReceiptPdf export - the provider-reference line renders where the payment carries one
@@ -418,6 +443,7 @@ SHALL render no such section when no provider reference is supplied.
 - **WHEN** ReceiptPdf renders it
 - **THEN** the Payment section shows the reference given
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-27a rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-42 - A card-paid receipt shows no provider-reference line
 
 **Serves:** ReceiptPdf export - the provider-reference line renders where the payment carries one
@@ -438,6 +464,7 @@ Payments, Current Payment Received, and Remaining Balance Due, in that
 order. **Always rendered** — ReceiptPdf SHALL render all four lines on every
 receipt; none is conditional on being given.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-5lf rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-8 - The payment breakdown renders in one fixed order
 
 **Serves:** ReceiptPdf export - the payment breakdown renders in its fixed order
@@ -447,6 +474,7 @@ receipt; none is conditional on being given.
 - **WHEN** ReceiptPdf renders them
 - **THEN** the four lines appear in that order
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-03g rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-22 - The payment breakdown keeps all four lines when two read zero
 
 **Serves:** ReceiptPdf export - none of the four payment-breakdown lines is conditional on its value
@@ -457,23 +485,6 @@ receipt; none is conditional on being given.
 - **THEN** all four payment-breakdown lines still appear, in their fixed
   order
 - **AND** none is dropped for reading zero
-
-### Requirement: Dates render in the winner's time zone
-
-Every document date uses the winner's time zone, matching the payment deadline
-the winner sees.
-
-**Given** — InvoicePdf and ReceiptPdf SHALL render every date as the winner's
-calendar date and clock time, with that zone's name.
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-43 - A date renders in the winner's time zone with its zone name
-
-**Serves:** Presentation-only contract - every date renders in the winner's time zone
-
-- **GIVEN** a `Date` value and a winner zone whose calendar date differs from Hong Kong for that instant
-- **WHEN** InvoicePdf renders it as a meta row
-- **THEN** the row shows that instant's winner-zone calendar date and clock
-  time, followed by that zone's name
 
 ### Requirement: InvoicePdf and ReceiptPdf render only what they are given
 
@@ -486,6 +497,7 @@ exactly as the string given, and SHALL derive no rendered value from another
 argument. **No label lookup** — InvoicePdf and ReceiptPdf SHALL render every
 label from the `copy` argument and SHALL import no message catalog.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-ca8 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-16 - Order Total renders exactly what is given, not a computed sum
 
 **Serves:** Presentation-only contract - a rendered amount is exactly the value given, never a derived one
@@ -496,6 +508,7 @@ label from the `copy` argument and SHALL import no message catalog.
 - **THEN** Order Total shows exactly the value given, not the sum of
   Subtotal and the fee
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-0s1 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-17 - Every label reads the copy argument, with no hardcoded fallback
 
 **Serves:** Presentation-only contract - every label comes from the copy argument, not a hardcoded string
@@ -505,6 +518,7 @@ label from the `copy` argument and SHALL import no message catalog.
 - **THEN** every label reads the string `copy` gave it
 - **AND** no label shows a default `copy` did not supply
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-t8t rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-27 - A required line still renders its row when its content is blank
 
 **Serves:** Presentation-only contract - every amount renders exactly as given, never dropped for its content
@@ -524,6 +538,7 @@ the caller supplies.
 **Given** — InvoicePdf and ReceiptPdf SHALL each return PDF bytes describing
 exactly one page, sized 595.28×841.89pt (A4).
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-3af rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-44 - InvoicePdf returns one A4 page
 
 **Serves:** Document shape - each renderer produces one A4 document
@@ -533,6 +548,7 @@ exactly one page, sized 595.28×841.89pt (A4).
 - **THEN** the returned bytes parse as a PDF document with exactly one page
 - **AND** that page is sized 595.28×841.89pt
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-nr3 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-45 - ReceiptPdf returns one A4 page
 
 **Serves:** Document shape - each renderer produces one A4 document

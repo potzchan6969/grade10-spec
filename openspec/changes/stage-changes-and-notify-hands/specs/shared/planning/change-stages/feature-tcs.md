@@ -19,6 +19,7 @@
 **I want** to be told once, in Slack, when the change reaches my stage, with the command to paste,
 **so that** I start the day it lands rather than the day I happen to look.
 
+<!-- trace:case id=g10.shared-change-stages.TC-rek rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC1-1: Stage landing tells the hand once
 
 **Classification:**
@@ -49,7 +50,8 @@ admin(engineer) is named as the `dev` hand on <change A>, which sits at Specifie
 * The message carries the command to paste as text.
 * The change page shows Planned with <dev handle> as the hand.
 
-### shared-planning-change-stages-US1-TC2-1: Decisions and journeys tell the designer and the tech PIC
+<!-- trace:case id=g10.shared-change-stages.TC-dvj rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
+### shared-planning-change-stages-US1-TC2-1: Decisions and journeys tell the designer alone
 
 **Classification:**
 
@@ -65,21 +67,22 @@ admin(engineer) is named as the `dev` hand on <change A>, which sits at Specifie
 * **Trace:** shared-planning-change-stages-US-01
 
 **Pre-conditions:**
-<change B> has only `proposal.md` on `main` and is on admin(product manager). Its `hands:` names <design handle> and <tech handle>, both known to the team map.
+<change B> has only `proposal.md` on `main` and is on admin(product manager). Its `hands:` names <pm handle>, <design handle> and <dev handle>, all known to the team map.
 
 **Steps:**
 
 1. Land <change B>'s `decisions.md`, `user-journeys.md`, its marked page lines and `hands:` in one push to `main`.
 2. Read <design handle>'s direct messages.
-3. Read <tech handle>'s direct messages.
+3. Read <dev handle>'s and <pm handle>'s direct messages.
 4. Open <change B>'s card at <manual board url>.
 
 **Expected Results:**
 
-* Each of the two hands holds one message naming <change B>, Proposed and the thread.
-* The card names the designer and the tech PIC as the hands, not the product manager.
-* No message reaches <pm handle> for that move.
+* <design handle> holds one message naming <change B>, Proposed and the thread.
+* The card names the designer as the hand, not the product manager and not the engineer.
+* No message reaches <dev handle> or <pm handle> for that move.
 
+<!-- trace:case id=g10.shared-change-stages.TC-13w rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC3-1: A stage told once per entry
 
 Runs once per row of **Test data**.
@@ -119,6 +122,7 @@ Runs once per row of **Test data**.
 * <dev handle>'s direct messages read as the row states.
 * The card sits in Planned.
 
+<!-- trace:case id=g10.shared-change-stages.TC-h6u rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC4-1: An unnamed hand is told in the role's channel
 
 **Classification:**
@@ -148,6 +152,7 @@ Runs once per row of **Test data**.
 * One post in the designer role's channel names <change C>, the stage and the thread.
 * No direct message is sent for that move.
 
+<!-- trace:case id=g10.shared-change-stages.TC-7cw rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC5-1: One push moving two changes tells each hand once
 
 **Classification:**
@@ -168,7 +173,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Land <change A>'s `tasks.md` and <change D>'s `spec.md` and `feature-tcs.md` in one push to `main`.
+1. Land <change A>'s `tasks.md` and <change D>'s `spec.md`, `feature-tcs.md` and `tech-design.md` in one push to `main`.
 2. Read <dev handle>'s and <pm handle>'s direct messages.
 3. Read <planning channel>.
 
@@ -177,6 +182,7 @@ Runs once per row of **Test data**.
 * Each hand holds one message, for its own change only.
 * No channel post is sent: neither change crossed a milestone.
 
+<!-- trace:case id=g10.shared-change-stages.TC-fyu rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC6-1: Weekly digest lists questions, idle, behind and waiting
 
 **Classification:**
@@ -193,7 +199,7 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-01
 
 **Pre-conditions:**
-admin(product manager) <pm handle> holds <change B> at its current stage, owes two ❓ decisions rows on it, holds <change E> idle 9 days, owes the artifact <change M> waits on, is the hand of one behind artifact, and holds <change F>, which the release of its dependency has just freed.
+admin(product manager) <pm handle> holds <change B> at its current stage, owes two `❓` decisions rows on it, holds <change E> idle 9 days, owes the artifact <change M> waits on, is the hand of one behind artifact, and holds <change F>, which the release of its dependency has just freed.
 
 **Steps:**
 
@@ -205,6 +211,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * One direct message lists what is on them now, their open questions, their idle, behind and waiting changes, and <change F> as freed by a dependency.
 * Each change in it links its thread and its change page.
 
+<!-- trace:case id=g10.shared-change-stages.TC-g62 rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC7-1: A digest with nothing to say is not sent
 
 **Classification:**
@@ -234,6 +241,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * No digest reaches <release handle>.
 * <pm handle>'s digest arrives as usual.
 
+<!-- trace:case id=g10.shared-change-stages.TC-04t rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC8-1: Implementation completion tells QA its turn
 
 **Classification:**
@@ -254,16 +262,16 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 
 **Steps:**
 
-1. Land an `implementation.json` entry naming <change R>'s historical accepted fingerprint, first-claim durable-spec baseline, repository commit and components on `main`.
+1. Land an `implementation.json` entry naming <change R>'s historical accepted fingerprint, first-claim durable-spec baseline, repository commit and components on `main`, with no deployment receipt for <change R> in any environment.
 2. Read <qa handle>'s direct messages.
-3. Read <qa handle>'s direct messages.
 
 **Expected Results:**
 
-* <qa handle> holds one implementation-complete message naming <change R>, its historical accepted fingerprint, claimed durable-spec baseline and the thread.
-* <qa handle> holds one staging message naming <change R>, the run sheet and build `1.4.0-rc2`.
-* Each of the two holds one message for that move, not two.
+* <qa handle> holds one implementation-complete message naming <change R>, its historical accepted fingerprint, claimed durable-spec baseline, the run sheet and the thread.
+* The message arrives without a deployment receipt, and no staging message follows it.
+* <qa handle> holds one message for that move, not two.
 
+<!-- trace:case id=g10.shared-change-stages.TC-rev rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC9-1: A build push tells nobody and the channel still reads it
 
 **Classification:**
@@ -293,6 +301,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * No direct message is sent for that push.
 * No channel post names <change A>: Building is no milestone.
 
+<!-- trace:case id=g10.shared-change-stages.TC-xb3 rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC10-1: A change with no thread links its change page
 
 **Classification:**
@@ -323,6 +332,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * The link it carries is <change S>'s change page, and no thread's.
 * The link opens <change S> at <manual change page url>.
 
+<!-- trace:case id=g10.shared-change-stages.TC-r0m rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC11-1: A handle the map gives no Slack member is sent nothing
 
 **Classification:**
@@ -354,6 +364,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * No post reaches the engineer role's channel: the hand is named, so the role is not asked for one.
 * The run log names <change T> and <memberless handle> as told nothing, and the run does not fail.
 
+<!-- trace:case id=g10.shared-change-stages.TC-q2p rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC12-1: A landing pushed from a terminal is one reply in the thread
 
 Runs once per row of **Test data**.
@@ -372,13 +383,13 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-01
 
 **Pre-conditions:**
-<change L> sits at Proposed with its designer and its tech PIC named. A landing a run cut carries the `Wake:` trailer, which `pnpm run plan:land` writes on the commit only when a wake fired the run; a landing pushed from a terminal carries none.
+<change L> sits at Proposed with its designer named. A landing a run cut carries the `Wake:` trailer, which `pnpm run plan:land` writes on the commit only when a wake fired the run; a landing pushed from a terminal carries none.
 
 **Test data:**
 
 | What the push carries | What the change's thread holds |
 | --- | --- |
-| A landing of <change L>, whose record names a thread, in a commit carrying no `Wake:` trailer | one reply naming what landed, whose word landed it, the stage now and the two hands whose turn it is |
+| A landing of <change L>, whose record names a thread, in a commit carrying no `Wake:` trailer | one reply naming what landed, whose word landed it, the stage now and the designer as the hand whose turn it is |
 | The same landing in a commit carrying the `Wake:` trailer | nothing: the run that landed it tells the thread itself |
 | A landing of a change whose record names no thread | nothing in the thread; the change's own Your turn messages still go out |
 
@@ -393,6 +404,7 @@ Runs once per row of **Test data**.
 * The thread holds what the row names.
 * A reply that went out is keyed, so a re-run of the same push posts nothing twice.
 
+<!-- trace:case id=g10.shared-change-stages.TC-5dp rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC13-1: A sent-keys file that cannot be read sends nothing
 
 **Classification:**
@@ -424,6 +436,44 @@ Runs once per row of **Test data**.
 * The read stops with a refusal naming the path it could not open.
 * No message goes out for that push.
 
+<!-- trace:case id=g10.shared-change-stages.TC-4v6 rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
+### shared-planning-change-stages-US1-TC14-1: An open Raised row reaches Specified, tells the product manager and holds acceptance
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-01
+
+**Pre-conditions:**
+<change W> sits at Designed on `ui-design.md` with <pm handle> as its `pm` hand, known to the team map, and a thread. Its `decisions.md` holds one row under `## Raised` whose `Landed` cell is empty.
+
+**Steps:**
+
+1. Land <change W>'s `spec.md`, `feature-tcs.md` and `tech-design.md` in one push to `main`.
+2. Read <change W>'s card at <manual board url>.
+3. Open <change W> at <manual change page url> and read the decisions row.
+4. Read <pm handle>'s direct messages.
+5. Land <change W>'s `tasks.md` on `main`.
+6. Run `spec:accept` on <change W>.
+7. Write the answering decision into the Raised row's `Landed` cell and push to `main`.
+8. Run `spec:accept` on <change W> again.
+
+**Expected Results:**
+
+* After Step 1 the card sits in the Specified lane and names <pm handle> as the hand, with the open Raised row holding nothing below acceptance.
+* The decisions row shows no open question count for the Raised row.
+* <pm handle> holds one direct message naming <change W>, the stage Specified and its thread.
+* Step 6 refuses and names the open Raised row, and no `acceptance.json` lands for <change W>.
+* Step 8 records the acceptance, and the card moves to the Accepted lane.
+
 ---
 
 ## shared-planning-change-stages-US2: Product manager reads where every change stands
@@ -432,6 +482,7 @@ Runs once per row of **Test data**.
 **I want** the board to show each change in the one stage its files prove, with the hand it waits on,
 **so that** I see what is stuck and on whom without asking anyone.
 
+<!-- trace:case id=g10.shared-change-stages.TC-3kd rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC1-1: Eight lanes, one stage per change
 
 **Classification:**
@@ -458,11 +509,12 @@ admin(product manager) has one change in each of the eight stages, each with its
 
 **Expected Results:**
 
-* The lanes read Proposed, Designed, Specified, Planned, Building, On staging, Released, Archived in that order.
+* The lanes read Proposed, Designed, Specified, Planned, Accepted, Building, Implementation complete, Archived in that order.
 * Each change appears in one lane only.
 * Each card names its hand, its age and its task bar.
 
-### shared-planning-change-stages-US2-TC2-1: Drafted lanes carry the agent mark and the hand's move
+<!-- trace:case id=g10.shared-change-stages.TC-kfv rev=2 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
+### shared-planning-change-stages-US2-TC2-2: Exactly five drafted lanes carry the agent mark and the hand's move
 
 **Classification:**
 
@@ -480,20 +532,20 @@ admin(product manager) has one change in each of the eight stages, each with its
 **Decided by:** `tools/manual/test/change-stages.test.ts`, `tools/manual/test/stage-board.test.tsx`, `tools/manual/test/stage-change-page.test.tsx`
 
 **Pre-conditions:**
-One change sits in each of Proposed, Designed, Specified, Planned, Building, On staging, Released and Archived.
+One change sits in each of Proposed, Designed, Specified, Planned, Accepted, Building, Implementation complete and Archived.
 
 **Steps:**
 
 1. Navigate to <manual board url>.
-2. Read the headings of Proposed to Building.
-3. Read the headings of On staging to Archived.
+2. Read each lane heading in order.
 
 **Expected Results:**
 
-* Each of the five headings carries the agent mark and the hand's move as text.
-* The three later headings carry neither.
+* Exactly five headings carry the agent mark and the hand's move as text: Proposed, Designed, Specified, Planned and Building.
+* Accepted, Implementation complete and Archived carry neither.
 * A reader tells the agent's draft from the hand's move without colour.
 
+<!-- trace:case id=g10.shared-change-stages.TC-68l rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC3-1: Idle chip at the day bounds and the shelf at 30
 
 Runs once per row of **Test data**.
@@ -534,6 +586,7 @@ Runs once per row of **Test data**.
 * <change E> shows what the row states.
 * The repository-wide commit moves no change's day count.
 
+<!-- trace:case id=g10.shared-change-stages.TC-98x rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC4-1: Blocked and the suite sit beside the stage
 
 **Classification:**
@@ -567,6 +620,7 @@ Runs once per row of **Test data**.
 * Neither card carries a chip outside the five overlays.
 * Both cards stay in the Planned lane.
 
+<!-- trace:case id=g10.shared-change-stages.TC-0l4 rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC5-1: Each filter narrows the board
 
 Runs once per row of **Test data**.
@@ -608,6 +662,7 @@ The board holds a change whose current stage names <pm handle>, one with a wait,
 * Only the changes the row names stay in the lanes.
 * The lane order and the lane headings do not change.
 
+<!-- trace:case id=g10.shared-change-stages.TC-9qa rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC6-1: Board with no change in flight
 
 **Classification:**
@@ -637,6 +692,7 @@ No change is in flight and the archive holds none the board reads.
 * Each lane is collapsed to its heading with a count of zero.
 * The shelf link is still reachable.
 
+<!-- trace:case id=g10.shared-change-stages.TC-8t9 rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC7-1: A reverted artifact drops the change a lane
 
 **Classification:**
@@ -667,6 +723,7 @@ No change is in flight and the archive holds none the board reads.
 * The stepper shows Planned as not reached.
 * The hands and the overlays on the card are unchanged.
 
+<!-- trace:case id=g10.shared-change-stages.TC-r52 rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC8-1: Change page reads artifacts, questions and who landed each
 
 **Classification:**
@@ -683,7 +740,7 @@ No change is in flight and the archive holds none the board reads.
 * **Trace:** shared-planning-change-stages-US-02
 
 **Pre-conditions:**
-<change B> is at Specified. Its `decisions.md` carries two ❓ rows, its `proposal.md` is fresh with `landed_by:` naming <pm handle>, and its `ui-design.md` is behind.
+<change B> is at Specified. Its `decisions.md` carries two `❓` rows, its `proposal.md` is fresh with `landed_by:` naming <pm handle>, and its `ui-design.md` is behind.
 
 **Steps:**
 
@@ -695,8 +752,9 @@ No change is in flight and the archive holds none the board reads.
 
 * The stepper shows Specified as the current stage, and the Your turn card carries the thread link and the command.
 * Each artifact row reads fresh or behind, with its open question count and the handle that landed it.
-* The hands, the delivery and the handoff rows read one fact per label; the delivery row names `main`, and no staging or release, since <change B> deploys nothing.
+* The hands and the handoff rows read one fact per label, and the page carries no delivery row naming staging or a release.
 
+<!-- trace:case id=g10.shared-change-stages.TC-wnh rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC9-1: A change whose record cannot be read
 
 **Classification:**
@@ -727,6 +785,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * Its hands show as open, one row per role.
 * No lane leaves <change U> out, and no lane reads as an error.
 
+<!-- trace:case id=g10.shared-change-stages.TC-cc7 rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC10-1: The change page lists the lines it marks
 
 **Classification:**
@@ -746,7 +805,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 
 **Pre-conditions:**
 
-* admin(engineer) is reading <change page> of a change that links two page sections, carrying two 🚧 lines and one ❓ line addressed to Finance between them.
+* admin(engineer) is reading <change page> of a change that links two page sections, carrying two 🚧 lines and one `❓` line addressed to Finance between them.
 
 **Steps:**
 
@@ -755,11 +814,12 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 
 **Expected Results:**
 
-* On the pages lists each linked section under its page's title, with every 🚧 and ❓ line as the page writes it.
-* The ❓ line names Finance as the hand it waits on.
+* On the pages lists each linked section under its page's title, with every 🚧 and `❓` line as the page writes it.
+* The `❓` line names Finance as the hand it waits on.
 * A change that marks no section shows one line saying so, and no empty list.
 
-### shared-planning-change-stages-US2-TC11-1: Delivery row reads staging with no build beside it
+<!-- trace:case id=g10.shared-change-stages.TC-0rb rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
+### shared-planning-change-stages-US2-TC11-1: Availability with no resolved ref reads Unknown
 
 **Classification:**
 
@@ -770,24 +830,94 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
-**Decided by:** `tools/manual/test/stage-change-page.test.tsx`
-
 **Pre-conditions:**
-<change H> is at Implementation complete with an availability receipt whose resolved ref is unknown.
+<change H> is at Implementation complete with a deployment receipt for one application component whose resolved ref is unknown.
 
 **Steps:**
 
 1. Navigate to <manual change page url> for <change H>.
-2. Read the delivery row.
+2. Read the environment availability row.
 
 **Expected Results:**
 
 * The change page loads for <change H>.
-* The delivery row reads staging with no build beside it.
+* The component reads Unknown, with its receipt link and no deployed ref beside it.
+* The change page carries no delivery row naming staging.
+
+<!-- trace:case id=g10.shared-change-stages.TC-iu3 rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-0sk,g10.shared-change-stages.SC-ds0,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-pi0,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
+### shared-planning-change-stages-US2-TC12-1: The tech design or its waiver holds Specified
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-02
+
+**Pre-conditions:**
+<change V> sits at Designed on `ui-design.md`, with no `tech-design.md` or `design_waived:` on `main`.
+
+**Test data:**
+
+| What lands beside `spec.md` and `feature-tcs.md` | The tech design row reads |
+| --- | --- |
+| `tech-design.md` | fresh |
+| `design_waived: "<why>"` | not owed, with its reason |
+
+**Steps:**
+
+1. Land <change V>'s `spec.md`, `feature-tcs.md` and <what lands beside `spec.md` and `feature-tcs.md`> in one push to `main`.
+2. Read <change V>'s card at <manual board url>.
+3. Open <change V> at <manual change page url>.
+
+**Expected Results:**
+
+* The card sits in the Specified lane.
+* The stepper shows Specified as the current stage.
+* The tech design row reads what the row states.
+
+<!-- trace:case id=g10.shared-change-stages.TC-ya4 rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-0sk,g10.shared-change-stages.SC-ds0,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-pi0,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
+### shared-planning-change-stages-US2-TC13-1: Requirements and cases without the tech design stay at Designed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-02
+
+**Pre-conditions:**
+<change V> sits at Designed on `ui-design.md`, with no `tech-design.md` or `design_waived:` on `main`.
+
+**Steps:**
+
+1. Land <change V>'s `spec.md` and `feature-tcs.md` in one push to `main`.
+2. Read <change V>'s card at <manual board url>.
+3. Open <change V> at <manual change page url>.
+
+**Expected Results:**
+
+* The card stays in the Designed lane.
+* The stepper shows Specified as not reached.
+* The tech design row reads owed and missing.
 
 ---
 
@@ -797,6 +927,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 **I want** one page listing the changes on me now and the ones that are mine later,
 **so that** a free afternoon starts on the right change.
 
+<!-- trace:case id=g10.shared-change-stages.TC-f9u rev=1 covers=g10.shared-change-stages.SC-vh6,g10.shared-change-stages.SC-fhs,g10.shared-change-stages.SC-e80,g10.shared-change-stages.SC-w7n,g10.shared-change-stages.SC-66a,g10.shared-change-stages.SC-d51,g10.shared-change-stages.SC-mb5,g10.shared-change-stages.SC-pyk -->
 ### shared-planning-change-stages-US3-TC1-1: My turn lists questions, then now, then later
 
 **Classification:**
@@ -815,7 +946,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 **Decided by:** `tools/manual/test/my-turn-page.test.tsx`
 
 **Pre-conditions:**
-admin(designer) <design handle> is addressed by two ❓ rows, is the hand of <change B> at its current stage, and is named as the `design` hand on <change R>, which is at Building.
+admin(designer) <design handle> is addressed by two `❓` rows, is the hand of <change B> at its current stage, and is named as the `design` hand on <change R>, which is at Building.
 
 **Steps:**
 
@@ -829,6 +960,7 @@ admin(designer) <design handle> is addressed by two ❓ rows, is the hand of <ch
 * The changes whose current stage names <design handle> come next.
 * The changes that are theirs at a later stage come last.
 
+<!-- trace:case id=g10.shared-change-stages.TC-d3l rev=1 covers=g10.shared-change-stages.SC-vh6,g10.shared-change-stages.SC-fhs,g10.shared-change-stages.SC-e80,g10.shared-change-stages.SC-w7n,g10.shared-change-stages.SC-66a,g10.shared-change-stages.SC-d51,g10.shared-change-stages.SC-mb5,g10.shared-change-stages.SC-pyk -->
 ### shared-planning-change-stages-US3-TC2-1: Handle is chosen once per browser
 
 **Classification:**
@@ -859,6 +991,7 @@ No handle has been chosen in this browser.
 * After Step 2 the page lists what is on <qa handle>.
 * The Mine filter uses <qa handle> without asking again.
 
+<!-- trace:case id=g10.shared-change-stages.TC-51a rev=1 covers=g10.shared-change-stages.SC-vh6,g10.shared-change-stages.SC-fhs,g10.shared-change-stages.SC-e80,g10.shared-change-stages.SC-w7n,g10.shared-change-stages.SC-66a,g10.shared-change-stages.SC-d51,g10.shared-change-stages.SC-mb5,g10.shared-change-stages.SC-pyk -->
 ### shared-planning-change-stages-US3-TC3-1: A handle the team map does not know
 
 **Classification:**
@@ -889,6 +1022,7 @@ No handle has been chosen in this browser.
 * The page says the team map does not know the handle.
 * No change and no open question is listed.
 
+<!-- trace:case id=g10.shared-change-stages.TC-u30 rev=1 covers=g10.shared-change-stages.SC-vh6,g10.shared-change-stages.SC-fhs,g10.shared-change-stages.SC-e80,g10.shared-change-stages.SC-w7n,g10.shared-change-stages.SC-66a,g10.shared-change-stages.SC-d51,g10.shared-change-stages.SC-mb5,g10.shared-change-stages.SC-pyk -->
 ### shared-planning-change-stages-US3-TC4-1: My turn with nothing on the reader
 
 **Classification:**
@@ -905,7 +1039,7 @@ No handle has been chosen in this browser.
 * **Trace:** shared-planning-change-stages-US-03
 
 **Pre-conditions:**
-<release handle> is in the team map, is on no change now or later, and is addressed by no ❓ row.
+<release handle> is in the team map, is on no change now or later, and is addressed by no `❓` row.
 
 **Steps:**
 
@@ -925,6 +1059,7 @@ No handle has been chosen in this browser.
 **I want** to name who takes each hand on the change,
 **so that** the next hand is told instead of found.
 
+<!-- trace:case id=g10.shared-change-stages.TC-bbq rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
 ### shared-planning-change-stages-US4-TC1-1: Hands written at the interview's end show on every surface
 
 **Classification:**
@@ -941,7 +1076,7 @@ No handle has been chosen in this browser.
 * **Trace:** shared-planning-change-stages-US-04
 
 **Pre-conditions:**
-admin(product manager) holds <change J> at Proposed with no `hands:`. The team map knows <pm handle>, <design handle>, <tech handle>, <dev handle>, <qa handle> and <release handle>.
+admin(product manager) holds <change J> at Proposed with no `hands:`. The team map knows <pm handle>, <design handle>, <dev handle>, <qa handle> and <release handle>.
 
 **Steps:**
 
@@ -952,10 +1087,11 @@ admin(product manager) holds <change J> at Proposed with no `hands:`. The team m
 
 **Expected Results:**
 
-* The hands table lists one handle per role, product manager to release hand.
+* The hands table lists five roles, product manager, designer, engineer, QA and release hand, one handle each, and no tech PIC row.
 * The card names the hand of the current stage.
 * Each handle shows the Slack member the team map gives it.
 
+<!-- trace:case id=g10.shared-change-stages.TC-ak1 rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
 ### shared-planning-change-stages-US4-TC2-1: Assign writes locally and reads on the hosted manual
 
 **Classification:**
@@ -986,6 +1122,7 @@ The manual runs locally at <local manual url> and hosted at <hosted manual url>.
 * The hosted page shows the hands read-only and offers no Assign.
 * The hosted page shows <qa handle> once the record is on `main`.
 
+<!-- trace:case id=g10.shared-change-stages.TC-to6 rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
 ### shared-planning-change-stages-US4-TC3-1: A hand removed shows the hand as open
 
 **Classification:**
@@ -1002,7 +1139,7 @@ The manual runs locally at <local manual url> and hosted at <hosted manual url>.
 * **Trace:** shared-planning-change-stages-US-04
 
 **Pre-conditions:**
-<change J>'s `hands:` names all six roles, and the change sits at Designed.
+<change J>'s `hands:` names all five roles, and the change sits at Proposed with its decisions and journeys on `main`.
 
 **Steps:**
 
@@ -1015,8 +1152,9 @@ The manual runs locally at <local manual url> and hosted at <hosted manual url>.
 
 * The card shows the design hand as open.
 * The hands table shows the designer role with no handle.
-* The other five handles are unchanged.
+* The other four handles are unchanged.
 
+<!-- trace:case id=g10.shared-change-stages.TC-4gz rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
 ### shared-planning-change-stages-US4-TC4-1: A handle the team map does not know is refused
 
 Runs once per row of **Test data**.
@@ -1054,6 +1192,7 @@ Runs once per row of **Test data**.
 * The check refuses and names what the row states.
 * No message is sent for <unknown handle>.
 
+<!-- trace:case id=g10.shared-change-stages.TC-lyr rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
 ### shared-planning-change-stages-US4-TC5-1: A malformed hands record is refused
 
 Runs once per row of **Test data**.
@@ -1079,7 +1218,8 @@ Runs once per row of **Test data**.
 | Edit to the record | The check names |
 | --- | --- |
 | `hands:` written as a list of handles with no roles | the malformed `hands:` block and the change |
-| `hands:` naming a role outside the six | the unknown role and the change |
+| `hands:` naming <unknown role>, a role outside the five | the unknown role and the change |
+| `hands:` naming `tech`, the retired tech PIC role | `tech` as an unknown role, and the change |
 
 **Steps:**
 
@@ -1091,6 +1231,7 @@ Runs once per row of **Test data**.
 * The check refuses and names what the row states.
 * The refusal names the change, not only the file.
 
+<!-- trace:case id=g10.shared-change-stages.TC-k31 rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
 ### shared-planning-change-stages-US4-TC6-1: A hand taken off a change tells the role's channel
 
 **Classification:**
@@ -1122,6 +1263,7 @@ Runs once per row of **Test data**.
 * The later push adds no second post.
 * The card shows the engineer hand as open.
 
+<!-- trace:case id=g10.shared-change-stages.TC-wwu rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
 ### shared-planning-change-stages-US4-TC7-1: A stand-in from another role is offered and accepted
 
 **Classification:**
@@ -1149,12 +1291,14 @@ The manual runs locally at <local manual url>. <change J> names no `dev` hand. T
 
 **Expected Results:**
 
+* Assign's role choice offers the five roles, product manager to release hand, and no tech PIC.
 * The picker offers every handle the team map names, <dev handle> first and the rest after it, each group alphabetical.
 * Step 3 writes <pm handle> as <change J>'s `dev` hand.
 * The change page shows <pm handle> as the engineer.
 
 ---
 
+<!-- trace:case id=g10.shared-change-stages.TC-q8l rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
 ### shared-planning-change-stages-US4-TC8-1: A team map that cannot be read messages nobody
 
 **Classification:**
@@ -1194,7 +1338,8 @@ The manual runs locally at <local manual url>. <change J> names no `dev` hand. T
 **I want** to say a change draws nothing,
 **so that** QA's run is not held behind a design nobody owes.
 
-### shared-planning-change-stages-US5-TC1-1: A waiver stands for the design it names
+<!-- trace:case id=g10.shared-change-stages.TC-7oc rev=1 covers=g10.shared-change-stages.SC-kez,g10.shared-change-stages.SC-y2n -->
+### shared-planning-change-stages-US5-TC1-1: The UI design or its waiver alone reaches Designed
 
 Runs once per row of **Test data**.
 
@@ -1212,28 +1357,29 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-05
 
 **Pre-conditions:**
-admin(designer) holds <change L> at Proposed, with its decisions, journeys and `hands:` on `main` and neither design landed.
+admin(designer) <design handle> holds <change L> at Proposed, with its decisions, journeys and `hands:` on `main`, and no `ui-design.md`, `ui_waived:`, `tech-design.md` or `design_waived:` on `main`.
 
 **Test data:**
 
-| What lands on the change | The change page shows |
+| What lands on the change | The UI design row reads |
 | --- | --- |
-| `ui_waived: "<why>"` and `tech-design.md` | the UI design not owed and fresh, the tech design fresh |
-| `ui-design.md` and `design_waived: "<why>"` | the UI design fresh, the tech design not owed and fresh |
-| `ui_waived: "<why>"` and `design_waived: "<why>"` | both designs not owed and fresh |
+| `ui_waived: "<why>"` | not owed, with its reason |
+| `ui-design.md` | fresh |
 
 **Steps:**
 
-1. Land <what lands on the change> on `main`.
+1. Land <what lands on the change> on `main`, and nothing else.
 2. Read <change L>'s card at <manual board url>.
 3. Open <change L> at <manual change page url>.
 
 **Expected Results:**
 
-* The card sits in the Designed lane.
-* The artifacts rows read what the row states, each waiver showing its reason.
+* The card sits in the Designed lane, with no tech design and no `design_waived:` on `main`.
+* The UI design row reads what the row states.
+* The card no longer names <design handle> as the hand.
 
-### shared-planning-change-stages-US5-TC2-1: One waiver alone does not reach Designed
+<!-- trace:case id=g10.shared-change-stages.TC-wbb rev=1 covers=g10.shared-change-stages.SC-kez,g10.shared-change-stages.SC-y2n -->
+### shared-planning-change-stages-US5-TC2-1: The tech design alone does not reach Designed
 
 Runs once per row of **Test data**.
 
@@ -1251,27 +1397,29 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-05
 
 **Pre-conditions:**
-<change L> is at Proposed with its decisions, journeys and `hands:` on `main`.
+<change L> is at Proposed with its decisions, journeys and `hands:` on `main`, <design handle> as its `design` hand, and no `ui-design.md` or `ui_waived:` on `main`.
 
 **Test data:**
 
-| What lands on the change | The change page shows |
+| What lands on the change | The UI design row reads |
 | --- | --- |
-| `ui_waived: "<why>"` only | the tech design owed and missing |
-| `tech-design.md` only | the UI design owed and missing |
+| `tech-design.md` only | owed and missing |
+| `design_waived: "<why>"` only | owed and missing |
 
 **Steps:**
 
 1. Land <what lands on the change> on `main`.
 2. Read <change L>'s card at <manual board url>.
-3. Read the direct messages of <change L>'s hands.
+3. Open <change L> at <manual change page url>.
+4. Read the direct messages of <change L>'s hands.
 
 **Expected Results:**
 
-* The card stays in the Proposed lane.
-* The change page shows what the row states.
+* The card stays in the Proposed lane and still names <design handle> as the hand.
+* The UI design row reads what the row states.
 * No Designed message is sent.
 
+<!-- trace:case id=g10.shared-change-stages.TC-gd9 rev=1 covers=g10.shared-change-stages.SC-kez,g10.shared-change-stages.SC-y2n -->
 ### shared-planning-change-stages-US5-TC3-1: A waiver removed returns the design to owed
 
 **Classification:**
@@ -1288,7 +1436,7 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-05
 
 **Pre-conditions:**
-<change L> sits at Designed on `ui_waived: "<why>"` and a landed `tech-design.md`.
+<change L> sits at Designed on `ui_waived: "<why>"` alone, with no `ui-design.md`, `tech-design.md` or `design_waived:` on `main`.
 
 **Steps:**
 
@@ -1311,6 +1459,7 @@ Runs once per row of **Test data**.
 **I want** to write what I wait on and have it shown against the hand that owes it,
 **so that** the wait is dated and nobody chases me for it.
 
+<!-- trace:case id=g10.shared-change-stages.TC-qfw rev=1 covers=g10.shared-change-stages.SC-b47,g10.shared-change-stages.SC-33p -->
 ### shared-planning-change-stages-US6-TC1-1: A wait shows dated against the hand that owes it
 
 **Classification:**
@@ -1327,22 +1476,23 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-06
 
 **Pre-conditions:**
-admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and owes its tech design. The team map knows both handles.
+admin(product manager) holds <change M> at Proposed, with its decisions, journeys and `hands:` on `main`. <design handle> is its `design` hand and owes its UI design. The team map knows both handles.
 
 **Steps:**
 
-1. Write one `awaiting:` line on <change M> naming the tech design, dated today.
+1. Write one `awaiting:` line on <change M> naming the UI design, dated today.
 2. Push to `main`.
 3. Read <change M>'s card at <manual board url>.
-4. Read <tech handle>'s direct messages.
+4. Read <design handle>'s direct messages.
 
 **Expected Results:**
 
 * The card carries an amber waiting chip with the line and its date.
-* The change page shows the line against <tech handle>, the hand that owes the artifact.
-* No direct message reaches <tech handle> for the wait; it is a line of Monday's digest.
-* The card stays in the Building lane.
+* The change page shows the line against <design handle>, the hand that owes the artifact.
+* No direct message reaches <design handle> for the wait; it is a line of Monday's digest.
+* The card stays in the Proposed lane.
 
+<!-- trace:case id=g10.shared-change-stages.TC-u2l rev=1 covers=g10.shared-change-stages.SC-b47,g10.shared-change-stages.SC-33p -->
 ### shared-planning-change-stages-US6-TC2-1: Many waits, one line per artifact
 
 **Classification:**
@@ -1372,6 +1522,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * <change M> stays under the filter and <change G> drops out.
 * The change page shows one waiting line per artifact, each with its date and the hand that owes it.
 
+<!-- trace:case id=g10.shared-change-stages.TC-l92 rev=1 covers=g10.shared-change-stages.SC-b47,g10.shared-change-stages.SC-33p -->
 ### shared-planning-change-stages-US6-TC3-1: A wait removed clears the chip
 
 **Classification:**
@@ -1388,21 +1539,22 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-06
 
 **Pre-conditions:**
-<change M> carries one `awaiting:` line on `main`, naming the tech design <tech handle> owes.
+<change M> sits at Proposed and carries one `awaiting:` line on `main`, naming the UI design <design handle> owes.
 
 **Steps:**
 
 1. Remove the `awaiting:` line from <change M>.
 2. Push to `main`.
 3. Read <change M>'s card at <manual board url>.
-4. Read <tech handle>'s direct messages.
+4. Read <design handle>'s direct messages.
 
 **Expected Results:**
 
 * The waiting chip is gone and the Waiting filter drops <change M>.
-* The change stays in the Building lane.
-* No message reaches <tech handle> for the wait, written or removed.
+* The change stays in the Proposed lane.
+* No message reaches <design handle> for the wait, written or removed.
 
+<!-- trace:case id=g10.shared-change-stages.TC-5o4 rev=1 covers=g10.shared-change-stages.SC-b47,g10.shared-change-stages.SC-33p -->
 ### shared-planning-change-stages-US6-TC4-1: A wait with no date shows as written
 
 **Classification:**
@@ -1419,7 +1571,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-06
 
 **Pre-conditions:**
-<change M> sits at Building and carries one `awaiting:` line on `main` naming the tech design <tech handle> owes, written with no date.
+<change M> sits at Proposed and carries one `awaiting:` line on `main` naming the UI design <design handle> owes, written with no date.
 
 **Steps:**
 
@@ -1430,8 +1582,8 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 **Expected Results:**
 
 * The waiting chip carries the line as written, with no date beside it.
-* The change page shows the line against <tech handle>.
-* <change M> stays under the Waiting filter and in the Building lane.
+* The change page shows the line against <design handle>.
+* <change M> stays under the Waiting filter and in the Proposed lane.
 
 ---
 
@@ -1441,6 +1593,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 **I want** each 🚧 line to show the stage of the change delivering it,
 **so that** I know how far the promise has come without leaving the page.
 
+<!-- trace:case id=g10.shared-change-stages.TC-wyg rev=1 covers=g10.shared-change-stages.SC-nhp,g10.shared-change-stages.SC-v4m,g10.shared-change-stages.SC-w1f -->
 ### shared-planning-change-stages-US7-TC1-1: A marked line wears its change's stage
 
 **Classification:**
@@ -1473,6 +1626,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * The 🚧 line carries a pip with the stage number.
 * The pip's hover names the change and the hand.
 
+<!-- trace:case id=g10.shared-change-stages.TC-vqj rev=1 covers=g10.shared-change-stages.SC-nhp,g10.shared-change-stages.SC-v4m,g10.shared-change-stages.SC-w1f -->
 ### shared-planning-change-stages-US7-TC2-1: A line whose change archived wears no pip
 
 **Classification:**
@@ -1501,6 +1655,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * The line wears no pip.
 * The in-flight row names no archived change.
 
+<!-- trace:case id=g10.shared-change-stages.TC-nno rev=1 covers=g10.shared-change-stages.SC-nhp,g10.shared-change-stages.SC-v4m,g10.shared-change-stages.SC-w1f -->
 ### shared-planning-change-stages-US7-TC3-1: A line two changes deliver wears one stage
 
 **Classification:**
@@ -1519,7 +1674,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 **Decided by:** `tools/manual/test/section-pip.test.tsx`
 
 **Pre-conditions:**
-<shared marked line> is linked by <change P> at Specified and by <change Q> at On staging.
+<shared marked line> is linked by <change P> at Specified and by <change Q> at Implementation complete.
 
 **Steps:**
 
@@ -1528,9 +1683,10 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 **Expected Results:**
 
-* The pip shows On staging, the further of the two stages.
+* The pip shows Implementation complete, the further of the two stages.
 * The line wears one pip, not two.
 
+<!-- trace:case id=g10.shared-change-stages.TC-3vp rev=1 covers=g10.shared-change-stages.SC-nhp,g10.shared-change-stages.SC-v4m,g10.shared-change-stages.SC-w1f -->
 ### shared-planning-change-stages-US7-TC4-1: The pip reads without colour
 
 **Classification:**
@@ -1568,6 +1724,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 **I want** to receive the accepted implementation identity and run sheet after implementation is complete,
 **so that** I verify the built components and record the suite's verdict.
 
+<!-- trace:case id=g10.shared-change-stages.TC-sgr rev=1 covers=g10.shared-change-stages.SC-jy2 -->
 ### shared-planning-change-stages-US8-TC1-1: Implementation completion tells QA
 
 **Classification:**
@@ -1598,6 +1755,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * The card sits in the Implementation complete lane.
 * The case suite remains draft until QA records a verdict after verification.
 
+<!-- trace:case id=g10.shared-change-stages.TC-3ey rev=1 covers=g10.shared-change-stages.SC-jy2 -->
 ### shared-planning-change-stages-US8-TC2-1: Planning acceptance does not ask for human QA
 
 **Classification:**
@@ -1627,6 +1785,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * The suite remains draft and has no human execution verdict.
 * No implementation-complete message reaches <qa handle>.
 
+<!-- trace:case id=g10.shared-change-stages.TC-j9a rev=1 covers=g10.shared-change-stages.SC-jy2 -->
 ### shared-planning-change-stages-US8-TC3-1: Ticked boxes alone do not complete implementation
 
 **Classification:**
@@ -1655,6 +1814,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * The card stays in Building.
 * No implementation-complete message reaches <qa handle>.
 
+<!-- trace:case id=g10.shared-change-stages.TC-czd rev=1 covers=g10.shared-change-stages.SC-jy2 -->
 ### shared-planning-change-stages-US8-TC4-1: Replaying implementation completion tells QA once
 
 **Classification:**
@@ -1683,6 +1843,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * <qa handle> holds one implementation-complete message for that historical fingerprint, not two.
 * The card stays in Implementation complete.
 
+<!-- trace:case id=g10.shared-change-stages.TC-jt5 rev=1 covers=g10.shared-change-stages.SC-jy2 -->
 ### shared-planning-change-stages-US8-TC5-1: Archive does not wait for a deployment receipt
 
 **Classification:**
@@ -1713,6 +1874,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * The change is Archived and its historical accepted fingerprint is unchanged.
 * No second fold is run.
 
+<!-- trace:case id=g10.shared-change-stages.TC-e8b rev=1 covers=g10.shared-change-stages.SC-jy2 -->
 ### shared-planning-change-stages-US8-TC6-1: A changed claimed contract needs an acknowledgement before archive
 
 **Classification:**
@@ -1749,6 +1911,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 **I want** to be told once when something before it changed after it was written,
 **so that** I read it again before anything is built on it.
 
+<!-- trace:case id=g10.shared-change-stages.TC-as2 rev=1 covers=g10.shared-change-stages.SC-jqe,g10.shared-change-stages.SC-e87,g10.shared-change-stages.SC-nos,g10.shared-change-stages.SC-ncv,g10.shared-change-stages.SC-dyb,g10.shared-change-stages.SC-d1x,g10.shared-change-stages.SC-tr0 -->
 ### shared-planning-change-stages-US9-TC1-1: The earliest behind artifact tells its hand
 
 **Classification:**
@@ -1765,21 +1928,24 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-09
 
 **Pre-conditions:**
-<change T> is at Planned with `ui-design.md`, `tech-design.md`, `spec.md` and `tasks.md` on `main`, all fresh. <design handle> is the hand of `ui-design.md`.
+<change T> is at Planned with `ui-design.md`, `spec.md`, `feature-tcs.md`, `tech-design.md` and `tasks.md` on `main`, all fresh. <design handle> is the hand of `ui-design.md`, and <dev handle> the hand of `tech-design.md`.
 
 **Steps:**
 
 1. Land a change to the page lines <change T> links.
 2. Read <design handle>'s direct messages.
-3. Read <change T>'s card at <manual board url>.
-4. Open <change T> at <manual change page url>.
+3. Read <dev handle>'s direct messages.
+4. Read <change T>'s card at <manual board url>.
+5. Open <change T> at <manual change page url>.
 
 **Expected Results:**
 
-* One direct message names `ui-design.md` and what changed before it.
+* One direct message to <design handle> names `ui-design.md` and what changed before it.
+* <dev handle> holds one direct message for that landing, naming `tech-design.md` among its behind artifacts.
 * The card carries a behind chip naming `ui-design.md` and <design handle>.
 * Each behind artifact row on the change page reads behind.
 
+<!-- trace:case id=g10.shared-change-stages.TC-lgv rev=1 covers=g10.shared-change-stages.SC-jqe,g10.shared-change-stages.SC-e87,g10.shared-change-stages.SC-nos,g10.shared-change-stages.SC-ncv,g10.shared-change-stages.SC-dyb,g10.shared-change-stages.SC-d1x,g10.shared-change-stages.SC-tr0 -->
 ### shared-planning-change-stages-US9-TC2-1: Behind twice before a re-read tells once
 
 **Classification:**
@@ -1809,6 +1975,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * <design handle> holds one behind message for `ui-design.md`, not two.
 * The behind chip still names `ui-design.md`.
 
+<!-- trace:case id=g10.shared-change-stages.TC-fy3 rev=1 covers=g10.shared-change-stages.SC-jqe,g10.shared-change-stages.SC-e87,g10.shared-change-stages.SC-nos,g10.shared-change-stages.SC-ncv,g10.shared-change-stages.SC-dyb,g10.shared-change-stages.SC-d1x,g10.shared-change-stages.SC-tr0 -->
 ### shared-planning-change-stages-US9-TC3-1: Behind holds no tick, claim or wait
 
 **Classification:**
@@ -1838,6 +2005,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * All three land, and the task bar, the claim and the waiting chip show on the card.
 * The behind chip stays beside the stage.
 
+<!-- trace:case id=g10.shared-change-stages.TC-n0l rev=1 covers=g10.shared-change-stages.SC-jqe,g10.shared-change-stages.SC-e87,g10.shared-change-stages.SC-nos,g10.shared-change-stages.SC-ncv,g10.shared-change-stages.SC-dyb,g10.shared-change-stages.SC-d1x,g10.shared-change-stages.SC-tr0 -->
 ### shared-planning-change-stages-US9-TC4-1: Archiving is refused while a delta is behind
 
 **Classification:**
@@ -1854,7 +2022,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-09
 
 **Pre-conditions:**
-<change T> has every task box ticked, sits at Released, and carries one behind delta.
+<change T> has every task box ticked, sits at Implementation complete, and carries one behind delta.
 
 **Steps:**
 
@@ -1866,6 +2034,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * The check refuses and names the behind artifact.
 * The card stays out of the Archived lane.
 
+<!-- trace:case id=g10.shared-change-stages.TC-es0 rev=1 covers=g10.shared-change-stages.SC-jqe,g10.shared-change-stages.SC-e87,g10.shared-change-stages.SC-nos,g10.shared-change-stages.SC-ncv,g10.shared-change-stages.SC-dyb,g10.shared-change-stages.SC-d1x,g10.shared-change-stages.SC-tr0 -->
 ### shared-planning-change-stages-US9-TC5-1: Behind reaches the digest at 7 days
 
 Runs once per row of **Test data**.
@@ -1910,6 +2079,7 @@ Runs once per row of **Test data**.
 **I want** each application's status in each environment to link to its deployment receipt, component and testing page,
 **so that** I know what people can test or use after a change is archived.
 
+<!-- trace:case id=g10.shared-change-stages.TC-23p rev=1 covers=g10.shared-change-stages.SC-1bd,g10.shared-change-stages.SC-of7,g10.shared-change-stages.SC-ifm -->
 ### shared-planning-change-stages-US12-TC1-1: Component status uses the receipt
 
 **Classification:**
@@ -1940,6 +2110,7 @@ A change has two application components with receipts in <environment>. The rece
 * Both surfaces agree on status, receipt freshness and resolved deployed ref.
 * Each component provides its receipt, URL, manual, QA and friendly testing-summary links.
 
+<!-- trace:case id=g10.shared-change-stages.TC-4it rev=1 covers=g10.shared-change-stages.SC-1bd,g10.shared-change-stages.SC-of7,g10.shared-change-stages.SC-ifm -->
 ### shared-planning-change-stages-US12-TC2-1: Manual refresh uses the same receipt and deduplicates a replay
 
 **Classification:**
@@ -1970,6 +2141,7 @@ A GitHub Deployment receipt changes one application's status in <environment>. T
 * The replay creates no duplicate availability record.
 * The change's stage does not change because availability changed.
 
+<!-- trace:case id=g10.shared-change-stages.TC-4or rev=1 covers=g10.shared-change-stages.SC-1bd,g10.shared-change-stages.SC-of7,g10.shared-change-stages.SC-ifm -->
 ### shared-planning-change-stages-US12-TC3-1: Archived changes keep their environment history
 
 **Classification:**
@@ -2005,7 +2177,29 @@ A GitHub Deployment receipt changes one application's status in <environment>. T
 
 2026-09-25 product revision: QA1 cases precede Dev's independent requirements and scenarios; QA2 reconciles the two; one human resolves all questions before acceptance. Human QA follows implementation. The receipt cases cover component availability independently of the stage and remain visible after archive. This revision extends the earlier blind pass; it is not represented as a new blind reading.
 
+2026-10-05 product revision (`Q85` to `Q89`): Designed is proven by the UI design or `ui_waived` alone, and the designer is its one hand; the tech design, or `design_waived`, proves Specified beside the requirements and the suite; the tech PIC is retired and five roles remain; no dated wait is written on the tech design's hand, and a question it cannot settle is a Raised row. The questions its blind pass asked were already answered:
+
+- Designed names nobody, so no Your turn message goes when a change lands there; the channel post names the stage, and a terminal landing's thread reply names nobody's turn - `Q30` and the whose-turn table.
+- An `awaiting:` line naming the tech design is shown against the engineer, its hand; the check refuses only a wait on an artifact the schema does not declare, one already written, or one waived - `Q20`, `Q87`.
+- An in-flight record still naming `tech` is refused by the check as a role outside the five, and the board shows the change in Proposed, named unreadable, with its hands open; the active records lose the line in the same commit as the role, and archived records keep theirs unread - `Q23`, `Q87`.
+- Before the planning run the tech design reads not yet written and the change names the blind cases as what it owes; once the cases and the requirements are in without it, the change names the tech design and stays at Designed - `Q86` and the requirement that the tech design proves Specified.
+- A change with an open Raised row reaches Specified once its blind cases, tech design and requirements are in; the row holds acceptance alone, and acceptance is refused naming the row - `Q92`, superseding the 2026-10-05 reading that held the change at Designed, with `Q80`.
+- Specified is the product manager's turn alone: Dev and QA2 are the planning run's readings, not hands told, and QA's turn comes after implementation - `Q91`, with `Q81`.
+- The retired tech PIC's place in the agent rounds is revised by the round change in its own delta, not here - `Q90`.
+
+2026-10-06 product revision (`Q92` to `Q98`): an open Raised row holds acceptance only, never Specified; the agent drafts five stages, Accepted being the accepting human's record; the engineer challenges the tech design as the `dev` hand, prompted by Planned's move, "read the plan and challenge the tech design"; acceptance waits for no sign-off from the engineer; the product manager answers a Raised row about the tech design; and an open Raised row is not an open question. The questions its blind pass asked were already answered:
+
+- An open Raised row is not an open question: it stays out of the counts, My turn and the digest, which list the `❓` decisions rows and `❓` page lines alone - `Q98`.
+- The product manager learns of an open Raised row from the Specified turn's message and from `spec:accept`'s refusal naming the row, and is told nothing new at Planned - `Q98`, with `Q92`.
+- The Specified card and turn need not name the open rows; `spec:accept`'s refusal names them - `Q98`.
+- The engineer's challenge is observable as the Planned turn's move and its Your turn message, and lands as decisions rows or Raised rows - `Q95`.
+- `spec:accept` does not wait for the engineer's word: a challenge that lands as a Raised row holds acceptance like any other, and no sign-off record is checked - `Q96`.
+
 ## Reconciliation
+
+Run: 2026-10-06, revision pass for `Q92` to `Q98`: QA1 revised eleven cases and wrote `shared-planning-change-stages-US1-TC14-1` over the revised anchors, bumping `shared-planning-change-stages-US2-TC2-1` to `shared-planning-change-stages-US2-TC2-2`, and `shared-planning-change-stages-US1-TC5-1` and `shared-planning-change-stages-US1-TC9-1` had taken the milestone channel post from `main` since the last run; Dev, without reading them, revised `shared-planning-change-stages-SC-07`, `shared-planning-change-stages-SC-10`, `shared-planning-change-stages-SC-16`, `shared-planning-change-stages-SC-79`, `shared-planning-change-stages-SC-86` and `shared-planning-change-stages-SC-87`, wrote `shared-planning-change-stages-SC-88`, and added tasks 10.13 to 10.15. QA2 joined the two on anchors, brought the cases still reading the staging message and the staging delivery row into line with `Q84`, and marked the dispositions 2026-10-06 below.
+
+Run: 2026-10-05, revision pass for `Q85` to `Q89`: QA1 revised fourteen cases and wrote `shared-planning-change-stages-US2-TC12-1` and `shared-planning-change-stages-US2-TC13-1` over the revised anchors; Dev, without reading them, revised the ladder, the drafted, hands and whose-turn tables and `shared-planning-change-stages-SC-07`, `shared-planning-change-stages-SC-08`, `shared-planning-change-stages-SC-13`, `shared-planning-change-stages-SC-14`, `shared-planning-change-stages-SC-15`, `shared-planning-change-stages-SC-32` and `shared-planning-change-stages-SC-40`, retired shared-planning-change-stages-SC-09 with the tech PIC's wait, and wrote `shared-planning-change-stages-SC-85` to `shared-planning-change-stages-SC-87`. QA2 joined the two on anchors; the dispositions are marked 2026-10-05 below.
 
 Run: 2026-09-21, fix pass on the senders: `US1-TC13-1` recast to the read the sender makes, at the layer of a stored fact, with the hand whose message is due placed; wrote `US4-TC8-1` for the team map nothing can read, from the audit's verdict rather than the blind pass.
 
@@ -2031,10 +2225,53 @@ Five cases went the other way in the earlier pass: the rulings settled behaviour
 - `shared-planning-change-stages-US4-TC6-1`, a hand taken off a change telling the role's channel once, `Q25` → `shared-planning-change-stages-SC-42`
 - `shared-planning-change-stages-US6-TC4-1`, a wait written with no date shown undated, `Q20` → `shared-planning-change-stages-SC-21`
 
+2026-10-05, each revised or new case against the revised scenarios:
+
+- `shared-planning-change-stages-US1-TC2-1`, the decisions and the journeys telling the designer alone, neither the engineer nor the product manager → `shared-planning-change-stages-SC-40`, `shared-planning-change-stages-SC-15`
+- `shared-planning-change-stages-US1-TC5-1`, the tech design landing with the requirements and the suite moving its change into Specified in the same push as another change's tasks → `shared-planning-change-stages-SC-47`, `shared-planning-change-stages-SC-86`, `shared-planning-change-stages-SC-16`; `Q91` gives Specified to the product manager alone, so the message to <pm handle> and none to the engineer for <change D> is what the scenario now says
+- `shared-planning-change-stages-US1-TC12-1`, the terminal landing's reply naming the designer as the hand whose turn it is → `shared-planning-change-stages-SC-70`, `shared-planning-change-stages-SC-15`
+- `shared-planning-change-stages-US2-TC12-1`, the tech design or `design_waived` completing Specified, the waiver read as not owed with its reason → `shared-planning-change-stages-SC-86`, `shared-planning-change-stages-SC-07`
+- `shared-planning-change-stages-US2-TC13-1`, the requirements and the suite without the tech design held at Designed, naming the tech design as owed → `shared-planning-change-stages-SC-86`
+- `shared-planning-change-stages-US4-TC1-1`, the hands table listing five roles and no tech PIC → `shared-planning-change-stages-SC-13`
+- `shared-planning-change-stages-US4-TC3-1`, moved from Designed, which now names nobody, to Proposed's second half, where taking the designer off shows the hand open → `shared-planning-change-stages-SC-42`, `shared-planning-change-stages-SC-17`
+- `shared-planning-change-stages-US4-TC5-1`'s new row, `tech` refused as a role outside the five → `shared-planning-change-stages-SC-14`
+- `shared-planning-change-stages-US4-TC7-1`, Assign's role choice offering the five roles → `shared-planning-change-stages-SC-68`, `shared-planning-change-stages-SC-13`
+- `shared-planning-change-stages-US5-TC1-1`, the UI design or `ui_waived` alone reaching Designed with no tech design, and the designer's turn ending → `shared-planning-change-stages-SC-85`, `shared-planning-change-stages-SC-07`, `shared-planning-change-stages-SC-16`
+- `shared-planning-change-stages-US5-TC2-1`, the tech design or `design_waived` alone leaving the change at Proposed with the UI design owed → `shared-planning-change-stages-SC-08`
+- `shared-planning-change-stages-US5-TC3-1`, a removed `ui_waived` returning a change Designed on it alone to Proposed and the designer's turn → `shared-planning-change-stages-SC-01`, `shared-planning-change-stages-SC-15`
+- `shared-planning-change-stages-US6-TC1-1`, `shared-planning-change-stages-US6-TC3-1`, `shared-planning-change-stages-US6-TC4-1`, the wait moved from the retired tech PIC at Building to the designer at Proposed, its rules unchanged → `shared-planning-change-stages-SC-21`
+- `shared-planning-change-stages-US9-TC1-1`, a page line putting the UI design and the tech design behind, the designer and the engineer each told of their own → `shared-planning-change-stages-SC-25`, `shared-planning-change-stages-SC-44`
+
+Two scenarios disagreed with what the requirements already settle, and were corrected in `spec.md` rather than raised:
+
+- `shared-planning-change-stages-SC-85` said the tech design is not shown as owed at Designed, while `shared-planning-change-stages-SC-86` and `shared-planning-change-stages-US2-TC13-1` name it as owed at Designed once the cases and the requirements are in; the scenario now says the change names the blind cases, not the tech design, as what it owes, the order `tech-design.md` gives `PROOF_OF_STAGE`
+- `shared-planning-change-stages-SC-79` held a change with an open Raised row at Planned, while the ladder counted every Raised row resolved among Specified's proofs and `shared-planning-change-stages-SC-87` held the change below Specified; it was corrected to say the stage remains Designed. Superseded on 2026-10-06 by `Q92`: the open row holds acceptance alone, and the scenario now says the stage stays below Accepted and not below Specified (task 10.13)
+
+2026-10-06, each revised or new case against the revised scenarios:
+
+- `shared-planning-change-stages-US1-TC5-1`, a change moving into Planned and another into Specified in one push telling each hand of its own, and no channel post because neither crossed a milestone → `shared-planning-change-stages-SC-47`'s milestone rule, `shared-planning-change-stages-SC-16`, `shared-planning-change-stages-SC-86`
+- `shared-planning-change-stages-US1-TC6-1`, the digest's open questions read as the `❓` rows alone, an open Raised row never among them → `shared-planning-change-stages-SC-48`, `shared-planning-change-stages-SC-88`
+- `shared-planning-change-stages-US1-TC8-1`, brought into line with `Q84` by QA2: the implementation-complete message names the run sheet and arrives without a deployment receipt, and the staging message and its build are gone → `shared-planning-change-stages-SC-45`
+- `shared-planning-change-stages-US1-TC9-1`, a build push telling nobody and posting nothing, Building being no milestone → `shared-planning-change-stages-SC-38`
+- `shared-planning-change-stages-US1-TC14-1`, an open Raised row reaching Specified on the product manager's turn, told once, counted as no open question on the change page, and holding acceptance until it lands → `shared-planning-change-stages-SC-87`, `shared-planning-change-stages-SC-79`, `shared-planning-change-stages-SC-88`, `shared-planning-change-stages-SC-16`; QA2 joined the change page's count, on the same run, from `shared-planning-change-stages-SC-88`
+- `shared-planning-change-stages-US2-TC1-1`, the eight lanes in the accepted stage order → `shared-planning-change-stages-SC-51`
+- `shared-planning-change-stages-US2-TC2-2`, exactly five drafted lanes, Accepted, Implementation complete and Archived carrying neither the mark nor the move → `shared-planning-change-stages-SC-10`
+- `shared-planning-change-stages-US2-TC8-1`, the change page's artifacts and questions, its open question count read from the `❓` rows; QA2 brought its last result into line with `Q84`, the page carrying no delivery row naming staging or a release → `shared-planning-change-stages-SC-34`, `shared-planning-change-stages-SC-57`, `shared-planning-change-stages-SC-58`, `shared-planning-change-stages-SC-59`
+- `shared-planning-change-stages-US2-TC10-1`, On the pages with its `❓` line and its hand → `shared-planning-change-stages-SC-71`
+- `shared-planning-change-stages-US2-TC11-1`, recast by QA2 from the retired staging delivery row to environment availability, a receipt with no resolved ref reading Unknown → the availability requirement's Unknown status and task 3.9 (`Q84`); it leaves automation, since the test it named decided the staging row
+- `shared-planning-change-stages-US2-TC12-1`, `shared-planning-change-stages-US2-TC13-1`, their preconditions no longer landing every Raised row, since an open row holds no rung below acceptance → `shared-planning-change-stages-SC-86`, `shared-planning-change-stages-SC-07`, with `Q92`
+- `shared-planning-change-stages-US3-TC1-1`, `shared-planning-change-stages-US3-TC4-1`, My turn's questions read as the `❓` rows → `shared-planning-change-stages-SC-60`, `shared-planning-change-stages-SC-61`, with `shared-planning-change-stages-SC-88`
+- `shared-planning-change-stages-US7-TC3-1`, a line two changes deliver wearing the further stage, Implementation complete in place of the retired On staging → `shared-planning-change-stages-SC-67`
+- `shared-planning-change-stages-US9-TC4-1`, the archive refusing a behind delta for a change at Implementation complete → `shared-planning-change-stages-SC-31`
+
+Tasks 10.13 to 10.15 trace scenarios: 10.13 traces `shared-planning-change-stages-SC-10`, `shared-planning-change-stages-SC-16`, `shared-planning-change-stages-SC-79`, `shared-planning-change-stages-SC-86` and `shared-planning-change-stages-SC-87`; 10.14 traces `shared-planning-change-stages-SC-27` and `shared-planning-change-stages-SC-28`; 10.15 traces `shared-planning-change-stages-SC-10`, `shared-planning-change-stages-SC-16`, `shared-planning-change-stages-SC-34`, `shared-planning-change-stages-SC-60`, `shared-planning-change-stages-SC-79` and `shared-planning-change-stages-SC-88`. `shared-planning-change-stages-SC-07` is traced by 10.1 and 10.9 as before.
+
 ### Rejected
 
 - `shared-planning-change-stages-US6-TC1-1`'s direct message to the hand that owes a wait — `Q31` keeps five message kinds, and a written wait is a line of the digest rather than a message of its own; the case keeps the dated chip and the hand it is shown against, and the page loses the row it was read from.
 - No case was dropped whole: every reading of the input turned out to be behaviour the rulings kept or a question they answered.
+- 2026-10-05: no revised or new case was rejected.
+- 2026-10-06: no revised or new case was rejected.
 
 ### Escalated
 
@@ -2051,6 +2288,25 @@ Five cases went the other way in the earlier pass: the rulings settled behaviour
 - Does the weekly digest reach a handle the team map does not know? → `Q27`
 - Does `landed_by:` hold one handle per artifact, or both? → `Q28`
 
+2026-10-05, the revision pass's questions, QA1's four answered by earlier rows and Dev's four reconciled here, two of them by the product owner's `Q90` and `Q91`:
+
+- Who holds a change at Designed, and who is told when it lands? → `Q30`, settled: nobody, and the channel post names the stage
+- An `awaiting:` line naming the tech design: shown against the engineer, or refused? → `Q20`, `Q87`, settled: shown against the engineer
+- An in-flight `hands:` still naming `tech`: how do the check and the board read it? → `Q23`, `Q87`, settled: refused, shown in Proposed with its hands open, and removed in the same commit as the role (task 10.6)
+- What does the tech design's row read before Specified? → `Q86`, settled: not yet written, and named as owed only once the cases and the requirements are in
+- Which change revises `run-a-round-on-every-artifact`'s agent-rounds delta, whose journey, leaf and dated-wait requirement still name the tech PIC? → `Q90`, settled: that change revises its own delta; this change touches only the page's decisions block
+- `add-store-cross-sell` loses its only naming of `@htonyl` when its `tech:` line goes: name them to another role? → `Q87`, settled for this change: the line is deleted, never rewritten to another role (task 10.6); naming them again is that change's product manager's
+- A change with an open Raised row "remains Planned", while the ladder holds it below Specified → the ladder, settled on 2026-10-05: corrected in the scenario, see Folded; superseded by `Q92`, which lets the change reach Specified and holds acceptance alone
+- Who takes a change at Specified: the scenario named Dev and QA2, the whose-turn and hands tables Dev and the product manager, the page the product manager, and the manual's derivation the product manager and QA? → `Q91`, settled: the product manager alone; Dev revised `shared-planning-change-stages-SC-16`, the whose-turn and Hands tables, the page's Hands table and `HANDS_AT` (task 10.12). No case tells Dev or QA at Specified: the cases that name an engineer there move the change to Planned, whose hand the engineer is
+
+2026-10-06, QA1's questions, each answered by the product owner's rows of the same day:
+
+- Does an open Raised row count as an open question in the counts, My turn and the digest? → `Q98`, settled: no
+- Is the product manager told of an open Raised row at Planned? → `Q98`, settled: no; they learn of it from the Specified turn and from `spec:accept`'s refusal naming it
+- Does the Specified card name the open Raised rows? → `Q98`, settled: no listing is required; the refusal names them
+- Is the engineer's challenge of the tech design observable? → `Q95`, settled: as Planned's move, "read the plan and challenge the tech design", in the Your turn message the engineer already gets
+- Does `spec:accept` wait for the engineer's challenge? → `Q96`, settled: no; a challenge lands as decisions rows or Raised rows, which already hold acceptance
+
 `Q26` moved a case: `shared-planning-change-stages-US1-TC3-1` read the key as one per change and now runs a row per entry, the revert and re-landing telling the engineer again.
 
 ### Out of suite
@@ -2062,6 +2318,9 @@ Five cases went the other way in the earlier pass: the rulings settled behaviour
 - `shared-planning-change-stages-SC-27` → the manual's derivation tests
 - `shared-planning-change-stages-SC-28` → the manual's derivation tests
 - `shared-planning-change-stages-SC-29` → the manual's derivation tests
+- `shared-planning-change-stages-SC-79` → `scripts/openspec/acceptance.test.mjs` for the refusal, and the manual's derivation tests for the open row holding no rung below acceptance (tasks 10.1 and 10.13); `shared-planning-change-stages-US1-TC14-1` walks it beside them
+- `shared-planning-change-stages-SC-87` → the same two: an open Raised row leaving the change at Specified in the derivation tests, and the refusal naming the row in the acceptance tests (tasks 10.1 and 10.13); `shared-planning-change-stages-US1-TC14-1` walks it beside them
+- `shared-planning-change-stages-SC-88` → My turn's and the digest's halves to task 10.15's tests; `shared-planning-change-stages-US1-TC14-1` walks the change page's count, the turn and the refusal
 
 ### Anchors no case reaches
 
@@ -2079,17 +2338,20 @@ Every journey is walked by at least one case. The six feature set root groups ar
 What stays manual after the walk (task 8.3/8.5), and why.
 
 - **US1's messages and the digest** — `US1-TC1-1` through `US1-TC8-1` read Slack, git history and the notify script's own sent-key file; a browser walk opens the manual, not a workspace or a repository's commits, so these are `scripts/openspec/*.test.mjs`'s to prove
+- **US1-TC14-1** - an open Raised row walked from Specified to acceptance reads Slack and runs `spec:accept` against the store's `main`; task 10.13's derivation and acceptance tests decide the stage and the refusal, and task 10.15's the count, so what is left for a person is the message arriving and the refusal read in a terminal
 - **US1-TC12-1** — the thread's landing reply reads Slack, and the marker it turns on is a trailer on a commit: `changed-changes.test.mjs` decides the reply, its key and the marker over a fixture repository, and `plan-land-relay.test.mjs` the trailer a wake's landing writes, so what is left for a person is the reply arriving in the workspace
 - **US2-TC1-1** — the lane order and "each change in one lane only" are unwalked; `board.walk.ts`'s `SC-51` proves only the third claim, a card's own facts, so the case stays whole and manual
 - **US2-TC3-1** — the four-row idle table (6/7/29/30 days) needs a repository-wide commit moving no change's day count, which `NO_GIT` cannot stage; `board.walk.ts`'s `SC-56` proves the fixture's own one row (idle 45 days, on the shelf) as a spec-level scenario, not this case whole
 - **US2-TC5-1** — the Mine row needs a chosen handle narrowing the board, which no walk drives; `SC-54`, `SC-55` and `board.walk.ts`'s own `SC-05` prove the other four filters and the unchosen-handle refusal, not the whole per-row case
-- **US2-TC7-1, US2-TC8-1, US2-TC9-1** — a reverted proof, a landed-by handle and a record nothing could read: no walk drives them. `US2-TC8-1` needs one change at Specified carrying two ❓ rows, a `landed_by:` handle and a behind UI design, which no fixture is; `change-page-delivery.walk.ts`'s `SC-59` reads the handoff's own rows — the days each rung spent, against the hand that took it — on the released fixture instead
+- **US2-TC7-1, US2-TC8-1, US2-TC9-1** — a reverted proof, a landed-by handle and a record nothing could read: no walk drives them. `US2-TC8-1` needs one change at Specified carrying two `❓` rows, a `landed_by:` handle and a behind UI design, which no fixture is; `change-page-delivery.walk.ts`'s `SC-59` reads the handoff's own rows — the days each rung spent, against the hand that took it — on the released fixture instead
+- **US2-TC11-1** - a receipt with no resolved ref reading Unknown is task 9.4's projection; `stage-change-page.test.tsx` decided the retired staging delivery row, so no test decides the case until 9.4's tests land
+- **US2-TC12-1, US2-TC13-1** - to be walked in task 10.10's walk: `demo-tech-owed` holds the second case's change at Designed naming the tech design; the first case's two rows land a file and a waiver beside the requirements in one push, which no fixture stages, so it stays manual past that walk
 - **US3-TC2-1** — its third step crosses onto the board's own Mine filter reading the handle My turn just remembered; `my-turn.walk.ts`'s `SC-62` and `SC-63` prove My turn's own half (asking, then reading without asking again) and stop there
 - **US3-TC4-1** — "the per-role Pending page is still reachable" is the manual's persistent nav, not a fact `MyTurnPage` itself renders; `my-turn.walk.ts`'s `SC-61` proves the empty state's own words
 - **US4-TC1-1, US4-TC2-1, US4-TC3-1, US4-TC6-1, US4-TC7-1** — `SC-68`'s local round trip (a role and a handle written to the working tree in one atomic write) needs the dev server `change-page-assign.walk.ts` never runs against; that walk proves `SC-69` alone, the hosted half of `US4-TC2-1`'s own case, so the case stays whole and manual
 - **US4-TC4-1, US4-TC5-1** — a handle the team map does not know and a malformed `hands:` record are both refusals the store's own reader raises before a page ever renders one; `check/record.mjs`'s and `read-changes.mts`'s own tests decide them, not a walk of the rendered page
-- **US5-TC1-1** — `change-page-waived.walk.ts`'s and `board.walk.ts`'s `SC-07` walk the first row of its three, `ui_waived:` beside a written `tech-design.md`, on the one fixture that shows it; the second row (a written `ui-design.md` beside `design_waived:`) has no fixture, so the case stays whole and manual
-- **US5-TC2-1, US5-TC3-1** — one reads the direct messages a stage that did not move does not send, the other removes a waiver and pushes; neither is a browser's to drive, and `change-page-half-designed.walk.ts`'s `SC-08` decides the page's own half of `US5-TC2-1`'s first row alone — the design still owed while the other is waived
-- **US6** — `board-overlays.walk.ts`'s and `change-page-waits.walk.ts`'s `SC-21` walk the dated-and-undated pair, on the card and on the change page, and each case still needs something past them: `US6-TC1-1`'s and `US6-TC3-1`'s direct messages, `US6-TC2-1`'s three dated lines beside a change carrying none, and `US6-TC4-1`'s own change sitting at Building rather than Proposed
+- **US5-TC1-1** - its two rows, `ui_waived:` alone and `ui-design.md` alone, each reaching Designed with no tech design, are to be walked in task 10.10's walk, over the demo store's `demo-design-waived` and `demo-designed` as task 10.9 rebuilds them; until that walk runs the case stays whole and manual
+- **US5-TC2-1, US5-TC3-1** - one reads the direct messages a stage that did not move does not send, the other removes a waiver and pushes; neither is a browser's to drive. `change-page-half-designed.walk.ts`, which decided the page's half of the old one-waiver row, is renamed with its fixture and reads Designed after task 10.9, so no walk decides either case's page half
+- **US6** - `board-overlays.walk.ts`'s and `change-page-waits.walk.ts`'s `SC-21` walk the dated-and-undated pair, on the card and on the change page, and each case still needs something past them: `US6-TC1-1`'s and `US6-TC3-1`'s direct messages, `US6-TC2-1`'s three dated lines beside a change carrying none, and `US6-TC4-1`'s own change sitting at Proposed, waiting on the designer, where the walks read the engineer's wait (task 10.10)
 - **US7-TC2-1** — an archived change's line wearing no pip has no fixture to reach it (`section-pip.walk.ts`'s own header names why); `test/section-pip.test.tsx` proves it at the block level instead
 - **US8, US9, US10** — the run sheet, the digest, deployment receipts and "no tick, claim or wait while behind" read outside the rendered manual; `US9-TC1-1` and `US9-TC2-1` each turn on a direct message, so `board-overlays.walk.ts`'s `SC-26` decides their card's own half alone — the chip naming the earliest of two behind artifacts and its hand; `US9-TC3-1`'s and `US9-TC4-1`'s refusals are the record reader's and the archive check's to prove, not a walk's

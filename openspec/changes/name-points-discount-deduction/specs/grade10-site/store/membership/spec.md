@@ -17,6 +17,7 @@ fell short meanwhile. An order abandoned, replaced, or undone before
 payment SHALL debit nothing. A promise larger than the order can carry
 SHALL be trimmed to what the order shows rather than refused.
 
+<!-- trace:scenario id=g10.store-membership.SC-qr3 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-16 - A promise larger than the cart is trimmed, not refused
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -24,6 +25,7 @@ SHALL be trimmed to what the order shows rather than refused.
 - **THEN** it is trimmed to what the order shows
 - **AND** the purchase completes at the trimmed amount
 
+<!-- trace:scenario id=g10.store-membership.SC-r53 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-72 - A points discount and a reward coupon apply together
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -31,6 +33,7 @@ SHALL be trimmed to what the order shows rather than refused.
 - **THEN** both apply
 - **AND** neither is refused for the other's presence
 
+<!-- trace:scenario id=g10.store-membership.SC-stn rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-73 - The balance moves once, when the order is paid
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -39,6 +42,7 @@ SHALL be trimmed to what the order shows rather than refused.
   applied
 - **AND** an abandoned or undone promise debits nothing
 
+<!-- trace:scenario id=g10.store-membership.SC-gga rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-81 - A points promise reads "Deduction from Points"
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -46,6 +50,7 @@ SHALL be trimmed to what the order shows rather than refused.
 - **THEN** the order's discount is titled "Deduction from Points"
 - **AND** the paid order carries that title
 
+<!-- trace:scenario id=g10.store-membership.SC-ke5 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-82 - A discount titled "Points" still counts as the member's points
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 

@@ -13,6 +13,7 @@ Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after
 **I want** the one erasure request to reach my submissions as it reaches my vault cases, refused by name while a submission is between booked and ready, money is still due on one or ready cards are uncollected, and otherwise keeping only the sealed documents and the photographs in the vault's classes and the submission record in the vault's case records, each for the window the table names from the later of the day the submission ended and the day nothing is owed either way, and no identity record at all,
 **so that** grading keeps nothing of mine the vault would not keep, and I ask once.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-ggi rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC1-1: Ended submission's documents, photographs and record survive erasure
 
 **Classification:**
@@ -52,6 +53,7 @@ Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after
 * The agreement, the hand-back receipt and the hand-in and hand-back photographs are kept under a hold named on `<submission_1>`.
 * The collector's contact details, postal address and the person named to collect are gone.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-0py rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC2-1: Submission record's retention window starts at the end event
 
 Runs once per row of **Test data**.
@@ -91,6 +93,7 @@ Runs once per row of **Test data**.
 
 * Grade10 reads the window start as the row states.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-50v rev=2 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC3-2: Submission cancelled before hand-in is purged with the account
 
 **Classification:**
@@ -136,6 +139,7 @@ Runs once per row of **Test data**.
 * No signing ceremony's personal data remains for `<submission_3>`.
 * No identity record exists for `<submission_3>` at any point.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-lzf rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC4-1: Live grading submission refuses the erasure ask by name
 
 Runs once per row of **Test data**.
@@ -181,6 +185,7 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * `<submission_4>` is not touched.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-ag4 rev=2 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC5-2: Live grading submission blocks an otherwise eligible vault erasure
 
 **Classification:**
@@ -226,6 +231,7 @@ Runs once per row of **Test data**.
 * Step 6 refuses the erasure, naming `<submission_5>` and cards with the grader.
 * `<submission_5>` and `<vault case_1>`'s data are unchanged.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-sth rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC6-1: Submission still with the grader is reported under no class
 
 **Classification:**
@@ -262,6 +268,7 @@ Runs once per row of **Test data**.
 * `<submission_6>` is reported under no class: not agreements, not photos, not case records.
 * Nothing of `<submission_6>` is deleted or flagged for deletion.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-56f rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC7-1: Ended submissions and a never-booked one refuse nothing
 
 Runs once per row of **Test data**.
@@ -309,6 +316,7 @@ Runs once per row of **Test data**.
 * `<submission_7>` refuses nothing: the erasure runs on every row.
 * On the `planned` row, Grade10 leaves `<submission_7>` as the row states.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-1f0 rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC8-1: The ask is withheld in the collector's own words while cards are with the grader
 
 **Classification:**
@@ -347,6 +355,7 @@ Runs once per row of **Test data**.
 * The words name the cards, never a status word and never an internal hold.
 * The block offers no control to file the ask, and the page files nothing while it reads this way.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-kwk rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC9-1: Owed mail goes with the erasure and the history keeps its entries
 
 **Classification:**
@@ -386,6 +395,7 @@ Runs once per row of **Test data**.
 * Every history entry stands, none deleted and none rewritten beyond its actor.
 * The entries that named the collector name an erased collector.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-lhm rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC10-1: The ask stays held while grading cannot say what stands in its way
 
 **Classification:**
@@ -420,6 +430,7 @@ Runs once per row of **Test data**.
 * The ask is not offered, and nothing is filed.
 * What the vault keeps stays on screen.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-l2w rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC11-1: A submission past its window is reported under each class it holds
 
 **Classification:**
@@ -456,6 +467,7 @@ Runs once per row of **Test data**.
 * `<submission_11>` is reported under agreements, photos and case records.
 * It is reported under no identity class.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-trp rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC12-1: A transfer not yet received holds the window
 
 **Classification:**
@@ -490,6 +502,7 @@ Runs once per row of **Test data**.
 
 * Step 2: `<submission_12>` is reported under no class, its windows measured from the day the transfer was marked received.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-8kc rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC13-1: A repayment due on a collected submission refuses the erasure
 
 **Classification:**

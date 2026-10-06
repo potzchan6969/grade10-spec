@@ -121,7 +121,11 @@ jobs:
       # `noUselessFragments` would leave them enforced nowhere at all.
       - name: Check manual
         if: ${{ !cancelled() }}
-        run: pnpm run check:manual
+        run: |
+          # The cited rule compares rounds rows with main; checkout's shallow
+          # pull-request ref does not carry origin/main.
+          git fetch --quiet --no-tags --depth=1 origin +refs/heads/main:refs/remotes/origin/main
+          pnpm run check:manual
 
       - name: Check diagrams
         if: ${{ !cancelled() }}

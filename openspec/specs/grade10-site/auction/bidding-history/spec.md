@@ -427,6 +427,7 @@ SHALL have no account control to delete or hide them.
 - **WHEN** the collector reads their bidding index
 - **THEN** Grade10 returns an empty result rather than another account's or another storefront's activity
 
+<!-- trace:scenario id=g10.auction-bidding-history.SC-33x rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-47 - A call-off moves only the collectors who placed a bid
 **Serves:** grade10-site-auction-bidding-history-US-01 - a collector reads a called-off listing on their index only when they bid on it
 
@@ -492,6 +493,7 @@ the requested size by the rest of its last decision.
 - **WHEN** the collector follows every returned cursor while no new event is added
 - **THEN** every retained event visible to that collector appears exactly once in stable order
 
+<!-- trace:scenario id=g10.auction-bidding-history.SC-1rj rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-48 - A page never splits one auction decision
 **Serves:** grade10-site-auction-bidding-history-US-03 - a collector paging a listing's history reads each decision as one step
 
@@ -527,6 +529,7 @@ The retained action-log type vocabulary SHALL contain exactly:
 - `accepted_price` — an accepted public price movement occurred; and
 - `standing_changed` — the account's standing on the listing changed.
 
+<!-- trace:scenario id=g10.auction-bidding-history.SC-st1 rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-51 - Every bid is a maximum, never a manual bid
 **Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every maximum Grade10 accepted
 
@@ -559,6 +562,7 @@ The retained action-log type vocabulary SHALL contain exactly:
 - **THEN** the collector's private history labels the action as automatic
 - **AND** the accepted public price movement remains subject to the auction's existing pseudonym rules
 
+<!-- trace:scenario id=g10.auction-bidding-history.SC-8d3 rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-49 - A refused first bid leaves no trace in the record
 **Serves:** grade10-site-auction-bidding-history-US-01 - a collector whose only attempt was refused finds no listing in their index
 
@@ -569,6 +573,7 @@ The retained action-log type vocabulary SHALL contain exactly:
 - **AND** no event for that listing is retained in their history or in the
   public auction log
 
+<!-- trace:scenario id=g10.auction-bidding-history.SC-vwx rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-50 - A refused raise leaves the entry as it was
 **Serves:** grade10-site-auction-bidding-history-US-02 - a refused raise adds nothing to what the collector audits
 

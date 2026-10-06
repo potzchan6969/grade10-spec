@@ -36,8 +36,8 @@ design describes moving it here, not building it fresh.
   `add-winner-order-tax-line`.
 - Building the manually-settled mark, Superseded invoice, or
   `issuerTaxDetails`. Those remain retired under `decisions.md` Q19.
-- A data model, a service, or a wire contract. Nothing here touches a
-  database, a backend service, or an API.
+- Implementing the data model, services and wire contracts in this store.
+  Grade10 owns its data model, services and wire contracts.
 - Pixel-level layout assertions (position, alignment, rule thickness).
   `pdf-lib` writes a content stream, not a DOM; there is no `data-slot` to
   query. Tests prove the data-in/bytes-out contract — order, presence,
@@ -80,8 +80,8 @@ edit needed.
 contract additions.** `InvoicePdfData`/`ReceiptPdfData` keep the shape
 `grade10`'s already-tested renderer takes — `PdfLineItem { key?, label,
 amount }` (see below for `key`), `PdfPartyAddress = Record<string, string |
-null> | null`, plain `string` amounts, `Date` for every date, and an explicit
-winner IANA time-zone identifier. This revision adds the optional supplied
+null> | null`, plain `string` amounts and `Date` for every date. No caller
+supplies a time zone. This revision adds the optional supplied
 `taxLine` to both documents and `replacesInvoice` to invoices. This is a
 deliberate difference from the
 retired DOM design's `ReactNode` props (`decisions.md` Q6): there is no JSX
@@ -99,7 +99,6 @@ export type PdfLineItem = {
 
 export type InvoicePdfReplacement = {
   invoiceId: string;
-  documentUrl?: string;
 };
 
 export type PdfDocumentCopy = {
@@ -141,7 +140,6 @@ export type InvoicePdfData = {
   invoiceNumber: string;
   sentAt: Date;
   paymentDeadline: Date;
-  winnerTimeZone: string;
   paymentMethod: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
@@ -175,7 +173,6 @@ export type ReceiptPdfData = {
   listingTitle: string;
   receiptNumber: string;
   paidAt: Date;
-  winnerTimeZone: string;
   invoiceId: string;
   providerReferenceCode: string;
   billTo: PdfPartyAddress;
@@ -218,12 +215,10 @@ Bid"`, `"Subtotal"`, …) already arrives as a caller-supplied string on
 `PdfLineItem` and needed no change; only the section/meta labels the
 renderer itself used to own move.
 
-**Dates stay computed inside the renderer, using the supplied winner zone.**
-`formatDateTime` receives the `Date` and `winnerTimeZone` IANA identifier and
-formats that instant in the winner's zone, including the zone name required
-by `spec.md`. This remains deliberately asymmetric with money: the caller
-chooses the preformatted amount, while the document owns consistent date
-presentation from an explicit zone rather than a machine default.
+**Document dates use Hong Kong time.** `formatDateTime` formats each `Date`
+in `Asia/Hong_Kong` and labels it `GMT+8`, as required by the accepted
+`shared/dates-and-times` contract. The caller passes no zone. Money remains
+preformatted by the caller.
 
 **The Grade10 wordmark stays a component-owned SVG path, not a prop.**
 `LOGO_PATHS` (`pdf-document.ts`) is unchanged from `grade10`'s version — a
@@ -261,14 +256,24 @@ matching `receipt-pdf.ts`'s own document-specific sections
 (`drawPaymentSection`, `drawPaymentBreakdown`) rather than the shared
 `pdf-document.ts` — no other document draws it. `drawBankRails` draws
 `copy.bankDetailsHeading`
-then one column for each enabled rail — SWIFT, FPS, and HK local transfer —
-each with its own heading and stack of label/value lines, followed by a rule
-and one wrapped line of `copy.bankReferenceNoteLabel` ending in the bold
-`bankRails.reference`. Called only when `data.bankRails` is given;
-`invoice-pdf.ts` skips the call and the vertical space entirely on a card
-invoice. Each rail is optional so the snapshot can represent the enabled
-subset; every supplied field remains a plain string with no rail-specific
-formatting or validation.
+then one column for each enabled rail - SWIFT, FPS, and HK local transfer in
+that order when supplied. Each column has its own heading and stack of
+label/value lines; the enabled columns divide the content width equally.
+Disabled or retired rails have no column or reserved width. A rule follows
+the columns, then one wrapped line of
+`copy.bankReferenceNoteLabel` ending in the bold
+`bankRails.reference`. Called
+only when `data.bankRails` is given; `invoice-pdf.ts` skips the call and the
+vertical space entirely on a card invoice, the same `!== undefined` gate
+`OrderValueSection`'s summary rows already use. Every field arrives as a
+plain string - no rail-specific formatting or validation. The caller
+supplies at least one enabled rail when it supplies `bankRails`.
+
+**A replacement invoice names its predecessor.** `InvoicePdfData` accepts
+optional `replacesInvoice` with `invoiceId`. `drawMetaBlock` draws
+`copy.replacesInvoiceLabel` and the replaced ID as a plain-text row only when
+the relationship is present. The current invoice number remains the
+document's own number. The PDF carries no link to the replaced invoice.
 
 **`footer`/`drawFooter` removed from both renderers (`decisions.md`
 Q23).** Neither document draws a footer sentence any more; `InvoicePdfCopy`
@@ -325,7 +330,7 @@ replacement-specific output, and its label comes from
    importing `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, then removes its
    own now-redundant copy under `packages/grade10-auction/contracts`. Data
    it already builds (`InvoicePdfData`/`ReceiptPdfData`) needs a `copy`
-   argument and `winnerTimeZone` at each call site, plus the optional
+   argument at each call site, plus the optional
    `taxLine` and `replacesInvoice` mappings where the order snapshot has
    them, sourced from `@grade10/i18n` and the order record. `grade10`'s own
    task (`tasks.md`), not built here.
@@ -337,6 +342,6 @@ independently. Step 3 is an ordinary application-side dependency bump
 
 ## Open Questions
 
-None. `decisions.md` Q18-Q24 settle the approach; the `key` discriminant and
+None. `decisions.md` Q18-Q24 and Q26 settle the approach; the `key` discriminant and
 the `copy` field list above are this document's implementation choices, not
 product judgments needing another decision row.

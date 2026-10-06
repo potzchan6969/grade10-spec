@@ -11,6 +11,7 @@
 **I want** my roles to be `user` only,
 **so that** I cannot act as staff by accident.
 
+<!-- trace:case id=g10.shared-roles.TC-gda rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC1-1: Collector without an operator grant is user only
 
 **Classification:**
@@ -38,6 +39,7 @@
 
 * The caller's roles are `user` only.
 
+<!-- trace:case id=g10.shared-roles.TC-5hv rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC2-1: Unknown role name is dropped
 
 **Classification:**
@@ -71,6 +73,7 @@
 
 * `intern` is not among the caller's roles.
 
+<!-- trace:case id=g10.shared-roles.TC-l66 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC3-1: User role cannot take an operator action
 
 **Classification:**
@@ -98,6 +101,7 @@
 
 * The ban is refused.
 
+<!-- trace:case id=g10.shared-roles.TC-u0g rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC4-1: Admin console rejects a user sign-in
 
 **Classification:**
@@ -139,6 +143,7 @@
 **I want** each action allowed only when my role grants that permission,
 **so that** support cannot set roles, staff cannot ban, and an unknown permission grants nothing.
 
+<!-- trace:case id=g10.shared-roles.TC-m1b rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC1-1: Support cannot set roles but can still list and ban
 
 **Classification:**
@@ -177,6 +182,7 @@
 * The role change is refused.
 * Listing accounts, the ban, and ending the session are allowed.
 
+<!-- trace:case id=g10.shared-roles.TC-cd2 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC2-1: Staff cannot list or ban users
 
 **Classification:**
@@ -206,6 +212,7 @@
 * The list is refused.
 * The ban is refused.
 
+<!-- trace:case id=g10.shared-roles.TC-67z rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC3-1: Unknown permission grants nothing
 
 **Classification:**
@@ -239,6 +246,7 @@
 
 * The action is refused.
 
+<!-- trace:case id=g10.shared-roles.TC-ni5 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC4-1: Staff can write the store and operate the auction catalog
 
 **Classification:**
@@ -268,6 +276,7 @@
 * The store write is allowed.
 * The auction operate action is allowed.
 
+<!-- trace:case id=g10.shared-roles.TC-c1m rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC5-1: Auditor reads the trail and nothing else
 
 **Classification:**
@@ -299,6 +308,7 @@
 * Reading the trail is allowed.
 * The ban, the store write, and the role change are refused.
 
+<!-- trace:case id=g10.shared-roles.TC-ozo rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC6-1: Combined roles stack their grants
 
 **Classification:**
@@ -328,6 +338,7 @@
 * The list is allowed.
 * The store write is allowed.
 
+<!-- trace:case id=g10.shared-roles.TC-8ru rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC7-1: Operator cannot widen what a role grants
 
 **Classification:**
@@ -357,6 +368,7 @@
 * Who holds a role can be changed.
 * What that role grants cannot be changed.
 
+<!-- trace:case id=g10.shared-roles.TC-af9 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC8-1: Admin can record a refund
 
 **Classification:**
@@ -384,6 +396,7 @@
 
 * The refund is allowed.
 
+<!-- trace:case id=g10.shared-roles.TC-z15 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC9-1: Settlement permission is not required for a refund
 
 **Classification:**
@@ -414,6 +427,7 @@
 * The refund is allowed.
 * The caller does not hold `auction:settle`.
 
+<!-- trace:case id=g10.shared-roles.TC-vdy rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC11-1: Finance collects auction money and holds nothing else
 
 **Classification:**
@@ -460,6 +474,7 @@
 * The shipment, the refund, the operate action, the catalogue write, the store write, the vault case and the payout are refused.
 * <auction order> shows no shipment and no refund; <vault case> shows no payout.
 
+<!-- trace:case id=g10.shared-roles.TC-bs3 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC14-1: Staff run the grading counter, bookings, stock and catalogue
 
 **Classification:**
@@ -501,6 +516,7 @@
 
 * The counter act, the approval, the booking change, the stock change and the catalogue write are each allowed.
 
+<!-- trace:case id=g10.shared-roles.TC-tw2 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC15-1: Staff and admin move an item and open its proof
 
 Runs once per row of **Test data**.
@@ -541,6 +557,7 @@ Runs once per row of **Test data**.
 * The proof downloads.
 * `<item_1>` reads the custodian as owner, with the move at the top.
 
+<!-- trace:case id=g10.shared-roles.TC-gu0 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC16-1: Treasurer holds no inventory grant
 
 **Classification:**
@@ -581,6 +598,7 @@ Runs once per row of **Test data**.
 **I want** the grants that run a case and the grants that pay against it to sit in different roles,
 **so that** a person who only records payouts cannot open a customer's identity document.
 
+<!-- trace:case id=g10.shared-roles.TC-w8z rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC1-1: Identity documents open with their own read grant
 
 **Classification:**
@@ -617,6 +635,7 @@ Runs once per row of **Test data**.
 * The identity capture shows.
 * The signed document shows.
 
+<!-- trace:case id=g10.shared-roles.TC-ug8 rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC2-1: Staff runs a vault case and is refused its money
 
 **Classification:**
@@ -664,6 +683,7 @@ Runs once per row of **Test data**.
 * The payout, the repayment, the money book and the auction payment are refused.
 * <vault case B> shows no payout, <vault case C> no repayment, <auction order> no payment.
 
+<!-- trace:case id=g10.shared-roles.TC-8gk rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC3-1: Treasurer pays out but cannot run a case, set its cost or open the identity document
 
 **Classification:**
@@ -706,6 +726,7 @@ Runs once per row of **Test data**.
 * Steps 3, 4 and 5 are refused.
 * <vault case A> shows no valuation started and no offer made, and no identity document shows.
 
+<!-- trace:case id=g10.shared-roles.TC-zgr rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC4-1: Reading a case does not open the person's identity documents
 
 **Classification:**
@@ -743,6 +764,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the case.
 * Steps 2 and 3 are refused; neither document shows.
 
+<!-- trace:case id=g10.shared-roles.TC-dak rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC5-1: One person holding staff and treasurer cannot pay out their own offer
 
 **Classification:**

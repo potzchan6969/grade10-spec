@@ -1,0 +1,9 @@
+schema: grade10-planning
+created: 2026-10-06
+promoted_by: "@tangconst"
+hands:
+  pm: "@tangconst"
+  tech: "@tangconst"
+  qa: "@tangconst"
+  dev: "@tangconst"
+ui_waived: "no new screen or state; collector clocks reuse the local-moment shape, and document clocks keep the existing PDF and email layout with a zone label change"

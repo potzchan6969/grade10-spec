@@ -99,6 +99,7 @@ None.
 * The not-found surface renders, not <zzz home url>.
 * The failed address does not appear anywhere on the page.
 
+<!-- trace:case id=zzz.site-navigation.TC-xmz rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
 ### zzz-site-site-navigation-US1-TC4-1: Not-found shows only the shared catalog's static words
 
 **Classification:**
@@ -128,6 +129,7 @@ None.
 * The description reads exactly "The link may be wrong, or the page may have moved."
 * Neither string contains any part of the address navigated to in step 1.
 
+<!-- trace:case id=zzz.site-navigation.TC-pfw rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
 ### zzz-site-site-navigation-US1-TC5-1: Not-found never reflects a crafted address
 
 **Classification:**
@@ -160,6 +162,7 @@ None.
   markup.
 * No script from the crafted address executes.
 
+<!-- trace:case id=zzz.site-navigation.TC-04e rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
 ### zzz-site-site-navigation-US1-TC6-1: Back to Home leaves not-found for the ZZZ home
 
 **Classification:**
@@ -187,6 +190,7 @@ no surface the zzz site answers>.
 
 * <zzz home url> renders.
 
+<!-- trace:case id=zzz.site-navigation.TC-7f7 rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
 ### zzz-site-site-navigation-US1-TC7-1: Not-found does not correct itself to home on its own
 
 **Classification:**

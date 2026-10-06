@@ -262,6 +262,27 @@ test("a change that said nothing is still refused its missing delta", () => {
   assert.match(run.said, /at least one delta/);
 });
 
+test("a feature-set removal amends a durable contract without restating a requirement", () => {
+  const run = validate(
+    store({
+      featureRemoval: {
+        "proposal.md": PROPOSAL,
+        ".openspec.yaml": "schema: grade10-planning\n",
+        "specs/demo/alpha/spec.md": [
+          "# Alpha",
+          "",
+          "## REMOVED Feature set",
+          "",
+          "- Upload",
+          "  - Confirm before store:",
+          "",
+        ].join("\n"),
+      },
+    }),
+  );
+  assert.equal(run.status, 0, run.said);
+});
+
 test("a named change is the only one read, and a typo says so", () => {
   const root = store({
     waiting: {

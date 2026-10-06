@@ -5,11 +5,9 @@ order: 12
 ---
 
 The booking surface, drawn once: the pickers, the details form, the summary,
-the confirmation, the card that manages one visit and the list of a
-collector's own. A brand's site imports them and supplies the words, the
-diary's answers and the callbacks.
+the confirmation, and the card that manages one visit. A brand's site
+imports them and supplies the words, the diary's answers and the callbacks.
 
-- **`BookingSteps`** — where the collector is in the flow, and the way back
 - **`BookingServicePicker`**, **`BookingLocationPicker`** — one choice each,
   reported by id
 - **`BookingSlotPicker`** — a month of days marked available or not, and the
@@ -20,7 +18,6 @@ diary's answers and the callbacks.
 - **`BookingConfirmation`** — what was booked and the link that manages it
 - **`BookingManageCard`** — one visit, with a move and a confirmed cancel
   while it is live
-- **`BookingList`** — upcoming visits, then past ones
 
 ::story{id="appointment-booking-bookingslotpicker--default" title="The slot picker"}
 
@@ -29,3 +26,12 @@ diary's answers and the callbacks.
 ::story{id="appointment-booking-bookingmanagecard--live" title="A live visit"}
 
 ::story{id="appointment-booking-bookingmanagecard--closed" title="A closed visit"}
+
+## Time Zone
+
+- **The shop's clock** - the slot picker, the summary and the visit card show
+  the shop's times, whatever zone the collector is in; the visit is physical,
+  so the shop's clock is the one that matters
+  ([Dates and Times](/p/platform/shared/dates-and-times))
+- **The label** - no rule sets how the blocks name the zone; their default
+  label is HKT for Hong Kong, and a page may pass its own

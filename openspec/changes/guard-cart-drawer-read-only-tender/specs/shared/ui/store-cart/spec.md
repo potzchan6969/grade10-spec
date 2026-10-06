@@ -50,6 +50,7 @@ eligibility details, and refusal reasons SHALL remain visible.
 When the matching callbacks are supplied, the drawer SHALL preserve the
 existing interactive behavior and state-specific disabled and loading rules.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-ka5 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-32 - Promo context is display-only without callbacks
 **Serves:** shared-ui-store-cart-US-09 - the promo context is display-only without callbacks
 
@@ -61,6 +62,7 @@ existing interactive behavior and state-specific disabled and loading rules.
 - **AND** the typed-code input and Apply control are absent
 - **AND** the applicable held code has no Apply control
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-rxp rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-33 - Promo callbacks expose the matching actions
 **Serves:** shared-ui-store-cart-US-09 - promo callbacks expose the matching actions
 
@@ -84,6 +86,7 @@ reviewed cart summary unchanged when no points-apply callback is supplied.
 When the matching callbacks are supplied, the drawer SHALL preserve the
 existing interactive behavior and state-specific disabled and loading rules.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-x7g rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-34 - Points context is display-only without callbacks
 **Serves:** shared-ui-store-cart-US-09 - the points context is display-only without callbacks
 
@@ -94,6 +97,7 @@ existing interactive behavior and state-specific disabled and loading rules.
 - **AND** the points amount input, Apply control, and Use max control are absent
 - **AND** no points amount is applied and the cart summary is unchanged
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-q34 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-35 - Points callbacks expose the matching actions
 **Serves:** shared-ui-store-cart-US-09 - points callbacks expose the matching actions
 
@@ -114,6 +118,7 @@ absent when that callback is missing. Promo and points disclosure controls
 SHALL likewise be absent when their matching state-change callbacks are
 missing.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-ufi rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-36 - One missing callback removes only its action
 **Serves:** shared-ui-store-cart-US-09 - one missing callback removes only its action
 

@@ -17,6 +17,7 @@
 **I want** to read the agreement on the iPad with the schedule of cards as checked and the figures I was quoted, type my name as on the booking with no ID asked for, give one line of postal address kept only for the written notice, and sign once,
 **so that** I know exactly what I signed and the fee is only taken after it.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-ib5 rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC1-1: Collector reads the agreement to the end and signs it
 
 **Classification:**
@@ -61,6 +62,7 @@
 * Step 4: the document seals, showing the sealed outcome and a download of the signed PDF.
 * Step 5: the fee is charged at the till only after the seal.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-05a rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC2-1: Cover schedule prints for a level that carries cover
 
 **Classification:**
@@ -104,6 +106,7 @@
 * The schedule shows a cover column beside each card's declared value.
 * The schedule totals the cover across every card, beside the total declared value.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-uiu rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC3-1: Sign stays disabled while the postal address is empty
 
 **Classification:**
@@ -143,6 +146,7 @@
 
 * Sign is disabled, naming the empty postal address line as the reason.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-ier rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC4-1: Signing is refused before the document is fully read
 
 **Classification:**
@@ -182,6 +186,7 @@
 * Step 2: signing is refused by name, stating the document must be read to its end.
 * Step 3: nothing is sealed and nothing is paid.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-bwc rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC5-1: Signing is refused when the typed name mismatches the booking
 
 **Classification:**
@@ -219,6 +224,7 @@
 * Step 2: signing is refused by name, against the booking's name.
 * Step 3: nothing is sealed and nothing is paid.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-ajv rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC6-1: The sign link is refused past its 30 minutes, at the limit
 
 Runs once per row of **Test data**.
@@ -258,6 +264,7 @@ Runs once per row of **Test data**.
 * Step 1: as the row's Step 1 says.
 * Step 2: a new link opens the same agreement.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-4dj rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC7-1: Sealing is refused in production with a fact unset
 
 **Classification:**
@@ -288,6 +295,7 @@ Runs once per row of **Test data**.
 * Preparing is refused, naming the unset fact.
 * Nothing is rendered, no sign link is minted, and nothing is sealed.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-ala rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC8-1: An unset fact prints as a placeholder outside production
 
 **Classification:**
@@ -321,6 +329,7 @@ Runs once per row of **Test data**.
 * Step 1: the document seals.
 * Step 2: the agreement prints the unset fact as a marked bracket placeholder.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-3mz rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC9-1: Agreement seals with no identity record asked for or kept
 
 **Classification:**
@@ -365,6 +374,7 @@ Runs once per row of **Test data**.
 * Steps 1 to 4 and step 6: no identity check is read, asked for or kept against the submission.
 * Step 5: the signing certificate says the document was signed without an identity check.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-z1y rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC10-1: A storage fee raised after the seal leaves the signed agreement as it was
 
 **Classification:**
@@ -405,6 +415,7 @@ Runs once per row of **Test data**.
 * Step 1: the sealed agreement still prints 3000 HKD minor units a card a month.
 * Step 2: what is due on that submission is worked out at the pinned 3000, not the new 5000.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-78m rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### grade10-site-grading-counter-documents-US1-TC11-1: A Bulk list of a hundred cards runs on and is signed once, on the last page
 
 **Classification:**
@@ -456,6 +467,7 @@ Runs once per row of **Test data**.
 **I want** to decline on the spot and have nothing paid and nothing signed in my name,
 **so that** the member of staff with me takes it from there with nothing half-done.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-l1u rev=1 covers=g10.grading-counter-documents.SC-ub5,g10.grading-counter-documents.SC-shr -->
 ### grade10-site-grading-counter-documents-US2-TC1-1: Declining the agreement withdraws it with nothing paid
 
 **Classification:**
@@ -490,6 +502,7 @@ Runs once per row of **Test data**.
 * Step 4: nothing is paid, and nothing is signed in the collector's name.
 * Step 4: the submission still reads Drop-off booked.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-v48 rev=1 covers=g10.grading-counter-documents.SC-ub5,g10.grading-counter-documents.SC-shr -->
 ### grade10-site-grading-counter-documents-US2-TC2-1: Declining the receipt withdraws it with nothing handed back
 
 **Classification:**
@@ -525,6 +538,7 @@ Runs once per row of **Test data**.
 * Step 4: nothing is handed back, and nothing is signed in the collector's name.
 * Step 4: the submission still reads Ready to collect.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-e18 rev=1 covers=g10.grading-counter-documents.SC-ub5,g10.grading-counter-documents.SC-shr -->
 ### grade10-site-grading-counter-documents-US2-TC3-1: The desk reads a declined receipt back and can prepare it again
 
 **Classification:**
@@ -567,6 +581,7 @@ Runs once per row of **Test data**.
 **I want** the receipt to list every cert and raw card I inspected, what was paid and paid out and how, and who collected, and to be signable only once nothing is due and every item is ticked,
 **so that** the slabs are mine the moment it is sealed and the submission closes.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-n81 rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC1-1: Collector signs the receipt and the slabs become theirs
 
 **Classification:**
@@ -610,6 +625,7 @@ Runs once per row of **Test data**.
 * Step 1: the receipt names the collector as who collected.
 * Steps 3 to 5: the receipt seals; the slabs are the collector's from that moment and the submission closes.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-00a rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC2-1: Receipt names the ID glance above the declared threshold
 
 **Classification:**
@@ -649,6 +665,7 @@ Runs once per row of **Test data**.
 
 * Collected by names that an ID was matched to the name and that nothing was kept.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-moq rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC3-1: Receipt names a card still held by the grader
 
 **Classification:**
@@ -684,6 +701,7 @@ Runs once per row of **Test data**.
 * Step 1: the receipt names the card still held by the grader.
 * Step 4: the submission stays ready for the held card, pending a second hand-back to close it.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-str rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC4-1: Receipt says a slab went to the vault instead
 
 **Classification:**
@@ -717,6 +735,7 @@ Runs once per row of **Test data**.
 
 * The receipt says that card went to the vault rather than to the collector.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-v41 rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC5-1: Receipt prints what was paid, refunded and paid out, and how
 
 **Classification:**
@@ -752,6 +771,7 @@ Runs once per row of **Test data**.
 
 * The receipt prints what was paid, what was refunded and what was paid out, each with how it moved.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-akt rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC6-1: Receipt cannot be prepared while a balance is due
 
 **Classification:**
@@ -784,6 +804,7 @@ Runs once per row of **Test data**.
 * Preparing is refused by name, naming the balance still due.
 * No sign link is minted and nothing is handed back.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-ke5 rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC7-1: Receipt cannot be prepared while an item is unticked
 
 **Classification:**
@@ -816,6 +837,7 @@ Runs once per row of **Test data**.
 * Preparing is refused by name, naming the item still unticked.
 * No sign link is minted and nothing is handed back.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-gew rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC8-1: Receipt refuses a name the submission does not hold
 
 **Classification:**
@@ -853,6 +875,7 @@ Runs once per row of **Test data**.
 * Step 2: signing is refused by name, against the booking's name.
 * Step 3: nothing is sealed and nothing is handed back.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-0ot rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC9-1: Two exceptions on one hand-back print one receipt with a line per card
 
 **Classification:**
@@ -888,6 +911,7 @@ Runs once per row of **Test data**.
 * Step 1: one receipt is prepared for the hand-back, not one per exception.
 * Step 3: it carries a line per card stating that card's outcome: the two handed back, the one still held by the grader, and the one that went to the vault.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-87a rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
 ### grade10-site-grading-counter-documents-US3-TC10-1: The second receipt prints the late card alone and names the first
 
 **Classification:**
@@ -932,6 +956,7 @@ Runs once per row of **Test data**.
 **I want** the iPad to prefill my name as named on the submission page and the receipt to record that I collected,
 **so that** the collector's record says who took the cards.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-idw rev=1 covers=g10.grading-counter-documents.SC-n5f,g10.grading-counter-documents.SC-vje -->
 ### grade10-site-grading-counter-documents-US4-TC1-1: Named person's iPad prefills their name and the receipt records them
 
 **Classification:**
@@ -972,6 +997,7 @@ Runs once per row of **Test data**.
 * Step 1: the signer's name is prefilled as the person named on the submission page, with a hint that it was prefilled.
 * Step 3: the receipt records the named person, not the collector, as who collected.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-y1s rev=1 covers=g10.grading-counter-documents.SC-n5f,g10.grading-counter-documents.SC-vje -->
 ### grade10-site-grading-counter-documents-US4-TC2-1: The named person's prefilled name does not take an edit
 
 **Classification:**
@@ -1021,6 +1047,7 @@ Runs once per row of **Test data**.
 **I want** a download after the seal, an email with the signed PDF attached, and each document on the submission page with its fingerprint,
 **so that** I hold my own copy without asking for one.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-eoe rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC1-1: Signer downloads the signed PDF right after the seal
 
 **Classification:**
@@ -1051,6 +1078,7 @@ Runs once per row of **Test data**.
 
 * The signed PDF downloads to the device.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-ztb rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC2-1: Sealed agreement's email attaches the agreement and intake receipt
 
 **Classification:**
@@ -1080,6 +1108,7 @@ Runs once per row of **Test data**.
 
 * The email carries the signed agreement as an attached PDF, with the intake receipt attached beside it.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-9va rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC3-1: Sealed receipt's email attaches the signed hand-back receipt
 
 **Classification:**
@@ -1109,6 +1138,7 @@ Runs once per row of **Test data**.
 
 * The email carries the signed hand-back receipt as an attached PDF.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-zpe rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC4-1: Submission page lists each document with its fingerprint
 
 **Classification:**
@@ -1137,6 +1167,7 @@ Runs once per row of **Test data**.
 
 * Each sealed document is listed with a fingerprint that tells the signed copy apart from an unsigned one.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-gtz rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC5-1: Reopening a signed link shows the sealed copy instead
 
 **Classification:**
@@ -1167,6 +1198,7 @@ Runs once per row of **Test data**.
 * Signing is refused by name, naming that the document is already signed.
 * The sealed copy is shown on the page.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-0hw rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC6-1: A declined document reaches none of the three ways to a copy
 
 **Classification:**
@@ -1197,6 +1229,7 @@ Runs once per row of **Test data**.
 * Step 2: the declined document is not listed and no download is offered for it.
 * Step 3: no email carries it as an attachment.
 
+<!-- trace:case id=g10.grading-counter-documents.TC-2b0 rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC7-1: A fingerprint grading never issued answers as none of its own
 
 **Classification:**
@@ -1235,6 +1268,7 @@ Runs once per row of **Test data**.
 * Step 2: the listed fingerprint answers as one grading sealed.
 
 
+<!-- trace:case id=g10.grading-counter-documents.TC-8gm rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC8-1: A withdrawn card's receipt is issued and listed with its fingerprint
 
 **Classification:**
