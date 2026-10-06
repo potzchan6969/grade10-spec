@@ -10,7 +10,7 @@
  * never a second copy of the table.
  */
 import assert from "node:assert/strict";
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFile, execFileSync, spawnSync } from "node:child_process";
 import {
   copyFileSync,
   existsSync,
@@ -23,6 +23,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 import {
   bundleFor,
   classifyDiff,
@@ -38,6 +39,7 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..", "..");
 const CLI = join(HERE, "perspectives.mjs");
+const execFileAsync = promisify(execFile);
 const SCHEMA = "openspec/schemas/grade10-planning/schema.yaml";
 const PAGE = "docs/prds/products/shared/planning/agent-rounds.md";
 /** The evidence a proposal cites beside the page it marks: explanatory, and
@@ -821,24 +823,36 @@ test("every reader the schema dispatches resolves on disk", () => {
 // or not this checkout installed the binary, so the run is made and its
 // failure is the test's: a guard that skipped it made a green run mean
 // nothing.
-test("`openspec instructions` resolves every schema artifact id", () => {
+test("`openspec instructions` resolves every schema artifact id", async () => {
   const artifacts = REAL_SCHEMA.artifacts;
   assert.ok(artifacts.length > 0, "the schema names artifacts to check");
-  for (const { id } of artifacts) {
-    assert.doesNotThrow(() =>
-      execFileSync(
-        "pnpm",
-        [
-          "openspec",
-          "instructions",
-          id,
-          "--change",
-          "run-a-round-on-every-artifact",
-        ],
-        { cwd: ROOT, stdio: "pipe" },
+  // Each invocation starts pnpm and the CLI. Check independent artifact ids
+  // concurrently, with a small cap so the test does not flood pnpm's cache.
+  const concurrency = 4;
+  const failures = [];
+  for (let start = 0; start < artifacts.length; start += concurrency) {
+    const batch = artifacts.slice(start, start + concurrency);
+    const results = await Promise.allSettled(
+      batch.map(({ id }) =>
+        execFileAsync(
+          "pnpm",
+          [
+            "openspec",
+            "instructions",
+            id,
+            "--change",
+            "run-a-round-on-every-artifact",
+          ],
+          { cwd: ROOT, stdio: "pipe" },
+        ),
       ),
     );
+    results.forEach((result, index) => {
+      if (result.status === "rejected")
+        failures.push(`${batch[index].id}: ${result.reason.message}`);
+    });
   }
+  assert.deepEqual(failures, [], "every artifact id must resolve in the CLI");
 });
 
 test("a record whose YAML does not parse is refused, naming the file", () => {
