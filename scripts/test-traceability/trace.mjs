@@ -210,7 +210,9 @@ function deprecatedCaseAt(lines, headingIndex) {
   if (!/^\s*###\s+\S/.test(lines[headingIndex] ?? "")) return false;
   for (let index = headingIndex + 1; index < lines.length; index += 1) {
     if (/^\s*###\s+\S/.test(lines[index])) break;
-    if (/^\s*\*\s+(?:\*\*)?Status:(?:\*\*)?\s+deprecated\s*$/i.test(lines[index]))
+    if (
+      /^\s*\*\s+(?:\*\*)?Status:(?:\*\*)?\s+deprecated\s*$/i.test(lines[index])
+    )
       return true;
   }
   return false;
@@ -388,9 +390,8 @@ export function parseTraceGraph({
         } else {
           const rawCovers = fields.covers ?? "";
           const isDeprecated = deprecatedCaseAt(lines, index + 1);
-          const covers = rawCovers === "none" && isDeprecated
-            ? []
-            : rawCovers.split(",");
+          const covers =
+            rawCovers === "none" && isDeprecated ? [] : rawCovers.split(",");
           if (rawCovers === "none" && !isDeprecated)
             issue(
               "invalid-empty-coverage",
@@ -1170,10 +1171,7 @@ function initializeBatch(values) {
     checkStoreMarkdownFile(file, storeRoot);
     const target = requireOption(input, "target");
     const app = normalizeApp(requireOption(input, "app"), "--app");
-    const product = normalizeSlug(
-      requireOption(input, "product"),
-      "--product",
-    );
+    const product = normalizeSlug(requireOption(input, "product"), "--product");
     const capability = normalizeSlug(
       requireOption(input, "capability"),
       "--capability",
@@ -1184,7 +1182,9 @@ function initializeBatch(values) {
     let existingId = input.existingId;
     if (input.replaceCovers === true) {
       if (input.kind !== "case" || indexInFile === 0)
-        fail(`batch record ${key} can replace coverage only on an existing case marker`);
+        fail(
+          `batch record ${key} can replace coverage only on an existing case marker`,
+        );
       const adjacent = traceComment(lines[indexInFile - 1]);
       const parsedMarker =
         adjacent?.syntax === "html" && /^case\s+([\s\S]+)$/.exec(adjacent.body);
@@ -1192,9 +1192,13 @@ function initializeBatch(values) {
         ? attributes(parsedMarker[1], () => {})
         : null;
       if (!existingFields?.id || !existingFields.rev || !existingFields.covers)
-        fail(`batch record ${key} does not have an adjacent complete case marker`);
+        fail(
+          `batch record ${key} does not have an adjacent complete case marker`,
+        );
       if (input.existingId && existingFields.id !== input.existingId)
-        fail(`batch record ${key} existing id does not match the adjacent marker`);
+        fail(
+          `batch record ${key} existing id does not match the adjacent marker`,
+        );
       existingId = existingFields.id;
       if (existingFields.rev !== caseHeadingRevision(target))
         fail(`batch record ${key} existing revision differs from its heading`);
@@ -1211,15 +1215,22 @@ function initializeBatch(values) {
         ? caseHeadingRevision(target)
         : String(input.revision ?? "1");
     if (input.kind === "case" && revision === null)
-      fail(`batch case ${key} target must end with a positive TC<n>-<v> revision`);
+      fail(
+        `batch case ${key} target must end with a positive TC<n>-<v> revision`,
+      );
     if (!positiveRevision(revision))
       fail(`batch record ${key} has an invalid revision: ${revision}`);
     const covers = input.kind === "case" ? input.covers : [];
     if (input.kind === "case" && !Array.isArray(covers))
       fail(`batch case ${key} requires a covers array`);
-    if (input.kind === "case" && covers.length === 0 &&
-      !deprecatedCaseAt(lines, indexInFile))
-      fail(`batch case ${key} may use empty coverage only on a deprecated case`);
+    if (
+      input.kind === "case" &&
+      covers.length === 0 &&
+      !deprecatedCaseAt(lines, indexInFile)
+    )
+      fail(
+        `batch case ${key} may use empty coverage only on a deprecated case`,
+      );
     return {
       key,
       kind: input.kind,
@@ -1245,7 +1256,9 @@ function initializeBatch(values) {
     recordByKey.set(record.key, record);
     const location = `${record.file}\0${record.indexInFile}`;
     if (targetByLocation.has(location))
-      fail(`batch records ${targetByLocation.get(location)} and ${record.key} target the same heading in ${record.file}`);
+      fail(
+        `batch records ${targetByLocation.get(location)} and ${record.key} target the same heading in ${record.file}`,
+      );
     targetByLocation.set(location, record.key);
   }
 
@@ -1295,7 +1308,9 @@ function initializeBatch(values) {
       `${a.file}\0${a.target}`.localeCompare(`${b.file}\0${b.target}`),
     )[0];
     const scopeKey = `${first.app}.${first.product}-${first.capability}`;
-    const explicitIds = new Set(group.map((item) => item.existingId).filter(Boolean));
+    const explicitIds = new Set(
+      group.map((item) => item.existingId).filter(Boolean),
+    );
     if (explicitIds.size > 1)
       fail(`batch mirror group ${mirrorKey} names more than one existing id`);
     if (explicitIds.size === 1) {
@@ -1308,7 +1323,9 @@ function initializeBatch(values) {
         parsedId.app !== first.app ||
         parsedId.scope !== `${first.product}-${first.capability}`
       )
-        fail(`batch mirror group ${mirrorKey} existing id has the wrong scope or kind`);
+        fail(
+          `batch mirror group ${mirrorKey} existing id has the wrong scope or kind`,
+        );
       idByMirror.set(mirrorKey, parsedId.canonical);
       continue;
     }
@@ -1339,17 +1356,24 @@ function initializeBatch(values) {
     if (!group.some((record) => record.existingId)) continue;
     const recordsOfKind =
       group[0].kind === "scenario" ? graph.scenarios : graph.cases;
-    if (!recordsOfKind.some((record) => record.id === idByMirror.get(mirrorKey)))
-      fail(`batch mirror group ${mirrorKey} names an id not already in the store`);
+    if (
+      !recordsOfKind.some((record) => record.id === idByMirror.get(mirrorKey))
+    )
+      fail(
+        `batch mirror group ${mirrorKey} names an id not already in the store`,
+      );
   }
   const mirrorById = new Map();
   for (const [mirrorKey, id] of idByMirror) {
     if (mirrorById.has(id))
-      fail(`batch mirror groups ${mirrorById.get(id)} and ${mirrorKey} claim the same existing id ${id}`);
+      fail(
+        `batch mirror groups ${mirrorById.get(id)} and ${mirrorKey} claim the same existing id ${id}`,
+      );
     mirrorById.set(id, mirrorKey);
   }
   for (const [mirrorKey, group] of mirrorGroups) {
-    if (group[0].kind === "scenario") knownScenarioIds.add(idByMirror.get(mirrorKey));
+    if (group[0].kind === "scenario")
+      knownScenarioIds.add(idByMirror.get(mirrorKey));
   }
   const generatedCases = [];
   for (const record of records) {
@@ -1360,7 +1384,9 @@ function initializeBatch(values) {
       if (recordByKey.has(reference)) {
         const scenario = recordByKey.get(reference);
         if (scenario.kind !== "scenario")
-          fail(`batch case ${record.key} covers non-scenario record ${reference}`);
+          fail(
+            `batch case ${record.key} covers non-scenario record ${reference}`,
+          );
         return idByMirror.get(scenario.mirrorKey);
       }
       return normalizeInputReference(reference, "SC", "batch covers");
@@ -1374,7 +1400,10 @@ function initializeBatch(values) {
     generatedCases.push({ record, covers });
   }
 
-  const coversByMirror = groupBy(generatedCases, ({ record }) => record.mirrorKey);
+  const coversByMirror = groupBy(
+    generatedCases,
+    ({ record }) => record.mirrorKey,
+  );
   for (const [mirrorKey, group] of coversByMirror) {
     const expected = group[0].covers.join(",");
     if (group.some(({ covers }) => covers.join(",") !== expected))
@@ -1399,7 +1428,9 @@ function initializeBatch(values) {
       if (!parsed) continue;
       const scope = `${parsed.app}.${parsed.scope}`;
       if (scope !== expectedScope)
-        fail(`batch markers in ${file} would mix scopes ${expectedScope} and ${scope}`);
+        fail(
+          `batch markers in ${file} would mix scopes ${expectedScope} and ${scope}`,
+        );
     }
   }
 
@@ -1449,7 +1480,9 @@ function initializeBatch(values) {
     for (const record of records.filter((item) => item.file === file)) {
       const type = record.kind === "scenario" ? "SC" : "TC";
       const prefix = record.markerIndex === null ? "+" : "~";
-      console.log(`${prefix} ${type} ${idByMirror.get(record.mirrorKey)} for ${record.target}`);
+      console.log(
+        `${prefix} ${type} ${idByMirror.get(record.mirrorKey)} for ${record.target}`,
+      );
     }
     update.nextText = nextText;
   }
@@ -1458,7 +1491,8 @@ function initializeBatch(values) {
       if (readFileSync(file, "utf8") !== update.oldText)
         fail(`file changed while preparing markers: ${file}`);
     }
-    for (const [file, update] of updates) writeFileSync(file, update.nextText, "utf8");
+    for (const [file, update] of updates)
+      writeFileSync(file, update.nextText, "utf8");
   }
 }
 

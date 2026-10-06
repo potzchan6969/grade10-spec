@@ -136,8 +136,14 @@ test("batch initialization allocates stable ids for mirrored cases and planned s
   const activeSuite = resolve(active, "feature-tcs.md");
   const scenarioHeading = "#### Scenario: Collector sees a listing";
   const caseHeading = "### listing-US1-TC1-1: Listing shows the current price";
-  writeFileSync(spec, `${scenarioHeading}\n**Serves:** listing-US-01 - Listing opens\n`);
-  writeFileSync(activeSpec, `${scenarioHeading}\n**Serves:** listing-US-01 - Listing opens\n`);
+  writeFileSync(
+    spec,
+    `${scenarioHeading}\n**Serves:** listing-US-01 - Listing opens\n`,
+  );
+  writeFileSync(
+    activeSpec,
+    `${scenarioHeading}\n**Serves:** listing-US-01 - Listing opens\n`,
+  );
   writeFileSync(durableSuite, `${caseHeading}\n`);
   writeFileSync(activeSuite, `${caseHeading}\n`);
   const manifestPath = resolve(root, "plan.json");
@@ -185,21 +191,43 @@ test("batch initialization allocates stable ids for mirrored cases and planned s
     ),
   );
   try {
-    const dryRun = runCli(["init", "batch", "--manifest", manifestPath, "--store-root", storeRoot, "--dry-run"]);
+    const dryRun = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+      "--dry-run",
+    ]);
     assert.equal(dryRun.status, 0, dryRun.stderr || dryRun.stdout);
     assert.doesNotMatch(readFileSync(spec, "utf8"), /trace:scenario/);
 
-    const result = runCli(["init", "batch", "--manifest", manifestPath, "--store-root", storeRoot]);
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
     assert.equal(result.status, 0, result.stderr || result.stdout);
-    const scenarioId = /trace:scenario id=([^\s]+)/.exec(readFileSync(spec, "utf8"))?.[1];
-    const durableMarker = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(readFileSync(durableSuite, "utf8"));
-    const activeMarker = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(readFileSync(activeSuite, "utf8"));
+    const scenarioId = /trace:scenario id=([^\s]+)/.exec(
+      readFileSync(spec, "utf8"),
+    )?.[1];
+    const durableMarker = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(
+      readFileSync(durableSuite, "utf8"),
+    );
+    const activeMarker = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(
+      readFileSync(activeSuite, "utf8"),
+    );
     assert.ok(scenarioId);
     assert.equal(durableMarker?.[1], activeMarker?.[1]);
     assert.equal(durableMarker?.[2], scenarioId);
     assert.equal(activeMarker?.[2], scenarioId);
 
-    const revisedScenarioHeading = "#### Scenario: Price includes the current bid";
+    const revisedScenarioHeading =
+      "#### Scenario: Price includes the current bid";
     writeFileSync(
       spec,
       `${readFileSync(spec, "utf8").trimEnd()}\n${revisedScenarioHeading}\n**Serves:** listing-US-01 - Listing opens\n`,
@@ -220,8 +248,14 @@ test("batch initialization allocates stable ids for mirrored cases and planned s
               capability: "product-listing",
             },
             ...[
-              ["durable-case", "openspec/specs/grade10-site/store/product-listing/feature-tcs.md"],
-              ["active-case", "openspec/changes/refresh-listing/specs/grade10-site/store/product-listing/feature-tcs.md"],
+              [
+                "durable-case",
+                "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
+              ],
+              [
+                "active-case",
+                "openspec/changes/refresh-listing/specs/grade10-site/store/product-listing/feature-tcs.md",
+              ],
             ].map(([key, file]) => ({
               key: `${key}-update`,
               kind: "case",
@@ -241,12 +275,25 @@ test("batch initialization allocates stable ids for mirrored cases and planned s
         2,
       ),
     );
-    const update = runCli(["init", "batch", "--manifest", updateManifestPath, "--store-root", storeRoot]);
+    const update = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      updateManifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
     assert.equal(update.status, 0, update.stderr || update.stdout);
-    const revisedScenarioIds = [...readFileSync(spec, "utf8").matchAll(/trace:scenario id=([^\s]+)/g)];
+    const revisedScenarioIds = [
+      ...readFileSync(spec, "utf8").matchAll(/trace:scenario id=([^\s]+)/g),
+    ];
     const revisedScenarioId = revisedScenarioIds.at(-1)?.[1];
-    const revisedDurable = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(readFileSync(durableSuite, "utf8"));
-    const revisedActive = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(readFileSync(activeSuite, "utf8"));
+    const revisedDurable = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(
+      readFileSync(durableSuite, "utf8"),
+    );
+    const revisedActive = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(
+      readFileSync(activeSuite, "utf8"),
+    );
     assert.equal(revisedDurable?.[1], durableMarker?.[1]);
     assert.equal(revisedActive?.[1], activeMarker?.[1]);
     assert.equal(revisedDurable?.[2], revisedScenarioId);
@@ -266,19 +313,29 @@ test("batch rejects two records targeting the same heading before writing", () =
   const original = `${readFileSync(spec, "utf8")}${target}\n`;
   writeFileSync(spec, original);
   const manifestPath = resolve(root, "duplicate-targets.json");
-  writeFileSync(manifestPath, JSON.stringify({
-    records: ["first", "second"].map((key) => ({
-      key,
-      kind: "scenario",
-      file: "openspec/specs/grade10-site/store/product-listing/spec.md",
-      target,
-      app: "g10",
-      product: "store",
-      capability: "product-listing",
-    })),
-  }));
+  writeFileSync(
+    manifestPath,
+    JSON.stringify({
+      records: ["first", "second"].map((key) => ({
+        key,
+        kind: "scenario",
+        file: "openspec/specs/grade10-site/store/product-listing/spec.md",
+        target,
+        app: "g10",
+        product: "store",
+        capability: "product-listing",
+      })),
+    }),
+  );
   try {
-    const result = runCli(["init", "batch", "--manifest", manifestPath, "--store-root", storeRoot]);
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
     assert.equal(result.status, 2);
     assert.match(result.stderr, /same heading/);
     assert.equal(readFileSync(spec, "utf8"), original);
@@ -299,20 +356,30 @@ test("batch rejects an existing id claimed by separate mirror groups", () => {
     return { file, path };
   });
   const manifestPath = resolve(root, "reused-id.json");
-  writeFileSync(manifestPath, JSON.stringify({
-    records: copies.map(({ file }, index) => ({
-      key: `copy-${index}`,
-      kind: "scenario",
-      file,
-      target,
-      app: "g10",
-      product: "store",
-      capability: "product-listing",
-      existingId: id,
-    })),
-  }));
+  writeFileSync(
+    manifestPath,
+    JSON.stringify({
+      records: copies.map(({ file }, index) => ({
+        key: `copy-${index}`,
+        kind: "scenario",
+        file,
+        target,
+        app: "g10",
+        product: "store",
+        capability: "product-listing",
+        existingId: id,
+      })),
+    }),
+  );
   try {
-    const result = runCli(["init", "batch", "--manifest", manifestPath, "--store-root", storeRoot]);
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
     assert.equal(result.status, 2);
     assert.match(result.stderr, /same existing id/);
     for (const copy of copies)
@@ -333,25 +400,40 @@ test("batch verifies an existing id supplied by any mirror record", () => {
     return file;
   });
   const manifestPath = resolve(root, "unknown-existing-id.json");
-  writeFileSync(manifestPath, JSON.stringify({
-    records: files.map((file, index) => ({
-      key: `copy-${index}`,
-      mirrorKey: "shared-scenario",
-      kind: "scenario",
-      file,
-      target,
-      app: "g10",
-      product: "store",
-      capability: "product-listing",
-      ...(index === 1 ? { existingId: "g10.store-product-listing.SC-abc" } : {}),
-    })),
-  }));
+  writeFileSync(
+    manifestPath,
+    JSON.stringify({
+      records: files.map((file, index) => ({
+        key: `copy-${index}`,
+        mirrorKey: "shared-scenario",
+        kind: "scenario",
+        file,
+        target,
+        app: "g10",
+        product: "store",
+        capability: "product-listing",
+        ...(index === 1
+          ? { existingId: "g10.store-product-listing.SC-abc" }
+          : {}),
+      })),
+    }),
+  );
   try {
-    const result = runCli(["init", "batch", "--manifest", manifestPath, "--store-root", storeRoot]);
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
     assert.equal(result.status, 2);
     assert.match(result.stderr, /id not already in the store/);
     for (const file of files)
-      assert.equal(readFileSync(resolve(storeRoot, file), "utf8"), `${target}\n`);
+      assert.equal(
+        readFileSync(resolve(storeRoot, file), "utf8"),
+        `${target}\n`,
+      );
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -371,22 +453,28 @@ test("batch can clear coverage only on a deprecated existing case", () => {
     writeFileSync(
       manifestPath,
       JSON.stringify({
-        records: [{
-          key: "retired-case",
-          kind: "case",
-          file: "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
-          target,
-          app: "g10",
-          product: "store",
-          capability: "product-listing",
-          replaceCovers: true,
-          covers: [],
-        }],
+        records: [
+          {
+            key: "retired-case",
+            kind: "case",
+            file: "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
+            target,
+            app: "g10",
+            product: "store",
+            capability: "product-listing",
+            replaceCovers: true,
+            covers: [],
+          },
+        ],
       }),
     );
     const result = runCli([
-      "init", "batch", "--manifest", manifestPath,
-      "--store-root", storeRoot,
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
     ]);
     assert.equal(result.status, 0, result.stderr || result.stdout);
     assert.match(readFileSync(caseFile, "utf8"), /covers=none/);
@@ -409,7 +497,10 @@ test("validate rejects covers=none on a non-deprecated case", () => {
     );
     const result = runCli(["validate", "--store-root", storeRoot]);
     assert.equal(result.status, 1, result.stderr || result.stdout);
-    assert.match(result.stdout, /covers=none is allowed only for a deprecated case/);
+    assert.match(
+      result.stdout,
+      /covers=none is allowed only for a deprecated case/,
+    );
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
