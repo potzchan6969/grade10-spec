@@ -15,8 +15,8 @@
 ### grade10-site-store-account-profile-US-03: Collector uploads or removes an avatar
 
 **As a** signed-in collector,
-**I want** an accepted image as my avatar and a remove that restores initials,
-**so that** a bad file is refused and initials follow the display name I actually have.
+**I want** an accepted image as my avatar and a remove that restores my display name's first letter,
+**so that** a bad file is refused and the letter follows the display name I actually have.
 
 ### grade10-site-store-account-profile-US-04: Collector's email stays the signed-in address
 
