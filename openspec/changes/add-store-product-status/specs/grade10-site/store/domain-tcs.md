@@ -207,25 +207,25 @@ repaired cart sent on to Shopify's payment page,
 ## Reconciliation
 
 **Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
-review's update and QA1's blind re-run. Read the store journeys file, these
+review's update and QA1's blind re-run. Read this suite's story headers, its
 cases, the scenarios they cover at their current revisions, `decisions.md` and
 the Product Status, Product Details and Cart Validation pages. US3-TC1-2
-walks the revised US-03: a sold-out card told from a broken purchase page.
+walks the revised US3: a sold-out card told from a broken purchase page.
 US2-TC2-1 opens the drawer only if the page add did not. QA1 changed no case
 here and raised nothing; every live case folds.
 
-**Run:** Update on 2026-10-06, from the fifth acceptance review. US-03 is
-revised in the journeys file beside this suite: a sold-out card is told from
-a broken purchase page, since unavailable names a withdrawn cart line. US2-TC2-1
-step 5 opens the cart drawer only if the add did not open it, because Product
-Details' Buy opens it after a page add. No case changed what it asserts. QA2
-reruns on this suite.
+**Run:** Update on 2026-10-06, from the fifth acceptance review. US3 is
+revised in its story header, and under `## MODIFIED User journeys` beside
+this suite: a sold-out card is told from a broken purchase page, since
+unavailable names a withdrawn cart line. US2-TC2-1 step 5 opens the cart
+drawer only if the add did not open it, because Product Details' Buy opens it
+after a page add. No case changed what it asserts. QA2 reruns on this suite.
 
 **Run:** QA2 on 2026-10-06, rerun in a fresh context after the second and
-third acceptance reviews. Read the store journeys file, these cases, the
+third acceptance reviews. Read this suite's story headers, its cases, the
 scenarios they cover at their current revisions, `decisions.md` and the
 Product Status, Product Details and Cart Validation pages. US2-TC2-1 walks the
-revised US-02: the page's one item, no choice, and a line with no marking.
+revised US2: the page's one item, no choice, and a line with no marking.
 US3-TC1-2 expects that nothing adding the sold-out card can be pressed, as Q16
 settles. US7-TC1-1 folds against cart-validation SC-15, SC-17 and SC-18 and
 the checkout scenarios it covers. The validator's identical-path warning on
@@ -236,10 +236,11 @@ it. Nothing was raised.
 change was rebased on main. Each case keeps the `trace:case` id main or the
 durable suite gave its number, its `rev` follows its heading, and its
 `covers` names every scenario serving its journeys; a deprecated case covers
-none. US2 is renamed for the one-item add, revised in the journeys file
-beside this suite, and US2-TC2 keeps main's id for it; US3-TC1-2 revises the
-durable US3-TC1-1 under its marker, so main's US3-TC2-1 draft is not carried;
-US7-TC1 takes a new id. QA2 reruns on this suite.
+none. US2 is renamed for the one-item add, revised in its story header and
+under `## MODIFIED User journeys` beside this suite, and US2-TC2 keeps
+main's id for it; US3-TC1-2 revises the durable US3-TC1-1 under its marker,
+so main's US3-TC2-1 draft is not carried; US7-TC1 takes a new id. QA2 reruns
+on this suite.
 
 **Run:** QA2 on 2026-10-06. US2-TC2 now opens the cart drawer to read the
 line when the add did not open it. US7-TC1 is the path both
