@@ -4,10 +4,10 @@
 
 The Store's product address currently renders a minimal vertical page even
 though the approved Grade10 Store design defines a media-led detail surface
-with purchase context, shipping information, and clear inventory states. This
+with purchase context, shipping information, and a clear sold-out state. This
 gap makes the product page harder to scan and leaves important catalogue facts
-such as compare-at pricing, low inventory, and product facets unavailable at
-the point of purchase.
+such as compare-at pricing and product facets unavailable at the point of
+purchase.
 
 The metric is the percentage of product-detail sessions that add an item to
 the cart, segmented by product and device width; the redesign should improve
@@ -17,8 +17,9 @@ that rate without changing which product item or price the Store accepts.
 
 - Rebuild the Grade10 Store product-detail surface to match the supplied Figma
   frame across desktop and narrow layouts.
-- Display all product media, compare-at pricing, low-inventory context,
-  optional product badges, static shipping and pickup guidance, and SKU data.
+- Display all product media, compare-at pricing, availability and sold-out
+  state with no remaining count, optional product badges, static shipping and
+  pickup guidance, and SKU data.
 - Add the Figma quantity stepper and in-place add states for the product's one
   sellable item, with no size, option or variant choice on the page.
 - Keep the underlying Shopify sale identifier for cart-line merging and

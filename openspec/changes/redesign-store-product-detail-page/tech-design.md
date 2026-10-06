@@ -94,7 +94,7 @@ store locator promised by the annotation.
 
 The Figma frame shows one general quantity stepper because each product has one
 sellable Shopify item. The page does not render a size, option, or variant
-chooser. The price and inventory context follow that item's catalogue data, and
+chooser. The price and availability follow that item's catalogue data, and
 its Shopify sale identifier is passed to the cart without becoming visible
 product text.
 
