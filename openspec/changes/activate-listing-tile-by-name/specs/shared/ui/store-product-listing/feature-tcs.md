@@ -5,7 +5,7 @@
 
 ## shared-ui-store-product-listing-US1: What the listing surface holds
 
-**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/store/home` and `grade10-site/store/product-listing`, which compose the surface
+**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
 **As a** shopper reading a surface that composes the listing's tiles,
 **I want** each tile to show what its surface supplies and to sell only where its surface sells,
 **so that** a tile reads the same wherever the store draws it.
@@ -30,16 +30,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProductCard` is open in Storybook, drawn as its Named Once story, showing `<product_1>`.
+* `ProductCard` is open in Storybook, drawn as the row's **Story**, showing `<product_1>`.
 * `<product_1>` is not sold out, and the tile is given an activation callback.
 * The tile's cart handler is as the row's **Cart handler** says.
 
 **Test data:**
 
-| Product | Cart handler | Outcome |
-| --- | --- | --- |
-| `<product_1>` | supplied — the tile sells | name and photo each open `<product_1>` |
-| `<product_1>` | not supplied — the tile does not sell | name and photo each open `<product_1>` |
+| Product | Story | Cart handler | Cart control |
+| --- | --- | --- | --- |
+| `<product_1>` | Named Once | supplied — the tile sells | shows on the photo |
+| `<product_1>` | Named Once Not Selling | not supplied — the tile does not sell | none, on hover or on focus |
 
 **Steps:**
 
@@ -47,12 +47,15 @@ Runs once per row of **Test data**.
 2. Click the tile's photo.
 3. Clear the Actions panel.
 4. Click the tile's name.
+5. Click the canvas above the tile, outside it.
+6. Press Tab until focus leaves the tile.
 
 **Expected Results:**
 
 * Step 2 logs one tile activation for `<product_1>`.
 * Step 4 logs one tile activation for `<product_1>`, the same as step 2.
 * Step 4 logs nothing else: no cart change, no second activation.
+* The cart control is as the row's **Cart control** says while the pointer is over the photo and while focus is in the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-5vw rev=1 covers=g10.shared-store-product-listing.SC-7pj -->
 ### shared-ui-store-product-listing-US1-TC5-1: Name in the browse grid opens its own product
@@ -120,7 +123,7 @@ Runs once per row of **Test data**.
 * Step 3 removes the underline.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-63a rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-yv9 -->
-### shared-ui-store-product-listing-US1-TC7-1: Name is the tile's one keyboard stop and opens from the keyboard
+### shared-ui-store-product-listing-US1-TC7-1: Name is the tile's one keyboard stop to open, and opens from the keyboard
 
 **Classification:**
 
@@ -156,10 +159,12 @@ Runs once per row of **Test data**.
 * The focused name is underlined.
 * Step 5 logs one tile activation for `<product_1>`.
 * Step 6 logs one more tile activation for `<product_1>`, and the page does not scroll.
-* Step 7 announces one control named for `<product_1>`; the photo is not announced as a control.
+* Step 7 announces one control named for `<product_1>`; the photo is not announced.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-rg1 rev=1 covers=g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-30a -->
 ### shared-ui-store-product-listing-US1-TC8-1: Sold-out name and photo stay inert on a tile that sells
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -177,7 +182,15 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `ProductCard` is open in Storybook, drawn as its Sold Out story, showing `<product_3>`.
-* `<product_3>` is sold out, and the tile is given both an activation callback and a cart handler.
+* `<product_3>` is sold out, and the tile is given a cart handler.
+* The tile's way in is as the row's **Way in** says, set in the story's controls.
+
+**Test data:**
+
+| Product | Way in | Outcome |
+| --- | --- | --- |
+| `<product_3>` | an activation callback | name and photo inert |
+| `<product_3>` | `<product_3 address>` alone, no activation callback | name and photo inert, no link |
 
 **Steps:**
 
@@ -192,12 +205,12 @@ Runs once per row of **Test data**.
 
 * The tile shows its sold-out treatment throughout.
 * Step 2 leaves the name plain text, not underlined.
-* Steps 3 and 4 log no tile activation.
+* Steps 3 and 4 log no tile activation and leave the story open.
 * Step 6 never lands focus on the name or the photo.
 * Neither the name nor the photo is offered as a link or a button.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-lbw rev=1 covers=g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-30a -->
-### shared-ui-store-product-listing-US1-TC9-1: No activation callback leaves name and photo inert
+### shared-ui-store-product-listing-US1-TC9-1: No activation callback and no address leave name and photo inert
 
 **Classification:**
 
@@ -214,7 +227,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProductCard` is open in Storybook, showing `<product_1>`, not sold out, with its activation callback removed in the story's controls.
+* `ProductCard` is open in Storybook, drawn as its Inert story, showing `<product_1>`.
+* `<product_1>` is not sold out, and the tile is given a cart handler and neither an activation callback nor an address.
 
 **Steps:**
 
@@ -256,26 +270,118 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open Storybook's Actions panel and clear it.
-2. Click the tile's name.
-3. Click the tile's photo.
+2. Move the pointer over the tile's name.
+3. Click the tile's name.
+4. Clear the Actions panel.
+5. Click the tile's photo.
+6. Click the canvas above the tile, outside it.
+7. Press Tab.
 
 **Expected Results:**
 
 * The tile shows its sold-out treatment throughout, and no cart control.
-* Steps 2 and 3 each log one tile activation for `<product_3>`.
+* Step 2 underlines the name.
+* Step 3 logs one tile activation for `<product_3>`.
+* Step 5 logs one tile activation for `<product_3>`, the same as step 3.
+* Step 7 lands focus on the name, underlined, not on the photo.
+
+### shared-ui-store-product-listing-US1-TC11-1: Name is a link where the tile is given an address alone
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Tile contract
+
+**Pre-conditions:**
+
+* `ProductCard` is open in Storybook, drawn as the row's **Story**, showing the row's **Product**.
+* The tile is given the row's **Address** and no activation callback, and no cart handler.
+
+**Test data:**
+
+| Product | Story | Address | Sold out |
+| --- | --- | --- | --- |
+| `<product_1>` | Address Only | `<product_1 address>` | no |
+| `<product_3>` | Sold Out Opens As A Link | `<product_3 address>` | yes, sold-out treatment shown |
+
+**Steps:**
+
+1. Open Storybook's Actions panel and clear it.
+2. Move the pointer over the tile's name.
+3. Ctrl-click (Cmd-click on a Mac) the tile's name.
+4. Ctrl-click (Cmd-click on a Mac) the tile's photo.
+5. Click the canvas above the tile, outside it.
+6. Press Tab until focus is on the tile's name.
+7. Press Enter.
+
+**Expected Results:**
+
+* Step 2 underlines the name.
+* Steps 3 and 4 each open the row's **Address** in a new tab; the story's tab stays where it was.
+* Step 6 never stops on the photo.
+* Step 7 follows the row's **Address** in the story's frame.
+* The Actions panel logs no tile activation throughout.
+
+### shared-ui-store-product-listing-US1-TC12-1: Photo used alone keeps its own keyboard stop and name
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Accessibility
+
+**Pre-conditions:**
+
+* `ProductCardImage` is open in Storybook on its own, drawn as its Opens Alone story, showing `<product_1>`.
+* `<product_1>` is not sold out, and the photo is given an activation callback.
+* A screen reader is on for step 5.
+
+**Steps:**
+
+1. Open Storybook's Actions panel and clear it.
+2. Click the canvas above the photo, outside it.
+3. Press Tab.
+4. Press Enter.
+5. Move to the photo with the screen reader.
+
+**Expected Results:**
+
+* Step 3 lands focus on the photo.
+* Step 4 logs one tile activation for `<product_1>`.
+* Step 5 announces one control named for `<product_1>`.
 
 ## Settled
 
-None yet.
+- **A tile with no name** — outside the contract: a tile is always given its product's name as text, and the catalogue authors a title for every product, so no case walks a nameless tile
 
 ## Reconciliation
 
-- **Raised, landed** — the blind pass asked three questions, each landed in `decisions.md`: which keys open the name (Q5: Enter and Space on a button, Enter on a link), whether the keyboard stops on the photo and the name or on one (Q6: the name alone, the one control announced), and whether an inert name takes the underline (Q7: no, plain text with no focus). US1-TC7 was re-worded to Tab stopping on the name and the cart control and never the photo, Enter and Space each reporting once, and one control announced; US1-TC8 and US1-TC9 to an inert name that stays plain text on hover and takes no focus
-- **Raised, folded** — US1-TC6 and US1-TC7 assert the underline on hover and on keyboard focus that Q2 decides; the delta states it as `shared-ui-store-product-listing-SC-99`, which US1-TC6 walks on hover and US1-TC7 on focus, and US1-TC8 and US1-TC9 on a name that does not open
+- **Raised, landed** — the 2026-10-05 pass asked three questions, each landed in `decisions.md`: which keys open the name (Q5), whether the keyboard stops on the photo and the name or on one (Q6), and whether an inert name takes the underline (Q7). US1-TC7 was re-worded to Tab stopping on the name and the cart control and never the photo, Enter and Space each reporting once, and one control announced; US1-TC8 and US1-TC9 to an inert name that stays plain text on hover and takes no focus
+- **Raised, settled** — the 2026-10-06 pass asked what opens a tile given no name; landed as Q10 from `ProductCardProps.name`, a required string the screen reader reads: a nameless tile is outside the contract, recorded under Settled, no case and no scenario
+- **Folded into spec** — US1-TC8's second row keeps a sold-out tile given its address alone and a cart handler inert, no link drawn; the requirement says so and no scenario proved it, so `shared-ui-store-product-listing-SC-88` now gives the tile both a callback and its address. US1-TC12 keeps a `ProductCardImage` used alone a named, focusable control, as the tech design and the UI design state and no requirement did; the image requirement now says so and `shared-ui-store-product-listing-SC-101` proves it, through the Opens Alone story US1-TC12 opens
+- **Folded into case** — `shared-ui-store-product-listing-SC-55`, re-worded here to focus moving through the tile, had no case that checks the cart control on a tile that does not sell; US1-TC4 gained a Tab walk and a Cart control column, its second row showing none on hover or on focus. The 2026-10-06 pass drafted the sold-out tile that does not sell again, with the name's underline and Tab landing on the name; that run is US1-TC10's, so its results joined US1-TC10 and no second case was issued
 - **Contradicted** — none: where a case and a scenario state the same behaviour they agree
-- **Uncovered anchors** — none of this delta's: `shared-ui-store-product-listing-SC-87` is walked by `shared-ui-store-product-listing-US1-TC4-1` on the tile and `shared-ui-store-product-listing-US1-TC5-1` in the browse grid, `shared-ui-store-product-listing-SC-88` by `shared-ui-store-product-listing-US1-TC8-1`, `shared-ui-store-product-listing-SC-89` by `shared-ui-store-product-listing-US1-TC9-1`, `shared-ui-store-product-listing-SC-98` by `shared-ui-store-product-listing-US1-TC7-1`, and `shared-ui-store-product-listing-SC-97` by `shared-ui-store-product-listing-US1-TC10-1`, since this suite is the one the durable suite starts from; `add-store-cross-sell`'s `shared-ui-store-product-listing-US1-TC1-1` is retired at that change's fold. `shared-ui-store-product-listing-SC-04` to `shared-ui-store-product-listing-SC-09` are carried unchanged in the modified requirement and are not this change's to cover
-- **Carried, not this change's** — the image requirement's `shared-ui-store-product-listing-SC-46` to `shared-ui-store-product-listing-SC-50`, `shared-ui-store-product-listing-SC-52` to `shared-ui-store-product-listing-SC-54`, `shared-ui-store-product-listing-SC-65` and `shared-ui-store-product-listing-SC-66` are carried word for word; the capability's suite refresh owes them cases
-- **Reworded for the one keyboard stop** — `shared-ui-store-product-listing-SC-51` moves focus into the image rather than onto it, where Tab now lands on the cart control, walked by US1-TC7's cart-control result; `shared-ui-store-product-listing-SC-55` keeps its outcome, no cart control on a surface that does not sell, which US1-TC10 shows on its tile with no cart handler
-- **Cases added after the reconciliation** — US1-TC10 (`shared-ui-store-product-listing-SC-97`), written from the scenario at the acceptance review, so it is not blind
+- **Walked** — `shared-ui-store-product-listing-SC-87` by US1-TC4 on the tile and US1-TC5 in the browse grid; `shared-ui-store-product-listing-SC-88` by US1-TC8; `shared-ui-store-product-listing-SC-89` by US1-TC9, whose Inert story gives neither a callback nor an address; `shared-ui-store-product-listing-SC-97` by US1-TC10; `shared-ui-store-product-listing-SC-98` by US1-TC7; `shared-ui-store-product-listing-SC-99` by US1-TC6 on hover, US1-TC7 on focus, US1-TC10 on a tile that does not sell, and US1-TC8 and US1-TC9 on a name that does not open; `shared-ui-store-product-listing-SC-100` by US1-TC11, whose plain press on the photo is shown by the photo's link opening the same address on a modified press, since a plain press leaves Storybook; `shared-ui-store-product-listing-SC-101` by US1-TC12; `shared-ui-store-product-listing-SC-51`, re-worded to focus moving into the image, by US1-TC7's cart-control result
+- **Overlap kept** — US1-TC10 and `add-store-cross-sell`'s blind US1-TC1 both open a sold-out tile that does not sell; US1-TC10 also checks the name's underline and that Tab lands on the name, not the photo. `add-store-cross-sell` owes the disposition of its US1-TC1 when its `shared-ui-store-product-listing-SC-91` leaves its delta (Q9)
+- **Carried, not this change's** — `shared-ui-store-product-listing-SC-04` to `shared-ui-store-product-listing-SC-09`, `shared-ui-store-product-listing-SC-46` to `shared-ui-store-product-listing-SC-50`, `shared-ui-store-product-listing-SC-52` to `shared-ui-store-product-listing-SC-54`, `shared-ui-store-product-listing-SC-65` and `shared-ui-store-product-listing-SC-66` are carried word for word; the capability's suite refresh owes them cases
+- **Uncovered** — none of this delta's scenarios
+- **Cases from the second pass** — US1-TC11 and US1-TC12, and US1-TC10's underline and Tab results, came from the 2026-10-06 pass that raised the nameless tile; it left no Run line, so this reconciliation does not count them as blind
 
 **Run:** Blind feature pass (QA1) on 2026-10-05 for `activate-listing-tile-by-name`, `shared/ui/store-product-listing`. Read the caller's isolated bundle only: the capability's Purpose and Feature set (outline), its `user-journeys.md`, the change's `proposal.md`, `decisions.md` with its Raised table, `ui-design.md` with scenario ids stripped, `openspec/config.yaml` context, the PRD pages `shared/ui/store-product-listing` and `grade10-site/store/product-listing`, and `add-store-cross-sell`'s in-flight suite for this capability with its Reconciliation stripped; plus `docs/governance/specs-to-test-cases.md` and `docs/governance/tcs-conventions.md`. Denied and not opened: every Requirements section, this change's delta `spec.md`, `openspec/specs/`, the rest of `openspec/changes/` and its archive, and `packages/` source.

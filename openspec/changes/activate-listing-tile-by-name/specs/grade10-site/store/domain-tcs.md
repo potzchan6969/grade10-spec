@@ -1,0 +1,52 @@
+# grade10-site/store Cross-Feature E2E Test Cases
+
+**Status:** pending-review
+**Drafts styled:** 2026-10-06, tcs-rules r4
+
+## grade10-site-store-e2e-US1: Collector enters a collection and opens a product
+
+**As a** collector,
+**I want** to move from a collection on the Store front door to a product's
+own page,
+**so that** I can inspect the card I chose in the catalogue.
+
+### grade10-site-store-e2e-US1-TC1-1: Collection tile leads to its product page
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-home-US-02, grade10-site-store-product-listing-US-02, grade10-site-store-product-page-US-02
+
+**Pre-conditions:**
+
+* `<collection>` is listed on the Store front door and holds `<product>`.
+* `<product>` is listed in `<collection>` and is for sale.
+
+**Steps:**
+
+1. Navigate to `<grade10 store url>`.
+2. Open the tile for `<collection>`.
+3. Check the collection shown as the listing narrowing.
+4. Open the card for `<product>`.
+
+**Expected Results:**
+
+* The Store front door renders with `<collection>` as a collection tile.
+* The browse listing shows `<collection>` as the narrowing in force.
+* Step 4 opens `<product>`'s own product page.
+
+## Reconciliation
+
+- **Re-worded** — US1-TC1 opened any product in the collection from the listing; the listing now keeps a sold-out card shut, so `<product>` is for sale; which control opens it is the listing's feature suite's
+- **Raised** — nothing: no other cross-feature path is introduced; a sold-out card from the front door's row stays US3-TC1's, whose row does not sell and so still opens it
+- **Shared with** — `add-store-product-status` carries US1-TC1 unchanged; whichever change folds second keeps `<product>` for sale
+
+**Run:** 2026-10-06, the domain check of `activate-listing-tile-by-name` at QA2: the change touches `grade10-site/store/product-listing` and `grade10-site/store/product-page`, and US1-TC1 traces both.
