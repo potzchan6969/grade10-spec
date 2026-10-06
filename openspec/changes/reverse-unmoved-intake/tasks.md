@@ -50,7 +50,7 @@ Built against the contract's fixtures, not a running backend.
 - [ ] 6.4 Render `intake-reversal` in `changelogActionLabel` as `Intake reversal · No Cert ID`, and `Intake reversal · <Cert ID>` when the entry's before carries a Cert record (`grade10-admin-inventory-catalog-SC-174`, `grade10-admin-inventory-catalog-SC-176`)
 - [ ] 6.5 Verify: `pnpm run typecheck`, `pnpm run lint` and `pnpm run test` in grade10.
 
-## 7. The walk (grade10)
+## 7. The walk (grade10) (owner: @mason5991)
 
 Uses draft `feature-tcs.md` as its input, with groups 2 to 6 landed; human QA reviews the cases after deployment (`/tcs-review reverse-unmoved-intake`), and `/tcs-run-sheet` executes the manual ones when needed.
 
