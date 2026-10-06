@@ -36,9 +36,8 @@ Before Dev writes deltas, collect every open decision once:
 - every ❓ or `TBC` in the page sections the change cites
 - any decision log the human provides: authoritative input, read first, never
   re-asked
-- the owner of each requirement that more than one in-flight change edits: one
-  change per requirement, per the `overlap` rule of `check:manual`
-- the `depends_on` acceptance order across the changes that share a capability
+- each requirement more than one in-flight change edits, and the
+  `depends_on` order: settled in step 5
 
 Ask the human once, as one numbered list with options and a recommendation
 each, as a [Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
@@ -64,6 +63,9 @@ decision that surfaces after this sweep is a gap in the sweep: say so.
    `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"`. It is
    cleared by their edit or by that artifact's `reviewed:` line, and it holds
    no stage. Use `docs/governance/task-ownership.md` for groups and owners.
+   Before QA2, run `pnpm plan:review-preflight <change>`: the strict change
+   validator, fold-facing delta headings, adjacent scenario trace markers and
+   active overlaps. A refusal is a Dev repair; rerun it before starting QA2.
 3. **QA2 - reconciliation.** In a fresh context, reconcile each blind case
    and scenario against the anchors in `feature-tcs.md`. Record whether a case
    was folded, rejected with reason, raised for the human or remains uncovered.
@@ -75,12 +77,26 @@ decision that surfaces after this sweep is a gap in the sweep: say so.
    architecture or tasks. Update the source first,
    then dependent artifacts. A changed anchor restarts QA1 and Dev; another
    edit reruns QA2. Confirm artifacts are complete and new cases remain draft.
-5. **Review.** In a fresh context, run `accept-review`; changes that share
-   capabilities go in one cluster run. Accept only on its `Ready to accept`
-   verdict. Fix all findings from one review in one pass, each in its source
-   first, then rerun the review only for blockers; `fix` and `note` findings
-   land without a rerun.
-6. **Accept and publish.** Run `pnpm accept:preflight <change>`. With its
+5. **Reconcile the cluster.** Before `accept-review`, group the open
+   changes that edit one durable requirement or are linked by `depends_on`
+   (the preflight's `--clusters` report lists them); a change in no cluster
+   skips this. Write one sheet per cluster, `reconciliation.md` in the
+   first-accepted change's directory: no validator reads it and acceptance
+   does not hash it, like `accept-review.md`. It holds:
+   - per shared requirement, the one change that owns the edit (the `overlap`
+     rule of `check:manual`) and what the others say
+   - every open ❓ and conflicting statement, asked once as one numbered
+     Clarification Request; the human's decision log is authoritative
+   - the acceptance order
+
+   Reconcile, do not merge: each change keeps its own scope, acceptance and
+   verdict, and a slow change never holds the others once ownership and order
+   are settled.
+6. **Review.** In a fresh context, run `accept-review`; a cluster is reviewed
+   as one run. Accept only on its `Ready to accept` verdict. Fix all findings
+   from one review in one pass, each in its source first, then rerun the
+   review only for blockers; `fix` and `note` findings land without a rerun.
+7. **Accept and publish.** Run `pnpm accept:preflight <change>`. With its
    printed baseline, run `pnpm spec:accept <change> --baseline <digest>
    --reviewed-by <human>`. An amendment names `--supersedes <fingerprint>`.
    Acceptance publishes the durable contract and preserves prior snapshots.

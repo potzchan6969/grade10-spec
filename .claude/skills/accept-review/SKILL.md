@@ -13,16 +13,25 @@ review catches that before `pnpm spec:accept`, not at archive.
 Run it in a fresh context that did not write the plan. It reads and reports;
 the owning hand fixes the source.
 
-## Machine Gates First
+## Flow
 
-Run `pnpm accept:preflight <change>` before reading any content. If it
-refuses, stop and report the refusal as the one blocker; a review of content
-the gates reject is spent twice. Whichever gates preflight covers, `pnpm
-check:manual` stays a gate of this review (check 1).
-
-If preflight can write a packet (`--packet`), read it first: it holds the
-change's lines, deltas and durable files in one place. Open a full file only to
-confirm a finding.
+1. **Fresh context** - one that did not write the plan.
+2. **Preflight once** - run `pnpm plan:review-preflight <change> --json`.
+   Its manifest lists the changed requirements, linked PRD lines, durable
+   targets and overlaps. If it is `blocked`, stop and report its blockers as
+   the one blocker; a review of content the gates reject is spent twice. Then
+   run `pnpm accept:preflight <change>` and `pnpm check:manual`; a refusal
+   from either stops the review the same way.
+3. **Ledger** - if `accept-review.md` exists, read it and review only
+   `git diff <reviewed>..HEAD` and what that diff touches. Otherwise review
+   in full.
+4. **Manifest first** - open the manifest's lines, then the full sources and
+   every affected durable file when `expandToFullSources` is true or an
+   overlap or disagreement appears. The manifest bounds the first read; it
+   never narrows a gate or a check below.
+5. **Cluster** - when the change belongs to a cluster, read its
+   reconciliation sheet and review the cluster as one (see Cluster Mode).
+6. **Ledger write** - write the report to the ledger.
 
 ## Ledger and Reruns
 
@@ -39,19 +48,22 @@ verdict: <the verdict line>
 ```
 
 `Status` is `open`, or `fixed <sha>` once verified. A rerun is still a fresh
-context, with a smaller input: read the ledger, verify each prior finding
-against its source, then review only `git diff <reviewed>..HEAD` and what that
-diff touches (the pages, deltas and durable files its lines cite). Rewrite the
-ledger with the new sha.
+context with a smaller input: verify each prior finding against its source,
+then review the diff since `reviewed` (flow step 3). Rewrite the ledger with
+the new sha.
 
 Only a blocker, or a fix that changes requirement text, calls for a rerun.
 `fix` and `note` findings land without one.
 
 ## Cluster Mode
 
-When several changes share capabilities, review them as one cluster: read each
-shared durable spec and page once, keep one table with a `Change` column, and
-end with a verdict per change. Each change keeps its own ledger.
+Changes that share a requirement or are linked by `depends_on` are reviewed as
+one cluster, after `planning-dev` has reconciled it. Read the cluster's
+reconciliation sheet first: check each shared requirement has one owner, the
+owner's delta carries the edit, no other delta restates it, and the decision
+log and acceptance order agree with the deltas. Read each shared durable spec
+and page once, keep one table with a `Change` column, and end with a verdict
+per change. Each change keeps its own ledger and verdict.
 
 ## Inputs
 
@@ -71,9 +83,9 @@ Read the store at its `main`, never the pinned copy:
 
 ## Checks
 
-1. **Machine gates** - `pnpm accept:preflight <change>` has passed (see
-   above) and `pnpm check:manual` is clean. A refusal is a blocker; a `spec ... changed meaning` warning
-   on a page in scope is a finding.
+1. **Machine gates** - the Flow's preflights passed and `pnpm check:manual`
+   is clean. A `spec ... changed meaning` warning on a page in scope is a
+   finding.
 2. **Page to delta** - every 🚧 line the change adds or keeps on a page is
    served by at least one requirement in its delta. Every ADDED or MODIFIED
    requirement serves a 🚧 or unmarked line on a page. A requirement no line
@@ -88,7 +100,8 @@ Read the store at its `main`, never the pinned copy:
 5. **Folded result** - read the durable files after the fold, not only the
    delta: a MODIFIED or REMOVED requirement names one that exists on `main`; no
    requirement left unchanged now contradicts a new one; an unmarked page line
-   the change makes untrue is rewritten or marked 🚧.
+   the change makes untrue is rewritten or marked 🚧; and the durable
+   capability `Purpose` still carries its existing scope alongside the change.
 6. **Designs** - each `ui-design.md` state ties to an anchor and agrees with
    the requirement for that state; `tech-design.md` delivers every requirement
    and adds no behaviour the spec and page do not state.
