@@ -28,7 +28,7 @@
 Once an invoice is `expired`, the admin portal SHALL be the only place it is
 paid. An operator holding payment-processing SHALL record it manually, per
 `grade10-admin/auction/post-sale`'s manual settlement. A cumulative exact
-payment makes the invoice `paid` and the order derive as Processing. A payment
+payment makes the invoice `paid` and the order derive as Preparing Shipment. A payment
 whose cumulative total remains below the invoice total keeps the invoice Partially Paid with its real balance;
 it starts no new self-service deadline and has no manual-settlement detour.
 In either case the winner's order shows no card Pay control.
@@ -61,7 +61,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **AND** an operator holding payment-processing
 - **WHEN** they record a bank transfer settlement with its reference and proof
 - **THEN** Grade10 accepts it
-- **AND** the invoice is `paid` and the order derives as Processing
+- **AND** the invoice is `paid` and the order derives as Preparing Shipment
 - **AND** the winner's order shows nothing owed and no card Pay control
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-v9x rev=1 -->
@@ -71,7 +71,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **GIVEN** an auction order whose invoice is `expired` with a 100000 minor-unit balance
 - **WHEN** an operator holding payment-processing records a 40000 minor-unit payment
 - **THEN** the invoice is Partially Paid with 60000 minor units remaining
-- **AND** no new self-service deadline or close-as-paid choice is created
+- **AND** no new self-service deadline is created
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-cdi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-86 - A winner payment received at the deadline is refused
@@ -91,7 +91,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
 - **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z
 - **WHEN** the payment succeeds at 2026-09-19T09:00:20Z
-- **THEN** the invoice is `paid` and the order derives as Processing
+- **THEN** the invoice is `paid` and the order derives as Preparing Shipment
 - **AND** the invoice was never `expired`
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-xct rev=1 -->

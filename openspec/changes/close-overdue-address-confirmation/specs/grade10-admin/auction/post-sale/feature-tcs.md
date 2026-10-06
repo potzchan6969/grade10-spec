@@ -737,7 +737,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 **Expected Results:**
 
-* The settlement is accepted; the order derives Processing.
+* The settlement is accepted; the order derives Preparing Shipment.
 * The Expired invoice status is gone; the invoice reads paid.
 * Winner Order shows no amount owed and no card Pay.
 
@@ -770,7 +770,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 **Expected Results:**
 
 * The invoice reads Partially Paid with 60000 minor units remaining.
-* No new self-service payment deadline or close-as-paid choice appears.
+* No new self-service payment deadline appears.
 * Winner Order offers no card Pay control.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-0g4 rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
@@ -810,7 +810,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 **Expected Results:**
 
 * The card payment is accepted.
-* The order derives Processing and never showed Expired invoice.
+* The order derives Preparing Shipment and never showed Expired invoice.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-54p rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC19-1: The winner cannot pay by card after the deadline
@@ -890,7 +890,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 * The deadline is 2026-09-21T10:00:00Z; Expired invoice and needs-action are gone.
 * Winner Order offers card Pay again.
-* The card payment is accepted; the order derives Processing.
+* The card payment is accepted; the order derives Preparing Shipment.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-2qa rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC21-1: Settling or reissuing an expired invoice needs payment-processing
@@ -963,7 +963,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * At 09:00:05 the invoice is still `pending`, not `expired`.
-* After confirmation the invoice is `paid` and the order is Processing.
+* After confirmation the invoice is `paid` and the order is Preparing Shipment.
 * The invoice log holds no expired entry.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-mon rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
