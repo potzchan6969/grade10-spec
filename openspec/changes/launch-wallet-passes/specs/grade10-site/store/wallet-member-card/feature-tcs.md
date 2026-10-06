@@ -2,7 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-10-06, tcs-rules r4
-**Out of suite:** grade10-site-store-wallet-member-card-SC-46, grade10-site-store-wallet-member-card-SC-47, grade10-site-store-wallet-member-card-SC-48
+**Out of suite:** grade10-site-store-wallet-member-card-SC-50, grade10-site-store-wallet-member-card-SC-51, grade10-site-store-wallet-member-card-SC-52, grade10-site-store-wallet-member-card-SC-54, grade10-site-store-wallet-member-card-SC-55
 
 ## grade10-site-store-wallet-member-card-US9: Operator ends a member's pass from the console
 
@@ -10,7 +10,7 @@
 **I want** to end a member's pass from the console when the phone it was on is gone,
 **so that** a member who cannot reach their own page is not left with a pass that still identifies them.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-19a rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-19a rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-eyg -->
 ### grade10-site-store-wallet-member-card-US9-TC1-1: Operator ends one wallet's pass and the other keeps identifying
 
 Runs once per row of **Test data**.
@@ -31,7 +31,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(admin, holds store:write, reads the audit trail) is signed in to the admin console.
-* customer(member with a live Google Wallet pass and a live Apple Wallet pass) has both passes on a test phone the tester holds.
+* customer(member with a live Google Wallet pass and a live Apple Wallet pass) has both passes on a test phone the tester holds, with the site's notifications allowed on it.
 * The tester can read the member's email inbox.
 * admin(shop staff) has the Grade10 extension open at the till.
 
@@ -51,7 +51,7 @@ Runs once per row of **Test data**.
 5. Scan the <kept wallet> pass at the till.
 6. Reload the member's record.
 7. On <grade10 admin audit url>, read the newest row for the member.
-8. Open the member's email inbox.
+8. Open the member's email inbox and the test phone's notifications.
 9. As the member, navigate to <grade10 membership url>.
 10. Click the action that adds a <ended wallet> pass.
 11. Scan the new <ended wallet> pass at the till.
@@ -63,11 +63,11 @@ Runs once per row of **Test data**.
 * Step 5 identifies the member.
 * Step 6 names <kept wallet> alone.
 * Step 7 names the operator, the member, <ended wallet> and step 3's time, and says a pass was ended.
-* Step 8 holds no message about the ending.
+* Step 8 holds no email and no notification about the ending.
 * Step 9 shows no <ended wallet> pass carried, and offers adding one.
 * Step 11 identifies the member.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-5v6 rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-5v6 rev=1 covers=g10.store-wallet-member-card.SC-7ub -->
 ### grade10-site-store-wallet-member-card-US9-TC2-1: Record names exactly the wallets carrying a live pass
 
 Runs once per row of **Test data**.
@@ -110,7 +110,7 @@ Runs once per row of **Test data**.
 * The record names <wallets named>, and no other wallet.
 * An ending is offered for each named wallet, and none otherwise.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-5tw rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-5tw rev=1 covers=g10.store-wallet-member-card.SC-6nw -->
 ### grade10-site-store-wallet-member-card-US9-TC3-1: Ending a pass no longer live ends nothing and says so
 
 Runs once per row of **Test data**.
@@ -157,7 +157,7 @@ Runs once per row of **Test data**.
 * Step 6 names Apple Wallet alone, still offering its ending.
 * Step 7 names admin A, the member, Google Wallet and step 4's time, and says nothing was ended.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-b06 rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-b06 rev=1 covers=g10.store-wallet-member-card.SC-7ub -->
 ### grade10-site-store-wallet-member-card-US9-TC4-1: Operator without store:write sees no wallets and no ending
 
 **Classification:**
@@ -170,12 +170,12 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-store-wallet-member-card-US-09
 
 **Pre-conditions:**
 
-* admin(reads the store, does not hold store:write) is signed in to the admin console.
+* admin(opens the member's record, does not hold store:write) is signed in to the admin console.
 * customer(member with a live Google Wallet pass and a live Apple Wallet pass).
 
 **Steps:**
@@ -189,7 +189,7 @@ Runs once per row of **Test data**.
 * The record names no wallet.
 * The record offers no ending.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-r84 rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-r84 rev=1 covers=g10.store-wallet-member-card.SC-ts9 -->
 ### grade10-site-store-wallet-member-card-US9-TC5-1: Ending sent without store:write is refused and the pass stays live
 
 **Classification:**
@@ -207,7 +207,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(reads the store, does not hold store:write) has a signed-in admin console session.
+* admin(support, does not hold store:write) has a signed-in admin console session.
 * customer(member with a live Google Wallet pass).
 
 **Steps:**
@@ -221,7 +221,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused as forbidden.
 * Step 3 shows the member still carries a Google Wallet pass.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-4pc rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-4pc rev=1 covers=g10.store-wallet-member-card.SC-1an -->
 ### grade10-site-store-wallet-member-card-US9-TC7-1: Ending the operator declines ends nothing
 
 **Classification:**
@@ -258,7 +258,7 @@ Runs once per row of **Test data**.
 * Step 5 still names Apple Wallet, offering its ending.
 * Step 6 shows the member still carries an Apple Wallet pass.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-g2r rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-g2r rev=1 covers=g10.store-wallet-member-card.SC-3il -->
 ### grade10-site-store-wallet-member-card-US9-TC8-1: Record whose wallets cannot be read says so
 
 **Classification:**
@@ -291,7 +291,7 @@ Runs once per row of **Test data**.
 * The record never says no wallet pass is saved.
 * The record offers no ending.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-7v3 rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-7v3 rev=1 covers=g10.store-wallet-member-card.SC-6w0 -->
 ### grade10-site-store-wallet-member-card-US9-TC9-1: Operator ends a pass on their own member record
 
 **Classification:**
@@ -325,7 +325,7 @@ Runs once per row of **Test data**.
 * Step 4 names no wallet.
 * Step 5 shows no Google Wallet pass carried.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-jac rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-jac rev=1 covers=g10.store-wallet-member-card.SC-a5e -->
 ### grade10-site-store-wallet-member-card-US9-TC10-1: Shop staff holding store:write ends a member's pass
 
 **Classification:**
@@ -360,7 +360,7 @@ Runs once per row of **Test data**.
 * Step 4 names no wallet.
 * Step 5 shows no Apple Wallet pass carried.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-e3d rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-e3d rev=1 covers=g10.store-wallet-member-card.SC-6nw -->
 ### grade10-site-store-wallet-member-card-US9-TC11-1: Ending sent for a wallet never added ends nothing
 
 **Classification:**
@@ -394,7 +394,7 @@ Runs once per row of **Test data**.
 * Step 3 names the operator, the member, Apple Wallet and step 1's time, and says nothing was ended.
 * Step 4 shows the member still carries a Google Wallet pass.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-doc rev=1 covers=g10.store-wallet-member-card.SC-a5e,g10.store-wallet-member-card.SC-ts9,g10.store-wallet-member-card.SC-7ub,g10.store-wallet-member-card.SC-6nw,g10.store-wallet-member-card.SC-eyg,g10.store-wallet-member-card.SC-1an,g10.store-wallet-member-card.SC-3il,g10.store-wallet-member-card.SC-6w0 -->
+<!-- trace:case id=g10.store-wallet-member-card.TC-doc rev=1 covers=g10.store-wallet-member-card.SC-7ub -->
 ### grade10-site-store-wallet-member-card-US9-TC12-1: Wallets read without store:write is refused
 
 **Classification:**
@@ -412,7 +412,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(reads the store, does not hold store:write) has a signed-in admin console session.
+* admin(support, does not hold store:write) has a signed-in admin console session.
 * customer(member with a live Google Wallet pass).
 
 **Steps:**
@@ -427,29 +427,30 @@ Runs once per row of **Test data**.
 
 ## Settled
 
-- **An ending the audit trail fails to record** — not this capability's: whether a store act rolls back on a failed append is the Audit Trail's rule for every elevated act
-- **A reason for an operator ending** — none typed; the cause is always the lost phone
-- **A message to the member** — none; the member asked for the ending, and their own page shows the wallet no longer held
-- **An attempt that ended nothing** — recorded on the audit trail as ending nothing
-- **An ending refused for want of `store:write`** — not recorded; the trail records acts that ran, for every elevated act
-- **An ending on the operator's own record** — allowed, as on any other member's
-- **Confirming the ending** — the record asks, naming the wallet; declining ends nothing
-- **Proving a member saves a pass** — the save is US-06's, walked by `grade10-site-store-wallet-member-card-US6-TC1-1` on each wallet in staging
+- **An ending the audit trail fails to record** - the [Audit Trail](/p/grade10-admin/audit)'s rule for every elevated act: the act does not pass unrecorded. Its case is the platform's, not this suite's. The shipped ladder does not hold it yet: it appends after the act commits (`packages/worker/src/trpc.ts:429-444` in grade10), so a failed write fails the request with the pass already ended. That gap is in every elevated mutation, and is a grade10 bug for the bug rounds
+- **A reason for an operator ending** - none typed; the cause is always the lost phone
+- **A message to the member** - none; the member asked for the ending, and their own page shows the wallet no longer held
+- **An attempt that ended nothing** - recorded on the audit trail as ending nothing
+- **An ending refused for want of `store:write`** - not recorded; an elevated action refused for want of a permission never runs, so the store's trail writes nothing ([Audit Trail](/p/grade10-admin/audit))
+- **An ending on the operator's own record** - allowed, as on any other member's
+- **Confirming the ending** - the record asks, naming the wallet; declining ends nothing
+- **Proving a member saves a pass** - the save is US-06's, walked by `grade10-site-store-wallet-member-card-US6-TC1-1` on each wallet in staging
 
 ## Reconciliation
 
-**Run:** 2026-10-06, QA2 in a fresh context, the second on US-09. It read this suite, the delta's scenarios, `decisions.md`, `tech-design.md`, `tasks.md`, the [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) page, the durable suite, and the shipped code in grade10. The blind pass (QA1) left no Run line of its own; its raised rows, R3 to R9 in `decisions.md`, quote the page, `decisions.md` and the Users page, and none names a scenario or a requirement. The first QA2 reconciled US9-TC1 to US9-TC5 and US9-TC7 to US9-TC8 the same day; US9-TC9 to US9-TC11 and `grade10-site-store-wallet-member-card-SC-49` came after it and are reconciled here for the first time.
+**Run:** 2026-10-06, QA2 in a fresh context, after the acceptance review's fixes and the scenario renumbering. Rerun the same day in a fresh context against the shipped code in grade10 at `d38e0e7e93`; its two corrections are the last two under **Corrected**. It read this suite, the delta's scenarios and feature set, `decisions.md`, `tech-design.md`, `tasks.md`, the [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) and [Audit Trail](/p/grade10-admin/audit) pages, the durable suite, the store domain suite, and the shipped code in grade10. The blind pass (QA1) left no Run line of its own; its raised rows, R3 to R9 in `decisions.md`, quote the page, `decisions.md` and the Users page, and none names a scenario or a requirement. Every case and every scenario is reconciled below, the Configuration group's included.
 
-- **Agreed** — `grade10-site-store-wallet-member-card-SC-38` and `grade10-site-store-wallet-member-card-SC-43` are walked by US9-TC1: the ending, the audit row, no message, the new pass and the other wallet left identifying; US9-TC10 walks `grade10-site-store-wallet-member-card-SC-38` for shop staff, who hold `store:write` (Q2). `grade10-site-store-wallet-member-card-SC-41` by US9-TC2 for the wallets named, by US9-TC1's reload for a wallet leaving the list, and by US9-TC4 for an operator without `store:write`. `grade10-site-store-wallet-member-card-SC-40` by US9-TC5. `grade10-site-store-wallet-member-card-SC-42` by US9-TC3 for a pass ended first elsewhere and US9-TC11 for a wallet never added. `grade10-site-store-wallet-member-card-SC-44` by US9-TC7, `grade10-site-store-wallet-member-card-SC-45` by US9-TC8, `grade10-site-store-wallet-member-card-SC-49` by US9-TC9
-- **Raised, landed** — a typed reason (Q14: none); a message to the member (Q15: none); an operator ending a pass on their own record (Q17: allowed, now `grade10-site-store-wallet-member-card-SC-49`); which case proves a member saving a pass (Q19: the durable `grade10-site-store-wallet-member-card-US6-TC1-1`, walked in staging by task 8.3); an ending refused for want of `store:write` (Q20: not recorded, as for every elevated act). No case changed
-- **Raised, folded into spec** — an attempt that ended nothing is recorded as ending nothing (Q16), stated in the requirement and `grade10-site-store-wallet-member-card-SC-42`; US9-TC3 and US9-TC11 read the audit row. The record asks the operator to confirm, naming the wallet, and declining ends nothing (Q18, from the shipped console), stated as `grade10-site-store-wallet-member-card-SC-44`; US9-TC1 and US9-TC3 confirm their ending
-- **Rejected** — US9-TC6, dropped: it held that an ending the audit trail cannot record does not take effect. The trail is the platform's: the append follows the act, and a failed append fails the request over an act already committed (`packages/worker/src/trpc.ts:429-444` in grade10). Whether a store act rolls back on a failed append is the [Audit Trail](/p/grade10-admin/audit) page's to decide, not this capability's
-- **Contradicted** — none: where a case and a scenario state the same behaviour they agree
-- **Found by neither reading** — a record whose wallets cannot be read says so and never that none are held: shipped in grade10's console and its test, folded as `grade10-site-store-wallet-member-card-SC-45`. A request for the member's wallets without `store:write` is refused as forbidden: decided in Q5 and the technical design, which moves the read from `store:read` to `store:write` (task 2.4), and tested by task 2.1, but stated by no scenario and walked by no case. Folded into the requirement and `grade10-site-store-wallet-member-card-SC-41`, walked by US9-TC12
-- **Cases added after a reconciliation** — US9-TC7 (`grade10-site-store-wallet-member-card-SC-44`), US9-TC8 (`grade10-site-store-wallet-member-card-SC-45`) and US9-TC12 (`grade10-site-store-wallet-member-card-SC-41`), written from the scenarios, so they are not blind. US9-TC9 to US9-TC11 record no reading of their own
-- **Out of suite** — `grade10-site-store-wallet-member-card-SC-46`, `grade10-site-store-wallet-member-card-SC-47` and `grade10-site-store-wallet-member-card-SC-48` serve the Configuration group, which no journey walks: the launch check is a command only Engineering runs. They are decided by grade10's tests, task 3.1 - `scripts/secrets/status.test.mjs`, `packages/utils/test/config.test.ts` and the store backend's `walletPassSecrets` test - and run against every deployed store worker by task 7.1
-- **Carried, not this change's** — `grade10-site-store-wallet-member-card-SC-12` is carried word for word in the modified requirement and walked by the durable `grade10-site-store-wallet-member-card-US1-TC3-1`
-- **Corrected** — `grade10-site-store-wallet-member-card-SC-43` served US-09 under a title the journey does not carry; it now names the journey's own
+- **Agreed** - `grade10-site-store-wallet-member-card-SC-38` and `grade10-site-store-wallet-member-card-SC-47` are walked by US9-TC1: the ending, the audit row, no message, the new pass and the other wallet left identifying; US9-TC10 walks `grade10-site-store-wallet-member-card-SC-38` for shop staff, who hold `store:write` (Q2). `grade10-site-store-wallet-member-card-SC-45` by US9-TC2 for the wallets named, by US9-TC1's reload for a wallet leaving the list, and by US9-TC4 for an operator without `store:write`. `grade10-site-store-wallet-member-card-SC-44` by US9-TC5. `grade10-site-store-wallet-member-card-SC-46` by US9-TC3 for a pass ended first elsewhere and US9-TC11 for a wallet never added. `grade10-site-store-wallet-member-card-SC-48` by US9-TC7, `grade10-site-store-wallet-member-card-SC-49` by US9-TC8, `grade10-site-store-wallet-member-card-SC-53` by US9-TC9
+- **Raised, landed** - a typed reason (Q14: none); a message to the member (Q15: none); an operator ending a pass on their own record (Q17: allowed, now `grade10-site-store-wallet-member-card-SC-53`); which case proves a member saving a pass (Q19: the durable `grade10-site-store-wallet-member-card-US6-TC1-1`, walked in staging by task 8.3); an ending refused for want of `store:write` (Q20: not recorded, as for every refused elevated action outside the identity trail). No case changed
+- **Raised, folded into spec** - an attempt that ended nothing is recorded as ending nothing (Q16), stated in the requirement and `grade10-site-store-wallet-member-card-SC-46`; US9-TC3 and US9-TC11 read the audit row. The record asks the operator to confirm, naming the wallet, and declining ends nothing (Q18, from the shipped console), stated as `grade10-site-store-wallet-member-card-SC-48`; US9-TC1 and US9-TC3 confirm their ending
+- **Rejected** - US9-TC6, dropped: it held that an ending the audit trail cannot record does not take effect. The [Audit Trail](/p/grade10-admin/audit) page states that rule for every elevated act - a failed write fails the request rather than letting the action pass unrecorded - so its case is the platform's, not this capability's; the shipped ladder's gap is under Settled
+- **Contradicted** - none: where a case and a scenario state the same behaviour they agree
+- **Found by neither reading** - a record whose wallets cannot be read says so and never that none are held: shipped in grade10's console and its test, folded as `grade10-site-store-wallet-member-card-SC-49`. A request for the member's wallets without `store:write` is refused as forbidden: decided in Q5 and the technical design, which moves the read from `store:read` to `store:write` (task 2.4), and tested by task 2.1, but stated by no scenario and walked by no case. Folded into the requirement and `grade10-site-store-wallet-member-card-SC-45`, walked by US9-TC12. Three lines of the page's Launch Check that no scenario proved: a check naming each missing secret, now `grade10-site-store-wallet-member-card-SC-50`, which leaves both Google secrets unset; Grade10 passing before its issuer is recorded, now in `grade10-site-store-wallet-member-card-SC-51` beside ZZZ; and each wallet's secrets expected only where that wallet's issuer is recorded, which task 5.10 relies on when Google is enrolled weeks before Apple, folded as `grade10-site-store-wallet-member-card-SC-54`. `WALLET_APPLE_APNS_KEY` was proved not expected without an APNs key id and never expected with one, folded as `grade10-site-store-wallet-member-card-SC-55`
+- **Cases added after a reconciliation** - US9-TC7 (`grade10-site-store-wallet-member-card-SC-48`), US9-TC8 (`grade10-site-store-wallet-member-card-SC-49`) and US9-TC12 (`grade10-site-store-wallet-member-card-SC-45`), written from the scenarios, so they are not blind. US9-TC9 to US9-TC11 record no reading of their own
+- **Out of suite** - `grade10-site-store-wallet-member-card-SC-50` to `grade10-site-store-wallet-member-card-SC-52`, `grade10-site-store-wallet-member-card-SC-54` and `grade10-site-store-wallet-member-card-SC-55` serve the Configuration group, which no journey walks: the launch check is a command only Engineering runs. They are decided by grade10's tests, task 3.1 - `scripts/secrets/status.test.mjs`, `packages/utils/test/config.test.ts` and the store backend's `walletPassSecrets` test - and run against every deployed store worker by task 7.1
+- **Carried, not this change's** - `grade10-site-store-wallet-member-card-SC-12` is carried word for word in the modified requirement and walked by the durable `grade10-site-store-wallet-member-card-US1-TC3-1`
+- **Levels** - the store domain suite traces US-06 and US-08, so the capability is a hit there. Its two cases walk a pass to a spend at the till, and this change moves no requirement on that path, so the proposal carries `No domain impact` and `No platform impact` lines rather than a domain case
+- **Corrected** - US9-TC1 read only the member's email for a message about the ending; the site also reaches a member by notification on their phone, so step 8 now reads both. `grade10-site-store-wallet-member-card-SC-47` served US-09 under a title the journey does not carry; it now names the journey's own. US9-TC5 and US9-TC12 asked for an operator who reads the store without `store:write`, a role nobody holds: staff and admins hold both. They now sign in as support, which holds neither and is refused at the store's API. US9-TC4 cannot take support: the Members section needs `loyalty:read`, which support lacks (`apps/admin/grade10/src/sections.ts:134` and `packages/grade10-auth/contracts/src/schemas.ts:123-155` in grade10), and every role that opens a member's record holds `store:write`. It states the condition alone, plans `automation`, and is decided by the console's test, which mounts the record for such an operator; task 8.2 no longer walks it. US9-TC8 asserts no ending on an unreadable record, which the console's test did not: task 1.3 now adds that assertion before flipping it, as it adds the named-no-wallet one for US9-TC4. US9-TC1's manual row credited the store's suite with the whole audit row; it proves the operator, the wallet and the time, and the row's member subject and outcome are task 2's
 
 ### Manual
 
@@ -457,18 +458,19 @@ No case is decided by an automated test yet. The tests that prove part of each, 
 
 - the store's suite - `packages/grade10-store/backend/src/testing/suites/posGateway.ts`, in the application repository
 - the console's test - `apps/admin/grade10/src/pages/members/MembersPage.test.tsx`, in the application repository
+- the grant test - `packages/grade10-store/backend/test/trpc/routers/walletGrants.test.ts`, in the application repository, task 2.1
 - the walk - `apps/frontend/grade10/e2e/tests/admin/wallet-pass-ending.spec.ts`, in the application repository, task 8.2
 
 | Manual | Why |
 | --- | --- |
-| `grade10-site-store-wallet-member-card-US9-TC1-1` | the store's suite proves the ending, the audit row and the other wallet left live; to be walked in the walk; a person scans both passes at a staging till, task 8.3 |
+| `grade10-site-store-wallet-member-card-US9-TC1-1` | the store's suite proves the ending, the operator, the wallet and the time on the audit row, and the other wallet left live; the member as the row's subject and its outcome are task 2's; to be walked in the walk; a person scans both passes at a staging till, task 8.3 |
 | `grade10-site-store-wallet-member-card-US9-TC2-1` | the store's suite proves the wallets held and none; the console's test proves no ending offered for none; to be walked in the walk |
 | `grade10-site-store-wallet-member-card-US9-TC3-1` | the store's suite proves the nothing-held answer; the console's line and the audit outcome are task 2's; a person ends the pass from a second session first |
-| `grade10-site-store-wallet-member-card-US9-TC4-1` | the console's test proves no ending offered without `store:write`; to be walked in the walk |
+| `grade10-site-store-wallet-member-card-US9-TC4-1` | the console's test proves no ending offered without `store:write`; flipped once task 1.3 links it, asserting it names no wallet either |
 | `grade10-site-store-wallet-member-card-US9-TC5-1` | the store's suite proves the refusal and the pass still identifying; flipped once task 1.3 links it |
 | `grade10-site-store-wallet-member-card-US9-TC7-1` | the console's test for a declined confirmation is task 2's; to be walked in the walk |
-| `grade10-site-store-wallet-member-card-US9-TC8-1` | the console's test proves an unreadable wallet is never called empty; flipped once task 1.3 links it |
+| `grade10-site-store-wallet-member-card-US9-TC8-1` | the console's test proves an unreadable wallet is never called empty; flipped once task 1.3 links it, asserting it offers no ending either |
 | `grade10-site-store-wallet-member-card-US9-TC9-1` | the store's suite for an ending on the operator's own record is task 2's; a person signs in as an operator who is also a member |
 | `grade10-site-store-wallet-member-card-US9-TC10-1` | a person signs in as shop staff; which roles hold `store:write` is the console's role table, which no test here reads |
 | `grade10-site-store-wallet-member-card-US9-TC11-1` | the store's suite for the nothing-held answer and its audit outcome is task 2's; flipped once task 2.5 links it |
-| `grade10-site-store-wallet-member-card-US9-TC12-1` | the store's suite for a `support` operator's refused read is task 2's; flipped once task 2.5 links it |
+| `grade10-site-store-wallet-member-card-US9-TC12-1` | the grant test, which fails until the read needs `store:write`, and the store's suite for a `support` operator's refused read are task 2's; flipped on the grant test once task 2.5 links it |
