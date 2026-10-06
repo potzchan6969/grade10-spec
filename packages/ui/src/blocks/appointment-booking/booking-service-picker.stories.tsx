@@ -33,7 +33,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Card Grading")).toBeVisible();
+    expect(canvas.getByText("Grading Submission")).toBeVisible();
     expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
     expect(canvas.getByText("Collection Consultation")).toBeVisible();
     await userEvent.click(
@@ -47,7 +47,9 @@ export const Selected: Story = {
   args: { selectedId: "svc_grading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("radio", { name: /Card Grading/ })).toBeChecked();
+    expect(
+      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    ).toBeChecked();
     expect(
       canvas.getByRole("radio", { name: /Vault Drop-Off/ }),
     ).not.toBeChecked();

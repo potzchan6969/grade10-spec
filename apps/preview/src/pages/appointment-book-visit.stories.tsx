@@ -227,6 +227,7 @@ function BookVisitPage() {
                   key={service.id}
                   copy={DETAILS_FORM_COPY}
                   questions={service.questions}
+                  description={service.description}
                   emailReadOnly
                   initialValues={CONTACT_SEED}
                   onSubmit={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
@@ -284,7 +285,7 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "Book a Visit" }),
     ).toBeVisible();
-    expect(canvas.getByText("Card Grading")).toBeVisible();
+    expect(canvas.getByText("Grading Submission")).toBeVisible();
     expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
     expect(canvas.getByText("Collection Consultation")).toBeVisible();
     expect(
@@ -303,7 +304,7 @@ export const Default: Story = {
       canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
     ).toBeNull();
     for (const name of [
-      /Card Grading/,
+      /Grading Submission/,
       /Vault Drop-Off/,
       /Collection Consultation/,
     ]) {
@@ -315,7 +316,9 @@ export const Default: Story = {
 export const Slot: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("radio", { name: /Card Grading/ }));
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    );
     await userEvent.click(
       canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
     );

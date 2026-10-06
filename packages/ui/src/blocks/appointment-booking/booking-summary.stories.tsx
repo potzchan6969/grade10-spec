@@ -11,7 +11,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     copy: SUMMARY_COPY,
-    service: "Card Grading",
+    service: "Grading Submission",
     location: "Hong Kong Grade10 Store",
     address: "13 Pak Sha Road, Causeway Bay, Hong Kong",
     start: LIVE_RECORD.start,
@@ -43,7 +43,7 @@ export const ServiceOnly: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Card Grading")).toBeInTheDocument();
+    expect(canvas.getByText("Grading Submission")).toBeInTheDocument();
     expect(canvas.queryByText("Shop")).toBeNull();
   },
 };

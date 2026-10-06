@@ -15,6 +15,11 @@ import type {
   BookingService,
   BookingSlot,
 } from "./types";
+import {
+  CONSULTATION_QUESTIONS,
+  GRADING_QUESTIONS,
+  VAULT_DROP_OFF_QUESTIONS,
+} from "./visit-questions";
 
 /** Hong Kong, September 2026: the calendar every fixture is drawn on. */
 const FIXTURE_MONTH = "2026-09";
@@ -32,28 +37,29 @@ const STATE_LABELS: Record<BookingRecordState, string> = {
 const GRADING_SERVICE: BookingService = {
   id: "svc_grading",
   slug: "grading",
-  name: "Card Grading",
-  description: "Bring a card to the desk to be graded.",
+  name: "Grading Submission",
+  description: "Tell us a bit about the items you plan to submit for grading.",
   durationLabel: "30 min",
-  questions: [],
+  questions: GRADING_QUESTIONS,
 };
 
 const VAULTING_SERVICE: BookingService = {
   id: "svc_vault_drop_off",
   slug: "vault-drop-off",
   name: "Vault Drop-Off",
-  description: "Bring collectibles. Staff register them at the counter.",
+  description: "Help us prepare for your item intake and security logging.",
   durationLabel: "30 min",
-  questions: [],
+  questions: VAULT_DROP_OFF_QUESTIONS,
 };
 
 const CONSULTATION_SERVICE: BookingService = {
   id: "svc_consultation",
   slug: "consultation",
   name: "Collection Consultation",
-  description: "Talk through a collection with a specialist.",
+  description:
+    "Let us know what you would like to discuss with our specialists.",
   durationLabel: "60 min",
-  questions: [],
+  questions: CONSULTATION_QUESTIONS,
 };
 
 /** Same shop as Store Locator / free pickup. */
@@ -88,7 +94,7 @@ const SEPTEMBER_3_SLOTS: readonly BookingSlot[] = [
 
 const LIVE_RECORD: BookingRecord = {
   id: "bk_live",
-  service: "Card Grading",
+  service: "Grading Submission",
   location: "Hong Kong Grade10 Store",
   address: "13 Pak Sha Road, Causeway Bay, Hong Kong",
   timeZone: FIXTURE_TIME_ZONE,
@@ -142,18 +148,16 @@ const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
 };
 
 const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
-  title: "Your details",
+  title: "Your Details",
   name: "Name",
   email: "Email",
   phone: "Phone",
-  notes: "Anything we should know?",
-  notesHint: "For the desk — not an intake record.",
   optional: "optional",
   nameMissing: "Tell us your name.",
   emailMissing: "Tell us where to send the confirmation.",
   emailInvalid: "That doesn’t look like an email address.",
-  answerMissing: "Pick one to continue.",
-  submit: "Book the visit",
+  answerMissing: "This is needed to continue.",
+  submit: "Confirm Appointment",
 };
 
 const SUMMARY_COPY: BookingSummaryCopy = {

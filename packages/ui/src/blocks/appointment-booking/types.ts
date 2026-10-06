@@ -4,9 +4,14 @@ import type { ReactNode } from "react";
 type BookingQuestion = {
   id: string;
   label: string;
-  kind: "text" | "choice";
+  kind: "text" | "textarea" | "choice" | "choices" | "select" | "number";
   options?: readonly string[];
   required: boolean;
+  placeholder?: string;
+  /** Tooltip on the label. */
+  hint?: string;
+  /** Uneditable text before a number, e.g. `$`. */
+  prefix?: string;
 };
 
 type BookingService = {
