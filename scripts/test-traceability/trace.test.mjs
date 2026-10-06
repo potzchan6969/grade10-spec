@@ -767,6 +767,47 @@ test("fold rejects unresolved active covers and duplicate durable target markers
   }
 });
 
+test("fold reads covers=none as validate does: allowed only on a deprecated case", () => {
+  const { root, storeRoot } = copyFoldFixture();
+  try {
+    const suites = [
+      "openspec/changes/trace-fold-demo/specs/auction/store/listing-media/feature-tcs.md",
+      "openspec/specs/auction/store/listing-media/feature-tcs.md",
+    ].map((path) => resolve(storeRoot, path));
+    const retire = (status) => {
+      for (const file of suites) {
+        const text = readFileSync(file, "utf8");
+        writeFileSync(
+          file,
+          text
+            .replace(/covers=[^ ]+ -->/, "covers=none -->")
+            .replace(
+              /(### The listing refuses media beyond its limit)(?:\n\n\* \*\*Status:\*\* \w+)?/,
+              `$1\n\n* **Status:** ${status}`,
+            ),
+        );
+      }
+      return runCli([
+        "fold",
+        "--change",
+        "trace-fold-demo",
+        "--store-root",
+        storeRoot,
+      ]);
+    };
+
+    const deprecated = retire("deprecated");
+    assert.equal(deprecated.status, 0, deprecated.stderr || deprecated.stdout);
+    assert.match(deprecated.stdout, /Trace fold validation: PASS/);
+
+    const draft = retire("draft");
+    assert.equal(draft.status, 1, draft.stderr || draft.stdout);
+    assert.match(draft.stdout, /\[invalid-empty-coverage\]/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("validate reports duplicate ids, invalid Base36 ids, noncanonical casing, unresolved refs, and stale links", () => {
   const result = runCli([
     "validate",
