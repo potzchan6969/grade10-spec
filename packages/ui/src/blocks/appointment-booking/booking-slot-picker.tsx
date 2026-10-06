@@ -1,22 +1,18 @@
 import { Text } from "@grade10/design-system/components/display/text";
-import { IconButton } from "@grade10/design-system/components/forms/icon-button";
+import { Calendar } from "@grade10/design-system/components/forms/calendar";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
-import { Center } from "@grade10/design-system/components/layout/center";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
-import { formatLocalTime, intlLocale } from "../../lib/format-datetime";
+import { formatLocalTime } from "../../lib/format-datetime";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
 import { type LocaleProps, zoneLabel } from "./booking-copy";
 import {
-  datesOf,
-  dayOf,
-  monthInstant,
-  shiftMonth,
-  weekdayOf,
+  dateFromDay,
+  dateFromMonth,
+  dayFromDate,
+  monthFromDate,
 } from "./calendar";
 import type { BookingDay, BookingSlot } from "./types";
 
@@ -25,8 +21,6 @@ type BookingSlotPickerCopy = {
   timeTitle: string;
   previousMonth: string;
   nextMonth: string;
-  /** Seven labels, Monday first. */
-  weekdays: readonly [string, string, string, string, string, string, string];
   /** Precedes the zone name: `Times in`. */
   timesIn: string;
   /** Shown in the time column before a day is picked. */
@@ -55,17 +49,6 @@ type BookingSlotPickerProps = LocaleProps & {
   className?: string;
 };
 
-/** How far the first day sits from Monday, as grid columns. */
-const LEADING_SPAN = [
-  "",
-  "col-span-1",
-  "col-span-2",
-  "col-span-3",
-  "col-span-4",
-  "col-span-5",
-  "col-span-6",
-] as const;
-
 /**
  * A month calendar beside the picked day's times. Everything shown is what
  * the consumer passed: the picker decides nothing about the diary.
@@ -87,14 +70,6 @@ function BookingSlotPicker({
   onSelectSlot,
   className,
 }: BookingSlotPickerProps) {
-  const monthName = new Intl.DateTimeFormat(intlLocale(locale), {
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(monthInstant(month));
-  const canStepBack = minMonth === undefined || month > minMonth;
-  const canStepForward = maxMonth === undefined || month < maxMonth;
-
   return (
     <div
       className={cn(
@@ -107,35 +82,17 @@ function BookingSlotPicker({
         <Text as="h2" size="lg" weight="medium">
           {copy.dayTitle}
         </Text>
-        <HStack className="w-full" hAlign="space-between" vAlign="center">
-          <IconButton
-            aria-label={copy.previousMonth}
-            disabled={!canStepBack}
-            onClick={() => onMonthChange(shiftMonth(month, -1))}
-            type="button"
-          >
-            <CaretLeft />
-          </IconButton>
-          <Text as="span" data-slot="booking-month" weight="medium">
-            {monthName}
-          </Text>
-          <IconButton
-            aria-label={copy.nextMonth}
-            disabled={!canStepForward}
-            onClick={() => onMonthChange(shiftMonth(month, 1))}
-            type="button"
-          >
-            <CaretRight />
-          </IconButton>
-        </HStack>
         <AsyncRegion skeletons={5} slot="booking-days" state={days}>
           {(list) => (
-            <MonthGrid
+            <SlotCalendar
+              copy={copy}
               days={list}
+              maxMonth={maxMonth}
+              minMonth={minMonth}
               month={month}
+              onMonthChange={onMonthChange}
               onSelectDay={onSelectDay}
               selectedDate={selectedDate}
-              weekdays={copy.weekdays}
             />
           )}
         </AsyncRegion>
@@ -204,64 +161,47 @@ function BookingSlotPicker({
   );
 }
 
-function MonthGrid({
-  month,
+function SlotCalendar({
+  copy,
   days,
+  month,
+  minMonth,
+  maxMonth,
   selectedDate,
-  weekdays,
+  onMonthChange,
   onSelectDay,
 }: {
-  month: string;
+  copy: BookingSlotPickerCopy;
   days: readonly BookingDay[];
+  month: string;
+  minMonth?: string;
+  maxMonth?: string;
   selectedDate?: string;
-  weekdays: BookingSlotPickerCopy["weekdays"];
+  onMonthChange: (month: string) => void;
   onSelectDay: (date: string) => void;
 }) {
   const available = new Set(
     days.filter((day) => day.available).map((day) => day.date),
   );
-  const dates = datesOf(month);
-  const leading = weekdayOf(dates[0] ?? `${month}-01`);
   return (
-    <div className="grid grid-cols-7 gap-1" data-slot="booking-month-grid">
-      {weekdays.map((label) => (
-        <Text
-          as="span"
-          className="text-center"
-          key={label}
-          size="xs"
-          tone="secondary"
-        >
-          {label}
-        </Text>
-      ))}
-      {leading > 0 ? (
-        <span aria-hidden className={LEADING_SPAN[leading]} />
-      ) : null}
-      {dates.map((date) => {
-        const selected = date === selectedDate;
-        const open = available.has(date);
-        return (
-          <button
-            aria-pressed={selected}
-            className={cn(
-              "size-10 rounded-full text-sm tabular-nums transition-colors focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
-              selected && "bg-primary text-primary-foreground",
-              !selected && open && "hover:bg-muted",
-              !open && "cursor-not-allowed text-muted-foreground/40",
-            )}
-            data-available={open}
-            data-slot="booking-day"
-            disabled={!open}
-            key={date}
-            onClick={() => onSelectDay(date)}
-            type="button"
-          >
-            <Center className="size-full">{dayOf(date)}</Center>
-          </button>
-        );
-      })}
-    </div>
+    <Calendar
+      disabled={(date) => !available.has(dayFromDate(date))}
+      endMonth={maxMonth ? dateFromMonth(maxMonth) : undefined}
+      labels={{
+        labelPrevious: () => copy.previousMonth,
+        labelNext: () => copy.nextMonth,
+      }}
+      mode="single"
+      month={dateFromMonth(month)}
+      onMonthChange={(date) => onMonthChange(monthFromDate(date))}
+      onSelect={(date) => {
+        if (date) {
+          onSelectDay(dayFromDate(date));
+        }
+      }}
+      selected={selectedDate ? dateFromDay(selectedDate) : undefined}
+      startMonth={minMonth ? dateFromMonth(minMonth) : undefined}
+    />
   );
 }
 

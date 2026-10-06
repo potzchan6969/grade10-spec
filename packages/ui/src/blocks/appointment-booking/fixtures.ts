@@ -152,7 +152,6 @@ const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
   timeTitle: "Pick a time",
   previousMonth: "Previous month",
   nextMonth: "Next month",
-  weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   timesIn: "Times in",
   pickADay: "Pick a day to see its times.",
   noTimes: "Nothing is free on this day any more.",
