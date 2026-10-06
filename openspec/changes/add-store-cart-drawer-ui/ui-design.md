@@ -48,7 +48,7 @@ States combine this change's Grade10 scenarios with durable
 | Every open starts a fresh read | `grade10-site-store-cart-drawer-SC-05` |
 | Pending / failed review | `grade10-site-store-cart-drawer-SC-06`–`grade10-site-store-cart-drawer-SC-08`; loading bones `shared-ui-store-cart-SC-08` |
 | Reviewed summary; quoted total; existing promo behavior and interactive points | `grade10-site-store-cart-drawer-SC-09`, `grade10-site-store-cart-drawer-SC-10`, `grade10-site-store-cart-drawer-SC-16`–`grade10-site-store-cart-drawer-SC-19` |
-| Empty drawer (shared EmptyState) | `shared-ui-store-cart-SC-04` |
+| Empty drawer (shared EmptyState); unread first open stays loading | `shared-ui-store-cart-SC-25`, `shared-ui-store-cart-SC-40` |
 | Unavailable cleanup | `grade10-site-store-cart-drawer-SC-12`; `shared-ui-store-cart-SC-10`, `shared-ui-store-cart-SC-11` |
 | Quantity / remove | `grade10-site-store-cart-drawer-SC-11` |
 | Line → product; Proceed to Checkout → hosted invoice | `grade10-site-store-cart-drawer-SC-13`, `grade10-site-store-cart-drawer-SC-15`; redirecting `shared-ui-store-cart-SC-09` |
