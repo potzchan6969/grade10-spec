@@ -93,6 +93,7 @@ The count SHALL NOT introduce a Cart control on a surface that omits it.
 - **WHEN** a signed-in member whose cart holds active lines opens any surface
 - **THEN** the header displays neither a Cart control nor its count badge
 
+<!-- trace:scenario id=g10.site-page-shell.SC-rae rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-55 - The count follows the collector to another surface
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
@@ -172,6 +173,7 @@ A change made on another device SHALL appear after the next review.
 - **AND** a failed review hides the badge instead
 - **AND** switching members or signing out still clears the count immediately
 
+<!-- trace:scenario id=g10.site-page-shell.SC-o8b rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-54 - A change from another device shows after the next review
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 

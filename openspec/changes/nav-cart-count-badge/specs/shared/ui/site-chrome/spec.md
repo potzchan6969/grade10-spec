@@ -247,6 +247,7 @@ assistive technology.
 - **THEN** the count indicator displays `123` in full
 - **AND** the cart control's accessible name includes `123`
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-92l rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-41 - A count without a cart handler shows nothing
 **Serves:** Header controls - a count without a cart handler shows nothing
 
