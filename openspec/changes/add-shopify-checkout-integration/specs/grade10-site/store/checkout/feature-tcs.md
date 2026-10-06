@@ -2154,6 +2154,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
+- **Run** - Update on 2026-10-06, from `add-store-product-status`'s fifth acceptance review (its decisions Q15). `Checkout reviews the current member basket before payment` now names the two reads `grade10-site/store/cart-validation` states, the read when the cart opens and the read at Pay, and names Pay as the drawer's Proceed to Checkout. No scenario and no case changed. QA2 reruns on this suite.
 - **Run** - Fresh QA2 after frontend-only QA1 and Dev completed independently. QA1 read the frozen bundle `/tmp/grade10-checkout-frontend.QNPBSW`: anchors, proposal, decisions, journeys, UI design, checkout/cart PRDs, context, existing cases without reconciliation and domain cases. Requirements, technical design, application source, acceptance and archive material were denied to QA1. QA2 read both reports, final requirements, technical design, tasks and Q18's existing orders-surface clarification. Dev's final strict validator passed before reconciliation.
 - **Anchors** - All 4 journeys and 4 feature roots are covered. The domain suite asserts no checkout handoff or return outcome; no case is delegated to it and no domain amendment is needed.
 - **Scope** - Q15–Q17 replace invoice reuse/recovery with fresh frontend creation and fixed invoices. Backend, permissions, settlement and carrier behavior are unchanged dependencies. No backend test, engineering task or execution claim is added.

@@ -243,8 +243,8 @@ and item facts,
 **I want** a product with no available item to keep its price and say that it is sold out,
 **so that** I can tell an unavailable product from a broken purchase page.
 
-<!-- trace:case id=g10.store-product-page.TC-aww rev=1 covers=g10.store-product-page.SC-xny -->
-### grade10-site-store-product-page-US9-TC1-1: Sold-out product keeps prices and disables purchase
+<!-- trace:case id=g10.store-product-page.TC-aww rev=2 covers=g10.store-product-page.SC-xny -->
+### grade10-site-store-product-page-US9-TC1-2: Sold-out product keeps prices and disables purchase
 
 **Classification:**
 
@@ -262,13 +262,13 @@ and item facts,
 **Pre-conditions:**
 
 * customer is on <grade10 store url>.
-* The catalogue holds <product_6> whose one product item is unavailable for sale.
+* The catalogue holds <product_6> whose one product item is sold out.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <product_6> | Product whose one item is unavailable for sale |
+| <product_6> | Product whose one item is sold out |
 
 **Steps:**
 
@@ -279,6 +279,15 @@ and item facts,
 
 **Expected Results:**
 
-* The product remains priced and is marked unavailable.
-* The purchase action is disabled and labelled sold out.
+* The product remains priced and reads Sold out.
+* The purchase action is disabled and reads Sold out.
 * No control can add <product_6> to the cart.
+
+## Reconciliation
+
+**Run:** Update on 2026-10-06, from `add-store-product-status`, which this
+change rebases onto (`add-store-product-status` decisions Q5). SC-13 moved to
+rev 2: the page says nothing about how many remain, as product status
+requires. US6-TC1 moved to rev 2 to expect the same. US9-TC1 moved to rev 2:
+the item is sold out and reads Sold out, rather than unavailable, which names
+a withdrawn cart line. QA2 reruns on this suite.

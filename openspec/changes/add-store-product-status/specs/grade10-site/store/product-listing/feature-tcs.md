@@ -174,8 +174,8 @@ finding out at the order.
 **I want** Add to cart to open sign-in instead of building a guest cart,
 **so that** I only hold lines I can take to members-only checkout.
 
-<!-- trace:case id=g10.store-product-listing.TC-ia6 rev=1 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
-### grade10-site-store-product-listing-US12-TC4-1: Sign-in keeps a requested quantity above the shop's count
+<!-- trace:case id=g10.store-product-listing.TC-ia6 rev=2 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
+### grade10-site-store-product-listing-US12-TC4-2: Sign-in completes a tile add the shop still sells at a count of 0
 
 **Classification:**
 
@@ -193,7 +193,8 @@ finding out at the order.
 **Pre-conditions:**
 
 * customer is signed out, holds a member account, and is on <grade10 browse listing url>.
-* <product_1> has one variant, for sale, tracked at 2, not sold when out of stock.
+* <product_1> has one variant, inventory tracked at 0, Continue selling when out of stock on, set up in the staging shop's admin.
+* 60 seconds have passed since the setup was saved.
 * The member cart is empty.
 
 **Test data:**
@@ -201,26 +202,79 @@ finding out at the order.
 | Field | Value |
 | --- | --- |
 | <product_1> | A card with one variant |
-| Requested | 5 |
-| Count | 2 |
 
 **Steps:**
 
 1. Type <product_1>'s name in the listing search and press Enter.
-2. Set the quantity on <product_1>'s tile to 5.
-3. Click the add control on <product_1>'s tile.
-4. Complete sign-in in the dialog with the member account.
-5. Open the cart drawer.
-6. Read <product_1>'s line.
+2. Click the add control on <product_1>'s tile.
+3. Complete sign-in in the dialog with the member account.
+4. Open the cart drawer.
+5. Read <product_1>'s line.
 
 **Expected Results:**
 
-* Step 2 holds 5, with no ceiling and no remaining count shown.
-* Step 3 opens the sign-in dialog and adds nothing yet.
-* Step 4 closes the dialog and leaves the collector on the listing.
-* Step 6: the line reads 2, marked adjusted, saying the shop can fill only that many.
+* Step 1: <product_1>'s tile reads available, with no remaining count shown.
+* Step 2 opens the sign-in dialog and adds nothing yet.
+* Step 3 closes the dialog and leaves the collector on the listing.
+* Step 5: the line reads 1, with no adjusted or sold-out marking.
 
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
+review's update and QA1's blind re-run. Read the anchors, these cases, the
+durable US12 scenarios, `decisions.md`, the Product Listing and Product Status
+pages and Grade10's tile cart control. US12-TC4-2 folds against SC-46 at its
+durable rev 1: the tile arms an add of 1 (Q18), and sign-in completes it for
+an item the shop still sells at a count of 0, which product-status SC-03 says
+can be added. QA1 changed no case here and raised nothing. Every live case
+folds, and no scenario is uncovered or contradicted.
+
+| Case | Disposition | Scenarios |
+| --- | --- | --- |
+| `grade10-site-store-product-listing-US6-TC1-1` | Deprecated with US-06; `grade10-site-commerce-product-status-US2-TC2-2` walks a quantity above the count from the tile | Removed `The browse listing holds a collector to the shop's count` |
+| `grade10-site-store-product-listing-US6-TC2-1` | Deprecated with US-06; `grade10-site-commerce-product-status-US2-TC4-2` walks an uncounted item | Removed `The browse listing holds a collector to the shop's count` |
+| `grade10-site-store-product-listing-US6-TC3-1` | Deprecated with US-06; `grade10-site-commerce-product-status-US1-TC5-1` asserts no count on the tile | Removed `The browse listing says how many are left when that is news` |
+| `grade10-site-store-product-listing-US6-TC4-1` | Deprecated with US-06; no count and no ceiling are both product-status rules | Removed `The browse listing says how many are left when that is news` |
+| `grade10-site-store-product-listing-US12-TC4-2` | Folded: the add the tile arms completes after sign-in | SC-46; `grade10-site-commerce-product-status-SC-03` |
+
+| Scenario | Cases |
+| --- | --- |
+| SC-44 | durable US12-TC1-1, unchanged |
+| SC-45 | durable US12-TC2-1, unchanged |
+| SC-46 | durable US12-TC3-1, US12-TC4-2 |
+| Uncovered | none |
+| Contradicted | none |
+
+**Run:** Update on 2026-10-06, from the fifth acceptance review. The tile
+has no quantity before its first add, and its first press adds 1, so a
+signed-out add from the tile is always 1 (Q18). The delta no longer modifies
+`Signed-out Add to cart opens sign-in`; SC-44 to SC-46 stay at their durable
+rev 1. US12-TC4 moves to rev 2: it walked an add of 5 the tile cannot set
+before its first add. It now walks the add the tile arms, 1 of an item the
+shop still sells at a count of 0, which sign-in completes because a count of
+0 on an item for sale bounds nothing. Raising the tile past the count is
+`grade10-site-commerce-product-status-US2-TC2-2`'s tile row, and a sign-in
+add above the count is the product page's US11-TC3-2. QA2 reruns on this
+suite.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the fourth
+acceptance review. Read the anchors, these cases, the delta's scenarios,
+`tasks.md`, `decisions.md` and the Product Listing page. US12-TC4-1 folds
+against SC-46 at rev 2: the member cart holds the 5 asked for, and the open
+read reduces the line to the shop's 2, as cart-validation SC-05 states. Every
+live case folds, the tables of the earlier QA2 run stand, and nothing was
+raised.
+
+**Run:** Update on 2026-10-06, from the fourth acceptance review. SC-46
+moved to rev 2: it states the sign-in add of 5 against a count of 2 that the
+requirement adds and US12-TC4-1 walks. No case changed. QA2 reruns on this
+suite.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the third
+acceptance review, which moved nothing in this capability. Task 2.2 now cites
+SC-46 for a sign-in add of 5 against a count of 2, which US12-TC4-1 walks.
+Every live case folds, the tables of the earlier QA2 run stand, and nothing
+was raised.
 
 **Run:** QA2 on 2026-10-06, rerun in a fresh context after the rebase. Read
 the anchors, these cases and the durable suite's US12 cases, the delta's
@@ -270,3 +324,5 @@ that suite.
 **Run:** Blind feature-TCS pass on 2026-09-24. Read the caller-supplied exact Purpose and Feature set for grade10-site/store/product-listing; openspec/changes/add-store-product-status/proposal.md and decisions.md including Raised; ui-design.md state descriptions without following their scenario references; the product-listing, product-page and product-status change-local user-journeys.md files; docs/prds/products/grade10-site/store/index.md, store/product-page.md, store/product-listing.md, commerce/index.md and commerce/product-status.md; openspec/config.yaml context; the durable product-listing feature suite for case-ID continuity only; docs/governance/specs-to-test-cases.md; and the current-major approved suite corpus (14 actual cases from shared/auth/sign-out and grade10-site/auction/bid-increments).
 
 **Excluded:** Every spec.md file, all requirements and scenarios in openspec/specs/ and openspec/changes/add-store-product-status/specs/, and the archive tree. The Purpose and Feature set came from the caller; no spec file was opened. No scenario reference in ui-design was followed.
+
+**Run:** 2026-10-06, QA1 blind re-run in a fresh context. Read: the capability's Purpose and Feature set, its user-journeys.md, the change's proposal.md, decisions.md with its Raised table, ui-design.md with its Anchor column set aside, the linked PRD pages, openspec/config.yaml's context, this suite above its Reconciliation, its Settled included, and the change's Store domain suite above its Reconciliation. Denied: every Requirements section, the scenarios, tech-design.md, tasks.md, QA2 material and openspec/changes/archive/.

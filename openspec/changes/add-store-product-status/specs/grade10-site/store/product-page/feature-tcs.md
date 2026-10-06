@@ -96,7 +96,7 @@ its own page,
 2. Read the purchase area.
 3. Set the quantity to 3.
 4. Click the add control.
-5. Open the cart drawer.
+5. Open the cart drawer if the add did not open it.
 6. Read the lines and the URL.
 
 **Expected Results:**
@@ -130,7 +130,7 @@ its own page,
 
 1. Navigate to <product url>.
 2. Click the add control.
-3. Open the cart drawer.
+3. Open the cart drawer if the add did not open it.
 4. Read the lines and the URL.
 
 **Expected Results:**
@@ -166,7 +166,7 @@ its own page,
 3. Close the cart drawer if the add opened it.
 4. Set the quantity to 2.
 5. Click the add control.
-6. Open the cart drawer.
+6. Open the cart drawer if the add did not open it.
 7. Read the lines.
 
 **Expected Results:**
@@ -183,7 +183,7 @@ the buying happens, while keeping its price visible,
 **so that** I can tell a sold-out product from a page that failed.
 
 <!-- trace:case id=g10.store-product-page.TC-mgl rev=2 covers=g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
-### grade10-site-store-product-page-US4-TC1-2: Sold-out card keeps its price and offers nothing to press
+### grade10-site-store-product-page-US4-TC1-2: Sold-out card keeps its price and cannot be added
 
 **Classification:**
 
@@ -465,7 +465,7 @@ Runs once per row of **Test data**.
 1. Set the quantity to the row's requested quantity.
 2. Click the add control.
 3. Complete sign-in in the dialog with the member account.
-4. Open the cart drawer.
+4. Open the cart drawer if the add did not open it.
 5. Read <product>'s line.
 
 **Expected Results:**
@@ -475,7 +475,56 @@ Runs once per row of **Test data**.
 * Step 3 closes the dialog and leaves the collector on <product url>.
 * Step 5: one line of <product>, reading as the row says.
 
+## Settled
+
+- A sold-out item keeps its quantity stepper and a Sold out button, both disabled: nothing that adds it can be pressed.
+
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
+review's update and QA1's blind re-run. Read the anchors, these cases, the
+delta's scenarios, `tasks.md`, `decisions.md`, the Product Details and Product
+Status pages. QA1 changed no case here and raised nothing. Each case that
+reads the cart after a page add opens the drawer only if the add did not, as
+Buy opens it. US11-TC3-2 alone walks a sign-in add above the shop's count,
+against SC-28 at rev 3. Q19's second line for a card whose one item moved is
+product-status SC-18, not a second add of the same item, so SC-36 stands. Every
+live case folds, the tables of the earlier QA2 run stand, and no scenario is
+uncovered or contradicted.
+
+**Run:** Update on 2026-10-06, from the fifth acceptance review. A case that
+reads the cart after a page add opens the drawer only if the add did not open
+it, because Buy opens it once the add settles. The listing's US12-TC4 now
+walks the 1 the tile arms (Q18), so US11-TC3-2 alone walks a sign-in add above
+the shop's count. No case changed what it asserts. QA2 reruns on this suite.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the fourth
+acceptance review. Read the anchors, these cases, the delta's scenarios,
+`tasks.md`, `decisions.md` and the Product Details page. US11-TC3-2 folds
+against SC-28 at rev 3: its Above the count row asks for 5 of an item counted
+at 2, the member cart holds 5, and the open read shows 2, adjusted. Settled
+now carries Q16. Every live case folds, the tables of the earlier QA2 run
+stand, and nothing was raised.
+
+**Run:** Update on 2026-10-06, from the fourth acceptance review. SC-28
+moved to rev 3: it states the sign-in add of 5 against a count of 2 that the
+requirement adds and US11-TC3-2's Above the count row walks. No case changed.
+QA2 reruns on this suite.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the third
+acceptance review. Read the anchors, these cases, the delta's scenarios,
+`ui-design.md`, `tasks.md`, `decisions.md`, the Product Details and Product
+Status pages and Grade10's purchase panel. US4-TC1-2 folds against SC-11 at
+rev 2. Its title now reads that the card cannot be added: "offers nothing to
+press" could be read as no button, and the page shows a disabled Sold out
+button (Q16). Task 2.2's sign-in add of 5 against a count of 2 is US11-TC3-2's
+Above the count row. Every live case folds, the tables of the earlier QA2 run
+stand, and nothing was raised.
+
+**Run:** Update on 2026-10-06, from the third acceptance review. The sold-out
+requirement now reads that nothing on the page can be pressed to add the
+item, as the built page shows a disabled Sold out button (Q16). SC-11 already
+said so, and no case changed. QA2 reruns on this suite.
 
 **Run:** QA2 on 2026-10-06, rerun in a fresh context after the rebase. Read
 the anchors, these cases and the durable suite's US1, US11 and US12 cases, the
@@ -546,3 +595,5 @@ quantity above the shop's count moved to the product-status suite.
 **Run:** Blind feature-TCS pass on 2026-09-24. Read the caller-supplied exact Purpose and Feature set for grade10-site/store/product-page; openspec/changes/add-store-product-status/proposal.md and decisions.md including Raised; ui-design.md state descriptions without following their scenario references; the product-page and product-listing change-local user-journeys.md files; docs/prds/products/grade10-site/store/index.md, store/product-page.md, store/product-listing.md, commerce/index.md and commerce/product-status.md; openspec/config.yaml context; the durable product-page feature suite for case-ID continuity only; docs/governance/specs-to-test-cases.md; and the current-major approved suite corpus (14 actual cases from shared/auth/sign-out and grade10-site/auction/bid-increments). Product-page US03 and US04 cases use version 2 for one-item, no-choice and no-stock-ceiling behavior.
 
 **Excluded:** Every spec.md file, all requirements and scenarios in openspec/specs/ and openspec/changes/add-store-product-status/specs/, and the archive tree. The Purpose and Feature set came from the caller; no spec file was opened. No scenario reference in ui-design was followed.
+
+**Run:** 2026-10-06, QA1 blind re-run in a fresh context. Read: the capability's Purpose and Feature set, its user-journeys.md, the change's proposal.md, decisions.md with its Raised table, ui-design.md with its Anchor column set aside, the linked PRD pages, openspec/config.yaml's context, this suite above its Reconciliation, its Settled included, and the change's Store domain suite above its Reconciliation. Denied: every Requirements section, the scenarios, tech-design.md, tasks.md, QA2 material and openspec/changes/archive/.

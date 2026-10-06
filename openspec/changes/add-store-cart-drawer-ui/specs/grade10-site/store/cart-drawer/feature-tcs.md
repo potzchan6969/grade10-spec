@@ -1113,8 +1113,8 @@ Runs once per row of **Test data**.
 * While the response is pending, the drawer shows a redirecting state rather than closing or leaving the page.
 * The collector's browser leaves for Shopify's hosted invoice only once the response arrives successfully.
 
-<!-- trace:case id=g10.store-cart-drawer.TC-kfu rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
-### grade10-site-store-cart-drawer-US06-TC05-1: A changed line found at creation is named in the drawer, not on a separate page
+<!-- trace:case id=g10.store-cart-drawer.TC-kfu rev=2 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
+### grade10-site-store-cart-drawer-US06-TC05-2: A changed line found at creation is named in the drawer, not on a separate page
 
 **Classification:**
 
@@ -1143,7 +1143,7 @@ Runs once per row of **Test data**.
 
 * The drawer names `<line>` as the reason Proceed to Checkout did not complete, in the drawer itself.
 * No checkout session is created for the stale basket.
-* The collector can review the current basket and press Proceed to Checkout again without leaving the drawer.
+* Once the drawer's next read confirms every line the cart still holds, Proceed to Checkout can be pressed again without leaving the drawer; a line the read finds sold out holds it until the collector removes it.
 
 <!-- trace:case id=g10.store-cart-drawer.TC-kzn rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### grade10-site-store-cart-drawer-US06-TC06-1: A provider refusal is named in the drawer, not on a separate page
@@ -1241,6 +1241,19 @@ Runs once per row of **Test data**.
 * Checkout is reachable only from Proceed to Checkout in the cart drawer.
 
 ## Reconciliation
+
+**Run:** Update on 2026-10-06, from `add-store-product-status`'s fifth
+acceptance review. `Drawer actions continue to a product address or create
+checkout directly` now says the drawer adds no re-read before creating the
+session, and reads the cart again when the recheck or the shop refuses the
+checkout, as cart-validation's **Back to the cart** requires. No scenario and
+no case changed. QA2 reruns on this suite.
+
+**Run:** Update on 2026-10-06, from `add-store-product-status`'s acceptance
+review. SC-28 moved to rev 2: after a refused checkout, Checkout is offered
+again only once the cart holds lines the read confirmed, because a sold-out
+line holds checkout under `grade10-site/store/cart-validation`. US06-TC05
+moved to rev 2 to expect the same. QA2 reruns on this suite.
 
 **Run:** 2026-09-29. Independent scenario and blind test-design readings,
 carried over from `move-checkout-into-cart-drawer` (folded here because

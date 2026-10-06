@@ -87,7 +87,7 @@ item,
 2. Click <product>'s tile.
 3. Read the purchase area.
 4. Click the add control in the purchase area.
-5. Open the cart drawer.
+5. Open the cart drawer if the add did not open it.
 6. Read <product>'s line.
 
 **Expected Results:**
@@ -104,7 +104,7 @@ item,
 **As a** collector,
 **I want** a sold-out card in the merchandised row to remain marked sold out
 when I open it,
-**so that** I can tell an unavailable card from a broken purchase page.
+**so that** I can tell a sold-out card from a broken purchase page.
 
 <!-- trace:case id=g10.store-domain.TC-g62 rev=2 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex,g10.store-home.SC-00a,g10.store-home.SC-q66,g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
 ### grade10-site-store-e2e-US3-TC1-2: Sold-out card keeps its status on the product page
@@ -206,17 +206,43 @@ repaired cart sent on to Shopify's payment page,
 
 ## Reconciliation
 
+**Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
+review's update and QA1's blind re-run. Read the store journeys file, these
+cases, the scenarios they cover at their current revisions, `decisions.md` and
+the Product Status, Product Details and Cart Validation pages. US3-TC1-2
+walks the revised US-03: a sold-out card told from a broken purchase page.
+US2-TC2-1 opens the drawer only if the page add did not. QA1 changed no case
+here and raised nothing; every live case folds.
+
+**Run:** Update on 2026-10-06, from the fifth acceptance review. US-03 is
+revised in the journeys file beside this suite: a sold-out card is told from
+a broken purchase page, since unavailable names a withdrawn cart line. US2-TC2-1
+step 5 opens the cart drawer only if the add did not open it, because Product
+Details' Buy opens it after a page add. No case changed what it asserts. QA2
+reruns on this suite.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the second and
+third acceptance reviews. Read the store journeys file, these cases, the
+scenarios they cover at their current revisions, `decisions.md` and the
+Product Status, Product Details and Cart Validation pages. US2-TC2-1 walks the
+revised US-02: the page's one item, no choice, and a line with no marking.
+US3-TC1-2 expects that nothing adding the sold-out card can be pressed, as Q16
+settles. US7-TC1-1 folds against cart-validation SC-15, SC-17 and SC-18 and
+the checkout scenarios it covers. The validator's identical-path warning on
+US3-TC1-1 and US3-TC1-2 is one case revised under one marker; the fold clears
+it. Nothing was raised.
+
 **Run:** Update on 2026-10-06, from the second acceptance review, after the
 change was rebased on main. Each case keeps the `trace:case` id main or the
 durable suite gave its number, its `rev` follows its heading, and its
 `covers` names every scenario serving its journeys; a deprecated case covers
-none. US2 takes the heading of the store journey this change modifies. US2-TC2 keeps
-main's id for the one-item add; US3-TC1-2 revises the durable US3-TC1-1 under
-its marker, so main's US3-TC2-1 draft is not carried; US7-TC1 takes a new id.
-QA2 reruns on this suite.
+none. US2 is renamed for the one-item add, revised in the journeys file
+beside this suite, and US2-TC2 keeps main's id for it; US3-TC1-2 revises the
+durable US3-TC1-1 under its marker, so main's US3-TC2-1 draft is not carried;
+US7-TC1 takes a new id. QA2 reruns on this suite.
 
 **Run:** QA2 on 2026-10-06. US2-TC2 now opens the cart drawer to read the
-line, since a page add is not said to open it. US7-TC1 is the path both
+line when the add did not open it. US7-TC1 is the path both
 `grade10-site/store/cart-validation` and `grade10-site/store/checkout` name for a
 line that moved at checkout (Q15). US3-TC1-2 replaces the durable US3-TC1-1 at
 the fold.
@@ -228,3 +254,5 @@ choice, and US2-TC2 walks the one-item add in its place. US3-TC1 is revised for
 the one item and the sold-out wording.
 
 **Run:** 2026-09-24 · updated the Store's merchandised product add and sold-out paths to preserve the internal sale identity without a shopper-facing variant choice; unchanged Store paths and cases remain as they were.
+
+**Run:** 2026-10-06, QA1 blind re-run in a fresh context. Read: the Store domain's and the four touched capabilities' user-journeys.md, the change's proposal.md, decisions.md with its Raised table, ui-design.md with its Anchor column set aside, the linked PRD pages, openspec/config.yaml's context, and the change's Store domain suite above its Reconciliation. Denied: every Requirements section, the scenarios, tech-design.md, tasks.md, QA2 material and openspec/changes/archive/. Level check: the Store domain is hit and carries this suite; Commerce has no domain suite and one touched capability; grade10-site has no product suite and the store no platform suite.

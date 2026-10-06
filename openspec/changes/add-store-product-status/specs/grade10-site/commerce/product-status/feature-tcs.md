@@ -10,7 +10,7 @@
 bought, and the product page and cart to report the same internal sale item,
 **so that** the availability I see before adding matches the item in my cart.
 
-<!-- trace:case id=g10.commerce-product-status.TC-c3l rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-c3l rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC1-2: Item for sale reads available on tile, page and cart line
 
 **Classification:**
@@ -46,7 +46,7 @@ bought, and the product page and cart to report the same internal sale item,
 4. Click the tile's photo.
 5. Read the purchase area.
 6. Click the add control in the purchase area.
-7. Open the cart drawer.
+7. Open the cart drawer if the add did not open it.
 8. Read <product_1>'s line.
 
 **Expected Results:**
@@ -55,7 +55,7 @@ bought, and the product page and cart to report the same internal sale item,
 * Step 5: the page shows the item's price and reads available.
 * Step 8: the line is <product_1>, quantity 1, with no sold-out, adjusted or unchecked marking.
 
-<!-- trace:case id=g10.commerce-product-status.TC-wjo rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-wjo rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC2-2: Single-item card the shop stops selling reads sold out, still priced
 
 **Classification:**
@@ -97,7 +97,7 @@ bought, and the product page and cart to report the same internal sale item,
 * Step 5: the page shows <price_2> and reads sold out.
 * Step 5: nothing that adds <product_2> can be pressed.
 
-<!-- trace:case id=g10.commerce-product-status.TC-01e rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-01e rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC3-1: Item the shop still sells at no count reads available
 
 Runs once per row of **Test data**.
@@ -172,7 +172,7 @@ Runs once per row of **Test data**.
 * The tile and product page read the item as available.
 * Neither surface derives an out-of-stock answer from the missing count.
 
-<!-- trace:case id=g10.commerce-product-status.TC-0ay rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-0ay rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC5-1: Browse surfaces say nothing about how many remain
 
 Runs once per row of **Test data**.
@@ -216,7 +216,7 @@ Runs once per row of **Test data**.
 * Step 5: the page shows the item's price and reads available.
 * Step 5: no remaining count and no scarcity cue.
 
-<!-- trace:case id=g10.commerce-product-status.TC-vpr rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-vpr rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC6-2: Tile with one variant for sale reads available; page takes that variant
 
 **Classification:**
@@ -259,7 +259,7 @@ Runs once per row of **Test data**.
 * Step 5: the page shows <price_6b>, not <price_6a>, and reads available.
 * Step 5: no size, option or variant choice, and no variant name.
 
-<!-- trace:case id=g10.commerce-product-status.TC-f39 rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-f39 rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC7-2: Tile reads sold out only when every variant is; page prices the first listed
 
 **Classification:**
@@ -284,8 +284,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <product_7> | A card with two variants, priced differently |
-| <price_7a> | The first listed variant's price, for example HKD 50.00 (5000 minor units) |
-| <price_7b> | The second listed variant's price, for example HKD 70.00 (7000 minor units) |
+| <price_7a> | The first listed variant's price, above the second's, for example HKD 70.00 (7000 minor units) |
+| <price_7b> | The second listed variant's price, for example HKD 50.00 (5000 minor units) |
 
 **Steps:**
 
@@ -301,7 +301,7 @@ Runs once per row of **Test data**.
 * Step 5: the page shows <price_7a>, not <price_7b>, and reads sold out.
 * Step 5: no variant choice or variant name, and nothing that adds <product_7> can be pressed.
 
-<!-- trace:case id=g10.commerce-product-status.TC-gsh rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-gsh rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC8-2: Item sold out after it was added reads sold out everywhere
 
 **Classification:**
@@ -342,10 +342,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3: the tile reads sold out.
-* Step 5: the page shows <price_8> and reads sold out, with nothing to press.
+* Step 5: the page shows <price_8> and reads sold out, and nothing that adds <product_8> can be pressed.
 * Step 7: the line is still in the cart, marked sold out.
 
-<!-- trace:case id=g10.commerce-product-status.TC-rza rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-rza rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC9-2: Unpublished product is absent and its address refuses
 
 **Classification:**
@@ -384,7 +384,7 @@ Runs once per row of **Test data**.
 * Step 3: no tile for <product_9>, sold out or otherwise.
 * Step 4 answers 404 with the site's not-found page.
 
-<!-- trace:case id=g10.commerce-product-status.TC-vrz rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
+<!-- trace:case id=g10.commerce-product-status.TC-vrz rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC10-1: Listing and page add the same item of a several-variant card
 
 **Classification:**
@@ -412,7 +412,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | <product_10> | A card with three variants, priced differently |
 | <price_10b> | The second listed variant's price, for example HKD 70.00 (7000 minor units) |
-| <price_10c> | The third listed variant's price, for example HKD 90.00 (9000 minor units) |
+| <price_10c> | The third listed variant's price, below the second's, for example HKD 30.00 (3000 minor units) |
 
 **Steps:**
 
@@ -421,13 +421,107 @@ Runs once per row of **Test data**.
 3. Click the add control on <product_10>'s tile.
 4. Navigate to <product_10 url>.
 5. Click the add control in the purchase area.
-6. Open the cart drawer.
+6. Open the cart drawer if the add did not open it.
 7. Read the lines.
 
 **Expected Results:**
 
 * Step 7: one line for <product_10>, quantity 2, at <price_10b>, with no sold-out, adjusted or unchecked marking.
 * Step 7: no line at <price_10c>.
+
+<!-- trace:case id=g10.commerce-product-status.TC-tjt rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
+### grade10-site-commerce-product-status-US1-TC11-1: Card with every variant for sale takes its first listed, not its cheapest
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-commerce-product-status-US-01
+
+**Pre-conditions:**
+
+* customer(member) is signed in with an empty cart.
+* Every variant of <product_15> is for sale.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_15> | A card with two variants, both for sale |
+| <price_15a> | The first listed variant's price, above the second's, for example HKD 70.00 (7000 minor units) |
+| <price_15b> | The second listed variant's price, for example HKD 50.00 (5000 minor units) |
+
+**Steps:**
+
+1. Navigate to <grade10 browse listing url>.
+2. Type <product_15>'s name in the listing search and press Enter.
+3. Read <product_15>'s tile.
+4. Navigate to <product_15 url>.
+5. Read the purchase area.
+6. Click the add control in the purchase area.
+7. Open the cart drawer if the add did not open it.
+8. Read the lines.
+
+**Expected Results:**
+
+* Step 3: the tile reads available, at <price_15a>, not <price_15b>.
+* Step 5: the page shows <price_15a>, with no size, option or variant choice.
+* Step 8: one line for <product_15>, quantity 1, at <price_15a>.
+
+<!-- trace:case id=g10.commerce-product-status.TC-1kh rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-77x,g10.commerce-product-status.SC-g9e -->
+### grade10-site-commerce-product-status-US1-TC12-1: Line keeps its item after the card's one item moves
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-commerce-product-status-US-01
+
+**Pre-conditions:**
+
+* customer(member) is signed in.
+* <product_17>'s first listed variant is sold out by the recipe "Sell a card out", applied to that variant only, and its second is for sale.
+* The cart holds 1 of <product_17>, added from <product_17 url>, at <price_17b>.
+* Since then, the second listed variant is sold out by the recipe "Sell a card out", applied to that variant only, and the first listed variant's inventory is set to 5 in the staging shop's admin.
+* 60 seconds have passed since the last change was saved.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_17> | A card with two variants, priced differently |
+| <price_17a> | The first listed variant's price, for example HKD 70.00 (7000 minor units) |
+| <price_17b> | The second listed variant's price, for example HKD 50.00 (5000 minor units) |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Read <product_17>'s line.
+3. Navigate to <product_17 url>.
+4. Read the purchase area.
+5. Click the add control in the purchase area.
+6. Open the cart drawer if the add did not open it.
+7. Read the lines.
+
+**Expected Results:**
+
+* Step 2: the line is still in the cart at <price_17b>, marked sold out.
+* Step 4: the page reads available, at <price_17a>, with no size, option or variant choice.
+* Step 7: two lines for <product_17>: the earlier line at <price_17b>, still marked sold out, and a new line of 1 at <price_17a>, with no marking.
 
 ---
 
@@ -464,23 +558,22 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Surface | Count | Requested | Line reads |
-| --- | --- | --- | --- |
-| <product_11>'s tile on <grade10 browse listing url>, found by searching its name | 3 | 3 | 3 |
-| <product_11 url> | 3 | 2 | 2 |
+| Surface | Count | Requested | Add | Line reads |
+| --- | --- | --- | --- | --- |
+| <product_11>'s tile on <grade10 browse listing url>, found by searching its name | 3 | 3 | Click the tile's add control, then raise the tile's stepper to 3 | 3 |
+| <product_11 url> | 3 | 2 | Set the page's stepper to 2, then click Add to cart | 2 |
 
 **Steps:**
 
 1. Navigate to the row's surface.
-2. Set the add control's quantity to the row's requested quantity.
-3. Click the add control.
-4. Open the cart drawer.
-5. Read <product_11>'s line.
+2. Add the row's requested quantity as the row's **Add** says.
+3. Open the cart drawer if the add did not open it.
+4. Read <product_11>'s line.
 
 **Expected Results:**
 
-* Step 2 holds the requested quantity.
-* Step 5: the line reads the row's quantity, with no adjusted or sold-out marking.
+* Step 2: the stepper holds the requested quantity.
+* Step 4: the line reads the row's quantity, with no adjusted or sold-out marking.
 
 <!-- trace:case id=g10.commerce-product-status.TC-huo rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz,g10.commerce-product-status.SC-0pg -->
 ### grade10-site-commerce-product-status-US2-TC2-2: Request above the shop's count is filled in part, naming how many
@@ -503,28 +596,29 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(member) is signed in with an empty cart.
-* <product_12> has one variant, for sale, tracked at the row's count, not sold when out of stock.
+* <product_12> has one variant, for sale, tracked at the row's count, with the row's out-of-stock setting in the staging shop's admin.
+* 60 seconds have passed since the setup was saved.
 
 **Test data:**
 
-| Surface | Count | Requested | Line reads |
-| --- | --- | --- | --- |
-| <product_12>'s tile on <grade10 browse listing url>, found by searching its name | 2 | 3 | 2 |
-| <product_12 url> | 2 | 5 | 2 |
+| Surface | Count | When out of stock | Requested | Add | Line reads |
+| --- | --- | --- | --- | --- | --- |
+| <product_12>'s tile on <grade10 browse listing url>, found by searching its name | 2 | Not sold | 3 | Click the tile's add control, then raise the tile's stepper to 3 | 2 |
+| <product_12 url> | 2 | Not sold | 5 | Set the page's stepper to 5, then click Add to cart | 2 |
+| <product_12 url> | 2 | Continue selling when out of stock on | 5 | Set the page's stepper to 5, then click Add to cart | 2 |
 
 **Steps:**
 
 1. Navigate to the row's surface.
-2. Set the add control's quantity to the row's requested quantity.
-3. Click the add control.
-4. Open the cart drawer.
-5. Read <product_12>'s line.
+2. Add the row's requested quantity as the row's **Add** says.
+3. Open the cart drawer if the add did not open it.
+4. Read <product_12>'s line.
 
 **Expected Results:**
 
-* Step 2 holds the requested quantity, with no ceiling and no remaining count shown.
-* Step 5: the line reads the row's quantity, marked adjusted.
-* Step 5: the line says the shop can fill only that many.
+* Step 2: the stepper holds the requested quantity, with no ceiling and no remaining count shown.
+* Step 4: the line reads the row's quantity, marked adjusted.
+* Step 4: the line says the shop can fill only that many.
 
 <!-- trace:case id=g10.commerce-product-status.TC-m97 rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz,g10.commerce-product-status.SC-0pg -->
 ### grade10-site-commerce-product-status-US2-TC3-2: Request for an item the shop stopped selling is not filled
@@ -601,19 +695,154 @@ Runs once per row of **Test data**.
 1. Navigate to <product_14 url>.
 2. Set the add control's quantity to 5.
 3. Click the add control.
-4. Open the cart drawer.
+4. Open the cart drawer if the add did not open it.
 5. Read <product_14>'s line.
 
 **Expected Results:**
 
 * Step 5: the line reads 5, with no adjusted or sold-out marking.
 
+<!-- trace:case id=g10.commerce-product-status.TC-htg rev=1 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz,g10.commerce-product-status.SC-0pg -->
+### grade10-site-commerce-product-status-US2-TC5-1: Second add that takes the line past the shop's count is filled in part
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-commerce-product-status-US-02
+
+**Pre-conditions:**
+
+* customer(member) is signed in.
+* <product_16> has one variant, for sale, tracked at 3, not sold when out of stock.
+* The cart holds 2 of <product_16>, with no marking.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_16> | A card with one variant |
+| Added | 2, so the line asks for 4 against a count of 3 |
+
+**Steps:**
+
+1. Navigate to <product_16 url>.
+2. Set the quantity to 2.
+3. Click the add control.
+4. Open the cart drawer if the add did not open it.
+5. Read <product_16>'s lines.
+
+**Expected Results:**
+
+* Step 2: the stepper holds 2, with no ceiling and no remaining count shown.
+* Step 5: one line for <product_16>, reading 3, marked adjusted.
+* Step 5: the line says the shop can fill only that many.
+
 ## Settled
 
 - The front door's merchandised row reads a card's sold-out status as the listing tile does and offers no add, so the one-item add does not arise there.
 - A listing tile shows the price of the card's one item: the first variant for sale, or the first listed when none is.
+- A sold-out item keeps its price, its quantity stepper and a Sold out button, both disabled: nothing that adds it can be pressed.
+- A cart line keeps the variant it was added as; once the card's one item moves to another variant, a page add puts that variant on a line of its own.
+- A request above a count above zero fills in part even when the shop sells the variant past zero.
 
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-06, in a fresh context after QA1's blind re-run.
+Read the anchors, these cases, the scenarios at their current revisions,
+`tech-design.md`, `ui-design.md`, `tasks.md`, `decisions.md`, the Product
+Status page and Grade10's cart model and line classification. Every live case
+folds. QA1's two questions land as Q19 and Q20, decided by the round from the
+rules and what Grade10 builds. Q19 sharpens **One answer** and adds SC-18;
+QA2 adds US1-TC12-1 to walk it, and every US1 case now covers it. Q20 needs no
+scenario: **Count as bound** and **No second derivation** already fill the
+request at the count, and US2-TC2-2's third row walks it. US1-TC11-1 proves
+the **One answer** rule's order, the first listed rather than the cheapest,
+which SC-12 and SC-14 state; US1-TC6, US1-TC7 and US1-TC10 now price the item
+the page skips below the one it shows, so the cheapest never passes by
+accident.
+
+| Case | Disposition | Scenarios |
+| --- | --- | --- |
+| `grade10-site-commerce-product-status-US1-TC1-2` | Folded | SC-01, SC-14 |
+| `grade10-site-commerce-product-status-US1-TC2-2` | Folded | SC-02, SC-13, SC-15 |
+| `grade10-site-commerce-product-status-US1-TC3-1` | Folded | SC-03, SC-04 |
+| `grade10-site-commerce-product-status-US1-TC4-1` | Deprecated: the Not counted row of US1-TC3-1 | SC-04 |
+| `grade10-site-commerce-product-status-US1-TC5-1` | Folded | SC-10, SC-11 |
+| `grade10-site-commerce-product-status-US1-TC6-2` | Folded; the skipped sold-out variant is the cheaper | SC-12 |
+| `grade10-site-commerce-product-status-US1-TC7-2` | Folded; the first listed is the dearer | SC-13, SC-15 |
+| `grade10-site-commerce-product-status-US1-TC8-2` | Folded | SC-02, SC-15 |
+| `grade10-site-commerce-product-status-US1-TC9-2` | Folded | SC-16 |
+| `grade10-site-commerce-product-status-US1-TC10-1` | Folded; the third variant is the cheapest | SC-14 |
+| `grade10-site-commerce-product-status-US1-TC11-1` | Folded: every variant for sale, the first listed is the dearer and is the one item | SC-12, SC-14 |
+| `grade10-site-commerce-product-status-US1-TC12-1` | Added by QA2 for QA1's question on a line whose item moved (Q19) | SC-18 |
+| `grade10-site-commerce-product-status-US2-TC1-2` | Folded | SC-05, SC-06 |
+| `grade10-site-commerce-product-status-US2-TC2-2` | Folded; its third row is a count the shop sells past (Q20) | SC-07, SC-17 |
+| `grade10-site-commerce-product-status-US2-TC3-2` | Folded | SC-08 |
+| `grade10-site-commerce-product-status-US2-TC4-2` | Folded | SC-09 |
+| `grade10-site-commerce-product-status-US2-TC5-1` | Folded: a second page add joins the line and asks past the count | SC-07, SC-17; `grade10-site-store-product-page-SC-36`, `grade10-site-store-cart-validation-SC-05` |
+
+| Scenario | Cases |
+| --- | --- |
+| SC-01 | US1-TC1 |
+| SC-02 | US1-TC2, US1-TC8 |
+| SC-03, SC-04 | US1-TC3 |
+| SC-05, SC-06 | US2-TC1 |
+| SC-07 | US2-TC2, US2-TC5 |
+| SC-08 | US2-TC3 |
+| SC-09 | US2-TC4 |
+| SC-10, SC-11 | US1-TC5 |
+| SC-12 | US1-TC6, US1-TC11 |
+| SC-13 | US1-TC2, US1-TC7 |
+| SC-14 | US1-TC1, US1-TC10, US1-TC11 |
+| SC-15 | US1-TC2, US1-TC7, US1-TC8 |
+| SC-16 | US1-TC9 |
+| SC-17 | US2-TC2, US2-TC5 |
+| SC-18 | US1-TC12 |
+| Uncovered | none |
+| Contradicted | none |
+
+| Raised | Disposition |
+| --- | --- |
+| Does a line keep its variant once the card's one item moves, and does a page add start a second line? | Q19, decided: yes to both, as Grade10 keys a line on its variant; **One answer** and SC-18 carry it, and US1-TC12 walks it |
+| Is a request above a count filled in part when the shop sells past zero? | Q20, decided: yes, at the count, since the store never reads the inventory policy; US2-TC2's third row walks it |
+
+**Run:** Update on 2026-10-06, from the fifth acceptance review. The tile has
+no quantity before its first add, and its first press adds 1 (Q18), so
+US2-TC1-2 and US2-TC2-2 now add on each surface in its own order, under a new
+**Add** column: the tile's add control and then its stepper, or the page's
+stepper and then Add to cart. What each case asserts is unchanged, so both
+keep rev 2. A case that reads the cart after a page add opens the drawer only
+if the add did not open it, because Product Details' Buy opens it. QA2 reruns
+on this suite.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the fourth
+acceptance review, which moved nothing in this capability. Settled now carries
+Q16. Every live case folds, the tables of the earlier QA2 run stand, and
+nothing was raised.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the third
+acceptance review. Read the anchors, these cases, the scenarios at their
+current revisions, `tech-design.md`, `ui-design.md`, `tasks.md`,
+`decisions.md`, the Product Status page and Grade10's purchase panel. The
+**Priced but unbuyable** anchor changed its words, not what a case sees: every
+case already expected that nothing adding a sold-out item can be pressed, so
+QA1's reading stands. US1-TC8-2's step 5 now says it in those words, because
+the page shows a disabled Sold out button (Q16). Every live case folds, the
+tables of the earlier QA2 run stand, no scenario is uncovered or contradicted,
+and nothing was raised.
+
+**Run:** Update on 2026-10-06, from the third acceptance review. **Priced but
+unbuyable** now reads that nothing that adds an out-of-stock variant can be
+pressed, as the built page shows a disabled Sold out button (Q16). The
+scenarios already said so, and no case changed. QA2 reruns on this suite.
 
 **Run:** QA2 on 2026-10-06, rerun in a fresh context after the rebase. Read
 the anchors, these cases, the Dev scenarios at their current revisions,
@@ -696,3 +925,5 @@ that in task 4.2.
 **Run:** Blind feature-TCS pass on 2026-09-24. Read the caller-supplied exact Purpose and Feature set for grade10-site/commerce/product-status; openspec/changes/add-store-product-status/proposal.md and decisions.md including Raised; ui-design.md state descriptions without following their scenario references; this change-local user-journeys.md; docs/prds/products/grade10-site/store/index.md, store/product-page.md, store/product-listing.md, commerce/index.md and commerce/product-status.md; openspec/config.yaml context; this change-local suite through its cases; docs/governance/specs-to-test-cases.md; and the current-major approved suite corpus (14 actual cases from shared/auth/sign-out and grade10-site/auction/bid-increments). No durable product-status feature suite existed. Retained all 13 case IDs and draft statuses; bumped behavior versions for US1-TC1, TC2, TC6–TC9 and US2-TC1–TC4.
 
 **Excluded:** Every spec.md file, all requirements and scenarios in openspec/specs/ and openspec/changes/add-store-product-status/specs/, and the archive tree. The Purpose and Feature set came from the caller; no spec file was opened. No scenario reference in ui-design was followed.
+
+**Run:** 2026-10-06, QA1 blind re-run in a fresh context. Read: the capability's Purpose and Feature set, its user-journeys.md, the change's proposal.md, decisions.md with its Raised table, ui-design.md with its Anchor column set aside, the linked PRD pages, openspec/config.yaml's context, this suite above its Reconciliation, its Settled included, and the change's Store domain suite above its Reconciliation. Denied: every Requirements section, the scenarios, tech-design.md, tasks.md, QA2 material and openspec/changes/archive/. One row of this Reconciliation, a case id beside two scenario numbers and no scenario text, was printed by a search.

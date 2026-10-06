@@ -368,8 +368,8 @@ Runs once per row of **Test data**.
 * Step 3: Proceed to Checkout cannot be pressed.
 * Step 6: each line shows the shop's current availability and price; Proceed to Checkout can be pressed.
 
-<!-- trace:case id=g10.store-cart-validation.TC-tc5 rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-c5i,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-tuc,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2,g10.store-cart-validation.SC-q4f -->
-### grade10-site-store-cart-validation-US1-TC10-1: Cart that fails before its lines are known names no line
+<!-- trace:case id=g10.store-cart-validation.TC-tc5 rev=2 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-c5i,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-tuc,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2,g10.store-cart-validation.SC-q4f -->
+### grade10-site-store-cart-validation-US1-TC10-2: Cart that fails before its lines are known names no line and is not shown as empty
 
 **Classification:**
 
@@ -402,6 +402,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3: the drawer says the cart could not be checked, offers Retry, and names no line.
+* Step 3: the drawer never says the cart is empty.
 * Step 3: no current estimated total; Proceed to Checkout cannot be pressed.
 * Step 6: <product_a>'s line shows the shop's current availability and price.
 
@@ -662,7 +663,9 @@ stock, and the cart is not reopened.
 * <supplied price> appears nowhere on the checkout.
 
 <!-- trace:case id=g10.store-cart-validation.TC-cxb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
-### grade10-site-store-cart-validation-US2-TC6-1: Line repriced at checkout is named, then goes at the new price
+### grade10-site-store-cart-validation-US2-TC6-1: Line repriced or reduced at checkout is named, then goes as the shop answered
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -680,12 +683,20 @@ stock, and the cart is not reopened.
 **Pre-conditions:**
 
 * customer(member) is signed in and is on <grade10 store url>.
-* The cart holds 1 of <product_a> at HKD 105.00 (10500 minor units) and 1 of <product_b>, both for sale.
+* The cart holds the row's held quantity of <product_a> and 1 of <product_b>, both for sale.
+* The cart's goods are under HKD 120,000.
+
+**Test data:**
+
+| Row | Held | Change in the staging shop's admin | Step 4 names <product_a> | Shopify's checkout page holds |
+| --- | --- | --- | --- | --- |
+| Repriced | 1 at HKD 105.00 (10500 minor units) | Price HKD 123.00 (12300 minor units) | Repriced, at HKD 123.00 | 1 of <product_a> at HKD 123.00 |
+| Reduced | 3, tracked at 10 | Inventory 1, not sold when out of stock | Adjusted, its line reading 1 | 1 of <product_a> |
 
 **Steps:**
 
 1. Open the cart drawer.
-2. In the staging shop's admin, change <product_a>'s price to HKD 123.00 (12300 minor units).
+2. In the staging shop's admin, make the row's change to <product_a>.
 3. In the still-open drawer, click Proceed to Checkout.
 4. Read the drawer.
 5. Click Proceed to Checkout.
@@ -694,9 +705,9 @@ stock, and the cart is not reopened.
 **Expected Results:**
 
 * Step 3 leaves the browser on Grade10.
-* Step 4: <product_a> is named repriced, at HKD 123.00.
+* Step 4: <product_a> is named as the row says.
 * Step 5 opens Shopify's checkout page without the lines being added again.
-* Step 6: <product_a> at HKD 123.00 and <product_b> at its current price.
+* Step 6: <product_a> as the row says, and <product_b> at its current price.
 
 ---
 
@@ -708,7 +719,7 @@ to me with the line named,
 **so that** a cart that passed the store's read and still failed is mine to
 resolve, not a dead end.
 
-<!-- trace:case id=g10.store-cart-validation.TC-70d rev=1 covers=g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
+<!-- trace:case id=g10.store-cart-validation.TC-70d rev=1 covers=g10.store-cart-validation.SC-6sg,g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
 ### grade10-site-store-cart-validation-US3-TC1-1: Shop refuses a line the store's read passed; the cart stays fixable
 
 **Classification:**
@@ -745,7 +756,7 @@ resolve, not a dead end.
 * Step 3: <product_b>'s line is unchanged.
 * Step 5 opens Shopify's checkout page with <product_b> only.
 
-<!-- trace:case id=g10.store-cart-validation.TC-44h rev=1 covers=g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
+<!-- trace:case id=g10.store-cart-validation.TC-44h rev=1 covers=g10.store-cart-validation.SC-6sg,g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
 ### grade10-site-store-cart-validation-US3-TC2-1: Cart the shop would fill short is refused, not sold short
 
 **Classification:**
@@ -765,20 +776,22 @@ resolve, not a dead end.
 
 * customer(member) is signed in and is on <grade10 store url>.
 * The cart holds 3 of <product_a>, for sale.
+* The store's checkout read counts <product_a> at 3, and every read after it counts 2.
 * The shop's checkout is mocked to accept only 2 of <product_a>, after the store's read passes.
 
 **Steps:**
 
 1. Open the cart drawer.
 2. Click Proceed to Checkout.
-3. Read the drawer.
+3. Read the drawer and <product_a>'s line.
 
 **Expected Results:**
 
 * Step 2 leaves the browser on Grade10, and no checkout for 2 opens.
 * Step 3: the message names <product_a> and says the shop would fill 2.
+* Step 3: <product_a>'s line reads 2, marked adjusted.
 
-<!-- trace:case id=g10.store-cart-validation.TC-87k rev=2 covers=g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
+<!-- trace:case id=g10.store-cart-validation.TC-87k rev=2 covers=g10.store-cart-validation.SC-6sg,g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
 ### grade10-site-store-cart-validation-US3-TC3-2: Checkout read that cannot finish blocks the handoff until Retry
 
 Runs once per row of **Test data**.
@@ -831,8 +844,117 @@ Runs once per row of **Test data**.
 - Proceed to Checkout stays unavailable while a sold-out line stays in the cart; a withdrawn line never stays.
 - A withdrawn line the checkout read finds is named unavailable and leaves the cart under the removal notice, as on open.
 - This capability states what a read does to a moved line; `grade10-site/store/checkout` applies the same rule at the handoff.
+- A cart whose lines never loaded offers Retry, names no line and is never shown as empty; the drawer shows it as a cart not yet read.
+- A checkout the store's read or the shop refuses reads the cart again as opening it does, so a line the shop filled short then reads adjusted at the shop's live count.
 
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
+review's update and QA1's blind re-run. Read the anchors, these cases, the
+scenarios at their current revisions, `tech-design.md`, `ui-design.md`,
+`tasks.md`, `decisions.md` and the Cart Validation page. Every live case
+folds, no scenario is uncovered or contradicted, and QA1 raised nothing here.
+US3-TC2-1 folds against SC-28: the shop's refusal names the line, and the read
+after it reduces the line to the shop's live 2. US2-TC6-1's Reduced row, added
+by QA1, folds against **Back to the cart**: the checkout read names the line
+adjusted, the read after it reduces the line to 1, and the next Proceed to
+Checkout goes with it, as SC-17 says. A draft keeps its revision for an
+assertion on the same run, so US2-TC6 stays at rev 1. US1-TC10-2 folds
+against SC-23 at rev 2.
+
+| Case | Disposition | Scenarios |
+| --- | --- | --- |
+| `grade10-site-store-cart-validation-US1-TC1-1` | Folded | SC-01, SC-03 |
+| `grade10-site-store-cart-validation-US1-TC2-1` | Folded | SC-04 |
+| `grade10-site-store-cart-validation-US1-TC3-1` | Folded | SC-05 |
+| `grade10-site-store-cart-validation-US1-TC4-1` | Folded | SC-06, SC-26 |
+| `grade10-site-store-cart-validation-US1-TC5-1` | Folded | SC-07, SC-08 |
+| `grade10-site-store-cart-validation-US1-TC6-2` | Folded | SC-09, SC-10, SC-25 |
+| `grade10-site-store-cart-validation-US1-TC7-1` | Folded | SC-11, SC-12 |
+| `grade10-site-store-cart-validation-US1-TC8-1` | Folded | SC-13 |
+| `grade10-site-store-cart-validation-US1-TC9-1` | Folded | SC-22 |
+| `grade10-site-store-cart-validation-US1-TC10-2` | Folded | SC-23 |
+| `grade10-site-store-cart-validation-US1-TC11-1` | Folded | SC-05, SC-06, SC-08, SC-11 |
+| `grade10-site-store-cart-validation-US1-TC12-1` | Folded | SC-24 |
+| `grade10-site-store-cart-validation-US2-TC1-1` | Folded | SC-02 |
+| `grade10-site-store-cart-validation-US2-TC2-1` | Folded | SC-15, SC-18 |
+| `grade10-site-store-cart-validation-US2-TC3-1` | Folded | SC-16, SC-27 |
+| `grade10-site-store-cart-validation-US2-TC4-1` | Deprecated: US2-TC2-1 walks the same open-then-checkout path | SC-18 |
+| `grade10-site-store-cart-validation-US2-TC5-1` | Folded | SC-14 |
+| `grade10-site-store-cart-validation-US2-TC6-1` | Folded; its Reduced row walks **Back to the cart** after a checkout read | SC-13, SC-16, SC-17 |
+| `grade10-site-store-cart-validation-US3-TC1-1` | Folded | SC-17, SC-19 |
+| `grade10-site-store-cart-validation-US3-TC2-1` | Folded | SC-20, SC-28 |
+| `grade10-site-store-cart-validation-US3-TC3-2` | Folded | SC-21 |
+
+| Scenario | Cases |
+| --- | --- |
+| SC-01, SC-03 | US1-TC1 |
+| SC-02 | US2-TC1 |
+| SC-04 | US1-TC2 |
+| SC-05 | US1-TC3, US1-TC11 |
+| SC-06 | US1-TC4, US1-TC11 |
+| SC-07, SC-08 | US1-TC5 |
+| SC-09, SC-10, SC-25 | US1-TC6 |
+| SC-11, SC-12 | US1-TC7 |
+| SC-13 | US1-TC8, US2-TC6 |
+| SC-14 | US2-TC5 |
+| SC-15, SC-18 | US2-TC2 |
+| SC-16 | US2-TC3, US2-TC6 |
+| SC-17 | US2-TC6, US3-TC1 |
+| SC-19 | US3-TC1 |
+| SC-20, SC-28 | US3-TC2 |
+| SC-21 | US3-TC3 |
+| SC-22 | US1-TC9 |
+| SC-23 | US1-TC10 |
+| SC-24 | US1-TC12 |
+| SC-26 | US1-TC4 |
+| SC-27 | US2-TC3 |
+| Uncovered | none |
+| Contradicted | none |
+
+**Run:** Update on 2026-10-06, from the fifth acceptance review. **Back to
+the cart** now states the read Q14 relies on: a checkout the store's read or
+the shop refuses reads the cart again as opening it does. SC-28 states it for a short fill and
+serves US-03, so every US3 case now covers it. US3-TC2-1 joins it on the same
+run: its later reads count 2, and step 3 reads the line at 2, marked adjusted.
+It stays a draft at its revision. **In flight** now says the cart is never
+presented as empty, and SC-23 moves to rev 2 with that line, which US1-TC10-2
+already asserts. Task 4.1 cites SC-28 in place of SC-05 for the reduce after a
+refusal. QA2 reruns on this suite.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the fourth
+acceptance review. Read the anchors, these cases, the scenarios at their
+current revisions, `tech-design.md`, `ui-design.md`, `tasks.md`,
+`decisions.md`, the Cart Validation and Cart pages, and the Store Cart page
+and design in `cart-drawer-empty-state`. US1-TC10 moves to rev 2: **In flight**
+now shows a cart whose lines never loaded as a cart not yet read, and
+the case also asserts the drawer never says the cart is empty. Before it, the
+case passed on the empty state the Grade10 host shows today. Settled carries
+Q9. Every live case folds, no scenario is uncovered or contradicted, and
+nothing was raised.
+
+**Run:** Update on 2026-10-06, from the fourth acceptance review. Q9 is
+settled: a cart whose lines never loaded shows as `shared/ui/store-cart`
+shows a cart not yet read, which `cart-drawer-empty-state` delivers. **In
+flight** now names that capability instead of a drawer state of its own. No
+scenario and no case changed. QA2 reruns on this suite.
+
+**Run:** QA2 on 2026-10-06, rerun in a fresh context after the third
+acceptance review. Read the anchors, these cases, the scenarios at their
+current revisions, `tech-design.md`, `tasks.md`, `decisions.md`, the Cart
+Validation page and Grade10's `CheckoutResolution`. US3-TC3-2 folds against
+SC-21 at rev 2: the Retry read returns, and checkout can be pressed again. A
+short fill is an `amendCart` answer, so the drawer runs the cart-open read
+again after it. US3-TC2-1 mocks only the shop's checkout and the store's read
+still passes, so its line is not reduced and the case stands. Task 4.1's test
+that the following read reduces the line now also cites SC-05, which states
+that rule. Every live case folds, the tables of the earlier QA2 run stand, and
+nothing was raised.
+
+**Run:** Update on 2026-10-06, from the third acceptance review. SC-21 moved
+to rev 2: checkout stays unavailable until a later read returns, as **In
+flight** says, not until one confirms every line. US3-TC3-2 already expects
+that read to release checkout, and no case changed. QA2 reruns on this suite.
 
 **Run:** QA2 on 2026-10-06, rerun in a fresh context after the rebase. Read
 the anchors, these cases, the Dev scenarios at their current revisions,
@@ -874,7 +996,7 @@ SC-24, which no case reached.
 | `grade10-site-store-cart-validation-US1-TC7-1` | Folded | SC-11, SC-12 |
 | `grade10-site-store-cart-validation-US1-TC8-1` | Folded | SC-13 |
 | `grade10-site-store-cart-validation-US1-TC9-1` | Folded | SC-22 |
-| `grade10-site-store-cart-validation-US1-TC10-1` | Folded; the drawer's look for it is the designer's, Q9 | SC-23 |
+| `grade10-site-store-cart-validation-US1-TC10-2` | Folded; the drawer shows the cart as `shared/ui/store-cart` shows a cart not yet read, never the empty cart (Q9) | SC-23 |
 | `grade10-site-store-cart-validation-US1-TC11-1` | Folded | SC-05, SC-06, SC-08, SC-11 |
 | `grade10-site-store-cart-validation-US1-TC12-1` | Added by QA2 for QA1's question on a line that shrank and was repriced (Q12) | SC-24 |
 | `grade10-site-store-cart-validation-US2-TC1-1` | Folded | SC-02 |
@@ -930,3 +1052,5 @@ walk decides that.
 
 **Run:** 2026-09-18 · the blind suite and the change's scenario reading were
 reconciled after the two read moments were settled.
+
+**Run:** 2026-10-06, QA1 blind re-run in a fresh context. Read: the capability's Purpose and Feature set, its user-journeys.md, the change's proposal.md, decisions.md with its Raised table, ui-design.md with its Anchor column set aside, the linked PRD pages, openspec/config.yaml's context, this suite above its Reconciliation, its Settled included, and the change's Store domain suite above its Reconciliation. Denied: every Requirements section, the scenarios, tech-design.md, tasks.md, QA2 material and openspec/changes/archive/.
