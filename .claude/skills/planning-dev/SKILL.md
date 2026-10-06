@@ -29,6 +29,22 @@ complete anchors: the journey set plus the feature-set root groups. If an
 anchor changes after a reading starts, invalidate QA1 and Dev and restart both
 in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
 
+## Decision Sweep
+
+Before Dev writes deltas, collect every open decision once:
+
+- every ❓ or `TBC` in the page sections the change cites
+- any decision log the human provides: authoritative input, read first, never
+  re-asked
+- the owner of each requirement that more than one in-flight change edits: one
+  change per requirement, per the `overlap` rule of `check:manual`
+- the `depends_on` acceptance order across the changes that share a capability
+
+Ask the human once, as one numbered list with options and a recommendation
+each, as a [Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
+Record each answer on the page and in `decisions.md` before drafting. A
+decision that surfaces after this sweep is a gap in the sweep: say so.
+
 ## One Planning Run
 
 1. **QA1 - blind cases.** Levels first: the rulebook's **When a Change
@@ -59,8 +75,11 @@ in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
    architecture or tasks. Update the source first,
    then dependent artifacts. A changed anchor restarts QA1 and Dev; another
    edit reruns QA2. Confirm artifacts are complete and new cases remain draft.
-5. **Review.** In a fresh context, run `accept-review`. Accept only on its
-   `Ready to accept` verdict; fix each blocker in its source first.
+5. **Review.** In a fresh context, run `accept-review`; changes that share
+   capabilities go in one cluster run. Accept only on its `Ready to accept`
+   verdict. Fix all findings from one review in one pass, each in its source
+   first, then rerun the review only for blockers; `fix` and `note` findings
+   land without a rerun.
 6. **Accept and publish.** Run `pnpm accept:preflight <change>`. With its
    printed baseline, run `pnpm spec:accept <change> --baseline <digest>
    --reviewed-by <human>`. An amendment names `--supersedes <fingerprint>`.
