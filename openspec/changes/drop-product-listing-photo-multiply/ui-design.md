@@ -1,4 +1,4 @@
-# UI: Product card photo without multiply
+# UI: Product card photo as supplied
 
 ## Screens
 
@@ -7,12 +7,13 @@
 | Surface | Storybook (SoT) | Figma (historical) |
 | --- | --- | --- |
 | Available | [`ProductCardImage` → Default](?path=/story/store-product-listing-productcardimage--default) | [Product Card Image](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074) |
-| On sale | [`ProductCardImage` → Sale](?path=/story/store-product-listing-productcardimage--sale) | — |
-| In cart | [`ProductCardImage` → In Cart](?path=/story/store-product-listing-productcardimage--in-cart) | — |
-| Sold out, where the tile sells | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-productcardimage--sold-out) | — |
-| Sold out, where nothing sells | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler) | — |
+| On sale | [`ProductCardImage` → Sale](?path=/story/store-product-listing-productcardimage--sale) | none |
+| In cart | [`ProductCardImage` → In Cart](?path=/story/store-product-listing-productcardimage--in-cart) | none |
+| Sold out, where the tile sells | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-productcardimage--sold-out) | none |
+| Sold out, where nothing sells | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler) | none |
 
-The Figma frame still draws the photo multiplied; the design hand redraws it (Q2).
+The Figma frame still draws the photo multiplied. Whether the designer redraws
+it is open (R1).
 
 ## Components
 
