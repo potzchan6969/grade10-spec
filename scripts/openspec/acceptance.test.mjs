@@ -13,6 +13,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
+import { sandbox } from "./fixtures/accept-sandbox.mjs";
 import {
   acceptanceReadiness,
   acceptChange,
@@ -28,35 +29,6 @@ import {
 
 const CHANGE = "build-alpha";
 const hash = (text) => createHash("sha256").update(text).digest("hex");
-
-function sandbox() {
-  const root = mkdtempSync(join(tmpdir(), "spec-accept-"));
-  const files = {
-    "openspec/changes/build-alpha/.openspec.yaml": "schema: grade10-planning\n",
-    "openspec/changes/build-alpha/proposal.md":
-      "# Build alpha\n\n## Why\n\nLet a reader search.\n\n[Product decisions](docs/prds/products/site/alpha.md#product-decisions)\n",
-    "openspec/changes/build-alpha/decisions.md":
-      "## Decisions\n\n| Q | Decided |\n| --- | --- |\n| Q1 | Search stays local to the capability. |\n\n## Raised\n\n| Capability | Raised | Landed |\n| --- | --- | --- |\n",
-    "openspec/changes/build-alpha/tech-design.md":
-      "# Technical design\n\nThe store owns the contract.\n",
-    "openspec/changes/build-alpha/tasks.md":
-      "## 1. Store contract (grade10-spec)\n\n- [ ] 1.1 Add search\n- [ ] 1.2 Verify output\n",
-    "openspec/changes/build-alpha/specs/site/search/spec.md":
-      "# Search\n\n## Purpose\n\nReaders find items.\n\n## Feature set\n\n### Search\n\nThe reader enters a query.\n\n## ADDED Requirements\n\n### Requirement: Search results\n\nThe system SHALL return matching items.\n\n#### Scenario: site-search-SC-01 - Results match\n\n- **WHEN** a reader searches\n- **THEN** matching items appear\n",
-    "openspec/changes/build-alpha/specs/site/search/user-journeys.md":
-      "# Search journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n",
-    "openspec/changes/build-alpha/specs/site/search/feature-tcs.md":
-      "# Search test cases\n\n## Settled\n\nThe query is case insensitive.\n\n## Reconciliation\n\nThe blind reading agreed with the feature set.\n",
-    "docs/prds/products/site/alpha.md":
-      "# Alpha\n\n## Product decisions\n\nSearch results stay within the selected capability.\n\n## Measurement\n\nCount successful searches.\n",
-  };
-  for (const [path, content] of Object.entries(files)) {
-    const target = join(root, path);
-    mkdirSync(dirname(target), { recursive: true });
-    writeFileSync(target, content);
-  }
-  return { root, files };
-}
 
 function applyOutputs(root, prepared) {
   for (const [path, content] of prepared.outputs) {
@@ -1194,13 +1166,14 @@ test("spec:accept commits folded files and acceptance only after both validators
       return { status: 0, stdout: "", stderr: "" };
     },
   });
-  assert.equal(commands.length, 4);
+  assert.equal(commands.length, 5);
   assert.equal(commands[0], `run validate:changes ${CHANGE}`);
   assert.match(
     commands[1],
     /^run tcs:validate --root \S+folded-store-\S+ --require-suites$/,
   );
-  assert.deepEqual(commands.slice(2), [
+  assert.match(commands[2], /^run check:manual \S+folded-store-\S+$/);
+  assert.deepEqual(commands.slice(3), [
     "check:manual",
     `run validate:changes ${CHANGE}`,
   ]);
@@ -1237,7 +1210,7 @@ test("spec:accept rolls back every durable and acceptance file when validation r
         expectedBaseline: before.baselineFingerprint,
         runCommand() {
           calls += 1;
-          return calls === 3
+          return calls === 4
             ? { status: 1, stdout: "manual refusal", stderr: "" }
             : { status: 0, stdout: "", stderr: "" };
         },
@@ -1248,7 +1221,7 @@ test("spec:accept rolls back every durable and acceptance file when validation r
     assert.equal(existsSync(join(root, path)), false);
   }
   assert.equal(verifyAcceptance(root, CHANGE).ok, false);
-  assert.deepEqual(calls, 3);
+  assert.deepEqual(calls, 4);
 });
 
 test("spec:accept validates the folded store in a copy and writes nothing when it fails", () => {
@@ -1270,7 +1243,7 @@ test("spec:accept validates the folded store in a copy and writes nothing when i
           return { status: 1, stdout: "TC1 appears more than once" };
         },
       }),
-    /tcs:validate refused the folded store:\nTC1 appears more than once/,
+    /\[tcs:validate\] TC1 appears more than once/,
   );
   assert.equal(
     folded,
@@ -1294,7 +1267,7 @@ test("spec:accept refuses a folded file whose trace marker is out of place", () 
         expectedBaseline: before.baselineFingerprint,
         runCommand: () => ({ status: 0 }),
       }),
-    /trace markers in the folded files sit away from their headings:\n- openspec\/specs\/site\/search\/feature-tcs\.md:\d+ \[marker-adjacency\]/,
+    /\[trace-markers\] openspec\/specs\/site\/search\/feature-tcs\.md:\d+ \[marker-adjacency\]/,
   );
   for (const [path] of before.outputs)
     assert.equal(existsSync(join(root, path)), false);

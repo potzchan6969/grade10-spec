@@ -14,6 +14,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import YAML from "yaml";
+import { RULES } from "../../../tools/manual/check/context.mjs";
 import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
 import {
   outline,
@@ -33,6 +34,7 @@ import {
 } from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
+import { foldChecks } from "./fold-checks.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
 const TRACE_MARKER = /<!-- trace:scenario id=(\S+)/g;
@@ -1503,51 +1505,129 @@ export function prepareAcceptance(
   };
 }
 
-/** The checks a folded store must pass, run before anything is written in a
- *  copy of `openspec/` that holds the fold, beside links to the rest of the
- *  store that the checks read: `tcs:validate` as the
- *  `suites` CI job runs it, and that every trace marker in a file the fold
- *  writes sits directly above its heading. The rest of `trace validate` is
- *  not asked: a change's markers repeat in the durable files it folds into
- *  until it archives. `command(args, cwd)` runs `pnpm` with `args`. */
-export function validateFoldedSuites(prepared, command) {
+/** A copy of the store that holds the fold, beside links to the rest of it,
+ *  for the checks that read a whole store. The caller removes it. */
+function foldedTree(prepared) {
   const tree = mkdtempSync(join(tmpdir(), "folded-store-"));
+  for (const entry of readdirSync(prepared.root))
+    if (entry === "openspec")
+      cpSync(join(prepared.root, entry), join(tree, entry), {
+        recursive: true,
+      });
+    else symlinkSync(join(prepared.root, entry), join(tree, entry));
+  for (const [path, content] of prepared.outputs) {
+    mkdirSync(dirname(join(tree, path)), { recursive: true });
+    writeFileSync(join(tree, path), content);
+  }
+  return tree;
+}
+
+/** `pnpm run check:manual` prints a `FAIL  <rule title>` heading over each
+ *  rule's rows; one failure per rule, named by its key. */
+function manualFailures(output) {
+  const found = [];
+  let current = null;
+  for (const line of output.split("\n")) {
+    const head = /^FAIL {2}(.+)$/.exec(line);
+    if (head) {
+      current = {
+        rule: `check:manual/${RULES.find((rule) => rule.title === head[1])?.key ?? head[1]}`,
+        level: "fail",
+        detail: [],
+      };
+      found.push(current);
+    } else if (current && /^ {6}\S/.test(line))
+      current.detail.push(line.trim());
+    else current = null;
+  }
+  return found.map((one) => ({ ...one, detail: one.detail.join("\n") }));
+}
+
+/** Every check `spec:accept` holds a change to, run on the fold before
+ *  anything is written, so `accept:preflight` and `spec:accept` refuse the
+ *  same changes: `validate:changes`, the fold's own checks, `tcs:validate`
+ *  on a copy of the store that holds the fold, the trace markers of the
+ *  files the fold writes, and `check:manual` on that copy with the
+ *  acceptance recorded - the store-wide rules (`overlap`, `issued`) that a
+ *  change accepted beside another one breaks. Nothing stops at the first
+ *  finding. Returns `{ failures, warnings }`, each `{ rule, detail }`.
+ *  `command(args, cwd)` runs `pnpm` with `args`. */
+export function acceptanceGate(prepared, command) {
+  const failures = [];
+  const warnings = [];
+  const refuse = (rule, detail) => failures.push({ rule, detail });
+  const run = (rule, args) => {
+    const result = command(args, prepared.root);
+    if (result.status === 0) return null;
+    return `${result.stdout ?? ""}${result.stderr ?? ""}`.trim() || rule;
+  };
+  const changes = run("validate:changes", [
+    "run",
+    "validate:changes",
+    prepared.changeId,
+  ]);
+  if (changes) refuse("validate:changes", changes);
+  for (const finding of foldChecks(prepared))
+    (finding.level === "warn" ? warnings : failures).push(finding);
+  const tree = foldedTree(prepared);
   try {
-    for (const entry of readdirSync(prepared.root))
-      if (entry === "openspec")
-        cpSync(join(prepared.root, entry), join(tree, entry), {
-          recursive: true,
-        });
-      else symlinkSync(join(prepared.root, entry), join(tree, entry));
-    for (const [path, content] of prepared.outputs) {
-      mkdirSync(dirname(join(tree, path)), { recursive: true });
-      writeFileSync(join(tree, path), content);
-    }
-    const result = command(
-      ["run", "tcs:validate", "--root", tree, "--require-suites"],
-      prepared.root,
-    );
-    if (result.status !== 0)
-      throw new Error(
-        `tcs:validate refused the folded store:\n${result.stdout ?? ""}${result.stderr ?? ""}`,
-      );
+    const suites = run("tcs:validate", [
+      "run",
+      "tcs:validate",
+      "--root",
+      tree,
+      "--require-suites",
+    ]);
+    if (suites) refuse("tcs:validate", suites);
     const markers = parseTraceGraph({ storeRoot: tree }).issues.filter(
       (issue) =>
         issue.code === "marker-adjacency" &&
         prepared.outputs.has(relative(tree, issue.file)),
     );
     if (markers.length > 0)
-      throw new Error(
-        `trace markers in the folded files sit away from their headings:\n${markers
+      refuse(
+        "trace-markers",
+        markers
           .map(
             (issue) =>
-              `- ${relative(tree, issue.file)}:${issue.line} [${issue.code}] ${issue.message}`,
+              `${relative(tree, issue.file)}:${issue.line} [${issue.code}] ${issue.message}`,
           )
-          .join("\n")}`,
+          .join("\n"),
       );
+    try {
+      const recorded = join(
+        tree,
+        "openspec",
+        "changes",
+        prepared.changeId,
+        "acceptance.json",
+      );
+      writeAcceptance(tree, prepared, {
+        reviewedBy: "accept:preflight",
+        supersedes: existsSync(recorded)
+          ? JSON.parse(readFileSync(recorded, "utf8")).fingerprint
+          : null,
+      });
+    } catch (error) {
+      refuse("acceptance", error.message);
+    }
+    const manual = command(["run", "check:manual", tree], prepared.root);
+    if (manual.status !== 0) {
+      const output = `${manual.stdout ?? ""}${manual.stderr ?? ""}`;
+      const named = manualFailures(output);
+      if (named.length > 0) failures.push(...named);
+      else refuse("check:manual", output.trim() || "check:manual failed");
+    }
   } finally {
     rmSync(tree, { recursive: true, force: true });
   }
+  return { failures, warnings };
+}
+
+export function formatFindings(findings) {
+  return findings
+    .map((one) => `- [${one.rule}] ${one.detail.replaceAll("\n", "\n    ")}`)
+    .join("\n");
 }
 
 export function runPnpm(args, cwd) {
@@ -1950,11 +2030,9 @@ export function acceptChange(
       );
   };
   try {
-    validate(
-      ["run", "validate:changes", changeId],
-      "validate:changes before fold",
-    );
-    validateFoldedSuites(prepared, command);
+    const { failures } = acceptanceGate(prepared, (args) => command(args));
+    if (failures.length > 0)
+      throw new Error(`Acceptance refused:\n${formatFindings(failures)}`);
     for (const [path, content] of prepared.outputs) {
       const target = join(root, path);
       preserve(target);
@@ -1983,4 +2061,10 @@ export function acceptChange(
   }
 }
 
-export { contractOutputs, json as prettyJson, mergeFeatureSet, mergeSuite };
+export {
+  contractOutputs,
+  json as prettyJson,
+  mergeFeatureSet,
+  mergeSuite,
+  requirementBlocks,
+};
