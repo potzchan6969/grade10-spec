@@ -13,20 +13,23 @@ and load more as the shopper scrolls.
 
 ## Product Tile
 
-🚧 **Whole photo** — the square well shows the full picture; leftover space is
+🚧 **Whole photo** - the square well shows the full picture; leftover space is
 the well, not a cropped edge. Available, on sale, sold out and in cart all do
 this.
 
-🚧 **No multiply** — the photo is drawn as supplied, not blended into the well.
+🚧 **No multiply** - the photo is drawn as supplied, not blended into the well.
 
-🚧 **Name opens the product** — when the tile can open a product, the name
+**Name opens the product** - when the tile can open a product, the name
 does too, the same way the photo does, and shows it by an underline on hover
-and on focus; a sold-out tile’s name stays inert where the tile sells, and a
-name that does not open is plain text.
+and on keyboard focus; a sold-out tile's name stays inert where the tile
+sells, and a name that does not open is plain text.
 
-🚧 **One stop to open** — the name is the tile's only keyboard stop for
+🚧 **One stop to open** - the name is the tile's only keyboard stop for
 opening the product and the one control a screen reader announces for it, so
 each product is announced once; the photo opens on a pointer press only.
+
+🚧 **Photo on its own** - used without its tile, the photo opens where a tile
+would, and is its own keyboard stop, named for the product.
 
 🚧 **A link** - a tile that opens, given its product's page, is a link to
 it: it can open in a new tab, and its address can be copied -
@@ -37,10 +40,10 @@ a sold-out tile still opens its product, sold-out treatment and all -
 [You May Also Like](/p/grade10-site/store/cross-sell), and the
 [Main Page](/p/grade10-site/store/home)'s row of cards
 
-🚧 **No cart words where it does not sell** — a tile that draws no cart
+🚧 **No cart words where it does not sell** - a tile that draws no cart
 control needs no cart word from the surface
 
-**Cart on a small screen** — where the tile sells, the round cart control
+**Cart on a small screen** - where the tile sells, the round cart control
 stays visible without hover on a narrow viewport and on touch; on a wide
 viewport with a fine pointer it still appears on hover or keyboard focus.
 
@@ -140,8 +143,8 @@ it. The first two rows place two parts of its map; the rest decide the tile.
 | --- | --- | --- | --- |
 | Responsive layout | Decided | The list answers the width it is given. It is its own part of the map, as the spec places it, because no other part means it. Not folded into the tile contract. | Product |
 | Load more | Decided | Reaching the end of the catalogue and waiting for the next products are reported like every other change. It is its own part of the map, as the spec places it, because reaching the end is not a choice the shopper makes in the filters or the sort. Not folded into Filters and sort. | Product |
-| Tile as a link | Decided | A tile that opens a product is a link: it opens in a new tab and its address can be copied, like any other. The surface gives the tile its product's page; the listing gives its tiles theirs in its own round. | Product |
-| One stop to open | Decided | The name is the one keyboard stop that opens the product, so 24 tiles cost 24 Tab presses rather than 48 and a screen reader announces each product once. Ruled out: the photo and the name as two stops for one destination. | Product |
+| Tile as a link | Decided | A tile that opens a product is a link: it opens in a new tab and its address can be copied, like any other. The surface gives the tile its product's page; the listing gives its tiles theirs in its own round, and until then its cards open in place. | Product |
+| One stop to open | Decided | The name is the one keyboard stop that opens the product, so a Tab user passes one stop fewer on every tile and a screen reader announces each product once. Ruled out: the photo and the name as two stops for one destination. | Product |
 | Sold-out opens where nothing sells | Decided | A surface that draws no cart control carries the collector on to another product, so it has no reason to stop at a card nobody can buy. Ruled out: a sold-out tile inert everywhere, a dead end on that surface. | Product |
-| The underline means it opens | Decided | A name that opens is underlined on hover and on focus, and a name that does not open stays plain, so the underline never promises a press that does nothing. Ruled out: an underline on every name. | Product |
+| The underline means it opens | Decided | A name that opens is underlined on hover and on keyboard focus, and a name that does not open stays plain, so the underline never promises a press that does nothing. Ruled out: an underline on every name. | Product |
 :::
