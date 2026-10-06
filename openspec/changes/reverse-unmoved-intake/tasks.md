@@ -5,7 +5,7 @@
 - [ ] 1.1 Add to the Intake code map of `docs/prds/products/grade10-admin/inventory/catalog.md`: `reverseRegularIntake` and `reverseCertIntake` in `services/inventoryMutations.ts`, and the moved test `selectMovedInventoryCertIds` and the reducible count `selectRegularStockReducible` in `repositories/`. The 🚧 on Units entered by mistake stays until the walk is verified; taking it off is the archive's step.
 - [ ] 1.2 Verify: `pnpm check:manual`, `pnpm run validate:changes reverse-unmoved-intake` and `pnpm run lint` in grade10-spec.
 
-## 2. History action and contracts (grade10)
+## 2. History action and contracts (grade10) (owner: @mason5991)
 
 - [ ] 2.1 Tests for the widened action check and the partial index against the committed migration, and for the contract's new action, the two failure codes, the two input schemas and `regularStock.reducible` decoding, in their own commit before the code
 - [ ] 2.2 Add the migration that drops `ck_changelogs_action` and adds it again `NOT VALID` with `intake-reversal`, then `idx_changelogs_change_product_old_inventory` on `((before -> 'oldInventory' ->> 'id'))` `WHERE action = 'change-product'` with its `-- lock:` line, and its `meta/` snapshot carried forward
