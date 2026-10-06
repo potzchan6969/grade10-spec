@@ -65,7 +65,8 @@ ending.
   so no state is added
 - **View** - `MemberWalletCard` takes `nothingHeld` and draws the line above
   whichever state it shows, the empty one included, since the re-read that
-  follows usually empties the list
+  follows usually empties the list. It is a `Text tone="secondary"`, the tone
+  Console Blocks gives an empty result: the answer is a result, not a refusal
 - **Words** - `copy.ts` gains `No live ${name} pass was held, so nothing was
   ended.`
 - **Rejected** - a toast, which leaves no line to read back to the member; a
@@ -79,14 +80,31 @@ missing' govern it: a wallet secret is expected where `packages/app-env`
 records that wallet's issuer for the brand and environment.
 
 - **Declaration** - `SecretDeclaration` (`packages/utils/src/config.ts`) gains
-  `expectedIn?: readonly DeployedEnv[]`, valid only beside `optional`: the
-  worker serves without it, and `--check` reports it missing in those
-  environments
-- **One predicate** - `expectedSecretNames(declarations, deployEnv)` returns
-  the required names plus those expected there. `scripts/secrets/status.mjs`
-  `buildStatus(targets, readings, deployEnv)` reads `required` through it, so
-  `missingRequired` and `inconsistent` follow without change. The unused
-  `requiredNames` export in `registry.mjs` is deleted
+  three keys, each valid only beside `optional`, so the worker still serves
+  without the secret:
+  - `expectedIn?: readonly DeployedEnv[]` - where `--check` reports it missing
+  - `unlessBound?: string` - a binding whose presence in the environment
+    stands in for it
+  - `withRecord?: { name: string; missingIn: readonly DeployedEnv[] }` - a
+    committed value the same credential needs, and the environments that do
+    not record it
+- **Bindings** - `registry.mjs` `target` already reads the environment's
+  wrangler block; it adds the names of its `mtls_certificates` bindings to
+  the target as `bound`
+- **Two predicates** - `expectedSecretNames(declarations, deployEnv, bound)`
+  returns the required names plus those expected there whose `unlessBound` is
+  not in `bound`; `missingRecordNames(declarations, deployEnv, bound)` returns
+  the `withRecord` name of each of those whose `missingIn` holds the
+  environment. Both are pure, and the unused `requiredNames` export in
+  `registry.mjs` is deleted
+- **Status** - `scripts/secrets/status.mjs` `buildStatus(targets, readings,
+  deployEnv)` reads `required` through the first, so `missingRequired` and
+  `inconsistent` follow without change. Each row gains `unrecorded` from the
+  second: `check` fails on it, naming each, and `renderStatus` prints it under
+  its worker. The picker never offers it, since a record is committed, not set
+- **Words** - a missing secret whose declaration carries `optional` is printed
+  with that reason, in `check`'s lines and the picker's hint, since its worker
+  still serves; "refuses to serve" stays for a secret without one
 - **Derivation** - `WALLET_PASS_SECRETS` becomes `walletPassSecrets(brand)`
   in `packages/grade10-store/backend/src/secrets.ts`, reading `walletIssuer`
   and `applePassIssuer` over `DEPLOYED_ENVS`. `@grade10/app-env` is data with
@@ -97,20 +115,32 @@ records that wallet's issuer for the brand and environment.
   | `WALLET_PASS_KEY` | Either issuer is recorded |
   | `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY` | `walletIssuer` is recorded |
   | `WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_PASS_AUTH_KEY` | `applePassIssuer` is recorded |
-  | `WALLET_APPLE_APNS_KEY` | `applePassIssuer` is recorded with an `apnsKeyId` |
+  | `WALLET_APPLE_APNS_KEY` | `applePassIssuer` is recorded and the environment binds no `WALLET_APPLE_APNS`; `withRecord` names `applePassIssuer.apnsKeyId`, missing in each environment whose issuer records no `apnsKeyId` |
 
 - **Brands** - each app's `src/secrets.ts` spreads `walletPassSecrets("grade10")`
-  or `walletPassSecrets("zzz")`; ZZZ records no issuer, so nothing is expected
-- **Validation** - `readDeclaration` (`registry.mjs`) accepts `expectedIn`
-  beside `why` and `optional`, and refuses it without `optional` or naming an
-  environment `DEPLOYED_ENVS` does not
+  or `walletPassSecrets("zzz")`; ZZZ records no issuer, so nothing is expected.
+  `WalletPassSecrets` takes its keys from the function's return type
+- **Same rule as the worker** - `apnsCredential`
+  (`packages/grade10-store/backend/src/services/wallet/applePush.ts:170-185`)
+  takes a bound certificate first, then names the missing key, then the
+  missing key id, and `configuredWallets`
+  (`packages/grade10-store/backend/src/services/wallet/deps.ts:261-262`)
+  offers Apple only where it can push; the table holds the check to that rule
+- **Validation** - `readDeclaration` (`registry.mjs`) accepts `expectedIn`,
+  `unlessBound` and `withRecord` beside `why` and `optional`. It refuses
+  `expectedIn` without `optional` or naming an environment `DEPLOYED_ENVS`
+  does not, the other two without `expectedIn`, and a `missingIn` environment
+  `expectedIn` does not name
 - **Runtime guard unchanged** - `missingSecrets` reads `optional` alone, so a
   missing wallet secret never stops the worker serving checkout; the wallet
   port refuses the add by name, as the page states
 - **Rejected** - dropping `optional`, which makes every brand and environment
   require Apple secrets; required in the runtime guard, which takes the whole
   store worker down for a wallet secret; a second list in the secrets tool,
-  which drifts from the issuer record
+  which drifts from the issuer record; expecting the push key only where a key
+  id is recorded, which passes a deployment whose worker names the key
+  missing and offers no Apple pass; the key id as a secret row, which the
+  picker would offer to set
 
 ### A Development Door Seeds a Pass for the Walk
 
@@ -161,12 +191,21 @@ each with its role. Two of their steps write code:
 
 - **`useWalletPasses(userId, enabled)`** - `{ read, unreachable, held,
   nothingHeld, endPass }`
-- **`expectedSecretNames(declarations, deployEnv) → string[]`** - pure
+- **`expectedSecretNames(declarations, deployEnv, bound) → string[]`** and
+  **`missingRecordNames(declarations, deployEnv, bound) → string[]`** - pure,
+  over `walletPassSecrets("grade10")`
 
   ```text
-  walletPassSecrets("grade10") with only staging's Google issuer recorded
-    staging    → [WALLET_GOOGLE_SERVICE_ACCOUNT_KEY, WALLET_PASS_KEY]
-    production → []
+  only staging's Google issuer recorded
+    staging    → [WALLET_GOOGLE_SERVICE_ACCOUNT_KEY, WALLET_PASS_KEY] · records []
+    production → []                                                  · records []
+  production's Apple issuer recorded with no apnsKeyId
+    bound []                  → [WALLET_APPLE_PASS_CERT, WALLET_APPLE_PASS_KEY, WALLET_PASS_AUTH_KEY,
+                                 WALLET_PASS_KEY, WALLET_APPLE_APNS_KEY]
+                                · records [applePassIssuer.apnsKeyId]
+    bound [WALLET_APPLE_APNS] → [WALLET_APPLE_PASS_CERT, WALLET_APPLE_PASS_KEY, WALLET_PASS_AUTH_KEY,
+                                 WALLET_PASS_KEY]
+                                · records []
   ```
 
 - **`POST /dev/wallet-pass`** - development only
@@ -192,7 +231,7 @@ each with its role. Two of their steps write code:
 ## Migration Plan
 
 1. **Code** - groups 1 to 3 land before enrolment; with every issuer null,
-   nothing is expected and every `--check` passes as it does now
+   nothing is expected and `--check` reports no wallet secret missing, as now
 2. **Enrolment** - groups 5 and 6 run in the page's order; each issuer record
    is its own commit after its secrets are set, so the deploy that records it
    is the first one `--check` holds to it
