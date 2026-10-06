@@ -147,6 +147,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** the other is carried too
 - **AND** where one is withheld the other is withheld with it
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-4zd rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-40 - The collector's vault screens answer not-found on every lane
 **Serves:** grade10-site-site-carried-surfaces-US-06 - the collector who opens an old vault link finds nothing rather than a screen nobody designed
 
@@ -155,6 +156,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** each is not found
 - **AND** where the vault's set is carried, the signing ceremony still answers
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-wjy rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-41 - Store Locator waits with the store
 **Serves:** `grade10-site-site-carried-surfaces-US-01`, `grade10-site-site-carried-surfaces-US-03` - the collector and the crawler on a build whose shop has not opened meet no shop location either
 

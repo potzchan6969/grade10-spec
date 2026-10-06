@@ -17,6 +17,7 @@
 **I want** the map, store name, address and hours drawn from the props I pass,
 **so that** every application shows the one shop the same way without a copy of its own.
 
+<!-- trace:case id=g10.shared-store-locator.TC-c18 rev=1 covers=g10.shared-store-locator.SC-al8 -->
 ### shared-ui-store-locator-US1-TC1-1: StoreLocator exports from the package entry and holds no copy
 
 **Classification:**
@@ -51,6 +52,7 @@
 * Step 4 finds no import from `@grade10/i18n`.
 * Step 4 finds no store name, address, hours or Maps address written in.
 
+<!-- trace:case id=g10.shared-store-locator.TC-haj rev=1 covers=g10.shared-store-locator.SC-7zw,g10.shared-store-locator.SC-pyw,g10.shared-store-locator.SC-2cu,g10.shared-store-locator.SC-xyp -->
 ### shared-ui-store-locator-US1-TC2-1: Supplied name, address and hours show as given
 
 **Classification:**
@@ -95,6 +97,7 @@
 * Step 5 shows each of `<hours rows>` as given, in order, and no other row.
 * Step 6 opens `<maps destination>` in a new tab.
 
+<!-- trace:case id=g10.shared-store-locator.TC-nio rev=1 covers=g10.shared-store-locator.SC-7zw,g10.shared-store-locator.SC-pyw,g10.shared-store-locator.SC-2cu,g10.shared-store-locator.SC-xyp -->
 ### shared-ui-store-locator-US1-TC3-1: The map is one named keyboard stop and the only way to Maps
 
 **Classification:**
@@ -134,6 +137,7 @@
 * Step 3 reads `<map name>`.
 * Step 4 opens the Maps destination in a new tab.
 
+<!-- trace:case id=g10.shared-store-locator.TC-3ab rev=1 covers=g10.shared-store-locator.SC-7zw,g10.shared-store-locator.SC-pyw,g10.shared-store-locator.SC-2cu,g10.shared-store-locator.SC-xyp -->
 ### shared-ui-store-locator-US1-TC4-1: No hours rows leave the hours section out
 
 **Classification:**

@@ -80,6 +80,7 @@ from Store home's, the browse listing's and a product page's, as
   store name, the street address, and the week's hours
 - **AND** each of them is visible on the page with no script having run
 
+<!-- trace:scenario id=g10.store-store-locator.SC-evn rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-11 - Scripts keep the page whole
 **Serves:** grade10-site-store-store-locator-US-01 - the collector whose browser runs scripts sees no blank moment once the shop has shown
 
@@ -97,6 +98,7 @@ from Store home's, the browse listing's and a product page's, as
 - **AND** nothing offers search, a store list, distance, filters, or a store
   picker
 
+<!-- trace:scenario id=g10.store-store-locator.SC-vb8 rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-10 - The page speaks the collector's language
 **Serves:** grade10-site-store-store-locator-US-01 - the collector reading the site in Traditional Chinese meets the shop under the name the free pick-up claim gave it
 
@@ -135,6 +137,7 @@ control beside the map.
 - **THEN** Google Maps opens in a new tab at 13 Pak Sha Road, Causeway Bay,
   Hong Kong
 
+<!-- trace:scenario id=g10.store-store-locator.SC-ca5 rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-12 - The map opens Maps with no script
 **Serves:** grade10-site-store-store-locator-US-02 - the collector whose scripts are off or not yet loaded still reaches Google Maps from the map
 
@@ -142,6 +145,7 @@ control beside the map.
 - **WHEN** they activate the map on Store Locator
 - **THEN** Google Maps opens in a new tab for the shop's address
 
+<!-- trace:scenario id=g10.store-store-locator.SC-91n rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-13 - The map opens Maps when Google's map does not load
 **Serves:** grade10-site-store-store-locator-US-02 - the collector whose embedded map never loads still reaches Google Maps from its place
 

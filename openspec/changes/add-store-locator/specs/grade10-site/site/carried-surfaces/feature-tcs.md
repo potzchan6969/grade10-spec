@@ -11,6 +11,7 @@ serve me from,
 **so that** I am never shown a price, a basket or a pay button for a shop
 nobody is ready to sell me from.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-kv7 rev=2 covers=g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-wjy -->
 ### grade10-site-site-carried-surfaces-US1-TC2-2: Footer carries no shop column and no store link
 
 **Classification:**
@@ -51,6 +52,7 @@ to tell me the site does not hold it,
 **so that** I learn the page is not there instead of waiting on one that will
 never render.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-ynq rev=2 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC1-2: Every store address answers not-found with a 404
 
 Runs once per row of **Test data**.
@@ -97,6 +99,7 @@ Runs once per row of **Test data**.
 * Step 1 returns status 404.
 * Step 2 renders the not-found surface, not a store surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-0x1 rev=2 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC2-2: An address beneath a store surface answers the same way
 
 Runs once per row of **Test data**.
@@ -150,6 +153,7 @@ answers,
 **so that** I never index a page that answers not-found and never carry it
 into a search result.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-xjk rev=3 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-wjy -->
 ### grade10-site-site-carried-surfaces-US3-TC1-3: Sitemap names no store, vault or booking address
 
 **Classification:**
@@ -181,6 +185,7 @@ into a search result.
   a visit.
 * Every entry names a surface the build carries.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-24a rev=3 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-wjy -->
 ### grade10-site-site-carried-surfaces-US3-TC4-3: Crawler files name the store, the vault and booking where the build carries them
 
 **Classification:**
@@ -221,6 +226,7 @@ into a search result.
 **so that** hiding the shop on the public site costs nothing to the lanes it
 is still sold on.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-weg rev=2 covers=g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US4-TC1-2: Every store address answers on a lane that carries the store
 
 Runs once per row of **Test data**.
@@ -278,6 +284,7 @@ serve me from,
 **so that** I am never shown a case to open or a visit to book that nobody is
 ready to honour.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-azq rev=2 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC1-2: Header names no withheld product and carries no cart control
 
 **Classification:**

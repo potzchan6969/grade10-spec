@@ -11,6 +11,7 @@ to Google Maps,
 **so that** the shop I would pick up from is the one I find, in my own
 language.
 
+<!-- trace:case id=g10.store-domain.TC-frk rev=1 covers=g10.store-product-page.SC-21b,g10.store-product-page.SC-res,g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-ca5,g10.store-store-locator.SC-91n,g10.store-store-locator.SC-w6y -->
 ### grade10-site-store-e2e-US7-TC1-1: Free pick-up leads to the same shop and on to Maps
 
 Runs once per row of **Test data**.

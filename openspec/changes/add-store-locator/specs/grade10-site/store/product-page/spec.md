@@ -30,6 +30,7 @@ link.
 - **THEN** Store Locator renders in the same tab
 - **AND** in the product page's language
 
+<!-- trace:scenario id=g10.store-product-page.SC-res rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-33 - A label with no page is not a link
 **Serves:** grade10-site-store-product-page-US-10 - the collector reading the shipping and pickup lines finds one link, the shop's
 

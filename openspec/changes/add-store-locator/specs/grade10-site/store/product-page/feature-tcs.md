@@ -10,7 +10,7 @@
 Store Locator,
 **so that** I see the same shop's address and hours before I choose pickup.
 
-<!-- trace:case id=g10.store-product-page.TC-ka9 rev=1 covers=g10.store-product-page.SC-21b -->
+<!-- trace:case id=g10.store-product-page.TC-ka9 rev=1 covers=g10.store-product-page.SC-21b,g10.store-product-page.SC-res -->
 ### grade10-site-store-product-page-US10-TC1-1: Free pick-up store name opens Store Locator
 
 Runs once per row of **Test data**.
@@ -50,6 +50,7 @@ Runs once per row of **Test data**.
 * Step 2: the claim names Hong Kong Grade10 Store, and the name is a link.
 * Step 3 opens Store Locator in the same tab, the Location & Hours heading showing.
 
+<!-- trace:case id=g10.store-product-page.TC-q55 rev=1 covers=g10.store-product-page.SC-21b,g10.store-product-page.SC-res -->
 ### grade10-site-store-product-page-US10-TC2-1: Shipping label with no page behind it is not a link
 
 **Classification:**

@@ -10,7 +10,7 @@
 page for the Hong Kong shop,
 **so that** I can read the address and hours without hunting for a dead link.
 
-<!-- trace:case id=g10.store-store-locator.TC-93l rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
+<!-- trace:case id=g10.store-store-locator.TC-93l rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC1-1: Location & Hours answers whole before scripts run
 
 **Classification:**
@@ -53,7 +53,7 @@ page for the Hong Kong shop,
 * Every day of the week reads `<shop hours>`.
 * The page shows one shop and no other.
 
-<!-- trace:case id=g10.store-store-locator.TC-zh8 rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
+<!-- trace:case id=g10.store-store-locator.TC-zh8 rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC2-1: Scripts keep the one shop and add no finder
 
 **Classification:**
@@ -86,7 +86,7 @@ page for the Hong Kong shop,
 * Step 3 finds no search field, store list, distance or filter.
 * Step 3 finds no store picker.
 
-<!-- trace:case id=g10.store-store-locator.TC-vei rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
+<!-- trace:case id=g10.store-store-locator.TC-vei rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC3-1: Title and description differ from the store's other pages
 
 Runs once per row of **Test data**.
@@ -128,7 +128,7 @@ Runs once per row of **Test data**.
 * Step 2's title differs from step 4's.
 * Step 2's meta description differs from step 4's.
 
-<!-- trace:case id=g10.store-store-locator.TC-2pc rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
+<!-- trace:case id=g10.store-store-locator.TC-2pc rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC4-1: Header Store Locator opens the page and marks it
 
 **Classification:**
@@ -165,7 +165,7 @@ Runs once per row of **Test data**.
 * Step 4: Store Locator is marked as the current page.
 * Step 4: no other primary-nav item is marked, Store included.
 
-<!-- trace:case id=g10.store-store-locator.TC-jei rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
+<!-- trace:case id=g10.store-store-locator.TC-jei rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC5-1: Footer Store Locator leads the Help column
 
 **Classification:**
@@ -197,7 +197,7 @@ Runs once per row of **Test data**.
 * Step 3: Store Locator is the column's first link, ahead of Docs.
 * Step 4 opens Store Locator, the Location & Hours heading showing.
 
-<!-- trace:case id=g10.store-store-locator.TC-cxo rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
+<!-- trace:case id=g10.store-store-locator.TC-cxo rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC6-1: Page reflows at 375 CSS pixels with no sideways scroll
 
 **Classification:**
@@ -232,6 +232,7 @@ Runs once per row of **Test data**.
 * Step 3 moves nothing; the page has no sideways scroll.
 * Step 4's menu lists Store Locator directly before Help.
 
+<!-- trace:case id=g10.store-store-locator.TC-y5d rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC7-1: Heading and store name follow the language prefix
 
 Runs once per row of **Test data**.
@@ -280,7 +281,7 @@ Runs once per row of **Test data**.
 **I want** activating the map to open Google Maps for the shop,
 **so that** I get directions without a second control on the page.
 
-<!-- trace:case id=g10.store-store-locator.TC-ifh rev=1 covers=g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-w6y -->
+<!-- trace:case id=g10.store-store-locator.TC-ifh rev=1 covers=g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-ca5,g10.store-store-locator.SC-91n,g10.store-store-locator.SC-w6y -->
 ### grade10-site-store-store-locator-US2-TC1-1: Clicking the map opens the shop on Google Maps in a new tab
 
 **Classification:**
@@ -317,7 +318,7 @@ Runs once per row of **Test data**.
 * Step 2 opens a new tab; the first tab stays on Store Locator.
 * Step 3 shows Google Maps at `<shop address>`.
 
-<!-- trace:case id=g10.store-store-locator.TC-3ij rev=1 covers=g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-w6y -->
+<!-- trace:case id=g10.store-store-locator.TC-3ij rev=1 covers=g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-ca5,g10.store-store-locator.SC-91n,g10.store-store-locator.SC-w6y -->
 ### grade10-site-store-store-locator-US2-TC2-1: Only the map, one keyboard stop, leads to Google Maps
 
 **Classification:**
@@ -358,6 +359,7 @@ Runs once per row of **Test data**.
 * Step 3: no other stop leads to Google Maps; no Get directions control.
 * Step 5 opens Google Maps at `<shop address>` in a new tab.
 
+<!-- trace:case id=g10.store-store-locator.TC-gs0 rev=1 covers=g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-ca5,g10.store-store-locator.SC-91n,g10.store-store-locator.SC-w6y -->
 ### grade10-site-store-store-locator-US2-TC3-1: The map opens Maps with scripts turned off
 
 **Classification:**
@@ -395,6 +397,7 @@ Runs once per row of **Test data**.
 * Step 2 opens a new tab; the first tab stays on Store Locator.
 * Step 3 shows Google Maps at `<shop address>`.
 
+<!-- trace:case id=g10.store-store-locator.TC-jof rev=1 covers=g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-ca5,g10.store-store-locator.SC-91n,g10.store-store-locator.SC-w6y -->
 ### grade10-site-store-store-locator-US2-TC4-1: The map's place opens Maps when Google's map does not load
 
 **Classification:**

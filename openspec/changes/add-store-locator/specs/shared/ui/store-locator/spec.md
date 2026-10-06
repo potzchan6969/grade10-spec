@@ -33,6 +33,7 @@ single `copy` prop of `StoreLocatorCopy`. Shop name, address lines, hours
 rows, map embed source, and Maps destination SHALL reach it through props. It
 SHALL NOT fetch, route, or read application stores.
 
+<!-- trace:scenario id=g10.shared-store-locator.SC-al8 rev=1 -->
 #### Scenario: shared-ui-store-locator-SC-01 - An application imports the surface
 **Serves:** Surface exports - an application imports the surface
 
@@ -59,6 +60,7 @@ NOT render a separate Get directions control.
 **Required map** - The map embed source and the Maps destination SHALL be
 required props: a `StoreLocator` missing either SHALL NOT type-check.
 
+<!-- trace:scenario id=g10.shared-store-locator.SC-7zw rev=1 -->
 #### Scenario: shared-ui-store-locator-SC-02 - Supplied shop facts render
 **Serves:** Location & Hours - an application passes its shop and sees it drawn as given
 
@@ -69,6 +71,7 @@ required props: a `StoreLocator` missing either SHALL NOT type-check.
 - **AND** the map link uses the supplied Maps destination
 - **AND** no word or shop fact appears that the props did not supply
 
+<!-- trace:scenario id=g10.shared-store-locator.SC-pyw rev=1 -->
 #### Scenario: shared-ui-store-locator-SC-03 - No separate directions control
 **Serves:** Location & Hours - the map stays the one way to Google Maps
 
@@ -76,6 +79,7 @@ required props: a `StoreLocator` missing either SHALL NOT type-check.
 - **THEN** the map is the only control that opens the Maps destination
 - **AND** no separate Get directions control appears
 
+<!-- trace:scenario id=g10.shared-store-locator.SC-2cu rev=1 -->
 #### Scenario: shared-ui-store-locator-SC-05 - The map is one keyboard stop
 **Serves:** Location & Hours - a keyboard user tabbing through the block reaches Google Maps once, by the map's own name
 
@@ -87,6 +91,7 @@ required props: a `StoreLocator` missing either SHALL NOT type-check.
   context
 - **AND** nothing inside the embedded map takes focus
 
+<!-- trace:scenario id=g10.shared-store-locator.SC-xyp rev=1 -->
 #### Scenario: shared-ui-store-locator-SC-06 - A map with no destination does not build
 **Serves:** Location & Hours - an application cannot draw a map that leads nowhere
 
