@@ -169,6 +169,19 @@ accepts first and carries the one-item add and sold-out requirements; the
 redesign rebases against the folded page (decisions Q5). The shared blocks'
 remaining-count element and stepper ceiling stay until the designer answers Q8.
 
+This change depends on `cart-drawer-empty-state`: cart-validation's
+**In flight** names Store Cart's rule for a cart not yet read, which only that
+change states (decisions Q9). `redesign-store-product-detail-page` and
+`add-store-cart-drawer-ui` depend on this change, because the first rebases on
+the folded product page and the second cites the folded cart-validation.
+
+The `add-shopify-checkout-integration` amendment re-accepts an accepted change,
+which a dependency cannot record: it accepts ahead of this change or with it,
+never after, because it names cart-validation's two reads where the durable
+checkout still names checkout open and Pay (decisions Q15). Its checkout suite
+takes its QA2 rerun first, then accepts with
+`--supersedes 137f9cec66da45e8975e44b4be5c14c272ad34df5ee7e37dca1b8061eb5e0d8c`.
+
 ## References
 
 - [Product Status](../../../docs/prds/products/grade10-site/commerce/product-status.md)
@@ -177,3 +190,5 @@ remaining-count element and stepper ceiling stay until the designer answers Q8.
 - [Cart Validation](../../../docs/prds/products/grade10-site/store/cart-validation.md)
 - [Product Listing](../../../docs/prds/products/grade10-site/store/product-listing.md)
 - [Product Details](../../../docs/prds/products/grade10-site/store/product-page.md)
+- [Cart Drawer](../../../docs/prds/products/grade10-site/store/cart.md)
+- [Checkout](../../../docs/prds/products/grade10-site/store/checkout.md)
