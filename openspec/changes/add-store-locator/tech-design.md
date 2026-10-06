@@ -9,8 +9,10 @@
 - **The chrome names surfaces by route id** — `src/chrome/siteContent.ts`
   holds the header's `NAV_LINKS` and the footer's links; `navLinksFor` drops
   what a build does not carry, and Help is appended after the table. The
-  footer's Store Locator is an `UnwrittenFooterLink` pointing at `#`, drawn
-  only beside the shop column (`src/chrome/SiteShell.tsx:184-195`)
+  footer draws Store Locator only beside the shop column
+  (`src/chrome/SiteShell.tsx:184-195`); its `#` link and the listing's `#`
+  utility row are removed by the grade10 `fix` the proposal names, before
+  this change
 - **A surface's head is the brand's catalog** — `surfaceHead` reads
   `head[surface]` from the grade10 layer, so a prerendered row with no head
   entry is a compile error
@@ -20,9 +22,13 @@
 - **The store name is answered in `shared/`** — `product.hongKongGrade10Store`
   in four languages, Korean among them, although only grade10 has the shop
 - **The reveal hides server markup** — `useFirstPaintReveal` renders every
-  section at `opacity-0` until an effect runs after hydration; its four users
+  section at `opacity-0` until an effect runs after hydration; its four blocks
   (order details, order history, auction record, winner order) are session
-  surfaces, so nobody has met it on a public page yet
+  surfaces, so nobody has met it on a public page yet. The preview's Store
+  Locator page story is a fifth user, importing the hook and its classes by
+  relative path (`apps/preview/src/pages/store-locator-page.stories.tsx:8-15`),
+  and the preview's order history, order details, winner order and My Auctions
+  page stories wait on the blocks' `data-revealed`
 - **No source holds the shop's facts** — the app repository names neither
   the address nor the hours; the preview's fixture is the only copy
   (`packages/ui/src/blocks/store-order-detail/fixtures.ts:193`)
@@ -86,11 +92,11 @@ storeLocator: {
   as its last entry, so `navLinksFor` drops it where the build does not carry
   it and Help, appended after the table, follows it. Current marking is the
   existing `isWithin(current, link.to)`
-- **Footer** — the Store Locator link becomes a `FooterSiteLink` to
-  `storeLocator`, first in the Help column, drawn where `storeLocator` is in
-  `carriedSurfaces(config.gates).served`. It no longer keys on the shop
-  column's read, so it is present on the first render rather than after the
-  collections answer; `UnwrittenFooterLink` loses its last user and goes
+- **Footer** — the Help column gains a `FooterSiteLink` to `storeLocator`,
+  first in the column, drawn where `storeLocator` is in
+  `carriedSurfaces(config.gates).served`. It keys on the row rather than on
+  the shop column's read, so it is present on the first render rather than
+  after the collections answer
 - **Words** — `chrome.nav.storeLocator` joins the shared layer in all four
   languages, the words `chrome.footer.storeLocator` already holds
 
@@ -101,11 +107,11 @@ storeLocator: {
   no loader
 - **Words** — a `storeLocator` namespace in the grade10 brand layer, in
   `en`, `zh-Hant` and `zh-Hans`: the heading, the hours heading, the map's
-  title and link name, the address lines, and seven day rows (Monday first,
-  a day label and an hours text each). Day labels are catalog words, never
-  `Intl` output, which can differ between the Node prerender and the
-  browser and break hydration. How the address and hours read in Chinese is
-  Q11
+  title and link name, the address lines, and the hours rows Q16 settles (a
+  day label and an hours text each; recommended seven, Monday first). Day
+  labels are catalog words, never `Intl` output, which can differ between
+  the Node prerender and the browser and break hydration. How the address
+  and hours read in Chinese is Q11
 - **Store name** — `product.hongKongGrade10Store` moves from `shared/` to the
   grade10 layer (a `product` file per language) and both surfaces read that
   key; Korean loses it, since ZZZ has no shop
@@ -157,8 +163,11 @@ classes and a delay helper, with no hook and no `revealed` state:
   `motion-reduce:animate-none`. Without CSS animation the section is simply
   there
 - **Every user moves** — order details, order history, auction record and
-  winner order drop `useFirstPaintReveal` and their `revealed` flags; their
-  stories stop waiting on `data-revealed`
+  winner order drop `useFirstPaintReveal` and their `revealed` flags; the
+  preview's Store Locator page story moves to the classes; the blocks' stories
+  and the preview's order history, order details, winner order and My Auctions
+  page stories stop waiting on `data-revealed`. All of them move in one commit,
+  so no commit leaves an importer of the removed hook
 - **Hydration** — hydration reuses the server's elements, so the entrance
   runs once on first paint and not again; a client navigation mounts new
   elements and runs it as today
@@ -174,6 +183,8 @@ classes and a delay helper, with no hook and no `revealed` state:
   so Shipping fee is never a link
 - **Feature view** — `ProductView` gains an optional `pickupHref` and passes
   it through
+- **Preview** — the product detail passes the workbench's Store Locator story
+  as `pickupHref`, so the agreed look links the store name as the site does
 - **Site** — `pages/store/ProductPage.tsx` passes `addressOf("storeLocator")`
   where the build carries `storeLocator`; the product page and Store Locator
   share the store's gate, so the claim is a link wherever the page answers
@@ -200,8 +211,8 @@ classes and a delay helper, with no hook and no `revealed` state:
 1. **This store** — the block, the CSS reveal, the metadata labels and the
    catalogs land; the preview page composes the block
 2. **grade10** — bump `external/grade10-spec`, then the row, the route, the
-   chrome and the product page land in one deploy, so the footer's `#` link
-   and the dead pick-up link disappear with the page's arrival
+   chrome and the product page land in one deploy, so the footer gains Store
+   Locator and the pick-up claim its link with the page's arrival
 3. **Rollback** — revert the grade10 commit; the row's removal takes the
    route, the chrome links and the sitemap entry with it
 
