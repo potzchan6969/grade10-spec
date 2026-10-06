@@ -277,7 +277,7 @@ jobs:
         continue-on-error: true
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
-        run: CURSOR_CONFIG_DIR="$RUNNER_TEMP/ci-auto-fix/config" agent -p --force --model "$CURSOR_MODEL" --output-format json "$(<"$RUNNER_TEMP/ci-auto-fix/prompt.txt")" > "$RUNNER_TEMP/ci-auto-fix/cursor.json"
+        run: CURSOR_CONFIG_DIR="$RUNNER_TEMP/ci-auto-fix/config" agent -p --force --model "$CURSOR_MODEL" --output-format json "$(<"$RUNNER_TEMP/ci-auto-fix/prompt.txt")" > "$RUNNER_TEMP/ci-auto-fix/cursor.json" 2> "$RUNNER_TEMP/ci-auto-fix/cursor.stderr.log"
 
       - name: Validate repair boundaries 1
         id: boundaries-1
@@ -353,6 +353,19 @@ jobs:
           echo "result=$state" >> "$GITHUB_OUTPUT"
           echo "has-changes=$has_changes" >> "$GITHUB_OUTPUT"
           [ "$state" != unresolved ]
+
+      - name: Upload repair diagnostics
+        if: always() && steps.target.outputs.repairable == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-auto-fix-diagnostics-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/ci-auto-fix/cursor.json
+            ${{ runner.temp }}/ci-auto-fix/cursor.stderr.log
+            ${{ runner.temp }}/ci-auto-fix/reports/verify.log
+            ${{ runner.temp }}/ci-auto-fix/reports/lint.log
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Commit verified repair to pull request branch
         id: commit-repair
