@@ -1238,10 +1238,15 @@ function initializeBatch(values) {
   });
 
   const recordByKey = new Map();
+  const targetByLocation = new Map();
   for (const record of records) {
     if (recordByKey.has(record.key))
       fail(`batch manifest repeats key ${record.key}`);
     recordByKey.set(record.key, record);
+    const location = `${record.file}\0${record.indexInFile}`;
+    if (targetByLocation.has(location))
+      fail(`batch records ${targetByLocation.get(location)} and ${record.key} target the same heading in ${record.file}`);
+    targetByLocation.set(location, record.key);
   }
 
   const mirrorGroups = groupBy(records, (record) => record.mirrorKey);
@@ -1331,11 +1336,17 @@ function initializeBatch(values) {
   const graph = parseTraceGraph({ storeRoot });
   const knownScenarioIds = new Set(graph.scenarios.map((record) => record.id));
   for (const [mirrorKey, group] of mirrorGroups) {
-    if (!group[0].existingId) continue;
+    if (!group.some((record) => record.existingId)) continue;
     const recordsOfKind =
       group[0].kind === "scenario" ? graph.scenarios : graph.cases;
     if (!recordsOfKind.some((record) => record.id === idByMirror.get(mirrorKey)))
       fail(`batch mirror group ${mirrorKey} names an id not already in the store`);
+  }
+  const mirrorById = new Map();
+  for (const [mirrorKey, id] of idByMirror) {
+    if (mirrorById.has(id))
+      fail(`batch mirror groups ${mirrorById.get(id)} and ${mirrorKey} claim the same existing id ${id}`);
+    mirrorById.set(id, mirrorKey);
   }
   for (const [mirrorKey, group] of mirrorGroups) {
     if (group[0].kind === "scenario") knownScenarioIds.add(idByMirror.get(mirrorKey));

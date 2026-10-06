@@ -256,6 +256,107 @@ test("batch initialization allocates stable ids for mirrored cases and planned s
   }
 });
 
+test("batch rejects two records targeting the same heading before writing", () => {
+  const { root, storeRoot } = createSuiteFixture();
+  const spec = resolve(
+    storeRoot,
+    "openspec/specs/grade10-site/store/product-listing/spec.md",
+  );
+  const target = "#### Scenario: A second listing scenario";
+  const original = `${readFileSync(spec, "utf8")}${target}\n`;
+  writeFileSync(spec, original);
+  const manifestPath = resolve(root, "duplicate-targets.json");
+  writeFileSync(manifestPath, JSON.stringify({
+    records: ["first", "second"].map((key) => ({
+      key,
+      kind: "scenario",
+      file: "openspec/specs/grade10-site/store/product-listing/spec.md",
+      target,
+      app: "g10",
+      product: "store",
+      capability: "product-listing",
+    })),
+  }));
+  try {
+    const result = runCli(["init", "batch", "--manifest", manifestPath, "--store-root", storeRoot]);
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /same heading/);
+    assert.equal(readFileSync(spec, "utf8"), original);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("batch rejects an existing id claimed by separate mirror groups", () => {
+  const { root, storeRoot } = createSuiteFixture();
+  const target = "#### Scenario: A collector opens a listing";
+  const id = "g10.store-product-listing.SC-001";
+  const copies = ["first-copy", "second-copy"].map((name) => {
+    const file = `openspec/changes/${name}/specs/grade10-site/store/product-listing/spec.md`;
+    const path = resolve(storeRoot, file);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, `${target}\n`);
+    return { file, path };
+  });
+  const manifestPath = resolve(root, "reused-id.json");
+  writeFileSync(manifestPath, JSON.stringify({
+    records: copies.map(({ file }, index) => ({
+      key: `copy-${index}`,
+      kind: "scenario",
+      file,
+      target,
+      app: "g10",
+      product: "store",
+      capability: "product-listing",
+      existingId: id,
+    })),
+  }));
+  try {
+    const result = runCli(["init", "batch", "--manifest", manifestPath, "--store-root", storeRoot]);
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /same existing id/);
+    for (const copy of copies)
+      assert.equal(readFileSync(copy.path, "utf8"), `${target}\n`);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("batch verifies an existing id supplied by any mirror record", () => {
+  const { root, storeRoot } = createSuiteFixture();
+  const target = "#### Scenario: A collector opens a listing";
+  const files = ["first-copy", "second-copy"].map((name) => {
+    const file = `openspec/changes/${name}/specs/grade10-site/store/product-listing/spec.md`;
+    const path = resolve(storeRoot, file);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, `${target}\n`);
+    return file;
+  });
+  const manifestPath = resolve(root, "unknown-existing-id.json");
+  writeFileSync(manifestPath, JSON.stringify({
+    records: files.map((file, index) => ({
+      key: `copy-${index}`,
+      mirrorKey: "shared-scenario",
+      kind: "scenario",
+      file,
+      target,
+      app: "g10",
+      product: "store",
+      capability: "product-listing",
+      ...(index === 1 ? { existingId: "g10.store-product-listing.SC-abc" } : {}),
+    })),
+  }));
+  try {
+    const result = runCli(["init", "batch", "--manifest", manifestPath, "--store-root", storeRoot]);
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /id not already in the store/);
+    for (const file of files)
+      assert.equal(readFileSync(resolve(storeRoot, file), "utf8"), `${target}\n`);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("batch can clear coverage only on a deprecated existing case", () => {
   const { root, storeRoot, caseFile } = createSuiteFixture();
   try {
