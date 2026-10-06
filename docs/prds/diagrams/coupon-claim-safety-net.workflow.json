@@ -62,6 +62,15 @@
       "width": 172
     },
     {
+      "id": "next",
+      "lane": "gone",
+      "col": 2,
+      "type": "backend",
+      "label": "The next claim",
+      "sublabel": "once the claim is five minutes old",
+      "width": 172
+    },
+    {
       "id": "sweep",
       "lane": "floor",
       "col": 1,
@@ -114,6 +123,21 @@
     },
     {
       "from": "guard",
+      "to": "back",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "top"
+    },
+    {
+      "from": "guard",
+      "to": "next",
+      "label": "where the checkout stopped",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "next",
       "to": "back",
       "variant": "dashed",
       "fromSide": "right",

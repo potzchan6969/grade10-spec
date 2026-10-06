@@ -114,7 +114,7 @@
       "y": 580,
       "label": "retire that sale, give its claim back",
       "variant": "security",
-      "note": "or refuse by name, where that checkout took the money or will not close"
+      "note": "or refuse by name, where that checkout took the money, will not close, or is still being submitted"
     },
     {
       "id": "again",

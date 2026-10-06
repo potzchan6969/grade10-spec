@@ -123,7 +123,7 @@ svg[data-diagram="coupon-contested-claim"] .c-lane{fill: var(--lane-fill); strok
           <rect x="308.8" y="560" width="204.4" height="16" rx="3" class="c-mask"/>
           <text x="411" y="570" class="t-security" font-size="9" text-anchor="middle">retire that sale, give its claim back</text>
         </g>
-        <text data-detail="fine" x="153.5" y="598" class="t-dim" font-size="7">or refuse by name, where that checkout took the money or will not close</text>
+        <text data-detail="fine" x="153.5" y="598" class="t-dim" font-size="7">or refuse by name, where that checkout took the money, will not close, or is still being submitted</text>
         </g>
         <g data-step="again" data-edge-from="newer" data-edge-to="loyalty" data-edge-label="ask again" data-edge-key="9" data-edge-id="again">
           <path data-composition-edge-from="newer" data-composition-edge-to="loyalty" data-composition-edge-id="again" data-composition-points="680.5,650;325.83333333333337,650" d="M 680.5 650 L 325.83333333333337 650" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-contested-claim-arrowhead-emphasis)"/>
