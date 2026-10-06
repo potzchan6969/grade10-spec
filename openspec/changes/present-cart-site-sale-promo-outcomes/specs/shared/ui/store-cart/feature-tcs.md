@@ -12,6 +12,7 @@ summary,
 **so that** I can trust the Subtotal as the sum of the lines I can still buy,
 at the prices I see on them.
 
+<!-- trace:case id=g10.shared-store-cart.TC-no2 rev=1 covers=g10.shared-store-cart.SC-ycc,g10.shared-store-cart.SC-ahq -->
 ### shared-ui-store-cart-US13-TC1-1: A line on the site sale strikes its list price
 
 **Classification:**
@@ -48,6 +49,7 @@ at the prices I see on them.
 * `<list price>` shows beside it, struck through.
 * The line shows no third price.
 
+<!-- trace:case id=g10.shared-store-cart.TC-ny1 rev=1 covers=g10.shared-store-cart.SC-ycc,g10.shared-store-cart.SC-ahq -->
 ### shared-ui-store-cart-US13-TC2-1: Sale lines sum to the Subtotal with no sale row
 
 **Classification:**
@@ -92,6 +94,7 @@ at the prices I see on them.
 * Step 4: the Subtotal reads `<subtotal>`.
 * Step 4: no row names the site sale, and no discount row shows.
 
+<!-- trace:case id=g10.shared-store-cart.TC-wrx rev=1 covers=g10.shared-store-cart.SC-ycc,g10.shared-store-cart.SC-ahq -->
 ### shared-ui-store-cart-US13-TC3-1: A list price equal to the price is still struck through
 
 **Classification:**
@@ -137,6 +140,7 @@ only its own Discount in the footer,
 **so that** I can see both cuts without the summary inventing a Store sale
 row.
 
+<!-- trace:case id=g10.shared-store-cart.TC-96l rev=1 covers=g10.shared-store-cart.SC-zxr -->
 ### shared-ui-store-cart-US14-TC1-1: A stacked code keeps the sale lines and adds one discount
 
 **Classification:**
@@ -188,6 +192,7 @@ row.
 prices alone and tell me why, including on a held ticket I cannot Apply,
 **so that** I am not left wondering whether the sale or the code won.
 
+<!-- trace:case id=g10.shared-store-cart.TC-dpj rev=1 covers=g10.shared-store-cart.SC-8bx,g10.shared-store-cart.SC-gas,g10.shared-store-cart.SC-tp9 -->
 ### shared-ui-store-cart-US15-TC1-1: A refused code leaves the sale lines and says why
 
 **Classification:**
@@ -233,6 +238,7 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * Step 5: the Estimated Total still reads `<estimated total>`.
 * Step 5: no discount row, and no row names the site sale.
 
+<!-- trace:case id=g10.shared-store-cart.TC-hw6 rev=1 covers=g10.shared-store-cart.SC-8bx,g10.shared-store-cart.SC-gas,g10.shared-store-cart.SC-tp9 -->
 ### shared-ui-store-cart-US15-TC2-1: A held code that cannot apply has no Apply
 
 **Classification:**
@@ -272,6 +278,7 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * Step 2: no Apply control on the ticket takes focus.
 * Step 4: no apply action is logged.
 
+<!-- trace:case id=g10.shared-store-cart.TC-oyz rev=1 covers=g10.shared-store-cart.SC-8bx,g10.shared-store-cart.SC-gas,g10.shared-store-cart.SC-tp9 -->
 ### shared-ui-store-cart-US15-TC3-1: Held codes that cannot apply sit apart from ones that can
 
 **Classification:**
@@ -318,6 +325,7 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 only that code's Discount in the footer,
 **so that** I know the site sale is no longer on those lines.
 
+<!-- trace:case id=g10.shared-store-cart.TC-fd7 rev=1 covers=g10.shared-store-cart.SC-6r0 -->
 ### shared-ui-store-cart-US16-TC1-1: A replacing code puts the lines at list price
 
 **Classification:**
@@ -366,6 +374,7 @@ only that code's Discount in the footer,
 the site sale, put the sale back on the lines while the sale still runs,
 **so that** I am not left at full list price after clearing a code.
 
+<!-- trace:case id=g10.shared-store-cart.TC-3df rev=1 covers=g10.shared-store-cart.SC-07s -->
 ### shared-ui-store-cart-US17-TC1-1: Removing a replacing code puts the sale back on the lines
 
 **Classification:**
@@ -408,6 +417,7 @@ the site sale, put the sale back on the lines while the sale still runs,
 * Step 4: the Subtotal reads `<subtotal after>`.
 * Step 4: no row names the site sale.
 
+<!-- trace:case id=g10.shared-store-cart.TC-rft rev=1 covers=g10.shared-store-cart.SC-07s -->
 ### shared-ui-store-cart-US17-TC2-1: Removing a stacked code leaves the sale lines unchanged
 
 **Classification:**

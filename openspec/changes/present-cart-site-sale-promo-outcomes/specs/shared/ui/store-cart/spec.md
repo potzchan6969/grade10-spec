@@ -27,6 +27,7 @@ with the list price struck through. It SHALL strike any `originalPrice` it is
 given and compare no amounts. Given a line with no `originalPrice`, it SHALL
 render the price alone. It SHALL render the supplied Subtotal.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-ycc rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-26 - Site sale lines show the struck list price and add no summary row
 **Serves:** shared-ui-store-cart-US-13 - Shopper reads a site sale on the cart lines
 
@@ -38,6 +39,7 @@ render the price alone. It SHALL render the supplied Subtotal.
   line prices as shown and leaves out the sold-out line, and the footer shows
   no discount row
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-ahq rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-47 - A list price equal to the price is still struck through
 **Serves:** shared-ui-store-cart-US-13 - Shopper reads a site sale on the cart lines
 
@@ -53,6 +55,7 @@ discount amount, the drawer SHALL render each line's sale price with its list
 price struck through, and exactly one discount row, for that code, with its
 amount.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-zxr rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-27 - Stacked code appears only as the footer discount on sale lines
 **Serves:** shared-ui-store-cart-US-14 - Shopper stacks a promo on the site sale
 
@@ -70,6 +73,7 @@ prices, `subtotal` and `estimatedTotal` as before the attempt. The drawer
 SHALL keep each line's sale price and struck list price, SHALL render no
 discount row, and the promo sheet SHALL show the refusal message.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-8bx rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-28 - Refused code leaves sale lines and shows the refusal
 **Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the site sale
 
@@ -85,6 +89,7 @@ A held code the consumer marks `applicable: false` SHALL render muted in the
 promo sheet, listed apart from the held codes that can apply, with its
 `inapplicableReason` and no Apply control, whatever callbacks are supplied.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-gas rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-29 - An inapplicable held promo has no Apply control
 **Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the site sale
 
@@ -93,6 +98,7 @@ promo sheet, listed apart from the held codes that can apply, with its
 - **THEN** the ticket is muted, shows why it cannot apply, and offers no
   Apply control
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-tp9 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-46 - Held codes that cannot apply are listed apart from the ones that can
 **Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the site sale
 
@@ -111,6 +117,7 @@ drawer SHALL render each such line's list price with nothing struck through,
 any line still on the sale as a sale line, and exactly one discount row, for
 that code, with its amount.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-6r0 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-30 - Replacing code shows list prices and only the footer discount
 **Serves:** shared-ui-store-cart-US-16 - Shopper's promo replaces the site sale
 
@@ -128,6 +135,7 @@ for that code. Where the code had replaced the site sale and the quote still
 carries the sale, the consumer SHALL supply those lines on the sale again, and
 the drawer SHALL render each sale price with its list price struck through.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-07s rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-31 - Removing a stacked or replacing code leaves the lines on the sale
 **Serves:** shared-ui-store-cart-US-17 - Shopper removes a promo and keeps the site sale
 
