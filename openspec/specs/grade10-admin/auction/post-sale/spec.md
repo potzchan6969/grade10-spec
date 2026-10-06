@@ -13,16 +13,23 @@ before a winner's invoice is sent.
   - Extended bidding label: an operator sees which lots are still taking bids past their scheduled close, without a second outcome
   - Overdue outcomes: names setup and payment deadlines after self-service closes
   - Refunded outcome: lets finance find completed refunds
+  - Payment Verifying: a row waiting on proof shows the outcome and needs action
+  - Search: by listing code, invoice ID or bank reference, a replaced invoice's included
 - Resolving an unpaid order
   - Reissue: a fresh invoice and a fresh deadline where non-payment was a genuine failure
   - Manual settlement: money taken outside the invoice flow, recorded against a confirmed address
   - Cancellation: the end of an order and the return of the lot
   - Refund: records money returned after full or partial collection
+  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance, tax and deadline, always with a reason and at least one change
+  - Card invoice paid by transfer: reissued as bank transfer, then settled
+  - Operator settlement: proof required, and straight to paid
 - Audit trail
   - Invoice log: every log entry against the money, including the attempts that failed
   - Fulfilment log: every log entry against the goods, with the address as it stood at each one
   - Retention: append-only, kept for the life of the account
   - Refund record: keeps the amount, method, reason, proof and audit number
+  - What a reissue changed: the log names each changed part
+  - Internal audit number: on the order and in the log, for operators only
 - Grants
   - Payment processing: recording money is a grant catalogue work does not carry
   - Shipment processing: recording dispatch is a separate grant again
@@ -35,9 +42,6 @@ before a winner's invoice is sent.
 - Phone-record parity
   - Recording an address by phone asks for billing too
   - Same as delivery address is selected by default
-- Queue
-  - Payment Verifying: a row waiting on proof shows the outcome and needs action
-  - Search: by listing code, invoice ID or bank reference, a replaced invoice's included
 - Quote and send
   - Payment method on the quote: the winner's choice decides how the fee is priced
   - Bank transfer fee: entered on every bank transfer invoice, zero or more, with no cap
@@ -45,14 +49,13 @@ before a winner's invoice is sent.
 - Checking proof
   - Confirm: settles the invoice with the winner's files, and the operator's own if added
   - Return to pending: an external and an internal reason, the time left shown, and not offered once expired
-- Resolving an unpaid order
-  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance and deadline, always with a reason and at least one change
-  - Card invoice paid by transfer: reissued as bank transfer, then settled
-  - Operator settlement: proof required, and straight to paid
-- Audit trail
-  - What a reissue changed: the log names each changed part
-  - Internal audit number: on the order and in the log, for operators only
+- Tax on the quote
+  - Optional amount: empty means no Tax; an added amount is above zero
+  - Send: Tax becomes an invoice line and part of the Subtotal
+  - Reissue: Tax can be added, changed, or removed with the other quoted amounts
+
 ## Requirements
+
 ### Requirement: Listing outcomes
 
 Each listing SHALL show exactly one outcome from this set. The queue
@@ -951,13 +954,15 @@ an auction order in Preparing Invoice:
    units of zero or more in the lot's currency.
 3. Optionally add Insurance for that address, an integer count of minor units
    greater than zero in the lot's currency.
-4. For bank transfer, enter the bank transfer fee: an integer count of minor
+4. Optionally add Tax for the order, an integer count of minor units greater
+   than zero in the lot's currency.
+5. For bank transfer, enter the bank transfer fee: an integer count of minor
    units of zero or more in the lot's currency, with no upper limit. A fee of
    zero reads Free to the winner.
-5. Read the subtotal, the payment processing fee, and the order total. For
+6. Read the subtotal, the payment processing fee, and the order total. For
    card, Grade10 computes the fee from the payment provider's current fees;
-   for bank transfer, the fee is the amount entered in step 4.
-6. Send the invoice.
+   for bank transfer, the fee is the amount entered in step 5.
+7. Send the invoice.
 
 On send Grade10 SHALL issue the invoice with invoice status `pending`, an
 invoice reference, and the payment method, record Sent at, set the payment
@@ -966,7 +971,7 @@ payment method, write a sent entry to the invoice log, and send the winner the
 invoice-sent letter, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL refuse to send an invoice when the winner has confirmed no
-delivery address, when Shipping & Handling is missing, when Insurance is
+delivery address, when Shipping & Handling is missing, when Insurance or Tax is
 added at zero, when a bank transfer invoice's fee is blank or is not an
 integer of zero or more, or when a card invoice's payment provider fees cannot
 be read. The refusal for unreadable fees SHALL say so, and SHALL name no stored
@@ -1073,6 +1078,35 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **AND** the payment provider's current fees cannot be read
 - **WHEN** an operator enters a bank transfer fee of 500000 minor units in HKD and sends
 - **THEN** the invoice is `pending` with an order total of 812000 minor units in HKD
+
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qv1 rev=1 -->
+#### Scenario: post-sale-SC-155 - An invoice sends with tax
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice for bank transfer with lines
+  totalling 312000 minor units in HKD before Tax
+- **WHEN** an operator adds Tax of 6000 and a bank transfer fee of 0 minor units
+  in HKD and sends
+- **THEN** the invoice is `pending` with a Subtotal and order total of 318000
+  minor units in HKD
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-36t rev=1 -->
+#### Scenario: post-sale-SC-156 - An invoice sends without tax
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice
+- **WHEN** an operator leaves Tax empty and sends an otherwise valid quote
+- **THEN** the invoice is sent without Tax
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-g1u rev=1 -->
+#### Scenario: post-sale-SC-157 - Tax added at zero is refused
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice
+- **WHEN** an operator adds Tax of 0 minor units and sends
+- **THEN** Grade10 refuses the send
+- **AND** no invoice is issued
 
 ### Requirement: Manual settlement records the method and its proof
 
@@ -1442,7 +1476,7 @@ whose invoice is `pending` or `expired`:
 
 1. Choose Reissue on the order.
 2. Change what the winner asked for or the operator decided: delivery address,
-   payment method, bank transfer fee, Shipping & Handling, Insurance. Each
+   payment method, bank transfer fee, Shipping & Handling, Insurance, Tax. Each
    starts from the current invoice.
 3. For bank transfer, read the bank transfer fee: prefilled from the current
    invoice when it was bank transfer, empty after a switch from card. It
@@ -1457,7 +1491,7 @@ whose invoice is `pending` or `expired`:
 
 **At least one change** - Grade10 SHALL refuse a reissue that changes none of
 the delivery address, payment method, bank transfer fee, Shipping & Handling,
-Insurance or deadline. A new reason alone is not a change; a fresh 7 days is.
+Insurance, Tax or deadline. A new reason alone is not a change; a fresh 7 days is.
 
 **On send** - On send Grade10 SHALL replace the current invoice with a new one
 carrying a new invoice ID, bank reference and internal audit number, per
@@ -1603,6 +1637,28 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **WHEN** an operator reissues it changing only the deadline to a fresh 7 days, and sends at 2026-09-15T10:00:00Z with a reason
 - **THEN** the new invoice is `pending` with a payment deadline of 2026-09-22T10:00:00Z
 - **AND** the reissued entry names the deadline as the only changed part
+
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qtj rev=1 -->
+#### Scenario: post-sale-SC-158 - A reissue changes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice has no Tax
+- **WHEN** an operator reissues it with Tax of 6000 minor units in HKD and a
+  reason, changing nothing else
+- **THEN** the new invoice includes Tax of 6000 minor units in HKD
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kdq rev=1 -->
+#### Scenario: post-sale-SC-210 - A reissue removes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice includes Tax of 6000
+  minor units in HKD
+- **WHEN** an operator reissues it removing Tax and giving a reason, changing
+  nothing else
+- **THEN** Grade10 accepts it as a change
+- **AND** the new invoice has no Tax line
+- **AND** its Subtotal is 6000 minor units lower than the replaced invoice's
 
 ### Requirement: An operator edits the address or method before send
 
