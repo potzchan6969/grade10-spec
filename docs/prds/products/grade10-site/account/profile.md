@@ -73,10 +73,9 @@ for.
 ## Address
 
 - **URL** — `grade10.com/profile`; signed out, it asks for sign-in
-- ❓ **Way in** — product confirms how a collector reaches the page once it
-  opens, now that the account menu drops Profile
-  ([Page Shell · No Profile](/p/grade10-site/site/page-shell#no-profile)): the
-  menu offering it again, in a change of its own, or the address alone
+- ❓ **Way in** - Product (@tangconst) confirms whether the account menu
+  offers Profile wherever this page is carried, or never
+  ([Page Shell · Account Menu](/p/grade10-site/site/page-shell#account-menu))
 
 ## Designs
 
