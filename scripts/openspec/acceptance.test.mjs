@@ -881,6 +881,51 @@ test("concurrent edits to the accepted requirement cause an explicit amendment c
   assert.equal(accepted.fingerprint.length, 64);
 });
 
+const SEARCH_MARKER =
+  "<!-- trace:scenario id=g10.site-search.SC-a1b rev=1 -->\n#### Scenario:";
+
+function amendAfterDurableEdit(edit, markDelta = false) {
+  const { root } = sandbox();
+  const first = prepareAcceptance(root, CHANGE);
+  applyOutputs(root, first);
+  writeAcceptance(root, first, { reviewedBy: "@pm" });
+  const durable = join(root, "openspec/specs/site/search/spec.md");
+  writeFileSync(durable, edit(readFileSync(durable, "utf8")));
+  const delta = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  writeFileSync(
+    delta,
+    readFileSync(delta, "utf8")
+      .replace("return matching items", "return ranked matching items")
+      .replace("#### Scenario:", markDelta ? SEARCH_MARKER : "#### Scenario:"),
+  );
+  return root;
+}
+
+test("an amendment passes when the durable spec gained trace markers after acceptance", () => {
+  const root = amendAfterDurableEdit(
+    (text) => text.replace("#### Scenario:", SEARCH_MARKER),
+    true,
+  );
+  assert.doesNotThrow(() => prepareAcceptance(root, CHANGE));
+});
+
+test("an amendment still refuses a wording change made to the durable spec after acceptance, markers or not", () => {
+  const root = amendAfterDurableEdit(
+    (text) =>
+      text
+        .replace("#### Scenario:", SEARCH_MARKER)
+        .replace("matching items", "ranked items"),
+    true,
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /changed since this amendment began|changed since the accepted baseline/,
+  );
+});
+
 test("v2 snapshots preserve planning provenance without locking later working-artifact edits", () => {
   const { root } = sandbox();
   const prepared = prepareAcceptance(root, CHANGE);
