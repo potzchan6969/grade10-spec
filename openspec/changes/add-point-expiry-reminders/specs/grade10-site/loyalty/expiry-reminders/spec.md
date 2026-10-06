@@ -1,4 +1,4 @@
-# Loyalty expiry reminders — delta
+# Loyalty expiry reminders - delta
 
 ## Purpose
 
@@ -13,9 +13,10 @@ warning without deriving again who is owed one.
     expires falls within a lead time, counted in whole days on the
     programme's clock, and they still hold points expiring on that day
   - Lead times: a configured set, so one reminder or a ladder of them is a
-    value the programme carries rather than a rule; a programme carrying no
-    lead times owes no reminder and still starts, while a set that is present
-    but cannot work stops the programme from starting
+    value the programme carries rather than a rule; a programme without a
+    lead-time setting owes no reminder and still starts, while a setting that
+    cannot work stops the programme from starting
+  - Grade10's lead times: the set Grade10's own programme carries
   - Raised once: a reminder is told apart by its member, day and lead time, so
     the same three are one reminder however often the programme is asked
 - What a reminder holds
@@ -23,8 +24,8 @@ warning without deriving again who is owed one.
   - The points: how many expire on the day, kept current while the day stands
 - Keeping a reminder true
   - Gone at once: a reminder stops being owed the moment its day moves, its
-    balance is brought to nothing or the balance lapses, whether or not
-    anything has read it
+    balance is brought to nothing, the balance lapses or the programme no
+    longer carries its lead time, whether or not anything has read it
 - Delivery
   - No channel: what is raised names no channel, and the programme sends
     nothing
@@ -41,7 +42,8 @@ members are owed an expiry reminder. A member SHALL be owed one for a lead
 time once the calendar day their redeemable balance
 expires is no more than that many whole days after the current calendar day,
 both read on the programme's clock, and the member still holds redeemable
-points expiring on that day. Whether a reminder is owed SHALL depend only on
+points expiring on that day, however few: 1 point is enough, and no minimum is
+configured. Whether a reminder is owed SHALL depend only on
 whether the member's account stands, their current expiry day and balance,
 the programme's clock and its lead times.
 
@@ -57,12 +59,13 @@ the lead time it names. The same three SHALL be one reminder however often the
 programme is asked, so whatever reads it later can tell a reminder it has
 already handled from one it has not.
 
-**Lead times** - The programme SHALL carry its lead times as configuration, as
-a set of whole days rather than a single value. A programme that carries no
-lead times SHALL owe no reminder and SHALL start. A set that is present but
-empty, holds a lead of zero or less, repeats a lead, or holds a lead as long
-as the programme's expiry window or longer - 365 days on a twelve-month
-window - SHALL fail the product at start-up, naming what it refuses.
+**Lead times** - The programme SHALL carry its lead times as an optional
+setting holding a set of whole days rather than a single value. A programme
+without a lead-time setting SHALL owe no reminder and SHALL start. A lead-time
+setting written with no lead in it, holding a lead under 1 day, repeating a
+lead, or holding a lead as long as the shortest the programme's expiry window
+can run or longer - 365 days on a twelve-month window, 181 on a six-month one -
+SHALL fail the product at start-up, naming what it refuses.
 
 **No points** - A member holding no redeemable points SHALL be owed nothing,
 whatever date their window carries.
@@ -97,6 +100,13 @@ whatever date their window carries.
 - **WHEN** a member holds no redeemable points
 - **THEN** nothing is owed to that member, whatever date their window carries
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-quh rev=1 -->
+#### Scenario: grade10-site-loyalty-expiry-reminders-SC-19 - A balance of 1 point is owed a reminder
+**Serves:** Raising a reminder - a balance of 1 point is owed a reminder
+
+- **WHEN** a member holds 1 redeemable point and the day it expires falls within one of the programme's lead times
+- **THEN** that member is owed a reminder naming 1 point
+
 <!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-qri rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-04 - Each lead time raises its own reminder
 **Serves:** Raising a reminder - each lead time raises its own reminder
@@ -113,20 +123,20 @@ whatever date their window carries.
 - **THEN** the reminder already owed is the one answered, and no second one is owed
 
 <!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-qfb rev=1 -->
-#### Scenario: grade10-site-loyalty-expiry-reminders-SC-07 - A programme with no lead times owes nothing and starts
-**Serves:** Raising a reminder - a programme with no lead times owes nothing and starts
+#### Scenario: grade10-site-loyalty-expiry-reminders-SC-07 - A programme without a lead-time setting owes nothing and starts
+**Serves:** Raising a reminder - a programme without a lead-time setting owes nothing and starts
 
-- **WHEN** the programme carries no lead times
+- **WHEN** the programme carries no lead-time setting
 - **THEN** the product starts
 - **AND** no member is owed a reminder, whatever their balance and the day it expires
 
-<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-tvk rev=1 -->
-#### Scenario: grade10-site-loyalty-expiry-reminders-SC-16 - A lead set that cannot work stops the programme from starting
-**Serves:** Raising a reminder - a lead set that cannot work stops the programme from starting
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-tvk rev=2 -->
+#### Scenario: grade10-site-loyalty-expiry-reminders-SC-16 - A lead-time setting that cannot work stops the programme from starting
+**Serves:** Raising a reminder - a lead-time setting that cannot work stops the programme from starting
 
-- **WHEN** the programme carries a set of lead times that is empty, holds a lead of zero or less, repeats a lead, or holds a lead as long as its expiry window or longer, such as 365 days on a twelve-month window
+- **WHEN** the programme carries a lead-time setting written with no lead in it, holding a lead under 1 day, repeating a lead, or holding a lead as long as the shortest its expiry window can run or longer, such as 365 days on a twelve-month window or 181 on a six-month one
 - **THEN** the product fails at start-up, naming what it refuses
-- **AND** a lead one day shorter than the window starts
+- **AND** a lead one day shorter than the shortest the window can run, such as 364 days on a twelve-month window, starts
 
 <!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-9az rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-15 - The points a reminder names stay current
@@ -142,8 +152,9 @@ A reminder stops being owed the moment what it says stops being true.
 
 **Gone at once** - A reminder SHALL stop being owed at the instant what it says
 stops being true: the day the member's balance expires has moved, the member
-holds no points expiring on the day it names, the balance has lapsed, or the
-member's account has been deleted. It SHALL NOT wait on any scheduled process,
+holds no points expiring on the day it names, the balance has lapsed, the
+member's account has been deleted, or the programme no longer carries the lead
+time it names. It SHALL NOT wait on any scheduled process,
 and SHALL stop being owed whether or not anything has read it.
 
 <!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-vup rev=1 -->
@@ -175,12 +186,21 @@ and SHALL stop being owed whether or not anything has read it.
 - **WHEN** the instant the member's balance expires passes
 - **THEN** the reminder naming that day is immediately no longer owed, whether or not anything read it
 
-<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-r8n rev=1 -->
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-r8n rev=4 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-17 - Points returned to a day are owed a reminder again
 **Serves:** Keeping a reminder true - points returned to a day are owed a reminder again
 
-- **WHEN** a member whose balance was brought to nothing has a redemption reversed, and the returned points take the day already running, which still falls within a lead time
+- **WHEN** a member whose balance was brought to nothing has a redemption reversed, or points they paid at checkout come back through a refund or an operator's return, and the returned points take the day already running, which still falls within a lead time
 - **THEN** the member is owed a reminder for that day again
+- **AND** it is the same reminder as before, named by the same member, day and lead time, never a second one
+
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-eci rev=1 -->
+#### Scenario: grade10-site-loyalty-expiry-reminders-SC-20 - A lead time taken out of the setting is owed nothing
+**Serves:** Keeping a reminder true - a lead time taken out of the setting is owed nothing
+
+- **WHEN** the programme starts again with one lead time taken out of its setting, and a member's day still falls within it
+- **THEN** no reminder naming that lead time is owed
+- **AND** a reminder for a lead time the setting still carries is the same one as before
 
 ### Requirement: A reminder names no channel and delivers nothing
 
