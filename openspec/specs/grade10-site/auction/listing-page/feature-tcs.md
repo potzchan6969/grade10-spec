@@ -1,7 +1,7 @@
 # grade10-site/auction/listing-page Test Cases
 
 **Status:** reopened
-**Drafts styled:** 2026-10-02, tcs-rules r4
+**Drafts styled:** 2026-10-05, tcs-rules r4
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 
 ## grade10-site-auction-listing-page-US1: Collector opens a lot at its own address
@@ -178,6 +178,7 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The page is that lot's page.
 
+<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
 ### grade10-site-auction-listing-page-US3-TC3-1: Hidden lot's address shows Page not found
 
 **Classification:**
@@ -357,6 +358,7 @@ None.
 **I want** Watching to tell me email alerts are on and offer My Auctions,
 **so that** I know how to manage that lot without hunting for the account page.
 
+<!-- trace:case id=g10.auction-listing-page.TC-4op rev=1 covers=g10.auction-listing-page.SC-z67,g10.auction-listing-page.SC-omp -->
 ### grade10-site-auction-listing-page-US6-TC1-1: Watch announces alerts on and opens My Auctions
 
 **Classification:**
@@ -396,6 +398,7 @@ None.
 * Step 3: My Auctions opens and lists <lot_1> once, Your Standing `--`.
 * Step 3: <lot_1>'s email alerts switch is on.
 
+<!-- trace:case id=g10.auction-listing-page.TC-sip rev=1 covers=g10.auction-listing-page.SC-z67,g10.auction-listing-page.SC-omp -->
 ### grade10-site-auction-listing-page-US6-TC2-1: Signed-out viewer is offered sign-in, no watch
 
 **Classification:**
@@ -440,6 +443,7 @@ None.
 **I want** Unwatch to confirm alerts are off and let me Undo,
 **so that** a mis-tap does not force me to find the lot again.
 
+<!-- trace:case id=g10.auction-listing-page.TC-pjv rev=1 covers=g10.auction-listing-page.SC-15a -->
 ### grade10-site-auction-listing-page-US7-TC1-1: Unwatch removes the lot and turns alerts off
 
 **Classification:**
@@ -477,6 +481,7 @@ None.
 * Step 1: current bid, time left and bid panel are unchanged.
 * Step 2: <lot_2> is not listed.
 
+<!-- trace:case id=g10.auction-listing-page.TC-i5l rev=1 covers=g10.auction-listing-page.SC-15a -->
 ### grade10-site-auction-listing-page-US7-TC2-1: Undo restores the watch with alerts on
 
 **Classification:**
@@ -522,6 +527,7 @@ None.
 **I want** the watch control locked as Watching and one alerts toast when the bid bookmarks the lot,
 **so that** I am not invited to unwatch money I already put down, and I am not toasted on every revisit.
 
+<!-- trace:case id=g10.auction-listing-page.TC-jhd rev=1 covers=g10.auction-listing-page.SC-krh,g10.auction-listing-page.SC-arf,g10.auction-listing-page.SC-bs7 -->
 ### grade10-site-auction-listing-page-US8-TC1-1: First bid locks Watching and toasts alerts once
 
 **Classification:**
@@ -561,6 +567,7 @@ None.
 * Step 2: nothing changes; no Unwatch toast.
 * Step 3: the control still reads Watching, disabled; no alerts toast.
 
+<!-- trace:case id=g10.auction-listing-page.TC-amc rev=1 covers=g10.auction-listing-page.SC-krh,g10.auction-listing-page.SC-arf,g10.auction-listing-page.SC-bs7 -->
 ### grade10-site-auction-listing-page-US8-TC2-1: A second bid on the lot shows no alerts toast
 
 **Classification:**
@@ -604,6 +611,7 @@ None.
 **I want** no Watch / Watching control,
 **so that** I am not invited to watch a sale that has already ended.
 
+<!-- trace:case id=g10.auction-listing-page.TC-84a rev=1 covers=g10.auction-listing-page.SC-n70 -->
 ### grade10-site-auction-listing-page-US9-TC1-1: A closed lot shows no watch control
 
 Runs once per row of **Test data**.
@@ -648,12 +656,530 @@ Runs once per row of **Test data**.
 
 ---
 
+## grade10-site-auction-listing-page-US10: Collector quotes a published lot
+
+**As a** collector browsing a listing,
+**I want** to reference and share a lot by its title and URL,
+**so that** I can discuss it with others and return to it easily.
+
+<!-- trace:case id=g10.auction-listing-page.TC-nis rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC1-1: Listing code absent from the response before scripts run
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>`.
+2. View the page's response source before any script runs.
+3. Identify each occurrence of the lot's listing code and inspect its context.
+
+**Expected Results:**
+
+* The source names the lot by its title.
+* The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
+
+<!-- trace:case id=g10.auction-listing-page.TC-87q rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC2-1: Listing code absent from the page once scripts finish running
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>` and let the page finish loading its scripts.
+2. View the rendered page and its current source.
+3. Identify each occurrence of the lot's listing code in both.
+
+**Expected Results:**
+
+* The rendered page has no labelled listing-code or payment-reference field.
+* Every code occurrence in the source is the lower-case suffix of the canonical address.
+
+<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC3-1: Listing code absent from the shared-link preview
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Fetch the share-preview metadata for `<a published lot's address>`.
+2. Search the preview's title, description and url for the lot's listing code.
+
+**Expected Results:**
+
+* The preview's title and description have no labelled listing-code or payment-reference field.
+* Its URL is the canonical address ending in the lower-case listing-code suffix.
+
+Previously cached preview content may persist; the test does not require a
+purge or regeneration. A fresh preview fetch must satisfy the absence above.
+
+<!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC4-1: Listing code absent from the page title and meta description
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>`.
+2. Read the browser tab title and the page's meta description.
+
+**Expected Results:**
+
+* Neither the tab title nor the meta description contains the listing code.
+
+<!-- trace:case id=g10.auction-listing-page.TC-udy rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC5-1: Listing code absent from the page's embedded data
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>`.
+2. View the page's response source.
+3. Search any data embedded in the document, outside the visible text, for the lot's listing code.
+
+**Expected Results:**
+
+* No field in the embedded data carries the listing code.
+
+<!-- trace:case id=g10.auction-listing-page.TC-yjo rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC6-1: Listing code absent from the page's own network responses
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>` and let the page finish loading.
+2. Inspect the responses the page's own client-side requests receive.
+3. Search those responses for the lot's listing code.
+
+**Expected Results:**
+
+* No page response contains a separate listing-code or payment-reference field.
+
+<!-- trace:case id=g10.auction-listing-page.TC-cbx rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC7-1: Listing code does not resolve as a lot address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists and its listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open the auction's lot-address path, substituting the lot's listing code for its usual identifier.
+
+**Expected Results:**
+
+* The address does not resolve to that lot's page.
+* The site's not-found surface is shown, the same as for any address naming no published lot.
+
+<!-- trace:case id=g10.auction-listing-page.TC-udv rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC8-1: Listing code stays absent regardless of the collector's signed-in state
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>` as a signed-out visitor and search the page and its source for the lot's listing code.
+2. Open the same address signed in as a registered collector and repeat the search.
+
+**Expected Results:**
+
+* Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix.
+* The title and address shown are identical in both views.
+
+<!-- trace:case id=g10.auction-listing-page.TC-6de rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC9-1: Listing code stays absent once an order exists on the lot
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A lot's auction has closed with a winning bid, so an order now exists on that lot.
+
+**Steps:**
+
+1. Open the lot's own address on the public listing page.
+2. View the page, its source, and its share-preview metadata.
+3. Inspect every occurrence of the lower-case listing-code suffix, which is now also the order's payment reference.
+
+**Expected Results:**
+
+* The page and preview contain no labelled listing-code or payment-reference field.
+* The code appears only as the lower-case suffix of the canonical address.
+
+<!-- trace:case id=g10.auction-listing-page.TC-y7l rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC10-1: An address naming no lot carries no listing code
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* The catalogue publishes no lot for `<a lot address naming no published lot>`.
+
+**Steps:**
+
+1. Fetch `<a lot address naming no published lot>`.
+2. Search the response, including any error detail, for a listing code.
+
+**Expected Results:**
+
+* Response status is 404.
+* No listing code appears anywhere in the response.
+
+<!-- trace:case id=g10.auction-listing-page.TC-90g rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC11-1: A listing removed from browse and search remains available at its original URL
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A previously published listing has canonical address `<listing_url>` and code `<listing_code>`.
+* The listing has been removed from browse and search without being explicitly deleted.
+
+**Steps:**
+
+1. Browse the auction catalogue and search for the listing.
+2. Open `<listing_url>` directly.
+3. Inspect the rendered page, response source and fresh share-preview metadata.
+
+**Expected Results:**
+
+* Browse and search do not return the listing.
+* `<listing_url>` still returns its public listing page.
+* The page and fresh preview identify the listing by its public title and canonical URL.
+* Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata.
+* Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`.
+
+<!-- trace:case id=g10.auction-listing-page.TC-k71 rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+### grade10-site-auction-listing-page-US10-TC12-1: A cached preview may persist after browse/search removal without private data
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A preview for `<listing_url>` was cached while the listing was publicly available.
+* The listing is subsequently removed from browse and search, without explicit deletion.
+* An authorized admin or the winner knows `<listing_code>`.
+
+**Steps:**
+
+1. Request the existing cached preview for `<listing_url>`.
+2. Inspect its title, description, URL, image and embedded metadata.
+
+**Expected Results:**
+
+* The cached preview may continue to show previously cached public listing metadata and `<listing_url>`.
+* It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data.
+* A persistent preview does not make the listing discoverable through browse or search.
+
+---
+
+## grade10-site-auction-listing-page-US11: Collector contacts support about a lot
+
+**As a** collector contacting support about a lot,
+**I want** support to quickly identify which lot I'm referring to,
+**so that** my inquiry is resolved faster without having to copy listing URLs or titles.
+
+<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
+### grade10-site-auction-listing-page-US11-TC1-1: No listing code available on the page for the collector to send
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A published lot exists at its own address.
+* The lot's listing code is known from the admin listing screen.
+
+**Steps:**
+
+1. Open `<a published lot's address>`.
+2. Inspect the visible page and its source for a labelled listing-code or payment-reference field.
+
+**Expected Results:**
+
+* The page has no labelled listing-code or payment-reference field for the collector to copy; its canonical address may end in the lower-case code suffix.
+
+<!-- trace:case id=g10.auction-listing-page.TC-wxd rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
+### grade10-site-auction-listing-page-US11-TC2-1: A listing code known from elsewhere gives no working link
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A published lot exists and its listing code is known from a leak or from another surface.
+
+**Steps:**
+
+1. Attempt to open the lot's address by substituting its listing code for the lot's usual identifier.
+
+**Expected Results:**
+
+* The listing code does not resolve to the lot.
+* No working link to the lot can be built from the code alone.
+
+<!-- trace:case id=g10.auction-listing-page.TC-h6y rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
+### grade10-site-auction-listing-page-US11-TC3-1: Title and address stay the collector's only reference once an order exists
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A lot's auction has closed with a winning bid, so an order now exists on that lot.
+
+**Steps:**
+
+1. Open the lot's own address on the public listing page.
+2. Note its title and address, and search the page for the lot's listing code.
+
+**Expected Results:**
+
+* The title and canonical address are unchanged by the order.
+* The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix.
+
+<!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
+### grade10-site-auction-listing-page-US11-TC4-1: Called-off listing remains directly accessible
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A listing has an allocated canonical address and listing code.
+
+**Steps:**
+
+1. Call the listing off before close.
+2. Open its canonical address directly.
+3. Search browse and search results for the listing.
+4. Try the listing code as the address.
+
+**Expected Results:**
+
+* The canonical address still resolves to the called-off listing.
+* The listing is absent from browse and search.
+* The listing code does not resolve as a public route.
+
+---
+
 ## grade10-site-auction-listing-page-US12: Collector sees another bid on the lot without reloading
 
 **As a** collector,
 **I want** a bid placed on another page to show on mine with the new price and close, without a reload,
 **so that** I bid against the price that stands.
 
+<!-- trace:case id=g10.auction-listing-page.TC-3rf rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC1-1: Another session's bid shows its price and bid count without a reload
 
 **Classification:**
@@ -696,6 +1222,7 @@ Runs once per row of **Test data**.
 * Time left still counts to the scheduled close.
 * customer A's page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-d35 rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC2-1: Scheduled close with a bid turns to Extended bidding without a reload
 
 **Classification:**
@@ -734,6 +1261,7 @@ Runs once per row of **Test data**.
 * Time left is labelled Extended bidding and counts to the scheduled close plus `<extension duration>`.
 * The page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-b7y rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC3-1: A page with no live line still catches up without a reload
 
 **Classification:**
@@ -774,6 +1302,7 @@ Runs once per row of **Test data**.
 * Highest bid reads `<bid amount>` and the bid count includes customer B's bid.
 * customer A's page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-nz3 rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC4-1: A page that lost its line catches up when it returns
 
 **Classification:**
@@ -815,6 +1344,7 @@ Runs once per row of **Test data**.
 * Highest bid reads `<bid amount>` and the bid count includes customer B's bid.
 * customer A's page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-5ps rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC5-1: Leader's own standing turns to Outbid without a reload
 
 **Classification:**
@@ -858,6 +1388,7 @@ Runs once per row of **Test data**.
 * Step 3 reads Highest bid `<user A maximum>` plus `<increment>`.
 * Step 3 shows the next valid bid, Highest bid plus its increment.
 
+<!-- trace:case id=g10.auction-listing-page.TC-wzt rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC6-1: Live updates name no bidder and no maximum
 
 **Classification:**
@@ -898,6 +1429,89 @@ Runs once per row of **Test data**.
 * No message carries `<user A maximum>`, an account id, an email or a card detail.
 * Any bidder a message names appears only by the lot's pseudonym.
 
+<!-- trace:case id=g10.auction-listing-page.TC-0yw rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+### grade10-site-auction-listing-page-US12-TC7-1: A tied maximum that came second carries the earlier-leads tip
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-12
+
+**Pre-conditions:**
+
+* `<listing_1>` is open in HKD, before its scheduled close, with no bid.
+* customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the lot page for `<listing_1>`, in English.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<maximum>` | At least two increments above the opening price |
+
+**Steps:**
+
+1. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
+2. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
+3. As customer B, read the Recent bids rows at `<maximum>`.
+4. Hover the Info control on customer B's row at `<maximum>`.
+
+**Expected Results:**
+
+* Step 3: customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A leads and set `<maximum>` first, whatever time each row shows.
+* Step 3: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one.
+* Step 4: the tip reads When maximums match, the earlier one leads.
+
+<!-- trace:case id=g10.auction-listing-page.TC-7nz rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+### grade10-site-auction-listing-page-US12-TC8-1: An older tie lower down keeps the earlier-leads tip
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-12
+
+**Pre-conditions:**
+
+* `<listing_5>` is open in HKD, before its scheduled close, with no bid.
+* customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the lot page for `<listing_5>`, in English.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<maximum>` | At least two increments above the opening price |
+| `<higher maximum>` | At least two increments above `<maximum>` |
+
+**Steps:**
+
+1. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
+2. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
+3. As customer C, enter `<higher maximum>` in the custom maximum on the bid panel and confirm it.
+4. As customer C, read the current price and the Recent bids rows at `<maximum>`.
+5. Hover the Info control on customer B's row at `<maximum>`.
+
+**Expected Results:**
+
+* Step 4: the current price is above `<maximum>`, and customer C's row leads Recent bids.
+* Step 4: customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A set `<maximum>` first, whatever time each row shows.
+* Step 4: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one.
+* Step 5: the tip reads When maximums match, the earlier one leads.
+
 ---
 
 ## grade10-site-auction-listing-page-US13: Collector reads the same time left as every other page
@@ -906,6 +1520,7 @@ Runs once per row of **Test data**.
 **I want** the lot's countdown to agree with every other page on that lot, whatever my device's clock says,
 **so that** the time I see left is the time I have.
 
+<!-- trace:case id=g10.auction-listing-page.TC-o3v rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-listing-page-US13-TC1-1: Countdown agrees across devices whose clocks disagree
 
 Runs once per row of **Test data**.
@@ -952,6 +1567,7 @@ Runs once per row of **Test data**.
 * Both pages read the same Time left, to the second, at step 3.
 * Neither page is off by `<device skew>`.
 
+<!-- trace:case id=g10.auction-listing-page.TC-56e rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-listing-page-US13-TC2-1: Last second never reads 0 while the lot takes bids
 
 **Classification:**
@@ -991,6 +1607,7 @@ Runs once per row of **Test data**.
 * At step 2 Time left reads 1 second, never 0.
 * At step 3 Time left reads 0 or the lot reads Closed.
 
+<!-- trace:case id=g10.auction-listing-page.TC-iu2 rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-listing-page-US13-TC3-1: Countdown corrects itself after the page was away
 
 Runs once per row of **Test data**.
@@ -1037,6 +1654,7 @@ Runs once per row of **Test data**.
 
 * Both pages read the same Time left, to the second.
 
+<!-- trace:case id=g10.auction-listing-page.TC-ncg rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-listing-page-US13-TC4-1: A sub-second correction never makes the countdown jump up
 
 **Classification:**
@@ -1083,6 +1701,7 @@ Runs once per row of **Test data**.
 **I want** a lot past its close to read Closed until its result is recorded, then Won or Did not win,
 **so that** I am never shown a result the auction has not decided.
 
+<!-- trace:case id=g10.auction-listing-page.TC-ffc rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC1-1: Closed shows until the close is recorded, then the result
 
 Runs once per row of **Test data**.
@@ -1123,6 +1742,7 @@ Runs once per row of **Test data**.
 * Once the close passes, the page reads Closed with no result.
 * The page then reads `<result>`, without a reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-iet rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC2-1: A delayed close keeps Closed and never guesses a result
 
 **Classification:**
@@ -1163,6 +1783,7 @@ Runs once per row of **Test data**.
 * No step shows Won, Did not win or Ended before the close is recorded.
 * After step 4 the page reads Won, without a reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-jic rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC3-1: A bid still confirming at the close reads in existing words
 
 **Classification:**
@@ -1205,6 +1826,7 @@ Runs once per row of **Test data**.
 * At step 4 the bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
 * The lot reads Did not win for customer A, with customer B's price as Highest bid.
 
+<!-- trace:case id=g10.auction-listing-page.TC-51a rev=2 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC4-2: A bid reaching the auction after the close reads in existing words
 
 **Classification:**
@@ -1249,6 +1871,7 @@ Runs once per row of **Test data**.
 * At step 5 Highest bid reads `<leader price>`.
 * At step 5 customer A's page shows neither Won nor Did not win.
 
+<!-- trace:case id=g10.auction-listing-page.TC-1pq rev=2 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC5-2: A lone first bid refused past the close leaves the lot Ended with No bids
 
 **Classification:**
@@ -1292,6 +1915,7 @@ Runs once per row of **Test data**.
 * At step 5 the lot reads Ended, with No bids under it.
 * At step 5 the page shows neither Won nor Did not win.
 
+<!-- trace:case id=g10.auction-listing-page.TC-ecq rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC6-1: A later close turns a Closed page back to Extended bidding
 
 **Classification:**
@@ -1333,10 +1957,77 @@ Runs once per row of **Test data**.
 * At step 3 the bid controls are enabled.
 * No step shows Won, Did not win or Ended, and the page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-4ba rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+### grade10-site-auction-listing-page-US14-TC7-1: A sold lot crowns its winning bid and no other
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-14
+
+**Pre-conditions:**
+
+* `<listing_2>` is live in HKD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
+* customer C is on the lot page for `<listing_2>`, in English.
+
+**Steps:**
+
+1. As customer C, read Recent bids before the close.
+2. Wait for the close to be recorded as sold to customer A, without reloading.
+3. As customer C, read Recent bids again.
+
+**Expected Results:**
+
+* Step 1: no row shows a crown.
+* Step 3: customer A's winning row shows a crown named Winner after the amount.
+* Step 3: no other row, customer B's included, shows a crown.
+
+<!-- trace:case id=g10.auction-listing-page.TC-hqd rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+### grade10-site-auction-listing-page-US14-TC8-1: A lot without a winner crowns no bid
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-14
+
+**Pre-conditions:**
+
+* `<listing_3>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
+* `<listing_4>` is past its close with no bid, its close recorded with no winner.
+* customer C is signed in on a separate session.
+
+**Steps:**
+
+1. As customer C, open the lot page for `<listing_3>` and read Recent bids.
+2. As customer C, open the lot page for `<listing_4>` and read Recent bids.
+
+**Expected Results:**
+
+* Step 1: the lot reads Closed and no row shows a crown.
+* Step 2: the lot reads Ended with No bids under it, Recent bids holds no row, and no crown shows.
+
 ## Settled
 
 - A bid takes no card hold, so no bid is still confirming at the close: a bid is accepted or refused in one answer, and the lot page never reads Authorizing… (decisions Q3).
 - A bid refused past the close is not a bid: the bid form says "Your bid did not go through." and the lot's result is decided as if it was never sent (decisions Q6).
+- A row tied on amount with a row above it carries the earlier-leads tip at any older tie lower down Recent bids, not only at the current price; the row above carries none (`bid-history-winner-priority` Q4).
+- Rows tied on amount are listed the leading or won row first, then the row of the bidder who set that maximum earlier, and keep that order once both are outbid; the tip goes on the row of the later maximum (`bid-history-winner-priority` Q6).
 
 ## Reconciliation
 
@@ -1374,3 +2065,94 @@ Runs once per row of **Test data**.
 - **Retired** - grade10-site-auction-listing-page-SC-46, a lone first bid still confirming at the close, leaves the result words with the payment confirmation (Q3). No retired id is reissued
 - **Contradicted** - none
 - **Uncovered anchors** - none
+
+**Run:** Accept-review fix round, 2026-10-05, for change `bid-history-winner-priority`. The Bidding page's Recent bids Winner line promised collectors an outcome no consumer requirement delivered, while `grade10` already sets both flags in `listingLotExtras.ts`. Read `proposal.md`, `decisions.md` (Q1 to Q3), this delta `spec.md`, the page line and the consumer's mapper and its tests. Written beside the scenarios, not blind.
+
+**Run:** QA2 reconciliation 2026-10-05, for change `bid-history-winner-priority`. Reread both cases against `grade10-site-auction-listing-page-SC-48` and `grade10-site-auction-listing-page-SC-49`, the requirement, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tech-design.md`, `tasks.md`, the Bidding · Auction Panel line and decision row, the durable spec and suite, `define-public-auction-identifiers`'s suite on this capability, and in `grade10` `listingLotExtras.ts`, its test, `listingUi.ts`'s sold panel and `ListingView.tsx`'s copy. It is a statement, not proof.
+
+**Run:** QA2 reconciliation 2026-10-05, rerun after Q4 and Q5, for change `bid-history-winner-priority`. Reread every case against `grade10-site-auction-listing-page-SC-48` to `grade10-site-auction-listing-page-SC-51`, the requirement, `user-journeys.md`, `proposal.md`, `decisions.md` (Q1 to Q5), `ui-design.md`, `tech-design.md`, `tasks.md`, the Bidding · Auction Panel line and decision row as Q4 left them, the durable spec and suite, `define-public-auction-identifiers`'s suite on this capability, and in `grade10` `listingLotExtras.ts` and `listingLotExtras.test.ts`. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| A sold lot crowns its won row and no other; a live lot crowns none | **Folded in:** `grade10-site-auction-listing-page-SC-48` / `grade10-site-auction-listing-page-US14-TC7-1` |
+| A tied maximum that came second carries the earlier-leads tip; the leader carries none | **Folded in:** `grade10-site-auction-listing-page-SC-49` / `grade10-site-auction-listing-page-US12-TC7-1` |
+| The tip on an older pair of equal amounts, below the current price | **Folded in:** Q4 settled it and `grade10-site-auction-listing-page-SC-51` states it, so the earlier Out of suite no longer holds; `grade10-site-auction-listing-page-US12-TC8-1` walks it. The mapper test in `grade10`, `listingLotExtras.test.ts`, "keeps the same-price priority tip on older equal-price pairs", stays its unit proof |
+| US12-TC8: an older tie needs a third bidder to move the price past it; customer A's earlier maximum answers customer B's later one | **Kept:** the case reads the rows at `<maximum>` by bidder, not by time, as `grade10-site-auction-listing-page-SC-51` does; customer A's automatic answer is stamped one ms after customer B's challenge, so customer A's row lists first once both are outbid |
+| No crown on a lot Closed without a result or ended without a winner, stated by the requirement; no scenario carried it at the first QA2 | **Folded in:** reported to Dev, then at the owner's word `grade10-site-auction-listing-page-SC-50` / `grade10-site-auction-listing-page-US14-TC8-1`; `listingLotExtras.test.ts`, "crowns no row until the lot is closed sold", proves the mapper half |
+| US14-TC8 reread, written without a QA2 read: a sale is absolute and a called-off lot is hidden, so a close with no winner is a lot with no bid, and Recent bids holds no row to crown | **Kept:** the second lot stays, since `grade10-site-auction-listing-page-SC-50` names it; step 2 now asserts Ended with No bids and an empty Recent bids, which the durable `Anyone - No winner` row states, rather than a crown with no row to sit on |
+| US14-TC8's first lot was "result not yet recorded" with no way to hold it there | **Folded in:** its pre-condition holds the close back until the next sweep, as the durable US14 delayed-close case does |
+| US12-TC7: customer A's maximum on a lot with no bid leaves customer A a row at the opening price as well, so "customer A's row" named two rows, and the tip was read by accessible name | **Folded in:** steps and results name the rows at `<maximum>`, and step 4 hovers the Info control, `grade10-site-auction-listing-page-SC-49`'s WHEN |
+| US14-TC7: "customer B's row shows no crown" asserted less than `grade10-site-auction-listing-page-SC-48`'s "no other row" | **Folded in:** step 3 asserts no other row, customer B's included |
+| US14-TC7 waits for the sold result without a reload; the scenario does not say so | **Kept:** the page's sold panel and the crown read the same won bid (`listingUi.ts`, `ListingView.tsx`), and US-14's durable cases already read the result without a reload |
+| Case ids `US12-TC7-1`, `US12-TC8-1`, `US14-TC7-1` and `US14-TC8-1` | **Checked:** the durable suite ends at `US12-TC6` and `US14-TC6`; `define-public-auction-identifiers` issues `US10` and `US11` only, and no other active change holds a suite on this capability. No collision |
+| `tasks.md` 4.1 cited `grade10-site-auction-listing-page-SC-48` and `-SC-49` only, and the walk named neither the older tie nor `grade10-site-auction-listing-page-US12-TC8-1` | **Resolved:** reported to Dev; 4.2 now names `grade10-site-auction-listing-page-SC-48` to `-SC-51` in the test titles, and 4.4 walks `grade10-site-auction-listing-page-US12-TC8-1` |
+| Facts across the Bidding page line and decision row, Q1 to Q5, `tech-design.md` Decision 4, the delta and the cases | **Agree:** the won row is crowned only once the close is recorded as sold; every row tied on amount with a row above it carries the tip, at the current price and at any older tie; the page supplies the copy in `en`, `ko`, `zh-Hans` and `zh-Hant` |
+| Questions for the PM | None - Q1 to Q5 settle what this capability turns on |
+
+**Run:** QA2 reconciliation 2026-10-05, rerun after Q6, for change `bid-history-winner-priority`. Reread every case against `grade10-site-auction-listing-page-SC-48` to `grade10-site-auction-listing-page-SC-51`, the requirement's Tied maximum clause as Q6 left it, `user-journeys.md`, `proposal.md`, `decisions.md` (Q1 to Q6), `ui-design.md`, `tech-design.md` Decisions 4 and 5, `tasks.md` 4.1 to 4.4, the Bidding · Auction Panel line and decision row, the durable spec and suite, `define-public-auction-identifiers`'s suite on this capability, and in `grade10` `listingLotExtras.ts`, `listingLotExtras.test.ts` and the public ledger read in `repositories/listings.ts`. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| Q6: rows tied on amount list leader or won first, then the earlier maximum | **Agree:** `grade10-site-auction-listing-page-SC-49` and `-SC-51` already name the tie by whose maximum came earlier, not by row time; both cases now say who sets `<maximum>` first in steps 1 and 2 and expect the tip on the row of the later maximum |
+| US12-TC7: customer A's automatic answer at `<maximum>` is the leading row | **Kept:** the leader lists first under the build and under Q6 alike |
+| US12-TC8: once customer C leads, neither row at `<maximum>` leads | **Kept:** the case expects Q6's order, customer A first; the build gives it, since customer A's answer is stamped one ms after customer B's challenge and both the public read and the mapper rank the newer row first. See the rerun after the built tie order below |
+| A walker cannot see when a maximum was set, only each row's shown time, the same on both rows of a tie | **Folded in:** both cases expect the order by who set `<maximum>` first, whatever time each row shows |
+| `tasks.md` 4.1 cited `grade10-site-auction-listing-page-SC-48` and `-SC-49` only, and the walk named no older tie | **Resolved:** 4.2 names `grade10-site-auction-listing-page-SC-48` to `-SC-51` in the test titles with no build change; 4.4 walks the tip at the current price and at an older tie lower down |
+| Case ids `US12-TC7-1`, `US12-TC8-1`, `US14-TC7-1` and `US14-TC8-1` | **Checked:** the durable suite ends at `US12-TC6` and `US14-TC6`; no other active change holds these ids. No collision |
+| Facts across the Bidding page line and decision row, Q1 to Q6, `tech-design.md` Decisions 4 and 5, the delta and the cases | **Agree:** the won row is crowned only once the close is recorded as sold; a tie lists leader or won first, then the earlier maximum; every row with an equal amount listed above it carries the tip, at the current price and at any older tie |
+| Questions for the PM | None - Q6 settles the order of a tie, and Q1 to Q5 the rest |
+
+**Uncovered anchors:** none. Recent bids outcome's two items each have cases - winner after close by `grade10-site-auction-listing-page-US14-TC7-1` and `-US14-TC8-1`, equal-max tip by `-US12-TC7-1` and `-US12-TC8-1` - and each of `grade10-site-auction-listing-page-SC-48` to `-SC-51` is asserted by one of them.
+
+**Run:** QA2 reconciliation 2026-10-05, rerun after the built tie order, for change `bid-history-winner-priority`. Reread every case against `grade10-site-auction-listing-page-SC-48` to `grade10-site-auction-listing-page-SC-51`, the requirement's Tied maximum clause, `user-journeys.md`, `proposal.md`, `decisions.md` (Q1 to Q6, as Q6 now names the one-ms answer stamp), `ui-design.md`, `tech-design.md` Decisions 4 and 5, `tasks.md` 4.1 to 4.4, the Bidding · Auction Panel line and decision row, the durable spec and suite, `define-public-auction-identifiers`'s suite on this capability, and in `grade10` the stamp in `resolveStandingMaxima.ts`, the public ledger read in `repositories/listings.ts`, the "recent-bids consecutive same-bidder" test in `autoBidding.spec.ts`, and `listingLotExtras.ts` and its test. It is a statement, not proof.
+
+| Finding | Disposition |
+| --- | --- |
+| A tie is not random: `resolveStandingMaxima.ts` stamps the leader's automatic answer one ms after the challenger, the public read orders an amount leader or won first, then newer, and the mapper ranks the same way | **Agree:** the earlier maximum lists first at the current price and after both are outbid; `autoBidding.spec.ts` lists the first bidder to set 180,000 above the second once both are outbid |
+| An earlier row said US12-TC8 fails at random until task 4.2 lands | **Corrected:** `grade10-site-auction-listing-page-US12-TC8-1` expects what the build already gives, customer A's row above customer B's at `<maximum>` and the tip on customer B's, and should pass at task 4.4's walk; task 4.2 names scenarios in test titles and changes no build. Each row above now states this outcome |
+| US12-TC7 against `grade10-site-auction-listing-page-SC-49` | **Agree:** customer A leads at `<maximum>` and lists first; the tip is on customer B's row only |
+| Each of US14-TC7 / `grade10-site-auction-listing-page-SC-48` and US14-TC8 / `-SC-50` | **Agree:** values and outcomes match each GIVEN, THEN and AND; the tie change touches neither |
+| Accept-review: the `## Settled` lines cited decisions Q4 and Q6 without the change, and fold beside other changes' Settled lines | **Folded in:** each names `bid-history-winner-priority`; the Q6 line no longer says the order ignores the stamp, since the stamp is what keeps it |
+| Accept-review: no `### Manual` table for the four manual cases | **Folded in:** `### Manual` below names what a person drives for each |
+| Case ids `US12-TC7-1`, `US12-TC8-1`, `US14-TC7-1` and `US14-TC8-1` | **Checked:** the durable suite ends at `US12-TC6` and `US14-TC6`; `define-public-auction-identifiers` issues `US10` and `US11` only, and no other active change holds a suite on this capability. No collision |
+| Questions for the PM | None - Q6 settles the order of a tie and the build keeps it, and Q1 to Q5 the rest |
+
+**Uncovered anchors:** none. Recent bids outcome's two items each have cases - winner after close by `grade10-site-auction-listing-page-US14-TC7-1` and `-US14-TC8-1`, equal-max tip by `-US12-TC7-1` and `-US12-TC8-1` - and each of `grade10-site-auction-listing-page-SC-48` to `-SC-51` is asserted by one of them; every case stays `draft`.
+
+**Run:** the suite pass read the isolated bundle assembled by hand at
+`/private/tmp/.../scratchpad/blind-suite-isolated-input.md` (Purpose, Feature
+set with the new "Public identifier" group, this capability's
+`user-journeys.md` including US-10 and US-11, `decisions.md` with `## Raised`
+included, the two PRD sections, and the existing `feature-tcs.md` for id
+continuity); it was denied `## Requirements`, `openspec/specs/` beyond the
+quoted sections, and `openspec/changes/archive/`. The scenario pass read
+`proposal.md`, `decisions.md`, this capability's `user-journeys.md`, the
+durable `spec.md`'s full `## Requirements`, and the same two PRD sections; it
+did not read `feature-tcs.md` or the suite draft.
+
+| Diff | Disposition |
+| --- | --- |
+| Suite carried a case for the listing code staying absent once scripts finish running (US10-TC2); no scenario stated it — the scenario draft's "Server-rendered response" bullet only covered the pre-script HTML | Real: the requirement's after-scripts behaviour is undecided by any prior requirement, and the durable "served lot becomes live without blanking" requirement is silent on the listing code. Folded in as `grade10-site-auction-listing-page-SC-25` |
+| Suite carried a case for the listing code not resolving as a lot address (US10-TC7, US11-TC2); no scenario stated it | Real: whether the code could double as an alternate lookup key was never proposed or ruled out. Folded in as `grade10-site-auction-listing-page-SC-26` |
+| Suite carried a case for a separate listing-code field staying absent once an order exists on the lot (US10-TC9, US11-TC3); no scenario stated it | Real, and already settled by decisions.md Q18 and the proposal: the lower-case code is the canonical-address suffix, never a labelled public field, regardless of whether an order exists. Folded in as `grade10-site-auction-listing-page-SC-27` |
+| Suite carried a case for the listing code staying absent regardless of signed-in state (US10-TC8) | Already covered: `SC-20`'s GIVEN/WHEN never conditions on an actor or auth state, so the rule is already unconditional across signed-in and signed-out visitors. No new scenario; case kept as a boundary check against that existing scenario |
+| Suite carried two positive cases on US10 (title/address present in the served response; shared-link preview names the lot by title/address) | Misreading of scope: both duplicate durable `grade10-site-auction-listing-page-SC-01` and `-SC-03`, which already prove a lot's title, description and preview render correctly. Not new behaviour from this change. Dropped |
+| Suite carried two positive cases on US11 (title/address together identify exactly one lot; the address a collector quotes reopens the same lot) | Misreading of scope: both duplicate durable `SC-01`/`SC-02`/`SC-05` (two lots answer as two pages; a published lot's address answers). Not new behaviour from this change. Dropped |
+| Suite carried a case on US11 for a closed lot still resolving by title and address | Misreading of scope: tests general lot-status resolution (Ended lots stay published), which is `grade10-site/auction/lot-status`'s durable behaviour, not this change's identifier guard. Dropped |
+| Scenario draft's `SC-24` (not-found response carries no listing code) reached no suite case | Hole: added `grade10-site-auction-listing-page-US10-TC10-1`, tracing `US-10` — an in-flight delta's suite can only trace journeys this same delta defines, and the durable `US-03` journey (whose not-found requirement this scenario extends) is not part of this delta's `user-journeys.md` |
+| Suite's raised question on whether a stale/cached share-preview generated before this change could still surface on a re-share | **Decided in Q15:** old cached content may persist and no purge or regeneration is guaranteed; current pages and fresh metadata still omit the code and private data |
+| Suite's raised question on whether the collector-facing payment reference (Q6) ever appears on the listing page after an order exists | Already settled, not a genuine gap: Q10 and the proposal are unconditional that the listing page never shows the code, in any order state. Resolved directly as `SC-27` rather than raised |
+| Suite's raised question on whether signed-in state matters here | Already settled, not a genuine gap: the requirement's rule is stated with no actor qualifier. No row raised |
+| Suite's raised question on whether a code-shaped-but-wrong guess is handled differently from an ordinary bad address | Already settled by the durable "An address that names no lot is refused" requirement plus this delta's `SC-26`: a listing code is not wired into the address's lookup at all, so it is refused the same as any other unrecognized address. No row raised |
+
+No contradiction between the two readings arose — both independently concluded
+the code must never appear on this capability's public surfaces.
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-auction-listing-page-US12-TC7-1` | To be walked in task 4.4 on the isolated stack: two signed-in bidders each confirm the same custom maximum in turn, and a person reads the rows at that amount and hovers the Info control; the mapper's test flags a tied row it is handed, and the case walks the order the server writes and the tip the page draws |
+| `grade10-site-auction-listing-page-US12-TC8-1` | To be walked in task 4.4 on the isolated stack: three signed-in bidders, the third confirming a higher maximum, and a person reads the older tie and hovers its Info control; the backend test proves the read's order and the mapper's test the flag, and the case walks both through the page |
+| `grade10-site-auction-listing-page-US14-TC7-1` | To be walked in task 4.4 on the isolated stack: a person watches a live lot's close be recorded as sold without reloading, and reads Recent bids before and after; the mapper's test proves the crown from a sold flag it is handed |
+| `grade10-site-auction-listing-page-US14-TC8-1` | To be walked in task 4.4 on the isolated stack: a person opens a lot whose close is held back until the next sweep and a lot ended with no bid, and reads each one's Recent bids; the mapper's test proves no crown before the lot is closed sold |

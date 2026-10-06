@@ -19,6 +19,8 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
 import { TRIGGERS, WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
+import { sectionLinesOf } from "../../../tools/manual/src/content/sections.ts";
+import { outline } from "../../../tools/manual/src/store/markdown.mts";
 import {
   applyPerspectives,
   bugPerspectives,
@@ -356,11 +358,22 @@ const taskArtifact = (schema, target) =>
  * records it, resolved to the files the change carries, followed by the page
  * sections the change's proposal marks. The pages come last because they are
  * the store's, not the change's: they are what the change is measured
- * against.
+ * against. A task group reads by citation, as `groupReading` says.
+ *
+ * Each entry is a path, given whole, or `path#La-Lb`, those lines: one read
+ * apiece, since none is larger than `MOST`. `warn` hears what a reading left
+ * out that its author may not mean to: a cited id the change does not issue,
+ * and a link to a section its page does not carry.
  */
-export function bundleFor(root, change, target, schema = planningSchema(root)) {
+export function bundleFor(
+  root,
+  change,
+  target,
+  schema = planningSchema(root),
+  warn = (line) => console.error(line),
+) {
   const dir = posix(join("openspec", "changes", change));
-  const pages = pageSections(root, dir);
+  const pages = pageExcerpts(root, dir, warn);
   const artifact = artifactOf(schema, target);
   if (!artifact) {
     if (!isGroup(target))
@@ -370,18 +383,21 @@ export function bundleFor(root, change, target, schema = planningSchema(root)) {
     // A task group's draft is the plan it implements; everything the plan was
     // drawn from is before it.
     const tasks = schema.artifacts.find(({ id }) => id === "tasks");
-    return {
-      draft: `${dir}/${tasks?.generates ?? "tasks.md"}`,
+    const plan = `${dir}/${tasks?.generates ?? "tasks.md"}`;
+    const reading = groupReading(root, dir, plan, target, warn);
+    return given(root, {
+      draft: reading ? [{ file: plan, ranges: reading.plan }] : [whole(plan)],
       upstream: [
-        ...upstreamOf(root, dir, schema, tasks?.upstream ?? []),
+        ...upstreamOf(root, dir, schema, tasks?.upstream ?? [], reading),
         ...pages,
       ],
-    };
+    });
   }
-  return {
-    draft: draftOf(root, dir, artifact.generates),
+  const draft = draftOf(root, dir, artifact.generates);
+  return given(root, {
+    draft: (Array.isArray(draft) ? draft : [draft]).map(whole),
     upstream: [...upstreamOf(root, dir, schema, artifact.upstream), ...pages],
-  };
+  });
 }
 
 /** The draft the round is writing: one path where the artifact is one file,
@@ -394,15 +410,325 @@ const draftOf = (root, dir, generates) => {
   return written;
 };
 
-const upstreamOf = (root, dir, schema, ids) => {
-  const files = [];
+/** A Read takes at most 25,000 tokens, and this store's densest prose runs
+ * about 2 bytes a token: no entry is larger than this many bytes. */
+const MOST = 45_000;
+/** Two excerpts of one file this many lines apart or fewer are given as one:
+ * one read fewer, and the lines between are the excerpts' own context. */
+const NEAR = 30;
+
+const whole = (file) => ({ file, ranges: null });
+
+/** The draft as one entry or several, as `draftOf` returns it, and every
+ * piece cut to entries a read takes whole. */
+const given = (root, { draft, upstream }) => {
+  const entries = (pieces) => pieces.flatMap((piece) => entriesOf(root, piece));
+  const drafts = entries(draft);
+  return {
+    draft: drafts.length === 1 ? drafts[0] : drafts,
+    upstream: entries(upstream),
+  };
+};
+
+/** One file's piece as entries: the path where the piece is the whole file
+ * and fits one read, `path#La-Lb` otherwise, each at most `MOST` bytes. A
+ * draft the round has yet to write is its path, unread. */
+const entriesOf = (root, { file, ranges }) => {
+  if (!existsSync(join(root, file))) return [file];
+  const lines = readFileSync(join(root, file), "utf8").split("\n");
+  const last = filledTo(lines, 1, lines.length);
+  const spans = merged(ranges ?? [{ start: 1, end: last }]);
+  if (spans.length === 1 && spans[0].start === 1 && spans[0].end >= last) {
+    const bytes = Buffer.byteLength(lines.slice(0, last).join("\n"));
+    if (bytes <= MOST) return [file];
+  }
+  return spans.flatMap((span) =>
+    cut(lines, span).map(({ start, end }) => `${file}#L${start}-L${end}`),
+  );
+};
+
+/** Ranges in line order, those `NEAR` or fewer lines apart joined. */
+const merged = (ranges) => {
+  const out = [];
+  for (const range of [...ranges].sort((a, b) => a.start - b.start)) {
+    const previous = out.at(-1);
+    if (previous && range.start <= previous.end + 1 + NEAR)
+      previous.end = Math.max(previous.end, range.end);
+    else out.push({ ...range });
+  }
+  return out;
+};
+
+/** A range cut at line ends into parts of at most `MOST` bytes each. */
+const cut = (lines, { start, end }) => {
+  const parts = [];
+  let from = start;
+  let bytes = 0;
+  for (let line = start; line <= end; line += 1) {
+    const size = Buffer.byteLength(lines[line - 1]) + 1;
+    if (line > from && bytes + size > MOST) {
+      parts.push({ start: from, end: line - 1 });
+      from = line;
+      bytes = 0;
+    }
+    bytes += size;
+  }
+  parts.push({ start: from, end });
+  return parts;
+};
+
+/** The last line from `start` to `end`, 1-based, that holds anything. */
+const filledTo = (lines, start, end) => {
+  let last = end;
+  while (last > start && lines[last - 1].trim() === "") last -= 1;
+  return last;
+};
+
+/** Every heading of a file, fence-aware, in the order the file has them. */
+const headingsOf = (text) => {
+  const flat = [];
+  const visit = (sections) => {
+    for (const section of sections) {
+      flat.push(section);
+      visit(section.children);
+    }
+  };
+  visit(outline(text));
+  return flat;
+};
+
+/** The lines a heading's section spans: to the next heading at its level or
+ * above, without the blank lines before it. */
+const spanOf = (lines, heads, index) => {
+  const head = heads[index];
+  const next = heads.slice(index + 1).find((one) => one.level <= head.level);
+  return {
+    start: head.line,
+    end: filledTo(lines, head.line, next ? next.line - 1 : lines.length),
+  };
+};
+
+/** The ids a section can cite, in the store's grammar: a case
+ * (`…-US1-TC2-1`), a scenario (`…-SC-12`) or a journey (`…-US-03`). */
+const ID =
+  /[a-z0-9][a-z0-9-]*?-(?:US-?\d+[a-z]?-TC\d+-\d+|SC-\d+[a-z]?|US-\d+[a-z]?)(?![\w-])/g;
+const isId = (text) => {
+  ID.lastIndex = 0;
+  const match = ID.exec(text);
+  return match !== null && match.index === 0 && match[0] === text;
+};
+
+/** A section's ids: those a code span holds whole, which the round and
+ * `plan:land`'s `CITED` read, and those written outside any code span, which
+ * neither can. */
+const idsIn = (text) => {
+  const cited = new Set();
+  const bare = new Set();
+  for (const line of text.split("\n"))
+    line.split("`").forEach((piece, index) => {
+      if (index % 2 === 1) {
+        if (isId(piece)) cited.add(piece);
+      } else for (const [id] of piece.matchAll(ID)) bare.add(id);
+    });
+  return { cited, bare };
+};
+
+/**
+ * Where the change issues each id, and the lines a reader citing it is given:
+ * a scenario's `#### Scenario:` heading gives the requirement it sits in and
+ * the delta heading above that; a journey's heading in `user-journeys.md`
+ * gives the journey, and its section of `feature-tcs.md` its cases; a case's
+ * heading gives the case. Each file's `opening` is everything above its first
+ * such block, and a requirements file's `kept` its removed and renamed
+ * requirements, given wherever the file is.
+ */
+const issuedBy = (root, dir) => {
+  const issued = new Map();
+  const files = new Map();
+  const casesOf = new Map();
+  const specs = walk(root, `${dir}/specs`)
+    .filter((path) => path.endsWith(".md"))
+    .sort();
+  for (const file of specs) {
+    const lines = readFileSync(join(root, file), "utf8").split("\n");
+    const heads = headingsOf(lines.join("\n"));
+    const own = { opening: null, kept: [] };
+    let first = null;
+    const opens = (index) => {
+      first ??= heads[index].line;
+    };
+    heads.forEach((head, index) => {
+      const delta = /^(ADDED|MODIFIED|REMOVED|RENAMED) Requirements$/.exec(
+        head.heading,
+      );
+      if (head.level === 2 && delta) {
+        opens(index);
+        if (delta[1] === "REMOVED" || delta[1] === "RENAMED")
+          own.kept.push(spanOf(lines, heads, index));
+        return;
+      }
+      const id =
+        /^(?:Scenario:\s+)?([a-z0-9][a-z0-9-]*?-(?:US-?\d+[a-z]?(?:-TC\d+-\d+)?|SC-\d+[a-z]?))\b/.exec(
+          head.heading,
+        )?.[1];
+      if (!id) return;
+      opens(index);
+      if (/-SC-/.test(id)) {
+        const at = (level) =>
+          heads.findLastIndex((one, j) => j < index && one.level === level);
+        const requirement = at(3);
+        const kind = at(2);
+        issued.set(id, {
+          file,
+          ranges: [
+            ...(kind === -1
+              ? []
+              : [{ start: heads[kind].line, end: heads[kind].line }]),
+            spanOf(lines, heads, requirement === -1 ? index : requirement),
+          ],
+        });
+      } else if (/-TC\d+-\d+$/.test(id))
+        issued.set(id, { file, ranges: [spanOf(lines, heads, index)] });
+      else if (file.endsWith("/feature-tcs.md"))
+        casesOf.set(journeyKey(file, id), {
+          file,
+          ranges: [spanOf(lines, heads, index)],
+        });
+      else
+        issued.set(id, {
+          file,
+          ranges: [spanOf(lines, heads, index)],
+          journey: journeyKey(file, id),
+        });
+    });
+    if (first !== null && first > 1)
+      own.opening = { start: 1, end: filledTo(lines, 1, first - 1) };
+    files.set(file, own);
+  }
+  return { issued, files, casesOf };
+};
+
+/** A journey by its capability's directory and its number, which
+ * `user-journeys.md` writes `US-03` and `feature-tcs.md` writes `US3`. */
+const journeyKey = (file, id) =>
+  `${file.slice(0, file.lastIndexOf("/"))}#${Number(/US-?(\d+)/.exec(id)[1])}`;
+
+/**
+ * What one task group reads of the change, by what its own section cites in
+ * backticks (Q117): the plan's opening and the group's section, and of the
+ * journeys, requirements and cases only the blocks those ids are issued by,
+ * with each such file's opening and a requirements file's removed and renamed
+ * requirements. A group citing none of the change's ids reads none of them;
+ * the rest of the change stays open on demand.
+ *
+ * Null - every capability, and the whole plan - for the reading of the whole
+ * change. Refused where the plan carries no such group, and where the group
+ * names one of the change's ids outside backticks: neither the round nor
+ * `plan:land --tests` can read that citation, so it is fixed before a round
+ * leans on it.
+ */
+const groupReading = (root, dir, plan, target, warn) => {
+  const number = /^(?:group\s*)?(\d+)/i.exec(String(target).trim())?.[1];
+  if (!number) return null;
+  const text = existsSync(join(root, plan))
+    ? readFileSync(join(root, plan), "utf8")
+    : "";
+  const lines = text.split("\n");
+  const heads = headingsOf(text).filter((one) => one.level <= 2);
+  const index = heads.findIndex(
+    (one) => one.level === 2 && one.heading.startsWith(`${number}. `),
+  );
+  if (index === -1) throw new Error(`${plan} has no group ${number}`);
+  const section = spanOf(lines, heads, index);
+  const firstGroup = heads.find((one) => one.level === 2);
+  const opening =
+    firstGroup.line > 1
+      ? [{ start: 1, end: filledTo(lines, 1, firstGroup.line - 1) }]
+      : [];
+
+  const { issued, files, casesOf } = issuedBy(root, dir);
+  const { cited, bare } = idsIn(
+    lines.slice(section.start - 1, section.end).join("\n"),
+  );
+  const uncited = [...bare].filter((id) => issued.has(id));
+  if (uncited.length > 0)
+    throw new Error(
+      `group ${number} of ${plan} names ${uncited.join(", ")} without backticks: backtick each, so the round and \`plan:land --tests\` can read it`,
+    );
+
+  const blocks = new Map();
+  const give = ({ file, ranges }) => {
+    blocks.set(file, [...(blocks.get(file) ?? []), ...ranges]);
+  };
+  for (const id of cited) {
+    const block = issued.get(id);
+    if (!block) {
+      warn(
+        `group ${number} cites ${id}, which ${dir} does not issue: it brings nothing into the bundle`,
+      );
+      continue;
+    }
+    give(block);
+    if (block.journey && casesOf.has(block.journey))
+      give(casesOf.get(block.journey));
+  }
+  for (const [file, ranges] of blocks) {
+    const own = files.get(file);
+    blocks.set(file, [
+      ...(own?.opening ? [own.opening] : []),
+      ...ranges,
+      ...(file.endsWith("/spec.md") ? (own?.kept ?? []) : []),
+    ]);
+  }
+  return { plan: [...opening, section], blocks };
+};
+
+/** The change's own files before an artifact, in the schema's order, each
+ * whole - or, on a group's reading, the per-capability files reduced to the
+ * blocks the group cites, and those it cites nothing of left out. */
+const upstreamOf = (root, dir, schema, ids, reading = null) => {
+  const pieces = [];
+  const seen = new Set();
   for (const id of ids) {
     const artifact = schema.artifacts.find((one) => one.id === id);
     if (!artifact) continue;
-    for (const file of filesOf(root, dir, artifact.generates))
-      if (!files.includes(file)) files.push(file);
+    for (const file of filesOf(root, dir, artifact.generates)) {
+      if (seen.has(file)) continue;
+      seen.add(file);
+      if (!reading || !artifact.generates.startsWith("specs/**"))
+        pieces.push(whole(file));
+      else if (reading.blocks.has(file))
+        pieces.push({ file, ranges: reading.blocks.get(file) });
+    }
   }
-  return files;
+  return pieces;
+};
+
+/** The page sections the proposal marks, as the lines each spans: a page
+ * linked whole is the page, and a link to a section the page does not carry
+ * gives the page whole - said through `warn`, since the reader of the link
+ * meant something on that page. */
+const pageExcerpts = (root, dir, warn) => {
+  const byPage = new Map();
+  for (const one of pageSections(root, dir)) {
+    const [page, slug] = one.split("#");
+    const piece = byPage.get(page) ?? { file: page, ranges: [] };
+    byPage.set(page, piece);
+    if (piece.ranges === null) continue;
+    if (!slug) {
+      piece.ranges = null;
+      continue;
+    }
+    const lines = sectionLinesOf(readFileSync(join(root, page), "utf8"), slug);
+    if (lines) piece.ranges.push(lines);
+    else {
+      warn(
+        `${dir}/proposal.md links ${page}#${slug}, a section the page does not carry: the page is given whole`,
+      );
+      piece.ranges = null;
+    }
+  }
+  return [...byPage.values()];
 };
 
 /** The files one artifact has in this change. A `generates` with no glob is

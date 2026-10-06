@@ -11,7 +11,8 @@
 **I want** a coupon back in my wallet whenever the checkout it was meant for does not complete,
 **so that** a refusal or an abandoned order never costs me what I redeemed.
 
-### grade10-site-store-discounts-US3-TC1-1: An expired sale loses its code and collects at full price
+<!-- trace:case id=g10.store-discounts.TC-qeb rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39,g10.store-discounts.SC-cvt,g10.store-discounts.SC-2a7 -->
+### grade10-site-store-discounts-US3-TC6-1: An expired sale loses its code and collects at full price
 
 **Classification:**
 
@@ -51,7 +52,8 @@
 * <expired counter sale> shows no cut for <coupon>, and is not cancelled.
 * <expired counter sale> can still collect at full price.
 
-### grade10-site-store-discounts-US3-TC2-1: A code does not go back on the sale it left
+<!-- trace:case id=g10.store-discounts.TC-bee rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39,g10.store-discounts.SC-cvt,g10.store-discounts.SC-2a7 -->
+### grade10-site-store-discounts-US3-TC7-1: A code does not go back on the sale it left
 
 **Classification:**
 
@@ -98,7 +100,8 @@
 **I want** a member's product coupon to settle the same way at the till as it does online,
 **so that** I can ring it up with the same confidence either channel gives me.
 
-### grade10-site-store-discounts-US4-TC1-1: A sale that collects a deactivated code is reported
+<!-- trace:case id=g10.store-discounts.TC-w7h rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9 -->
+### grade10-site-store-discounts-US4-TC5-1: A sale that collects a deactivated code is reported
 
 **Classification:**
 

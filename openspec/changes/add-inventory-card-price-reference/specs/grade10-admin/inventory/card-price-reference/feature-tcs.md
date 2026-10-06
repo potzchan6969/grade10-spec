@@ -11,6 +11,7 @@ and a confirmed PriceCharting match,
 **so that** the catalogue identifies the card consistently and can retrieve the
 right price reference.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-77w rev=1 covers=g10adm.inventory-card-price-reference.SC-76a,g10adm.inventory-card-price-reference.SC-3pc,g10adm.inventory-card-price-reference.SC-d8q,g10adm.inventory-card-price-reference.SC-rvp -->
 ### grade10-admin-inventory-card-price-reference-US1-TC1-1: Create a classified collectible card
 
 **Classification:**
@@ -49,6 +50,7 @@ An inventory admin can access <grade10 admin inventory product URL>.
 * The product is created with Collectible Cards as its type.
 * The product shows the IP, Item, and Category tags.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-83n rev=2 covers=g10adm.inventory-card-price-reference.SC-76a,g10adm.inventory-card-price-reference.SC-3pc,g10adm.inventory-card-price-reference.SC-d8q,g10adm.inventory-card-price-reference.SC-rvp -->
 ### grade10-admin-inventory-card-price-reference-US1-TC2-2: Refuse incomplete card taxonomy
 
 **Classification:**
@@ -76,6 +78,7 @@ An existing classified card product is open in <grade10 admin inventory product 
 * The product update is refused for its missing controlled role.
 * The product retains its prior classification.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-dl0 rev=1 covers=g10adm.inventory-card-price-reference.SC-76a,g10adm.inventory-card-price-reference.SC-3pc,g10adm.inventory-card-price-reference.SC-d8q,g10adm.inventory-card-price-reference.SC-rvp -->
 ### grade10-admin-inventory-card-price-reference-US1-TC3-1: Reuse an inline matching tag
 
 **Classification:**
@@ -112,6 +115,7 @@ The inventory catalogue already has the IP tag `Pokémon`.
 * The saved product shows the existing Pokémon IP tag.
 * The catalogue has no second IP tag differing only by letter case.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-sw8 rev=1 covers=g10adm.inventory-card-price-reference.SC-76a,g10adm.inventory-card-price-reference.SC-3pc,g10adm.inventory-card-price-reference.SC-d8q,g10adm.inventory-card-price-reference.SC-rvp -->
 ### grade10-admin-inventory-card-price-reference-US1-TC4-1: Confirm a PriceCharting card match
 
 **Classification:**
@@ -142,6 +146,7 @@ matching card result for <a valid PriceCharting card URL>.
 * The product shows its confirmed PriceCharting reference.
 * Later price reads use the selected provider identity.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-3k4 rev=1 covers=g10adm.inventory-card-price-reference.SC-76a,g10adm.inventory-card-price-reference.SC-3pc,g10adm.inventory-card-price-reference.SC-d8q,g10adm.inventory-card-price-reference.SC-rvp -->
 ### grade10-admin-inventory-card-price-reference-US1-TC5-1: Refuse a non-card PriceCharting reference
 
 **Classification:**
@@ -178,6 +183,7 @@ freshness,
 **so that** I can use an attributable market signal without mistaking it for
 permanent product value or PSA certification data.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-kdw rev=1 covers=g10adm.inventory-card-price-reference.SC-h9s,g10adm.inventory-card-price-reference.SC-i6m,g10adm.inventory-card-price-reference.SC-13p,g10adm.inventory-card-price-reference.SC-wjl -->
 ### grade10-admin-inventory-card-price-reference-US2-TC1-1: Read a fresh PSA-focused reference
 
 **Classification:**
@@ -208,6 +214,7 @@ than 24 hours old with an ungraded baseline and PSA-oriented values.
 * The ungraded baseline and supplied PSA-oriented grades show in USD.
 * Missing grades show as unavailable rather than zero.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-40r rev=1 covers=g10adm.inventory-card-price-reference.SC-h9s,g10adm.inventory-card-price-reference.SC-i6m,g10adm.inventory-card-price-reference.SC-13p,g10adm.inventory-card-price-reference.SC-wjl -->
 ### grade10-admin-inventory-card-price-reference-US2-TC2-1: Refresh an expired regular cache
 
 **Classification:**
@@ -235,6 +242,7 @@ hours old, and PriceCharting is configured to return a current result.
 * Grade10 requests a current provider result before answering.
 * The returned reference replaces the expired values and is fresh.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-ayg rev=1 covers=g10adm.inventory-card-price-reference.SC-h9s,g10adm.inventory-card-price-reference.SC-i6m,g10adm.inventory-card-price-reference.SC-13p,g10adm.inventory-card-price-reference.SC-wjl -->
 ### grade10-admin-inventory-card-price-reference-US2-TC3-1: Preserve stale prices after refresh failure
 
 **Classification:**
@@ -271,6 +279,7 @@ PriceCharting refresh is configured to fail.
 **so that** I can add a large collection without creating partial or
 misidentified catalogue data.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-isq rev=1 covers=g10adm.inventory-card-price-reference.SC-2k9,g10adm.inventory-card-price-reference.SC-5dl,g10adm.inventory-card-price-reference.SC-uot,g10adm.inventory-card-price-reference.SC-lmn -->
 ### grade10-admin-inventory-card-price-reference-US3-TC1-1: Preview a valid card CSV
 
 **Classification:**
@@ -310,6 +319,7 @@ PriceCharting search is configured to return one candidate for each row in
 * Every row shows one PriceCharting candidate for confirmation.
 * No imported product, inventory snapshot, or confirmed reference exists yet.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-16y rev=1 covers=g10adm.inventory-card-price-reference.SC-2k9,g10adm.inventory-card-price-reference.SC-5dl,g10adm.inventory-card-price-reference.SC-uot,g10adm.inventory-card-price-reference.SC-lmn -->
 ### grade10-admin-inventory-card-price-reference-US3-TC2-1: Block an invalid CSV row
 
 **Classification:**
@@ -341,6 +351,7 @@ unmatched PriceCharting link.
 * The preview cannot be confirmed.
 * No product from the CSV exists.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-13a rev=1 covers=g10adm.inventory-card-price-reference.SC-2k9,g10adm.inventory-card-price-reference.SC-5dl,g10adm.inventory-card-price-reference.SC-uot,g10adm.inventory-card-price-reference.SC-lmn -->
 ### grade10-admin-inventory-card-price-reference-US3-TC3-1: Confirm every imported card candidate
 
 **Classification:**
@@ -369,6 +380,7 @@ A valid card import preview is open with a PriceCharting candidate for each row.
 * The preview becomes ready for commit only after every candidate is confirmed.
 * Each row retains its selected canonical link and provider identity.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-xnq rev=1 covers=g10adm.inventory-card-price-reference.SC-2k9,g10adm.inventory-card-price-reference.SC-5dl,g10adm.inventory-card-price-reference.SC-uot,g10adm.inventory-card-price-reference.SC-lmn -->
 ### grade10-admin-inventory-card-price-reference-US3-TC4-1: Commit an entire reviewed import
 
 **Classification:**
@@ -396,6 +408,7 @@ A ready import preview contains two valid, confirmed card rows.
 * Both imported products appear with their required tags.
 * Each product has one empty inventory snapshot and a confirmed PriceCharting reference.
 
+<!-- trace:case id=g10adm.inventory-card-price-reference.TC-jsf rev=1 covers=g10adm.inventory-card-price-reference.SC-2k9,g10adm.inventory-card-price-reference.SC-5dl,g10adm.inventory-card-price-reference.SC-uot,g10adm.inventory-card-price-reference.SC-lmn -->
 ### grade10-admin-inventory-card-price-reference-US3-TC5-1: Roll back a conflicted import
 
 **Classification:**

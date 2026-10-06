@@ -285,6 +285,7 @@ intermediate increments.
 - **AND** the public history records C's accepted action followed by B's automatic response
 - **AND** both records show the resolved amount of 60000 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-arw rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-30 - A lone maximum on a 0 start stands at the lowest increment
 **Serves:** grade10-site-auction-auto-bidding-US-01 - Collector opens bidding on a lot that starts at nothing
 
@@ -294,6 +295,7 @@ intermediate increments.
 - **AND** the current bid is 1000 minor units, not 0
 - **AND** the public history records one bid, that collector's, at 1000 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-qbr rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-30a - A second maximum on a 0 start clears one increment above the opening price
 **Serves:** grade10-site-auction-auto-bidding-US-01 - Collector commits a maximum on an open listing
 
@@ -303,6 +305,7 @@ intermediate increments.
 - **THEN** Grade10 refuses it and names 2000 minor units as the minimum
 - **AND** A still leads at 1000 minor units
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-9mj rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-31 - A lone bidder on a 0 start never wins at 0
 **Serves:** grade10-site-auction-auto-bidding-US-01 - Collector opens bidding on a lot that starts at nothing
 
@@ -404,6 +407,7 @@ winner pays, under `grade10-site/auction/bid-payment-method`.
   the same answer
 - **AND** nothing is held, authorized or charged on either bidder's card
 
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-zw7 rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-32 - A raise is judged on the auction's rules alone
 **Serves:** grade10-site-auction-auto-bidding-US-01 - a leader raises their maximum
 

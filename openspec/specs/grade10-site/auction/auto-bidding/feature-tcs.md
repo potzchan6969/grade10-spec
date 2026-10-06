@@ -172,6 +172,7 @@ customer(has a committed maximum matching the row) is on that open listing's pag
 * Grade10 refuses it.
 * Customer's committed maximum remains the row's committed maximum.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-j8v rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
 ### grade10-site-auction-auto-bidding-US1-TC5-1: Lone maximum on a zero start stands at the lowest increment
 
 Runs once per row of **Test data**.
@@ -219,6 +220,7 @@ Runs once per row of **Test data**.
 * The bid count reads 1, and Recent Bids shows one bid at the row's current bid after.
 * Customer leads.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-65a rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
 ### grade10-site-auction-auto-bidding-US1-TC6-1: Maximum one minor unit below the minimum on a zero start is refused
 
 Runs once per row of **Test data**.
@@ -261,6 +263,7 @@ Runs once per row of **Test data**.
 * No maximum is recorded for customer B.
 * The current bid and the leader are as the row's standing gives them.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-y4r rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
 ### grade10-site-auction-auto-bidding-US1-TC7-1: Lone bidder wins a zero-start lot at the lowest increment
 
 Runs once per row of **Test data**.
@@ -302,6 +305,7 @@ Runs once per row of **Test data**.
 * Customer A wins.
 * The winning bid is 0 plus the currency's lowest increment, the row's winning bid, not 0.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-ic0 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
 ### grade10-site-auction-auto-bidding-US1-TC8-1: Second maximum on a zero start must clear one increment above the opening price
 
 Runs once per row of **Test data**.

@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "5bc68c01684451d3072a506077d169f6a91c802c769d0e95e6e50ab8710eea2d"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ef68697f380af32a4c6dcd30f49699b77475c32b",
+    "capturedAt": "2026-10-06T05:05:16.205Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An operator confirms an image before it is stored",
+          "Requirement: An operator stores a chosen image without confirmation"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

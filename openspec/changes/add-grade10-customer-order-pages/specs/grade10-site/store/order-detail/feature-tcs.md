@@ -9,6 +9,7 @@
 **I want** one trustworthy account of my Store order,
 **so that** I can understand its items, money, fulfilment, refund, and tracking.
 
+<!-- trace:case id=g10.store-order-detail.TC-hsn rev=3 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC1-3: Owned web order presents supplied settlement facts
 
 **Classification:**
@@ -41,6 +42,7 @@ The signed-in user owns <web order> with shop order number `#G10-10482`, quoted 
 * The supplied shipping address appears without a pickup claim.
 * The Visa logo and masked number identify the supplied payment instrument.
 
+<!-- trace:case id=g10.store-order-detail.TC-c2d rev=2 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC2-2: Missing and unowned ids share not-found
 
 Runs once per row of **Test data**.
@@ -78,6 +80,7 @@ The user is signed in; the selected order id is in the state named by **Test dat
 * The same not-found treatment appears in both runs.
 * The page does not say whether the selected id exists.
 
+<!-- trace:case id=g10.store-order-detail.TC-xqg rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC3-1: Partial refund stays separate from the charge
 
 **Classification:**
@@ -106,6 +109,7 @@ The signed-in user owns an order paid at 11200 minor units `HKD` and refunded by
 * Paid total remains 11200 minor units `HKD`.
 * Refund shows 2000 minor units `HKD` separately.
 
+<!-- trace:case id=g10.store-order-detail.TC-pvz rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC4-1: Point-of-sale order invents no web facts
 
 **Classification:**
@@ -135,6 +139,7 @@ The signed-in user owns a point-of-sale order with a paid total but no quoted su
 * No zero subtotal or empty product row appears.
 * No payment method or shipping address is invented.
 
+<!-- trace:case id=g10.store-order-detail.TC-ljv rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC5-1: Missing optional facts leave no placeholders
 
 **Classification:**
@@ -164,6 +169,7 @@ The signed-in user owns an order with no payment method, address, discount, ship
 * Unavailable sections and rows are omitted.
 * No placeholder is presented as a known order fact.
 
+<!-- trace:case id=g10.store-order-detail.TC-vqf rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC6-1: Delivery estimate and safe tracking stay distinct
 
 **Classification:**
@@ -194,6 +200,7 @@ The signed-in user owns an undelivered order with an estimated delivery date and
 * <safe carrier tracking url> opens in a new browser context.
 * The carrier page has no access to the Grade10 page.
 
+<!-- trace:case id=g10.store-order-detail.TC-9r5 rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC7-1: Tracking data without a safe URL stays inactive
 
 **Classification:**
@@ -221,6 +228,7 @@ The signed-in user owns an order with a carrier and tracking number but no safe 
 
 * Track Order does not appear.
 
+<!-- trace:case id=g10.store-order-detail.TC-etu rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC8-1: First detail read remains loading
 
 **Classification:**
@@ -249,6 +257,7 @@ The owned-order read is delayed by network manipulation.
 * A loading state appears.
 * The page does not claim the order is missing.
 
+<!-- trace:case id=g10.store-order-detail.TC-azz rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC9-1: Failed detail read retries at the same address
 
 **Classification:**
@@ -277,6 +286,7 @@ The first owned-order read is made to fail and the next read is allowed to compl
 * A localized error and Retry action appear after the first read.
 * Step 2 reads the same order again without changing its address.
 
+<!-- trace:case id=g10.store-order-detail.TC-2si rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC10-1: Customer label keeps the Store route id
 
 Runs once per row of **Test data**.
@@ -315,6 +325,7 @@ The signed-in user owns an order with Store id <store order id> and the shop ord
 * The header shows <expected customer label> and invents no other order number.
 * The browser remains at `/profile/orders/<store order id>` in every run.
 
+<!-- trace:case id=g10.store-order-detail.TC-r2i rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC11-1: Zero settlement rows differ from absent rows
 
 **Classification:**
@@ -344,6 +355,7 @@ The signed-in user owns two otherwise equivalent paid orders. <stated-zero order
 * Step 2 omits Discount, Shipping, and Tax.
 * Each order's paid total remains the charge.
 
+<!-- trace:case id=g10.store-order-detail.TC-f0k rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC12-1: Partial shipping address draws no blanks
 
 **Classification:**
@@ -372,6 +384,7 @@ The signed-in user owns an order whose shipping address supplies address line 1,
 * The supplied address line 1, city, and country appear in postal order.
 * No blank recipient, placeholder line, or pickup-address claim appears.
 
+<!-- trace:case id=g10.store-order-detail.TC-zfl rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC13-1: Payment presentation preserves provider identity
 
 Runs once per row of **Test data**.
@@ -410,6 +423,7 @@ The signed-in user owns an order with the payment instrument named by **Test dat
 * The section matches <expected presentation>.
 * No card or wallet identity is inferred beyond the supplied instrument.
 
+<!-- trace:case id=g10.store-order-detail.TC-khp rev=1 covers=g10.store-order-detail.SC-d26,g10.store-order-detail.SC-a2p,g10.store-order-detail.SC-bjc,g10.store-order-detail.SC-0uc,g10.store-order-detail.SC-3mi,g10.store-order-detail.SC-6xb,g10.store-order-detail.SC-ik3,g10.store-order-detail.SC-7ci,g10.store-order-detail.SC-gbw,g10.store-order-detail.SC-cew,g10.store-order-detail.SC-ik7,g10.store-order-detail.SC-4bj,g10.store-order-detail.SC-xz6,g10.store-order-detail.SC-2ah,g10.store-order-detail.SC-4lu,g10.store-order-detail.SC-gzr -->
 ### grade10-site-store-order-detail-US1-TC14-1: Points credit stays distinct from Discount
 
 **Classification:**
@@ -448,6 +462,7 @@ The signed-in user owns an order with an order promo discount of 17700 minor uni
 **I want** sign-in to keep the order address I opened,
 **so that** I can continue to that order after proving my account.
 
+<!-- trace:case id=g10.store-order-detail.TC-bwy rev=2 covers=g10.store-order-detail.SC-en3 -->
 ### grade10-site-store-order-detail-US2-TC1-2: Sign-in preserves the requested order address
 
 **Classification:**

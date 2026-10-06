@@ -92,9 +92,14 @@ the card is in the winner's hands. The collector's half is
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:
   later product-media edits, reordering, or deletion do not change that lot.
-  A picked direct-upload file is previewed and stored only on confirm; an item
+  A direct-upload file joins the gallery when it is dropped or chosen; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
+- 🚧 **Uploading and ordering** - files an operator drops or chooses are stored
+  at once, several at a time, after the last item, with no preview to confirm;
+  a replacement stores the same way. The operator drags items into order, and
+  the new order holds as soon as it is dropped, except while inventory assets
+  wait for Save. Removing an item still asks first
 - **Cert-aware inventory media** - a listing for one Cert ID starts with
   untagged product media and media tagged to that Cert. Media tagged to another
   Cert stays in a separately labelled drawer until the operator deliberately
@@ -174,7 +179,7 @@ order.
 | Rule | Value |
 | --- | --- |
 | Payment window | **7 calendar days** from send |
-| 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen gives a fresh **48 hours**; after confirmation only an operator changes it |
+| 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen of unconfirmed Setup Overdue gives a fresh **48 hours**; after confirmation only an operator changes it |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
@@ -297,25 +302,36 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 On a paid invoice | Counts above the Order Total | Overpaid |
 | 🚧 On an invoice in any other state, which no card payment can start on | Counts toward nothing | Unexpected status |
 
+### Manual Payment Collection
+
 - 🚧 **Record payment** - one dialog for money received outside the card
   checkout: the amount, starting at the balance; bank transfer, cash or a
   described method; a reference, required for a bank transfer; the date
   received; 1 to 5 private proof files; and a reason. Never on a card invoice,
   which is reissued as bank transfer first
+
 - 🚧 **Partially Paid** — the deadline stops for good, and what will not be
   paid off is settled by hand outside Grade10
 
 | Payments so far | The next payment | What happens |
 | --- | --- | --- |
-| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid |
-| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; asked again on every later payment |
+| 🚧 Any | Less than the balance | Recorded; the order reads Partially Paid at the real remaining balance |
 | 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
-- 🚧 **Reopening the address form** — after the 48-hour deadline and before
-  send, on request and with a reason, giving a fresh 48 hours; repeatable,
-  changes no status, never on a cancelled order. Or the operator records an
-  address the winner gives by phone, leaving the form closed
+### Address Confirmation Window
+
+- 🚧 **Reopening the address form** — after the 48-hour deadline passed with no
+  confirmed address and before send, on request and with a reason, giving a
+  fresh 48 hours; repeatable, writes no status directly but its reopened facts
+  derive Awaiting Setup, never on a cancelled order. Or, only while the order
+  is unconfirmed Setup Overdue and its invoice is `not_issued`, the operator
+  records an address by phone, leaving
+  the form closed. Both
+  paths refuse once an address is confirmed, an invoice is sent, or cancellation
+  is requested or complete
+
+### Order Cancellation
 
 | Cancelling an order | Value |
 | --- | --- |
@@ -323,7 +339,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 What the dialog states | Before the operator confirms: the lot goes back to stock, no runner-up is offered it, the winner is emailed, a suspension stays, and the cancel cannot be undone |
 | The lot | Back to stock with no runner-up offer, its hammer price and bid history kept for audit and never carried into a new listing |
 | 🚧 Relisting it | The order links to its lot, which an operator relists by hand; nothing is relisted on its own |
-| 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, finance sends the money back outside Grade10, and the operator clears the flag once it has gone |
+| 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, Finance sends the money back outside Grade10, and an operator with payment processing clears the flag with a reason and any return reference once it has gone |
 
 - **Refund** — the winner asks Customer Service, outside Grade10; the
   operator sends the money by hand, in the Stripe dashboard or by bank
@@ -358,6 +374,9 @@ on winner, In transit, Closed and All, opening on Needs action.
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
 - **Failed payments** - every failed payment attempt stays in the invoice log
+
+### Transfer Contact Policy
+
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
@@ -507,7 +526,7 @@ settings.
 | Payment source | Decided | The order tells a card payment through Stripe from money an operator records. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |
-| Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
+| Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason, reopens only an unconfirmed Setup Overdue order before invoice send; a reopen gives a fresh 48 hours and its reopened window derives Awaiting Setup. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Premium minimum | 🚧 In flight | Under Auction because auction invoices use it; behind payment processing, `auction:payment`, because changing it changes the amount collected. Chosen over the settlement grant, which only `admin` holds, so finance could not keep the settings it owns. | Product and finance |
 | Payment processing fee | 🚧 In flight | The invoice's payment method decides. A card invoice's fee is Grade10's own: the Stripe card rule per currency, grossed up so Grade10 keeps the subtotal whole; with no rule for the currency, the invoice cannot be sent or reissued. A bank transfer invoice's fee is the operator's own; a sent invoice never re-prices, and Finance enters the card rule at rollout. Chosen over reading the provider's fees at send, which Stripe cannot answer - [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice). | Product and finance |

@@ -1,7 +1,7 @@
 ---
 name: reader
 description: Reads a draft as the reader of the product - the words, as they would say them - on a page's marks, a proposal, the decisions, the journeys, a design's copy and a task group that lands prose or a message catalog's words. The round dispatches it when a draft moves a page's words or words a reader sees.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -19,7 +19,12 @@ beside you.
 
 - **The draft** — the artifact as it stands on the change's branch
 - **What is before it** — the page sections the change links and the change's
-  earlier artifacts, in the schema's order
+  earlier artifacts, in the schema's order; on a task group, the plan's
+  opening and the group's own section, and of the journeys, requirements and
+  cases only the blocks the group cites
+- **Reading it** — every entry in one message: a path whole, a `path#La-Lb`
+  entry by `offset` a and `limit` b - a + 1. The rest of the change is open
+  where a finding turns on it
 - **Nothing else** — never another reader's findings, never a verifier's
   verdict, never the thread
 

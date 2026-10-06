@@ -11,6 +11,7 @@
 every vault case they hold,
 **so that** I can answer a customer about all of their cases from one place.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-mgb rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC1-1: A collector's name opens their page with who they are and every vault case
 
 **Classification:**
@@ -47,6 +48,7 @@ every vault case they hold,
 * The vault cases section lists all three cases, each with its reference, item, status, lane and last touched, newest-touched first.
 * Step 4 opens that case's own page.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-r6v rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC2-1: Every route to a collector's page lands on the same page
 
 Runs once per row of **Test data**.
@@ -88,6 +90,7 @@ Runs once per row of **Test data**.
 
 * The collector page for `<collector_A>` opens at `admin.grade10.com/vault/collectors/<collector_A user id>`.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-gdf rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC3-1: Each opening of a collector's page is on the audit chain
 
 **Classification:**
@@ -121,6 +124,7 @@ Runs once per row of **Test data**.
 * Steps 1 and 2 each leave a header-read entry and a cases-read entry naming the staff member, the time and `<collector_A user id>`.
 * No entry holds `<collector_A>`'s name or email.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-94p rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC4-1: The vault cases section pages and says whether there is more
 
 **Classification:**
@@ -158,6 +162,7 @@ Runs once per row of **Test data**.
 * Step 2 adds the one remaining case, oldest-touched, and says there is no more.
 * No case is listed twice.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-mkt rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC5-1: A collector holding no vault case reads as such
 
 **Classification:**
@@ -189,6 +194,7 @@ Runs once per row of **Test data**.
 * The header shows `<account_E>`'s short id and says it holds no vault case.
 * The vault cases section says the collector holds no vault case.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-3t7 rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC6-1: A name the account service cannot answer reads as unavailable and the cases still load
 
 **Classification:**
@@ -218,6 +224,7 @@ Runs once per row of **Test data**.
 * The header reads `<collector_A>`'s short id and "name unavailable", and no email.
 * The vault cases section lists both cases.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-gqm rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC7-1: A section that fails shows its own error and retry while the other stands
 
 Runs once per row of **Test data**.
@@ -259,6 +266,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the failing section's own error with a retry, and the standing section reads as the row says.
 * Step 2 loads the failing section; the standing section is unchanged.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-43i rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC8-1: An id no account answers to says so
 
 Runs once per row of **Test data**.
@@ -298,6 +306,7 @@ Runs once per row of **Test data**.
 * The page says nobody answers to that id.
 * No header name, email or case is shown.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-1cp rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC9-1: Only a vault read holder opens a collector's page
 
 Runs once per row of **Test data**.
@@ -336,6 +345,7 @@ Runs once per row of **Test data**.
 
 * The page matches the row's outcome.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-k4e rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC10-1: A case no account holds offers no collector page
 
 **Classification:**
@@ -366,6 +376,7 @@ Runs once per row of **Test data**.
 * The header carries no **The collector's cases** link.
 * Nothing on the page links a collector's page.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-leh rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC11-1: The header opens the queue narrowed to the collector
 
 Runs once per row of **Test data**.
@@ -407,6 +418,7 @@ Runs once per row of **Test data**.
 * The queue opens on its landing view, narrowed to `<collector_A>`.
 * Needs staff lists `<case_1>` and `<case_2>` and no other case.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-0og rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC12-1: Cases removed from the account or erased are not listed
 
 **Classification:**
@@ -435,6 +447,7 @@ Runs once per row of **Test data**.
 
 * The vault cases section lists `<case_1>` alone.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-c75 rev=1 covers=g10adm.console-collector-page.SC-80w,g10adm.console-collector-page.SC-hy5,g10adm.console-collector-page.SC-zvu,g10adm.console-collector-page.SC-liq,g10adm.console-collector-page.SC-q24,g10adm.console-collector-page.SC-2do,g10adm.console-collector-page.SC-ls5,g10adm.console-collector-page.SC-ybv,g10adm.console-collector-page.SC-m8a,g10adm.console-collector-page.SC-0o4,g10adm.console-collector-page.SC-bfq,g10adm.console-collector-page.SC-frx,g10adm.console-collector-page.SC-k7t,g10adm.console-collector-page.SC-9ct,g10adm.console-collector-page.SC-ogo -->
 ### grade10-admin-console-collector-page-US1-TC13-1: An account that never held a vault case is not named
 
 **Classification:**
@@ -475,6 +488,7 @@ Runs once per row of **Test data**.
 **so that** I can follow a borrower's money across their cases without being
 shown a name my role does not hold.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-s8o rev=1 covers=g10adm.console-collector-page.SC-4hc,g10adm.console-collector-page.SC-olt,g10adm.console-collector-page.SC-cf6,g10adm.console-collector-page.SC-zfs -->
 ### grade10-admin-console-collector-page-US2-TC1-1: A treasurer reads the collector's cases under their short id and no name
 
 **Classification:**
@@ -509,6 +523,7 @@ shown a name my role does not hold.
 * The vault cases section lists both cases with reference, item, status, lane and last touched.
 * Step 3's case page shows `tai.man@example.com` as its contact.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-ug6 rev=1 covers=g10adm.console-collector-page.SC-4hc,g10adm.console-collector-page.SC-olt,g10adm.console-collector-page.SC-cf6,g10adm.console-collector-page.SC-zfs -->
 ### grade10-admin-console-collector-page-US2-TC2-1: The header's name read refuses a caller without the identity grant
 
 **Classification:**
@@ -548,6 +563,7 @@ shown a name my role does not hold.
 or not,
 **so that** I can see everything they have with us in one place.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-0ku rev=1 covers=g10adm.console-collector-page.SC-tu2,g10adm.console-collector-page.SC-z9y,g10adm.console-collector-page.SC-21h -->
 ### grade10-admin-console-collector-page-US3-TC1-1: The collector page lists every live item the collector owns
 
 **Classification:**
@@ -582,6 +598,7 @@ or not,
 * `<item_3>` and `<item_20>` are not listed.
 * Step 3 opens the page of `<item_1>`.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-bbx rev=1 covers=g10adm.console-collector-page.SC-tu2,g10adm.console-collector-page.SC-z9y,g10adm.console-collector-page.SC-21h -->
 ### grade10-admin-console-collector-page-US3-TC2-1: A collector who owns no item reads none
 
 **Classification:**
@@ -611,6 +628,7 @@ or not,
 * The Items section says the collector owns no item.
 * The vault cases section lists `<collector_E>`'s case.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-p7a rev=1 covers=g10adm.console-collector-page.SC-tu2,g10adm.console-collector-page.SC-z9y,g10adm.console-collector-page.SC-21h -->
 ### grade10-admin-console-collector-page-US3-TC3-1: A treasurer reads the collector page without its items
 
 **Classification:**
@@ -640,6 +658,7 @@ or not,
 * The Items section is refused, naming `inventory:read`, and lists no item.
 * The header and the vault cases section still load.
 
+<!-- trace:case id=g10adm.console-collector-page.TC-99z rev=1 covers=g10adm.console-collector-page.SC-tu2,g10adm.console-collector-page.SC-z9y,g10adm.console-collector-page.SC-21h -->
 ### grade10-admin-console-collector-page-US3-TC4-1: The items section fails alone
 
 **Classification:**

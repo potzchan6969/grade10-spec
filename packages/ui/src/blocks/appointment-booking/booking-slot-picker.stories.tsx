@@ -42,7 +42,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Times in Hong Kong time")).toBeInTheDocument();
+    expect(canvas.getByText("Times in HKT")).toBeInTheDocument();
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
       "September",
     );

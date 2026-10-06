@@ -1,3 +1,5 @@
+# grade10-site/auction/account-record Specification
+
 ## Feature set
 
 - After a close
@@ -12,6 +14,7 @@ list, label its order state Partially Paid, show the winning lot and amount,
 and open the same Winner Order when the winner selects View order. It SHALL
 not relabel the row as a new bid standing.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-chv rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-62 - A partially paid Won row opens Winner Order
 **Serves:** grade10-site-auction-account-record-US-08 - Winner revisits a partially paid order
 

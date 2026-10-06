@@ -36,6 +36,7 @@ const allowedApps = new Set(["g10", "zzz", "g10adm", "zzzadm"]);
 const usage = `Usage:
   pnpm run trace -- init scenario --file <path> --target <exact heading line> --app <g10|zzz|g10adm|zzzadm> --product <slug> --capability <slug> [--dry-run]
   pnpm run trace -- init case --file <path> --target <exact case heading line> --app <g10|zzz|g10adm|zzzadm> --product <slug> --capability <slug> --covers <SC-ref[,SC-ref...]> [--dry-run]
+  pnpm run trace -- init batch --manifest <json-file> [--dry-run]
   pnpm run trace -- link --file <path> --target <exact test line> (--acceptance <TC-ref@revision> | --supports <SC-ref>) [--dry-run]
   pnpm run trace -- validate [--store-root <path>] [--app-root <Grade10 root>]
   pnpm run trace -- fold --change <id> [--store-root <path>]
@@ -200,6 +201,41 @@ function positiveRevision(value) {
   return /^\d+$/.test(value ?? "") && Number(value) > 0;
 }
 
+function caseHeadingRevision(heading) {
+  const match = /^\s*###\s+.*?TC\d+-(\d+)\s*:\s*\S/.exec(heading);
+  return match && positiveRevision(match[1]) ? match[1] : null;
+}
+
+function deprecatedCaseAt(lines, headingIndex) {
+  if (!/^\s*###\s+\S/.test(lines[headingIndex] ?? "")) return false;
+  for (let index = headingIndex + 1; index < lines.length; index += 1) {
+    if (/^\s*###\s+\S/.test(lines[index])) break;
+    if (
+      /^\s*\*\s+(?:\*\*)?Status:(?:\*\*)?\s+deprecated\s*$/i.test(lines[index])
+    )
+      return true;
+  }
+  return false;
+}
+
+function isSuiteFile(file) {
+  return [
+    "feature-tcs.md",
+    "domain-tcs.md",
+    "product-tcs.md",
+    "platform-tcs.md",
+  ].includes(file.split(sep).at(-1));
+}
+
+function caseHeadings(lines) {
+  const headings = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    const revision = caseHeadingRevision(lines[index]);
+    if (revision) headings.push({ index, revision });
+  }
+  return headings;
+}
+
 function normalizeSlug(value, option) {
   const normalized = value.toLowerCase();
   if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(normalized))
@@ -244,6 +280,11 @@ function nextSequence(storeRoot, app, product, capability, kind, target) {
       }
     }
   }
+  return allocateSequence(used, app, product, capability, kind, target);
+}
+
+function allocateSequence(used, app, product, capability, kind, target) {
+  const scope = `${product}-${capability}`;
   const seed = `${app}.${scope}.${kind}\0${target}`;
   const digest = createHash("sha256").update(seed).digest();
   const start = digest.readUInt32BE(0) % 36 ** 3;
@@ -251,7 +292,10 @@ function nextSequence(storeRoot, app, product, capability, kind, target) {
     const candidate = ((start + offset) % 36 ** 3)
       .toString(36)
       .padStart(3, "0");
-    if (!/^\d{3}$/.test(candidate) && !used.has(candidate)) return candidate;
+    if (!/^\d{3}$/.test(candidate) && !used.has(candidate)) {
+      used.add(candidate);
+      return candidate;
+    }
   }
   fail(`no trace sequence remains for ${app}.${scope}`);
 }
@@ -345,8 +389,15 @@ export function parseTraceGraph({
           scenarios.push(record);
         } else {
           const rawCovers = fields.covers ?? "";
-          const covers = rawCovers.split(",");
-          if (!covers.length)
+          const isDeprecated = deprecatedCaseAt(lines, index + 1);
+          const covers =
+            rawCovers === "none" && isDeprecated ? [] : rawCovers.split(",");
+          if (rawCovers === "none" && !isDeprecated)
+            issue(
+              "invalid-empty-coverage",
+              "covers=none is allowed only for a deprecated case",
+            );
+          if (rawCovers !== "none" && !covers.length)
             issue(
               "marker-shape",
               "case marker must cover at least one scenario id",
@@ -437,6 +488,44 @@ export function parseTraceGraph({
     }
   }
 
+  const suiteCaseCounts = { total: 0, marked: 0, unmarked: 0 };
+  for (const source of sources) {
+    if (source.kind !== "store" || !isSuiteFile(source.file)) continue;
+    const lines = readFileSync(source.file, "utf8").split(/\r?\n/);
+    for (const heading of caseHeadings(lines)) {
+      suiteCaseCounts.total += 1;
+      const marker = traceComment(lines[heading.index - 1] ?? "");
+      const matchingCase =
+        marker?.syntax === "html" && marker.body.startsWith("case ")
+          ? cases.find(
+              (record) =>
+                record.file === source.file && record.line === heading.index,
+            )
+          : null;
+      const issue = (code, message) =>
+        issues.push({
+          code,
+          message,
+          file: source.file,
+          line: heading.index + 1,
+        });
+      if (!matchingCase) {
+        suiteCaseCounts.unmarked += 1;
+        issue(
+          "missing-case-marker",
+          "every suite case must have an adjacent trace:case marker",
+        );
+        continue;
+      }
+      suiteCaseCounts.marked += 1;
+      if (matchingCase.revision !== heading.revision)
+        issue(
+          "case-revision-mismatch",
+          `case marker revision ${matchingCase.revision} must match heading revision ${heading.revision}`,
+        );
+    }
+  }
+
   const byScenario = groupBy(scenarios, (record) => record.id);
   const byCase = groupBy(cases, (record) => record.id);
   duplicateIssues(byScenario, "scenario", issues);
@@ -515,6 +604,7 @@ export function parseTraceGraph({
     scenarios,
     cases,
     tests,
+    suiteCaseCounts,
     issues,
     unlinked,
     links: validLinkCount(cases, tests, byScenario, byCase),
@@ -838,6 +928,7 @@ function summarize(graph) {
     `Trace validation: ${issues.length ? "FAIL" : "PASS"}`,
     `Scenarios: ${scenarios.length}`,
     `Cases: ${cases.length}`,
+    `Suite cases checked: ${graph.suiteCaseCounts.total} (unmarked: ${graph.suiteCaseCounts.unmarked})`,
     `Test markers: ${tests.length}`,
     `Links: ${graph.links}`,
     `Unlinked scenarios: ${unlinked.scenarios.length}`,
@@ -877,6 +968,9 @@ function reportObject(graph) {
     counts: {
       scenarios: graph.scenarios.length,
       cases: graph.cases.length,
+      suiteCases: graph.suiteCaseCounts.total,
+      markedSuiteCases: graph.suiteCaseCounts.marked,
+      unmarkedSuiteCases: graph.suiteCaseCounts.unmarked,
       tests: graph.tests.length,
       links: graph.links,
       unlinkedScenarios: graph.unlinked.scenarios.length,
@@ -1052,9 +1146,354 @@ function initialize(kind, values) {
     if (new Set(covers).size !== covers.length)
       fail("--covers must be a comma-separated list of distinct SC ids");
     validateReferencesForMutation(storeRoot, "scenario", covers);
-    marker = `trace:case id=${id} rev=1 covers=${covers.join(",")}`;
+    const revision = caseHeadingRevision(target) ?? "1";
+    marker = `trace:case id=${id} rev=${revision} covers=${covers.join(",")}`;
   }
   insertMarker({ file, target, marker, syntax: "html", dryRun: values.dryRun });
+}
+
+function initializeBatch(values) {
+  const storeRoot = resolve(values.storeRoot ?? scriptRoot);
+  const manifestPath = resolve(requireOption(values, "manifest"));
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+  if (!Array.isArray(manifest.records) || manifest.records.length === 0)
+    fail("batch manifest must contain a non-empty records array");
+
+  const records = manifest.records.map((input, index) => {
+    if (!input || typeof input !== "object" || Array.isArray(input))
+      fail(`batch record ${index + 1} must be an object`);
+    const key = input.key;
+    if (typeof key !== "string" || !key.trim())
+      fail(`batch record ${index + 1} requires a non-empty key`);
+    if (!["scenario", "case"].includes(input.kind))
+      fail(`batch record ${key} kind must be scenario or case`);
+    const file = resolve(storeRoot, requireOption(input, "file"));
+    checkStoreMarkdownFile(file, storeRoot);
+    const target = requireOption(input, "target");
+    const app = normalizeApp(requireOption(input, "app"), "--app");
+    const product = normalizeSlug(requireOption(input, "product"), "--product");
+    const capability = normalizeSlug(
+      requireOption(input, "capability"),
+      "--capability",
+    );
+    const lines = readFileSync(file, "utf8").split(/\r?\n/);
+    const indexInFile = exactTargetIndex(lines, target, file);
+    let markerIndex = null;
+    let existingId = input.existingId;
+    if (input.replaceCovers === true) {
+      if (input.kind !== "case" || indexInFile === 0)
+        fail(
+          `batch record ${key} can replace coverage only on an existing case marker`,
+        );
+      const adjacent = traceComment(lines[indexInFile - 1]);
+      const parsedMarker =
+        adjacent?.syntax === "html" && /^case\s+([\s\S]+)$/.exec(adjacent.body);
+      const existingFields = parsedMarker
+        ? attributes(parsedMarker[1], () => {})
+        : null;
+      if (!existingFields?.id || !existingFields.rev || !existingFields.covers)
+        fail(
+          `batch record ${key} does not have an adjacent complete case marker`,
+        );
+      if (input.existingId && existingFields.id !== input.existingId)
+        fail(
+          `batch record ${key} existing id does not match the adjacent marker`,
+        );
+      existingId = existingFields.id;
+      if (existingFields.rev !== caseHeadingRevision(target))
+        fail(`batch record ${key} existing revision differs from its heading`);
+      markerIndex = indexInFile - 1;
+    } else {
+      ensureNoAdjacentTrace(lines, indexInFile);
+    }
+    if (input.kind === "scenario" && !/^\s*####\s+Scenario:\s+\S/.test(target))
+      fail(`batch scenario ${key} target must be a scenario heading`);
+    if (input.kind === "case" && !/^\s*###\s+\S/.test(target))
+      fail(`batch case ${key} target must be a case heading`);
+    const revision =
+      input.kind === "case"
+        ? caseHeadingRevision(target)
+        : String(input.revision ?? "1");
+    if (input.kind === "case" && revision === null)
+      fail(
+        `batch case ${key} target must end with a positive TC<n>-<v> revision`,
+      );
+    if (!positiveRevision(revision))
+      fail(`batch record ${key} has an invalid revision: ${revision}`);
+    const covers = input.kind === "case" ? input.covers : [];
+    if (input.kind === "case" && !Array.isArray(covers))
+      fail(`batch case ${key} requires a covers array`);
+    if (
+      input.kind === "case" &&
+      covers.length === 0 &&
+      !deprecatedCaseAt(lines, indexInFile)
+    )
+      fail(
+        `batch case ${key} may use empty coverage only on a deprecated case`,
+      );
+    return {
+      key,
+      kind: input.kind,
+      file,
+      target,
+      indexInFile,
+      app,
+      product,
+      capability,
+      revision,
+      covers,
+      mirrorKey: input.mirrorKey ?? key,
+      existingId,
+      markerIndex,
+    };
+  });
+
+  const recordByKey = new Map();
+  const targetByLocation = new Map();
+  for (const record of records) {
+    if (recordByKey.has(record.key))
+      fail(`batch manifest repeats key ${record.key}`);
+    recordByKey.set(record.key, record);
+    const location = `${record.file}\0${record.indexInFile}`;
+    if (targetByLocation.has(location))
+      fail(
+        `batch records ${targetByLocation.get(location)} and ${record.key} target the same heading in ${record.file}`,
+      );
+    targetByLocation.set(location, record.key);
+  }
+
+  const mirrorGroups = groupBy(records, (record) => record.mirrorKey);
+  for (const [mirrorKey, group] of mirrorGroups) {
+    const first = group[0];
+    for (const item of group) {
+      if (
+        item.kind !== first.kind ||
+        item.app !== first.app ||
+        item.product !== first.product ||
+        item.capability !== first.capability ||
+        item.target !== first.target
+      )
+        fail(`batch mirror group ${mirrorKey} mixes targets, scopes, or kinds`);
+      if (item.kind === "case" && item.revision !== first.revision)
+        fail(`batch mirror group ${mirrorKey} has differing case revisions`);
+    }
+  }
+
+  const usedByScope = new Map();
+  const markdownRoots = [
+    resolve(storeRoot, "openspec/specs"),
+    resolve(storeRoot, "openspec/changes"),
+  ];
+  for (const file of markdownRoots.flatMap((root) =>
+    walk(root, (path) => extname(path) === ".md"),
+  )) {
+    const lines = readFileSync(file, "utf8").split(/\r?\n/);
+    for (const line of lines) {
+      const comment = traceComment(line);
+      if (comment?.syntax !== "html") continue;
+      const id = /(?:^|\s)id=([^\s]+)/.exec(comment.body)?.[1];
+      const parsed = parseReference(id);
+      if (!parsed) continue;
+      const key = `${parsed.app}.${parsed.scope}`;
+      if (!usedByScope.has(key)) usedByScope.set(key, new Set());
+      usedByScope.get(key).add(parsed.sequence);
+    }
+  }
+
+  const idByMirror = new Map();
+  for (const [mirrorKey, group] of [...mirrorGroups].sort(([a], [b]) =>
+    a.localeCompare(b),
+  )) {
+    const first = [...group].sort((a, b) =>
+      `${a.file}\0${a.target}`.localeCompare(`${b.file}\0${b.target}`),
+    )[0];
+    const scopeKey = `${first.app}.${first.product}-${first.capability}`;
+    const explicitIds = new Set(
+      group.map((item) => item.existingId).filter(Boolean),
+    );
+    if (explicitIds.size > 1)
+      fail(`batch mirror group ${mirrorKey} names more than one existing id`);
+    if (explicitIds.size === 1) {
+      const [existingId] = explicitIds;
+      const expectedKind = first.kind === "scenario" ? "SC" : "TC";
+      const parsedId = parseReference(existingId);
+      if (
+        !parsedId ||
+        parsedId.kind !== expectedKind ||
+        parsedId.app !== first.app ||
+        parsedId.scope !== `${first.product}-${first.capability}`
+      )
+        fail(
+          `batch mirror group ${mirrorKey} existing id has the wrong scope or kind`,
+        );
+      idByMirror.set(mirrorKey, parsedId.canonical);
+      continue;
+    }
+    if (!usedByScope.has(scopeKey)) usedByScope.set(scopeKey, new Set());
+    const sequence = allocateSequence(
+      usedByScope.get(scopeKey),
+      first.app,
+      first.product,
+      first.capability,
+      first.kind === "scenario" ? "SC" : "TC",
+      first.target,
+    );
+    idByMirror.set(
+      mirrorKey,
+      formatReference(
+        first.app,
+        first.product,
+        first.kind === "scenario" ? "SC" : "TC",
+        first.capability,
+        sequence,
+      ),
+    );
+  }
+
+  const graph = parseTraceGraph({ storeRoot });
+  const knownScenarioIds = new Set(graph.scenarios.map((record) => record.id));
+  for (const [mirrorKey, group] of mirrorGroups) {
+    if (!group.some((record) => record.existingId)) continue;
+    const recordsOfKind =
+      group[0].kind === "scenario" ? graph.scenarios : graph.cases;
+    if (
+      !recordsOfKind.some((record) => record.id === idByMirror.get(mirrorKey))
+    )
+      fail(
+        `batch mirror group ${mirrorKey} names an id not already in the store`,
+      );
+  }
+  const mirrorById = new Map();
+  for (const [mirrorKey, id] of idByMirror) {
+    if (mirrorById.has(id))
+      fail(
+        `batch mirror groups ${mirrorById.get(id)} and ${mirrorKey} claim the same existing id ${id}`,
+      );
+    mirrorById.set(id, mirrorKey);
+  }
+  for (const [mirrorKey, group] of mirrorGroups) {
+    if (group[0].kind === "scenario")
+      knownScenarioIds.add(idByMirror.get(mirrorKey));
+  }
+  const generatedCases = [];
+  for (const record of records) {
+    if (record.kind !== "case") continue;
+    const covers = record.covers.map((reference) => {
+      if (typeof reference !== "string" || !reference)
+        fail(`batch case ${record.key} has an invalid covers entry`);
+      if (recordByKey.has(reference)) {
+        const scenario = recordByKey.get(reference);
+        if (scenario.kind !== "scenario")
+          fail(
+            `batch case ${record.key} covers non-scenario record ${reference}`,
+          );
+        return idByMirror.get(scenario.mirrorKey);
+      }
+      return normalizeInputReference(reference, "SC", "batch covers");
+    });
+    if (new Set(covers).size !== covers.length)
+      fail(`batch case ${record.key} repeats a covered scenario`);
+    for (const id of covers) {
+      if (!knownScenarioIds.has(id))
+        fail(`batch case ${record.key} covers unknown scenario ${id}`);
+    }
+    generatedCases.push({ record, covers });
+  }
+
+  const coversByMirror = groupBy(
+    generatedCases,
+    ({ record }) => record.mirrorKey,
+  );
+  for (const [mirrorKey, group] of coversByMirror) {
+    const expected = group[0].covers.join(",");
+    if (group.some(({ covers }) => covers.join(",") !== expected))
+      fail(`batch mirror group ${mirrorKey} has different coverage`);
+  }
+
+  const plannedScopeByFile = new Map();
+  for (const record of records) {
+    const scope = `${record.app}.${record.product}-${record.capability}`;
+    const current = plannedScopeByFile.get(record.file);
+    if (current && current !== scope)
+      fail(`batch records in ${record.file} mix marker scopes`);
+    plannedScopeByFile.set(record.file, scope);
+  }
+  for (const [file, expectedScope] of plannedScopeByFile) {
+    const lines = readFileSync(file, "utf8").split(/\r?\n/);
+    for (let index = 0; index < lines.length; index += 1) {
+      const comment = traceComment(lines[index]);
+      if (comment?.syntax !== "html") continue;
+      const id = /(?:^|\s)id=([^\s]+)/.exec(comment.body)?.[1];
+      const parsed = parseReference(id);
+      if (!parsed) continue;
+      const scope = `${parsed.app}.${parsed.scope}`;
+      if (scope !== expectedScope)
+        fail(
+          `batch markers in ${file} would mix scopes ${expectedScope} and ${scope}`,
+        );
+    }
+  }
+
+  const updates = new Map();
+  for (const record of records) {
+    if (!updates.has(record.file)) {
+      const text = readFileSync(record.file, "utf8");
+      updates.set(record.file, {
+        oldText: text,
+        eol: text.includes("\r\n") ? "\r\n" : "\n",
+        lines: text.split(/\r?\n/),
+      });
+    }
+  }
+  const coversByKey = new Map(
+    generatedCases.map(({ record, covers }) => [record.key, covers]),
+  );
+  for (const record of [...records].sort((a, b) =>
+    a.file === b.file
+      ? (b.markerIndex ?? b.indexInFile) - (a.markerIndex ?? a.indexInFile)
+      : a.file.localeCompare(b.file),
+  )) {
+    const id = idByMirror.get(record.mirrorKey);
+    const marker =
+      record.kind === "scenario"
+        ? `trace:scenario id=${id} rev=${record.revision}`
+        : `trace:case id=${id} rev=${record.revision} covers=${coversByKey.get(record.key).join(",") || "none"}`;
+    const fileUpdate = updates.get(record.file);
+    if (record.markerIndex === null) {
+      fileUpdate.lines.splice(
+        record.indexInFile,
+        0,
+        markerLineForMarkdown(marker, record.target),
+      );
+    } else {
+      fileUpdate.lines.splice(
+        record.markerIndex,
+        1,
+        markerLineForMarkdown(marker, record.target),
+      );
+    }
+  }
+
+  for (const [file, update] of updates) {
+    const nextText = update.lines.join(update.eol);
+    console.log(`${values.dryRun ? "DRY RUN" : "Updated"}: ${file}`);
+    for (const record of records.filter((item) => item.file === file)) {
+      const type = record.kind === "scenario" ? "SC" : "TC";
+      const prefix = record.markerIndex === null ? "+" : "~";
+      console.log(
+        `${prefix} ${type} ${idByMirror.get(record.mirrorKey)} for ${record.target}`,
+      );
+    }
+    update.nextText = nextText;
+  }
+  if (!values.dryRun) {
+    for (const [file, update] of updates) {
+      if (readFileSync(file, "utf8") !== update.oldText)
+        fail(`file changed while preparing markers: ${file}`);
+    }
+    for (const [file, update] of updates)
+      writeFileSync(file, update.nextText, "utf8");
+  }
 }
 
 function linkTest(values) {
@@ -1104,8 +1543,8 @@ function parseCommand(argv) {
   if (command === "init") {
     kind = args[0];
     args = args.slice(1);
-    if (!["scenario", "case"].includes(kind))
-      fail("init requires scenario or case");
+    if (!["scenario", "case", "batch"].includes(kind))
+      fail("init requires scenario, case, or batch");
   }
   const normalizedArgs = args.map((arg) => {
     if (!arg.startsWith("--")) return arg;
@@ -1130,6 +1569,7 @@ function parseCommand(argv) {
       file: { type: "string" },
       help: { type: "boolean", short: "h", default: false },
       json: { type: "boolean", default: false },
+      manifest: { type: "string" },
       product: { type: "string" },
       storeRoot: { type: "string" },
       supports: { type: "string" },
@@ -1152,6 +1592,10 @@ export function runCli(argv = process.argv.slice(2)) {
     }
     const { values } = parsed;
     if (parsed.command === "init") {
+      if (parsed.kind === "batch") {
+        initializeBatch(values);
+        return 0;
+      }
       initialize(parsed.kind, values);
       return 0;
     }

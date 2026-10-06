@@ -1,3 +1,5 @@
+# grade10-site/auction/listing-page Specification
+
 ## Feature set
 
 - Public identifier
@@ -50,6 +52,7 @@ the public page does not make the code a separate field or an alternate route.
 - **THEN** the canonical address is `/auction/listings/charizard-psa-10-lk423`
 - **AND** the response exposes no labelled listing-code or payment-reference field
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-oq9 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-21 - A shared lot preview uses the canonical address
 **Serves:** grade10-site-auction-listing-page-US-10 - Collector shares the lot by its title and canonical URL
 
@@ -66,6 +69,7 @@ the public page does not make the code a separate field or an alternate route.
   data over the network
 - **THEN** no response body carries a separate listing-code or payment-reference field
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-51n rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-23 - Support resolves a lot from its title alone
 **Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a lot and is identified by title, not a code neither of them has
 
@@ -103,6 +107,7 @@ the public page does not make the code a separate field or an alternate route.
   lot
 - **AND** the site's not-found screen is shown, not that lot's page
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-dc3 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-27 - A public listing keeps the code out of labelled fields once an order exists
 **Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a won lot without a separate code field on the listing page
 
@@ -138,6 +143,7 @@ once published. A called-off lot's canonical address SHALL continue to serve
 its public listing page after it is removed from browse and search, as
 `grade10-site/auction/lot-status` defines.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-s88 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
@@ -146,6 +152,7 @@ its public listing page after it is removed from browse and search, as
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's Page not found screen
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-jj1 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-05 - A lot the catalogue publishes answers
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
@@ -153,6 +160,7 @@ its public listing page after it is removed from browse and search, as
 - **WHEN** its address is fetched
 - **THEN** the response has status 200 and carries that lot's page
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-c13 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-19 - A hidden lot's address shows Page not found
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 

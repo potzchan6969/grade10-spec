@@ -25,6 +25,6 @@ shipment button. No carrier name in the header.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Shipped with tracking | Tracking number link in Order Progress | `winner-order-SC-20` |
-| Delivered with tracking | Same tracking number link | `winner-order-SC-221` |
+| Shipped with tracking | Tracking number link in Order Progress | `winner-order-SC-251` |
+| Delivered with tracking | Same tracking number link | `winner-order-SC-252` |
 | No tracking yet | Header title only | **Out of suite:** Preparing Shipment before dispatch |

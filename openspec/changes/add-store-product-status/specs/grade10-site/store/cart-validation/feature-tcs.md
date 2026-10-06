@@ -11,6 +11,7 @@ the store, or changed price,
 **so that** I fix my cart before I try to pay rather than being refused at
 checkout for something the store already knew.
 
+<!-- trace:case id=g10.store-cart-validation.TC-00a rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC1-1: Cart re-reads every line as it opens
 
 **Classification:**
@@ -44,6 +45,7 @@ network manipulation.
   checkout button is disabled.
 * After the read each line shows its current availability and price.
 
+<!-- trace:case id=g10.store-cart-validation.TC-eu7 rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC2-1: Browse cache does not answer for a cart line
 
 **Classification:**
@@ -74,6 +76,7 @@ the browse cache.
 
 * Line reads out of stock.
 
+<!-- trace:case id=g10.store-cart-validation.TC-jms rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC3-1: Line above the remaining count is reduced and marked
 
 **Classification:**
@@ -109,6 +112,7 @@ The cart holds 5 of <a variant>; the shop then sets its inventory count to 2.
 * Line quantity is 2.
 * Line is marked adjusted and says the quantity changed.
 
+<!-- trace:case id=g10.store-cart-validation.TC-yir rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC4-1: Sold-out line stays for the collector to remove
 
 **Classification:**
@@ -140,6 +144,7 @@ stops selling it when out of stock.
   reduced to zero.
 * Step 3 removes the line.
 
+<!-- trace:case id=g10.store-cart-validation.TC-v2q rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC5-1: Line is never grown and a fillable line is untouched
 
 **Classification:**
@@ -176,6 +181,7 @@ counted at 30>.
 * Both lines still request 2.
 * Neither line carries an adjustment or a warning.
 
+<!-- trace:case id=g10.store-cart-validation.TC-71q rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC6-1: Withdrawn product is told apart from sold out
 
 **Classification:**
@@ -207,6 +213,7 @@ sale.
 * The unpublished product's line reads unavailable, not out of stock.
 * The two markings differ.
 
+<!-- trace:case id=g10.store-cart-validation.TC-sr7 rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC7-1: Changed price is shown and disclosed, up or down
 
 **Classification:**
@@ -245,6 +252,7 @@ changes each variant's price to the current value.
 * Each line says the price changed, the rise as plainly as the fall.
 * Total is computed from the current prices only.
 
+<!-- trace:case id=g10.store-cart-validation.TC-9nh rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC8-1: Disclosed price carries to checkout without a second notice
 
 **Classification:**
@@ -274,6 +282,7 @@ disclosed; the shop's price is unchanged since.
 * Line is confirmed at 12300 minor units HKD.
 * No price change is reported again.
 
+<!-- trace:case id=g10.store-cart-validation.TC-hjs rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC9-1: Failed cart review leaves lines unchecked and can retry
 
 **Classification:**
@@ -309,6 +318,7 @@ returns the current line answers on the next request.
 * After Retry, the returned availability and prices are shown and checkout is
   available when every line is confirmed.
 
+<!-- trace:case id=g10.store-cart-validation.TC-tc5 rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
 ### grade10-site-store-cart-validation-US1-TC10-1: Cart cannot be loaded before its lines are known
 
 **Classification:**
@@ -352,6 +362,7 @@ every line that moved,
 **so that** I reach the shop's payment page only with a cart it can fill, and
 when I cannot, I know exactly what to fix.
 
+<!-- trace:case id=g10.store-cart-validation.TC-nrx rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
 ### grade10-site-store-cart-validation-US2-TC1-1: Checkout re-reads every line before an order exists
 
 **Classification:**
@@ -380,6 +391,7 @@ The cart holds two lines the shop offers, each below its inventory count.
 * A read of every line goes out before any checkout order is created.
 * The browser then goes to <the shop's checkout url>.
 
+<!-- trace:case id=g10.store-cart-validation.TC-ckp rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
 ### grade10-site-store-cart-validation-US2-TC2-1: One moved line blocks the handoff until it is resolved
 
 **Classification:**
@@ -416,6 +428,7 @@ stock.
 * Step 4 creates the checkout order from the two remaining lines and the
   browser goes to <the shop's checkout url>.
 
+<!-- trace:case id=g10.store-cart-validation.TC-pwd rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
 ### grade10-site-store-cart-validation-US2-TC3-1: Every contradicted line is named at once
 
 **Classification:**
@@ -447,6 +460,7 @@ price.
 * Both lines are identified, one as unavailable and one as repriced, in the
   same pass.
 
+<!-- trace:case id=g10.store-cart-validation.TC-emi rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
 ### grade10-site-store-cart-validation-US2-TC4-1: Open-time read does not carry a later checkout
 
 **Classification:**
@@ -477,6 +491,7 @@ stock, and the cart is not reopened.
 * No checkout order is created.
 * That line is identified as out of stock.
 
+<!-- trace:case id=g10.store-cart-validation.TC-1qb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
 ### grade10-site-store-cart-validation-US2-TC5-1: Supplied price decides nothing
 
 **Classification:**
@@ -513,6 +528,7 @@ shop's current price.
 * The amount is 12300 minor units HKD, the store's own re-read price.
 * The request's price is not used.
 
+<!-- trace:case id=g10.store-cart-validation.TC-cxb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
 ### grade10-site-store-cart-validation-US2-TC6-1: Resolving the moved line permits the handoff
 
 **Classification:**
@@ -552,6 +568,7 @@ to me with the line named,
 **so that** a cart that passed the store's read and still failed is mine to
 resolve, not a dead end.
 
+<!-- trace:case id=g10.store-cart-validation.TC-70d rev=1 covers=g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
 ### grade10-site-store-cart-validation-US3-TC1-1: Shop refuses a line the store's read had confirmed
 
 **Classification:**
@@ -582,6 +599,7 @@ is mocked to refuse one of them as no longer sellable.
 * The message is not a generic failure and does not blame the collector.
 * The other line is still in the cart, untouched.
 
+<!-- trace:case id=g10.store-cart-validation.TC-44h rev=1 covers=g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
 ### grade10-site-store-cart-validation-US3-TC2-1: Shop fills a line short
 
 **Classification:**
@@ -618,6 +636,7 @@ endpoint> is mocked to accept only 2 of it.
 * No checkout order is created.
 * The message names the line and says the shop would fill 2.
 
+<!-- trace:case id=g10.store-cart-validation.TC-87k rev=1 covers=g10.store-cart-validation.SC-wfj,g10.store-cart-validation.SC-14e,g10.store-cart-validation.SC-3zl -->
 ### grade10-site-store-cart-validation-US3-TC3-1: Read cannot be completed
 
 **Classification:**

@@ -7,7 +7,7 @@ This repository is the versioned source of truth for product requirements and th
 - Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, primitives, and conventions before proposing a new structure.
 - Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style, [`docs/governance/writing.md`](docs/governance/writing.md): headings as plain Title Case labels, values first, items leading with the key term in bold, the reader's words, short sentences with no flourish, decided facts flat and present-tense, ❓ or `TBC` on anything unconfirmed, 🚧 only on what is confirmed and being built. Copy the page its Copy table names for the kind of page you are writing. Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. A case that proves a rule, a state that dresses an outcome and a mechanism belong to the suite, the design record and the architecture doc.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
-- Keep changes reviewable: one product decision or component capability per pull request where practical.
+- Keep changes reviewable: one product decision or component capability per push where practical.
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
 
 ## Sources of truth
@@ -111,21 +111,20 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
-- `pnpm check:manual` after a page, a change, or a suite changes; CI runs it on every push and refuses a change with an unmarked page, application work with no tech design, a capability with no journeys file, a 🚧 line no change delivers, and an id cited in backticks that the store issues nowhere. It warns (`dense`) on a page past the style's budget, tabled under Enforcement in `docs/governance/writing.md`.
+- `pnpm push:main` runs `pnpm check:manual`, `pnpm run validate:changes` and `pnpm run tcs:validate` on what it sends, as CI does; run one alone while drafting. `check:manual` refuses an unmarked page, application work with no tech design, a capability with no journeys file, a 🚧 line no change delivers, and a backticked id the store issues nowhere; it warns (`dense`) past the budget in `docs/governance/writing.md`.
 - `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
 - `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
 - `pnpm run test:openspec` after anything under `scripts/openspec/` changes.
 - `pnpm --dir tools/relay test` after anything under `tools/relay/` changes.
-- `pnpm run validate:changes <change-id>` after a change's artifacts change; CI runs it over every change.
-- `pnpm run tcs:validate` after a suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.
 - `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.
 - `pnpm run lint` for repository formatting and static checks.
 - `pnpm run typecheck` after any TypeScript change.
 
-## Pull Requests and Commits
+## Pushes, Pull Requests and Commits
 
+- Push with `pnpm push:main`, not a pull request: it rebases, runs the checks the paths owe and lands planning text (`openspec/changes`, `openspec/specs`, `docs/`) on `main`. Anything else goes through a pull request set to merge once green. Settle a conflict as `/spec-push` says.
 - PR labels: use one of `feature`, `bug`, `ci`, `agent`, `enhancement`, `maintenance`, or `documentation`, when labels are available.
 - Commit subjects use the Conventional Commits format. Do not add issue or PR prefixes; repository tooling adds them.
 - Keep commits atomic. Split unrelated implementation, documentation, refactoring, and generated build output into separate commits when practical.

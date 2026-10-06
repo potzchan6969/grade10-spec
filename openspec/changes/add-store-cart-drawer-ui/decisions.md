@@ -39,6 +39,8 @@ reconciliation).
 | Q9 | Does the drawer create checkout itself once it can? | Yes - `onCheckout` creates the checkout session directly and redirects to Shopify's hosted invoice, completing this change's own deferred non-goal now that the checkout PRD and `add-shopify-checkout-integration`'s Q1 narrow to one drawer-side read plus the server's existing transactional recheck. Corrected `grade10-site-store-cart-drawer-SC-27`'s text to match (it previously said "the drawer creates no checkout", written before this decision) and reworded "Checkout navigation" to "activating Checkout" in the points-persistence requirement above it, for the same reason | Continuing to navigate to `/checkout`, which this change's own tech design named as a placeholder pending exactly this decision |
 | Q10 | Where does the HKD 120,000 verification gate live once `/checkout` is removed? | Inline in the drawer, blocking Checkout and linking to the account page exactly as `CheckoutPage`'s `VerifyPanel` does today; the identity check itself stays on the account page | Redirecting to the account page instead of showing the gate inline - rejected as an extra screen. Letting the server reject with no proactive gate - rejected; it drops the existing "verify before you try to pay" guidance |
 | Q11 | Is the bar checked against gross goods or the total after code and points, and does the gate replace Checkout or sit disabled beside it? | Gross goods, from the existing checkout resolution's `goodsMinor` field; the gate replaces the Checkout action's area with `VerifyPanel`'s message and link, exactly as it replaces `CheckoutPage`'s pay section today - both unchanged existing behaviour, not new choices | A new bar calculation, or showing Checkout disabled alongside the message - neither needed; the blind test-case pass in `move-checkout-into-cart-drawer` raised both as open questions and they resolved to facts already true in the code |
+| Q12 | Does the drawer still apply a typed or picked code? | Yes - typed, picked and removed codes cut the total, as the Cart Promo Code section already says. This change neither adds nor removes that editing | Closing promo to display-only (the leftover review-backed facts table) |
+| Q13 | Does the gate wait for checkout creation to return verify? | No - the drawer shows the gate and creates no session. The identity check still runs only on the account page | Asking Shopify first and dressing its verification outcome as the gate |
 
 ## Raised
 
@@ -51,3 +53,5 @@ reconciliation).
 
 | grade10-site/store/cart-drawer | Is the bar checked against gross goods or the total after code and points? | Q11 |
 | grade10-site/store/cart-drawer | Does the verification gate replace the Checkout action or sit disabled beside it? | Q11 |
+| grade10-site/store/cart-drawer | Does the drawer still apply a typed or picked code? | Q12 |
+| grade10-site/store/cart-drawer | Does the gate wait for checkout creation to return verify? | Q13 |

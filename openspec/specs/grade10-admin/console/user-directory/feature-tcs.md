@@ -298,6 +298,7 @@ existing account when the email is already taken,
 **so that** I can stand up elevated access before the person signs in without
 leaving the access desk or using Override.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-2zn rev=1 covers=g10adm.console-user-directory.SC-8z1,g10adm.console-user-directory.SC-v25,g10adm.console-user-directory.SC-dz7,g10adm.console-user-directory.SC-z2a,g10adm.console-user-directory.SC-dcl,g10adm.console-user-directory.SC-xr8 -->
 ### grade10-admin-console-user-directory-US4-TC1-1: Create succeeds and opens the new panel
 
 **Classification:**
@@ -339,6 +340,7 @@ Signed in as admin(holds `user:list`, `user:create`, and `user:set-role`). No Au
 * Step 4 creates the account.
 * Step 5 opens that account's panel beside the list, addressed like picking a row.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-pp4 rev=1 covers=g10adm.console-user-directory.SC-8z1,g10adm.console-user-directory.SC-v25,g10adm.console-user-directory.SC-dz7,g10adm.console-user-directory.SC-z2a,g10adm.console-user-directory.SC-dcl,g10adm.console-user-directory.SC-xr8 -->
 ### grade10-admin-console-user-directory-US4-TC2-1: Create is not offered without user:create
 
 **Classification:**
@@ -366,6 +368,7 @@ Signed in as admin(holds `user:list` and `user:set-role`, not `user:create`).
 
 * Create is not offered.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-p4u rev=1 covers=g10adm.console-user-directory.SC-8z1,g10adm.console-user-directory.SC-v25,g10adm.console-user-directory.SC-dz7,g10adm.console-user-directory.SC-z2a,g10adm.console-user-directory.SC-dcl,g10adm.console-user-directory.SC-xr8 -->
 ### grade10-admin-console-user-directory-US4-TC3-1: Duplicate email refuses on the form and opens the existing account
 
 **Classification:**
@@ -403,6 +406,7 @@ Signed in as admin(holds `user:list`, `user:create`, and `user:set-role`). Auth 
 * Step 4 opens <existing account>'s panel.
 * No second Auth row holds <taken email>.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-7d6 rev=1 covers=g10adm.console-user-directory.SC-8z1,g10adm.console-user-directory.SC-v25,g10adm.console-user-directory.SC-dz7,g10adm.console-user-directory.SC-z2a,g10adm.console-user-directory.SC-dcl,g10adm.console-user-directory.SC-xr8 -->
 ### grade10-admin-console-user-directory-US4-TC4-1: Create with only user:create offers plain user
 
 **Classification:**
@@ -443,6 +447,7 @@ Signed in as admin(holds `user:list` and `user:create`, not `user:set-role`). No
 * The confirmation has no email note and no admin note.
 * Step 4 succeeds and opens that account's panel with roles `user` only.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-poj rev=1 covers=g10adm.console-user-directory.SC-8z1,g10adm.console-user-directory.SC-v25,g10adm.console-user-directory.SC-dz7,g10adm.console-user-directory.SC-z2a,g10adm.console-user-directory.SC-dcl,g10adm.console-user-directory.SC-xr8 -->
 ### grade10-admin-console-user-directory-US4-TC5-1: Create review notes when the role is admin, and combines with an email check
 
 **Classification:**

@@ -1,3 +1,5 @@
+# grade10-site/auction/winner-order Specification
+
 ## Feature set
 
 - Bank transfer
@@ -26,8 +28,9 @@ and three tabs with FPS selected by default. Each tab SHALL show that rail’s
 fields as labelled detail rows without copy controls, then the invoice's bank
 reference as a labelled detail row without a copy control, and a warning that
 the winner must enter the reference in the bank app's memo or remarks field.
-Live account details remain Finance TBC; the preview uses Grade10 Finance
-Limited and HSBC Hong Kong samples.
+Live account details and the FPS QR come from Finance-owned configuration.
+Grade10 snapshots those approved instructions on the issued bank-transfer
+invoice; the preview uses Grade10 Finance Limited and HSBC Hong Kong samples.
 
 | Way to pay | Details shown |
 | --- | --- |
@@ -44,6 +47,7 @@ payment proof once".
 invoice and SHALL refuse a card payment attempted against one. A winner who
 wants to pay by card asks Grade10, and an operator reissues the invoice.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-bmm rev=1 -->
 #### Scenario: winner-order-SC-95 - A bank transfer invoice shows three ways and the reference
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -53,6 +57,7 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **AND** the bank reference is shown at the bottom of the selected tab
 - **AND** no card Pay control is offered
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-dvp rev=1 -->
 #### Scenario: winner-order-SC-96 - A card payment on a bank transfer invoice is refused
 **Serves:** Bank transfer - card Pay is not offered on a bank transfer invoice
 
@@ -61,6 +66,7 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **THEN** Grade10 refuses it
 - **AND** the invoice is still `pending`
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-zbt rev=1 -->
 #### Scenario: winner-order-SC-180 - Order summary offers Submit Payment Proof and View Bank Details
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -71,6 +77,7 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **AND** View Bank Details opens the View Bank Details dialog
 - **AND** Submit Payment Proof opens the Submit Payment Proof dialog
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-zx9 rev=1 -->
 #### Scenario: winner-order-SC-181 - View Bank Details opens on FPS
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -79,6 +86,7 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **THEN** the FPS tab is selected
 - **AND** FPS ID, account name and an FPS QR are shown
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-tf6 rev=1 -->
 #### Scenario: winner-order-SC-182 - HK Local tab shows branch code
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -86,6 +94,7 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **WHEN** the winner selects HK Local
 - **THEN** bank name, bank code, branch code and the full account number including bank and branch code are shown
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-oii rev=1 -->
 #### Scenario: winner-order-SC-183 - SWIFT tab shows OUR note after payment reference
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -95,6 +104,7 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **AND** the payment reference and memo warning are shown
 - **AND** a note after the payment reference tells the winner to choose OUR for transfer fees so Grade10 receives the full order total
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-fm9 rev=1 -->
 #### Scenario: winner-order-SC-184 - Submit Payment Proof is proof-only
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 

@@ -24,6 +24,7 @@ existing callback-presence and other availability guards, without invoking any
 action automatically. The shared component SHALL NOT quote, persist or decide
 when the consumer's operation finishes.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-9yi rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-37 - Pending tender prevents a second action
 **Serves:** shared-ui-store-cart-US-18 - Shopper waits for the current choice to finish
 
@@ -32,6 +33,7 @@ when the consumer's operation finishes.
 - **THEN** points and promo inputs and all tender actions and Checkout are disabled
 - **AND** attempted activation invokes no action callback and preserves shown figures and entered values
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-nty rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-38 - Clearing pending restores existing availability
 **Serves:** shared-ui-store-cart-US-18 - Shopper continues after the consumer answers
 
@@ -40,6 +42,7 @@ when the consumer's operation finishes.
 - **THEN** actions resume only where their existing callbacks and availability guards permit them
 - **AND** no callback is invoked automatically
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-x24 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-39 - Existing consumers keep their behavior
 **Serves:** shared-ui-store-cart-US-18 - Shopper uses a drawer whose consumer supplies no pending state
 

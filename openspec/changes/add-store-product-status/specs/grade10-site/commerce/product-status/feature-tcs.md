@@ -10,6 +10,7 @@
 bought, and the product page and cart to report the same internal sale item,
 **so that** the availability I see before adding matches the item in my cart.
 
+<!-- trace:case id=g10.commerce-product-status.TC-c3l rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC1-2: Offered item keeps its availability across browse and cart
 
 **Classification:**
@@ -44,6 +45,7 @@ bought, and the product page and cart to report the same internal sale item,
 * The product page reads the internal sale item as available.
 * The cart line reads the same sale item as available.
 
+<!-- trace:case id=g10.commerce-product-status.TC-wjo rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC2-2: Item Shopify no longer offers is out of stock and keeps its price
 
 **Classification:**
@@ -77,6 +79,7 @@ bought, and the product page and cart to report the same internal sale item,
 * The product page keeps the item's price and reads it as out of stock.
 * No usable add control is offered for the item.
 
+<!-- trace:case id=g10.commerce-product-status.TC-01e rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC3-1: Shop still offering at zero inventory stays available
 
 **Classification:**
@@ -107,6 +110,7 @@ bought, and the product page and cart to report the same internal sale item,
 * The tile and product page read the item as available.
 * The item has the same available treatment as one with positive inventory.
 
+<!-- trace:case id=g10.commerce-product-status.TC-gpj rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC4-1: Offered item with no inventory count stays available
 
 **Classification:**
@@ -137,6 +141,7 @@ bought, and the product page and cart to report the same internal sale item,
 * The tile and product page read the item as available.
 * Neither surface derives an out-of-stock answer from the missing count.
 
+<!-- trace:case id=g10.commerce-product-status.TC-0ay rev=1 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC5-1: Browse surfaces show no count or scarcity cue
 
 **Classification:**
@@ -168,6 +173,7 @@ bought, and the product page and cart to report the same internal sale item,
 * Both product pages show only their item's price and availability.
 * The two inventory counts are not shown as product labels.
 
+<!-- trace:case id=g10.commerce-product-status.TC-vpr rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC6-2: Listing rolls up variants while the page keeps one item
 
 **Classification:**
@@ -199,6 +205,7 @@ bought, and the product page and cart to report the same internal sale item,
 * The page shows availability only for its one internal sale item.
 * The page offers no shopper-facing variant choice or variant label.
 
+<!-- trace:case id=g10.commerce-product-status.TC-f39 rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC7-2: Tile is out of stock only when every variant is unavailable
 
 **Classification:**
@@ -232,6 +239,7 @@ bought, and the product page and cart to report the same internal sale item,
 * No usable add control is offered.
 * No shopper-facing variant choice or label appears.
 
+<!-- trace:case id=g10.commerce-product-status.TC-gsh rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC8-2: Cart reports the same item after Shopify stops offering it
 
 **Classification:**
@@ -263,6 +271,7 @@ bought, and the product page and cart to report the same internal sale item,
 * The tile, page and cart line read the same internal item as out of stock.
 * The product page keeps the item's price and offers no usable add control.
 
+<!-- trace:case id=g10.commerce-product-status.TC-rza rev=2 covers=g10.commerce-product-status.SC-zdl,g10.commerce-product-status.SC-dvw,g10.commerce-product-status.SC-jwx,g10.commerce-product-status.SC-w6q,g10.commerce-product-status.SC-my5,g10.commerce-product-status.SC-oaw,g10.commerce-product-status.SC-h7u,g10.commerce-product-status.SC-uei,g10.commerce-product-status.SC-ns0,g10.commerce-product-status.SC-5rs,g10.commerce-product-status.SC-g9e -->
 ### grade10-site-commerce-product-status-US1-TC9-2: Unpublished product is absent and its address refuses
 
 **Classification:**
@@ -303,6 +312,7 @@ for, and how much,
 **so that** a request the shop cannot meet is a stated answer I can act on
 rather than a refusal at checkout.
 
+<!-- trace:case id=g10.commerce-product-status.TC-kxe rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz -->
 ### grade10-site-commerce-product-status-US2-TC1-2: Request at a positive count is fillable
 
 Runs once per row of **Test data**.
@@ -342,6 +352,7 @@ Runs once per row of **Test data**.
 * The cart reports the requested quantity as fillable.
 * The line is not marked adjusted or out of stock.
 
+<!-- trace:case id=g10.commerce-product-status.TC-huo rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz -->
 ### grade10-site-commerce-product-status-US2-TC2-2: Request above a positive count is fillable in part
 
 Runs once per row of **Test data**.
@@ -382,6 +393,7 @@ Runs once per row of **Test data**.
 * The answer names the count Shopify can fill.
 * The browse control did not cap the requested quantity.
 
+<!-- trace:case id=g10.commerce-product-status.TC-m97 rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz -->
 ### grade10-site-commerce-product-status-US2-TC3-2: Request for an unavailable item is not fillable
 
 **Classification:**
@@ -412,6 +424,7 @@ Runs once per row of **Test data**.
 * The line is not fillable.
 * No positive fill quantity is offered.
 
+<!-- trace:case id=g10.commerce-product-status.TC-oia rev=2 covers=g10.commerce-product-status.SC-csg,g10.commerce-product-status.SC-fhg,g10.commerce-product-status.SC-l64,g10.commerce-product-status.SC-jj1,g10.commerce-product-status.SC-2mz -->
 ### grade10-site-commerce-product-status-US2-TC4-2: Zero or missing count does not bound an offered item
 
 Runs once per row of **Test data**.

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import {
   cpSync,
+  mkdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -41,6 +42,525 @@ function copyFoldFixture() {
   cpSync(foldStoreFixture, storeRoot, { recursive: true });
   return { root, storeRoot };
 }
+
+function createSuiteFixture({
+  marker = true,
+  revision = 1,
+  headingRevision = 1,
+} = {}) {
+  const root = mkdtempSync(resolve(tmpdir(), "trace-suite-test-"));
+  const storeRoot = resolve(root, "store");
+  const capability = resolve(
+    storeRoot,
+    "openspec/specs/grade10-site/store/product-listing",
+  );
+  mkdirSync(capability, { recursive: true });
+  writeFileSync(
+    resolve(capability, "spec.md"),
+    [
+      "## Requirements",
+      "",
+      "<!-- trace:scenario id=g10.store-product-listing.SC-001 rev=1 -->",
+      "#### Scenario: A collector opens a listing",
+      "**Serves:** grade10-site-store-product-listing-US-01 - Collector opens a listing",
+      "",
+    ].join("\n"),
+  );
+  const markerLine = marker
+    ? `<!-- trace:case id=g10.store-product-listing.TC-001 rev=${revision} covers=g10.store-product-listing.SC-001 -->\n`
+    : "";
+  writeFileSync(
+    resolve(capability, "feature-tcs.md"),
+    [
+      "# Store Product Listing Test Cases",
+      "",
+      `${markerLine}### grade10-site-store-product-listing-US1-TC1-${headingRevision}: Listing opens`,
+      "",
+      "* **Trace:** grade10-site-store-product-listing-US-01",
+      "",
+    ].join("\n"),
+  );
+  return { root, storeRoot, caseFile: resolve(capability, "feature-tcs.md") };
+}
+
+test("case initialization copies the heading version into the marker revision", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture({
+    marker: false,
+    headingRevision: 4,
+  });
+  try {
+    const target =
+      "### grade10-site-store-product-listing-US1-TC1-4: Listing opens";
+    const result = runCli([
+      "init",
+      "case",
+      "--file",
+      caseFile,
+      "--target",
+      target,
+      "--app",
+      "g10",
+      "--product",
+      "store",
+      "--capability",
+      "product-listing",
+      "--covers",
+      "g10.store-product-listing.SC-001",
+      "--store-root",
+      storeRoot,
+      "--dry-run",
+    ]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /trace:case id=.* rev=4 covers=/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("batch initialization allocates stable ids for mirrored cases and planned scenarios", () => {
+  const root = mkdtempSync(resolve(tmpdir(), "trace-batch-test-"));
+  const storeRoot = resolve(root, "store");
+  const durable = resolve(
+    storeRoot,
+    "openspec/specs/grade10-site/store/product-listing",
+  );
+  const active = resolve(
+    storeRoot,
+    "openspec/changes/refresh-listing/specs/grade10-site/store/product-listing",
+  );
+  mkdirSync(durable, { recursive: true });
+  mkdirSync(active, { recursive: true });
+  const spec = resolve(durable, "spec.md");
+  const durableSuite = resolve(durable, "feature-tcs.md");
+  const activeSpec = resolve(active, "spec.md");
+  const activeSuite = resolve(active, "feature-tcs.md");
+  const scenarioHeading = "#### Scenario: Collector sees a listing";
+  const caseHeading = "### listing-US1-TC1-1: Listing shows the current price";
+  writeFileSync(
+    spec,
+    `${scenarioHeading}\n**Serves:** listing-US-01 - Listing opens\n`,
+  );
+  writeFileSync(
+    activeSpec,
+    `${scenarioHeading}\n**Serves:** listing-US-01 - Listing opens\n`,
+  );
+  writeFileSync(durableSuite, `${caseHeading}\n`);
+  writeFileSync(activeSuite, `${caseHeading}\n`);
+  const manifestPath = resolve(root, "plan.json");
+  writeFileSync(
+    manifestPath,
+    JSON.stringify(
+      {
+        records: [
+          {
+            key: "listing-scenario",
+            kind: "scenario",
+            file: "openspec/specs/grade10-site/store/product-listing/spec.md",
+            target: scenarioHeading,
+            app: "g10",
+            product: "store",
+            capability: "product-listing",
+            mirrorKey: "listing-scenario-mirror",
+          },
+          {
+            key: "durable-case",
+            kind: "case",
+            file: "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
+            target: caseHeading,
+            app: "g10",
+            product: "store",
+            capability: "product-listing",
+            mirrorKey: "listing-case-mirror",
+            covers: ["listing-scenario"],
+          },
+          {
+            key: "active-case",
+            kind: "case",
+            file: "openspec/changes/refresh-listing/specs/grade10-site/store/product-listing/feature-tcs.md",
+            target: caseHeading,
+            app: "g10",
+            product: "store",
+            capability: "product-listing",
+            mirrorKey: "listing-case-mirror",
+            covers: ["listing-scenario"],
+          },
+        ],
+      },
+      null,
+      2,
+    ),
+  );
+  try {
+    const dryRun = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+      "--dry-run",
+    ]);
+    assert.equal(dryRun.status, 0, dryRun.stderr || dryRun.stdout);
+    assert.doesNotMatch(readFileSync(spec, "utf8"), /trace:scenario/);
+
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    const scenarioId = /trace:scenario id=([^\s]+)/.exec(
+      readFileSync(spec, "utf8"),
+    )?.[1];
+    const durableMarker = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(
+      readFileSync(durableSuite, "utf8"),
+    );
+    const activeMarker = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(
+      readFileSync(activeSuite, "utf8"),
+    );
+    assert.ok(scenarioId);
+    assert.equal(durableMarker?.[1], activeMarker?.[1]);
+    assert.equal(durableMarker?.[2], scenarioId);
+    assert.equal(activeMarker?.[2], scenarioId);
+
+    const revisedScenarioHeading =
+      "#### Scenario: Price includes the current bid";
+    writeFileSync(
+      spec,
+      `${readFileSync(spec, "utf8").trimEnd()}\n${revisedScenarioHeading}\n**Serves:** listing-US-01 - Listing opens\n`,
+    );
+    const updateManifestPath = resolve(root, "update-plan.json");
+    writeFileSync(
+      updateManifestPath,
+      JSON.stringify(
+        {
+          records: [
+            {
+              key: "revised-listing-scenario",
+              kind: "scenario",
+              file: "openspec/specs/grade10-site/store/product-listing/spec.md",
+              target: revisedScenarioHeading,
+              app: "g10",
+              product: "store",
+              capability: "product-listing",
+            },
+            ...[
+              [
+                "durable-case",
+                "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
+              ],
+              [
+                "active-case",
+                "openspec/changes/refresh-listing/specs/grade10-site/store/product-listing/feature-tcs.md",
+              ],
+            ].map(([key, file]) => ({
+              key: `${key}-update`,
+              kind: "case",
+              file,
+              target: caseHeading,
+              app: "g10",
+              product: "store",
+              capability: "product-listing",
+              mirrorKey: "listing-case-update",
+              existingId: durableMarker?.[1],
+              replaceCovers: true,
+              covers: ["revised-listing-scenario"],
+            })),
+          ],
+        },
+        null,
+        2,
+      ),
+    );
+    const update = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      updateManifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(update.status, 0, update.stderr || update.stdout);
+    const revisedScenarioIds = [
+      ...readFileSync(spec, "utf8").matchAll(/trace:scenario id=([^\s]+)/g),
+    ];
+    const revisedScenarioId = revisedScenarioIds.at(-1)?.[1];
+    const revisedDurable = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(
+      readFileSync(durableSuite, "utf8"),
+    );
+    const revisedActive = /trace:case id=([^\s]+) rev=1 covers=([^\s]+)/.exec(
+      readFileSync(activeSuite, "utf8"),
+    );
+    assert.equal(revisedDurable?.[1], durableMarker?.[1]);
+    assert.equal(revisedActive?.[1], activeMarker?.[1]);
+    assert.equal(revisedDurable?.[2], revisedScenarioId);
+    assert.equal(revisedActive?.[2], revisedScenarioId);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("batch rejects two records targeting the same heading before writing", () => {
+  const { root, storeRoot } = createSuiteFixture();
+  const spec = resolve(
+    storeRoot,
+    "openspec/specs/grade10-site/store/product-listing/spec.md",
+  );
+  const target = "#### Scenario: A second listing scenario";
+  const original = `${readFileSync(spec, "utf8")}${target}\n`;
+  writeFileSync(spec, original);
+  const manifestPath = resolve(root, "duplicate-targets.json");
+  writeFileSync(
+    manifestPath,
+    JSON.stringify({
+      records: ["first", "second"].map((key) => ({
+        key,
+        kind: "scenario",
+        file: "openspec/specs/grade10-site/store/product-listing/spec.md",
+        target,
+        app: "g10",
+        product: "store",
+        capability: "product-listing",
+      })),
+    }),
+  );
+  try {
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /same heading/);
+    assert.equal(readFileSync(spec, "utf8"), original);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("batch rejects an existing id claimed by separate mirror groups", () => {
+  const { root, storeRoot } = createSuiteFixture();
+  const target = "#### Scenario: A collector opens a listing";
+  const id = "g10.store-product-listing.SC-001";
+  const copies = ["first-copy", "second-copy"].map((name) => {
+    const file = `openspec/changes/${name}/specs/grade10-site/store/product-listing/spec.md`;
+    const path = resolve(storeRoot, file);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, `${target}\n`);
+    return { file, path };
+  });
+  const manifestPath = resolve(root, "reused-id.json");
+  writeFileSync(
+    manifestPath,
+    JSON.stringify({
+      records: copies.map(({ file }, index) => ({
+        key: `copy-${index}`,
+        kind: "scenario",
+        file,
+        target,
+        app: "g10",
+        product: "store",
+        capability: "product-listing",
+        existingId: id,
+      })),
+    }),
+  );
+  try {
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /same existing id/);
+    for (const copy of copies)
+      assert.equal(readFileSync(copy.path, "utf8"), `${target}\n`);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("batch verifies an existing id supplied by any mirror record", () => {
+  const { root, storeRoot } = createSuiteFixture();
+  const target = "#### Scenario: A collector opens a listing";
+  const files = ["first-copy", "second-copy"].map((name) => {
+    const file = `openspec/changes/${name}/specs/grade10-site/store/product-listing/spec.md`;
+    const path = resolve(storeRoot, file);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, `${target}\n`);
+    return file;
+  });
+  const manifestPath = resolve(root, "unknown-existing-id.json");
+  writeFileSync(
+    manifestPath,
+    JSON.stringify({
+      records: files.map((file, index) => ({
+        key: `copy-${index}`,
+        mirrorKey: "shared-scenario",
+        kind: "scenario",
+        file,
+        target,
+        app: "g10",
+        product: "store",
+        capability: "product-listing",
+        ...(index === 1
+          ? { existingId: "g10.store-product-listing.SC-abc" }
+          : {}),
+      })),
+    }),
+  );
+  try {
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /id not already in the store/);
+    for (const file of files)
+      assert.equal(
+        readFileSync(resolve(storeRoot, file), "utf8"),
+        `${target}\n`,
+      );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("batch can clear coverage only on a deprecated existing case", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture();
+  try {
+    const contents = readFileSync(caseFile, "utf8").replace(
+      "* **Trace:** grade10-site-store-product-listing-US-01",
+      "* **Trace:** grade10-site-store-product-listing-US-01\n* **Status:** deprecated",
+    );
+    writeFileSync(caseFile, contents);
+    const target =
+      "### grade10-site-store-product-listing-US1-TC1-1: Listing opens";
+    const manifestPath = resolve(root, "retire-coverage.json");
+    writeFileSync(
+      manifestPath,
+      JSON.stringify({
+        records: [
+          {
+            key: "retired-case",
+            kind: "case",
+            file: "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
+            target,
+            app: "g10",
+            product: "store",
+            capability: "product-listing",
+            replaceCovers: true,
+            covers: [],
+          },
+        ],
+      }),
+    );
+    const result = runCli([
+      "init",
+      "batch",
+      "--manifest",
+      manifestPath,
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(readFileSync(caseFile, "utf8"), /covers=none/);
+    const validation = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(validation.status, 0, validation.stderr || validation.stdout);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate rejects covers=none on a non-deprecated case", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture();
+  try {
+    writeFileSync(
+      caseFile,
+      readFileSync(caseFile, "utf8").replace(
+        "covers=g10.store-product-listing.SC-001",
+        "covers=none",
+      ),
+    );
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(
+      result.stdout,
+      /covers=none is allowed only for a deprecated case/,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate requires a marker on every suite case and reports the inventory", () => {
+  const { root, storeRoot } = createSuiteFixture({ marker: false });
+  try {
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /Suite cases checked: 1 \(unmarked: 1\)/);
+    assert.match(result.stdout, /\[missing-case-marker\]/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate applies the universal marker rule to every suite level", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture({ marker: false });
+  try {
+    const contents = readFileSync(caseFile, "utf8");
+    const suites = [
+      resolve(storeRoot, "openspec/specs/grade10-site/store/domain-tcs.md"),
+      resolve(storeRoot, "openspec/specs/grade10-site/product-tcs.md"),
+      resolve(storeRoot, "openspec/specs/platform-tcs.md"),
+    ];
+    for (const suite of suites) {
+      mkdirSync(dirname(suite), { recursive: true });
+      writeFileSync(suite, contents);
+    }
+
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /Suite cases checked: 4 \(unmarked: 4\)/);
+    assert.equal(
+      (result.stdout.match(/\[missing-case-marker\]/g) ?? []).length,
+      4,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate requires the case marker revision to match the heading version", () => {
+  const { root, storeRoot } = createSuiteFixture({
+    revision: 2,
+    headingRevision: 1,
+  });
+  try {
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /\[case-revision-mismatch\]/);
+    assert.match(
+      result.stdout,
+      /marker revision 2 must match heading revision 1/,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
 
 test("validate and report build a graph from fixtures without a registry", () => {
   const validate = runCli([

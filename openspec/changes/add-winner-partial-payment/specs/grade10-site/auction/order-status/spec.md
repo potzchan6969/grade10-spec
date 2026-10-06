@@ -1,3 +1,5 @@
+# grade10-site/auction/order-status Specification
+
 ## Feature set
 
 - Writable primitives
@@ -18,6 +20,7 @@ not carry a payment deadline. The status SHALL remain until the operator
 closes the invoice as Paid, including after confirming an overpayment, or
 records a refund.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-4ke rev=1 -->
 #### Scenario: auction-status-SC-49 - A recorded payment derives Partially Paid
 **Serves:** Derived order status - a recorded payment derives Partially Paid
 
@@ -25,6 +28,7 @@ records a refund.
 - **WHEN** an order-status surface reads it
 - **THEN** the derived status is Partially Paid
 
+<!-- trace:scenario id=g10.auction-order-status.SC-e1r rev=1 -->
 #### Scenario: auction-status-SC-50 - Partially Paid has no self-service deadline
 **Serves:** Guards - Partially Paid has no self-service deadline
 

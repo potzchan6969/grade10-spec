@@ -1,31 +1,40 @@
 name: OpenSpec changes
 
-# What a push to main moved, and who it moved it to.
+# What reached the hosted manual, and who it moved it to.
 #
-# One post to the planning channel naming each change and the stage it moved
-# into, and one direct message per hand a change has reached — the same
-# derivation the board reads, run over the push's base and its head.
+# One post to the planning channel naming each change that crossed one of five
+# milestones — proposed, accepted, implementation claimed, implementation
+# complete, archived — and one direct message per hand a change has reached:
+# the same derivation the board reads, run over the last deployed head and this
+# one. A push that crosses no milestone posts nothing in the channel.
 #
-# The job commits nothing: `contents: read` is the whole of it, and the only
-# token it holds is the Slack bot's. `thread:` and `reviewed:` are written by
-# the round, not here.
+# It runs when the Manual workflow finishes on `main`, and only when it
+# succeeded: that one job deploys the manual and the OpenSpec viewer under
+# /openspec/, so every link a message carries opens on a page that already
+# shows what it says. A deploy that failed, or was cancelled by a newer push,
+# tells nobody; the next deploy that succeeds reads from the last one that did,
+# so nothing it carried is lost.
+#
+# The job commits nothing: `contents: read` and `actions: read` — the second
+# to find the last deployed head — are the whole of it, and the only token it
+# holds beyond the workflow's own is the Slack bot's. `thread:` and `reviewed:`
+# are written by the round, not here.
 
 on:
-  push:
+  workflow_run:
+    workflows: [Manual]
+    types: [completed]
     branches: [main]
-    paths:
-      - "openspec/changes/**"
-      - "openspec/specs/**"
-      # A page landing can put an artifact behind, and the hand of that
-      # artifact is told about it.
-      - "docs/prds/**"
-      - ".github/workflows/proposal-notify.yml"
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
-  group: openspec-notify-${{ github.sha }}
+  # One at a time, oldest first: each run reads from the head the last
+  # successful deploy carried, so two side by side would tell one range twice.
+  group: openspec-notify
+  cancel-in-progress: false
 
 env:
   NODE_VERSION: 24.14.1
@@ -37,6 +46,11 @@ env:
 
 jobs:
   notify:
+    # Both deployed, or nothing is told.
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
@@ -44,11 +58,13 @@ jobs:
       # messages are — never a second diff of the same push.
       matrix: ${{ steps.changes.outputs.matrix }}
     steps:
-      # Full history: a push can carry more than one commit, so the diff starts
-      # at the branch's previous commit rather than HEAD's parent.
+      # The deployed head, with full history: a deploy can carry more than one
+      # push, so the diff starts at the head the last successful deploy
+      # carried rather than HEAD's parent.
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
 
       - name: Install pnpm
@@ -109,6 +125,32 @@ jobs:
             exit 1
           fi
 
+      # The head the Manual workflow last deployed before this one: the newest
+      # successful run on `main` older than the run that woke this one. The
+      # newest 100 runs are read unfiltered and the conclusion is checked
+      # here: the API's own `status=success` filter answered a run two weeks
+      # old while a successful one an hour old sat beside it. A head that is
+      # not an ancestor, or no success among the 100, reads from the head's
+      # parent rather than from somewhere nobody chose.
+      - name: Find the last deployed head
+        id: range
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW_ID: ${{ github.event.workflow_run.workflow_id }}
+          RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          base="$(gh api \
+            "repos/$REPOSITORY/actions/workflows/$WORKFLOW_ID/runs?branch=main&per_page=100" \
+            --jq "[.workflow_runs[] | select(.conclusion == \"success\" and .run_number < $RUN_NUMBER)] | sort_by(.run_number) | last | .head_sha // empty")"
+          if [ -z "$base" ] || ! git merge-base --is-ancestor "$base" "$HEAD_SHA"; then
+            base="$(git rev-parse "$HEAD_SHA^")"
+            echo "::notice::No earlier successful deploy on this history; reading from $base."
+          fi
+          echo "Reading $base..$HEAD_SHA ($(git rev-list --count "$base..$HEAD_SHA") commits)."
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+
       # No `restore-keys`: a prefix fallback would drag the previous push's
       # keys in and silence a stage re-entered after a revert (decisions Q26).
       - name: Restore the keys this run has sent
@@ -118,18 +160,18 @@ jobs:
           key: notify-sent-${{ github.run_id }}
 
       # One run: the channel post and the direct messages are one delivery,
-      # the post keyed by the push's own head so a re-run does not post it
+      # the post keyed by the deployed head so a re-run does not post it
       # twice either. `NOTIFY_DMS` turns the direct messages off without
       # touching the post.
-      - name: Find what this push moved and tell it
+      - name: Find what this deploy carried and tell it
         id: changes
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_WORKSPACE_URL: ${{ vars.SLACK_WORKSPACE_URL }}
           TCS_SHEET_URL: ${{ vars.TCS_SHEET_URL }}
           CHANNEL: ${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}
-          BEFORE: ${{ github.event.before }}
-          HEAD_SHA: ${{ github.sha }}
+          BEFORE: ${{ steps.range.outputs.base }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           touch "$SENT_KEYS"
           node scripts/openspec/changed-changes.mjs \
@@ -142,7 +184,7 @@ jobs:
             --sent-keys "$SENT_KEYS" \
             --manual-url "$MANUAL_URL" \
             --openspec-url "$OPENSPEC_VIEWER_URL" \
-            --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
+            --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/$HEAD_SHA" \
             --github-output "$GITHUB_OUTPUT"
 
       # Whatever happened above: what went out is what went out, and the next
@@ -192,7 +234,7 @@ jobs:
           AGENT_WAKE_URL: ${{ vars.AGENT_WAKE_URL }}
           AGENT_WAKE_TOKEN: ${{ secrets.AGENT_WAKE_TOKEN }}
           CHANGE: ${{ matrix.id }}
-          HEAD_SHA: ${{ github.sha }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           filter="$(cat <<'JQ'
           { change: $change, reason: "landing", head: $head }
@@ -221,7 +263,7 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           CHANNEL: ${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}
           CHANGE: ${{ matrix.id }}
-          HEAD_SHA: ${{ github.sha }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           filter="$(cat <<'JQ'
           {

@@ -33,15 +33,16 @@ migration with a repair report rather than guessing a deadline.
 - Order-status and Winner Order contracts expose the deadline, refusal and
   operator-contact facts; no winner-facing reopen mutation is added.
 
-Reopen requires the existing operator grant, a reason and a non-terminal order;
-each reopen gets a fresh 48-hour deadline and an invoice-log entry carrying the
-named actor, timestamp and reason. Phone-recorded address changes get a matching
-address-recorded invoice-log entry with actor, timestamp and reason. The same
-transaction boundary prevents a late winner write, operator recording, reopen,
-or invoice send from racing into an inconsistent address snapshot.
+Reopen requires the existing operator grant, a reason, an unconfirmed Setup
+Overdue order and no sent invoice; each reopen gets a fresh 48-hour deadline and
+an invoice-log entry carrying the named actor, timestamp and reason.
+Phone-recorded address changes get a matching address-recorded invoice-log entry
+with actor, timestamp and reason. The same transaction boundary prevents a late
+winner write, operator recording, reopen, or invoice send from racing into an
+inconsistent address snapshot.
 
-The queue Overdue mark reads the derived deadline condition for Awaiting Setup
-only. Preparing Invoice has no queue Overdue mark. Its payment Overdue timer and
-deadline are created only when invoice send commits and the invoice is visible
-to the winner; before then the invoice remains `not_issued` and no payment timer
-exists.
+An unconfirmed order derives Setup Overdue from the elapsed deadline condition;
+an operator reopen restores Awaiting Setup from its new deadline. Preparing
+Invoice never derives Setup Overdue. Its payment Overdue timer and deadline are
+created only when invoice send commits and the invoice is visible to the winner;
+before then the invoice remains `not_issued` and no payment timer exists.

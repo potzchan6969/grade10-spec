@@ -1,6 +1,6 @@
 ---
 name: spec-push
-description: "Land a spec branch on main - rebase onto origin/main, resolve conflicts by reading the OpenSpec change, validate, force-push, and merge the PR once it is settled and the author says go. Invoke with /spec-push. Only when invoked."
+description: "Land planning commits on main with `pnpm push:main` - rebase onto origin/main, settle conflicts by reading the OpenSpec change, run the fast gate, push. Invoke with /spec-push. Only when invoked."
 disable-model-invocation: true
 ---
 
@@ -8,72 +8,66 @@ disable-model-invocation: true
 
 Kept until the team has adopted the line commands (`Q84` of
 `run-a-round-on-every-artifact`). `/workflow-land` lands one artifact on
-`main` as a fast-forward on the hand's word, with no pull request.
+`main` on the hand's word; this lands whatever planning commits sit ahead of
+`origin/main`.
 
-Rebase this branch onto `main`, settle what conflicts by reading the change
-rather than the hunk, and merge the PR once nothing is outstanding.
+Landing is the handoff. The application repository reads this store at its
+`main`, so a change sitting on a branch reaches nobody: `pnpm plan board` there
+flags it and `pnpm plan claim` refuses it.
 
-Merging here is the handoff, not a formality. The application repository reads
-this store at its `main`, so a change sitting on a branch reaches nobody:
-`pnpm plan board` there flags it and `pnpm plan claim` refuses it. Until this
-runs, the work cannot be picked up.
-
-**Done when:** the PR is merged into `main`, or the merge is the only thing
-left and the author has been asked for it. **Stop when:** something is
-unsettled — a conflict the change itself cannot decide, a red check, or a
-review still asking for something.
+**Done when:** the commits are on `main`, or their pull request is open and set
+to merge once green. **Stop when:** a conflict the change itself
+cannot decide, or a check that fails for a reason outside the change.
 
 ## Chain
 
-May follow `/commit` and `/pr-push` in the same message. Invoked alone it
-expects a pushed branch with an open PR; no PR yet → run `/pr-push` first
-rather than opening one here.
-
-Invoking this skill is the authorisation to rebase published work and
-force-push **this** branch. It authorises nothing on any other branch, never
-`main` directly, and not the merge itself — that is asked for at the end.
+May follow `/commit` in the same message. Invoking this skill is the
+authorisation to rebase the commits ahead of `origin/main` and push them to
+`main`. It authorises nothing on a branch someone else pushed to.
 
 ## Gather
 
 Run each as its own command:
 
 - `git status`
-- `git branch --show-current`
-- `git fetch origin`
 - `git log --oneline origin/main..HEAD`
-- `git log --oneline HEAD..origin/main`
 - `git log --format='%an' origin/main..HEAD | sort -u`
-- `gh pr list --head <branch> --state open --json url,isDraft,mergeable,reviewDecision`
 
 Stop before touching anything when:
 
-- **The tree is dirty.** Commit through `/commit`, or stash. A rebase either
-  refuses or carries the work into a conflict nobody meant to resolve.
-- **HEAD is detached, or the branch is `main`.** `/pr-push` is what makes a
-  branch out of work sitting on `main`.
+- **The tree is dirty.** Commit through `/commit`, or stash.
 - **Nothing is ahead of `origin/main`.** There is nothing to land.
-- **The commits are not all yours.** Rebasing rewrites them and the force-push
-  discards what their author pushed. Name whose they are and ask first.
+- **The commits are not all yours.** Rebasing rewrites them. Name whose they
+  are and ask first.
 
-Then name the OpenSpec changes the branch touches — the directories under
-`openspec/changes/` in `git diff --name-only origin/main...HEAD`. Those are
-what the review below is about.
-
-## Rebase
+## Push
 
 ```bash
-git rebase origin/main
+pnpm push:main
 ```
 
-Clean → skip to **Validate**. Conflict → the next section. `git rebase --abort`
-returns to exactly where you started, and is the right move whenever the
-resolution is not decided by the change itself.
+It fetches, rebases onto `origin/main`, runs the fast checks the paths owe
+(`scripts/push-main/paths.mjs`), and pushes. Planning text — `openspec/changes`,
+`openspec/specs` and `docs/` — lands on `main`; anything else goes to a pull
+request that merges itself once its checks pass. `main`
+moving under the push is a rebase and a gate again, three times at most.
+`--dry-run` rebases and gates and pushes nothing; `--pr` sends anything through
+a pull request, when the author wants someone to read it first.
+
+- **Exit 1, a check failed** — fix it in a new commit and run it again.
+- **Exit 2, a conflict** — the rebase was aborted and nothing moved; the next
+  section.
+- **Exit 3, lost the race three times** — run it again.
+
+The hook `pnpm install` sets runs the same gate on any other push to `main`,
+and refuses a shared surface there. Never pass `--no-verify`.
 
 ## Resolve by reading the change
 
 A conflict here is two people writing the same requirement. Picking a side
 records a requirement neither of them settled, and `openspec validate` still
-passes — nothing downstream will catch it. Read first:
+passes — nothing downstream will catch it. Rebase by hand with
+`git rebase origin/main`, and read first:
 
 ```bash
 openspec show <change-id>
@@ -112,30 +106,21 @@ side claims, and let the change's author decide.
 
 ```bash
 git add <paths> && git rebase --continue
+pnpm push:main
 ```
 
-## Validate
 
-On the rebased commits, not the ones you started with:
+## Beyond the gate
 
-- `pnpm run validate:changes <change-id>` — every change on the branch. It
-  honours a declared wait; the bare CLI refuses one.
-- `openspec validate --specs` — a durable spec was touched or conflicted.
-- `pnpm run lint` and `pnpm run typecheck` — always.
-- `pnpm run design-sync:check` — a primitive under
-  `packages/design-system/src/components/` changed.
-- `pnpm run test` — `packages/i18n` or `packages/ui` changed.
-- `pnpm run agent:check-parity` — agent instructions, rules, or skills changed.
-- `pnpm run tcs:validate` — always. It is cheap, it needs no install, and it
-  catches a suite whose header contradicts its cases or whose trace points at
-  an id the spec no longer issues.
+The gate is what every push owes. The pull request's CI runs the rest for a
+shared surface; for planning text, these are still yours:
 
 **A delta with journeys and no suite does not push**, and that now includes a
 capability whose journeys say `**Walked by:** nobody` — it is anchored on its
 feature set, not exempt. If a `spec.md` on this branch has a `user-journeys.md`
 and no `feature-tcs.md` beside it, stop and run `/spec-to-tcs <change-id>`, then
 commit the suites before pushing — `pnpm run tcs:validate --require-suites`
-names them. The blind pass belongs in the spec's own pull request, and lands
+names them. The blind pass belongs in the spec's own push, and lands
 before the scenarios commit; see `docs/governance/specs-to-test-cases.md`.
 
 **A suite with no `## Reconciliation` does not push either.** The section is the
@@ -160,80 +145,15 @@ walks.
 
 A regenerated file is a commit, not a dirty tree left behind.
 
-## Push
-
-```bash
-git push --force-with-lease
-```
-
-Never `--force`: the lease refuses when the remote moved under you, which is
-exactly the case where someone else pushed to this branch. Refused → re-gather,
-do not escalate. No rebase happened → plain `git push`.
-
-## Merge when settled
-
-Settled is all of these, checked rather than assumed:
-
-```bash
-gh pr checks <pr-url>
-gh pr view <pr-url> --json isDraft,mergeable,mergeStateStatus,reviewDecision,reviewRequests
-```
-
-- Checks green. Pending is not green — wait, or report and stop. A failure is
-  compared against the same check on the base first:
-
-  ```bash
-  gh run list --branch main --workflow=<workflow> --limit 3 --json conclusion,headSha
-  ```
-
-  Red on the base too → inherited, not yours. Still not green, so it still
-  stops, but say which commits on `main` it has been failing on rather than
-  letting it read as something this branch broke. Landing onto a red base is
-  the author's call to make, not yours.
-- `reviewDecision` is not `CHANGES_REQUESTED`.
-- `reviewRequests` is empty. Someone was asked to look and has not yet.
-- `mergeable` is `MERGEABLE`.
-- Validation above passed.
-
-Any one unmet or unknown → stop and say which. Do not merge through it.
-
-All met, and the PR is a draft:
-
-```bash
-gh pr ready <pr-url>
-```
-
-A draft here is `/pr-push`'s default, not a decision anyone made — every PR
-from that skill starts as one. Invoking `/spec-push` is the author saying the
-change is finished, which is the same thing clicking *Ready for review* says,
-so clear it rather than stopping on it. A reviewer who was actually asked for
-is the case above, and that one does stop.
-
-Then ask before merging. Say what lands — the change ids, the commits, the
-base — and wait. Everything up to here is recoverable: a rebase from the
-reflog, a force-push from the remote's old SHA. The merge is not, and it is the
-step that puts a requirement in front of every engineer reading the store.
-
-On the go-ahead:
-
-```bash
-gh pr merge <pr-url> --merge
-```
-
-A merge commit, matching this repository's history. The branch stays behind;
-deleting it is the author's call.
-
 ## Confirm
 
-Report the PR URL and whether it merged, what the rebase moved over, every
-conflict and how each was settled, what validation ran, and anything left for a
-human.
-
-Then say the handoff out loud: the change is on `main`, so an engineer can
-claim it with `pnpm plan claim` in the application repository.
+Report where it landed — the new `main` SHA or the pull request URL — what the
+rebase moved over, every conflict and how each was settled, and anything left
+for a human. Then say the handoff out loud: the change is on `main`, so an
+engineer can claim it with `pnpm plan claim` in the application repository.
 
 ## Related
 
-- `/pr-push` — opens the PR this one lands.
+- `/workflow-land` — one artifact, on the hand's word.
 - `/planning-pm`, `/planning-qa`, `/planning-dev`, `/openspec-propose` — where
   the change was written.

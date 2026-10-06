@@ -9,6 +9,7 @@
 **I want** My Auctions to keep the Won row linked to the order,
 **so that** I can return to the locked payment record.
 
+<!-- trace:case id=g10.auction-account-record.TC-hc2 rev=1 covers=g10.auction-account-record.SC-chv -->
 ### grade10-site-auction-account-record-US8-TC1-1: A partially paid Won row opens Winner Order
 
 **Classification:**

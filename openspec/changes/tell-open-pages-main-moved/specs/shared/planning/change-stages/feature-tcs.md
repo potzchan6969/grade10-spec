@@ -9,6 +9,7 @@
 **I want** to be told when `main` moves and to see what landed without reloading by hand,
 **so that** I read and answer on what the store holds rather than on what the page held when I opened it.
 
+<!-- trace:case id=g10.shared-change-stages.TC-4sl rev=1 covers=g10.shared-change-stages.SC-mty,g10.shared-change-stages.SC-7i0 -->
 ### shared-planning-change-stages-US10-TC1-1: An open page names what landed on `main`
 
 Runs once per row of **Test data**.
@@ -47,6 +48,7 @@ admin(tech PIC) has <change A> open at <manual change page url> on the hosted ma
 * It names the landed commit's subject and how long ago it landed.
 * It says the site rebuilds and refreshes on its own, and offers Refresh now.
 
+<!-- trace:case id=g10.shared-change-stages.TC-7x2 rev=1 covers=g10.shared-change-stages.SC-mty,g10.shared-change-stages.SC-7i0 -->
 ### shared-planning-change-stages-US10-TC2-1: The page shows what landed once the site has caught up
 
 **Classification:**
@@ -76,6 +78,7 @@ admin(tech PIC) has <change A> open at <manual change page url>, the banner is u
 * The banner is gone, and no second notice replaces it.
 * The reading position and every open section are where the reader left them.
 
+<!-- trace:case id=g10.shared-change-stages.TC-cen rev=1 covers=g10.shared-change-stages.SC-mty,g10.shared-change-stages.SC-7i0 -->
 ### shared-planning-change-stages-US10-TC3-1: Nothing reloads while the reader is typing
 
 **Classification:**
@@ -106,6 +109,7 @@ admin(product manager) has the banner up at <manual change page url> and is typi
 * The banner is still up while the field has focus.
 * Step 3 leaves the page showing what landed, with the banner gone.
 
+<!-- trace:case id=g10.shared-change-stages.TC-n3e rev=1 covers=g10.shared-change-stages.SC-mty,g10.shared-change-stages.SC-7i0 -->
 ### shared-planning-change-stages-US10-TC4-1: Two landings before the site catches up
 
 **Classification:**
@@ -136,6 +140,7 @@ admin(engineer) has <manual board url> open on the hosted manual, built from the
 * The board shows both landings after step 3.
 * The page is taken through one refresh, not two.
 
+<!-- trace:case id=g10.shared-change-stages.TC-zcj rev=1 covers=g10.shared-change-stages.SC-mty,g10.shared-change-stages.SC-7i0 -->
 ### shared-planning-change-stages-US10-TC5-1: No relay, no banner
 
 **Classification:**
@@ -165,6 +170,7 @@ The hosted manual is built with no relay origin set, and admin(engineer) has <ma
 * The page reads exactly as it did before the landing.
 * Nothing on the page reports an error.
 
+<!-- trace:case id=g10.shared-change-stages.TC-etp rev=1 covers=g10.shared-change-stages.SC-mty,g10.shared-change-stages.SC-7i0 -->
 ### shared-planning-change-stages-US10-TC6-1: The notice drops its promise after ten minutes behind
 
 **Classification:**
@@ -194,6 +200,7 @@ admin(tech PIC) has <change A> open at <manual change page url>, the banner is u
 * It no longer says the site refreshes on its own.
 * Refresh now is still offered.
 
+<!-- trace:case id=g10.shared-change-stages.TC-ssr rev=1 covers=g10.shared-change-stages.SC-mty,g10.shared-change-stages.SC-7i0 -->
 ### shared-planning-change-stages-US10-TC7-1: Refresh now re-reads the page before the site has caught up
 
 **Classification:**
@@ -229,6 +236,7 @@ admin(tech PIC) has <change A> open at <manual change page url>, the banner is u
 **I want** to see how many commits behind `main` the checkout is and to pull it in one click,
 **so that** I read what landed without leaving the page to work out which command to run.
 
+<!-- trace:case id=g10.shared-change-stages.TC-1hp rev=1 covers=g10.shared-change-stages.SC-0du,g10.shared-change-stages.SC-43a -->
 ### shared-planning-change-stages-US11-TC1-1: A checkout behind `main` names the count and pulls
 
 **Classification:**
@@ -260,6 +268,7 @@ admin(tech PIC) has <change A> open at <manual change page url>, the banner is u
 * Step 2 leaves the page showing what those commits landed.
 * The banner is gone, and no count is shown.
 
+<!-- trace:case id=g10.shared-change-stages.TC-jeh rev=1 covers=g10.shared-change-stages.SC-0du,g10.shared-change-stages.SC-43a -->
 ### shared-planning-change-stages-US11-TC2-1: Pull is refused with the reason
 
 Runs once per row of **Test data**.
@@ -298,6 +307,7 @@ admin(designer) is on <locally run manual url>, run from a checkout 3 commits be
 * Pull is not offered.
 * The checkout is untouched: nothing is committed, stashed, merged or rebased.
 
+<!-- trace:case id=g10.shared-change-stages.TC-pd8 rev=1 covers=g10.shared-change-stages.SC-0du,g10.shared-change-stages.SC-43a -->
 ### shared-planning-change-stages-US11-TC3-1: A checkout with nothing to count says nothing
 
 Runs once per row of **Test data**.
@@ -335,6 +345,7 @@ admin(designer) is on <locally run manual url>, run from <the checkout>.
 * No Pull control is offered.
 * Nothing on the page reports an error.
 
+<!-- trace:case id=g10.shared-change-stages.TC-bl7 rev=1 covers=g10.shared-change-stages.SC-0du,g10.shared-change-stages.SC-43a -->
 ### shared-planning-change-stages-US11-TC5-1: A fetch that fails keeps the last count and its time
 
 **Classification:**

@@ -23,8 +23,8 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Field | Notes |
 | --- | --- |
 | Auction order | The order this invoice is the payable record for. An order holds one current invoice, and any invoices a reissue replaced |
-| Invoice ID | Given at send, per "Every invoice carries an invoice ID and a bank reference". Finds the order, including after a reissue |
-| Bank reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
+| Invoice ID | Given at send, per "Every invoice carries an invoice ID and the order's payment reference". Finds the order, including after a reissue |
+| Payment reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
 | Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
@@ -32,13 +32,13 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
 | Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
-| Tax | Optional. Added by an operator for the order, and greater than zero when added. Grade10 defines no rate or regime |
+| Tax | Optional caller-supplied `taxLine`, added by an operator for the order, and greater than zero when added. Grade10 defines no rate, jurisdiction or formal tax receipt |
 | Subtotal | The sum of the components above |
 | Payment processing fee | Priced by the payment method, below. On every invoice, and never dropped |
 | Order total | The total payable — the subtotal plus the payment processing fee |
 | Sent at | When the operator sent the invoice. Stored in UTC |
-| Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC, displayed in the winner's own zone |
-| Replaced by | On a replaced invoice only: the invoice that replaced it |
+| Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC; shown in the viewer's local zone on Winner Order and in `Asia/Hong_Kong` as `GMT+8` on the invoice PDF |
+| Replaces invoice | On a replacement invoice only: the prior invoice ID named by `Replaces invoice {id}` |
 | Invoice status | Per `grade10-site/auction/order-status`. A replaced invoice holds none |
 
 The payment processing fee SHALL be priced by the invoice's payment method:
@@ -78,6 +78,7 @@ SHALL still carry Subtotal.
 No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-6nv rev=1 -->
 #### Scenario: winner-order-SC-04 - An estimated total is marked as one
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -88,6 +89,7 @@ an invoice amount before an operator has sent it.
 - **THEN** the order total is 318000 minor units in HKD
 - **AND** no component is marked as an estimate
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-33a rev=1 -->
 #### Scenario: winner-order-SC-05 - A confirmed address makes the total firm
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -98,6 +100,7 @@ an invoice amount before an operator has sent it.
 - **THEN** its total is the order total for that address
 - **AND** no component is marked as an estimate
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-awt rev=1 -->
 #### Scenario: winner-order-SC-62 - The fee grosses the subtotal up
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -110,6 +113,7 @@ an invoice amount before an operator has sent it.
 Scenario `winner-order-SC-63` keeps its title with its id. The title is
 historical: a manually settled order keeps its payment processing fee.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-6if rev=1 -->
 #### Scenario: winner-order-SC-63 - A manually settled order carries no fee
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -119,6 +123,7 @@ historical: a manually settled order keeps its payment processing fee.
 - **THEN** the payment processing fee of 5000 minor units in HKD is shown
 - **AND** the amount settled is the order total of 317000 minor units in HKD
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-w9w rev=1 -->
 #### Scenario: winner-order-SC-38 - Shipping & Handling of zero reads Free
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -126,6 +131,7 @@ historical: a manually settled order keeps its payment processing fee.
 - **WHEN** the winner opens the order
 - **THEN** the Shipping & Handling line reads Free
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-k0e rev=1 -->
 #### Scenario: winner-order-SC-39 - An invoice with no insurance shows no Insurance line
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -135,6 +141,7 @@ historical: a manually settled order keeps its payment processing fee.
 - **AND** the Payment Processing Fee line is still shown, whatever the method
 - **AND** the order total is the sum of the lines that are shown
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-4lu rev=1 -->
 #### Scenario: winner-order-SC-69 - Fee lines carry info tooltips
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -145,6 +152,7 @@ historical: a manually settled order keeps its payment processing fee.
 - **AND** the Payment Processing Fee tooltip does not describe the gross-up
   formula
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-c6t rev=1 -->
 #### Scenario: winner-order-SC-110 - A bank transfer fee is the amount the operator entered
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -164,6 +172,7 @@ historical: a manually settled order keeps its payment processing fee.
 - **AND** the order total is 312000 minor units in HKD
 
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-ppq rev=1 -->
 #### Scenario: winner-order-SC-215 - An invoice with no tax shows no Tax line
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -171,6 +180,7 @@ historical: a manually settled order keeps its payment processing fee.
 - **WHEN** the winner reads the invoice, receipt, or Order Summary
 - **THEN** no Tax line is shown
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-deu rev=1 -->
 #### Scenario: winner-order-SC-216 - Tax is included in the card fee base
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -179,6 +189,7 @@ historical: a manually settled order keeps its payment processing fee.
 - **WHEN** Grade10 prices its card payment processing fee
 - **THEN** the Subtotal used for the gross-up is 318000 minor units in HKD
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-4z7 rev=1 -->
 #### Scenario: winner-order-SC-214 - Tax is itemised on the invoice and receipt
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -201,6 +212,7 @@ Tax line is shown.
 **Copy** - The tooltip SHALL read `Set by Grade10 for where your order ships.
 Some orders have none.`
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-d0w rev=1 -->
 #### Scenario: winner-order-SC-217 - A shown Tax line carries its info tooltip
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -210,6 +222,7 @@ Some orders have none.`
 - **AND** it offers an info tooltip reading `Set by Grade10 for where your order
   ships. Some orders have none.`
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-mph rev=1 -->
 #### Scenario: winner-order-SC-212 - An absent Tax line offers no tooltip
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -228,6 +241,7 @@ Summary SHALL show Tax as TBD with the other fee rows.
 **No amount** - Grade10 SHALL NOT show a calculated Tax amount before the
 operator sends the invoice.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-1ok rev=1 -->
 #### Scenario: winner-order-SC-213 - Tax reads TBD before the invoice is sent
 **Serves:** winner-order-US-01 - Winner settles a won lot
 

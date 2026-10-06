@@ -27,7 +27,8 @@ starts at no data because free-text reasons cannot be counted.
   hand.
 - **A card payment that lands after the cancel is flagged.** The payment is
   recorded, the order stays Cancelled and carries a Paid after cancel flag;
-  finance returns the money outside Grade10 and the operator clears the flag.
+  Finance returns the money outside Grade10 and any operator with
+  `auction:payment` clears the flag with a reason and any return reference.
 
 No running rule is reversed: cancel stays operator-only, terminal, and
 unable to lift a suspension.
@@ -70,9 +71,9 @@ None. Every question the interview raised was settled.
 
 ## References
 
-- [Auction Management · Payment](../../../docs/prds/products/grade10-admin/auction/management.md#payment)
+- [Auction Management · Order Cancellation](../../../docs/prds/products/grade10-admin/auction/management.md#order-cancellation)
 - [Auction Management · Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/management.md#post-sale-queue)
-- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)
+- [Post-Bidding · Cancelled Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#cancelled-order)
 
 ## Follow-on changes
 

@@ -108,6 +108,7 @@ they are using, they are signed out.
 - **WHEN** they revoke the session they are using
 - **THEN** they are not signed in
 
+<!-- trace:scenario id=g10.shared-sessions.SC-bui rev=1 -->
 #### Scenario: shared-auth-sessions-SC-09 - A cached read closes within 70 seconds of a revoke
 **Serves:** shared-auth-sessions-US-02 - Operator ends a session
 

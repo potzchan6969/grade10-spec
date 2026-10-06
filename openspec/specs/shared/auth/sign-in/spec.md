@@ -871,6 +871,7 @@ sign-in.
 - **Keeps the page usable** - WHEN the prompt does not load, the system
   SHALL leave the page and the sign-in dialog fully usable.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-ph5 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-80 - The prompt appears for a signed-out visitor without opening the dialog
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -879,6 +880,7 @@ sign-in.
   dialog
 - **THEN** Google's own auto-prompt appears offering sign-in
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-iaq rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-81 - A brand without Google sign-in never shows the prompt
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -886,6 +888,7 @@ sign-in.
 - **WHEN** a signed-out collector visits a page
 - **THEN** no Google auto-prompt appears
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-5lg rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-82 - The prompt does not show while the sign-in dialog is open
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -893,6 +896,7 @@ sign-in.
 - **WHEN** a signed-out collector opens the sign-in dialog
 - **THEN** the Google auto-prompt does not appear while the dialog is open
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-emf rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-83 - Opening the dialog dismisses an already-showing prompt
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -902,6 +906,7 @@ sign-in.
 - **THEN** the auto-prompt is dismissed
 - **AND** only the sign-in dialog remains visible
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-bp4 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-84 - Completing the prompt with a verified email signs in
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -911,6 +916,7 @@ sign-in.
 - **THEN** they are signed in as the account for that address, on the same
   terms the Google control's requirement sets
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-75s rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-85 - Completing the prompt with an unverified email does not sign in
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -920,6 +926,7 @@ sign-in.
 - **THEN** no account is created from that request
 - **AND** they are not signed in
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-psv rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-86 - A signed-in visitor never sees the prompt
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -928,6 +935,7 @@ sign-in.
 - **WHEN** that person visits a page
 - **THEN** no Google auto-prompt appears
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-l6p rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-87 - The prompt is offered on any page, including checkout
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -936,6 +944,7 @@ sign-in.
   checkout
 - **THEN** the auto-prompt appears the same way it does on any other page
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-qqs rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-88 - Ignoring the prompt leaves the page unaffected
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -946,6 +955,7 @@ sign-in.
 - **THEN** they remain signed out
 - **AND** the page behaves exactly as it would with no prompt showing
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-fsu rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-89 - A prompt that fails to load leaves the page usable
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 
@@ -955,6 +965,7 @@ sign-in.
 - **THEN** the page loads normally with no auto-prompt shown
 - **AND** the sign-in dialog remains reachable and works as it always does
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-dl3 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-90 - Declining the dialog suppresses the prompt for the rest of the visit
 **Serves:** shared-auth-sign-in-US-11 - Collector is offered Google sign-in without opening the dialog
 

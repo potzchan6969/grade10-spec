@@ -11,6 +11,7 @@ it,
 **so that** the appointment starts at the item, and I can see at a glance
 whether a check is on file, still out, or refused.
 
+<!-- trace:case id=g10.vault-identity-check.TC-90f rev=2 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC1-2: Booking an intake visit invites the user
 
 **Classification:**
@@ -48,6 +49,7 @@ whether a check is on file, still out, or refused.
 * The user is invited to verify.
 * The invitation goes to `<the case's email address>`.
 
+<!-- trace:case id=g10.vault-identity-check.TC-7kk rev=2 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC2-2: Case nobody can be invited on is reported
 
 Runs once per row of **Test data**.
@@ -87,6 +89,7 @@ Runs once per row of **Test data**.
 * The admin is told why it could not be raised.
 * The case does not read as a check nobody answered.
 
+<!-- trace:case id=g10.vault-identity-check.TC-6vt rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC3-1: User already verified is not asked again
 
 **Classification:**
@@ -124,6 +127,7 @@ Runs once per row of **Test data**.
 * That identity is bound to the case.
 * No invitation is sent.
 
+<!-- trace:case id=g10.vault-identity-check.TC-nwd rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC4-1: Verified case names who performed the check
 
 **Classification:**
@@ -160,6 +164,7 @@ Runs once per row of **Test data**.
 * The case shows whether Grade10 staff or a provider performed the check.
 * The case shows when it was performed and what the provider found.
 
+<!-- trace:case id=g10.vault-identity-check.TC-n6f rev=2 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC5-2: Case with a check out is not shown as unverified
 
 **Classification:**
@@ -198,6 +203,7 @@ Runs once per row of **Test data**.
 * The case shows the check as out, not as having no identity.
 * The case can be booked, valued and moved exactly as a case with no check out.
 
+<!-- trace:case id=g10.vault-identity-check.TC-yz5 rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC6-1: Binding a verdict voids an outstanding packet
 
 **Classification:**
@@ -234,6 +240,7 @@ Runs once per row of **Test data**.
 * The outstanding packet is void.
 * Nothing can be signed from it.
 
+<!-- trace:case id=g10.vault-identity-check.TC-6wi rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC7-1: Preparing documents without an identity is refused
 
 **Classification:**
@@ -269,6 +276,7 @@ Runs once per row of **Test data**.
 * The request is refused.
 * The refusal names the missing identity check.
 
+<!-- trace:case id=g10.vault-identity-check.TC-9me rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC8-1: Prepared document carries the bound identity's name
 
 **Classification:**
@@ -304,6 +312,7 @@ Runs once per row of **Test data**.
 * The name printed is the bound identity's.
 * Nothing typed on the case reaches the paper.
 
+<!-- trace:case id=g10.vault-identity-check.TC-f0y rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC9-1: Packet whose identity moved cannot be sealed
 
 **Classification:**
@@ -339,6 +348,7 @@ Runs once per row of **Test data**.
 * Sealing is refused.
 * The packet is not sealed.
 
+<!-- trace:case id=g10.vault-identity-check.TC-jwg rev=2 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
 ### grade10-site-vault-identity-check-US1-TC10-2: Case identity state reads without the identity grant, its details do not
 
 **Classification:**
@@ -384,6 +394,7 @@ Runs once per row of **Test data**.
 **so that** a refused, lapsed or never-started check costs the visit nothing,
 and a check that overrides a refusal says so on the case.
 
+<!-- trace:case id=g10.vault-identity-check.TC-me8 rev=1 covers=g10.vault-identity-check.SC-qcf,g10.vault-identity-check.SC-9xs,g10.vault-identity-check.SC-q5q,g10.vault-identity-check.SC-3wt -->
 ### grade10-site-vault-identity-check-US2-TC1-1: Admin asks for a check on a case that needs one
 
 **Classification:**
@@ -420,6 +431,7 @@ and a check that overrides a refusal says so on the case.
 * The user is invited.
 * The case shows the check as out.
 
+<!-- trace:case id=g10.vault-identity-check.TC-wtn rev=1 covers=g10.vault-identity-check.SC-qcf,g10.vault-identity-check.SC-9xs,g10.vault-identity-check.SC-q5q,g10.vault-identity-check.SC-3wt -->
 ### grade10-site-vault-identity-check-US2-TC2-1: Admin verifies a user who arrives unverified
 
 **Classification:**
@@ -457,6 +469,7 @@ and a check that overrides a refusal says so on the case.
 * The case holds a verified identity.
 * The case can proceed to signing.
 
+<!-- trace:case id=g10.vault-identity-check.TC-7qk rev=2 covers=g10.vault-identity-check.SC-qcf,g10.vault-identity-check.SC-9xs,g10.vault-identity-check.SC-q5q,g10.vault-identity-check.SC-3wt -->
 ### grade10-site-vault-identity-check-US2-TC3-2: Counter check is refused once the item is in custody
 
 Runs once per row of **Test data**.
@@ -502,6 +515,7 @@ Runs once per row of **Test data**.
 * Recording is refused.
 * The case's identity is unchanged.
 
+<!-- trace:case id=g10.vault-identity-check.TC-saw rev=2 covers=g10.vault-identity-check.SC-qcf,g10.vault-identity-check.SC-9xs,g10.vault-identity-check.SC-q5q,g10.vault-identity-check.SC-3wt -->
 ### grade10-site-vault-identity-check-US2-TC4-2: Override of a refused check carries a reason
 
 **Classification:**
@@ -551,6 +565,7 @@ landed,
 **so that** nothing signed, vaulted or erased is disturbed by a check that
 finished too late.
 
+<!-- trace:case id=g10.vault-identity-check.TC-d8f rev=2 covers=g10.vault-identity-check.SC-30d,g10.vault-identity-check.SC-4l5,g10.vault-identity-check.SC-k3i,g10.vault-identity-check.SC-pcc,g10.vault-identity-check.SC-alf,g10.vault-identity-check.SC-zfm -->
 ### grade10-site-vault-identity-check-US3-TC1-2: Verdict landing on a case that has moved is refused
 
 Runs once per row of **Test data**.
@@ -595,6 +610,7 @@ Runs once per row of **Test data**.
 * The case's identity is the one it held before, and the identity the verdict created is purged with its evidence.
 * The check reads Declined with the reason recorded, and no identity is left bound to nothing.
 
+<!-- trace:case id=g10.vault-identity-check.TC-dny rev=1 covers=g10.vault-identity-check.SC-30d,g10.vault-identity-check.SC-4l5,g10.vault-identity-check.SC-k3i,g10.vault-identity-check.SC-pcc,g10.vault-identity-check.SC-alf,g10.vault-identity-check.SC-zfm -->
 ### grade10-site-vault-identity-check-US3-TC5-1: Displaced identity is settled rather than left behind
 
 **Classification:**

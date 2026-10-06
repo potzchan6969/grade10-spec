@@ -7,13 +7,11 @@ historical reference for the drawer chrome and sale-price line only.
 
 | Surface | Storybook (SoT) | Figma (historical) |
 | --- | --- | --- |
-| Site sale alone (sale + compare-at on lines; no Store sale footer row) | [`Store Cart/CartDrawer/Auto Discount` → Refuse](?path=/story/store-cart-cartdrawer-auto-discount--refuse) (pre-apply) | [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev), [Cart Item](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4761-1494&m=dev) |
+| Site sale alone (sale + compare-at on lines; no Store sale footer row) | [`Store Cart/CartItem` → Sale Price](?path=/story/store-cart-cartitem--sale-price) | [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev), [Cart Item](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4761-1494&m=dev) |
 | Promo refused | [`Store Cart/CartDrawer/Auto Discount` → Refuse](?path=/story/store-cart-cartdrawer-auto-discount--refuse) | — |
 | Promo stacked | [`Store Cart/CartDrawer/Auto Discount` → Stack](?path=/story/store-cart-cartdrawer-auto-discount--stack) | — |
 | Promo replaces site sale | [`Store Cart/CartDrawer/Auto Discount` → Replace](?path=/story/store-cart-cartdrawer-auto-discount--replace) | — |
 | Site sale restored after remove | [`Store Cart/CartDrawer/Auto Discount` → Fallback after remove](?path=/story/store-cart-cartdrawer-auto-discount--fallback-after-remove) | — |
-
-Line-only sale + compare-at (no promo): [`Store Cart/CartItem` → Sale Price](?path=/story/store-cart-cartitem--sale-price).
 
 Held inapplicable ticket (no Apply): [`Store Cart/PromoTicket` → Not Applicable](?path=/story/store-cart-promoticket--not-applicable) and the muted partition on Refuse.
 

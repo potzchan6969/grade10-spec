@@ -95,6 +95,7 @@ None.
 * The not-found surface renders.
 * The failed address does not appear anywhere on the page.
 
+<!-- trace:case id=g10.site-navigation.TC-oik rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4,g10.site-navigation.SC-m4k -->
 ### grade10-site-site-navigation-US1-TC4-1: Not-found shows only the shared catalog's static words
 
 **Classification:**
@@ -124,6 +125,7 @@ None.
 * The description reads exactly "The link may be wrong, or the page may have moved."
 * Neither string contains any part of the address navigated to in step 1.
 
+<!-- trace:case id=g10.site-navigation.TC-bii rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4,g10.site-navigation.SC-m4k -->
 ### grade10-site-site-navigation-US1-TC5-1: Not-found never reflects a crafted address
 
 **Classification:**
@@ -156,6 +158,7 @@ None.
   markup.
 * No script from the crafted address executes.
 
+<!-- trace:case id=g10.site-navigation.TC-38v rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4,g10.site-navigation.SC-m4k -->
 ### grade10-site-site-navigation-US1-TC6-1: Back to Home leaves not-found for the brand home
 
 **Classification:**

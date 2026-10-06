@@ -11,7 +11,7 @@ designs the screens — [Collector Pages](/p/grade10-site/vault/collector-pages)
 
 ## The Blocks
 
-- 🚧 **None** — the store carries no block of the vault collector's own; a
+- **None** — the store carries no block of the vault collector's own; a
   site page composes [Page Blocks](/p/shared/ui/page-blocks) and
   [Booking Blocks](/p/shared/ui/appointment-booking)
 

@@ -27,9 +27,62 @@ test("supporting gallery behavior", () => {});
 - **Capability slug** - The capability slug stays stable across its journeys, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.
 - **Sequence** - Exactly three Base36 characters (`000` to `zzz`), stored in lowercase. Initialization derives a non-numeric candidate from the scope, kind, and exact heading, then advances only to avoid an existing scenario or case marker in that app, product, and capability. The sequence is shared by `SC` and `TC` markers. The scan includes durable specs, active changes, and archived changes so an archived marker does not free its suffix.
 - **Scenario id** - An `SC` reference identifies one scenario. A scenario marker carries its positive `rev`.
-- **Case id** - A `TC` reference identifies one case. `covers` lists one or more `SC` references separated by commas. A case can cover scenarios from any app, product, or capability, and a scenario can be covered by multiple cases.
+- **Case id** - A `TC` reference identifies one case. `covers` lists one or more `SC` references separated by commas. A deprecated case with no current scenario may use `covers=none`; active and durable behavior must name one or more scenarios. A case can cover scenarios from any app, product, or capability, and a scenario can be covered by multiple cases.
 - **Revision** - A positive integer, starting at `1`. Increase it when the scenario or case meaning changes. A case marker's `rev` equals the `<v>` suffix of the case heading below it, and the two move together; `pnpm run tcs:validate` refuses a pair that differs. An acceptance test names the exact current case revision; `supports` names a scenario directly.
 - **Markdown scope** - All scenario and case marker ids in one Markdown file share one app, product, and capability prefix. Application test files can link markers from multiple scopes.
+
+## Case identity in suites
+
+Every active or durable case in `feature-tcs.md`, `domain-tcs.md`,
+`product-tcs.md`, and `platform-tcs.md` owns one `trace:case` marker. The
+marker is the stable identity and revision record for the case; it is required
+whether or not an application test accepts it. Active change copies retain the
+same marker as the case they carry into the durable suite.
+
+The `id` is allocated by `pnpm run trace -- init case` for the exact case
+heading and its app, product, and capability scope. Preserve an existing ID
+when a case already has one. Never choose a suffix by hand. `covers` lists the
+exact scenario IDs that serve the journey or journeys named by the case's
+`**Trace:**` line, in source order. Each ID must resolve to one scenario
+marker. A deprecated case with no current behavior may use `covers=none`;
+the CLI accepts that only when its case status is `deprecated`. A missing or
+unclear journey-to-scenario link is a coverage question; do not fill it by
+similarity of titles or expected results.
+
+For a reviewed migration that needs to add many markers together, use
+`pnpm run trace -- init batch --manifest <json-file>`. Each manifest record
+names a unique `key`, `kind`, repository-relative `file`, exact `target`, and
+the app, product, and capability scope. A scenario record may set `revision`;
+a case record lists `covers` as existing scenario IDs or scenario keys from the
+same manifest. Records with the same `mirrorKey` receive one ID, for an active
+and durable copy of the same record. When another copy already owns the ID,
+`existingId` preserves it. Set `replaceCovers` on a case record to update only
+an existing marker's `covers` value while keeping its ID and revision. The
+batch validates every target and reference before it writes; `--dry-run` prints
+the proposed markers without changing files.
+
+Derive the scope from the suite's path. A feature suite under
+`specs/<app>/<product>/<domain>/<capability>/` uses that app, product, and
+capability. A domain suite under `specs/<app>/<product>/domain-tcs.md` uses
+that app and product with the capability `domain`. A product suite under
+`specs/<app>/product-tcs.md` uses that app directory as the product slug and
+the capability `product`. Active change copies use the same scope as their
+durable suite.
+
+The marker's `rev` matches the case heading's final `<v>` value in
+`TC<n>-<v>`. Start at `1`. When behavior changes, increment `<v>` and `rev`
+together in the same reviewed edit. A wording-only edit that leaves the
+behavior intact keeps both values. A changed `covers` set is a traceability
+change and is reviewed with the case. Do not change an ID to represent a new
+revision.
+
+New cases receive a marker when they are written. A modified case keeps its ID
+and updates its revision and coverage as needed. Migration adds markers to
+existing cases without rewriting their content or headings, except where an
+unresolved or conflicting `<v>` must first be settled by the suite owner. Use
+the repository CLI to allocate every new scenario ID needed by `covers`; keep
+existing scenario IDs unchanged. Migration is complete only when the inventory
+shows no unmarked case in active changes or durable suites.
 
 ## Commands
 
@@ -38,6 +91,8 @@ Run the CLI from this repository:
 ```sh
 pnpm run trace -- init scenario --file openspec/specs/<path>/spec.md --target '#### Scenario: Exact existing heading' --app g10 --product auction --capability listing-media --dry-run
 pnpm run trace -- init case --file openspec/specs/<path>/feature-tcs.md --target '### Exact existing case heading' --app g10 --product auction --capability listing-media --covers g10.auction-listing-media.SC-c93 --dry-run
+pnpm run trace -- init case --file openspec/specs/grade10-site/auction/domain-tcs.md --target '### Exact domain case heading' --app g10 --product auction --capability domain --covers g10.auction-domain.SC-c93 --dry-run
+pnpm run trace -- init case --file openspec/specs/grade10-admin/product-tcs.md --target '### Exact product case heading' --app g10adm --product grade10-admin --capability product --covers g10adm.grade10-admin-product.SC-c93 --dry-run
 pnpm run trace -- link --file <app-test-file> --target '  test("exact test title", () => {});' --acceptance g10.auction-listing-media.TC-c94@2 --dry-run
 pnpm run trace -- link --file <app-test-file> --target '  test("supporting behavior", () => {});' --supports g10.auction-listing-media.SC-c93 --dry-run
 pnpm run trace -- validate --app-root <grade10-app-root>
@@ -51,9 +106,9 @@ From a Grade10 app checkout, use the spec-store checkout explicitly:
 pnpm --dir <grade10-spec-root> run trace -- validate --app-root "$PWD"
 ```
 
-`--target` matches the entire source line. Mutating commands require `--file` and `--target`, refuse a missing or ambiguous target, and insert one adjacent marker. `init` requires `--app`, `--product`, and `--capability`; it derives a stable non-numeric sequence within that full scope and accepts those values in any casing. `--covers`, `--acceptance`, and `--supports` resolve references without regard to input casing and write canonical values. `--dry-run` prints the proposed marker without writing. Case initialization and test linking also require referenced ids to resolve to one record.
+`--target` matches the entire source line. Mutating commands require `--file` and `--target`, refuse a missing or ambiguous target, and insert one adjacent marker. `init` requires `--app`, `--product`, and `--capability`; it derives a stable non-numeric sequence within that full scope and accepts those values in any casing. Case initialization reads the heading's `<v>` into `rev`. `--covers`, `--acceptance`, and `--supports` resolve references without regard to input casing and write canonical values. `--dry-run` prints the proposed marker without writing. Case initialization and test linking also require referenced ids to resolve to one record.
 
-`validate` scans durable specs and active changes under the store, then source files under `--app-root`. It excludes archived changes and generated or third-party directories. It checks duplicate ids, unknown apps, malformed or non-positive revisions, malformed markers, noncanonical casing, mixed marker scopes within a Markdown file, unresolved references, marker adjacency, and acceptance links whose revision no longer matches the case. Invalid links return a non-zero exit code. Unlinked scenarios and cases are reported as rollout information and do not fail validation.
+`validate` scans durable specs and active changes under the store, then source files under `--app-root`. It excludes archived changes and generated or third-party directories. It checks duplicate IDs, unknown apps, malformed or non-positive revisions, malformed markers, noncanonical casing, mixed marker scopes within a Markdown file, unresolved references, marker adjacency, every suite case's required marker, case revision agreement with `<v>`, and acceptance links whose revision no longer matches the case. Invalid links return a non-zero exit code. Unlinked scenarios and cases are reported as rollout information and do not fail validation.
 
 `fold --change <id>` checks the pre-archive handover for one active change. For each `openspec/changes/<id>/specs/<product>/<domain>/<capability>/feature-tcs.md`, it reads the matching durable suite under `openspec/specs/`. Every active case marker must appear exactly once there with the same `id`, `rev`, and ordered `covers` values. Each active case's `covers` references must resolve to a scenario marker anywhere in the active or durable store. Missing, changed, or duplicate durable case markers and unresolved references fail the command. Use `--store-root` for an alternate store or an isolated fixture.
 

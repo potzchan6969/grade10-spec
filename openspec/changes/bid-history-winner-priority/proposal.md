@@ -22,7 +22,8 @@ the equal-max tip (target: 100%).
   the amount tone and the tooltip reads that when maximums match, the
   earlier one leads.
 - Record the contract on `shared/ui/auction-listing` for
-  `ListingBidHistoryRow` / `ListingBidHistoryList` / bid-card copy.
+  `ListingBidHistoryRow` / `ListingBidHistoryList` / bid-card copy, and on
+  `grade10-site/auction/listing-page` for when the lot page sets each flag.
 
 ## Non-Goals
 
@@ -38,6 +39,8 @@ None.
 
 - `shared/ui/auction-listing` — public bid history winner crown and equal-max
   tip copy.
+- `grade10-site/auction/listing-page` — the lot page sets the winner flag on a
+  sold lot's won row and the equal-max flag on a tied row ranked second.
 
 ## Impact
 

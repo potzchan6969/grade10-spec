@@ -9,6 +9,7 @@
 **I want** Winner Order to say it was cancelled and when,
 **so that** I know the order is closed and how to contact Grade10.
 
+<!-- trace:case id=g10.auction-winner-order.TC-3x8 rev=1 covers=g10.auction-winner-order.SC-1fb -->
 ### winner-order-US13-TC1-1: Cancelled keeps the lot and winning bid visible
 
 **Classification:**

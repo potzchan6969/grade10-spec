@@ -335,6 +335,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 accepts it
 - **AND** the recorded close becomes the extension duration after that bid
 
+<!-- trace:scenario id=g10.auction-auction.SC-e9w rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-81 - A leader raising their own maximum does not extend
 **Serves:** grade10-site-auction-auction-US-12 - Bidder keeps a lot open only by moving its price
 
@@ -347,6 +348,7 @@ title is historical: a listing no longer carries an extension window.
   HKD minor units
 - **AND** the recorded close stays 20:30 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-xd3 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-82 - Equal maxima at a higher price extend
 **Serves:** grade10-site-auction-auction-US-12 - Bidder keeps a lot open only by moving its price
 
@@ -358,6 +360,7 @@ title is historical: a listing no longer carries an extension window.
   as the earlier
 - **AND** the recorded close becomes 20:40 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-23v rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-83 - A bid at the scheduled close counts with extension off
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
@@ -368,6 +371,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 accepts it
 - **AND** the listing closes at 20:00:00 UTC with that bid winning
 
+<!-- trace:scenario id=g10.auction-auction.SC-6b9 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-84 - A cap of zero turns extended bidding off
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
@@ -377,6 +381,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing closes at its scheduled close
 - **AND** a bid after it is refused
 
+<!-- trace:scenario id=g10.auction-auction.SC-r92 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-85 - The late window ends at the extension reach
 **Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
 
@@ -387,6 +392,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 refuses it
 - **AND** the listing closes at 20:10 UTC with the earlier bid winning
 
+<!-- trace:scenario id=g10.auction-auction.SC-wu6 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-87 - A bid at the recorded close does not count, however late the close is recorded
 **Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
 
@@ -398,6 +404,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 refuses it and the recorded close stays 21:05:00 UTC
 - **AND** when the close is recorded, the bid from 20:35:00 UTC wins
 
+<!-- trace:scenario id=g10.auction-auction.SC-7kh rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-62 - A first bid may stand on the starting price
 **Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot nobody has bid on
 
@@ -406,6 +413,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 accepts the bid and the current bid is 20000 minor units
 - **AND** the next minimum is 21000 minor units
 
+<!-- trace:scenario id=g10.auction-auction.SC-dbc rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-64 - A first bid below the starting price is refused
 **Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot nobody has bid on
 
@@ -413,6 +421,7 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** a bidder bids 19999 minor units
 - **THEN** Grade10 refuses the bid and names 20000 minor units as the minimum valid amount
 
+<!-- trace:scenario id=g10.auction-auction.SC-wlg rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-63 - A first bid on a 0 start must reach the lowest increment
 **Serves:** grade10-site-auction-auction-US-02 - Collector opens the bidding on a lot that starts at nothing
 
@@ -505,6 +514,7 @@ sit below it.
 - **THEN** the lots are in the same order as reading the catalogue whole
 - **AND** no lot is listed twice and none is missing
 
+<!-- trace:scenario id=g10.auction-auction.SC-zv8 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-40 - Featured lots still appear in All auctions below Featured
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -603,6 +613,7 @@ SHALL NOT report the listing Ended or name a result.
 - **THEN** it is closed once, with one outcome and one winner order when it
   sold
 
+<!-- trace:scenario id=g10.auction-auction.SC-c6m rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-74 - A bid past the close does not close the lot
 **Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
 
@@ -679,6 +690,7 @@ front page image, and whose lot is published Active or Upcoming at read time
 **Order** — slides appear in the operator's slot order
 **Absent** — with no complete slide, the page has no Featured band
 
+<!-- trace:scenario id=g10.auction-auction.SC-kis rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-43 - Featured appears when a complete slide is set
 **Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
 
@@ -688,6 +700,7 @@ front page image, and whose lot is published Active or Upcoming at read time
 - **THEN** the page leads with Featured in operator order
 
 
+<!-- trace:scenario id=g10.auction-auction.SC-3g8 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-57 - Featured loads from its own public read
 **Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
 
@@ -696,6 +709,7 @@ front page image, and whose lot is published Active or Upcoming at read time
 - **THEN** Featured is answered by the dedicated Featured public read
 - **AND** that answer includes each slide's front page image and the banner lot facts
 
+<!-- trace:scenario id=g10.auction-auction.SC-4je rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-30 - Featured is absent when no complete slide is set
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -721,6 +735,7 @@ and `ListingCountdownDisplay`.
 | Money | Active: served current bid; rolls when that amount **increases** after first paint. Upcoming: no money until the lot opens |
 | Open lot | Active: Bid Now. Upcoming: View Auction. Either opens that lot's details page |
 
+<!-- trace:scenario id=g10.auction-auction.SC-8d7 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-31 - A Featured slide shows front page image, title, status, countdown and bid
 **Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
 
@@ -740,6 +755,7 @@ and `ListingCountdownDisplay`.
 - **THEN** the current bid updates with a rolling number to the new minor-unit
   amount and currency code
 
+<!-- trace:scenario id=g10.auction-auction.SC-rl4 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-33 - An Upcoming Featured slide counts down to open
 **Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
 
@@ -755,6 +771,7 @@ and `ListingCountdownDisplay`.
 An Active Featured slide SHALL offer Bid Now. An Upcoming Featured slide SHALL
 offer View Auction. Activating either SHALL open that lot's details page.
 
+<!-- trace:scenario id=g10.auction-auction.SC-sh8 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-34 - Bid Now opens an Active lot's details page
 **Serves:** grade10-site-auction-auction-US-08 - Collector opens a Featured lot
 
@@ -762,6 +779,7 @@ offer View Auction. Activating either SHALL open that lot's details page.
 - **WHEN** the collector activates Bid Now
 - **THEN** that lot's details page opens
 
+<!-- trace:scenario id=g10.auction-auction.SC-b2i rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-58 - View Auction opens an Upcoming lot's details page
 **Serves:** grade10-site-auction-auction-US-08 - Collector opens a Featured lot
 
@@ -777,6 +795,7 @@ offer previous/next and horizontal swipe to advance among those slides. A
 single complete slide SHALL NOT require multi-dot advance or stage previous/next.
 Progress MAY use `CarouselProgress`.
 
+<!-- trace:scenario id=g10.auction-auction.SC-94x rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-35 - Progress advances among two or three slides
 **Serves:** grade10-site-auction-auction-US-07 - Collector advances Featured slides
 
@@ -785,6 +804,7 @@ Progress MAY use `CarouselProgress`.
   viewport with stage previous/next or a horizontal swipe
 - **THEN** each curated slide becomes visible in turn without leaving Featured
 
+<!-- trace:scenario id=g10.auction-auction.SC-wea rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-36 - One Featured slide needs no multi-dot advance
 **Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
 
@@ -800,6 +820,7 @@ On `/auction` in this layout, the only catalogue sections SHALL be Featured
 (when present) and All auctions. The page SHALL NOT show a Categories heading,
 category tiles, or busy filter chrome.
 
+<!-- trace:scenario id=g10.auction-auction.SC-7l1 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-37 - The quiet layout has no category section
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -811,6 +832,7 @@ category tiles, or busy filter chrome.
   auctions
 
 
+<!-- trace:scenario id=g10.auction-auction.SC-tb4 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-42 - The catalogue address stays /auction without a category query
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -824,6 +846,7 @@ Each All auctions card that may be watched SHALL offer the same watch as the
 lot page and My Auctions. A closed lot's card SHALL show no watch. The card MAY
 compose `AuctionCard` with `WatchButton`.
 
+<!-- trace:scenario id=g10.auction-auction.SC-na4 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-38 - A signed-in collector watches from an All auctions card
 **Serves:** grade10-site-auction-auction-US-09 - Collector watches from an All auctions card
 
@@ -832,6 +855,7 @@ compose `AuctionCard` with `WatchButton`.
 - **THEN** the lot is watched or unwatched the same way as on the lot page and
   My Auctions
 
+<!-- trace:scenario id=g10.auction-auction.SC-epv rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-39 - A closed lot's card shows no watch
 **Serves:** grade10-site-auction-auction-US-09 - Collector watches from an All auctions card
 
@@ -840,6 +864,7 @@ compose `AuctionCard` with `WatchButton`.
 - **THEN** the card shows no watch control
 
 
+<!-- trace:scenario id=g10.auction-auction.SC-iyy rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-41 - Featured remains when All auctions is empty
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -856,6 +881,7 @@ batch. While that batch is loading, All auctions SHALL append Boneyard skeleton
 cards below the lots already shown and SHALL keep those lots visible. When no
 further lots remain, no load trigger SHALL appear.
 
+<!-- trace:scenario id=g10.auction-auction.SC-cys rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-59 - More All auctions lots load on scroll
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -865,6 +891,7 @@ further lots remain, no load trigger SHALL appear.
 - **AND** lots already shown stay visible
 - **AND** the combined list stays in the catalogue resting order
 
+<!-- trace:scenario id=g10.auction-auction.SC-ned rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-60 - Loading more shows skeleton cards
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -879,6 +906,7 @@ An Upcoming lot on Featured or on an All auctions card SHALL NOT show a starting
 bid or other money amount. Money SHALL appear once the lot is Active (Featured
 current bid; All auctions current bid).
 
+<!-- trace:scenario id=g10.auction-auction.SC-fs8 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-61 - An Upcoming All auctions card shows no money
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -926,6 +954,7 @@ each against the state the one before it left.
 - **AND** the current bid is the highest valid accepted amount
 - **AND** no lower bid can overwrite that current bid
 
+<!-- trace:scenario id=g10.auction-auction.SC-ckp rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-86 - A bid in the last second counts when accepted
 **Serves:** grade10-site-auction-auction-US-11 - Bidder is held to the close with everyone else
 
@@ -974,6 +1003,7 @@ log entry at the auction service, naming the bidder, the listing, the code, the
 maximum sent and, where the refusal names one, the floor or the ceiling: the
 minimum next bid or the currency's highest maximum. The entry is for operators and SHALL NOT reach the bidder's record.
 
+<!-- trace:scenario id=g10.auction-auction.SC-rl3 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-89 - A refused first bid leaves no trace
 **Serves:** grade10-site-auction-auction-US-14 - a collector's first bid on a lot is refused because the price moved
 
@@ -987,6 +1017,7 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
   history
 - **AND** the current bid, the leader and the bid count are unchanged
 
+<!-- trace:scenario id=g10.auction-auction.SC-lu0 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-90 - An Outbid bidder's refused raise leaves their row where it was
 **Serves:** grade10-site-auction-auction-US-14 - an Outbid bidder's raise is refused because the price moved
 
@@ -999,6 +1030,7 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
 - **AND** B's maximum stays 110000 HKD minor units and their bidding history
   gains no entry
 
+<!-- trace:scenario id=g10.auction-auction.SC-fnt rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-91 - Each refusal reads in its own words
 **Serves:** grade10-site-auction-auction-US-14 - the bidder reads why a bid was refused
 
@@ -1006,6 +1038,7 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
 - **THEN** the bid form shows that row's words under the bid action
 - **AND** no toast opens
 
+<!-- trace:scenario id=g10.auction-auction.SC-nh5 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-92 - The server's words never reach the bid form
 **Serves:** grade10-site-auction-auction-US-14 - a refusal the bid form has no words of its own for
 
@@ -1014,6 +1047,7 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
 - **THEN** the bid form says Your bid did not go through.
 - **AND** none of the server's message shows
 
+<!-- trace:scenario id=g10.auction-auction.SC-ulv rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-93 - A refusal is kept for operators only
 **Serves:** grade10-site-auction-auction-US-14 - an operator reads a refusal the bidder's record never shows
 
@@ -1042,6 +1076,7 @@ the one exception to the announcement under
 the auction recorded it as made when it accepted the bid and the standing read
 does not carry it.
 
+<!-- trace:scenario id=g10.auction-auction.SC-xrx rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-94 - A committed bid behind a lost answer reads as placed
 **Serves:** grade10-site-auction-auction-US-02 - a collector's bid commits but its answer is lost on the way back
 
@@ -1052,6 +1087,7 @@ does not carry it.
 - **AND** the panel shows their maximum of 130000 HKD minor units and their
   standing
 
+<!-- trace:scenario id=g10.auction-auction.SC-s1d rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-95 - A lost answer with no bid behind it says so
 **Serves:** grade10-site-auction-auction-US-02 - a collector's bid gets no answer and placed nothing
 
@@ -1099,6 +1135,7 @@ in USD minor units; the increment at each next maximum here is 500.
 In the third row the next maximum plus one increment is 20300, above the price
 before, so the price stays.
 
+<!-- trace:scenario id=g10.auction-auction.SC-qs1 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-96 - The runner-up takes the lead from the maxima left
 **Serves:** grade10-site-auction-auction-US-13 - the leader's account is erased and the runner-up's maximum is highest left
 
@@ -1111,6 +1148,7 @@ before, so the price stays.
 - **AND** the public bid history records one bid placed on B's behalf at 12500
   USD minor units
 
+<!-- trace:scenario id=g10.auction-auction.SC-hlm rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-97 - Erasing the bidder who set the price re-prices the leader
 **Serves:** grade10-site-auction-auction-US-13 - the bidder whose maximum set the price is erased
 
@@ -1119,6 +1157,7 @@ before, so the price stays.
 - **WHEN** B's account is erased
 - **THEN** A still leads, at 12500 USD minor units
 
+<!-- trace:scenario id=g10.auction-auction.SC-z26 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-98 - A leader whose maximum outgrew the price keeps it
 **Serves:** grade10-site-auction-auction-US-13 - the erasure would price the lot above where it stood
 
@@ -1128,6 +1167,7 @@ before, so the price stays.
 - **THEN** A still leads at 20000 USD minor units
 - **AND** nothing is written beyond C's withdrawn bids
 
+<!-- trace:scenario id=g10.auction-auction.SC-43o rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-99 - Erasing a bidder who set nothing moves nothing
 **Serves:** grade10-site-auction-auction-US-13 - a bidder below the runner-up is erased
 
@@ -1136,6 +1176,7 @@ before, so the price stays.
 - **WHEN** C's account is erased
 - **THEN** A still leads at 15500 USD minor units, on the same bid
 
+<!-- trace:scenario id=g10.auction-auction.SC-t9v rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-100 - One maximum left stands at the opening price
 **Serves:** grade10-site-auction-auction-US-13 - the leader is erased and one bidder is left
 
@@ -1145,6 +1186,7 @@ before, so the price stays.
 - **WHEN** A's account is erased
 - **THEN** B leads at 10000 USD minor units
 
+<!-- trace:scenario id=g10.auction-auction.SC-rmq rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-101 - Erasing the only bidder leaves no leader
 **Serves:** grade10-site-auction-auction-US-13 - the lot's only bidder is erased
 
@@ -1154,6 +1196,7 @@ before, so the price stays.
 - **THEN** the listing has no leader and no current bid
 - **AND** the next bid must reach 10000 USD minor units
 
+<!-- trace:scenario id=g10.auction-auction.SC-5oc rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-102 - A re-stood lot closes on its new leader
 **Serves:** grade10-site-auction-auction-US-13 - a lot re-stood after an erasure reaches its close
 

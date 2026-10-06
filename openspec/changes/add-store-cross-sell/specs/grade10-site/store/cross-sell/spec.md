@@ -50,6 +50,7 @@ may want.
 - **AND** nothing stands in the rail's place while the page loads
 - **AND** the card does not move when the rail appears
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-4s1 rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-02 - A card nobody can buy still shows its rail
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector who cannot buy this card is carried to the next one
 
@@ -69,6 +70,7 @@ similar cards to fill.
   whether the stock keeper chose it or it shares its own facts.
 - **One card shows** — a rail of one card is drawn, headed as ever.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-jts rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-03 - The picks lead and similar cards fill
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector meets the stock keeper's cards first and more cards after them
 
@@ -78,6 +80,7 @@ similar cards to fill.
 - **AND** the remaining four are cards sharing its world
 - **AND** nothing in the rail says which of the two a card came from
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-9zy rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-04 - The rail stops at six
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector is given a set they can read, not the catalogue
 
@@ -86,6 +89,7 @@ similar cards to fill.
 - **THEN** the rail holds the first six of them, in the stock keeper's order
 - **AND** no similar card is in the rail
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-ieg rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-05 - One card is enough for a rail
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector is shown the one card the stock keeper meant
 
@@ -115,6 +119,7 @@ nothing that adds to the cart.
 - **Buying is on the card's page** — adding is done on the page the rail
   opened.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-w8r rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-07 - A card in the rail opens
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector goes on to the next card without returning to the listing
 
@@ -122,6 +127,7 @@ nothing that adds to the cart.
 - **WHEN** they open a card in the rail
 - **THEN** they are on that card's own page, reading that card
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-jox rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-33 - A card in the rail is a link to its page
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector opens the next card the way they open any link, before the page's scripts run
 
@@ -129,6 +135,7 @@ nothing that adds to the cart.
 - **WHEN** its page is fetched and no script runs
 - **THEN** each card in the rail is a link to that card's own page
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-cjl rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-08 - Nothing in the rail adds to the cart
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector buys on the card's own page, not from under another card
 
@@ -151,6 +158,7 @@ SHALL leave no space for one.
   and environment, every card's page answers whole and shows no rail, as with
   nothing to show.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-oc0 rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-09 - Nothing to show, nothing drawn
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector reads a card whose page ends with the card
 
@@ -159,6 +167,7 @@ SHALL leave no space for one.
 - **THEN** no rail and no heading are under the card
 - **AND** no space is left where the rail would be
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-aqd rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-10 - A rail the site cannot compose
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector still gets the card they asked for
 
@@ -167,6 +176,7 @@ SHALL leave no space for one.
 - **THEN** the card's page answers whole
 - **AND** no rail, no heading and no space are under the card
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-abp rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-34 - The rail switched off
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector still gets the card they asked for while the store has the rail off
 
@@ -190,6 +200,7 @@ card itself, SHALL be that card's picks.
 - **Left out** — a pick the catalogue no longer holds is left out, and the rest
   of the rail stands.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-n3j rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-11 - The stock keeper's order is the rail's order
 **Serves:** grade10-site-store-cross-sell-US-03 - the stock keeper puts the cards in an order and the page keeps it
 
@@ -197,6 +208,7 @@ card itself, SHALL be that card's picks.
 - **WHEN** a collector opens that card's page
 - **THEN** the rail's first three cards are those three, in the order the stock keeper chose them
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-zts rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-12 - A changed pick reaches the page
 **Serves:** grade10-site-store-cross-sell-US-03 - the stock keeper changes the cards and sees the change on the page
 
@@ -222,6 +234,7 @@ is sold out, and still open its own page.
   and keeps its price.
 - **Still opens** — it opens its own page like every other card in the rail.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-ntx rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-14 - A sold-out pick says so and still opens
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector meets a card the stock keeper meant them to see, sold out and still worth opening
 
@@ -256,6 +269,7 @@ sharing this card's world, its language or its collectible type.
   does not hold yet shows its picks alone; the similar cards follow when the
   copy does.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-of9 rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-15 - A card nobody chose picks for shows cards like it
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector on an unchosen card is still led somewhere
 
@@ -263,6 +277,7 @@ sharing this card's world, its language or its collectible type.
 - **WHEN** a collector opens its page
 - **THEN** the rail holds those four cards, newest first
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-5na rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-16 - A shared world comes before a shared language
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector sees the cards closest to the one they are reading first
 
@@ -270,6 +285,7 @@ sharing this card's world, its language or its collectible type.
 - **WHEN** a collector opens its page
 - **THEN** the card sharing the world is before the card sharing the language
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-npr rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-17 - A shared language comes before a shared type
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector reading in one language is offered that language first
 
@@ -277,6 +293,7 @@ sharing this card's world, its language or its collectible type.
 - **WHEN** a collector opens its page
 - **THEN** the card sharing the language is before the card sharing the collectible type
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-gyq rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-18 - Newest first among cards sharing the same fact
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector is offered what the store has just taken in
 
@@ -293,6 +310,7 @@ sharing this card's world, its language or its collectible type.
 - **WHEN** a collector opens the first card's page
 - **THEN** the April card is before the March card
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-g8u rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-27 - Similar cards stop at six
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector is given a set they can read
 
@@ -301,6 +319,7 @@ sharing this card's world, its language or its collectible type.
 - **THEN** the rail holds six of them, newest first
 - **AND** no seventh tile is drawn
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-znx rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-28 - Picks unreadable, similar cards fill
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector is still led somewhere when the picks are not to be had
 
@@ -309,6 +328,7 @@ sharing this card's world, its language or its collectible type.
 - **THEN** the rail holds the cards sharing its world, as for a card nobody chose for
 - **AND** the card's page is otherwise unchanged
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-fi3 rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-29 - A card with no world falls to its language and type
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector on a card the catalogue names no world for still sees cards like it
 
@@ -316,6 +336,7 @@ sharing this card's world, its language or its collectible type.
 - **WHEN** a collector opens its page
 - **THEN** the rail holds both, the card sharing the language first
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-fch rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-30 - Clearing every pick leaves similar cards
 **Serves:** grade10-site-store-cross-sell-US-03 - the stock keeper takes their picks back and the page still leads somewhere
 
@@ -323,6 +344,7 @@ sharing this card's world, its language or its collectible type.
 - **WHEN** the stock keeper removes every pick in Shopify
 - **THEN** reading the card's page afresh within a minute shows the cards sharing its world and no pick
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-rz4 rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-31 - Closer comes before newer
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector sees the card most like the one they are reading before a newer card less like it
 
@@ -330,6 +352,7 @@ sharing this card's world, its language or its collectible type.
 - **WHEN** a collector opens its page
 - **THEN** the March card is before the April card
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-2qp rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-32 - A card the store's copy does not hold yet shows its picks alone
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector on a card the store has just taken in still meets the stock keeper's picks
 
@@ -351,6 +374,7 @@ and every card already in the rail as a pick.
   type with the card being read is never among them, and a card the catalogue
   names none of the three facts for draws no similar card at all.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-w2k rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-20 - A card the catalogue names no facts for
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector on a card the catalogue says little about still gets what was chosen for it
 
@@ -359,6 +383,7 @@ and every card already in the rail as a pick.
 - **THEN** the rail holds those two picks
 - **AND** no similar card is in the rail
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-56r rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-21 - A card nobody can buy is never a similar card
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector is led on to cards they can still buy
 
@@ -389,6 +414,7 @@ them.
   `grade10-site/store/product-listing` holds it to; the page states one clock,
   its own minute, and promises no second one for the similar cards.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-6b1 rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-23 - A card the catalogue gains joins the similar cards
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector is offered the card the store took in this morning
 
@@ -397,6 +423,7 @@ them.
 - **AND** the store's copy of the catalogue holds it
 - **THEN** reading the card's page afresh, past the page's own minute, shows the published card among the similar cards, first among those sharing its world
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-79a rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-24 - A similar card that sells out leaves
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector is not led to a card that has gone
 

@@ -26,6 +26,11 @@ import {
   deltaSections,
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
+import {
+  acceptedSnapshots,
+  describeReuse,
+  reusedInChange,
+} from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
@@ -105,7 +110,7 @@ function sectionContent(text, anchor) {
   visit(roots);
   if (all.length === 0) return null;
   const section = all[0];
-  const span = sectionSpan(
+  const _span = sectionSpan(
     text,
     section.heading,
     section.level === 1 ? roots : undefined,
@@ -309,16 +314,31 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   const deltaSections = rootSections(deltaText).sections;
   const deltaFeature = sectionByName(deltaSections, "Feature set");
   const removedFeature = sectionByName(deltaSections, "REMOVED Feature set");
-  const removedGroups = (removedFeature?.raw ?? "")
+  const splitGroups = (raw) => {
+    const groups = new Map();
+    let items = null;
+    for (const line of raw.split("\n")) {
+      if (/^-\s+/.test(line)) {
+        const group = line.trim();
+        if (!groups.has(group)) groups.set(group, []);
+        items = groups.get(group);
+      } else if (!items || line.trim() === "") continue;
+      else if (/^ {2}-\s+/.test(line) || items.length === 0) items.push([line]);
+      else items.at(-1).push(line);
+    }
+    return groups;
+  };
+  const removedGroupNames = (removedFeature?.raw ?? "")
     .split("\n")
     .filter((line) => /^-\s+/.test(line))
     .map((line) => line.trim());
-  if (!deltaFeature && removedGroups.length === 0) return currentSpec;
+  const removedGroups = splitGroups(removedFeature?.raw ?? "");
+  if (!deltaFeature && removedGroups.size === 0) return currentSpec;
   const currentFeature = sectionByName(
     rootSections(currentSpec).sections,
     "Feature set",
   );
-  if (!currentFeature && removedGroups.length > 0)
+  if (!currentFeature && removedGroups.size > 0)
     throw new Error(
       `${capability}: cannot remove a Feature set group without a durable Feature set`,
     );
@@ -335,20 +355,6 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
         `${capability}: accepted Feature set changed since this amendment began; rebase the delta before acceptance`,
       );
   }
-  const splitGroups = (raw) => {
-    const groups = new Map();
-    let items = null;
-    for (const line of raw.split("\n")) {
-      if (/^-\s+/.test(line)) {
-        const group = line.trim();
-        if (!groups.has(group)) groups.set(group, []);
-        items = groups.get(group);
-      } else if (!items || line.trim() === "") continue;
-      else if (/^ {2}-\s+/.test(line) || items.length === 0) items.push([line]);
-      else items.at(-1).push(line);
-    }
-    return groups;
-  };
   const textOf = (item) => item.map((line) => line.trim()).join(" ");
   const labelOf = (item) => {
     const text = item[0].trim().replace(/^-\s+/, "");
@@ -357,11 +363,15 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   };
   const baseGroups = splitGroups(currentFeature?.raw ?? "");
   const deltaGroups = splitGroups(deltaFeature?.raw ?? "");
-  if (new Set(removedGroups).size !== removedGroups.length)
+  const holding = (pool, label) =>
+    label
+      ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
+      : [];
+  if (new Set(removedGroupNames).size !== removedGroupNames.length)
     throw new Error(
       `${capability}: REMOVED Feature set names a root group more than once`,
     );
-  if (deltaGroups.size === 0 && removedGroups.length === 0) {
+  if (deltaGroups.size === 0 && removedGroups.size === 0) {
     if (deltaFeature.raw.trim() === currentFeature.raw.trim())
       return currentSpec;
     throw new Error(
@@ -371,10 +381,6 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   for (const [group, deltaItems] of deltaGroups) {
     if (!baseGroups.has(group)) baseGroups.set(group, []);
     const items = baseGroups.get(group);
-    const holding = (pool, label) =>
-      label
-        ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
-        : [];
     for (const item of deltaItems) {
       const label = labelOf(item);
       const matches = holding(items, label);
@@ -391,16 +397,47 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
         items.push(item);
     }
   }
-  for (const group of removedGroups) {
+  for (const [group, removedItems] of removedGroups) {
     if (!baseGroups.has(group))
       throw new Error(
         `${capability}: REMOVED Feature set names a root group that does not exist: ${group.replace(/^-\s+/, "")}`,
       );
-    if (deltaGroups.has(group))
-      throw new Error(
-        `${capability}: Feature set root group cannot be both modified and removed: ${group.replace(/^-\s+/, "")}`,
-      );
-    baseGroups.delete(group);
+    if (removedItems.length === 0) {
+      if (deltaGroups.has(group))
+        throw new Error(
+          `${capability}: Feature set root group cannot be both modified and removed: ${group.replace(/^-\s+/, "")}`,
+        );
+      baseGroups.delete(group);
+      continue;
+    }
+    const items = baseGroups.get(group);
+    const deltaItems = deltaGroups.get(group) ?? [];
+    const removedLabels = new Set();
+    for (const item of removedItems) {
+      const label = labelOf(item);
+      if (!label)
+        throw new Error(
+          `${capability}: REMOVED Feature set item in ${group.replace(/^-\s+/, "")} needs a label ending in a colon`,
+        );
+      if (removedLabels.has(label))
+        throw new Error(
+          `${capability}: REMOVED Feature set names item "${label}" more than once in ${group.replace(/^-\s+/, "")}`,
+        );
+      removedLabels.add(label);
+      if (holding(deltaItems, label).length > 0)
+        throw new Error(
+          `${capability}: Feature set item cannot be both modified and removed: ${label}`,
+        );
+      const matches = holding(items, label);
+      if (matches.length !== 1)
+        throw new Error(
+          matches.length === 0
+            ? `${capability}: REMOVED Feature set item does not exist: ${label}`
+            : `${capability}: Feature set group "${group}" holds label "${label}" more than once in the durable spec; make its labels unique before folding`,
+        );
+      items.splice(matches[0], 1);
+    }
+    if (items.length === 0) baseGroups.delete(group);
   }
   const body = [...baseGroups]
     .map(([group, items]) => [group, ...items.flat()].join("\n"))
@@ -1027,47 +1064,13 @@ function durableWhenPurposeWritten(root, deltaPath, durablePath) {
   return textAt(root, written, durablePath) ?? "";
 }
 
-function previousDurableSnapshots(root, changeId) {
-  const current = join(
-    root,
-    "openspec",
-    "changes",
-    changeId,
-    "acceptance.json",
-  );
-  if (!existsSync(current)) return new Map();
-  try {
-    const accepted = JSON.parse(readFileSync(current, "utf8"));
-    const file = join(
-      root,
-      "openspec",
-      "changes",
-      changeId,
-      "acceptance",
-      `${accepted.fingerprint}.snapshots.json`,
-    );
-    if (!existsSync(file)) return new Map();
-    const snapshots = JSON.parse(readFileSync(file, "utf8"));
-    return new Map(
-      (snapshots.files ?? [])
-        .filter((entry) => entry.role === "durable-result")
-        .map((entry) => [
-          entry.path,
-          Buffer.from(entry.contentBase64, "base64").toString("utf8"),
-        ]),
-    );
-  } catch {
-    return new Map();
-  }
-}
-
 function contractOutputs(root, changeId, foldedOn) {
   const dir = join(root, "openspec", "changes", changeId);
   const deltas = walkFiles(root, join(dir, "specs"))
     .filter((path) => path.endsWith("/spec.md"))
     .sort();
   const outputs = new Map();
-  const prior = previousDurableSnapshots(root, changeId);
+  const prior = acceptedSnapshots(root, changeId, "durable-result");
   for (const path of deltas) {
     const relativeCapability = path
       .slice(`openspec/changes/${changeId}/specs/`.length)
@@ -1301,6 +1304,8 @@ export function acceptanceReadiness(root, changeId) {
   );
   if (deltas.length === 0 && manifest.skip_specs !== true)
     errors.push("there are no delta specs to accept");
+  for (const { file, reuse } of reusedInChange(root, changeId))
+    errors.push(`${file}: ${describeReuse(reuse)}`);
   for (const path of deltas) {
     const capabilityDir = dirname(join(root, path));
     for (const file of ["user-journeys.md", "feature-tcs.md"]) {
@@ -1321,10 +1326,25 @@ export function acceptanceReadiness(root, changeId) {
             .replace(/<!--[\s\S]*?-->/g, "")
             .trim()
         : "";
+      const tableRows = body
+        .split("\n")
+        .filter(
+          (line) =>
+            /^\s*\|/.test(line) &&
+            !/^\s*\|(?:\s*:?-{3,}:?\s*\|)+\s*$/.test(line),
+        );
+      const incompleteTable =
+        tableRows.length === 1 ||
+        tableRows.slice(1).some((line) =>
+          line
+            .split("|")
+            .slice(1, -1)
+            .some((cell) => cell.trim() === ""),
+        );
       if (
         !reconciliation ||
         body === "" ||
-        /^\s*\|\s*(?:Raised|Disposition|Question)\s*\|/im.test(body) ||
+        incompleteTable ||
         /^\s*\|\s*<!--/m.test(
           suite
             .split("\n")

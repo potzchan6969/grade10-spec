@@ -144,6 +144,7 @@ today.
 - **WHEN** the five status views are read together
 - **THEN** every status appears in exactly one of them
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-5zv rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-21 - Every cut says how many it holds
 **Serves:** grade10-admin-vault-operator-queue-US-06 - the operator sizes the day's load before opening a case
 
@@ -152,6 +153,7 @@ today.
 - **THEN** the cut for cases waiting on staff says it holds 60, and the one for cases agreeing says it holds none
 - **AND** the page in hand says how many of the 60 it is showing
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-2bi rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-22 - The console opens on today's visits in slot order
 **Serves:** grade10-admin-vault-operator-queue-US-06 - the operator starts the shift on the day's visits
 
@@ -160,6 +162,7 @@ today.
 - **THEN** the view it opens on is the Today cut, holding those three cases in that order, with its count beside it
 - **AND** reading the Today cut straight after answers those same three cases
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-q25 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-23 - A day with no visit says so
 **Serves:** grade10-admin-vault-operator-queue-US-06 - the operator learns there is nothing booked before working the rest of the queue
 
@@ -264,6 +267,7 @@ queue with nothing in it.
 - **WHEN** an operator searches for the same number with spaces in it
 - **THEN** the case is found
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-bol rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-07a - A number typed in full-width digits or with a bare dial code is found
 **Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
 
@@ -287,6 +291,7 @@ queue with nothing in it.
 - **WHEN** they read the queue unnarrowed
 - **THEN** no audit entry is written for it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ybs rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-24 - The characters read out at the counter find the case
 **Serves:** grade10-admin-vault-operator-queue-US-05 - the operator serves the person at the counter from what they read out
 
@@ -294,12 +299,14 @@ queue with nothing in it.
 - **WHEN** an operator searches for those characters in lower case
 - **THEN** that case is found
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-76n rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-26 - A reference nobody holds says so
 **Serves:** grade10-admin-vault-operator-queue-US-05 - the operator learns the characters were misheard rather than reading an empty queue
 
 - **WHEN** an operator searches for a reference no case carries
 - **THEN** the answer says no case answers to it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-i1e rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-47 - The first characters of a case id find the case
 **Serves:** grade10-admin-vault-operator-queue-US-02 - the operator opens the case from the id in front of them
 
@@ -307,6 +314,7 @@ queue with nothing in it.
 - **WHEN** they search the first eight characters of that id
 - **THEN** that case is found
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ehn rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-48 - Part of a number finds nothing
 **Serves:** grade10-admin-vault-operator-queue-US-02 - the operator cannot walk the customer list a piece of a number at a time
 
@@ -471,6 +479,7 @@ read out and the word the collector reads for where the case stands.
 - **Who is waited on** - a queue row SHALL say when the case is waiting on the
   collector rather than on a member of staff.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-bd3 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-27 - A row reads the collector's word, never the stored one
 **Serves:** grade10-admin-vault-operator-queue-US-01 - the operator reads a row in the words the person at the counter will use
 
@@ -479,6 +488,7 @@ read out and the word the collector reads for where the case stands.
 - **THEN** the row shows the word the collector's own case page shows for that status
 - **AND** no stored status name is printed on it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-qhf rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-28 - Every case surface carries the reference
 **Serves:** grade10-admin-vault-operator-queue-US-05 - the operator reads the reference back to the person at the counter
 
@@ -486,6 +496,7 @@ read out and the word the collector reads for where the case stands.
 - **WHEN** an operator reads its queue row, its row in the held list and its own header
 - **THEN** each shows that case's reference
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-6lc rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-29 - A row says when the collector is the one being waited on
 **Serves:** grade10-admin-vault-operator-queue-US-01 - the operator sees at a glance which cases are not theirs to move
 
@@ -520,6 +531,7 @@ that visit, in the order they are worked.
 - **No visit today** - a case with no visit at the shop today SHALL show no
   checklist.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-i5p rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-30 - The counter reads the visit's steps in order
 **Serves:** grade10-admin-vault-operator-queue-US-07 - a shop of three runs the counter from the screen
 
@@ -528,6 +540,7 @@ that visit, in the order they are worked.
 - **THEN** it opens on the visit's seven steps in order, with the identity step ticked
 - **AND** the step that inspects and values carries the act that lands it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-on2 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-31 - A step the case does not allow yet says what it is waiting for
 **Serves:** grade10-admin-vault-operator-queue-US-07 - the counter learns what is missing without sending an act that will be refused
 
@@ -535,6 +548,7 @@ that visit, in the order they are worked.
 - **WHEN** staff read the step that puts the item in the vault
 - **THEN** the step offers no act and says it is waiting for the packet to be signed
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-a0m rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-32 - A case that borrows nothing walks the custody terms
 **Serves:** grade10-admin-vault-operator-queue-US-07 - the counter works a storage visit from the same screen
 
@@ -543,6 +557,7 @@ that visit, in the order they are worked.
 - **THEN** its terms step reads the custody terms, and no step asks for the loan agreement's key terms
 - **AND** its checklist walks six steps rather than seven
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-fzi rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-33 - A case with no visit today shows no checklist
 **Serves:** grade10-admin-vault-operator-queue-US-07 - the counter is not walked through a visit nobody is coming to
 
@@ -550,6 +565,7 @@ that visit, in the order they are worked.
 - **WHEN** staff open it
 - **THEN** no visit checklist is shown
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ffw rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-50 - An act lands its step and hands the next one on
 **Serves:** grade10-admin-vault-operator-queue-US-07 - the counter works down the list without looking up what comes next
 
@@ -579,6 +595,7 @@ for instead of leaving the operator to send it and be refused.
   sent to the collector about the late loan, each with the day it went and the
   channel it went by.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-cby rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-34 - A loan not yet past its due date cannot be forfeited
 **Serves:** grade10-admin-vault-operator-queue-US-08 - the operator never takes an item a day early
 
@@ -586,6 +603,7 @@ for instead of leaving the operator to send it and be refused.
 - **WHEN** an operator reads the custody tab
 - **THEN** forfeiture is not offered, and the reason reads that the due date has not passed
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ngn rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-35 - A late loan with no notice offers the notice
 **Serves:** grade10-admin-vault-operator-queue-US-08 - the operator sees the one act that moves a late case on
 
@@ -594,6 +612,7 @@ for instead of leaving the operator to send it and be refused.
 - **THEN** forfeiture is not offered, and the reason reads that no written notice has been sent
 - **AND** sending the notice is offered beside it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-xep rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-36 - A running cure names the date and the day the notice went
 **Serves:** grade10-admin-vault-operator-queue-US-08 - the operator reads the exact day the item may be taken
 
@@ -601,6 +620,7 @@ for instead of leaving the operator to send it and be refused.
 - **WHEN** an operator reads the custody tab
 - **THEN** forfeiture is not offered, and the reason names the date the borrower was given and the day the notice was sent
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-tog rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-37 - A tab says what this status withholds
 **Serves:** grade10-admin-vault-operator-queue-US-03 - the operator learns why a case offers less than the one before it
 
@@ -608,6 +628,7 @@ for instead of leaving the operator to send it and be refused.
 - **WHEN** its tabs are read
 - **THEN** the acts this status withholds are named, each with what it is waiting for
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-oxk rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-38 - The custody tab lists what the collector was told
 **Serves:** grade10-admin-vault-operator-queue-US-08 - the operator sees what the borrower has already been sent before taking the item
 
@@ -615,6 +636,7 @@ for instead of leaving the operator to send it and be refused.
 - **WHEN** an operator reads the custody tab
 - **THEN** each of the three is listed with the day it went and the channel it went by
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-g9x rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-51 - Forfeiture is offered once nothing holds it
 **Serves:** grade10-admin-vault-operator-queue-US-08 - the operator takes the item on the first day they may
 
@@ -650,6 +672,7 @@ take it at the counter.
   `grade10-site/e-kyc/hosted-verification` holds, which is where the boundary
   between the two is stated.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-xz7 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-39 - A check still out reads as out, not as nothing asked for
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator knows whether to send the check again or wait
 
@@ -658,6 +681,7 @@ take it at the counter.
 - **THEN** it reads Out, with the day the check went
 - **AND** it offers sending it again and recording one at the counter
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-rz1 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-40 - A refused check names who records over it
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator takes the identity at the counter with the refusal in sight
 
@@ -666,12 +690,14 @@ take it at the counter.
 - **THEN** it reads Refused, with the day and the reason
 - **AND** recording one at the counter names who is recording over the refusal
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-fw0 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-41 - Each of the six states reads its own panel
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator reads one word for where the identity stands
 
 - **WHEN** a case standing at each of the six states is read in turn
 - **THEN** the panel shows that state, with what it adds beside it and the acts it offers
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-3z5 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-42 - A provider's finer state folds into one of the six
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator is never shown a word the shop does not use
 
@@ -679,6 +705,7 @@ take it at the counter.
 - **WHEN** an operator reads the identity panel
 - **THEN** it shows one of the six states, and no word of the provider's
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-k4s rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-52 - A check just submitted reads Out, and Stalled when the identity check says so
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator waits on the provider only while there is something to wait for
 
@@ -704,6 +731,7 @@ a single row.
 - **Nothing held** - a list holding nothing SHALL say so, with its figures at
   none.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4c4 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-43 - The figures count what is held, not the page
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator says how much the shops are holding without paging the list
 
@@ -711,6 +739,7 @@ a single row.
 - **WHEN** the held list is read
 - **THEN** its figures read 60 held, 25 carrying a live loan and 4 waiting on a pickup, and name how many of the 60 are held at each of the two shops
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-1ij rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-44 - One shop narrows the rows and the figures with them
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator answers for the shop they are standing in
 
@@ -718,6 +747,7 @@ a single row.
 - **WHEN** the list is narrowed to one of them
 - **THEN** only that shop's items are listed, and the figures count that shop's items alone
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4h9 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-45 - A row says what the item is carrying
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator answers for one item without opening its case
 
@@ -725,6 +755,7 @@ a single row.
 - **WHEN** the held list is read
 - **THEN** each row names the case reference, the item, the shop, the locker, the day it was taken in, the days it has been held, the status in the collector's word, what is outstanding, and whether a pickup is booked
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-j43 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-46 - A shop holding nothing says so
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator reads an empty shelf as an empty shelf
 
@@ -743,6 +774,7 @@ anyone to look the movements up elsewhere.
 - **Written by the act** - a movement SHALL reach the log because the act that
   moved the item wrote it, and SHALL NOT be entered by hand.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-0nd rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-49 - A move between lockers reads back on the log
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator says where an item has been without leaving the case
 
@@ -792,6 +824,7 @@ keyed to a person and never to a case. Staff SHALL NOT add a second item, edit
 an item, or attach a photograph to a case, except a photograph on an unsent
 draft staff opened.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-vri rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-55 - A walk-in opens a draft under the customer's account
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator serves a customer who arrives with no request
 
@@ -801,6 +834,7 @@ draft staff opened.
 - **AND** the operator lands on the draft's page, and the draft is in the Drafts view
 - **AND** nothing is emailed to anybody
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-mvr rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-56 - An account nobody has signed in to takes the draft
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator serves a customer whose address the shop met before
 
@@ -808,6 +842,7 @@ draft staff opened.
 - **WHEN** an operator opens a walk-in for that address
 - **THEN** the draft opens under that account, and no second account exists for the address
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-rkk rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-57 - An address signed in to before is refused
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator learns this customer sends from their own phone
 
@@ -816,6 +851,7 @@ draft staff opened.
 - **THEN** it is refused by name, saying only that the address has signed in before and that the customer sends the request from their own phone
 - **AND** no case is opened, and the form keeps what was typed
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-9is rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-58 - The statement comes before the address and its version is kept
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator reads the statement to the customer before taking their address
 
@@ -824,6 +860,7 @@ draft staff opened.
 - **THEN** the statement is shown before the address field
 - **AND** the draft the form opens keeps the version that was shown
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-8w3 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-59 - In production, an unwritten statement refuses the open
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator is not asked to collect an address under a statement that does not exist
 
@@ -832,6 +869,7 @@ draft staff opened.
 - **THEN** it is refused by name
 - **AND** no case is opened and no account is created
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-d45 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-60 - Outside production, an unwritten statement does not hold the open
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator rehearses a walk-in while the wording is still being written
 
@@ -839,6 +877,7 @@ draft staff opened.
 - **WHEN** an operator opens a walk-in
 - **THEN** the draft opens, and the statement reads as being prepared
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-or8 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-61 - A fourth unsent request is refused at the counter
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator meets the same cap the customer meets
 
@@ -853,6 +892,7 @@ draft staff opened.
 - **WHEN** the same open arrives again
 - **THEN** it answers the draft already opened, and the account holds one draft for it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-us4 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-63 - Only the operate grant opens a walk-in
 **Serves:** grade10-admin-vault-operator-queue-US-10 - a treasurer at the counter cannot open a case
 
@@ -860,6 +900,7 @@ draft staff opened.
 - **WHEN** they read the queue's header
 - **THEN** no walk-in is offered, and sending one is refused by name
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-bsk rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-74 - An address typed in other capitals finds the same account
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator types the address as the customer spells it
 
@@ -868,6 +909,7 @@ draft staff opened.
 - **THEN** it is refused as an address signed in before
 - **AND** no case is opened, and no second account exists for the address
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-icq rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-75 - A walk-in holds at most ten photographs
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator photographs the item under the collector's own limits
 
@@ -875,6 +917,7 @@ draft staff opened.
 - **WHEN** the operator looks to add another
 - **THEN** the form offers no way to add one, and still holds ten
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-03h rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-76 - A fact the intake refuses is refused at the counter
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator corrects a field before the draft opens
 
@@ -883,6 +926,7 @@ draft staff opened.
 - **THEN** it is refused by name beside the title
 - **AND** no case is opened, and the form keeps what was typed
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-xu5 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-95 - An address that is not an email address is refused beside its field
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator checks the address with the customer before the draft opens
 
@@ -891,6 +935,7 @@ draft staff opened.
 - **THEN** it is refused by name beside the address, and the walk-in cannot be opened
 - **AND** nothing is sent, and the form keeps what was typed
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-wqo rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-96 - A loan of zero is refused beside its field
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator asks the customer how much before the draft opens
 
@@ -899,6 +944,7 @@ draft staff opened.
 - **THEN** it is refused by name beside the loan field, and the walk-in cannot be opened
 - **AND** nothing is sent, and the form keeps what was typed
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-q6y rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-79 - A walk-in opens with no photograph
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator opens the draft before the item is photographed
 
@@ -907,6 +953,7 @@ draft staff opened.
 - **THEN** the draft opens
 - **AND** the customer's send of it is refused until it holds a photograph
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-wjv rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-80 - Staff do not change a case they did not open as an unsent draft
 **Serves:** grade10-admin-vault-operator-queue-US-10 - every case stays the collector's to describe
 
@@ -922,6 +969,7 @@ SHALL be named by the part of its address before the `@` until the customer
 names themselves, and an existing account nobody has signed in to SHALL keep
 the name it has.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-cgu rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-64 - A created account reads by its handle
 **Serves:** grade10-admin-vault-operator-queue-US-10 - the operator tells the new draft apart before the customer names themselves
 
@@ -929,6 +977,7 @@ the name it has.
 - **WHEN** an operator opens a walk-in for it
 - **THEN** the draft's collector reads `mei.chan` on the queue
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-jcc rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-65 - A walk-in renames nobody
 **Serves:** grade10-admin-vault-operator-queue-US-10 - an earlier account keeps the name it carries
 
@@ -956,6 +1005,7 @@ grant.
   no collector and SHALL NOT narrow by one; a found case's header links its
   collector.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-lnp rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-66 - The queue names each case's collector
 **Serves:** grade10-admin-vault-operator-queue-US-11 - the operator greets the customer by name
 
@@ -963,6 +1013,7 @@ grant.
 - **WHEN** an operator holding the identity read grant reads the queue
 - **THEN** each row names its own collector
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-e22 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-67 - The held items name each item's collector
 **Serves:** grade10-admin-vault-operator-queue-US-11 - the operator tells two customers' items apart on the shelf
 
@@ -970,6 +1021,7 @@ grant.
 - **WHEN** an operator holding the identity read grant reads the held items
 - **THEN** each row names the collector whose case holds it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-msu rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-68 - A renamed account reads its new name
 **Serves:** grade10-admin-vault-operator-queue-US-11 - the operator reads the name the customer gave last
 
@@ -977,6 +1029,7 @@ grant.
 - **WHEN** the queue is read
 - **THEN** the row names the account's new name
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-00c rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-69 - A name that cannot be read leaves the row standing
 **Serves:** grade10-admin-vault-operator-queue-US-11 - the operator keeps working while names cannot be read
 
@@ -1012,6 +1065,7 @@ cut and the held items to that collector's cases.
 - **Unknown collector** — an address naming an id no account answers to, or
   one that is not an id, SHALL read as a collector holding no case.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-tjf rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-71 - A name narrows the lists to that collector
 **Serves:** grade10-admin-vault-operator-queue-US-12 - the operator sees everything one customer has with the shop
 
@@ -1021,6 +1075,7 @@ cut and the held items to that collector's cases.
 - **AND** the held items list that one item, and their figures count it alone
 - **AND** the collector's name stands above the rows with a control that clears it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-8mz rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-72 - The address keeps the collector
 **Serves:** grade10-admin-vault-operator-queue-US-12 - the operator sends a colleague the narrowed queue
 
@@ -1029,6 +1084,7 @@ cut and the held items to that collector's cases.
 - **THEN** it is still narrowed to that collector
 - **AND** clearing it lists every collector's cases again, and nowhere on the queue offers a field to type a collector
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-q78 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-73 - A cut holding none of the collector's cases says so
 **Serves:** grade10-admin-vault-operator-queue-US-12 - the operator reads an empty cut as that customer having nothing in it
 
@@ -1036,6 +1092,7 @@ cut and the held items to that collector's cases.
 - **WHEN** the cut for cases being agreed is opened
 - **THEN** it says the collector holds no case in it, and its count reads none
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-z5x rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-77 - An address naming nobody reads as a collector holding no case
 **Serves:** grade10-admin-vault-operator-queue-US-12 - a stale link reads as empty rather than failing
 
@@ -1043,6 +1100,7 @@ cut and the held items to that collector's cases.
 - **WHEN** a member of staff or a treasurer opens it
 - **THEN** every cut says the collector holds no case in it, and every count reads none
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-gij rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-78 - Overdue and search stay whole while the queue is narrowed
 **Serves:** grade10-admin-vault-operator-queue-US-12 - the arrears read every borrower whoever was narrowed to
 
@@ -1058,6 +1116,7 @@ the ids of the collectors read. No column of the entry SHALL hold a name or an
 email. A list that names nobody SHALL write none. A read whose entry cannot be
 written SHALL be refused rather than shown.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-t8q rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-81 - A page of names is recorded without the names
 **Serves:** grade10-admin-vault-operator-queue-US-11 - the shop can answer who looked at a customer
 
@@ -1066,6 +1125,7 @@ written SHALL be refused rather than shown.
 - **THEN** the audit trail carries one entry naming the operator, the instant and both collectors' ids
 - **AND** neither name nor email appears in any column of it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-xda rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-82 - A list narrowed to one collector is recorded
 **Serves:** grade10-admin-vault-operator-queue-US-12 - reading one customer's cases leaves a trace
 
@@ -1091,6 +1151,7 @@ they sent it.
 - **Unreachable** - where the register cannot be read, the section SHALL show
   its own error with a retry, and the rest of the tab SHALL stand.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-pfx rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-83 - The section says registration is pending until the valuation starts
 **Serves:** grade10-admin-vault-operator-queue-US-21 - staff read a case the register does not hold yet
 
@@ -1098,6 +1159,7 @@ they sent it.
 - **WHEN** staff open its Case tab
 - **THEN** the item's facts section says the item is registered when the valuation starts
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-54k rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-84 - The register's facts stand in for the request's
 **Serves:** grade10-admin-vault-operator-queue-US-21 - staff read one story about the item on the case
 
@@ -1106,6 +1168,7 @@ they sent it.
 - **THEN** the section shows the register's category, title, description, PSA, `10` and `12345678`, linking the item
 - **AND** the collector's request still reads "Charizard card", as they sent it
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-2vm rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-85 - Editing the facts needs the register's write grant
 **Serves:** grade10-admin-vault-operator-queue-US-21 - staff correct the slab's cert from the case
 
@@ -1114,6 +1177,7 @@ they sent it.
 - **THEN** the register's edit opens, and the section shows the corrected cert once it lands
 - **AND** an operator holding `vault:read` without `inventory:write` reads the facts with no Edit, and an edit sent anyway is refused by name
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ned rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-86 - A register that cannot be read leaves the case standing
 **Serves:** grade10-admin-vault-operator-queue-US-21 - staff work the case while the register is down
 
@@ -1122,6 +1186,7 @@ they sent it.
 - **THEN** the item's facts section shows its own error with a retry
 - **AND** the case's acts and timeline stand
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-0bj rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-94 - A treasurer's Case tab names the register's grant
 **Serves:** grade10-admin-vault-operator-queue-US-21 - a treasurer reading a case to pay against it is not shown who owns which item
 
@@ -1151,6 +1216,7 @@ sent it:
 While the lookup runs the form SHALL say so; where the register cannot be
 asked, the form SHALL show an error with a retry and keep what was typed.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-knz rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-87 - A walk-in's slab the register knows is taken
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff take in a slab a collector brought before
 
@@ -1160,6 +1226,7 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **WHEN** staff open the draft
 - **THEN** the case takes that item, and its Case tab reads the item's facts
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-s8n rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-88 - An unknown slab is registered when the valuation starts
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff take in a slab the register has never seen
 
@@ -1168,6 +1235,7 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **THEN** the form fills nothing, and the item registered at the start carries PSA, `9` and `87654321`
 - **AND** a slab given with a grader and cert and no grade is refused by name
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-z22 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-89 - A retired slab reads as retired
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff type a slab whose old record was retired
 
@@ -1175,6 +1243,7 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **WHEN** staff type PSA and `12345678` on the walk-in form
 - **THEN** the form reads the slab as retired, and a new item is registered when the valuation starts
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-nyo rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-90 - A slab under another owner is taken and named
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff learn at the counter that the slab is registered to someone else
 
@@ -1184,6 +1253,7 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **AND** for staff without `kyc:read` it names the owner by short id
 - **AND** the case takes the item, and Prepare documents is refused until the owners match
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-5z0 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-91 - A slab another case marks is refused
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff cannot take in a slab the vault already keeps
 
@@ -1191,6 +1261,7 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **WHEN** staff open a walk-in's draft naming PSA and `12345678`
 - **THEN** it is refused, naming and linking `K7P2QX`, and no case is opened
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-qjf rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-92 - A lookup that cannot reach the register keeps the form
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff retry the lookup without typing the customer again
 
@@ -1198,6 +1269,7 @@ asked, the form SHALL show an error with a retry and keep what was typed.
 - **WHEN** staff type a grader and cert on the walk-in form
 - **THEN** the form shows an error with a retry and keeps everything typed
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-jor rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-93 - Starting a valuation names the slab the same way
 **Serves:** grade10-admin-vault-operator-queue-US-20 - staff name the slab of a request sent from a phone when they start valuing it
 

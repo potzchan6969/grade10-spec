@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
+import {
+  FIXTURE_ALT_TIME_ZONE,
+  FIXTURE_TIME_ZONE,
+} from "../../lib/datetime-fixtures";
 import { BookingSummary } from "./booking-summary";
 import { FIXTURE_TIME_ZONE_LABEL, LIVE_RECORD, SUMMARY_COPY } from "./fixtures";
 
@@ -28,8 +31,23 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByText("3 Sep 2026, 10:15–10:45 (Hong Kong time)"),
+      canvas.getByText("3 Sep 2026, 10:15–10:45 (HKT)"),
     ).toBeInTheDocument();
+  },
+};
+
+export const ViewerZoneNewYork: Story = {
+  args: {
+    timeZone: FIXTURE_ALT_TIME_ZONE,
+    timeZoneLabel: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.queryByText("3 Sep 2026, 10:15–10:45 (HKT)"),
+    ).not.toBeInTheDocument();
+    expect(canvas.queryByText(/HKT|\bUTC\b|Hong Kong time/)).toBeNull();
+    expect(canvas.getByText(/EDT/)).toBeInTheDocument();
   },
 };
 

@@ -11,6 +11,7 @@
 **so that** nothing is left open in my name and any visit I booked goes with
 it.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-w0n rev=2 covers=g10.vault-case-lifecycle.SC-0gz,g10.vault-case-lifecycle.SC-vch,g10.vault-case-lifecycle.SC-vc1,g10.vault-case-lifecycle.SC-69a,g10.vault-case-lifecycle.SC-7se,g10.vault-case-lifecycle.SC-4jt -->
 ### grade10-site-vault-case-lifecycle-US1-TC1-2: Calling off a request names and closes only what stands open
 
 Runs once per row of **Test data**.
@@ -52,6 +53,7 @@ Runs once per row of **Test data**.
 * Step 2 reads `<case_1>` cancelled, ended, called off by the collector.
 * Step 2 reads no offer or visit left open.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-mwq rev=2 covers=g10.vault-case-lifecycle.SC-0gz,g10.vault-case-lifecycle.SC-vch,g10.vault-case-lifecycle.SC-vc1,g10.vault-case-lifecycle.SC-69a,g10.vault-case-lifecycle.SC-7se,g10.vault-case-lifecycle.SC-4jt -->
 ### grade10-site-vault-case-lifecycle-US1-TC2-2: Calling off is refused once the item is in the vault
 
 Runs once per row of **Test data**.
@@ -91,6 +93,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name.
 * Step 2 still reads `<case_1>` as the row's state.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-gq8 rev=2 covers=g10.vault-case-lifecycle.SC-0gz,g10.vault-case-lifecycle.SC-vch,g10.vault-case-lifecycle.SC-vc1,g10.vault-case-lifecycle.SC-69a,g10.vault-case-lifecycle.SC-7se,g10.vault-case-lifecycle.SC-4jt -->
 ### grade10-site-vault-case-lifecycle-US1-TC3-2: A call-off read before staff moved the case is refused as moved
 
 **Classification:**
@@ -122,6 +125,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name, as a case that moved.
 * Step 2 reads `<case_3>` in the vault, as staff left it, not cancelled.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-t0k rev=2 covers=g10.vault-case-lifecycle.SC-0gz,g10.vault-case-lifecycle.SC-vch,g10.vault-case-lifecycle.SC-vc1,g10.vault-case-lifecycle.SC-69a,g10.vault-case-lifecycle.SC-7se,g10.vault-case-lifecycle.SC-4jt -->
 ### grade10-site-vault-case-lifecycle-US1-TC4-2: The collector calls off a draft staff opened for them
 
 **Classification:**
@@ -160,6 +164,7 @@ Runs once per row of **Test data**.
 * Step 2 lists `<case_1>` as a cancelled request.
 * Step 3 holds no message about `<case_1>`.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-7kl rev=1 covers=g10.vault-case-lifecycle.SC-0gz,g10.vault-case-lifecycle.SC-vch,g10.vault-case-lifecycle.SC-vc1,g10.vault-case-lifecycle.SC-69a,g10.vault-case-lifecycle.SC-7se,g10.vault-case-lifecycle.SC-4jt -->
 ### grade10-site-vault-case-lifecycle-US1-TC7-1: Another collector cannot call off the case
 
 **Classification:**
@@ -200,6 +205,7 @@ saying so,
 **so that** I am not waiting on a case nobody is working and my item is not
 expected at a counter.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-ljf rev=2 covers=g10.vault-case-lifecycle.SC-lz5,g10.vault-case-lifecycle.SC-33a,g10.vault-case-lifecycle.SC-z0u,g10.vault-case-lifecycle.SC-whn -->
 ### grade10-site-vault-case-lifecycle-US2-TC1-2: A case with terms agreed and no visit ahead reads the day its clock calls it off
 
 **Classification:**
@@ -236,6 +242,7 @@ expected at a counter.
 * Step 1 reads `<case_5>` as waiting on the collector.
 * Step 1 carries what `<call-off day>` is worked out from: the case's own 30-day clock from `<agreed day>`.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-yq3 rev=2 covers=g10.vault-case-lifecycle.SC-lz5,g10.vault-case-lifecycle.SC-33a,g10.vault-case-lifecycle.SC-z0u,g10.vault-case-lifecycle.SC-whn -->
 ### grade10-site-vault-case-lifecycle-US2-TC2-2: A submitted request nobody books a visit for ends on its own
 
 Runs once per row of **Test data**.
@@ -275,6 +282,7 @@ Runs once per row of **Test data**.
 * The case reads the status from the row.
 * At 30 days, the read carries the case as ended by its own clock, with no visit ahead of it.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-eyg rev=2 covers=g10.vault-case-lifecycle.SC-lz5,g10.vault-case-lifecycle.SC-33a,g10.vault-case-lifecycle.SC-z0u,g10.vault-case-lifecycle.SC-whn -->
 ### grade10-site-vault-case-lifecycle-US2-TC3-2: A case waiting to sign with no visit booked ends on its own
 
 Runs once per row of **Test data**.
@@ -315,6 +323,7 @@ Runs once per row of **Test data**.
 
 * The case reads the status from the row.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-39g rev=2 covers=g10.vault-case-lifecycle.SC-lz5,g10.vault-case-lifecycle.SC-33a,g10.vault-case-lifecycle.SC-z0u,g10.vault-case-lifecycle.SC-whn -->
 ### grade10-site-vault-case-lifecycle-US2-TC4-2: A missed visit ends a request that never reached custody
 
 Runs once per row of **Test data**.
@@ -353,6 +362,7 @@ Runs once per row of **Test data**.
 
 * The case reads the status from the row.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-5zm rev=2 covers=g10.vault-case-lifecycle.SC-lz5,g10.vault-case-lifecycle.SC-33a,g10.vault-case-lifecycle.SC-z0u,g10.vault-case-lifecycle.SC-whn -->
 ### grade10-site-vault-case-lifecycle-US2-TC5-2: A missed visit on a case already in the vault does not end it
 
 **Classification:**
@@ -394,6 +404,7 @@ case has moved under me,
 **so that** two of us working the same counter cannot leave one case in a
 state neither of us meant.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-vip rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC1-1: Starting the valuation registers the item under the collector
 
 **Classification:**
@@ -426,6 +437,7 @@ state neither of us meant.
 * The Case tab reads the registered item's category comic and title `<request title>`, linking it.
 * Step 3 opens an item owned by `<collector A>`, not marked.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-10a rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC2-1: Confirm vaulted marks the item for the vault
 
 **Classification:**
@@ -458,6 +470,7 @@ state neither of us meant.
 * Step 2's place row names the vault, `<case_2>`'s reference and its status; Transfer and Retire are not offered.
 * Step 3 lists `<item_2>`.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-tcj rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC3-1: Release and unwind close the mark and keep the owner
 
 Runs once per row of **Test data**.
@@ -498,6 +511,7 @@ Runs once per row of **Test data**.
 * `<item_3>` reads not marked, still owned by `<collector A>`, with no new move.
 * Transfer and Retire are offered.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-exj rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC4-1: Forfeit closes the mark and moves the item to the lender
 
 **Classification:**
@@ -531,6 +545,7 @@ Runs once per row of **Test data**.
 * Its newest move reads from `<collector A>` to the lender, made by the vault on `<case_4>`.
 * Step 3's Items section no longer lists `<item_4>`.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-pbt rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC5-1: An item that never reached custody stays registered and unmarked
 
 Runs once per row of **Test data**.
@@ -570,6 +585,7 @@ Runs once per row of **Test data**.
 * `<case_5>` reads declined or cancelled as the act gives.
 * `<item_5>` is still owned by `<collector A>` and reads not marked.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-5s5 rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC6-1: Prepare documents is not offered while the register names another owner
 
 **Classification:**
@@ -603,6 +619,7 @@ Runs once per row of **Test data**.
 * Step 2 opens `<item_6>`.
 * Step 4 offers Prepare documents.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-9rk rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC7-1: An owner moved under an open Documents tab refuses Prepare documents
 
 **Classification:**
@@ -633,6 +650,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused with an error naming `<collector B>` and linking `<item_7>`.
 * `<case_7>` stays accepted and no packet is prepared.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-owi rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC8-1: Confirm vaulted lands while the register is down
 
 **Classification:**
@@ -665,6 +683,7 @@ Runs once per row of **Test data**.
 * Step 1 is not refused; `<case_8>` reads vaulted at once.
 * Step 3 reads `<item_8>` marked by the vault on `<case_8>`, with one place row.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-5qj rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC9-1: Prepare documents is refused while the register cannot be read
 
 **Classification:**
@@ -695,6 +714,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused with an error saying the register cannot be read now.
 * `<case_9>` stays accepted and no packet is prepared.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-ify rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC10-1: Without the identity read the other owner reads by short id
 
 **Classification:**
@@ -726,6 +746,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused with an error naming `<collector B>`'s short id, not their name, and linking `<item_10>`.
 * Step 3 does not offer Prepare documents; its line names `<collector B>`'s short id and links `<item_10>`.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-wkt rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
 ### grade10-site-vault-case-lifecycle-US3-TC11-1: A retired item refuses Prepare documents until it is restored
 
 **Classification:**
@@ -767,6 +788,7 @@ the request was called off and by whom, the clock that ran out, or the
 figure the item settled with the dates of the notice,
 **so that** I know what happened and what, if anything, is still mine.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-6t6 rev=2 covers=g10.vault-case-lifecycle.SC-u1t,g10.vault-case-lifecycle.SC-qy1,g10.vault-case-lifecycle.SC-kil,g10.vault-case-lifecycle.SC-fp8,g10.vault-case-lifecycle.SC-dub,g10.vault-case-lifecycle.SC-6ug,g10.vault-case-lifecycle.SC-a3h -->
 ### grade10-site-vault-case-lifecycle-US4-TC1-2: A declined case's read carries the reason staff gave
 
 **Classification:**
@@ -798,6 +820,7 @@ figure the item settled with the dates of the notice,
 * Step 1 reads the booked visit cancelled.
 * Step 2 reads the stage the case reached as the one in progress, and the item Closed, naming the day.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-1uq rev=2 covers=g10.vault-case-lifecycle.SC-u1t,g10.vault-case-lifecycle.SC-qy1,g10.vault-case-lifecycle.SC-kil,g10.vault-case-lifecycle.SC-fp8,g10.vault-case-lifecycle.SC-dub,g10.vault-case-lifecycle.SC-6ug,g10.vault-case-lifecycle.SC-a3h -->
 ### grade10-site-vault-case-lifecycle-US4-TC2-2: A cancelled case's read names who called it off
 
 Runs once per row of **Test data**.
@@ -839,6 +862,7 @@ Runs once per row of **Test data**.
 * Step 1 reads the offer closed and the visit cancelled.
 * Step 2 reads the stage the case reached as the one in progress, and the item Closed, naming the day.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-7gn rev=2 covers=g10.vault-case-lifecycle.SC-u1t,g10.vault-case-lifecycle.SC-qy1,g10.vault-case-lifecycle.SC-kil,g10.vault-case-lifecycle.SC-fp8,g10.vault-case-lifecycle.SC-dub,g10.vault-case-lifecycle.SC-6ug,g10.vault-case-lifecycle.SC-a3h -->
 ### grade10-site-vault-case-lifecycle-US4-TC3-2: An expired case's read names the clock that ran out
 
 Runs once per row of **Test data**.
@@ -879,6 +903,7 @@ Runs once per row of **Test data**.
 * Step 1 reads nothing signed and no item handed over.
 * Step 2 reads the stage the case reached as the one in progress, and the item Closed, naming the day.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-k8j rev=2 covers=g10.vault-case-lifecycle.SC-u1t,g10.vault-case-lifecycle.SC-qy1,g10.vault-case-lifecycle.SC-kil,g10.vault-case-lifecycle.SC-fp8,g10.vault-case-lifecycle.SC-dub,g10.vault-case-lifecycle.SC-6ug,g10.vault-case-lifecycle.SC-a3h -->
 ### grade10-site-vault-case-lifecycle-US4-TC4-2: A forfeited case's read carries the figure and the notice's dates
 
 **Classification:**
@@ -911,6 +936,7 @@ Runs once per row of **Test data**.
 * Step 1 still lists the signed agreements.
 * Step 2 reads the item Closed, naming the day.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-34d rev=2 covers=g10.vault-case-lifecycle.SC-u1t,g10.vault-case-lifecycle.SC-qy1,g10.vault-case-lifecycle.SC-kil,g10.vault-case-lifecycle.SC-fp8,g10.vault-case-lifecycle.SC-dub,g10.vault-case-lifecycle.SC-6ug,g10.vault-case-lifecycle.SC-a3h -->
 ### grade10-site-vault-case-lifecycle-US4-TC5-2: A released case reads collected, naming the day
 
 **Classification:**
@@ -951,6 +977,7 @@ it was, and what to do next,
 **so that** I do not take a closed offer or a closed visit for a closed
 case.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-0ez rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC1-2: The stages a case walks follow its own lane
 
 Runs once per row of **Test data**.
@@ -990,6 +1017,7 @@ Runs once per row of **Test data**.
 * Step 2 reads the row's stages, in that order.
 * The row's stage reads in progress, every earlier one done and every later one still to come.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-nwp rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC2-2: A case waiting on the collector reads Waiting on you
 
 Runs once per row of **Test data**.
@@ -1029,6 +1057,7 @@ Runs once per row of **Test data**.
 
 * Step 2 reads the item Waiting on you.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-4p1 rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC3-2: A case the shop holds the next move on reads With us
 
 Runs once per row of **Test data**.
@@ -1071,6 +1100,7 @@ Runs once per row of **Test data**.
 * Step 2 reads the item With us.
 * For `<case_4>` and `<case_19>`, step 2 names the day the item has been held since.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-dus rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC4-2: An offer that ran out or was replaced reads closed, the case still open
 
 Runs once per row of **Test data**.
@@ -1110,6 +1140,7 @@ Runs once per row of **Test data**.
 * Step 1 reads `<case_18>` at `offer_made`, not ended.
 * Step 1 still reads the booked visit.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-zfj rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC5-2: A declined offer reads closed, the request still open
 
 **Classification:**
@@ -1140,6 +1171,7 @@ Runs once per row of **Test data**.
 * Step 1 carries the figure declined and the day.
 * Step 1 still reads the booked visit.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-ntg rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC6-2: A missed visit reads on the case, the case still open
 
 **Classification:**
@@ -1170,6 +1202,7 @@ Runs once per row of **Test data**.
 * Step 1 reads `<case_8>` submitted, not ended, carrying the slot that was missed.
 * Step 2 reads the item Waiting on you.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-qrv rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC7-2: An ask for the item back reads on the case with its day
 
 **Classification:**
@@ -1200,6 +1233,7 @@ Runs once per row of **Test data**.
 * Step 1 reads `<case_16>` at `vaulted`, carrying the ask and `<ask day>`.
 * Step 2 reads the item Waiting on you.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-aj7 rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC8-2: A vaulted case on the storage lane reads nothing owed
 
 **Classification:**
@@ -1230,6 +1264,7 @@ Runs once per row of **Test data**.
 * Step 1 reads nothing outstanding.
 * Step 1 lists the signed documents with their fingerprints.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-wt8 rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC9-2: Asking for the item back is refused once the case has already moved on
 
 **Classification:**
@@ -1261,6 +1296,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name, as a case that moved.
 * Step 2 reads `<case_4>` where staff moved it, with no ask for the item back.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-qqa rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC10-2: A case is read only by the collector who holds it
 
 **Classification:**
@@ -1292,6 +1328,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused, and the response carries none of `<case_1>`'s facts.
 * Step 1's refusal matches step 2's; nothing tells the two apart.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-4xc rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC11-2: The collector asks for the item back as an act on their own case
 
 **Classification:**
@@ -1328,6 +1365,7 @@ Runs once per row of **Test data**.
 * Step 4 reads one ask, with the same day as step 2.
 * Step 5 is accepted.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-h6z rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC12-2: The collector's cases and the case read one answer for a held item
 
 **Classification:**
@@ -1359,6 +1397,7 @@ Runs once per row of **Test data**.
 * Step 3 reads the item With us from both reads.
 * Both name `<held day>` as the day the item has been held since.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-9pd rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC13-2: Reading a derived fact writes nothing on the case
 
 **Classification:**
@@ -1393,6 +1432,7 @@ Runs once per row of **Test data**.
 * Both reads carry the same status, `offer_made`.
 * The history carries no entry for either read.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-fck rev=2 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC14-2: A case meeting two facts reads the later one
 
 **Classification:**
@@ -1425,6 +1465,7 @@ Runs once per row of **Test data**.
 * Step 1's history carries the offer that ran out, not as the fact.
 * Step 2 is accepted.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-52w rev=1 covers=g10.vault-case-lifecycle.SC-8ne,g10.vault-case-lifecycle.SC-8m9,g10.vault-case-lifecycle.SC-5rw,g10.vault-case-lifecycle.SC-bnt,g10.vault-case-lifecycle.SC-77l,g10.vault-case-lifecycle.SC-3v2,g10.vault-case-lifecycle.SC-yvx,g10.vault-case-lifecycle.SC-e7l,g10.vault-case-lifecycle.SC-vgv,g10.vault-case-lifecycle.SC-ftn,g10.vault-case-lifecycle.SC-daj,g10.vault-case-lifecycle.SC-zjg,g10.vault-case-lifecycle.SC-oo5 -->
 ### grade10-site-vault-case-lifecycle-US5-TC16-1: Asking for the item back is refused where it is not the collector's to ask
 
 Runs once per row of **Test data**.
@@ -1474,6 +1515,7 @@ address,
 **so that** the customer can send it, and the account at the wrong address
 is never emailed and keeps nothing of it.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-21k rev=2 covers=g10.vault-case-lifecycle.SC-68t,g10.vault-case-lifecycle.SC-8rr,g10.vault-case-lifecycle.SC-plk,g10.vault-case-lifecycle.SC-6aa,g10.vault-case-lifecycle.SC-hir -->
 ### grade10-site-vault-case-lifecycle-US6-TC1-2: Staff cancel a mistyped walk-in and open it again under the right address
 
 **Classification:**
@@ -1515,6 +1557,7 @@ is never emailed and keeps nothing of it.
 * Step 3 lists `<case_2>` as a draft opened at the counter, and not `<case_1>`.
 * Nothing about `<case_1>` or `<case_2>` is emailed to `<wrong email>` or `<right email>`; `<right email>` receives only its sign-in link.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-ywp rev=2 covers=g10.vault-case-lifecycle.SC-68t,g10.vault-case-lifecycle.SC-8rr,g10.vault-case-lifecycle.SC-plk,g10.vault-case-lifecycle.SC-6aa,g10.vault-case-lifecycle.SC-hir -->
 ### grade10-site-vault-case-lifecycle-US6-TC2-2: The account at the wrong address keeps nothing of a cancelled walk-in
 
 Runs once per row of **Test data**.
@@ -1561,6 +1604,7 @@ Runs once per row of **Test data**.
 * `<wrong email>`'s mailbox holds no message about `<case_1>`.
 * The queue's Closed view lists `<case_1>` under its reference, its item reading as erased and no collector named.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-skm rev=1 covers=g10.vault-case-lifecycle.SC-68t,g10.vault-case-lifecycle.SC-8rr,g10.vault-case-lifecycle.SC-plk,g10.vault-case-lifecycle.SC-6aa,g10.vault-case-lifecycle.SC-hir -->
 ### grade10-site-vault-case-lifecycle-US6-TC3-1: A walk-in nobody sends ends on the seven-day draft clock and leaves nothing on the account
 
 Runs once per row of **Test data**.
@@ -1603,6 +1647,7 @@ Runs once per row of **Test data**.
 * An expired `<case_1>` is not listed on the collector page, and nothing is emailed to `<walk-in email>`.
 * An expired `<case_1>` stays in the queue's Closed view under its reference, its item reading as erased and no collector named.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-ied rev=2 covers=g10.vault-case-lifecycle.SC-68t,g10.vault-case-lifecycle.SC-8rr,g10.vault-case-lifecycle.SC-plk,g10.vault-case-lifecycle.SC-6aa,g10.vault-case-lifecycle.SC-hir -->
 ### grade10-site-vault-case-lifecycle-US6-TC4-2: A walk-in the collector already sent is cancelled like any case
 
 **Classification:**
@@ -1632,6 +1677,7 @@ Runs once per row of **Test data**.
 
 * Step 2 reads `<case_1>` cancelled, called off by staff, still carrying its photographs.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-5uu rev=2 covers=g10.vault-case-lifecycle.SC-68t,g10.vault-case-lifecycle.SC-8rr,g10.vault-case-lifecycle.SC-plk,g10.vault-case-lifecycle.SC-6aa,g10.vault-case-lifecycle.SC-hir -->
 ### grade10-site-vault-case-lifecycle-US6-TC5-2: Staff cancelling a walk-in the collector has just sent is refused by name
 
 **Classification:**

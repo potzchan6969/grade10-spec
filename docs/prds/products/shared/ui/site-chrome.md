@@ -30,11 +30,6 @@ sign-in email, then My Auctions and Sign Out. Once Store answers, My Orders
 joins ahead of My Auctions and Membership joins after it. KYC stays out of
 the menu
 
-🚧 **No Profile item** — the menu never offers Profile; there is no Profile
-page. Optional `onProfile` stays on the contract so a later page can wire it;
-Grade10 does not supply it. Specs and Storybook that still named Profile as
-joining once carried are corrected here
-
 🚧 **My Orders** — ahead of My Auctions once Store answers, opening the Store
 order history surface, and omitted until then
 
@@ -51,6 +46,13 @@ left inset drawer with primary navigation, then utility links in the same
 style, then language through a nested drawer (the language label is not in the
 compact bar). Account / Sign In and Cart stay in the bar; search moves into the
 drawer when it is answered.
+
+## No Profile
+
+🚧 **No Profile item** — the menu never offers Profile; there is no Profile
+page. Optional `onProfile` stays on the contract so a later page can wire it;
+Grade10 does not supply it. Specs and Storybook that still named Profile as
+joining once carried are corrected here
 
 ## External Links
 

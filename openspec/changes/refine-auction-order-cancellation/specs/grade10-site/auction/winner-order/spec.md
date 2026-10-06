@@ -1,3 +1,5 @@
+# grade10-site/auction/winner-order Specification
+
 ## Feature set
 
 - Records the winner keeps
@@ -13,6 +15,7 @@ lot and winning bid, and Contact Us as the only next action. It SHALL not show
 the operator's category or note, SHALL not show a stepper or payment action,
 and SHALL preserve the order's retained facts.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-1fb rev=1 -->
 #### Scenario: winner-order-SC-143 - Cancelled keeps the lot and winning bid visible
 **Serves:** winner-order-US-13 - Winner learns their order was cancelled
 

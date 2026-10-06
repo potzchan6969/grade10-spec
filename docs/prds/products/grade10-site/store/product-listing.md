@@ -71,7 +71,7 @@ The product listing lets collectors browse the catalogue and open a product.
 
 🚧 **Name opens the product** — the product name on a listing card opens
 Product Details the same way the photo does; a sold-out card’s name stays
-inert.
+inert where the tile sells.
 
 **Signed-out Add to cart** — opens the sign-in dialog titled
 **Sign In to Add to Cart**; no guest cart; after a successful sign-in the
@@ -90,12 +90,15 @@ the header still shows chips.
 
 ## Search
 
-The listing search field lives with the filters. Typing drafts locally;
-Enter or a suggestion selection is what acts.
+The listing search field lives with the filters on a wide viewport. Narrow
+chrome has no search. Typing drafts locally; Enter or a suggestion
+selection is what acts.
 
 - 🚧 **Suggestions while typing** — matching products and matching world or
   type filters, at most five of each, over the whole catalogue even when
   facets are already on; store hits only
+- 🚧 **Filter hit** — a world or type suggestion shows the choice's name,
+  and World or Type beside it
 - 🚧 **Empty and waiting** — no match shows that nothing matched; while hits
   are still resolving the field shows it is searching; Enter still commits
   the typed words either way
@@ -213,7 +216,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | No browse threshold | Decided | The listing and product page expose availability without remaining counts or scarcity cues. Only Cart may explain a requested quantity that the shop can fill in part. | Product |
 | Links the site owes | ❓ Open | The footer still draws destinations the site does not yet answer. Settling that departure belongs to page-shell; the listing no longer adds a second one. | Product |
 | Search stays on the listing | Decided | The field lives with the listing filters, not in the site header. Auction has no search surface yet, and a nav search would read as site-wide find. | Design |
-| Small screen: search outside the drawer | Decided | On a narrow viewport, Filter opens a left drawer for facets only. Catalogue search stays on the listing so typing does not require opening Filter. | Design |
+| Search is the wide sidebar field | Decided | Suggestions, commit and the search chip are the wide sidebar field. Below the wide breakpoint there is no listing search; facets are the narrow pills. | Design |
 | Worlds and Types as tabs on small screens | Decided | Inside the filter drawer the two facet groups are tabs so expanding worlds does not push types down the scroll. The wide sidebar still stacks them. Nested drill-down was ruled out for a closed pair of groups. | Design |
 | Typing suggests; Enter commits | Decided | Suggestions are products and matching world or type filters. Enter commits free text as a chip with the other applied filters. Picking a product opens it; picking a filter applies that facet. The field clears after commit or pick. | Design |
 | Suggestions cover the whole catalogue | Decided | Product hits are catalogue-wide even when facets are already on, matching free-text search. | Product |

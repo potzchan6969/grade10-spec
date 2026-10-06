@@ -10,6 +10,7 @@
 **I want** each tile to show what its surface supplies and to sell only where its surface sells,
 **so that** a tile reads the same wherever the store draws it.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-oqz rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-vxt,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-ryr,g10.shared-store-product-listing.SC-ws9 -->
 ### shared-ui-store-product-listing-US1-TC1-1: Sold-out tile with an activation target still opens its card
 
 **Classification:**
@@ -41,6 +42,7 @@
 * The tile still shows its sold-out treatment.
 * No cart control is drawn on the tile.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-mzb rev=1 covers=g10.shared-store-product-listing.SC-rzq -->
 ### shared-ui-store-product-listing-US1-TC2-1: Tile drawn with no cart control does not require cart copy
 
 **Classification:**
@@ -72,6 +74,7 @@
 * No cart control is drawn on the tile.
 * No cart wording appears on the tile.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-o4i rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-vxt,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-ryr,g10.shared-store-product-listing.SC-ws9 -->
 ### shared-ui-store-product-listing-US1-TC3-1: Tile given its address opens as a link
 
 **Classification:**

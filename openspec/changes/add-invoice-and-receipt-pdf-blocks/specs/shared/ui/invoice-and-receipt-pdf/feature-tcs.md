@@ -47,7 +47,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -167,7 +167,7 @@ Runs once per row of **Test data**.
 * Order Total renders its supplied content.
 * Neither row is dropped or reordered by Insurance's absence.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC6-1: Replaced by renders only when given
+### shared-ui-invoice-and-receipt-pdf-US1-TC6-1: Replaces invoice renders only when given
 
 **Classification:**
 
@@ -186,23 +186,24 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Replaced by prop | Replaced by line |
+| `replacesInvoice` | Replacement line |
 | --- | --- |
-| Supplied | Renders |
-| Omitted | Does not render |
+| `{ invoiceId: "IN-LK42301" }` | Renders `Replaces invoice IN-LK42301` |
+| Omitted or `null` | Does not render |
 
 **Pre-conditions:**
 
-* `InvoicePdf` is rendered with every other line supplied, and Replaced by set per the row.
+* `InvoicePdf` is rendered with every other field supplied, and `replacesInvoice` set per the row.
 
 **Steps:**
 
-1. Render `InvoicePdf` with the row's Replaced by prop.
+1. Render `InvoicePdf` with the row's `replacesInvoice` value.
 2. Inspect the meta rows.
 
 **Expected Results:**
 
-* Replaced by matches the row's outcome.
+* The replacement line matches the row's outcome and names the prior invoice.
+* The prior invoice remains retained; this renderer does not mark it cancelled.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC7-1: Bill To and Ship To render independently when they differ
 
@@ -509,11 +510,11 @@ Runs once per row of **Test data**.
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Reserved extension slots
+* **Trace:** InvoicePdf export
 
 **Pre-conditions:**
 
-* `InvoicePdf` is rendered with every other line supplied and no tax-line prop supplied.
+* `InvoicePdf` is rendered with every other line supplied and `taxLine` omitted or set to `null`.
 
 **Steps:**
 
@@ -531,18 +532,18 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Reserved extension slots
+* **Trace:** InvoicePdf export
 
 **Pre-conditions:**
 
-* `InvoicePdf` is rendered with the tax-line prop supplied as a non-empty `ReactNode`.
+* `InvoicePdf` is rendered with `taxLine` supplied as a plain `PdfLineItem` labelled `Tax` with amount `HKD 12.00`.
 
 **Steps:**
 
@@ -551,45 +552,45 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The tax line renders the supplied content among the order-value lines.
+* The tax line renders immediately before the boxed summary with the supplied label and amount.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC18-1: An empty tax line renders differently from an absent one
+### shared-ui-invoice-and-receipt-pdf-US1-TC18-1: A null tax line behaves like an omitted tax line
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Reserved extension slots
+* **Trace:** InvoicePdf export
 
 Runs once per row of **Test data**.
 
 **Test data:**
 
-| Tax-line prop | Tax row |
+| `taxLine` | Tax row |
 | --- | --- |
-| Omitted entirely (prop never passed) | Does not render |
-| Supplied as an empty `ReactNode` | Renders, with blank content |
+| Omitted entirely | Does not render |
+| `null` | Does not render |
 
 **Pre-conditions:**
 
-* `InvoicePdf` is rendered with every other order-value line supplied, and the tax-line prop set per the row.
+* `InvoicePdf` is rendered with every other order-value line supplied, and `taxLine` set per the row.
 
 **Steps:**
 
-1. Render `InvoicePdf` with the row's tax-line prop.
+1. Render `InvoicePdf` with the row's `taxLine` value.
 2. Inspect the order-value lines for a tax row.
 
 **Expected Results:**
 
 * The tax row's presence matches the row's outcome.
-* Omitting the prop and passing it as empty content are not treated the same.
+* Omission and `null` are both treated as absent.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC19-1: Issuer tax-details block does not render when omitted
 
@@ -604,7 +605,7 @@ Runs once per row of **Test data**.
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Reserved extension slots
+* **Trace:** InvoicePdf export
 
 **Pre-conditions:**
 
@@ -633,7 +634,7 @@ Runs once per row of **Test data**.
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Reserved extension slots
+* **Trace:** InvoicePdf export
 
 Runs once per row of **Test data**.
 
@@ -658,6 +659,7 @@ Runs once per row of **Test data**.
 
 * Each slot's presence matches its own prop, independent of the other slot's state.
 
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-8hd rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-i50,g10.shared-invoice-and-receipt-pdf.SC-m09,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
 ### shared-ui-invoice-and-receipt-pdf-US1-TC21-1: Tax line behaves the same on invoice and receipt
 
 **Classification:**
@@ -671,11 +673,11 @@ Runs once per row of **Test data**.
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Reserved extension slots
+* **Trace:** InvoicePdf export
 
 **Pre-conditions:**
 
-* `ReceiptPdf` is rendered with every other line supplied and no tax-line prop supplied.
+* `ReceiptPdf` is rendered with every other line supplied and `taxLine` omitted or set to `null`.
 
 **Steps:**
 
@@ -685,7 +687,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No tax line renders on the receipt.
-* The reserved slot's omitted behaviour matches `InvoicePdf`'s.
+* The optional tax-line omission behavior matches `InvoicePdf`'s.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC22-1: Preformatted amount content renders exactly as supplied
 
@@ -1181,7 +1183,7 @@ Runs once per row of **Test data**.
 * The Ship To block shows the single line "Not recorded".
 * No blank address lines appear in its place.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC39-1: A bank-transfer receipt names its transfer reference
+### shared-ui-invoice-and-receipt-pdf-US1-TC39-1: A bank-transfer receipt names its recorded provider reference
 
 **Classification:**
 
@@ -1198,7 +1200,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A ReceiptPdf given a transfer reference.
+* A ReceiptPdf given a recorded provider reference.
 
 **Steps:**
 
@@ -1207,9 +1209,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The Payment section shows the transfer reference given.
+* The Payment section shows the recorded provider reference given.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC40-1: A card-paid receipt shows no transfer-reference line
+### shared-ui-invoice-and-receipt-pdf-US1-TC40-1: A card-paid receipt shows no provider-reference line
 
 **Classification:**
 
@@ -1226,7 +1228,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A ReceiptPdf given no transfer reference.
+* A ReceiptPdf given no recorded provider reference.
 
 **Steps:**
 
@@ -1238,7 +1240,8 @@ Runs once per row of **Test data**.
 * No Payment section appears.
 * Every other meta row and party block still renders.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders fixed to Hong Kong time with its zone name
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-x92 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-43 -->
+### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders in Hong Kong as GMT+8
 
 **Classification:**
 
@@ -1255,17 +1258,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A `Date` value, and a machine clock not set to Hong Kong time.
+* Issue, deadline and paid-at instants cross the Hong Kong calendar boundary; the machine clock is set to New York time.
 
 **Steps:**
 
-1. Render InvoicePdf with the pre-conditions.
-2. Inspect the sent-at meta row.
+1. Render InvoicePdf with the issue instant and deadline.
+2. Render ReceiptPdf with the paid-at instant.
+3. Inspect all three date rows.
 
 **Expected Results:**
 
-* The row shows that instant's Hong Kong calendar date and clock time.
-* The row ends in the zone name `HKT`.
+* Each row shows its instant's Hong Kong calendar date and clock time.
+* Each row ends in `GMT+8`, independent of the machine clock.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC42-1: Each renderer returns exactly one A4 page
 
@@ -1503,7 +1507,7 @@ existing scenarios already cover.
 | TC2, TC3 (bank reference/rails given or withheld together) | Already covered: `SC-1`, `SC-2` |
 | TC4 (Insurance conditional) | Already covered: `SC-3`, `SC-4` |
 | TC5 (Subtotal/Order Total survive Insurance's absence) | Already covered: `SC-4` |
-| TC6 (Replaced by conditional) | Already covered: `SC-5`, `SC-6` |
+| TC6 (replacement relationship) | Rewritten against `replacesInvoice`; covered by `SC-51` |
 | TC7 (Bill To/Ship To never echo each other, invoice) | Real gap. **Folded in:** `shared-ui-invoice-and-receipt-pdf-SC-19` |
 | TC9 (payment breakdown keeps all four lines at zero values) | Real gap. **Folded in:** `shared-ui-invoice-and-receipt-pdf-SC-22` |
 | TC10, TC12 (manually-settled mark; Superseded invoice conditional) | Already covered: `SC-9`, `SC-10`, `SC-11`, `SC-12` |
@@ -1511,11 +1515,8 @@ existing scenarios already cover.
 | TC13 (receipt's own order-value lines and Insurance conditional) | Real gap — the scenario pass had written no scenario proving `ReceiptPdf` renders its order-value lines at all. **Folded in as a new requirement:** "ReceiptPdf renders its order-value lines in the same fixed order as InvoicePdf's", scenario `SC-21` |
 | TC14 (receipt ID and invoice ID never conflate) | Real gap. **Folded in:** `SC-20` |
 | TC15 (Bill To/Ship To never echo each other, receipt) | Real gap. **Folded in:** `SC-29` |
-| TC16, TC17 (tax line conditional on the invoice) | Already covered: `SC-13`, `SC-14` |
-| TC18 (empty-content tax prop vs the prop never being passed) | Real gap, and a genuine reading nobody had settled: whether "supplied" means the prop key is present or its content is non-empty. Not costly to undo, so **decided by the round rather than paused** — see `decisions.md` Q10. **Folded in:** `SC-25` |
-| TC19 (issuer tax-details conditional) | Real gap — `SC-14` only ever tested `taxLine`'s absence, never `issuerTaxDetails`'s. **Folded in:** `SC-30` |
-| TC20 (tax line and issuer tax-details render independently) | Real gap. **Folded in:** `SC-24` |
-| TC21 (tax line's omitted behaviour matches across both documents) | Already covered: `SC-14` (its GIVEN clause already exercises both `InvoicePdf` and `ReceiptPdf` together) |
+| TC16, TC17, TC18, TC21 (optional tax line) | Rewritten against the plain `PdfLineItem` contract and `null` omission; covered by the live tax-line requirement |
+| TC19, TC20 (issuer tax-details) | Deprecated: `issuerTaxDetails` remains outside the live renderer contract |
 | TC22 (rich `ReactNode` markup renders unchanged, not reduced to text) | Real gap — `SC-16` only proved no computation, never that non-string markup survives. **Folded in:** `SC-26` |
 | TC23 (labels render from `copy`, non-English content) | Already covered: `SC-17` |
 | TC24 (a required line with whitespace-only content still renders its row) | Real gap. **Folded in:** `SC-27` |
@@ -1591,12 +1592,13 @@ and this suite gained `TC36`-`TC42` for the behaviour that changed or is new:
 
 - **Retired, no longer resolving to a live scenario** — `TC2`/`TC3` (bank
   rails), `TC10`/`TC12` (manually-settled mark, Superseded invoice),
-  `TC16`-`TC20` (the reserved tax-line/issuer-tax-details slots), `TC22`
+`TC19`/`TC20` (the retired issuer-tax-details slot), `TC22`
   (rich `ReactNode` markup — there is no JSX left to carry it, every value is
   now a plain string), and `TC25` (loading/error state — a meaningful claim
   about a React component's render cycle, not about a data-in/bytes-out
   function). None was ever exercised by a real `grade10` consumer; `SC-19`'s
-  own retirement of the fields they proved is `decisions.md` Q19.
+  own retirement of the fields they proved is `decisions.md` Q19; `taxLine`
+  is restored below because the separate tax change already consumes it.
 - **Superseded by new cases** — `TC27`-`TC30` proved the DOM contract's
   nine-field `PartyAddress` (including phone and state, both absent from the
   address shape `grade10`'s renderer actually takes). `TC36`-`TC38` prove
@@ -1605,9 +1607,9 @@ and this suite gained `TC36`-`TC42` for the behaviour that changed or is new:
   allowing one to be withheld entirely.
 - **New** — `TC39`/`TC40` prove the transfer-reference line, a real
   behaviour `grade10`'s renderer already has that the DOM contract never
-  specified. `TC41` proves the Hong Kong-time date formatting the renderer
-  does itself — the one value it computes rather than taking preformatted,
-  a deliberate asymmetry with money (`spec.md`'s Presentation-only contract).
+  specified. `TC41` proves date formatting in `Asia/Hong_Kong` as `GMT+8` — the
+  one value the renderer computes rather than taking preformatted, a
+  deliberate asymmetry with money (`spec.md`'s Presentation-only contract).
   `TC42` proves the one fact every other case assumes: each call returns
   exactly one A4 page.
 - **Unaffected** — every other live case (`TC1`, `TC4`-`TC9`, `TC11`, `TC13`-
@@ -1654,6 +1656,14 @@ or the existing suite.
 | No vertical space is reserved when the section is withheld (suite reading only — the scenario reading's `SC-48` claimed absence but not the gap) | Real gap the suite reading caught alone: a lazy implementation could still reserve the section's height even while skipping its content. **Folded in:** `SC-48`'s `Withheld` clause extended to require no reserved space, and its `THEN`/`AND` to name the issuer block sitting directly after the order-value summary; `TC46` extended the same way |
 | The three columns' content is its own concern, separate from presence (scenario reading's `SC-49`; suite reading folded this into `TC45` rather than splitting it) | Same substance, different granularity. **Folded in, scenario reading's split kept:** `SC-49`/`TC47`, matching this capability's established one-scenario-per-concern pattern rather than one broad case |
 | The reference note's bold interpolation is a distinct rendering mechanic (partial bold within a wrapped line), not covered by presence or column content alone (both readings independently proposed this) | Agreement. **Folded in:** `SC-50`/`TC48` |
-| A case per rail (SWIFT-only, FPS-only, …) | Both readings independently declined this: `bankRails` ties all three rails to one optional value with no independent conditionality — "all three rails are required once `bankRails` is given at all" (`decisions.md` Q22). **Not added** |
+| A case per rail (SWIFT-only, FPS-only, …) | The clarified contract permits an enabled subset inside `bankRails`; the live suite covers all rails and a SWIFT/FPS subset without requiring an individual case for every combination |
 
 No contradiction, no question raised for `decisions.md`'s `## Raised` table.
+
+**Clarification, 2026-10-06:** the user confirmed four changes to the live
+contract. The replacement case now asserts `Replaces invoice {id}` on the new
+invoice; `taxLine` remains an optional plain `PdfLineItem` on InvoicePdf and
+ReceiptPdf while `issuerTaxDetails` remains retired; the proposal and
+technical design are updated to carry those decisions and the fixed GMT+8
+date contract; and this suite's live tax, replacement, bank-rail and date
+cases supersede the deprecated DOM-era readings above.

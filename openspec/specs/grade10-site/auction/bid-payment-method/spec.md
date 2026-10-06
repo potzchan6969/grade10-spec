@@ -118,6 +118,7 @@ Every other refusal, and the order refusals answer in, is
 - **AND** it does not ask for a card again solely because the listing is
   different
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-mlo rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-18 - Bidding takes nothing from the card
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector bids on the card already linked
 
@@ -127,6 +128,7 @@ Every other refusal, and the order refusals answer in, is
 - **AND** nothing is held, authorized or charged on the card, and no payment
   provider is asked
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-l44 rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-19 - A bidder who does not win is never charged
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - a collector bids, loses the lot, and pays nothing
 
@@ -145,6 +147,7 @@ Every other refusal, and the order refusals answer in, is
   locked after the first accepted bid.
 - **AND** it records no bid, and card X stays the listing's card
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-o6l rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-21 - A refused first bid leaves the card changeable
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - a collector's first bid on a lot is refused
 

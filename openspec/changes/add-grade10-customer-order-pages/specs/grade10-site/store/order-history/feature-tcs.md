@@ -9,6 +9,7 @@
 **I want** my newest active and past Store orders in one place,
 **so that** I can understand an order and decide whether to open it.
 
+<!-- trace:case id=g10.store-order-history.TC-1mb rev=2 covers=g10.store-order-history.SC-u2y,g10.store-order-history.SC-zre,g10.store-order-history.SC-4i0,g10.store-order-history.SC-fun,g10.store-order-history.SC-yhz,g10.store-order-history.SC-3eo,g10.store-order-history.SC-71g,g10.store-order-history.SC-raj,g10.store-order-history.SC-ab2,g10.store-order-history.SC-dta,g10.store-order-history.SC-g9j -->
 ### grade10-site-store-order-history-US1-TC1-2: Owned orders group and open newest first
 
 **Classification:**
@@ -40,6 +41,7 @@ The signed-in user owns active and past Store orders with different creation tim
 * The selected summary shows the paid total, not the quoted subtotal.
 * Step 4 opens `/profile/orders/<order-id>` for the selected order.
 
+<!-- trace:case id=g10.store-order-history.TC-lty rev=1 covers=g10.store-order-history.SC-u2y,g10.store-order-history.SC-zre,g10.store-order-history.SC-4i0,g10.store-order-history.SC-fun,g10.store-order-history.SC-yhz,g10.store-order-history.SC-3eo,g10.store-order-history.SC-71g,g10.store-order-history.SC-raj,g10.store-order-history.SC-ab2,g10.store-order-history.SC-dta,g10.store-order-history.SC-g9j -->
 ### grade10-site-store-order-history-US1-TC2-1: Unknown total stays pending
 
 **Classification:**
@@ -68,6 +70,7 @@ The signed-in user owns a Store order with no paid amount and no quoted subtotal
 * The order says its total is pending.
 * No zero amount is shown for that order.
 
+<!-- trace:case id=g10.store-order-history.TC-k8f rev=1 covers=g10.store-order-history.SC-u2y,g10.store-order-history.SC-zre,g10.store-order-history.SC-4i0,g10.store-order-history.SC-fun,g10.store-order-history.SC-yhz,g10.store-order-history.SC-3eo,g10.store-order-history.SC-71g,g10.store-order-history.SC-raj,g10.store-order-history.SC-ab2,g10.store-order-history.SC-dta,g10.store-order-history.SC-g9j -->
 ### grade10-site-store-order-history-US1-TC3-1: Safe carrier link opens in isolation
 
 **Classification:**
@@ -97,6 +100,7 @@ The signed-in user owns a Store order with <safe carrier tracking url>, an absol
 * <safe carrier tracking url> opens in a new browser context.
 * The carrier page has no access to the Grade10 page.
 
+<!-- trace:case id=g10.store-order-history.TC-hve rev=1 covers=g10.store-order-history.SC-u2y,g10.store-order-history.SC-zre,g10.store-order-history.SC-4i0,g10.store-order-history.SC-fun,g10.store-order-history.SC-yhz,g10.store-order-history.SC-3eo,g10.store-order-history.SC-71g,g10.store-order-history.SC-raj,g10.store-order-history.SC-ab2,g10.store-order-history.SC-dta,g10.store-order-history.SC-g9j -->
 ### grade10-site-store-order-history-US1-TC4-1: Tracking number alone creates no action
 
 **Classification:**
@@ -124,6 +128,7 @@ The signed-in user owns a Store order with a carrier and tracking number but no 
 
 * Track Order is absent for that order.
 
+<!-- trace:case id=g10.store-order-history.TC-7ws rev=1 covers=g10.store-order-history.SC-u2y,g10.store-order-history.SC-zre,g10.store-order-history.SC-4i0,g10.store-order-history.SC-fun,g10.store-order-history.SC-yhz,g10.store-order-history.SC-3eo,g10.store-order-history.SC-71g,g10.store-order-history.SC-raj,g10.store-order-history.SC-ab2,g10.store-order-history.SC-dta,g10.store-order-history.SC-g9j -->
 ### grade10-site-store-order-history-US1-TC5-1: First order read remains loading
 
 **Classification:**
@@ -152,6 +157,7 @@ The order read is delayed by network manipulation.
 * A loading state appears.
 * The page does not claim the account has no orders.
 
+<!-- trace:case id=g10.store-order-history.TC-uom rev=1 covers=g10.store-order-history.SC-u2y,g10.store-order-history.SC-zre,g10.store-order-history.SC-4i0,g10.store-order-history.SC-fun,g10.store-order-history.SC-yhz,g10.store-order-history.SC-3eo,g10.store-order-history.SC-71g,g10.store-order-history.SC-raj,g10.store-order-history.SC-ab2,g10.store-order-history.SC-dta,g10.store-order-history.SC-g9j -->
 ### grade10-site-store-order-history-US1-TC6-1: Failed order read retries in place
 
 **Classification:**
@@ -180,6 +186,7 @@ The signed-in user's first order read is made to fail and the next read is allow
 * A localized error and Retry action appear after the first read.
 * Step 2 reads the orders again at `/profile/orders`.
 
+<!-- trace:case id=g10.store-order-history.TC-h4e rev=1 covers=g10.store-order-history.SC-u2y,g10.store-order-history.SC-zre,g10.store-order-history.SC-4i0,g10.store-order-history.SC-fun,g10.store-order-history.SC-yhz,g10.store-order-history.SC-3eo,g10.store-order-history.SC-71g,g10.store-order-history.SC-raj,g10.store-order-history.SC-ab2,g10.store-order-history.SC-dta,g10.store-order-history.SC-g9j -->
 ### grade10-site-store-order-history-US1-TC7-1: Customer label keeps the Store action id
 
 Runs once per row of **Test data**.
@@ -227,6 +234,7 @@ The signed-in user owns an order with Store id <store order id> and the shop ord
 **I want** sign-in to keep the Your Orders address,
 **so that** I arrive at the orders I asked to see after proving my account.
 
+<!-- trace:case id=g10.store-order-history.TC-xb7 rev=1 covers=g10.store-order-history.SC-si2 -->
 ### grade10-site-store-order-history-US2-TC1-1: Sign-in preserves Your Orders address
 
 **Classification:**
@@ -263,6 +271,7 @@ The user has no signed-in session and has an account with Store orders.
 **I want** an empty state that returns me to the Store,
 **so that** I can begin a purchase instead of reaching a dead end.
 
+<!-- trace:case id=g10.store-order-history.TC-2ez rev=1 covers=g10.store-order-history.SC-li6 -->
 ### grade10-site-store-order-history-US3-TC1-1: Empty account returns to the Store
 
 **Classification:**

@@ -1,6 +1,7 @@
 # shared/ui/auction-listing Specification
 
 ## Purpose
+
 Shared auction listing blocks disclose the buyer's premium on the bid panel
 before a collector commits a maximum. They are the shared listing product-page
 blocks every auction storefront composes: the media gallery, the bid panel,
@@ -18,6 +19,7 @@ authoritative event data.
   - Fallback to src: an omitted thumb or zoom uses the main source
 - Gallery strip
   - Several items: more than one image shows a strip; one item does not
+  - Lot gallery by width: ListingLotGallery shows a left rail when wide enough beside the stage; stacked keeps previous/next and progress only
 - Consumer labels
   - Supplied copy: accessible names come from the application
 - Bid history
@@ -53,6 +55,14 @@ authoritative event data.
   - Separate from chips: the first chip is not that typed minimum
 - Lost standing
   - Badge only: Did not win remains, with no banner
+- Custom maximum ceiling
+  - Major-unit cap: draft cannot exceed 9,999,999,999 whole major units
+  - Restore on overshoot: paste or keystroke that would exceed leaves the previous valid draft
+  - No ceiling error copy: refuse is silent, same feel as refusing a decimal mark
+- Public bid history outcome
+  - Winner crown: closed sold winning row shows a primary crown after the amount
+  - Equal-max tip: a row tied on amount with a row above it shows an Info tip in the amount tone
+  - Live lots: no winner crown
 
 ## Requirements
 
@@ -225,14 +235,28 @@ activity-time rules unless `timeOverride` is set.
 and `timeZone` and SHALL thread them to bid history and the collector deadline
 line.
 
+`AuctionCard` SHALL require `locale` and `timeZone` and SHALL format its
+static Ends / Opens / Closed line as a collector deadline in that zone,
+naming the viewer's short zone (`HKT`, `EDT`).
+
 <!-- trace:scenario id=g10.shared-auction-listing.SC-9gi rev=1 -->
-#### Scenario: auction-listing-SC-13 - Recent bids show localized activity time
+#### Scenario: shared-ui-auction-listing-SC-13 - Recent bids show localized activity time
 **Serves:** Bid history - recent bids show localized activity time
 
 - **GIVEN** a bid card with history rows carrying `acceptedAtMs`
 - **WHEN** it renders with a shipped locale and time zone
 - **THEN** each row shows a formatted activity time
 - **AND** no row shows a raw millisecond value
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-tzc rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-55 - A catalogue tile close follows the viewer
+**Serves:** Bid history - catalogue tile close follows the viewer
+
+- **GIVEN** the same close instant rendered on `AuctionCard` for `Asia/Hong_Kong` and `America/New_York`
+- **WHEN** each card renders its clock line
+- **THEN** the clock values differ
+- **AND** the Hong Kong line names `HKT`
+- **AND** the New York line names `EDT` and does not contain `HKT`
 
 ### Requirement: The listing surface exports bid enrollment blocks
 
@@ -611,6 +635,7 @@ The first chip SHALL NOT be replaced by the typed raise floor.
 - **WHEN** the bid card renders quick-bid chips
 - **THEN** the three amounts are 124000, 128000, and 136000 HKD minor units
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-2s5 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-52 - Before any bid chip 1x is the opening price
 **Serves:** Quick bids - a collector meets the chips on a lot nobody has bid on
 
@@ -688,3 +713,206 @@ and SHALL render no banner under that standing.
 - **WHEN** the bid card renders
 - **THEN** Did not win status is shown
 - **AND** no banner is shown under that standing
+
+### Requirement: Custom maximum entry respects a major-unit ceiling
+
+A custom maximum has a ceiling, and an edit past it is refused without a
+message.
+
+**Major-unit cap** - `ListingAuctionBidCard` SHALL accept a custom
+private-maximum draft only when the whole major-unit integer is at most
+9,999,999,999, regardless of listing currency.
+
+**After cleaning** - The ceiling applies after whole-major cleaning (non-digits
+stripped; a decimal mark and its fraction discarded).
+
+**Restore on overshoot** - An edit — typed or pasted — whose cleaned major-unit
+value would exceed that ceiling SHALL leave the previous valid draft unchanged,
+including when that draft is empty.
+
+**No clamp** - The field SHALL NOT clamp the draft to the ceiling.
+
+**At the ceiling** - Exactly 9,999,999,999 SHALL be accepted.
+
+**No ceiling error copy** - The refuse alone SHALL NOT show an invalid-amount
+or below-floor message.
+
+**Set and raise** - Set and raise private maximum share this field and this
+rule.
+
+**Committed amounts** - Committed amounts remain an integer count of minor
+units at or above the existing floor rules.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-9e0 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-38 - A draft at the ceiling is accepted
+**Serves:** Custom maximum ceiling - a draft at the ceiling is accepted
+
+- **GIVEN** an HKD listing bid panel whose custom maximum field is empty
+- **WHEN** a collector enters `9999999999` into the custom maximum field
+- **THEN** the draft shown is `9999999999`
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-8ym rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-39 - A typed digit beyond the ceiling restores the previous draft
+**Serves:** Custom maximum ceiling - a typed digit beyond the ceiling restores the previous draft
+
+- **GIVEN** an HKD listing bid panel whose custom maximum draft is `9999999999`
+- **WHEN** a collector types `0` into the custom maximum field
+- **THEN** the draft remains `9999999999`
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-wdd rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-40 - A paste beyond the ceiling from an empty field stays empty
+**Serves:** Custom maximum ceiling - a paste beyond the ceiling from an empty field stays empty
+
+- **GIVEN** an HKD listing bid panel with the custom maximum field empty
+- **WHEN** a collector pastes `10000000000` into the custom maximum field
+- **THEN** the draft remains empty
+- **AND** no invalid-amount message appears solely because of the rejected
+  paste
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-z2x rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-41 - A paste beyond the ceiling restores the prior draft
+**Serves:** Custom maximum ceiling - a paste beyond the ceiling restores the prior draft
+
+- **GIVEN** an HKD listing bid panel whose custom maximum draft is `500`
+- **WHEN** a collector pastes `99999999999` into the custom maximum field
+- **THEN** the draft remains `500`
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-y2e rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-42 - A fractional paste that exceeds after whole-major cleaning restores the prior draft
+**Serves:** Custom maximum ceiling - a fractional paste that exceeds after whole-major cleaning restores the prior draft
+
+- **GIVEN** an HKD listing bid panel whose custom maximum draft is `500`
+- **WHEN** a collector pastes `10000000000.99` into the custom maximum field
+- **THEN** the draft remains `500`
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-xxl rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-43 - Raise path restores on overshoot
+**Serves:** Custom maximum ceiling - raise path restores on overshoot
+
+- **GIVEN** an HKD listing bid panel showing Raise your private maximum whose
+  custom maximum draft is `9999999999`
+- **WHEN** a collector types `1` into the custom maximum field
+- **THEN** the draft remains `9999999999`
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-6n7 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-53 - A fractional paste at the ceiling after cleaning is accepted
+**Serves:** Custom maximum ceiling - a fractional paste at the ceiling after cleaning is accepted
+
+- **GIVEN** an HKD listing bid panel whose custom maximum draft is `500`
+- **WHEN** a collector pastes `9999999999.99` into the custom maximum field
+- **THEN** the draft shown is `9999999999`
+
+### Requirement: Public bid history marks the closed winner and equal-max priority
+
+Public Recent bids on the listing surface SHALL make the closed outcome and
+equal-max priority readable without opening personal bidding.
+
+**Winner flag** - `ListingBidHistoryRow` MAY carry `isWinner?: boolean`. The
+consumer sets it on the winning public row when the lot is closed and sold.
+Live lots SHALL NOT set `isWinner`.
+
+**Equal-max flag** - `ListingBidHistoryRow` MAY carry
+`samePricePriority?: boolean`. The consumer sets it on a public row whose
+amount matches a row ranked above it, at the current price or at any older
+tie lower down, because the earlier maximum stands above it. The list
+decides nothing about priority.
+
+**Winner crown** - When `row.isWinner` is true and `copy.winner` is supplied,
+`ListingBidHistoryList` SHALL render a small filled crown icon in the primary
+color after the amount (and after any equal-max Info control), before the
+**You** badge when present. The crown SHALL use `copy.winner` as its
+accessible name; the list supplies no name of its own.
+
+**Equal-max tip** - When `row.samePricePriority` is true and
+`copy.samePricePriorityTip` is supplied, the list SHALL show an Info control
+whose tooltip content is that tip, with the icon inheriting the amount text
+tone. The tip SHALL state that when maximums match, the earlier one
+leads.
+
+**Bid card copy** - `ListingAuctionBidCard` `bidHistory` copy MAY include
+`winner` and `samePricePriorityTip` and SHALL thread them to
+`ListingBidHistoryList`.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-13j rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
+**Serves:** Public bid history outcome - closed sold Recent bids show a winner crown
+
+- **GIVEN** a closed sold bid card whose winning public history row has
+  `isWinner` true, and winner copy `Winner` supplied
+- **WHEN** the Recent bids list renders
+- **THEN** that row shows a primary crown after the amount with accessible
+  name Winner
+- **AND** no live bid card history row shows a winner crown without
+  `isWinner`
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-alr rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
+**Serves:** Public bid history outcome - equal-max non-leader shows earlier-leads tip
+
+- **GIVEN** a bid card history row with `samePricePriority` true and
+  equal-max tip copy supplied
+- **WHEN** the collector activates the Info control on that row
+- **THEN** the tooltip states that when maximums match, the earlier one
+  leads
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-4a9 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-54 - No crown without its name
+**Serves:** Public bid history outcome - no crown without its name
+
+- **GIVEN** a closed sold bid card whose winning public row has `isWinner` true, and bid history copy with no `winner`
+- **WHEN** the Recent bids list renders
+- **THEN** no row shows a crown
+- **AND** no row carries an accessible name the consumer did not supply
+
+### Requirement: ListingLotGallery shows a left rail only when wide enough
+
+`ListingLotGallery` SHALL render several images with a left thumbnail rail
+only when the gallery is wide enough to place that rail beside the main
+frame. When the gallery is stacked (not wide enough for that rail), it SHALL
+hide the thumbnail rail and SHALL keep previous/next and carousel progress
+available.
+
+With exactly one image it SHALL hide the rail and previous/next. With none it
+SHALL render no item and SHALL NOT present previous/next as available.
+
+`ListingGallery` strip rules are unchanged by this requirement.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-nlz rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-47 - Wide ListingLotGallery shows a left rail
+**Serves:** Gallery strip - wide ListingLotGallery shows a left rail
+
+- **GIVEN** `ListingLotGallery` with two or more images in a gallery column
+  wide enough for a left rail beside the main frame
+- **WHEN** it renders
+- **THEN** a thumbnail exists for each image in a rail beside the main frame
+- **AND** previous and next remain available
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ed7 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-48 - Stacked ListingLotGallery hides the rail
+**Serves:** Gallery strip - stacked ListingLotGallery hides the rail
+
+- **GIVEN** `ListingLotGallery` with two or more images in a stacked gallery
+  column that is not wide enough for a left rail beside the main frame
+- **WHEN** it renders
+- **THEN** no thumbnail rail is shown
+- **AND** previous and next remain available
+- **AND** carousel progress remains available
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ln3 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-49 - One ListingLotGallery image has no rail
+**Serves:** Gallery strip - one ListingLotGallery image has no rail
+
+- **GIVEN** `ListingLotGallery` with exactly one image
+- **WHEN** it renders
+- **THEN** that image is shown
+- **AND** no thumbnail rail is shown
+- **AND** previous and next are not available
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-1mh rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-56 - Empty ListingLotGallery has no item or navigation
+**Serves:** Gallery strip - empty ListingLotGallery has no item or navigation
+
+- **GIVEN** `ListingLotGallery` with no images
+- **WHEN** it renders
+- **THEN** no image is shown
+- **AND** previous and next are not available

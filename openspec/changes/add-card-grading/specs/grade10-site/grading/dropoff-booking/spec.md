@@ -80,6 +80,7 @@ a drop-off and SHALL send nothing about it. The submission SHALL send the
 booked, moved, cancelled, missed and day-before messages itself; what each one
 carries is `grade10-site/grading/collector-notifications`.
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-55a rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-01 - The booking surface lists the visit and neither drop-off
 **Serves:** grade10-site-grading-dropoff-booking-US-05 - a collector who books at the shop's own booking page rather than from a list
 
@@ -87,6 +88,7 @@ carries is `grade10-site/grading/collector-notifications`.
 - **THEN** the Grading visit is listed
 - **AND** neither the Grading drop-off nor its Bulk variant is offered there
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-l56 rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-02 - The drop-off is booked and only grading writes to the collector
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector booking the visit their cards are handed in on
 
@@ -94,6 +96,7 @@ carries is `grade10-site/grading/collector-notifications`.
 - **THEN** the collector is sent the booked message by the submission
 - **AND** the diary sends nothing about that visit
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-q6n rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-03 - A day past the service's horizon is not offered
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector picking the day they will come in
 
@@ -138,6 +141,7 @@ the agreement is signed.
 or the lists on its visit, to 20 cards or more SHALL move the visit to the Bulk
 drop-off at the same slot, in one move and without cancelling it first.
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-nt0 rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-04 - A collector books the drop-off from the plan
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector booking the visit their cards are handed in on
 
@@ -148,6 +152,7 @@ drop-off at the same slot, in one move and without cancelling it first.
 - **AND** the times were read in the shop's own zone
 - **AND** nothing was paid, held or deposited
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-hgq rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-05 - Twenty cards take the longer Bulk visit
 **Serves:** grade10-site-grading-dropoff-booking-US-06 - a dealer bringing a long list to the desk
 
@@ -156,6 +161,7 @@ drop-off at the same slot, in one move and without cancelling it first.
 - **THEN** the Bulk drop-off is the service booked
 - **AND** the visit is named as taking about 45 minutes
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-gbe rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-06 - A slot taken meanwhile is refused by name
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector picking the day they will come in
 
@@ -165,6 +171,7 @@ drop-off at the same slot, in one move and without cancelling it first.
 - **AND** another day is offered and the picked day's times are read again
 - **AND** the submission holds no visit
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-9xv rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-07 - A day with nothing free offers no times
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector picking the day they will come in
 
@@ -172,6 +179,7 @@ drop-off at the same slot, in one move and without cancelling it first.
 - **THEN** no time is offered for it
 - **AND** the day says it has nothing free
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-qk1 rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-08 - The diary cannot be read and no day reads as free
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector picking the day they will come in
 
@@ -179,6 +187,7 @@ drop-off at the same slot, in one move and without cancelling it first.
 - **THEN** the failure is named
 - **AND** no day reads as free and none can be picked
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-09j rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-30 - A booked list edited past twenty cards takes the longer visit at the same slot
 **Serves:** grade10-site-grading-dropoff-booking-US-06 - a dealer whose list grew after the visit was booked
 
@@ -209,6 +218,7 @@ shown instead.
 SHALL be counted from the day the batch leaves the shop, never from the day the
 visit is booked and never from the day of the visit.
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-v5k rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-09 - A day before the cut-off names this week's batch
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector who wants to know which batch their cards join
 
@@ -217,6 +227,7 @@ visit is booked and never from the day of the visit.
 - **THEN** the batch named closes that Thursday at 19:00
 - **AND** the cards are said to leave the Friday after it
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-h89 rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-10 - A day past the cut-off names the next batch
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector who wants to know which batch their cards join
 
@@ -225,6 +236,7 @@ visit is booked and never from the day of the visit.
 - **THEN** the batch named closes the following Thursday
 - **AND** the cards are said to leave the day after that
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-y97 rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-25 - A visit at the cut-off instant is in that week's batch
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector picking the last slot before the cards leave
 
@@ -233,6 +245,7 @@ visit is booked and never from the day of the visit.
 - **THEN** the batch named is the one closing at that same instant
 - **AND** the cards are said to leave the Friday after it
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-uzm rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-11 - The day back is counted from the day the cards leave
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector who wants to know when the cards come home
 
@@ -269,6 +282,7 @@ drop-off was booked.
 coming back, SHALL be able to open a vault case at the same counter, and that
 case SHALL take the identity check the vault asks for, which grading does not.
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-wxh rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-12 - The booked page carries the visit, the four items and the calendar file
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector reading what to bring before the visit
 
@@ -281,6 +295,7 @@ case SHALL take the identity check the vault asks for, which grading does not.
 - **AND** the fourth item names the day the cards leave and the estimated day
   back
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-he4 rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-13 - A Bulk booking says the visit takes about 45 minutes
 **Serves:** grade10-site-grading-dropoff-booking-US-06 - a dealer who needs the desk to have time for every card
 
@@ -288,6 +303,7 @@ case SHALL take the identity check the vault asks for, which grading does not.
 - **WHEN** the collector opens the booked page
 - **THEN** the visit is said to take about 45 minutes
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-leu rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-14 - A card that is not being graded can be vaulted on the same visit
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector bringing one card to grade and one to vault
 
@@ -318,6 +334,7 @@ the slot the visit already holds, since the diary counts that slot taken.
 on and the estimate SHALL stay as they were, and the page SHALL offer another
 drop-off.
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-44v rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-15 - A visit is moved before it starts and the collector is told
 **Serves:** grade10-site-grading-dropoff-booking-US-02 - a collector who cannot make the day they booked
 
@@ -328,6 +345,7 @@ drop-off.
 - **AND** the collector is sent the moved message
 - **AND** the submission held a visit throughout
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-9xj rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-16 - A cancelled visit leaves the list as it was
 **Serves:** grade10-site-grading-dropoff-booking-US-02 - a collector calling the visit off
 
@@ -339,6 +357,7 @@ drop-off.
   unchanged
 - **AND** the page offers another drop-off
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-mrb rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-17 - Neither move nor cancel is offered once the visit has started
 **Serves:** grade10-site-grading-dropoff-booking-US-02 - a collector opening the page after the slot has begun
 
@@ -346,6 +365,7 @@ drop-off.
 - **WHEN** the collector opens the submission page
 - **THEN** neither moving nor cancelling the visit is offered
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-wlp rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-29 - A move never offers the visit's own current slot back
 **Serves:** grade10-site-grading-dropoff-booking-US-02 - a collector moving a visit reads only slots other than the one they already hold
 
@@ -381,6 +401,7 @@ counted from there, never from the day the plan was first kept. A visit that
 ends without a hand-in spends the slot, not the plan's own chance to book
 again.
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-qae rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-18 - A visit nobody started is closed and the collector hears within the hour
 **Serves:** grade10-site-grading-dropoff-booking-US-03 - a collector who did not make it to the shop
 
@@ -389,6 +410,7 @@ again.
 - **THEN** within the hour the submission holds no visit
 - **AND** the collector is sent the missed message
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-u2b rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-26 - The page reads the visit as booked until the diary answers
 **Serves:** grade10-site-grading-dropoff-booking-US-03 - a collector opening the page in the hour after the slot they missed
 
@@ -398,6 +420,7 @@ again.
 - **THEN** the submission still holds that visit
 - **AND** no missed message has been sent
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-r0l rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-19 - A missed visit leaves the list and the estimate as they were
 **Serves:** grade10-site-grading-dropoff-booking-US-03 - a collector booking again after a missed day
 
@@ -407,6 +430,7 @@ again.
   unchanged
 - **AND** another drop-off is offered
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-4vc rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-28 - A missed visit restarts the plan's clock from the day of the miss
 **Serves:** grade10-site-grading-dropoff-booking-US-03 - a collector who missed a visit weeks into their plan
 
@@ -418,6 +442,7 @@ again.
 - **AND** it expires `plan_expiry_days` after today, not `plan_expiry_days`
   after the day it was first kept
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-1v3 rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-31 - A cancelled visit restarts the plan's clock from the day of the cancel
 **Serves:** grade10-site-grading-dropoff-booking-US-02 - a collector who called the visit off weeks into their plan
 
@@ -449,6 +474,7 @@ move and without being cancelled first.
 every joining submission with no visit, each told and each offered another
 drop-off, with its cards and its estimate as they were.
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-xaq rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-20 - A second submission joins the drop-off the first one booked
 **Serves:** grade10-site-grading-dropoff-booking-US-04 - a collector whose cards need two levels on one trip
 
@@ -458,6 +484,7 @@ drop-off, with its cards and its estimate as they were.
   visit
 - **AND** its page shows the same day, time and shop
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-tgw rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-21 - Two lists passing twenty cards take the longer visit at the same slot
 **Serves:** grade10-site-grading-dropoff-booking-US-04 - a collector whose two lists fill the desk
 
@@ -466,6 +493,7 @@ drop-off, with its cards and its estimate as they were.
 - **THEN** the visit is the Bulk drop-off at the same day and time
 - **AND** it was moved once and never cancelled
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-shj rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-22 - The owner cancels and every joining submission is told
 **Serves:** grade10-site-grading-dropoff-booking-US-04 - a collector who called off the submission that owned the visit
 
@@ -475,6 +503,7 @@ drop-off, with its cards and its estimate as they were.
 - **AND** its collector is told and offered another drop-off
 - **AND** its cards and its estimate are unchanged
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-mb2 rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-27 - The owner misses the visit and every joining submission is detached
 **Serves:** grade10-site-grading-dropoff-booking-US-04 - a collector whose trip ended with the submission that owned the visit
 
@@ -498,6 +527,7 @@ neither read its outcome nor send any message about it.
 **Listed at the counter** - the cards SHALL be written with the collector at
 the desk, and the submission SHALL be created and handed in from there.
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-qam rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-23 - A walk-in books the Grading visit with a name and an email
 **Serves:** grade10-site-grading-dropoff-booking-US-05 - a collector who books before listing anything
 
@@ -505,6 +535,7 @@ the desk, and the submission SHALL be created and handed in from there.
 - **THEN** the visit is held with no list of cards
 - **AND** it carries no submission
 
+<!-- trace:scenario id=g10.grading-dropoff-booking.SC-nqy rev=1 -->
 #### Scenario: grade10-site-grading-dropoff-booking-SC-24 - The walk-in's cards are listed at the desk and grading says nothing about the visit
 **Serves:** grade10-site-grading-dropoff-booking-US-05 - a collector listing their cards with staff at the counter
 

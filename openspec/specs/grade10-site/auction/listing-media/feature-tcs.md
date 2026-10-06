@@ -1,15 +1,16 @@
 # grade10-site/auction/listing-media Test Cases
 
-**Status:** approved
-**Reviewed:** 2026-09-07
+**Status:** reopened
+**Reviewed:** 2026-09-07, lapsed 2026-10-05
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-auction-listing-media-US1: Operator attaches an image to a listing gallery
 
 **As an** operator with catalogue grant,
-**I want** to upload a supported image into a listing's gallery and confirm it
-from a preview,
-**so that** only the file I meant to store is sent, and the gallery stays
-within the cap admin-listing sets.
+**I want** to drop one or several supported images into a listing's gallery
+and see each one stored as it lands,
+**so that** photographing a card costs one move rather than a confirm per
+file, and the gallery stays within the cap admin-listing sets.
 
 <!-- trace:case id=g10.auction-listing-media.TC-pzu rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC1-1: One-image listing publishes with no empty slots
@@ -91,66 +92,66 @@ within the cap admin-listing sets.
 * <jpeg_ok> is stored in gallery order.
 * The admin listings surface can show it on <listing_2>.
 
-<!-- trace:case id=g10.auction-listing-media.TC-oyk rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
-### grade10-site-auction-listing-media-US1-TC3-1: Choosing a file shows a preview without uploading
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* <listing_3> is a draft with an empty gallery slot the admin is filling.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_3>` | A draft auction listing with an empty gallery slot being filled |
-| `<jpeg_ok>` | charizard-front.jpg, JPEG, under the media size bound |
-
-**Steps:**
-
-1. Navigate to <grade10 auction admin listings url>.
-2. Open the media manager for <listing_3>.
-3. Select <jpeg_ok>.
-4. Check the preview and the stored gallery.
-
-**Expected Results:**
-
-* The media manager shows a preview of <jpeg_ok>.
-* <listing_3> still has no new stored image for that slot.
-
-<!-- trace:case id=g10.auction-listing-media.TC-eq0 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
-### grade10-site-auction-listing-media-US1-TC4-1: Confirming the preview stores the image
+<!-- trace:case id=g10.auction-listing-media.TC-oyk rev=2 covers=g10.auction-listing-media.SC-31 -->
+### grade10-site-auction-listing-media-US1-TC3-2: Choosing a file stores it without a preview
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 
 * An admin holds the catalogue grant.
-* The admin has selected <jpeg_ok> for a <listing_4> gallery slot and sees its preview.
+* `<listing_3>` is a draft with fewer than eight media items.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_3>` | A draft auction listing with fewer than eight media items |
+| `<jpeg_ok>` | charizard-front.jpg, JPEG, under the media size bound |
+
+**Steps:**
+
+1. Navigate to <grade10 auction admin listings url>.
+2. Open the media manager for `<listing_3>`.
+3. Choose `<jpeg_ok>`.
+4. Check the gallery.
+
+**Expected Results:**
+
+* `<jpeg_ok>` is stored in the gallery immediately.
+* No preview, confirm or discard step is required.
+
+<!-- trace:case id=g10.auction-listing-media.TC-eq0 rev=1 covers=g10.auction-listing-media.SC-07 -->
+### grade10-site-auction-listing-media-US1-TC4-1: Confirming a preview stores the image
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* An admin holds the catalogue grant.
+* The admin has selected `<jpeg_ok>` for a `<listing_4>` gallery slot and sees its preview.
 
 **Test data:**
 
@@ -162,33 +163,35 @@ within the cap admin-listing sets.
 **Steps:**
 
 1. Confirm the upload.
-2. Check that gallery slot and the preview.
+2. Check the gallery slot and the preview.
 
 **Expected Results:**
 
-* That slot holds <jpeg_ok>.
+* That slot holds `<jpeg_ok>`.
 * The preview is cleared.
 
-<!-- trace:case id=g10.auction-listing-media.TC-h3k rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
+**Deprecated:** Superseded by immediate upload on drop or choose; the confirm step no longer exists.
+
+<!-- trace:case id=g10.auction-listing-media.TC-h3k rev=1 covers=g10.auction-listing-media.SC-08 -->
 ### grade10-site-auction-listing-media-US1-TC5-1: Discarding the preview leaves the gallery unchanged
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
 
 * An admin holds the catalogue grant.
-* The admin has selected an image for a <listing_5> gallery slot and sees its preview.
+* The admin has selected an image for a `<listing_5>` gallery slot and sees its preview.
 
 **Test data:**
 
@@ -206,6 +209,8 @@ within the cap admin-listing sets.
 * The gallery is unchanged.
 * The preview is cleared.
 * No upload was sent.
+
+**Deprecated:** Superseded by immediate upload on drop or choose; the discard step no longer exists.
 
 <!-- trace:case id=g10.auction-listing-media.TC-c94 rev=1 covers=g10.auction-listing-media.SC-c93 -->
 ### grade10-site-auction-listing-media-US1-TC6-1: Ninth media item is refused
@@ -398,6 +403,202 @@ within the cap admin-listing sets.
 
 * The upload is refused.
 * The gallery is unchanged.
+
+<!-- trace:case id=g10.auction-listing-media.TC-bat rev=1 covers=g10.auction-listing-media.SC-32 -->
+### grade10-site-auction-listing-media-US1-TC11-1: Several files append after the last gallery item
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* An admin holds the catalogue grant.
+* `<listing_7>` is a draft whose gallery already contains `<existing_image>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_7>` | A draft auction listing with one existing gallery image |
+| `<batch_images>` | Three supported images selected in a known order |
+
+**Steps:**
+
+1. Navigate to <grade10 auction admin listings url>.
+2. Open the media manager for `<listing_7>`.
+3. Drop `<batch_images>` together.
+4. Check the gallery order.
+
+**Expected Results:**
+
+* Each image stores without a confirm step.
+* The images appear after `<existing_image>` in selection order.
+
+<!-- trace:case id=g10.auction-listing-media.TC-ref rev=1 covers=g10.auction-listing-media.SC-34 -->
+### grade10-site-auction-listing-media-US1-TC12-1: Refused files keep their reasons in a mixed selection
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* An admin holds the catalogue grant.
+* `<listing_8>` is a draft with room for two more media items.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | A draft auction listing with room for two more media items |
+| `<mixed_files>` | Two supported images, a PDF, an image over the size bound, and a file beyond the eight-item cap |
+
+**Steps:**
+
+1. Open the media manager for `<listing_8>`.
+2. Choose `<mixed_files>` together.
+3. Read the gallery and each refusal result.
+
+**Expected Results:**
+
+* The two supported images are stored.
+* The PDF, oversized image and over-cap file remain unstored.
+* Each refused file is named with its refusal reason.
+
+<!-- trace:case id=g10.auction-listing-media.TC-rep rev=1 covers=g10.auction-listing-media.SC-33 -->
+### grade10-site-auction-listing-media-US1-TC13-1: Replacement stores without confirmation
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* An admin holds the catalogue grant.
+* `<listing_9>` is a draft with a stored image at one gallery position.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_9>` | A draft auction listing with at least two gallery images |
+| `<replacement_image>` | A supported image different from the image being replaced |
+
+**Steps:**
+
+1. Open the media manager for `<listing_9>`.
+2. Choose `<replacement_image>` for one stored image.
+3. Check that position and the other gallery items.
+
+**Expected Results:**
+
+* `<replacement_image>` is stored immediately at the selected position.
+* No confirm step appears.
+* Other gallery items retain their positions.
+
+<!-- trace:case id=g10.auction-listing-media.TC-ord rev=1 covers=g10.auction-listing-media.SC-35 -->
+### grade10-site-auction-listing-media-US1-TC14-1: Direct-upload reorder holds on drop
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* An admin holds the catalogue grant.
+* `<listing_10>` is a draft with direct-upload images in order A, B, C.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_10>` | A draft auction listing with three direct-upload images in order A, B, C |
+
+**Steps:**
+
+1. Open the media manager for `<listing_10>`.
+2. Drag C before A and drop it.
+3. Leave and reopen the media manager.
+
+**Expected Results:**
+
+* The gallery order is C, A, B after the drop.
+* The order remains C, A, B after reopening without a separate Save action.
+
+<!-- trace:case id=g10.auction-listing-media.TC-stg rev=1 covers=g10.auction-listing-media.SC-36 -->
+### grade10-site-auction-listing-media-US1-TC15-1: Staged inventory reorder waits for Save
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* An admin holds the catalogue grant.
+* `<listing_11>` has inventory assets staged in the media manager but not saved.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_11>` | A draft listing with two staged inventory assets |
+
+**Steps:**
+
+1. Reorder the staged inventory assets.
+2. Leave the listing without saving.
+3. Reopen the listing.
+
+**Expected Results:**
+
+* The stored listing retains its prior inventory order.
+* The reordered inventory assets apply only after the listing is saved.
 
 ---
 
@@ -860,7 +1061,7 @@ details page.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -872,6 +1073,7 @@ details page.
 **Pre-conditions:**
 
 * <listing_20> is published with two gallery images.
+* The details gallery is wide enough for a left rail beside the main frame.
 
 **Test data:**
 
@@ -882,11 +1084,11 @@ details page.
 **Steps:**
 
 1. Navigate to <listing_20 public url>.
-2. Check the thumbnail strip, the main frame, and zoom.
+2. Check the thumbnail rail, the main frame, and zoom.
 
 **Expected Results:**
 
-* The thumbnail strip requests size `thumb`.
+* The thumbnail rail requests size `thumb`.
 * The main frame requests size `detail`.
 * Zoom requests size `zoom`.
 
@@ -997,14 +1199,14 @@ details page.
 
 * The gallery shows three images in the order A, B, C.
 
-<!-- trace:case id=g10.auction-listing-media.TC-ic0 rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### grade10-site-auction-listing-media-US5-TC6-1: One image has no thumbnail strip
+<!-- trace:case id=g10.auction-listing-media.TC-ic0 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
+### grade10-site-auction-listing-media-US5-TC6-2: One image has no thumbnail strip or navigation
 
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -1013,34 +1215,36 @@ details page.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
+
 **Pre-conditions:**
 
-* <listing_24> is published with only one gallery image.
+* <listing_24> is published with one gallery image.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_24>` | A published auction listing with exactly one gallery image |
+| `<listing_24>` | A published listing with one gallery image |
 
 **Steps:**
 
 1. Navigate to <listing_24 public url>.
-2. Check the gallery.
+2. Check the gallery controls.
 
 **Expected Results:**
 
-* The gallery shows that image.
-* It does not show a thumbnail strip.
+* The image is shown.
+* No thumbnail rail, previous control, or next control is shown.
 
-<!-- trace:case id=g10.auction-listing-media.TC-l76 rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### grade10-site-auction-listing-media-US5-TC7-1: No images still shows the listing
+<!-- trace:case id=g10.auction-listing-media.TC-l76 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
+### grade10-site-auction-listing-media-US5-TC7-2: No images still shows the listing without navigation
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1049,22 +1253,147 @@ details page.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
+
 **Pre-conditions:**
 
-* <listing_25> is published with no gallery images.
+* <listing_25> is published without gallery images.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_25>` | A published auction listing with no gallery images |
+| `<listing_25>` | A published listing with no gallery images |
 
 **Steps:**
 
 1. Navigate to <listing_25 public url>.
-2. Check the page and the gallery.
+2. Check the gallery and the listing page.
 
 **Expected Results:**
 
-* The page shows the listing's title and bid panel.
-* The gallery has no image.
+* The gallery has no image and no previous or next control.
+* The listing title and bid panel remain visible.
+
+<!-- trace:case id=g10.auction-listing-media.TC-pls rev=1 covers=g10.auction-listing-media.SC-5tk -->
+### grade10-site-auction-listing-media-US5-TC8-1: Wide details gallery shows a left rail
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Pre-conditions:**
+
+* <listing_28> is published with two or more gallery images.
+* The details gallery is wide enough for a left rail beside the main frame.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_28>` | A published auction listing with two or more gallery images |
+
+**Steps:**
+
+1. Navigate to <listing_28 public url>.
+2. Check the gallery for a thumbnail rail beside the main frame.
+
+**Expected Results:**
+
+* A thumbnail rail is shown beside the main frame.
+
+<!-- trace:case id=g10.auction-listing-media.TC-pbt rev=1 covers=g10.auction-listing-media.SC-cd3 -->
+### grade10-site-auction-listing-media-US5-TC9-1: Stacked details gallery hides the rail
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Pre-conditions:**
+
+* <listing_29> is published with two or more gallery images.
+* The details gallery is stacked and not wide enough for a left rail beside
+  the main frame.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_29>` | A published auction listing with two or more gallery images |
+
+**Steps:**
+
+1. Navigate to <listing_29 public url> at a stacked gallery width.
+2. Check for a thumbnail rail, previous/next.
+
+**Expected Results:**
+
+* No thumbnail rail is shown.
+* Previous and next remain available.
+* Carousel progress remains available.
+
+## Settled
+
+- Wide enough means the gallery can place a left rail beside the main frame;
+  the implementation threshold stays in code.
+- Stacked several-image galleries hide the rail; previous/next and progress
+  remain.
+- Named size `thumb` applies when the rail is shown; `detail` and `zoom`
+  still apply to the main frame.
+- A one-image details gallery has no rail or previous/next. An empty details
+  gallery has no image or previous/next while the listing page remains.
+
+## Reconciliation
+
+Two independent readings of the same anchors: QA1 wrote the blind cases
+without sight of the scenarios, and Dev wrote the scenarios without sight of
+the blind suite. QA2 reconciled both against the modified US-01 journey and
+the upload feature-set root.
+
+| Finding | Disposition |
+| --- | --- |
+| The preview, confirm and discard flow no longer matches the journey | **Deprecated:** `US1-TC4-1` and `US1-TC5-1`; `US1-TC3-2` carries the revised case and `SC-31` |
+| A single supported file stores as soon as it is chosen | **Folded in:** `SC-31` and `US1-TC3-2` |
+| Several files need deterministic append order | **Folded in:** `SC-32` and `US1-TC11-1` |
+| Replacement follows the same immediate path | **Folded in:** `SC-33` and `US1-TC13-1` |
+| Mixed selections need per-file refusal reasons without rolling back accepted files | **Folded in:** `SC-34` and `US1-TC12-1` |
+| Direct-upload reorder and staged inventory reorder have different persistence timing | **Folded in:** `SC-35` and `SC-36`, walked by `US1-TC14-1` and `US1-TC15-1` |
+| Existing accepted types, size bound, cap, remove confirmation, alt text, zoom and writable-state behavior | **Kept:** these remain covered by the durable suite and unchanged requirements |
+| QA1 or Dev raised an unresolved product question | **None:** decisions Q1 to Q6 settle the changed behavior |
+
+**Run:** Blind pass read Purpose (durable), Feature set (delta),
+user-journeys.md (US-05), proposal.md, decisions.md (goals, non-goals,
+Q1–Q4, empty Raised), PRD Media Gallery strip lines, and durable
+feature-tcs.md for id continuity with Reconciliation stripped. Denied:
+every Requirements section, openspec/specs/ beyond those excerpts,
+openspec/changes/archive/.
+
+| Finding | Disposition |
+| --- | --- |
+| Details gallery uses thumb, detail, and zoom when a rail is shown | Folded as covered by `grade10-site-auction-listing-media-SC-22` / `grade10-site-auction-listing-media-US5-TC2-1` |
+| Wide details gallery shows a left rail | Folded as covered by `grade10-site-auction-listing-media-SC-29` / `grade10-site-auction-listing-media-US5-TC8-1` |
+| Stacked details gallery hides the rail, keeps previous/next and progress | Folded as covered by `grade10-site-auction-listing-media-SC-30` / `grade10-site-auction-listing-media-US5-TC9-1` |
+| One details image has no rail or previous/next | Revised durable `grade10-site-auction-listing-media-US5-TC6-1` as `TC6-2`, keeping trace id `g10.auction-listing-media.TC-ic0` at rev 2, for `grade10-site-auction-listing-media-SC-27` |
+| Empty details gallery leaves the listing visible without previous/next | Revised durable `grade10-site-auction-listing-media-US5-TC7-1` as `TC7-2`, keeping trace id `g10.auction-listing-media.TC-l76` at rev 2, for `grade10-site-auction-listing-media-SC-28` |
+| Details order | Covered by durable `grade10-site-auction-listing-media-SC-26` / `US5-TC5-1` — unchanged by this change |
+| Raised questions from the blind pass | None — Q1–Q4 already settled width rule, stacked replacement, ListingGallery carve-out, and unnamed threshold |
+
+**Uncovered anchors:** none after the stated scenario and case patches.

@@ -9,6 +9,7 @@
 **I want** the reward form to set a reward's kind, discount, scope and combine setting,
 **so that** publishing any reward never needs the admin API.
 
+<!-- trace:case id=g10.loyalty-programme.TC-nzm rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
 ### grade10-site-loyalty-programme-US9-TC1-1: A money-off reward is created from the console alone
 
 **Classification:**
@@ -41,6 +42,7 @@
 * Reward is listed on the rewards page.
 * Reopened, it shows the same kind, amount, variant and combine setting.
 
+<!-- trace:case id=g10.loyalty-programme.TC-bju rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
 ### grade10-site-loyalty-programme-US9-TC2-1: A free item is created from one variant
 
 **Classification:**
@@ -73,6 +75,7 @@
 * Rewards page terms read Everything off that variant.
 * Reopened, Free item is chosen with that variant picked.
 
+<!-- trace:case id=g10.loyalty-programme.TC-7q7 rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
 ### grade10-site-loyalty-programme-US9-TC3-1: A stored free item reopens and duplicates as a free item
 
 **Classification:**
@@ -106,6 +109,7 @@
 * Stored variant is the picked item on both.
 * Minimum spend reads HKD 500 on both.
 
+<!-- trace:case id=g10.loyalty-programme.TC-nuz rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
 ### grade10-site-loyalty-programme-US9-TC4-1: A 100% discount on two variants reopens as money off
 
 **Classification:**
@@ -137,6 +141,7 @@
 * Discount reads Everything (free).
 * Both variants are picked.
 
+<!-- trace:case id=g10.loyalty-programme.TC-tuu rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
 ### grade10-site-loyalty-programme-US9-TC5-1: A capped 100% discount on one variant reopens as money off
 
 **Classification:**

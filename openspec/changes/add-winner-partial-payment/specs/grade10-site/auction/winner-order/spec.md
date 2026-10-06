@@ -1,3 +1,5 @@
+# grade10-site/auction/winner-order Specification
+
 ## Feature set
 
 - Settlement
@@ -14,15 +16,18 @@
 When an operator has recorded money but has not closed the invoice, Winner
 Order SHALL show Partially Paid as a locked state with Contact Us and a receipt
 link for each payment in the existing receipt row, oldest first. It SHALL show
-no running balance. It SHALL hide Pay, address changes, invoice reissue and
-cancellation, and SHALL show no further payment deadline.
+no running balance. It SHALL hide Pay, Submit Payment Proof, View Bank Details,
+address changes, invoice reissue and cancellation, and SHALL show no further
+payment deadline.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-34b rev=1 -->
 #### Scenario: winner-order-SC-156 - The partially paid order is locked
-**Serves:** winner-order-US-12 - Winner sees partial collection without a second order
+**Serves:** winner-order-US-20 - Winner sees partial collection without a second order
 
 - **GIVEN** an order with one partial payment and money still due
 - **WHEN** the winner opens Winner Order
 - **THEN** it reads Partially Paid
 - **AND** it offers Contact Us and shows no running balance
 - **AND** it shows a separate receipt link for each recorded payment, oldest first
-- **AND** it shows no Pay, reissue, address change or cancel action
+- **AND** it shows no Pay, Submit Payment Proof, View Bank Details, reissue,
+  address change or cancel action

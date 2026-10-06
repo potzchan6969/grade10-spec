@@ -11,6 +11,7 @@
 **I want** the staging door to answer one approved workflow, act on tester addresses only, and do only the five moves,
 **so that** staging auth cases finish a sign-in without a mailbox and nothing else mints a session.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-6jb rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
 ### shared-auth-test-sign-in-US1-TC1-1: An approved dispatch from main is answered
 
 **Classification:**
@@ -41,6 +42,7 @@
 * Step 1 returns the link from that address's last sign-in mail.
 * Step 2 is answered, and the link no longer signs the address in.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-3ni rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
 ### shared-auth-test-sign-in-US1-TC2-1: Callers that are not the door's own workflow are refused
 
 Runs once per row of **Test data**.
@@ -81,6 +83,7 @@ Runs once per row of **Test data**.
 * The caller in the row is refused and gets no link.
 * Step 2 returns the link, unchanged by the refused call.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-xa3 rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
 ### shared-auth-test-sign-in-US1-TC3-1: The door's workflow off the main branch is refused
 
 **Classification:**
@@ -111,6 +114,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused and gets no link.
 * Step 2 returns the link.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-fwx rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
 ### shared-auth-test-sign-in-US1-TC4-1: A run a pull request started is refused
 
 **Classification:**
@@ -141,6 +145,7 @@ Runs once per row of **Test data**.
 * Both moves are refused.
 * The address holds no `admin` afterwards.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-b5b rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
 ### shared-auth-test-sign-in-US1-TC5-1: A dispatch no reviewer approved is refused
 
 **Classification:**
@@ -171,6 +176,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused and gets no link.
 * Step 2 returns the link.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-12e rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
 ### shared-auth-test-sign-in-US1-TC6-1: A move on an address that never signed in creates the account
 
 Runs once per row of **Test data**.
@@ -213,6 +219,7 @@ Runs once per row of **Test data**.
 * It is in the state the row names.
 * Step 4 is refused for the banned row and signs in holding `admin` for the prepared row.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-z9o rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
 ### shared-auth-test-sign-in-US1-TC7-1: An address outside the tester domain is refused
 
 Runs once per row of **Test data**.
@@ -253,6 +260,7 @@ Runs once per row of **Test data**.
 * Both moves are refused and no link is returned.
 * No account exists for that address afterwards.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-qtf rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
 ### shared-auth-test-sign-in-US1-TC8-1: A move naming no address is refused
 
 Runs once per row of **Test data**.
@@ -295,6 +303,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused.
 * No address is read as a default: step 2 returns the same link, the address is neither banned nor holding `admin`, and the sign-in wait on that address still holds.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-6j4 rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
 ### shared-auth-test-sign-in-US1-TC9-1: Two tester addresses differing by a plus tag stay apart
 
 **Classification:**
@@ -325,6 +334,7 @@ Runs once per row of **Test data**.
 * The link differs from the one sent to `<plus-tagged tester address>`.
 * The signed-in account is `<tester address>`.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-lil rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
 ### shared-auth-test-sign-in-US1-TC10-1: A sign-in mail to a tester address is sent the ordinary way
 
 **Classification:**
@@ -356,6 +366,7 @@ Runs once per row of **Test data**.
 * The door returns that link.
 * The door neither skipped nor replaced the send.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-x9g rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC11-1: The job captures the link and follows it into a session
 
 **Classification:**
@@ -387,6 +398,7 @@ Runs once per row of **Test data**.
 * Step 2 returns the link with no mailbox opened.
 * Step 3 signs `<tester address>` in on `<grade10 staging site url>`.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-d7d rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC12-1: Capture for an address with no last mail returns no link
 
 **Classification:**
@@ -418,6 +430,7 @@ Runs once per row of **Test data**.
 * Step 1 returns no link.
 * Step 3 returns the link from the mail step 2 sent.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-mdj rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC13-1: Capture returns only the named address's last mail
 
 **Classification:**
@@ -448,6 +461,7 @@ Runs once per row of **Test data**.
 * The link is `<tester address>`'s, not the newer one sent to `<second tester address>`.
 * The signed-in account is `<tester address>`.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-30m rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC14-1: A second capture returns the same link until another send
 
 **Classification:**
@@ -480,6 +494,7 @@ Runs once per row of **Test data**.
 * Step 2 returns the link step 1 used.
 * Step 4 returns the link from the mail step 3 sent.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-2dr rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC15-1: An aged unused link is refused before its lifetime passes
 
 **Classification:**
@@ -511,6 +526,7 @@ Runs once per row of **Test data**.
 * Step 3 is refused as expired.
 * No session starts, and less than `<link lifetime>` has passed since the mail was sent.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-lfd rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC16-1: Aging a used link changes nothing
 
 **Classification:**
@@ -543,6 +559,7 @@ Runs once per row of **Test data**.
 * Step 4 answers exactly as step 2 did.
 * No new session starts.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-o35 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC17-1: Aging an address with no link ages nothing
 
 **Classification:**
@@ -574,6 +591,7 @@ Runs once per row of **Test data**.
 * No link exists to open after step 1.
 * Step 3 signs `<tester address>` in, inside `<link lifetime>`.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-xm8 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC18-1: A banned tester address cannot follow its captured link
 
 **Classification:**
@@ -605,6 +623,7 @@ Runs once per row of **Test data**.
 * Step 3 is refused for a banned address.
 * No session starts.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-tka rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC19-1: A prepared tester address holds admin once the link is followed
 
 **Classification:**
@@ -637,6 +656,7 @@ Runs once per row of **Test data**.
 * Step 3 signs the address in.
 * Step 4 admits the session, which holds `admin`.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-6x5 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC20-1: Clearing the limits sends a second mail without the wait
 
 **Classification:**
@@ -670,6 +690,7 @@ Runs once per row of **Test data**.
 * Step 3 sends the mail at once.
 * Step 4 returns the newer link.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-b7v rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC21-1: Clearing the limits lets the caller ask past the count
 
 **Classification:**
@@ -703,6 +724,7 @@ Runs once per row of **Test data**.
 * Step 3 sends the mail.
 * Step 4 returns its link.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-2ca rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
 ### shared-auth-test-sign-in-US1-TC22-1: The door is closed on preview and production
 
 Runs once per row of **Test data**.
@@ -742,6 +764,7 @@ Runs once per row of **Test data**.
 * Both moves are refused and no link is returned.
 * `<tester address>` is not banned afterwards.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-brm rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
 ### shared-auth-test-sign-in-US1-TC23-1: The disposable dev door on staging stays 403
 
 Runs once per row of **Test data**.
@@ -780,6 +803,7 @@ Runs once per row of **Test data**.
 * Both steps answer 403.
 * No session starts on `<grade10 staging site url>`.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-dv3 rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
 ### shared-auth-test-sign-in-US1-TC24-1: The door mints no session without the mail
 
 **Classification:**
@@ -810,6 +834,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused and returns no session.
 * Step 2 shows nobody signed in.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-z4u rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
 ### shared-auth-test-sign-in-US1-TC25-1: The door does not unban
 
 **Classification:**
@@ -842,6 +867,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused.
 * Step 4 is refused for a banned address.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-rzt rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
 ### shared-auth-test-sign-in-US1-TC26-1: The door seeds no store or auction data
 
 **Classification:**
@@ -874,6 +900,7 @@ Runs once per row of **Test data**.
 * Both seed moves are refused.
 * No new product shows in step 3 and no new listing in step 4.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-pb7 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC27-1: Clearing one address leaves another address's wait standing
 
 **Classification:**
@@ -904,6 +931,7 @@ Runs once per row of **Test data**.
 * Step 2 is held by the wait between two mails.
 * No second mail is sent to `<second tester address>`.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-u45 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
 ### shared-auth-test-sign-in-US1-TC28-1: A mail older than the capture window is no longer readable
 
 **Classification:**
@@ -933,6 +961,7 @@ Runs once per row of **Test data**.
 * The call is not refused.
 * No link is returned, as for an address no mail was sent to.
 
+<!-- trace:case id=g10.shared-test-sign-in.TC-ug2 rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
 ### shared-auth-test-sign-in-US1-TC29-1: A tester address in mixed case is acted on
 
 **Classification:**

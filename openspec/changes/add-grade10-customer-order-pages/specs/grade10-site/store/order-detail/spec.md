@@ -27,6 +27,7 @@ SHALL NOT disclose whether the id exists. A collector without a decided session
 SHALL remain at the requested address while the existing sign-in surface decides
 the session.
 
+<!-- trace:scenario id=g10.store-order-detail.SC-d26 rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-01 - An owner opens one order
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -34,6 +35,7 @@ the session.
 - **WHEN** they open `/profile/orders/<order-id>` for it
 - **THEN** that order's detail appears
 
+<!-- trace:scenario id=g10.store-order-detail.SC-a2p rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-02 - Missing and unowned orders look the same
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -42,6 +44,7 @@ the session.
 - **THEN** the same not-found treatment appears for either id
 - **AND** the page does not say whether an order exists
 
+<!-- trace:scenario id=g10.store-order-detail.SC-en3 rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-03 - A signed-out collector keeps the requested order address
 **Serves:** grade10-site-store-order-detail-US-02 - Collector signs in to the requested order
 
@@ -94,6 +97,7 @@ The page SHALL NOT infer a payment method, address, discount, points credit,
 shipping charge, tax, image, loyalty amount, or other missing value from
 another fact.
 
+<!-- trace:scenario id=g10.store-order-detail.SC-bjc rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-04 - A web order keeps quoted and paid totals distinct
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -102,6 +106,7 @@ another fact.
 - **THEN** the quoted subtotal shows 10000 minor units `HKD`
 - **AND** the paid total shows 11200 minor units `HKD`
 
+<!-- trace:scenario id=g10.store-order-detail.SC-0uc rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-05 - A partial refund stays distinct from the charge
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -110,6 +115,7 @@ another fact.
 - **THEN** the paid total remains 11200 minor units `HKD`
 - **AND** the refund shows 2000 minor units `HKD` separately
 
+<!-- trace:scenario id=g10.store-order-detail.SC-3mi rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-06 - A point-of-sale order does not invent web fields
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -118,6 +124,7 @@ another fact.
 - **THEN** the paid total appears
 - **AND** no zero subtotal, empty product row, payment method, or shipping address is invented
 
+<!-- trace:scenario id=g10.store-order-detail.SC-6xb rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-07 - Unavailable optional facts are omitted
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -126,6 +133,7 @@ another fact.
 - **THEN** those sections or rows are omitted
 - **AND** no placeholder is presented as a known order fact
 
+<!-- trace:scenario id=g10.store-order-detail.SC-ik3 rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-17 - Points credit stays distinct from Discount
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -136,6 +144,7 @@ another fact.
 - **AND** the Points label names the 100 points deducted
 - **AND** neither amount is folded into the other
 
+<!-- trace:scenario id=g10.store-order-detail.SC-7ci rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-13 - Customer-facing identity does not replace the route id
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -145,6 +154,7 @@ another fact.
 - **AND** the Store order id identifies it otherwise
 - **AND** the address continues to use the immutable Store order id
 
+<!-- trace:scenario id=g10.store-order-detail.SC-gbw rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-14 - Supplied settlement rows preserve zero and absence
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -154,6 +164,7 @@ another fact.
 - **AND** the second order omits all three rows
 - **AND** each paid total remains the charge
 
+<!-- trace:scenario id=g10.store-order-detail.SC-cew rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-15 - A partial shipping address remains truthful
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -162,6 +173,7 @@ another fact.
 - **THEN** the supplied non-empty address parts appear in postal order
 - **AND** no blank recipient, placeholder line, or pickup address appears
 
+<!-- trace:scenario id=g10.store-order-detail.SC-ik7 rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-16 - Payment identity remains truthful
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -179,6 +191,7 @@ appear only for an absolute `https` carrier URL with no embedded credentials.
 It SHALL open that URL in a new browser context isolated from the Grade10 page.
 A carrier or tracking number alone SHALL NOT create a tracking action.
 
+<!-- trace:scenario id=g10.store-order-detail.SC-4bj rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-08 - An estimate is not a completed milestone
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -187,6 +200,7 @@ A carrier or tracking number alone SHALL NOT create a tracking action.
 - **THEN** the date is identified as an estimate
 - **AND** delivery is not presented as completed
 
+<!-- trace:scenario id=g10.store-order-detail.SC-xz6 rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-09 - A safe carrier URL enables the detail action
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -195,6 +209,7 @@ A carrier or tracking number alone SHALL NOT create a tracking action.
 - **THEN** Track Order appears
 - **AND** activating it opens the carrier URL in a new browser context isolated from the Grade10 page
 
+<!-- trace:scenario id=g10.store-order-detail.SC-2ah rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-10 - Unsafe tracking data creates no action
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
@@ -209,12 +224,14 @@ read SHALL show a localized error and a retry action at the same address. A
 successful null answer SHALL show the not-found treatment rather than a loading
 or transport-error state.
 
+<!-- trace:scenario id=g10.store-order-detail.SC-4lu rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-11 - The first read is still loading
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **WHEN** the first order read has not settled
 - **THEN** the page shows a loading state and no not-found claim
 
+<!-- trace:scenario id=g10.store-order-detail.SC-gzr rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-12 - A failed read can be retried
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 

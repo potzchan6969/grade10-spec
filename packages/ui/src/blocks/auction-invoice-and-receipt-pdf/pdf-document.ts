@@ -53,20 +53,30 @@ export type PdfDocumentCopy = {
 /**
  * The regular face every line falls back to, and a bold face for titles,
  * headings and totals. The Latin path gets a real bold standard font for
- * free; a storefront whose document needs the embedded CJK fallback has no
- * bold face provisioned for it, so `bold` is the same face as `regular`
- * there - plain weight throughout rather than a missing glyph.
+ * free; a document drawn in an embedded face takes its bold from
+ * `boldFontBytes`, and without one `bold` is the same face as `regular` -
+ * plain weight throughout rather than a missing glyph.
  */
 export type Fonts = { regular: PDFFont; bold: PDFFont };
+
+/** The embedded faces a caller supplies when the standard fonts cannot draw its text. */
+export type PdfRenderOptions = {
+  fontBytes?: ArrayBuffer | null;
+  boldFontBytes?: ArrayBuffer | null;
+};
 
 export async function loadFonts(
   pdf: PDFDocument,
   fontBytes?: ArrayBuffer | null,
+  boldFontBytes?: ArrayBuffer | null,
 ): Promise<Fonts> {
   if (fontBytes) {
     pdf.registerFontkit(fontkit);
-    const font = await pdf.embedFont(fontBytes, { subset: true });
-    return { regular: font, bold: font };
+    const regular = await pdf.embedFont(fontBytes, { subset: true });
+    const bold = boldFontBytes
+      ? await pdf.embedFont(boldFontBytes, { subset: true })
+      : regular;
+    return { regular, bold };
   }
   return {
     regular: await pdf.embedFont(StandardFonts.Helvetica),
@@ -78,19 +88,13 @@ export async function loadFonts(
 const DOCUMENT_TIME_ZONE = "Asia/Hong_Kong";
 
 /**
- * `HKT`, not `GMT+8` - `Intl` only resolves the named abbreviation under a
- * Hong Kong locale; the US locale used for the date and time parts falls
- * back to the offset instead.
+ * Asia/Hong_Kong labelled GMT+8, matching emails and terms.
  */
-function timeZoneAbbreviation(value: Date, timeZone: string): string {
-  return (
-    new Intl.DateTimeFormat("en-HK", { timeZone, timeZoneName: "short" })
-      .formatToParts(value)
-      .find((part) => part.type === "timeZoneName")?.value ?? timeZone
-  );
+function documentZoneName(): string {
+  return "GMT+8";
 }
 
-/** `September 24, 2026, 12:30 HKT`. */
+/** `September 24, 2026, 12:30 GMT+8`. */
 export function formatDateTime(value: Date): string {
   const date = new Intl.DateTimeFormat("en-US", {
     timeZone: DOCUMENT_TIME_ZONE,
@@ -104,7 +108,7 @@ export function formatDateTime(value: Date): string {
     minute: "2-digit",
     hourCycle: "h23",
   }).format(value);
-  return `${date}, ${time} ${timeZoneAbbreviation(value, DOCUMENT_TIME_ZONE)}`;
+  return `${date}, ${time} ${documentZoneName()}`;
 }
 
 export function addressLines(address: PdfPartyAddress): string[] {

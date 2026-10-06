@@ -1,0 +1,136 @@
+{
+  "version": 2,
+  "change": "bid-history-winner-priority",
+  "baseline": "d373ed7eb6533a1213d2c61707c5b283e325ab4aed346e2f330bd0c8215c9797",
+  "fingerprint": "bc8ee7737866ae4c7533377f797f9301015636e247f4298250a126fa6b3cadb8",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-05T12:16:07.644Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/bidding.md#auction-panel",
+      "sha256": "b3a74d8bb39194b12fc2d2273f7c66d9e13eb41b3b1003c4d7db61326b5f8633",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/auction-listing.md#bid-history",
+      "sha256": "90385a028d6976ecdda9a8e11860629dee808db8acf83a000f2976086ff14765",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/decisions.md",
+      "sha256": "6f1bcdd3a7ff51d44a58bbeace312bdd5e4504c519167c27cb633abd8d2712aa",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/proposal.md",
+      "sha256": "22c8264ba5f1e1d87829959f25444e55e43657551511b78c3ca758f688b133f2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "c614046042e7bc8f7139c6385d5f2bd5621b3fcd5925386f935ded915369a208",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "070015880cae206d1e66d5801c151a919d69630b414329e0ab063f4df492a26d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "b282be118da90e355dfb17de75bb1c5a985e1ad7ddf16f0ec0cf705694a950ee",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "d0ccc8c641e62a2ad27d13aa46eb0fdd0ccb5dd562d1f269eb1ba7ac72f26826",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "0b9cd976bbd77b6288dfc9dbfa1add6939a3c67a82aa9cb730a4a8297572e803",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "526ea66fb4aba2f9a1092c8cce58e9bacf41a5bb2aa04d9627e0a89671215a79",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/tech-design.md",
+      "sha256": "6d523466ee4287835d8dc8caa7822b75140101b17873630b9c3340d00e716a62",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/bid-history-winner-priority/ui-design.md",
+      "sha256": "c1ee95b8558e2cf5668ee83092dc1037fc0c590b855ea2e4da1c3f38494c0d62",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "61dc46aeb8ac082ff5e8594574ee37251627a7e55e9b3febe246f8423914e15c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "168464f3246d4a0b53c78381f36f333f8289272d6cdc6379bf4adc96cf95fa4a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "e8552f1f11e74ec3b7f467d66d1669835aa13029d1ccc1224fb1c97175161b22",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "1fafb22333164ee2c6ebb1c600b6a4e8ed9bcee56ea8e227905079dcfe7676f7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "2d9b35f7ccb6082e7d0fe7408f9d73f3e7c27a23ab78953d258b1af446bddb2d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "526ea66fb4aba2f9a1092c8cce58e9bacf41a5bb2aa04d9627e0a89671215a79",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/bid-history-winner-priority/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Recent bids crown the closed winner and explain a tied maximum"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Public bid history marks the closed winner and equal-max priority"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

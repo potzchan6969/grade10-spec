@@ -19,6 +19,7 @@ the day it left,
 **so that** the borrower's term runs from the day they got the money and
 nobody can price and pay out one loan alone.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-vou rev=2 covers=g10.vault-loan-and-settlement.SC-3g8,g10.vault-loan-and-settlement.SC-72r,g10.vault-loan-and-settlement.SC-6zm,g10.vault-loan-and-settlement.SC-0as,g10.vault-loan-and-settlement.SC-obp,g10.vault-loan-and-settlement.SC-apt,g10.vault-loan-and-settlement.SC-zk2,g10.vault-loan-and-settlement.SC-3mx -->
 ### grade10-site-vault-loan-and-settlement-US1-TC1-2: Payout within its value-date bounds fixes the due date and tells the borrower
 
 Runs once per row of **Test data**.
@@ -61,6 +62,7 @@ Runs once per row of **Test data**.
 * Step 3 reads the due date 30 days after the row's value date, and the borrower is told it in writing.
 * Step 3 reads the amount owed as principal plus interest exactly, half-up rounded, and never below zero.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-nwn rev=1 covers=g10.vault-loan-and-settlement.SC-3g8,g10.vault-loan-and-settlement.SC-72r,g10.vault-loan-and-settlement.SC-6zm,g10.vault-loan-and-settlement.SC-0as,g10.vault-loan-and-settlement.SC-obp,g10.vault-loan-and-settlement.SC-apt,g10.vault-loan-and-settlement.SC-zk2,g10.vault-loan-and-settlement.SC-3mx -->
 ### grade10-site-vault-loan-and-settlement-US1-TC2-1: Payout is refused when its value date falls outside its bounds
 
 Runs once per row of **Test data**.
@@ -104,6 +106,7 @@ Runs once per row of **Test data**.
 * The payout is refused by name
 * The case stays `vaulted`, with no payout recorded
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-z0y rev=1 covers=g10.vault-loan-and-settlement.SC-3g8,g10.vault-loan-and-settlement.SC-72r,g10.vault-loan-and-settlement.SC-6zm,g10.vault-loan-and-settlement.SC-0as,g10.vault-loan-and-settlement.SC-obp,g10.vault-loan-and-settlement.SC-apt,g10.vault-loan-and-settlement.SC-zk2,g10.vault-loan-and-settlement.SC-3mx -->
 ### grade10-site-vault-loan-and-settlement-US1-TC3-1: Payout is refused when its recorder priced the same case's offer
 
 **Classification:**
@@ -140,6 +143,7 @@ Runs once per row of **Test data**.
   paid out the loan
 * The case stays `vaulted`
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-3of rev=1 covers=g10.vault-loan-and-settlement.SC-3g8,g10.vault-loan-and-settlement.SC-72r,g10.vault-loan-and-settlement.SC-6zm,g10.vault-loan-and-settlement.SC-0as,g10.vault-loan-and-settlement.SC-obp,g10.vault-loan-and-settlement.SC-apt,g10.vault-loan-and-settlement.SC-zk2,g10.vault-loan-and-settlement.SC-3mx -->
 ### grade10-site-vault-loan-and-settlement-US1-TC4-1: Payout is refused when the amount does not equal the accepted principal
 
 **Classification:**
@@ -175,6 +179,7 @@ Runs once per row of **Test data**.
 * The payout is refused by name
 * The case stays `vaulted`
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-k4o rev=1 covers=g10.vault-loan-and-settlement.SC-3g8,g10.vault-loan-and-settlement.SC-72r,g10.vault-loan-and-settlement.SC-6zm,g10.vault-loan-and-settlement.SC-0as,g10.vault-loan-and-settlement.SC-obp,g10.vault-loan-and-settlement.SC-apt,g10.vault-loan-and-settlement.SC-zk2,g10.vault-loan-and-settlement.SC-3mx -->
 ### grade10-site-vault-loan-and-settlement-US1-TC5-1: Payout is refused with no bank reference
 
 **Classification:**
@@ -208,6 +213,7 @@ Runs once per row of **Test data**.
 * The payout is refused by name
 * The case stays `vaulted`
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-g69 rev=1 covers=g10.vault-loan-and-settlement.SC-3g8,g10.vault-loan-and-settlement.SC-72r,g10.vault-loan-and-settlement.SC-6zm,g10.vault-loan-and-settlement.SC-0as,g10.vault-loan-and-settlement.SC-obp,g10.vault-loan-and-settlement.SC-apt,g10.vault-loan-and-settlement.SC-zk2,g10.vault-loan-and-settlement.SC-3mx -->
 ### grade10-site-vault-loan-and-settlement-US1-TC6-1: Payout is refused when a live payout already stands on the case
 
 **Classification:**
@@ -241,6 +247,7 @@ Runs once per row of **Test data**.
 * The payout is refused by name
 * The case's one live payout is unchanged
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-o49 rev=1 covers=g10.vault-loan-and-settlement.SC-3g8,g10.vault-loan-and-settlement.SC-72r,g10.vault-loan-and-settlement.SC-6zm,g10.vault-loan-and-settlement.SC-0as,g10.vault-loan-and-settlement.SC-obp,g10.vault-loan-and-settlement.SC-apt,g10.vault-loan-and-settlement.SC-zk2,g10.vault-loan-and-settlement.SC-3mx -->
 ### grade10-site-vault-loan-and-settlement-US1-TC7-1: Payout is refused before the packet is executed and the item is in custody
 
 **Classification:**
@@ -285,6 +292,7 @@ payment to cut what my arrears run on,
 **so that** I can pay some now and the rest later without being charged for
 money I have already returned.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-fyv rev=2 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC1-2: The borrower's read gives one figure owed across two reads
 
 **Classification:**
@@ -317,6 +325,7 @@ money I have already returned.
 * Step 1 names the due date, 1 October, and the instant it computed the figure at.
 * Step 2 reads the same figure owed and the same due date.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-c92 rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC2-1: A repayment on time still owes the whole term's interest, and settles the loan
 
 **Classification:**
@@ -354,6 +363,7 @@ money I have already returned.
 * The amount owed now reads zero, never negative
 * The item may then be booked for a pickup visit and taken home
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-swz rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC3-1: A part payment clears interest first, and the remaining arrears run on the unreturned principal alone
 
 **Classification:**
@@ -395,6 +405,7 @@ money I have already returned.
   principal alone, no fee, no compounding, no higher rate
 * Step 3's repayment leaves the case `repaid`, owing zero
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-cf1 rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC4-1: A repayment is refused when the quoted balance has moved
 
 **Classification:**
@@ -431,6 +442,7 @@ money I have already returned.
 * The repayment is refused by name, naming that the quote moved
 * The case's balance reflects only the second treasurer's recording
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-mo8 rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC5-1: A repayment is refused when it would over-repay the loan at its own value date
 
 **Classification:**
@@ -467,6 +479,7 @@ money I have already returned.
 * The repayment is refused by name
 * The case's amount owed is unchanged at 10,300,000 (HKD)
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-hrj rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC6-1: The same recorder's key replays the same recording rather than a duplicate
 
 **Classification:**
@@ -504,6 +517,7 @@ money I have already returned.
   repayment
 * The case's balance reflects only one 3,000,000 (HKD) repayment
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-tv4 rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC7-1: A repayment is refused when its value date is outside the payout's bounds
 
 Runs once per row of **Test data**.
@@ -546,6 +560,7 @@ Runs once per row of **Test data**.
 * The repayment is refused by name
 * The case's balance is unchanged
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-yps rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC8-1: Release is refused while a balance is still outstanding
 
 **Classification:**
@@ -579,6 +594,7 @@ Runs once per row of **Test data**.
 * Release is refused by name, naming that a balance is still outstanding
 * The case stays `active`
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-ypr rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC10-1: A part payment at the counter is refused while nowhere to pay is set
 
 **Classification:**
@@ -616,6 +632,7 @@ Runs once per row of **Test data**.
 
 * Every row reads as its Result column says
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-m0p rev=2 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC9-2: Total interest owed never passes the brand's accrual ceiling of the principal
 
 **Classification:**
@@ -658,6 +675,7 @@ Runs once per row of **Test data**.
 gave them,
 **so that** nobody's property is taken without notice and a chance to pay.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-tyu rev=1 covers=g10.vault-loan-and-settlement.SC-4xb,g10.vault-loan-and-settlement.SC-6xk,g10.vault-loan-and-settlement.SC-u4f,g10.vault-loan-and-settlement.SC-ii8,g10.vault-loan-and-settlement.SC-57m -->
 ### grade10-site-vault-loan-and-settlement-US4-TC1-1: A forfeiture notice is refused before the loan is past its due date
 
 **Classification:**
@@ -687,6 +705,7 @@ gave them,
 * The notice is refused by name
 * The case carries no forfeiture notice
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-5t4 rev=2 covers=g10.vault-loan-and-settlement.SC-4xb,g10.vault-loan-and-settlement.SC-6xk,g10.vault-loan-and-settlement.SC-u4f,g10.vault-loan-and-settlement.SC-ii8,g10.vault-loan-and-settlement.SC-57m -->
 ### grade10-site-vault-loan-and-settlement-US4-TC2-2: A forfeiture notice fixes the cure date and states nothing can be taken before it
 
 **Classification:**
@@ -720,6 +739,7 @@ gave them,
 * The borrower's read carries the same day written and the same date to pay
   by
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-jph rev=1 covers=g10.vault-loan-and-settlement.SC-4xb,g10.vault-loan-and-settlement.SC-6xk,g10.vault-loan-and-settlement.SC-u4f,g10.vault-loan-and-settlement.SC-ii8,g10.vault-loan-and-settlement.SC-57m -->
 ### grade10-site-vault-loan-and-settlement-US4-TC3-1: Forfeiture is refused while the notice's cure period is still running
 
 **Classification:**
@@ -750,6 +770,7 @@ gave them,
 * Forfeiture is refused by name, naming the cure date not yet passed
 * The case stays `active`, and the item stays in the vault
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-isq rev=1 covers=g10.vault-loan-and-settlement.SC-4xb,g10.vault-loan-and-settlement.SC-6xk,g10.vault-loan-and-settlement.SC-u4f,g10.vault-loan-and-settlement.SC-ii8,g10.vault-loan-and-settlement.SC-57m -->
 ### grade10-site-vault-loan-and-settlement-US4-TC4-1: Forfeiture is refused with no notice sent, even when the loan is past due
 
 **Classification:**
@@ -780,6 +801,7 @@ gave them,
 * Forfeiture is refused by name, naming that no notice stands
 * The case stays `active`, and the item stays in the vault
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-wgu rev=1 covers=g10.vault-loan-and-settlement.SC-4xb,g10.vault-loan-and-settlement.SC-6xk,g10.vault-loan-and-settlement.SC-u4f,g10.vault-loan-and-settlement.SC-ii8,g10.vault-loan-and-settlement.SC-57m -->
 ### grade10-site-vault-loan-and-settlement-US4-TC5-1: Forfeiture, once the cure period has passed, settles the debt and tells the borrower
 
 **Classification:**
@@ -813,6 +835,7 @@ gave them,
   notice's date and the date to pay by
 * The borrower is told the item was forfeited
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-eak rev=1 covers=g10.vault-loan-and-settlement.SC-4xb,g10.vault-loan-and-settlement.SC-6xk,g10.vault-loan-and-settlement.SC-u4f,g10.vault-loan-and-settlement.SC-ii8,g10.vault-loan-and-settlement.SC-57m -->
 ### grade10-site-vault-loan-and-settlement-US4-TC6-1: Forfeiture is refused once the loan has already settled
 
 **Classification:**
@@ -843,6 +866,7 @@ gave them,
 * Forfeiture is refused by name, naming that no disbursed loan stands
 * The case stays `repaid`
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-zz5 rev=2 covers=g10.vault-loan-and-settlement.SC-4xb,g10.vault-loan-and-settlement.SC-6xk,g10.vault-loan-and-settlement.SC-u4f,g10.vault-loan-and-settlement.SC-ii8,g10.vault-loan-and-settlement.SC-57m -->
 ### grade10-site-vault-loan-and-settlement-US4-TC7-2: A brand that shortens its notice period does not move the date the borrower was given
 
 **Classification:**
@@ -885,6 +909,7 @@ gave them,
 account, whose name it is under and the reference to type,
 **so that** I can pay at my own bank without asking the shop where.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-o4d rev=2 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
 ### grade10-site-vault-loan-and-settlement-US5-TC1-2: The borrower's read of a live loan carries the how-to-pay block and how long the figure holds
 
 **Classification:**
@@ -914,6 +939,7 @@ account, whose name it is under and the reference to type,
 * Step 1 carries the lender's registered name as payee, its FPS id, its bank account and `<case reference>` as the transfer reference.
 * Step 1 carries `<due instant>`, the instant the read was made at, and what each further started day adds.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-g6e rev=2 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
 ### grade10-site-vault-loan-and-settlement-US5-TC2-2: The same how-to-pay block appears in every money email on the case
 
 Runs once per row of **Test data**.
@@ -962,6 +988,7 @@ Runs once per row of **Test data**.
 * The message names the same FPS id, bank account and case reference as
   step 1's how-to-pay block
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-mld rev=1 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
 ### grade10-site-vault-loan-and-settlement-US5-TC3-1: The how-to-pay block also offers card or cash at the counter
 
 **Classification:**
@@ -993,6 +1020,7 @@ Runs once per row of **Test data**.
 * The block names card or cash at the counter as an alternative to the
   bank transfer
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-nld rev=2 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
 ### grade10-site-vault-loan-and-settlement-US5-TC4-2: An unset FPS id reads as a placeholder off production and as no block on it
 
 Runs once per row of **Test data**.
@@ -1030,6 +1058,7 @@ Runs once per row of **Test data**.
 
 * Step 1 carries what the row says.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-jiy rev=2 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
 ### grade10-site-vault-loan-and-settlement-US5-TC5-2: A stored item with no live loan carries no how-to-pay block
 
 **Classification:**
@@ -1067,6 +1096,7 @@ Runs once per row of **Test data**.
 after it, and the final notice with its date to pay by,
 **so that** I know what I still owe and how long I have.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-pye rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC1-2: With no repayments, the borrower's read lists none and the whole figure owed
 
 **Classification:**
@@ -1098,6 +1128,7 @@ after it, and the final notice with its date to pay by,
 * Step 2 lists no repayment.
 * Outstanding reads 10,300,000.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-fy8 rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC2-2: With one repayment, the borrower's read lists its value date, method and balance after
 
 **Classification:**
@@ -1129,6 +1160,7 @@ after it, and the final notice with its date to pay by,
 * Step 2 lists one repayment: 3,000,000, FPS, value date 10 September, recorded 11 September.
 * Its balance after reads 7,300,000: 10,300,000 less 3,000,000.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-nhz rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC3-2: With several repayments, the borrower's read lists each in value-date order with its own balance after
 
 **Classification:**
@@ -1161,6 +1193,7 @@ after it, and the final notice with its date to pay by,
 * The 10 September repayment's balance after reads 7,300,000; the 20 September one's reads 5,300,000.
 * Each balance after equals 10,300,000 less every repayment value-dated on or before it.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-fze rev=1 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC4-1: Past due with no notice sent, the page shows no final-notice card
 
 **Classification:**
@@ -1190,6 +1223,7 @@ after it, and the final notice with its date to pay by,
 * The past-due figure and the reminders card show
 * No final-notice card shows
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-i84 rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC5-2: Once a notice is sent, the borrower's read carries the day it was written and the date to pay by
 
 **Classification:**
@@ -1222,6 +1256,7 @@ after it, and the final notice with its date to pay by,
 * Step 2 reads the notice written on 10 October.
 * Step 2 reads the date to pay by: 24 October, the notice day plus 14 days.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-7ss rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC6-2: Once a notice is sent, the borrower's read carries no reminder to come
 
 **Classification:**
@@ -1254,6 +1289,7 @@ after it, and the final notice with its date to pay by,
 * Step 2 lists the three reminders sent, with their days.
 * Step 2 carries no reminder to come.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-zs4 rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC7-2: Before its due date, the borrower's read carries the reminder dates to come
 
 **Classification:**
@@ -1284,6 +1320,7 @@ after it, and the final notice with its date to pay by,
 
 * Step 2 carries reminders to come on 24 September and 30 September: 7 days and 1 day before the due date.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-juh rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC8-2: A repayment taken back leaves the borrower's read as if never recorded
 
 **Classification:**
@@ -1318,6 +1355,7 @@ after it, and the final notice with its date to pay by,
 * Its balance after reads 8,300,000: 10,300,000 less 2,000,000.
 * Outstanding reads 8,300,000.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-pro rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC9-2: Past due with no notice, the borrower's read carries the reminders sent and the next one
 
 **Classification:**
@@ -1362,6 +1400,7 @@ the three things a vaulting needs; the two people, the due date and the
 reminder days a payout sets — before I send,
 **so that** I act knowing the rule rather than learning it from a refusal.
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-il5 rev=1 covers=g10.vault-loan-and-settlement.SC-adf,g10.vault-loan-and-settlement.SC-pbl,g10.vault-loan-and-settlement.SC-kf3,g10.vault-loan-and-settlement.SC-znu,g10.vault-loan-and-settlement.SC-xm5 -->
 ### grade10-site-vault-loan-and-settlement-US7-TC1-1: The make-offer dialog states the cap, the presets and the derived figures before it is sent
 
 **Classification:**
@@ -1394,6 +1433,7 @@ reminder days a payout sets — before I send,
   and the annualised rate it derives live from the entered values
 * The dialog states the date the offer stays open until
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-i0m rev=1 covers=g10.vault-loan-and-settlement.SC-adf,g10.vault-loan-and-settlement.SC-pbl,g10.vault-loan-and-settlement.SC-kf3,g10.vault-loan-and-settlement.SC-znu,g10.vault-loan-and-settlement.SC-xm5 -->
 ### grade10-site-vault-loan-and-settlement-US7-TC2-1: With a bound unset, the make-offer dialog reads the gate as not set, and behaves by environment
 
 Runs once per row of **Test data**.
@@ -1433,6 +1473,7 @@ Runs once per row of **Test data**.
 
 * The dialog and the outcome match the row
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-zyo rev=1 covers=g10.vault-loan-and-settlement.SC-adf,g10.vault-loan-and-settlement.SC-pbl,g10.vault-loan-and-settlement.SC-kf3,g10.vault-loan-and-settlement.SC-znu,g10.vault-loan-and-settlement.SC-xm5 -->
 ### grade10-site-vault-loan-and-settlement-US7-TC3-1: The vault dialog states its two preconditions before the item is confirmed in
 
 **Classification:**
@@ -1464,6 +1505,7 @@ Runs once per row of **Test data**.
 * The dialog asks for no visit slot
 * The dialog states the shop is required and the locker optional
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-4wk rev=1 covers=g10.vault-loan-and-settlement.SC-adf,g10.vault-loan-and-settlement.SC-pbl,g10.vault-loan-and-settlement.SC-kf3,g10.vault-loan-and-settlement.SC-znu,g10.vault-loan-and-settlement.SC-xm5 -->
 ### grade10-site-vault-loan-and-settlement-US7-TC4-1: The payout dialog states its preconditions, the two people and the dates it will fix before it is sent
 
 **Classification:**
@@ -1500,6 +1542,7 @@ Runs once per row of **Test data**.
 * The dialog states the due date and the reminder dates the recording will
   fix
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-hfh rev=1 covers=g10.vault-loan-and-settlement.SC-adf,g10.vault-loan-and-settlement.SC-pbl,g10.vault-loan-and-settlement.SC-kf3,g10.vault-loan-and-settlement.SC-znu,g10.vault-loan-and-settlement.SC-xm5 -->
 ### grade10-site-vault-loan-and-settlement-US7-TC5-1: As the value date changes in the payout dialog, the due date and the reminder dates re-derive
 
 **Classification:**
@@ -1537,6 +1580,7 @@ Runs once per row of **Test data**.
 * Step 3 shows a due date of 2 October, with reminder dates shifted by the
   same day
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-y3s rev=1 covers=g10.vault-loan-and-settlement.SC-9pz -->
 ### grade10-site-vault-loan-and-settlement-US7-TC6-1: The worker still refuses the act on its own even after the dialog stated the rule
 
 **Classification:**
@@ -1573,6 +1617,7 @@ Runs once per row of **Test data**.
   said nothing
 * The case stays `vaulted`
 
+<!-- trace:case id=g10.vault-loan-and-settlement.TC-rid rev=1 covers=g10.vault-loan-and-settlement.SC-adf,g10.vault-loan-and-settlement.SC-pbl,g10.vault-loan-and-settlement.SC-kf3,g10.vault-loan-and-settlement.SC-znu,g10.vault-loan-and-settlement.SC-xm5 -->
 ### grade10-site-vault-loan-and-settlement-US7-TC7-1: A bound the offer fails is named unmet before the send, and the control stays
 
 **Classification:**

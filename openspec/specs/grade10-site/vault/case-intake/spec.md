@@ -106,6 +106,7 @@ what it was sent with.
 - **WHEN** a further photograph is offered for it
 - **THEN** it is refused by name and nothing is stored
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-v7o rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-43 - A sent request takes no edit to its facts
 **Serves:** grade10-site-vault-case-intake-US-04 - the collector reads back and changes the request only until it goes
 
@@ -146,6 +147,7 @@ A collector with several items SHALL open one request for each.
 - **WHEN** two collectors give the same number typed differently
 - **THEN** both cases store it in the same canonical form
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-fyh rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-24 - A title and a description at their caps are taken
 **Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
@@ -153,6 +155,7 @@ A collector with several items SHALL open one request for each.
   and a description of exactly 2,000
 - **THEN** the request is opened carrying both as written
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-6s8 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-25 - A title or a description past its cap is refused
 **Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
@@ -161,12 +164,14 @@ A collector with several items SHALL open one request for each.
 - **WHEN** a collector opens a request with a description of 2,001 characters
 - **THEN** it is refused by name and no case is opened
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-u3j rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-26 - A number the brand's plan cannot read is refused
 **Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
 - **WHEN** a collector opens a request whose contact number is `123-abc`
 - **THEN** it is refused by name and no case is opened
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-93o rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-27 - A second item is a second request
 **Serves:** grade10-site-vault-case-intake-US-05 - Collector gets a reference they can say and type
 
@@ -175,6 +180,7 @@ A collector with several items SHALL open one request for each.
 - **THEN** a new request is opened with a reference of its own
 - **AND** the request already sent keeps its reference and its status
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-jdq rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-39 - The wizard offers the register's ten categories
 **Serves:** grade10-site-vault-case-intake-US-01 - the collector says what the item is in their own language
 
@@ -208,6 +214,7 @@ is asked for by leaving the amount out.
 - **WHEN** a collector opens a request asking for no loan
 - **THEN** the case is on the storage lane and no offer is ever written for it
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-9u2 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-42 - A loan of zero is refused
 **Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
@@ -229,6 +236,7 @@ request in, or its ending, SHALL free a place.
 - **WHEN** the collector opens another
 - **THEN** it is refused by name and no case is opened
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-s1j rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-36 - A draft staff opened takes a place under the cap
 **Serves:** Opening a request - a draft staff opened counts against the collector's own
 
@@ -268,6 +276,7 @@ SHALL NOT be removed.
 - **WHEN** the same bytes are offered twice for one case
 - **THEN** the case carries one photograph, not two
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-a99 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-28 - Ten photographs at the size cap are all taken
 **Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
@@ -276,6 +285,7 @@ SHALL NOT be removed.
   it
 - **THEN** all ten are stored on the request
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-y95 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-29 - A photograph past the size cap is refused
 **Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
@@ -283,6 +293,7 @@ SHALL NOT be removed.
 - **WHEN** a JPEG of 20,971,521 bytes is offered for it
 - **THEN** it is refused by name and nothing is stored
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-5hl rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-37 - The collector removes a photograph from an unsent request
 **Serves:** grade10-site-vault-case-intake-US-06 - the collector corrects the request before it goes
 
@@ -322,6 +333,7 @@ that is never rewritten.
 - **WHEN** a signed-in collector asks for a photograph on a case that is not theirs
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-64e rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-30 - Every read of a photograph is recorded
 **Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
@@ -375,12 +387,14 @@ counter and type into a bank form.
   `grade10-site/vault/collector-notifications`'s, and the counter's search
   over it is `grade10-admin/vault/operator-queue`'s.
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-u8f rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-19 - A case is opened with its reference
 **Serves:** grade10-site-vault-case-intake-US-05 - the collector has something to say at the counter from the day they ask
 
 - **WHEN** a collector opens a request
 - **THEN** the case carries a six-character reference of that alphabet, before the request is sent
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-1y5 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-20 - Two cases never share a reference
 **Serves:** The case reference - a draw that clashes is redrawn rather than shared
 
@@ -388,6 +402,7 @@ counter and type into a bank form.
 - **WHEN** another case is opened and the reference drawn for it is that one
 - **THEN** another is drawn and the two cases carry different references
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-0q4 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-21 - A reference is never issued twice
 **Serves:** The case reference - what was drawn once stays with the case that took it
 
@@ -395,12 +410,14 @@ counter and type into a bank form.
 - **WHEN** a new case is opened
 - **THEN** it is not issued the ended case's reference
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-3s9 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-22 - The address keeps the id
 **Serves:** The case reference - a link followed from a letter opens the case by its id
 
 - **WHEN** a letter links the collector to their case
 - **THEN** the link names the case's id and never its reference
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-3h1 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-23 - The reference is read where a person needs it
 **Serves:** grade10-site-vault-case-intake-US-05 - the collector reads it out at the counter and types it at the bank
 
@@ -428,6 +445,7 @@ like any other draft.
   SHALL be started, no visit SHALL be bookable, and no email SHALL be sent
   about it.
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-v4u rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-32 - The collector finds the draft staff opened
 **Serves:** grade10-site-vault-case-intake-US-06 - the collector signs in on their own phone and finds the request
 
@@ -437,6 +455,7 @@ like any other draft.
 - **AND** its read carries staff's facts and photographs
 - **AND** it carries no contact number, and an edit by the collector adds one
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-y75 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-33 - The collector changes what staff typed and photographed
 **Serves:** grade10-site-vault-case-intake-US-06 - the collector corrects the request before it goes
 
@@ -444,6 +463,7 @@ like any other draft.
 - **WHEN** the collector changes its title, removes one of staff's photographs and adds one of their own
 - **THEN** the draft's read carries the new title and those two photographs
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-yz2 rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-34 - The collector sends it with the last step
 **Serves:** grade10-site-vault-case-intake-US-06 - the collector answers for the statement before anything happens to the item
 
@@ -451,6 +471,7 @@ like any other draft.
 - **WHEN** the collector sends it naming the statement version in force
 - **THEN** the case is submitted, keeps that version of the statement, and a visit may be booked against it
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-myj rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-35 - Nothing happens to an unsent draft staff opened
 **Serves:** grade10-site-vault-case-intake-US-06 - nothing happens to the item on a request the collector has not seen
 
@@ -467,6 +488,7 @@ the collector's edits SHALL change only the photographs and the request's
 description, never the register's.
 An edit to any other fact of that draft SHALL be refused by name.
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-nui rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-40 - The collector edits the photos and the description of a linked draft
 **Serves:** grade10-site-vault-case-intake-US-01 - the collector checks a draft staff opened with their slab
 
@@ -476,6 +498,7 @@ An edit to any other fact of that draft SHALL be refused by name.
 - **AND** adding a photograph and changing the description are both kept
 - **AND** the register's description is unchanged, since the edit changes the request alone
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-c2q rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-41 - An edit to the register's facts is refused
 **Serves:** grade10-site-vault-case-intake-US-01 - the case and the register never tell two stories of one slab
 
@@ -504,6 +527,7 @@ and the send answers for the personal information collection statement.
   and in production the send SHALL be refused by name with the request left
   unsent.
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-lmj rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-15 - The last step shows the request as it will be sent
 **Serves:** grade10-site-vault-case-intake-US-04 - the collector reads back what they are sending before it goes
 
@@ -512,6 +536,7 @@ and the send answers for the personal information collection statement.
 - **THEN** it carries the item facts, the amount asked for and the photograph as the send will carry them
 - **AND** an edit to its title is read back on the next read
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-cda rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-16 - A send without the tick is refused
 **Serves:** grade10-site-vault-case-intake-US-04 - the collector answers for the statement before the request goes
 
@@ -519,6 +544,7 @@ and the send answers for the personal information collection statement.
 - **WHEN** the collector sends it naming a statement version other than the one in force
 - **THEN** it is refused by name and the request stays unsent
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-fei rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-17 - The send keeps the version that was shown
 **Serves:** grade10-site-vault-case-intake-US-04 - the collector answers for the statement they were shown
 
@@ -526,6 +552,7 @@ and the send answers for the personal information collection statement.
 - **WHEN** the collector sends the request naming that statement's version
 - **THEN** the case keeps that version of the collection statement with the send
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-mzh rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-18 - Outside production, a statement nobody has written yet does not hold the request
 **Serves:** grade10-site-vault-case-intake-US-04 - the collector sends the request while the wording is still being written
 
@@ -535,6 +562,7 @@ and the send answers for the personal information collection statement.
 - **THEN** the statement is answered with a version and no words
 - **AND** the request is sent in
 
+<!-- trace:scenario id=g10.vault-case-intake.SC-slr rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-31 - In production, a statement nobody has written yet refuses the send
 **Serves:** grade10-site-vault-case-intake-US-04 - the collector is not asked to answer for a statement that does not exist
 

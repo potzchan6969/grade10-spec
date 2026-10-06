@@ -1,9 +1,11 @@
+# shared/ui/auction-listing Specification
+
 ## Feature set
 
 - Public bid history outcome
   - Winner crown: closed sold winning row shows a primary crown after the amount
-  - Equal-max tip: same-price non-leading row shows an Info tip in the amount tone
-  - Live lots: no winner crown; first row stays the leading presentation
+  - Equal-max tip: a row tied on amount with a row above it shows an Info tip in the amount tone
+  - Live lots: no winner crown
 
 ## ADDED Requirements
 
@@ -16,10 +18,17 @@ equal-max priority readable without opening personal bidding.
 consumer sets it on the winning public row when the lot is closed and sold.
 Live lots SHALL NOT set `isWinner`.
 
-**Winner crown** - When `row.isWinner` is true, `ListingBidHistoryList` SHALL
-render a small filled crown icon in the primary color after the amount (and
-after any equal-max Info control), before the **You** badge when present.
-The crown SHALL use `copy.winner` as its accessible name.
+**Equal-max flag** - `ListingBidHistoryRow` MAY carry
+`samePricePriority?: boolean`. The consumer sets it on a public row whose
+amount matches a row ranked above it, at the current price or at any older
+tie lower down, because the earlier maximum stands above it. The list
+decides nothing about priority.
+
+**Winner crown** - When `row.isWinner` is true and `copy.winner` is supplied,
+`ListingBidHistoryList` SHALL render a small filled crown icon in the primary
+color after the amount (and after any equal-max Info control), before the
+**You** badge when present. The crown SHALL use `copy.winner` as its
+accessible name; the list supplies no name of its own.
 
 **Equal-max tip** - When `row.samePricePriority` is true and
 `copy.samePricePriorityTip` is supplied, the list SHALL show an Info control
@@ -31,17 +40,19 @@ leads.
 `winner` and `samePricePriorityTip` and SHALL thread them to
 `ListingBidHistoryList`.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-13j rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
 **Serves:** Public bid history outcome - closed sold Recent bids show a winner crown
 
-- **GIVEN** a closed sold bid card whose leading public history row has
-  `isWinner` true
+- **GIVEN** a closed sold bid card whose winning public history row has
+  `isWinner` true, and winner copy `Winner` supplied
 - **WHEN** the Recent bids list renders
 - **THEN** that row shows a primary crown after the amount with accessible
   name Winner
 - **AND** no live bid card history row shows a winner crown without
   `isWinner`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-alr rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
 **Serves:** Public bid history outcome - equal-max non-leader shows earlier-leads tip
 
@@ -50,3 +61,12 @@ leads.
 - **WHEN** the collector activates the Info control on that row
 - **THEN** the tooltip states that when maximums match, the earlier one
   leads
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-4a9 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-54 - No crown without its name
+**Serves:** Public bid history outcome - no crown without its name
+
+- **GIVEN** a closed sold bid card whose winning public row has `isWinner` true, and bid history copy with no `winner`
+- **WHEN** the Recent bids list renders
+- **THEN** no row shows a crown
+- **AND** no row carries an accessible name the consumer did not supply

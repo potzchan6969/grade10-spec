@@ -9,6 +9,7 @@
 **I want** to see a listing's code on its admin screen,
 **so that** I can match a support, finance or reconciliation request that quotes the code (or the payment reference built from it) back to the right listing and order.
 
+<!-- trace:case id=g10adm.auction-listing.TC-4tj rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC1-1: Operator sees the code on a newly created listing
 
 **Classification:**
@@ -39,6 +40,7 @@
 * The Listings table and listing detail screen show the same listing code.
 * The code is present with no further operator action.
 
+<!-- trace:case id=g10adm.auction-listing.TC-01g rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC2-1: A draft listing shows no listing code yet
 
 **Classification:**
@@ -67,6 +69,7 @@
 
 * The draft's admin screen shows no listing code.
 
+<!-- trace:case id=g10adm.auction-listing.TC-q6k rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC3-1: Listing code matches its fixed two-letter-prefix shape
 
 **Classification:**
@@ -98,6 +101,7 @@
 * Its first two characters are letters only, drawn from `ABCDEFGHJKMNPQRSTVWXYZ`, with no digit.
 * Its remaining three characters are drawn from the full Crockford Base32 charset `0123456789ABCDEFGHJKMNPQRSTVWXYZ`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-0qe rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC4-1: Two listings receive distinct codes
 
 **Classification:**
@@ -128,6 +132,7 @@
 
 * `<listing_1>` and `<listing_2>` show different listing codes.
 
+<!-- trace:case id=g10adm.auction-listing.TC-8gd rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC5-1: A closed listing keeps its original listing code
 
 **Classification:**
@@ -157,6 +162,7 @@
 
 * The admin screen still shows `<listing code>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-z3q rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC6-1: A called-off listing keeps its original listing code
 
 **Classification:**
@@ -186,6 +192,7 @@
 
 * The admin screen still shows `<listing code>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-m09 rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC7-1: Listing code has no editable control on the form or the API
 
 **Classification:**
@@ -219,6 +226,7 @@
 * The API write is refused.
 * The listing code remains `<listing code>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-63a rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC8-1: Listing code follows existing admin listing access
 
 **Classification:**
@@ -251,6 +259,7 @@
 * The other operator receives the ordinary listing-access denial and cannot read private listing data.
 * Knowing `LK423` does not grant or broaden admin access; no separate code permission is evaluated.
 
+<!-- trace:case id=g10adm.auction-listing.TC-gc4 rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC9-1: Allocation retries a projected collision
 
 **Classification:**
@@ -280,6 +289,7 @@
 * Allocation retries atomically.
 * The stored code has the required shape and differs from the colliding code.
 
+<!-- trace:case id=g10adm.auction-listing.TC-4rj rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC10-1: A retained listing-code reservation is never allocated again
 
 **Classification:**
@@ -309,6 +319,7 @@
 * `LK423` remains unavailable.
 * The later listing receives a different code.
 
+<!-- trace:case id=g10adm.auction-listing.TC-1jo rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC11-1: Cancel preserves the canonical URL and does not release it
 
 **Classification:**
@@ -348,6 +359,7 @@
 **I want** a saved draft to suggest a listing slug from its title and stable code,
 **so that** I can start with a distinct public address and learn before Save when a chosen address is already reserved.
 
+<!-- trace:case id=g10adm.auction-listing.TC-agw rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC1-1: A saved draft receives a title-and-code slug
 
 **Classification:**
@@ -377,6 +389,7 @@
 * The Slug field is prefilled with normalized title words followed by the lower-case code, such as `charizard-psa-10-<lowercase code>`.
 * The complete slug is at most 64 characters.
 
+<!-- trace:case id=g10adm.auction-listing.TC-7zt rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC2-1: A titleless draft uses the neutral slug prefix
 
 **Classification:**
@@ -404,6 +417,7 @@
 
 * The draft receives a slug in the form `lot-<lowercase code>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-w2u rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC3-1: An untouched generated slug follows a title edit
 
 **Classification:**
@@ -433,6 +447,7 @@
 * The slug title portion is regenerated.
 * The lower-case listing-code suffix is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-sry rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC4-1: An operator-edited slug survives a title edit
 
 **Classification:**
@@ -461,6 +476,7 @@
 
 * The operator's slug remains unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-6k1 rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC5-1: Leaving Slug reports a retained address collision
 
 **Classification:**
@@ -492,6 +508,7 @@
 * The value remains available for correction.
 * Helper text states: `Slug must be unique. Completed, expired, and unsold listings also reserve their addresses.`
 
+<!-- trace:case id=g10adm.auction-listing.TC-m70 rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC6-1: Save remains authoritative after a race
 
 **Classification:**

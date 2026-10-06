@@ -7,8 +7,12 @@ import { fileURLToPath } from "node:url";
 import { parseArgs, promisify } from "node:util";
 import YAML from "yaml";
 
-import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
-import { messagesOf, newlyBehind, readingOf } from "./lib/moves.mjs";
+import {
+  messagesOf,
+  milestonesBetween,
+  newlyBehind,
+  readingOf,
+} from "./lib/moves.mjs";
 import { deliver, readSentKeys } from "./lib/notify.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 import { escapeSlackText } from "./lib/wording.mjs";
@@ -17,7 +21,6 @@ import { absentAt } from "./store-main.mjs";
 const exec = promisify(execFile);
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const CHANGE_ROOT = "openspec/changes/";
-const SPEC_ROOT = "openspec/specs/";
 
 function location(path) {
   if (!path?.startsWith(CHANGE_ROOT)) return null;
@@ -87,20 +90,6 @@ function artifactScope(relative) {
   return relative;
 }
 
-function capabilityArtifact(path) {
-  if (!path?.startsWith(SPEC_ROOT)) return null;
-  const parts = path.slice(SPEC_ROOT.length).split("/");
-  if (parts.length < 4) return null;
-  const directory = parts.slice(0, 3).join("/");
-  return {
-    directory,
-    id: directory,
-    kind: "capability",
-    path,
-    scope: artifactScope(parts.slice(3).join("/")),
-  };
-}
-
 function addChange(groups, status, item) {
   const change = groups[status].get(item.id) ?? {
     id: item.id,
@@ -162,32 +151,6 @@ export function classifyChanges(changed) {
   return finishChanges(groups);
 }
 
-export function classifyCapabilities(changed) {
-  const groups = {
-    new: new Map(),
-    archived: new Map(),
-    removed: new Map(),
-    updated: new Map(),
-  };
-
-  for (const record of changed) {
-    const oldPath = record.status === "D" ? record.path : record.oldPath;
-    const newPath = record.status === "D" ? null : record.path;
-    const oldItem = capabilityArtifact(oldPath);
-    const newItem = capabilityArtifact(newPath);
-
-    if (newItem) {
-      if (record.status === "M") addChange(groups, "updated", newItem);
-      else if (record.status === "R" && oldItem) {
-        addChange(groups, "removed", oldItem);
-        addChange(groups, "new", newItem);
-      } else addChange(groups, "new", newItem);
-    } else if (oldItem) addChange(groups, "removed", oldItem);
-  }
-
-  return finishChanges(groups);
-}
-
 async function changedFiles(root, base, head) {
   const { stdout } = await exec(
     "git",
@@ -200,7 +163,6 @@ async function changedFiles(root, base, head) {
       head,
       "--",
       CHANGE_ROOT,
-      SPEC_ROOT,
     ],
     { cwd: root },
   );
@@ -209,12 +171,6 @@ async function changedFiles(root, base, head) {
 
 function humanize(id) {
   return id.replace(/[-_]+/g, " ");
-}
-
-function scopesText(scopes = []) {
-  return scopes.length
-    ? ` — ${scopes.map((scope) => `\`${escapeSlackText(scope)}\``).join(", ")}`
-    : "";
 }
 
 /** A Slack link, or the bare label where there is no url: an empty link
@@ -229,27 +185,6 @@ function changeLink(id, title, openspecUrl) {
     `${baseUrl}/#/change/${encodeURIComponent(id)}`,
     escapeSlackText(title),
   );
-}
-
-function capabilityLink(id, openspecUrl) {
-  const baseUrl = openspecUrl.replace(/\/$/, "");
-  const path = id.split("/").map(encodeURIComponent).join("/");
-  return slackLink(`${baseUrl}/#/spec/${path}`, escapeSlackText(id));
-}
-
-async function titleAt(root, ref, directory, fallback) {
-  try {
-    const stdout = await showAt(
-      root,
-      ref,
-      `${CHANGE_ROOT}${directory}/proposal.md`,
-    );
-    const title = stdout?.match(/^#\s+(.+)$/m)?.[1]?.trim();
-    if (title) return title;
-  } catch {
-    // The proposal may have been removed in the same push.
-  }
-  return humanize(fallback);
 }
 
 /**
@@ -276,92 +211,100 @@ export async function showAt(root, ref, path) {
   }
 }
 
-export async function titledChanges(
-  changes,
-  { base, head, root = rootDirectory },
-) {
-  const titled = {};
-  for (const [status, items] of Object.entries(changes)) {
-    titled[status] = await Promise.all(
-      items.map(async (item) => ({
-        ...item,
-        title: await titleAt(
-          root,
-          status === "removed" ? base : head,
-          item.path,
-          item.id,
-        ),
-      })),
-    );
+/** The five sections of the post, in the order a change meets them: the
+ * heading, and what each line adds after the change's link. */
+const SECTIONS = [
+  ["proposed", ":new: *Proposed*", () => ""],
+  [
+    "accepted",
+    ":white_check_mark: *Accepted* — requirements published to the specs and the manual",
+    () => "",
+  ],
+  [
+    "claimed",
+    ":raising_hand: *Implementation claimed*",
+    ({ claims }) =>
+      ` — ${claims
+        .map(({ num, owner }) => `group ${num} by @${escapeSlackText(owner)}`)
+        .join(", ")}`,
+  ],
+  [
+    "completed",
+    ":checkered_flag: *Implementation complete*",
+    ({ tasks }) => ` — ${tasks.done}/${tasks.total} tasks checked`,
+  ],
+  ["archived", ":file_cabinet: *Archived*", () => ""],
+];
+
+/** Slack refuses a section whose text passes 3,000 characters, and a
+ * message past 50 blocks — `invalid_blocks`, and the whole post with it. */
+const SECTION_LIMIT = 3000;
+const MAX_SECTIONS = 49;
+
+/** One milestone's lines as sections, each under Slack's limit: the heading
+ * opens the first, and the rest carry on under it without repeating it. */
+function packed(heading, lines) {
+  if (lines.length === 0) return [];
+  const sections = [];
+  let text = heading;
+  for (const line of lines) {
+    if (text.length + 1 + line.length > SECTION_LIMIT && text !== heading) {
+      sections.push(text);
+      text = line;
+    } else text = `${text}\n${line}`;
   }
-  return titled;
+  sections.push(text);
+  return sections.map((one) => ({
+    type: "section",
+    text: { type: "mrkdwn", text: one.slice(0, SECTION_LIMIT) },
+  }));
 }
 
-/** The stage a change moved into, where this run read one — the channel's own
- * half of what every message says. A run that read no stage says nothing
- * about one rather than guessing from the files it saw. */
-function stageText(stages, id) {
-  const stage = stages[id];
-  return stage ? ` · *${STAGE_LABEL[stage] ?? stage}*` : "";
-}
-
+/**
+ * The channel post: one section per milestone a change crossed, and nothing
+ * for a push that crossed none — `blocks` is empty then, and nothing is sent.
+ */
 export function slackPayload({
-  changes,
-  capabilities = { new: [], updated: [], archived: [], removed: [] },
+  milestones,
   commitSha,
   commitUrl,
   manualUrl,
   openspecUrl = "https://spec.grade10-stg.com/openspec/",
-  stages = {},
 }) {
-  const sha = commitSha.slice(0, 7);
-  const sections = [
-    ["new", "New", ":new:"],
-    ["updated", "Updated", ":pencil2:"],
-    ["archived", "Archived", ":file_cabinet:"],
-    ["removed", "Removed", ":wastebasket:"],
-  ].filter(([status]) => changes[status]?.length);
+  const sections = SECTIONS.flatMap(([milestone, heading, detail]) =>
+    packed(
+      heading,
+      milestones
+        .filter((one) => one.milestone === milestone)
+        .map(
+          (one) =>
+            `- ${changeLink(one.id, one.title ?? humanize(one.id), openspecUrl)} (\`${one.id}\`)${detail(one)}`,
+        ),
+    ),
+  );
+  // Slack takes 50 blocks a message, the context line among them: a range
+  // past that names what it dropped rather than being refused whole.
+  if (sections.length > MAX_SECTIONS) {
+    const dropped = sections.length - (MAX_SECTIONS - 1);
+    sections.splice(MAX_SECTIONS - 1, dropped, {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `…and ${dropped} more sections — ${slackLink(manualUrl, "the planning board")} has them all`,
+      },
+    });
+  }
+  if (sections.length === 0) return { blocks: [] };
 
   return {
     blocks: [
-      ...sections.map(([status, label, icon]) => ({
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `${icon} OpenSpec *${label}*\n${changes[status]
-            .map(
-              ({ id, title, scopes }) =>
-                `- ${changeLink(id, title, openspecUrl)} (\`${id}\`)${stageText(stages, id)}${scopesText(scopes)}`,
-            )
-            .join("\n")}`,
-        },
-      })),
-      ...[
-        ["new", "New", ":new:"],
-        ["updated", "Updated", ":pencil2:"],
-        ["removed", "Removed", ":wastebasket:"],
-      ]
-        .filter(([status]) => capabilities[status]?.length)
-        .map(([status, label, icon]) => ({
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: `${icon} OpenSpec *${label} capabilities*\n${capabilities[
-              status
-            ]
-              .map(
-                ({ id, scopes }) =>
-                  `- ${capabilityLink(id, openspecUrl)}${scopesText(scopes)}`,
-              )
-              .join("\n")}`,
-          },
-        })),
+      ...sections,
       {
         type: "context",
         elements: [
           {
             type: "mrkdwn",
-            text: `${slackLink(manualUrl, "Planning")} | ${slackLink(commitUrl, sha)}`,
+            text: `${slackLink(manualUrl, "Planning")} | ${slackLink(commitUrl, commitSha.slice(0, 7))}`,
           },
         ],
       },
@@ -603,17 +546,17 @@ async function main() {
   const suppressed = values.stages
     ? await keysOnly(root, values.base, values.head, touched)
     : new Set();
-  const changes = await titledChanges(
-    without(classifyChanges(changed), suppressed),
-    { base: values.base, head: values.head, root },
-  );
-  const capabilities = classifyCapabilities(changed);
+  const changes = without(classifyChanges(changed), suppressed);
   const [head, checkout] = await Promise.all([
     revision(root, values.head),
     revision(root, "HEAD"),
   ]);
 
   let stages = {};
+  // Without `--stages` nothing reads a change's record, so the only milestone
+  // a run can see is the move into the archive, from the files alone.
+  let atBase = new Map();
+  let atHead = new Map();
   let messages = [];
   let skipped = [];
   let matrix = [];
@@ -622,8 +565,8 @@ async function main() {
     // The head is the checkout, which is what a push's job holds; a head
     // given by hand that is not the checkout is read from its own worktree
     // rather than from whatever the working tree happens to be on.
-    const atBase = await readingAt(root, values.base);
-    const atHead =
+    atBase = await readingAt(root, values.base);
+    atHead =
       head === checkout ? await readingOf(root) : await readingAt(root, head);
     stages = Object.fromEntries([...atHead].map(([id, at]) => [id, at.stage]));
     const told = messagesOf(atBase, atHead, team, {
@@ -649,33 +592,34 @@ async function main() {
     matrix = rereadMatrixOf(touched, atBase, atHead, suppressed);
   }
 
+  const milestones = milestonesBetween(
+    atBase,
+    atHead,
+    changes.archived.map((one) => one.id),
+  );
   const payload = slackPayload({
-    changes,
-    capabilities,
+    milestones,
     commitSha: head,
     commitUrl: values["commit-url"],
     manualUrl: values["manual-url"],
     openspecUrl: values["openspec-url"],
-    stages,
   });
-  const hasChanges =
-    Object.values(changes).some((items) => items.length) ||
-    Object.values(capabilities).some((items) => items.length);
 
   for (const one of skipped) {
     process.stderr.write(`nothing sent for ${one.key}: ${one.why}\n`);
   }
 
   // The channel post and the direct messages are one delivery: the post is
-  // keyed by the push's own head, so a re-run of one push does not post it
-  // twice either, and `--dms` is what a repository variable turns off in
-  // production without touching the post.
+  // keyed by the range's own head, so a re-run does not post it twice either,
+  // and `--dms` is what a repository variable turns off in production without
+  // touching the post. The post goes out only where a change crossed one of
+  // the five milestones; any other push is silent in the channel.
   //
   // What it turns off is the messages a hand reads. The thread's landing reply
   // is nobody's inbox - it is the change's own record read out in the change's
   // own thread - so it goes out either way.
   const toDeliver = [];
-  if (hasChanges) {
+  if (payload.blocks.length > 0) {
     if (values.send && !values.channel) {
       throw new Error("no channel to post to: pass --channel");
     }
@@ -683,7 +627,7 @@ async function main() {
       key: `channel:${head}`,
       to: "channel",
       channel: values.channel,
-      text: "OpenSpec changes on main",
+      text: "OpenSpec milestones on main",
       blocks: payload.blocks,
     });
   }
@@ -706,7 +650,7 @@ async function main() {
     JSON.stringify({
       changedPaths,
       changes,
-      capabilities,
+      milestones,
       payload,
       stages,
       messages,

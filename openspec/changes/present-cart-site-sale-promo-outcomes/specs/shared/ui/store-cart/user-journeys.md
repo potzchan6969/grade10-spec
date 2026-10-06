@@ -1,4 +1,6 @@
-## User journeys
+## Context user journeys
+
+## ADDED User journeys
 
 ### shared-ui-store-cart-US-13: Shopper reads a storewide sale on the cart lines
 
@@ -36,3 +38,7 @@ only that code's Discount in the footer,
 **I want** removing the promo to put the automatic store sale back on the
 lines when it still applies,
 **so that** I am not left at full list price after clearing a code.
+
+## MODIFIED User journeys
+
+## REMOVED User journeys

@@ -9,6 +9,7 @@
 **I want** the listing source to include product media and my selected Cert's media,
 **so that** I can build a gallery that documents the physical unit I selected.
 
+<!-- trace:case id=g10adm.grade10-admin-product.TC-wpw rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf,g10adm.auction-listing.SC-vhc,g10adm.auction-listing.SC-lvn,g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-e2e-US1-TC1-1: Tagged source becomes an independent listing snapshot
 
 **Classification:**
@@ -65,6 +66,7 @@
 **I want** to remove an available physical unit and its Cert record together,
 **so that** its tagged source media is deleted while an Auction listing keeps its saved copy.
 
+<!-- trace:case id=g10adm.grade10-admin-product.TC-8p3 rev=1 covers=g10adm.inventory-catalog.SC-gpb,g10adm.inventory-catalog.SC-k3v,g10adm.auction-listing.SC-xyf,g10adm.auction-listing.SC-01q,g10adm.auction-listing.SC-emr,g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-e2e-US2-TC1-1: Physical removal deletes tagged source media but keeps the listing snapshot
 
 **Classification:**

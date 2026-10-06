@@ -115,6 +115,7 @@ refuse an amount below it. It SHALL not create intermediate bids.
 - **WHEN** Grade10 calculates the next minimum
 - **THEN** the minimum is 820000 minor units
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-w8f rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-12 - A 0 start opens at the lowest increment
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector enters the opening bid on a lot that starts at nothing
 
@@ -146,7 +147,7 @@ currency, the same on every lot. Operators SHALL NOT change it.
 | --- | --- | --- |
 | USD | 1000000000 | USD 10,000,000 |
 | HKD | 8000000000 | HKD 80,000,000 |
-| JPY | 150000000000 | JPY 150,000,000,000 |
+| JPY | 5000000000 | JPY 5,000,000,000 |
 
 Grade10 SHALL accept an amount equal to the ceiling. It SHALL refuse a manual
 bid or an auto-bid maximum above the ceiling, name the ceiling in the refusal,
@@ -171,13 +172,13 @@ further bid on that listing.
 - **THEN** Grade10 refuses the bid and names 8000000000 minor units as the ceiling
 - **AND** the listing's price and leader are unchanged
 
-<!-- trace:scenario id=g10.auction-bid-increments.SC-xnb rev=1 -->
+<!-- trace:scenario id=g10.auction-bid-increments.SC-xnb rev=2 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-10 - An auto-bid maximum above the ceiling is refused
 **Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 
 - **GIVEN** an open JPY listing whose minimum bid is 150000 minor units
-- **WHEN** a collector commits an auto-bid maximum of 150000000001 minor units
-- **THEN** Grade10 refuses the maximum and names 150000000000 minor units as the ceiling
+- **WHEN** a collector commits an auto-bid maximum of 5000000001 minor units
+- **THEN** Grade10 refuses the maximum and names 5000000000 minor units as the ceiling
 - **AND** no maximum is recorded for that collector
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-pd0 rev=1 -->

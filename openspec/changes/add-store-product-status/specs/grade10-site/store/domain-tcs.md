@@ -10,6 +10,7 @@
 own page,
 **so that** I can inspect the card I chose in the catalogue.
 
+<!-- trace:case id=g10.store-domain.TC-k4u rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4,g10.store-product-listing.SC-aty,g10.store-product-listing.SC-ksc,g10.store-product-listing.SC-o37,g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
 ### grade10-site-store-e2e-US1-TC1-1: Collection tile leads to its product page
 
 **Classification:**
@@ -58,7 +59,8 @@ own page,
 **I want** to open a card from the Store front door and add its sellable item,
 **so that** I can buy it without choosing a size, option, or variant.
 
-### grade10-site-store-e2e-US2-TC1-1: Merchandised card adds its one sellable item
+<!-- trace:case id=g10.store-domain.TC-u3b rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex,g10.store-product-page.SC-jt1,g10.store-product-page.SC-b7g,g10.store-product-page.SC-qmb,g10.store-product-page.SC-tl5,g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2 -->
+### grade10-site-store-e2e-US2-TC2-1: Merchandised card adds its one sellable item
 
 **Classification:**
 
@@ -106,7 +108,8 @@ own page,
 when I open it,
 **so that** I can tell an unavailable card from a broken purchase page.
 
-### grade10-site-store-e2e-US3-TC1-1: Sold-out card keeps one price and no choice
+<!-- trace:case id=g10.store-domain.TC-7vw rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex,g10.store-home.SC-00a,g10.store-home.SC-q66,g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
+### grade10-site-store-e2e-US3-TC2-1: Sold-out card keeps one price and no choice
 
 **Classification:**
 
@@ -152,6 +155,7 @@ when I open it,
 **I want** staff to take my points and my product coupon off one sale,
 **so that** both settle once, when I pay.
 
+<!-- trace:case id=g10.store-domain.TC-gdu rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9 -->
 ### grade10-site-store-e2e-US4-TC1-1: Points and a product coupon settle together on one till sale
 
 **Classification:**
@@ -201,6 +205,7 @@ when I open it,
 **I want** staff to scan the pass in my phone wallet and take my spend from the right place,
 **so that** I am served from my lock screen and a code anybody could photograph never moves my points.
 
+<!-- trace:case id=g10.store-domain.TC-u39 rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv,g10.store-wallet-member-card.SC-nmv,g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5 -->
 ### grade10-site-store-e2e-US5-TC1-1: Google Wallet pass opens a session that spends points
 
 **Classification:**
@@ -245,6 +250,7 @@ when I open it,
 
 **Run:** 2026-09-24 · updated the Store's merchandised product add and sold-out paths to preserve the internal sale identity without a shopper-facing variant choice; unchanged Store paths and cases remain as they were.
 
+<!-- trace:case id=g10.store-domain.TC-n78 rev=1 covers=g10.store-wallet-member-card.SC-g3f,g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5 -->
 ### grade10-site-store-e2e-US5-TC2-1: Apple Wallet pass refuses the spend and the card pays it
 
 **Classification:**

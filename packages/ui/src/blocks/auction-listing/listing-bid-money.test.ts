@@ -28,7 +28,7 @@ describe("sanitizeMoneyDraft", () => {
 describe("sanitizeCustomMaximumDraft", () => {
   const ceiling = String(CUSTOM_MAXIMUM_MAJOR_CEILING);
 
-  it("accepts drafts at and below the major-unit ceiling", () => {
+  it("accepts drafts at and below the major-unit ceiling (shared-ui-auction-listing-SC-38)", () => {
     expect(sanitizeCustomMaximumDraft(ceiling, "HKD", "")).toBe(ceiling);
     expect(sanitizeCustomMaximumDraft("500", "HKD", "")).toBe("500");
     expect(sanitizeCustomMaximumDraft("9999999998", "JPY", "1")).toBe(
@@ -36,7 +36,7 @@ describe("sanitizeCustomMaximumDraft", () => {
     );
   });
 
-  it("restores the previous draft when sanitized major units exceed the ceiling", () => {
+  it("restores the previous draft when sanitized major units exceed the ceiling (shared-ui-auction-listing-SC-39, shared-ui-auction-listing-SC-40, shared-ui-auction-listing-SC-41)", () => {
     expect(sanitizeCustomMaximumDraft(`${ceiling}0`, "HKD", ceiling)).toBe(
       ceiling,
     );
@@ -44,7 +44,7 @@ describe("sanitizeCustomMaximumDraft", () => {
     expect(sanitizeCustomMaximumDraft("99999999999", "HKD", "500")).toBe("500");
   });
 
-  it("applies whole-major sanitize before the ceiling check", () => {
+  it("applies whole-major sanitize before the ceiling check (shared-ui-auction-listing-SC-42, shared-ui-auction-listing-SC-53)", () => {
     expect(sanitizeCustomMaximumDraft("10000000000.99", "HKD", "500")).toBe(
       "500",
     );

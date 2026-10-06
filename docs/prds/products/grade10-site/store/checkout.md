@@ -59,9 +59,10 @@ verification gate all run in the cart drawer; there is no `/checkout` page
 to navigate to.
 
 - **Members only** — checkout is signed in; there is no guest checkout
-- **The bar** — goods worth **HKD 120,000** or more need a verified buyer;
-  an unverified one is sent to [verify from their account](/p/grade10-site/account/kyc)
-  before any order is made
+- **The bar** — goods worth **HKD 120,000** or more: the drawer replaces
+  Proceed to Checkout with the verify message and an account link; no
+  checkout session is created. A verified member, or a basket under the
+  bar, proceeds. They verify on [their account](/p/grade10-site/account/kyc)
 - **The cart** — kept while the collector is at Shopify; cleared once the
   order is paid
 - **Another Pay** - A new submission uses the existing creation flow; earlier

@@ -63,6 +63,7 @@ const CHECKBOX = /^\s*-\s*\[( |x|X)\]\s?(.*)$/;
 const BULLET = /^\s*[-*]\s+(.+?)\s*$/;
 const ISSUED_ID = /([a-z0-9][a-z0-9-]*)-(SC|US|TC)-(\d+)/g;
 const DELTA_HEADING = /^(ADDED|MODIFIED|REMOVED|RENAMED)\s+Requirements$/;
+const REMOVED_FEATURE_SET = /^REMOVED Feature set$/;
 const REQUIREMENT_HEADING = /^Requirement:\s*(.+?)\s*$/i;
 const FROM_LINE = /^\s*-?\s*FROM:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
 const TO_LINE = /^\s*-?\s*TO:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
@@ -986,10 +987,15 @@ function readDeltas(
       kinds.push(kind.toUpperCase());
       requirements.push(...deltaRequirements(section, kind, detailed));
     }
-    // A delta that will never name a requirement is broken. One that has not
-    // named one yet is the outline, and the change says so in `awaiting:` —
-    // where the `awaiting` rule keeps reading it until the requirements land.
-    if (kinds.length === 0 && !awaitingSpecs) {
+    // A delta that will never name a requirement is broken, except an explicit
+    // feature-set removal: acceptance folds it without restating an unchanged
+    // requirement. One that has not named either yet is the outline, and the
+    // change says so in `awaiting:` — where the `awaiting` rule keeps reading
+    // it until the requirements land.
+    const removesFeatureSet = deltaSections(text).some((section) =>
+      REMOVED_FEATURE_SET.test(section.heading),
+    );
+    if (kinds.length === 0 && !removesFeatureSet && !awaitingSpecs) {
       fail(
         file,
         new StoreFileError(

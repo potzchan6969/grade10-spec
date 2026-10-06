@@ -12,6 +12,7 @@ name in the claim SHALL be the control that reaches Store Locator.
 underline for that store name in `redesign-store-product-detail-page` once
 both changes fold.
 
+<!-- trace:scenario id=g10.store-product-page.SC-21b rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-25 - Free pick-up reaches Store Locator
 **Serves:** grade10-site-store-product-page-US-10 - Collector opens Store Locator from free pick-up
 
