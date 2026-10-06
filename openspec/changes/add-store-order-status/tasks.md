@@ -1,0 +1,45 @@
+## 1. The order status rule (grade10)
+
+Pure code in `packages/grade10-store/contracts`; no backend, wire or page change.
+
+- [ ] 1.1 Write the failing tests first: `ORDER_STATUS_CASES` in `@grade10/store-contracts/testing`, holding one case per scenario below and, once Q17 files them, the thirty confirmed source rows, each with its badge and note; a source row that disagrees with the page goes back to the product manager as a Decisions row, because the page wins; and an exhaustive test over every combination of the accepted values, plus one unknown value and absence per fact, that asserts one of the five badges, a note from the 18 or none, and never `pickup` (`grade10-site-commerce-order-status-SC-01` through `grade10-site-commerce-order-status-SC-13`, `grade10-site-commerce-order-status-SC-15` through `grade10-site-commerce-order-status-SC-28`)
+- [ ] 1.2 Add `orderStatus`, `ORDER_STATUS_BADGES` and `ORDER_STATUS_NOTES` in `src/orderStatus.ts`, exported as `@grade10/store-contracts/order-status`; its input is a `Pick` of `StoreOrder` over the five stored columns that carry the four facts, so it cannot read origin, the Store status, shipments, money or time; make 1.1 pass
+- [ ] 1.3 Verify with `node scripts/test.mjs store-contracts`, `pnpm run typecheck` and `pnpm run lint`
+
+## 2. Shopify facts on the order read (grade10)
+
+- [ ] 2.1 Run the extended order query against the dev shop under the app's current scopes and record the answer in the group's commit: it returns `closedAt` and `returnStatus`, and a counter sale rung through the POS simulator reports `FULFILLED` and `closed`. A missing scope joins the ops scope list before 2.3 lands; a counter sale that never closes stops the change and goes back to the product manager (Q12)
+- [ ] 2.2 Write the failing tests first: the codec and `toOrder` carry `closedAt` and `returnStatus`; a REST webhook body maps `closed_at` and reads `returnStatus` as null; the Shopify provider's `Payment` and the simulated and fake providers carry `financialStatus`, `canceledAt`, `closedAt` and `returnStatus`
+- [ ] 2.3 Add `closedAt` and `returnStatus` to `ORDER_FIELDS`, the codec and `ShopifyOrder` in `packages/shopify`, keeping Shopify's `cancelledAt` spelling there; add the four new fields to `Payment` in `packages/grade10-store/backend/src/types/payment.ts`, spelled `canceledAt`, and to every provider; make 2.2 pass
+
+## 3. Stored facts and their reads (grade10)
+
+Needs groups 1 and 2.
+
+- [ ] 3.1 Write the failing pglite tests first: the snapshot write overwrites the four new columns whole under its claim, and a missed or out-of-claim read leaves them; the cron claims a never-read order before an hourly re-check, re-checks an order Shopify holds open within 90 days once 55 minutes have passed since its last read, and not before, and never re-claims one it read as closed or canceled; a till sale is claimed; a payment webhook for a held order marks it due whether or not a transition matched; the backfill marks every order with a `payment_ref` due (`grade10-site-commerce-order-status-SC-29`, `grade10-site-commerce-order-status-SC-30`)
+- [ ] 3.2 Add `financial_status`, `canceled_at`, `closed_at` and `return_status` to `store.orders` in the drizzle schema, with the generated migration in both the grade10 and zzz store backends; the backfill UPDATE carries its `-- lock:` line; `pnpm run check:migrations` passes
+- [ ] 3.3 Write the facts through `updateSettlementSnapshot` from `pullSettlementSnapshot`; replace `claimUndeliveredOrders` with `claimOrdersDueForRead` over the Due and Open arms in `tech-design.md`; lower `FULFILLMENT_STALE_MS` to 55 minutes; gate `refreshFulfillmentIfStale` on `payment_ref` alone and drop the `open` short-circuit in `refreshOnFulfillmentEvent`; add `markOrderReadDue` to the `PAYMENT_TOPICS` route; log the claimed and due counts per tick; make 3.1 pass
+- [ ] 3.4 Delete the SQL `completed()` and `ORDER_COMPLETION_CASES`, moving each test that read the table onto `ORDER_STATUS_CASES` or the Open arm
+- [ ] 3.5 Write a failing contract test, then add `financialStatus`, `canceledAt`, `closedAt` and `returnStatus` to `orderSchema` and `toStoreOrder`, so `checkout.listOrders` and `checkout.getOrder` carry them
+- [ ] 3.6 Verify with `pnpm run test:backend` for the store and shopify packages, `pnpm run typecheck`, `pnpm run lint` and `pnpm run db:drizzle:generate` reporting no drift
+
+## 4. Pages take the badge from the rule (grade10)
+
+Needs group 3 deployed and its due count at zero in the target environment.
+
+- [ ] 4.1 Write the failing tests first: the history and detail projections derive the badge from the order's facts with no status parameter, and one order projects the same badge on both; the admin order-detail surface's `statusOf` agrees with `ORDER_STATUS_CASES` (`grade10-site-commerce-order-status-SC-14`)
+- [ ] 4.2 Add the four new fields to the frontend `Order` model and `checkoutMapper`; call `orderStatus` inside `projectOrderHistory` and `projectOrderDetails` and remove their `statusFor` parameter; delete `apps/frontend/grade10/src/pages/orders/orderStatus.ts` and its test; make the admin surface's `statusOf` return `orderStatus(order).badge`; make 4.1 pass
+- [ ] 4.3 Verify with focused projection and page tests, `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build` and `pnpm run check:submodules`
+
+## 5. Product record (grade10-spec)
+
+- [ ] 5.1 After group 6 passes, take the 🚧 off the delivered lines on Order Status and Order History Blocks; leave every ❓ line as the product manager settled it; add a `Test cases` block with `::cases{id="grade10-site/commerce/order-status"}` to Order Status, as `auction/display.md` carries its own, now that acceptance has put the suite on disk; verify with `pnpm check:manual`
+
+## 6. The walk - Your Orders and Order Details agree (grade10)
+
+Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review add-store-order-status`), and `/tcs-run-sheet` executes manual cases when needed.
+
+- [ ] 6.1 Seed one signed-in collector's Shopify-held orders, each with its facts stamped as just read so no refresh replaces them: canceled, voided, partly refunded and shipped, held with a partial refund, fulfilled and open, fulfilled paid and archived, and a till sale paid and archived (`grade10-site-commerce-order-status-SC-02`, `grade10-site-commerce-order-status-SC-03`, `grade10-site-commerce-order-status-SC-04`, `grade10-site-commerce-order-status-SC-05`, `grade10-site-commerce-order-status-SC-06`, `grade10-site-commerce-order-status-SC-19`, `grade10-site-commerce-order-status-SC-20`)
+- [ ] 6.2 Walk `grade10-site-commerce-order-status-US-01` and `grade10-site-commerce-order-status-US-03` in the e2e lane: each card on Your Orders shows the badge `ORDER_STATUS_CASES` names for its facts, and its Order Details shows the same one (`grade10-site-commerce-order-status-SC-14`)
+- [ ] 6.3 Walk a refund on the local stack through `/dev/webhooks/shopify`: the order is marked due, the next cron tick reads it, and both pages then show Refunded (`grade10-site-commerce-order-status-SC-29`)
+- [ ] 6.4 Verify with `pnpm --dir apps/frontend/grade10 run e2e` on the order-history spec, and record the walk's row in `rounds.md`
