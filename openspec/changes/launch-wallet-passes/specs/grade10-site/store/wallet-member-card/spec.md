@@ -1,37 +1,159 @@
+# grade10-site/store/wallet-member-card Specification
+
 ## Feature set
 
-- Operator ending
-  - Console ending: an operator ends a pass for a member who cannot end it
-    themselves, under the permission an elevated act requires, recorded like
-    any other
+- The wallet pass
+  - Ending one: immediate, by the member, or by an operator holding
+    `store:write` for a member whose phone is gone
+- Configuration
+  - Launch check: fails, naming the secret, where a wallet's issuer is
+    recorded and one of that wallet's secrets is unset; passes where no
+    issuer is recorded
+
+## ADDED Requirements
+
+### Requirement: An operator ends a member's pass from the console
+
+An operator holding `store:write` SHALL be able to end one wallet's pass for a
+member from the member's record in the console, leaving the member's pass in
+the other wallet live. The record SHALL ask the operator to confirm, naming
+the wallet, and an ending the operator does not confirm SHALL end nothing.
+The ending SHALL take effect at once, as the member's own does: every code the
+ended pass can make identifies nobody, and the member can add a new pass
+afterwards. The member SHALL be sent no message. The audit trail SHALL record
+each ending with the operator, the member, the wallet, the time and whether a
+pass was ended. The record SHALL show an operator holding `store:write` the
+wallets the member carries a live pass in, and SHALL offer an operator without
+it neither the wallets nor the ending; a request for the member's wallets
+without it SHALL be refused as forbidden. A record whose wallets cannot be read
+SHALL say so, never that the member holds none. An operator without
+`store:write` who attempts the ending SHALL be refused as forbidden, not
+answered as though the pass or the act did not exist, and the pass SHALL stay
+live. Ending a wallet the member holds no live pass in SHALL end nothing and
+say so. An operator SHALL be able to end the pass on their own member record
+as on any other.
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-a5e rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-38 - An operator ends a member's pass, and the audit trail records it
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** a member carrying a live pass in one wallet
+- **WHEN** an operator holding `store:write` ends that wallet's pass
+- **THEN** a code the pass makes identifies nobody, and the member can add a new pass
+- **AND** no message reaches the member
+- **AND** the audit trail records the operator, the member, the wallet, the time and that a pass was ended
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-ts9 rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-40 - An operator without the grant is refused, and the pass stays live
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** a member carrying a live pass in one wallet
+- **WHEN** an operator without `store:write` ends that wallet's pass
+- **THEN** the act is refused as forbidden, not answered as though the pass did not exist
+- **AND** a code the pass makes still identifies the member
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-7ub rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-41 - An operator sees which wallets a member carries a pass in
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** a member carrying a live pass in one wallet
+- **WHEN** an operator holding `store:write` opens the member's record
+- **THEN** that wallet is named, with its ending beside it
+- **AND** once that pass is ended, the wallet leaves the list
+- **AND** a member who never saved a pass shows none
+- **AND** an operator without `store:write` is offered neither the wallets nor the ending, and a request for the member's wallets is refused as forbidden
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-6nw rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-42 - Ending a wallet with no live pass ends nothing
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** a member with no live pass in a wallet
+- **WHEN** an operator holding `store:write` ends that wallet's pass
+- **THEN** nothing is ended, and the operator is told nothing was held
+- **AND** the audit trail records the attempt as having ended nothing
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-eyg rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-43 - An operator's ending leaves the other wallet's pass live
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** a member carrying a live pass in each wallet
+- **WHEN** an operator holding `store:write` ends one wallet's pass
+- **THEN** a code the other wallet's pass makes still identifies the member
+- **AND** the record still names the other wallet
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-1an rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-44 - An ending the operator does not confirm ends nothing
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** a member carrying a live pass in one wallet
+- **WHEN** an operator holding `store:write` chooses that wallet's ending
+- **THEN** the record asks them to confirm, naming the wallet
+- **AND** when they decline, a code the pass makes still identifies the member, and the record still names the wallet
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-3il rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-45 - A record whose wallets cannot be read says so
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** a member whose wallets cannot be read
+- **WHEN** an operator holding `store:write` opens the member's record
+- **THEN** the record says the wallets could not be read
+- **AND** it never says the member holds no pass, and offers no ending
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-6w0 rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-49 - An operator ends the pass on their own record
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** an operator holding `store:write` who carries a live pass in one wallet
+- **WHEN** they end that wallet's pass from their own member record
+- **THEN** a code the pass makes identifies nobody, as on any other member's record
 
 ## MODIFIED Requirements
 
-### Requirement: A member ends a pass, and ending it ends what it can do
+### Requirement: A half-configured wallet says which secret is missing
 
-A member SHALL be able to end a pass in one action, and an operator SHALL be
-able to end it for a member who asks under the permission an elevated act
-requires, recorded in the operator log like any other. An operator holding no
-such permission SHALL have the act refused by name rather than answered as
-though it did not exist, and the console SHALL offer it only to an operator
-who holds the permission. The console SHALL show which wallets the member is
-carrying a pass in, so the operator ends one the member holds rather than one
-they named from memory. Ending SHALL take effect at once: every code the ended
-pass can make identifies nobody, whether or not the pass is still on the
-member's phone. A member SHALL be able to add a new pass
-afterwards.
+Issuing a pass on a wallet whose credentials are not fully configured SHALL
+refuse loudly, naming the missing secret, rather than issuing a pass nobody
+can read.
 
-#### Scenario: grade10-site-store-wallet-member-card-SC-24 - An ended pass identifies nobody
-**Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
+The launch check, `pnpm run secrets --check`, SHALL fail, naming each missing
+secret, for a brand and environment where `packages/app-env` records a
+wallet's issuer and one of that wallet's expected secrets is unset, and SHALL
+pass where no issuer is recorded. Google's expected secrets SHALL be
+`WALLET_GOOGLE_SERVICE_ACCOUNT_KEY` and `WALLET_PASS_KEY`; Apple's SHALL be
+`WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_PASS_AUTH_KEY` and
+`WALLET_PASS_KEY`, with `WALLET_APPLE_APNS_KEY` expected only where the Apple
+issuer records an APNs key id.
 
-- **WHEN** a member ends their pass and a code it makes is then presented
-- **THEN** it identifies nobody
-- **AND** the member can add a new pass that does
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-58f rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-12 - A missing credential names itself
+**Serves:** grade10-site-store-wallet-member-card-US-01 - Member adds their card to a phone wallet
 
-#### Scenario: grade10-site-store-wallet-member-card-SC-38 - An operator ends a pass under the permission it requires
-**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+- **GIVEN** a deployment missing one wallet credential
+- **WHEN** a member tries to add that wallet's pass
+- **THEN** the refusal names the missing credential
 
-- **WHEN** an operator ends a member's pass
-- **THEN** the act is recorded in the operator log with who and when
-- **AND** an operator without that permission is refused by name, and is never
-  offered the act in the console
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-oga rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-46 - A recorded issuer missing a secret fails the launch check
+**Serves:** Configuration - a recorded issuer missing a secret fails the launch check
+
+- **GIVEN** a brand and environment whose Google issuer is recorded
+- **AND** `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY` is unset there
+- **WHEN** the launch check runs
+- **THEN** it fails, naming `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY`
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-i4n rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-47 - A brand that issues no pass passes the launch check
+**Serves:** Configuration - a brand that issues no pass passes the launch check
+
+- **GIVEN** ZZZ, which records no wallet issuer, with no wallet secret set
+- **WHEN** the launch check runs for it
+- **THEN** no wallet secret is reported missing
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-e1r rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-48 - An Apple issuer with no APNs key id expects no push key
+**Serves:** Configuration - an Apple issuer with no APNs key id expects no push key
+
+- **GIVEN** a brand and environment whose Apple issuer is recorded with no APNs key id
+- **AND** every Apple secret but `WALLET_APPLE_APNS_KEY` is set there
+- **WHEN** the launch check runs
+- **THEN** it passes, and `WALLET_APPLE_APNS_KEY` is not reported missing
