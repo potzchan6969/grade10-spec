@@ -51,7 +51,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
 
 ## 4. JPY bid ceiling (grade10) (owner: @htonyl)
 
-- [ ] 4.1 Tests first, in their own commit: `bidIncrements.test.ts` pins
+- [x] 4.1 Tests first, in their own commit: `bidIncrements.test.ts` pins
       `bidCeiling("JPY")` at `5_000_000_000`; `placeBid.spec.ts` refuses a
       JPY maximum of `5_000_000_001` naming `5_000_000_000`; every test
       and fixture amount the old ceiling named moves under the new one,
@@ -60,7 +60,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       `TC19` to `TC25`.
       `grade10-site-auction-bid-increments-SC-08`,
       `grade10-site-auction-bid-increments-SC-10`
-- [ ] 4.2 Set `AUCTION_BID_CEILINGS.JPY` to `5_000_000_000` in
+- [x] 4.2 Set `AUCTION_BID_CEILINGS.JPY` to `5_000_000_000` in
       `packages/grade10-auction/contracts/src/bidIncrements.ts`.
-- [ ] 4.3 Verify - `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 4.3 Verify - `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       and the auction backend lane.
