@@ -58,6 +58,24 @@ test("Auto-fix CI claims one attempt per target commit", () => {
   assert.match(target.run, /\[ "\$attempted" -eq 0 \] \|\| skip/);
   assert.match(target.run, /repos\/\$repo\/statuses\/\$sha/);
   assert.equal(repairSteps.length, 1);
+
+  const diagnostics = workflow.jobs.repair.steps.find(
+    (step) => step.name === "Upload repair diagnostics",
+  );
+  assert.equal(
+    diagnostics.if,
+    "always() && steps.target.outputs.repairable == 'true'",
+  );
+  assert.equal(diagnostics.uses, "actions/upload-artifact@v4");
+  for (const file of [
+    "cursor.json",
+    "cursor.stderr.log",
+    "verify.log",
+    "lint.log",
+  ])
+    assert.ok(diagnostics.with.path.includes(file), file);
+  assert.equal(diagnostics.with["retention-days"], 7);
+  assert.match(repairSteps[0].run, /cursor\.stderr\.log/);
 });
 
 /** Every `actions/cache` step of one job, restore and save alike. */
