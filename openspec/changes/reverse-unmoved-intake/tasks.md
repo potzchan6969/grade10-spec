@@ -22,7 +22,7 @@ Needs group 2's migration and contracts landed.
 - [ ] 3.4 Refuse an unmoved record in `removeCertUnit` with `inventory-cert-id-unavailable`, after both locks (`grade10-admin-inventory-catalog-SC-134`, `grade10-admin-inventory-catalog-SC-135`, `grade10-admin-inventory-catalog-SC-175`)
 - [ ] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend` in grade10.
 
-## 4. Reduce regular stock intaken since its latest move (grade10)
+## 4. Reduce regular stock intaken since its latest move (grade10) (owner: @mason5991)
 
 Needs group 3's moved test and reducible count landed.
 
