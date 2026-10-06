@@ -20,8 +20,6 @@ covers image delivery and alt.
 - Operator image upload
   - Accepted types and size: JPEG, PNG, WebP and AVIF within the shared media
     size bound reach storage; anything else is refused
-  - Confirm before store: an operator sees a preview of the selected file and
-    confirms before any bytes leave for the auction service
   - Card-size review with zoom: the admin media manager shows stored images at
     card size and reveals a large zoom preview on hover or focus
   - Upload on drop or choose: a supported file stores as soon as it is dropped

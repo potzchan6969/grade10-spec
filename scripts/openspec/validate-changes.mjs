@@ -8,8 +8,9 @@
  * change somebody stopped writing and the wrong one for a change that has
  * said what it is waiting for. Those errors are dropped for a change whose
  * `.openspec.yaml` declares `awaiting: specs:` and whose deltas name no
- * requirement yet. Every other error it reports still counts, on that change
- * and on the rest.
+ * requirement yet. A `REMOVED Feature set` amendment is also a real delta:
+ * acceptance can fold it without restating an unchanged requirement. Every
+ * other error it reports still counts, on that change and on the rest.
  *
  * `spec.md` is written in two passes — the outline, then the requirements —
  * so the wait is read against the delta headings rather than against the
@@ -51,6 +52,7 @@ const NO_DELTA = "Change must have at least one delta.";
 const NO_SECTIONS = "No delta sections found.";
 const DELTA_HEADING =
   /^##\s+(?:ADDED|MODIFIED|REMOVED|RENAMED)\s+Requirements\s*$/m;
+const REMOVED_FEATURE_SET = /^##\s+REMOVED\s+Feature set\s*$/m;
 
 /**
  * What the change says it is waiting on before it can write a requirement, or
@@ -91,6 +93,24 @@ function outlineOnly(specs) {
   walk(specs);
   if (found.length === 0) return true;
   return found.some((file) => !DELTA_HEADING.test(readFileSync(file, "utf8")));
+}
+
+/** A feature-set removal has a concrete fold operation but the pinned
+ * OpenSpec CLI only recognizes requirement headings as deltas. Keep the
+ * wrapper's exception narrow, so an ordinary outline remains incomplete. */
+function removesFeatureSetItem(specs) {
+  if (!existsSync(specs)) return false;
+  const found = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) walk(join(dir, entry.name));
+      else if (entry.name === "spec.md") found.push(join(dir, entry.name));
+    }
+  };
+  walk(specs);
+  return found.some((file) =>
+    REMOVED_FEATURE_SET.test(readFileSync(file, "utf8")),
+  );
 }
 
 /**
@@ -210,11 +230,14 @@ export function main(root, strict, only) {
   const failed = [];
   for (const item of items) {
     const why = waitingOnSpecs(join(changes, item.id));
+    const featureSetAmendment = removesFeatureSetItem(
+      join(changes, item.id, "specs"),
+    );
     const left = (item.issues ?? []).filter(
       (issue) =>
         issue.level !== "INFO" &&
         !(
-          why !== undefined &&
+          (why !== undefined || featureSetAmendment) &&
           (issue.message.startsWith(NO_DELTA) ||
             issue.message.startsWith(NO_SECTIONS))
         ),
