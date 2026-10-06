@@ -47,6 +47,9 @@ Needs groups 2 and 3. Walks the draft `feature-tcs.md` cases; human QA reviews t
 - [ ] 4.2 Walk an untaxed invoice from quote through payment and confirm the summary, invoice and receipt omit Tax while pre-send still showed TBD and its tip (`post-sale-SC-156`, `winner-order-SC-215`, `winner-order-SC-212`, `winner-order-SC-213`)
 - [ ] 4.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and the focused admin and Winner Order E2E journeys
 
-## 5. Follow-up after `define-public-auction-identifiers` archives
+## 5. Records the winner keeps
 
-- [ ] 5.1 Open a small change to `Records the winner keeps` that replaces the receipt wording "any tax amount supplied by the separate tax capability" with "Tax when added" and revises `winner-order-SC-18` to match. This change does not modify that requirement, which `define-public-auction-identifiers` adds
+`define-public-auction-identifiers` archived on 2026-10-06, so this change carries every edit to the requirement.
+
+- [ ] 5.1 Add the receipt's "Tax when added" wording and the tracker's carrier-link row to `Records the winner keeps`: the receipt lists Tax, and the tracker shows the tracking number as the link with no separate carrier name (`winner-order-SC-18`, `winner-order-SC-20`; `clarify-auction-shipping-progress-copy` Q6)
+- [ ] 5.2 Verify the Winner Order receipt and tracker against `winner-order-US2-TC1-2` and `winner-order-US2-TC2-2`

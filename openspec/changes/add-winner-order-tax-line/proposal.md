@@ -44,6 +44,12 @@ watch.
   appearing in one status and vanishing in the next
 - **The invoice and the receipt state it** as the optional `taxLine` the PDF
   blocks already accept, before the boxed Subtotal summary
+- **The receipt names Tax when added.** `Records the winner keeps` replaces
+  "any tax amount supplied by the separate tax capability" with "Tax when
+  added", and `winner-order-SC-18` follows
+- **The shipping tracker is the tracking number as the carrier link**, with no
+  separate carrier name, in `Records the winner keeps` and `winner-order-SC-20`.
+  This carries `clarify-auction-shipping-progress-copy` Q6
 - **Grade10 prices nothing.** No rate, no regime, no jurisdiction rule, no tax
   provider. The operator decides the amount and owns it
 
@@ -62,7 +68,9 @@ See [Non-Goals](decisions.md#non-goals).
 - `grade10-site/auction/winner-order`: the Tax line becomes a stated
   requirement instead of a reserved row — its place in the summary, its TBD
   before send, its absence when none, its presence in the Subtotal, and its
-  place on the invoice and the receipt
+  place on the invoice and the receipt. `Records the winner keeps` is modified
+  here for the receipt's Tax wording and the tracker's carrier link, since one
+  change may edit a requirement at a time
 - `grade10-admin/auction/post-sale`: the quote takes an optional Tax amount,
   refuses it at zero, and carries it through a reissue
 
@@ -99,11 +107,6 @@ only, deliberately.
 
 ## Follow-on changes
 
-- The receipt wording in `Records the winner keeps`. After
-  `define-public-auction-identifiers` archives, a small change replaces "any
-  tax amount supplied by the separate tax capability" with "Tax when added" and
-  revises `winner-order-SC-18` to match. This change does not modify that
-  requirement, which that change adds
 - A computed tax rate, if Grade10 ever prices tax itself rather than taking
   an operator's number
 - The formal tax receipt — whether a receipt must carry Grade10's company

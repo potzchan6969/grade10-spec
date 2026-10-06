@@ -212,11 +212,92 @@
 * The Subtotal is 318000 minor units in HKD.
 * Grade10 computes the payment processing fee from that Subtotal.
 
+## winner-order-US2: Winner follows a settled lot to delivery
+
+**As a** winner who has paid,
+**I want** a receipt PDF that says how I paid, what was paid before it and what
+is still owed, a tracker, and proof of what was handed over,
+**so that** I can account for a high-value purchase without asking Grade10 for records.
+
+<!-- trace:case id=g10.auction-winner-order.TC-h7f rev=2 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
+### winner-order-US2-TC1-2: The receipt itemises what was paid and sums to the total
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_paid>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_paid> | An HKD order paid in full at <final amount> |
+| <final amount> | HKD 3,160.00 (316000 minor units) |
+
+**Steps:**
+
+1. Download the receipt PDF.
+2. Read its lines.
+
+**Expected Results:**
+
+* Winning bid, buyer's premium, shipping, insurance when added, Tax when added and final amount show.
+* The lines sum to <final amount>.
+* It names how it was paid.
+
+<!-- trace:case id=g10.auction-winner-order.TC-4zy rev=2 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
+### winner-order-US2-TC2-2: A dispatched lot shows the tracking number as the carrier link
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_shipped>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_shipped> | A paid order dispatched with a carrier and <tracking number> |
+
+**Steps:**
+
+1. Read the shipment section.
+2. Click <tracking number>.
+
+**Expected Results:**
+
+* Step 1: <tracking number> shows as a link, with no separate carrier name.
+* Step 2: the carrier's tracking page opens.
+
 ## Reconciliation
 
 **Run:** The blind pass read the Purpose, Feature set, `winner-order-US-01`, the proposal, decisions, UI design without scenario dispositions, and the linked PRD. It did not read durable or change requirements.
 
-**Run:** 2026-10-06, QA2 rerun after accept-review, not blind: the delta's requirements and scenarios, `ui-design.md`, the durable suite and the cases above. It split `winner-order-US1-TC31-1`'s expectations by surface, since the page places Tax before Payment Processing Fee and the PDFs before Subtotal. It revised the durable `winner-order-US1-TC1-1` and `winner-order-US1-TC2-1`, which still read Tax as an estimate.
+**Run:** 2026-10-06, QA2 rerun after accept-review, not blind: the delta's requirements and scenarios, `ui-design.md`, the durable suite and the cases above. It split `winner-order-US1-TC31-1`'s expectations by surface, since the page places Tax before Payment Processing Fee and the PDFs before Subtotal. It revised the durable `winner-order-US1-TC1-1` and `winner-order-US1-TC2-1`, which still read Tax as an estimate. It also carries `winner-order-US2-TC1-1` and `winner-order-US2-TC2-1` revised, because this change owns every edit to `Records the winner keeps`.
 
 ### Folded
 
@@ -229,6 +310,8 @@
 
 - `winner-order-US1-TC1-2`, from `-TC1-1`: Shipping & Handling, Insurance and Tax read TBD before send and no charge is marked as an estimate, instead of reading as estimates; the payable-at-close result is dropped, since `winner-order-US1-TC3-1` refuses payment until the address is confirmed -> `winner-order-SC-04`, `winner-order-SC-213`
 - `winner-order-US1-TC2-2`, from `-TC2-1`: Shipping & Handling, Insurance and Tax read TBD, instead of still to be calculated -> `winner-order-SC-213`
+- `winner-order-US2-TC1-2`, from `-TC1-1`: the receipt lines read insurance when added and Tax when added, instead of any tax -> `winner-order-SC-18`
+- `winner-order-US2-TC2-2`, from `-TC2-1`: the tracker shows the tracking number as the carrier link and no separate carrier name, instead of the carrier and the tracking number -> `winner-order-SC-20`
 
 ### Rejected
 
@@ -241,5 +324,6 @@
 ### Carried Unchanged
 
 - **Invoice fields** - `winner-order-SC-05`, `winner-order-SC-38`, `winner-order-SC-39`, `winner-order-SC-62`, `winner-order-SC-63`, `winner-order-SC-69`, `winner-order-SC-110`, `winner-order-SC-111` keep their meaning and their durable coverage. `winner-order-SC-04` changed meaning to a taxed total and is reached above by `winner-order-US1-TC31-1` and `winner-order-US1-TC1-2`
+- **Records the winner keeps** - `winner-order-SC-19`, `winner-order-SC-21`, `winner-order-SC-36`, `winner-order-SC-112`, `winner-order-SC-113`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-135`, `winner-order-SC-133`, `winner-order-SC-247`, `winner-order-SC-222`, `winner-order-SC-223`, `winner-order-SC-246` keep their meaning and their durable coverage. `winner-order-SC-18` and `winner-order-SC-20` changed and are reached above by `winner-order-US2-TC1-2` and `winner-order-US2-TC2-2`
 
 **Out of suite:** none of this change's scenarios.

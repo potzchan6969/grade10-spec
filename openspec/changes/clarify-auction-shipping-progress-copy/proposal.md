@@ -58,8 +58,8 @@ payment-confirm copy are updated in `add-my-auction-orders`.
 - Store order status copy stays Processing (separate vocabulary).
 - PRD Progress Under Shipping line and Progress stepper decision carry 🚧
   this change delivers. Order Progress adds no separate carrier name. The
-  older carrier-name row in `Records the winner keeps` stays until
-  `define-public-auction-identifiers` archives and removes it.
+  carrier-name row in `Records the winner keeps` is removed by
+  `add-winner-order-tax-line`, which carries that requirement.
 - Shipped badge tone matches Preparing Shipment (`default`) on Winner Order
   and My Auctions — see `ui-design.md`.
 

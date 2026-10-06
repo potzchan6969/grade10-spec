@@ -350,6 +350,8 @@ failure, and locks the form while work is in progress.
 
 - **Receipt** — the itemised amounts and how it was paid: card brand and last
   four, or the method and reference an operator recorded
+- 🚧 **Tax on the receipt** — the receipt lists Tax when the operator added it,
+  between Insurance and the Subtotal
 - 🚧 **Bill To and Ship To** — the same two addresses as the invoice it
   pays; a later edit or reissue never changes a receipt already issued
 - 🚧 **A confirmed transfer** — its receipt reads Bank Transfer
@@ -425,7 +427,7 @@ then shipped, delivered, and order cancelled.
 
 ### Missed Address Deadline
 
-- **Winner** — Confirm hides, Missed setup deadline gives Contact Us, and the
+- **Winner** — Confirm hides, Missed address deadline gives Contact Us, and the
   order reads Setup Overdue
 - **Operator** — reopens the form for a fresh 48 hours; records an address by
   phone while the order is unconfirmed Setup Overdue and its invoice is

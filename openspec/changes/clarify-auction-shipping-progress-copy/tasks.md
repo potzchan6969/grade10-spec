@@ -10,5 +10,5 @@ records that no application-repository group is owed beyond a submodule bump.
 - [x] 1.3 Update i18n `auctionOrders.status.processing` (en, zh-Hans, zh-Hant, ko), Winner Order / My Auctions preview labels, auction-record fixtures, and story asserts.
 - [x] 1.3a Shipped badge uses Badge `default` on Winner Order and My Auctions (same as Preparing Shipment).
 - [ ] 1.4 After implementation is verified and before archive, update the PRD: take 🚧 off Under Shipping, Preparing Shipment status row, and the Progress stepper decision.
-- [ ] 1.4a After `define-public-auction-identifiers` archives, confirm `Records the winner keeps` and its tracker table row no longer name the carrier; this change does not modify that requirement.
+- [x] 1.4a Carried by `add-winner-order-tax-line` (Q14): it removes the carrier name from `Records the winner keeps` and its tracker table row; this change does not modify that requirement.
 - [x] 1.5 Run `pnpm run lint`, `pnpm run typecheck`, `pnpm check:manual` and `pnpm run validate:changes clarify-auction-shipping-progress-copy` in grade10-spec.
