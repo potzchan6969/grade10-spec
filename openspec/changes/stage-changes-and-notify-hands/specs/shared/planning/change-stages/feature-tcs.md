@@ -254,15 +254,14 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 
 **Steps:**
 
-1. Land an `implementation.json` entry naming <change R>'s historical accepted fingerprint, first-claim durable-spec baseline, repository commit and components on `main`.
+1. Land an `implementation.json` entry naming <change R>'s historical accepted fingerprint, first-claim durable-spec baseline, repository commit and components on `main`, with no deployment receipt for <change R> in any environment.
 2. Read <qa handle>'s direct messages.
-3. Read <qa handle>'s direct messages.
 
 **Expected Results:**
 
-* <qa handle> holds one implementation-complete message naming <change R>, its historical accepted fingerprint, claimed durable-spec baseline and the thread.
-* <qa handle> holds one staging message naming <change R>, the run sheet and build `1.4.0-rc2`.
-* Each of the two holds one message for that move, not two.
+* <qa handle> holds one implementation-complete message naming <change R>, its historical accepted fingerprint, claimed durable-spec baseline, the run sheet and the thread.
+* The message arrives without a deployment receipt, and no staging message follows it.
+* <qa handle> holds one message for that move, not two.
 
 ### shared-planning-change-stages-US1-TC9-1: A build push tells nobody and the channel still reads it
 
@@ -446,18 +445,20 @@ Runs once per row of **Test data**.
 
 1. Land <change W>'s `spec.md`, `feature-tcs.md` and `tech-design.md` in one push to `main`.
 2. Read <change W>'s card at <manual board url>.
-3. Read <pm handle>'s direct messages.
-4. Land <change W>'s `tasks.md` on `main`.
-5. Run `spec:accept` on <change W>.
-6. Write the answering decision into the Raised row's `Landed` cell and push to `main`.
-7. Run `spec:accept` on <change W> again.
+3. Open <change W> at <manual change page url> and read the decisions row.
+4. Read <pm handle>'s direct messages.
+5. Land <change W>'s `tasks.md` on `main`.
+6. Run `spec:accept` on <change W>.
+7. Write the answering decision into the Raised row's `Landed` cell and push to `main`.
+8. Run `spec:accept` on <change W> again.
 
 **Expected Results:**
 
 * After Step 1 the card sits in the Specified lane and names <pm handle> as the hand, with the open Raised row holding nothing below acceptance.
+* The decisions row shows no open question count for the Raised row.
 * <pm handle> holds one direct message naming <change W>, the stage Specified and its thread.
-* Step 5 refuses and names the open Raised row, and no `acceptance.json` lands for <change W>.
-* Step 7 records the acceptance, and the card moves to the Accepted lane.
+* Step 6 refuses and names the open Raised row, and no `acceptance.json` lands for <change W>.
+* Step 8 records the acceptance, and the card moves to the Accepted lane.
 
 ---
 
@@ -729,7 +730,7 @@ No change is in flight and the archive holds none the board reads.
 
 * The stepper shows Specified as the current stage, and the Your turn card carries the thread link and the command.
 * Each artifact row reads fresh or behind, with its open question count and the handle that landed it.
-* The hands, the delivery and the handoff rows read one fact per label; the delivery row names `main`, and no staging or release, since <change B> deploys nothing.
+* The hands and the handoff rows read one fact per label, and the page carries no delivery row naming staging or a release.
 
 ### shared-planning-change-stages-US2-TC9-1: A change whose record cannot be read
 
@@ -793,7 +794,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * The `❓` line names Finance as the hand it waits on.
 * A change that marks no section shows one line saying so, and no empty list.
 
-### shared-planning-change-stages-US2-TC11-1: Delivery row reads staging with no build beside it
+### shared-planning-change-stages-US2-TC11-1: Availability with no resolved ref reads Unknown
 
 **Classification:**
 
@@ -804,24 +805,23 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
-**Decided by:** `tools/manual/test/stage-change-page.test.tsx`
-
 **Pre-conditions:**
-<change H> is at Implementation complete with an availability receipt whose resolved ref is unknown.
+<change H> is at Implementation complete with a deployment receipt for one application component whose resolved ref is unknown.
 
 **Steps:**
 
 1. Navigate to <manual change page url> for <change H>.
-2. Read the delivery row.
+2. Read the environment availability row.
 
 **Expected Results:**
 
 * The change page loads for <change H>.
-* The delivery row reads staging with no build beside it.
+* The component reads Unknown, with its receipt link and no deployed ref beside it.
+* The change page carries no delivery row naming staging.
 
 ### shared-planning-change-stages-US2-TC12-1: The tech design or its waiver holds Specified
 
@@ -2119,11 +2119,21 @@ A GitHub Deployment receipt changes one application's status in <environment>. T
 - An `awaiting:` line naming the tech design is shown against the engineer, its hand; the check refuses only a wait on an artifact the schema does not declare, one already written, or one waived - `Q20`, `Q87`.
 - An in-flight record still naming `tech` is refused by the check as a role outside the five, and the board shows the change in Proposed, named unreadable, with its hands open; the active records lose the line in the same commit as the role, and archived records keep theirs unread - `Q23`, `Q87`.
 - Before the planning run the tech design reads not yet written and the change names the blind cases as what it owes; once the cases and the requirements are in without it, the change names the tech design and stays at Designed - `Q86` and the requirement that the tech design proves Specified.
-- A change with an open Raised row stays below Specified, at Designed, whatever else has landed, and acceptance is refused naming the row - the ladder and `Q80`.
+- A change with an open Raised row reaches Specified once its blind cases, tech design and requirements are in; the row holds acceptance alone, and acceptance is refused naming the row - `Q92`, superseding the 2026-10-05 reading that held the change at Designed, with `Q80`.
 - Specified is the product manager's turn alone: Dev and QA2 are the planning run's readings, not hands told, and QA's turn comes after implementation - `Q91`, with `Q81`.
 - The retired tech PIC's place in the agent rounds is revised by the round change in its own delta, not here - `Q90`.
 
+2026-10-06 product revision (`Q92` to `Q98`): an open Raised row holds acceptance only, never Specified; the agent drafts five stages, Accepted being the accepting human's record; the engineer challenges the tech design as the `dev` hand, prompted by Planned's move, "read the plan and challenge the tech design"; acceptance waits for no sign-off from the engineer; the product manager answers a Raised row about the tech design; and an open Raised row is not an open question. The questions its blind pass asked were already answered:
+
+- An open Raised row is not an open question: it stays out of the counts, My turn and the digest, which list the `❓` decisions rows and `❓` page lines alone - `Q98`.
+- The product manager learns of an open Raised row from the Specified turn's message and from `spec:accept`'s refusal naming the row, and is told nothing new at Planned - `Q98`, with `Q92`.
+- The Specified card and turn need not name the open rows; `spec:accept`'s refusal names them - `Q98`.
+- The engineer's challenge is observable as the Planned turn's move and its Your turn message, and lands as decisions rows or Raised rows - `Q95`.
+- `spec:accept` does not wait for the engineer's word: a challenge that lands as a Raised row holds acceptance like any other, and no sign-off record is checked - `Q96`.
+
 ## Reconciliation
+
+Run: 2026-10-06, revision pass for `Q92` to `Q98`: QA1 revised eleven cases and wrote `shared-planning-change-stages-US1-TC14-1` over the revised anchors, bumping `shared-planning-change-stages-US2-TC2-1` to `shared-planning-change-stages-US2-TC2-2`, and `shared-planning-change-stages-US1-TC5-1` and `shared-planning-change-stages-US1-TC9-1` had taken the milestone channel post from `main` since the last run; Dev, without reading them, revised `shared-planning-change-stages-SC-07`, `shared-planning-change-stages-SC-10`, `shared-planning-change-stages-SC-16`, `shared-planning-change-stages-SC-79`, `shared-planning-change-stages-SC-86` and `shared-planning-change-stages-SC-87`, wrote `shared-planning-change-stages-SC-88`, and added tasks 10.13 to 10.15. QA2 joined the two on anchors, brought the cases still reading the staging message and the staging delivery row into line with `Q84`, and marked the dispositions 2026-10-06 below.
 
 Run: 2026-10-05, revision pass for `Q85` to `Q89`: QA1 revised fourteen cases and wrote `shared-planning-change-stages-US2-TC12-1` and `shared-planning-change-stages-US2-TC13-1` over the revised anchors; Dev, without reading them, revised the ladder, the drafted, hands and whose-turn tables and `shared-planning-change-stages-SC-07`, `shared-planning-change-stages-SC-08`, `shared-planning-change-stages-SC-13`, `shared-planning-change-stages-SC-14`, `shared-planning-change-stages-SC-15`, `shared-planning-change-stages-SC-32` and `shared-planning-change-stages-SC-40`, retired shared-planning-change-stages-SC-09 with the tech PIC's wait, and wrote `shared-planning-change-stages-SC-85` to `shared-planning-change-stages-SC-87`. QA2 joined the two on anchors; the dispositions are marked 2026-10-05 below.
 
@@ -2171,13 +2181,33 @@ Five cases went the other way in the earlier pass: the rulings settled behaviour
 Two scenarios disagreed with what the requirements already settle, and were corrected in `spec.md` rather than raised:
 
 - `shared-planning-change-stages-SC-85` said the tech design is not shown as owed at Designed, while `shared-planning-change-stages-SC-86` and `shared-planning-change-stages-US2-TC13-1` name it as owed at Designed once the cases and the requirements are in; the scenario now says the change names the blind cases, not the tech design, as what it owes, the order `tech-design.md` gives `PROOF_OF_STAGE`
-- `shared-planning-change-stages-SC-79` held a change with an open Raised row at Planned, while the ladder counts every Raised row resolved among Specified's proofs and `shared-planning-change-stages-SC-87` holds the change below Specified; it now says the stage remains Designed. Tasks 10.1 and 10.2 trace it
+- `shared-planning-change-stages-SC-79` held a change with an open Raised row at Planned, while the ladder counted every Raised row resolved among Specified's proofs and `shared-planning-change-stages-SC-87` held the change below Specified; it was corrected to say the stage remains Designed. Superseded on 2026-10-06 by `Q92`: the open row holds acceptance alone, and the scenario now says the stage stays below Accepted and not below Specified (task 10.13)
+
+2026-10-06, each revised or new case against the revised scenarios:
+
+- `shared-planning-change-stages-US1-TC5-1`, a change moving into Planned and another into Specified in one push telling each hand of its own, and no channel post because neither crossed a milestone → `shared-planning-change-stages-SC-47`'s milestone rule, `shared-planning-change-stages-SC-16`, `shared-planning-change-stages-SC-86`
+- `shared-planning-change-stages-US1-TC6-1`, the digest's open questions read as the `❓` rows alone, an open Raised row never among them → `shared-planning-change-stages-SC-48`, `shared-planning-change-stages-SC-88`
+- `shared-planning-change-stages-US1-TC8-1`, brought into line with `Q84` by QA2: the implementation-complete message names the run sheet and arrives without a deployment receipt, and the staging message and its build are gone → `shared-planning-change-stages-SC-45`
+- `shared-planning-change-stages-US1-TC9-1`, a build push telling nobody and posting nothing, Building being no milestone → `shared-planning-change-stages-SC-38`
+- `shared-planning-change-stages-US1-TC14-1`, an open Raised row reaching Specified on the product manager's turn, told once, counted as no open question on the change page, and holding acceptance until it lands → `shared-planning-change-stages-SC-87`, `shared-planning-change-stages-SC-79`, `shared-planning-change-stages-SC-88`, `shared-planning-change-stages-SC-16`; QA2 joined the change page's count, on the same run, from `shared-planning-change-stages-SC-88`
+- `shared-planning-change-stages-US2-TC1-1`, the eight lanes in the accepted stage order → `shared-planning-change-stages-SC-51`
+- `shared-planning-change-stages-US2-TC2-2`, exactly five drafted lanes, Accepted, Implementation complete and Archived carrying neither the mark nor the move → `shared-planning-change-stages-SC-10`
+- `shared-planning-change-stages-US2-TC8-1`, the change page's artifacts and questions, its open question count read from the `❓` rows; QA2 brought its last result into line with `Q84`, the page carrying no delivery row naming staging or a release → `shared-planning-change-stages-SC-34`, `shared-planning-change-stages-SC-57`, `shared-planning-change-stages-SC-58`, `shared-planning-change-stages-SC-59`
+- `shared-planning-change-stages-US2-TC10-1`, On the pages with its `❓` line and its hand → `shared-planning-change-stages-SC-71`
+- `shared-planning-change-stages-US2-TC11-1`, recast by QA2 from the retired staging delivery row to environment availability, a receipt with no resolved ref reading Unknown → the availability requirement's Unknown status and task 3.9 (`Q84`); it leaves automation, since the test it named decided the staging row
+- `shared-planning-change-stages-US2-TC12-1`, `shared-planning-change-stages-US2-TC13-1`, their preconditions no longer landing every Raised row, since an open row holds no rung below acceptance → `shared-planning-change-stages-SC-86`, `shared-planning-change-stages-SC-07`, with `Q92`
+- `shared-planning-change-stages-US3-TC1-1`, `shared-planning-change-stages-US3-TC4-1`, My turn's questions read as the `❓` rows → `shared-planning-change-stages-SC-60`, `shared-planning-change-stages-SC-61`, with `shared-planning-change-stages-SC-88`
+- `shared-planning-change-stages-US7-TC3-1`, a line two changes deliver wearing the further stage, Implementation complete in place of the retired On staging → `shared-planning-change-stages-SC-67`
+- `shared-planning-change-stages-US9-TC4-1`, the archive refusing a behind delta for a change at Implementation complete → `shared-planning-change-stages-SC-31`
+
+Tasks 10.13 to 10.15 trace scenarios: 10.13 traces `shared-planning-change-stages-SC-10`, `shared-planning-change-stages-SC-16`, `shared-planning-change-stages-SC-79`, `shared-planning-change-stages-SC-86` and `shared-planning-change-stages-SC-87`; 10.14 traces `shared-planning-change-stages-SC-27` and `shared-planning-change-stages-SC-28`; 10.15 traces `shared-planning-change-stages-SC-10`, `shared-planning-change-stages-SC-16`, `shared-planning-change-stages-SC-34`, `shared-planning-change-stages-SC-60`, `shared-planning-change-stages-SC-79` and `shared-planning-change-stages-SC-88`. `shared-planning-change-stages-SC-07` is traced by 10.1 and 10.9 as before.
 
 ### Rejected
 
 - `shared-planning-change-stages-US6-TC1-1`'s direct message to the hand that owes a wait — `Q31` keeps five message kinds, and a written wait is a line of the digest rather than a message of its own; the case keeps the dated chip and the hand it is shown against, and the page loses the row it was read from.
 - No case was dropped whole: every reading of the input turned out to be behaviour the rulings kept or a question they answered.
 - 2026-10-05: no revised or new case was rejected.
+- 2026-10-06: no revised or new case was rejected.
 
 ### Escalated
 
@@ -2202,8 +2232,16 @@ Two scenarios disagreed with what the requirements already settle, and were corr
 - What does the tech design's row read before Specified? → `Q86`, settled: not yet written, and named as owed only once the cases and the requirements are in
 - Which change revises `run-a-round-on-every-artifact`'s agent-rounds delta, whose journey, leaf and dated-wait requirement still name the tech PIC? → `Q90`, settled: that change revises its own delta; this change touches only the page's decisions block
 - `add-store-cross-sell` loses its only naming of `@htonyl` when its `tech:` line goes: name them to another role? → `Q87`, settled for this change: the line is deleted, never rewritten to another role (task 10.6); naming them again is that change's product manager's
-- A change with an open Raised row "remains Planned", while the ladder holds it below Specified → the ladder, settled: corrected in the scenario, see Folded
+- A change with an open Raised row "remains Planned", while the ladder holds it below Specified → the ladder, settled on 2026-10-05: corrected in the scenario, see Folded; superseded by `Q92`, which lets the change reach Specified and holds acceptance alone
 - Who takes a change at Specified: the scenario named Dev and QA2, the whose-turn and hands tables Dev and the product manager, the page the product manager, and the manual's derivation the product manager and QA? → `Q91`, settled: the product manager alone; Dev revised `shared-planning-change-stages-SC-16`, the whose-turn and Hands tables, the page's Hands table and `HANDS_AT` (task 10.12). No case tells Dev or QA at Specified: the cases that name an engineer there move the change to Planned, whose hand the engineer is
+
+2026-10-06, QA1's questions, each answered by the product owner's rows of the same day:
+
+- Does an open Raised row count as an open question in the counts, My turn and the digest? → `Q98`, settled: no
+- Is the product manager told of an open Raised row at Planned? → `Q98`, settled: no; they learn of it from the Specified turn and from `spec:accept`'s refusal naming it
+- Does the Specified card name the open Raised rows? → `Q98`, settled: no listing is required; the refusal names them
+- Is the engineer's challenge of the tech design observable? → `Q95`, settled: as Planned's move, "read the plan and challenge the tech design", in the Your turn message the engineer already gets
+- Does `spec:accept` wait for the engineer's challenge? → `Q96`, settled: no; a challenge lands as decisions rows or Raised rows, which already hold acceptance
 
 `Q26` moved a case: `shared-planning-change-stages-US1-TC3-1` read the key as one per change and now runs a row per entry, the revert and re-landing telling the engineer again.
 
@@ -2216,8 +2254,9 @@ Two scenarios disagreed with what the requirements already settle, and were corr
 - `shared-planning-change-stages-SC-27` → the manual's derivation tests
 - `shared-planning-change-stages-SC-28` → the manual's derivation tests
 - `shared-planning-change-stages-SC-29` → the manual's derivation tests
-- `shared-planning-change-stages-SC-79` → `scripts/openspec/acceptance.test.mjs` for the refusal, and the manual's derivation tests for the stage held below Specified (task 10.1)
-- `shared-planning-change-stages-SC-87` → the same two: a Raised row holding Specified in the derivation tests, and the refusal naming the row in the acceptance tests (task 10.1)
+- `shared-planning-change-stages-SC-79` → `scripts/openspec/acceptance.test.mjs` for the refusal, and the manual's derivation tests for the open row holding no rung below acceptance (tasks 10.1 and 10.13); `shared-planning-change-stages-US1-TC14-1` walks it beside them
+- `shared-planning-change-stages-SC-87` → the same two: an open Raised row leaving the change at Specified in the derivation tests, and the refusal naming the row in the acceptance tests (tasks 10.1 and 10.13); `shared-planning-change-stages-US1-TC14-1` walks it beside them
+- `shared-planning-change-stages-SC-88` → My turn's and the digest's halves to task 10.15's tests; `shared-planning-change-stages-US1-TC14-1` walks the change page's count, the turn and the refusal
 
 ### Anchors no case reaches
 
@@ -2235,11 +2274,13 @@ Every journey is walked by at least one case. The six feature set root groups ar
 What stays manual after the walk (task 8.3/8.5), and why.
 
 - **US1's messages and the digest** — `US1-TC1-1` through `US1-TC8-1` read Slack, git history and the notify script's own sent-key file; a browser walk opens the manual, not a workspace or a repository's commits, so these are `scripts/openspec/*.test.mjs`'s to prove
+- **US1-TC14-1** - an open Raised row walked from Specified to acceptance reads Slack and runs `spec:accept` against the store's `main`; task 10.13's derivation and acceptance tests decide the stage and the refusal, and task 10.15's the count, so what is left for a person is the message arriving and the refusal read in a terminal
 - **US1-TC12-1** — the thread's landing reply reads Slack, and the marker it turns on is a trailer on a commit: `changed-changes.test.mjs` decides the reply, its key and the marker over a fixture repository, and `plan-land-relay.test.mjs` the trailer a wake's landing writes, so what is left for a person is the reply arriving in the workspace
 - **US2-TC1-1** — the lane order and "each change in one lane only" are unwalked; `board.walk.ts`'s `SC-51` proves only the third claim, a card's own facts, so the case stays whole and manual
 - **US2-TC3-1** — the four-row idle table (6/7/29/30 days) needs a repository-wide commit moving no change's day count, which `NO_GIT` cannot stage; `board.walk.ts`'s `SC-56` proves the fixture's own one row (idle 45 days, on the shelf) as a spec-level scenario, not this case whole
 - **US2-TC5-1** — the Mine row needs a chosen handle narrowing the board, which no walk drives; `SC-54`, `SC-55` and `board.walk.ts`'s own `SC-05` prove the other four filters and the unchosen-handle refusal, not the whole per-row case
-- **US2-TC7-1, US2-TC8-1, US2-TC9-1** — a reverted proof, a landed-by handle and a record nothing could read: no walk drives them. `US2-TC8-1` needs one change at Specified carrying two ❓ rows, a `landed_by:` handle and a behind UI design, which no fixture is; `change-page-delivery.walk.ts`'s `SC-59` reads the handoff's own rows — the days each rung spent, against the hand that took it — on the released fixture instead
+- **US2-TC7-1, US2-TC8-1, US2-TC9-1** — a reverted proof, a landed-by handle and a record nothing could read: no walk drives them. `US2-TC8-1` needs one change at Specified carrying two `❓` rows, a `landed_by:` handle and a behind UI design, which no fixture is; `change-page-delivery.walk.ts`'s `SC-59` reads the handoff's own rows — the days each rung spent, against the hand that took it — on the released fixture instead
+- **US2-TC11-1** - a receipt with no resolved ref reading Unknown is task 9.4's projection; `stage-change-page.test.tsx` decided the retired staging delivery row, so no test decides the case until 9.4's tests land
 - **US2-TC12-1, US2-TC13-1** - to be walked in task 10.10's walk: `demo-tech-owed` holds the second case's change at Designed naming the tech design; the first case's two rows land a file and a waiver beside the requirements in one push, which no fixture stages, so it stays manual past that walk
 - **US3-TC2-1** — its third step crosses onto the board's own Mine filter reading the handle My turn just remembered; `my-turn.walk.ts`'s `SC-62` and `SC-63` prove My turn's own half (asking, then reading without asking again) and stop there
 - **US3-TC4-1** — "the per-role Pending page is still reachable" is the manual's persistent nav, not a fact `MyTurnPage` itself renders; `my-turn.walk.ts`'s `SC-61` proves the empty state's own words

@@ -225,8 +225,9 @@
 
 **Expected Results:**
 
-* The proposal, the decisions, the journeys, the design where a surface moves, the tech design, the requirements and the plan are drafted on the branch, each drawn from the one before it.
-* The cases are drawn from the anchors, beside the requirements and never from the requirements themselves.
+* The proposal, the decisions, the journeys and the design where a surface moves are drafted on the branch, each drawn from the one before it.
+* The cases are drafted next, drawn from the anchors and never from the tech design or the requirements.
+* The tech design, the requirements and the plan follow on the branch, in that order.
 * Each draft's summary names the perspectives that read it, the branch carries a push per artifact, and nothing is on `main`.
 
 ### shared-planning-agent-rounds-US1-TC8-1: The summary's button is the word pressed
@@ -2723,12 +2724,15 @@ Runs once per row of **Test data**.
 
 ## Settled
 
-2026-10-05 product revision (`Q112` to `Q114`): the tech PIC is retired; Dev writes the tech design in the planning run, the product manager who accepts the plan challenges it, and a question the tech design cannot settle is a Raised row, never a dated wait. The questions its blind pass asked were already answered:
+2026-10-05 product revision (`Q112` to `Q114`), revised 2026-10-06: the tech PIC is retired; Dev writes the tech design in the planning run, the engineer who will build the change challenges it before the plan is accepted, and a question the tech design cannot settle is a Raised row, never a dated wait. The questions its blind passes asked were already answered:
 
-- The product manager reads and challenges the tech design's summary in the change's thread, where every round's summary and questions arrive and where the agent answers a challenge; a terminal runs the same round - the page's Round, step 5, and the requirement that a remark settles a question asked, with `Q112`.
+- The engineer who will build the change reads and challenges the tech design's summary in the change's thread, where every round's summary and questions arrive and where the agent answers a challenge; a terminal runs the same round - the page's Round, step 5, and the requirement that a remark settles a question asked, with `Q112`.
 - A Raised row lands as a numbered decisions row, answered in the thread like any other, `Q<n>: <answer>` or `Q<n>` alone; acceptance is `pnpm run spec:accept`, refused while a row is open, and that refusal is `shared/planning/change-stages`' own - `Q10`, `Q113`, and `stage-changes-and-notify-hands`' `Q80`.
-- The summary does not state that the requirements and the suite are whole: the product manager judges that by reading them, and the summary carries the perspectives, the findings that stood and each question with its recommendation - `Q112`, `Q9` and the round's one-reply rule.
+- The summary does not state that the requirements and the suite are whole: the human who accepts the plan judges that by reading them, and the summary carries the perspectives, the findings that stood and each question with its recommendation - `Q112`, `Q9` and the round's one-reply rule.
 - The designer's dated wait for a frame nobody drew is written by the round drafting `ui-design.md`, and a behind artifact holds it no more than a tick - the requirement that a draft waits for what only its hand can give, `Q58` and `Q5`.
+- The engineer is told to challenge the tech design by the Planned Your turn message they already get, before acceptance, with no new turn or message - `Q116`, with `stage-changes-and-notify-hands`' `Q95`.
+- The product manager or the named owner accepts the plan, the Change Stages page's Stages row 5; a case names them as the human who accepts it - `Q116`.
+- The product manager answers a Raised row about a mechanism the tech design cannot settle, with the engineer - `Q116`, with `stage-changes-and-notify-hands`' `Q97`.
 
 ### shared-planning-agent-rounds-US9-TC11-1: The change page mirrors the thread and says what the hands are told
 
@@ -2767,7 +2771,9 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-Run: 2026-10-05, revision pass for `Q112` to `Q114`: QA1 revised `US3-TC1-1` to `US3-TC4-1` over the renamed journey, recast `US3-TC4-1` from the tech PIC's dated wait to a Raised row holding acceptance, and moved `US4-TC13-1` and `US5-TC7-1` off the retired role; Dev, without reading them, revised the journey lines of `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25` and `shared-planning-agent-rounds-SC-31`, retired shared-planning-agent-rounds-SC-49 and shared-planning-agent-rounds-SC-50 (retired by Q113) with the requirement that wrote the wait, and wrote `shared-planning-agent-rounds-SC-108` under task group 11. QA2 aligned the US3 heading and its actor to the journey the product manager renamed after QA1, `admin(product manager of <change>)`, a wording alignment rather than a re-reading, and joined the two on anchors; the dispositions are marked 2026-10-05 below.
+Run: 2026-10-06, rerun on the revised anchors (`Q112` to `Q115`): QA1, reading the isolated input the 2026-09-19 line names with this section stripped, revised `US3-TC1-1` to `US3-TC4-1` onto the journey renamed to the engineer who will build the change, added `US8-TC7-1` for a failed run-sheet row, and backticked the glyphs in `US2-TC7-1` and `US4-TC4-1`; Dev, without reading them, moved `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25`, `shared-planning-agent-rounds-SC-31` and `shared-planning-agent-rounds-SC-108` to the engineer, put the cases before the tech design in `shared-planning-agent-rounds-SC-71` and dropped the tech design from the cases' upstream, and wrote tasks 11.4 and 11.5. QA2 joined the two on anchors, folded `shared-planning-agent-rounds-SC-61a` with task 11.6, and landed QA1's three questions on `Q116`; the dispositions are marked 2026-10-06 below. No `<v>` moved: every case touched is a draft no review has read and no `trace:case` marker carries, so a rewrite is a restyle, not a behaviour change against a reviewed case.
+
+Run: 2026-10-05, revision pass for `Q112` to `Q114`: QA1 revised `US3-TC1-1` to `US3-TC4-1` over the renamed journey, recast `US3-TC4-1` from the tech PIC's dated wait to a Raised row holding acceptance, and moved `US4-TC13-1` and `US5-TC7-1` off the retired role; Dev, without reading them, revised the journey lines of `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25` and `shared-planning-agent-rounds-SC-31`, retired shared-planning-agent-rounds-SC-49 and shared-planning-agent-rounds-SC-50 (retired by Q113) with the requirement that wrote the wait, and wrote `shared-planning-agent-rounds-SC-108` under task group 11. QA2 joined the two on anchors; the dispositions are marked 2026-10-05 below, and the challenger they named moved to the engineer on 2026-10-06.
 
 Run: 2026-09-21, fix pass on the landing gate: wrote `US2-TC9-1` for the group landing refused while the branch holds a text of a schema artifact `main` does not, one case over the branch states it meets, and `US9-TC13-1` for the fix pass's row refused for the reader or the verifier it leaves out; `US2-TC8-1` now names the relay's tests and the relay-mode landing's alone, the terminal landing's own file deciding `US2-TC6-1`, `US2-TC9-1` and `US9-TC13-1`. Later that day, the archive gate: wrote `US8-TC6-1` for the preflight refusing a change whose last group's row names no walk or whose rounds hold no `whole change` row, and widened its table on the readers' verdicts to the rows `main` holds, the walk on an earlier group, the whole read before the last group and the capability's durable journeys.
 
@@ -2821,18 +2827,28 @@ Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Fe
 
 2026-10-05, each revised case against the revised scenarios:
 
-* `shared-planning-agent-rounds-US3-TC1-1`, the plan's summary of one screen, each question with its recommendation → `shared-planning-agent-rounds-SC-01`; its first result, the proposed system, its data flow and the options rejected, was the journey's own statement and `Q112`'s with no scenario beside it, and QA2 raised it to Dev, who folded it into `shared-planning-agent-rounds-SC-03` → `shared-planning-agent-rounds-SC-03`. The same pass reworded the Serves and WHEN lines of `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25`, `shared-planning-agent-rounds-SC-31` and `shared-planning-agent-rounds-SC-108` to the product manager who accepts the plan, and the product manager reworded `ui-design.md`'s Challenge recorded row and `proposal.md`, revised the tech PIC out of `decisions.md`'s goals and marked `Q16` superseded by `Q113`; no case moved.
-* `shared-planning-agent-rounds-US3-TC2-1`, the product manager's challenge in the thread settling a numbered row with the agent's answer, the reply naming the readers it re-ran, and the plan still not accepted → `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-12`; a remark accepts nothing because acceptance is `pnpm run spec:accept` alone, as `## Settled` says.
+* `shared-planning-agent-rounds-US3-TC1-1`, the plan's summary of one screen, each question with its recommendation → `shared-planning-agent-rounds-SC-01`; its first result, the proposed system, its data flow and the options rejected, was the journey's own statement and `Q112`'s with no scenario beside it, and QA2 raised it to Dev, who folded it into `shared-planning-agent-rounds-SC-03` → `shared-planning-agent-rounds-SC-03`. The same pass reworded the Serves and WHEN lines of `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25`, `shared-planning-agent-rounds-SC-31` and `shared-planning-agent-rounds-SC-108` to the challenger of that day, since moved to the engineer, and the product manager reworded `ui-design.md`'s Challenge recorded row and `proposal.md`, revised the tech PIC out of `decisions.md`'s goals and marked `Q16` superseded by `Q113`; no case moved.
+* `shared-planning-agent-rounds-US3-TC2-1`, a challenge in the thread settling a numbered row with the agent's answer, the reply naming the readers it re-ran, and the plan still not accepted → `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-12`; a remark accepts nothing because acceptance is `pnpm run spec:accept` alone, as `## Settled` says.
 * `shared-planning-agent-rounds-US3-TC3-1`, each tech design finding that stood naming its principle, and the row naming the perspectives run and what stood → `shared-planning-agent-rounds-SC-31`, `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-51`.
 * `shared-planning-agent-rounds-US3-TC4-1`, a question the tech design cannot settle written as a Raised row, no `awaiting: tech-design:` line, and the summary carrying it with its recommendation → `shared-planning-agent-rounds-SC-108`, `shared-planning-agent-rounds-SC-01`. The acceptance refused naming the row and taken once it lands is `shared-planning-change-stages-SC-87`'s, the refusal the requirement leaves to that capability.
 * `shared-planning-agent-rounds-US4-TC13-1`, a reply overturning a row the round decided, the designer's now rather than the retired tech PIC's → `shared-planning-agent-rounds-SC-21`, its actor alone moved.
 * `shared-planning-agent-rounds-US5-TC7-1`, a tick and the designer's dated wait taken while `tasks.md` is behind → `shared-planning-agent-rounds-SC-38`, `shared-planning-agent-rounds-SC-20`. QA2 recast its second step: the wait is the round's to write as it drafts `ui-design.md`, not the engineer's, as `## Settled` says.
 
+2026-10-06, each case the rerun touched against the revised scenarios:
+
+* `shared-planning-agent-rounds-US3-TC1-1`, the engineer reading the tech design's summary in the thread: the proposed system, its data flow and the options rejected → `shared-planning-agent-rounds-SC-03`; each numbered question with its recommendation → `shared-planning-agent-rounds-SC-01`.
+* `shared-planning-agent-rounds-US3-TC2-1`, the engineer's challenge in the thread written into a numbered row with the agent's answer → `shared-planning-agent-rounds-SC-13`; the reply naming the perspectives it re-ran → the four moves' Re-read by what it touched, as `shared-planning-agent-rounds-SC-12` walks it; the plan still not accepted, since acceptance is `pnpm run spec:accept` alone.
+* `shared-planning-agent-rounds-US3-TC3-1`, each tech design finding naming its principle and the row naming what stood → `shared-planning-agent-rounds-SC-31`, `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-51`.
+* `shared-planning-agent-rounds-US3-TC4-1`, the Raised row and no dated wait → `shared-planning-agent-rounds-SC-108`, the summary carrying it → `shared-planning-agent-rounds-SC-01`; step 4's answer is the Answer move under `Q113`, given by the product manager under `Q116`; steps 3 and 5, the acceptance refused and then taken by the human who accepts, are `shared-planning-change-stages-SC-87`'s. The placeholder for that human stands: the Change Stages page's Stages row 5 names the product manager or the named owner, `Q116`.
+* `shared-planning-agent-rounds-US1-TC7-1`, the plan wake's chain → `shared-planning-agent-rounds-SC-71`. QA2 joined the new order to its results - the cases drafted after the design and never from the tech design or the requirements, then the tech design, the requirements and the plan - a result on the run the case already walks; its `<v>` stays.
+* `shared-planning-agent-rounds-US8-TC7-1`, a failed run-sheet row reaching the thread only as QA's sentence: `Q115`'s rule stood as a bullet on the run sheet's requirement with no scenario beside it. Folded as `shared-planning-agent-rounds-SC-61a`, with task 11.6 for `tcs-run-sheet` and its test.
+* `shared-planning-agent-rounds-SC-25` stays out of suite above; its Serves line alone moved.
+
 ### Rejected
 
 None. No case read a non-goal as behaviour, and none took the stage, the direct messages or the Behind chip - `shared/planning/change-stages`' - for this capability's.
 
-2026-10-05: `US3-TC1-1`'s result that the summary names the requirements and the cases so their wholeness can be judged - a misreading of `Q112`, under which the product manager judges wholeness by reading the requirements and the suite; the summary's content is the round's one reply. The result was dropped and the case kept.
+2026-10-05: `US3-TC1-1`'s result that the summary names the requirements and the cases so their wholeness can be judged - a misreading of `Q112`, under which the human who accepts the plan judges wholeness by reading the requirements and the suite; the summary's content is the round's one reply. The result was dropped and the case kept.
 
 ### Escalated
 
@@ -2850,14 +2866,20 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 * **The agent's own `reviewed:` landing** → `Q22`, with the row above: the landed artifacts and the ticked groups owe rows, and a read that ran no perspective owes none.
 * **What each answer to a moved goal does** → `Q26`, taken as extend, supersede and split each doing something to the change. Folded as `shared-planning-agent-rounds-SC-47`, and `US7-TC2-1` recast onto what each answer does.
 * **Where the product manager's read of the requirements is walked** → `Q27`. In `shared/planning/change-stages`, as the hand's move at Specified; here `shared-planning-agent-rounds-SC-06` states the two readings' exemption alone, and no journey and no case of this capability walks the read.
-* **A remark that touches a page's marked lines** → `Q28`. From the product manager it is applied as written; from any other hand it becomes a ❓ line for the product manager. Folded as `shared-planning-agent-rounds-SC-16`, with `US2-TC7-1` added.
+* **A remark that touches a page's marked lines** → `Q28`. From the product manager it is applied as written; from any other hand it becomes a `❓` line for the product manager. Folded as `shared-planning-agent-rounds-SC-16`, with `US2-TC7-1` added.
 
 2026-10-05, the revision pass's four questions, each answered by an earlier row and written in `decisions.md`'s `## Raised` as landing there:
 
-* **Where the product manager reads and challenges the tech design's summary** → `Q112`, settled: in the change's thread, where every round's summary arrives; `US3-TC1-1` to `US3-TC4-1` stand.
+* **Where the tech design's summary is read and challenged** → `Q112`, settled: in the change's thread, where every round's summary arrives; `US3-TC1-1` to `US3-TC4-1` stand.
 * **How a Raised row is answered, and how acceptance is said** → `Q113`, with `Q10` and `stage-changes-and-notify-hands`' `Q80`, settled: a `Q<n>` reply on the numbered row it lands as, and `pnpm run spec:accept`, refused while the row is open; `US3-TC4-1` stands.
-* **Whether the summary states that the requirements and the suite are whole** → `Q112`, settled: the product manager judges it; see Rejected.
+* **Whether the summary states that the requirements and the suite are whole** → `Q112`, settled: the human who accepts the plan judges it; see Rejected.
 * **Who writes the designer's dated wait in `US5-TC7-1`** → `Q58`, settled: the round drafting `ui-design.md`; the case is recast, see Folded.
+
+2026-10-06, the rerun's three questions, each settled by `stage-changes-and-notify-hands` and landed on `Q116`:
+
+* **How the engineer is told to challenge the tech design** → `Q116`, with that change's `Q95`: the Planned Your turn message is the prompt; `US3-TC1-1` to `US3-TC4-1` stand.
+* **Who accepts the plan** → `Q116`, the Change Stages page's Stages row 5: the product manager or the named owner; `US3-TC4-1`'s placeholder stands.
+* **Who answers a tech Raised row** → `Q116`, with that change's `Q97`: the product manager, with the engineer; `US3-TC4-1` stands.
 
 ### Out of suite
 
@@ -2907,10 +2929,10 @@ Slack thread either.
 | `US2-TC4-1` | Which readers a round dispatched, inside the session |
 | `US2-TC5-1` | The dated wait a design round writes, inside the session |
 | `US2-TC7-1` | A remark in the thread on a page's marked lines |
-| `US3-TC1-1` | The plan's summary as the planning run posts it |
+| `US3-TC1-1` | The tech design's summary as the planning run posts it, read by the engineer |
 | `US3-TC2-1` | A challenge typed in the thread, and the answer to it |
 | `US3-TC3-1` | The readers' own findings, inside the session |
-| `US3-TC4-1` | The Raised row the planning run writes, and an acceptance refused and then taken, by the product manager |
+| `US3-TC4-1` | The Raised row the planning run writes, the product manager's answer in the thread, and an acceptance refused and then taken by the human who accepts the plan |
 | `US4-TC1-1` | The question as the thread carries it |
 | `US4-TC2-1` | An answer typed in the thread |
 | `US4-TC3-1` | A question id typed alone in the thread |
@@ -2943,6 +2965,7 @@ Slack thread either.
 | `US7-TC3-1` | A landing refused in the thread while the question is open |
 | `US8-TC1-1` | The run tab, written into the run spreadsheet |
 | `US8-TC3-1` | Both ends of the gate, in the run spreadsheet |
+| `US8-TC7-1` | A row marked failed in the run spreadsheet, and QA's sentence typed in the thread |
 | `US8-TC4-1` | A push, a staging deploy and a release cut |
 | `US8-TC5-1` | Nothing drives it yet: `scripts/openspec/decided-by.test.mjs` proves the line and its refusals, and the case walks the flip riding the test's commit |
 | `US9-TC1-1` | The page and `rounds.md` read together after three real rounds |

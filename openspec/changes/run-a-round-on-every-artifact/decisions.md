@@ -140,6 +140,7 @@
 | Q113 | Does a requirement that reaches the tech design still write a dated wait on its author? | No: Dev writes the tech design and the scenarios in one `/planning-dev` run, so the wait has nobody to wait on; a question the design cannot settle is a Raised row, answered like any numbered row - `Q<n>: <answer>` or `Q<n>` for the recommendation - and `pnpm spec:accept` refuses while one is open - product owner's word, 2026-10-05 (recommended) | Keeping the `awaiting: tech-design:` line, addressed to the engineer |
 | Q114 | Does this change revise its own delta, or does `stage-changes-and-notify-hands` carry it? | This change revises its delta in place, so one requirement never carries two deltas - product owner's word, 2026-10-05, `stage-changes-and-notify-hands` Q90 | A second `agent-rounds` delta in `stage-changes-and-notify-hands` |
 | Q115 | Does a failed run-sheet row reach the change's thread on its own? | No: QA writes the sentence in the thread, naming the case id, and the sheet stays the record of the walk; no new sender - product owner took the recommendation, 2026-10-06 | The sheet posting each failure to the thread itself, which needs a sender and its keying |
+| Q116 | How is the engineer told to challenge the tech design, who accepts the plan, and who answers a Raised row about a mechanism? | As `stage-changes-and-notify-hands` settles them, recorded here so this change's Raised rows land in this file: Planned's Your turn message is the engineer's prompt (its Q95); the product manager or the named owner accepts, the Change Stages page's Stages row 5; the product manager answers a tech Raised row, with the engineer (its Q97) - 2026-10-06 | Answering them again in this change, which gives one rule two homes |
 
 ## Raised
 
@@ -155,7 +156,8 @@ The revision on 2026-10-05 settles `Q112` to `Q114`: the tech PIC is retired,
 Dev writes the tech design in the planning run, and, revised on 2026-10-06,
 the engineer who will build the change challenges it before acceptance; the
 same day settles `Q115`. Its blind pass raised four questions, each answered
-by an earlier row.
+by an earlier row. The rerun on 2026-10-06 raised three more, each settled by
+`stage-changes-and-notify-hands` and recorded here as `Q116`.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
@@ -176,3 +178,6 @@ by an earlier row.
 | shared/planning/agent-rounds | How is a Raised row answered, and how is acceptance said: a `Q<n>` reply in the thread, `pnpm run spec:accept`, or both? | Q113 |
 | shared/planning/agent-rounds | Must the plan's summary state that the requirements and the suite are whole, or does the product manager judge that by reading them? | Q112 |
 | shared/planning/agent-rounds | Once the tech PIC's wait is retired, who writes the dated wait on the designer for a frame nobody drew: the round drafting the design, or any hand at a terminal? | Q58 |
+| shared/planning/agent-rounds | How is the engineer who will build the change told to read and challenge the tech design's summary before the plan is accepted: by the Planned turn, or by a mention when the summary posts? | Q116 |
+| shared/planning/agent-rounds | Who accepts the plan once the engineer has challenged the tech design: the product manager, the engineer, or a named owner? | Q116 |
+| shared/planning/agent-rounds | Who answers a Raised row about a mechanism the tech design cannot settle: the product manager who resolves every other question, or the engineer who challenged the design? | Q116 |

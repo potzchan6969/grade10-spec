@@ -136,6 +136,10 @@ The revision on 2026-10-05 settles Q85 to Q89: the Design stage draws the UI
 design alone, the tech design proves Specified, and the tech PIC is retired.
 Its blind pass raised four questions, each answered by an earlier row; its
 reconciliation raised two, Q90 and Q91, which the product owner answered the same day.
+The revision on 2026-10-06 settles Q92 to Q98: an open Raised row holds
+acceptance alone, the engineer challenges the tech design at Planned, and an
+open Raised row is not an open question. Its blind pass raised five questions,
+each answered by one of those rows.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
@@ -157,3 +161,8 @@ reconciliation raised two, Q90 and Q91, which the product owner answered the sam
 | shared/planning/change-stages | What does the tech design's row read before Specified? | Q86 |
 | shared/planning/change-stages | Which change revises `run-a-round-on-every-artifact`'s `shared/planning/agent-rounds` delta, which still names the retired tech PIC? | Q90 |
 | shared/planning/change-stages | Who takes a change at Specified, when the scenario, the whose-turn and Hands tables, the page and the manual each name different hands? | Q91 |
+| shared/planning/change-stages | Does an open Raised row count as an open question in the counts, My turn and the digest? | Q98 |
+| shared/planning/change-stages | Is the product manager told of an open Raised row when the change moves to Planned? | Q98 |
+| shared/planning/change-stages | Does the Specified card or turn name the open Raised rows it waits on? | Q98 |
+| shared/planning/change-stages | Is the engineer's challenge of the tech design observable anywhere before acceptance? | Q95 |
+| shared/planning/change-stages | Does `spec:accept` wait for the engineer's challenge of the tech design? | Q96 |

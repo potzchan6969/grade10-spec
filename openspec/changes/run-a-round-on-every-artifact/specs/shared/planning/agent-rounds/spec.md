@@ -1241,6 +1241,15 @@ and SHALL say how many it left out.
 - **AND** it says how many it left out
 - **AND** the change page shows the automated count against the suite's total
 
+#### Scenario: shared-planning-agent-rounds-SC-61a - A failed row reaches the thread as QA's sentence
+**Serves:** shared-planning-agent-rounds-US-08 - the QA teammate says what failed where the change's hands already read
+
+- **GIVEN** a run sheet holding a case still manual
+- **WHEN** QA marks that case failed on the sheet
+- **THEN** the sheet posts nothing to the change's thread
+- **AND** QA's one sentence in the thread names the case id and what failed
+- **AND** the sheet still holds the case marked failed
+
 ### Requirement: The suite runs on every push and every cut
 
 The change's end-to-end suite SHALL run on every push to `main`, and its smoke
