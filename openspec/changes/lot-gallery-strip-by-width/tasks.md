@@ -4,7 +4,7 @@
 - [ ] 1.2 Cover the one-image and empty `ListingLotGallery` boundaries `shared-ui-auction-listing-SC-49`, `shared-ui-auction-listing-SC-56`
 - [ ] 1.3 Update the existing automated details-gallery cases for one and empty images with the no-navigation assertions `grade10-site-auction-listing-media-SC-27`, `grade10-site-auction-listing-media-SC-28`
 
-## 2. Build the local-width gallery presentation (grade10)
+## 2. Build the local-width gallery presentation (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Keep `ListingLotGallery`'s rail decision in its local gallery container and preserve the active image and controls across presentations `shared-ui-auction-listing-SC-47`, `shared-ui-auction-listing-SC-48`, `shared-ui-auction-listing-SC-49`, `shared-ui-auction-listing-SC-56`
 - [ ] 2.2 Update the shared-gallery stories and Grade10 site details-page evidence for wide and stacked containers `grade10-site-auction-listing-media-SC-29`, `grade10-site-auction-listing-media-SC-30`
