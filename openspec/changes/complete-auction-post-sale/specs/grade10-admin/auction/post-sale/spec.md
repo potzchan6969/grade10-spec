@@ -611,6 +611,7 @@ transfer or a payment proof on WhatsApp, at that phone number.
   contact
 - **AND** no payment-provider identifier is shown in their place
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kjb rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-203 - The order page shows the number to reach the winner on
 **Serves:** post-sale-US-03 - Operator collects payment
 
@@ -1359,7 +1360,11 @@ from the order's page.
 **Dispatch** - On a Preparing Shipment order, the operator SHALL record dispatch with
 the carrier, the tracking number and, when there is one, a link to the
 carrier's tracker, reading the delivery address the lot goes to. The order
-SHALL then derive as Shipped.
+SHALL then derive as Shipped. The winner's carrier link, per
+`grade10-site/auction/winner-order` "Winner Order makes the tracking number the
+carrier link", SHALL be that tracker link, the operator's only source for it.
+With none given, the winner reads the tracking number as plain text, still with
+no carrier name and no Track shipment control.
 
 **Delivery** - On a Shipped order, the operator SHALL record the date it was
 delivered, no later than today, with the carrier's proof when there is one:

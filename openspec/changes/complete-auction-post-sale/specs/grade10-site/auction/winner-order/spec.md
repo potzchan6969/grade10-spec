@@ -141,6 +141,7 @@ per "The delivery address locks when the invoice is sent".
 - **AND** a confirmation carrying the home address and bank transfer is refused
 - **AND** the order holds no delivery address and no method
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-7y2 rev=1 -->
 #### Scenario: winner-order-SC-248 - A currency with no card fee rule does not offer card
 **Serves:** Payment method - card only where Finance set a card fee rule
 
@@ -153,6 +154,7 @@ per "The delivery address locks when the invoice is sent".
 - **AND** a confirmation carrying card for that order is refused
 - **AND** the order holds no delivery address and no method
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-cz1 rev=1 -->
 #### Scenario: winner-order-SC-249 - A currency with neither method cannot confirm setup
 **Serves:** Payment method - card only where Finance set a card fee rule
 
@@ -166,6 +168,7 @@ per "The delivery address locks when the invoice is sent".
 - **AND** the order is still Awaiting Setup, holding no delivery address and no
   method
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-ii6 rev=1 -->
 #### Scenario: winner-order-SC-257 - The setup deadline runs where no method is offered
 **Serves:** winner-order-US-07 - Winner misses the address deadline
 
@@ -179,13 +182,15 @@ per "The delivery address locks when the invoice is sent".
 ### Requirement: An unfinished card payment leaves the invoice payable
 
 Pay Now SHALL start a hosted card payment session for the current invoice. Its
-outcome SHALL read as follows.
+outcome SHALL read as follows. The two unfinished rows hold before the payment
+deadline; for a session started in time that ends unpaid after it, "The payment
+deadline is fixed when the invoice is sent" governs.
 
 | Session outcome | The winner sees | Order |
 | --- | --- | --- |
 | Completed | **Confirming payment** until Grade10 records the invoice `paid` | Preparing Shipment once paid |
-| Timed out | Payment was not completed; Pay Now is available again | Stays Pending Payment |
-| Abandoned or cancelled by the winner | Payment was not completed; Pay Now is available again | Stays Pending Payment |
+| Timed out before the deadline | Payment was not completed; Pay Now is available again | Stays Pending Payment |
+| Abandoned or cancelled by the winner before the deadline | Payment was not completed; Pay Now is available again | Stays Pending Payment |
 | Declined | The refusal, per "The winner pays a sent invoice by the method it was sent for" | Stays Pending Payment |
 
 Pay Now after an unfinished session SHALL start a fresh session. An unfinished
@@ -332,6 +337,7 @@ multi-line field that shares TextInput's label, status and message contract.
 - **AND** the winner cannot edit To or Subject
 - **AND** Copy Message remains the footer control for the full ready email
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-81q rev=1 -->
 #### Scenario: winner-order-SC-250 - Copy Message confirms through its own state
 **Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
