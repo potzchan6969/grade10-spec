@@ -1,12 +1,5 @@
 # Post-Sale - delta
 
-## Purpose
-
-Operators work every won lot's auction order in one Orders workspace: a
-worklist by segment, a page per order that says what to do next, the invoice
-quoted with the fee its payment method decides, payment collected, and
-dispatch and delivery recorded, with every change on one timeline.
-
 ## Feature set
 
 - Queue

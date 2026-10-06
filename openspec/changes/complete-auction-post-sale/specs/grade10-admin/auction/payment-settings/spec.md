@@ -1,11 +1,5 @@
 # Payment Settings - delta
 
-## Purpose
-
-Lets an operator with payment processing keep, from the Auction admin section,
-the minimum buyer premium per currency and the Stripe card fee rule that prices
-a card invoice's payment processing fee.
-
 ## Feature set
 
 - Payment settings
