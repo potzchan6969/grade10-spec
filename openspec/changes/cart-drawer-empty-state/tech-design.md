@@ -11,8 +11,7 @@ store commit that carries the block.
 What is missing is evidence. No story or test cites the scenarios this change
 issues, `CartDrawer.FetchingOnOpen` has no play function, and the Grade10
 tests at `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx:920`, `:938`
-and `:955` cite `shared-ui-store-cart-SC-02` to `shared-ui-store-cart-SC-04`,
-which retire with the five-row requirement. The Grade10 host also breaks the
+and `:955` cite the five-row scenarios, which retire with their requirement. The Grade10 host also breaks the
 unread-cart clause: a failed review ends its `loading` over a basket it never
 read (`CartDrawerHost.tsx:593`, `:616-617`). The work is tests, the re-cited
 host tests, that one host fix and the walk.
@@ -44,11 +43,11 @@ what renders. These decisions govern where each scenario is proven.
 
 ### One empty decision per surface, both derived
 
-The drawer decides emptiness from its visible lines, after it drops
-`unavailable` lines, and only when not loading
-(`cart-drawer.tsx:1474`, `:1523`). The body decides the same from the items
-it receives (`cart-drawer.tsx:464`). Both stay derived from props on every
-render; neither stores an empty flag.
+The drawer drops `unavailable` lines and hides the footer whenever no visible
+line is left, loading or not (`cart-drawer.tsx:1474`, `:1523`). The body shows
+the empty state for the items it receives only when not loading
+(`cart-drawer.tsx:464`). Both stay derived from props on every render; neither
+stores an empty flag.
 
 | Cart | Loading | Body | Header badge | Footer |
 | --- | --- | --- | --- | --- |
@@ -57,14 +56,14 @@ render; neither stores an empty flag.
 | No visible lines | Yes | Blank | Skeleton | Hidden |
 | No visible lines | No | `EmptyState`: cart icon, title, description where supplied | Hidden | Hidden |
 
-**Rejected — show the empty state while loading.** The drawer cannot yet know
+**Rejected - show the empty state while loading.** The drawer cannot yet know
 the cart is empty, so the shopper would read a wrong answer before the read
 returns.
 
-**Rejected — a placeholder row skeleton for a cart with no lines.** Nothing is
+**Rejected - a placeholder row skeleton for a cart with no lines.** Nothing is
 known to load, so a row skeleton draws lines that may not exist.
 
-### Prove the block in stories, the contract in the entry test
+### Prove the block in stories, the contract in the entry test, the unread cart in the host
 
 | Scenario | Proven in |
 | --- | --- |
@@ -72,16 +71,17 @@ known to load, so a row skeleton draws lines that may not exist.
 | `shared-ui-store-cart-SC-22` | The same test, as type assertions that `emptyTitle` is required and `emptyDescription` optional on both types; `pnpm run typecheck` runs them |
 | `shared-ui-store-cart-SC-23`, `shared-ui-store-cart-SC-24` | `CartDrawer` stories `Default` (two lines) and `OverflowItems` |
 | `shared-ui-store-cart-SC-25`, `shared-ui-store-cart-SC-41` | `CartDrawer` stories `EmptyState` and a new `EmptyStateWithoutDescription` |
-| `shared-ui-store-cart-SC-45` | A new `CartDrawer` story whose every line is `soldOut` |
+| `shared-ui-store-cart-SC-45` | A new `CartDrawer` story `OnlySoldOutLines`, whose every line is `soldOut` |
 | `shared-ui-store-cart-SC-44` | `CartDrawerBody` story `Empty` |
-| `shared-ui-store-cart-SC-08`, `shared-ui-store-cart-SC-40` | `CartDrawer` stories under a controlled `loading`, with lines and with none |
-| `shared-ui-store-cart-SC-42` | A new `CartDrawer` story whose every line turns `unavailable` after the open read |
+| `shared-ui-store-cart-SC-08`, `shared-ui-store-cart-SC-40` | New `CartDrawer` stories `LoadingWithLines`, with an applied promo so the Discount row has a skeleton, and `LoadingNoLines`, both under a controlled `loading` held in the story's args, so a tester ends the read from the Controls panel |
+| `shared-ui-store-cart-SC-42` | A new `CartDrawer` story `OnlyDelistedLines`, opened by an Open Cart button, whose every line turns `unavailable` after the open read |
+| `shared-ui-store-cart-SC-48` | The Grade10 host tests in `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx`, since the block cannot tell an unread cart from an empty one |
 
 Empty-state parts are read through the design-system slots
 (`data-slot="empty-state-icon"`, `empty-state-description`,
 `empty-state-actions`), so a test does not depend on the copy's words.
 
-**Rejected — a separate unit-test file per scenario.** The stories already
+**Rejected - a separate unit-test file per scenario.** The stories already
 render each state under the Storybook vitest project; a second harness would
 prove the same render twice.
 
@@ -98,18 +98,26 @@ test at `:622` loses the same query.
 The host computes `loading = !reviewUnchecked && (isOpening ||
 !basket.hasData || !review.hasData)` (`CartDrawerHost.tsx:616-617`). A failed
 review sets `reviewUnchecked` (`:593`), which ends loading even when the basket
-was never read; the unread basket falls back to `emptyCart()`
-(`packages/grade10-store/frontend/src/features/orders/cart/presentation/hooks/useCart.ts:103`),
-and the review query runs on its own
-(`useCartReview.ts:72-79` beside it). A first open whose review
-fails before the basket answers shows the empty state behind the Retry toast.
+was never read, and an unread basket falls back to `emptyCart()`
+(`packages/grade10-store/frontend/src/features/orders/cart/presentation/hooks/useCart.ts:103`).
+The review query (`useCartReview.ts:74-81` beside it) is enabled only once the
+basket is ready (`useCartPresentation.ts:35-36`), but the open handler
+refetches the review after `refreshBasket` even when that read failed
+(`CartDrawerHost.tsx:409-414`), and a refetch ignores `enabled`. So a first open
+whose basket read and review both fail shows the empty state behind the Retry
+toast; a failed basket read alone, or a basket still pending, never reaches it.
 
 The fix is `loading = !basket.hasData || (!reviewUnchecked && (isOpening ||
-!review.hasData))`: an unread basket always holds loading, and a failed review
-over a read basket still shows its lines unchecked. A host test for that first
-open cites `shared-ui-store-cart-SC-40`.
+!review.hasData))`: an unread basket always holds loading. A failed review over
+a read basket keeps the state `add-store-cart-drawer-ui` gives it: its lines
+with the unchecked price label and Checkout disabled (`CartDrawerHost.tsx:593-628`).
+Two host tests cite `shared-ui-store-cart-SC-48`: a first open that fails both
+`getCart` and `reviewCart`, which fails before the fix, and a first open whose
+`getCart` never answers. Both expect the drawer loading with no empty state and
+no footer. The cart-validation test at `CartDrawer.test.tsx:748`, whose first
+basket read fails, also expects no empty state.
 
-**Rejected — raise it against `add-store-cart-drawer-ui`.** The unread-cart
+**Rejected - raise it against `add-store-cart-drawer-ui`.** The unread-cart
 clause is this change's requirement, so this change proves and fixes it.
 
 ## Risks / Trade-offs
