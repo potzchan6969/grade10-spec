@@ -4,7 +4,7 @@
 
 **As a** collector with an order in progress,
 **I want** one badge that tells me whether my order is being prepared, on its
-way, finished, cancelled, or refunded,
+way, finished, canceled, or refunded,
 **so that** I am never shown a blank status and never shown a status the surface
 invented for a combination nobody defined.
 

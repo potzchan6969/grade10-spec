@@ -2,97 +2,105 @@
 
 ## Why
 
-A collector who opens their order history today has no reliable answer to "where
-is my order". The Store reads Shopify's `displayFinancialStatus` and
-`displayFulfillmentStatus` as separate facts, and every surface that wants to
-show a single status pill decides for itself how to collapse them. Order history
-renders a badge, order detail renders a stepper, and nothing states which
-Shopify combination produces which badge. Two surfaces can disagree about the
-same order, and no test can catch it because no requirement says what the right
-answer is.
+A collector who opens an order cannot reliably tell where it stands. Your
+Orders and Order Details share one interim adapter, `customerOrderStatus` in
+the grade10 application's `apps/frontend/grade10/src/pages/orders/orderStatus.ts`,
+and no requirement says what its answer should be. It differs from the
+[Order Status](../../../docs/prds/products/grade10-site/commerce/order-status.md)
+page in five ways:
 
-The gap is widest exactly where a collector is most anxious. A partially
-refunded order, an order held before fulfilment, a voided payment — these are
-the states that generate support contact, and they are the states no surface
-currently has a defined answer for. An undefined combination today renders
-whatever the surface happens to pass.
+- **Completed** — a paid, fully fulfilled order reads Completed, archived or
+  not (`orderStatus.ts:36-38`)
+- **Till sales** — a paid counter sale reads Completed by where it was sold,
+  whatever its fulfilment (`orderStatus.ts:27-29`)
+- **Partial refunds** — a partial refund reads the same as a full one, because
+  the Store's own status folds them together (`orderStatus.ts:25`)
+- **Held orders** — a held or scheduled order carrying a refund reads Refunded,
+  where the page keeps it Processing (`orderStatus.ts:25`)
+- **Failed checkouts** — a checkout that failed before Shopify recorded it
+  reads Canceled (`orderStatus.ts:22`); whether the badge covers it at all is
+  Q15
 
-This change names the mapping once, as a capability, so every surface derives
-the same badge from the same facts.
+A partly refunded, held or voided order is where a collector is most likely to
+write to support, and it is where the adapter has no defined answer.
 
-Measurement: order-status support contacts per hundred orders, and their share
-of total Store contacts. If a collector can read their own order state, they
-write in less. Partial-refund and on-hold orders are the segment to watch, since
-they are where the mapping does the most work.
+**Metric** — support contacts about order status per 100 orders, and their
+share of all Store contacts, with partly refunded and held orders watched as
+their own segment.
 
 ## What Changes
 
-- Introduces `grade10-site/commerce/order-status`: the mapping from an order's Shopify
-  facts to one customer-facing badge and an optional secondary note.
-- Defines five badges for this phase — Processing, Shipped, Completed, Canceled,
-  Refunded — derived by an ordered rule that resolves **every** combination of
-  the Shopify vocabularies, not only enumerated ones.
-- Defines the secondary note as an optional identifier the mapping emits, which
-  the i18n catalogs answer. The mapping never emits display copy.
-- Requires every Store surface that shows order status to derive it from this
-  mapping rather than deciding for itself.
+- **One rule** — introduces `grade10-site/commerce/order-status`: an order's
+  Shopify order, payment and fulfilment facts resolve to one of five badges,
+  Processing, Shipped, Completed, Canceled or Refunded, by an ordered rule that
+  resolves every combination
+- **Secondary note** — the rule may also name one note identifier, read with
+  the order's return state, which the message catalogs translate; whether a
+  surface shows it in this delivery is open (Q14)
+- **Every surface** — every Store surface that shows order status takes it
+  from this rule, which replaces the interim adapter
+- **Shared badge** — `OrderHistoryStatus` keeps its six variants and drops the
+  meaning it gave each one; Order Status defines what a Store order's badge
+  means
 
-The mapping replaces the source PRD's fifteen-step priority list. That list
-resolved badges only, could not produce the notes its own tables showed, and
-contradicted those tables for a held order carrying a partial refund. The
-ordered rule specified here reproduces all thirty confirmed PRD rows.
+The ordered rule replaces the source PRD's fifteen-step priority list, which
+resolved badges only and could not produce the notes its own tables showed.
+The rule was drawn from the thirty rows that PRD confirmed. Q9 and Q19 changed
+rule 4 since, and task 1.1 rechecks the rows once Q17 files them.
 
 ## Non-Goals
 
-- **"Ready for Pickup" is not emitted this phase.** Grade10 does not yet
-  distinguish pickup orders from shipped orders in Shopify. The shared badge
-  component keeps its `pickup` rung and its Figma counterpart untouched, because
-  pickup is a confirmed later phase; removing the rung would only mean adding it
-  back.
-- **No notification requirements.** A notification centre serving the whole
-  Grade10 ecosystem is in progress and will own its own spec. It is named here
-  as a future consumer of this mapping, not specified by it.
-- **No new component contract.** Rendering the secondary note is left to each
-  surface. Adding a note slot to the shared status badge is a component-contract
-  change with a Figma dependency, and belongs to whoever plans that delivery.
-- **No custom badges** beyond the five, and no merchant-configurable thresholds.
-- **Completed does not mean delivered.** It means fulfilled, paid, and archived.
-  Carrier-confirmed delivery remains outside what the Store reports.
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 
 ### New Capabilities
 
-- `grade10-site/commerce/order-status`: how an order's Shopify payment, fulfilment, and
-  order facts resolve to one customer-facing badge and an optional secondary
-  note, and the obligation on every surface that shows order status to use it.
+- `grade10-site/commerce/order-status`: how an order's Shopify order, payment
+  and fulfilment facts resolve to one badge, how its return state and those
+  facts choose an optional note identifier, and the obligation on every surface
+  that shows order status to use it.
 
 ### Modified Capabilities
 
-None. The mapping is additive: it defines a derivation no capability currently
-owns, and changes no existing requirement.
+- `shared/ui/store-order-history`: `Order status maps the six Status-set
+  variants` keeps the six accepted statuses and the consumer's label, and
+  replaces its meaning column with the rule that the consumer chooses the
+  status.
 
 ## Impact
 
-**Consuming surfaces.** Order history and order detail in the grade10
-application must derive their badge from this mapping. Neither surface's
-component contract changes; what changes is which value the application passes.
+**Consumers** — Your Orders and Order Details in the grade10 application
+derive their badge from this rule, and `orderStatus.ts` is deleted.
+`add-grade10-customer-order-pages` holds its completion behind this change
+(its `tech-design.md`, step 5) and names this capability in its deltas, as
+does `clarify-auction-shipping-progress-copy` in the auction's independence
+rule; both depend on the id `grade10-site/commerce/order-status`.
 
-**A conflict to resolve before archive.** The durable
-`shared/ui/store-order-history` capability defines its `completed` badge as
-delivered for an online order. That wording conflicts with this capability,
-where Completed means fulfilled, paid, and archived — never carrier-confirmed
-delivery. The order-status change needs its own delta against that shared
-component contract before it can archive.
+**Delivery facts for the tech design:**
 
-**Delivery facts to preserve:**
+1. **Facts the Store order lacks** — the typed Store order carries a
+   normalised lifecycle that folds partial and full refunds together, and no
+   archived flag or return status; the Shopify order query fetches neither.
+   The tech design decides how Shopify's financial status, fulfilment status,
+   `closed`, `cancelledAt` and `returnStatus` reach the rule, how they are
+   stored for Your Orders, which reads stored rows, and how existing orders
+   are backfilled.
+2. **Returns** — `returned` is not a member of Shopify's fulfilment status;
+   Shopify reports returns on the order's `returnStatus`, and the rule reads
+   them there.
+3. **Till sales** — the tech design checks how Shopify reports fulfilment and
+   archiving for this shop's counter sales (Q12).
+4. **One implementation** — the rule is written once, where both pages and a
+   later notification centre can import it, and is tested over every
+   combination of its vocabulary.
 
-1. `returned` is not a member of `OrderDisplayFulfillmentStatus`; Shopify tracks
-   returns on a separate field. The two PRD rows keyed on `returned` are
-   specified here against the order's return status instead.
-2. The current typed Store order exposes normalized lifecycle status,
-   fulfilment status, and fulfilment display status. Delivery planning decides
-   how that projection feeds this mapping without copying rules into each page.
+**Design system** — no primitive, Figma component set or `tokens.json`
+change, unless Q14 adds a note slot to the status badge.
 
-**No design-system or token impact.** No primitive changes, no Figma component
-set changes, no `tokens.json` change.
+## References
+
+- [Order Status · Badges](../../../docs/prds/products/grade10-site/commerce/order-status.md#badges)
+- [Order Status · Secondary Note](../../../docs/prds/products/grade10-site/commerce/order-status.md#secondary-note)
+- [Order Status · Pickup](../../../docs/prds/products/grade10-site/commerce/order-status.md#pickup)
+- [Order History Blocks](../../../docs/prds/products/shared/ui/store-order-history.md)
