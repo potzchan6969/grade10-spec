@@ -308,6 +308,7 @@ reimplementing its behavior.
 * The account entry renders only with its handler or its slot, and
   `SiteHeader` always supplies one: `onSignIn` signed out, the account menu
   signed in.
+* The small initial avatar sits above the sign-in email, never beside it.
 
 ## Reconciliation
 
@@ -319,13 +320,15 @@ reimplementing its behavior.
 
 **Run:** QA2 reconciliation, third run, 2026-10-06, after US1-TC8's marker was narrowed to the two Chrome exports scenarios it walks. Every Header controls scenario the old marker named is still covered by a durable case under that group, US1-TC5 to US1-TC20, so nothing is left uncovered. No disposition moved.
 
-**Run:** QA2 reconciliation, fourth run, 2026-10-06, after the acceptance review's third round. The durable Settled line that kept `onOrders` is now false, and acceptance strikes it by hand, because the fold has no rule that removes one. `## Settled` records Q8, Q9 and Q11. No case or scenario moved.
+**Run:** QA2 reconciliation, fourth run, 2026-10-06, after the acceptance review's third round. The durable Settled line "`onOrders` ("My Auction Orders") keeps its existing export contract ..." is now false, and acceptance strikes it by hand, because the fold has no rule that removes one. `## Settled` records Q8, Q9 and Q11. No case or scenario moved.
 
 **Run:** QA2 reconciliation, fifth run, 2026-10-06, after the delta's feature set kept only the Handler-gated and Account menu lines (Q12). `Chrome exports` and `Header controls` still resolve from the durable feature set, so every case keeps its trace. `shared-ui-site-chrome-SC-17` and `shared-ui-site-chrome-SC-29` now serve `Header controls`, and no case moved.
 
 **Run:** QA2 reconciliation, sixth run, 2026-10-06, after the acceptance review's fourth round. The Handler-gated line names the cart slot beside the account slot, as `Nav` shows Cart for a supplied slot with no handler (Q12). `Header controls` did not move, and every case and scenario was joined again; no disposition moved.
 
 **Run:** QA2 reconciliation, seventh run, 2026-10-06, in a fresh context. It joined the durable cases of the modified requirement as well as this suite's. Two had drifted from it: `shared-ui-site-chrome-US1-TC9-1` still read "Sign out" and walked nothing the other cases do not, so it retires; `shared-ui-site-chrome-US1-TC12-1` walked the My Orders handler, which the requirement now states only as "each item", so it folds as `shared-ui-site-chrome-SC-43`. `shared-ui-site-chrome-SC-34` leaves `**Out of suite:**`. No anchor moved.
+
+**Run:** QA2 reconciliation, eighth run, 2026-10-07, after the acceptance review's fifth round. The durable Settled line "The small initial avatar sits above the account label, never beside it." now settles an avatar shown with `copy.accountMenuLabel`, the look Q6 holds open, so acceptance strikes it by hand and `## Settled` places the avatar above the sign-in email. No case or scenario moved.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
@@ -343,5 +346,6 @@ reimplementing its behavior.
 | `shared-ui-site-chrome-SC-17`, `shared-ui-site-chrome-SC-29` | Re-anchored to `Header controls` | Each served `grade10-site-site-page-shell-US-03`, which names neither Profile nor Membership and holds both open (Q1, Q5). `shared-ui-site-chrome-SC-17` supplies every handler, Membership included, which no site supplies; `shared-ui-site-chrome-SC-29` shows Profile with no My Orders, which no lane reaches, since none carries the account page and withholds Store. Both are the header's fixed order, which `shared-ui-site-chrome-US1-TC15-2` and `shared-ui-site-chrome-US1-TC13-2` walk under `Header controls` |
 | `shared-ui-site-chrome-US1-TC9-2` | Retired, `deprecated`, bumped | A durable case of the modified requirement: it expects "Sign out", which `shared-ui-site-chrome-SC-37` refutes, and its menu is the fixed order with no Membership, walked by `shared-ui-site-chrome-US1-TC15-2` and `shared-ui-site-chrome-US1-TC19-1`. Its marker covers none. `shared-ui-site-chrome-US1-TC15-2` keeps the smoke suite |
 | `shared-ui-site-chrome-US1-TC12-1` | Folded as a scenario | The requirement dropped its sentence "Activating My Orders SHALL invoke its matching handler" for "Activating each item SHALL invoke the matching supplied handler", and no scenario stated the My Orders half, while Profile and Membership each have one. Folded as `shared-ui-site-chrome-SC-43`, which this case walks and task 1.1 tests; its precondition names `onMyOrders`, its version stands |
+| Settled: the avatar above the account label | Retracted, restated | This change names `copy.accountMenuLabel` the account label (Q14), so the durable line "The small initial avatar sits above the account label, never beside it." would settle an avatar shown with that label, the look Q6 holds open. Acceptance strikes the line by hand, because the fold has no rule that removes a Settled line, and `## Settled` places the avatar above the sign-in email |
 | Contradictions | None | Where a case and a scenario state the same behaviour they agree |
 

@@ -71,6 +71,15 @@ None.
 - Manual pages: [Page Shell · Account Menu](../../../docs/prds/products/grade10-site/site/page-shell.md#account-menu),
   [Site Header and Footer · Account Entry](../../../docs/prds/products/shared/ui/site-chrome.md#account-entry)
   and [Post-Bidding · My Auction Orders](../../../docs/prds/products/grade10-site/auction/post-bidding.md#my-auction-orders).
+- Durable suites: acceptance strikes by hand the `## Settled` lines this
+  change makes false, because the fold has no rule that removes a Settled
+  line. In `grade10-site/site/page-shell`: "Signed-in account entry opens a
+  menu, the sign-in email with its small initial avatar ..." and "The
+  account menu's item order under every combination of {Profile carried,
+  Store answers} ...". In `shared/ui/site-chrome`: "`onOrders` ("My Auction
+  Orders") keeps its existing export contract ..." and "The small initial
+  avatar sits above the account label, never beside it." Each suite's
+  Reconciliation quotes its lines.
 - `nav-cart-count-badge`: accepted before this change (`depends_on`), so
   its 'A control renders only when it can act' carries the cart slot this
   Handler-gated line names. Its deltas keep only the feature-set lines they
