@@ -313,10 +313,10 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Partially Paid** — the deadline stops for good, and what will not be
   paid off is settled by hand outside Grade10
 
-| Payments so far | The next payment | What happens |
+| Total with this payment | The next payment | What happens |
 | --- | --- | --- |
 | 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid, and updating it to Paid is refused |
-| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; asked again on every later payment |
+| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; this payment brings the total to 90% or more, and every later payment under 100% asks again |
 | 🚧 Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 

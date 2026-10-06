@@ -123,6 +123,10 @@ meaning.
 - **Cancellation display** — Winner Order keeps the lot, the winning bid and
   `Cancelled on {date}`, with Contact Us alone. It never shows the operator's
   reason, category or payment controls
+- 🚧 **Contact Us on a cancelled order** — opens the ready email with the
+  reason `order cancelled`, subject `Auction lot {lot title}: order cancelled`,
+  and names the invoice when one exists; the operator's category and note
+  stay internal
 
 ### Refunds
 
@@ -451,8 +455,9 @@ then shipped, delivered, and order cancelled.
 
 🚧 A winner who cannot pay in one go pays in parts, off the page: an operator
 records each payment, the order reads Partially Paid, and the winner's page
-locks with Contact Us and a receipt for every payment, never a running
-balance. The invoice above, settled in three payments:
+locks with Contact Us and a receipt for every payment. It keeps showing the full
+invoice amount, never a running balance. The invoice above, settled in three
+payments:
 
 | Payment | Amount | Its receipt shows | The operator |
 | --- | --- | --- | --- |
@@ -462,9 +467,9 @@ balance. The invoice above, settled in three payments:
 
 - 🚧 **Completing the balance** — updating the invoice to Paid is refused
   until payments reach 90% of the original invoice total, so a 1,000 invoice
-  needs at least 900 first. From 90% each further payment asks the operator to
-  close as Paid or keep it Partially Paid at the real balance, and asks again
-  on every payment while the total is under 100%. An exact cumulative match
+  needs at least 900 first. The payment that brings the total to 90% or more
+  asks the operator to close as Paid or keep it Partially Paid at the real
+  balance, and every later payment asks again while the total is under 100%. An exact cumulative match
   closes on its own; an amount above the total asks the operator to confirm the
   overpayment before the invoice is marked Paid
 - 🚧 **Overpaying** — a payment that would take the total past the invoice is
@@ -601,7 +606,7 @@ a second payment provider, and changes to the bid-time rules.
 | Address window | 🚧 In flight | The stored 48-hour deadline is based on the actual lot close and does not move with configuration changes. Confirm and address changes close at expiry. An operator can reopen with a reason for another 48 hours, or record a phone-supplied address with an audit entry. Invoice send ends the address window. | Product and finance |
 | My Auctions Status column | Decided | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
 | Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
-| Closing a partial balance | 🚧 In flight | Measured against the original invoice total, cumulative across every payment, not the balance left at that moment: updating the invoice to Paid is refused below 90% of the total, and once payments reach 90%, every further payment offers the operator a close, Paid with no separate write-off entry, or kept Partially Paid at the real balance. The prompt returns on each payment while still under 100%, so a `keep open` answer never quietly waives later checks. An exact match closes on its own. | Product and finance |
+| Closing a partial balance | 🚧 In flight | Measured against the original invoice total, cumulative across every payment, not the balance left at that moment: updating the invoice to Paid is refused below 90% of the total, and the payment that brings the total to 90% or more, and every later one, offers the operator a close, Paid with no separate write-off entry, or kept Partially Paid at the real balance. The prompt returns on each later payment while still under 100%, so a `keep open` answer never quietly waives later checks. An exact match closes on its own. | Product and finance |
 | Overpaying a partial balance | 🚧 In flight | A payment above the original invoice total is accepted after an operator confirmation dialog before the invoice is marked Paid. The full payment remains recorded; the excess can be returned through the refund flow. | Product and finance |
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |

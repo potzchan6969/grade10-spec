@@ -20,3 +20,5 @@
 ## 5. Verification (owner: @htonyl)
 
 - [x] 5.1 Run the domain cases, contract tests, migration checks and the focused admin/site E2E journeys.
+
+Every task above was built before this change was accepted; each is re-verified against the accepted contract before it is read as done.

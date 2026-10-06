@@ -28,13 +28,13 @@ zero — no invoice can record a partial payment at all.
   for good — not paused, as Payment Verifying does — because self-service Pay
   is never offered again on that invoice.
 - **Updating the invoice to Paid is refused below 90% of the original invoice
-  total; at 90% or more, every further payment asks the operator to close or
-  keep going.** A $1,000 invoice must collect at least $900 before it can be
+  total; the payment that takes it to 90% or more, and every later one, asks the
+  operator to close or keep going.** A $1,000 invoice must collect at least $900 before it can be
   closed as Paid. Measured against the invoice's original total, cumulative
   across every payment, not the balance left at that moment. They choose to
   close the invoice as Paid — no separate write-off entry is recorded — or
   leave it Partially Paid at the real remaining balance; the prompt returns on
-  the next payment too while the total is still under 100%. An exact match to
+  each later payment while the total is still under 100%. An exact match to
   the full amount closes on its own, no prompt needed. A payment that exceeds
   the original invoice total is accepted only after a confirmation dialog
   before the invoice is marked Paid; the full payment remains recorded and the
@@ -51,9 +51,10 @@ zero — no invoice can record a partial payment at all.
   Order, oldest first. The landed `add-winner-contact-email` change delivers
   each partial receipt through an append-only `payment_received_partial`
   letter with the current invoice and receipt IDs.
-- **Winner Order never shows a running balance.** A Partially Paid winner
-  sees a locked page and Contact Us, on the order and in any suspension
-  copy; the balance owed is operator-portal-only.
+- **Winner Order never shows a running balance.** It always shows the full
+  invoice amount. A Partially Paid winner sees a locked page and Contact Us,
+  on the order and in any suspension copy; the balance owed is
+  operator-portal-only.
 
 ## Non-Goals
 
@@ -73,9 +74,10 @@ None.
   no running balance shown, on the order or in suspension copy.
 - `grade10-site/auction/order-status`: Partially Paid added to both status
   vocabularies; its moves in and out.
-- `grade10-admin/auction/post-sale`: Partially Paid outcome, not
-  needs-action; recording a partial payment on the manual-settlement form;
-  Reissue and Cancel refused once a payment is recorded.
+- `grade10-admin/auction/post-sale`: recording a partial payment on the manual-settlement form;
+  Reissue and Cancel refused once a payment is recorded. Partially Paid in the
+  queue's Waiting on winner segment, not Needs action, is carried by
+  `complete-auction-post-sale`.
 - `grade10-site/auction/account-record`: the winner's row shows Partially
   Paid.
 
