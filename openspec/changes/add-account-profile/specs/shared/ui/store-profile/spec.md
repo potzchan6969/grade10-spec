@@ -16,7 +16,9 @@ belong to the application.
 - Read view
   - Supplied fields: avatar, display name, email, bio, and meta, with no component defaults
 - Form
-  - Reported save: the form reports values; validity belongs to the application
+  - Reported save: the form reports values; validity and length limits belong to the application
+  - Read-only email: the form shows the address it is given and edits nothing of it
+  - Pending save: a save in flight cannot be sent again
 
 ## ADDED Requirements
 
@@ -171,14 +173,18 @@ refusal back through the form's error content.
 The profile components SHALL render no built-in user-facing copy. Each
 component SHALL take every word it renders in its own `copy` prop, whose type
 it exports under its own name, per `shared/ui/component-package`. The avatar's
-choose and remove labels SHALL belong to `ProfileFormCopy`.
+choose and remove labels SHALL belong to `ProfileFormCopy`. The avatar's
+accessible name and fallback content are the collector's content, not copy:
+they arrive as props beside the image source, as the display name and the
+email do.
 
 #### Scenario: shared-ui-store-profile-SC-16 - A control has no copy of its own
 **Serves:** Surface exports - a control has no copy of its own
 
 - **WHEN** the surface is rendered
-- **THEN** every visible string is one the application supplied through a
-  `copy` prop, and no component substitutes wording of its own
+- **THEN** every visible string is one the application supplied, through a
+  `copy` prop or as the collector's content, and no component substitutes
+  wording of its own
 
 #### Scenario: shared-ui-store-profile-SC-17 - The avatar controls are named by the form's copy
 **Serves:** Surface exports - the avatar controls are named by the form's copy
@@ -186,3 +192,41 @@ choose and remove labels SHALL belong to `ProfileFormCopy`.
 - **WHEN** an engineer opens `ProfileFormCopy`
 - **THEN** it names the choose and remove labels alongside the form's other
   words, and the form renders no label the type does not carry
+
+### Requirement: The form applies the application's limits and refuses nothing itself
+
+`ProfileForm` SHALL apply only the display-name and bio length limits the
+application passes, and SHALL hold no limit of its own. It SHALL refuse no
+submission itself, an empty display name included: the application judges the
+submitted values and reports a refusal through the form's error content. The
+form SHALL show the email address it is given, read-only. While the
+application reports a save pending, the form's submit SHALL show busy and SHALL
+NOT submit again.
+
+#### Scenario: shared-ui-store-profile-SC-18 - The limits are the application's
+**Serves:** Form - the limits are the application's
+
+- **WHEN** the form is rendered with a display-name limit and a bio limit
+- **THEN** each field accepts no more characters than the limit passed for it
+- **AND** a form rendered without them does not compile
+
+#### Scenario: shared-ui-store-profile-SC-19 - An empty display name reaches the application
+**Serves:** Form - an empty display name reaches the application
+
+- **WHEN** the collector clears the display name and submits
+- **THEN** the form reports the empty display name to the application
+- **AND** shows only the error content the application supplies in return
+
+#### Scenario: shared-ui-store-profile-SC-20 - The email is shown and not edited
+**Serves:** Form - the email is shown and not edited
+
+- **WHEN** the form is rendered with an email address
+- **THEN** it displays that address, no control edits it, and the submitted
+  values carry no email
+
+#### Scenario: shared-ui-store-profile-SC-21 - A pending save cannot be sent twice
+**Serves:** Form - a pending save cannot be sent twice
+
+- **GIVEN** a form the application reports as saving
+- **WHEN** the collector submits again
+- **THEN** the submit shows busy and nothing further is reported

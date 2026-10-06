@@ -1,9 +1,10 @@
 ## Purpose
 
 The basic information a signed-in collector holds about themselves in the
-Grade10 store — display name, bio, avatar, and the address they signed in with
-— and how they read and edit it on their own account page. Owner-only: nobody
-but the collector sees their profile.
+Grade10 and ZZZ stores — display name, bio, avatar, and the address they signed
+in with — and how they read and edit it on their own account page, which both
+brands render the same way. Owner-only: nobody but the collector sees their
+profile.
 
 ## Feature set
 
@@ -13,8 +14,11 @@ but the collector sees their profile.
   - Session defaults: a collector who has never saved still sees a complete page
 - Fields
   - Display name, bio, avatar, email, member-since: email is the signed-in address and is read-only
+- Avatar
+  - Upload and remove: an upload takes a JPEG, PNG or WebP up to 5 MB; removed, the display name's first letter stands in
 - Edits
   - Explicit save: empty display name is refused; a save with no field is refused
+  - Limits: display name trimmed, 1 to 80 characters; bio trimmed, at most 500
 - Failures
   - Reported: a failed read or save is shown; a failed save keeps the collector's input
 
@@ -24,7 +28,8 @@ but the collector sees their profile.
 
 The system SHALL resolve a profile from the caller's session and no other
 input. A profile SHALL be readable and editable by its owner alone, and a
-request without a session SHALL be refused.
+request without a session SHALL be refused. A signed-out visit to the account
+page SHALL ask the visitor to sign in.
 
 #### Scenario: grade10-site-store-account-profile-SC-01 - Signed-out request is refused
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
@@ -32,6 +37,14 @@ request without a session SHALL be refused.
 - **GIVEN** a request carrying no session
 - **WHEN** it reads or edits a profile
 - **THEN** the system refuses it as unauthenticated and returns no profile data
+
+#### Scenario: grade10-site-store-account-profile-SC-34 - A signed-out visit asks for sign-in
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
+
+- **GIVEN** a visitor who is not signed in
+- **WHEN** they open `/profile`
+- **THEN** the page asks them to sign in and shows no profile
+- **AND** once they sign in, the page shows their own profile
 
 #### Scenario: grade10-site-store-account-profile-SC-02 - A collector cannot address another collector's profile
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
@@ -45,9 +58,10 @@ request without a session SHALL be refused.
 
 The system SHALL return a complete profile for every signed-in collector,
 whether or not they have saved anything. Values the collector has not set SHALL
-be defaulted from their signed-in session — display name from the session name,
-or, when the session carries no name, from the part of the signed-in address
-before the `@`; avatar as initials. Reading a profile SHALL NOT create or
+be defaulted from their signed-in account — display name from the account
+name, or, when the account has no name, from the part of the signed-in address
+before the `@`; avatar as the display name's first letter. The display name SHALL be the one the till
+and the wallet pass show for the member. Reading a profile SHALL NOT create or
 modify stored data; the collector's profile record is created when they first
 save.
 
@@ -56,19 +70,20 @@ save.
 
 - **GIVEN** a collector who has never saved their profile
 - **WHEN** they open their account page
-- **THEN** the page shows their session name as the display name, an initials
-  avatar, and an empty bio
+- **THEN** the page shows their account name as the display name, its first
+  letter as the avatar, and in place of a bio the line that says what the bio
+  is for
 - **AND** the page offers editing, not creation — nothing asks them to create a
   profile first
 
 #### Scenario: grade10-site-store-account-profile-SC-04 - A collector whose session carries no name
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
-- **GIVEN** a collector who signed in by emailed link or code, whose session
-  carries no name
+- **GIVEN** a collector who signed in by emailed link or code, whose account
+  has no name
 - **WHEN** they open their account page
 - **THEN** the display name shown is the part of their signed-in address before
-  the `@`, and the avatar shows initials derived from it
+  the `@`, and the avatar shows its first letter
 - **AND** nothing shows a generated identifier in place of a name
 
 #### Scenario: grade10-site-store-account-profile-SC-05 - A read stores nothing
@@ -84,8 +99,8 @@ save.
 - **GIVEN** a collector whose profile record exists because some other part of
   the store wrote it, carrying a display name they never set
 - **WHEN** they open their account page
-- **THEN** the display name shown is the one from their session, not the
-  unset placeholder
+- **THEN** the display name shown is the account name, else the part of the
+  signed-in address before the `@`, not the unset placeholder
 
 #### Scenario: grade10-site-store-account-profile-SC-07 - Saved values win over session defaults
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
@@ -93,15 +108,16 @@ save.
 - **GIVEN** a collector who has saved a display name and a bio
 - **WHEN** they open their account page
 - **THEN** the page shows their saved values, unchanged, and does not fall back
-  to session values
+  to the account name
 
 ### Requirement: A profile holds display name, bio, avatar, email, and member-since
 
-The system SHALL present exactly these fields on the account page: display
-name, bio, avatar, the email address of the signed-in session, and the date the
-collector first saved their profile. Member-since SHALL be that date and not
-the date some other part of the store created their record. Display name, bio,
-and avatar SHALL be editable by the collector; email SHALL NOT.
+The account page SHALL present display name, bio, avatar, the email address of
+the signed-in session, and the date the collector first saved their profile.
+Member-since SHALL be the date of the collector's first save of any of their
+fields — display name, bio or avatar — and not the date some other part of the
+store created their record. Display name, bio, and avatar SHALL be editable by
+the collector; email SHALL NOT.
 
 #### Scenario: grade10-site-store-account-profile-SC-08 - Every field is present
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
@@ -128,18 +144,27 @@ and avatar SHALL be editable by the collector; email SHALL NOT.
 - **THEN** no member-since date is shown, and that record's creation date is
   not presented as the date they joined
 
+#### Scenario: grade10-site-store-account-profile-SC-35 - An avatar saved on its own starts member-since
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
+
+- **GIVEN** a collector who has never saved their profile
+- **WHEN** they save a new avatar and nothing else
+- **THEN** their account page shows the date of that save as member-since
+- **AND** a later save of their display name or bio leaves that date unchanged
+
 ### Requirement: Email is read-only
 
-The system SHALL show the email address of the signed-in session and SHALL NOT
-offer any way to change it from the account page. An edit that carries an email
+The system SHALL show the email address of the signed-in session, while the
+collector reads their profile and while they edit it, and SHALL NOT offer any
+way to change it from the account page. An edit that carries an email
 address SHALL be refused.
 
 #### Scenario: grade10-site-store-account-profile-SC-11 - The address shown is the one signed in with
 **Serves:** grade10-site-store-account-profile-US-04 - Collector's email stays the signed-in address
 
 - **GIVEN** a collector signed in as a given address
-- **WHEN** they open their account page
-- **THEN** that address is shown, and no control edits it
+- **WHEN** they open their account page, and when they edit their profile
+- **THEN** that address is shown in both, and no control edits it
 
 #### Scenario: grade10-site-store-account-profile-SC-12 - An edit carrying an email is refused
 **Serves:** grade10-site-store-account-profile-US-04 - Collector's email stays the signed-in address
@@ -151,7 +176,8 @@ address SHALL be refused.
 
 The system SHALL trim leading and trailing whitespace from a submitted display
 name and SHALL require the result to be between 1 and 80 characters. A display
-name SHALL NOT be required to be unique.
+name SHALL NOT be required to be unique. Length SHALL be counted in UTF-16
+code units, as the field and the store both count it.
 
 #### Scenario: grade10-site-store-account-profile-SC-13 - Whitespace is trimmed before saving
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
@@ -183,8 +209,8 @@ name SHALL NOT be required to be unique.
 
 ### Requirement: Bio is optional, trimmed, and at most 500 characters
 
-The system SHALL trim a submitted bio, SHALL accept up to 500 characters, and
-SHALL let a collector clear it.
+The system SHALL trim a submitted bio, SHALL accept up to 500 characters,
+counted the same way, and SHALL let a collector clear it.
 
 #### Scenario: grade10-site-store-account-profile-SC-17 - A bio within the limit is saved
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
@@ -204,37 +230,43 @@ SHALL let a collector clear it.
 
 - **GIVEN** a collector with a saved bio
 - **WHEN** they clear it and save
-- **THEN** the profile holds no bio and the page shows the empty-bio state, not
-  the previous text
+- **THEN** the profile holds no bio, and the page shows the line that says what
+  the bio is for, never the previous text
 
 ### Requirement: A collector uploads an avatar image
 
-The system SHALL accept a JPEG, PNG, or WebP image of at most 5 MB as the
-collector's avatar, presented square. An upload SHALL replace whatever avatar
-the collector had, and the replaced image SHALL be deleted from storage and
-SHALL be served from a different address than its replacement. A copy already
-held in a cache outside the system MAY answer the replaced image's address
-until that cache expires. A rejected upload SHALL leave the previous avatar in
-place and SHALL state why it was rejected.
+The system SHALL store a collector's avatar square, at 512 by 512 pixels. An
+avatar upload SHALL carry a JPEG, PNG, or WebP image of at most 5 MB
+(5,242,880 bytes), and the system SHALL refuse any other upload, whoever sends
+it. An upload SHALL replace whatever avatar the collector had. An image's
+address SHALL change whenever its content does. An image SHALL answer at its
+address only while some profile holds it, so a replaced image keeps answering
+only while another profile holds the same image. The storage sweep SHALL
+delete an image no profile holds once it is at least a day old, so an upload
+still in flight is never deleted. A copy already held in a cache outside the
+system MAY answer the replaced image's address until that cache expires. A
+rejected upload SHALL leave the previous avatar in place and SHALL state why
+it was rejected.
 
 #### Scenario: grade10-site-store-account-profile-SC-20 - An accepted upload becomes the avatar
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
-- **WHEN** a collector uploads a JPEG, PNG, or WebP image of at most 5 MB
-- **THEN** the system stores it, and their account page shows that image as
-  their avatar on this and every later visit
+- **WHEN** a collector chooses an image and saves
+- **THEN** the system stores it square at 512 by 512 pixels, and their account
+  page shows it as their avatar on this and every later visit
 
 #### Scenario: grade10-site-store-account-profile-SC-21 - An unsupported image type is refused
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
-- **WHEN** a collector uploads a file that is not a JPEG, PNG, or WebP image
+- **WHEN** an avatar upload carries a file that is not a JPEG, PNG, or WebP
+  image
 - **THEN** the system refuses it, states the accepted types, and the previous
   avatar is unchanged
 
 #### Scenario: grade10-site-store-account-profile-SC-22 - An oversized image is refused
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
-- **WHEN** a collector uploads an image larger than 5 MB
+- **WHEN** an avatar upload carries an image larger than 5 MB
 - **THEN** the system refuses it, states the 5 MB limit, and the previous
   avatar is unchanged
 
@@ -243,36 +275,47 @@ place and SHALL state why it was rejected.
 
 - **GIVEN** a collector with an avatar
 - **WHEN** they upload another accepted image
-- **THEN** the page shows the new image at a different address, and the
-  previous image is deleted from storage
+- **THEN** the page shows the new image at a different address, the previous
+  image stops answering at its address, and the storage sweep deletes it once
+  it is a day old
 
-### Requirement: A collector removes their avatar and falls back to initials
+### Requirement: A collector removes their avatar and falls back to the display name's first letter
 
-The system SHALL let a collector remove their avatar and SHALL delete the
-removed image from storage, and SHALL show initials derived from the display
-name whenever no avatar is set.
+The system SHALL let a collector remove their avatar, and SHALL treat the
+removed image as it treats a replaced one. Whenever no avatar is set, the
+system SHALL show the display name's first letter in its place: one character,
+the first letter or digit in any script, upper-cased, as the account menu
+draws it, and `?` for a display name with neither.
 
-#### Scenario: grade10-site-store-account-profile-SC-24 - Removing an avatar restores the initials
+#### Scenario: grade10-site-store-account-profile-SC-24 - Removing an avatar restores the letter
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector with an avatar
 - **WHEN** they remove it
-- **THEN** the page shows initials derived from their display name, and the
-  removed image is deleted from storage
+- **THEN** the page shows their display name's first letter, the removed
+  image stops answering at its address, and the storage sweep deletes it once
+  it is a day old
 
-#### Scenario: grade10-site-store-account-profile-SC-25 - A collector who never uploaded sees initials
+#### Scenario: grade10-site-store-account-profile-SC-25 - A collector who never uploaded sees the letter
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector with no avatar
 - **WHEN** they open their account page
-- **THEN** the page shows initials derived from their display name
+- **THEN** the page shows their display name's first letter
 
-#### Scenario: grade10-site-store-account-profile-SC-26 - Initials follow the display name
+#### Scenario: grade10-site-store-account-profile-SC-26 - The letter follows the display name
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector with no avatar
 - **WHEN** they change their display name
-- **THEN** the initials shown are derived from the new display name
+- **THEN** the letter shown is the new display name's first letter
+
+#### Scenario: grade10-site-store-account-profile-SC-36 - The letter is read in any script
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
+
+- **GIVEN** a collector with no avatar
+- **WHEN** their display name is `陳大文`, `ångström` or `🃏🃏`
+- **THEN** the page shows `陳`, `Å` or `?` in the avatar's place
 
 ### Requirement: Editing is explicit, and a save carrying no field is refused
 
@@ -285,7 +328,8 @@ and change nothing.
 
 An avatar is set and removed on its own, so an edit touching both the avatar
 and the text fields SHALL report each outcome and SHALL NOT present a refused
-text save as having undone an accepted avatar change.
+text save as having undone an accepted avatar change. An edit whose avatar is
+refused SHALL save none of its text fields.
 
 #### Scenario: grade10-site-store-account-profile-SC-27 - A save persists and is reflected immediately
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
@@ -317,6 +361,15 @@ text save as having undone an accepted avatar change.
 - **THEN** the page shows the new avatar, states why the display name was
   refused, and keeps the collector's entered text so they can retry
 - **AND** the stored display name and bio are unchanged
+
+#### Scenario: grade10-site-store-account-profile-SC-33 - A refused avatar saves nothing else
+**Serves:** grade10-site-store-account-profile-US-05 - Collector is told when a read or save fails
+
+- **GIVEN** a collector who changes their avatar and their display name in one
+  edit
+- **WHEN** the avatar is refused or cannot be saved
+- **THEN** the page states why, keeps the entered text and the chosen image so
+  they can retry, and the stored profile is unchanged
 
 ### Requirement: A failed read or save is reported, never hidden
 

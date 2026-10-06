@@ -3,6 +3,9 @@
 - The wallet pass
   - One name: the name the member chose for the shop, else their account name, else the address before the `@`
   - A name the account service cannot give: the pass stays as it was and is refreshed later
+  - A saved name: needs no account service, so the pass refreshes with it through an outage, whoever else its lap holds
+  - Whole: the pass carries the name uncut, and the wallet app lays it out
+  - A new name: one saved on the profile reaches the pass on the next lap; an account-name change within the daily floor
 
 ## ADDED Requirements
 
@@ -15,10 +18,19 @@ membership surface show, resolved in this order:
 2. Their account name.
 3. The part of their email address before the `@`.
 
+The pass SHALL carry the name whole, uncut by the store; the wallet app lays
+it out.
+
 A refresh that cannot get the account name SHALL fail and be retried on a
 later lap, leaving the pass as it was; it SHALL NOT blank the name or guess
-one. A pass whose account name changes SHALL show the new name from its next
-due refresh.
+one. A member with a name chosen for the shop SHALL need no account name, so
+their pass SHALL be refreshed with that name while the account service cannot
+answer, whichever other members the same lap refreshes.
+
+A name the member saves on their profile SHALL reach the pass on the next lap.
+The prompt that brings the pass forward is best effort, so a name whose prompt
+is lost SHALL still reach the pass within the daily floor. A change to the
+account name SHALL reach the pass within the daily floor.
 
 <!-- trace:scenario id=g10.store-wallet-member-card.SC-nmv rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-39 - An unreachable account service leaves a pass as it was
@@ -28,6 +40,43 @@ due refresh.
 - **WHEN** a refresh of their pass cannot reach the account service
 - **THEN** the pass is left as it was, name included
 - **AND** the pass is refreshed again on a later lap
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-gvk rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-40 - A name saved on the profile reaches the pass on the next lap
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
+
+- **GIVEN** a member with a live pass
+- **WHEN** they save a new display name on their profile
+- **THEN** by the end of the next lap the pass shows the new name
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-vzv rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-41 - A changed account name reaches the pass within a day
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
+
+- **GIVEN** a member with a live pass and no name chosen for the shop
+- **WHEN** their account name changes
+- **THEN** the pass shows the new name within 24 hours of the change
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-92j rev=2 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-42 - A name chosen for the shop reaches the pass through an outage
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
+
+- **GIVEN** a member with a live pass and a name chosen for the shop
+- **WHEN** their pass is refreshed while the account service cannot be
+  reached, on a lap that also refreshes a member with no name chosen for the
+  shop
+- **THEN** their pass is refreshed and shows the name chosen for the shop
+- **AND** the other member's pass is left as it was, to be refreshed on a
+  later lap
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-4hb rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-43 - A long name reaches the pass whole
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
+
+- **GIVEN** a member with a live pass whose name chosen for the shop is 80
+  characters long
+- **WHEN** their pass is refreshed
+- **THEN** the store sends the pass all 80 characters of the name
 
 ## MODIFIED Requirements
 
@@ -48,7 +97,7 @@ Identifying from a pass SHALL open the same session on the same terms as the
 card on the site, and removing a pass SHALL change nothing about the
 membership.
 
-<!-- trace:scenario id=g10.store-wallet-member-card.SC-4q3 rev=1 -->
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-4q3 rev=2 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-13 - A member adds their card to their wallet
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -64,6 +113,7 @@ membership.
 - **WHEN** staff scan a member's pass
 - **THEN** a session opens for that member on the same terms a scanned card opens
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-jmq rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-15 - A photographed code is worth nothing
 **Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
@@ -78,6 +128,7 @@ membership.
 - **WHEN** a member with no network on their phone presents their pass
 - **THEN** the code it shows is current and opens a session
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-e3j rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-17 - Removing a pass leaves the membership intact
 **Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
@@ -103,7 +154,7 @@ SHALL be served by the card on the site, as they are today.
 
 Removing a pass SHALL change nothing about the membership.
 
-<!-- trace:scenario id=g10.store-wallet-member-card.SC-fjc rev=1 -->
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-fjc rev=2 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-18 - A member adds their card to Apple Wallet
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
