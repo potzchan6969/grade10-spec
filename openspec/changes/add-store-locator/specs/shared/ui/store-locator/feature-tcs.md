@@ -169,14 +169,18 @@
 * No hours title shows, and no empty hours list.
 * The map, store name and address lines still show.
 
+## Settled
+
+- A block with no Maps destination is not a state: the map embed and the Maps destination are both required props.
+
 ## Reconciliation
 
-**Run:** QA2 reconciliation, 2026-10-06, in a fresh context. Read: this suite, the delta `spec.md` with its scenarios, `tech-design.md`, `ui-design.md`, `decisions.md`, `tasks.md` and the Store Locator Block page. The blind pass recorded no Run line of its own; its question is the shared/ui row of `decisions.md`'s `## Raised`. A second QA2 run, 2026-10-06 in a fresh context after the accept review's edits, read the same set, and checked each disposition below against the current scenarios.
+**Run:** QA2 reconciliation, 2026-10-06, in a fresh context. Read: this suite, the delta `spec.md` with its scenarios, `tech-design.md`, `ui-design.md`, `decisions.md`, `tasks.md` and the Store Locator Block page. The blind pass recorded no Run line of its own; its question is the shared/ui row of `decisions.md`'s `## Raised`. A second QA2 run, 2026-10-06 in a fresh context after the accept review's edits, read the same set, and checked each disposition below against the current scenarios. A third QA2 run, 2026-10-06 in a fresh context, read the same set and rechecked every disposition. A fourth QA2 run, 2026-10-06 in a fresh context, read the same set and rechecked every disposition; nothing moved.
 
 - **Folded** — `shared-ui-store-locator-US1-TC1-1` to `shared-ui-store-locator-SC-01`, gaining the three named types and no other export for the block; `shared-ui-store-locator-US1-TC2-1` to `shared-ui-store-locator-SC-02`; `shared-ui-store-locator-US1-TC3-1` to `shared-ui-store-locator-SC-03` and `shared-ui-store-locator-SC-05`
 - **Folded into spec** — `shared-ui-store-locator-US1-TC1-1` reads the block for words and shop facts written in; the requirement's Props-only content said so and no scenario did, so `shared-ui-store-locator-SC-02` now asserts no word or fact the props did not supply
 - **Raised, answered** — a block with no Maps destination (Q21): not a state the block has. Both map props are required, and `shared-ui-store-locator-SC-06` holds a block missing either to a refused type check
-- **Blocked** — `shared-ui-store-locator-US1-TC4-1`, the block with no hours rows: the designer's Q15. The case stays draft and no requirement takes a side until the answer lands
+- **Blocked** — `shared-ui-store-locator-US1-TC4-1`, the block with no hours rows: the designer's Q15. Its expected results are the blind reading's guess, one of Q15's options and not its recommendation: the case stays draft and no requirement takes a side. When the answer lands, the case is rewritten to it with a scenario, or retired if the hours become a required non-empty list
 - **Contradicted** — none
 - **Uncovered anchors** — none: both root groups, Surface exports and Location & Hours, are reached
 

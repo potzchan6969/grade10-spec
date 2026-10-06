@@ -48,9 +48,9 @@ page for the Hong Kong shop,
 **Expected Results:**
 
 * Step 1 returns status 200.
-* Step 1's response holds the heading, `<shop name>`, `<shop address>` and the hours.
+* Step 1's response holds the heading, the map, `<shop name>`, `<shop address>` and the hours.
 * Step 2 shows the map, `<shop name>`, `<shop address>` and the hours.
-* Every day of the week reads `<shop hours>`.
+* The hours say the shop opens `<shop hours>`, every day.
 * The page shows one shop and no other.
 
 <!-- trace:case id=g10.store-store-locator.TC-zh8 rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
@@ -159,7 +159,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: Store Locator follows every other primary-nav item, directly before Help.
+* Step 2: Store Locator sits directly before Help, which ends the primary nav.
 * Step 2: Store Locator is not marked as the current page.
 * Step 3 opens Store Locator, the Location & Hours heading showing.
 * Step 4: Store Locator is marked as the current page.
@@ -355,7 +355,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2: the map is one stop; nothing inside the map takes focus.
-* Step 3: the map's stop is named for the shop.
+* Step 3: the map's stop is one named link.
 * Step 3: no other stop leads to Google Maps; no Get directions control.
 * Step 5 opens Google Maps at `<shop address>` in a new tab.
 
@@ -437,16 +437,24 @@ Runs once per row of **Test data**.
 * Step 3 opens a new tab; the first tab stays on Store Locator.
 * Step 4 shows Google Maps at `<shop address>`.
 
+## Settled
+
+- The map opens Google Maps before any script runs: its link is in the first response, like the rest of the page.
+- When Google's embedded map does not load, the map keeps its place and still opens Google Maps for the shop; how the box looks then is the designer's.
+
 ## Reconciliation
 
-**Run:** QA2 reconciliation, 2026-10-06, in a fresh context. Read: this suite, the change's `domain-tcs.md`, the delta `spec.md` with its scenarios, `tech-design.md`, `ui-design.md`, `decisions.md`, `tasks.md` and the Store Locator, Store Locator Block and Product Details pages. The blind pass recorded no Run line of its own, so what it read is not on record here; its four questions are the blind rows of `decisions.md`'s `## Raised`. A second QA2 run, 2026-10-06 in a fresh context after the accept review's edits, read the same set and the application repository's chrome, footer and product view, and checked each disposition below against the current scenarios.
+**Run:** QA2 reconciliation, 2026-10-06, in a fresh context. Read: this suite, the change's `domain-tcs.md`, the delta `spec.md` with its scenarios, `tech-design.md`, `ui-design.md`, `decisions.md`, `tasks.md` and the Store Locator, Store Locator Block and Product Details pages. The blind pass recorded no Run line of its own, so what it read is not on record here; its four questions are the blind rows of `decisions.md`'s `## Raised`. A second QA2 run, 2026-10-06 in a fresh context after the accept review's edits, read the same set and the application repository's chrome, footer and product view, and checked each disposition below against the current scenarios. A third QA2 run, 2026-10-06 in a fresh context, read the same set, the application repository's header (`SiteShell.tsx`, `siteContent.ts`) and `grade10-site/site/page-shell`'s Help requirement, and rechecked every disposition. A fourth QA2 run, 2026-10-06 in a fresh context, read the same set, the other open changes' claims on this domain's ids and the application repository's lane gates (`apps/frontend/grade10/src/surfaces.ts`), and rechecked every disposition against the open designer questions. A fifth QA2 run, 2026-10-06 in a fresh context, read the same set, the page's Location & Hours line against `grade10-site-store-store-locator-SC-01`, and the gates' output for the change's ids, and rechecked every disposition.
 
 - **Folded** — `grade10-site-store-store-locator-US1-TC1-1` to `grade10-site-store-store-locator-SC-01`, `grade10-site-store-store-locator-SC-02` and the shop facts; `grade10-site-store-store-locator-US1-TC3-1` to `grade10-site-store-store-locator-SC-03`; `grade10-site-store-store-locator-US1-TC4-1` to `grade10-site-store-store-locator-SC-06` and `grade10-site-store-store-locator-SC-08`, gaining the scenario's Store left unmarked on Store Locator; `grade10-site-store-store-locator-US1-TC5-1` to `grade10-site-store-store-locator-SC-07`; `grade10-site-store-store-locator-US1-TC6-1` to `grade10-site-store-store-locator-SC-09`, its map-above-the-details line from `ui-design.md`'s Narrow state; `grade10-site-store-store-locator-US1-TC7-1` to `grade10-site-store-store-locator-SC-10`, with English and Simplified Chinese as rows beside it; `grade10-site-store-store-locator-US2-TC1-1` to `grade10-site-store-store-locator-SC-04`; `grade10-site-store-store-locator-US2-TC2-1` to `grade10-site-store-store-locator-SC-05` and the block's `shared-ui-store-locator-SC-05`
-- **Folded into spec** — `grade10-site-store-store-locator-US1-TC2-1`'s content never going blank once scripts start had no scenario; the requirement now says scripts never hide it again, proved by `grade10-site-store-store-locator-SC-11`. It is the failure the proposal names: the first-paint reveal hides the content until a script runs
+- **Folded into spec** — `grade10-site-store-store-locator-US1-TC2-1`'s content never going blank once scripts start had no scenario; the requirement now says scripts never hide it again, proved by `grade10-site-store-store-locator-SC-11`. It is the failure the proposal names: the first-paint reveal hides the content until a script runs. Its no-finder results fold to `grade10-site-store-store-locator-SC-02` beside `grade10-site-store-store-locator-US1-TC1-1`
+- **Corrected** - the header placement. Help is itself the primary nav's last item (`grade10-site/site/page-shell`; grade10 `apps/frontend/grade10/src/chrome/SiteShell.tsx:141-151`), so "the last primary-nav item, directly before Help" could not hold. The page, the feature-set leaf, the Placement requirement, `grade10-site-store-store-locator-SC-06`, `ui-design.md`, Q6, the proposal and `grade10-site-store-store-locator-US1-TC4-1` now read directly before Help, which ends the primary nav. No behaviour moves, so the case and the scenario keep their revisions
+- **Corrected** - the map in the first response. The page and the requirement put the map in the first response with the heading, name, address and hours; `grade10-site-store-store-locator-SC-01` and `grade10-site-store-store-locator-US1-TC1-1`'s response result named everything but the map, and now name it too. Both are unaccepted drafts, so they keep their revisions
 - **Raised, answered** — the map before scripts run (Q17): `grade10-site-store-store-locator-SC-12`, reached by the new `grade10-site-store-store-locator-US2-TC3-1`
 - **Raised, answered** — the map when Google's embedded map does not load (Q18): `grade10-site-store-store-locator-SC-13`, reached by the new `grade10-site-store-store-locator-US2-TC4-1`, which asserts what happens and not how the box looks
+- **Deferred to the designer** - one hours row a day or one Every day row (Q16). `grade10-site-store-store-locator-US1-TC1-1` read the hours day by day, which takes a side; it now reads the shop's hours every day, as the page's shop fact states them, and no case asserts how the rows are drawn
 - **Raised for the designer** — how the map's place looks when the embedded map does not load (Q19, open for the designer on the Store Locator Block page); no requirement takes a side, and no case asserts a look
-- **Covered at domain** — `grade10-site-store-e2e-US7-TC1-1` walks `grade10-site-store-store-locator-SC-10`'s store name reading as the free pick-up claim's, in each language
+- **Covered at domain** — `grade10-site-store-e2e-US8-TC1-1` walks `grade10-site-store-store-locator-SC-10`'s store name reading as the free pick-up claim's, in each language
 - **Out of suite** — the feature-set leaf Carried with the store: `grade10-site-site-carried-surfaces-SC-41`, reached by the carried-surfaces suite's `US1`, `US2`, `US3`, `US4` and `US5` cases this change extends
 - **Out of suite** — Store Locator's Open Graph tags, which the Store Locator page promises: `grade10-site-site-crawlable-pages-SC-06` binds every public surface, and grade10's `apps/frontend/grade10/src/surfaces.test.ts` holds it for marketing, store and auction only, so task 2.2 runs that test over every prerendered surface
 - **Contradicted** — none: no case and scenario state opposite outcomes

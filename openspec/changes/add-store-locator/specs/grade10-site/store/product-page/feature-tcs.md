@@ -85,16 +85,22 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: Shipping fee is plain text, not a link.
+* Step 2: Shipping fee is text, not a link.
 * Step 3 leaves the page and its address unchanged, with no `#` added.
 * Step 4 stops on the pick-up store name and skips Shipping fee.
 
+## Settled
+
+- The store name in free pick-up opens Store Locator in the same tab, in the product page's language; only the map, which leaves the site, opens a new tab.
+
 ## Reconciliation
 
-**Run:** QA2 reconciliation, 2026-10-06, in a fresh context. Read: this suite, the change's `domain-tcs.md`, the delta `spec.md` with its scenarios, `tech-design.md`, `decisions.md`, `tasks.md` and the Product Details and Store Locator pages. The blind pass recorded no Run line of its own; its question is the product-page row of `decisions.md`'s `## Raised`. A second QA2 run, 2026-10-06 in a fresh context after the accept review's edits, read the same set and the application repository's product view and `StoreProductMetadata`, and checked each disposition below against the current scenarios.
+**Run:** QA2 reconciliation, 2026-10-06, in a fresh context. Read: this suite, the change's `domain-tcs.md`, the delta `spec.md` with its scenarios, `tech-design.md`, `decisions.md`, `tasks.md` and the Product Details and Store Locator pages. The blind pass recorded no Run line of its own; its question is the product-page row of `decisions.md`'s `## Raised`. A second QA2 run, 2026-10-06 in a fresh context after the accept review's edits, read the same set and the application repository's product view and `StoreProductMetadata`, and checked each disposition below against the current scenarios. A third QA2 run, 2026-10-06 in a fresh context, read the same set and the other open changes' claims on this capability's ids, and rechecked every disposition against the open designer questions. A fifth QA2 run, 2026-10-06 in a fresh context, read the same set and the application repository's product view, and rechecked every disposition; nothing moved.
 
-- **Folded** — `grade10-site-store-product-page-US10-TC1-1` to `grade10-site-store-product-page-SC-25`, a sold-out card as a row because the claim is on every card; `grade10-site-store-product-page-US10-TC2-1` to `grade10-site-store-product-page-SC-33`, now naming the Shipping fee label the scenario names rather than the whole shipping line
+- **Folded** — `grade10-site-store-product-page-US10-TC1-1` to `grade10-site-store-product-page-SC-25`, a sold-out card as a row because the claim is on every card; `grade10-site-store-product-page-US10-TC2-1` to `grade10-site-store-product-page-SC-38`, now naming the Shipping fee label the scenario names rather than the whole shipping line
 - **Raised, answered** — whether the store name opens Store Locator in the same tab (Q20): it does, in the product page's language. `grade10-site-store-product-page-SC-25` now says so, and `grade10-site-store-product-page-US10-TC1-1` gains the same-tab result
-- **Covered at domain** — `grade10-site-store-e2e-US7-TC1-1` walks `grade10-site-store-product-page-SC-25`'s language: the address keeps the product page's prefix and the name reads the same on both pages
+- **Deferred to the designer** - whether Shipping fee keeps its underline once it is not a link (Q22). `grade10-site-store-product-page-US10-TC2-1` read it as plain text, which takes a side; it now reads text, not a link, as `grade10-site-store-product-page-SC-38` does, and no case asserts the look
+- **Renumbered** - the Shipping fee scenario is `grade10-site-store-product-page-SC-38` and the domain journey is `grade10-site-store-e2e-US8`, numbers no other open change claims: `add-store-product-status` holds this capability's scenarios 33 to 37, and it and `add-account-profile` each hold the domain's journey 7
+- **Covered at domain** — `grade10-site-store-e2e-US8-TC1-1` walks `grade10-site-store-product-page-SC-25`'s language: the address keeps the product page's prefix and the name reads the same on both pages
 - **Contradicted** — none
 - **Uncovered anchors** — none: `grade10-site-store-product-page-US-10` carries both cases, and both leaves of the Free pick-up group are reached
