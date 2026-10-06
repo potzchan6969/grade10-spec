@@ -812,6 +812,29 @@ test("an added journey that reuses a durable journey id is refused", () => {
   );
 });
 
+test("a restated, modified or removed journey the baseline does not hold is refused, walked by nobody included", () => {
+  const { root } = sandbox();
+  const walkedByNobody =
+    "# Search journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n";
+  writeDurable(root, "user-journeys.md", walkedByNobody);
+  for (const [kind, verb] of [
+    ["Context user", "restated"],
+    ["MODIFIED User", "modified"],
+    ["REMOVED User", "removed"],
+  ]) {
+    writeFileSync(
+      join(root, SEARCH_DELTA, "user-journeys.md"),
+      `${walkedByNobody}\n## ${kind} journeys\n\n### site-search-US-01: Search contract\n`,
+    );
+    assert.throws(
+      () => prepareAcceptance(root, CHANGE),
+      new RegExp(
+        `${verb} journey site-search-US-01 is not in the accepted baseline`,
+      ),
+    );
+  }
+});
+
 test("a test case id already held by another durable journey is refused", () => {
   const { root } = sandbox();
   writeDurable(

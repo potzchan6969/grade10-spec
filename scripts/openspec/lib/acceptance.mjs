@@ -232,6 +232,24 @@ function refuseBesideWalkedBy(added, standing, capability) {
       );
 }
 
+/** A restated, modified or removed journey names one the accepted baseline
+ * holds; one it does not hold would be added, or silently dropped under a
+ * Walked by line. */
+function refuseUnheldJourneys(fromDelta, held, capability) {
+  for (const [name, verb] of [
+    ["Context user journeys", "restated"],
+    ["MODIFIED User journeys", "modified"],
+    ["REMOVED User journeys", "removed"],
+  ])
+    for (const journey of sectionByName(fromDelta, name)?.children ?? []) {
+      const id = usId(journey.heading);
+      if (!id || !held.has(id))
+        throw new Error(
+          `${capability}: ${verb} journey ${id ?? journey.heading} is not in the accepted baseline`,
+        );
+    }
+}
+
 function mergeJourneys(
   currentText,
   deltaText,
@@ -239,10 +257,16 @@ function mergeJourneys(
   capability,
   priorText,
 ) {
+  const fromDelta = deltaSections(deltaText);
+  const ownIds = journeyIds(priorText);
+  refuseUnheldJourneys(
+    fromDelta,
+    new Set([...journeyIds(currentText), ...ownIds]),
+    capability,
+  );
   const walkedBy = WALKED_BY.exec(deltaText)?.[0];
   const current = currentText ?? deltaText;
   const currentSections = deltaSections(current);
-  const fromDelta = deltaSections(deltaText);
   const currentJourneySection = sectionByName(currentSections, "User journeys");
   const live = new Map(
     (currentJourneySection?.children ?? [])
@@ -251,7 +275,6 @@ function mergeJourneys(
   );
   const retired = new Set(readRetiredIds(currentSections));
   const durableIds = new Set(currentText ? live.keys() : []);
-  const ownIds = journeyIds(priorText);
   const deltaHeld = [
     "User journeys",
     "Context user journeys",
@@ -287,10 +310,6 @@ function mergeJourneys(
   const removed = sectionByName(fromDelta, "REMOVED User journeys");
   for (const journey of removed?.children ?? []) {
     const id = usId(journey.heading);
-    if (!id || !live.has(id))
-      throw new Error(
-        `${capability}: removed journey ${id ?? journey.heading} is not in the accepted baseline`,
-      );
     live.delete(id);
     retired.add(id);
   }
