@@ -1,4 +1,4 @@
-## 1. Cover the responsive gallery contract (grade10)
+## 1. Cover the responsive gallery contract (grade10) (owner: @htonyl)
 
 - [ ] 1.1 Add focused component or Storybook interaction coverage for a wide several-image rail and a stacked several-image gallery that retains chevrons and progress `shared-ui-auction-listing-SC-47`, `shared-ui-auction-listing-SC-48`
 - [ ] 1.2 Cover the one-image and empty `ListingLotGallery` boundaries `shared-ui-auction-listing-SC-49`, `shared-ui-auction-listing-SC-56`
