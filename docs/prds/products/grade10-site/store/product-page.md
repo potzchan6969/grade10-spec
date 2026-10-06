@@ -41,8 +41,15 @@ add completes when practical.
 
 ## Free Pick-up
 
-🚧 **Opens Store Locator** — the free pick-up claim names Hong Kong Grade10
-Store and opens Store Locator
+🚧 **Opens Store Locator** — the store name in the free pick-up claim opens
+Store Locator in the same tab, in the page's language
+
+🚧 **No dead label** — Shipping fee has no page behind it, so it is not a
+link
+
+❓ **Shipping fee underline** — whether the label keeps the underline the
+product page draws once it is not a link; recommended plain, like the text
+around it, so it does not read as a broken link. The designer confirms
 
 ## You May Also Like
 
