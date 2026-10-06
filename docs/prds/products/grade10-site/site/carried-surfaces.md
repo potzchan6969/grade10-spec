@@ -11,17 +11,21 @@ answer. What a build carries is fixed when it is made, so a lane cannot be
 told to show a surface the build it runs has no page for.
 
 **Each waiting product waits for its own launch** — the store, the vault,
-booking a visit, the account profile and membership are carried in
-development and staging, and nowhere the public can reach. The auction has
+booking a visit, the account profile, membership and grading are carried in
+development and the two staging lanes, and nowhere else. The auction has
 already opened and is carried everywhere.
 
-| Lane | Store | Vault | Booking | Profile | Membership | Labs |
-| --- | --- | --- | --- | --- | --- | --- |
-| Development | carried | carried | carried | carried | carried | carried |
-| Staging | carried | carried | carried | carried | carried | carried |
-| Preview | not carried | not carried | not carried | not carried | not carried | not carried |
-| Production | not carried | not carried | not carried | not carried | not carried | not carried |
+| Lane | Front door | Store | Vault | Booking | Profile | Membership | Grading | Labs |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Development | carried | carried | carried | carried | carried | carried | carried | carried |
+| Staging | carried | carried | carried | carried | carried | carried | carried | carried |
+| Staging-2 | carried | carried | carried | carried | carried | carried | carried | carried |
+| UAT | not carried | not carried | not carried | not carried | not carried | not carried | not carried | not carried |
+| Preview | not carried | not carried | not carried | not carried | not carried | not carried | not carried | not carried |
+| Production | not carried | not carried | not carried | not carried | not carried | not carried | not carried | not carried |
 
+- **Front door** — the home page. Where it is not carried, the home address
+  opens the auction
 - **Store** — the store, the collections under it, a card's own page, the two
   addresses the shop hands out for a product and a collection, the cart, the
   checkout, and a collector's order history and order detail
@@ -35,6 +39,8 @@ already opened and is carried everywhere.
 - **Membership** — the membership and join pages. The two link to each
   other and share this one gate, so neither is ever reached from a build that
   withholds the other
+- **Grading** — the agreement and receipts a collector signs on the shop's
+  tablet at the counter
 - **Labs** — the demonstration surfaces, and the refund and shipping drafts
   nobody has approved
 
@@ -42,8 +48,8 @@ already opened and is carried everywhere.
 set, so it waits for the store's launch —
 [Store Locator](/p/grade10-site/store/store-locator)
 
-The auction, the front door, the terms, the privacy page, and sign-in are
-carried in every lane.
+The auction, the terms, the privacy page and sign-in are carried in every
+lane.
 
 ## An Address Nothing Carries
 
@@ -85,7 +91,7 @@ works in complete.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
-| Collector on grade10.com | Opens the front door before the store, the vault or booking has opened | Reads a site that offers what it can serve, with nothing to click that leads nowhere. |
+| Collector on grade10.com | Opens the site before the store, the vault or booking has opened | Reads a site that offers what it can serve, with nothing to click that leads nowhere. |
 | Collector with an old link | Opens a withheld address on the public site | Lands on the not-found surface, and the site does not pretend to sell or hold a card. |
 | Teammate on staging | Works on the store, the vault or booking | Reads and buys, vaults and books exactly as before, in a lane the public does not reach. |
 
@@ -116,6 +122,7 @@ production.
 | The deploy environment turns it off | Decided | Production and preview carry no store; staging and development do. Keying on the site stage was dropped: the stage reads `preview` for production today by one registry row, so a site moved to a preview stage for an unrelated reason would lose its store. | Engineering |
 | Preview follows production | Decided | The preview host is the production build at another address, so it carries what production carries. A preview that sold would be a public shop under a quieter name. | Engineering |
 | A store address in old mail owes nothing | Decided | A lane that carries no store takes no order, so no mail sent from it names a store address. A rule for mail would cover a case no lane can produce. | Product |
+| The site's lanes | Decided | Staging-2 carries what staging carries, and uat withholds what production withholds. The front door and grading each wait behind a gate of their own, and a build that withholds the front door sends its home address to the auction (grade10 `apps/frontend/grade10/src/surfaces.ts:343-399`, `:447-453`). | Product |
 | Store Locator waits with the store | Decided | The shop's location and hours page joins the store's set rather than being carried on every lane. The page and the chrome already tie it to the store: the footer draws it only beside the shop column. | Product |
 | The page code may stay in the bundle | Decided | A build without the store holds no store address and no store page; whether the code behind them still rides in the bundle is not stated. The storefront publishes the shop's features and the account's as one list, and the account's serve the profile, membership and join pages every lane carries, so telling them apart is work the shop's launch retires. | Engineering |
 | The vault's link-bearing surface waits with it | Decided | The signing ceremony waits behind the vault's gate. A shut vault mints no signing link, so any link already sent was internal — nobody outside the team held it. | Product |

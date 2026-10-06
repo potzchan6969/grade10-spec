@@ -2,7 +2,6 @@
 title: Crawlable Pages
 spec: grade10-site/site/crawlable-pages
 order: 2
-reviewed: 2026-10-06
 ---
 
 A public surface is one a collector reaches with no session, on a build that
