@@ -59,9 +59,9 @@ walked away from**.
 - **A counter sale a reward's code has left takes no reward again.** The
   remedy is a new sale, and points still go on. A counter sale a newer promise
   retired takes no new plan at all, and the till tells staff to ring the goods
-  on a new sale. What a fresh scan does on a cart that still carries the
-  member's reward code is open, since a till session ends long before a sale's
-  hour (decisions.md, Raised R1).
+  on a new sale. A fresh scan on the cart of a sale still open, carrying the
+  member's reward code, is not yet decided, since a till session ends long
+  before a sale's hour (decisions.md, Raised R1).
 - **A sale that collects a code this store deactivated is reported, and pays
   for the coupon once.** It spends the coupon where no other sale claims it.
   Today nothing looks: a reward's code is the only one that never reaches the
@@ -94,7 +94,8 @@ None.
   stands; a reversal is refused only while a sale claims the coupon, and the
   programme's own clock never frees a coupon whose code is live; a claim a
   checkout left before its order was written is released by the next claim;
-  the member's coupon list shows no code; what a redemption forfeits when it
+  the member's coupon list and `CouponList`'s contract carry no code for a
+  reward coupon; what a redemption forfeits when it
   lapses unused is its coupon, never a code minted for one sale.
 - `grade10-site/store/discounts`: at the till a gift reaches the sale as its
   own line and carries no code, and the till journey names a reward coupon,
@@ -127,6 +128,9 @@ None.
 - **`@grade10/i18n`** (this store) — `checkout.refusal.held_elsewhere` in
   every locale, and `checkout.refusal.idempotency_conflict` reworded to a
   coupon already used on another order.
+- **`@grade10/ui`** (this store) - `CouponList`'s contract wording only: it
+  carries a code where the consumer passes one, and a reward coupon carries
+  none. No component changes.
 - **Consumer apps** — the Grade10 site's cart drawer and `/checkout`, the
   membership wallet, and the POS till.
 
