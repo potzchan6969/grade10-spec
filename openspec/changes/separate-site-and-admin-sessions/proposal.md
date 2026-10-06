@@ -9,7 +9,7 @@ An operator who signs in on the site is signed in to the admin console, and the 
 - **BREAKING** The admin console holds a session of its own. Signing in on the site no longer signs the person in to the console, and signing in to the console no longer signs them in on the site. This reverses the rule that one sign-in covers every site of a brand.
 - **BREAKING** Operators sign in to the console once more at release; the console stops honouring the site's session. Customer sessions are untouched.
 - Sign-out on one surface leaves the other signed in.
-- A sign-in link signs in the surface that asked for it; "already signed in as someone else" is judged on that surface alone.
+- A sign-in link signs in the surface that asked for it; "already signed in as someone else" is judged on that surface alone. The one exception is a site link an elevated console action sends for a customer account, which signs in the site.
 - The second factor and the recent sign-in an operator action asks for are measured on the console's own session. A site sign-in never counts.
 - The session list names each session's surface, and ending every session of an account, like a ban, ends both.
 - Applies to both brands.
@@ -27,13 +27,15 @@ None.
 ### Modified Capabilities
 
 - `shared/auth/session`: sign-in no longer covers every site of the brand; the console holds its own session, and an open tab follows only its own surface's session.
-- `shared/auth/sign-in`: a link signs in the surface that asked for it, and the different-account check reads that surface.
+- `shared/auth/sign-in`: a link signs in the surface that asked for it, bar the site link an elevated console action sends for a customer account, the different-account check reads that surface, the send cap and newest link count per address and surface, a sign-in dialog closes for a session on its own side only, and a failed or different-account console link lands on the console's sign-in page.
 - `shared/auth/sign-out`: signing out ends the surface's own session only.
 - `shared/auth/sessions`: the list names the surface, and ending every session ends both.
+- `shared/console/user-directory`: a session may carry its surface, so the sessions dialog and the account panel name it on each row.
 
 ## Impact
 
-- Auth worker session handling and cookie naming, the site and console auth clients, and the backends' session reads, for both brands.
+- Auth worker session handling and cookie naming, the site and console auth clients, the console's sign-in page and two session lists (`AdminSignInFlow`, `UserSessionsDialog`, `UserAccountPanel`; the users desk renders the panel), and the backends' session reads, for both brands.
+- The test winners panel's Email sign-in link (`emailSignInLink` in `AuctionTestWinners`, `apps/admin/grade10/src/pages/auction-test/AuctionTestPage.tsx`, shipped by `complete-auction-post-sale`): it names the site, so the link signs in the test account on the site and not the console.
 - Every console request carries the console's session, so the backends' elevated procedures read it and refuse the site's.
 - Existing console sessions end at release.
 
@@ -47,4 +49,6 @@ None. A second customer site on a brand would sign in on its own under this chan
 - [Sign-In](../../../docs/prds/products/shared/auth/sign-in.md)
 - [Sign-Out](../../../docs/prds/products/shared/auth/sign-out.md)
 - [Sessions · Revoke](../../../docs/prds/products/shared/auth/sessions.md#revoke)
+- [User Directory · Account Panel](../../../docs/prds/products/shared/console/user-directory.md#account-panel)
 - [Accounts · Collector Half](../../../docs/prds/products/shared/auth/index.md#collector-half)
+- [Account · Registration and Login](../../../docs/prds/products/grade10-site/auction/account.md#registration-and-login)

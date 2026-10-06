@@ -17,6 +17,8 @@ honest outcome rather than a special case.
 
 🚧 **The list names the surface** - each session reads as a site or a console session, so an operator can tell where a person is signed in.
 
+🚧 **A session from before release reads as the site's** - one made before the separation carries no surface and is listed as a site session.
+
 🚧 **Ending every session ends both** - revoking all of an account's sessions closes its site and console sessions alike, and a ban does the same.
 
 This is the surgical version of a ban. A ban disables the whole account and

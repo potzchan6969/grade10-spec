@@ -13,7 +13,8 @@ another are stored against it; an email is an attribute of the account, never
 the thing it is filed under. That is what makes changing an address a change of
 data rather than a migration.
 
-Signing in covers the brand's customer site and no site of another brand.
+A session covers the surface it was made on and no other brand's, as
+[Sign-In](/p/shared/auth/sign-in) says.
 
 ## Two Sessions
 
@@ -52,6 +53,6 @@ surface, site or console, is reading the same one.
   what it shows about them is theirs: their cart, their watchlist, their
   orders, never the last person's.
 - **When it keeps up** — no later than when the person comes back to the tab,
-  and promptly for a tab on the same site whether they left it or not.
+  and promptly for a tab on the same surface whether they left it or not.
 - **When it cannot tell** — a tab that cannot reach us goes on showing what
   it last knew and asks again later. Only a definite answer signs anyone out.
