@@ -7,10 +7,14 @@ import {
   ACTIVITY_RELATIVE_MAX_MS,
   formatActivityAt,
   formatCollectorDeadline,
+  formatListingEnds,
   formatLocalDay,
   formatLocalMoment,
   formatLocalTime,
   formatRelativeAt,
+  formatViewerZoneName,
+  formatZonedLocalMoment,
+  formatZoneOffset,
   isPastActivityCap,
   JUST_NOW_MAX_MS,
   resolveActivityNow,
@@ -88,6 +92,9 @@ describe("formatLocalMoment", () => {
     expect(
       formatLocalMoment(at, { locale: "en", timeZone: "Asia/Hong_Kong" }),
     ).not.toContain("UTC");
+    expect(
+      formatLocalMoment(at, { locale: "en", timeZone: "Asia/Hong_Kong" }),
+    ).not.toContain("HKT");
   });
 
   it("shifts clock values by timezone", () => {
@@ -184,7 +191,7 @@ describe("formatActivityAt", () => {
 });
 
 describe("formatCollectorDeadline", () => {
-  it("prefixes a local moment", () => {
+  it("prefixes a local moment with the viewer's zone name", () => {
     const at = Date.UTC(2026, 8, 1, 18, 0);
     expect(
       formatCollectorDeadline(at, {
@@ -192,7 +199,51 @@ describe("formatCollectorDeadline", () => {
         timeZone: "Asia/Hong_Kong",
         prefix: "Ends",
       }),
-    ).toBe("Ends 2 Sep 2026, 02:00");
+    ).toBe("Ends 2 Sep 2026, 02:00 HKT");
+  });
+
+  it("names the viewer's zone, so New York reads EDT not HKT", () => {
+    const at = Date.UTC(2026, 8, 1, 18, 0);
+    const hk = formatListingEnds(at, {
+      locale: "en",
+      timeZone: "Asia/Hong_Kong",
+    });
+    const ny = formatListingEnds(at, {
+      locale: "en",
+      timeZone: "America/New_York",
+    });
+    expect(hk).not.toBe(ny);
+    expect(hk).toMatch(/ HKT$/);
+    expect(ny).toMatch(/ EDT$/);
+    expect(ny).not.toContain("HKT");
+  });
+});
+
+describe("formatViewerZoneName", () => {
+  it("names Hong Kong as HKT and New York in September as EDT", () => {
+    const at = Date.UTC(2026, 8, 1);
+    expect(formatViewerZoneName("Asia/Hong_Kong", at)).toBe("HKT");
+    expect(formatViewerZoneName("America/New_York", at)).toBe("EDT");
+  });
+});
+
+describe("formatZonedLocalMoment", () => {
+  it("appends the viewer zone to the local moment", () => {
+    const at = Date.UTC(2026, 8, 1, 18, 0);
+    expect(
+      formatZonedLocalMoment(at, {
+        locale: "en",
+        timeZone: "America/New_York",
+      }),
+    ).toBe("1 Sep 2026, 14:00 EDT");
+  });
+});
+
+describe("formatZoneOffset", () => {
+  it("names Hong Kong as GMT+8", () => {
+    expect(formatZoneOffset("Asia/Hong_Kong", Date.UTC(2026, 8, 1))).toBe(
+      "GMT+8",
+    );
   });
 });
 
