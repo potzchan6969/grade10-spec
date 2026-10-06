@@ -30,8 +30,8 @@ the collector asks for. When the store acts on an answer for a cart, that is
     be bought and nothing about how many remain
   - No browse ceiling: a browse add control keeps the quantity a collector asks
     for, whatever the shop's count
-  - Priced but unbuyable: an out-of-stock variant keeps its price and offers no
-    control that cannot be used
+  - Priced but unbuyable: an out-of-stock variant keeps its price, and nothing
+    that adds it can be pressed
 - Unpublished products
   - Absent, not marked: an unpublished product is missing from the listing and
     its address refuses
@@ -233,27 +233,29 @@ availability on that card's tile.
 - **WHEN** a collector sees it on the listing
 - **THEN** the card's tile reads Sold out
 - **AND** the tile keeps the first listed variant's price
-- **AND** the tile offers no usable add control
+- **AND** nothing on the tile that adds it can be pressed
 
 ### Requirement: Every surface communicates the same availability
 
 Every surface uses one internal sale identity per card, and none of them
-hides a price or offers a control that does nothing.
+hides a price or lets an out-of-stock variant be added.
 
 **One answer** - Each card SHALL have one internal Shopify sale identity: the
 first available variant in the product read's order, or the first listed
 variant when none is available. A listing tile SHALL show that identity's
 price; the card's page SHALL use it for its price, availability and cart add;
-a listing add and a page add SHALL both put it in the cart; and the cart line
-SHALL communicate its current availability. The tile's own availability is
-its rollup. No surface SHALL derive availability from stock counts.
+a listing add and a page add SHALL both put it in the cart; and each cart line
+SHALL communicate the current availability of the sale identity it holds. A
+line SHALL keep that identity when the card's one item moves to another, and
+an add of the new item SHALL be a line of its own. The tile's own availability
+is its rollup. No surface SHALL derive availability from stock counts.
 
 **No variant choice** - The page SHALL NOT render or require the collector to
 choose among sizes, options, or variants, and SHALL NOT show the internal sale
 identity as a product choice or display label.
 
 **Priced but unbuyable** - A surface SHALL NOT hide a price because a variant
-is out of stock, and SHALL NOT offer a purchase control that cannot be used.
+is out of stock, and SHALL NOT offer anything that can be pressed to add it.
 
 <!-- trace:scenario id=g10.commerce-product-status.SC-ns0 rev=2 -->
 #### Scenario: grade10-site-commerce-product-status-SC-14 - The page and cart use the available item
@@ -275,7 +277,19 @@ is out of stock, and SHALL NOT offer a purchase control that cannot be used.
 - **GIVEN** a card with one listed variant and that variant is out of stock
 - **WHEN** a collector opens the card's page
 - **THEN** the page keeps the item's price and says it is sold out
-- **AND** no usable purchase control is offered
+- **AND** nothing that adds it can be pressed
+
+<!-- trace:scenario id=g10.commerce-product-status.SC-77x rev=1 -->
+#### Scenario: grade10-site-commerce-product-status-SC-18 - A line keeps the item it holds
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
+
+- **GIVEN** a cart line holding a card's second listed variant, added while the
+  first was out of stock
+- **AND** the second variant has since sold out and the first is for sale again
+- **WHEN** a collector opens the cart, then opens the card's page and adds
+- **THEN** the line still holds the second variant and reads Sold out
+- **AND** the page reads available at the first variant's price
+- **AND** the add puts the first variant in the cart on a line of its own
 
 ### Requirement: An unpublished product is absent from browsing rather than marked
 

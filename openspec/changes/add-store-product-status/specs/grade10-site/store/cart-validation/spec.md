@@ -17,6 +17,8 @@ cart is offered for checkout, where the shop becomes the authority.
     order is priced from
   - Live answer: each read is answered by the shop at that moment, never by a
     browse cache or a recorded value
+  - Back to the cart: a checkout the store's read or the shop refuses reads
+    the cart again as opening it does
 - What a read does to a line
   - Reduced: a line the shop can fill in part drops to what it can fill and
     says so
@@ -48,6 +50,10 @@ every line the cart holds when the cart is opened, and again when the cart is
 offered for checkout. It SHALL NOT rely on what a line recorded when it was
 added, however recently.
 
+**Back to the cart** - When the checkout read or the shop refuses a checkout
+and the collector is returned to the cart, the store SHALL re-read every line
+the cart holds under the rules of the cart-open read.
+
 **Live answer** - Each read SHALL be answered by the shop at that moment. A
 cached read that serves the listing or a card's page SHALL NOT answer for a
 cart line: a browse surface may use its normal catalogue cache, and the cart
@@ -64,8 +70,10 @@ checkout on the strength of the previous read. If a read fails, the store
 SHALL mark each affected line unchecked, SHALL offer Retry, SHALL NOT present
 its recorded availability, price, or the cart total as current, and SHALL keep
 checkout unavailable until a later read returns. If the initial cart read
-fails before any lines are known, the drawer SHALL show a cart-level unchecked
-state with Retry and SHALL NOT present a total or allow checkout.
+fails before any lines are known, the store SHALL offer Retry and SHALL NOT
+name a line, present a total, present the cart as empty, or allow checkout;
+the drawer shows that cart as `shared/ui/store-cart` requires for a cart not
+yet read.
 
 <!-- trace:scenario id=g10.store-cart-validation.SC-cl3 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-01 - The cart is opened
@@ -101,7 +109,7 @@ state with Retry and SHALL NOT present a total or allow checkout.
 - **AND** no recorded availability, price, or cart total is presented as current
 - **AND** Retry is available while checkout remains unavailable
 
-<!-- trace:scenario id=g10.store-cart-validation.SC-scy rev=1 -->
+<!-- trace:scenario id=g10.store-cart-validation.SC-scy rev=2 -->
 #### Scenario: grade10-site-store-cart-validation-SC-23 - The cart cannot be loaded
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
@@ -109,6 +117,7 @@ state with Retry and SHALL NOT present a total or allow checkout.
 - **WHEN** the initial cart read fails
 - **THEN** the drawer says the cart could not be checked and offers Retry
 - **AND** no line or total is presented as current, and checkout is unavailable
+- **AND** the drawer does not say the cart is empty
 
 <!-- trace:scenario id=g10.store-cart-validation.SC-3j7 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-04 - A browse cache is not the answer
@@ -118,6 +127,17 @@ state with Retry and SHALL NOT present a total or allow checkout.
   tile still reads available from a cached read
 - **WHEN** a collector opens a cart holding that variant
 - **THEN** the line is reported as out of stock
+
+<!-- trace:scenario id=g10.store-cart-validation.SC-6sg rev=1 -->
+#### Scenario: grade10-site-store-cart-validation-SC-28 - The cart is read again after a short fill
+**Serves:** grade10-site-store-cart-validation-US-03 - Collector meets the shop's own refusal
+
+- **GIVEN** a cart line requesting 3 of a variant the store's checkout read
+  confirmed
+- **AND** the shop accepts 2 of it at checkout and now counts it at 2
+- **WHEN** the collector is returned to the cart
+- **THEN** every line is re-read as when the cart opens
+- **AND** the line's quantity becomes 2 and it is reported as adjusted
 
 ### Requirement: A line the store cannot fill in full is reduced to what remains
 
@@ -403,7 +423,7 @@ The lines it holds are treated as **In flight** requires.
 - **THEN** no checkout order is created
 - **AND** the line is identified with 2 as the quantity the shop would fill
 
-<!-- trace:scenario id=g10.store-cart-validation.SC-3zl rev=1 -->
+<!-- trace:scenario id=g10.store-cart-validation.SC-3zl rev=2 -->
 #### Scenario: grade10-site-store-cart-validation-SC-21 - The read cannot be completed
 **Serves:** grade10-site-store-cart-validation-US-03 - Collector meets the shop's own refusal
 
@@ -415,4 +435,4 @@ The lines it holds are treated as **In flight** requires.
 - **AND** each held line is marked unchecked; no recorded availability,
   price, or cart total is presented as current
 - **AND** Retry is available, and checkout remains unavailable until a later
-  read confirms the lines
+  read returns

@@ -14,7 +14,7 @@
     line
 - Sold-out item
   - Priced but unbuyable: an item nobody can buy keeps its price, reads Sold
-    out, and offers nothing to press
+    out, and nothing that adds it can be pressed
 
 ## REMOVED Feature set
 
@@ -149,10 +149,10 @@ reads is the one the address names, not the catalogue it came from.
 ### Requirement: A card nobody can buy says so where the buying happens
 
 A card whose one item is sold out SHALL say so on its page, in the place a
-collector would otherwise buy it. It SHALL NOT show a control that cannot be
-used, and it SHALL NOT hide the item's price — a sold-out card still costs
-what it costs, and a page with nothing where the buying goes reads as a page
-that failed rather than a card that sold.
+collector would otherwise buy it. It SHALL NOT offer anything that can be
+pressed to add the item, and it SHALL NOT hide the item's price — a sold-out
+card still costs what it costs, and a page with nothing where the buying goes
+reads as a page that failed rather than a card that sold.
 
 The item is sold out only when no variant the card lists is for sale. While
 any is, the page offers that one, and shows no other variant as sold out or as
@@ -213,13 +213,14 @@ a later add.
 - **THEN** they remain signed out on that product page
 - **AND** the cart is unchanged
 
-<!-- trace:scenario id=g10.store-product-page.SC-0j7 rev=2 -->
+<!-- trace:scenario id=g10.store-product-page.SC-0j7 rev=3 -->
 #### Scenario: grade10-site-store-product-page-SC-28 - Sign-in on the product page completes the add
 **Serves:** grade10-site-store-product-page-US-11 - Collector signs in to add from the product page
 
-- **GIVEN** a signed-out collector who opened sign-in from Add to cart for a
-  given quantity on a product page
+- **GIVEN** a signed-out collector who asked for 5 of a product whose one item
+  the shop counts at 2, and opened sign-in from Add to cart on its page
 - **WHEN** they sign in successfully and remain on that page with that same
   intended quantity
-- **THEN** the signed-in member cart holds that add
+- **THEN** the signed-in member cart holds 5 of that item, for the cart's
+  review to answer
 - **AND** the sign-in dialog is closed

@@ -14,6 +14,12 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
   `quantityAvailable` to `StoreProductPurchasePanel`, which caps the stepper
   with it. `sellableQuantity`, `scarceQuantity` and `remainingToSay`
   (`Product.ts:184-228`) are exported and read by nothing
+- **Sold out where the buying happens** - `StoreProductPurchasePanel`
+  disables its stepper and its Sold out button when `availableForSale` is
+  false (`packages/ui/src/blocks/store-product/store-product-purchase-panel.tsx:46-70`),
+  and `ProductCardImage` draws no cart control on a sold-out tile
+  (`packages/ui/src/blocks/store-product-listing/product-card-image.tsx:90`),
+  so nothing that adds a sold-out item can be pressed
 - **Line classification** - `classifyCartLine`
   (`packages/grade10-store/contracts/src/cartReview.ts:61-104`) is the one
   rule the cart review, the checkout pricing and the fixture client share. A
@@ -71,10 +77,10 @@ the code above.
 | Page sale item | `pricedVariant(product)` is the page's one item: price, availability, SKU and cart add read the same object; no chooser, no variant title on the page | A variant chooser; status for a variant the page cannot add |
 | No browse ceiling | `ProductBuyBox` passes `saleItem: { availableForSale }` only. `sellableQuantity`, `scarceQuantity`, `remainingToSay` and their exports are deleted | Keeping the count "advisory" on the stepper |
 | Cart line title | `lineTitle` keeps naming the variant on the cart line; the page never does | Hiding the variant in the cart, where the collector tells two lines apart |
-| Checkout contradicts the cart | On `amendCart` naming lines, the drawer runs the cart-open read again through `retryReview`. That read applies the open rules to every line: withdrawn leaves and is named in the removal notice, sold out stays marked, a short line is reduced, a repriced line shows its struck price. One persistent notice under `checkout.review.blocked` names every line the checkout answer named | Folding the checkout's lines into the review cache, which writes nothing back, so the next open reports the same reprice twice; a second notice vocabulary |
-| Shop fills short | `quantityClamped` names its line and count in that notice through a new `checkout.review.filledShort` message (`{title}`, `{count}`); the line is not reduced | Reducing the line to the shop's count, which changes a cart on a refusal; the count-free `reason.quantityClamped` |
+| Checkout contradicts the cart | On `amendCart` naming lines, the drawer runs the cart-open read again through `retryReview`, as **Back to the cart** requires. That read applies the open rules to every line: withdrawn leaves and is named in the removal notice, sold out stays marked, a short line is reduced, a repriced line shows its struck price. One persistent notice under `checkout.review.blocked` names every line the checkout answer named | Folding the checkout's lines into the review cache, which writes nothing back, so the next open reports the same reprice twice; a second notice vocabulary |
+| Shop fills short | `quantityClamped` is an `amendCart` answer (`packages/grade10-store/frontend/src/features/orders/checkout/domain/models/CheckoutResolution.ts:92`), so it takes the row above. The refusal itself changes no line; it names its line and count in the one notice through a new `checkout.review.filledShort` message (`{title}`, `{count}`). The cart-open read that follows, under **Back to the cart**, reduces the line under **Reduced** when the shop's live count bounds the request, and the line reads adjusted | The count-free `reason.quantityClamped` |
 | Checkout read fails | `catalog_unavailable` sets the same unchecked state a failed cart-open read sets: lines, prices and totals read unchecked, the persistent notice names every line with Retry, Proceed to Checkout stays disabled. The state is one derived flag, `reviewUnchecked = review.state === "failed" \|\| checkoutReadFailed`; Retry clears `checkoutReadFailed` only when its read returns | A second failure path with its own copy; clearing on a timer or on close |
-| Cart not loaded | A failed basket read keeps the drawer in its loading treatment, never its empty state, with the persistent Retry notice and no line names; checkout stays disabled | Showing the empty cart, which says something the store does not know |
+| Cart not loaded | The persistent Retry notice names no line and checkout stays disabled. The drawer stays in its loading treatment, never its empty state, because the host holds `loading` until the basket is read: `cart-drawer-empty-state` task 2.2 makes that fix, for the state `shared/ui/store-cart` owns | Showing the empty cart, which says something the store does not know; fixing the host's `loading` here as well, a second change for one line |
 | Data and API | Reuse `CheckoutOutcome`, `CheckoutResolution` and the review procedures as they are | A new endpoint or a stored browse count |
 
 ```mermaid
@@ -115,9 +121,10 @@ sequenceDiagram
   omit them; `StoreProductHeaderCopy.onlyLeft` stays supplied until Q8,
   because the block's copy type requires it, and renders nothing without
   `availabilityCount`
-- [The cart drawer has no drawer-level unchecked body] → the loading
-  treatment and the persistent notice carry it; a dedicated body state is
-  the designer's, decisions Q9
+- [Today a failed review over a basket never read ends `loading`, and the
+  drawer shows the empty state] → `cart-drawer-empty-state` task 2.2 holds
+  `loading` until the basket is read; group 5's walk of a cart that never
+  loaded waits on it (decisions Q9)
 
 ## Migration Plan
 
