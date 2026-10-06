@@ -67,6 +67,7 @@ window - SHALL fail the product at start-up, naming what it refuses.
 **No points** - A member holding no redeemable points SHALL be owed nothing,
 whatever date their window carries.
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-bhb rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-01 - A member inside a lead time is owed a reminder
 **Serves:** Raising a reminder - a member inside a lead time is owed a reminder
 
@@ -74,6 +75,7 @@ whatever date their window carries.
 - **THEN** that member is owed a reminder for that day
 - **AND** the reminder names the member, the day, the points expiring on it, and the lead time that raised it
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-7q3 rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-14 - A lead time counts whole days on the programme's clock
 **Serves:** Raising a reminder - a lead time counts whole days on the programme's clock
 
@@ -81,18 +83,21 @@ whatever date their window carries.
 - **THEN** the member is owed a reminder for that lead time
 - **AND** a member whose day falls one day later is owed none for it
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-t7s rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-02 - A member outside every lead time is owed nothing
 **Serves:** Raising a reminder - a member outside every lead time is owed nothing
 
 - **WHEN** the day a member's balance expires is further off than every configured lead time
 - **THEN** nothing is owed to that member
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-4yr rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-03 - A member holding no points is owed nothing
 **Serves:** Raising a reminder - a member holding no points is owed nothing
 
 - **WHEN** a member holds no redeemable points
 - **THEN** nothing is owed to that member, whatever date their window carries
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-qri rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-04 - Each lead time raises its own reminder
 **Serves:** Raising a reminder - each lead time raises its own reminder
 
@@ -100,12 +105,14 @@ whatever date their window carries.
 - **THEN** two reminders are owed for that day, one per lead time
 - **AND** each is told apart from the other by the lead time it names
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-y1d rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-05 - Asking again raises nothing twice
 **Serves:** Raising a reminder - asking again raises nothing twice
 
 - **WHEN** the programme is asked again who is owed a reminder, with the same member, day and lead time still matching
 - **THEN** the reminder already owed is the one answered, and no second one is owed
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-qfb rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-07 - A programme with no lead times owes nothing and starts
 **Serves:** Raising a reminder - a programme with no lead times owes nothing and starts
 
@@ -113,6 +120,7 @@ whatever date their window carries.
 - **THEN** the product starts
 - **AND** no member is owed a reminder, whatever their balance and the day it expires
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-tvk rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-16 - A lead set that cannot work stops the programme from starting
 **Serves:** Raising a reminder - a lead set that cannot work stops the programme from starting
 
@@ -120,6 +128,7 @@ whatever date their window carries.
 - **THEN** the product fails at start-up, naming what it refuses
 - **AND** a lead one day shorter than the window starts
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-9az rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-15 - The points a reminder names stay current
 **Serves:** What a reminder holds - the points a reminder names stay current
 
@@ -137,6 +146,7 @@ holds no points expiring on the day it names, the balance has lapsed, or the
 member's account has been deleted. It SHALL NOT wait on any scheduled process,
 and SHALL stop being owed whether or not anything has read it.
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-vup rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-08 - Activity that moves the day ends the reminder
 **Serves:** Keeping a reminder true - activity that moves the day ends the reminder
 
@@ -144,24 +154,28 @@ and SHALL stop being owed whether or not anything has read it.
 - **THEN** the reminder owed against the day it replaced is immediately no longer owed
 - **AND** nothing is owed for the new day until it falls within a lead time
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-4iv rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-09 - A balance brought to nothing ends the reminder
 **Serves:** Keeping a reminder true - a balance brought to nothing ends the reminder
 
 - **WHEN** a member owed a reminder has their whole balance clawed back or corrected away, and the day their balance expires stays in place
 - **THEN** the reminder is immediately no longer owed
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-jbb rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-18 - A deleted account ends the reminder
 **Serves:** Keeping a reminder true - a deleted account ends the reminder
 
 - **WHEN** a member owed a reminder deletes their account
 - **THEN** no reminder is owed to them from that moment
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-wib rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-10 - A day that has passed ends the reminder
 **Serves:** Keeping a reminder true - a day that has passed ends the reminder
 
 - **WHEN** the instant the member's balance expires passes
 - **THEN** the reminder naming that day is immediately no longer owed, whether or not anything read it
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-r8n rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-17 - Points returned to a day are owed a reminder again
 **Serves:** Keeping a reminder true - points returned to a day are owed a reminder again
 
@@ -176,6 +190,7 @@ Raising a reminder sends nothing.
 send no message on raising one. No member SHALL be told anything as a result
 of a reminder being owed.
 
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-q6l rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-12 - Raising a reminder tells the member nothing
 **Serves:** Delivery - raising a reminder tells the member nothing
 
