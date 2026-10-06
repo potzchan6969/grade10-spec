@@ -22,13 +22,10 @@ The product listing lets collectors browse the catalogue and open a product.
 - **Filter** — the sidebar narrows by the world a card comes from and the kind
   of collectible it is, each choice with the catalogue's count beside it;
   worlds show five and an invitation to the rest, types show whole
-- **Zero behind a choice** — a facet choice or group the catalogue counts
-  nothing behind, over the whole unnarrowed catalogue, never shows in the
-  filter panel; narrowing by something else does not resurrect it. A choice
-  or group the catalogue does carry something for elsewhere stays shown at
-  whatever the current narrowing counts behind it, zero included, so the
-  collector can see what a narrowing (their own or a sibling's) starved and
-  undo it
+- **Zero behind a choice** — a choice or group the whole catalogue counts
+  nothing behind never shows, whatever the narrowing; one the catalogue
+  carries stays shown at the narrowing's count, zero included, so the
+  collector sees what a narrowing starved and can undo it
 - 🚧 **Filter on a small screen** — a Filter control opens a left drawer for
   worlds and types; the catalogue search field stays on the listing outside
   that drawer
@@ -201,7 +198,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Seconds after save | Decided | A change reaches the listing in seconds, not minutes. The shop's report and its own reads are the floor, so nothing here can be faster than Shopify: the store reads a change back rather than trusting the report, and a report that never arrives is caught by the 5-minute re-read. A listing narrowed to a collection stays on the shop's own read, which the mirror does not reproduce in the collection's own order. | Product |
 | Collection with facets | ❓ Open | Whether a collection and a facet can be applied together; nothing in the catalogue's own reads prevents it. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
-| Price order | ❓ Open | Whether lowest price means the cheapest listed product regardless of availability, as Shopify's price sort exposes, or the cheapest item the collector can buy, as the active user journey promises. | Product |
+| Price order | ❓ Open | Whether a card for sale lists before a sold-out one, in which orders — every order, latest at rest included, or the price orders only — and which price a price order sorts on: the price the tile shows, or the lowest of every variant. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
 | The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |
@@ -211,10 +208,9 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | A starved facet is still offered | Decided | Once a query is in force, nothing behind a choice is the query's doing rather than the shop's. Hiding the group would strand the collector, and a selection nobody can undo is a trap. | Design |
 | No facets, no panel | Decided | A shop that has configured none gets no facet group and no message in its place; search and sort stay. It is not a fault the collector is told about. | Product |
 | Utility row | Decided | Help, Shipping and Orders & Returns do not sit under the filter. Where Help and store or auction documentation live is still open on [Page Shell](/p/grade10-site/site/page-shell). | Product |
-| Browse quantity is unbounded | Decided | The cart's review is the only authority for a requested quantity. Browse controls do not expose or cap a request by the shop's stock count, and Cart explains a short fill when the shop cannot honour it in full. | Engineering |
 | Sign-in to add | Decided | A signed-out Add to cart opens the sign-in dialog. There is no guest cart and no guest checkout. After sign-in the add completes when practical. | Product |
 | Sign-in title from add | Decided | The dialog title is **Sign In to Add to Cart** (Title Case, as Modal titles are) — why, not the bare **Sign In to Grade10**. Header Sign In and other entry points keep **Sign In to Grade10**. Cart, not bag. | Product |
-| No browse threshold | Decided | The listing and product page expose availability without remaining counts or scarcity cues. Only Cart may explain a requested quantity that the shop can fill in part. | Product |
+| No stock on browse | Decided | The listing and the product page show no remaining count, no scarcity cue and no cap on a requested quantity from a stock count. The cart's review is the only authority for a quantity, and Cart explains a short fill. | Product |
 | Links the site owes | ❓ Open | The footer still draws destinations the site does not yet answer. Settling that departure belongs to page-shell; the listing no longer adds a second one. | Product |
 | Search stays on the listing | Decided | The field lives with the listing filters, not in the site header. Auction has no search surface yet, and a nav search would read as site-wide find. | Design |
 | Search is the wide sidebar field | Decided | Suggestions, commit and the search chip are the wide sidebar field. Below the wide breakpoint there is no listing search; facets are the narrow pills. | Design |

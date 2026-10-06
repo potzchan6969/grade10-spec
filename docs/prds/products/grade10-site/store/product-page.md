@@ -10,7 +10,7 @@ item a collector can add.
 
 - **Card** — name, description, images and the one sellable item's price;
   badges and compare-at price where the catalogue provides them
-- 🚧 **One item to buy** — the page offers no size, option or variant choice.
+- **One item to buy** — the page offers no size, option or variant choice.
   Shopify's sale identifier stays internal to availability and cart handling
 - 🚧 **Buy** — choose a quantity, add the product, and stay on the page; while
   the add is pending the controls show Adding…; after it settles the cart
@@ -104,5 +104,7 @@ auction lot's address.
 | Large card on X | Decided | The response names the card shape, because X sizes the card from that name alone and defaults to the small square. Wide with a picture, small without. | Product |
 | Originals under the box | Decided | A picture narrower than the box is enlarged to fill it, so it reads soft rather than small, and the declared size is always the delivered one. | Product |
 | Lot previews | ❓ Open | An auction lot's address unfurls with no picture; its images are the auction's, not the shop's. | Product |
+| Low-stock annotation | ❓ Open | The Product Detail frame's Low inventory indicator still asks for `Only X left`, which this page rules out; the designer supersedes it or says why it stays. | Design |
+| Remaining count in the shared blocks | ❓ Open | Whether the product header's and the listing card's remaining-count element, and the purchase panel's stepper ceiling from a stock count, leave the shared blocks now that no Grade10 surface may supply them. | Design |
 | A catalogue image that fails to transform | ❓ Open | Whether a card whose image exists but fails to load or resize from the CDN falls back to no `og:image`, the same as a card with no image, or something else. | Engineering |
 :::

@@ -13,14 +13,30 @@ The distinction matters because the two moments do different jobs. Opening the
 drawer lets the collector repair a cart early. Checkout makes the final order
 decision. Neither answer turns the shop's later acceptance into a guarantee.
 
-🚧 **A check that cannot finish** — name every affected line as unchecked,
-replace its last availability and price and the cart total with an unchecked
-state, offer a retry, and keep checkout unavailable until the store has a
-current answer. If the cart has not loaded its lines, show an unchecked cart
-and Retry without naming lines it does not know.
-When a product has left the channel, name it in the unavailable-items notice
-as it is removed from the cart; keep an out-of-stock line visible for the
-collector to remove.
+- **Fewer than asked** — a line the shop can fill only in part drops to what
+  it can fill, and the collector is told the store changed it; a line never
+  grows when more comes back
+- **A new price** — a line takes the shop's current price and says it
+  changed, a rise as plainly as a fall; that price is the line's from then on
+- **Priced from its own read** — checkout prices every line from the read it
+  takes, never from an earlier read or a price the browser sends
+- **A sold-out line holds checkout** — Proceed to Checkout stays unavailable
+  until the collector removes it
+- 🚧 **A product that left the shop** — a line whose product left the
+  store's channel, or whose variant no longer exists, leaves the cart when it
+  opens or when checkout finds it, and one notice names every line removed. A
+  variant the shop still lists but does not sell stays in the cart as Sold
+  out for the collector to remove
+- 🚧 **Every moved line at once** — when the checkout read finds lines that
+  moved, the drawer stays open and one notice names each of them with what
+  happened to it
+- 🚧 **Filled short** — a cart the shop would fill short is refused, naming
+  the line and how many the shop would fill; nothing is sold short
+- 🚧 **A check that cannot finish** — every affected line reads unchecked,
+  its last availability and price and the cart total are replaced with an
+  unchecked state, Retry is offered, and checkout stays unavailable until the
+  store has a current answer. A cart that has not loaded its lines shows an
+  unchecked cart and Retry, naming no line it does not know
 
 :::detail{title="Product decisions" for="pm"}
 A collector should learn about a moved cart line while they can still fix it,
