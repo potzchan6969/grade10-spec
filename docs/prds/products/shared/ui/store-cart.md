@@ -47,10 +47,10 @@ the footer and no count on the drawer title.
 
 ## Tender Actions
 
-🚧 **Unresolved choice** — tender actions and Checkout wait while the
+🚧 **Unresolved choice** - tender actions and Checkout wait while the
 application saves a choice; accepted figures stay visible until it answers.
 
-🚧 **Tender actions need an answer** — a promo or points action appears only
+🚧 **Tender actions need an answer** - a promo or points action appears only
 when the application supplies the callback that can perform it. The drawer can
 show current tender context without offering an action that cannot change it.
 
@@ -68,7 +68,7 @@ Store sale row.
 price from the price charged. The designer's call.
 
 🚧 **Subtotal** - the sum of each line's price times its quantity, leaving
-out a sold-out line as the count badge does.
+out sold-out and unavailable lines, as the drawer title's count does.
 
 🚧 **Stacked** - a code that stacks leaves the sale on the lines; the summary
 shows only the code's discount.
@@ -88,7 +88,7 @@ listed apart from the ones that can, muted with its reason and no Apply.
 
 ❓ **A picked code the quote refuses** - whether its ticket stays among the
 ones that can apply, with its Apply, or moves apart, muted with the refusal as
-its reason. The designer's call.
+its reason, or each application chooses. The designer's call.
 
 ::story{id="store-cart-cartitem--sale-price" title="A line on the site sale"}
 
@@ -151,4 +151,6 @@ line: in every outcome here, the code's discount shows in the summary.
 | Look | Decided | The block's stories are the agreed look; the Figma cart frames are historical | Design |
 | Combine rules | Decided | The drawer shows the outcome the quote returns. Whether a code stacks, is refused or replaces the sale, including a product sale that refuses every code, is the shop's pricing - [Discounts · One discount at a time](/p/grade10-site/store/discounts#one-discount-at-a-time). Chosen over encoding those rules in the drawer. | Product |
 | No sale row | Decided | A site sale shows only on the lines it cuts, so each cut appears once; the summary names no automatic cut. | Product |
+| Picked code refused | Open | ❓ Designer to confirm: after the quote refuses a held code the shopper picked, its ticket stays among the ones that can apply with its Apply, moves apart, muted, with the refusal as its reason, or each application chooses. Recommended: moves apart | Design |
+| Struck price read aloud | Open | ❓ Designer to confirm: how a screen reader tells the struck list price from the price charged - hidden labels the application supplies, such as Sale price and Was, or a strike element with no new words. Recommended: hidden labels, through one follow-on change for every struck price | Design |
 :::

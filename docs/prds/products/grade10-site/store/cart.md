@@ -34,6 +34,8 @@ back to that page.
 - **The choice follows the cart** — the code and the points the member
   chose are held with the lines, so both are still there after a reload and
   on another device; the figures are read again either way
+- **Repriced** - a line the shop repriced shows the new price with the price
+  the member saw before struck through
 
 ## Promo Code
 
@@ -141,7 +143,7 @@ and tax before the invoice. A second code on one cart.
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
-| Struck price on a line | ❓ Open | A line strikes through one price, the one the member saw before a reprice. A line both repriced and on sale needs one meaning for it: the list price, with the reprice given a signal of its own, or the price seen before, with the sale shown only by the lower price. Recommended: settle it with the change that prices the shop's sale in this drawer. | Product |
+| Struck price on a line | ❓ Open | A line both repriced and on sale strikes through one price: the list price, with the reprice given a signal of its own, or the price seen before, with the sale shown only by the lower price. Recommended: settle it with the change that prices the shop's sale in this drawer. | Product |
 | Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
 | Verification before a session | Decided | Goods of HKD 120,000 or more replace Proceed to Checkout with the verify message and the account link. No checkout session is created until the member is verified. The identity check still runs only on the account page. Asking Shopify first and showing the gate from its reply is not this drawer. | Product |
 | Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
