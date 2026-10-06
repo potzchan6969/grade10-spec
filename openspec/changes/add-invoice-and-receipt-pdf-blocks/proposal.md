@@ -41,8 +41,8 @@ own task, see Impact).
     Bill To and Ship To, including a phone line when supplied, the lot
     heading, a Description/Amount table of charges ending in a boxed
     Subtotal/Payment Processing Fee/Order Total summary, an optional supplied
-    `taxLine`, an optional `Replaces invoice {id}` row, and the issuer block
-    pinned to the sheet's bottom right.
+    `taxLine`, an optional `Replaces invoice {id}` row that links to the prior
+    PDF when supplied, and the issuer block pinned to the sheet's bottom right.
   - `ReceiptPdf` draws the same title/issuer-mark, meta rows (receipt number,
     the invoice number it pays, date paid, payment method, payment
     reference), Bill To and Ship To, including a phone line when supplied, the

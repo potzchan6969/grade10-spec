@@ -37,10 +37,13 @@ Grade10 SHALL refuse a delivery-address write from the winner, per
 persisted address deadline has passed SHALL derive as Setup Overdue; a
 confirmed address SHALL still derive as Preparing Invoice.
 
-An operator SHALL be able to record a delivery address on an auction order
-whose `address_window_open` is false. Doing so SHALL set `address_confirmed`
-true, SHALL leave `address_window_open` false, and SHALL NOT let the winner
-write again. An operator reopening an unconfirmed Setup Overdue order with
+An operator holding payment-processing SHALL be able to record a delivery
+address only on an unconfirmed Setup Overdue auction order whose invoice status
+is `not_issued`. Doing so SHALL set `address_confirmed` true, SHALL leave
+`address_window_open` false, and SHALL NOT let the winner write again. Grade10
+SHALL refuse recording when an address is already confirmed, an invoice has
+been sent, cancellation is requested or the order is cancelled. An operator
+reopening an unconfirmed Setup Overdue order with
 invoice status `not_issued` SHALL make `address_window_open` true again. It
 SHALL NOT write a status directly; the derived order status SHALL be
 re-evaluated from the reopened order facts.
@@ -108,9 +111,19 @@ afterwards.
 #### Scenario: auction-status-SC-35 - An operator may record the address on a passed address deadline
 **Serves:** Guards - no address on a passed address deadline
 
-- **GIVEN** an auction order whose `address_window_open` is false
-- **WHEN** an operator records a delivery address on it without reopening the
-  address form
+- **GIVEN** an unconfirmed auction order in Setup Overdue whose invoice status
+  is `not_issued` and whose `address_window_open` is false
+- **WHEN** an operator holding payment-processing records a delivery address on
+  it without reopening the address form
 - **THEN** Grade10 accepts the write
 - **AND** `address_window_open` is still false
 - **AND** the order derives as Preparing Invoice
+
+#### Scenario: auction-status-SC-36 - Recording a phone address refuses ineligible orders
+**Serves:** Guards - pre-invoice overdue address recording only
+
+- **GIVEN** one order with a confirmed address, one with an invoice sent, one
+  with cancellation requested, and one cancelled order
+- **WHEN** an operator attempts to record a delivery address given by phone
+- **THEN** Grade10 refuses every write
+- **AND** no order's delivery address or derived status changes

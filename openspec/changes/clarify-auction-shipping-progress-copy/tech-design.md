@@ -10,7 +10,7 @@
 ## Boundaries
 
 - **No persistent change** - No API, database field, derived-status rule, or stepper animation changes.
-- **No tracker change** - The carrier link, tracking chrome, and Shipped or Delivered letters remain as they are.
+- **Tracking chrome** - Keep the existing carrier link on the tracking number and remove the older carrier-name requirement from the Winner Order contract. Shipped and Delivered letters stay as they are.
 - **No application group** - The store owns the catalogues, preview, fixtures, and story assertions. A consuming application only takes the published submodule update.
 
 ## Verification

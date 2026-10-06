@@ -38,8 +38,9 @@
     `SC-91`.
   - Verification: permission, audit and concurrency-boundary checks.
 - [x] 3.3 Retire the address window at invoice send and preserve the existing
-  operator-only expired-invoice settlement path.
-  - Covers: `grade10-admin-auction-post-sale-SC-85`–`SC-89`.
+  operator-only expired-invoice collection path, including a Partially Paid
+  shortfall.
+  - Covers: `grade10-admin-auction-post-sale-SC-85` through `SC-89`, and `SC-92`.
   - Verification: invoice-send race and settlement checks.
 
 ## 4. Frontend (owner: @htonyl)

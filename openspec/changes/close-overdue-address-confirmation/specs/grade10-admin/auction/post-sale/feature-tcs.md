@@ -231,7 +231,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-post-sale-SC-82
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -741,6 +741,38 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The Expired invoice status is gone; the invoice reads paid.
 * Winner Order shows no amount owed and no card Pay.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-v9x rev=1 covers=g10adm.auction-post-sale.SC-v9x -->
+### post-sale-US18-TC28-1: An expired invoice keeps a recorded shortfall
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<expired-invoice order>` has a 100000 minor-unit balance after its deadline.
+* admin(holds payment-processing) is recording a payment.
+
+**Steps:**
+
+1. Record a 40000-minor-unit payment with method, reference and proof.
+2. Read the invoice status, remaining balance and winner payment controls.
+
+**Expected Results:**
+
+* The invoice reads Partially Paid with 60000 minor units remaining.
+* No new self-service payment deadline or close-as-paid choice appears.
+* Winner Order offers no card Pay control.
+
 <!-- trace:case id=g10adm.auction-post-sale.TC-0g4 rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC18-1: A card payment just before the deadline is accepted
 
@@ -980,6 +1012,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 | Address write/reopen race and phone-recorded audit entry | **Folded in:** `SC-90`/`SC-91` with `post-sale-US18-TC25-1`/`TC26-1`. |
 | Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US18-TC13-1` reads it that way |
 | An expired invoice can only be paid in the admin portal | **Folded in** — `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US18-TC17-1`, `TC19-1` and `TC21-1` |
+| An expired invoice with a shortfall stays Partially Paid | **Folded in** - `grade10-admin-auction-post-sale-SC-92`, walked by `post-sale-US18-TC28-1` |
 | A card payment at exactly the deadline | **Folded in.** Judged on receipt: at or after the deadline is refused — `grade10-admin-auction-post-sale-SC-86` |
 | A card payment started before the deadline that confirms after | **Folded in** after a grilling round: a payment started in time counts, and the invoice is held `pending` until its outcome — `SC-87` and `SC-88`, with `post-sale-US18-TC22-1` and `TC23-1` added |
 | Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** This change checks only the existing reissue deadline behavior. |

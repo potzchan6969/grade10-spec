@@ -305,7 +305,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<closed-window order>` has invoice status `not_issued` and `address_window_open` false.
+* `<closed-window order>` is unconfirmed Setup Overdue with invoice status `not_issued` and `address_window_open` false.
 
 **Steps:**
 
@@ -317,6 +317,35 @@ Runs once per row of **Test data**.
 * The write is accepted.
 * `address_confirmed` is true and `address_window_open` is still false.
 * The order derives as Preparing Invoice.
+
+### auction-status-US6-TC13-1: Phone address recording refuses after send, confirmation or cancellation
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Guards
+
+**Pre-conditions:**
+
+* One order has a confirmed address, one has an invoice sent, one has cancellation requested and one is cancelled.
+* admin(holds payment-processing) is on each order detail.
+
+**Steps:**
+
+1. Attempt to record an address given by phone on each order.
+
+**Expected Results:**
+
+* Every write is refused.
+* No delivery address or order status changes.
 
 ## Reconciliation
 

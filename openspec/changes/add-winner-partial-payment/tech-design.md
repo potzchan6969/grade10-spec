@@ -11,11 +11,11 @@ original quote.
 - `packages/grade10-auction/backend/src/db/schema/auctionOrders.ts` owns the
   payment rows, receipt number, method, reference, proof metadata and actor.
 - `packages/grade10-auction/backend/src/services/auctions/winnerInvoice.ts`
-  owns balance, tolerance and idempotent payment recording.
+  owns balance, exact-total closure and idempotent payment recording.
 - `packages/grade10-auction/backend/src/services/orderStatus.ts` derives
   `Partially Paid` and suppresses self-service actions.
 - Auction contracts expose the payment history and remaining balance; the
-  admin client owns the collection prompt and the winner client renders the
+  admin client owns overpayment confirmation and the winner client renders the
   locked record.
 
 Payment recording runs in one transaction with a per-order lock and is

@@ -48,8 +48,10 @@ too short.
   while no address is confirmed; a confirmed address still reads Preparing
   Invoice. `address_window_open` gates the winner's write, and operator actions
   do not write a status directly.
-- **An expired invoice is paid only in the admin portal.** An operator settles
-  it manually; a reissue is the only way back to the winner's card.
+- **An expired invoice is paid only in the admin portal.** An operator records
+  it manually; a full payment settles it, while a shortfall stays Partially
+  Paid with no new self-service deadline. A reissue is the only way back to
+  the winner's card.
 - **A card payment started in time counts.** One Grade10 received before the
   payment deadline completes even if it confirms after, and the invoice stays
   `pending` until then. One received at or after the deadline is refused and not

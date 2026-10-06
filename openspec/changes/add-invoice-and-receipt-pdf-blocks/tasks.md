@@ -76,6 +76,6 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
 ## 7. Reconcile invoice rendering with the accepted PDF contract
 
 - [ ] 7.1 Update `InvoicePdfBankRails` and `drawBankRails` so only supplied enabled rails receive columns, and use `bankRails.reference` in the note; cover two enabled rails and an absent third (`SC-49`, `SC-50`).
-- [ ] 7.2 Add optional `replacesInvoice` to `InvoicePdfData`, render the replaced invoice ID in its own row, and cover presence and absence (`SC-51`). Keep the document's own invoice number distinct.
+- [ ] 7.2 Add optional `replacesInvoice` to `InvoicePdfData`, render the replaced invoice ID in its own row, and link it to the prior PDF when `documentLink` is supplied (`SC-51`, `SC-54`). Cover presence, absence and the plain-text fallback. Keep the document's own invoice number distinct.
 - [ ] 7.3 Verify the existing `addressLines` renderer and tests show phone when supplied and leave no line when absent for both documents (`SC-31`, `SC-32`).
 - [ ] 7.4 Update the invoice samples and Grade10 backend caller to pass only enabled bank rails, `reference`, and the replacement relationship when one exists; run the focused renderer tests, Grade10 PDF service tests, Storybook preview, and typechecks.

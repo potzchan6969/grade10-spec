@@ -25,6 +25,10 @@ starts at no data because free-text reasons cannot be counted.
   emailed, any suspension stays, and the cancel cannot be undone.
 - **The cancelled order links to its lot**, which the operator relists by
   hand.
+- **A payment that reaches the balance before cancellation stops it.** Grade10
+  refuses cancellation when that payment commits first. A recorded payment
+  that counts toward nothing does not block cancellation and stays available
+  for Finance to return outside Grade10.
 - **A card payment that lands after the cancel is flagged.** The payment is
   recorded, the order stays Cancelled and carries a Paid after cancel flag;
   Finance returns the money outside Grade10 and any operator with
@@ -55,9 +59,11 @@ None.
 
 - **Admin app** — the cancel dialog, a category filter on the queue, the lot
   link and the Paid after cancel flag on the order detail.
-- **Auction service** — the reason category on the cancellation record; a
-  payment on a `cancelled` invoice recorded in the invoice log without moving
-  the status, raising the flag; the flag's clearing with operator and reason.
+- **Auction service** — the reason category on the cancellation record;
+  cancellation refuses a payment that counted toward the balance before it
+  committed; a payment on a `cancelled` invoice is recorded in the invoice log
+  without moving the status and raises the flag; the flag clears with operator
+  and reason.
 - **Site** — the cancelled notice on Winner Order. No new letter.
 - **Overlaps.** `add-winner-bank-transfer`, `add-winner-partial-payment` and
   `add-winner-refund` also modify the unpaid-order actions in `post-sale`.

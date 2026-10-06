@@ -73,7 +73,7 @@
 * The order remains Partially Paid until its invoice is closed.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-uz7 rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
-### post-sale-US12-TC3-1: The closing prompt does not discard the payment
+### post-sale-US12-TC3-1: An incomplete payment stays Partially Paid
 
 **Classification:**
 
@@ -96,14 +96,12 @@
 **Steps:**
 
 1. Record a payment of 5000 minor units.
-2. Choose to keep the invoice open.
-3. Record an exact 5000-minor-unit balance payment.
+2. Record an exact 5000-minor-unit balance payment.
 
 **Expected Results:**
 
-* Step 1 asks whether to close or keep collecting.
-* Step 2 leaves the order Partially Paid with the real balance.
-* Step 3 closes the invoice as Paid without a second prompt.
+* Step 1 leaves the order Partially Paid with the real 5000-minor-unit balance.
+* Step 2 closes the invoice as Paid without a prompt.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-qpm rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
 ### post-sale-US12-TC4-1: An overpayment needs confirmation before Paid
@@ -143,4 +141,4 @@
 
 | Finding | Disposition |
 | --- | --- |
-| Overpayment and close-or-keep boundary | **Folded in:** `grade10-admin-auction-post-sale-SC-140`–`SC-142` |
+| Exact-total closure and confirmed overpayment | **Folded in:** `grade10-admin-auction-post-sale-SC-140` through `SC-143` |

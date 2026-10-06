@@ -54,11 +54,13 @@ payment-processing SHALL see the reopen control visible and disabled, and
 Grade10 SHALL refuse the same action on the server.
 
 An operator holding payment-processing SHALL also be able to record a delivery
-address on an order whose address deadline has passed, without reopening the
-address form, so a winner who gives their address by telephone is quoted in one
-step. Recording it SHALL NOT reopen the window and SHALL NOT let the winner
-write again. Grade10 SHALL write an address-recorded invoice-log entry carrying
-the named operator, timestamp and reason.
+address, without reopening the address form, only for an unconfirmed Setup
+Overdue order whose invoice status is `not_issued`, so a winner who gives their
+address by telephone is quoted in one step. Recording it SHALL NOT reopen the
+window and SHALL NOT let the winner write again. Grade10 SHALL refuse it after
+address confirmation, invoice send, cancellation requested or cancellation.
+Grade10 SHALL write an address-recorded invoice-log entry carrying the named
+operator, timestamp and reason.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-ehu rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-75 - A reopen gives a fresh 48 hours
@@ -185,10 +187,12 @@ the named operator, timestamp and reason.
 ### Requirement: Only an operator settles an expired invoice
 
 Once an invoice is `expired`, the admin portal SHALL be the only place it is
-paid. An operator holding payment-processing SHALL settle it manually, per
-`grade10-admin/auction/post-sale`'s manual settlement, which makes the invoice
-`paid` and the order derive as Processing. After that the winner's order SHALL
-show nothing owed and no card Pay control.
+paid. An operator holding payment-processing SHALL record it manually, per
+`grade10-admin/auction/post-sale`'s manual settlement. A cumulative exact
+payment makes the invoice `paid` and the order derive as Processing. A payment
+whose cumulative total remains below the invoice total keeps the invoice Partially Paid with its real balance;
+it starts no new self-service deadline and has no manual-settlement detour.
+In either case the winner's order shows no card Pay control.
 
 Grade10 SHALL offer the winner no way to pay an expired invoice. A card payment
 Grade10 receives from the winner at or after the payment deadline SHALL be
@@ -211,7 +215,7 @@ An operator without payment-processing SHALL be offered no settle or reissue
 control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-b5v rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-85 - An operator settles an expired invoice
+#### Scenario: grade10-admin-auction-post-sale-SC-85 - An operator fully settles an expired invoice
 **Serves:** Resolving an unpaid order - the admin portal is the only place an expired invoice is paid
 
 - **GIVEN** an auction order whose invoice is `expired`
@@ -220,6 +224,15 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **THEN** Grade10 accepts it
 - **AND** the invoice is `paid` and the order derives as Processing
 - **AND** the winner's order shows nothing owed and no card Pay control
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-v9x rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-92 - An expired shortfall remains Partially Paid
+**Serves:** Resolving an unpaid order - an expired invoice retains its real balance
+
+- **GIVEN** an auction order whose invoice is `expired` with a 100000 minor-unit balance
+- **WHEN** an operator holding payment-processing records a 40000 minor-unit payment
+- **THEN** the invoice is Partially Paid with 60000 minor units remaining
+- **AND** no new self-service deadline or close-as-paid choice is created
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-cdi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-86 - A winner payment received at the deadline is refused

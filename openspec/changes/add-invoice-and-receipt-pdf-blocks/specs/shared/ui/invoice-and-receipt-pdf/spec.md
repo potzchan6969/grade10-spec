@@ -139,19 +139,19 @@ it, never a block of blank lines.
 
 **Serves:** Party address fields - every address line renders when supplied
 
-- **GIVEN** a Bill To with a recipient, company, address line 1, address
-  line 2, city, region, postal code, and country
+- **GIVEN** a Bill To with a recipient, company, phone, address line 1,
+  address line 2, city, region, postal code, and country
 - **WHEN** InvoicePdf renders it
 - **THEN** every one of those lines is shown
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-1fi rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-32 - A personal address omits the company line
 
-**Serves:** Party address fields - company and address line 2 are the only optional lines
+**Serves:** Party address fields - omitted optional lines leave no blank rows
 
-- **GIVEN** a Ship To with no company and no address line 2
+- **GIVEN** a Ship To with no company, phone, or address line 2
 - **WHEN** InvoicePdf renders it
-- **THEN** no company line and no address-line-2 line appear
+- **THEN** no company, phone, or address-line-2 line appears
 - **AND** recipient, address line 1, the city/region/postal-code line, and
   country still render
 
@@ -170,8 +170,10 @@ it, never a block of blank lines.
 When an invoice replaces an earlier invoice, `InvoicePdfData` SHALL accept a
 `replacesInvoice` value containing the replaced invoice ID and an optional
 document link. InvoicePdf SHALL render `Replaces invoice {invoice ID}`. When
-the value is absent, it SHALL render no replacement row. The relationship does
-not make the replaced invoice the current payable invoice.
+the document link is present, the replaced invoice ID SHALL link to that PDF.
+Without a document link, the ID SHALL render as plain text. When the
+relationship is absent, InvoicePdf SHALL render no replacement row. The
+relationship does not make the replaced invoice the current payable invoice.
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-9et rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-51 - A replacement invoice names the invoice it replaces
@@ -181,6 +183,16 @@ not make the replaced invoice the current payable invoice.
 - **GIVEN** an InvoicePdfData value whose `replacesInvoice` names `IN-LK42301`
 - **WHEN** InvoicePdf renders it
 - **THEN** the PDF shows `Replaces invoice IN-LK42301`
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-54 - A replacement row links to the replaced PDF when supplied
+
+**Serves:** InvoicePdf export - the replaced invoice remains retrievable
+
+- **GIVEN** an InvoicePdfData value whose `replacesInvoice` names `IN-LK42301`
+  and includes its `documentLink`
+- **WHEN** InvoicePdf renders it
+- **THEN** the replaced invoice ID links to that document
+- **AND** without `documentLink` the same ID is plain text
 
 ### Requirement: InvoicePdf and ReceiptPdf render the issuer block at the foot of the sheet, right-aligned
 

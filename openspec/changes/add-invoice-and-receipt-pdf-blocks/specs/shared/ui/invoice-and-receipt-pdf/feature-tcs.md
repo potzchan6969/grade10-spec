@@ -863,7 +863,7 @@ Runs once per row of **Test data**.
 
 * All nine fields render.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC28-1: A personal address omits company name, address line 2 and state
+### shared-ui-invoice-and-receipt-pdf-US1-TC28-1: A personal address omits optional company, phone, address line 2 and state
 
 **Classification:**
 
@@ -880,7 +880,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `InvoicePdf` is rendered with a Ship To omitting company name, address line 2, and state.
+* `InvoicePdf` is rendered with a Ship To omitting company name, phone number, address line 2, and state.
 
 **Steps:**
 
@@ -889,8 +889,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No company name, address line 2, or state field renders.
-* Full name, address line 1, city, postal code, country, and phone number still render.
+* No company name, phone number, address line 2, or state field renders, and no blank line is reserved for them.
+* Full name, address line 1, city, postal code, and country still render.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC29-1: A receipt's company address renders every field it is given
 
@@ -920,7 +920,7 @@ Runs once per row of **Test data**.
 
 * All nine fields render.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC30-1: A receipt's personal address omits company name, address line 2 and state
+### shared-ui-invoice-and-receipt-pdf-US1-TC30-1: A receipt's personal address omits optional company, phone, address line 2 and state
 
 **Classification:**
 
@@ -937,7 +937,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ReceiptPdf` is rendered with a Ship To omitting company name, address line 2, and state.
+* `ReceiptPdf` is rendered with a Ship To omitting company name, phone number, address line 2, and state.
 
 **Steps:**
 
@@ -946,8 +946,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No company name, address line 2, or state field renders.
-* Full name, address line 1, city, postal code, country, and phone number still render.
+* No company name, phone number, address line 2, or state field renders, and no blank line is reserved for them.
+* Full name, address line 1, city, postal code, and country still render.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC31-1: Bank rails render below the order value, full width, not as a meta row
 
@@ -1380,8 +1380,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `InvoicePdf` is rendered with `bankRails` given (`swift`, `fps`,
-  `hkLocalTransfer`, and `reference` all supplied), alongside every other
+* `InvoicePdf` is rendered with `bankRails` given (`swift` and `reference`
+  supplied), alongside every other
   required prop.
 
 **Steps:**
@@ -1428,7 +1428,7 @@ Runs once per row of **Test data**.
   blank space reserved where the section would have sat.
 * Every other section of the invoice still renders.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC47-1: Bank details lists all three rails under their own headings
+### shared-ui-invoice-and-receipt-pdf-US1-TC47-1: Bank details lists only enabled rails under their own headings
 
 **Classification:**
 
@@ -1446,21 +1446,20 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `InvoicePdf` is rendered with `bankRails` given: `swift` (beneficiary,
-  SWIFT/BIC, account), `fps` (FPS ID, beneficiary), `hkLocalTransfer` (bank
-  & code, beneficiary, account no.).
+  SWIFT/BIC, account) and `fps` (FPS ID, beneficiary) enabled; no
+  `hkLocalTransfer` value is supplied.
 
 **Steps:**
 
 1. Render `InvoicePdf` with the supplied props.
-2. Inspect the three columns of the Bank details section.
+2. Inspect the enabled columns of the Bank details section.
 
 **Expected Results:**
 
 * The SWIFT column shows Beneficiary, SWIFT/BIC, and Account/IBAN as the
   values given.
 * The FPS column shows FPS ID and Beneficiary as the values given.
-* The HK local transfer column shows Bank & code, Beneficiary, and Account
-  no. as the values given.
+* No HK local transfer heading, details, or empty column appears.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC48-1: The bank reference note bolds only the reference value
 
@@ -1485,13 +1484,72 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Render `InvoicePdf` with the supplied props.
-2. Inspect the wrapped note line below the three columns' divider.
+2. Inspect the wrapped note line below the enabled rails' divider.
 
 **Expected Results:**
 
 * The note line names the reference given.
 * Only the reference value's own text renders more heavily weighted; the
   rest of the line renders at normal weight.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC49-1: A replacement invoice names the invoice it replaces
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdfData` names `IN-LK42301` in `replacesInvoice.invoiceId`.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the replacement relationship.
+2. Inspect the invoice number and replacement row.
+
+**Expected Results:**
+
+* The PDF shows `Replaces invoice IN-LK42301`.
+* Its own invoice number remains distinct from the replaced invoice ID.
+* Without `replacesInvoice`, no replacement row appears.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC50-1: A replaced invoice link is optional
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdfData.replacesInvoice` names `IN-LK42301`.
+
+**Steps:**
+
+1. Render `InvoicePdf` with a `documentLink` to the replaced invoice PDF.
+2. Render it again without `documentLink`.
+
+**Expected Results:**
+
+* The first PDF links the replaced invoice ID to the supplied document.
+* The second PDF prints the same ID as plain text.
 
 ## Reconciliation
 
@@ -1580,9 +1638,9 @@ longer resolves to a live scenario, the same way `TC2`/`TC3`'s did once
 "Every invoice carries an invoice ID and a bank reference" requirement still
 requires the invoice PDF to name a replacement (`SC-98`, and a line of
 `SC-123`) — left untouched here, since that requirement already carries its
-own MODIFIED delta in the open `define-public-auction-identifiers` change;
-see `proposal.md`'s Open Questions for the reconciliation this leaves for
-whoever lands that change.
+own MODIFIED delta in the open `define-public-auction-identifiers` change.
+The later `replacesInvoice` amendment restores the predecessor reference in
+this renderer without reviving `replacedBy`.
 
 **Amendment, 2026-09-24 (`decisions.md` Q18-Q20):** the DOM component this
 capability specified is retired, replaced by the pdf-lib renderer `grade10`
@@ -1654,7 +1712,7 @@ or the existing suite.
 | --- | --- |
 | The section renders only when `bankRails` is given, mirroring `ReceiptPdf`'s transfer-reference precedent (scenario reading's `SC-47`/`SC-48`; suite reading's `TC45`/`TC46`) | Agreement on the presence/absence split. **Folded in:** `SC-47`, `TC45` (presence + position); `SC-48`, `TC46` (absence) |
 | No vertical space is reserved when the section is withheld (suite reading only — the scenario reading's `SC-48` claimed absence but not the gap) | Real gap the suite reading caught alone: a lazy implementation could still reserve the section's height even while skipping its content. **Folded in:** `SC-48`'s `Withheld` clause extended to require no reserved space, and its `THEN`/`AND` to name the issuer block sitting directly after the order-value summary; `TC46` extended the same way |
-| The three columns' content is its own concern, separate from presence (scenario reading's `SC-49`; suite reading folded this into `TC45` rather than splitting it) | Same substance, different granularity. **Folded in, scenario reading's split kept:** `SC-49`/`TC47`, matching this capability's established one-scenario-per-concern pattern rather than one broad case |
+| The enabled columns' content is its own concern, separate from presence (scenario reading's `SC-49`; suite reading folded this into `TC45` rather than splitting it) | Same substance, different granularity. **Folded in, scenario reading's split kept:** `SC-49`/`TC47`, matching this capability's established one-scenario-per-concern pattern rather than one broad case |
 | The reference note's bold interpolation is a distinct rendering mechanic (partial bold within a wrapped line), not covered by presence or column content alone (both readings independently proposed this) | Agreement. **Folded in:** `SC-50`/`TC48` |
 | A case per rail (SWIFT-only, FPS-only, …) | The clarified contract permits an enabled subset inside `bankRails`; the live suite covers all rails and a SWIFT/FPS subset without requiring an individual case for every combination |
 
