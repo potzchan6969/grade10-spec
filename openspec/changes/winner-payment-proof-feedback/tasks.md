@@ -4,7 +4,7 @@ The preview owns the shared feedback composition and its stories. The
 consuming `grade10-site` application wires the same outcomes into its existing
 Winner Order surface. No group has an owner until an engineer claims it.
 
-## 1. Preview feedback contract (grade10-spec)
+## 1. Preview feedback contract (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Add failing interaction tests for success and failure toast copy, the retained draft after a failed upload, and the page success callback (`winner-order-SC-119`, `winner-order-SC-218`)
 - [ ] 1.2 Add failing interaction tests for HEIC conversion and upload busy states; assert Cancel, Escape and overlay dismiss leave the dialog open (`winner-order-SC-219`)
