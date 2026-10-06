@@ -490,14 +490,15 @@ Runs once per row of **Test data**.
 
 * customer is signed in on <grade10 store url>.
 * Header shows a positive member cart count.
-* The member's next cart review is held pending.
+* The member's next cart review will be held pending.
 
 **Steps:**
 
-1. Click Sign Out in the account menu.
-2. Observe the Cart control when the session changes.
-3. Release the held cart review.
-4. Observe the Cart control.
+1. Click the Cart control, then close the drawer while its review is held.
+2. Click Sign Out in the account menu.
+3. Observe the Cart control when the session changes.
+4. Release the held cart review.
+5. Observe the Cart control.
 
 **Expected Results:**
 
@@ -527,7 +528,7 @@ Runs once per row of **Test data**.
 
 * customer A has a reviewed cart count of 2.
 * customer B's cart has 1 active line.
-* customer A's next cart review and customer B's first review are held pending.
+* customer A's next cart review and customer B's first review will be held pending.
 
 **Test data:**
 
@@ -538,11 +539,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to <grade10 store url> as customer A.
-2. Sign out, then sign in as customer B.
-3. Observe the Cart control.
-4. Release customer A's review and customer B's review in <customer A review released> order.
-5. Observe the Cart control after each release.
+1. Navigate to <grade10 store url> as customer A, and wait for the header to show 2.
+2. Click the Cart control, then close the drawer while its review is held.
+3. Sign out, then sign in as customer B.
+4. Observe the Cart control.
+5. Release customer A's review and customer B's review in <customer A review released> order.
+6. Observe the Cart control after each release.
 
 **Expected Results:**
 
@@ -662,7 +664,7 @@ Runs once per row of **Test data**.
 ## Settled
 
 * The header count is one per distinct active line in the reviewed basket, whatever its quantity: adjusted lines count, sold-out and unavailable lines do not, and checkout eligibility does not decide it.
-* The count refreshes on cart hydration, a settled cart change, and a cart review or retry, with the drawer open or closed; nothing polls, and a change from another device shows after the next review.
+* The count refreshes when the member's cart loads, when a cart change settles, saved or failed, when the drawer opens, and on Retry, with the drawer open or closed; nothing polls, and a change from another device shows after the next of these.
 * The author chose to retain the last verified same-member count while a refresh is pending, including after failed cart updates; failed review hides the badge. Initial unknown counts and previous-member counts remain hidden.
 
 ## Reconciliation
@@ -701,5 +703,26 @@ Runs once per row of **Test data**.
 | `grade10-site-site-page-shell-SC-53` | TC15 ran a successful and a failed update as a sentence, not rows, and released a count the refused update could not reach | Folded: TC15 takes the two updates as rows, each with its reviewed count |
 | `grade10-site-site-page-shell-SC-52` | TC13 changed member with no step a collector can take | Folded: TC13 signs out and signs in as B |
 | `grade10-site-site-page-shell-SC-05` | US2-TC2-2 ran per row without saying so | Folded: the per-row line added |
+| Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 third reading. A fresh reader re-joined every case and scenario on both journeys against the Cart section of the page-shell PRD and its new refresh decision, the decisions and the tech design, and read how the drawer starts a review (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`).
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `grade10-site-site-page-shell-SC-51` | TC12 held the member's next review but no step started one, so no late response could arrive | Folded: TC12 opens and closes the drawer to start the held review before signing out |
+| `grade10-site-site-page-shell-SC-52` | TC13 held A's next review with no step that started it, and never showed A's 2 first | Folded: TC13 waits for 2, then opens and closes the drawer to start A's held review before changing member |
+| `grade10-site-site-page-shell-SC-53` | TC15's cart update starts the review it holds; TC9 and TC10 start theirs by opening the drawer and by Retry | Folded: TC15, TC9, TC10 |
+| `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-42` to `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-54`, `grade10-site-site-page-shell-SC-55` | Unchanged since the second reading | Folded as recorded above |
+| Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 fifth reading. A fresh reader re-joined every case and scenario on both journeys against the Cart section of the page-shell PRD, the decisions, the tech design and `useCartPresentation` in grade10 (`packages/grade10-store/frontend/src/features/orders/cart/presentation/hooks/useCartPresentation.ts:42-70`), which keeps a same-member count while checking and drops it when the basket read or the review fails.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| The refresh requirement | It listed opening the drawer among triggers that run "even while the drawer is closed" | Clarified: loading and settled changes review with the drawer open or closed, and opening the drawer and Retry review too; no case moves |
+| `grade10-site-site-page-shell-SC-49` | A later review on opening the drawer or on Retry restores the count; TC9 fails the drawer-open review, TC10 restores on Retry | Folded: TC9, TC10 |
+| `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-42` to `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-50` to `grade10-site-site-page-shell-SC-55` | Unchanged since the third reading | Folded as recorded above |
 | Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
 | Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |

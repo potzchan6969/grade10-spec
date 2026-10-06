@@ -5,7 +5,7 @@
 
 ## shared-ui-site-chrome-US1: Shared chrome contract
 
-**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
+**Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
 **As an** application composing the shared chrome,
 **I want** the chrome to expose only the controls I have answered, keep
 off-site destinations safely scoped, and present one truthful, session-aware
@@ -52,7 +52,7 @@ Runs once per row of **Test data**.
 
 * The slot content appears in the cart control position.
 * The built-in cart icon button is not rendered.
-* Activating the slot runs only the slot's own action; the Cart handler is not called.
+* Activating the slot runs only the slot's own action, never a supplied Cart handler.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-6iz rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi,g10.shared-site-chrome.SC-6id,g10.shared-site-chrome.SC-szi,g10.shared-site-chrome.SC-1ow,g10.shared-site-chrome.SC-xw7,g10.shared-site-chrome.SC-bc3,g10.shared-site-chrome.SC-92l -->
 ### shared-ui-site-chrome-US1-TC22-1: An empty cart hides the count indicator
@@ -199,5 +199,37 @@ Runs once per row of **Test data**.
 | `shared-ui-site-chrome-SC-25` | TC23 claimed the drawer title's count without rendering the drawer header | Folded: TC23 renders `CartDrawerHeader` with the same count and compares its title badge on every row |
 | `shared-ui-site-chrome-SC-24`, `shared-ui-site-chrome-SC-26` | The requirement fixes the accessible name as the label then the count in parentheses; TC23 asserted only that it includes the count | Folded: TC23 asserts `Cart (<active-line count>)` |
 | TC21, TC22, TC23 | Per-row cases without the per-row line, or with it below the classification | Restyled: the line sits under each title |
+| Uncovered anchors | Every scenario this change adds or modifies under `Header controls` is reached | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 third reading, after the accept review. A fresh reader re-joined the four cases and the `Header controls` scenarios against the moved Cart slot feature-set line, the handler-or-slot requirement and `packages/design-system/src/components/layout/nav.tsx:327`.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `shared-ui-site-chrome-SC-04` | The requirement shows Cart for a slot alone, so "no cart handler" no longer meant no Cart | Revised: the scenario takes neither a cart handler nor a cart slot; durable TC5 still holds it, since `SiteHeader` supplies a slot only with a Cart handler |
+| `shared-ui-site-chrome-SC-22` | TC21's no-handler row asserted a slot-only Cart that no scenario stated | Revised: the scenario takes a slot with or without `onCartClick`, and both TC21 rows stand on it |
+| TC21 | The last expected result named a Cart handler the no-handler row never supplies | Restyled: the slot never runs a supplied Cart handler |
+| Cart slot feature-set line | It now carries the slot rule that left the Handler-gated line to `omit-profile-account-menu` | No case reads a feature-set line |
+| Uncovered anchors | Every scenario this change adds or modifies under `Header controls` is reached | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 fourth reading. A fresh reader re-joined the four cases and every `Header controls` scenario this change adds or modifies against the Site Header and Footer page, the decisions, the UI design, `packages/ui/src/blocks/site-chrome/site-header.tsx:207` and `packages/design-system/src/components/layout/nav.tsx:327`, and read the Handler-gated line `omit-profile-account-menu` carries.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `shared-ui-site-chrome-SC-04` | `SiteHeader` builds its cart slot only with a Cart handler, so durable TC5 still supplies neither | Folded: durable TC5 |
+| `shared-ui-site-chrome-SC-22` to `shared-ui-site-chrome-SC-26`, `shared-ui-site-chrome-SC-41` | Each scenario has a case that asserts every THEN, and each case row stands on a scenario | Folded: TC21 to TC24 |
+| The page's handler rule | The page showed a control only for a handler, while `Nav` shows account and cart for a slot alone | Corrected: the page names a control of the application's own for account and cart |
+| Handler-gated feature-set line | `omit-profile-account-menu` gates cart on its handler and names the account slot alone, against the Cart slot line | Raised: Q11 names the cart slot on that line |
+| Uncovered anchors | Every scenario this change adds or modifies under `Header controls` is reached | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 fifth reading. A fresh reader re-joined the four cases and every `Header controls` scenario this change adds or modifies against the Site Header and Footer page, the decisions, `packages/ui/src/blocks/site-chrome/site-header.tsx:207-237` and `packages/design-system/src/components/layout/nav.tsx:326-327`, and read the Handler-gated line on `omit-profile-account-menu`'s branch.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| Handler-gated feature-set line | Q11 said that change's line names the cart slot; it names the account slot alone, so it still says Cart needs its handler | Raised: Q11 restated, and the edit is that change's |
+| Story block | Its Walked-by line kept a dash the journeys file no longer carries | Restyled to match the journeys file |
+| `shared-ui-site-chrome-SC-04`, `shared-ui-site-chrome-SC-22` to `shared-ui-site-chrome-SC-26`, `shared-ui-site-chrome-SC-41` | Unchanged since the fourth reading | Folded as recorded above |
 | Uncovered anchors | Every scenario this change adds or modifies under `Header controls` is reached | None |
 | Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
