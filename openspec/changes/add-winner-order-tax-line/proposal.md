@@ -64,7 +64,7 @@ See [Non-Goals](decisions.md#non-goals).
   before send, its absence when none, its presence in the Subtotal, and its
   place on the invoice and the receipt
 - `grade10-admin/auction/post-sale`: the quote takes an optional Tax amount,
-  refuses it at zero, carries it through a reissue, and logs it
+  refuses it at zero, and carries it through a reissue
 
 ## Impact
 
@@ -75,12 +75,15 @@ See [Non-Goals](decisions.md#non-goals).
   supplies Tax as an ordinary `lineItems` charge row between Insurance and
   Subtotal
 - **The audit log** — Tax joins the quoted amounts a reissue records before
-  and after
+  and after, written by `complete-auction-post-sale`'s `Invoice log history`
+  (Q8), not by this change
 - **The set of quoted amounts is enumerated in six places** in
   `openspec/specs/grade10-admin/auction/post-sale/spec.md` — the reissue
   action summary, the audit `Changed parts` cell, the quote steps, the send
   refusals, the reissue requirement, and what counts as a change. Adding Tax
   moves all six in step, or names the set once and has the others refer to it.
+  The `Changed parts` cell is `complete-auction-post-sale`'s, per Q8, so this
+  change moves the other five.
   The fee rows that carry an info tip are a seventh such set, in the other
   capability. This change adds Tax to each post-sale set in place and gives
   the Tax tip its own requirement beside Insurance's. Naming each set once
@@ -97,6 +100,11 @@ only, deliberately.
 
 ## Follow-on changes
 
+- The receipt wording in `Records the winner keeps`. After
+  `define-public-auction-identifiers` archives, a small change replaces "any
+  tax amount supplied by the separate tax capability" with "Tax when added" and
+  revises `winner-order-SC-18` to match. This change does not modify that
+  requirement, which that change adds
 - A computed tax rate, if Grade10 ever prices tax itself rather than taking
   an operator's number
 - The formal tax receipt — whether a receipt must carry Grade10's company

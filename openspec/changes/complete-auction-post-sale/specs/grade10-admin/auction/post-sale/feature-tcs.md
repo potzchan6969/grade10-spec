@@ -1721,6 +1721,37 @@ payments that failed,
 * The first names a Visa card ending 4242.
 * The second names cash, with its proof file.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-0ok rev=1 covers=g10adm.auction-post-sale.SC-tyi -->
+### post-sale-US8-TC13-1: A reissue that changes tax names it with its value before and after
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* An order in Pending Payment whose invoice carries no Tax.
+* admin(operator with payment processing) opens it.
+
+**Steps:**
+
+1. Reissue it adding Tax of 6000 minor units in HKD, changing nothing else, with a reason.
+2. Read the reissued entry on the timeline.
+
+**Expected Results:**
+
+* The entry names Tax as changed, with no amount before and 6000 minor units in HKD after.
+* It names no other part as changed.
+
 ---
 
 ## post-sale-US16: Operator records a refund a winner asked Customer Service for
@@ -1908,6 +1939,7 @@ payments that failed,
 | `grade10-admin-auction-post-sale-SC-38` | Covered by the durable `post-sale-US8-TC4-1` |
 | `grade10-admin-auction-post-sale-SC-42` | Was uncovered; added `US8-TC11-1` |
 | `grade10-admin-auction-post-sale-SC-61` | Was uncovered; added `US8-TC12-1` |
+| `grade10-admin-auction-post-sale-SC-204` | Added with `US8-TC13-1`. It carries `add-winner-order-tax-line`'s reissue log rule for Tax, which that change handed over to keep `Invoice log history` in one change; `add-winner-order-tax-line`'s `post-sale-SC-158` keeps the new invoice's Tax |
 | `grade10-admin-auction-post-sale-SC-124` | Covered by the durable `post-sale-US8-TC6-1` |
 | `grade10-admin-auction-post-sale-SC-132` | Covered by the durable `post-sale-US8-TC8-1` |
 | `grade10-admin-auction-post-sale-SC-166` | Covered by `US8-TC9-1` |

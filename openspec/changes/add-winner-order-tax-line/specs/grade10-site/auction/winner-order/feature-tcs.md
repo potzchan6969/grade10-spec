@@ -221,7 +221,7 @@
 ### Folded
 
 - `winner-order-US1-TC30-1`, Tax reads TBD with its tip before send -> `winner-order-SC-213`
-- `winner-order-US1-TC31-1`, sent Tax on the page with its tip and on both PDFs inside the Subtotal -> `winner-order-SC-217`, `winner-order-SC-214`, `winner-order-SC-04`, `winner-order-SC-18`
+- `winner-order-US1-TC31-1`, sent Tax on the page with its tip and on both PDFs inside the Subtotal -> `winner-order-SC-217`, `winner-order-SC-214`, `winner-order-SC-04`
 - `winner-order-US1-TC32-1`, an untaxed invoice shows no Tax line and no tip anywhere -> `winner-order-SC-215`, `winner-order-SC-212`
 - `winner-order-US1-TC33-1`, the card fee priced from a Subtotal that includes Tax -> `winner-order-SC-216`
 
@@ -241,6 +241,5 @@
 ### Carried Unchanged
 
 - **Invoice fields** - `winner-order-SC-05`, `winner-order-SC-38`, `winner-order-SC-39`, `winner-order-SC-62`, `winner-order-SC-63`, `winner-order-SC-69`, `winner-order-SC-110`, `winner-order-SC-111` keep their meaning and their durable coverage. `winner-order-SC-04` changed meaning to a taxed total and is reached above by `winner-order-US1-TC31-1` and `winner-order-US1-TC1-2`
-- **Records the winner keeps** - `winner-order-SC-19`, `winner-order-SC-20`, `winner-order-SC-21`, `winner-order-SC-36`, `winner-order-SC-112`, `winner-order-SC-113`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-133`, `winner-order-SC-135`, `winner-order-SC-222`, `winner-order-SC-223`, `winner-order-SC-246`, `winner-order-SC-247` keep their meaning and their durable coverage. `winner-order-SC-18` changed meaning to Tax when added and is reached above by `winner-order-US1-TC31-1` and `winner-order-US1-TC32-1`, beside durable `winner-order-US2-TC1-1`
 
 **Out of suite:** none of this change's scenarios.

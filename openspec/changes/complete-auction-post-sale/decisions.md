@@ -74,6 +74,7 @@
 | Q35 | Which language do Country/Region names read in? | The account's language, as the rest of the site does - Product (@tangconst) | The browser's locale, and fixed English |
 | Q36 | Does an unsaved one-time address survive leaving the order? | Yes. It stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it - Product (@tangconst) | Clearing it on leaving |
 | Q37 | What does a winner read where their currency offers neither method, and does the setup deadline run? | They read that payment is not yet available in that currency, with Contact Us, and cannot confirm. The 48-hour setup deadline keeps running, so the order can go Setup Overdue as usual; an operator reopens or records setup by hand - Product (@tangconst) | Pausing the deadline, which is more to build, and holding launch for Finance's USD and JPY rules |
+| Q38 | Which change writes the log rule for a reissue that changes Tax? | This change, in `Invoice log history`: a reissue that changes Tax names it with its value before and after, and no amount where the invoice carried none, per `grade10-admin-auction-post-sale-SC-204`. `add-winner-order-tax-line` no longer modifies that requirement and keeps the new invoice's Tax only - the planning owner's decision, so two in-flight changes never modify one requirement and Tax can be accepted now | `add-winner-order-tax-line` also modifying `Invoice log history`, which the overlap check refuses |
 
 ## Raised
 

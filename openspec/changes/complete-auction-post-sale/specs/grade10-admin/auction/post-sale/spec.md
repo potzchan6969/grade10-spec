@@ -396,6 +396,16 @@ reinstatement.
   Shipping & Handling as changed, each with its value before and after
 - **AND** names no other part as changed
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-tyi rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-204 - A reissue that changes tax names it with its value before and after
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an order in Pending Payment whose invoice has no Tax
+- **AND** an operator reissued it with Tax of 6000 minor units in HKD and a reason, changing nothing else
+- **WHEN** an operator reads the invoice log
+- **THEN** the reissued entry names Tax as the changed part, with no amount before and 6000 minor units in HKD after
+- **AND** names no other part as changed
+
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-jce rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-124 - A proof check is on the record
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history

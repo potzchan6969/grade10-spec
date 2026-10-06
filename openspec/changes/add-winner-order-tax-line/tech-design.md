@@ -39,7 +39,8 @@ that Tax consumes.
 3. **A reissue writes a fresh Tax snapshot.** The reissue command accepts the
    same nullable Tax input as the first quote. Its change detector compares
    the prior and next normalized values, and the append-only audit entry
-   records both when Tax changed. Reissue validation reuses the first-send
+   records both when Tax changed, as `complete-auction-post-sale`'s
+   `Invoice log history` requires. Reissue validation reuses the first-send
    positive-integer refusal.
    - Rejected: mutate Tax on the current invoice. Reissues retain the existing
      immutable-invoice and append-only-audit boundary.
