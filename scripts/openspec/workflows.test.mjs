@@ -209,12 +209,12 @@ test("the notifier runs once the manual and the viewer deployed, and only then",
   assert.doesNotMatch(notifyText, /github\.sha\b|github\.event\.before/);
 });
 
-test("the notifier finds the last deployed head by each run's conclusion, never the API's status filter", () => {
-  // `status=success` answered a run two weeks old while one an hour old had
-  // succeeded, and the post that range made was too long for Slack.
+test("the notifier verifies the run listing before choosing the last deployed head", () => {
   const step = notify.jobs.notify.steps.find((one) => one.id === "range");
   assert.doesNotMatch(step.run, /status=success/);
-  assert.match(step.run, /\.conclusion == \\"success\\"/);
+  assert.equal(step.env.RUN_ID, "${{ github.event.workflow_run.id }}");
+  assert.match(step.run, /select-deployed-base\.mjs/);
+  assert.match(step.run, /"\$RUN_ID" "\$RUN_NUMBER" "\$HEAD_SHA"/);
   assert.match(step.run, /git merge-base --is-ancestor "\$base" "\$HEAD_SHA"/);
 });
 
