@@ -103,7 +103,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 | Invoice status | `expired` | `partially_paid` | An operator records a payment short of the order total on a bank transfer invoice |
 | Invoice status | `expired` | `cancelled` | An operator cancels the order. The listing stays Closed and its stock hold is released, so the item is back in stock. |
 | Invoice status | `partially_paid` | `partially_paid` | An operator records another payment short of the balance |
-| Invoice status | `partially_paid` | `paid` | An operator records a payment that meets the balance, or closes the invoice within tolerance |
+| Invoice status | `partially_paid` | `paid` | An operator records a payment that meets the balance |
 | Invoice status | `partially_paid` | `refunded` | A refund is recorded |
 | Invoice status | `paid` | `refunded` | A refund is completed. Refund mechanics are not specified at MVP |
 | Fulfilment status | `unfulfilled` | `fulfilled` | The warehouse dispatches, with invoice status already `paid` |

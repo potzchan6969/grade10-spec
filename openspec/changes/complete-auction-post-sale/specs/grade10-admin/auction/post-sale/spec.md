@@ -860,12 +860,12 @@ invoice is `pending` or `expired`, or on a Partially Paid order:
    (10,485,760 bytes). One file that breaks this refuses the commit, and no
    file is stored.
 8. Give a reason. It is required.
-9. Read the balance before and after the payment, answer the choice it asks
-   when it asks one, and commit.
+9. Read the balance before and after the payment, confirm an overpayment when
+   the amount is above the balance, and commit.
 
 What each payment does to the invoice follows "Operators can record an ordered
-partial-payment history" and "Closing tolerance is explicit and preserves
-payments". A payment above the balance, once the operator confirms it, SHALL
+partial-payment history" and "Partial collection preserves every payment
+until exact closure". A payment above the balance, once the operator confirms it, SHALL
 also carry the Overpaid flag, per "Money that lands is always recorded".
 
 An invoice the payments pay SHALL become `paid` directly, without passing

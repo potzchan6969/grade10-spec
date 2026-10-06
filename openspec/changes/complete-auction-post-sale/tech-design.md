@@ -138,7 +138,7 @@ export function winnerActions(facts: OrderFacts): ("completeSetup" | "payByCard"
 export function operatorNextStep(facts: OrderFacts): OperatorNextStep;
 export function segmentOf(status: AuctionOrderStatus, flagOpen: boolean): OrderSegment; // flagOpen -> needsAction
 export function paymentOutcome(totalMinor: number, paidMinor: number, amountMinor: number):
-  { kind: "settles" | "partial" | "partialNearFull" | "overpays"; balanceAfterMinor: number }; // near full at 90 % or more
+  { kind: "settles" | "partial" | "overpays"; balanceAfterMinor: number };
 export function invoiceSearchKey(text: string): string;                              // trimmed, upper-cased, leading IN- kept
 export const PROOF_LIMITS = {
   winner: { files: 3, bytes: 5 * 1024 * 1024, totalBytes: 15 * 1024 * 1024,
@@ -213,7 +213,7 @@ No input carries `actor` or `at`: identity is the session, time is the server cl
 | --- | --- |
 | `SendInvoiceInput` | `orderId`, `shippingMinor`, `insuranceMinor`, `taxMinor: number \| null` (> 0 when set), `processingFeeMinor >= 0`, `expectedTotalMinor`, `idempotencyKey` |
 | `ReissueInvoiceInput` | `SendInvoiceInput` + `deliveryAddress?`, `billingAddress?`, `paymentMethod?`, `deadline: "kept" \| "reset"`, `reason` |
-| `RecordPaymentInput` | `orderId`, `method: "bank_transfer" \| "cash" \| "other"`, `methodNote?` (required for other), `amountMinor > 0`, `externalReference`, `receivedAt`, `reason`, `proofKeys` (1 to 5, every method), `overpaymentConfirmed?`, `closeDecision?: "close" \| "keep_open"`, `idempotencyKey` |
+| `RecordPaymentInput` | `orderId`, `method: "bank_transfer" \| "cash" \| "other"`, `methodNote?` (required for other), `amountMinor > 0`, `externalReference`, `receivedAt`, `reason`, `proofKeys` (1 to 5, every method), `overpaymentConfirmed?`, `idempotencyKey` |
 | `ReviewProofInput` | `orderId`, `invoiceId`, `action: "confirm" \| "return"`, `externalReason?`, `internalNote?`, `idempotencyKey` |
 | `CancelOrderInput` | `orderId`, `category`, `note`, `idempotencyKey` |
 | `RecordRefundInput` | `orderId`, `amountMinor`, `method`, `destination`, `externalReference`, `refundedAt`, `reason` (fixed list), `note?`, `stockChoice`, `proofKeys`, `idempotencyKey` |
@@ -380,7 +380,7 @@ Money that counts toward nothing never blocks a reissue or a cancel. Finance ret
 
 ### Operator Payment
 
-1. `recordPayment` requires no refusal; the dialog pre-fills the balance; `paymentOutcome` drives the inline choice - close at 90 % or more or keep open, confirm an overpayment - and backs the server check (`PAYMENT_NEEDS_DECISION`, `PAYMENT_TOO_LARGE`)
+1. `recordPayment` requires no refusal; the dialog pre-fills the balance; `paymentOutcome` drives the inline overpayment confirmation and backs the server check (`PAYMENT_NEEDS_DECISION`, `PAYMENT_TOO_LARGE`)
 2. Writes the payment row with `received_at`, the reason, the receipt snapshot, the proof keys; balance reached -> `paid` and `payment_received`; otherwise `partially_paid` and `payment_received_partial`; overpaid -> `paid` + flag `overpaid`
 
 ### Cancel
@@ -473,7 +473,7 @@ Every dialog is a `FormDialog` held open by `useDialogSubject`; a refusal shows 
 | Reissue | `InvoiceQuoteFields`, deadline kept or restarted, reason; `SetupFields` behind a Switch "Change address or payment method" | what changes, old number -> Replaced, new total |
 | Record or Change setup | `SetupFields`: addresses, method, reason | what the winner sees |
 | Check proof | the files inline with Open, the invoice ID and bank reference beside the payment method and the order total; Confirm, or Return with the winner's reason and an internal note | "the winner sees this reason" |
-| Record payment | amount pre-filled with the balance, reference, received on (refused when in the future), reason, `ProofFilesField`; the close or overpayment choice inline from `paymentOutcome` | balance before and after |
+| Record payment | amount pre-filled with the balance, reference, received on (refused when in the future), reason, `ProofFilesField`; the overpayment confirmation inline from `paymentOutcome` | balance before and after |
 | Cancel | category, required note; destructive confirm, dismiss "Keep order" | the consequence list |
 | Refund | amount, method, destination card (brand, last four) or bank (channel FPS / local / SWIFT, bank name, masked account), reference, refunded on, reason from the fixed list, note, stock choice, proofs | amount, method, destination, lot outcome, "the only refund, cannot be undone" |
 | Dispatch | carrier, tracking, tracker link; the address shown | "the winner gets the shipped letter" |
