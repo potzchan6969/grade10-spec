@@ -1,40 +1,40 @@
 ## 1. Nav Slot Contract (grade10-spec) (owner: @kinisworking)
 
-The slot API already exists. Close its verification gap; retain the current implementation unless the scenarios expose a mismatch.
+The slot API and its story already exist. Verify them; change the implementation only where a scenario exposes a mismatch.
 
-- [ ] 1.1 Prove `shared-ui-site-chrome-SC-22` in a Nav story: a supplied cart slot replaces the built-in control even with `onCartClick` present, and activating the slot invokes only its own callback. Retain omitted-slot handler gating from `shared-ui-site-chrome-SC-04`.
+- [ ] 1.1 Verify that the existing Nav slot story (`nav.overview.stories.tsx`) proves `shared-ui-site-chrome-SC-22`: a supplied cart slot replaces the built-in control even with `onCartClick` present, and activating the slot invokes only its own callback. Retain omitted-slot handler gating from `shared-ui-site-chrome-SC-04`.
 - [ ] 1.2 Verify: run `pnpm --filter @grade10/design-system exec vitest run --project storybook src/components/layout/nav`, `pnpm --filter @grade10/design-system run typecheck`, and `pnpm run lint`; run `pnpm run design-sync:check` if the primitive implementation changes. Record the scenario evidence.
 
-## 2. SiteHeader Count Acceptance and PRD (grade10-spec) (owner: @kinisworking)
+## 2. SiteHeader Count Acceptance (grade10-spec) (owner: @kinisworking)
 
-This group can be claimed independently of Group 1 because both shared APIs are already present. Application integration is tracked separately in Groups 4 and 5.
+Independent of Group 1: both shared APIs and their stories already exist. Application integration is Groups 4 and 5.
 
-- [ ] 2.1 Prove `shared-ui-site-chrome-SC-23` and the handler-absent requirement in the cart stories: zero and omitted counts preserve the cart control without an indicator; a positive count with no handler renders neither. Use omitted/zero input for signed-out and unknown-count fixtures.
-- [ ] 2.2 Prove `shared-ui-site-chrome-SC-24`, `shared-ui-site-chrome-SC-25`, and `shared-ui-site-chrome-SC-26` through the existing 1, 3, and 12 stories. Assert count/brand presentation and accessible names, verify cart activation calls its handler once, add an above-99 full-number case, and render a controlled count of 3 into both `SiteHeader` and `CartDrawerHeader` to prove agreement.
-- [ ] 2.3 Verify the positive-count stories in wide and compact containers for `shared-ui-site-chrome-SC-24` through `shared-ui-site-chrome-SC-26`: full digits remain visible, the cart stays operable, and the account/menu controls retain their layout. Apply only contract-required component fixes found by this verification.
-- [ ] 2.4 Update `docs/prds/products/shared/ui/site-chrome.md` with the settled omitted/unknown-count and signed-out outcomes; retain the 🚧 cart-count mark until delivery is confirmed. Keep mechanism details in `tech-design.md` and preserve the existing proposal, deltas, and suite.
+- [ ] 2.1 Make the cart stories prove `shared-ui-site-chrome-SC-23` and `shared-ui-site-chrome-SC-41`: add an omitted-count story beside `EmptyNoBadge`, both keeping the cart control with no indicator and no count in its accessible name; re-point the `NoCartHandler` step from `shared-ui-site-chrome-SC-04` to `shared-ui-site-chrome-SC-41`, a positive count with no handler rendering neither. Signed-out and unknown-count fixtures use omitted or zero input.
+- [ ] 2.2 Make the existing 1, 3 and 123 stories and `MatchesDrawerTitle` prove `shared-ui-site-chrome-SC-24`, `shared-ui-site-chrome-SC-25`, and `shared-ui-site-chrome-SC-26`: count/brand presentation, the accessible name carrying the count, one handler call per activation, and a controlled count of 3 shown alike by `SiteHeader` and `CartDrawerHeader`. Add the missing assertion that the indicator is hidden from assistive technology to the shared count step.
+- [ ] 2.3 Verify the positive-count stories in wide and compact containers for `shared-ui-site-chrome-SC-24` through `shared-ui-site-chrome-SC-26`: full digits remain visible, the cart stays operable, and the account/menu controls keep their layout. Apply only contract-required component fixes found by this verification.
 - [ ] 2.5 Verify: run `pnpm --filter @grade10/ui exec vitest run --project storybook src/blocks/site-chrome/site-header.auction-store.cart-count.stories.tsx`, `pnpm --filter @grade10/ui run typecheck`, `pnpm run lint`, `pnpm check:manual`, and `pnpm run validate:changes nav-cart-count-badge`. Record browser and visual evidence separately from live application acceptance.
-
-
-## 3. Application Product Record (grade10-spec)
-
-- [ ] 3.1 Update `docs/prds/products/grade10-site/site/page-shell.md` for the member header count, its closed-drawer updates, and unknown/signed-out outcome. Keep the delivery mark until application acceptance is confirmed.
-- [ ] 3.2 Verify: `pnpm run validate:changes nav-cart-count-badge`, `pnpm run tcs:validate`, and `pnpm check:manual`. Record unrelated generated-index failures separately.
 
 ## 4. Member Cart Count State (grade10) (owner: @kinisworking)
 
-Depends on Group 3's merged application contract; uses the existing shared badge API. Review the merged store pin before implementation and run `pnpm run check:submodules` if it moves.
+Depends on acceptance. `useCartPresentation` already implements the count; each open task verifies it and adds the tests no scenario has yet. Review the store pin before claiming and run `pnpm run check:submodules` if it moves.
 
 - [x] 4.1 Make `grade10-site-site-page-shell-SC-42` and `grade10-site-site-page-shell-SC-43` pass with a cart-feature projection of distinct reviewed active lines, retaining adjusted lines and excluding sold-out/unavailable lines. Do not change the existing quantity-total API.
-- [ ] 4.2 Make `grade10-site-site-page-shell-SC-46`, `grade10-site-site-page-shell-SC-47`, `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-49`, and `grade10-site-site-page-shell-SC-53` pass with one member-scoped cart/review observer active while the drawer is closed; retain the last verified same-member count while checking and clear it on failure; reuse mutation invalidation and review retry without adding polling or automatic unavailable-line removal.
-- [ ] 4.3 Make `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-51`, and `grade10-site-site-page-shell-SC-52` pass for unresolved sessions, sign-out, member switching, and late responses.
+- [ ] 4.2 Verify `grade10-site-site-page-shell-SC-47`, `grade10-site-site-page-shell-SC-49`, and `grade10-site-site-page-shell-SC-53`, and add tests citing `grade10-site-site-page-shell-SC-46` (hydration with the drawer closed) and `grade10-site-site-page-shell-SC-48` (a pending first count shows no badge): one member-scoped observer stays active while the drawer is closed, keeps the last verified same-member count while checking and clears it on failure, with no polling and no automatic unavailable-line removal.
+- [ ] 4.3 Verify `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-51`, and `grade10-site-site-page-shell-SC-52` for unresolved sessions, sign-out, member switching, and late responses.
 - [ ] 4.4 Verify: run the cart feature's focused domain/hook tests, `node scripts/test.mjs grade10-store-frontend`, `pnpm run typecheck`, and `pnpm run lint`. Include delayed review and mutation races in the named scenario tests.
+- [ ] 4.5 Add hook tests citing `grade10-site-site-page-shell-SC-43` for a reviewed empty basket and for one holding only sold-out and unavailable lines: both return `0`, and the count stays defined so the header hides the badge rather than waiting.
 
 ## 5. Header and Drawer Integration (grade10)
 
-Depends on Group 4's cart projection and shared observer. Preserve existing sign-in and account-menu behavior when adapting the store pin.
+Depends on Group 4, and on the Cart-on-Auction bug fix: a `fix` commit, run through `docs/governance/bug-fixes.md`, that restores Cart on every surface once Store answers (`grade10-site-site-page-shell-SC-16`); `root.tsx:304` holds Cart to Store addresses today. Preserve existing sign-in and account-menu behavior when adapting the store pin.
 
-- [ ] 5.1 Make `grade10-site-site-page-shell-SC-42`, `grade10-site-site-page-shell-SC-45`, and `grade10-site-site-page-shell-SC-46` pass through root composition and `SiteShell`, supplying the optional count to `SiteHeader` and sharing reviewed basket state with `CartDrawerHost`. Preserve fresh drawer-open review and keep quote/tender/cleanup effects drawer-gated.
-- [ ] 5.2 Make `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-44`, and `grade10-site-site-page-shell-SC-50` pass through real application composition: first paint, stable controls, full digits at wide/375px widths, and unchanged sign-in activation.
-- [ ] 5.3 Make `grade10-site-site-page-shell-SC-47`, `grade10-site-site-page-shell-SC-49`, and `grade10-site-site-page-shell-SC-52` pass in application integration tests and local browser flows: add/remove/change quantity with the drawer closed, navigate Store → Auction, open the drawer to compare counts, recover a failed review, and switch members without stale counts.
-- [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and the focused Grade10 Playwright flows using the repository E2E lane. Record local visual evidence separately from deployed acceptance; no backend test or migration is needed unless implementation changes that scope.
+- [ ] 5.1 Write the application tests first, through the real root composition against injected cart ports: `grade10-site-site-page-shell-SC-45` (the auction-first composition, `SiteWithoutCart`, shows neither Cart nor a badge for a member holding active lines), `grade10-site-site-page-shell-SC-05` (the badge appearing after the session resolves leaves the Cart control where it was), `grade10-site-site-page-shell-SC-54` (a server-side change shows nothing until opening the drawer reviews it, then header and drawer title both show `3`), and `grade10-site-site-page-shell-SC-55` (Store `2` → Auction `2`, no new review). Re-point `CartDrawer.test.tsx:328` and the Auction tail of `cart-count.spec.ts:177` at `grade10-site-site-page-shell-SC-55`, expecting Cart and its count on Auction.
+- [ ] 5.2 Verify `grade10-site-site-page-shell-SC-42` and `grade10-site-site-page-shell-SC-46` through root composition and `SiteShell`: the optional count reaches `SiteHeader` and `CartDrawerHost` shares the reviewed basket. Preserve fresh drawer-open review and keep quote, tender and cleanup effects drawer-gated.
+- [ ] 5.3 Verify `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-44`, and `grade10-site-site-page-shell-SC-50` through real application composition. The `grade10-site-site-page-shell-SC-44` checks fill a real cart to its 50-line cap at wide and 375px widths, replacing the 123-line response fixtures in `cart-count.spec.ts:131` and `CartDrawer.test.tsx:208`.
+- [ ] 5.4 Verify `grade10-site-site-page-shell-SC-47`, `grade10-site-site-page-shell-SC-49`, and `grade10-site-site-page-shell-SC-52` in local browser flows: add, remove and change quantity with the drawer closed, open the drawer to compare counts, recover a failed review, and switch members without stale counts.
+- [ ] 5.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and the focused Grade10 Playwright flows using the repository E2E lane. Record local visual evidence separately from deployed acceptance; no backend test or migration is needed unless implementation changes that scope.
+
+## 6. The walk (grade10)
+
+- [ ] 6.1 On the deployed site, signed in as one member: add two lines on Store with the drawer closed and read the header, open the drawer and compare its title, move to Auction and read the header, read it again in a 375px-wide window, change the cart from a second browser and open the drawer, then sign out and sign in as another member. Record each count against the header and the drawer title.
+- [ ] 6.2 Run `/tcs-review nav-cart-count-badge` against the deployed grade10 header and cart drawer.
