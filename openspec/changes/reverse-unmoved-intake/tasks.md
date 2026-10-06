@@ -40,7 +40,7 @@ Needs group 3's moved test landed.
 - [ ] 5.3 Add `inventory.reverseCertIntake` as an `inventory:write` elevated procedure audited as `inventory-cert-unit` (`grade10-admin-inventory-catalog-SC-190`)
 - [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend` in grade10.
 
-## 6. Cert ID details and the product history (grade10)
+## 6. Cert ID details and the product history (grade10) (owner: @mason5991)
 
 Built against the contract's fixtures, not a running backend.
 
