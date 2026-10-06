@@ -38,10 +38,12 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 ## Bid History
 
 - **Accepted instants** — each row keeps the accepted time as data
-- **Localized** — recent activity reads in relative form and older activity
-  in the stated local time zone; the application supplies the locale, the
+- 🚧 **Localized** — recent activity reads in relative form and older activity
+  in the viewer's local zone; the application supplies the locale, the
   time zone and the activity copy, and a non-timestamp state may supply its
-  own display text; collector deadline lines use the same locale and zone
+  own display text; collector deadline and catalogue tile close lines use
+  the same locale and zone, and a deadline names that viewer's short zone
+  (HKT, EDT)
 - 🚧 **Winner after close** — when the lot is closed and sold, the winning
   public row shows a primary crown after the amount (`isWinner`; accessible
   name from consumer copy)

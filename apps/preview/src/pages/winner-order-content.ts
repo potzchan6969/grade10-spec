@@ -134,13 +134,13 @@ const INVOICE_ID = WINNER_ORDER_INVOICE_ID;
 const ADDRESS =
   "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong" as const;
 
-/** Lot closed 17 Sep 2026, 21:30 HKT → complete setup within 48 hours. */
+/** Lot closed 17 Sep 2026, 21:30 → complete setup within 48 hours. */
 const ADDRESS_DEADLINE = "Confirm by 19 Sep 2026, 21:30 HKT" as const;
 /** Brief overdue alert — past tense so the winner knows the window closed. */
 const ADDRESS_DEADLINE_PASSED = "Missed setup deadline: 19 Sep 2026" as const;
 
 /**
- * Invoice sent 19 Sep 2026, 11:00 HKT → pay within 7 calendar days of send
+ * Invoice sent 19 Sep 2026, 11:00 → pay within 7 calendar days of send
  * (not of lot close).
  */
 const PAYMENT_DEADLINE = "Pay by 26 Sep 2026, 11:00 HKT" as const;

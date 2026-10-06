@@ -1,9 +1,12 @@
-import type { ShippedLocale } from "../../lib/format-datetime";
+import {
+  formatViewerZoneName,
+  type ShippedLocale,
+} from "../../lib/format-datetime";
 
-/** How a block words a zone: the consumer's label when it has one, the IANA
- * name otherwise, so a zone is always named. */
+/** How a block words a zone: the consumer's label when it has one, otherwise
+ * the viewer's short name (`HKT`, `EDT`). */
 function zoneLabel(timeZone: string, label?: string): string {
-  return label ?? timeZone;
+  return label ?? formatViewerZoneName(timeZone);
 }
 
 type LocaleProps = {

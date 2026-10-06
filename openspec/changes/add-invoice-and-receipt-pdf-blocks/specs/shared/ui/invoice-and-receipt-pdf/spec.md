@@ -463,16 +463,18 @@ receipt; none is conditional on being given.
 Every document date uses the winner's time zone, matching the payment deadline
 the winner sees.
 
-**Given** — InvoicePdf and ReceiptPdf SHALL render every date as the winner's
-calendar date and clock time, with that zone's name.
+**Given** — `InvoicePdfData` and `ReceiptPdfData` SHALL each require the
+winner's IANA time-zone identifier. InvoicePdf and ReceiptPdf SHALL render
+every date as the winner's calendar date and clock time, with that zone's
+name. Neither renderer SHALL read the server's or viewer's local zone.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-43 - A date renders in the winner's time zone with its zone name
 
 **Serves:** Presentation-only contract - every date renders in the winner's time zone
 
 - **GIVEN** a `Date` value and a winner zone whose calendar date differs from Hong Kong for that instant
-- **WHEN** InvoicePdf renders it as a meta row
-- **THEN** the row shows that instant's winner-zone calendar date and clock
+- **WHEN** InvoicePdf renders its issue and deadline rows and ReceiptPdf renders its paid-at row
+- **THEN** each row shows that instant's winner-zone calendar date and clock
   time, followed by that zone's name
 
 ### Requirement: InvoicePdf and ReceiptPdf render only what they are given

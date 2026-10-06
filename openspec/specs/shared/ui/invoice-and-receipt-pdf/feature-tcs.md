@@ -1239,7 +1239,7 @@ Runs once per row of **Test data**.
 * No Payment section appears.
 * Every other meta row and party block still renders.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders fixed to Hong Kong time with its zone name
+### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders in Hong Kong as GMT+8
 
 **Classification:**
 
@@ -1266,7 +1266,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row shows that instant's Hong Kong calendar date and clock time.
-* The row ends in the zone name `HKT`.
+* The row ends in `GMT+8`.
+* The row does not contain `HKT`.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC42-1: Each renderer returns exactly one A4 page
 

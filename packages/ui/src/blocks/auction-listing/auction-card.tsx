@@ -58,6 +58,7 @@ type AuctionCardProps = {
   /** Static close, open, or closed line. Omit it and no clock is shown. */
   when?: AuctionCardWhen;
   locale?: ShippedLocale;
+  timeZone: string;
   badges?: readonly AuctionCardBadge[];
   /**
    * Open-lot pip. `open` is the brand dot. `last-minutes` is the error dot.
@@ -86,15 +87,17 @@ type AuctionCardProps = {
 function scheduleLabel(
   when: AuctionCardWhen | undefined,
   locale: ShippedLocale,
+  timeZone: string,
 ): string | null {
   if (when == null) return null;
+  const options = { locale, timeZone };
   switch (when.kind) {
     case "ends":
-      return formatListingEnds(when.at, locale);
+      return formatListingEnds(when.at, options);
     case "opens":
-      return formatListingOpens(when.at, locale);
+      return formatListingOpens(when.at, options);
     case "closed":
-      return formatListingClosed(when.at, locale);
+      return formatListingClosed(when.at, options);
   }
 }
 
@@ -117,6 +120,7 @@ function AuctionCard({
   bidCountLabel,
   when,
   locale = "en",
+  timeZone,
   badges = [],
   live,
   closed = false,
@@ -128,7 +132,7 @@ function AuctionCard({
   className,
 }: AuctionCardProps) {
   const showWatch = !closed && onWatchToggle != null;
-  const timeLabel = scheduleLabel(when, locale);
+  const timeLabel = scheduleLabel(when, locale, timeZone);
   const price = formatMoney(currentBidMinor, currency, { locale });
 
   const photoClassName = cn(

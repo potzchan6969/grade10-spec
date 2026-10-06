@@ -615,7 +615,7 @@ const journeyKey = (file, id) =>
 
 /**
  * What one task group reads of the change, by what its own section cites in
- * backticks (Q112): the plan's opening and the group's section, and of the
+ * backticks (Q117): the plan's opening and the group's section, and of the
  * journeys, requirements and cases only the blocks those ids are issued by,
  * with each such file's opening and a requirements file's removed and renamed
  * requirements. A group citing none of the change's ids reads none of them;

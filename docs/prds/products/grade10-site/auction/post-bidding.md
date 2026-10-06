@@ -156,7 +156,7 @@ meaning.
 
 ## Order Setup
 
-Before any invoice, the winner confirms three things on one form, inside 48
+Before any invoice, the winner confirms four things on one form, inside 48
 hours of the close.
 
 | The winner confirms | From | Default |
@@ -164,6 +164,7 @@ hours of the close.
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
 | 🚧 Payment method | Card in every currency; bank transfer where Grade10 holds bank details for the order's currency; each choice shows its fee range | Nothing preselected |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
+| 🚧 Time zone | The zone in which the winner reads the payment deadline and invoice dates; the winner can change the browser's suggested zone before confirming | The browser's current IANA time zone, shown for confirmation |
 
 - **Form** — Personal or Company; first and last name, phone (country and
   digits), country or region, town or city, address line 1 and postal code are
@@ -183,6 +184,12 @@ hours of the close.
   order show the confirmed snapshot: company name when the address is
   company, recipient name, phone, and the full address including postal code
   (not the lean picker card body)
+
+### Time Zone
+
+- 🚧 **Winner's zone** - the winner sees the browser's suggested IANA zone,
+  can choose another and confirms it with Order Setup. Winner Order keeps the
+  payment deadline in that confirmed zone when the winner later travels
 
 ### Address Deadline
 
@@ -260,7 +267,7 @@ by card, reads:
 - **PDFs** — the invoice once sent (text link beside the Order summary
   heading) and the receipt once paid (text link under the payment-method
   card); hidden when Cancelled
-- **Payment deadline** — an absolute date and time in the winner's zone, with
+- **Payment deadline** — an absolute date and time in the zone kept on the sent invoice, with
   no countdown
 
 ## Paying
@@ -417,8 +424,8 @@ then shipped, delivered, and order cancelled.
 
 - **Winner** — Confirm hides, Missed setup deadline gives Contact Us, and the
   order reads Setup Overdue
-- **Operator** — reopens the form for a fresh 48 hours, records an address
-  given by phone only while the order is unconfirmed Setup Overdue and its
+- **Operator** — reopens the form for a fresh 48 hours, records an address and
+  the winner's stated time zone given by phone only while the order is unconfirmed Setup Overdue and its
   invoice is `not_issued`, or cancels after review
 
 ### Missed Payment Deadline

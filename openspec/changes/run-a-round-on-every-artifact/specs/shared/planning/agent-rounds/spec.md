@@ -26,7 +26,7 @@ read again before anything lands after it, with one record row per round.
   - Decided by the round: a preference the round can take is decided on the best option and recorded as a numbered `## Decisions` row, and one reply from any hand overturns it
   - Held for its hand: a choice that moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work waits on its hand and holds the change's landings
   - Ids per change: issued per change and never reused
-  - Page lines: a product detail is a ❓ line on the page the change links
+  - Page lines: a product detail is a `❓` line on the page the change links
   - Listed per hand: the change page and My turn list the held rows addressed to each hand
 - Perspectives as data
   - Schema table: each artifact's readers sit in the schema beside its teammate, each with what in a draft summons it
@@ -39,7 +39,7 @@ read again before anything lands after it, with one record row per round.
   - Landing refused: an artifact lands only when everything before it is fresh, the fold at archive refuses a behind delta, and a tick, a claim and a wait are never held
   - Moved goals: a goal or non-goal that moved is a question to the product manager, extend, supersede or split, and nothing is rewritten in place
   - Raised rows: a landed Raised row puts the requirements and the cases behind
-  - Tech design first: a requirement that reaches the tech design writes a dated wait on the tech PIC, cleared by their edit or a read
+  - Tech design in planning: Dev writes the tech design in the planning run, the engineer who will build the change challenges it before acceptance, and a question it cannot settle is a Raised row, never a dated wait
 - The record
   - Rounds table: `rounds.md` holds one row per round, the artifact or group, the perspectives run, what stood, the question ids raised and the tests per scenario
   - Refused without a row: a landed artifact or a ticked group with no row is refused on a change on the round, and on every change from the day the kept skills go
@@ -107,12 +107,13 @@ other route.
 - **AND** no further step of the round runs
 
 #### Scenario: shared-planning-agent-rounds-SC-03 - A finding that stands changes the draft
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC reads a mechanism the readers have already argued over
+**Serves:** shared-planning-agent-rounds-US-03 - the engineer who will build the change challenges a mechanism the readers have already argued over
 
 - **GIVEN** a challenger reports that a proposed mechanism holds state a simpler one would not
 - **WHEN** the verifier argues the finding and it stands
 - **THEN** the draft is changed before the summary is written
 - **AND** the summary names the finding as one that stood
+- **AND** a summary of `tech-design.md` names the proposed system, its data flow and its rejected options
 
 ### Requirement: One word lands every artifact of that hand
 
@@ -277,7 +278,7 @@ taken as a remark.
 - **A reply the round cannot apply** — answered with what it could not do, and
   the question it names stays open
 - **A remark on a page's marked lines** — from the product manager it is
-  applied to the page as written; from any other hand it becomes a ❓ line on
+  applied to the page as written; from any other hand it becomes a `❓` line on
   the page for the product manager
 
 #### Scenario: shared-planning-agent-rounds-SC-11 - A question answered by its id alone
@@ -298,10 +299,10 @@ taken as a remark.
 - **AND** `rounds.md` gains a row naming the remark
 
 #### Scenario: shared-planning-agent-rounds-SC-13 - A remark settles a question that was asked
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC's challenge is answered where the next reader will find it
+**Serves:** shared-planning-agent-rounds-US-03 - the engineer's challenge before acceptance is answered where the next reader will find it
 
 - **GIVEN** a numbered decisions row asking which mechanism is taken
-- **WHEN** the tech PIC remarks that the other option is taken
+- **WHEN** the engineer who will build the change remarks in the thread that the other option is taken
 - **THEN** that row is written with the answer
 - **AND** `rounds.md` gains the round's row naming the remark
 - **AND** the thread carries the agent's answer to the challenge
@@ -329,7 +330,7 @@ taken as a remark.
 - **GIVEN** a draft whose summary quotes the marked lines of the page the change links
 - **WHEN** a remark changes what one of those lines says
 - **THEN** a remark from the product manager is applied to the page as written
-- **AND** a remark from any other hand becomes a ❓ line on the page for the product manager
+- **AND** a remark from any other hand becomes a `❓` line on the page for the product manager
 
 ### Requirement: A first sentence opens a change
 
@@ -490,7 +491,7 @@ the draft that depends on it.
 
 | Finding | Written as |
 | --- | --- |
-| A product detail: a value, a set the reader meets, an outcome they see, a decision | A ❓ line in the section of the page the change links, naming who confirms it |
+| A product detail: a value, a set the reader meets, an outcome they see, a decision | A `❓` line in the section of the page the change links, naming who confirms it |
 | A preference or a product decision | A numbered `decisions.md` row, held for its hand or decided by the round, as above |
 | A goal or a non-goal | A line in `decisions.md`'s goals or non-goals |
 | A state a reader sees | A `## States` bullet in `ui-design.md` |
@@ -505,16 +506,16 @@ the draft that depends on it.
 **Serves:** shared-planning-agent-rounds-US-04 - the hand confirms a value where every reader of the product will find it
 
 - **WHEN** a draft needs a value or an outcome the page does not state
-- **THEN** the page gains a ❓ line for it in the section it belongs to, naming who confirms it
+- **THEN** the page gains a `❓` line for it in the section it belongs to, naming who confirms it
 - **AND** the draft states no value in its place
 - **AND** no numbered decisions row is written for it
 
 #### Scenario: shared-planning-agent-rounds-SC-25 - A finding names a state and a mechanism
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC's reading lands in the design it is about, not in the requirement drawn from it
+**Serves:** shared-planning-agent-rounds-US-03 - the engineer who will build the change challenges the mechanism in the design it is about, not in the requirement drawn from it
 
 - **WHEN** a round on the requirements keeps a finding naming a state a reader sees and one naming a mechanism
 - **THEN** the state is written as a `## States` bullet in `ui-design.md` and the mechanism as a decision in `tech-design.md`
-- **AND** the requirements are drafted only after both have landed
+- **AND** the requirements are drafted from both only once both carry the finding
 
 ### Requirement: Open questions are listed per hand
 
@@ -523,7 +524,7 @@ An open row is a held row, and every one of them reaches the hand it waits on.
 Every held row SHALL be listed to the hand it waits on, and a row the round
 decided SHALL be listed nowhere.
 
-- **An open row is a held row** — the ❓ and the hand it waits on are what make
+- **An open row is a held row** — the `❓` and the hand it waits on are what make
   a row open; a row the round decided is no question, and no list carries it
 - **The change page** — each artifact row carries the ids of the questions open
   on it, linking to the change's decisions
@@ -568,7 +569,7 @@ them from there.
   block, read through the same reader
 - **No reader without a trigger** — a perspective no draft can summon is not an
   entry
-- **One procedure** — `/workflow-plan`, `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
+- **One procedure** — `/workflow-plan`, `/workflow-design`, `/workflow-specify`, `/workflow-tasks`,
   `/workflow-build` and `/workflow-land` each name their artifact and call `/workflow-round`, which reads
   this table; none of them carries its own copy of it
 
@@ -611,7 +612,7 @@ it, and SHALL NOT be given any other reader's findings or verdicts.
 - **AND** neither is given a verifier's verdict
 
 #### Scenario: shared-planning-agent-rounds-SC-31 - A design's reader names the principle
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC reads a finding as a claim against a stated principle
+**Serves:** shared-planning-agent-rounds-US-03 - the engineer who will build the change reads a finding as a claim against a stated principle
 
 - **WHEN** a reader of `tech-design.md` reports a finding
 - **THEN** the finding names which of the eight principles it rests on
@@ -633,17 +634,19 @@ and everything after an artifact SHALL be drawn from it.
 | `ui-design.md` | The page sections; `proposal.md`; `decisions.md`; `user-journeys.md` |
 | `tech-design.md` | The page sections; `proposal.md`; `decisions.md`; `user-journeys.md` |
 | `spec.md` | The above, then `ui-design.md` and `tech-design.md` |
-| `feature-tcs.md` | The page sections; `proposal.md`; `decisions.md`; `user-journeys.md`; `ui-design.md`; `tech-design.md` |
+| `feature-tcs.md` | The page sections; `proposal.md`; `decisions.md`; `user-journeys.md`; `ui-design.md` |
 | `tasks.md` | The above, then `spec.md` and `feature-tcs.md` |
 | The code and its end-to-end tests | The above, then `tasks.md` |
 
 - **The set is data** — `upstream:` names the artifact ids on each artifact in
   `openspec/schemas/grade10-planning/schema.yaml`, and the set is read in the
   schema's artifact order, in which the tech design sits above the requirements
-- **`feature-tcs.md` omits `spec.md`** — the cases are a blind reading of the
-  same anchors, drawn beside the requirements and never from them
-- **`tech-design.md` omits `ui-design.md`** — both are drawn from the journeys
-  side by side, and neither waits on the other
+- **`feature-tcs.md` omits `spec.md` and `tech-design.md`** - QA1 writes the
+  cases blind from the anchors before Dev writes the tech design, so the cases
+  are never drawn from Dev's design or requirements
+- **`tech-design.md` omits `ui-design.md`** - the tech design is drawn from the
+  journeys, not from the frames, so an edit to the UI design does not put it
+  behind; the requirements read both
 - **One artifact, every capability** — a change specifying several capabilities
   carries one `upstream:` entry and one `reviewed:` line per artifact id, never
   one per capability
@@ -670,7 +673,7 @@ and everything after an artifact SHALL be drawn from it.
 - **The code keeps no read record** — no `reviewed:` line is written for the
   code; a behind `tasks.md` refuses the group's landing instead
 
-#### Scenario: shared-planning-agent-rounds-SC-108 - A group's reader is given the blocks it cites
+#### Scenario: shared-planning-agent-rounds-SC-109 - A group's reader is given the blocks it cites
 **Serves:** Perspectives as data - a group's reading holds what the group builds, not the whole change
 
 - **GIVEN** a change specifying two capabilities, and a group whose task lines cite one scenario of one
@@ -679,7 +682,7 @@ and everything after an artifact SHALL be drawn from it.
 - **AND** of the cited capability its opening, the requirement holding the scenario, and its removed and renamed requirements
 - **AND** nothing of the other capability, and no other group's section
 
-#### Scenario: shared-planning-agent-rounds-SC-109 - A cited journey brings its cases
+#### Scenario: shared-planning-agent-rounds-SC-110 - A cited journey brings its cases
 **Serves:** Perspectives as data - a walk's reader is given the journeys it walks and their cases
 
 - **GIVEN** a group whose task lines cite one journey, and one case of another journey
@@ -687,7 +690,7 @@ and everything after an artifact SHALL be drawn from it.
 - **THEN** it is given the cited journey and every case under it
 - **AND** of the other journey, the cited case alone
 
-#### Scenario: shared-planning-agent-rounds-SC-110 - A group that cites nothing is given no capability
+#### Scenario: shared-planning-agent-rounds-SC-111 - A group that cites nothing is given no capability
 **Serves:** Perspectives as data - a group that builds no cited behaviour reads no requirement
 
 - **GIVEN** a group whose task lines cite none of the change's ids
@@ -695,7 +698,7 @@ and everything after an artifact SHALL be drawn from it.
 - **THEN** it is given no journey, requirement or case
 - **AND** a reading of the whole change is given every capability whole
 
-#### Scenario: shared-planning-agent-rounds-SC-111 - A linked page section is given alone
+#### Scenario: shared-planning-agent-rounds-SC-112 - A linked page section is given alone
 **Serves:** Perspectives as data - a page carries many changes' marks, and a reader is given only the sections this one links
 
 - **GIVEN** a proposal linking a page section that holds a flow whose steps are headings
@@ -704,7 +707,7 @@ and everything after an artifact SHALL be drawn from it.
 - **AND** nothing of the section after it
 - **AND** a link to a section the page does not carry gives the whole page, and the link is printed
 
-#### Scenario: shared-planning-agent-rounds-SC-112 - A bare id stops the group's reading
+#### Scenario: shared-planning-agent-rounds-SC-113 - A bare id stops the group's reading
 **Serves:** Perspectives as data - a citation the tools cannot read is fixed before a round leans on it
 
 - **GIVEN** a group whose section names one of the change's scenario ids without backticks
@@ -882,13 +885,13 @@ A wake that opens a change or is asked to plan SHALL draft every artifact it
 can reach on the change's branch, each from the draft before it except the
 cases, and SHALL land nothing.
 
-- **The chain** — `proposal.md`, `decisions.md`, the journeys, `ui-design.md`
-  where a surface moves, `tech-design.md`, the requirements and the cases, then
-  `tasks.md`, in the order the upstream set gives them
-- **The cases beside the requirements** — the cases are the one artifact the
-  chain does not draw from the draft before it: their upstream set draws them
-  from the anchors, and never from `spec.md`, so neither reading sees the
-  other's output
+- **The chain** - `proposal.md`, `decisions.md`, the journeys, `ui-design.md`
+  where a surface moves, then the cases, `tech-design.md` and the requirements,
+  in the order the planning run writes them, then `tasks.md`
+- **The cases first and blind** - the cases are the one artifact the chain
+  does not draw from the draft before it: their upstream set draws them from
+  the anchors, and never from `tech-design.md` or `spec.md`, so neither
+  reading sees the other's output
 - **Each with its own readers** — every draft in the chain is challenged and
   verified as its own round
 - **Pushed as it goes** — the branch is pushed after every artifact, so a wake
@@ -901,8 +904,9 @@ cases, and SHALL land nothing.
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager's one sentence comes back as a change drafted as far as it can be
 
 - **WHEN** a wake opens a change or is asked to plan one
-- **THEN** the proposal, the decisions, the journeys, the design where a surface moves, the tech design, the requirements and the plan are drafted, each from the draft before it
-- **AND** the cases are drafted from the anchors, beside the requirements and never from `spec.md`
+- **THEN** the proposal, the decisions, the journeys and the design where a surface moves are drafted, each from the draft before it
+- **AND** the cases are drafted next, blind from the anchors, and never from `tech-design.md` or `spec.md`
+- **AND** the tech design, the requirements and the plan follow, in that order, each from the draft before it
 - **AND** each draft is read by its own perspectives
 - **AND** the branch is pushed after every artifact
 - **AND** nothing reaches `main`
@@ -988,38 +992,38 @@ is before `spec.md` and `feature-tcs.md`, and both SHALL go behind.
 - **THEN** `spec.md` and `feature-tcs.md` are behind
 - **AND** `tasks.md` does not land until both have been read again
 
-### Requirement: A requirement that reaches the tech design writes a dated wait
+### Requirement: A question the tech design cannot settle is a Raised row
 
-The tech design is drawn first, and a requirement it does not carry is asked of
-the tech PIC rather than written over them.
+Dev writes the tech design and the requirements in one planning run, the
+engineer who will build the change challenges the design, and the human who
+accepts the plan judges the requirements and the suite.
 
-The requirements pass SHALL read `tech-design.md` beside `ui-design.md`, and a
-requirement that needs the proposed mechanism changed SHALL be written as a
-dated wait on the tech PIC.
+The requirements pass SHALL read `tech-design.md` beside `ui-design.md` and
+SHALL NOT write a requirement contradicting either. A question the tech design
+cannot settle SHALL be written as a row in `decisions.md`'s `## Raised`, and
+SHALL NOT be written as an `awaiting: tech-design:` line.
 
-- **The order** — `tech-design.md` is drawn before the requirements, and the
-  requirements are drawn from it
-- **The wait** — an `awaiting: tech-design:` line carrying the date, the
-  requirement and the tech PIC's handle
-- **Cleared by** — the tech PIC's edit to `tech-design.md`, or that artifact's
-  `reviewed:` line
-- **Holds no stage** — the wait is an overlay; it refuses no tick and no claim
+- **One writer** - Dev writes `tech-design.md` after QA1's blind cases and
+  before the scenarios, in the same `/planning-dev` run; a requirement that
+  needs the mechanism changed changes the design in that run
+- **The challenge** - the engineer who will build the change reads the
+  proposed system, its data flow and its rejected options in the tech design's
+  summary in the change's thread, and challenges it before the plan is
+  accepted; no hand is told to read the tech design on its own
+- **Whole by reading** - the human who accepts the plan judges by reading the
+  files whether the requirements and the suite are whole, and the summary need
+  not state it
+- **Holds acceptance** - the open row refuses acceptance, and that refusal is
+  `shared/planning/change-stages`' own
 
-#### Scenario: shared-planning-agent-rounds-SC-49 - The requirements pass reads the design
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC's mechanism is what the requirements are drawn against
+#### Scenario: shared-planning-agent-rounds-SC-108 - A question the tech design cannot settle is raised
+**Serves:** shared-planning-agent-rounds-US-03 - the engineer reads the open question in the change's thread before the plan is accepted
 
-- **GIVEN** a change carrying `tech-design.md` and `ui-design.md` on `main`
-- **WHEN** the requirements are drafted
-- **THEN** both are read as what is before them
-- **AND** a requirement contradicting either is not written
-
-#### Scenario: shared-planning-agent-rounds-SC-50 - A requirement reaching the design writes the wait
-**Serves:** shared-planning-agent-rounds-US-03 - the tech PIC is told which requirement their design does not carry
-
-- **WHEN** a requirement being drafted needs the proposed mechanism changed
-- **THEN** the change's record gains an `awaiting: tech-design:` line with the date, the requirement and the tech PIC's handle
-- **AND** the change's stage is not held by it
-- **AND** the line is cleared by the tech PIC's edit or by `tech-design.md`'s `reviewed:` line
+- **GIVEN** a planning run whose requirements pass needs a mechanism `tech-design.md` does not settle
+- **WHEN** Dev cannot settle it by changing the design
+- **THEN** a row naming the question is written in `decisions.md`'s `## Raised`
+- **AND** the change's record gains no `awaiting: tech-design:` line
+- **AND** no requirement contradicting `tech-design.md` or `ui-design.md` is written
 
 ### Requirement: `rounds.md` holds one row per round
 
@@ -1279,6 +1283,9 @@ and SHALL say how many it left out.
 
 - **The change page** — the Delivery row shows the suite's automated count
   against its total
+- **A failed row** - QA writes the failure in the change's thread as one
+  sentence naming the case id; the sheet stays the record of the walk and
+  posts nothing to the thread itself
 
 #### Scenario: shared-planning-agent-rounds-SC-61 - Automated cases are left out and counted
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate walks the cases the suite cannot show
@@ -1288,6 +1295,15 @@ and SHALL say how many it left out.
 - **THEN** no automated case is on it
 - **AND** it says how many it left out
 - **AND** the change page shows the automated count against the suite's total
+
+#### Scenario: shared-planning-agent-rounds-SC-61a - A failed row reaches the thread as QA's sentence
+**Serves:** shared-planning-agent-rounds-US-08 - the QA teammate says what failed where the change's hands already read
+
+- **GIVEN** a run sheet holding a case still manual
+- **WHEN** QA marks that case failed on the sheet
+- **THEN** the sheet posts nothing to the change's thread
+- **AND** QA's one sentence in the thread names the case id and what failed
+- **AND** the sheet still holds the case marked failed
 
 ### Requirement: The suite runs on every push and every cut
 

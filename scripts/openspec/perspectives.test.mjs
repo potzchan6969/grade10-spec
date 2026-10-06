@@ -535,7 +535,7 @@ const citing = (root) => {
   );
 };
 
-test("shared-planning-agent-rounds-SC-108 - a group's reader is given the blocks it cites", () => {
+test("shared-planning-agent-rounds-SC-109 - a group's reader is given the blocks it cites", () => {
   const root = fixture();
   citing(root);
   const bundle = bundleFor(root, "demo", "1", undefined, quiet);
@@ -571,7 +571,7 @@ test("shared-planning-agent-rounds-SC-108 - a group's reader is given the blocks
   );
 });
 
-test("shared-planning-agent-rounds-SC-109 - a cited journey brings its cases, and a cited case itself", () => {
+test("shared-planning-agent-rounds-SC-110 - a cited journey brings its cases, and a cited case itself", () => {
   const root = fixture();
   citing(root);
   const text = readAll(root, bundleFor(root, "demo", "3", undefined, quiet));
@@ -584,7 +584,7 @@ test("shared-planning-agent-rounds-SC-109 - a cited journey brings its cases, an
   assert.doesNotMatch(text, /other journey|other case/);
 });
 
-test("shared-planning-agent-rounds-SC-110 - a group that cites nothing is given no capability, and the whole change every one", () => {
+test("shared-planning-agent-rounds-SC-111 - a group that cites nothing is given no capability, and the whole change every one", () => {
   const root = fixture();
   citing(root);
   const none = bundleFor(root, "demo", "2", undefined, quiet);
@@ -604,7 +604,7 @@ test("shared-planning-agent-rounds-SC-110 - a group that cites nothing is given 
       );
 });
 
-test("shared-planning-agent-rounds-SC-111 - a linked page section is given alone, to the end of its flow", () => {
+test("shared-planning-agent-rounds-SC-112 - a linked page section is given alone, to the end of its flow", () => {
   const root = fixture();
   writeFileSync(
     join(root, PAGE),
@@ -644,7 +644,7 @@ test("shared-planning-agent-rounds-SC-111 - a linked page section is given alone
   assert.doesNotMatch(text, /Nothing the change links\./);
 });
 
-test("shared-planning-agent-rounds-SC-111 - a link to a section the page does not carry gives the whole page, printed", () => {
+test("shared-planning-agent-rounds-SC-112 - a link to a section the page does not carry gives the whole page, printed", () => {
   const root = fixture();
   writeFileSync(
     join(root, "openspec", "changes", "demo", "proposal.md"),
@@ -659,7 +659,7 @@ test("shared-planning-agent-rounds-SC-111 - a link to a section the page does no
   assert.match(printed.join("\n"), new RegExp(`${PAGE}#nowhere`));
 });
 
-test("shared-planning-agent-rounds-SC-112 - a bare id the change issues stops the group's reading", () => {
+test("shared-planning-agent-rounds-SC-113 - a bare id the change issues stops the group's reading", () => {
   const root = fixture();
   citing(root);
 
@@ -671,7 +671,7 @@ test("shared-planning-agent-rounds-SC-112 - a bare id the change issues stops th
   assert.match(said, /shared-planning-demo-SC-02/);
 });
 
-test("shared-planning-agent-rounds-SC-112 - a backticked id the change does not issue brings nothing, and is printed", () => {
+test("shared-planning-agent-rounds-SC-113 - a backticked id the change does not issue brings nothing, and is printed", () => {
   const root = fixture();
   citing(root);
   const printed = [];

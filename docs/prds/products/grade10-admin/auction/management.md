@@ -302,6 +302,17 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 On a paid invoice | Counts above the Order Total | Overpaid |
 | 🚧 On an invoice in any other state, which no card payment can start on | Counts toward nothing | Unexpected status |
 
+### Winner Time Zone
+
+- 🚧 **Invoice dates** - the quote shows the winner's confirmed IANA zone;
+  send is refused while the order has none. Each issued invoice keeps that
+  zone for its dates and for receipts paid against it
+- 🚧 **Phone setup** - the operator enters the winner's stated IANA zone
+  with the addresses; an absent or invalid zone refuses the record
+- 🚧 **Older orders** - when an order has no zone, the operator records the
+  zone the winner states, with a reason, before sending or reissuing; an
+  already issued document keeps its original dates
+
 ### Manual Payment Collection
 
 - 🚧 **Record payment** - one dialog for money received outside the card
@@ -315,8 +326,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 
 | Payments so far | The next payment | What happens |
 | --- | --- | --- |
-| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid |
-| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; asked again on every later payment |
+| 🚧 Any | Less than the balance | Recorded; the order reads Partially Paid at the real remaining balance |
 | 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
@@ -325,8 +335,12 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Reopening the address form** — after the 48-hour deadline passed with no
   confirmed address and before send, on request and with a reason, giving a
   fresh 48 hours; repeatable, writes no status directly but its reopened facts
-  derive Awaiting Setup, never on a cancelled order. Or the operator records an
-  address the winner gives by phone, leaving the form closed
+  derive Awaiting Setup, never on a cancelled order. Or, only while the order
+  is unconfirmed Setup Overdue and its invoice is `not_issued`, the operator
+  records an address and the winner's stated IANA time zone by phone, leaving
+  the form closed. Both
+  paths refuse once an address is confirmed, an invoice is sent, or cancellation
+  is requested or complete
 
 ### Order Cancellation
 
@@ -336,7 +350,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 What the dialog states | Before the operator confirms: the lot goes back to stock, no runner-up is offered it, the winner is emailed, a suspension stays, and the cancel cannot be undone |
 | The lot | Back to stock with no runner-up offer, its hammer price and bid history kept for audit and never carried into a new listing |
 | 🚧 Relisting it | The order links to its lot, which an operator relists by hand; nothing is relisted on its own |
-| 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, finance sends the money back outside Grade10, and the operator clears the flag once it has gone |
+| 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, Finance sends the money back outside Grade10, and an operator with payment processing clears the flag with a reason and any return reference once it has gone |
 
 - **Refund** — the winner asks Customer Service, outside Grade10; the
   operator sends the money by hand, in the Stripe dashboard or by bank
