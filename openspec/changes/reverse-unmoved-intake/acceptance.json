@@ -1,0 +1,86 @@
+{
+  "version": 2,
+  "change": "reverse-unmoved-intake",
+  "baseline": "f8ef5566777b9ff518f00db434badc40d71a2cb500fdf57003ca51f094f2e8b2",
+  "fingerprint": "54ce8cd9287416c82153a8fd855d7f88534ad30c6886eb2eefc602a16cb9a9dd",
+  "reviewedBy": "@mason5991",
+  "acceptedAt": "2026-10-05T23:39:20.788Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/catalog.md#intake",
+      "sha256": "7dec7e0b8fff44dd7d0fd3e5688120e53059aee3e7776a06cf20eb3d4bba5a1f",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/reverse-unmoved-intake/decisions.md",
+      "sha256": "014f18fbce1c12995a6f13218e0a2338b0aa58690b3eb0aa98ac1746bffeb959",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/reverse-unmoved-intake/proposal.md",
+      "sha256": "3b0ba55ed770aafcf9c0d5b620e8ff0f85d5444fe69d69c8fe4c4ce9afa1419f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/reverse-unmoved-intake/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "sha256": "f7f57ebd6444c52768c352139ebcb8457ad4b7182d250cce1d9cce27e33a739d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/reverse-unmoved-intake/specs/grade10-admin/inventory/catalog/spec.md",
+      "sha256": "c9ef7e9701725ee8b8276bcf58dd2f9e72b6c4e022a365bd43730a51dfe7d770",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/reverse-unmoved-intake/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "sha256": "fb1021abc71edaed0d9e4ed8dbdf910e177f051540e284b79e7c1056ec13d2dc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/reverse-unmoved-intake/tech-design.md",
+      "sha256": "30fda7b33837d7c812c54d30eb370898c3c1d7248d5aaabf486fcf4933c82f22",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "sha256": "282d799c08b1840074b3116e23ff4df53a25c62865c4995adfb69f6f2f25616a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+      "sha256": "c38bff7ae126d8776f92becfd2be79074dfe41c509710a97f31d9890b5c9de76",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "sha256": "042bfb93fbc3bd47c92064dd2aff8c67c38ce8066548b31d9e5b7f2fe88bbf3b",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A reversal is confirmed with remarks first",
+        "Requirement: A reversal lands whole against holds and other changes",
+        "Requirement: An unmoved Cert record can be removed as never received",
+        "Requirement: Cert ID details shows each unit's history",
+        "Requirement: Change history fields identify every transition",
+        "Requirement: Inventory may own optional Cert ID records and copy facts",
+        "Requirement: Only an inventory admin who may write inventory reverses an intake",
+        "Requirement: Product inventory snapshot fields",
+        "Requirement: Regular stock intaken since its latest move can be reduced",
+        "Requirement: The product page and history name each hold's holder"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
