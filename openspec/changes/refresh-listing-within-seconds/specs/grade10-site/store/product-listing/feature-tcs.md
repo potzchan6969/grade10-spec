@@ -234,5 +234,4 @@ to rev 2, A card follows the shop's price and availability: a card stops at no
 count, because product status puts no ceiling on a browse quantity
 (`add-store-product-status` decisions Q1 and Q17). US14-TC3 moved to rev 2 to
 match: it saves a new price, then sells every variant out, and reads Sold out
-on the card where it raised the quantity past the count. QA2 reruns on this
-suite.
+on the card. QA2 reruns on this suite.
