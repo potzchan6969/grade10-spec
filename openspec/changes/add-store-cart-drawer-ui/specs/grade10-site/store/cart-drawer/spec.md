@@ -190,7 +190,9 @@ reviewed basket and its accepted tender. The drawer SHALL remain open,
 showing the redirecting state, until it hands the collector to the resulting
 hosted invoice. `grade10-site/store/checkout`'s existing transactional
 recheck at order-write time remains the read that gates this creation; the
-drawer adds no second re-read of its own.
+drawer adds no re-read of its own before creating the session. When that
+recheck or the shop refuses the checkout, the drawer reads the cart again as
+`grade10-site/store/cart-validation` requires.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-oqn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-13 - A line opens its product
@@ -211,7 +213,7 @@ drawer adds no second re-read of its own.
 - **AND** the drawer remains open on its redirecting state until that redirect succeeds
 - **AND** no separate checkout surface opens
 
-<!-- trace:scenario id=g10.store-cart-drawer.SC-5pn rev=1 -->
+<!-- trace:scenario id=g10.store-cart-drawer.SC-5pn rev=2 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-28 - A changed line is named and no order is created
 **Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose checkout attempt is refused because a line changed
 
@@ -219,7 +221,8 @@ drawer adds no second re-read of its own.
 - **WHEN** the collector activates Checkout and the checkout session is refused for that line
 - **THEN** the drawer names the affected line
 - **AND** no order is created
-- **AND** the drawer offers to try Checkout again
+- **AND** Checkout is offered again once the cart holds only lines the read
+  confirmed, as `grade10-site/store/cart-validation` requires
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-t6r rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-29 - A provider refusal offers retry with no order created

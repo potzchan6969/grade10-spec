@@ -16,7 +16,7 @@ Public guest checkout, an embedded card form and a separate checkout page.
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | When is the basket read? | Use the drawer's continuous current review and quote; preserve the existing server validation at Pay | A separate checkout page or a new backend validation flow |
+| Q1 | When is the basket read? | At the two moments `grade10-site/store/cart-validation` states: when the cart opens, and at Pay, the drawer's Proceed to Checkout, where the existing server validation prices the order; the tender quote is the drawer's | A separate checkout page or a new backend validation flow |
 | Q2 | Which Shopify flow is used? | Call the existing Draft Order hosted-invoice creation flow for each new Pay submission | An embedded form or a new provider flow |
 | Q3 | Who uses public checkout? | The public frontend requires a signed-in member and uses authenticated checkout; existing operator surfaces and backend permissions remain unchanged | A public guest or typed-email frontend |
 | Q4 | Where are shipping and tax calculated? | Shopify calculates them; the drawer shows an estimate | Presenting the drawer estimate as the final charge |

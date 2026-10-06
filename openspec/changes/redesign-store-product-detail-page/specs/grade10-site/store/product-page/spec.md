@@ -80,35 +80,30 @@ SHALL restore the collapsed state without navigating away.
 ### Requirement: A product page adds a chosen quantity in place
 
 The product page SHALL render a quantity stepper defaulting to one for the
-product's one sellable item. The stepper SHALL NOT cap the requested quantity
-at a stock count; the cart's review answers it. While an add is pending, the stepper
-and add action SHALL be disabled and the action SHALL show its loading state
-labelled for adding. After a successful add, the page SHALL remain on the
-product address, open the cart drawer, reset the quantity stepper to one, and
-reflect the resulting cart quantity. The page SHALL NOT show an on-page added
-confirmation. If the product item is not available for sale, the action SHALL
-be disabled and labelled as sold out.
+product's one sellable item. While an add is pending, the stepper and the add
+action SHALL be disabled and the action SHALL show its loading state labelled
+for adding. After a successful add, the page SHALL open the cart drawer and
+reset the quantity stepper to one, and SHALL NOT show an on-page added
+confirmation. When the item is sold out, the add action itself SHALL read Sold
+out.
 
-<!-- trace:scenario id=g10.store-product-page.SC-lqp rev=1 -->
+<!-- trace:scenario id=g10.store-product-page.SC-lqp rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-17 - A collector adds a chosen quantity in place
 **Serves:** grade10-site-store-product-page-US-08 - Collector adds a product quantity from the product page
 
-- **GIVEN** a product with one available sellable item and finite quantity 3
+- **GIVEN** a product with one available sellable item
 - **WHEN** a collector changes the stepper to 2 and activates Add to cart
 - **THEN** the pending action disables the stepper and add control
 - **AND** the add control shows its loading label
-- **AND** the page remains on the product address
-- **AND** the cart records quantity 2 for the product's sellable item after the add settles
-- **AND** the cart drawer opens
+- **WHEN** the add settles
+- **THEN** the cart drawer opens
 - **AND** the quantity stepper resets to one
 - **AND** the page shows no on-page added confirmation
 
-<!-- trace:scenario id=g10.store-product-page.SC-xny rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-18 - A sold-out product offers no add action
+<!-- trace:scenario id=g10.store-product-page.SC-xny rev=2 -->
+#### Scenario: grade10-site-store-product-page-SC-18 - A sold-out product's add reads Sold out and cannot be pressed
 **Serves:** grade10-site-store-product-page-US-09 - Collector meets a sold-out product
 
-- **GIVEN** a product whose one sellable item is unavailable for sale
+- **GIVEN** a product whose one sellable item is sold out
 - **WHEN** a collector opens the product page
-- **THEN** the product remains priced and marked unavailable
-- **AND** the purchase action is disabled and labelled sold out
-- **AND** no control can add the product to the cart
+- **THEN** the add action reads Sold out and cannot be pressed

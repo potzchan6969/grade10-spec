@@ -139,8 +139,9 @@ cannot decide whether the rendered region exceeds three lines.
 
 `add-store-product-status` owns what the page says about availability: the
 one item's price and whether it can be bought, with no remaining count and no
-stock ceiling. The redesign keeps its gallery, description and quantity
-scenarios and adds no stock helper or threshold.
+stock ceiling. The redesign keeps its gallery and description scenarios, and
+of the add only the pending label, the drawer opening, the reset and the Sold
+out label on the add action. It adds no stock helper or threshold.
 
 ### Keep copy in the shared catalogs
 
@@ -194,8 +195,9 @@ accepts a fabricated default label.
   control in the SSR-safe initial render and hide it only after a measured
   collapsed region proves that no disclosure is needed.
 - Two changes move the product page → `add-store-product-status` accepts
-  first, and this change rebases against the folded page, retiring US-08 and
-  US-09 into US-03 and US-04.
+  first. This change's requirements already state only what that change does
+  not; once it folds, SC-17 and SC-18 move to serve US-03 and US-04, their
+  cases join those journeys' folded suites, and US-08 and US-09 retire.
 
 ## Migration Plan
 

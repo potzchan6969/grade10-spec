@@ -36,12 +36,14 @@ order surface. The invoice fixes the purchase; backend behavior is unchanged.
 
 ### Requirement: Checkout reviews the current member basket before payment
 
-Checkout SHALL use the drawer's continuous current line review and accepted
-tender quote. The frontend SHALL keep Pay unavailable while review, cart or
-tender writes, or its checkout request are pending, or while the current
-review or quote is failed or contradictory. A failed tender edit MAY retain
-the previous accepted choice and allow Pay once its current quote is ready.
-The existing server validation at Pay remains unchanged.
+Checkout SHALL use the two reads `grade10-site/store/cart-validation` states
+and the drawer's accepted tender quote: the read when the cart opens, and the
+read when the collector presses Pay, the drawer's Proceed to Checkout. The
+frontend SHALL keep Pay unavailable while review, cart or tender writes, or
+its checkout request are pending, or while the current review or quote is
+failed or contradictory. A failed tender edit MAY retain the previous accepted
+choice and allow Pay once its current quote is ready. The read at Pay is the
+existing server validation, and it prices the order.
 
 **Review** - Current titles, quantities, prices and availability SHALL come
 from the existing review. A changed line SHALL be named so the collector can

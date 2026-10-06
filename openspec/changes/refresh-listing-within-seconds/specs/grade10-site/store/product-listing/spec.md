@@ -43,13 +43,13 @@ a read older than the report that caused it SHALL NOT be published.
 - **WHEN** the shop takes that product off the store's channel and reports it
 - **THEN** within 10 seconds of the shop's read no longer answering it, no location lists it, and no count counts it
 
-<!-- trace:scenario id=g10.store-product-listing.SC-6q8 rev=1 -->
-#### Scenario: grade10-site-store-product-listing-SC-51 - A card follows the shop's price and stock
+<!-- trace:scenario id=g10.store-product-listing.SC-6q8 rev=2 -->
+#### Scenario: grade10-site-store-product-listing-SC-51 - A card follows the shop's price and availability
 **Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
-- **GIVEN** a card showing a price and stopping at the shop's count
-- **WHEN** the shop changes that product's price or its count and reports it
-- **THEN** within 10 seconds of the shop's read answering the new price and count, the card at any location shows the new price and stops at the new count
+- **GIVEN** a card showing a price and reading available
+- **WHEN** the shop changes that product's price, or stops selling every variant, and reports it
+- **THEN** within 10 seconds of the shop's read answering the change, the card at any location shows the new price, or reads Sold out
 - **AND** a price order places the card by the new price
 
 <!-- trace:scenario id=g10.store-product-listing.SC-kj0 rev=1 -->
