@@ -33,6 +33,7 @@ import {
   NEXT_AVAILABLE_VISIT_DATE,
   prepTipsForService,
   SERVICE_PICKER_COPY,
+  SHOP_NAME,
   SLOT_PICKER_COPY,
   SUMMARY_COPY,
   VAULT_CONFIRMATION_STORY_ID,
@@ -111,7 +112,7 @@ function BookVisitPage() {
       {view === "service" ? (
         <VStack gap="lg" hAlign="stretch">
           <Card
-            aria-label={CAUSEWAY_BAY.name}
+            aria-label={SHOP_NAME}
             className="w-fit max-w-full self-start"
             role="group"
           >
