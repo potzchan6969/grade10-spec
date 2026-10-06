@@ -84,7 +84,7 @@ to navigate to.
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Checkout-open read | Decided | The cart drawer's own continuous live quote, kept current while the drawer is open, stands in for a separate checkout-open read; no second client-side re-read is added before Pay. | Engineering |
+| Checkout-open read | Decided | The read when the cart opens stands in for a separate checkout-open read, and the read at Proceed to Checkout prices the order, as [Cart Validation](/p/grade10-site/store/cart-validation) states; no client-side re-read is added before it. | Engineering |
 | Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
 :::

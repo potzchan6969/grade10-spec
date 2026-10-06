@@ -30,13 +30,18 @@ decision. Neither answer turns the shop's later acceptance into a guarantee.
 - 🚧 **Every moved line at once** — when the checkout read finds lines that
   moved, the drawer stays open and one notice names each of them with what
   happened to it
+- 🚧 **Back to the cart** — a checkout the store's read or the shop refuses
+  reads the cart again as opening it does, so each line shows the shop's
+  current answer
 - 🚧 **Filled short** — a cart the shop would fill short is refused, naming
   the line and how many the shop would fill; nothing is sold short
 - 🚧 **A check that cannot finish** — every affected line reads unchecked,
   its last availability and price and the cart total are replaced with an
   unchecked state, Retry is offered, and checkout stays unavailable until the
-  store has a current answer. A cart that has not loaded its lines shows an
-  unchecked cart and Retry, naming no line it does not know
+  store has a current answer
+- 🚧 **A cart that never loaded** — Retry is offered and checkout stays
+  unavailable; the drawer names no line and never says the cart is empty, as
+  [Store Cart](/p/shared/ui/store-cart) shows a cart not yet read
 
 :::detail{title="Product decisions" for="pm"}
 A collector should learn about a moved cart line while they can still fix it,

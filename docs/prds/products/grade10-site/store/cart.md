@@ -26,8 +26,9 @@ back to that page.
   [Cart Validation](/p/grade10-site/store/cart-validation)
 - **Unresolved** — while the read is pending or failed the lines, the
   totals and Checkout wait; nothing held is shown as current
-- **Lines the shop no longer sells** — leave the cart on open, with one
-  notice
+- **Lines whose product left the shop** — leave the cart on open, with one
+  notice; a sold-out line stays, marked, until the collector removes it —
+  [Cart Validation](/p/grade10-site/store/cart-validation)
 - **One scope** — the member cart of the signed-in session; a signed-out
   session holds no lines and builds none
 - **Edits** — quantity and removal write to the same cart the page holds
@@ -95,7 +96,7 @@ The refusals are the coupon's own —
 
 ::story{id="store-cart-cartdrawerfooter--interactive-member" title="A code and points on the cart"}
 
-::story{id="store-cart-cartdrawer--unavailable-items-removed" title="Lines the store no longer sells, leaving"}
+::story{id="store-cart-cartdrawer--unavailable-items-removed" title="Lines whose product left the shop, leaving"}
 
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
 

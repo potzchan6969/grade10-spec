@@ -76,14 +76,17 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   from then on. No browser-supplied or recorded price ever reaches a checkout
   order.
 - **A cart the read contradicts is not handed off.** Every contradicted line is
-  named at once and the collector returns to the cart to resolve it.
+  named at once and the collector returns to the cart to resolve it. A
+  checkout the store's read or the shop refuses reads the cart again as
+  opening it does.
 - **The store's read is advisory; the shop remains the authority.** A refusal
   after a passing read is reported with the line named, a cart the shop would
   fill short is refused rather than sold short, and a read that cannot complete
   blocks checkout rather than guessing.
 - **An initial cart read can fail before any lines are known.** The drawer
-  presents an unchecked cart with Retry, no current total and no checkout
-  action; it does not invent line names.
+  offers Retry, no current total and no checkout, names no line and never
+  shows the cart as empty; it shows the cart as `shared/ui/store-cart` shows a
+  cart not yet read.
 
 No component contract changes. `shared/ui/store-product-listing` takes
 availability as a supplied condition and forbids deriving one;
@@ -95,8 +98,9 @@ states what the store puts into them.
 
 - **Overriding the shop's inventory policy.** Whether a variant sells past zero
   is set on the shop, and the store neither adds a pre-order treatment for it
-  nor refuses what the shop sells. A catalogue that must never sell past zero
-  says so on the shop. *(Assumption — no variant on the Grade10 shop is set to
+  nor refuses a variant the shop sells; a count above zero still bounds a
+  request, because the store never reads the setting (decisions Q20). A
+  catalogue that must never sell past zero says so on the shop. *(Assumption — no variant on the Grade10 shop is set to
   sell past zero; if one is, the store sells it as available.)*
 - **Low stock as a cue to buy.** Browse surfaces state availability and nothing
   about quantity. The cart's `adjusted` warning explains a quantity the store
@@ -127,7 +131,8 @@ states what the store puts into them.
 ### Modified Capabilities
 
 - `grade10-site/store/product-listing`: remove stock-derived quantity limits
-  and low-stock counts from listing tiles.
+  and low-stock counts from listing tiles. The signed-out add keeps its
+  durable rule, because the tile's first add is always 1 (decisions Q18).
 - `grade10-site/store/product-page`: remove stock-derived quantity limits and
   low-stock counts from the product page; the page answers, adds and reads sold
   out for its one sellable item through the internal Shopify sale identity, and

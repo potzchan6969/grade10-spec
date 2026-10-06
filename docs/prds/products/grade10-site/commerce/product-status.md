@@ -23,8 +23,11 @@ The cart reads the identity on each line again when it reviews the cart.
 - **One item per card** — the first variant for sale, or the first listed
   when none is; the tile and the page show its price, and both add it, with
   no choice between variants
-- **Priced either way** — an out-of-stock variant keeps its price and offers
-  no control that cannot be used
+- **Priced either way** — an out-of-stock variant keeps its price, and
+  nothing that adds it can be pressed
+- **A line keeps its item** — a cart line reads the variant it was added as;
+  once the card's one item moves to another variant, a page add puts that
+  variant on a line of its own
 
 ## Browsing Limits
 
@@ -47,6 +50,10 @@ three ways:
 | Fillable | The variant is available, and Shopify exposes no count above zero or the request is at or below it |
 | Fillable in part | The variant is available, and the request is above a count above zero — the answer names what it can fill |
 | Not fillable | The variant is out of stock |
+
+- **Selling past a count** — a request above a count above zero fills in
+  part even when the shop sells the variant past zero, because the store
+  never reads that setting
 
 What the cart does with a line that cannot be filled in full belongs to
 [Cart Validation](/p/grade10-site/store/cart-validation).

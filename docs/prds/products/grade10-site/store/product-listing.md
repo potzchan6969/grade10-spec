@@ -22,10 +22,13 @@ The product listing lets collectors browse the catalogue and open a product.
 - **Filter** — the sidebar narrows by the world a card comes from and the kind
   of collectible it is, each choice with the catalogue's count beside it;
   worlds show five and an invitation to the rest, types show whole
-- **Zero behind a choice** — a choice or group the whole catalogue counts
-  nothing behind never shows, whatever the narrowing; one the catalogue
-  carries stays shown at the narrowing's count, zero included, so the
-  collector sees what a narrowing starved and can undo it
+- **Zero behind a choice** — a facet choice or group the catalogue counts
+  nothing behind, over the whole unnarrowed catalogue, never shows in the
+  filter panel; narrowing by something else does not resurrect it. A choice
+  or group the catalogue does carry something for elsewhere stays shown at
+  whatever the current narrowing counts behind it, zero included, so the
+  collector can see what a narrowing (their own or a sibling's) starved and
+  undo it
 - 🚧 **Filter on a small screen** — a Filter control opens a left drawer for
   worlds and types; the catalogue search field stays on the listing outside
   that drawer
@@ -114,8 +117,8 @@ The listing answers from the store's mirror of the shop's catalogue.
 | A change the shop never reports | Within 5 minutes |
 | A location's check on the mirror | Every 3 s while the listing is in use |
 
-- 🚧 **Within seconds** — a product the shop publishes, takes down or
-  reprices, and stock that moves, reach the cards, the counts and the sidebar
+- 🚧 **Within seconds** — a product the shop publishes, takes down, reprices,
+  sells out or brings back reaches the cards, the counts and the sidebar
   within seconds, the same at every location; the store reads the product back
   from the shop rather than trusting the report
 - 🚧 **The re-read as the net** — the store reads the whole catalogue again
