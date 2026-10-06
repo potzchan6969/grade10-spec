@@ -1,5 +1,13 @@
 # grade10-site/store/wallet-member-card Specification
 
+## Purpose
+
+A phone-wallet rendering of the loyalty member card `grade10-site/store/membership`
+carries on the site: Google Wallet and Apple Wallet each hold a pass that
+identifies the member at the counter, stays current one sweep behind the
+programme, and is discharged rather than deleted when a member, or an
+operator for them, ends it, or the member asks to be erased.
+
 ## Feature set
 
 - The wallet pass
@@ -7,8 +15,8 @@
     `store:write` for a member whose phone is gone
 - Configuration
   - Launch check: fails, naming each missing secret, where a wallet's
-    issuer is recorded and one of that wallet's secrets is unset; passes
-    where no issuer is recorded
+    issuer is recorded and one of that wallet's secrets is unset; reports no
+    wallet secret missing where no issuer is recorded
 
 ## ADDED Requirements
 
@@ -29,9 +37,9 @@ without it SHALL be refused as forbidden. A record whose wallets cannot be read
 SHALL say so and offer no ending, never that the member holds none. An
 operator without `store:write` who attempts the ending SHALL be refused as
 forbidden, not answered as though the pass or the act did not exist, and the
-pass SHALL stay live. Ending a wallet the member holds no live pass in SHALL end nothing and
-say so. An operator SHALL be able to end the pass on their own member record
-as on any other.
+pass SHALL stay live. Ending a wallet the member holds no live pass in SHALL
+end nothing and say so. An operator SHALL be able to end the pass on their
+own member record as on any other.
 
 <!-- trace:scenario id=g10.store-wallet-member-card.SC-a5e rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-38 - An operator ends a member's pass, and the audit trail records it
@@ -118,11 +126,14 @@ can read.
 The launch check, `pnpm run secrets --check`, SHALL fail, naming each missing
 secret, for a brand and environment where `packages/app-env` records a
 wallet's issuer and one of that wallet's expected secrets is unset, and SHALL
-pass where no issuer is recorded. Google's expected secrets SHALL be
-`WALLET_GOOGLE_SERVICE_ACCOUNT_KEY` and `WALLET_PASS_KEY`; Apple's SHALL be
-`WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_PASS_AUTH_KEY` and
-`WALLET_PASS_KEY`, with `WALLET_APPLE_APNS_KEY` expected only where the Apple
-issuer records an APNs key id.
+report no wallet secret missing where no issuer is recorded. Google's
+expected secrets SHALL be `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY` and
+`WALLET_PASS_KEY`; Apple's SHALL be `WALLET_APPLE_PASS_CERT`,
+`WALLET_APPLE_PASS_KEY`, `WALLET_PASS_AUTH_KEY` and `WALLET_PASS_KEY`. Where
+the Apple issuer is recorded and the environment binds no `WALLET_APPLE_APNS`
+client certificate, the check SHALL also expect `WALLET_APPLE_APNS_KEY` and
+the issuer's APNs key id, naming each that is missing; where it binds one,
+it SHALL expect neither.
 
 <!-- trace:scenario id=g10.store-wallet-member-card.SC-58f rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-12 - A missing credential names itself
@@ -134,16 +145,26 @@ issuer records an APNs key id.
 
 <!-- trace:scenario id=g10.store-wallet-member-card.SC-oga rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-68 - A recorded issuer missing its secrets fails the launch check, naming each
-**Serves:** Configuration - a recorded issuer missing its secrets fails the launch check, naming each
+**Serves:** Configuration - Launch check
 
 - **GIVEN** a brand and environment whose Google issuer is recorded
 - **AND** `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY` and `WALLET_PASS_KEY` are unset there
 - **WHEN** the launch check runs
 - **THEN** it fails, naming `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY` and `WALLET_PASS_KEY`
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-j9h rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-74 - A recorded Apple issuer missing its signing secrets fails the launch check, naming each
+**Serves:** Configuration - Launch check
+
+- **GIVEN** a brand and environment whose Apple issuer is recorded with an APNs key id
+- **AND** that environment binds no `WALLET_APPLE_APNS` client certificate
+- **AND** `WALLET_APPLE_APNS_KEY` is set there, and `WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_PASS_AUTH_KEY` and `WALLET_PASS_KEY` are unset
+- **WHEN** the launch check runs
+- **THEN** it fails, naming `WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_PASS_AUTH_KEY` and `WALLET_PASS_KEY`
+
 <!-- trace:scenario id=g10.store-wallet-member-card.SC-i4n rev=1 -->
-#### Scenario: grade10-site-store-wallet-member-card-SC-69 - A deployment with no issuer recorded passes the launch check
-**Serves:** Configuration - a deployment with no issuer recorded passes the launch check
+#### Scenario: grade10-site-store-wallet-member-card-SC-69 - A deployment with no issuer recorded expects no wallet secret
+**Serves:** Configuration - Launch check
 
 - **GIVEN** a brand and environment that records no wallet issuer, as ZZZ does everywhere and Grade10 does before its enrolment
 - **AND** no wallet secret is set there
@@ -151,28 +172,40 @@ issuer records an APNs key id.
 - **THEN** no wallet secret is reported missing
 
 <!-- trace:scenario id=g10.store-wallet-member-card.SC-e1r rev=1 -->
-#### Scenario: grade10-site-store-wallet-member-card-SC-70 - An Apple issuer with no APNs key id expects no push key
-**Serves:** Configuration - an Apple issuer with no APNs key id expects no push key
+#### Scenario: grade10-site-store-wallet-member-card-SC-70 - An Apple issuer pushing by client certificate expects no push key
+**Serves:** Configuration - Launch check
 
 - **GIVEN** a brand and environment whose Apple issuer is recorded with no APNs key id
+- **AND** that environment binds a `WALLET_APPLE_APNS` client certificate
 - **AND** every Apple secret but `WALLET_APPLE_APNS_KEY` is set there
 - **WHEN** the launch check runs
-- **THEN** it passes, and `WALLET_APPLE_APNS_KEY` is not reported missing
+- **THEN** no Apple secret is reported missing, and neither is the APNs key id
 
 <!-- trace:scenario id=g10.store-wallet-member-card.SC-wlb rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-72 - A brand recording one wallet expects none of the other's secrets
-**Serves:** Configuration - a brand recording one wallet expects none of the other's secrets
+**Serves:** Configuration - Launch check
 
 - **GIVEN** a brand and environment whose Google issuer is recorded and whose Apple issuer is not
 - **AND** both Google secrets are set there, and no Apple secret
 - **WHEN** the launch check runs
-- **THEN** it passes, and no Apple secret is reported missing
+- **THEN** no Apple secret is reported missing
 
 <!-- trace:scenario id=g10.store-wallet-member-card.SC-xay rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-73 - An Apple issuer with an APNs key id expects the push key
-**Serves:** Configuration - an Apple issuer with an APNs key id expects the push key
+**Serves:** Configuration - Launch check
 
 - **GIVEN** a brand and environment whose Apple issuer is recorded with an APNs key id
+- **AND** that environment binds no `WALLET_APPLE_APNS` client certificate
 - **AND** every Apple secret but `WALLET_APPLE_APNS_KEY` is set there
 - **WHEN** the launch check runs
 - **THEN** it fails, naming `WALLET_APPLE_APNS_KEY`
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-svn rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-61 - An Apple issuer with neither push credential fails the launch check, naming both
+**Serves:** Configuration - Launch check
+
+- **GIVEN** a brand and environment whose Apple issuer is recorded with no APNs key id
+- **AND** that environment binds no `WALLET_APPLE_APNS` client certificate
+- **AND** every Apple secret but `WALLET_APPLE_APNS_KEY` is set there
+- **WHEN** the launch check runs
+- **THEN** it fails, naming `WALLET_APPLE_APNS_KEY` and the APNs key id
