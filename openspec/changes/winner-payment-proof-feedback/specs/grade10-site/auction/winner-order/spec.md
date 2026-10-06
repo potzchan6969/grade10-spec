@@ -1,3 +1,5 @@
+# grade10-site/auction/winner-order Specification
+
 ## Feature set
 
 - Bank transfer
@@ -19,7 +21,7 @@ invoice while an operator checks it.
    total at most **15 MB** (15,728,640 bytes). HEIC/HEIF SHALL be converted to
    JPEG before storage so an operator can open it without a special viewer.
 2. Read irreversible microcopy saying nothing can be added or changed after
-   submit (inline in Submit Payment Proof — no second confirm screen).
+   submit (inline in Submit Payment Proof - no second confirm screen).
 3. Confirm submit.
 
 **On confirm** - On a successful confirm Grade10 SHALL store the files against
@@ -33,7 +35,10 @@ is sent.
 **Payment Verifying** - While the invoice is `payment_verifying`, Winner Order
 SHALL show no payment deadline running, SHALL offer no card Pay and no upload,
 SHALL hide Submit Payment Proof and View Bank Details, and SHALL refuse a
-further upload.
+further upload. It SHALL show an inline default Alert with the Hourglass icon,
+stating that Grade10 is verifying the transfer and will email when payment is
+confirmed. The Alert sits under Order progress on small viewports and under the
+lot from `lg` up, where the Preparing Invoice alert sits.
 
 **Busy** - While the upload is submitting, or while HEIC/HEIF is converting,
 Submit Payment Proof SHALL lock the whole form and SHALL block leave (Cancel,
@@ -51,8 +56,7 @@ successful confirm SHALL store nothing. An upload that fails part-way SHALL
 store nothing, leave the invoice `pending`, keep Submit Payment Proof open with
 the draft the winner had entered, and show an error toast titled **Proof not
 submitted** with description **Nothing was saved. Try again.**; the winner may
-upload again; a file sent before the failure SHALL be deleted after a day. The
-one upload counts only once an upload succeeds.
+upload again. The one upload counts only once an upload succeeds.
 
 **Who reads the files** - Payment proof files SHALL be readable by any operator
 who can open the order, per `grade10-admin/auction/post-sale`, and never by the
@@ -60,7 +64,7 @@ winner. Winner Order, the receipt and every letter SHALL show no payment proof
 file and no file name, the winner's or an operator's. Only the Payment Verifying
 status shows that proof was sent.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-bsl rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-bsl rev=2 -->
 #### Scenario: winner-order-SC-99 - Uploading proof stops the deadline
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -71,6 +75,7 @@ status shows that proof was sent.
 - **AND** Winner Order offers no card Pay and no further upload
 - **AND** Submit Payment Proof and View Bank Details are hidden
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-q86 rev=1 -->
 #### Scenario: winner-order-SC-100 - Files outside the limits are refused
 **Serves:** Bank transfer - one upload of 1 to 3 files
 
@@ -89,7 +94,7 @@ status shows that proof was sent.
 - **THEN** Grade10 refuses it
 - **AND** the files already stored are unchanged
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-7jw rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-7jw rev=2 -->
 #### Scenario: winner-order-SC-102 - Leaving the confirm step uploads nothing
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -98,6 +103,7 @@ status shows that proof was sent.
 - **THEN** no file is stored
 - **AND** the invoice is still `pending` and the winner can upload
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-01a rev=1 -->
 #### Scenario: winner-order-SC-103 - No upload on an expired or card invoice
 **Serves:** Bank transfer - proof is uploaded only on a pending bank transfer invoice
 
@@ -115,6 +121,7 @@ status shows that proof was sent.
 - **THEN** neither file nor its name is shown
 - **AND** Grade10 refuses both requests
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-9ec rev=1 -->
 #### Scenario: winner-order-SC-116 - A file of exactly 5 MB is accepted
 **Serves:** Bank transfer - one upload of 1 to 3 files
 
@@ -131,6 +138,7 @@ status shows that proof was sent.
 - **THEN** Grade10 starts none and makes no charge
 - **AND** the invoice is still `payment_verifying`
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-d3x rev=1 -->
 #### Scenario: winner-order-SC-118 - No upload before send or after payment
 **Serves:** Bank transfer - proof is uploaded only on a pending bank transfer invoice
 
@@ -139,7 +147,7 @@ status shows that proof was sent.
 - **THEN** neither offers an upload
 - **AND** Grade10 refuses both attempts
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-uxu rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-uxu rev=2 -->
 #### Scenario: winner-order-SC-119 - An upload that fails part-way stores nothing
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -167,6 +175,7 @@ status shows that proof was sent.
 - **WHEN** the winner confirms a valid proof upload
 - **THEN** the invoice is `payment_verifying` and the order derives as Payment Verifying
 - **AND** a success toast reads **Proof submitted** / **We'll verify your payment shortly.**
+- **AND** an inline default Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed, under Order progress on small viewports and under the lot from `lg` up
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-bb1 rev=1 -->
 #### Scenario: winner-order-SC-219 - Leave is blocked while submitting or converting
@@ -194,4 +203,3 @@ status shows that proof was sent.
 - **WHEN** an upload carries a GIF file named `slip.jpg`
 - **THEN** Grade10 refuses the whole upload and stores no file
 - **AND** the invoice is still `pending`
-
