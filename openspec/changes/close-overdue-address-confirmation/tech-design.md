@@ -19,8 +19,9 @@ migration with a repair report rather than guessing a deadline.
   facts.
 - `packages/grade10-auction/backend/src/services/auctions/auctionOrders.ts`
   owns the persisted order facts and the address-window transition.
-- `packages/grade10-auction/backend/src/services/orderStatus.ts` derives
-  `address_window_open` and the order status from current facts; operator
+- `packages/grade10-auction/backend/src/services/orderStatus.ts` derives the
+  order status from current facts, reading `address_deadline_passed`, and
+  `address_window_open` as a write gate outside that derivation; operator
   actions never write a status directly.
 - `packages/grade10-auction/backend/src/rpc/AuctionService.ts` exposes the
   winner-facing deadline/refusal facts and applies receipt-time validation.
@@ -29,8 +30,9 @@ migration with a repair report rather than guessing a deadline.
   and reasoned phone-recorded setup are `complete-auction-post-sale`'s
   `reopenSetup` and `recordSetup`, which this change's deadline serves.
 - `packages/grade10-auction/backend/src/services/auctions/winnerInvoice.ts`
-  retires the address window at invoice send and preserves payment-at-deadline
-  semantics.
+  retires the address window at invoice send. Refusing a payment received at or
+  after the deadline and holding the invoice `pending` while an in-time payment
+  is in flight are new.
 - Order-status and Winner Order contracts expose the deadline, refusal and
   operator-contact facts; no winner-facing reopen mutation is added.
 
@@ -43,7 +45,7 @@ persisted `address_deadline_at`. The same transaction boundary prevents a late
 winner write, operator recording, reopen, or invoice send from racing into an
 inconsistent address snapshot.
 
-An unconfirmed order derives Setup Overdue from the elapsed deadline condition;
+An unconfirmed order derives Setup Overdue from `address_deadline_passed`;
 an operator reopen restores Awaiting Setup from its new deadline. Preparing
 Invoice never derives Setup Overdue. Its payment Overdue timer and deadline are
 created only when invoice send commits and the invoice is visible to the winner;

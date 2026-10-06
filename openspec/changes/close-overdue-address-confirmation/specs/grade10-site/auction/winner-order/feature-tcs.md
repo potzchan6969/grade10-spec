@@ -49,7 +49,7 @@
 * The order reads Preparing Invoice.
 * No invoice is issued by the confirmation itself.
 
-<!-- trace:case id=g10.auction-winner-order.TC-io3 rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
+<!-- trace:case id=g10.auction-winner-order.TC-io3 rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC2-1: First confirmation is refused at the 48-hour mark
 
 **Classification:**
@@ -88,40 +88,7 @@
 * The order holds no confirmed delivery address.
 * The order still reads Setup Overdue.
 
-<!-- trace:case id=g10.auction-winner-order.TC-s6n rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
-### winner-order-US23-TC3-1: A missed address deadline refuses a change to a confirmed address
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-23
-
-**Pre-conditions:**
-
-* `<lot_1>`'s order carries a delivery address confirmed inside the 48 hours, and no invoice has been sent.
-* The address deadline passed two hours ago.
-* customer(winner of `<lot_1>`) is on <the winner's auction order url>.
-
-**Steps:**
-
-1. Attempt to change the confirmed delivery address to the account's work address.
-2. Read the order's delivery address.
-
-**Expected Results:**
-
-* The change is refused.
-* The order still shows the address confirmed inside the window.
-* The order still reads Preparing Invoice.
-
-<!-- trace:case id=g10.auction-winner-order.TC-w89 rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
+<!-- trace:case id=g10.auction-winner-order.TC-w89 rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC4-1: A reopened address form runs a fresh 48 hours from the reopen
 
 **Classification:**
@@ -162,7 +129,7 @@
 * The confirmation is accepted.
 * The order reads Preparing Invoice.
 
-<!-- trace:case id=g10.auction-winner-order.TC-bth rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
+<!-- trace:case id=g10.auction-winner-order.TC-bth rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC5-1: Winner has no way to reopen the address form
 
 **Classification:**
@@ -208,7 +175,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Order at lot close
+* **Trace:** Delivery address
 
 **Pre-conditions:**
 
@@ -280,7 +247,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Settlement
+* **Trace:** Delivery address
 
 **Pre-conditions:**
 
@@ -331,7 +298,7 @@
 * Neither reaches the auction order.
 * The order still has no confirmed delivery address and still offers no address form.
 
-<!-- trace:case id=g10.auction-winner-order.TC-yee rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-h4t,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
+<!-- trace:case id=g10.auction-winner-order.TC-yee rev=1 covers=g10.auction-winner-order.SC-oos,g10.auction-winner-order.SC-r6m,g10.auction-winner-order.SC-kz8,g10.auction-winner-order.SC-6ax,g10.auction-winner-order.SC-90v -->
 ### winner-order-US23-TC10-1: A reopen sends the winner no letter
 
 **Classification:**
@@ -376,10 +343,11 @@ What they disagreed about is below.
 | Whether a reopen after send does anything | **Already decided**, in `grade10-admin/auction/post-sale`: a reopen is refused once the invoice is sent. The suite could not see it |
 | Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-149` and `winner-order-US23-TC10-1` |
 | What a missed address deadline does to the reminder letters | **Dropped.** Address reminders belong to the durable Winner Order rules. Recorded here so the next blind pass does not raise it again |
+| Whether a winner may change a confirmed address after the deadline | **Dropped** after the planning owner decided that a confirmed address locks on confirm and this change adds no winner change control. The change scenario and its case are retired with their ids; the lock is the durable Winner Order rule |
 | Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-23`; the journeys those cases walk are durable and reach the suite at archive |
-| Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here became ADDED after `check:manual` refused a draft that folded requirements the durable Winner Order rules also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |
+| Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here but the payment deadline became ADDED after `check:manual` refused a draft that folded requirements the durable Winner Order rules also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |
 | Cases the address deadline on `main` now covers | **Dropped** after the durable Winner Order rules took on the 48-hour address deadline: Contact Us in place of the form, no suspension or cancellation, the displayed deadline, nothing to pay at close, and seven days from send. Its own suite walks them. The rest were renumbered under `winner-order-US23` |
 
 An operator may record a delivery address after the address deadline without
-reopening it. Neither reading proposed it; it came out of the same grilling
-round and is proved in `grade10-admin/auction/post-sale`.
+reopening it. Neither reading proposed it; the action is
+`complete-auction-post-sale`'s.

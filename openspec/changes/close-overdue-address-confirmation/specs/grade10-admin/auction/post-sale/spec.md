@@ -2,24 +2,12 @@
 
 ## Feature set
 
-- Queue
-  - Three states before an invoice: Awaiting Setup waits on the winner, Setup
-    Overdue needs operator action after the address deadline, and Preparing
-    Invoice waits on an operator after a confirmed address
-  - Setup Overdue derives when an unconfirmed order's persisted 48-hour address
-    deadline passes. Preparing Invoice has no address-deadline state, and its
-    payment Overdue timer starts only after invoice send and winner visibility
-  - Expired invoices: an order whose invoice has expired reads Pending Payment and is highlighted as needing action
-- Quote and send
-  - Operator quote: Shipping & Handling, and Insurance when added, are priced by a person for the winner's confirmed address
-  - Send opens the window: sending issues the invoice, locks the address, and starts the 7-day deadline
-  - Re-quote on request: an address change after send is re-priced and reissued by an operator, who decides what happens to the deadline
 - Resolving an unpaid order
-  - Manual settlement: a non-card payment is recorded with its method, its reference, and proof of it
   - Settling an expired invoice: the admin portal is the only place an expired invoice is paid; a reissue is the only way back to the winner's card
-  - Cancellation: now also available before an invoice is sent, for an order the operator decides not to pursue
-- Audit trail
-  - Payment method on the record: every paid entry says how it was paid
+  - Expired shortfall: a payment short of the balance keeps the invoice Partially Paid with its real balance and no new self-service deadline
+  - Winner cannot pay expired: a card payment Grade10 receives at or after the deadline is refused and not charged
+  - Started in time counts: a card payment received before the deadline completes after it, and one that fails writes `expired` when it fails
+  - Settling needs payment-processing: an operator without the grant is offered no settle or reissue control
 
 ## ADDED Requirements
 
@@ -27,7 +15,7 @@
 
 Once an invoice is `expired`, the admin portal SHALL be the only place it is
 paid. An operator holding payment-processing SHALL record it manually, per
-`grade10-admin/auction/post-sale`'s manual settlement. A cumulative exact
+"Manual settlement records the method and its proof". A cumulative exact
 payment makes the invoice `paid` and the order derive as Preparing Shipment. A payment
 whose cumulative total remains below the invoice total keeps the invoice Partially Paid with its real balance;
 it starts no new self-service deadline and has no manual-settlement detour.
@@ -55,7 +43,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-b5v rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-85 - An operator fully settles an expired invoice
-**Serves:** Resolving an unpaid order - the admin portal is the only place an expired invoice is paid
+**Serves:** Resolving an unpaid order - settling an expired invoice
 
 - **GIVEN** an auction order whose invoice is `expired`
 - **AND** an operator holding payment-processing
@@ -66,7 +54,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-v9x rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-92 - An expired shortfall remains Partially Paid
-**Serves:** Resolving an unpaid order - an expired invoice retains its real balance
+**Serves:** Resolving an unpaid order - expired shortfall
 
 - **GIVEN** an auction order whose invoice is `expired` with a 100000 minor-unit balance
 - **WHEN** an operator holding payment-processing records a 40000 minor-unit payment
@@ -75,7 +63,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-cdi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-86 - A winner payment received at the deadline is refused
-**Serves:** Resolving an unpaid order - the winner cannot pay an expired invoice
+**Serves:** Resolving an unpaid order - winner cannot pay expired
 
 - **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
   and whose invoice has no card payment in progress
@@ -86,7 +74,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-d1w rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-87 - A payment started in time completes after the deadline
-**Serves:** Resolving an unpaid order - a payment started in time counts
+**Serves:** Resolving an unpaid order - started in time counts
 
 - **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
 - **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z
@@ -96,7 +84,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-xct rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-88 - A payment started in time that fails expires the invoice then
-**Serves:** Resolving an unpaid order - a payment started in time counts
+**Serves:** Resolving an unpaid order - started in time counts
 
 - **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
 - **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z

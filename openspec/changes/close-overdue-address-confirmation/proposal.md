@@ -11,8 +11,8 @@ confirm a delivery address. When the deadline passes it hides Confirm and shows
 Contact Us, and says only that an operator follows up. Four things are left
 open:
 
-- **Changing a confirmed address.** Nothing stops a winner who confirmed in time
-  from changing the address after the deadline.
+- **A late write.** Hiding Confirm does not say that Grade10 refuses an address
+  it receives after the deadline, or which clock judges it.
 - **Getting the form back.** A winner who gets in touch has no way back to the
   form. Nothing lets an operator reopen it.
 - **An expired invoice.** It can be settled manually, but that sits only in an
@@ -29,9 +29,10 @@ too short.
 
 ## What Changes
 
-- **A missed address deadline closes the whole address form.** The winner can
-  neither confirm an address nor change one already confirmed until an operator
-  reopens the form or records the order address. Invoice send locks the address.
+- **A missed address deadline closes the address form.** The winner cannot
+  confirm an address until an operator reopens the form or records the order
+  address. A confirmed address locks on confirm, and invoice send retires the
+  deadline.
 - **The deadline counts from the actual close**, after any extended bidding. A
   write is judged by when Grade10 receives it.
 - **The operator's reopen and record-setup actions are
@@ -54,7 +55,7 @@ too short.
   the winner's card.
 - **A card payment started in time counts.** One Grade10 received before the
   payment deadline completes even if it confirms after, and the invoice stays
-  `pending` until then. One received at or after the deadline is refused and not
+  `pending` until then, never written `expired` while it is in flight. One received at or after the deadline is refused and not
   charged.
 - **The Post-Sale Queue page no longer says an expired invoice "stays
   payable"**, which read as if the winner could still pay it.
@@ -65,8 +66,9 @@ too short.
   `Confirm by …`, the `Missed address deadline` alert and Contact Us are
   inherited durable behavior; this change carries the settled Setup Overdue
   derivation and does not duplicate that copy.
-- **The expired invoice's own rules.** Writing `expired`, hiding card Pay, and
-  reissue and cancellation remain existing durable behavior.
+- **The expired invoice's own rules.** Hiding card Pay, and reissue and
+  cancellation remain existing durable behavior. Writing `expired` is held while
+  a card payment started in time is in flight.
 - **Letters.** Address reminders are that change's. A reopen sends no letter;
   the operator tells the winner directly.
 - **Suspension and automatic cancellation.** A missed address deadline does
@@ -82,7 +84,9 @@ None.
 ### Modified Capabilities
 
 - `grade10-site/auction/winner-order`: a new requirement — a missed address
-  deadline closes the whole address form, and only an operator reopens it.
+  deadline closes the address form, and only an operator reopens it. The
+  requirement "The payment deadline is fixed when the invoice is sent" is
+  modified so a card payment started in time holds the invoice `pending`.
 - `grade10-site/auction/order-status`: a new requirement adding the condition
   `address_window_open`, which gates the winner's address write; an
   unconfirmed missed deadline derives Setup Overdue.
@@ -95,7 +99,7 @@ None.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | After the address deadline, Winner Order hides the address change control as it hides Confirm, and refuses an address write. |
+| `apps/frontend/grade10` | After the address deadline, Winner Order refuses an address write and offers no winner change control. |
 | `apps/admin/grade10` | Settle an expired invoice. The reopen and record-setup controls are `complete-auction-post-sale`'s. |
 | Auction service | A deadline a reopen resets, refusal of late address writes, and an invoice held `pending` while a payment started in time confirms. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. |
@@ -107,10 +111,16 @@ None.
   `.openspec.yaml`. That change owns the operator's reopen-setup and
   record-setup actions and their requirement; this change owns the persisted
   address deadline and `address_window_open` they act on.
-- **Owns the queue mark mapping, derived condition, audit entries and race
-  behavior.** It does not reopen the winner-facing deadline wording.
-- **Cumulative feature sets.** The delta files copy that change's feature set and
-  add this change's leaves, because archive copies the feature set by hand.
+- **Accepted after `complete-auction-post-sale`**, which waits for its own
+  dependencies to archive first.
+- **Owns the persisted deadline, the derived write gate and the race behavior.**
+  It does not reopen the winner-facing deadline wording.
+- **Feature sets carry this change's own items only.** The fold merges them by
+  label into the durable sets.
+- **Deferred modification.** Order Status's "An auction order carries two
+  writable status fields" and "Permitted transitions" are modified by
+  `complete-auction-post-sale`; after it archives, a follow-up modifies them for
+  the in-flight exception (tasks.md 5.1).
 
 ### Durable contract updates carried by this change
 
@@ -118,8 +128,6 @@ None.
   persisted 48-hour address deadline passes. Preparing Invoice does not derive
   Setup Overdue; its payment Overdue timer starts only when the invoice is sent
   and visible to the winner.
-- **Invoice log** — the log types name *address form reopened* and *address
-  recorded by an operator*, each with actor, timestamp and reason.
 - **Race behavior** — address writes, operator reopen/record, and invoice send
   serialize under the order boundary.
 

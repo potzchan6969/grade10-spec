@@ -5,9 +5,9 @@
 
 ## auction-status-US5: Winner misses the address deadline
 
-**As a** winner or operator,
-**I want** an expired invoice to stay Pending Payment without winner card pay,
-**so that** the deadline ends self-service settlement while operators can still resolve the order.
+**As a** winner whose address window has closed,
+**I want** to understand that Grade10 must reopen the form,
+**so that** I know why I cannot confirm the address myself.
 
 <!-- trace:case id=g10.auction-order-status.TC-4zb rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn,g10.auction-order-status.SC-cgu,g10.auction-order-status.SC-nin,g10.auction-order-status.SC-4ke -->
 ### auction-status-US5-TC4-1: No invoice and no address reads Awaiting Setup
@@ -142,8 +142,14 @@ Runs once per row of **Test data**.
 * The order holds no confirmed delivery address.
 * The order status is still Setup Overdue.
 
+## auction-status-US6: Operator resolves a missed address deadline
+
+**As an** operator,
+**I want** to reopen the address form or record the address the winner gave by phone,
+**so that** the order can continue from Setup Overdue without reopening winner self-service unnecessarily.
+
 <!-- trace:case id=g10.auction-order-status.TC-43a rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
-### auction-status-US5-TC8-1: An order with no invoice cannot be dispatched
+### auction-status-US6-TC8-1: An order with no invoice cannot be dispatched
 
 **Classification:**
 
@@ -175,7 +181,7 @@ Runs once per row of **Test data**.
 * The order status is still Preparing Invoice.
 
 <!-- trace:case id=g10.auction-order-status.TC-36u rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
-### auction-status-US5-TC9-1: An invoice is refused a send with no confirmed address
+### auction-status-US6-TC9-1: An invoice is refused a send with no confirmed address
 
 **Classification:**
 
@@ -205,12 +211,6 @@ Runs once per row of **Test data**.
 * The send is refused.
 * The invoice status is still `not_issued`.
 * No payment deadline is started.
-
-## auction-status-US6: Operator resolves a missed address deadline
-
-**As an** operator,
-**I want** to reopen the address form or record the address the winner gave by phone,
-**so that** the order can continue from Setup Overdue without reopening winner self-service unnecessarily.
 
 <!-- trace:case id=g10.auction-order-status.TC-uot rev=1 covers=g10.auction-order-status.SC-g4b -->
 ### auction-status-US6-TC10-1: A reopen restores the write through derived status
@@ -247,46 +247,6 @@ Runs once per row of **Test data**.
 * The write is accepted.
 * Step 3 reads Preparing Invoice.
 
-<!-- trace:case id=g10.auction-order-status.TC-3v7 rev=1 covers=g10.auction-order-status.SC-tc9,g10.auction-order-status.SC-i18,g10.auction-order-status.SC-wlf,g10.auction-order-status.SC-y48,g10.auction-order-status.SC-mej,g10.auction-order-status.SC-sx5,g10.auction-order-status.SC-fmg,g10.auction-order-status.SC-r6z,g10.auction-order-status.SC-d22,g10.auction-order-status.SC-j9x,g10.auction-order-status.SC-wt0,g10.auction-order-status.SC-er6,g10.auction-order-status.SC-e4v,g10.auction-order-status.SC-q1w,g10.auction-order-status.SC-dq1,g10.auction-order-status.SC-x14,g10.auction-order-status.SC-1xq -->
-### auction-status-US6-TC11-1: Expiry is a written invoice status, not a time read
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Writable primitives
-
-**Pre-conditions:**
-
-* `<expired-invoice order>`'s invoice was sent, is unpaid, and its deadline is one minute away.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Payment deadline | 2026-09-12T09:00:00Z |
-| Read before | 2026-09-12T08:59:00Z |
-| Read after | 2026-09-12T09:01:00Z |
-
-**Steps:**
-
-1. Read the stored invoice status before the deadline.
-2. Read the stored invoice status after the deadline.
-3. Read the derived order status.
-
-**Expected Results:**
-
-* Step 1 reads `pending`.
-* Step 2 reads `expired` as a stored fact on the invoice.
-* Step 3 reads Pending Payment, before and after alike.
-
 <!-- trace:case id=g10.auction-order-status.TC-3lv rev=1 covers=g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-wjo,g10.auction-order-status.SC-4yo,g10.auction-order-status.SC-9bm,g10.auction-order-status.SC-soi,g10.auction-order-status.SC-kki,g10.auction-order-status.SC-e1r -->
 ### auction-status-US6-TC12-1: An operator's address write is accepted on a closed window
 
@@ -318,36 +278,6 @@ Runs once per row of **Test data**.
 * `address_confirmed` is true and `address_window_open` is still false.
 * The order derives as Preparing Invoice.
 
-<!-- trace:case id=g10.auction-order-status.TC-k6b rev=1 covers=g10.auction-order-status.SC-e3m -->
-### auction-status-US6-TC13-1: Phone address recording refuses after send, confirmation or cancellation
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Guards
-
-**Pre-conditions:**
-
-* One order has a confirmed address, one has an invoice sent, one has cancellation requested and one is cancelled.
-* admin(holds payment-processing) is on each order detail.
-
-**Steps:**
-
-1. Attempt to record an address given by phone on each order.
-
-**Expected Results:**
-
-* Every write is refused.
-* No delivery address or order status changes.
-
 ## Reconciliation
 
 Two independent readings of the same anchors: this suite, written without sight
@@ -357,8 +287,9 @@ of any requirement, and a scenario draft written without sight of this suite.
 | --- | --- |
 | What fact says the window is open — a stored closing time, close plus 48 hours, or a reopen count | **Left to the engineer.** The requirement says the condition is read from the order's own facts and stored as no enum, which `auction-status-SC-30` proves. Which fact carries it is `tech-design.md` |
 | Whether an operator may correct the address on a closed-window order | **Folded in** after a grilling round. They may, without reopening — `auction-status-SC-35` and `auction-status-US6-TC12-1` |
-| Whether recording refuses an ineligible order | **Folded in:** an order with a confirmed address, a sent invoice, cancellation requested or cancelled refuses it — `auction-status-SC-36` and `auction-status-US6-TC13-1` |
-| How a passed address deadline reads | **Folded in:** an unconfirmed elapsed window derives Setup Overdue; a reopened window derives Awaiting Setup; Preparing Invoice does not derive Setup Overdue. Its payment Overdue timer starts only after invoice send and winner visibility. |
+| Whether recording refuses an ineligible order | **Moved.** The refusals belong to `complete-auction-post-sale`'s "An operator reopens the address form". The refusal scenario and its case are retired with their ids, and this suite keeps only the condition, in `auction-status-SC-35` |
+| How a passed address deadline reads | **Folded in:** an unconfirmed order past its address deadline derives Setup Overdue, read through `address_deadline_passed`; a reopened deadline derives Awaiting Setup; Preparing Invoice does not derive Setup Overdue. `address_window_open` gates writes only. Its payment Overdue timer starts only after invoice send and winner visibility |
 | What `not_issued` becomes on a pre-invoice cancellation | **Dropped.** the durable Winner Order rules already permits `not_issued` to `cancelled`. The suite was blind to it |
 | What a reissue does to a stored `expired` | **Dropped.** Already settled by the durable Winner Order rules, and out of scope here |
-| How the suite groups status checks | **Settled.** The cases trace the winner's missed-deadline journey and the operator's resolution journey |
+| How the suite groups status checks | **Settled.** The status readings and the refused winner write sit under `auction-status-US-05`, the winner's missed-deadline journey. The send and dispatch guards, the reopen and the operator's write sit under `auction-status-US-06`, the operator's resolution journey |
+| Where the expiry-write case sat | **Dropped.** `auction-status-US6-TC11-1` read the stored `expired` status under the operator's address journey, which it does not walk. Writing `expired` is the expired-invoice journey's, and the hold while a card payment started in time is proved in `grade10-admin/auction/post-sale` |

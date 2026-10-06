@@ -1,6 +1,6 @@
 ## Winner Order
 
-- **Setup Overdue** - Hide Confirm delivery address and address change. Show a
+- **Setup Overdue** - Hide Confirm delivery address. Show a
   missed-deadline alert with Contact Us. Keep the order's normal shell and
   progress presentation.
 - **Reopened** - Show Confirm delivery address and the fresh absolute deadline.

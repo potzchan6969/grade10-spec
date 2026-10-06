@@ -1,7 +1,7 @@
 ## User journeys
 
-### post-sale-US-18: Operator reopens the address form
+### post-sale-US-19: Operator settles an expired invoice
 
 **As an** operator,
-**I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
-**so that** a winner who got in touch can finish the order without me cancelling the lot.
+**I want** an expired invoice settled only in the admin portal, and a card payment started in time to count,
+**so that** a winner who paid just before the deadline is never expired, and one who paid after it is never charged.

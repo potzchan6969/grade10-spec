@@ -3,705 +3,14 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
-## post-sale-US18: Operator reopens the address form
+## post-sale-US19: Operator settles an expired invoice
 
 **As an** operator,
-**I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
-**so that** a winner who got in touch can finish the order without me cancelling the lot.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-unr rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC1-1: Reopen gives a fresh 48 hours from the moment it reopens
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<closed-window order>` derives as Setup Overdue, its lot closed at 2026-09-03T12:00:00Z and its address deadline passed at 2026-09-05T12:00:00Z.
-* admin(holds payment-processing) is on `<closed-window order>` at `<the reopen>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<the reopen>` | 2026-09-07T09:00:00Z |
-| `<reason>` | The operator's stated reason for the reopen |
-| New address deadline | 2026-09-09T09:00:00Z |
-
-**Steps:**
-
-1. Reopen the address form on `<closed-window order>` with `<reason>`.
-2. Read the address deadline.
-
-**Expected Results:**
-
-* The reopen is accepted.
-* The address deadline is 2026-09-09T09:00:00Z, 48 hours from `<the reopen>`.
-* It is not measured from the lot close.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-6p3 rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC2-1: Reopen without a reason is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<closed-window order>` derives as Setup Overdue and its address deadline passed two days ago.
-* admin(holds payment-processing) is on `<closed-window order>`.
-
-**Steps:**
-
-1. Open the reopen form.
-2. Commit the reopen with the reason left empty.
-3. Read the address deadline.
-
-**Expected Results:**
-
-* The reopen is refused.
-* The address deadline is unchanged.
-* The winner still cannot confirm an address.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-l8m rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC3-1: Reopen is refused without the payment-processing grant
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<closed-window order>` derives as Setup Overdue and its address deadline passed two days ago.
-* admin(holds fulfilment, not payment-processing) is on `<closed-window order>`.
-
-**Steps:**
-
-1. Look for the reopen control on `<closed-window order>`.
-2. Submit a reopen with a reason.
-
-**Expected Results:**
-
-* The reopen control is visible and disabled.
-* The reopen is refused.
-* The address deadline is unchanged.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-r1s rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC4-1: Reopen derives Awaiting Setup from Setup Overdue
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<closed-window order>` derives as Setup Overdue and its address deadline passed two days ago.
-* admin(holds payment-processing) is on `<closed-window order>`.
-
-**Steps:**
-
-1. Reopen the address form with a reason.
-2. Read the order's outcome and needs-action treatment on the queue.
-
-**Expected Results:**
-
-* The reopened facts derive Awaiting Setup.
-* The address form is open again.
-* The row no longer needs action.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-htq rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC5-1: A second reopen starts the 48 hours again
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<closed-window order>` was reopened once at 2026-09-07T09:00:00Z and its fresh address deadline passed unused at 2026-09-09T09:00:00Z.
-* admin(holds payment-processing) is on `<closed-window order>` at `<the second reopen>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<the second reopen>` | 2026-09-10T15:00:00Z |
-| Entrance close after it | 2026-09-12T15:00:00Z |
-
-**Steps:**
-
-1. Reopen the address form a second time with a reason.
-2. Read the address deadline.
-
-**Expected Results:**
-
-* The second reopen is accepted.
-* The address deadline is 2026-09-12T15:00:00Z.
-* No cap on the number of reopens is applied.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-t9r rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC6-1: No reopen is offered once the invoice has been sent
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<sent-invoice order>` carries a confirmed address and an invoice sent at 2026-09-05T09:00:00Z.
-* admin(holds payment-processing) is on `<sent-invoice order>`.
-
-**Steps:**
-
-1. Look for the reopen control on `<sent-invoice order>`.
-2. Read what the detail offers for an address change.
-
-**Expected Results:**
-
-* No reopen control is offered on a sent invoice.
-* The detail offers a re-quote and reissue instead.
-* The locked address is unchanged.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-itu rev=1 covers=g10adm.auction-post-sale.SC-egm -->
-### post-sale-US18-TC27-1: A confirmed address cannot reopen
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<preparing-invoice order>` has a confirmed address, no sent invoice, and an elapsed address deadline.
-* admin(holds payment-processing) is on `<preparing-invoice order>`.
-
-**Steps:**
-
-1. Attempt to reopen the address form with a reason.
-2. Read the order outcome and address controls.
-
-**Expected Results:**
-
-* The reopen is refused.
-* The order remains Preparing Invoice.
-* The winner receives no reopened address form.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-5rs rev=1 covers=g10adm.auction-post-sale.SC-fzv,g10adm.auction-post-sale.SC-blu,g10adm.auction-post-sale.SC-su0 -->
-### post-sale-US18-TC7-1: Reopen is logged with its reason and its new close
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Audit trail
-
-**Pre-conditions:**
-
-* `<closed-window order>` was reopened at 2026-09-07T09:00:00Z by admin(holds payment-processing) with `<reason>`.
-* admin(holds payment-processing) is on `<closed-window order>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<reason>` | The operator's stated reason for the reopen |
-
-**Steps:**
-
-1. Read the order's log.
-
-**Expected Results:**
-
-* The log holds a reopen entry timestamped 2026-09-07T09:00:00Z.
-* It names the operator, `<reason>`, and the new address deadline.
-* Earlier entries are unchanged beside it.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-w9k rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
-### post-sale-US18-TC8-1: The two pre-invoice outcomes filter apart
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Queue
-
-**Pre-conditions:**
-
-* `<awaiting-address order>` has no confirmed address and `<preparing-invoice order>` has one, neither with an invoice sent.
-* admin(holds payment-processing) is on the post-sale queue.
-
-**Steps:**
-
-1. Filter the queue to Awaiting Setup.
-2. Filter the queue to Preparing Invoice.
-
-**Expected Results:**
-
-* Step 1 lists `<awaiting-address order>` and not `<preparing-invoice order>`.
-* Step 2 lists `<preparing-invoice order>` and not `<awaiting-address order>`.
-* Each row wears one outcome.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-qkb rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
-### post-sale-US18-TC9-1: Only the rows waiting on an operator need action
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Queue
-
-**Pre-conditions:**
-
-* admin(holds payment-processing) is on the post-sale queue holding all three orders.
-
-**Test data:**
-
-| Order | Outcome | Needs action |
-| --- | --- | --- |
-| `<awaiting-address order>` | Awaiting Setup | no |
-| `<preparing-invoice order>` | Preparing Invoice | yes |
-| `<expired-invoice order>` | Pending Payment | yes |
-
-**Steps:**
-
-1. Read the row's outcome.
-2. Read the row's needs-action treatment.
-
-**Expected Results:**
-
-* The outcome is the one the row names.
-* The needs-action treatment matches the row.
-* `<expired-invoice order>` shows its Expired invoice status beside Pending Payment.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-6iu rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
-### post-sale-US18-TC10-1: Awaiting Setup becomes Setup Overdue at the 48-hour address deadline
-
-Runs once per row of **Test data**. The Preparing Invoice stage is intentionally not included here because it does not derive Setup Overdue; TC24 asserts that absence.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Queue
-
-**Pre-conditions:**
-
-* The order's invoice has not been sent and its lot closed at 2026-09-03T12:00:00Z, so its address deadline passed at 2026-09-05T12:00:00Z.
-* admin(holds payment-processing) is on the post-sale queue at the read time the row names.
-
-**Test data:**
-
-| Order | Read at | Outcome |
-| --- | --- | --- |
-| `<awaiting-address order>` | 2026-09-05T11:59:00Z | Awaiting Setup |
-| `<awaiting-address order>` | 2026-09-05T12:00:00Z | Setup Overdue |
-
-**Steps:**
-
-1. Read the order's row at the time the row names.
-
-**Expected Results:**
-
-* The outcome is the one the row names.
-* The order is not expired or closed by the derived status.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-dkd rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
-### post-sale-US18-TC24-1: Preparing Invoice does not derive Setup Overdue before invoice send
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** none
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** Queue
-
-**Pre-conditions:**
-
-* `<preparing-invoice order>` has invoice status `not_issued` and its persisted
-  48-hour address deadline has passed.
-* admin(holds payment-processing) is on the post-sale queue.
-
-**Steps:**
-
-1. Read `<preparing-invoice order>` in the queue.
-
-**Expected Results:**
-
-* The order remains Preparing Invoice rather than Setup Overdue, and is not cancelled or expired.
-* No payment Overdue timer or payment deadline exists before invoice send.
-
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-kp5 rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC25-1: Concurrent address write and reopen serialize
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* A Setup Overdue order has an expired address deadline and no confirmed address.
-* A winner address write and an operator reopen can be submitted concurrently.
-
-**Steps:**
-
-1. Submit both operations concurrently.
-2. Read the final address snapshot, deadline and derived status.
-
-**Expected Results:**
-
-* The operations serialize under the order boundary.
-* The final snapshot and deadline match the last committed transition.
-* The order is internally consistent and no partial address overwrite exists.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-20s rev=1 covers=g10adm.auction-post-sale.SC-fzv,g10adm.auction-post-sale.SC-blu,g10adm.auction-post-sale.SC-su0 -->
-### post-sale-US18-TC26-1: Phone-recorded address carries an audit actor and reason
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Audit trail
-
-**Pre-conditions:**
-
-* A Setup Overdue order has no confirmed address.
-* admin(holds payment-processing) has a phone-provided address and a reason.
-
-**Steps:**
-
-1. Record the address without reopening the window.
-2. Read the invoice log.
-
-**Expected Results:**
-
-* The order derives as Preparing Invoice while the winner window remains closed.
-* The log names the operator, timestamp and reason.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-zl5 rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
-### post-sale-US18-TC11-1: Send locks the address and starts the seven days
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Quote and send
-
-**Pre-conditions:**
-
-* `<preparing-invoice order>` carries an address confirmed on 2026-09-04T08:00:00Z and no invoice.
-* admin(holds payment-processing) is on `<preparing-invoice order>` at `<the send>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Shipping & Handling | 24000 minor units, HKD |
-| `<the send>` | 2026-09-05T09:00:00Z |
-| Payment deadline | 2026-09-12T09:00:00Z |
-
-**Steps:**
-
-1. Enter Shipping & Handling for the confirmed address.
-2. Send the invoice.
-3. Read the payment deadline and the delivery address.
-
-**Expected Results:**
-
-* The invoice is issued and the order derives Pending Payment.
-* The payment deadline is 2026-09-12T09:00:00Z.
-* The delivery address is locked and the winner can no longer change it.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-84x rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
-### post-sale-US18-TC12-1: Send is refused while no address is confirmed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Quote and send
-
-**Pre-conditions:**
-
-* `<awaiting-address order>` has no confirmed delivery address and its address form is open.
-* admin(holds payment-processing) is on `<awaiting-address order>`.
-
-**Steps:**
-
-1. Enter Shipping & Handling of 24000 minor units in HKD.
-2. Send the invoice.
-
-**Expected Results:**
-
-* The send is refused.
-* No invoice is issued and no payment deadline starts.
-* The order still derives Awaiting Setup.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-goe rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
-### post-sale-US18-TC13-1: A closed window does not stop an operator sending
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Quote and send
-
-**Pre-conditions:**
-
-* `<closed-window order>` carries an address confirmed inside the 48 hours and its address deadline passed two hours ago.
-* admin(holds payment-processing) is on `<closed-window order>`.
-
-**Steps:**
-
-1. Enter Shipping & Handling of 24000 minor units in HKD.
-2. Send the invoice.
-
-**Expected Results:**
-
-* The send is accepted.
-* The order derives Pending Payment with a seven-day deadline.
-* The closed window gated the winner's write, not the operator's send.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-29v rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US18-TC14-1: Cancelling before a send returns the lot to available
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Resolving an unpaid order
-
-**Pre-conditions:**
-
-* `<closed-window order>` has no confirmed address, its address deadline passed four days ago, and no invoice has been sent.
-* admin(holds payment-processing) is on `<closed-window order>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<reason>` | The operator's stated reason for the cancellation |
-
-**Steps:**
-
-1. Cancel `<closed-window order>` with `<reason>`.
-2. Read the derived order status and the lot's inventory status.
-
-**Expected Results:**
-
-* The cancellation is accepted without an invoice having existed.
-* The order derives Cancelled and leaves the pre-invoice queue.
-* The lot's inventory status is available and it can be listed again.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-f7o rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC15-1: A cancelled order refuses a reopen
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<cancelled order>` was cancelled before any invoice was sent and its lot returned to available stock.
-* An operator holds payment-processing.
-
-**Steps:**
-
-1. Open `<cancelled order>`.
-2. Attempt to reopen its address form with a reason.
-
-**Expected Results:**
-
-* The reopen is refused.
-* The order still derives as Cancelled.
-* The lot stays in available stock.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-b2d rev=2 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC16-2: An operator records setup without reopening
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* `<missed-deadline order>` is in Setup Overdue with its address deadline passed.
-* An operator holds payment-processing.
-
-**Steps:**
-
-1. Open `<missed-deadline order>`.
-2. Record the delivery address, billing address and payment method the winner gave by telephone.
-
-**Expected Results:**
-
-* The address is accepted and the order derives as Preparing Invoice.
-* The address window is still closed.
-* The winner is offered no address form.
+**I want** an expired invoice settled only in the admin portal, and a card payment started in time to count,
+**so that** a winner who paid just before the deadline is never expired, and one who paid after it is never charged.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-o6m rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US18-TC17-1: Manual settlement pays an expired invoice and ends what is owed
+### post-sale-US19-TC1-1: Manual settlement pays an expired invoice and ends what is owed
 
 **Classification:**
 
@@ -742,7 +51,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * Winner Order shows no amount owed and no card Pay.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-v9x rev=1 covers=g10adm.auction-post-sale.SC-v9x -->
-### post-sale-US18-TC28-1: An expired invoice keeps a recorded shortfall
+### post-sale-US19-TC2-1: An expired invoice keeps a recorded shortfall
 
 **Classification:**
 
@@ -774,7 +83,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * Winner Order offers no card Pay control.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-0g4 rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US18-TC18-1: A card payment just before the deadline is accepted
+### post-sale-US19-TC3-1: A card payment just before the deadline is accepted
 
 **Classification:**
 
@@ -813,7 +122,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The order derives Preparing Shipment and never showed Expired invoice.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-54p rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US18-TC19-1: The winner cannot pay by card after the deadline
+### post-sale-US19-TC4-1: The winner cannot pay by card after the deadline
 
 **Classification:**
 
@@ -852,8 +161,74 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * After reload, no card Pay is offered; Contact Us is.
 * The order still reads Pending Payment with Expired invoice.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-o2f rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
+### post-sale-US19-TC5-1: A card payment started in time completes after the deadline
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
+* The payment provider is set to confirm the winner's card payment 50 seconds after it is received.
+
+**Steps:**
+
+1. At 2026-09-19T08:59:30Z, submit the winner's card payment.
+2. Read the invoice status at 2026-09-19T09:00:05Z.
+3. Read it again after the payment confirms at 2026-09-19T09:00:20Z.
+
+**Expected Results:**
+
+* At 09:00:05 the invoice is still `pending`, not `expired`.
+* After confirmation the invoice is `paid` and the order is Preparing Shipment.
+* The invoice log holds no expired entry.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-mon rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
+### post-sale-US19-TC6-1: A card payment started in time that fails expires the invoice when it fails
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
+* The payment provider is set to decline the winner's card payment 50 seconds after it is received.
+
+**Steps:**
+
+1. At 2026-09-19T08:59:30Z, submit the winner's card payment.
+2. Read the invoice status at 2026-09-19T09:00:05Z.
+3. Read it again after the decline at 2026-09-19T09:00:20Z.
+
+**Expected Results:**
+
+* At 09:00:05 the invoice is still `pending`.
+* After the decline the invoice is `expired`, with the expired entry timestamped at the decline.
+* The winner's order shows Contact Us and no card Pay.
+
 <!-- trace:case id=g10adm.auction-post-sale.TC-mpo rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US18-TC20-1: Reissuing an expired invoice gives card payment a fresh seven days
+### post-sale-US19-TC7-1: Reissuing an expired invoice gives card payment a fresh seven days
 
 **Classification:**
 
@@ -893,7 +268,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The card payment is accepted; the order derives Preparing Shipment.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-2qa rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US18-TC21-1: Settling or reissuing an expired invoice needs payment-processing
+### post-sale-US19-TC8-1: Settling or reissuing an expired invoice needs payment-processing
 
 Runs once per row of **Test data**.
 
@@ -933,72 +308,6 @@ Runs once per row of **Test data**.
 * The action is refused.
 * The order still reads Pending Payment with Expired invoice, deadline unchanged.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-o2f rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US18-TC22-1: A card payment started in time completes after the deadline
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Resolving an unpaid order
-
-**Pre-conditions:**
-
-* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
-* The payment provider is set to confirm the winner's card payment 50 seconds after it is received.
-
-**Steps:**
-
-1. At 2026-09-19T08:59:30Z, submit the winner's card payment.
-2. Read the invoice status at 2026-09-19T09:00:05Z.
-3. Read it again after the payment confirms at 2026-09-19T09:00:20Z.
-
-**Expected Results:**
-
-* At 09:00:05 the invoice is still `pending`, not `expired`.
-* After confirmation the invoice is `paid` and the order is Preparing Shipment.
-* The invoice log holds no expired entry.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-mon rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
-### post-sale-US18-TC23-1: A card payment started in time that fails expires the invoice when it fails
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Resolving an unpaid order
-
-**Pre-conditions:**
-
-* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
-* The payment provider is set to decline the winner's card payment 50 seconds after it is received.
-
-**Steps:**
-
-1. At 2026-09-19T08:59:30Z, submit the winner's card payment.
-2. Read the invoice status at 2026-09-19T09:00:05Z.
-3. Read it again after the decline at 2026-09-19T09:00:20Z.
-
-**Expected Results:**
-
-* At 09:00:05 the invoice is still `pending`.
-* After the decline the invoice is `expired`, with the expired entry timestamped at the decline.
-* The winner's order shows Contact Us and no card Pay.
-
 ## Reconciliation
 
 Two independent readings of the same anchors: this suite, written without sight
@@ -1006,16 +315,12 @@ of any requirement, and a scenario draft written without sight of this suite.
 
 | Raised | Disposition |
 | --- | --- |
-| Whether a cancelled order's address form can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US18-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
-| Whether an operator may record setup without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US18-TC16-2`, which now records the whole setup as `complete-auction-post-sale` states it |
-| How the 48-hour address deadline changes the queue | **Folded in:** `post-sale-US18-TC4-1` and `post-sale-US18-TC10-1` cover Setup Overdue and reopen to Awaiting Setup; `post-sale-US18-TC24-1` asserts Preparing Invoice does not derive Setup Overdue or start a payment timer before invoice send. |
-| Address write/reopen race and phone-recorded audit entry | **Folded in:** `SC-90`/`SC-91` with `post-sale-US18-TC25-1`/`TC26-1`. |
-| Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US18-TC13-1` reads it that way |
-| An expired invoice can only be paid in the admin portal | **Folded in** — `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US18-TC17-1`, `TC19-1` and `TC21-1` |
-| An expired invoice with a shortfall stays Partially Paid | **Folded in** - `grade10-admin-auction-post-sale-SC-92`, walked by `post-sale-US18-TC28-1` |
-| A card payment at exactly the deadline | **Folded in.** Judged on receipt: at or after the deadline is refused — `grade10-admin-auction-post-sale-SC-86` |
-| A card payment started before the deadline that confirms after | **Folded in** after a grilling round: a payment started in time counts, and the invoice is held `pending` until its outcome — `SC-87` and `SC-88`, with `post-sale-US18-TC22-1` and `TC23-1` added |
-| Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** This change checks only the existing reissue deadline behavior. |
+| An expired invoice can only be paid in the admin portal | **Folded in** - `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US19-TC1-1`, `TC4-1` and `TC8-1` |
+| An expired invoice with a shortfall stays Partially Paid | **Folded in** - `grade10-admin-auction-post-sale-SC-92`, walked by `post-sale-US19-TC2-1` |
+| A card payment at exactly the deadline | **Folded in.** Judged on receipt: at or after the deadline is refused - `grade10-admin-auction-post-sale-SC-86` |
+| A card payment started before the deadline that confirms after | **Folded in** after a grilling round: a payment started in time counts, and the invoice is held `pending` until its outcome - `SC-87` and `SC-88`, with `post-sale-US19-TC3-1`, `TC5-1` and `TC6-1` |
+| Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** This change checks only the existing reissue deadline behavior |
 | Whether settling an expired invoice restores bidding | **Already decided** on the Winner Order page: paying does not restore bidding by itself. Suspension belongs to `grade10-site/auction/bidder-suspension` |
 | Whether the winner is told about a reissue | **Out of scope**, with the other letters, in a follow-on change |
-| Who owns the reopen and record-setup requirement | **Moved** to `complete-auction-post-sale` (`decisions.md` Q10), which this change depends on. Its scenarios keep their ids and markers: `SC-75` to `SC-84`, `SC-90` and `SC-91` now sit in that change's post-sale delta. This suite's `post-sale-US18-TC1-1` to `TC7-1`, `TC15-1`, `TC16-2`, `TC25-1`, `TC26-1` and `TC27-1` still cover them |
+| Who owns the reopen and record-setup requirement | **Moved** to `complete-auction-post-sale` (`decisions.md` Q10), which this change depends on. `SC-75` to `SC-84`, `SC-90` and `SC-91` keep their ids and markers in that change's post-sale delta. This suite no longer carries their cases; `post-sale-US18-TC1-1` to `TC7-1`, `TC15-1`, `TC16-2`, `TC25-1`, `TC26-1` and `TC27-1`, under the journey that reads Operator reopens the address form, move there with them |
+| Cases for scenarios this change does not own | **Moved.** `post-sale-US18-TC8-1` to `TC14-1` and `TC24-1` read the queue outcomes, the send and the cancellation, none of which has a scenario here. The queue and send are `complete-auction-post-sale`'s, and the status each order reads is proved in `grade10-site/auction/order-status` |
