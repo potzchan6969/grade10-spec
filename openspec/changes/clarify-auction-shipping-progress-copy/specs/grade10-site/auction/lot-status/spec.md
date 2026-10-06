@@ -1,11 +1,5 @@
 # grade10-site/auction/lot-status Specification
 
-## Purpose
-
-The external lot status is the status collectors see for an auction lot:
-Upcoming, Active or Ended, worked out from the lot and never saved. This
-capability also sets which lots collectors never see.
-
 ## Feature set
 
 - External lot status
