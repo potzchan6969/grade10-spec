@@ -113,8 +113,7 @@ states what the store puts into them.
 - **Refresh cadence for browse surfaces.** Whether the listing reads live or
   from cache is engineering's. The two cart reads are not cadence — they are
   stated moments, and they are live.
-- **Visual treatment.** Whether out of stock and unavailable are drawn alike is
-  design's.
+- **Visual treatment.** How Sold out is drawn is design's.
 
 ## Capabilities
 
