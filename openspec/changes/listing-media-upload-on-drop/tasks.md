@@ -18,7 +18,7 @@
       reason without rolling back accepted files from the same selection,
       covering `grade10-site-auction-listing-media-SC-34`.
 
-## 2. Gallery ordering (grade10)
+## 2. Gallery ordering (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add tests for direct-upload reorder persistence and staged inventory
       reorder behavior, covering
