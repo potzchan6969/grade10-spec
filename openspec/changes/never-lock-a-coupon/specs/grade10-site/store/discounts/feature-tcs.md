@@ -9,7 +9,7 @@
 **I want** a coupon back in my wallet whenever the checkout it was meant for does not complete,
 **so that** a refusal or an abandoned order never costs me what I redeemed.
 
-<!-- trace:case id=g10.store-discounts.TC-qeb rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39,g10.store-discounts.SC-cvt,g10.store-discounts.SC-2a7 -->
+<!-- trace:case id=g10.store-discounts.TC-qeb rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39,g10.store-discounts.SC-cvt,g10.store-discounts.SC-82q -->
 ### grade10-site-store-discounts-US3-TC6-1: A counter sale nobody paid loses its code at the hour
 
 Runs once per row of **Test data**.
@@ -58,6 +58,7 @@ Runs once per row of **Test data**.
 * <counter sale A> is not cancelled and still holds <line_1>.
 * <coupon> reads unused.
 
+<!-- trace:case id=g10.store-discounts.TC-dsi rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39,g10.store-discounts.SC-cvt,g10.store-discounts.SC-82q -->
 ### grade10-site-store-discounts-US3-TC8-1: An expired online order keeps its code while its checkout can collect
 
 **Classification:**
@@ -96,6 +97,7 @@ Runs once per row of **Test data**.
 * <expired order> is not cancelled.
 * <coupon> reads unused.
 
+<!-- trace:case id=g10.store-discounts.TC-93a rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39,g10.store-discounts.SC-cvt,g10.store-discounts.SC-82q -->
 ### grade10-site-store-discounts-US3-TC9-1: A gift on a counter sale nobody paid goes back to the wallet
 
 Runs once per row of **Test data**.
@@ -151,7 +153,7 @@ Runs once per row of **Test data**.
 **I want** a member's product coupon to settle the same way at the till as it does online,
 **so that** I can ring it up with the same confidence either channel gives me.
 
-<!-- trace:case id=g10.store-discounts.TC-rf9 rev=2 covers=g10.store-discounts.SC-elk,g10.store-discounts.SC-99a -->
+<!-- trace:case id=g10.store-discounts.TC-rf9 rev=2 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co -->
 ### grade10-site-store-discounts-US4-TC3-2: A sale a reward was cleared off takes points, and no reward
 
 Runs once per row of **Test data**.
@@ -200,7 +202,7 @@ Runs once per row of **Test data**.
 * Step 2 answers as the row's second column says.
 * <product coupon_1> and <product coupon_2> stand live in the wallet.
 
-<!-- trace:case id=g10.store-discounts.TC-pic rev=1 covers=g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-pic rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co -->
 ### grade10-site-store-discounts-US4-TC4-1: Code the paid sale does not name stops standing
 
 **Classification:**
@@ -239,7 +241,7 @@ Runs once per row of **Test data**.
 * The code no longer stands at the shop.
 * Nothing shows the member the code as money saved on the sale.
 
-<!-- trace:case id=g10.store-discounts.TC-w7h rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9 -->
+<!-- trace:case id=g10.store-discounts.TC-w7h rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co -->
 ### grade10-site-store-discounts-US4-TC5-1: A sale that collects a code another sale claims is reported and spends nothing
 
 Runs once per row of **Test data**.
@@ -291,6 +293,7 @@ Runs once per row of **Test data**.
 * <counter sale A> spends no coupon.
 * Step 4 shows an alert whose log line names <counter sale A>'s order.
 
+<!-- trace:case id=g10.store-discounts.TC-99b rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co -->
 ### grade10-site-store-discounts-US4-TC6-1: A sale paid with what it gave up spends the coupon nobody else claims
 
 Runs once per row of **Test data**.
@@ -340,6 +343,7 @@ Runs once per row of **Test data**.
 * The row's reward reads used once, by <counter sale A>.
 * Step 3 shows an alert whose log line names <counter sale A>'s order.
 
+<!-- trace:case id=g10.store-discounts.TC-ofg rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co -->
 ### grade10-site-store-discounts-US4-TC7-1: A counter sale a newer promise retired takes no new plan
 
 Runs once per row of **Test data**.
@@ -392,6 +396,7 @@ Runs once per row of **Test data**.
 * <later checkout> still carries <coupon>'s cut.
 * <coupon> and <other coupon> read unused in the wallet.
 
+<!-- trace:case id=g10.store-discounts.TC-uwj rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co -->
 ### grade10-site-store-discounts-US4-TC8-1: A counter sale that closed takes no new plan, from its own session or a fresh scan
 
 Runs once per row of **Test data**.
@@ -442,6 +447,7 @@ Runs once per row of **Test data**.
 * Step 3 shows no code minted by step 2.
 * <counter sale A>'s order still holds <line_1> and is not rewritten.
 
+<!-- trace:case id=g10.store-discounts.TC-6h1 rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co -->
 ### grade10-site-store-discounts-US4-TC9-1: A gift at the till goes on as its own line and carries no code
 
 **Classification:**
@@ -484,6 +490,7 @@ Runs once per row of **Test data**.
 * Step 3 shows no discount code for <gift>.
 * Step 6 shows <gift> used once.
 
+<!-- trace:case id=g10.store-discounts.TC-8y2 rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co -->
 ### grade10-site-store-discounts-US4-TC10-1: A reward POS's own remove-all took off does not go back on the sale
 
 Runs once per row of **Test data**.
@@ -548,7 +555,7 @@ Runs once per row of **Test data**.
 - **Agreed** — `grade10-site-store-discounts-SC-19` by US3-TC6-1; `grade10-site-store-discounts-SC-21` by US4-TC5-1, in both settling orders; `grade10-site-store-discounts-SC-28` by US4-TC9-1. US3-TC9-1 walks a gift's claim leaving a counter sale at the hour and when claimed elsewhere, which `grade10-site-loyalty-programme-SC-205` and `grade10-site-loyalty-programme-SC-191` state for any coupon, with the line staying as Q15 and Q18 settle
 - **Raised, folded into spec** — US3-TC8-1 held that an online order that only expires keeps its code while its checkout can collect, which the requirement states and no scenario did: `grade10-site-store-discounts-SC-26` (Q6). US4-TC10-1 held that a reward POS's own 管理折扣 → 全部移除 took off does not go back on the sale, which the requirement's "cleared off it" states and `grade10-site-store-discounts-SC-17` named only by 移除所有折扣: that scenario's GIVEN names both, inside the second revision this change already makes. US4-TC8-1's paid row held that a sale whose paid order arrived takes no new plan, which the requirement states and no scenario did: `grade10-site-store-discounts-SC-29`
 - **Raised by QA2, landed** — US4-TC8-1's hour row and US3-TC6-1's third row planned a till sale an hour after its last plan in its own session. A till session lives ten minutes (`pos/deps.ts:54`), so that plan never comes: staff are told the session expired and to scan the card again, and the fresh scan would mint a second code beside the dead one on the same cart. Q19 refuses a fresh scan on a cart still carrying another sale's reward code; `grade10-site-store-discounts-SC-27` now walks that scan, the requirement and the Discounts page's `A row that closed cannot be rewritten` line carry it, and tasks 10.5 and 10.6 build it. US4-TC8-1 now walks the paid sale from its own session and the hour from a fresh scan; US3-TC6-1's third row plans twice inside one session
-- **Rewritten to the spec** — US4-TC7-1, drafted as US3-TC7-1, took points on a counter sale whose coupon was claimed elsewhere. The Discounts page says that sale takes no new plan, and the feature-set line that misled the blind pass named any reward's code leaving; the line, the proposal and Q7 now say a reward cleared off. Every row is refused naming a new sale, for `grade10-site-store-discounts-SC-24`. The durable US4-TC3-1 is rewritten for `grade10-site-store-discounts-SC-17`'s second revision, another reward refused too, and `grade10-site-store-discounts-SC-22`, points still taken, so it is US4-TC3-2 under its marker's second revision. US4-TC5-1 reads the commerce monitors' alert, the reader Q16 names. US3-TC9-1's line staying is asserted on both rows, as Q18 settles for the hour. The durable US4-TC4-1 is carried unchanged under a corrected marker, which named the two scenarios its siblings prove rather than `grade10-site-store-discounts-SC-18`, and US4-TC3-2's marker is corrected the same way
+- **Rewritten to the spec** — US4-TC7-1, drafted as US3-TC7-1, took points on a counter sale whose coupon was claimed elsewhere. The Discounts page says that sale takes no new plan, and the feature-set line that misled the blind pass named any reward's code leaving; the line, the proposal and Q7 now say a reward cleared off. Every row is refused naming a new sale, for `grade10-site-store-discounts-SC-24`. The durable US4-TC3-1 is rewritten for `grade10-site-store-discounts-SC-17`'s second revision, another reward refused too, and `grade10-site-store-discounts-SC-22`, points still taken, so it is US4-TC3-2 under its marker's second revision. US4-TC5-1 reads the commerce monitors' alert, the reader Q16 names. US3-TC9-1's line staying is asserted on both rows, as Q18 settles for the hour. The durable US4-TC4-1 is carried unchanged. Both carried markers keep their ids and list every scenario serving US-04, as the trace convention sets; `grade10-site-store-discounts-SC-17` and `grade10-site-store-discounts-SC-18` serve feature-set lines, so their cases cover them in this reading, not in a marker
 - **Raised by the blind pass, landed** — Q14 in US4-TC5-1 and US4-TC6-1; Q15 in US4-TC6-1's gift row and US3-TC9-1; Q16 in the alert both read
 - **Cases added after the reconciliation** — US4-TC6-1 (`grade10-site-store-discounts-SC-23`, `grade10-site-store-discounts-SC-25`): written from the scenarios, so it is not blind. US4-TC3-2 is the durable case, rewritten
 - **Contradicted** — none left. The one opposite reading, points on a sale whose coupon was claimed elsewhere, is settled by the Discounts page
