@@ -20,8 +20,8 @@ document rules into either application.
 
 ## Ownership
 
-- **The application** resolves the document data, amounts, dates, time zone,
-  payment rails, and copy, then passes them to the renderer
+- **The application** resolves the document data, amounts, dates, payment
+  rails, and copy, then passes them to the renderer
 - 🚧 **GMT+8** — every date on the invoice and the receipt is Hong Kong
   time, labelled GMT+8
 - **The block** lays out the supplied content and returns PDF bytes; it does not

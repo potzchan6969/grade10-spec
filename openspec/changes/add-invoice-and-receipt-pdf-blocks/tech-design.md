@@ -37,8 +37,7 @@ design describes moving it here, not building it fresh.
 - Building the manually-settled mark, Superseded invoice, or
   `issuerTaxDetails`. Those remain retired under `decisions.md` Q19.
 - Implementing the data model, services and wire contracts in this store.
-  Grade10 implements the winner-zone source and revision snapshot required
-  by the modified auction contracts in this change.
+  Grade10 owns its data model, services and wire contracts.
 - Pixel-level layout assertions (position, alignment, rule thickness).
   `pdf-lib` writes a content stream, not a DOM; there is no `data-slot` to
   query. Tests prove the data-in/bytes-out contract — order, presence,
@@ -47,31 +46,6 @@ design describes moving it here, not building it fresh.
   (see Risks), not by an assertion.
 
 ## Decisions
-
-**Winner-zone provenance and revision snapshot.** The online setup request
-carries a selected IANA identifier; the browser's `Intl` zone is only the
-initial suggestion shown to the winner. The phone-record request carries the
-operator-entered identifier the winner stated. Both validate the IANA zone
-and persist it on the auction order atomically with setup. A legacy order
-without one may receive its first zone through a payment-processing operator
-action with a reason and log entry. A confirmed zone cannot be silently
-replaced.
-
-First send and reissue read the order zone inside the issue transaction,
-refuse a missing or invalid value, and copy it onto the new invoice revision
-with the sent-at and deadline facts. Invoice and receipt PDF services pass
-that revision value as `winnerTimeZone`; Winner Order uses the current
-revision zone for its deadline. Archived PDF bytes remain authoritative. A
-historical revision without a zone passes `Asia/Hong_Kong` for a new render
-and labels that zone; this read fallback never supplies the value required
-to issue a new revision.
-
-`auctionOrders` needs a nullable winner-zone column for existing orders;
-`auctionInvoices` needs a nullable revision-zone column for already issued
-invoices. New writes require both through the service guards, so the database
-migration preserves old rows without guessing a geographic zone. Keeping
-the zone on the revision prevents a later reader or device from changing
-already issued document dates or cache contents.
 
 **Directory and files carry over, contents change.** Still one directory,
 `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/` — the name
@@ -106,8 +80,8 @@ edit needed.
 contract additions.** `InvoicePdfData`/`ReceiptPdfData` keep the shape
 `grade10`'s already-tested renderer takes — `PdfLineItem { key?, label,
 amount }` (see below for `key`), `PdfPartyAddress = Record<string, string |
-null> | null`, plain `string` amounts, `Date` for every date, and an explicit
-winner IANA time-zone identifier. This revision adds the optional supplied
+null> | null`, plain `string` amounts and `Date` for every date. No caller
+supplies a time zone. This revision adds the optional supplied
 `taxLine` to both documents and `replacesInvoice` to invoices. This is a
 deliberate difference from the
 retired DOM design's `ReactNode` props (`decisions.md` Q6): there is no JSX
@@ -167,7 +141,6 @@ export type InvoicePdfData = {
   invoiceNumber: string;
   sentAt: Date;
   paymentDeadline: Date;
-  winnerTimeZone: string;
   paymentMethod: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
@@ -201,7 +174,6 @@ export type ReceiptPdfData = {
   listingTitle: string;
   receiptNumber: string;
   paidAt: Date;
-  winnerTimeZone: string;
   invoiceId: string;
   providerReferenceCode: string;
   billTo: PdfPartyAddress;
@@ -244,12 +216,9 @@ Bid"`, `"Subtotal"`, …) already arrives as a caller-supplied string on
 `PdfLineItem` and needed no change; only the section/meta labels the
 renderer itself used to own move.
 
-**Dates stay computed inside the renderer, using the supplied winner zone.**
-`formatDateTime` receives the `Date` and required `winnerTimeZone` IANA
-identifier and formats that instant in the winner's zone, including the zone
-name required by `spec.md`. It does not read the server's or viewer's local
-zone. The caller supplies a stable invoice-revision zone, so an invoice and
-its receipts keep the same clock after the winner travels. Money remains
+**Document dates use Hong Kong time.** `formatDateTime` formats each `Date`
+in `Asia/Hong_Kong` and labels it `GMT+8`, as required by the accepted
+`shared/dates-and-times` contract. The caller passes no zone. Money remains
 preformatted by the caller.
 
 **The Grade10 wordmark stays a component-owned SVG path, not a prop.**
@@ -352,7 +321,7 @@ replacement-specific output, and its label comes from
    importing `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, then removes its
    own now-redundant copy under `packages/grade10-auction/contracts`. Data
    it already builds (`InvoicePdfData`/`ReceiptPdfData`) needs a `copy`
-   argument and `winnerTimeZone` at each call site, plus the optional
+   argument at each call site, plus the optional
    `taxLine` and `replacesInvoice` mappings where the order snapshot has
    them, sourced from `@grade10/i18n` and the order record. `grade10`'s own
    task (`tasks.md`), not built here.
@@ -364,6 +333,6 @@ independently. Step 3 is an ordinary application-side dependency bump
 
 ## Open Questions
 
-None. `decisions.md` Q18-Q25 settle the approach; the `key` discriminant and
+None. `decisions.md` Q18-Q24 and Q26 settle the approach; the `key` discriminant and
 the `copy` field list above are this document's implementation choices, not
 product judgments needing another decision row.

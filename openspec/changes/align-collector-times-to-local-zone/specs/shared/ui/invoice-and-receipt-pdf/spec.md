@@ -11,8 +11,8 @@ Every document date uses Asia/Hong_Kong, matching emails and terms, and names
 the offset **GMT+8**.
 
 **Given** — InvoicePdf and ReceiptPdf SHALL render every date as the Hong Kong
-calendar date and clock time, followed by `GMT+8`, regardless of the machine
-or the winner's zone.
+calendar date and clock time, followed by `GMT+8`, regardless of the machine's
+zone.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-43 - A date renders in Hong Kong as GMT+8
 

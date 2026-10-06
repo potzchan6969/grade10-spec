@@ -1605,7 +1605,7 @@ and this suite gained `TC36`-`TC42` for the behaviour that changed or is new:
   allowing one to be withheld entirely.
 - **New** — `TC39`/`TC40` prove the transfer-reference line, a real
   behaviour `grade10`'s renderer already has that the DOM contract never
-  specified. `TC41` proves date formatting in the supplied winner zone — the
+  specified. `TC41` proves date formatting in `Asia/Hong_Kong` as `GMT+8` — the
   one value the renderer computes rather than taking preformatted, a
   deliberate asymmetry with money (`spec.md`'s Presentation-only contract).
   `TC42` proves the one fact every other case assumes: each call returns
@@ -1662,6 +1662,6 @@ No contradiction, no question raised for `decisions.md`'s `## Raised` table.
 contract. The replacement case now asserts `Replaces invoice {id}` on the new
 invoice; `taxLine` remains an optional plain `PdfLineItem` on InvoicePdf and
 ReceiptPdf while `issuerTaxDetails` remains retired; the proposal and
-technical design are updated to carry those decisions and the winner-zone
+technical design are updated to carry those decisions and the fixed GMT+8
 date contract; and this suite's live tax, replacement, bank-rail and date
 cases supersede the deprecated DOM-era readings above.
