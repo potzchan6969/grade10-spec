@@ -21,8 +21,8 @@ Card, not a new one. The host frame is the redesign's
   the way an available tile's photo does, and stays dim; it takes the focus
   ring and the name's underline of any tile, and draws no cart (Q50). Figma's
   `Product / Product Card Image` `4274:10074` draws no hover on a sold-out
-  well: the code is ahead of the set there, and the design hand owes that
-  cell
+  well, so the code is ahead of the set there. ❓ The design hand confirms
+  whether the set gains that cell (R2)
 - **A link** — each tile's photo and name are links to its card's own page
   (Q52)
 
