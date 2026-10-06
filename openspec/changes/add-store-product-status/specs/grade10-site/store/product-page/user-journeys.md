@@ -1,9 +1,3 @@
-## Retired
-
-- `grade10-site-store-product-page-US-05` — The product page no longer caps a
-  requested quantity to stock or discloses the remaining count. Partial-fill
-  feedback is covered by `grade10-site-commerce-product-status-US-02` and
-  `grade10-site-store-cart-validation-US-01`.
 ## Context user journeys
 
 ### grade10-site-store-product-page-US-01: Collector reads a card at its own address
@@ -41,8 +35,6 @@ whole,
 **so that** whoever receives it sees the card rather than a text-only preview
 or one with its edges cut off.
 
-## ADDED User journeys
-
 ## MODIFIED User journeys
 
 ### grade10-site-store-product-page-US-03: Collector adds the product from its page
@@ -67,3 +59,10 @@ the buying happens, while keeping its price visible,
 **I want** the page to stop me at what the shop has of the grade I chose, and
 to say how many that is,
 **so that** the quantity I take to the cart is one the shop can fill.
+
+## Retired
+
+- `grade10-site-store-product-page-US-05` — The product page no longer caps a
+  requested quantity to stock or discloses the remaining count. Partial-fill
+  feedback is covered by `grade10-site-commerce-product-status-US-02` and
+  `grade10-site-store-cart-validation-US-01`.

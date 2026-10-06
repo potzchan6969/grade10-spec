@@ -1,4 +1,4 @@
-# Cart Validation — delta
+# grade10-site/store/cart-validation Specification
 
 ## Purpose
 
@@ -22,8 +22,8 @@ cart is offered for checkout, where the shop becomes the authority.
     says so
   - Out of stock: a line the shop cannot fill stays, marked, for the collector
     to remove
-  - Unavailable: a line whose product left the channel is told apart from one
-    that sold out
+  - Withdrawn: a line whose product left the channel is removed and named,
+    apart from one that sold out
   - Repriced: a line shows the current price, the change is disclosed once, and
     that price is the line's from then on
   - Never grown: a line keeps the quantity the collector asked for when more
@@ -61,11 +61,11 @@ defines it. Price SHALL be read as an integer count of minor units and an ISO
 **In flight** - While a read is in flight the store SHALL NOT present the
 lines it is checking as confirmed, and SHALL NOT let the cart be offered for
 checkout on the strength of the previous read. If a read fails, the store
-SHALL mark each affected line unchecked and SHALL NOT present its recorded
-availability, price, or the cart total as current.
-If the initial cart read fails before any lines are known, the drawer SHALL
-show a cart-level unchecked state with Retry and SHALL NOT present a total or
-allow checkout.
+SHALL mark each affected line unchecked, SHALL offer Retry, SHALL NOT present
+its recorded availability, price, or the cart total as current, and SHALL keep
+checkout unavailable until a later read returns. If the initial cart read
+fails before any lines are known, the drawer SHALL show a cart-level unchecked
+state with Retry and SHALL NOT present a total or allow checkout.
 
 <!-- trace:scenario id=g10.store-cart-validation.SC-cl3 rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-01 - The cart is opened
@@ -131,7 +131,8 @@ not their doing.
 
 **Out of stock** - When a re-read answers not fillable, the store SHALL report
 the line as out of stock and SHALL NOT reduce it to zero silently or remove
-it. The collector SHALL be able to remove it themselves.
+it. The collector SHALL be able to remove it themselves, and while it stays
+the cart SHALL NOT be offered for checkout.
 
 **Never grown** - The store SHALL NOT increase a line's quantity on a re-read,
 whatever count has since become available. A collector asked for what they
@@ -155,6 +156,15 @@ asked for.
 - **THEN** the line is reported as out of stock
 - **AND** the line is still shown, and the collector can remove it
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-c5i rev=1 -->
+#### Scenario: grade10-site-store-cart-validation-SC-26 - A sold-out line holds checkout
+**Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
+
+- **GIVEN** a cart whose open read found one of its two lines out of stock
+- **THEN** the cart cannot be offered for checkout
+- **WHEN** the collector removes that line
+- **THEN** the cart can be offered for checkout
+
 <!-- trace:scenario id=g10.store-cart-validation.SC-gut rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-07 - A line is never grown
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
@@ -171,29 +181,67 @@ asked for.
 - **WHEN** the store re-reads it
 - **THEN** the line is unchanged and carries no adjustment or warning
 
-### Requirement: A line whose product was withdrawn from sale is reported as unavailable
+### Requirement: A line whose product was withdrawn from sale leaves the cart and is named
 
-When a re-read finds that a line's product, or the variant itself, is no longer
-on the store's sales channel, the store SHALL report that line as unavailable,
-distinctly from out of stock. A collector whose card sold out SHALL be told
-something different from one whose card was withdrawn from sale.
+A line is withdrawn when its product is no longer on the store's sales channel
+or its variant no longer exists. A variant the shop still lists but does not
+offer for sale is out of stock, not withdrawn.
 
-<!-- trace:scenario id=g10.store-cart-validation.SC-93m rev=1 -->
+**Removed on open** - When the cart-open read finds a withdrawn line, the store
+SHALL remove that line from the cart, and one notice SHALL name every line it
+removed on that read. An out-of-stock line SHALL stay, as the out-of-stock
+rule requires.
+
+**Unavailable at checkout** - When the checkout read finds a withdrawn line,
+the store SHALL identify it as unavailable, as a cart the checkout read
+contradicts requires, and SHALL then remove it from the cart under the same
+notice the cart-open read gives.
+
+**Told apart** - A collector whose card sold out SHALL be told something
+different from one whose card was withdrawn from sale.
+
+<!-- trace:scenario id=g10.store-cart-validation.SC-93m rev=2 -->
 #### Scenario: grade10-site-store-cart-validation-SC-09 - The product was withdrawn from sale
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
 - **GIVEN** a cart line for a product published when it was added
-- **WHEN** the store re-reads it and that product is no longer on the channel
-- **THEN** the line is reported as unavailable, and not as out of stock
+- **WHEN** the cart opens and the store's read finds that product no longer on
+  the channel
+- **THEN** the line leaves the cart
+- **AND** one notice names the product removed, and does not call it out of
+  stock
 
-<!-- trace:scenario id=g10.store-cart-validation.SC-it2 rev=1 -->
+<!-- trace:scenario id=g10.store-cart-validation.SC-it2 rev=2 -->
 #### Scenario: grade10-site-store-cart-validation-SC-10 - Sold out and withdrawn are told apart
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
 
-- **GIVEN** a cart holding one line whose variant the shop stopped offering and
-  one line whose product was unpublished
-- **WHEN** the store re-reads them
-- **THEN** the first is reported as out of stock and the second as unavailable
+- **GIVEN** a cart holding one line whose variant the shop stopped offering,
+  and two lines whose products were unpublished
+- **WHEN** the cart opens and the store re-reads them
+- **THEN** the first line stays, marked out of stock, for the collector to
+  remove
+- **AND** the other two leave the cart, and one notice names both
+
+<!-- trace:scenario id=g10.store-cart-validation.SC-tuc rev=1 -->
+#### Scenario: grade10-site-store-cart-validation-SC-25 - The variant no longer exists
+**Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
+
+- **GIVEN** a cart line for a variant the shop has since deleted, on a product
+  still published
+- **WHEN** the cart opens and the store re-reads it
+- **THEN** the line leaves the cart
+- **AND** one notice names it, and does not call it out of stock
+
+<!-- trace:scenario id=g10.store-cart-validation.SC-5dk rev=1 -->
+#### Scenario: grade10-site-store-cart-validation-SC-27 - A product withdrawn while the cart was open
+**Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
+
+- **GIVEN** a cart whose open read confirmed every line
+- **AND** a product on it removed from the channel since
+- **WHEN** the collector offers the cart for checkout
+- **THEN** no checkout order is created
+- **AND** that line is identified as unavailable, leaves the cart, and is named
+  in one removal notice
 
 ### Requirement: A line whose price changed is shown at the current price before checkout
 
@@ -243,6 +291,17 @@ whose read did not return.
 - **WHEN** the collector offers the cart for checkout and the re-read returns
   12300 minor units `HKD`
 - **THEN** the line is confirmed and no price change is reported
+
+<!-- trace:scenario id=g10.store-cart-validation.SC-q4f rev=1 -->
+#### Scenario: grade10-site-store-cart-validation-SC-24 - A line both shrank and was repriced
+**Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
+
+- **GIVEN** a cart line requesting 5 at 10500 minor units `HKD`
+- **WHEN** the store re-reads it and the shop counts 2 at 12300 minor units
+  `HKD`
+- **THEN** the line's quantity becomes 2 and it is reported as adjusted
+- **AND** it shows 12300 minor units `HKD`, and the collector is told the price
+  changed
 
 <!-- trace:scenario id=g10.store-cart-validation.SC-eqa rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-14 - A supplied price decides nothing
@@ -323,8 +382,8 @@ line than were asked for — SHALL be refused with that line identified and the
 quantity the shop would fill, and SHALL NOT be sold short.
 
 **Read cannot complete** - When the read itself cannot be completed, the store
-SHALL NOT invent availability or price, SHALL NOT fall back to what a line
-recorded, and SHALL NOT create a checkout order.
+SHALL NOT invent availability or price and SHALL NOT create a checkout order.
+The lines it holds are treated as **In flight** requires.
 
 <!-- trace:scenario id=g10.store-cart-validation.SC-wfj rev=1 -->
 #### Scenario: grade10-site-store-cart-validation-SC-19 - The shop refuses what the store had confirmed
@@ -355,5 +414,5 @@ recorded, and SHALL NOT create a checkout order.
   invented availability or price shown
 - **AND** each held line is marked unchecked; no recorded availability,
   price, or cart total is presented as current
-- **AND** Retry is available, and Pay remains unavailable until a later read
-  confirms the lines
+- **AND** Retry is available, and checkout remains unavailable until a later
+  read confirms the lines

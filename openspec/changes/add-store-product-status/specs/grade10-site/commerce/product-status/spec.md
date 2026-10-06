@@ -1,4 +1,4 @@
-# Product Status — delta
+# grade10-site/commerce/product-status Specification
 
 ## Purpose
 
@@ -21,12 +21,15 @@ the collector asks for. When the store acts on an answer for a cart, that is
   - Count as bound: only a count above zero the shop exposes bounds a request
 - Cards on browse surfaces
   - Tile rollup: a card is available while any variant on it is
-  - One item on the product page: the page reports availability for its one
-    sellable item, using the internal Shopify sale identity
+  - One item per card: the tile and the page show one item's price, and both
+    add it — the first variant for sale or else the first listed, using its
+    internal Shopify sale identity
   - No variant choice: the page does not render the Shopify variant as a
     shopper-facing choice or label
   - No quantity: browse surfaces say whether the card or its one page item can
     be bought and nothing about how many remain
+  - No browse ceiling: a browse add control keeps the quantity a collector asks
+    for, whatever the shop's count
   - Priced but unbuyable: an out-of-stock variant keeps its price and offers no
     control that cannot be used
 - Unpublished products
@@ -42,7 +45,8 @@ answer.
 
 **Shop's answer** - The store SHALL take a variant's availability from the
 shop: a variant the shop offers for sale on the store's sales channel SHALL be
-available, and a variant the shop does not SHALL be out of stock.
+available, and a variant the shop does not SHALL be out of stock. A collector
+SHALL read out of stock as Sold out.
 
 **No second derivation** - The store SHALL NOT derive availability from a
 count, and SHALL NOT read the shop's inventory policy.
@@ -52,9 +56,9 @@ SHALL be available; a variant the shop stops offering at zero SHALL be out of
 stock; a variant whose count the shop does not expose SHALL be whatever the
 shop answers. Whether a variant sells past zero is decided on the shop.
 
-**Purchasable** - An available variant SHALL be purchasable wherever the
-surface offers purchasing, whatever count remains. An out-of-stock variant
-SHALL NOT be purchasable on any surface.
+**Purchasable** - The sale identity a surface offers SHALL be purchasable
+when it is available, whatever count remains, and SHALL NOT be purchasable on
+any surface when it is out of stock.
 
 <!-- trace:scenario id=g10.commerce-product-status.SC-zdl rev=1 -->
 #### Scenario: grade10-site-commerce-product-status-SC-01 - The shop offers the variant
@@ -163,6 +167,10 @@ treatment, or any label that distinguishes one available variant from another
 by quantity, so two available variants are offered identically however far
 apart their counts are.
 
+**No browse ceiling** - A browse add control SHALL NOT cap or reduce a
+requested quantity to the shop's count. The quantity a collector asks for
+reaches the cart, whose review answers it.
+
 **Browse surfaces only** - This binds the surfaces a collector browses on.
 What the cart tells a collector about a line it could not fill in full is
 `grade10-site/store/cart-validation`'s, and is told at the moment the store
@@ -185,10 +193,20 @@ acts on the quantity rather than as a cue to buy sooner.
 - **WHEN** the listing or a card's page communicates a variant's availability
 - **THEN** it names no remaining quantity
 
+<!-- trace:scenario id=g10.commerce-product-status.SC-0pg rev=1 -->
+#### Scenario: grade10-site-commerce-product-status-SC-17 - A browse add keeps the quantity asked for
+**Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
+
+- **GIVEN** a card whose item the shop offers at a count of 2
+- **WHEN** a collector asks for 5 on the card's listing tile, and again on the
+  card's page, and adds each
+- **THEN** each add control keeps 5, with no ceiling and no remaining count
+- **AND** the cart line requests what was added, for the cart's review to
+  answer as fillable in part
+
 ### Requirement: A card's listing availability is that of its most available variant
 
-A card's listing tile is available while any Shopify variant is available. Its
-product page shows one sellable item and reports that item's availability.
+A card's listing tile is available while any Shopify variant is available.
 
 **Tile rollup** - Where a card lists more than one variant, the card's own
 availability SHALL be that of its most available variant, with available
@@ -196,69 +214,67 @@ beating out of stock. A card SHALL be out of stock only when every variant it
 lists is out of stock. The listing SHALL communicate each card's rolled-up
 availability on that card's tile.
 
-**One sellable item on the page** - A card's page SHALL use one internal
-Shopify sale identity for the item's price, availability, and cart add. When
-any listed variant is available, that identity SHALL be the first available
-variant in the product read's order; when none is available, the page SHALL
-use the first listed variant for its price and unavailable status. The page
-SHALL NOT render or require the collector to choose among sizes, options, or
-variants, and SHALL NOT show the internal sale identity as a product choice
-or display label.
-
-<!-- trace:scenario id=g10.commerce-product-status.SC-h7u rev=1 -->
+<!-- trace:scenario id=g10.commerce-product-status.SC-h7u rev=2 -->
 #### Scenario: grade10-site-commerce-product-status-SC-12 - One grade sold, another still for sale
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a card listing one out-of-stock variant followed by one available variant
 - **WHEN** a collector sees the card on the listing and opens its page
-- **THEN** the tile reads available
-- **AND** the page shows the price and availability of the first available item
+- **THEN** the tile reads available, at the price of the first available item
   in the product read's order
+- **AND** the page shows that item's price and availability
 - **AND** the page offers no variant choice or variant display label
 
-<!-- trace:scenario id=g10.commerce-product-status.SC-uei rev=1 -->
+<!-- trace:scenario id=g10.commerce-product-status.SC-uei rev=2 -->
 #### Scenario: grade10-site-commerce-product-status-SC-13 - Nothing left on the card
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a card whose every listed variant is out of stock
-- **THEN** the card's tile reads out of stock
+- **WHEN** a collector sees it on the listing
+- **THEN** the card's tile reads Sold out
+- **AND** the tile keeps the first listed variant's price
+- **AND** the tile offers no usable add control
 
 ### Requirement: Every surface communicates the same availability
 
-The listing communicates product-level availability as a rollup. A card's
-page and its cart line communicate availability for the same internal sale
-identity, and none of them hides a price or offers a control that does nothing.
+Every surface uses one internal sale identity per card, and none of them
+hides a price or offers a control that does nothing.
 
-**One answer** - The listing SHALL report a card as available when any listed
-variant is available and out of stock only when none is available. The page
-and cart SHALL communicate the current availability of the same internal sale
-identity. A page add SHALL use that identity. The identity is the first
-available variant in the product read's order, or the first listed variant
-when none is available. No surface SHALL derive availability from stock
-counts.
+**One answer** - Each card SHALL have one internal Shopify sale identity: the
+first available variant in the product read's order, or the first listed
+variant when none is available. A listing tile SHALL show that identity's
+price; the card's page SHALL use it for its price, availability and cart add;
+a listing add and a page add SHALL both put it in the cart; and the cart line
+SHALL communicate its current availability. The tile's own availability is
+its rollup. No surface SHALL derive availability from stock counts.
+
+**No variant choice** - The page SHALL NOT render or require the collector to
+choose among sizes, options, or variants, and SHALL NOT show the internal sale
+identity as a product choice or display label.
 
 **Priced but unbuyable** - A surface SHALL NOT hide a price because a variant
 is out of stock, and SHALL NOT offer a purchase control that cannot be used.
 
-<!-- trace:scenario id=g10.commerce-product-status.SC-ns0 rev=1 -->
+<!-- trace:scenario id=g10.commerce-product-status.SC-ns0 rev=2 -->
 #### Scenario: grade10-site-commerce-product-status-SC-14 - The page and cart use the available item
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
-- **GIVEN** a card with one unavailable variant followed by one available
+- **GIVEN** a card with one out-of-stock variant followed by one available
   variant in the product read
-- **WHEN** a collector sees the tile, opens the page, and adds the item to the
-  cart, with each read at the same moment
+- **WHEN** a collector sees the tile, adds the card from the listing, opens the
+  page, and adds the item from the page, while the shop's answer does not move
 - **THEN** the tile reads available
 - **AND** the page uses the available item for its price, status, and add
-- **AND** the cart line uses that same internal sale identity and reads available
+- **AND** the listing add and the page add put that same internal sale identity
+  in the cart, on one line that reads available
 
 <!-- trace:scenario id=g10.commerce-product-status.SC-5rs rev=1 -->
-#### Scenario: grade10-site-commerce-product-status-SC-15 - An unavailable item keeps its price
+#### Scenario: grade10-site-commerce-product-status-SC-15 - A sold-out item keeps its price
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a card with one listed variant and that variant is out of stock
 - **WHEN** a collector opens the card's page
-- **THEN** the page keeps the item's price and says it is unavailable
+- **THEN** the page keeps the item's price and says it is sold out
 - **AND** no usable purchase control is offered
 
 ### Requirement: An unpublished product is absent from browsing rather than marked
