@@ -145,9 +145,9 @@ A reversal takes back a coupon the member still holds and returns the
 points that bought it — both move together, or the member ends up holding
 one and not the other. It is an operator's move, never a member's.
 
-- **Unused reverses** — the coupon is voided, and every point lot comes
-  back on its own original date, so a reversal never lengthens the life of
-  points
+- **Unused reverses** — the coupon is voided, and the points go back to the
+  day the balance still runs to, even onto a balance brought to nothing, so a
+  reversal never lengthens the life of points
 - **Used does not** — a used coupon stays used; cancelling or refunding the
   order that carried it changes nothing, and the points stay spent
 - 🚧 **Claimed by a sale does not** — refused, naming that sale, until the

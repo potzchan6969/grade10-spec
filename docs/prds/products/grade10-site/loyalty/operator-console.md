@@ -16,8 +16,9 @@ part on one question: do the points count toward the tier?
   it can promote a member
 - **Correction** — putting a mistake right; adds to or takes from the
   redeemable balance alone, so it never promotes anyone
-- **Neither moves the date** — the points take the date the balance
-  already has — [Points](/p/grade10-site/loyalty/points#expiry)
+- **Neither moves a running date** — the points take the date the balance
+  already has; where nothing is live they start twelve months from their own
+  day — [Points](/p/grade10-site/loyalty/points#expiry)
 - **The form states the date** — before the operator writes, it names the
   day the points will lapse
 - **Both carry a reason** — what the operator types goes to the audit trail;

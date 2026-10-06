@@ -13,8 +13,8 @@ every point they hold without being told once. The programme knows the day
 months ahead.
 
 Telling them is two decisions, not one: who is owed a warning, and what
-carries it. They have been stuck together, and the second one — email, a push,
-the wallet card — has held the first back since the programme shipped.
+carries it. They have been stuck together, and the second one - email, a push,
+the wallet card - has held the first back since the programme shipped.
 
 This change settles the first alone. The programme answers who is close to
 losing points and how many, and stops there. Nothing is sent. A channel picked
@@ -33,8 +33,8 @@ owed a reminder is what makes that a small change rather than another argument a
   It names them, the day, the points and the lead time that raised it.
 - **A lead time is configuration, not a rule.** The programme carries a set of
   them, so one reminder or a ladder of them is a value the product picks. A
-  programme that carries none owes no reminder and still starts; a set that
-  cannot work stops it from starting. Which
+  programme without a lead-time setting owes no reminder and still starts; a
+  setting that cannot work stops it from starting. Which
   values Grade10 carries is held for Product in
   [decisions](decisions.md#decisions).
 - **One reminder per member, day and lead time.** Two lead times on one day are
@@ -46,6 +46,12 @@ owed a reminder is what makes that a small change rather than another argument a
   claw-back, a correction or a deleted account bringing it to nothing, leaves
   nothing to warn about. In each case the reminder stops being owed the
   moment it stops being true, unsent.
+- **Returned points keep the running day.** Points a reversal gives back, and
+  points paid at checkout that a refund or an operator returns, go to the day
+  the balance still runs to, even onto a balance
+  brought to nothing, so a reminder dropped then is owed again. The programme
+  already does this; its expiry requirement now says so, where its feature set
+  started a window from a reversal's own day.
 - **Nothing is delivered.** No email, no push, no page reads what is raised.
   A reminder names no channel and the programme sends nothing.
 
@@ -56,15 +62,18 @@ What this change leaves out is in [decisions](decisions.md#non-goals).
 ## Capabilities
 
 - Added: `grade10-site/loyalty/expiry-reminders`
+- Modified: `grade10-site/loyalty/programme` - the inactivity expiry
+  requirement states the day returned points take; no behaviour changes
 
 ## Impact
 
-- **Spec store** — one new capability beside `grade10-site/loyalty/programme`,
-  and a manual page for it. No component export changes, and no consuming
+- **Spec store** - one new capability beside `grade10-site/loyalty/programme`,
+  and a manual page for it; the programme's expiry requirement and Points state
+  the day returned points take. No component export changes, and no consuming
   application adapts: nothing renders a reminder.
-- **Application** — the programme's own service. No member surface, no
+- **Application** - the programme's own service. No member surface, no
   operator console, no till.
-- **Members** — none see anything change. A member close to losing points is
+- **Members** - none see anything change. A member close to losing points is
   owed a reminder and is still not told.
 
 ## Follow-on changes
