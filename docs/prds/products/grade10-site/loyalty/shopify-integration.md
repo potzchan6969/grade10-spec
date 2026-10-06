@@ -58,7 +58,7 @@ Every online checkout is a Shopify draft order and its invoice.
 | The draft carries | As |
 | --- | --- |
 | Member | The draft's customer, so a customer-scoped code evaluates |
-| Points | One fixed-amount order discount named "Points" |
+| Points | One fixed-amount order discount |
 | Coupon | The draft's one discount code — minted for that checkout for a product or gift coupon, the operator's own for an order coupon |
 | Prices | None on the lines — the shop prices at payment |
 | Shipping | None — the invoice page prices it |
@@ -84,7 +84,7 @@ Every online checkout is a Shopify draft order and its invoice.
 On the store's own `/checkout` page, before Shopify has seen the basket.
 
 ## *Store* — **Draft order created**
-The member is the draft's customer, the points are one fixed-amount order discount named "Points", and the coupon goes on as its discount code, minted for that checkout where it is a product or gift coupon. The store's order id is a custom attribute on the draft, and the lines carry no prices, because the shop prices them at payment.
+The member is the draft's customer, the points are one fixed-amount order discount, and the coupon goes on as its discount code, minted for that checkout where it is a product or gift coupon. The store's order id is a custom attribute on the draft, and the lines carry no prices, because the shop prices them at payment.
 
 ```json
 {
