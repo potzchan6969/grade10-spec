@@ -39,7 +39,7 @@ function BookingServicePicker({
                 onSelect(value);
               }
             }}
-            value={selectedId}
+            value={selectedId ?? ""}
           >
             {list.map((service) => (
               <RadioCard

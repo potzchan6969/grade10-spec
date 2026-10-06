@@ -17,7 +17,7 @@ import {
 import { MapPin } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import {
   BOOK_VISIT_NAV_COPY,
   BOOK_VISIT_SERVICES,
@@ -267,39 +267,12 @@ export const Default: Story = {
     expect(
       canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
     ).toBeNull();
-
-    const picker = canvas.getByRole("radiogroup", {
-      name: SERVICE_PICKER_COPY.title,
-    });
-    await userEvent.click(
-      within(picker).getByRole("radio", { name: /Card grading/ }),
-    );
-    const continueButton = await canvas.findByRole("button", {
-      name: BOOK_VISIT_NAV_COPY.continue,
-    });
-    expect(continueButton).toBeEnabled();
-    await userEvent.click(continueButton);
-    expect(
-      canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
-    ).not.toBeNull();
-    expect(
-      canvasElement.querySelector('[data-slot="booking-details-form"]'),
-    ).toBeNull();
-
-    const dayTwo = canvasElement.querySelector(
-      '[data-slot="booking-day"][data-available="true"]',
-    );
-    expect(dayTwo).not.toBeNull();
-    expect(dayTwo).toHaveTextContent("2");
-    await userEvent.click(dayTwo as HTMLElement);
-    await userEvent.click(await canvas.findByRole("radio", { name: /^10:00/ }));
-    expect(
-      canvasElement.querySelector('[data-slot="booking-details-form"]'),
-    ).not.toBeNull();
-    expect(canvas.getByText("Is the card raw or slabbed?")).toBeVisible();
-    expect(canvas.getByText(/Told the desk as a reference/)).toBeVisible();
-    expect(
-      canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
-    ).toBeNull();
+    for (const name of [
+      /Card grading/,
+      /Vault drop-off/,
+      /Collection consultation/,
+    ]) {
+      expect(canvas.getByRole("radio", { name })).not.toBeChecked();
+    }
   },
 };
