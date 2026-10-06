@@ -67,7 +67,9 @@ Design-level only; [decisions.md](decisions.md#non-goals) owns product scope.
 `profile.get` returns a view — display name, bio, avatar URL, email,
 member-since, and the `phone` it carries today — composed from the row and the
 session: display name by `memberName`; member-since null before the first save.
-`profile.update` and both avatar routes return the same view. The row shape
+`profile.update` and the avatar upload answer `saved` carrying the same view,
+or `refused` with its reason; the avatar removal answers `saved` with the
+view. The row shape
 stays internal to the worker; `StoreProfile` in `@grade10/store-contracts`
 becomes that view. `ProfileView` reads the email from the view, and both
 brands' `ProfilePage` stop passing it, so the page has one source for it.
@@ -141,21 +143,23 @@ does today.
 wallet app and the till lay it out.
 
 A profile save kicks the wallet refresh after the response, best effort, so a
-saved name reaches the pass on the next lap; a lost kick and an account-name
-change are caught by the daily floor.
+saved name reaches the pass on the next lap: a fourth way a pass falls due,
+beside its own next-change instant, the daily floor and the change-log kick. A
+lost kick and an account-name change are caught by the daily floor.
 
-Makes pass: `grade10-site-store-membership-SC-78`, `grade10-site-store-membership-SC-83`, `grade10-site-store-membership-SC-84`, `grade10-site-store-membership-SC-85`,
-`grade10-site-store-wallet-member-card-SC-13`, `grade10-site-store-wallet-member-card-SC-18`, `grade10-site-store-wallet-member-card-SC-39`, `grade10-site-store-wallet-member-card-SC-40`,
-`grade10-site-store-wallet-member-card-SC-41`, `grade10-site-store-wallet-member-card-SC-42`,
-`grade10-site-store-wallet-member-card-SC-43`.
+Makes pass: `grade10-site-store-membership-SC-78`, `grade10-site-store-membership-SC-87`, `grade10-site-store-membership-SC-88`, `grade10-site-store-membership-SC-89`,
+`grade10-site-store-membership-SC-90`,
+`grade10-site-store-wallet-member-card-SC-13`, `grade10-site-store-wallet-member-card-SC-18`, `grade10-site-store-wallet-member-card-SC-39`, `grade10-site-store-wallet-member-card-SC-56`,
+`grade10-site-store-wallet-member-card-SC-57`, `grade10-site-store-wallet-member-card-SC-58`,
+`grade10-site-store-wallet-member-card-SC-59`, `grade10-site-store-wallet-member-card-SC-60`.
 
 ### Member-since is a timestamp the first save writes
 
 `account_profile.created_at` records when the row appeared, and a row can
 appear from a webhook the collector never triggered (decisions Q4). A nullable
 `first_saved_at` is written as `COALESCE(first_saved_at, now())` by every write
-the collector makes to their profile — `profile.update` and both avatar routes
-— and by nothing else: `ensureAccount`, `setPhone` and joining at a counter
+the collector makes to their profile — `profile.update` and both avatar routes,
+a save that repeats the stored values included — and by nothing else: `ensureAccount`, `setPhone` and joining at a counter
 leave it alone. The view reads it, and null means the page shows no date. Rows
 saved before the column existed are decisions Q11: answered (a), they stay
 NULL; answered (b), one backfill copies `created_at` where `display_name` is
@@ -166,21 +170,24 @@ rather than the collector. Infer the first save from `display_name IS NOT
 NULL` — rejected, it carries no date.
 
 Makes pass: `grade10-site-store-account-profile-SC-08`, `grade10-site-store-account-profile-SC-09`, `grade10-site-store-account-profile-SC-10`,
-`grade10-site-store-account-profile-SC-35`.
+`grade10-site-store-account-profile-SC-35`, `grade10-site-store-account-profile-SC-37`.
 
 ### Avatars are content-addressed objects reclaimed by the orphan sweep
 
 Each brand's store worker binds an `AVATARS` bucket through
 `createR2ObjectStorePort` and registers one `avatars` area. A key is
-`contentKey("avatars", sha256, ext)`; `account_profile.avatar_key` holds it,
-never a URL, and the view derives the path, as the auction's `lotImagePath`
-does.
+`contentKey("avatars", digest, ext)`, where `digest` is the SHA-256 of the
+user id followed by the bytes. Each profile owns its object, the address
+cannot be worked out from the image alone, and the same collector uploading
+the same image again writes the same key. `account_profile.avatar_key` holds
+it, never a URL, and the view derives the path, as the auction's
+`lotImagePath` does.
 
 1. The upload puts the object, then writes the row: one statement sets
    `avatar_key` and `first_saved_at`.
 2. A removal sets `avatar_key` to NULL.
 3. The store's cron runs `deleteOrphanedObjects` over the `avatars` area, whose
-   `referenced` answers which keys some `account_profile` row still holds. A
+   `referenced` answers which keys their profile's row still holds. A
    replaced or removed image, and an object whose row write failed, is deleted
    once it is a day old and unreferenced; the port re-reads an object's age
    before deleting it, so a re-uploaded key saves itself.
@@ -196,16 +203,22 @@ the address changes with the image.
 `storage_cursors`, the sweep's resume table, comes from
 `@grade10/object-store/schema` into the store schema.
 
-*Alternatives:* a random key per upload and a due row per replaced object,
-claimed by a cron pass of its own — rejected, it rebuilds what the shared
-sweep already does, and still leaves the orphan of a failed row write.
+*Alternatives:* the digest of the bytes alone — rejected, two collectors with
+one image would share an object, so a replaced image would keep answering for
+the other profile, and anyone holding the image could work out its address. An
+HMAC of the bytes under a store secret — rejected, a secret to provision and
+rotate for what the user id already gives. A random key per upload and a due
+row per replaced object, claimed by a cron pass of its own — rejected, it
+rebuilds what the shared sweep already does, and still leaves the orphan of a
+failed row write.
 Authenticated streaming per render, like the auction's proof documents —
 rejected under decisions Q1's recommendation, which product has not yet
 answered: every render becomes a worker invocation no cache
 can absorb, and a public profile would undo it. Cloudflare Images — rejected,
 a new paid dependency for one square image.
 
-Makes pass: `grade10-site-store-account-profile-SC-20`, `grade10-site-store-account-profile-SC-23`, `grade10-site-store-account-profile-SC-24`.
+Makes pass: `grade10-site-store-account-profile-SC-20`, `grade10-site-store-account-profile-SC-23`, `grade10-site-store-account-profile-SC-24`,
+`grade10-site-store-account-profile-SC-38`.
 
 ### Byte routes go through a tRPC caller, and the transport learns one body type
 
@@ -285,19 +298,23 @@ never as an error message the page would have to parse or show raw.
 - **Outcomes** — `profile.update` answers `{ outcome: "saved", profile }` or
   `{ outcome: "refused", reason }`, with `reason` one of `displayNameRequired`,
   `displayNameTooLong`, `bioTooLong`, `nothingToSave`; the avatar procedure
-  answers `saved` or `refused` with `avatarType` or `avatarTooLarge`
+  answers `{ outcome: "saved", profile }` or `refused` with `avatarType` or
+  `avatarTooLarge`
 - **Words** — the feature maps each reason to a key in the `profile` namespace
   of `@grade10/i18n`, answered in every locale; it never renders the store's
-  text. A failure that is no refusal — network, server, sign-in — takes the
-  failure words `localize-failure-copy` gives every surface, the failed read
-  included
+  text. A failure that is no refusal — network, server, sign-in — is worded by
+  the same namespace: `loadFailed` for the read, which ships today, and
+  `saveFailed` for a save; the transport's message is never shown
+- **Retry** — the failed read gives `ProfileCard`'s error state an action,
+  labelled by `common.retry`, that refetches the read
 
 *Alternatives:* judge in the feature before sending — rejected, a second judge
 that drifts from the store's. Keep schema refusals and map the tRPC error —
 rejected, the page would parse a validation message to choose its words.
 
 Makes pass: `grade10-site-store-account-profile-SC-14`, `grade10-site-store-account-profile-SC-15`, `grade10-site-store-account-profile-SC-18`,
-`grade10-site-store-account-profile-SC-21`, `grade10-site-store-account-profile-SC-22`, `grade10-site-store-account-profile-SC-29`.
+`grade10-site-store-account-profile-SC-21`, `grade10-site-store-account-profile-SC-22`, `grade10-site-store-account-profile-SC-29`,
+`grade10-site-store-account-profile-SC-31`, `grade10-site-store-account-profile-SC-32`.
 
 ### The application owns validity; the form owns none
 
@@ -305,10 +322,11 @@ Makes pass: `grade10-site-store-account-profile-SC-14`, `grade10-site-store-acco
 submission: the empty-name disable and the 80 and 500 defaults go, and
 `ProfileView` passes the limits from `@grade10/store-contracts` and reports
 the worded refusal through `error`. Making the limits required lets the compiler name every consumer.
-The input's `maxLength` and the store's schema both count UTF-16 code units,
+The bio moves from `TextInput` to the design system's `Textarea` (decisions
+Q14), and `ProfileDetails` renders it with its line breaks kept. Both fields' `maxLength` and the store's schema count UTF-16 code units,
 so the form never accepts a length the store refuses.
 
-Makes pass: `shared-ui-store-profile-SC-18`, `shared-ui-store-profile-SC-19`;
+Makes pass: `shared-ui-store-profile-SC-18`, `shared-ui-store-profile-SC-19`, `shared-ui-store-profile-SC-23`;
 `grade10-site-store-account-profile-SC-14`, `grade10-site-store-account-profile-SC-15`, `grade10-site-store-account-profile-SC-18`.
 
 ### The fallback letter is the application's, from one helper
@@ -318,23 +336,26 @@ given. The feature derives it from the display name it holds with the design
 system's `avatarInitial`, the helper the site header's account menu already
 uses, so the menu and the profile follow one rule and the fallback tracks a
 name change with no extra state. The helper reads only Latin letters and
-digits today, so `陳大文` gives `?`; decisions Q17 widens it to the first
-`\p{L}` or `\p{N}` code point, which moves the account menu and the bid
-history with it. It upper-cases that code point only where the result stays
-one character, so `ß` stays `ß`, and answers `?` for a name with neither, as
-it does today.
+digits today, so `陳大文` gives `?`, and reads only the part before an `@`
+whenever its input holds one, so the label `@kitlam` gives `?`. Decisions Q17
+widens it to the first `\p{L}` or `\p{N}` code point of the value read whole,
+and the site header passes the address before the `@`, the one caller that
+holds an email; the bid history's pseudonym and the profile's display name are
+labels. It upper-cases that code point only where the result stays one
+character, so `ß` stays `ß`, and answers `?` for a value with neither, as it
+does today.
+
+*Alternatives:* a reading flag on the helper — rejected, one caller holds an
+email and slicing it there is one expression.
 
 Makes pass: `grade10-site-store-account-profile-SC-25`, `grade10-site-store-account-profile-SC-26`, `grade10-site-store-account-profile-SC-36`;
 `shared-ui-store-profile-SC-09`, `shared-ui-store-profile-SC-10`.
 
 ## Risks / Trade-offs
 
-- **The avatar URL is a bearer handle** → its key is the digest of a
-  re-encoded image, and the route answers only while a row holds it
-  (decisions Q1).
-- **Two collectors with identical bytes share one object** → the sweep keeps
-  it while either row holds the key, and each collector's removal unserves
-  nothing the other still holds.
+- **The avatar URL is a bearer handle** → its key is the digest of the user
+  id and a re-encoded image, and the route answers only while the profile's
+  row holds it (decisions Q1).
 - **A replaced image outlives its replacement in browsers** → the edge copy is
   purged by tag, but a browser that cached the old address keeps its copy until
   its `max-age` runs out. The requirement is deletion from storage.
@@ -345,8 +366,6 @@ Makes pass: `grade10-site-store-account-profile-SC-25`, `grade10-site-store-acco
   migration matches the exact string the old `ensureAccount` wrote, and the
   read falls back only on NULL, so a miss shows a stale name rather than
   corrupting one.
-- **Bio is a single-line input** → the design system publishes no textarea
-  (decisions Q14).
 - **An account name longer than 80 characters** is shown whole as the default,
   and the store refuses it if it is sent back → under decisions Q12 answered
   (b), an untouched default is never sent; answered (a), the collector meets
@@ -373,7 +392,7 @@ reclaimed by the sweep only once a worker that runs it is back.
 
 ## Open Questions
 
-Decisions Q1, Q5, Q9 to Q16 are held for their owners. Four change this
+Decisions Q1, Q5, Q9 to Q12, Q15 and Q16 are held for their owners. Four change this
 design. Q1 decides who can open the avatar, which the account-profile delta
 does not yet state: answered as recommended, the delta gains a requirement
 excepting the image from the owner-only rule, and the serving route above
