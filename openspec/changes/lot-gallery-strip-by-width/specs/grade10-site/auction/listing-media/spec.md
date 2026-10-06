@@ -1,9 +1,12 @@
 # grade10-site/auction/listing-media Specification
 
 ## Purpose
-
-Collectors study a lot's gallery on the details page with a thumbnail rail
-when that gallery has room beside its main frame.
+How a listing's gallery images get optional alt text and named public sizes
+(`card`, `detail`, `thumb`, `zoom`) on top of the ordered one-to-eight media
+gallery defined by `grade10-admin/auction/listing`, and
+how the catalogue and details page consume those sized paths. Gallery attach,
+order, video, and the eight-item cap live in admin-listing; this capability
+covers image delivery and alt.
 
 ## Feature set
 

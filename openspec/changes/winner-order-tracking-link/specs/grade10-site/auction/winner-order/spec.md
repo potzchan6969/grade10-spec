@@ -1,9 +1,10 @@
 # grade10-site/auction/winner-order Specification
 
 ## Purpose
-
-Let a winner open the carrier's tracker from the dispatched order while the
-order is Shipped or Delivered.
+What a winner is sent after a lot closes and what they do with it: one order
+per lot, a delivery address, payment method and billing address they choose, an
+operator's invoice priced for both, payment by card or by a bank transfer they
+prove, and the receipt, tracker and delivery proof the order keeps afterwards.
 
 ## Feature set
 
