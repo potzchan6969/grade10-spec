@@ -104,10 +104,10 @@ The count SHALL NOT introduce a Cart control on a surface that omits it.
 
 ### Requirement: The cart count refreshes without opening the drawer
 
-The site SHALL review the member's basket on cart hydration, after settled
-cart mutations, and on explicit cart review or retry, even while the drawer
-is closed. Once review succeeds, the header SHALL reflect that reviewed
-basket without requiring the collector to open the drawer.
+The site SHALL review the member's basket on cart hydration and after settled
+cart mutations, with the drawer open or closed, and when the drawer opens and
+on retry after a failed review. Once review succeeds, the header SHALL reflect
+that reviewed basket without requiring the collector to open the drawer.
 
 Before the member has a verified count, pending hydration or review SHALL
 show no badge. During a later review for the same member, the header SHALL
@@ -115,7 +115,6 @@ retain that member's last verified count until the review completes, including
 when the refresh follows a failed cart update. A failed review SHALL hide the
 badge; a successful review SHALL replace it with the newly verified count.
 The header SHALL NOT show a badge skeleton or invent a count from unreviewed lines.
-The existing fresh review on drawer open SHALL remain in effect.
 
 The site SHALL NOT poll for, or subscribe to, cart changes made elsewhere.
 A change made on another device SHALL appear after the next review.
@@ -158,8 +157,8 @@ A change made on another device SHALL appear after the next review.
 - **GIVEN** a signed-in collector whose header showed `2` active lines
 - **WHEN** review of their current basket fails
 - **THEN** the header displays no count badge
-- **AND** a later explicit review or retry that succeeds with `1` active line
-  restores a badge displaying `1`
+- **AND** a later review, on opening the drawer or on retry, that succeeds
+  with `1` active line restores a badge displaying `1`
 - **AND** the Cart control stays available throughout
 
 <!-- trace:scenario id=g10.site-page-shell.SC-k7b rev=1 -->

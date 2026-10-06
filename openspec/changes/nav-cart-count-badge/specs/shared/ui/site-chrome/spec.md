@@ -4,7 +4,7 @@
 
 - Header controls
   - Cart slot: a `cartSlot` on `Nav` replaces the built-in cart control and
-    shows even with no cart handler
+    shows Cart with or without a cart handler
   - Cart count: `SiteHeader` shows a round brand indicator on the cart icon for the supplied active-line count; hidden when empty or omitted
 
 ## MODIFIED Requirements
@@ -68,11 +68,11 @@ When the application supplies `onAccountClick` and no `accountSlot`, `Nav`
 SHALL render the account control as an icon by default, or as a primary Sign In
 button when `accountPresentation` is `"sign-in"`.
 
-<!-- trace:scenario id=g10.shared-site-chrome.SC-5a2 rev=1 -->
+<!-- trace:scenario id=g10.shared-site-chrome.SC-5a2 rev=2 -->
 #### Scenario: shared-ui-site-chrome-SC-04 - A storefront with no cart
 **Serves:** Header controls - a storefront with no cart
 
-- **GIVEN** an application that supplies no cart handler
+- **GIVEN** an application that supplies neither a cart handler nor a cart slot
 - **WHEN** the header renders
 - **THEN** no cart control appears in it, and no space is reserved for one
 
@@ -176,11 +176,12 @@ continue to follow the handler-gated cart rule.
 #### Scenario: shared-ui-site-chrome-SC-22 - Cart slot replaces the built-in cart
 **Serves:** Header controls - cart slot replaces the built-in cart
 
-- **GIVEN** `Nav` with a `cartSlot` and an `onCartClick` handler
+- **GIVEN** `Nav` with a `cartSlot`, with or without an `onCartClick` handler
 - **WHEN** the header renders
 - **THEN** the slot content appears in the cart control position
 - **AND** the built-in cart icon button is not rendered
-- **AND** activating the slot content does not call `onCartClick`
+- **AND** activating the slot content runs only the slot's own action, never a
+  supplied `onCartClick`
 
 ### Requirement: SiteHeader owns the cart count badge
 

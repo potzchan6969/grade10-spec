@@ -46,7 +46,7 @@ inline label beside the title. The header overlay uses `StatusIndicator`
 | Count `1` | `StatusIndicator` brand count `1` on the cart icon | `shared-ui-site-chrome-SC-24` |
 | Count `3` | `StatusIndicator` brand count `3` (same active-line count as the drawer title) | `shared-ui-site-chrome-SC-25` |
 | Count `123` | Full digits `123`; no `99+` truncation | `shared-ui-site-chrome-SC-26` |
-| Cart slot composition | Badged cart control rendered through `Nav`'s `cartSlot` | `shared-ui-site-chrome-SC-22` |
+| Cart slot composition | Badged cart control rendered through `Nav`'s `cartSlot` | `shared-ui-site-chrome-SC-24` |
 | Cart handler absent | No cart control and no count, whatever count is supplied | `shared-ui-site-chrome-SC-41` |
 | Signed-out (no guest cart) | Cart control present once Store answers; no badge | **Out of suite:** same treatment as empty/omitted (`shared-ui-site-chrome-SC-23`); no guest count |
 | Count unknown (hydrating) | No badge until the host supplies `cartItemCount > 0` | **Out of suite:** host omits the prop or passes `0`; no loading API on `SiteHeader` |
