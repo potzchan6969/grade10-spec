@@ -1,44 +1,9 @@
+# grade10-site/site/page-shell Specification
+
 ## Feature set
 
-- Shell around every surface
-  - Header, region, footer: one wrapper the site renders every surface into,
-    not-found included
-  - Landmark structure: exactly one banner, one main, and one contentinfo on
-    the page, with the surface inside main
-  - No opinion on content: the shell adds no heading, copy, or spacing of its
-    own to what a surface renders
-- Session-independent chrome
-  - Chrome before the session: the header and the footer render before the
-    session has resolved
-  - Stable layout: no chrome control appears, disappears, or moves when the
-    session arrives
-- Account control
-  - Session-aware entry: a primary Sign In button when signed out, the
-    account icon when signed in
-  - Account menu: signed in, the icon opens Profile, My Auctions, and Sign
-    out; My Orders joins between Profile and My Auctions once Store answers;
-    the profile also offers Sign out
 - Members-only cart
   - Active-line count: header and drawer agree without opening the drawer; unknown and signed-out counts stay hidden
-  - Sign-in before the cart: the Cart control opens sign-in while no session
-    is signed in, and the drawer stays closed
-  - The cart the ask was for: the drawer opens by itself once the session
-    arrives, and nothing is left waiting when the ask is dismissed
-- Links only to real surfaces
-  - Controls with surfaces behind them: search and cart stay absent until the
-    site answers them
-  - Reachable links only: a navigation, utility, footer, or legal link appears
-    only when its destination exists, except primary-nav Help may name the
-    documentation host Product names
-  - Current-surface marking: the navigation item owning the current address is
-    marked, and none is when no item owns it
-- Collector help
-  - Header Help: primary nav lists Help after Store Locator when that item is
-    present, and after Auction on auction-only nav; Help opens the
-    documentation site in a new tab
-- Small-width resilience
-  - No horizontal overflow: the shell reflows at 375 CSS pixels with every
-    control still reachable
 
 ## MODIFIED Requirements
 
@@ -53,6 +18,7 @@ chrome SHALL. No chrome control SHALL appear, disappear, or move when the
 session arrives. The cart count badge SHALL NOT change the presence or
 position of the Cart control.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-9ud rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-04 - A first paint while the session resolves
 **Serves:** grade10-site-site-page-shell-US-02 - Collector sees the chrome before the session resolves
 
@@ -60,6 +26,7 @@ position of the Cart control.
 - **THEN** the header and the footer are already rendered
 - **AND** the content region shows that the surface is loading
 
+<!-- trace:scenario id=g10.site-page-shell.SC-yxt rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-05 - No layout shift when the session arrives
 **Serves:** grade10-site-site-page-shell-US-02 - Collector sees the chrome before the session resolves
 
@@ -68,6 +35,8 @@ position of the Cart control.
 - **THEN** the account entry matches the session (Sign In when signed out,
   account icon when signed in)
 - **AND** no other chrome control appears, disappears, or moves
+- **AND** a cart count badge that later appears for a signed-in member leaves
+  the Cart control where it was
 
 ## ADDED Requirements
 
@@ -77,8 +46,8 @@ On every surface whose header offers Cart, the site SHALL supply the header
 and drawer title with the same active-line count from the current member's
 reviewed basket. Each distinct active line SHALL count once, irrespective of
 quantity. Active lines include `default` and `adjusted` lines and exclude
-`soldOut` and `unavailable` lines, following `shared/ui/store-cart`. Checkout
-eligibility alone SHALL NOT determine the count.
+`soldOut` and `unavailable` lines. Checkout eligibility alone SHALL NOT
+determine the count.
 
 The header SHALL show the full positive count in wide and compact layouts.
 It SHALL show no count badge when the reviewed basket has no active lines.
@@ -109,19 +78,28 @@ The count SHALL NOT introduce a Cart control on a surface that omits it.
 #### Scenario: grade10-site-site-page-shell-SC-44 - The full count survives a compact header
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
-- **GIVEN** a signed-in collector whose reviewed basket has `123` active lines
+- **GIVEN** a signed-in collector whose reviewed basket has `50` active lines
 - **WHEN** a surface whose header offers Cart renders at a wide viewport or
   at `375` CSS pixels wide
-- **THEN** its Cart badge displays `123`, without truncation
+- **THEN** its Cart badge displays `50`, without truncation
 - **AND** the Cart control remains reachable without horizontal overflow
 
 <!-- trace:scenario id=g10.site-page-shell.SC-e9p rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-45 - A count does not add an unanswered Cart control
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
-- **GIVEN** a surface whose header does not offer Cart
-- **WHEN** a signed-in member has a known positive active-line count
+- **GIVEN** an auction-first build, whose header offers no Cart because Store
+  does not answer the cart drawer
+- **WHEN** a signed-in member whose cart holds active lines opens any surface
 - **THEN** the header displays neither a Cart control nor its count badge
+
+#### Scenario: grade10-site-site-page-shell-SC-55 - The count follows the collector to another surface
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector whose Store header shows `2` active lines
+- **WHEN** they move to Auction, whose header offers Cart once Store answers
+- **THEN** the Auction header's Cart badge displays `2`
+- **AND** showing it needs neither a new review nor opening the drawer
 
 ### Requirement: The cart count refreshes without opening the drawer
 
@@ -137,6 +115,9 @@ when the refresh follows a failed cart update. A failed review SHALL hide the
 badge; a successful review SHALL replace it with the newly verified count.
 The header SHALL NOT show a badge skeleton or invent a count from unreviewed lines.
 The existing fresh review on drawer open SHALL remain in effect.
+
+The site SHALL NOT poll for, or subscribe to, cart changes made elsewhere.
+A change made on another device SHALL appear after the next review.
 
 <!-- trace:scenario id=g10.site-page-shell.SC-r0e rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-46 - Hydration supplies the count with the drawer closed
@@ -190,6 +171,16 @@ The existing fresh review on drawer open SHALL remain in effect.
 - **AND** a successful review replaces it with the resulting active-line count
 - **AND** a failed review hides the badge instead
 - **AND** switching members or signing out still clears the count immediately
+
+#### Scenario: grade10-site-site-page-shell-SC-54 - A change from another device shows after the next review
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector whose header shows `2` active lines
+- **AND** the same member adds a distinct line from another device
+- **WHEN** no review of the basket runs on this device
+- **THEN** the header keeps showing `2`
+- **AND** opening the drawer reviews the basket, and the header and the drawer
+  title both display `3`
 
 ### Requirement: The cart count belongs only to the current member
 
