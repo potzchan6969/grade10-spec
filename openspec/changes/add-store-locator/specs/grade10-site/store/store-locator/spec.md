@@ -29,7 +29,8 @@ sets.
     new tab
   - No second control: no Get directions control beside the map
 - Chrome reach
-  - Header: Store Locator is the last primary-nav item, directly before Help
+  - Header: Store Locator sits directly before Help, which ends the primary
+    nav
   - Footer: Store Locator is the first link of the Help column, ahead of Docs
   - Current marking: the header marks Store Locator while the collector is on
     it
@@ -76,8 +77,8 @@ from Store home's, the browse listing's and a product page's, as
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **WHEN** the Store Locator address is fetched and no script executes
-- **THEN** the response HTML contains the Location & Hours heading, the
-  store name, the street address, and the week's hours
+- **THEN** the response HTML contains the Location & Hours heading, the map,
+  the store name, the street address, and the week's hours
 - **AND** each of them is visible on the page with no script having run
 
 <!-- trace:scenario id=g10.store-store-locator.SC-evn rev=1 -->
@@ -168,9 +169,9 @@ Locator in the header and the footer, each leading to that address. While a
 collector is on Store Locator, the header SHALL mark Store Locator as the
 current surface.
 
-**Placement** - In the header, Store Locator SHALL be the last primary
-navigation item, directly before Help. In the footer, it SHALL be the first
-link of the Help column, ahead of Docs.
+**Placement** - In the header, Store Locator SHALL sit directly before Help,
+which ends the primary nav. In the footer, it SHALL be the first link of the
+Help column, ahead of Docs.
 
 <!-- trace:scenario id=g10.store-store-locator.SC-ux5 rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-06 - Header reaches Store Locator
@@ -179,8 +180,8 @@ link of the Help column, ahead of Docs.
 - **GIVEN** a build that carries Store Locator
 - **WHEN** a collector follows Store Locator in the header
 - **THEN** Store Locator renders
-- **AND** the item they followed is the last primary navigation item,
-  directly before Help
+- **AND** the item they followed sits directly before Help, which ends the
+  primary nav
 
 <!-- trace:scenario id=g10.store-store-locator.SC-1zq rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-07 - Footer reaches Store Locator
@@ -193,7 +194,7 @@ link of the Help column, ahead of Docs.
   of Docs
 
 <!-- trace:scenario id=g10.store-store-locator.SC-l9w rev=1 -->
-#### Scenario: grade10-site-store-store-locator-SC-08 - Chrome marks Store Locator
+#### Scenario: grade10-site-store-store-locator-SC-08 - The header marks Store Locator
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **GIVEN** a collector on Store Locator
