@@ -71,9 +71,10 @@ None.
 - Manual pages: [Page Shell · Account Menu](../../../docs/prds/products/grade10-site/site/page-shell.md#account-menu),
   [Site Header and Footer · Account Entry](../../../docs/prds/products/shared/ui/site-chrome.md#account-entry)
   and [Post-Bidding · My Auction Orders](../../../docs/prds/products/grade10-site/auction/post-bidding.md#my-auction-orders).
-- `nav-cart-count-badge`: its deltas keep only the feature-set lines they
-  change (Q12). Its review branch lands on `main` before this change is
-  accepted, so neither fold puts back the other's old lines.
+- `nav-cart-count-badge`: accepted before this change (`depends_on`), so
+  its 'A control renders only when it can act' carries the cart slot this
+  Handler-gated line names. Its deltas keep only the feature-set lines they
+  change (Q12), so neither fold puts back the other's old lines.
 
 ## Open questions
 
