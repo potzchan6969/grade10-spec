@@ -51,6 +51,10 @@ header's gating. grade10 already meets both, so its settled work is tests
 that pass on arrival and guard the wiring from here on. Only Q1's answer can
 add a code line (below).
 
+The current-surface requirement only names the account page in place of the
+profile: `grade10-site-site-page-shell-SC-14` moves to revision 2, and no
+grade10 test cites it or its case.
+
 **Rejected:** a menu table in `SiteShell` mapping each item to its gate.
 Three props with one ternary each say the same thing with no indirection.
 
@@ -81,7 +85,7 @@ table calls it unchanged. The app's citations move with them (task 2.1 to 2.4).
 | `grade10-site-site-page-shell-SC-29` | `grade10-site-site-page-shell-SC-60`, the exact auction-launch menu |
 | `grade10-site-site-page-shell-SC-30`, `grade10-site-site-page-shell-SC-33` | `grade10-site-site-page-shell-SC-61`, `grade10-site-site-page-shell-SC-62`, unchanged in meaning |
 | `grade10-site-site-page-shell-SC-31` | Nothing: the site always has the email (Context), so the label fallback is `SiteHeader`'s alone, held by `shared-ui-site-chrome-SC-35` |
-| `grade10-site-site-page-shell-SC-32`, `grade10-site-site-page-shell-SC-34` | Nothing: Membership's place is ❓ (Q5) and the app never offered it; `grade10-site-site-page-shell-SC-63` keeps the settled half, no Membership where its page is withheld |
+| `grade10-site-site-page-shell-SC-32`, `grade10-site-site-page-shell-SC-34` | Nothing: Membership's place is open (Q5) and the app never offered it; `grade10-site-site-page-shell-SC-63` keeps the settled half, no Membership where its page is withheld |
 | None | `grade10-site-site-page-shell-SC-64` and `grade10-site-site-page-shell-SC-65`, the My Orders and My Auctions destinations the old requirement stated without a scenario |
 
 Account-page Sign Out lives only in `The account control leads where the
@@ -98,7 +102,11 @@ rather than waiting on a story. No consumer adapts: grade10 supplies
 neither, and zzz renders its own header.
 
 `shared-ui-site-chrome-SC-39` drops its withheld-address line: `SiteHeader`
-never routes, which **No application state** already requires.
+never routes, which **No application state** already requires. The
+requirement states activation once, "Activating each item SHALL invoke the
+matching supplied handler", and `shared-ui-site-chrome-SC-43` gives My
+Orders the scenario Profile and Membership already have; it passes on
+arrival.
 
 **Rejected:** naming a sixth item in the fixed order. It keeps a prop for a
 destination no product offers.
@@ -112,8 +120,9 @@ contract only.
 
 ### Profile Follows Q1
 
-Acceptance waits on Q1. Either answer adds a clause and a scenario to the
-page-shell delta; group 3 carries the matching row.
+Q1's answer lands on Page Shell, `decisions.md` and the page-shell delta
+before acceptance: the planning rerun that writes it keeps the chosen row
+below, deletes the other, and leaves group 3 with that row's tasks.
 
 | Q1 answer | page-shell delta adds | grade10 |
 | --- | --- | --- |

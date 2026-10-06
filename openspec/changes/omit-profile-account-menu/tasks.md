@@ -3,22 +3,22 @@
 - [ ] 1.1 Tests first, in their own commit: a type test beside
       `packages/ui/src/blocks/site-chrome/site-header.tsx` asserting with
       `expectTypeOf` that `SiteHeaderProps` has no `onOrders` and
-      `SiteHeaderCopy` no `orders` (`shared-ui-site-chrome-SC-42`)
+      `SiteHeaderCopy` no `orders` (`shared-ui-site-chrome-SC-42`); and a
+      play in an account-menu story that clicks My Orders and asserts
+      `onMyOrders` is invoked once and no other handler is
+      (`shared-ui-site-chrome-SC-43`)
 - [ ] 1.2 Remove `onOrders` and `copy.orders` from `SiteHeaderProps` and
       `SiteHeaderCopy`, with their render path and the docstring's Orders
       sentence (`shared-ui-site-chrome-SC-17`,
       `shared-ui-site-chrome-SC-42`). The commit stops at the Design Override
       hook; it changes no drawn state, so show the person
       its lines and add the trailer only on their yes
-- [ ] 1.3 Waits on Q7. In the account-menu story Q7 settles, with every
-      handler supplied, assert in its play that the menu lists Profile, My
-      Orders, My Auctions, Membership, then Sign Out, and nothing else
-      (`shared-ui-site-chrome-SC-17`)
-- [ ] 1.4 Page Shell · Account Menu: write Q1's answer over the ❓ Profile
-      line and its decisions row - unmarked on "wherever carried", which
-      already runs; 🚧 on "never", which group 3 delivers - and take
-      `page_waived` off `.openspec.yaml`
-- [ ] 1.5 Verify: `pnpm --filter @grade10/ui run typecheck`,
+- [ ] 1.3 In the account-menu story Q7 names, with every handler supplied,
+      assert in its play that the menu lists Profile, My Orders, My
+      Auctions, Membership, then Sign Out, and nothing else
+      (`shared-ui-site-chrome-SC-17`). The planning rerun that writes Q7's
+      answer names the story here before acceptance
+- [ ] 1.4 Verify: `pnpm --filter @grade10/ui run typecheck`,
       `pnpm --filter @grade10/ui exec vitest run --project storybook src/blocks/site-chrome`,
       `pnpm check:manual` and `pnpm run lint`
 
@@ -62,8 +62,9 @@ Menu Requirement Is Replaced.
 
 ## 3. Profile by Q1 (grade10)
 
-Waits on Q1 and the scenario its row adds; `tech-design.md` § Profile
-Follows Q1 holds both rows.
+`tech-design.md` § Profile Follows Q1 holds both rows. The planning rerun
+that writes Q1's answer keeps its row's tasks and deletes the other before
+acceptance.
 
 - [ ] 3.1 Tests first, in their own commit, citing the scenarios Q1's row
       adds: on "wherever carried", Profile first with `profile` open and
