@@ -22,11 +22,15 @@ document rules into either application.
 
 - **The application** resolves the document data, amounts, dates, time zone,
   payment rails, and copy, then passes them to the renderer
+- 🚧 **GMT+8** — every date on the invoice and the receipt is Hong Kong
+  time, labelled GMT+8
 - **The block** lays out the supplied content and returns PDF bytes; it does not
   fetch, store, navigate, calculate totals, or import application copy
 - **UI design** is waived because this change moves an existing PDF renderer
   into the shared package contract and does not add a reader-facing state or
   layout
+
+::changes{spec="shared/ui/invoice-and-receipt-pdf"}
 
 :::detail{title="Code map" for="engineer"}
 - **Exports** - `InvoicePdf` and `ReceiptPdf` in `packages/ui`

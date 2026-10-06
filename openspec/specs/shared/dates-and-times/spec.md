@@ -13,12 +13,12 @@ It also governs the one place the traffic runs the other way — a calendar day
 an operator types into a date field, which carries no time and no zone and
 has to become instants before a worker can store it.
 
-Which zone a reader's machine is in is not consulted anywhere. An instant is
-stated in the zone the surface names: operator tables and admin surfaces state
-the platform's UTC, a collector's activity time and local moments state the
-zone the reader has told us, and a message states the brand's. A calendar day
-is always judged on the brand's own zone, because a day is a fact about where
-the business stands rather than about where its reader does.
+Which zone a reader's machine is in is the collector clock: an instant on a
+collector surface is stated in the viewer's local zone. Operator tables and
+admin surfaces state the platform's UTC. A message, invoice, receipt, or
+terms page states the brand's zone as GMT+8. A calendar day is always judged
+on the brand's own zone, because a day is a fact about where the business
+stands rather than about where its reader does.
 
 ## Feature set
 
@@ -30,9 +30,9 @@ the business stands rather than about where its reader does.
   - Platform format: ordering and punctuation are the platform's, not a browser's configuration
   - Named language: every rendering accepts the language its words are drawn from, English where none is named
 - Stated zones
-  - No reader's zone: no rendering uses the zone the reader's machine is set to; a collector's zone is one they stated
   - UTC for operators: operator tables and admin surfaces state Coordinated Universal Time
-  - Reader zone for collectors: activity time and local moments use the stated reader time zone
+  - Reader zone for collectors: activity time and local moments use the viewer's local time zone
+  - Documents as GMT+8: invoices, receipts, terms and emails state Asia/Hong_Kong as GMT+8
   - The brand's day: a calendar judgement — a contract's date, a due date, a "today" queue, an age, a document's expiry, a report's month — is made on the brand's zone
   - Named deadlines: an instant a reader is expected to act before names the zone it is stated in
 - Refusals
@@ -157,11 +157,12 @@ with an error. No surface SHALL render placeholder text in place of a date.
 
 ### Requirement: Each rendering states the zone its surface requires
 
-Every instant the platform renders SHALL be stated in one named zone, and no
-rendering SHALL use the zone the reader's machine is set to unless that zone
-was supplied as the reader's stated zone. Operator tables and admin surfaces
-SHALL state Coordinated Universal Time. Collector-facing activity time and
-local moments SHALL state the reader's stated `timeZone`.
+Every instant the platform renders SHALL be stated in one named zone.
+Collector-facing activity time, local moments, and collector deadlines SHALL
+use the viewer's local zone, supplied as `timeZone` (the zone the reader's
+environment is in). Operator tables and admin surfaces SHALL state Coordinated
+Universal Time. Invoice and receipt PDFs, terms, and emails SHALL state
+Asia/Hong_Kong.
 
 A surface that states a calendar day SHALL name the brand's zone, so the day
 it shows is the day the brand's own counter, paper and records are on.
@@ -231,57 +232,60 @@ it falls on is a question asked when it is read.
 
 ### Requirement: A deadline names its time zone
 
-Any rendering of an instant a reader is expected to act before SHALL name the
-time zone it is stated in. An auction's close is such an instant on every
-surface that shows it.
+A deadline on a collector surface SHALL use the viewer's local zone. When it
+names the zone, the name SHALL be that viewer's short name at that instant
+(`HKT`, `EDT`). It SHALL NOT pin `HKT` for every reader. Relative remaining
+time SHALL carry no zone.
 
-The name SHALL be the one the language gives that zone, which for a zone
-English has no abbreviation for is its offset (`GMT+8` for Hong Kong).
+A deadline on an invoice, receipt, terms page, or email SHALL be stated in
+Asia/Hong_Kong and SHALL name **GMT+8**.
 
 <!-- trace:scenario id=g10.shared-dates-and-times.SC-jjl rev=1 -->
 #### Scenario: shared-dates-and-times-SC-12 - The auction page shows a close
-**Serves:** Stated zones - a deadline names its zone
+**Serves:** Stated zones - a collector deadline follows the viewer
 
 - **GIVEN** a listing open for bids
-- **WHEN** its close time is rendered on the auction page
-- **THEN** the rendering names the zone it is stated in
-- **AND** a reader whose machine is set to another zone sees that same name
+- **WHEN** its close time is rendered on the auction page for two viewers in different zones
+- **THEN** each rendering uses that viewer's local clock
+- **AND** each names that viewer's short zone
+- **AND** the New York rendering is not suffixed `HKT`
 
 <!-- trace:scenario id=g10.shared-dates-and-times.SC-k76 rev=1 -->
-#### Scenario: shared-dates-and-times-SC-13 - A page and a message agree
-**Serves:** Stated zones - a page and a message name one zone
+#### Scenario: shared-dates-and-times-SC-13 - A page and a message disagree on the zone name
+**Serves:** Stated zones - mail names GMT+8; the page follows the viewer
 
 - **GIVEN** the same listing's close shown on the auction page and in an auction email
 - **WHEN** both are rendered
-- **THEN** both name the zone they are stated in
-- **AND** both use the deadline shape
+- **THEN** the email states Asia/Hong_Kong as GMT+8
+- **AND** the page states the viewer's local moment
 
 <!-- trace:scenario id=g10.shared-dates-and-times.SC-upi rev=1 -->
 #### Scenario: shared-dates-and-times-SC-14 - A closed listing
-**Serves:** Stated zones - a closed listing names its zone
+**Serves:** Stated zones - a closed listing follows the viewer
 
 - **GIVEN** a listing that has already closed
-- **WHEN** its close time is rendered
-- **THEN** the rendering names the time zone it is stated in
+- **WHEN** its close time is rendered on a collector surface
+- **THEN** the rendering uses the viewer's local clock
+- **AND** it names that viewer's short zone
 
 ### Requirement: A message the platform sends states one zone
 
 A date rendered into a message the platform sends — an email, a notification
-— SHALL name the zone it is stated in, and SHALL be worded in English
-regardless of where the message is opened.
+— SHALL be stated in Asia/Hong_Kong, SHALL name **GMT+8**, and SHALL be worded
+in English regardless of where the message is opened.
 
 A message is composed once and read anywhere, so it has no reader whose
-language could be used, and the zone it states is the brand's, so the date a
-borrower reads in a message is the date their shop's paper names.
+language could be used, and the zone it states is the brand's, so every
+recipient reads the same Hong Kong clock labelled GMT+8.
 
 <!-- trace:scenario id=g10.shared-dates-and-times.SC-v5n rev=1 -->
-#### Scenario: shared-dates-and-times-SC-15 - An auction email states its zone
-**Serves:** Sent messages - a message states its zone
+#### Scenario: shared-dates-and-times-SC-15 - An auction email states GMT+8
+**Serves:** Sent messages - a message states GMT+8
 
 - **GIVEN** an auction email carrying a close time
 - **WHEN** the message is rendered
-- **THEN** the time is stated in one fixed zone
-- **AND** the rendering names that zone
+- **THEN** the time is stated in Asia/Hong_Kong
+- **AND** the rendering names `GMT+8`
 
 <!-- trace:scenario id=g10.shared-dates-and-times.SC-ufn rev=1 -->
 #### Scenario: shared-dates-and-times-SC-16 - Two recipients read one time
@@ -290,6 +294,7 @@ borrower reads in a message is the date their shop's paper names.
 - **GIVEN** two recipients of the same auction email in different countries and different zones
 - **WHEN** each opens the message
 - **THEN** both read the same text for the close time
+- **AND** that text names `GMT+8`
 
 ### Requirement: A typed calendar day covers that whole day
 
@@ -368,20 +373,19 @@ invoking.
 ### Requirement: A local moment renders for collectors without naming UTC
 
 A **local moment** SHALL render an instant on collector-facing surfaces in the
-reader's stated `timeZone` with shape `DD Mon YYYY, HH:MM`, month names from
-`locale`, and no zone suffix.
+viewer's `timeZone` with shape `DD Mon YYYY, HH:MM`, month names from
+`locale`, and no `UTC` or `HKT` suffix.
 
-Operator tables, admin surfaces, and sent messages SHALL continue to use the UTC
-moment and deadline shapes that name the zone.
+Operator tables and admin surfaces SHALL continue to use the UTC moment shape.
 
 <!-- trace:scenario id=g10.shared-dates-and-times.SC-uu7 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-23 - Two zones read different clocks
-**Serves:** Stated zones - a collector reads their stated zone
+**Serves:** Stated zones - a collector reads their local zone
 
 - **GIVEN** the same instant rendered for readers in `Asia/Hong_Kong` and `America/New_York`
 - **WHEN** each reads it as a local moment in English
 - **THEN** the clock values differ
-- **AND** neither string contains `UTC`
+- **AND** neither string contains `UTC` or `HKT`
 
 ### Requirement: Activity time composes relative and local moment
 
@@ -396,3 +400,13 @@ days and SHALL fall back to local moment otherwise.
 - **WHEN** both are rendered as activity time in English for `Asia/Hong_Kong`
 - **THEN** the recent instant uses the relative minutes tier
 - **AND** the older instant uses the local moment shape `DD Mon YYYY, HH:MM`
+
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-loc rev=1 -->
+#### Scenario: shared-dates-and-times-SC-29 - Two collectors read different collector clocks
+**Serves:** Stated zones - collector surfaces use the viewer's zone
+
+- **GIVEN** the same instant rendered for collectors in `Asia/Hong_Kong` and `America/New_York`
+- **WHEN** each reads it as a collector deadline
+- **THEN** the clock values differ
+- **AND** the Hong Kong string names `HKT`
+- **AND** the New York string names `EDT` and does not contain `HKT`
