@@ -9,7 +9,7 @@
 - [ ] 2.1 Keep `ListingLotGallery`'s rail decision in its local gallery container and preserve the active image and controls across presentations `shared-ui-auction-listing-SC-47`, `shared-ui-auction-listing-SC-48`, `shared-ui-auction-listing-SC-49`, `shared-ui-auction-listing-SC-56`
 - [ ] 2.2 Update the shared-gallery stories and Grade10 site details-page evidence for wide and stacked containers `grade10-site-auction-listing-media-SC-29`, `grade10-site-auction-listing-media-SC-30`
 
-## 3. Verify the collector details gallery (grade10)
+## 3. Verify the collector details gallery (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Run focused package and Storybook checks for rail selection, stacked chevrons and progress, one image, and empty gallery states `shared-ui-auction-listing-SC-47`, `shared-ui-auction-listing-SC-48`, `shared-ui-auction-listing-SC-49`, `shared-ui-auction-listing-SC-56`
 - [ ] 3.2 Verify the details page still requests thumbnail size only with a visible rail, keeps main and zoom image behavior, and updates automated one-image and empty-gallery coverage for no navigation `grade10-site-auction-listing-media-SC-22`, `grade10-site-auction-listing-media-SC-27`, `grade10-site-auction-listing-media-SC-28`, `grade10-site-auction-listing-media-SC-29`, `grade10-site-auction-listing-media-SC-30`
