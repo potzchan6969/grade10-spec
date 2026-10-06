@@ -46,6 +46,7 @@
  */
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { storeMain } from "../../../scripts/openspec/store-main.mjs";
 import { walkFiles } from "../src/store/disk.mts";
 import {
   mergeGitIndexes,
@@ -125,6 +126,24 @@ const EMPTY_CONFIG = {
  * point at it. Lint runs the whole check on the same push, so the family
  * still fails the pull request that wrote it.
  */
+/** Store files as `main` carries them, read in one git call: what `cited`
+ * holds a rounds record's kept rows against. Nothing where the store has no
+ * `main`. */
+function mainReader(store, index) {
+  return async (paths) => {
+    const main = storeMain(store, { fetch: false });
+    if (!main || paths.length === 0) return new Map();
+    const refs = paths.map((path) => `${main.commit}:${path}`);
+    const blobs = await index.readBlobs(refs);
+    const texts = new Map();
+    paths.forEach((path, at) => {
+      const text = blobs.get(refs[at]);
+      if (text !== undefined) texts.set(path, text);
+    });
+    return texts;
+  };
+}
+
 export async function runChecks(
   target,
   git,
@@ -196,7 +215,7 @@ export async function runChecks(
     checkCoverage(ctx, shape);
     checkUnwritten(ctx, changes, shape);
     checkAcceptance(ctx, shape);
-    checkCited(roots.store, add);
+    await checkCited(roots.store, add, mainReader(roots.store, index));
     checkWalked(ctx, shape, changes);
     checkRole(ctx, shape);
     const folded = checkSpecShape(roots.store, shape, add);
