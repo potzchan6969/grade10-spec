@@ -114,7 +114,7 @@ judges, and no longer a collector deadline's day, which
       `pnpm run validate:changes align-collector-times-to-local-zone` and
       `pnpm check:manual`.
 
-## 3. Bump the store and state sent messages in GMT+8 (grade10)
+## 3. Bump the store and state sent messages in GMT+8 (grade10) (owner: @sean)
 
 Needs group 2 landed on the store's main, and `external/grade10-spec` bumped to
 it, before it starts. The store pin, `2608abf84`, is behind store main, so the
