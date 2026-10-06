@@ -51,5 +51,45 @@
         "grade10"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@htonyl",
+    "reviewedAt": "2026-10-06T17:08:40Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The trace-ID migration adds identifiers to existing bid-increment cases, including the ceiling case, without changing its steps or asserted outcome."
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "Later gallery, viewer-time, and bid-history acceptance cases share this whole-file target; the custom-maximum ceiling cases retain their assertions and traceability.",
+        "evidence": [
+          "9gag/grade10@1b89b6f00e590c6b41730d0142eb22d4ac6b95fd: apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Later accepted gallery, time-display, and bid-history capabilities extend the shared surface without changing the custom-maximum ceiling contract.",
+        "evidence": [
+          "9gag/grade10@1b89b6f00e590c6b41730d0142eb22d4ac6b95fd: apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Requirement: Custom maximum entry respects a major-unit ceiling"
+        ],
+        "classification": "editorial",
+        "reason": "The requirement's wording and scenarios are unchanged; the only difference is the trace-ID migration that names its existing scenarios."
+      }
+    ]
+  }
 }
