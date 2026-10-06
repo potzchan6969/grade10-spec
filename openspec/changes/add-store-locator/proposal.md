@@ -20,8 +20,8 @@ delivery sets the baseline.
 - **Map opens Google Maps** for that address, in a new tab; no separate Get
   directions control
 - **Chrome reaches it** — header and footer Store Locator lead to the page
-  wherever the build carries the store, last in the primary nav before Help
-  and first in the footer's Help column, and chrome marks it while the
+  wherever the build carries the store, directly before Help, which ends the
+  primary nav, and first in the footer's Help column, and the header marks it while the
   collector is there
 - **Waits with the store** — Store Locator joins the store's set in
   `grade10-site/site/carried-surfaces`, so the route, the chrome items and the
@@ -67,12 +67,15 @@ See [Non-Goals](decisions.md#non-goals).
   supplied. Consumer: grade10
   `packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductView.tsx:132`,
   which passes neither today, so both labels are `#` links; it passes the
-  Store Locator address as `pickupHref`
+  Store Locator address as `pickupHref`. Consumer: `apps/preview/src/store-product`,
+  whose product detail passes the workbench's Store Locator story as
+  `pickupHref`
 - **`@grade10/ui` first-paint reveal** — `blocks/shared/use-first-paint-reveal.ts`
   hides content in the server markup until an effect runs; Store Locator needs
   it visible without scripts, and the fix in the shared module reaches every
-  block that uses it: order details, order history, auction record and winner
-  order
+  user: the order details, order history, auction record and winner order
+  blocks, the preview's Store Locator page story, which imports it by relative
+  path, and the preview page stories that wait on the blocks' `data-revealed`
 - **`@grade10/design-system`** — primitives only (`VStack`, existing layout);
   no new primitive variants
 - **`@grade10/i18n`** — page copy and head title and description in the
@@ -83,12 +86,16 @@ See [Non-Goals](decisions.md#non-goals).
   `apps/frontend/grade10/src/surfaces.ts`, the sitemap entry, `addressHead`
   and the chrome destinations; the path is Q9
 - **grade10 chrome fix, before this change** — the footer's Store Locator
-  link and the listing's utility row point at `#` on staging store builds; a
-  `fix` commit in grade10 omits them until their pages answer
+  link and the listing's utility row point at `#` on staging store builds
+  (grade10 `apps/frontend/grade10/src/chrome/siteContent.ts:100-104`,
+  `:183-186`); a `fix` commit in grade10, run through the bug rounds
+  (`docs/governance/bug-fixes.md`) with a regression test that a carried-store
+  build draws no `#` chrome link, omits them until their pages answer
 - **`redesign-store-product-detail-page`** — its delta's Item facts and
   `grade10-site-store-product-page-SC-15` defer to this change's Free pick-up
-  requirement: the store name opens Store Locator and Shipping fee is text, so
-  either acceptance order folds one rule
+  requirement: the store name opens Store Locator and Shipping fee is text.
+  The redesign cites that requirement, so it is accepted after this change, as
+  its `depends_on` records
 - **Crawlers** — the sitemap gains the Store Locator address wherever the
   store is carried; no crawlable-pages delta
 
@@ -103,6 +110,16 @@ No platform impact: no cross-product path.
   the Hong Kong shop
 - GRADE as a chrome destination, if Product wants it beside Store Locator
 - Public phone and holiday hours once Operations names them (Q13)
+- The lanes in `grade10-site/site/carried-surfaces`, as its own change: the
+  requirement names no staging-2 or uat lane and no front door or grading
+  gate, and carries the front door on every lane, while the site and the
+  Carried Surfaces page have staging-2 and uat lanes and both gates, and
+  withhold the front door on uat and production (grade10
+  `apps/frontend/grade10/src/surfaces.ts:343-399`). That change brings the
+  table and `grade10-site-site-carried-surfaces-SC-24`, which carries the front
+  door on production, to the page's The site's lanes decision. This change
+  republishes the requirement unchanged apart from the Store Locator row, and
+  rebases on that change if it lands first
 - The store-product blocks' export contract under `shared/ui`, so a later
   prop change to `StoreProductMetadata` and its siblings has a delta to land
   in; today only the site-level product page carries its behaviour
@@ -124,6 +141,7 @@ No platform impact: no cross-product path.
 - [Store Locator · From Elsewhere](../../../docs/prds/products/grade10-site/store/store-locator.md#from-elsewhere)
 - [Store Locator · Shop](../../../docs/prds/products/grade10-site/store/store-locator.md#shop)
 - [Store Locator Block](../../../docs/prds/products/shared/ui/store-locator.md)
+- [Store Locator Block · Designs](../../../docs/prds/products/shared/ui/store-locator.md#designs)
 - [Page Shell](../../../docs/prds/products/grade10-site/site/page-shell.md)
 - [Product Details · Free Pick-up](../../../docs/prds/products/grade10-site/store/product-page.md#free-pick-up)
 - [Crawlable Pages](../../../docs/prds/products/grade10-site/site/crawlable-pages.md)
