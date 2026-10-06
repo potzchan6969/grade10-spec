@@ -51,4 +51,33 @@ function monthInstant(month: string): number {
   return Date.UTC(year, monthIndex, 1);
 }
 
-export { datesOf, dayOf, monthInstant, shiftMonth, weekdayOf };
+function dateFromMonth(month: string): Date {
+  const { year, monthIndex } = parseMonth(month);
+  return new Date(year, monthIndex, 1);
+}
+
+function monthFromDate(date: Date): string {
+  return formatMonth(date.getFullYear(), date.getMonth());
+}
+
+function dateFromDay(date: string): Date {
+  const match = DATE.exec(date);
+  if (!match) throw new Error(`Not a date: ${date}`);
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function dayFromDate(date: Date): string {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+export {
+  dateFromDay,
+  dateFromMonth,
+  datesOf,
+  dayFromDate,
+  dayOf,
+  monthFromDate,
+  monthInstant,
+  shiftMonth,
+  weekdayOf,
+};

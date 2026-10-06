@@ -43,18 +43,28 @@ export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Times in HKT")).toBeInTheDocument();
-    expect(canvas.getByText("September 2026")).toBeInTheDocument();
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "September",
+    );
+    expect(canvas.getByRole("combobox", { name: /year/i })).toHaveTextContent(
+      "2026",
+    );
+    expect(canvas.getByRole("grid")).toBeVisible();
 
-    const sunday = canvas.getByRole("button", { name: "6" });
+    const sunday = canvas.getByRole("button", { name: /September 6th, 2026/ });
     expect(sunday).toBeDisabled();
-    expect(sunday).toHaveAttribute("aria-pressed", "false");
+    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
+      "3",
+    );
 
-    await userEvent.click(canvas.getByRole("button", { name: "4" }));
-    expect(args.onSelectDay).toHaveBeenCalledWith("2026-09-04");
-
-    expect(canvas.queryByRole("button", { name: "11:00" })).toBeNull();
-    await userEvent.click(canvas.getByRole("button", { name: "10:15" }));
+    expect(canvas.queryByRole("radio", { name: /^11:00/ })).toBeNull();
+    await userEvent.click(canvas.getByRole("radio", { name: /^10:15/ }));
     expect(args.onSelectSlot).toHaveBeenCalledWith(SEPTEMBER_3_SLOTS[1]);
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: /September 4th, 2026/ }),
+    );
+    expect(args.onSelectDay).toHaveBeenCalledWith("2026-09-04");
   },
 };
 

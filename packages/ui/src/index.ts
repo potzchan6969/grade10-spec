@@ -13,11 +13,6 @@ export {
   type BookingDetailsFormProps,
 } from "./blocks/appointment-booking/booking-details-form";
 export {
-  BookingList,
-  type BookingListCopy,
-  type BookingListProps,
-} from "./blocks/appointment-booking/booking-list";
-export {
   BookingLocationPicker,
   type BookingLocationPickerCopy,
   type BookingLocationPickerProps,
@@ -38,11 +33,6 @@ export {
   type BookingSlotPickerProps,
 } from "./blocks/appointment-booking/booking-slot-picker";
 export {
-  BookingSteps,
-  type BookingStepsCopy,
-  type BookingStepsProps,
-} from "./blocks/appointment-booking/booking-steps";
-export {
   BookingSummary,
   type BookingSummaryCopy,
   type BookingSummaryProps,
@@ -57,7 +47,6 @@ export type {
   BookingRecordState,
   BookingService,
   BookingSlot,
-  BookingStep,
 } from "./blocks/appointment-booking/types";
 // shared/ui/invoice-and-receipt-pdf
 export {

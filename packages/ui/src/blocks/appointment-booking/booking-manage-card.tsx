@@ -1,9 +1,3 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
@@ -17,6 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import { cn } from "@grade10/design-system/lib/utils";
+import { MapPin } from "@phosphor-icons/react";
 import { type ReactNode, useState } from "react";
 import type { LocaleProps } from "./booking-copy";
 import { BookingStateBadge } from "./booking-state-badge";
@@ -72,26 +68,44 @@ function BookingManageCard({
   }
 
   return (
-    <Card className={className} data-slot="booking-manage-card">
-      <CardHeader>
-        <CardTitle>{record.service}</CardTitle>
-        <BookingStateBadge
-          label={copy.state[record.state]}
-          state={record.state}
-        />
-      </CardHeader>
-      <CardContent>
+    <div
+      className={cn("rounded-2xl border border-border px-5 py-5", className)}
+      data-slot="booking-manage-card"
+    >
+      <div
+        className={
+          live
+            ? "grid gap-6 lg:grid-cols-[minmax(0,1fr)_13.5rem] lg:items-start lg:gap-10"
+            : undefined
+        }
+      >
         <VStack gap="md" hAlign="stretch">
+          <HStack gap="sm" vAlign="center">
+            <Text as="h2" size="lg" weight="medium">
+              {record.service}
+            </Text>
+            <BookingStateBadge
+              label={copy.state[record.state]}
+              state={record.state}
+            />
+          </HStack>
           <VStack gap="none" hAlign="stretch">
             <Text as="span" size="xs" tone="secondary">
               {copy.location}
             </Text>
-            <Text as="span" weight="medium">
-              {record.location}
-            </Text>
-            <Text as="span" size="sm" tone="secondary">
-              {record.address}
-            </Text>
+            <HStack gap="xs" vAlign="start">
+              <span className="mt-0.5 shrink-0 text-primary">
+                <MapPin aria-hidden size={16} />
+              </span>
+              <VStack gap="none" hAlign="start">
+                <Text as="span" weight="medium">
+                  {record.location}
+                </Text>
+                <Text as="span" size="sm" tone="secondary">
+                  {record.address}
+                </Text>
+              </VStack>
+            </HStack>
           </VStack>
           <VStack gap="none" hAlign="stretch">
             <Text as="span" size="xs" tone="secondary">
@@ -117,30 +131,30 @@ function BookingManageCard({
               {error}
             </Text>
           ) : null}
-          {live ? (
-            <HStack gap="sm">
-              <Button
-                disabled={pending}
-                onClick={onMove}
-                size="md"
-                type="button"
-                variant="secondary"
-              >
-                {copy.move}
-              </Button>
-              <Button
-                disabled={pending}
-                onClick={() => setConfirming(true)}
-                size="md"
-                type="button"
-                variant="outline"
-              >
-                {copy.cancel}
-              </Button>
-            </HStack>
-          ) : null}
         </VStack>
-      </CardContent>
+        {live ? (
+          <VStack className="lg:pt-1" gap="sm" hAlign="stretch">
+            <Button
+              disabled={pending}
+              onClick={onMove}
+              size="md"
+              type="button"
+              variant="secondary"
+            >
+              {copy.move}
+            </Button>
+            <Button
+              disabled={pending}
+              onClick={() => setConfirming(true)}
+              size="md"
+              type="button"
+              variant="ghost"
+            >
+              {copy.cancel}
+            </Button>
+          </VStack>
+        ) : null}
+      </div>
       {confirming ? (
         <Dialog onOpenChange={setConfirming} open>
           <DialogContent showCloseButton={false}>
@@ -172,7 +186,7 @@ function BookingManageCard({
           </DialogContent>
         </Dialog>
       ) : null}
-    </Card>
+    </div>
   );
 }
 
