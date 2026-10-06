@@ -1,4 +1,4 @@
-## 1. Product record (grade10-spec)
+## 1. Product record (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Update the auction management and listing display pages for first-save
   code allocation, the title-and-code generated slug, retained-address note,
