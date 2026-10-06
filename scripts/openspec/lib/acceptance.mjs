@@ -37,6 +37,7 @@ import {
 } from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
+import { foldGroups, holding, labelOf, splitGroups } from "./feature-set.mjs";
 import { foldChecks, purposeOf } from "./fold-checks.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
@@ -346,51 +347,24 @@ function readRetiredIds(sections) {
 function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   const delta = deltaSections(deltaText);
   const deltaFeature = sectionByName(delta, "Feature set");
-  const removedFeature = sectionByName(delta, "REMOVED Feature set");
-  const splitGroups = (raw) => {
-    const groups = new Map();
-    let items = null;
-    for (const line of raw.split("\n")) {
-      if (/^-\s+/.test(line)) {
-        const group = line.trim();
-        if (!groups.has(group)) groups.set(group, []);
-        items = groups.get(group);
-      } else if (!items || line.trim() === "") continue;
-      else if (/^ {2}-\s+/.test(line) || items.length === 0) items.push([line]);
-      else items.at(-1).push(line);
-    }
-    return groups;
-  };
-  const removedGroupNames = (removedFeature?.raw ?? "")
-    .split("\n")
-    .filter((line) => /^-\s+/.test(line))
-    .map((line) => line.trim());
-  const removedGroups = splitGroups(removedFeature?.raw ?? "");
-  if (!deltaFeature && removedGroups.size === 0) return currentSpec;
+  const removedRaw = sectionByName(delta, "REMOVED Feature set")?.raw ?? "";
+  const removing = splitGroups(removedRaw).size > 0;
+  if (!deltaFeature && !removing) return currentSpec;
   const currentFeature = sectionByName(
     deltaSections(currentSpec),
     "Feature set",
   );
-  if (!currentFeature && removedGroups.size > 0)
+  if (!currentFeature && removing)
     throw new Error(
       `${capability}: cannot remove a Feature set group without a durable Feature set`,
     );
   if (!currentFeature) {
     return `${currentSpec.replace(/\n*$/, "\n\n")}## Feature set${deltaFeature.raw ? `\n\n${deltaFeature.raw}` : ""}\n`;
   }
-  const textOf = (item) => item.map((line) => line.trim()).join(" ");
-  const labelOf = (item) => {
-    const text = item[0].trim().replace(/^-\s+/, "");
-    const match = /^\*\*([^*]+?):?\*\*|^([^:`]+):(?=\s|$)/.exec(text);
-    return (match?.[1] ?? match?.[2])?.trim() || null;
-  };
-  const baseGroups = splitGroups(currentFeature?.raw ?? "");
-  const deltaGroups = splitGroups(deltaFeature?.raw ?? "");
-  const holding = (pool, label) =>
-    label
-      ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
-      : [];
   if (priorText) {
+    const baseGroups = splitGroups(currentFeature.raw);
+    const deltaGroups = splitGroups(deltaFeature?.raw ?? "");
+    const removedGroups = splitGroups(removedRaw);
     const priorFeature = sectionByName(deltaSections(priorText), "Feature set");
     const priorGroups = splitGroups(priorFeature?.raw ?? "");
     const shape = (items) =>
@@ -430,101 +404,21 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
         );
     }
   }
-  if (new Set(removedGroupNames).size !== removedGroupNames.length)
-    throw new Error(
-      `${capability}: REMOVED Feature set names a root group more than once`,
-    );
-  if (deltaGroups.size === 0 && removedGroups.size === 0) {
+  if (!removing && splitGroups(deltaFeature.raw).size === 0) {
     if (deltaFeature.raw.trim() === currentFeature.raw.trim())
       return currentSpec;
     throw new Error(
       `${capability}: cannot safely merge this Feature set; use its bullet-group form or rebase a complete compatible result`,
     );
   }
-  const order = [...baseGroups.keys()];
-  const fresh = [...deltaGroups.keys()].filter(
-    (group) => !baseGroups.has(group),
+  const groups = foldGroups(
+    currentFeature.raw,
+    deltaFeature?.raw ?? "",
+    removedRaw,
+    capability,
   );
-  for (const [group, deltaItems] of deltaGroups) {
-    if (!baseGroups.has(group)) baseGroups.set(group, []);
-    const items = baseGroups.get(group);
-    for (const item of deltaItems) {
-      const label = labelOf(item);
-      const matches = holding(items, label);
-      for (const [side, count] of [
-        ["durable", matches.length],
-        ["delta", holding(deltaItems, label).length],
-      ])
-        if (count > 1)
-          throw new Error(
-            `${capability}: Feature set group "${group}" holds label "${label}" more than once in the ${side} spec; make its labels unique before folding`,
-          );
-      if (matches.length === 1) items[matches[0]] = item;
-      else if (!items.some((one) => textOf(one) === textOf(item)))
-        items.push(item);
-    }
-  }
-  for (const [group, removedItems] of removedGroups) {
-    if (!baseGroups.has(group))
-      throw new Error(
-        `${capability}: REMOVED Feature set names a root group that does not exist: ${group.replace(/^-\s+/, "")}`,
-      );
-    if (removedItems.length === 0) {
-      if (deltaGroups.has(group))
-        throw new Error(
-          `${capability}: Feature set root group cannot be both modified and removed: ${group.replace(/^-\s+/, "")}`,
-        );
-      baseGroups.delete(group);
-      continue;
-    }
-    const items = baseGroups.get(group);
-    const deltaItems = deltaGroups.get(group) ?? [];
-    const removedLabels = new Set();
-    for (const item of removedItems) {
-      const label = labelOf(item);
-      if (!label)
-        throw new Error(
-          `${capability}: REMOVED Feature set item in ${group.replace(/^-\s+/, "")} needs a label ending in a colon`,
-        );
-      if (removedLabels.has(label))
-        throw new Error(
-          `${capability}: REMOVED Feature set names item "${label}" more than once in ${group.replace(/^-\s+/, "")}`,
-        );
-      removedLabels.add(label);
-      if (holding(deltaItems, label).length > 0)
-        throw new Error(
-          `${capability}: Feature set item cannot be both modified and removed: ${label}`,
-        );
-      const matches = holding(items, label);
-      if (matches.length !== 1)
-        throw new Error(
-          matches.length === 0
-            ? `${capability}: REMOVED Feature set item does not exist: ${label}`
-            : `${capability}: Feature set group "${group}" holds label "${label}" more than once in the durable spec; make its labels unique before folding`,
-        );
-      items.splice(matches[0], 1);
-    }
-    if (items.length === 0) baseGroups.delete(group);
-  }
-  // A group the durable spec does not hold takes the place of a group the
-  // delta removes whole, paired in listing order, so a rename keeps its
-  // place; one left over lands before the next durable group the delta lists
-  // after it, and last when none follows.
-  const vacated = removedGroupNames.filter(
-    (group) => removedGroups.get(group).length === 0,
-  );
-  const listed = [...deltaGroups.keys()];
-  for (const group of fresh) {
-    const next =
-      vacated.shift() ??
-      listed
-        .slice(listed.indexOf(group) + 1)
-        .find((one) => !fresh.includes(one));
-    order.splice(next ? order.indexOf(next) : order.length, 0, group);
-  }
-  const body = order
-    .filter((group) => baseGroups.has(group))
-    .map((group) => [group, ...baseGroups.get(group).flat()].join("\n"))
+  const body = [...groups]
+    .map(([group, items]) => [group, ...items.flat()].join("\n"))
     .join("\n");
   const rendered = `## Feature set\n\n${body}\n`;
   const span = sectionSpan(currentSpec, "Feature set");

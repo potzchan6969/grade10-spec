@@ -564,3 +564,48 @@ test("a retired journey holds only deprecated cases, which may still trace it", 
   );
   assert.match(live, /traces `demo-alpha-US-02`, which is neither a journey/);
 });
+
+test("a change suite traces the feature set groups its delta folds to, accepted or not", () => {
+  const traced = (
+    anchor,
+    removed = "",
+    durable = "- Doing the thing\n- Kept group\n  - Kept leaf: stays\n  - Gone leaf: goes\n- Gone group\n- Emptied group\n  - Only: a\n",
+  ) => {
+    const root = mkdtempSync(join(tmpdir(), "partial-feature-set-"));
+    for (const [name, content] of Object.entries({
+      ...SPEC,
+      "openspec/specs/demo/alpha/spec.md": `## Feature set\n\n${durable}`,
+      [`${CHANGE}/spec.md`]: SPEC[`${CHANGE}/spec.md`].replace(
+        "- Doing the thing\n",
+        `- A new group\n\n## REMOVED Feature set\n\n- Gone group\n- Kept group\n  - Gone leaf: goes\n- Emptied group\n  - Only: a\n${removed}`,
+      ),
+      [`${CHANGE}/feature-tcs.md`]: SUITE([]).replace(
+        "* **Trace:** demo-alpha-US-01",
+        `* **Trace:** ${anchor}`,
+      ),
+    })) {
+      const file = join(root, name);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, content);
+    }
+    return run(root).stdout;
+  };
+  const refused =
+    /traces `[^`]+`, which is neither a journey nor a feature set group/;
+
+  for (const anchor of ["Doing the thing", "Kept group", "A new group"])
+    assert.doesNotMatch(traced(anchor), refused, anchor);
+  for (const anchor of ["Gone group", "Emptied group"])
+    assert.match(traced(anchor), refused, anchor);
+  const accepted = traced(
+    "Kept group",
+    "",
+    "- A new group\n- Doing the thing\n- Kept group\n  - Kept leaf: stays\n",
+  );
+  assert.doesNotMatch(accepted, refused);
+  assert.doesNotMatch(accepted, /does not fold/);
+  assert.match(
+    traced("Kept group", "- Gone group\n"),
+    /the feature set does not fold: demo\/alpha: REMOVED Feature set names a root group more than once/,
+  );
+});

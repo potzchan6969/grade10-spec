@@ -33,6 +33,7 @@ import {
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
 import {
+  deltaSections,
   leadingTitle,
   outline,
   type Section,
@@ -40,6 +41,9 @@ import {
   sectionSpan,
   tableRows,
 } from "./markdown.mts";
+
+export { deltaSections };
+
 import { readLandings } from "./read-landings.mts";
 import { readRounds, roundArtifactOf } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
@@ -1097,14 +1101,6 @@ function claim(marks: Map<string, IssuedMarks>, text: string): void {
     if ((held[key] ?? 0) < issued) held[key] = issued;
     marks.set(token, held);
   }
-}
-
-/** The `## ` sections of a delta file, with a `# ` title unwrapped — what
- * `openspec archive` splits the file into. */
-export function deltaSections(text: string): Section[] {
-  return outline(text).flatMap((one) =>
-    one.level === 1 ? one.children : [one],
-  );
 }
 
 /** The delta kind a `## ` heading names, when it names one. */

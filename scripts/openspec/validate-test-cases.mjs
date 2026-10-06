@@ -242,6 +242,8 @@ function checkSuite(root, filePath, rulesRev) {
     }[level];
     err(1, missingScope);
   }
+  if (spec?.groupsError)
+    err(1, `the feature set does not fold: ${spec.groupsError}`);
 
   const cases = [];
   for (const j of suite.journeys) for (const tc of j.cases) cases.push(tc);
