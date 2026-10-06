@@ -28,7 +28,8 @@ removed, per the amendment note above each one.
     charges given, an optional supplied Tax line, and a boxed
     Subtotal/Payment Processing Fee/Order Total summary
   - Replacement relationship: on a replacement invoice, the supplied prior
-    invoice ID appears as `Replaces invoice {id}`
+    invoice ID appears as `Replaces invoice {id}`, plain text with no link to
+    the prior PDF
   - Bank details: every enabled SWIFT, FPS and HK local transfer rail plus the
     bank reference, a full-width section below the order-value summary, shown
     only on a bank-transfer invoice
@@ -168,12 +169,11 @@ it, never a block of blank lines.
 ### Requirement: InvoicePdf renders a supplied replacement relationship
 
 When an invoice replaces an earlier invoice, `InvoicePdfData` SHALL accept a
-`replacesInvoice` value containing the replaced invoice ID and an optional
-document link. InvoicePdf SHALL render `Replaces invoice {invoice ID}`. When
-the document link is present, the replaced invoice ID SHALL link to that PDF.
-Without a document link, the ID SHALL render as plain text. When the
-relationship is absent, InvoicePdf SHALL render no replacement row. The
-relationship does not make the replaced invoice the current payable invoice.
+`replacesInvoice` value containing the replaced invoice ID. InvoicePdf SHALL
+render `Replaces invoice {invoice ID}` as plain text, with no link to the
+replaced invoice's PDF. When the relationship is absent, InvoicePdf SHALL
+render no replacement row. The relationship does not make the replaced invoice
+the current payable invoice.
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-9et rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-51 - A replacement invoice names the invoice it replaces
@@ -183,16 +183,6 @@ relationship does not make the replaced invoice the current payable invoice.
 - **GIVEN** an InvoicePdfData value whose `replacesInvoice` names `IN-LK42301`
 - **WHEN** InvoicePdf renders it
 - **THEN** the PDF shows `Replaces invoice IN-LK42301`
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-54 - A replacement row links to the replaced PDF when supplied
-
-**Serves:** InvoicePdf export - the replaced invoice remains retrievable
-
-- **GIVEN** an InvoicePdfData value whose `replacesInvoice` names `IN-LK42301`
-  and includes its `documentLink`
-- **WHEN** InvoicePdf renders it
-- **THEN** the replaced invoice ID links to that document
-- **AND** without `documentLink` the same ID is plain text
 
 ### Requirement: InvoicePdf and ReceiptPdf render the issuer block at the foot of the sheet, right-aligned
 

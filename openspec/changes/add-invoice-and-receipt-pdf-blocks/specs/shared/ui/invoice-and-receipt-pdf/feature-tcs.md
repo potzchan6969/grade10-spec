@@ -1492,65 +1492,6 @@ Runs once per row of **Test data**.
 * Only the reference value's own text renders more heavily weighted; the
   rest of the line renders at normal weight.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC49-1: A replacement invoice names the invoice it replaces
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** InvoicePdf export
-
-**Pre-conditions:**
-
-* `InvoicePdfData` names `IN-LK42301` in `replacesInvoice.invoiceId`.
-
-**Steps:**
-
-1. Render `InvoicePdf` with the replacement relationship.
-2. Inspect the invoice number and replacement row.
-
-**Expected Results:**
-
-* The PDF shows `Replaces invoice IN-LK42301`.
-* Its own invoice number remains distinct from the replaced invoice ID.
-* Without `replacesInvoice`, no replacement row appears.
-
-### shared-ui-invoice-and-receipt-pdf-US1-TC50-1: A replaced invoice link is optional
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** InvoicePdf export
-
-**Pre-conditions:**
-
-* `InvoicePdfData.replacesInvoice` names `IN-LK42301`.
-
-**Steps:**
-
-1. Render `InvoicePdf` with a `documentLink` to the replaced invoice PDF.
-2. Render it again without `documentLink`.
-
-**Expected Results:**
-
-* The first PDF links the replaced invoice ID to the supplied document.
-* The second PDF prints the same ID as plain text.
-
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -1725,3 +1666,8 @@ ReceiptPdf while `issuerTaxDetails` remains retired; the proposal and
 technical design are updated to carry those decisions and the fixed GMT+8
 date contract; and this suite's live tax, replacement, bank-rail and date
 cases supersede the deprecated DOM-era readings above.
+
+**Clarification, 2026-10-06 (`decisions.md` Q27):** the planning owner declined
+the link from the replacement row to the retained prior PDF. `SC-54` and
+`TC49`-`TC50` are removed: `SC-51` still proves the row names the prior
+invoice, and `TC6` still covers it, so no live scenario lost its case.

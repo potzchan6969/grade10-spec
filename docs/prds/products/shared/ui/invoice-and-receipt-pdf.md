@@ -31,6 +31,13 @@ document rules into either application.
   into the shared package contract and does not add a reader-facing state or
   layout
 
+## On the Page
+
+- 🚧 **A replacement invoice** — names the invoice it replaces as plain
+  text, with no link to that invoice's PDF
+- 🚧 **Bank details** — an invoice shows only the bank rails that are
+  enabled
+
 ::changes{spec="shared/ui/invoice-and-receipt-pdf"}
 
 :::detail{title="Code map" for="engineer"}

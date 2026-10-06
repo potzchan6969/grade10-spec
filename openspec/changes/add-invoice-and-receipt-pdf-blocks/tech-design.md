@@ -99,7 +99,6 @@ export type PdfLineItem = {
 
 export type InvoicePdfReplacement = {
   invoiceId: string;
-  documentLink?: string;
 };
 
 export type PdfDocumentCopy = {
@@ -271,11 +270,10 @@ plain string - no rail-specific formatting or validation. The caller
 supplies at least one enabled rail when it supplies `bankRails`.
 
 **A replacement invoice names its predecessor.** `InvoicePdfData` accepts
-optional `replacesInvoice` with `invoiceId` and optional `documentLink`.
-`drawMetaBlock` draws `copy.replacesInvoiceLabel` and the replaced ID as a
-row only when the relationship is present. The current invoice number
-remains the document's own number. The optional link is passed through as
-the PDF row's target; its absence leaves the ID as plain text.
+optional `replacesInvoice` with `invoiceId`. `drawMetaBlock` draws
+`copy.replacesInvoiceLabel` and the replaced ID as a plain-text row only when
+the relationship is present. The current invoice number remains the
+document's own number. The PDF carries no link to the replaced invoice.
 
 **`footer`/`drawFooter` removed from both renderers (`decisions.md`
 Q23).** Neither document draws a footer sentence any more; `InvoicePdfCopy`
