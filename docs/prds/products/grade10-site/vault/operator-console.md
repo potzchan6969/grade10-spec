@@ -88,6 +88,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - **A slab the register knows** - at a walk-in, staff type the grader and
   cert and the case takes the item the register knows, its facts filled in -
   [Items](/p/grade10-admin/inventory/items#facts)
+- ❓ **A clock on queue rows** - whether a live loan's row in the In custody
+  view carries the days past due, as the case header does; the product owner
+  confirms
 
 ## One case
 
@@ -126,6 +129,16 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   beside what the collector was told
 - **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
+- 🚧 **A loan's clock** - beside the status, a live loan past its due date
+  reads `N days past due`, counted as the Overdue view counts it; once a
+  forfeiture notice stands it reads `pay by <date>` on the shop's clock instead
+- 🚧 **Cancel visit asks first** - naming the slot on the shop's clock, that
+  the collector is emailed, and that the case keeps its status
+- 🚧 **Send forfeiture notice asks first** - naming the address the notice
+  goes to and the date to pay by it sets, in the destructive tone
+- ❓ **A notice to a case with no address** - whether a forfeiture notice is
+  refused when the case holds no email address, rather than recorded with
+  nobody told; Legal confirms
 - **The item's facts** — the Case tab shows and edits the register's
   category, title, description, grader, grade and cert once it has the item,
   which it gets when the valuation starts, and says registration is pending
@@ -213,6 +226,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | Queue by wait, not by status | Decided | A shop asks what a case is waiting for; every status belongs to exactly one status view, and Today and Overdue are queries | Product |
 | Buttons follow the machine | Decided | Each move shows only at the statuses the contract publishes, and the worker refuses independently | Engineering |
 | The rule is shown before the refusal | Decided | The make-offer, vault and payout dialogs state the bound, the precondition and what the recording fixes before the operator sends; the worker's refusal stands unchanged behind them | Product |
+| An email or a deadline asks first | Decided | Cancel visit and Send forfeiture notice confirm before they act, because an email to the customer and a legal deadline should never follow a misplaced press; an undo after the press was rejected, since the email has already left | Owner |
+| A loan's clock in the case header | Decided | A late loan reads its days past due, then the date to pay by once a notice stands, as a clock beside the status. Not a badge saying the case waits on staff, because a case runs a clock once terms are accepted; not a new status, because overdue is the loan's arithmetic; not the Payouts tab alone, which staff cannot open | Owner |
+| No countdown before the due date | Decided | The header reads nothing on a loan inside its term: nothing waits on the shop, and the header already states what is owed | Owner |
 | The counter works a checklist | Decided | The Case tab opens on the visit's steps in order, and Forfeit is withheld with its reason in words rather than drawn as a stepper, because a shop of three learns the flow from the screen rather than from a manual | Product |
 | Treasurer split | Decided | Nothing a single staff member can do moves money out of the business | Product |
 | A correction takes a second money holder | Decided | `vault:payout` and never the row's own recorder; asking for the approve grant as well would have made corrections admin-only, because staff and treasurer are disjoint on money | Product |
