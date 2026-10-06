@@ -13,8 +13,8 @@ import {
   formatHkd,
   PORTFOLIO_SUMMARY,
   VAULT_ASSETS,
-  VAULT_ITEM_DETAIL_STORY_ID,
   VAULT_BOOK_VISIT_STORY_ID,
+  VAULT_ITEM_DETAIL_STORY_ID,
   type VaultAsset,
   type VaultAssetStatus,
 } from "./vault-content";
