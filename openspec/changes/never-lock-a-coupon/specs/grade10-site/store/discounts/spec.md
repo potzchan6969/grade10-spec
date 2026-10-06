@@ -42,7 +42,8 @@ paid with a reward's code its order had given up — or, for a gift, with the
 gift's line — SHALL be settled against what it carried: it SHALL spend the
 coupon where no other sale claims it and the coupon is still unspent, and
 SHALL spend nothing otherwise. Either way it SHALL be reported to an operator
-with the order on it.
+with the order on it. These rules settle a sale that names the shop's
+allocations.
 
 <!-- trace:scenario id=g10.store-discounts.SC-cvt rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-19 - A counter sale that runs out its hour loses its code
@@ -226,9 +227,9 @@ plan, and staff SHALL be told to ring the goods on a new sale rather than to
 scan the member's card again, since a fresh scan would leave the deactivated
 code on the same cart. A till session lives ten minutes and a sale's hour
 outlasts it, so a closed sale's next plan reaches the store from a fresh scan
-on the same cart: a plan from a new session on a cart whose sale has closed
-and carries a reward's code SHALL be refused the same way, and SHALL mint
-nothing onto that cart. Where a reward's code has
+on the same cart: a plan from a new session of the same member, on a cart
+whose sale of theirs has closed and carries a reward's code, SHALL be refused
+the same way, and SHALL mint nothing onto that cart. Where a reward's code has
 left a sale that is still open — cleared off it — the sale SHALL take no reward
 again, that coupon or another, and the refusal SHALL name a new sale rather
 than repeat the remedy that took the code off. A re-plan that names no reward

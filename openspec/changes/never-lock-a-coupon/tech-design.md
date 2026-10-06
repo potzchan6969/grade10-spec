@@ -211,7 +211,7 @@ The claim reaches a dead order on the miss rather than on every ask: when the
 programme answers `not_available`, the claim runs inline the unsettled
 `coupon_release_jobs` of this member's dead orders whose `loyalty_coupon_id` is
 this coupon — an indexed, bounded read with no provider call — then makes the
-second ask the race retry already makes (`SC-227`). The happy path reads
+second ask the race retry already makes (`SC-237`). The happy path reads
 nothing more.
 
 So the drawer offers every reward coupon the wallet quote returns, as the
@@ -227,7 +227,7 @@ programme's claim and its own row write leaves a claim naming an order id no
 store row carries. Only a crash does that, since the request's guard gives the
 claim back on every other exit. When the programme answers `not_available` and the
 wallet names such an id for the coupon, the claim asks the programme to
-release it, then asks once more (`SC-231`). The release is a new programme
+release it, then asks once more (`SC-241`). The release is a new programme
 operation, `releaseUnwrittenClaim`, keyed on the coupon and that order id: it
 releases the pending claim only where it is older than five minutes. The store
 owns the fact that no row exists and the programme owns the claim's age, so
@@ -236,15 +236,17 @@ running, and the promise's own row write refuses a claim it made more than a
 minute before, so a release never meets a row still being written. A younger
 claim may be a checkout still being promised, so the operation answers
 `too_recent` and the claim is refused by name, as an earlier sale that stands
-(`SC-232`); the race retry above has already run by then. The sweep still
+(`SC-242`); the race retry above has already run by then. The sweep still
 releases one nobody claims again.
 
-The member's coupon list already carries no code for a reward coupon
-(`packages/ui/src/blocks/loyalty-membership/types.ts:35`), and the forfeit
-count already reads coupons past their validity, never a code
-(`packages/loyalty/backend/src/services/finance/forfeits.ts`), so neither
-requirement that now names the coupon needs code; their tests cite the
-scenarios (task 14.3).
+The member's coupon list already carries no code for a reward coupon: the
+block takes one only where its consumer passes it
+(`packages/ui/src/blocks/loyalty-membership/types.ts:35`), and the wallet
+passes none (`CouponListView.tsx:21-24`). The forfeit count already reads
+coupons past their validity, never a code
+(`packages/loyalty/backend/src/services/finance/forfeits.ts`). So none of the
+three requirements that now name the coupon, `The membership surface exports`
+among them, needs code; their tests cite the scenarios (task 14.3).
 
 A claimed coupon already reads as spendable in the wallet, the SPA and the
 shared coupon list. What is owed there is one line in the programme: expiry is
@@ -305,14 +307,14 @@ Task group 8. Each item ties to the modified retry requirement in
 - **A key answers only a live claim** (8.1, 8.2) — `useCoupon` reads only
   `pending` and `applied` usages for its key, and the unique index narrows to
   the same predicate. A retry of a claim that still stands replays it
-  (`SC-204`); a released claim's key makes a new claim (`SC-225`), which is
+  (`SC-204`); a released claim's key makes a new claim (`SC-235`), which is
   how a till sale whose plan was refused after it claimed — the promise's
   guard gives the claim back — claims it again under its own order id when
   staff re-plan (`SC-203`); an applied claim still refuses a
-  second (`SC-226`), `uq_coupon_usages_live`'s rule.
+  second (`SC-236`), `uq_coupon_usages_live`'s rule.
 - **The hour gives the coupon back** (8.3) — `expireTillSale` calls
   `giveBackReward(order, null)` before it moves the row to `expired`, the move
-  the supersede pass makes on a counter sale it ends (`SC-205`, `SC-224`).
+  the supersede pass makes on a counter sale it ends (`SC-205`, `SC-234`).
 - **One guarded write sets a claim** (8.4) — the claim columns come off
   `NewOrderValues` and off `upsertPromisedOrder`'s conflict arm;
   `writeOrderReward` is the one write, and it refuses a row already holding a different claim.
@@ -334,7 +336,7 @@ Task group 8. Each item ties to the modified retry requirement in
 25 hours after it was made (`packages/loyalty/backend/src/services/rewards/coupons.ts:551-575`).
 Every sale that ends gives its claim back itself except one: an online order
 that only expires keeps its claim while its code can be collected, and the
-sweep is what releases it once the code is dead (`SC-228`). The sweep also
+sweep is what releases it once the code is dead (`SC-238`). The sweep also
 catches a claim no store row carries — a promise that crashed before its order
 row existed — so an operator's reversal never waits longer than the sweep.
 
