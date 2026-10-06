@@ -6,7 +6,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs, promisify } from "node:util";
 import YAML from "yaml";
-
+import { cliArgs } from "./lib/args.mjs";
 import {
   messagesOf,
   milestonesBetween,
@@ -501,7 +501,7 @@ async function mustResolve(root, base, head) {
 
 async function main() {
   const { values } = parseArgs({
-    args: process.argv.slice(2).filter((argument) => argument !== "--"),
+    args: cliArgs(),
     options: {
       base: { type: "string" },
       head: { type: "string", default: "HEAD" },

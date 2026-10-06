@@ -28,6 +28,7 @@ import {
   daysBetween,
   TIME_ZONE,
 } from "../../tools/manual/src/api/time.ts";
+import { cliArgs } from "./lib/args.mjs";
 import { addressOf, deliver, readSentKeys } from "./lib/notify.mjs";
 import { readChangesAt } from "./lib/store-read.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
@@ -215,7 +216,7 @@ export function digestOf(read, map, ctx) {
 
 async function main() {
   const { values } = parseArgs({
-    args: process.argv.slice(2).filter((argument) => argument !== "--"),
+    args: cliArgs(),
     options: {
       root: { type: "string" },
       team: { type: "string", default: TEAM_MAP },

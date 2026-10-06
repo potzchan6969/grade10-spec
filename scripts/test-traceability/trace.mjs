@@ -5,6 +5,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
+import { cliArgs } from "../openspec/lib/args.mjs";
 
 const scriptRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const sourceExtensions = new Set([
@@ -1585,7 +1586,7 @@ function parseCommand(argv) {
 
 export function runCli(argv = process.argv.slice(2)) {
   try {
-    const parsed = parseCommand(argv);
+    const parsed = parseCommand(cliArgs(argv));
     if (parsed.command === "help") {
       console.log(usage);
       return 0;

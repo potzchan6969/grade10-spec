@@ -2,9 +2,10 @@
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { acceptChange } from "./lib/acceptance.mjs";
+import { cliArgs } from "./lib/args.mjs";
 
 const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const args = process.argv.slice(2);
+const args = cliArgs();
 const value = (name) => {
   const index = args.indexOf(name);
   if (index < 0) return null;
