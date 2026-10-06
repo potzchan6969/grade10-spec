@@ -12,7 +12,7 @@
 - [ ] 2.3 Add `intake-reversal` to `CHANGELOG_ACTIONS`, `UNIT_MOVED` and `INVALID_REASON` to the failure codes and the error map, `adminInventoryReverseRegularIntakeInputSchema` (`productId`, `quantity`, `remarks`) and `adminInventoryReverseCertIntakeInputSchema` (`productId`, `inventoryCertId`, `remarks`) with `remarks` as the required `reason` schema, and `reducible` (a whole number from 0) to `adminRegularStockSchema`; regenerate `packages/api-docs`
 - [ ] 2.4 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend` in grade10.
 
-## 3. One unmoved test and the reducible count (grade10)
+## 3. One unmoved test and the reducible count (grade10) (owner: @mason5991)
 
 Needs group 2's migration and contracts landed.
 
