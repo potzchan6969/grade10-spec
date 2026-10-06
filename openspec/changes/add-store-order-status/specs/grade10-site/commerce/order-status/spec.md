@@ -14,10 +14,12 @@ the same answer from the same facts.
 - Secondary note
   - Confirmed combinations only: Emit a note identifier for a clarified edge case, never display copy.
 - Status meaning
-  - Conclusion, not delivery: Completed reports an archived order, not carrier confirmation.
+  - Conclusion, not delivery: Completed reports a fulfilled, paid, archived order, not carrier confirmation.
   - Pickup withheld: Do not emit a pickup badge while the data model cannot support it.
 - Surface consistency
   - One mapping: Every surface showing order status derives it here.
+  - The note: Show only a note the mapping emitted.
+  - Freshness: Paid in full, refunded or canceled within 5 minutes; any other change within the hour.
 
 ## ADDED Requirements
 
@@ -398,10 +400,10 @@ the same order.
 surface SHALL NOT display a note the mapping did not emit for that order.
 
 **Freshness** - Every surface SHALL resolve an order's status from one stored
-copy of its Shopify facts. A payment, refund or cancellation that Shopify
-reports for an order SHALL reach that copy within 5 minutes. A change to the
-fulfilment, archive or return of an order created in the last 90 days SHALL
-reach it within an hour.
+copy of its Shopify facts. An order that Shopify reports paid in full,
+refunded or canceled SHALL reach that copy within 5 minutes. Any other change
+to an order placed in the last 90 days - its fulfilment, archive or return, or
+a payment voided or expired - SHALL reach it within an hour.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-nwz rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-14 - Two surfaces report one order identically
@@ -425,7 +427,7 @@ reach it within an hour.
 #### Scenario: grade10-site-commerce-order-status-SC-30 - An archive reaches both surfaces within an hour
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 
-- **GIVEN** an order created in the last 90 days whose order state is `open`, fulfilment state is `fulfilled`, and payment state is `paid`
+- **GIVEN** an order placed in the last 90 days whose order state is `open`, fulfilment state is `fulfilled`, and payment state is `paid`
 - **WHEN** the shop archives the order in Shopify
 - **THEN** within an hour the stored copy reads order state `closed`
 - **AND** both surfaces then display the badge `completed`

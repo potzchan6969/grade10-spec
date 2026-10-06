@@ -1,11 +1,3 @@
-## Purpose
-
-The shared blocks a store Order History page assembles between site chrome and
-footer: a status badge, a product line item, an order card with header and
-horizontally scrollable line items, and the page compound that lists Active and
-Past orders or shows the empty state. Every store application renders them from
-one component source, supplying copy, imagery, formatted values, and callbacks.
-
 ## Feature set
 
 - Order status
@@ -29,8 +21,8 @@ consumer-supplied label for that status. It SHALL NOT invent other status values
 
 The consumer SHALL choose the status, and the component SHALL NOT define what
 an order's status means. For a Grade10 Store order, `grade10-site/commerce/order-status`
-defines it. `pickup` SHALL remain an accepted status while no consumer
-supplies it.
+defines it. `pickup` SHALL remain an accepted status even though no
+consumer supplies it yet.
 
 <!-- trace:scenario id=g10.shared-store-order-history.SC-fem rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-08 - Each status renders its label
