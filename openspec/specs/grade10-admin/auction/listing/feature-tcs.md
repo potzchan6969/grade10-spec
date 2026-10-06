@@ -53,9 +53,11 @@
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
