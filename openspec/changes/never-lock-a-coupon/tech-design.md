@@ -9,7 +9,7 @@ its own compensation.
 
 The store owns every fact this change turns on: which order claims a coupon
 (`orders.loyalty_coupon_id`), whether it can still take money (`status`),
-whether its checkout can be killed (the provider), and what code was minted for
+whether its checkout can be closed (the provider), and what code was minted for
 it (`orders.loyalty_coupon_code`). Loyalty owns one: whether the coupon is
 spent.
 
@@ -50,9 +50,10 @@ spent.
   against what it carried. That is the only fact both sides agree on, and it is
   missing today rather than weakened here.
 
-- **One status set, read by the offer and the claim alike.** A coupon is
-  offered exactly where it can be taken back, so the drawer can never offer
-  what the checkout then refuses.
+- **Every surface offers what the member holds; the claim decides.** The
+  drawer and the till panel offer every coupon that is not spent, lapsed or
+  void. The claim takes it back from an earlier sale or refuses it by name, so
+  no surface offers what the checkout then refuses as unavailable.
 
 - **A cut the shop gave is paid for once.** A counter sale paid with a code
   its order had given up spends the coupon where it is still free, rather
@@ -134,7 +135,7 @@ or that landed. The till's sentence for `sale_closed` asks for a fresh scan
 same cart leaves the deactivated code on it, so the sentence names a new sale
 instead, for every closed sale alike (task 10.4, `SC-24`, `SC-27`, `SC-29`). A
 retired counter sale leaves the open list, so a claim left on it, even one on a
-coupon this checkout does not name, would wait for the programme's day-old
+coupon this checkout does not name, would wait for the programme's 25-hour
 sweep and block an operator's reversal until then. The pass still answers whether the coupon this checkout
 names came free, which is what the claim reads. The sale keeps its cart; one
 paid still carrying the code is settled as the section above says.
@@ -148,15 +149,18 @@ the supersede cancelled moments earlier — two provider round trips per checkou
 | --- | --- |
 | A web draft | Retired at the provider, then cancelled — as today |
 | A counter sale, `pending` or `expired` | Keeps its cart; whatever reward it holds comes off, the code is deactivated best-effort, and the claim is released |
-| A draft the provider will not kill | Keeps the coupon; the claim is refused by name |
+| A web draft the provider reports collected | Keeps the coupon; the claim is refused by name |
+| A web draft the provider will not close | Keeps the coupon; the claim is refused by name |
+| A claim naming an order never written, five minutes old or more | Released by the programme, then claimed, as `releaseUnwrittenClaim` below says |
+| A claim naming an order never written, under five minutes old | Keeps the coupon; the claim is refused by name |
 
 **Which checkout retires a counter sale.** Every checkout of a signed-in member
 runs the pass, whatever it carries (`services/orders/promise.ts:218-225`), and
 the pass lists the member's earlier sales carrying points, a reward or a store
-coupon (`repositories/orders.ts:362-383`). So a checkout carrying neither points
-nor a coupon still retires a counter sale that holds a reward — the Discounts
-page's `The newer promise retires the older` line read as written, where
-"carrying points or a code" describes the earlier sale.
+coupon (`repositories/orders.ts:357-383`). So a checkout carrying neither points
+nor a coupon still retires a counter sale that holds a reward, a till gift
+among them, as the Discounts page's `The newer promise retires the older` line
+says.
 
 The pass answers which coupon it could not free, and `reserveRewardCoupon`
 refuses on that rather than letting the programme say the coupon is
@@ -207,17 +211,40 @@ The claim reaches a dead order on the miss rather than on every ask: when the
 programme answers `not_available`, the claim runs inline the unsettled
 `coupon_release_jobs` of this member's dead orders whose `loyalty_coupon_id` is
 this coupon — an indexed, bounded read with no provider call — then makes the
-second ask the race retry already makes (`SC-209`). The happy path reads
+second ask the race retry already makes (`SC-227`). The happy path reads
 nothing more.
 
-So the drawer offers a claimed coupon wherever one of the member's own orders
-holds the claim, whatever that order's status: the claim can free it, or
-refuses it by name. It reads those orders by the ids the wallet names on its
-claimed coupons — one bounded read, no wider than the coupons the member holds
-— rather than listing the member's open orders. That closes the window in which
-a cancelled order's release has not drained and the drawer hid a coupon the
-till panel offered (`SC-196`). A claim whose order id names no row — a checkout
-that crashed before writing it — stays hidden until the sweep releases it.
+So the drawer offers every reward coupon the wallet quote returns, as the
+till panel does, and reads no orders to decide it: whatever holds the claim,
+the claim frees it or refuses it by name. `spendableRewards` and its read of
+the member's open orders go (`services/orders/quote.ts:263-293`). That closes
+the windows in which a cancelled order's release has not drained, or a claim
+names an order never written, and the drawer hid a coupon the till panel
+offered (`SC-196`).
+
+**A claim whose order was never written.** A checkout that stops between the
+programme's claim and its own row write leaves a claim naming an order id no
+store row carries. Only a crash does that, since the request's guard gives the
+claim back on every other exit. When the programme answers `not_available` and the
+wallet names such an id for the coupon, the claim asks the programme to
+release it, then asks once more (`SC-231`). The release is a new programme
+operation, `releaseUnwrittenClaim`, keyed on the coupon and that order id: it
+releases the pending claim only where it is older than five minutes. The store
+owns the fact that no row exists and the programme owns the claim's age, so
+neither decides on the other's data. Five minutes is past any checkout still
+running, and the promise's own row write refuses a claim it made more than a
+minute before, so a release never meets a row still being written. A younger
+claim may be a checkout still being promised, so the operation answers
+`too_recent` and the claim is refused by name, as an earlier sale that stands
+(`SC-232`); the race retry above has already run by then. The sweep still
+releases one nobody claims again.
+
+The member's coupon list already carries no code for a reward coupon
+(`packages/ui/src/blocks/loyalty-membership/types.ts:35`), and the forfeit
+count already reads coupons past their validity, never a code
+(`packages/loyalty/backend/src/services/finance/forfeits.ts`), so neither
+requirement that now names the coupon needs code; their tests cite the
+scenarios (task 14.3).
 
 A claimed coupon already reads as spendable in the wallet, the SPA and the
 shared coupon list. What is owed there is one line in the programme: expiry is
@@ -225,10 +252,9 @@ computed from `available` alone, so a claimed coupon that lapses reads claimed
 forever — and the till panel, widened to offer one, would hand a shopkeeper a
 dead coupon. Computing it from `reserved` too fixes every reader at once.
 
-The till panel offers every coupon that is not spent, lapsed or void. It cannot
-read the rule the drawer reads — the programme holds no order statuses, and
-the panel's own wire type carries no claim — and it does not need to: under
-this rule a claim never blocks, so the store is what refuses, once.
+The till panel offers every coupon that is not spent, lapsed or void, the same
+set the drawer offers. Under this rule a claim never blocks, so the store is
+what refuses, once, and by name.
 
 ## The counter
 
@@ -256,10 +282,12 @@ this rule a claim never blocks, so the store is what refuses, once.
   a coupon chosen there would mint a second code beside the dead one.
   `PosSalePlanInput` gains `cartOrderId`, the attribute the cart carries before
   the plan writes its own; `planTillSale` refuses `sale_closed` when it names a
-  row of this member's that this session did not write and that carries a
-  reward's code (`SC-27`). A pending one is included: this plan's own
-  supersede would retire it and leave its code dead on the cart. One read by
-  id; a cart naming no order, or this session's own, plans as today.
+  row of this member's that this session did not write, that is no longer
+  `pending`, and that carries a reward's code (`SC-27`). One read by id; a
+  cart naming no order, this session's own, or a `pending` row plans as
+  today. What a fresh scan does on a cart whose sale is still `pending` is
+  open as Raised R1: refusing it adds `pending` to this check, and continuing
+  it plans onto that row and its code. The read serves either answer.
 - **A gift's line stays on a cart its sale has left.** Nothing of the store
   runs at the counter once staff walk away, so the hour and a newer promise
   take the claim off the row and leave the line on the shop's cart. The row
@@ -277,14 +305,14 @@ Task group 8. Each item ties to the modified retry requirement in
 - **A key answers only a live claim** (8.1, 8.2) — `useCoupon` reads only
   `pending` and `applied` usages for its key, and the unique index narrows to
   the same predicate. A retry of a claim that still stands replays it
-  (`SC-204`); a released claim's key makes a new claim (`SC-207`), which is
+  (`SC-204`); a released claim's key makes a new claim (`SC-225`), which is
   how a till sale whose plan was refused after it claimed — the promise's
   guard gives the claim back — claims it again under its own order id when
   staff re-plan (`SC-203`); an applied claim still refuses a
-  second (`SC-208`), `uq_coupon_usages_live`'s rule.
+  second (`SC-226`), `uq_coupon_usages_live`'s rule.
 - **The hour gives the coupon back** (8.3) — `expireTillSale` calls
   `giveBackReward(order, null)` before it moves the row to `expired`, the move
-  the supersede pass makes on a counter sale it ends (`SC-205`, `SC-206`).
+  the supersede pass makes on a counter sale it ends (`SC-205`, `SC-224`).
 - **One guarded write sets a claim** (8.4) — the claim columns come off
   `NewOrderValues` and off `upsertPromisedOrder`'s conflict arm;
   `writeOrderReward` is the one write, and it refuses a row already holding a different claim.
@@ -306,7 +334,7 @@ Task group 8. Each item ties to the modified retry requirement in
 25 hours after it was made (`packages/loyalty/backend/src/services/rewards/coupons.ts:551-575`).
 Every sale that ends gives its claim back itself except one: an online order
 that only expires keeps its claim while its code can be collected, and the
-sweep is what releases it once the code is dead (`SC-210`). The sweep also
+sweep is what releases it once the code is dead (`SC-228`). The sweep also
 catches a claim no store row carries — a promise that crashed before its order
 row existed — so an operator's reversal never waits longer than the sweep.
 
@@ -332,27 +360,37 @@ it for a cut nobody gave.
 - **Coupon claims refused as unavailable** — `store.checkout.outcome` tags a
   refused coupon `reason:couponRefused`, and `store.pos.sale.refused` tags it
   `reason:coupon_refused`; neither names the cause, so neither can read zero.
-  Both gain a `cause` tag carrying the coupon's refusal cause, and the measure
-  reads `cause:not_available`. `store.coupons.claim_blocked` counts the named
-  refusal, `held_elsewhere`, which is correct and stays apart (task 15.2).
+  Both gain a `cause` tag carrying the coupon's refusal cause. `not_available`
+  also answers a coupon a racing paid order spent or an operator voided, which
+  is correct, so the programme's `not_available` answer names the standing
+  that refused it (`claimed`, `spent` or `not_live`) and the store tags it
+  `standing`. The measure reads `cause:not_available` with `standing:claimed`.
+  `store.coupons.claim_blocked` counts the named refusal, `held_elsewhere`,
+  which is correct and stays apart (task 15.2).
 - **Coupons spent within a day of a counter sale the member walked away
-  from** — the hour's give-back counts `store.pos.sale.expired` and says
-  nothing of a reward. It is tagged `reward:given_back` when `giveBackReward`
-  freed one, and the programme counts `loyalty.coupon.used_after_release` when
-  it marks used a coupon whose previous claim was released less than 24 hours
-  before. The measure reads the second against the first (task 15.3).
+  from** — counted where both facts live. The programme knows which claim on a
+  coupon it released and when; the store knows which order was a counter sale.
+  So the programme's answer to a capture names the order whose claim on that
+  coupon it released less than 24 hours before, and the store's sink counts
+  `store.coupons.used_after_counter_release` when that order is a counter sale
+  other than the paying one. An online checkout superseded by the member's
+  next one is not counted. The give-backs it reads against are the counter
+  sale's: `store.pos.sale.expired` at the hour and `store.pos.sale.superseded`
+  when retired, each tagged `reward:given_back` when `giveBackReward` freed
+  one (task 15.3). No column moves: the programme reads its own released
+  usage, the store its own order.
 
 ## Risks
 
 - **A checkout refused after the claim** — an unpriceable gift, points the
-  member cannot spend — has already taken the cut off the earlier sale. The
+  member cannot spend — has already taken the claim off the earlier sale and
+  deactivated its code. The
   coupon returns to the wallet spendable anywhere, but not back onto a counter
   sale whose code it left. The remedy the counter already names is a new sale.
-- **A claim a crashed checkout left** — no order row holds it, so nothing in
-  the store can free it; the till panel offers that coupon and the programme
-  refuses it as unavailable until the sweep releases it. The request's own
-  guard gives a claim back on every exit short of a crash, so this is the one
-  route left to `cause:not_available`.
+- **A fresh scan on a sale still open, while Raised R1 stands.** The plan
+  retires that sale and deactivates its code, which the shop still honours on
+  the cart, and a coupon chosen again mints a second code beside it. The
+  answer to R1 closes it, in the check above.
 - **Staff watch a cut leave a sale they are working.** The plan result now names
   the member's coupon so the extension can say so; a live push is its own
   change.
