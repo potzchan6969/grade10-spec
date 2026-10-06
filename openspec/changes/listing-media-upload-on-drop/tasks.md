@@ -1,4 +1,4 @@
-## 1. Upload behavior (grade10)
+## 1. Upload behavior (grade10) (owner: @htonyl)
 
 - [ ] 1.1 Add tests first for immediate add, multi-file ordering, per-file
       refusal, and immediate replacement, covering
