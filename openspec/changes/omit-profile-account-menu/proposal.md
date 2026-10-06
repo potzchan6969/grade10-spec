@@ -2,8 +2,9 @@
 
 ## Why
 
-The account page at `/profile` is carried in development and staging behind
-its own gate, and the app offers Profile first in the account menu there. The
+The account page at `/profile` is carried behind its own gate on the lanes
+[Carried Surfaces](../../../docs/prds/products/grade10-site/site/carried-surfaces.md)
+lists, and the app offers Profile first in the account menu there. The
 pages proposed never offering Profile on the premise that no such page
 exists. Product now settles one Profile rule (Q1), and the pages, the
 contracts, the app and the stories follow it.
@@ -17,8 +18,9 @@ a page-shell case.
   page is carried, or never.
 - **Account menu** - auction launch stays My Auctions and Sign Out; once
   Store answers, My Orders joins before My Auctions. The menu offers no item
-  whose page the site withholds, Membership leaves the requirements until
-  Q5, and the account page's Sign Out is stated once.
+  whose page the site withholds. Membership's place in the menu leaves the
+  page-shell requirement until Q5; only its withheld-page rule stays. The
+  account page's Sign Out is stated once.
 - **Contract wording** - `grade10-site/site/page-shell` replaces its menu
   requirement: the Profile clause waits on Q1, and the account page's own
   Sign Out stays with the account control. Its Purpose and current-surface

@@ -45,13 +45,14 @@ withholds: My Orders, Profile or Membership
 **My Orders** - ahead of My Auctions once Store answers, opening
 `/profile/orders`, and omitted until then on the same gate as Cart
 
-❓ **Membership** — after My Auctions once Store answers; Product confirms
-whether it opens the membership page wherever that page is carried, by the
-same rule as Profile
+❓ **Membership** - after My Auctions; Product (@tangconst) confirms whether
+it joins wherever the membership page is carried, by the same rule as
+Profile, or waits for the loyalty programme's own launch -
+[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
-❓ **Profile** — Product confirms whether Profile joins first wherever the
-account page is carried, which today is development and staging only, or the
-menu never offers it
+❓ **Profile** - Product (@tangconst) confirms whether Profile joins first
+wherever the account page is carried, or the menu never offers it -
+[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 **Sign Out on the account page** - the account page offers Sign Out as well,
 wherever it is carried
@@ -125,7 +126,7 @@ no cart to show someone signed out.
 | My Orders label and place | Decided | "My Orders", ahead of My Auctions once Store answers; rejected "Your Orders" (parallels the page title instead of My Auctions naming) and appending after My Auctions, before Sign Out. | Product |
 | My Orders gating | Decided | Handler-gated like Cart and search, supplied only once Store answers — the same gate `/profile/orders` and Cart already carry. Rejected keeping it required and always-present regardless of Store: that leaves a menu item pointing at a page gated shut on any build where Store has not answered. | Product |
 | My Auction Orders in the menu | Decided | Not offered. A winner opens each order from its Won row on My Auctions; rejected a second orders item beside My Auctions. | Product |
-| Profile in the menu | ❓ Open | Two menus are on the table. Profile joins first wherever the account page is carried, today development and staging only, so no public lane shows it and `add-account-profile` opens it with the page; or the menu never offers Profile, and collectors reach the account page through the Account breadcrumbs on My Auctions and the order pages. Recommended: join wherever carried, because the header is the one route that stays put on every surface. | Product |
+| Profile in the menu | ❓ Open | Two menus are on the table. Profile joins first wherever the account page is carried ([Carried Surfaces](/p/grade10-site/site/carried-surfaces)), so it shows only where that page does and `add-account-profile` opens it with the page; or the menu never offers Profile, and collectors reach the account page through the Account breadcrumbs on My Auctions and the order pages. Recommended: join wherever carried, because the header is the one route that stays put on every surface. | Product (@tangconst) |
 | Signed-in email | Decided | The menu shows the sign-in email above the items, in place of an "Account" heading, with the same small initial avatar the bidding panel uses for that address. | Product |
-| Membership | ❓ Open | The membership page at `/membership` is carried in development and staging behind its own gate, as the account page is behind its own. Membership either joins after My Auctions wherever that page is carried, by the rule Profile follows, or waits for the loyalty programme's own launch. Recommended: one rule for both account pages, decided with Profile. | Product |
+| Membership | ❓ Open | The membership page at `/membership` is carried behind its own gate, as the account page is behind its own ([Carried Surfaces](/p/grade10-site/site/carried-surfaces)). Membership either joins after My Auctions wherever that page is carried, by the rule Profile follows, or waits for the loyalty programme's own launch. Recommended: one rule for both account pages, decided with Profile. | Product (@tangconst) |
 :::
