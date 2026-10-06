@@ -3,15 +3,16 @@
 Storybook is the layout source of truth for this change. Figma cart frames remain
 historical reference for the drawer chrome and sale-price line only.
 
-### Cart drawer — site sale × promo
+### Cart drawer — site sale and promo code
 
 | Surface | Storybook (SoT) | Figma (historical) |
 | --- | --- | --- |
-| Site sale alone (sale + compare-at on lines; no Store sale footer row) | [`Store Cart/CartItem` → Sale Price](?path=/story/store-cart-cartitem--sale-price) | [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev), [Cart Item](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4761-1494&m=dev) |
+| A line on the site sale (sale price and struck list price) | [`Store Cart/CartItem` → Sale Price](?path=/story/store-cart-cartitem--sale-price) | [Cart Item](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4761-1494&m=dev) |
+| Site sale alone (sale lines, one line off the sale, one sold-out line; no code; no Store sale row) | [`Store Cart/CartDrawer/Auto Discount` → On Sale](?path=/story/store-cart-cartdrawer-auto-discount--on-sale) | [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
 | Promo refused | [`Store Cart/CartDrawer/Auto Discount` → Refuse](?path=/story/store-cart-cartdrawer-auto-discount--refuse) | — |
 | Promo stacked | [`Store Cart/CartDrawer/Auto Discount` → Stack](?path=/story/store-cart-cartdrawer-auto-discount--stack) | — |
 | Promo replaces site sale | [`Store Cart/CartDrawer/Auto Discount` → Replace](?path=/story/store-cart-cartdrawer-auto-discount--replace) | — |
-| Site sale restored after remove | [`Store Cart/CartDrawer/Auto Discount` → Fallback after remove](?path=/story/store-cart-cartdrawer-auto-discount--fallback-after-remove) | — |
+| Code removed, sale on the lines | [`Store Cart/CartDrawer/Auto Discount` → Fallback after remove](?path=/story/store-cart-cartdrawer-auto-discount--fallback-after-remove) | — |
 
 Held inapplicable ticket (no Apply): [`Store Cart/PromoTicket` → Not Applicable](?path=/story/store-cart-promoticket--not-applicable) and the muted partition on Refuse.
 
@@ -19,9 +20,10 @@ Held inapplicable ticket (no Apply): [`Store Cart/PromoTicket` → Not Applicabl
 
 - `CartDrawer`, `CartDrawerHeader`, `CartDrawerBody`, `CartDrawerFooter`,
   `CartItem`, `CartPromoSheet`, `PromoTicket` from `@grade10/ui` — existing
-  compound and parts; site sale is `CartItemSummary.price` +
-  `originalPrice`; stacked/replaced/refused codes use `PromoState` and held
-  `HeldPromoCode.applicable` / `inapplicableReason`.
+  compound and parts; a site sale is `CartItemSummary.price` (sale price) and
+  `originalPrice` (list price); stacked, replaced and refused codes use
+  `PromoState`, and held codes `HeldPromoCode.applicable` and
+  `inapplicableReason`.
 - `TextInput`, `Button`, `Link` from `@grade10/design-system` — promo sheet
   field, Apply, Remove on an applied Discount row (already composed).
 
@@ -30,11 +32,11 @@ summary row whose only job is to name the site sale.
 
 ## States
 
-| State | Spec scenarios |
-| --- | --- |
-| Site sale on lines (sale + compare-at); Subtotal = line sum; no Store sale footer row | `shared-ui-store-cart-SC-26` |
-| Stacked code — lines keep sale + compare-at; footer `Discount (<code>)` only | `shared-ui-store-cart-SC-27` |
-| Refused code — sale lines unchanged; sheet error; no applied Discount row | `shared-ui-store-cart-SC-28` |
-| Inapplicable held promo — muted ticket, reason, no Apply | `shared-ui-store-cart-SC-29` |
-| Replacing code — list line prices, no compare-at; footer Discount only | `shared-ui-store-cart-SC-30` |
-| Remove promo — site-sale lines return when the sale still applies | `shared-ui-store-cart-SC-31` |
+| State | Anchor | Spec scenario |
+| --- | --- | --- |
+| Site sale on lines (sale price, struck list price); a line off the sale at its price alone; Subtotal = sum of the lines but a sold-out one; no discount row | On sale, Subtotal as shown · `shared-ui-store-cart-US-13` | `shared-ui-store-cart-SC-26`, `shared-ui-store-cart-SC-47` |
+| Stacked code — lines keep the sale; one footer discount row for the code | Stacked · `shared-ui-store-cart-US-14` | `shared-ui-store-cart-SC-27` |
+| Refused code — sale lines unchanged; sheet shows the refusal; no discount row | Refused · `shared-ui-store-cart-US-15` | `shared-ui-store-cart-SC-28` |
+| Inapplicable held promo — muted ticket, reason, no Apply, listed apart from the applicable ones | Held, cannot apply · `shared-ui-store-cart-US-15` | `shared-ui-store-cart-SC-29`, `shared-ui-store-cart-SC-46` |
+| Replacing code — list prices, nothing struck; one footer discount row for the code | Replaced · `shared-ui-store-cart-US-16` | `shared-ui-store-cart-SC-30` |
+| Code removed — its discount row leaves; the sale is on the lines while it still runs | Removed · `shared-ui-store-cart-US-17` | `shared-ui-store-cart-SC-31` |

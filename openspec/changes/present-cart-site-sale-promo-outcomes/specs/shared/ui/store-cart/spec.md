@@ -1,103 +1,139 @@
+## Feature set
+
+- Site sale and promo outcomes
+  - On sale: a site sale shows on the lines it cuts as the sale price over the struck list price, never as a summary row
+  - Subtotal as shown: the sum of the lines the shop still sells, as shown, leaving out a sold-out line
+  - Stacked: the lines keep the sale and the summary shows only the code's discount
+  - Refused: the lines and totals stay on the sale and the promo sheet says why
+  - Replaced: the lines show the list price with nothing struck through and the summary shows only the code's discount
+  - Removed: the code's discount leaves, and the sale returns to lines the code had taken it from while it still runs
+  - Held, cannot apply: a held code that cannot apply is muted with its reason and no Apply
+
 ## ADDED Requirements
 
-### Requirement: A site sale on a cart line shows as sale price with compare-at, never as a Store sale footer row
+### Requirement: A site sale reaches the drawer only on its lines
 
-A site sale shows on the line it cuts, not as a row of its own in the footer.
+The consumer's quote owns every amount; the drawer computes none.
 
-**Line prices** - When the applied cart quote carries an automatic site sale
-on a line, that line SHALL present the discounted unit price as `price` and
-the pre-sale unit price as `originalPrice`.
+**Consumer supplies** - The consumer SHALL supply a site sale only on the lines
+it cuts, as each line's `price` (the sale price) and `originalPrice` (the list
+price), and never as `PromoState`. It SHALL supply a promo code only as
+`PromoState`, and never as a line's `couponCode`. The `subtotal` it supplies
+SHALL be the sum of the line prices as shown, times quantity, over every line
+but a sold-out one, in every outcome.
 
-**No footer row** - The drawer footer SHALL NOT render a separate summary row
-whose only job is to name that site-sale cut (for example “Store sale”).
+**Drawer renders** - Given such a line, the drawer SHALL render the sale price
+with the list price struck through. It SHALL strike any `originalPrice` it is
+given and compare no amounts. Given a line with no `originalPrice`, it SHALL
+render the price alone. It SHALL render the supplied Subtotal.
 
-**Subtotal** - The Subtotal SHALL be the sum of the unit prices shown on the
-lines (times quantity).
+#### Scenario: shared-ui-store-cart-SC-26 - Site sale lines show the struck list price and add no summary row
+**Serves:** shared-ui-store-cart-US-13 - Shopper reads a site sale on the cart lines
 
-#### Scenario: shared-ui-store-cart-SC-26 - Site sale lines use compare-at and no Store sale footer row
-**Serves:** shared-ui-store-cart-US-13 - Shopper reads a storewide sale on the cart lines
-
-- **GIVEN** a cart whose quote applies a site sale on every line
+- **GIVEN** a cart whose quote applies a site sale on some lines but not on
+  another, with one sold-out line, and no promo code
 - **WHEN** the drawer renders those lines and the summary
-- **THEN** each eligible line shows the sale unit price and a struck
-  compare-at, the Subtotal matches the sum of those line prices, and no
-  footer row names the site sale alone
+- **THEN** each sale line shows the sale price and the struck list price, the
+  line off the sale shows its price alone, the Subtotal matches the sum of the
+  line prices as shown and leaves out the sold-out line, and the footer shows
+  no discount row
 
-### Requirement: A stacked promo keeps site-sale lines and adds only the code in the footer
+#### Scenario: shared-ui-store-cart-SC-47 - A list price equal to the price is still struck through
+**Serves:** shared-ui-store-cart-US-13 - Shopper reads a site sale on the cart lines
 
-When the quote stacks an order-level promo code on a site sale, every
-site-sale line SHALL keep its sale `price` and `originalPrice`, the Subtotal
-SHALL remain the sum of those line prices, and `PromoState` SHALL be
-`applied` with that code and its discount amount. The footer SHALL NOT also
-name the site sale as its own summary row.
+- **GIVEN** a line whose supplied list price equals its price
+- **WHEN** the drawer renders that line
+- **THEN** the line shows the price and the list price struck through beside
+  it, as on any sale line
 
-#### Scenario: shared-ui-store-cart-SC-27 - Stacked code appears only as footer Discount on post-sale lines
-**Serves:** shared-ui-store-cart-US-14 - Shopper stacks a promo on the store sale
+### Requirement: A stacked promo keeps the sale lines and adds only the code's discount
+
+Given lines on the site sale and `PromoState` `applied` with the code and its
+discount amount, the drawer SHALL render each line's sale price with its list
+price struck through, and exactly one discount row, for that code, with its
+amount.
+
+#### Scenario: shared-ui-store-cart-SC-27 - Stacked code appears only as the footer discount on sale lines
+**Serves:** shared-ui-store-cart-US-14 - Shopper stacks a promo on the site sale
 
 - **GIVEN** a cart with a site sale on its lines and a promo code that stacks
 - **WHEN** the drawer shows the applied code
-- **THEN** the lines still show sale price and compare-at, the footer shows
-  `Discount (<code>)` with the code's cut, and no Store sale footer row
-  appears
+- **THEN** the lines still show the sale price and the struck list price,
+  the Subtotal matches the sum of those sale prices, and the footer shows
+  exactly one discount row, for the code, with its amount
 
 ### Requirement: A refused promo leaves the site sale in place and names the refusal
 
-A refused code changes nothing on the lines, and the shopper reads why it was
-refused.
+Given lines on the site sale and a refused code, the consumer SHALL supply
+`PromoState` `expanded` with the refusal as its `error`, and the same line
+prices, `subtotal` and `estimatedTotal` as before the attempt. The drawer
+SHALL keep each line's sale price and struck list price, SHALL render no
+discount row, and the promo sheet SHALL show the refusal message.
 
-**Lines and totals** - When the quote refuses a promo code against a site
-sale, every site-sale line SHALL keep its sale presentation, totals SHALL stay
-on the site sale, and `PromoState` SHALL NOT be `applied` for that code.
-
-**Refusal message** - The promo sheet SHALL show the refusal message.
-
-**Held promo** - A held promo marked not applicable SHALL render muted without
-an Apply control.
-
-#### Scenario: shared-ui-store-cart-SC-28 - Refused code leaves sale lines and shows an error
-**Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the store sale
+#### Scenario: shared-ui-store-cart-SC-28 - Refused code leaves sale lines and shows the refusal
+**Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the site sale
 
 - **GIVEN** a cart with a site sale on its lines
 - **WHEN** the shopper applies a promo code the quote refuses
-- **THEN** the lines and Subtotal stay on the site sale, no `Discount
-  (<code>)` row appears, and the promo sheet shows the refusal
+- **THEN** the lines, the Subtotal and the estimated total stay on the site
+  sale, the footer shows no discount row, and the promo sheet shows the
+  refusal
+
+### Requirement: A held code that cannot apply is muted with its reason
+
+A held code the consumer marks `applicable: false` SHALL render muted in the
+promo sheet, listed apart from the held codes that can apply, with its
+`inapplicableReason` and no Apply control, whatever callbacks are supplied.
 
 #### Scenario: shared-ui-store-cart-SC-29 - An inapplicable held promo has no Apply control
-**Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the store sale
+**Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the site sale
 
 - **GIVEN** a held promo the quote marks not applicable for this cart
 - **WHEN** the promo sheet lists that code
 - **THEN** the ticket is muted, shows why it cannot apply, and offers no
   Apply control
 
-### Requirement: A replacing promo lifts the line sale and shows only the code in the footer
+#### Scenario: shared-ui-store-cart-SC-46 - Held codes that cannot apply are listed apart from the ones that can
+**Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the site sale
 
-When the quote replaces a site sale with an order-level promo code, every
-formerly site-sale line SHALL show the list unit price as `price` with no
-`originalPrice`, the Subtotal SHALL be the sum of those list line prices,
-and `PromoState` SHALL be `applied` with that code and its discount amount.
+- **GIVEN** a cart on the site sale holding one code that can apply and one
+  the quote marks not applicable
+- **WHEN** the shopper opens the promo sheet
+- **THEN** the code that can apply shows its Apply control, and the code that
+  cannot is listed apart from it, muted, with its reason and no Apply control
 
-#### Scenario: shared-ui-store-cart-SC-30 - Replacing code uses list line prices and footer Discount only
-**Serves:** shared-ui-store-cart-US-16 - Shopper's promo replaces the store sale
+### Requirement: A replacing promo lifts the line sale and shows only the code's discount
+
+The consumer SHALL supply each line the code takes the sale from at its list
+price with no `originalPrice`, and `PromoState` `applied` with the code and its
+discount amount. Which lines a code takes is the quote's, line by line. The
+drawer SHALL render each such line's list price with nothing struck through,
+any line still on the sale as a sale line, and exactly one discount row, for
+that code, with its amount.
+
+#### Scenario: shared-ui-store-cart-SC-30 - Replacing code shows list prices and only the footer discount
+**Serves:** shared-ui-store-cart-US-16 - Shopper's promo replaces the site sale
 
 - **GIVEN** a cart whose quote replaced a site sale with a promo code
 - **WHEN** the drawer renders
-- **THEN** the lines show list unit prices without compare-at, the footer
-  shows `Discount (<code>)`, and no Store sale footer row appears
+- **THEN** the lines show the list price with nothing struck through, the
+  Subtotal matches the sum of those list prices, and the footer shows exactly
+  one discount row, for the code, with its amount
 
-### Requirement: Removing a promo restores the site sale on the lines when it still applies
+### Requirement: Removing a promo drops its discount and leaves the lines on the sale
 
-When the shopper removes an applied promo code and the quote still carries
-the site sale, every eligible line SHALL return to sale `price` with
-`originalPrice`, the Subtotal SHALL return to the post-sale line sum, and
-`PromoState` SHALL leave `applied`.
+Once the shopper removes an applied code, the consumer SHALL supply
+`PromoState` other than `applied`, and the drawer SHALL render no discount row
+for that code. Where the code had replaced the site sale and the quote still
+carries the sale, the consumer SHALL supply those lines on the sale again, and
+the drawer SHALL render each sale price with its list price struck through.
 
-#### Scenario: shared-ui-store-cart-SC-31 - Removing a replacing or stacked code restores site-sale lines
-**Serves:** shared-ui-store-cart-US-17 - Shopper removes a promo and the store sale returns
+#### Scenario: shared-ui-store-cart-SC-31 - Removing a stacked or replacing code leaves the lines on the sale
+**Serves:** shared-ui-store-cart-US-17 - Shopper removes a promo and keeps the site sale
 
 - **GIVEN** a cart showing an applied promo that stacked on or replaced a
-  site sale, and the site sale is still active
+  site sale, and the site sale still runs
 - **WHEN** the shopper removes that promo
-- **THEN** the lines show sale price and compare-at again, the Subtotal
-  matches those line prices, and the footer no longer shows that code's
-  Discount row
+- **THEN** the lines show the sale price and the struck list price, the
+  Subtotal matches those line prices, and the footer shows no discount row
+  for that code
