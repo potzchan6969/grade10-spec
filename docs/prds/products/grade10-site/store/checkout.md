@@ -47,8 +47,8 @@ In Your Orders.
 
 ## Integration readiness
 
-🚧 **Checkout integration** - The drawer uses the existing checkout backend
-for hosted handoff and order return; this change adds frontend integration only.
+🚧 **Checkout integration** - The drawer hands the member's cart to the
+checkout backend for hosted handoff and order return.
 
 🚧 **Return path** - Shopify's Thank You and Order status extension offers a
 Grade10 Your Orders link, and the staging walk proves the matching purchase
@@ -63,14 +63,14 @@ to navigate to.
   Proceed to Checkout with the verify message and an account link; no
   checkout session is created. A verified member, or a basket under the
   bar, proceeds. They verify on [their account](/p/grade10-site/account/kyc)
-- **The cart** — kept while the collector is at Shopify; cleared once the
-  order is paid
-- **Another Pay** - A new submission uses the existing creation flow; earlier
-  invoices are ignored and may remain payable
-
-- **The invoice** - Fixes the purchase; later cart edits do not change it
-- **Cart cleanup** - Existing payment settlement removes whole matching lines
-  and clears tender choices; this integration adds no cart-edit reconciliation
+- 🚧 **The cart** — one per member; kept while the collector is at Shopify,
+  and cleared with its code and points once its invoice is paid, however the
+  store learns of the payment
+- 🚧 **Another Pay** — on the same cart, unchanged, opens the same invoice;
+  after the cart changed, the earlier invoice is discarded and a new one made
+- **The invoice** — fixes the purchase; later cart edits do not change it
+- 🚧 **A late payment** — an invoice paid after the collector changed the cart
+  leaves the changed cart as it is
 
 :::detail{title="Design record" for="engineer"}
 - **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
@@ -87,4 +87,6 @@ to navigate to.
 | Checkout-open read | Decided | The read when the cart opens stands in for a separate checkout-open read, and the read at Proceed to Checkout prices the order, as [Cart Validation](/p/grade10-site/store/cart-validation) states; no client-side re-read is added before it. | Engineering |
 | Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
+| One cart per member | Decided | A member holds one cart, and a paid invoice clears the cart it was made from and nothing else, so a payment the store learns of late never empties a cart built afterwards. Chosen on 2026-10-06 over keeping lines per member. | Product |
+| One invoice per cart | Decided | Pay on an unchanged cart opens the invoice already made; Pay after an edit discards it and makes a new one. An edit alone discards nothing, so editing never waits on Shopify. | Product |
 :::

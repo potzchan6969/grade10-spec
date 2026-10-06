@@ -17,7 +17,7 @@ back to that page.
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Estimated total | **Goods − code − points** — before shipping, tax and the shop's own sale, which the invoice prices |
 | Held codes | The member's own store codes and reward coupons, the ones that fit first, the soonest to expire first; every store code is minted to a member, so the list is complete |
-| Carried to checkout | 🚧 The code and the points, held with the cart; Proceed to Checkout sends them straight to Shopify; a paid order clears them |
+| Carried to checkout | 🚧 The code and the points, held with the cart; Proceed to Checkout sends them straight to Shopify; paying the invoice clears the cart, them included — [Checkout](/p/grade10-site/store/checkout#integration-readiness) |
 
 ## Reviewing the Cart
 

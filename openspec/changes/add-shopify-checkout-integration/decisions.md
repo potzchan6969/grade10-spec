@@ -4,13 +4,13 @@
 
 - Send the current member basket and accepted tender from the drawer to hosted payment.
 - Handle the existing checkout responses and show the order after return.
-- Integrate the frontend without changing the backend.
+- Keep one payable invoice per member cart, and clear that cart the moment its invoice is paid.
 
 ## Non-goals
 
-Backend or schema work, new APIs, provider recovery, request idempotency,
-duplicate-invoice prevention, old-invoice cancellation and cart-edit reconciliation.
-Public guest checkout, an embedded card form and a separate checkout page.
+New APIs, provider recovery, request idempotency keys and dispatch recovery.
+Reconciling a cart edit into an invoice already made. Public guest checkout, an
+embedded card form and a separate checkout page.
 
 ## Decisions
 
@@ -21,20 +21,21 @@ Public guest checkout, an embedded card form and a separate checkout page.
 | Q3 | Who uses public checkout? | The public frontend requires a signed-in member and uses authenticated checkout; existing operator surfaces and backend permissions remain unchanged | A public guest or typed-email frontend |
 | Q4 | Where are shipping and tax calculated? | Shopify calculates them; the drawer shows an estimate | Presenting the drawer estimate as the final charge |
 | Q5 | Who creates and binds the order? | The existing backend owns order creation and provider references without changes in this plan | New persistence or transaction work |
-| Q6 | What happens on another Pay? | A new submission calls the existing creation flow and may produce another invoice; disable the control while the current frontend request is pending | Reusing an invoice by intent or promising server deduplication |
+| Q6 | What happens on another Pay? | A new submission calls creation; on the unchanged cart it returns the cart's open invoice, after a cart edit it discards that invoice and creates another. The control stays disabled while the current frontend request is pending | A second payable invoice for the same cart, or reuse keyed on a browser intent |
 | Q7 | Who settles payment? | Existing webhook, reconciliation and order-read behavior remains unchanged; the frontend reads its results | A new backend settlement path |
-| Q8 | What happens to the cart? | Keep existing paid-transition cleanup: remove whole matching variant lines and clear cart tender; frontend refreshes the resulting cart | Quantity subtraction or reconciliation of edits made during payment |
+| Q8 | What happens to the cart? | Payment clears the cart the invoice was made from, lines and tender, in the step that records the payment, whichever path learns of it. A cart changed after Pay, or built after an earlier payment, is kept; frontend refreshes the resulting cart | Removing matching variant lines from whatever cart the member holds, which emptied a cart built after a late payment |
 | Q9 | Who owns carrier rates? | Existing carrier configuration and behavior remain unchanged | Carrier implementation work in this change |
 | Q10 | Where does confirmation return? | A static Grade10 Your Orders link on Shopify Thank You and Order status; reuse existing order surfaces | A purchase-specific link or a new checkout page |
 | Q11 | Does reload reuse an intent? | No frontend intent persistence or replay is required; a later Pay is a new submission | A same-session purchase recovery contract |
 | Q12 | What happens on refusal? | Present the existing named-line refusal or error and allow a fresh submission when the basket is ready | New backend refusal recovery |
 | Q13 | What happens on response loss? | Show the existing failure or settling outcome; do not claim the frontend recovers the prior invoice or prevents duplicates | Provider lookup or dispatch recovery work |
 | Q14 | What happens on a worker crash? | Keep the current backend behavior; no dispatch state, deadline or operator recovery flow is added | A new state machine |
-| Q15 | What happens to an earlier payable invoice? | Ignore it for this integration. Each new Pay uses the existing creation flow; no cancellation or retirement is added | Waiting for the earlier invoice to close |
-| Q16 | What happens to edits during payment? | The invoice fixes the purchase; edits during payment are ignored and existing cart cleanup is unchanged | Repricing the invoice or preserving added quantity through new backend logic |
-| Q17 | What is the delivery scope? | Frontend integration only. Logic absent from the existing backend is not added now | The previous backend intent/replay/recovery plan |
+| Q15 | What happens to an earlier payable invoice? | It stands while the cart is unchanged and is returned by the next Pay. Once the cart changes, the next Pay discards it at Shopify so it can no longer be paid; an edit alone calls nobody | Leaving it payable beside a new invoice, or discarding it on every edit |
+| Q16 | What happens to edits during payment? | The invoice fixes the purchase. An edit makes it a different cart: paying the earlier invoice keeps the edited cart, and the next Pay replaces the invoice | Repricing the invoice, or a payment emptying the edited cart |
+| Q17 | What is the delivery scope? | Frontend integration, plus the backend cart header that Q6, Q8, Q15, Q16 and Q20 need. No intent, replay or dispatch recovery | The previous backend intent/replay/recovery plan |
 | Q18 | What if no matching order is returned? | Keep the existing order list, loading, error/Retry and empty/Shop now states; do not invent an order or add purchase recovery | A new return-specific missing-order flow |
 | Q19 | Does verification add a shared drawer slot? | Reuse the existing drawer-host threshold message and account action; this integration adds no shared UI export or slot | A new inline drawer contract |
+| Q20 | How is a member's cart held? | One active cart per member, counting each change to its lines or tender; an order whose lines are exactly that cart records which cart and which change it was made from. Staging carts are reset, not copied, as the store runs on staging only | Lines keyed by member with no cart of their own, which cannot tell a later cart from the one an invoice bought |
 
 ## Raised
 
@@ -49,3 +50,5 @@ Public guest checkout, an embedded card form and a separate checkout page.
 | `grade10-site/store/checkout` | Does this change add missing backend logic? | Q17 |
 | `grade10-site/store/checkout` | Which state appears if Your Orders has no matching purchase? | Q18 |
 | `grade10-site/store/checkout` | Does verification add a shared drawer slot? | Q19 |
+| `grade10-site/store/checkout` | Must a late payment, through the re-check or an operator sync, leave a cart built afterwards alone? | Q8 |
+| `grade10-site/store/checkout` | Does a second Pay on the same unchanged cart create a second invoice? | Q15 |

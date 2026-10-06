@@ -3,8 +3,10 @@
 ## Purpose
 
 The signed-in collector sends the drawer's current basket and accepted tender
-to the existing Shopify hosted checkout, then returns to the existing Grade10
-order surface. The invoice fixes the purchase; backend behavior is unchanged.
+to the Shopify hosted checkout, then returns to the existing Grade10 order
+surface. The invoice fixes the purchase. A member holds one cart, one payable
+invoice stands for it, and paying that invoice clears the cart it was made
+from.
 
 ## Feature set
 
@@ -18,11 +20,12 @@ order surface. The invoice fixes the purchase; backend behavior is unchanged.
   - Refusal: show the existing named-line and failure outcomes
 - Frontend payment attempts
   - Pending request: prevent another frontend submission while awaiting a response
-  - Fresh submission: a later Pay uses creation again and ignores older invoices
+  - Same cart: a later Pay on the unchanged cart returns its open invoice
+  - Changed cart: a later Pay after a cart edit discards the earlier invoice and creates another
   - Fixed purchase: later cart edits do not alter the invoice
 - Frontend order settlement and return
   - Order state: read existing pending and paid outcomes
-  - Cart refresh: reflect existing paid-transition cleanup
+  - Cart clear: paying the invoice clears the cart it was made from, and never a cart changed since
   - Return: link from Shopify confirmation to Grade10 Your Orders
 
 ## REMOVED Feature set
@@ -110,18 +113,22 @@ accepted tender through existing checkout creation.
 
 The public storefront frontend SHALL require a signed-in member and use the
 existing authenticated creation flow. Each new Pay submission SHALL invoke
-creation with the current reviewed basket and accepted tender. It MAY create
-another invoice; earlier invoices SHALL be ignored by this integration.
+creation with the current reviewed basket and accepted tender. A submission
+whose lines are exactly the member's cart SHALL be that cart's checkout: while
+the cart is unchanged since an open invoice was created for it, creation SHALL
+return that invoice; once the cart has changed, creation SHALL discard the
+cart's earlier invoice so it can no longer be paid, and create another.
 
 **Handoff** - The frontend SHALL open the hosted URL returned by the existing
 backend. Shopify owns address, shipping, tax and payment. The frontend SHALL
-not introduce an embedded payment form, an intent key, invoice replay or old
-invoice cancellation.
+not introduce an embedded payment form or an intent key; reusing or discarding
+an invoice is the backend's answer to the cart, never a browser decision.
 
 **Request** - The frontend SHALL prevent another submission while awaiting
 the current response. After it resolves, a later Pay is a fresh creation
 request. The invoice fixes the purchased lines and tender; subsequent cart
-edits SHALL not alter that purchase.
+edits SHALL not alter that purchase. A cart edit alone SHALL discard no
+invoice; the next Pay on the changed cart does.
 
 **Outcomes** - The frontend SHALL present the existing named-line refusal,
 verification, settling and failure responses. A transport failure SHALL not
@@ -156,15 +163,15 @@ remain unchanged; typed email SHALL not substitute for sign-in on this frontend.
 - **AND** no paid outcome is invented
 - **AND** a fresh submission is available after the basket is ready
 
-<!-- trace:scenario id=g10.store-checkout.SC-dwk rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-33 - A later Pay creates a fresh invoice
+<!-- trace:scenario id=g10.store-checkout.SC-dwk rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-33 - A later Pay on the unchanged cart returns the same invoice
 **Serves:** grade10-site-store-checkout-US-01 - The collector starts another payment attempt
 
-- **GIVEN** an earlier Pay resolved and its invoice remains unpaid
+- **GIVEN** an earlier Pay created an invoice for the member's cart and it remains unpaid
+- **AND** the cart has not changed since
 - **WHEN** the collector later presses Pay with a ready basket, including after reload
-- **THEN** the frontend calls existing creation again with the current basket and tender
-- **AND** it neither reuses nor cancels the earlier invoice
-- **AND** it can open a different returned invoice without promising deduplication
+- **THEN** the frontend calls creation again with the current basket and tender
+- **AND** creation returns the earlier invoice, and no second payable invoice exists
 
 <!-- trace:scenario id=g10.store-checkout.SC-5x2 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-34 - A pending request blocks another frontend submission
@@ -175,14 +182,16 @@ remain unchanged; typed email SHALL not substitute for sign-in on this frontend.
 - **THEN** the control remains unavailable and no second frontend request is sent
 - **AND** the request's resolution restores the appropriate ready or outcome state
 
-<!-- trace:scenario id=g10.store-checkout.SC-cc7 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-35 - Later edits leave the invoice purchase fixed
+<!-- trace:scenario id=g10.store-checkout.SC-cc7 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-35 - A Pay after a cart edit replaces the invoice
 **Serves:** grade10-site-store-checkout-US-01 - The collector pays the invoice's purchase
 
-- **GIVEN** creation accepted a reviewed basket and tender
+- **GIVEN** creation accepted a reviewed basket and tender and its invoice remains unpaid
 - **WHEN** the collector edits the cart during hosted payment
-- **THEN** this frontend does not update, reprice or reconcile the existing invoice
-- **AND** a later Pay submits the then-current cart as a new purchase
+- **THEN** the existing invoice is not updated or repriced
+- **WHEN** the collector presses Pay on the changed cart
+- **THEN** the earlier invoice can no longer be paid
+- **AND** a new invoice is created for the then-current cart and tender
 
 <!-- trace:scenario id=g10.store-checkout.SC-8hm rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-38 - A lost response offers the existing failure treatment
@@ -203,8 +212,12 @@ facts supplied by the existing backend after payment.
 
 **Cart** - The frontend SHALL keep cart data at redirect and merely returning
 from Shopify. After observing a paid web order it SHALL refresh existing cart
-and tender reads. Existing paid cleanup removes whole matching variant lines
-and clears tender; changes made during payment receive no new reconciliation.
+and tender reads. Payment SHALL clear the cart the invoice was made from, its
+lines and its tender, in the same step that records the payment, whichever
+path learns of it: the payment webhook, the order's own re-check or an
+operator sync. A cart changed after Pay, or built after an earlier payment,
+SHALL be kept as it is; an order whose lines were not the member's cart
+SHALL clear no cart.
 
 **Return** - The existing Shopify Thank You and Order status extensions SHALL
 offer a static Grade10 Your Orders link. The existing order surface SHALL show
@@ -221,14 +234,14 @@ native Continue shopping action or Shopify account path is required.
 - **AND** existing polling continues while the status can move
 - **AND** merely returning does not clear the cart
 
-<!-- trace:scenario id=g10.store-checkout.SC-m13 rev=2 -->
+<!-- trace:scenario id=g10.store-checkout.SC-m13 rev=3 -->
 #### Scenario: grade10-site-store-checkout-SC-13 - A paid event settles once and releases the cart
 **Serves:** grade10-site-store-checkout-US-03 - The collector sees the paid purchase and current cart
 
-- **GIVEN** the existing order read reports a paid web order
+- **GIVEN** the existing order read reports a paid web order made from the unchanged cart
 - **WHEN** the frontend displays it
 - **THEN** it shows the backend's paid total and refreshes cart and tender reads
-- **AND** it reflects existing cleanup rather than deleting local lines itself
+- **AND** the cart reads empty with no tender, cleared by the payment rather than by the frontend deleting local lines
 
 <!-- trace:scenario id=g10.store-checkout.SC-o15 rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-15 - Confirmation returns to the Grade10 order
@@ -240,14 +253,14 @@ native Continue shopping action or Shopify account path is required.
 - **AND** it shows the matching purchase when answered by the existing backend
 - **AND** the link does not depend on Continue shopping or a Shopify account page
 
-<!-- trace:scenario id=g10.store-checkout.SC-2n2 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-36 - Cart refresh reflects unchanged whole-line cleanup
-**Serves:** grade10-site-store-checkout-US-03 - The collector sees existing cleanup after payment
+<!-- trace:scenario id=g10.store-checkout.SC-2n2 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-36 - A payment never clears a cart changed after Pay
+**Serves:** grade10-site-store-checkout-US-03 - The collector keeps the cart built after Pay
 
-- **GIVEN** the collector increased a matching variant's quantity and changed tender during hosted payment
-- **WHEN** existing paid cleanup removes that whole matching line and clears tender
-- **THEN** the frontend's refreshed cart shows that result
-- **AND** it does not restore the added quantity or tender through new reconciliation
+- **GIVEN** the collector increased a variant's quantity and changed tender during hosted payment
+- **WHEN** the earlier invoice is paid and the payment is recorded, by webhook, re-check or operator sync
+- **THEN** the paid order shows the invoice's purchase
+- **AND** the frontend's refreshed cart shows the changed lines and tender, unchanged
 
 ## REMOVED Requirements
 
@@ -280,8 +293,9 @@ creation. Intent persistence, replay, duplicate-invoice prevention, provider
 response recovery and dispatch recovery are withdrawn.
 
 **Migration** - Stop relying on intent reuse for checkout. Each later Pay calls
-existing creation; an older invoice may remain payable. No database or API
-migration is introduced and historical acceptance records remain intact.
+creation, which returns the cart's open invoice or replaces it as the handoff
+requirement states. No API migration is introduced and historical acceptance
+records remain intact.
 Scenarios SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 are retired with this
 requirement. Their identifiers are not reused.
 

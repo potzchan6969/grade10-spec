@@ -276,8 +276,8 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
-<!-- trace:case id=g10.store-checkout.TC-gwn rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC5-2: Edited basket and tender reach a fresh submission
+<!-- trace:case id=g10.store-checkout.TC-gwn rev=3 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
+### grade10-site-store-checkout-US1-TC5-3: Edited basket and tender replace the earlier invoice
 
 **Classification:**
 
@@ -316,9 +316,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The submission carries the current basket and accepted tender.
-* Existing creation is called again.
-* The returned hosted URL opens.
-* The earlier invoice is ignored, without cancellation or reuse.
+* Creation is called again and returns a different hosted URL, which opens.
+* The earlier invoice can no longer be paid.
 
 <!-- trace:case id=g10.store-checkout.TC-w18 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC8-1: Terminal intent replay retains its existing outcome
@@ -830,8 +829,8 @@ Runs once per row of **Test data**.
 * The frontend sends only the first creation request.
 * The returned hosted URL opens when the response arrives.
 
-<!-- trace:case id=g10.store-checkout.TC-w15 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC23-1: A later Pay creates a fresh submission
+<!-- trace:case id=g10.store-checkout.TC-w15 rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
+### grade10-site-store-checkout-US1-TC23-2: A later Pay on the unchanged cart returns the same invoice
 
 **Classification:**
 
@@ -850,8 +849,7 @@ Runs once per row of **Test data**.
 
 * customer(member) is on <grade10 store url>.
 * The current basket review and accepted tender are ready.
-* An earlier invoice exists for this unchanged basket.
-* Checkout creation is mocked to return a different hosted URL.
+* An earlier unpaid invoice exists for this cart, unchanged since.
 
 **Steps:**
 
@@ -861,12 +859,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The frontend calls existing creation again.
-* The newly returned hosted URL opens.
-* The earlier invoice does not block or replace this submission.
+* The frontend calls creation again.
+* The earlier invoice's hosted URL opens.
+* No second payable invoice exists for the cart.
 
-<!-- trace:case id=g10.store-checkout.TC-mnx rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC24-1: Reload does not require an earlier invoice to close
+<!-- trace:case id=g10.store-checkout.TC-mnx rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
+### grade10-site-store-checkout-US1-TC24-2: Reload keeps the unchanged cart's invoice
 
 **Classification:**
 
@@ -884,7 +882,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(member) is on <grade10 store url>.
-* An earlier invoice remains payable for the current basket.
+* An earlier invoice remains payable for the current cart, unchanged since.
 
 **Steps:**
 
@@ -896,8 +894,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The drawer uses current basket and accepted tender.
-* Pay calls existing creation again.
-* The frontend does not wait for the earlier invoice.
+* Pay calls creation again and opens the earlier invoice's hosted URL.
+* The frontend does not wait for the earlier invoice to close.
 
 <!-- trace:case id=g10.store-checkout.TC-urs rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC25-1: An empty basket offers no hosted payment
@@ -1535,8 +1533,8 @@ Runs once per row of **Test data**.
 * Order detail shows the same purchase.
 * Return alone does not clear the cart or tender.
 
-<!-- trace:case id=g10.store-checkout.TC-xym rev=2 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
-### grade10-site-store-checkout-US3-TC2-2: Observed payment refreshes the existing cart cleanup
+<!-- trace:case id=g10.store-checkout.TC-xym rev=3 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
+### grade10-site-store-checkout-US3-TC2-3: Observed payment shows the paid cart cleared
 
 **Classification:**
 
@@ -1554,8 +1552,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(member) is on <grade10 orders url>.
+* The purchase was made from the member's cart, unchanged since Pay.
 * Existing order reads transition the matching purchase from pending to paid.
-* The resulting cart read excludes paid variants and clears tender.
 
 **Steps:**
 
@@ -1567,8 +1565,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The matching order displays the returned paid state and total.
-* The cart refresh reflects the existing paid-transition result.
-* Whole matching variant lines are absent.
+* The refreshed cart holds no lines.
 * Cart tender choices are cleared.
 
 <!-- trace:case id=g10.store-checkout.TC-dno rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
@@ -1830,8 +1827,8 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
-<!-- trace:case id=g10.store-checkout.TC-9a1 rev=1 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
-### grade10-site-store-checkout-US3-TC10-1: Cart edits do not change the invoice purchase
+<!-- trace:case id=g10.store-checkout.TC-9a1 rev=2 covers=g10.store-checkout.SC-l12,g10.store-checkout.SC-m13,g10.store-checkout.SC-o15,g10.store-checkout.SC-2n2 -->
+### grade10-site-store-checkout-US3-TC10-2: A payment keeps the cart edited after Pay
 
 **Classification:**
 
@@ -1849,9 +1846,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(member) is on an existing hosted invoice.
-* The Grade10 cart is edited during payment to <edited cart>.
-* Existing order reads return <invoice purchase> as paid.
-* Existing cart reads return whole matching variants removed and tender cleared.
+* The Grade10 cart is edited during payment to <edited cart>, and its tender changed.
+* The invoice is paid and order reads return <invoice purchase> as paid.
 
 **Test data:**
 
@@ -1870,9 +1866,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The order shows <invoice purchase>, unchanged by later edits.
-* The cart refresh reflects existing whole matching-variant removal.
-* The unrelated variant remains as returned by the cart read.
-* Cart tender choices are cleared.
+* The cart shows <edited cart>, both variants at their edited quantities.
+* The changed tender choices remain.
 
 ---
 
@@ -2147,9 +2142,9 @@ Runs once per row of **Test data**.
 
 ## Settled
 
-- Frontend only; backend behavior is unchanged.
-- Each new Pay uses existing creation; older invoices are ignored.
-- The invoice fixes the purchase; existing paid cart cleanup is unchanged.
+- One cart per member; one payable invoice stands for it.
+- Pay on the unchanged cart returns its open invoice; Pay after an edit discards it and creates another.
+- The invoice fixes the purchase; paying it clears the cart it was made from and never a cart changed since.
 - No matching purchase uses the existing orders states and actions.
 
 ## Reconciliation
@@ -2158,6 +2153,7 @@ Runs once per row of **Test data**.
 - **Run** - Update on 2026-10-06, from `add-store-product-status`'s fifth acceptance review (its decisions Q15). `Checkout reviews the current member basket before payment` now names the two reads `grade10-site/store/cart-validation` states, the read when the cart opens and the read at Pay, and names Pay as the drawer's Proceed to Checkout. No scenario and no case changed. QA2 reruns on this suite.
 - **Run** - Fresh QA2 after frontend-only QA1 and Dev completed independently. QA1 read the frozen bundle `/tmp/grade10-checkout-frontend.QNPBSW`: anchors, proposal, decisions, journeys, UI design, checkout/cart PRDs, context, existing cases without reconciliation and domain cases. Requirements, technical design, application source, acceptance and archive material were denied to QA1. QA2 read both reports, final requirements, technical design, tasks and Q18's existing orders-surface clarification. Dev's final strict validator passed before reconciliation.
 - **Anchors** - All 4 journeys and 4 feature roots are covered. The domain suite asserts no checkout handoff or return outcome; no case is delegated to it and no domain amendment is needed.
+- **Amendment** - The cart-header amendment (Q20) rewrites SC-13, SC-33, SC-35 and SC-36 and the cases US1-TC5-3, US1-TC23-2, US1-TC24-2, US3-TC2-3 and US3-TC10-2 against them. A fresh QA2 reconciles them before the amendment is accepted.
 - **Scope** - Q15–Q17 replace invoice reuse/recovery with fresh frontend creation and fixed invoices. Backend, permissions, settlement and carrier behavior are unchanged dependencies. No backend test, engineering task or execution claim is added.
 - **Raised** - QA1's absent matching purchase question lands in Q18. US3 TC11 folds the existing list/loading/error Retry/empty Shop now treatment. Purchase discovery, recovery and a new missing-order message are rejected under Q17–Q18. The answer is retained in Settled without scenario ids.
 - **Added** - QA2 adds frontend boundaries missing from the blind set: pending writes, failed tender retention, settling creation, contradictory/failed quotes, lost/undecodable responses, existing absent-purchase states and late responses after member change. All remain draft/manual. Existing US2 TC2 now explicitly checks availability and retry; this clarifies its existing failed-read run.
@@ -2171,13 +2167,13 @@ Each row folds a blind case or an added frontend case into the accepted anchors.
 | --- | --- | --- |
 | `grade10-site-store-checkout-US1-TC1-2` | Folded: reviewed basket, accepted tender and hosted handoff | SC-01, SC-02, SC-05 |
 | `grade10-site-store-checkout-US1-TC2-1` | Folded: estimate and Shopify final charges | SC-02 |
-| `grade10-site-store-checkout-US1-TC5-2` | Folded: changed basket/tender use fresh creation | SC-33, SC-35 |
+| `grade10-site-store-checkout-US1-TC5-3` | Folded: changed basket/tender replace the earlier invoice | SC-33, SC-35 |
 | `grade10-site-store-checkout-US1-TC12-2` | Folded: below-limit gate boundary | SC-01, SC-37 |
 | `grade10-site-store-checkout-US1-TC13-2` | Folded: gross boundary despite accepted points | SC-37 |
 | `grade10-site-store-checkout-US1-TC14-2` | Folded: verified boundary | SC-01, SC-37 |
 | `grade10-site-store-checkout-US1-TC22-1` | Folded: current request guard | SC-34 |
-| `grade10-site-store-checkout-US1-TC23-1` | Folded: same basket can create another invoice | SC-33 |
-| `grade10-site-store-checkout-US1-TC24-1` | Folded: reload uses current creation | SC-33 |
+| `grade10-site-store-checkout-US1-TC23-2` | Folded: unchanged cart returns its open invoice | SC-33 |
+| `grade10-site-store-checkout-US1-TC24-2` | Folded: reload keeps the unchanged cart's invoice | SC-33 |
 | `grade10-site-store-checkout-US1-TC25-1` | Folded: existing empty drawer prevents checkout | Current basket and tender; SC-01 ready-basket condition |
 | `grade10-site-store-checkout-US1-TC26-1` | Folded: existing verification feedback and account action | SC-37; existing verification outcome |
 | `grade10-site-store-checkout-US1-TC27-1` | Added: cart/tender writes block stale Pay | Review requirement; SC-01, SC-02 |
@@ -2191,9 +2187,9 @@ Each row folds a blind case or an added frontend case into the accepted anchors.
 | `grade10-site-store-checkout-US2-TC9-1` | Added: contradictory review/quote and failed quote | Review requirement; SC-03, SC-04 |
 | `grade10-site-store-checkout-US2-TC10-1` | Added: transport/decode failures promise no recovery | SC-38 |
 | `grade10-site-store-checkout-US3-TC1-2` | Folded: returned pending purchase and unchanged cart | SC-12 |
-| `grade10-site-store-checkout-US3-TC2-2` | Folded: observed pending-to-paid read refreshes cart/tender | SC-12, SC-13 |
+| `grade10-site-store-checkout-US3-TC2-3` | Folded: observed pending-to-paid read refreshes cart/tender | SC-12, SC-13 |
 | `grade10-site-store-checkout-US3-TC4-1` | Folded: both static confirmation links | SC-15 |
-| `grade10-site-store-checkout-US3-TC10-1` | Folded: fixed invoice and returned whole-line cleanup | SC-35, SC-36 |
+| `grade10-site-store-checkout-US3-TC10-2` | Folded: fixed invoice and the cart kept after edits | SC-35, SC-36 |
 | `grade10-site-store-checkout-US3-TC11-1` | Added: Q18 uses existing orders states/actions | Return requirement; Q18 |
 | `grade10-site-store-checkout-US4-TC1-2` | Folded: signed-out frontend sends no creation | SC-06 |
 | `grade10-site-store-checkout-US4-TC2-2` | Folded: expired session uses existing sign-in outcome | SC-06; Handoff Outcomes |
@@ -2267,13 +2263,13 @@ No case is credited to an executed test. Fixture walks are to be walked in the a
 | --- | --- |
 | `grade10-site-store-checkout-US1-TC1-2` | Hosted invoice basket/tender and address/payment are to be walked in the authorized staging checkout |
 | `grade10-site-store-checkout-US1-TC2-1` | Estimate and Shopify address-aware totals are to be walked in authorized staging |
-| `grade10-site-store-checkout-US1-TC5-2` | Current edited basket and ignored invoice are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC5-3` | Current edited basket and replaced invoice are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC12-2` | Below-limit action is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC13-2` | Gross-limit verification and account action are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC14-2` | Verified-limit action is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC22-1` | Pending control is to be walked in the mounted fixture integration |
-| `grade10-site-store-checkout-US1-TC23-1` | Fresh unchanged-basket creation is to be walked in the mounted fixture integration |
-| `grade10-site-store-checkout-US1-TC24-1` | Reload without intent reuse is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC23-2` | The unchanged cart's returned invoice is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US1-TC24-2` | Reload with the unchanged cart's invoice is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC25-1` | Empty drawer action is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC26-1` | Existing verification feedback and account action are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US1-TC27-1` | Pending write guards are to be walked in the mounted fixture integration |
@@ -2287,9 +2283,9 @@ No case is credited to an executed test. Fixture walks are to be walked in the a
 | `grade10-site-store-checkout-US2-TC9-1` | Invalid review/quote gating is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US2-TC10-1` | Transport/decode failure copy and retry are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US3-TC1-2` | Pending purchase/cart visibility is to be walked in the mounted fixture integration |
-| `grade10-site-store-checkout-US3-TC2-2` | Observed paid refresh is to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US3-TC2-3` | Observed paid refresh is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US3-TC4-1` | Actual Thank You/Order status extension placement is to be walked in authorized staging |
-| `grade10-site-store-checkout-US3-TC10-1` | Fixed purchase and returned cleanup are to be walked in the mounted fixture integration |
+| `grade10-site-store-checkout-US3-TC10-2` | Fixed purchase and the kept edited cart are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US3-TC11-1` | Existing orders states/actions are to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US4-TC1-2` | Signed-out surface is to be walked in the mounted fixture integration |
 | `grade10-site-store-checkout-US4-TC2-2` | Expired session feedback is to be walked in the mounted fixture integration |

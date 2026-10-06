@@ -3,8 +3,9 @@
 - [ ] 1.1 Verify amended frontend requirements and frozen anchors with the
   scoped artifact checks; preserve trace identities and draft case status.
 - [ ] 1.2 Update the checkout PRD and linked frontend architecture records for
-  current drawer creation, fresh submissions, fixed invoices and unchanged
-  backend cleanup; do not add backend intent or recovery contracts.
+  current drawer creation, the cart's one payable invoice, fixed invoices and
+  the cart cleared by its own payment; do not add backend intent or recovery
+  contracts.
 - [ ] 1.3 Verify with `pnpm check:manual` and
   `pnpm openspec validate add-shopify-checkout-integration --strict`.
 
@@ -115,10 +116,35 @@ These retired addresses are not completed tasks and are never reused.
   order display, unchanged cart refresh and both Shopify return surfaces.
 - [ ] 5.6 After explicit staging authorization, verify deployed frontend and
   existing extension placement against the existing shop; record observed
-  invoice/order references and outcomes without adding recovery, carrier or
-  settlement work or claiming duplicate prevention.
+  invoice/order references and outcomes, including the unchanged cart's
+  returned invoice and the cart cleared by its payment, without adding
+  recovery or carrier work.
 - [ ] 5.7 Verify the recorded frontend staging observations against the scoped
   draft suite; record environment, commands, observed results and unrun gates.
+
+## 7. Cart header (grade10) (owner: @cheunglok97)
+
+The backend piece of Q20, in [Grade10 PR #880](https://github.com/9gag/grade10/pull/880).
+Tests land before their code and the test checkbox is ticked last.
+
+- [ ] 7.1 Add failing backend tests for a paid invoice clearing its cart, a
+  basket that is not the cart, Pay twice on the unchanged cart, Pay after an
+  edit, and a late payment after an edit or a rebuild, through the webhook and
+  the reconcile pass, with an edit racing the payment on real Postgres:
+  `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-33`,
+  `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-36`.
+- [ ] 7.2 Add the cart header: one active cart per member with its version,
+  lines keyed by cart, the order's cart link and invoice URL, and one migration
+  per brand that resets staging carts:
+  `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-36`.
+- [ ] 7.3 Link a checkout whose lines are the cart to it, answer the unchanged
+  cart's open invoice, and retire the cart's other open invoices:
+  `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-35`.
+- [ ] 7.4 Convert the cart in the paid transition only while it holds the
+  order's version, and delete every cart on erasure:
+  `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-36`.
+- [ ] 7.5 Verify the store backend unit lane, both brands' db and worker lanes,
+  the Postgres lane and `pnpm run check:migrations`; record commands and results.
 
 ## 6. The walk (grade10)
 
@@ -136,6 +162,6 @@ manual execution uses `/tcs-run-sheet`. Cases remain draft during planning.
   `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>`; name cases
   remaining manual in the suite and the walk's rounds row.
 - [ ] 6.3 Verify the relevant Playwright flows and record fixture versus
-  authorized staging proof separately. No duplicate-invoice, backend recovery
-  or carrier guarantees are part of this walk; production enablement requires
-  separate authorization.
+  authorized staging proof separately. No backend recovery or carrier
+  guarantees are part of this walk; production enablement requires separate
+  authorization.
