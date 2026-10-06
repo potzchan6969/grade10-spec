@@ -27,7 +27,7 @@ required.
 
 | State | Spec scenario | Source of truth |
 | --- | --- | --- |
-| Product with two images, compare-at price, and low inventory for its one sellable item | `grade10-site-store-product-page-SC-13` | Product catalogue response |
+| Product with two images and a compare-at price for its one sellable item, with no remaining count | `grade10-site-store-product-page-SC-13` | Product catalogue response |
 | Product with no images | `grade10-site-store-product-page-SC-14` | Product catalogue response |
 | Product with optional badges and item facts | `grade10-site-store-product-page-SC-15` | Product catalogue response and locale catalog |
 | Description collapsed / expanded | `grade10-site-store-product-page-SC-16` | Product page disclosure state |

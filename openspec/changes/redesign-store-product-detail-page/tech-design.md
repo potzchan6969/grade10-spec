@@ -19,10 +19,9 @@ The remaining delivery work is the description disclosure: group 5 replaces
 the character-count estimate with a post-layout overflow decision while
 keeping server rendering and hydration deterministic.
 
-The stock ceiling and remaining-count behavior in the frontend completion plan
-belongs to `hold-cart-quantity-to-stock`, groups 3 and 5. This change consumes
-that change's landed product-model and buy-box boundary; it does not introduce
-a second stock threshold or duplicate its presentation task.
+The page shows no remaining count and puts no stock ceiling on the stepper:
+`add-store-product-status` removed both from the product page, and owns the
+page's one-item add and sold-out requirements.
 
 ## Goals / Non-Goals
 
@@ -39,8 +38,8 @@ a second stock threshold or duplicate its presentation task.
 
 - **Provider work** — no Shopify query, API, database, webhook, or deployment
   change for the remaining frontend groups
-- **Stock-policy work** — no new ceiling or scarcity rule; those belong to
-  `hold-cart-quantity-to-stock`
+- **Stock-policy work** — no ceiling or scarcity rule; the page's availability
+  is `add-store-product-status`'s
 - **Design-system work** — no new export, variant, or token
 
 ## Decisions
@@ -99,8 +98,8 @@ chooser. The price and inventory context follow that item's catalogue data, and
 its Shopify sale identifier is passed to the cart without becoming visible
 product text.
 
-The stepper uses the design-system `Stepper` with a minimum of one and a
-finite maximum when the product item exposes a positive quantity. The buy box
+The stepper uses the design-system `Stepper` with a minimum of one and no
+maximum from a stock count. The buy box
 passes the chosen quantity to the existing cart use case. Pending, success,
 and cart quantity are observed from the existing mutation/query state rather
 than duplicated in storage.
@@ -136,22 +135,18 @@ The alternative is to keep the fixed character budget in the product model.
 Rejected: line wrapping changes with width, font, and locale, so the model
 cannot decide whether the rendered region exceeds three lines.
 
-### Consume stock-limit ownership from its own change
+### Leave availability to product status
 
-The product page and buy box share the quantity state and stock feedback
-defined by `hold-cart-quantity-to-stock`. Its product-model group owns the
-finite ceiling and single scarcity rule; its product-page group owns the
-remaining-count presentation. The redesign keeps its existing quantity and
-cart scenarios and does not add parallel helpers or thresholds.
-
-The alternative is to add a second stock helper to this change. Rejected: two
-rules for the same shop count would let the stepper and the message disagree.
+`add-store-product-status` owns what the page says about availability: the
+one item's price and whether it can be bought, with no remaining count and no
+stock ceiling. The redesign keeps its gallery, description and quantity
+scenarios and adds no stock helper or threshold.
 
 ### Keep copy in the shared catalogs
 
 The new labels (`Shop`, `About This Item`, `Shipping & Pickup`, `Shipping
 calculated at checkout`, `Shipping fee`, `Free pick-up at`, `Hong Kong Grade10
-Store`, `Only X left`, `Show more`, `Show less`, `Adding…`, and `Sold out`)
+Store`, `Show more`, `Show less`, `Adding…`, and `Sold out`)
 are added to the shared product/store message catalog. Other locales fall back
 through the existing catalog-resolution mechanism until translations are
 supplied.
@@ -198,9 +193,9 @@ accepts a fabricated default label.
 - Layout measurement can briefly precede the overflow decision → keep the
   control in the SSR-safe initial render and hide it only after a measured
   collapsed region proves that no disclosure is needed.
-- A stock change can land beside this redesign → keep the stock model and
-  threshold in `hold-cart-quantity-to-stock`, and consume its shared boundary
-  rather than adding a second rule here.
+- Two changes move the product page → `add-store-product-status` accepts
+  first, and this change rebases against the folded page, retiring US-08 and
+  US-09 into US-03 and US-04.
 
 ## Migration Plan
 
@@ -208,8 +203,8 @@ accepts a fabricated default label.
 2. Bump `external/grade10-spec` in `grade10`.
 3. Complete the description disclosure group with layout measurement and
    serving, hydration, package, and application coverage.
-4. Land the stock model and product-page work through
-   `hold-cart-quantity-to-stock`, without duplicating its helpers here.
+4. Rebase this delta against the product page `add-store-product-status`
+   folds, adding no stock helper here.
 5. Run the remaining product-page acceptance checks on the chosen integration
    build.
 

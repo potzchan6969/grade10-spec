@@ -8,77 +8,6 @@
   - Description disclosure: lets a collector read the full description without losing their place.
   - Quantity purchase: lets a collector choose a quantity and add the product's one sellable item in place.
 
-## MODIFIED Requirements
-
-### Requirement: A card is added to the cart from its own page
-
-A card's page SHALL let a collector add its one sellable product item to the
-storefront's cart, without leaving the page and without returning to the grid.
-The page SHALL NOT render or require a choice among sizes, options, or
-variants. The underlying Shopify sale identifier remains an internal cart
-identity and is not a product choice or display label.
-
-After a card is added the collector SHALL still be on that card, and what the
-site says the cart holds SHALL account for what was added. Adding the same
-product again SHALL increase one cart line.
-
-<!-- trace:scenario id=g10.store-product-page.SC-jt1 rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-07 - A collector adds the grade they chose
-**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
-
-- **GIVEN** a card with one sellable product item
-- **WHEN** a collector opens its product page
-- **THEN** the page offers no size, option, or variant choice
-
-<!-- trace:scenario id=g10.store-product-page.SC-b7g rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-08 - A card with one thing to buy needs no choice
-**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
-
-- **GIVEN** a card with one sellable product item
-- **WHEN** a collector adds it without choosing anything
-- **THEN** the cart holds that product item
-
-<!-- trace:scenario id=g10.store-product-page.SC-qmb rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-09 - The collector keeps their place
-**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
-
-- **WHEN** a collector adds a card from its page
-- **THEN** they are still on that card's address, reading that card
-- **AND** what the site says the cart holds has changed to account for it
-
-<!-- trace:scenario id=g10.store-product-page.SC-tl5 rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-10 - The same card twice
-**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
-
-- **GIVEN** a collector who has already added a product from its page
-- **WHEN** they add the same product again
-- **THEN** the cart holds the quantity they added, as one line rather than two
-
-### Requirement: A card nobody can buy says so where the buying happens
-
-A card whose one product item is unavailable SHALL say so on its page, in the
-place a collector would otherwise buy it. It SHALL NOT show a control that
-cannot be used, and it SHALL NOT hide the price it lists.
-
-<!-- trace:scenario id=g10.store-product-page.SC-prx rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-11 - Nothing on the card is for sale
-**Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
-
-- **GIVEN** a card whose one product item is unavailable for sale
-- **WHEN** a collector opens its page
-- **THEN** the page says the product cannot be bought
-- **AND** its price is still visible
-- **AND** there is nothing to press that would add it
-
-<!-- trace:scenario id=g10.store-product-page.SC-1p0 rev=1 -->
-#### Scenario: grade10-site-store-product-page-SC-12 - One grade sold, another still for sale
-**Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
-
-- **GIVEN** a card whose one product item is unavailable for sale
-- **WHEN** a collector opens its page
-- **THEN** the product is marked unavailable
-- **AND** the page offers no alternate size, option, or variant to add
-
 ## ADDED Requirements
 
 ### Requirement: A product detail page presents complete catalogue context
@@ -87,14 +16,11 @@ The product page SHALL render every image supplied for the product in the
 catalogue order, with descriptive alternative text, and SHALL render an
 accessible placeholder when the catalogue supplies no image. It SHALL show the
 product's one sellable item's current price and SHALL show a compare-at price
-only when the catalogue supplies one greater than the current price.
+only when the catalogue supplies one greater than the current price. It SHALL
+NOT show a remaining quantity, as `grade10-site/commerce/product-status`
+requires.
 
-When the product item is available and the catalogue supplies a finite
-quantity from one through three, the page SHALL show the remaining quantity.
-It SHALL hide that low-inventory message when quantity is greater than three,
-unknown, or the product item is sold out.
-
-<!-- trace:scenario id=g10.store-product-page.SC-n6k rev=1 -->
+<!-- trace:scenario id=g10.store-product-page.SC-n6k rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-13 - A product page shows its media and price context
 **Serves:** grade10-site-store-product-page-US-06 - Collector reviews a product's catalogue context
 
@@ -102,7 +28,7 @@ unknown, or the product item is sold out.
 - **WHEN** a collector opens the product page
 - **THEN** the page renders both images in catalogue order with descriptive alternative text
 - **AND** it renders the current price and the greater compare-at price
-- **AND** it says that only 3 remain
+- **AND** it says nothing about how many remain
 
 <!-- trace:scenario id=g10.store-product-page.SC-dd3 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-14 - A product without media has an honest placeholder
@@ -154,8 +80,8 @@ SHALL restore the collapsed state without navigating away.
 ### Requirement: A product page adds a chosen quantity in place
 
 The product page SHALL render a quantity stepper defaulting to one for the
-product's one sellable item. The stepper SHALL clamp to that item's finite
-available quantity when one is supplied. While an add is pending, the stepper
+product's one sellable item. The stepper SHALL NOT cap the requested quantity
+at a stock count; the cart's review answers it. While an add is pending, the stepper
 and add action SHALL be disabled and the action SHALL show its loading state
 labelled for adding. After a successful add, the page SHALL remain on the
 product address, open the cart drawer, reset the quantity stepper to one, and
