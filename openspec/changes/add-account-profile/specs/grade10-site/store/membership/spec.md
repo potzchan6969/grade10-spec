@@ -1,7 +1,7 @@
 ## Feature set
 
 - Spending
-  - Member's name: the name chosen for the shop, else the account name, else the address before the `@`, sent whole; 會員 when the account service cannot give one
+  - Member's name: the name chosen for the shop, else the account name, else the address before the `@`, sent whole; 會員 for a member with no name chosen for the shop while the account service cannot be reached
 
 ## MODIFIED Requirements
 
@@ -23,8 +23,9 @@ The member's name SHALL be the one their profile, their pass and the
 membership surface show, resolved in this order: the name the member chose
 for the shop, else their account name, else the part of their email address
 before the `@`. A member with a name chosen for the shop SHALL be named without
-the account service. When the account service cannot be reached or gives no
-name for a member with none, staff SHALL see 會員 in its place. The
+the account service. For a member with no name chosen for the shop, staff SHALL
+see 會員 in its place when the account service cannot be reached or does not
+answer for them. The
 customer-details badge SHALL show the member by the same name. The store SHALL
 send the till session and the badge the name whole, uncut; the till lays it
 out.
@@ -65,6 +66,17 @@ notification SHALL never carry the code.
 - **WHEN** the sale is later abandoned rather than paid
 - **THEN** the member receives a correction notice
 
+<!-- trace:scenario id=g10.store-membership.SC-e9k rev=1 -->
+#### Scenario: grade10-site-store-membership-SC-90 - The till names the member by the store's one rule
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
+
+- **WHEN** staff open a till session for a member
+- **THEN** staff see the name the member chose for the shop
+- **AND** for a member with none, their account name; with neither, the part
+  of their email address before the `@`
+- **AND** a member whose record holds the placeholder name older records carry
+  is named as one with no name chosen for the shop
+
 <!-- trace:scenario id=g10.store-membership.SC-a70 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-78 - An unreachable account service shows the member as 會員
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
@@ -74,7 +86,7 @@ notification SHALL never carry the code.
 - **THEN** staff see 會員 in place of the member's name
 
 <!-- trace:scenario id=g10.store-membership.SC-jjw rev=1 -->
-#### Scenario: grade10-site-store-membership-SC-83 - A name chosen for the shop needs no account service
+#### Scenario: grade10-site-store-membership-SC-87 - A name chosen for the shop needs no account service
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **GIVEN** a member who has saved a name on their profile
@@ -82,7 +94,7 @@ notification SHALL never carry the code.
 - **THEN** staff see the name the member saved
 
 <!-- trace:scenario id=g10.store-membership.SC-y0k rev=1 -->
-#### Scenario: grade10-site-store-membership-SC-84 - The badge names the member as the till does
+#### Scenario: grade10-site-store-membership-SC-88 - The badge names the member as the till does
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **GIVEN** a paired customer staff found in Shopify's own search
@@ -91,7 +103,7 @@ notification SHALL never carry the code.
   and 會員 where the till would
 
 <!-- trace:scenario id=g10.store-membership.SC-ymg rev=1 -->
-#### Scenario: grade10-site-store-membership-SC-85 - A long name reaches the till whole
+#### Scenario: grade10-site-store-membership-SC-89 - A long name reaches the till whole
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **GIVEN** a member whose name chosen for the shop is 80 characters long

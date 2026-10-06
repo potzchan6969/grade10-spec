@@ -17,6 +17,7 @@ belong to the application.
   - Supplied fields: avatar, display name, email, bio, and meta, with no component defaults
 - Form
   - Reported save: the form reports values; validity and length limits belong to the application
+  - Reported cancel: offered only when the application names it and handles it, and reports no values
   - Read-only email: the form shows the address it is given and edits nothing of it
   - Pending save: a save in flight cannot be sent again
 
@@ -77,6 +78,13 @@ hold or decide whether the collector is reading or editing.
 - **WHEN** the card is rendered failed with a message and an action
 - **THEN** it displays that message and that action, and no profile fields
 
+<!-- trace:scenario id=g10.shared-store-profile.SC-z3a rev=1 -->
+#### Scenario: shared-ui-store-profile-SC-22 - An empty card states what the application supplies
+**Serves:** Card states - an empty card states what the application supplies
+
+- **WHEN** the card is rendered empty with a message and an action
+- **THEN** it displays that message and that action, and no profile fields
+
 ### Requirement: The read view shows avatar, display name, email, bio, and meta
 
 `ProfileDetails` SHALL display the supplied avatar, display name, email
@@ -103,8 +111,39 @@ edit label and an edit handler.
 #### Scenario: shared-ui-store-profile-SC-08 - A read-only view offers no edit
 **Serves:** Read view - a read-only view offers no edit
 
-- **WHEN** the read view is rendered without an edit label and edit handler
+- **WHEN** the read view is rendered with an edit handler and no edit label,
+  an edit label and no handler, or neither
 - **THEN** no control invites editing
+
+### Requirement: The form offers a cancel the application names
+
+`ProfileForm` SHALL offer a cancel only when the application supplies both a
+cancel label in `ProfileFormCopy` and a cancel handler. A cancel SHALL report
+to that handler and SHALL report no values to the submit handler.
+
+<!-- trace:scenario id=g10.shared-store-profile.SC-7y6 rev=1 -->
+#### Scenario: shared-ui-store-profile-SC-24 - A cancel reports no values
+**Serves:** Form - a cancel reports no values
+
+- **GIVEN** a form rendered with a cancel label and a cancel handler
+- **WHEN** the collector edits the fields, chooses an image and cancels
+- **THEN** the cancel handler is called once, under the supplied label
+- **AND** no values are reported to the submit handler
+- **AND** a form rendered with the handler and no label, the label and no
+  handler, or neither offers no cancel
+
+### Requirement: The bio keeps the lines the collector typed
+
+`ProfileForm` SHALL edit the bio in a field of several lines, and
+`ProfileDetails` SHALL show the bio's line breaks as typed.
+
+<!-- trace:scenario id=g10.shared-store-profile.SC-tlq rev=1 -->
+#### Scenario: shared-ui-store-profile-SC-23 - A bio's line breaks are kept
+**Serves:** Form - a bio's line breaks are kept
+
+- **WHEN** the collector types a bio over two lines in the form and submits
+- **THEN** the submitted bio carries both lines and the break between them
+- **AND** the read view rendered with that bio shows it on two lines
 
 ### Requirement: The avatar falls back when there is no image to show
 

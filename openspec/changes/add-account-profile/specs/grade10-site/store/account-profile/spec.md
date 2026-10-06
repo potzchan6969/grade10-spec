@@ -20,7 +20,7 @@ profile.
   - Explicit save: empty display name is refused; a save with no field is refused
   - Limits: display name trimmed, 1 to 80 characters; bio trimmed, at most 500
 - Failures
-  - Reported: a failed read or save is shown; a failed save keeps the collector's input
+  - Reported: a failed read or save is shown; a failed read offers to try again; a failed save keeps the collector's input
 
 ## ADDED Requirements
 
@@ -65,8 +65,7 @@ be defaulted from their signed-in account — display name from the account
 name, or, when the account has no name, from the part of the signed-in address
 before the `@`; avatar as the display name's first letter. The display name SHALL be the one the till
 and the wallet pass show for the member. Reading a profile SHALL NOT create or
-modify stored data; the collector's profile record is created when they first
-save.
+modify stored data.
 
 <!-- trace:scenario id=g10.store-account-profile.SC-xen rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-03 - A collector who has never saved sees a profile
@@ -259,12 +258,11 @@ counted the same way, and SHALL let a collector clear it.
 The system SHALL store a collector's avatar square, at 512 by 512 pixels. An
 avatar upload SHALL carry a JPEG, PNG, or WebP image of at most 5 MB
 (5,242,880 bytes), and the system SHALL refuse any other upload, whoever sends
-it. An upload SHALL replace whatever avatar the collector had. An image's
-address SHALL change whenever its content does. An image SHALL answer at its
-address only while some profile holds it, so a replaced image keeps answering
-only while another profile holds the same image. The storage sweep SHALL
-delete an image no profile holds once it is at least a day old, so an upload
-still in flight is never deleted. A copy already held in a cache outside the
+it. An upload SHALL replace whatever avatar the collector had. Each profile's
+image SHALL have an address of its own, which changes whenever the image does.
+An image SHALL answer at its address only while its profile holds it. The
+storage sweep SHALL delete an image its profile no longer holds once it is at
+least a day old, so an upload still in flight is never deleted. A copy already held in a cache outside the
 system MAY answer the replaced image's address until that cache expires. A
 rejected upload SHALL leave the previous avatar in place and SHALL state why
 it was rejected.
@@ -304,13 +302,23 @@ it was rejected.
   image stops answering at its address, and the storage sweep deletes it once
   it is a day old
 
+<!-- trace:scenario id=g10.store-account-profile.SC-hjj rev=1 -->
+#### Scenario: grade10-site-store-account-profile-SC-38 - Two collectors with the same image each hold their own
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
+
+- **GIVEN** two collectors who upload the same image as their avatars
+- **WHEN** one of them removes theirs
+- **THEN** the two avatars had different addresses
+- **AND** the other collector's image still answers at its address
+
 ### Requirement: A collector removes their avatar and falls back to the display name's first letter
 
 The system SHALL let a collector remove their avatar, and SHALL treat the
 removed image as it treats a replaced one. Whenever no avatar is set, the
 system SHALL show the display name's first letter in its place: one character,
-the first letter or digit in any script, upper-cased, as the account menu
-draws it, and `?` for a display name with neither.
+the first letter or digit in any script, read from the whole display name and
+upper-cased, as the account menu draws it, and `?` for a display name with
+neither.
 
 <!-- trace:scenario id=g10.store-account-profile.SC-f4k rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-24 - Removing an avatar restores the letter
@@ -343,8 +351,8 @@ draws it, and `?` for a display name with neither.
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector with no avatar
-- **WHEN** their display name is `陳大文`, `ångström` or `🃏🃏`
-- **THEN** the page shows `陳`, `Å` or `?` in the avatar's place
+- **WHEN** their display name is `陳大文`, `ångström`, `@kitlam` or `🃏🃏`
+- **THEN** the page shows `陳`, `Å`, `K` or `?` in the avatar's place
 
 ### Requirement: Editing is explicit, and a save carrying no field is refused
 
@@ -353,7 +361,7 @@ Cancelling SHALL discard the edits and leave the stored profile untouched. A
 save SHALL persist the display name and bio it carries together — both or
 neither — and SHALL return the updated profile. A save carrying no editable
 field SHALL be refused; a save repeating the stored values SHALL be accepted
-and change nothing.
+and change no field.
 
 An avatar is set and removed on its own, so an edit touching both the avatar
 and the text fields SHALL report each outcome and SHALL NOT present a refused
@@ -384,6 +392,15 @@ refused SHALL save none of its text fields.
 - **THEN** the system refuses it, stating that it carried nothing to save, and
   stores nothing
 
+<!-- trace:scenario id=g10.store-account-profile.SC-oj6 rev=1 -->
+#### Scenario: grade10-site-store-account-profile-SC-37 - A first save that repeats the stored values starts member-since
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
+
+- **GIVEN** a collector who has never saved their profile, and who holds no bio
+- **WHEN** their first save carries only an empty bio
+- **THEN** no stored field changes
+- **AND** their account page shows the date of that save as member-since
+
 <!-- trace:scenario id=g10.store-account-profile.SC-q8y rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-30 - An accepted avatar stands when the text save is refused
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
@@ -409,14 +426,16 @@ refused SHALL save none of its text fields.
 
 The system SHALL tell the collector when their profile could not be loaded or
 saved, and SHALL NOT present a partially loaded profile as if it were complete.
+A failed read SHALL offer to try again.
 
 <!-- trace:scenario id=g10.store-account-profile.SC-tvg rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-31 - A failed read is reported
 **Serves:** grade10-site-store-account-profile-US-05 - Collector is told when a read or save fails
 
 - **WHEN** the profile cannot be loaded
-- **THEN** the page states that the profile could not be loaded and shows no
-  profile fields
+- **THEN** the page states that the profile could not be loaded, shows no
+  profile fields, and offers to try again
+- **AND** trying again once the profile can be loaded shows it
 
 <!-- trace:scenario id=g10.store-account-profile.SC-7oe rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-32 - A failed save keeps the collector's input
