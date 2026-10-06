@@ -116,3 +116,24 @@ The revision of 2026-10-05 and 2026-10-06 (`Q112` to `Q115`). It lands in one pu
 - [ ] 11.5 `workflow-round`'s Draft ahead and `workflow-plan`'s The Whole Plan in One Wake name that order and the cases drawn blind from the anchors, before the tech design; the cases' `upstream:` without `tech-design` is group 10's 10.14 - `shared-planning-agent-rounds-SC-71`
 - [ ] 11.6 `tcs-run-sheet` says a failed row is QA's one sentence in the change's thread naming the case id, and that the sheet posts nothing itself; a `round-skill.test.mjs` test in 11.1's commit reads it - `shared-planning-agent-rounds-SC-61a`
 - [ ] 11.3 Verify: `pnpm run test:openspec`, `pnpm --dir tools/manual test`, `pnpm check:manual` and `openspec validate run-a-round-on-every-artifact --strict`
+
+## 12. Scope a group's reading to what it cites (grade10-spec)
+
+Raised by the context profile of 2026-10-05: a reader of one `add-card-grading`
+group is given about 700K tokens of the change, and a first read of the plan
+ends before group 27 starts; Q117 holds the scope.
+
+- [ ] 12.1 Tests: a group's bundle holds the plan's opening and its own section,
+      and of the capabilities only the blocks its section cites; a cited journey
+      brings its cases; a group citing none of the change's ids gets no
+      capability; a linked page section is given as its own lines, and a link to
+      no section as the whole page; a bare id the change issues refuses the
+      reading - `shared-planning-agent-rounds-SC-109`, `shared-planning-agent-rounds-SC-110`, `shared-planning-agent-rounds-SC-111`, `shared-planning-agent-rounds-SC-112`, `shared-planning-agent-rounds-SC-113`
+- [ ] 12.2 `bundleFor` gives line ranges, reading the group's citations against
+      the ids the change's own files issue and the page sections through the
+      manual's section boundary, with no entry over 45 KB - `shared-planning-agent-rounds-SC-109`, `shared-planning-agent-rounds-SC-110`, `shared-planning-agent-rounds-SC-111`, `shared-planning-agent-rounds-SC-112`, `shared-planning-agent-rounds-SC-113`
+- [ ] 12.3 Each reader's definition says how to read its bundle in one message;
+      a reader a task group's or the tech design's round dispatches runs on
+      `opus`, held by `scripts/agent-platform/check-agent-readers.mjs`
+- [ ] 12.4 Verify: `pnpm run test:openspec`, `pnpm run agent:check-parity`,
+      `pnpm check:manual`, `pnpm run validate:changes run-a-round-on-every-artifact`

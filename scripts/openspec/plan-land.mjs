@@ -665,7 +665,7 @@ async function attemptLanding(attempt) {
     say("land", `the relay moved ${mainBranch} to ${short(commit)}`);
   } else {
     race(attempt);
-    const pushed = push([`${commit}:refs/heads/${mainBranch}`]);
+    const pushed = push([`${commit}:refs/heads/${mainBranch}`], commit);
     if (!pushed.ok) {
       if (!pushed.rejected) fail(`git push refused:\n${pushed.stderr}`);
       return false;
@@ -1115,11 +1115,14 @@ function remoteBranchSha() {
  * can fail is git refusing to push at all — no remote, no network, a hook —
  * and nobody's race to run again.
  */
-function push(args) {
+/** `gated` names a commit this run already checked, so the pre-push gate
+ * (`scripts/push-main/hook.mjs`) lets it through without checking it again. */
+function push(args, gated) {
   const ran = spawnSync("git", ["push", "origin", ...args], {
     cwd: root,
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
+    env: gated ? { ...process.env, PUSH_MAIN_GATED: gated } : process.env,
   });
   const stderr = ran.stderr ?? "";
   if (ran.status !== 0 && stderr) process.stderr.write(stderr);

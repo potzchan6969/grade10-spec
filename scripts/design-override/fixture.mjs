@@ -1,5 +1,5 @@
 /*
- * A throwaway copy of the store: the engine, the team parser, the hooks and a
+ * A throwaway copy of the store: the engines, the team parser, the hooks and a
  * team map of its own, committed on `main` with the hooks set. Every git call
  * runs with no global or system config, so the answer is the same anywhere.
  */
@@ -44,14 +44,11 @@ export function fixture({ team = TEAM, gitConfig } = {}) {
   const dir = mkdtempSync(join(tmpdir(), "design-override-"));
   const copy = (path) =>
     cpSync(join(STORE, path), join(dir, path), { recursive: true });
-  cpSync(
-    join(STORE, "scripts/design-override"),
-    join(dir, "scripts/design-override"),
-    {
+  for (const scripts of ["scripts/design-override", "scripts/push-main"])
+    cpSync(join(STORE, scripts), join(dir, scripts), {
       recursive: true,
       filter: (path) => !path.endsWith(".test.mjs"),
-    },
-  );
+    });
   copy("scripts/openspec/lib/team-parse.mjs");
   copy("scripts/openspec/lib/handle.mjs");
   copy(".githooks");

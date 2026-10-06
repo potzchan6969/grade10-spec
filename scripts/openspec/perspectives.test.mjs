@@ -83,7 +83,10 @@ const fixture = ({ record } = {}) => {
   write(`${change}/decisions.md`, "# Decisions\n");
   write(`${change}/ui-design.md`, "# UI Design\n");
   write(`${change}/tech-design.md`, "# Tech Design\n");
-  write(`${change}/tasks.md`, "# Tasks\n");
+  write(
+    `${change}/tasks.md`,
+    "# Tasks\n\n## 3. Demo (grade10-spec)\n\n- [ ] 3.1 The demo\n",
+  );
   write(
     `${change}/specs/shared/planning/demo/user-journeys.md`,
     "# Journeys\n",
@@ -369,7 +372,7 @@ test("shared-planning-agent-rounds-SC-30 - a bundle is the draft and what is bef
     "openspec/changes/demo/proposal.md",
     "openspec/changes/demo/decisions.md",
     "openspec/changes/demo/specs/shared/planning/demo/user-journeys.md",
-    `${PAGE}#the-walk`,
+    `${PAGE}#L3-L5`,
   ]);
   // The schema draws the tech design beside the UI design, never from it, and
   // nothing after it is before it.
@@ -378,6 +381,345 @@ test("shared-planning-agent-rounds-SC-30 - a bundle is the draft and what is bef
       !bundle.upstream.some((one) => one.endsWith(later)),
       `${later} is not upstream of the tech design`,
     );
+});
+
+/** The text one bundle entry names: a path whole, or `path#La-Lb` those lines. */
+const textOf = (root, entry) => {
+  const [path, range] = entry.split("#");
+  const text = readFileSync(join(root, path), "utf8");
+  const lines = /^L(\d+)-L(\d+)$/.exec(range ?? "");
+  if (!lines) return text;
+  return text
+    .split("\n")
+    .slice(Number(lines[1]) - 1, Number(lines[2]))
+    .join("\n");
+};
+const entriesOf = (bundle) => [bundle.draft, ...bundle.upstream].flat();
+/** Everything a reader of the bundle is given, as one text. */
+const readAll = (root, bundle) =>
+  entriesOf(bundle)
+    .map((entry) => textOf(root, entry))
+    .join("\n");
+const quiet = () => {};
+
+/** More lines than the merge of nearby ranges bridges, so a block a reading
+ * leaves out stays out of every range around it. */
+const FILLER = Array.from({ length: 35 }, (_, i) => `Filler line ${i + 1}.`);
+
+/** Fills the fixture's change with two capabilities whose files issue their
+ * own ids, and a plan whose groups cite them in every way a group can. */
+const citing = (root) => {
+  const change = join(root, "openspec", "changes", "demo");
+  const capability = (name) => {
+    const prefix = `shared-planning-${name}`;
+    const dir = join(change, "specs", "shared", "planning", name);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(
+      join(dir, "spec.md"),
+      [
+        `# ${name} Specification`,
+        "",
+        "## Purpose",
+        "",
+        `${name} purpose.`,
+        "",
+        "## ADDED Requirements",
+        "",
+        `### Requirement: ${name} first`,
+        "",
+        `${name} first rule.`,
+        "",
+        `#### Scenario: ${prefix}-SC-01 - ${name} first holds`,
+        "",
+        ...FILLER,
+        "",
+        `### Requirement: ${name} second`,
+        "",
+        `${name} second rule.`,
+        "",
+        `#### Scenario: ${prefix}-SC-02 - ${name} second holds`,
+        "",
+        ...FILLER,
+        "",
+        "## REMOVED Requirements",
+        "",
+        `### Requirement: ${name} gone`,
+        "",
+        `${name} gone rule.`,
+        "",
+      ].join("\n"),
+    );
+    writeFileSync(
+      join(dir, "user-journeys.md"),
+      [
+        `# ${name} Journeys`,
+        "",
+        `### ${prefix}-US-01: ${name} journey one`,
+        "",
+        `${name} journey one steps.`,
+        "",
+        ...FILLER,
+        "",
+        `### ${prefix}-US-02: ${name} journey two`,
+        "",
+        `${name} journey two steps.`,
+        "",
+      ].join("\n"),
+    );
+    writeFileSync(
+      join(dir, "feature-tcs.md"),
+      [
+        `# ${name} Test Cases`,
+        "",
+        "**Status:** pending-review",
+        "",
+        `## ${prefix}-US1: ${name} journey one`,
+        "",
+        `### ${prefix}-US1-TC1-1: ${name} case one one`,
+        "",
+        `${name} case one one steps.`,
+        "",
+        ...FILLER,
+        "",
+        `### ${prefix}-US1-TC2-1: ${name} case one two`,
+        "",
+        `${name} case one two steps.`,
+        "",
+        ...FILLER,
+        "",
+        `## ${prefix}-US2: ${name} journey two`,
+        "",
+        `### ${prefix}-US2-TC1-1: ${name} case two one`,
+        "",
+        `${name} case two one steps.`,
+        "",
+      ].join("\n"),
+    );
+  };
+  capability("demo");
+  capability("other");
+  writeFileSync(
+    join(change, "tasks.md"),
+    [
+      "# Tasks",
+      "",
+      "Plan opening: the landing order.",
+      "",
+      "## 1. Cites a scenario (grade10-spec)",
+      "",
+      "- [ ] 1.1 Group one task - `shared-planning-demo-SC-01`",
+      "",
+      ...FILLER,
+      "",
+      "## 2. Cites nothing (grade10-spec)",
+      "",
+      "- [ ] 2.1 Group two task: `pnpm run lint`",
+      "",
+      ...FILLER,
+      "",
+      "## 3. The walk (grade10-spec)",
+      "",
+      "- [ ] 3.1 Group three task - `shared-planning-demo-US-02`, `shared-planning-demo-US1-TC1-1`",
+      "",
+      ...FILLER,
+      "",
+      "## 4. Cites bare (grade10-spec)",
+      "",
+      "- [ ] 4.1 Group four task - shared-planning-demo-SC-02",
+      "",
+      ...FILLER,
+      "",
+      "## 5. Cites what the change does not issue (grade10-spec)",
+      "",
+      "- [ ] 5.1 Group five task - `shared-planning-gone-SC-09`",
+      "",
+    ].join("\n"),
+  );
+};
+
+test("shared-planning-agent-rounds-SC-109 - a group's reader is given the blocks it cites", () => {
+  const root = fixture();
+  citing(root);
+  const bundle = bundleFor(root, "demo", "1", undefined, quiet);
+  const text = readAll(root, bundle);
+
+  // The plan: its opening and the group's own section, no other group's.
+  assert.match(text, /Plan opening: the landing order\./);
+  assert.match(text, /Group one task/);
+  assert.doesNotMatch(text, /Group two task|Group three task/);
+  // The change's own artifacts that are not per capability, whole.
+  for (const name of [
+    "proposal.md",
+    "decisions.md",
+    "ui-design.md",
+    "tech-design.md",
+  ])
+    assert.ok(
+      bundle.upstream.includes(`openspec/changes/demo/${name}`),
+      `${name} is given whole`,
+    );
+  // Of the cited capability: its opening, the cited requirement under its
+  // delta heading, and its removed requirements - not the requirement no
+  // task line cites.
+  assert.match(text, /demo purpose\./);
+  assert.match(text, /## ADDED Requirements/);
+  assert.match(text, /demo first rule\./);
+  assert.match(text, /demo gone rule\./);
+  assert.doesNotMatch(text, /demo second rule\./);
+  // Nothing of the other capability, and no journey or case of either.
+  assert.ok(!entriesOf(bundle).some((one) => one.includes("/planning/other/")));
+  assert.ok(
+    !entriesOf(bundle).some((one) => /user-journeys|feature-tcs/.test(one)),
+  );
+});
+
+test("shared-planning-agent-rounds-SC-110 - a cited journey brings its cases, and a cited case itself", () => {
+  const root = fixture();
+  citing(root);
+  const text = readAll(root, bundleFor(root, "demo", "3", undefined, quiet));
+
+  assert.match(text, /demo journey two steps\./);
+  assert.match(text, /demo case two one steps\./);
+  assert.match(text, /demo case one one steps\./);
+  assert.doesNotMatch(text, /demo case one two steps\./);
+  assert.doesNotMatch(text, /demo journey one steps\./);
+  assert.doesNotMatch(text, /other journey|other case/);
+});
+
+test("shared-planning-agent-rounds-SC-111 - a group that cites nothing is given no capability, and the whole change every one", () => {
+  const root = fixture();
+  citing(root);
+  const none = bundleFor(root, "demo", "2", undefined, quiet);
+
+  assert.ok(!entriesOf(none).some((one) => one.includes("/specs/")));
+  assert.match(readAll(root, none), /Group two task/);
+
+  const whole = bundleFor(root, "demo", "apply", undefined, quiet);
+  assert.equal(whole.draft, "openspec/changes/demo/tasks.md");
+  for (const capability of ["demo", "other"])
+    for (const name of ["user-journeys.md", "spec.md", "feature-tcs.md"])
+      assert.ok(
+        whole.upstream.includes(
+          `openspec/changes/demo/specs/shared/planning/${capability}/${name}`,
+        ),
+        `the whole change reads ${capability}'s ${name}`,
+      );
+});
+
+test("shared-planning-agent-rounds-SC-112 - a linked page section is given alone, to the end of its flow", () => {
+  const root = fixture();
+  writeFileSync(
+    join(root, PAGE),
+    [
+      "---",
+      "title: Agent Rounds",
+      "---",
+      "",
+      "## The Walk",
+      "",
+      "The round reads the draft.",
+      "",
+      ':::flow{title="A round"}',
+      "## *Hand* — **Asks**",
+      "",
+      "The step the flow writes as a heading.",
+      ":::",
+      "",
+      "After the flow, still the walk.",
+      "",
+      ...FILLER,
+      "",
+      "## The Next Thing",
+      "",
+      "Nothing the change links.",
+      "",
+    ].join("\n"),
+  );
+  const bundle = bundleFor(root, "demo", "tech-design", undefined, quiet);
+  const page = bundle.upstream.filter((one) => one.startsWith(PAGE));
+  const text = page.map((one) => textOf(root, one)).join("\n");
+
+  assert.match(page[0], /#L\d+-L\d+$/);
+  assert.match(text, /^## The Walk/);
+  assert.match(text, /The step the flow writes as a heading\./);
+  assert.match(text, /After the flow, still the walk\./);
+  assert.doesNotMatch(text, /Nothing the change links\./);
+});
+
+test("shared-planning-agent-rounds-SC-112 - a link to a section the page does not carry gives the whole page, printed", () => {
+  const root = fixture();
+  writeFileSync(
+    join(root, "openspec", "changes", "demo", "proposal.md"),
+    `# Demo\n\n## Why\n\nThe page: [Agent Rounds](../../../${PAGE}#nowhere).\n`,
+  );
+  const printed = [];
+  const bundle = bundleFor(root, "demo", "tech-design", undefined, (line) =>
+    printed.push(line),
+  );
+
+  assert.equal(bundle.upstream.at(-1), PAGE);
+  assert.match(printed.join("\n"), new RegExp(`${PAGE}#nowhere`));
+});
+
+test("shared-planning-agent-rounds-SC-113 - a bare id the change issues stops the group's reading", () => {
+  const root = fixture();
+  citing(root);
+
+  assert.throws(
+    () => bundleFor(root, "demo", "4", undefined, quiet),
+    /group 4[\s\S]*shared-planning-demo-SC-02[\s\S]*backtick/,
+  );
+  const said = cliRefuses(root, ["demo", "4", "--diff", diffOf(root, "")]);
+  assert.match(said, /shared-planning-demo-SC-02/);
+});
+
+test("shared-planning-agent-rounds-SC-113 - a backticked id the change does not issue brings nothing, and is printed", () => {
+  const root = fixture();
+  citing(root);
+  const printed = [];
+  const bundle = bundleFor(root, "demo", "5", undefined, (line) =>
+    printed.push(line),
+  );
+
+  assert.ok(!entriesOf(bundle).some((one) => one.includes("/specs/")));
+  assert.match(printed.join("\n"), /shared-planning-gone-SC-09/);
+});
+
+test("a group the plan does not carry is refused", () => {
+  const root = fixture();
+  citing(root);
+
+  assert.throws(
+    () => bundleFor(root, "demo", "9", undefined, quiet),
+    /no group 9/,
+  );
+});
+
+test("no bundle entry is larger than one read takes, and the parts are the file", () => {
+  const root = fixture();
+  const path = join(root, "openspec", "changes", "demo", "decisions.md");
+  const text = `${Array.from({ length: 1200 }, (_, i) => `${i} ${"x".repeat(99)}`).join("\n")}\n`;
+  writeFileSync(path, text);
+  const parts = bundleFor(
+    root,
+    "demo",
+    "tech-design",
+    undefined,
+    quiet,
+  ).upstream.filter((one) =>
+    one.startsWith("openspec/changes/demo/decisions.md"),
+  );
+
+  assert.ok(parts.length > 1, "a 120 KB file is given in parts");
+  for (const part of parts)
+    assert.ok(
+      Buffer.byteLength(textOf(root, part)) <= 45_000,
+      `${part} fits one read`,
+    );
+  assert.equal(
+    parts.map((part) => textOf(root, part)).join("\n"),
+    text.replace(/\n+$/, ""),
+  );
 });
 
 test("shared-planning-agent-rounds-SC-30 - a reference page the proposal cites is before the draft, as a page it marks is", () => {
@@ -399,7 +741,7 @@ test("shared-planning-agent-rounds-SC-30 - a reference page the proposal cites i
   // Both, in the order the proposal names them: the reference reaches the
   // reader, `writableBy` yields it, and a round may correct it.
   assert.deepEqual(bundleFor(root, "demo", "tech-design").upstream.slice(-2), [
-    `${PAGE}#the-walk`,
+    `${PAGE}#L3-L5`,
     REFERENCE,
   ]);
 });
