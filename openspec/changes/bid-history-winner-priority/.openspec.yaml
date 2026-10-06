@@ -7,4 +7,5 @@ hands:
   tech: "@tangconst"
   qa: "@tangconst"
   dev: "@tangconst"
-decisions_carried: "Q1–Q3 on docs/prds/products/grade10-site/auction/bidding.md Auction Panel Recent bids 🚧 and Public Recent bids Winner row"
+  release: "@tangconst"
+decisions_carried: "Q1–Q6 on docs/prds/products/grade10-site/auction/bidding.md Auction Panel Recent bids 🚧 and Public Recent bids Winner row; served by shared/ui/auction-listing and grade10-site/auction/listing-page"

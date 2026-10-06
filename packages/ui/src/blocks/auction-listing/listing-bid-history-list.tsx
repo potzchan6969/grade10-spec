@@ -32,7 +32,7 @@ const ACTIVITY_TICK_MS = 15_000;
 type ListingBidHistoryListCopy = {
   you?: string;
   empty?: string;
-  /** Accessible name for the closed sold winning-row crown. */
+  /** Accessible name for the closed sold winning-row crown; without it no crown draws. */
   winner?: string;
   /** Explains why an equal-price bid is not the accepted (earlier) one. */
   samePricePriorityTip?: string;
@@ -127,9 +127,9 @@ function BidHistoryRowContent({
               <TooltipContent>{copy.samePricePriorityTip}</TooltipContent>
             </Tooltip>
           ) : null}
-          {row.isWinner ? (
+          {row.isWinner && copy.winner ? (
             <span
-              aria-label={copy.winner ?? "Winner"}
+              aria-label={copy.winner}
               className="inline-flex shrink-0 text-primary"
               role="img"
             >

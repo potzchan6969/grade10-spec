@@ -13,7 +13,7 @@ is wide enough for that rail beside the main frame,
 **so that** a stacked column keeps a clear stage with previous/next and
 progress instead of a crowded second rail.
 
-### shared-ui-auction-listing-US1-TC10-1: Wide ListingLotGallery shows a left rail
+### shared-ui-auction-listing-US1-TC30-1: Wide ListingLotGallery shows a left rail
 
 **Classification:**
 
@@ -43,7 +43,7 @@ progress instead of a crowded second rail.
 * A thumbnail exists for each image in a rail beside the main frame.
 * Previous and next remain available.
 
-### shared-ui-auction-listing-US1-TC11-1: Stacked ListingLotGallery hides the rail
+### shared-ui-auction-listing-US1-TC31-1: Stacked ListingLotGallery hides the rail
 
 **Classification:**
 
@@ -75,7 +75,7 @@ progress instead of a crowded second rail.
 * Previous and next remain available.
 * Carousel progress remains available.
 
-### shared-ui-auction-listing-US1-TC12-1: One ListingLotGallery image has no rail
+### shared-ui-auction-listing-US1-TC32-1: One ListingLotGallery image has no rail
 
 **Classification:**
 
@@ -124,7 +124,7 @@ openspec/changes/archive/.
 
 | Finding | Disposition |
 | --- | --- |
-| Wide ListingLotGallery shows a left rail | Folded as covered by `shared-ui-auction-listing-SC-47` / `shared-ui-auction-listing-US1-TC10-1` |
-| Stacked ListingLotGallery hides the rail, keeps previous/next and progress | Folded as covered by `shared-ui-auction-listing-SC-48` / `shared-ui-auction-listing-US1-TC11-1` |
-| One ListingLotGallery image has no rail | Folded as covered by `shared-ui-auction-listing-SC-49` / `shared-ui-auction-listing-US1-TC12-1` |
+| Wide ListingLotGallery shows a left rail | Folded as covered by `shared-ui-auction-listing-SC-47` / `shared-ui-auction-listing-US1-TC30-1` |
+| Stacked ListingLotGallery hides the rail, keeps previous/next and progress | Folded as covered by `shared-ui-auction-listing-SC-48` / `shared-ui-auction-listing-US1-TC31-1` |
+| One ListingLotGallery image has no rail | Folded as covered by `shared-ui-auction-listing-SC-49` / `shared-ui-auction-listing-US1-TC32-1` |
 | Raised questions from the blind pass | None — Q1–Q4 already settled width rule, stacked replacement, ListingGallery carve-out, and unnamed threshold |

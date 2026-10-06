@@ -104,7 +104,8 @@ Everything this run produces is `draft`. Nothing in it claims review.
 
 2. **Interview the author.** Ask what changes what is built, as [Round
    Summary and Landing · Interview](../../../docs/governance/round-summary.md#interview)
-   shapes it, listing the defaults you applied as decided by the round.
+   shapes it, listing the defaults you applied as decided by the round. Put
+   the questions to them as a [Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
 
    A question the author answers is a row in their own words, whichever way
    the answer arrived - given, taken as offered, or kept against your

@@ -210,6 +210,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Live lot: no winner crown, and the equal-max non-leader carries the tip.
+ *
+ * Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
+ * Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
+ */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -476,6 +482,9 @@ const CLOSED_EQUAL_MAX_HISTORY: ListingBidHistoryRow[] = [
 /**
  * Closed sold with equal maxima: winning row shows a crown; the same-price
  * non-leader carries the equal-max Info tip.
+ *
+ * Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
+ * Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
  */
 export const ClosedSoldEqualMax: Story = {
   args: {
@@ -507,6 +516,35 @@ export const ClosedSoldEqualMax: Story = {
     expect(
       canvas.getByLabelText("When maximums match, the earlier one leads."),
     ).toBeInTheDocument();
+  },
+};
+
+/**
+ * ClosedSoldEqualMax with bid history copy that leaves `winner` unset: the
+ * won row is flagged, but no crown draws without its name.
+ *
+ * Scenario: shared-ui-auction-listing-SC-54 - No crown without its name
+ */
+export const ClosedSoldEqualMaxWithoutWinnerCopy: Story = {
+  args: {
+    ...ClosedSoldEqualMax.args,
+    copy: { ...COPY, bidHistory: { ...COPY.bidHistory, winner: undefined } },
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "ClosedSoldEqualMax without `winner` copy. The won row carries `isWinner`, yet no crown shows, because the list draws none without the consumer's name for it.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const heading = canvas.getByText("Recent Bids");
+    const recentBids = within(heading.parentElement as HTMLElement);
+    expect(recentBids.queryByRole("img")).not.toBeInTheDocument();
+    expect(canvas.queryByLabelText("Winner")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Winner")).not.toBeInTheDocument();
   },
 };
 

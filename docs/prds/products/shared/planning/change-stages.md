@@ -20,10 +20,10 @@ A change is in exactly one planning or delivery stage, proven by a file on
 | 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Designer and tech PIC challenge the page and journeys from their own perspectives | Designer and tech PIC: read and land their designs |
 | 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | QA1 writes the blind cases from the frozen anchors; Dev independently writes the technical design, requirements and scenarios; QA2 reconciles the two readings | Product manager: resolve every open question; QA1 does not review the requirement draft |
 | 4 | Planned | `tasks.md` | Dev writes the dependency-ordered plan after QA2 reconciliation | Engineer: read the plan |
-| 5 | Accepted | `acceptance.json`, with a content fingerprint of the resolved plan | Records the human's acceptance of the reconciled plan; no product question remains open | Product manager or named owner: accept the plan |
-| 6 | Building | Implementation has started from the accepted fingerprint | Builds each group test first, audited and verified | Engineer: read each landing |
+| 5 | Accepted | `acceptance.json`, with a content fingerprint of the resolved plan | Reviews the page, designs and deltas against each other, then records the human's acceptance and publishes the contract to `openspec/specs/`; no product question remains open | Product manager or named owner: accept the plan |
+| 6 | Building | A ticked task; the first claim recorded the store's `main` commit and the accepted targets in `implementation.json` | Builds each group test first, audited and verified | Engineer: read each landing |
 | 7 | Implementation complete | `implementation.json`, with the repository, commit and concrete application component ids | Records implementation and ancestry against the accepted contract | QA: run human review after implementation, on a deployed environment when required |
-| 8 | Archived | The directory under `archive/`; the accepted contract and implementation record verified | Folds the accepted specification and marks | Engineer: archive after implementation verification |
+| 8 | Archived | The directory under `archive/`; the accepted contract and implementation record verified | Compares the claimed targets with the current durable contract; acceptance already folded it | Engineer: archive after implementation verification |
 
 - 🚧 **One stage per change** — the board, the change page, a page's in-flight
   ribbon and My turn all show the same one
@@ -38,10 +38,10 @@ A change is in exactly one planning or delivery stage, proven by a file on
   suite approved or actual; human QA starts after implementation is complete
 - 🚧 **Accepted and verified records** — the acceptance fingerprint stays
   immutable, implementation records its repository, commit and application
-  component ids, and the archive verifies that record before deployment
-- 🚧 **Availability follows archive** — a GitHub Deployment receipt records
+  component ids, and the archive verifies that record
+- 🚧 **Availability apart from archive** - a GitHub Deployment receipt records
   whether each application component is newly, still, no longer, partially,
-  unknown or stale in an environment
+  unknown or stale in an environment; a deploy never waits for archive
 - 🚧 **Drafted, then landed on your word** — each planning artifact reaches
   `main` only when its hand lands it, and the landing records whose word it was
 - 🚧 **The tech design before the requirements** — `tech-design.md` is drawn
@@ -69,7 +69,7 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
   repository-wide commit moves nobody's count
 - 🚧 **Behind** — shown, told once, and listed in the digest after 7 days
   counted from the day it went behind; it holds a tick, a claim and a wait
-  never, the fold at archive always, and the next landing where what moved is
+  never, the archive always, and the next landing where what moved is
   major —
   what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
 - 🚧 **Suite** — shown beside the stage and never holding the ladder
@@ -137,7 +137,7 @@ Slack tells one person, once per move, in the change's thread.
 | A change reaches Implementation complete | Its QA hand, by direct message | The change, the accepted implementation identity and the run sheet to walk |
 | 🚧 What moved reaches their artifacts | Each hand it reaches, one message per person per landing | What moved, before and after, and which of their artifacts it holds |
 | 🚧 An artifact lands from a terminal | The change's thread | What landed, whose word landed it, the stage now, and whose turn it is |
-| A push lands on `main` | The channel | Each change the push moved, and its stage |
+| A change is proposed, accepted, claimed, completed or archived | The channel, once the manual has deployed it | Each change that crossed one, under its milestone |
 | Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |
 
 - 🚧 **Once per move** — a move is the hand changing; a move told twice, or a
@@ -145,7 +145,12 @@ Slack tells one person, once per move, in the change's thread.
 - 🚧 **One thread per change** — every direct message links the change's
   thread, and the change page until the round opens one; a reply in the
   thread is how a hand answers
-- **The channel post per push** — runs today, listing the changes a push touched
+- **The channel post** — names a change only when it is proposed, accepted,
+  claimed, has every task checked, or is archived; any other push is silent
+  in the channel
+- **After the deploy** — nothing is sent until the manual and the OpenSpec
+  viewer have deployed what the message says; a failed deploy sends nothing,
+  and the next one that succeeds carries it
 - 🚧 **Two fewer messages** — a written wait and a freed dependency are digest
   lines, not messages of their own
 - 🚧 **QA follows implementation** — the QA hand is told when implementation
@@ -200,13 +205,13 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |
 | Tech design order | Decided | Before the requirements, from the page, the decisions and the journeys, on every change; owed when the work lands outside this store. | Product, tech PIC |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
-| Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, the channel post per push kept, a weekly digest; never one per commit. | Product |
+| Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, 🚧 and the next landing where what moved is major. | Product, Engineering |
 | Plan acceptance | Decided | `acceptance.json` records an immutable content fingerprint after QA2 and human resolution. | Product, Engineering |
 | Measure | Decided | Days between a stage landing and the next hand's word, shown on the change page. | Product |
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
 | Hosted actions | Decided | Assign stays on the locally run manual until the hosted site has a sign-in. | Operations |
 | Open pages | Decided | A page open while `main` moves is told and refreshes once the site has caught up; the locally run manual pulls. | Operations, Engineering |
-| Implementation evidence | Decided | `implementation.json` records the repository, commit and concrete application component ids. Archive verifies it before deployment. | Engineering |
+| Implementation evidence | Decided | `implementation.json` records the first claim's durable baseline, the repository, commit and concrete application component ids. Archive verifies it; deployment does not wait for archive. | Engineering |
 | Availability | Decided | GitHub Deployment receipts report per-component environment status as newly, still, no longer, partial, unknown or stale; archived changes remain visible. | Product, Operations |
 :::

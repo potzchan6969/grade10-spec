@@ -16,7 +16,7 @@ made.
 - **Two entities** — the custodian holds the item and the lender lends
   against it; each prints on its own paper, and only the lender's carries a
   licence
-- 🚧 **Where** — `admin.grade10.com/vault` for the shop and
+- **Where** — `admin.grade10.com/vault` for the shop and
   `grade10.com/vault/sign#<token>` for the iPad; one host and a path per
   surface, and a vanity domain redirects to it
 - **The collector's address** — mailed links keep `grade10.com/vault/cases/<id>`
@@ -46,7 +46,7 @@ made.
 
 ## Where It Is Open
 
-🚧 **Not open to the public yet** — the vault's one site page, the signing
+**Not open to the public yet** — the vault's one site page, the signing
 ceremony, is carried in development and staging, and on no lane the public
 reaches —
 [Carried Surfaces](/p/grade10-site/site/carried-surfaces)

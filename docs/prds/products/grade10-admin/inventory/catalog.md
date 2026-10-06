@@ -85,24 +85,29 @@ product history.
   grade and serial, grade as source text; one intaken from the product page
   carries the Cert ID alone. A unit without a Cert ID is regular stock rather
   than a Cert record.
-- 🚧 **Every unit in Cert ID details** — View Cert IDs lists each Cert record
+- **Every unit in Cert ID details** — View Cert IDs lists each Cert record
   and the regular stock without a Cert ID: one `No Cert ID` row for the
   available units with their count, shown whenever regular stock has any
   history, and one for each active hold with its holder and remaining count. A
   `No Cert ID` row shows the history of regular stock. Sold, withdrawn and
   vaulted regular stock is not listed, because no unit of it is tracked
-- 🚧 **Cert ID correction** — a Cert record that has only been intaken can
+- **Cert ID correction** — a Cert record that has only been intaken can
   have its Cert ID changed to another one no record of the product holds, in
   any status. A record that has ever been reserved, sold, withdrawn, vaulted
   or listed keeps its Cert ID, and a Cert ID cannot be cleared or read
   `No Cert ID`
-- 🚧 **Cert ID assignment** — an available unit of regular stock can be given
+- **Cert ID assignment** — an available unit of regular stock can be given
   a Cert ID alone, the one field the intake dialog asks for; it becomes a Cert
   record with no Grade Issuer, Grade, Autograph Grade or Serial and leaves the
   `No Cert ID` count
-- 🚧 **Cert ID change in history** — each change is one history entry with
+- **Cert ID change in history** — each change is one history entry with
   its time, actor, the Cert ID before and after (`No Cert ID` before an
   assignment) and optional remarks, and it shows in that unit's history
+- 🚧 **Units entered by mistake** — regular stock intaken since it last moved, or
+  a Cert record only intaken with its tagged media, leaves as never received
+- 🚧 **Confirmed first** — remarks default to `Entered by mistake`
+- 🚧 **Reversal in history** — `Intake reversal · No Cert ID` or `· <Cert ID>`
+- 🚧 **Remove physical unit** — offered only on a Cert record that has moved
 - **Explicit reservation unit** — every reservation selects one Cert ID or
   explicitly selects `No Cert ID`; a numbered reservation is one unit
 - **Product bulk import** — upload product names and typed schema attributes
@@ -143,7 +148,8 @@ second gallery.
 | --- | --- | --- | --- |
 | Cert media tag identity | Decided | The tag stores the immutable Cert record id. Every Cert record has a printed Cert ID used for display only. | Product |
 | One Cert per source item | Decided | A source item is untagged and shared, or tagged to exactly one same-product Cert record. Regular stock without a Cert ID has no Cert record and cannot be a tag target. | Product |
-| Retag and remove | Decided | An authorized Inventory operator may tag or untag. Retagging leaves the item untagged; assigning another Cert is a separate tag. Physical removal of an available Cert unit withdraws it, deletes its Cert record and its tagged source media, and leaves other product media and saved Auction snapshots unchanged. | Product |
+| Retag and remove | Decided | An authorized Inventory operator may tag or untag. Retagging leaves the item untagged; assigning another Cert is a separate tag. Physical removal of an available Cert unit that has moved withdraws it, deletes its Cert record and its tagged source media, and leaves other product media and saved Auction snapshots unchanged. | Product |
+| Units entered by mistake | Decided | Regular stock intaken since regular stock last moved, or a Cert record that has only been intaken, can be taken out as if it was never received; a Cert record's moves, an assigned record's included, never count against regular stock: stock and the ledger fall, withdrawn does not move. A unit that has moved leaves only by withdrawal, so the ledger keeps every unit that was ever handled. One removal per Cert record: Remove physical unit is not offered on one that has only been intaken, and a card that left before it ever moved is reversed with remarks saying so. | Product |
 :::
 
 :::detail{title="Intake code map" for="engineer"}

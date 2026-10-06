@@ -9,7 +9,7 @@
 **I want** to choose bank transfer, see where to send the money and what reference to quote, and send Grade10 proof,
 **so that** Grade10 can match my payment and my deadline stops while it is checked.
 
-### winner-order-US9-TC5-1: Successful proof submit toasts and shows Payment Verifying
+### winner-order-US9-TC28-1: Successful proof submit toasts and shows Payment Verifying
 
 **Classification:**
 
@@ -47,7 +47,7 @@
 * The order reads Payment Verifying.
 * Submit Payment Proof and View Bank Details are hidden.
 
-### winner-order-US9-TC6-1: Failed proof upload stays open with the draft
+### winner-order-US9-TC29-1: Failed proof upload stays open with the draft
 
 **Classification:**
 
@@ -85,7 +85,7 @@
 * Submit Payment Proof stays open with the draft.
 * An error toast reads Proof not submitted / Nothing was saved. Try again.
 
-### winner-order-US9-TC7-1: Leave is blocked while submitting or converting HEIC
+### winner-order-US9-TC30-1: Leave is blocked while submitting or converting HEIC
 
 **Classification:**
 
@@ -122,7 +122,7 @@
 * The dialog stays open.
 * The form stays locked until the busy beat finishes.
 
-### winner-order-US9-TC8-1: Confirm stays inline irreversible microcopy
+### winner-order-US9-TC31-1: Confirm stays inline irreversible microcopy
 
 **Classification:**
 

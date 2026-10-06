@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-30, tcs-rules r3.0
 
-## auction-status-US1: Expired invoice keeps Pending Payment without winner card pay
+## auction-status-US8: Expired invoice keeps Pending Payment without winner card pay
 
 **As a** winner or operator,
 **I want** a paid, undispatched order to read Preparing Shipment,
 **so that** Status alone shows packing without implying the lot already shipped.
 
-### auction-status-US1-TC7-1: Paid and undispatched derives Preparing Shipment
+### auction-status-US8-TC7-1: Paid and undispatched derives Preparing Shipment
 
 **Classification:**
 

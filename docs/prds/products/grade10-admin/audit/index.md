@@ -1,17 +1,18 @@
 ---
 title: Audit Trail
+spec: shared/console/audit
 icon: list-magnifying-glass
 ---
 
 Every operator action across every product is written to a tamper-evident log,
 and the Audit section of the admin console reads all of them as one list. An
-auditor — somebody holding that role and nothing else — pages back through what
-operators did and can run a verification that walks each product's chain and
-names the exact row where it breaks.
+auditor — somebody holding that role and nothing else — filters and pages back
+through what operators did and can run a verification that walks each product's
+chain and names the exact row where it breaks.
 
 It is not one log. Each service owns its own table in its own database, because
 each service owns its own data. What makes them one surface is a shared table
-shape, a shared read contract, and a console that merges seven chains in the
+shape, a shared read contract, and a console that merges the chains in the
 browser and sorts them by time.
 
 The trail is load-bearing rather than observational. An elevated action in a
@@ -29,20 +30,40 @@ table reads as broken rather than as a clean start.
 
 :::flow{title="An auditor's pass"}
 ## Sign in and clear the second factor
+
 The auditor role holds exactly one permission, so the Audit section is the only
 thing visible.
+
 ## Read the chain strip
-Every one of the seven products is named on every render, with its state. A
-product that has gone quiet looks exactly like a product where nothing happened,
-which is why silence is shown rather than omitted.
-## Page back through the merged list
-Fifty rows at a time, newest first, sorted by time across chains. While any
-chain is silent the table refuses to page, because moving on would skip whatever
-that chain held in the window.
+
+When every requested chain is reading and internally consistent, one line says
+so. A chain that is refused, unreachable, unreadable, unverified, or broken is
+named in a notice; answering products stay off the strip. A broken chain still
+offers a jump to that position.
+
+## Filter and page the merged list
+
+Filters combine: product, action, actor id, subject id, result, and a date
+range. Newest-first is the default; oldest-first is a choice. The location holds
+filters and sort so a view can be shared. While any **requested** chain is
+silent the table refuses to page; filtering to one product drops the others from
+the request so they cannot hold paging. No email filter — people are found by
+user id.
+
+## Inspect a row
+
+Each row names the subject user id when there is one, a readable action name,
+and whether it succeeded. Expanding shows roles and details without hashes,
+email, or recovery codes. Actor and subject ids copy; they link to Users only
+for a directory person the operator can open.
+
 ## Verify a chain
+
 The walk answers either a count of linked rows or the sequence number where it
 broke, and why: no genesis, a gap, a broken link, or a hash that does not match.
+
 ## Read the verdict honestly
+
 A passing verification says the chain is internally consistent. It never says
 the chain is intact — the outside witnesses are what say that.
 :::
@@ -56,15 +77,6 @@ reach. Three exist — the head emitted on every append and forwarded to
 monitoring, the verified heads a scheduled sweep writes to a locked bucket, and
 the offsite backups. All three are best-effort in their own way, and not every
 worker runs the sweep.
-:::
-
-:::callout{kind="note"}
-There is no audit spec. The only requirement touching it lives inside the
-loyalty spec — operators act through named permissions, with a second factor and
-a tamper-evident record — which covers the guarantee as loyalty depends on it
-and nothing about the mechanism. The chain's columns, the four break reasons,
-the verify cursor and its sweep, the archive witness, the merged console and the
-signing anchor are all unspecified.
 :::
 
 :::detail{title="Chain internals" for="engineer"}

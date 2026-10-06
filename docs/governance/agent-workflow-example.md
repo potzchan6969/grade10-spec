@@ -112,8 +112,8 @@ classification is not a test result.
 - **Treating the accepted snapshot as an implementation lock** - preserve it as
   planning evidence, record the baseline at first claim, and reconcile only the
   claimed targets at archive.
-- **Waiting for deployment to archive** - archive after engineering
-  verification and before deployment; QA review follows when the application is
+- **Tying deployment to archive** - archive after engineering verification;
+  deployment waits for neither, and QA review follows when the application is
   available.
 
 ## See Also

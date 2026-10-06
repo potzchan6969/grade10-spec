@@ -8,12 +8,14 @@ export type ListingBidHistoryRow = {
   isViewer?: boolean;
   /**
    * When true, the lot is closed sold and this row is the winning public
-   * bid — the list shows a Winner badge. Live lots omit this flag.
+   * bid — the list shows a crown named by `copy.winner`, and none without
+   * it. Live lots omit this flag.
    */
   isWinner?: boolean;
   /**
-   * When true, the row matches the leading price but is not the accepted
-   * (earlier) bid — the list shows a tip explaining time priority.
+   * When true, the row ties on amount with a row listed above it, at the
+   * current price or at any older tie lower down — the list shows a tip
+   * explaining that the earlier maximum leads.
    */
   samePricePriority?: boolean;
 };

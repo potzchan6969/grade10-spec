@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "a9274789f83bcf95227ec9634c73ae51f2842232ad76b697937cda76c70b05ed"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ec46a57d278bbf64c3483c69e975a8e0f4032598",
+    "capturedAt": "2026-10-05T12:50:25.538Z",
+    "targets": [
+      {
+        "path": "openspec/changes/cap-custom-maximum-entry/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+        "anchors": [
+          "Requirement: A bid never exceeds its currency's ceiling"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Custom maximum entry respects a major-unit ceiling"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

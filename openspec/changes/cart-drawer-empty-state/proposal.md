@@ -54,9 +54,16 @@ items lists only those items.
 - `CartDrawerCopy` gains required `emptyTitle` (optional `emptyDescription`).
 - Active `add-store-cart-drawer-ui` must stop requiring Browse More once it
   consumes this change.
+- **Manual** —
+  [`Cart Drawer · Empty`](../../../docs/prds/products/shared/ui/store-cart.md#empty-cart)
+  marks the empty state
 
 ## Open Questions
 
 None — empty state has no action button; Storybook is layout SoT; Figma stays
 historical. Confirmed with the author when splitting this from
 `add-store-cart-drawer-ui`.
+
+## References
+
+- [Cart Drawer](../../../docs/prds/products/shared/ui/store-cart.md#empty-cart)

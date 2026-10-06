@@ -1,6 +1,6 @@
 ## User journeys
 
-### winner-order-US-08: Winner gets the address form back
+### winner-order-US-23: Winner gets the address form back
 
 **As a** winner who missed the 48-hour address deadline,
 **I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
