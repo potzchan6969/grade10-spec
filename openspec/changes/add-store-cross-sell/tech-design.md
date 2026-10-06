@@ -75,8 +75,9 @@ metafield's `value`, a JSON list of product gids in the order stored.
 The spec governs the rule (world, then language, then type; newest first; not
 the card itself; not sold out). One function owns it:
 
-`relatedRail(card, pickIds, entries, limit)` in `services/catalog/related.ts`
-beside `browse.ts`, returning the rail's cards in final order:
+`relatedRail({ cardId, pickIds, entries, limit })` in
+`services/catalog/related.ts` beside `browse.ts`, `limit` defaulting to the
+rail's six (Q35), returning the rail's cards in final order:
 
 1. **The picks** — each id resolved to the mirror's entry, in the stored
    order; an id no entry answers is left out and counted
