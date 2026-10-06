@@ -162,6 +162,7 @@ historical: a manually settled order keeps its payment processing fee.
 - **THEN** the payment processing fee is 5000 minor units in HKD
 - **AND** the order total is 317000 minor units in HKD
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-16z rev=1 -->
 #### Scenario: winner-order-SC-111 - A bank transfer fee of zero reads Free
 **Serves:** Invoice - Payment Processing Fee priced by method
 

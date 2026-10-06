@@ -436,7 +436,7 @@ the final amount, the address history and the invoice amount history SHALL be
 independently reconstructable and cross-referenceable, so an amount change can
 be explained afterwards.
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-fzw rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-fzv rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-36 - The address at dispatch survives a later edit
 **Serves:** post-sale-US-08 - Operator reconstructs an order's history
 

@@ -101,6 +101,7 @@ per "The delivery address locks when the invoice is sent".
 - **AND** bank transfer reads `Bank fee set on your invoice`, naming no amount
 - **AND** neither method is selected
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-1aa rev=1 -->
 #### Scenario: winner-order-SC-92 - A currency with no bank details offers card only
 **Serves:** Payment method - bank transfer only where bank details are set up
 
@@ -121,6 +122,7 @@ per "The delivery address locks when the invoice is sent".
 - **THEN** the order records bank transfer
 - **AND** the order derives as Preparing Invoice
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=1 -->
 #### Scenario: winner-order-SC-94 - A confirmation with no method is refused
 **Serves:** Payment method - card or bank transfer recorded with the address
 
@@ -407,7 +409,7 @@ alphabetically in that language.
 **Stored** - The country or region an address holds SHALL NOT change with the
 language; a winner who changes language reads the same choice in the new one.
 
-#### Scenario: winner-order-SC-253 - A Traditional Chinese account reads and searches names in Traditional Chinese
+#### Scenario: winner-order-SC-261 - A Traditional Chinese account reads and searches names in Traditional Chinese
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a winner whose account language is Traditional Chinese, on

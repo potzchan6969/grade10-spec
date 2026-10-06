@@ -513,6 +513,7 @@ Runs once per row of **Test data**.
 * The page shows the winner's account name and registered account email as the contact, with `+852 91234567`.
 * No payment-provider customer or payment identifier is shown in their place.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-05y rev=1 covers=g10adm.auction-post-sale.SC-uf1,g10adm.auction-post-sale.SC-3uf,g10adm.auction-post-sale.SC-n2q,g10adm.auction-post-sale.SC-7jf,g10adm.auction-post-sale.SC-3bt,g10adm.auction-post-sale.SC-en4,g10adm.auction-post-sale.SC-c66,g10adm.auction-post-sale.SC-ccp,g10adm.auction-post-sale.SC-btq,g10adm.auction-post-sale.SC-gmi,g10adm.auction-post-sale.SC-amp -->
 ### post-sale-US3-TC1-1: A verified card capture marks the listing Paid via Stripe
 
 **Classification:**
@@ -551,6 +552,7 @@ Runs once per row of **Test data**.
 * Step 3 shows that change from Stripe.
 * Step 3 names no operator on that change.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-lvf rev=1 covers=g10adm.auction-post-sale.SC-uf1,g10adm.auction-post-sale.SC-3uf,g10adm.auction-post-sale.SC-n2q,g10adm.auction-post-sale.SC-7jf,g10adm.auction-post-sale.SC-3bt,g10adm.auction-post-sale.SC-en4,g10adm.auction-post-sale.SC-c66,g10adm.auction-post-sale.SC-ccp,g10adm.auction-post-sale.SC-btq,g10adm.auction-post-sale.SC-gmi,g10adm.auction-post-sale.SC-amp -->
 ### post-sale-US3-TC2-1: A second payment record is refused
 
 **Classification:**
@@ -589,6 +591,7 @@ Runs once per row of **Test data**.
 * Step 2 still shows Paid via Stripe.
 * Step 3 shows the winner unchanged.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-1cx rev=1 covers=g10adm.auction-post-sale.SC-uf1,g10adm.auction-post-sale.SC-3uf,g10adm.auction-post-sale.SC-n2q,g10adm.auction-post-sale.SC-7jf,g10adm.auction-post-sale.SC-3bt,g10adm.auction-post-sale.SC-en4,g10adm.auction-post-sale.SC-c66,g10adm.auction-post-sale.SC-ccp,g10adm.auction-post-sale.SC-btq,g10adm.auction-post-sale.SC-gmi,g10adm.auction-post-sale.SC-amp -->
 ### post-sale-US3-TC3-1: Staff cannot record payment
 
 **Classification:**
