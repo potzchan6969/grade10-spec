@@ -27,7 +27,7 @@ test("supporting gallery behavior", () => {});
 - **Capability slug** - The capability slug stays stable across its journeys, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.
 - **Sequence** - Exactly three Base36 characters (`000` to `zzz`), stored in lowercase. Initialization derives a non-numeric candidate from the scope, kind, and exact heading, then advances only to avoid an existing scenario or case marker in that app, product, and capability. The sequence is shared by `SC` and `TC` markers. The scan includes durable specs, active changes, and archived changes so an archived marker does not free its suffix.
 - **Scenario id** - An `SC` reference identifies one scenario. A scenario marker carries its positive `rev`.
-- **Case id** - A `TC` reference identifies one case. `covers` lists one or more `SC` references separated by commas. A case can cover scenarios from any app, product, or capability, and a scenario can be covered by multiple cases.
+- **Case id** - A `TC` reference identifies one case. `covers` lists one or more `SC` references separated by commas. A deprecated case with no current scenario may use `covers=none`; active and durable behavior must name one or more scenarios. A case can cover scenarios from any app, product, or capability, and a scenario can be covered by multiple cases.
 - **Revision** - A positive integer, starting at `1`. Increase it when the scenario or case meaning changes. A case marker's `rev` equals the `<v>` suffix of the case heading below it, and the two move together; `pnpm run tcs:validate` refuses a pair that differs. An acceptance test names the exact current case revision; `supports` names a scenario directly.
 - **Markdown scope** - All scenario and case marker ids in one Markdown file share one app, product, and capability prefix. Application test files can link markers from multiple scopes.
 
@@ -44,8 +44,22 @@ heading and its app, product, and capability scope. Preserve an existing ID
 when a case already has one. Never choose a suffix by hand. `covers` lists the
 exact scenario IDs that serve the journey or journeys named by the case's
 `**Trace:**` line, in source order. Each ID must resolve to one scenario
-marker. A missing or unclear journey-to-scenario link is a coverage question;
-do not fill it by similarity of titles or expected results.
+marker. A deprecated case with no current behavior may use `covers=none`;
+the CLI accepts that only when its case status is `deprecated`. A missing or
+unclear journey-to-scenario link is a coverage question; do not fill it by
+similarity of titles or expected results.
+
+For a reviewed migration that needs to add many markers together, use
+`pnpm run trace -- init batch --manifest <json-file>`. Each manifest record
+names a unique `key`, `kind`, repository-relative `file`, exact `target`, and
+the app, product, and capability scope. A scenario record may set `revision`;
+a case record lists `covers` as existing scenario IDs or scenario keys from the
+same manifest. Records with the same `mirrorKey` receive one ID, for an active
+and durable copy of the same record. When another copy already owns the ID,
+`existingId` preserves it. Set `replaceCovers` on a case record to update only
+an existing marker's `covers` value while keeping its ID and revision. The
+batch validates every target and reference before it writes; `--dry-run` prints
+the proposed markers without changing files.
 
 Derive the scope from the suite's path. A feature suite under
 `specs/<app>/<product>/<domain>/<capability>/` uses that app, product, and
