@@ -1058,7 +1058,7 @@ without reading every account.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
