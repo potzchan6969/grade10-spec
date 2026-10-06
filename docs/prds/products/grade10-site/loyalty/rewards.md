@@ -87,11 +87,12 @@ carrying the definition it was bought under.
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
   lines
-- **Applied at the counter** — inside the till session, staff apply the
-  coupon from the member's panel, or the member opens it on their own phone
-  and the till scans it. A product coupon's code is minted the moment it is
-  chosen, for that sale alone, and never shown as the coupon itself; a gift
-  goes on as its own line, discounted to nothing, with no code
+- **Applied at the counter** — for a scope the till can match, inside the
+  till session: staff apply it from the member's panel, or the member opens
+  it on their phone and the till scans it; a product coupon's code is minted
+  when chosen, for that sale alone, never shown as the coupon, and a gift
+  goes on as its own line, discounted to nothing, with no code -
+  [Reward Types](#reward-types)
 - **Used by the paid order** — the paid order is what marks the coupon
   used, never a vendor's lagging count
 - **One discount at a time** — an order carries one discount at a time,

@@ -41,7 +41,7 @@ so redefining the reward never rewrites a coupon a member already holds —
 | Channel | How it lands |
 | --- | --- |
 | Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
-| At the till | Chosen inside the till session — a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
+| At the till | For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
@@ -80,7 +80,7 @@ so redefining the reward never rewrites a coupon a member already holds —
   retried until an hour past the programme's sweep
 - 🚧 **A claim whose order was never written** — released by the next claim on
   that coupon once the claim is five minutes old
-- **Under both** — the programme releases any claim still standing 25 hours
+- **Under all three** — the programme releases any claim still standing 25 hours
   after it was made: an expired online order's once its code is dead, or one
   a checkout left when it stopped before its order was written
 
