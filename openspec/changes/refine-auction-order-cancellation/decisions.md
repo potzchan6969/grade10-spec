@@ -10,7 +10,7 @@
 - Grade10 cancelling an order on its own when a deadline passes
 - Offering a cancelled lot to the second-highest bidder
 - Telling other bidders or watchers that an order was cancelled
-- Cancelling an order once any payment is recorded; that order is refunded
+- Cancelling an order once a payment that counts toward the balance is recorded; that order is refunded
 - A winner cancelling their own order
 - Showing the winner why the order was cancelled
 - Undoing a cancel, or a late payment reviving the order
@@ -28,11 +28,11 @@
 | Q3 | How does the operator give the reason? | A required category (Non-payment, Missed setup, Winner asked, Lot issue, Other) and a note (recommended) | Free text only, which cannot be counted |
 | Q4 | Can a winner cancel? | No, operator only; the winner uses Contact Us (recommended) | Self-cancel before the invoice is sent, which lets a binding bid be walked away from |
 | Q5 | Can a cancel lift a suspension? | Never; reinstatement stays a separate review (recommended) | Lifting it when the reason is Lot issue, which reverses operator-review-only |
-| Q6 | A card payment lands after the cancel. What happens? | The order stays Cancelled, the payment is recorded and the order flagged Paid after cancel (recommended) | The payment reviving the order, which clashes with a relisted lot; refusing a cancel during a payment attempt, which still leaves later money unanswered |
+| Q6 | How does a card payment interact with cancellation? | After cancel, the order stays Cancelled, the payment is recorded and the order flagged Paid after cancel. Before cancel, only money that counts toward the balance blocks it; money that counts toward nothing does not (recommended) | The payment reviving the order, which clashes with a relisted lot; any recorded payment blocking cancel, even when it counts toward nothing |
 | Q7 | What does the confirmation show? | The consequences — back to stock, no runner-up, winner emailed, suspension stays, cannot be undone — and the required reason (recommended) | The reason field alone |
 | Q8 | Can a cancel be undone? | No, it is terminal (recommended) | A short undo window before the letter, which delays the letter and reverses terminal |
 | Q9 | What happens to the lot? | Back to stock; the order links to it and the operator relists by hand (recommended) | A Relist now step in the dialog, which reaches into the listing flow |
-| Q10 | How is a Paid after cancel payment returned? | Finance returns it outside Grade10; the operator clears the flag (recommended) | Widening the Refund action in `add-winner-refund` to cancelled orders, for a rare case |
+| Q10 | How is a Paid after cancel payment returned? | Finance returns it outside Grade10; any operator with `auction:payment` clears the flag with a reason and records Finance's return reference when available (recommended) | Requiring a reference for every return, which could keep a returned payment flagged when Finance has none; widening the Refund action in `add-winner-refund` to cancelled orders |
 | Q11 | How is success measured? | Cancellations each month by category, and winner contacts per 100 cancellations, with a category filter on the queue (recommended) | Category counts only; no measurement |
 | Q12 | What is left out? | Auto-cancel, runner-up offers, telling other bidders, cancelling a paid order | Any of them in scope |
 

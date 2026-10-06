@@ -1239,7 +1239,7 @@ Runs once per row of **Test data**.
 * No Payment section appears.
 * Every other meta row and party block still renders.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders fixed to Hong Kong time with its zone name
+### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: Invoice and receipt dates use the supplied winner zone
 
 **Classification:**
 
@@ -1256,17 +1256,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A `Date` value, and a machine clock not set to Hong Kong time.
+* An issue instant, deadline and paid-at instant whose calendar dates differ
+  between `America/New_York` and Hong Kong; `winnerTimeZone` is
+  `America/New_York` and the machine clock is set to Hong Kong time.
 
 **Steps:**
 
-1. Render InvoicePdf with the pre-conditions.
-2. Inspect the sent-at meta row.
+1. Render InvoicePdf with the issue instant and deadline.
+2. Render ReceiptPdf with the paid-at instant.
+3. Inspect all three date rows.
 
 **Expected Results:**
 
-* The row shows that instant's Hong Kong calendar date and clock time.
-* The row ends in the zone name `HKT`.
+* Each row shows its instant's New York calendar date and clock time.
+* Each row ends in the New York zone name, independent of the machine clock.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC42-1: Each renderer returns exactly one A4 page
 
