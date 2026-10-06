@@ -1,0 +1,228 @@
+{
+  "version": 2,
+  "change": "clarify-auction-shipping-progress-copy",
+  "baseline": "d44be4ff79da8f6d280694a1f7fcea1d2f5c6c22a51cc0a4d51a4f140c7aa8ad",
+  "fingerprint": "db0ee2ef4e4d325d25a5a8a5c68cf1ee0dccedc1f7f7d5dc33df8517ba2e2939",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-06T13:54:28.682Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#order-status",
+      "sha256": "a5b98d3b5557f039e06cf901753a9f7ebc1b2206dabd6a040e936771a8199534",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#winner-order",
+      "sha256": "4b8780f463b64fe717fb547ae76cf0b070764fdf30327877b4f97ed0a7025500",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/decisions.md",
+      "sha256": "64efd6dcc202bca09c9db9ce133cd04e2e4a396b7660cd567515d3d29eebcb93",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/proposal.md",
+      "sha256": "2c8807be54c2ea9989c844b16c501ae488fd21ab8938d060b5730cb5b1345a0b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "e1c023641e1bfc3851dfd1cb03d2b5a38f28679bba57dffbdb11fbba018eaa88",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "db0deeb7dd5d0f7bdcf25c4c482d7781744c80b90b9817b6f93f400933bf2514",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "47eaa73ccbece48a49206a73f41563c75c8eab6ba47fdc47d994c5118ab708b5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/lot-status/feature-tcs.md",
+      "sha256": "b7fe93a066b4c59606223eddc439409d195bf38e107e1ab87c89e617428673b5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/lot-status/spec.md",
+      "sha256": "8a4505ebf6aeda57d8b6753a2f78cebe5748fff1cec233483c6b0db90437b1da",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/lot-status/user-journeys.md",
+      "sha256": "897013e1c00416f0b5caad6b9c4e1b69fdcd5c4bb75b7551db5d73350c719ce0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "sha256": "e2337670bc8890e30d49e1bb1b3c31c4a917c89427b6d9c0cc01732d956e5de1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/order-status/spec.md",
+      "sha256": "d415f9060ad30dabb0772ab40d09f5ff92b00804973588f2fae603a1199d7600",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/order-status/user-journeys.md",
+      "sha256": "8e76372725c3558271d28ab806b8fb2886c6efc73c741cfc9ba39ccb74fe36ee",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "1f8e945c1ac287382af5f3644faa105d4123eef513d6fdf2ff077f2bc9df6624",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "de25f519a36b56b236534ced05a44188a060938ddafe4ccdc1bda4027041a095",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "acac30c56b40d1c13f2f8712d92346791045879b53e3c97be5a507e729fd904d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/tech-design.md",
+      "sha256": "193afc7d2c970a5e72e795e05a0a8704594c636682ba99cb70abf467263e0d9f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/ui-design.md",
+      "sha256": "c57a007436bc4faa5bd4e6bdb568e375fb1d1b9e834b7e786f4364f60ff5b1ff",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "cbf8cecbf7570932a00c5f5ad6063ece1457c2520c7591998720ec7151367af1",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "22a053f2deb92f1124920a7d259175e038f20d828ae3ec9e1e84cb98519dc02e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "0091bd3140f57d34f38778bce17befdf7e58c6c50cbef0471df128b9affe8f6e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/feature-tcs.md",
+      "sha256": "d3d7b4e353cf4a493f659aa26d5bd4ca13a8da6bb1531d56dfc0b22ed084f4c3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/spec.md",
+      "sha256": "b8916de6ec9976cafa73b3451c1199dd5e7ced5ea706acd4c98fe09b1e50cc14",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/user-journeys.md",
+      "sha256": "49a3427d4058e91fb6bcb2f626dd27302c31b2bcb1ce367bd94f1c8735a93217",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "sha256": "b69ad118547e3140364bba6b0bec6ac95a68daf7352aa3bb8c0d5c67dd1a123c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+      "sha256": "cd7f51865c26b536ff970ebf5f9700ed0f25b6b01ea969c956781719eb956980",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+      "sha256": "744c494af8e05762d4e2e93af4bd9c58d9d097eb1298165090b156cd17f3d392",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "08dc1d4e743729c7ab16b2156f6066c852393695fb8f2d98cc8c55df03a10901",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "99403a28dcb9e4db46e44bed177f9bac5250aaaf7b1f3a9d8d691d31576695db",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "9f5d892eac10ff525b919f2360512b4fc924b9744e7a55b3de8871ebad9112c1",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/clarify-auction-shipping-progress-copy/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A winner reads their own payment and shipment state"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Every visible lot has one external lot status"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Auction order status is independent of store order status",
+        "Requirement: Order status is derived, never written"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Winner Order shows five progress steps"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

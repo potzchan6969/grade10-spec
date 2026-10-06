@@ -90,6 +90,10 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
 - Order-progress tracking
   - Tracking number: while fulfilment is `fulfilled` with a tracking number, Order Progress makes the number an external link to the carrier tracking page; no Track shipment control or carrier name appears in Order Progress; the link remains after delivery is confirmed
+- Settlement progress
+  - Five presentation steps: Address → Invoice → Payment → Shipping → Completed
+  - Preparing Shipment and Shipped share the Shipping step as **current** (progress); Preparing Shipment subtext reads Preparing to ship
+  - Status badges: Preparing Shipment and Shipped use Badge `default` (muted fill) on Winner Order, matching My Auctions
 
 ## Requirements
 
@@ -1113,7 +1117,7 @@ winner SHALL not be offered a way to reopen either window.
 ### Requirement: Winner Order shows five progress steps
 
 Winner Order SHALL present settlement progress as five steps in this order:
-**Address**, **Invoice**, **Payment**, **Shipped**, **Completed**. The steps
+**Address**, **Invoice**, **Payment**, **Shipping**, **Completed**. The steps
 SHALL be presentation only and SHALL NOT replace the derived order status
 vocabulary in `grade10-site/auction/order-status`.
 
@@ -1122,17 +1126,20 @@ vocabulary in `grade10-site/auction/order-status`.
 | Address | Awaiting Setup or Setup Overdue |
 | Invoice | Preparing Invoice |
 | Payment | Pending Payment (invoice `pending`), Payment Overdue (invoice `expired`), or Payment Verifying |
-| Shipped | Processing or Shipped |
+| Shipping | Preparing Shipment or Shipped |
 | Completed | Delivered |
 
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
 
-Step subtext SHALL use day-only dates in the viewer's local zone. While Address is
+Step subtext SHALL use day-only dates in the winner's zone. While Address is
 current and awaiting confirm, subtext SHALL read `Confirm by {date}`. While
 Payment is current and the invoice is `pending`, subtext SHALL read
 `Pay by {date}`. While the invoice is `payment_verifying`, Payment subtext
-SHALL name no date. Description copy SHALL wrap so five columns do not
+SHALL name no date. While Shipping is current and the derived status is
+**Preparing Shipment**, Shipping subtext SHALL read **Preparing to ship**.
+While Shipping is current and the derived status is **Shipped**, Shipping
+subtext SHALL use the day-only ship date when one is known. Description copy SHALL wrap so five columns do not
 overflow.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-11o rev=1 -->
@@ -1148,10 +1155,28 @@ overflow.
 #### Scenario: winner-order-SC-55 - Processing maps under Shipped
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
-- **GIVEN** an auction order whose derived status is Processing
+The scenario title is historical for its permanent trace identity. Its normative
+Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
+
+- **GIVEN** an auction order whose derived status is Preparing Shipment
 - **WHEN** the winner opens Winner Order
-- **THEN** the progress stepper marks Shipped as the current step
-- **AND** does not invent a Processing step label
+- **THEN** the progress stepper marks Shipping as the current (progress) step
+- **AND** Shipping subtext reads Preparing to ship
+- **AND** the title badge uses Badge `default`
+- **AND** does not invent a Preparing Shipment step label
+- **AND** does not leave Shipping incomplete or upcoming while Payment is complete
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-lk0 rev=1 -->
+#### Scenario: winner-order-SC-253 - A shipped order keeps Shipping current
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order whose derived status is Shipped, with a day-only
+  ship date and a tracking number when one is known
+- **WHEN** the winner opens Winner Order
+- **THEN** the title badge uses Badge `default`
+- **AND** Shipping is the current progress step with the day-only ship date
+- **AND** a known tracking number is the external carrier link
+- **AND** Order Progress adds no separate Track shipment control and no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fm0 rev=1 -->
 #### Scenario: winner-order-SC-56 - Cancelled hides the stepper

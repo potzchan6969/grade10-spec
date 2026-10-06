@@ -1643,9 +1643,8 @@
 ## winner-order-US2: Winner follows a settled lot to delivery
 
 **As a** winner who has paid,
-**I want** a receipt PDF that says how I paid, what was paid before it and what
-is still owed, a tracker, and proof of what was handed over,
-**so that** I can account for a high-value purchase without asking Grade10 for records.
+**I want** Order Progress to say Shipping while the lot is packing,
+**so that** I do not read the current step as already shipped.
 
 <!-- trace:case id=g10.auction-winner-order.TC-h7f rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
 ### winner-order-US2-TC1-1: The receipt itemises what was paid and sums to the total
@@ -2149,6 +2148,82 @@ is still owed, a tracker, and proof of what was handed over,
 * Order Progress still shows <tracking number> as an external link with an arrow icon.
 * Order Progress shows no Track shipment button or carrier name.
 * Step 2 opens <carrier tracking URL> in a new tab.
+
+<!-- trace:case id=g10.auction-winner-order.TC-nmg rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
+### winner-order-US2-TC55-1: Preparing Shipment pings Shipping with Preparing to ship
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_preparing_shipment>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_preparing_shipment> | A paid order with fulfilment `unfulfilled` |
+
+**Steps:**
+
+1. Read the status badge.
+2. Read Order Progress.
+
+**Expected result:**
+
+* Badge reads Preparing Shipment.
+* Badge uses `default`.
+* Shipping is the current (progress) progress step — not incomplete.
+* Shipping subtext reads Preparing to ship.
+* No step is labelled Preparing Shipment.
+
+<!-- trace:case id=g10.auction-winner-order.TC-7j8 rev=1 covers=g10.auction-winner-order.SC-lk0 -->
+### winner-order-US2-TC20-1: Shipped keeps Shipping current
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_shipped>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_shipped> | A paid, fulfilled order with a ship date and tracking number |
+
+**Steps:**
+
+1. Read the status badge and Order Progress.
+
+**Expected result:**
+
+* Badge reads Shipped and uses `default`.
+* Shipping is the current progress step with the day-only ship date.
+* The tracking number is the external carrier link.
+* Order Progress adds no separate Track shipment control and no separate carrier name.
 
 ---
 
@@ -5769,3 +5844,7 @@ that implementation works.
 | The Raised questions about the Track shipment control and Delivered state | **Settled:** decisions Q1 and Q3; the shipped case checks no separate control, and the delivered case checks the link remains |
 | Root group and journey coverage | **Covered:** both cases trace `winner-order-US-02`; neither case adds behavior outside `Order-progress tracking` |
 | Uncovered scenarios | **None.** Both delta scenarios have a case; the durable suite and auction domain suite add no other scenario for this change's frozen anchors |
+
+- **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
+- **Covered:** `winner-order-SC-253` ← `US2-TC20-1`.
+- **Raised:** none.

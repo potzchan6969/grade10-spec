@@ -10,25 +10,25 @@ derivation that resolves one status a buyer and an operator both read.
 - Writable primitives
   - Invoice status gains `payment_verifying`: the winner uploaded payment proof and an operator has not checked it
   - Stopped deadline: while proof is checked the deadline does not run, and the time left is kept
+  - Invoice status: the state of the money, written by payment and by an operator
+  - Fulfilment status: the state of the goods, written by dispatch alone
+  - Supplementary conditions: two facts read from data Grade10 already holds, so no third enum is needed
 - Derived order status
   - Refunded from partial collection: makes a refund terminal after any recorded payment
   - Deadline-derived outcomes: distinguishes an overdue setup from an overdue payment
   - Payment Verifying: its own name, read by the winner and the operator alike
   - Replaced invoices hold no status: the order's invoice status is always its current invoice's
-
-- Writable primitives
-  - Invoice status: the state of the money, written by payment and by an operator
-  - Fulfilment status: the state of the goods, written by dispatch alone
-  - Supplementary conditions: two facts read from data Grade10 already holds, so no third enum is needed
-- Derived order status
   - Ordered derivation: one rule chain whose first match wins, so precedence is explicit rather than emergent
   - Never written directly: the primitives are the only writable state, so a status cannot contradict them
+  - Preparing Shipment: display name for invoice `paid` and fulfilment `unfulfilled` (was Processing)
 - Guards
   - Refused combinations: a lot that must never dispatch before payment is stopped at write time
   - Permitted transitions: every other move between states is refused
 - Independence from the store
   - Separate derivation: an auction order and a store order share label names and share no meaning
+
 ## Requirements
+
 ### Requirement: An auction order carries two writable status fields
 
 Each auction order SHALL carry exactly one invoice status and exactly one
@@ -112,7 +112,7 @@ the first match.
 | 2 | `cancelled` | any | — | **Cancelled** |
 | 3 | `paid` | `fulfilled` | `delivery_confirmed` is true | **Delivered** |
 | 4 | `paid` | `fulfilled` | `delivery_confirmed` is false | **Shipped** |
-| 5 | `paid` | `unfulfilled` | — | **Processing** |
+| 5 | `paid` | `unfulfilled` | — | **Preparing Shipment** |
 | 6 | `payment_verifying` | `unfulfilled` | — | **Payment Verifying** |
 | 7 | `expired` | `unfulfilled` | — | **Payment Overdue** |
 | 8 | `pending` | `unfulfilled` | — | **Pending Payment** |
@@ -152,12 +152,15 @@ Refunded.
 
 <!-- trace:scenario id=g10.auction-order-status.SC-aj3 rev=1 -->
 #### Scenario: auction-status-SC-07 - A paid, undispatched order is Processing
-**Serves:** Derived order status - a paid, undispatched order is Processing
+**Serves:** Derived order status - a paid, undispatched order is Preparing Shipment
+
+The scenario title is historical for its permanent trace identity. Its normative
+Given, When and Then use the current Preparing Shipment vocabulary.
 
 - **GIVEN** an auction order with invoice status `paid` and fulfilment status
   `unfulfilled`
 - **WHEN** its order status is read
-- **THEN** it is Processing
+- **THEN** it is Preparing Shipment
 
 <!-- trace:scenario id=g10.auction-order-status.SC-apb rev=1 -->
 #### Scenario: auction-status-SC-08 - Dispatch and delivery separate Shipped from Delivered
@@ -183,7 +186,7 @@ Refunded.
 **Serves:** Derived order status - order status refuses a direct write
 
 - **GIVEN** an auction order whose derived order status is Pending Payment
-- **WHEN** any caller attempts to set its order status to Processing
+- **WHEN** any caller attempts to set its order status to Preparing Shipment
 - **THEN** Grade10 refuses the write
 - **AND** the order status is still Pending Payment
 
@@ -404,7 +407,7 @@ imply shared meaning, and no surface SHALL derive one from the other.
 #### Scenario: auction-status-SC-15 - A shared label name carries no shared meaning
 **Serves:** Independence from the store - either derivation read on its own, with no path between them
 
-- **GIVEN** an auction order derived as Processing and a store order badged
+- **GIVEN** an auction order derived as Preparing Shipment and a store order badged
   `processing`
 - **WHEN** either is read
 - **THEN** each is resolved by its own capability's derivation
@@ -506,4 +509,3 @@ SHALL not be replaced by a later payment or shipment event.
 - **WHEN** any order-status surface reads it
 - **THEN** the derived status remains the status before the overpayment return
 - **AND** it is not Refunded
-

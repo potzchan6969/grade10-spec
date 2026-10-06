@@ -23,3 +23,9 @@
 **As a** winner or operator,
 **I want** incomplete setup past its deadline to read Setup Overdue,
 **so that** Status alone shows self-service Confirm has closed without implying setup is still open.
+
+### auction-status-US-08: Expired invoice keeps Pending Payment without winner card pay
+
+**As a** winner or operator,
+**I want** an unpaid invoice past its deadline to read Payment Overdue without winner card pay,
+**so that** the deadline ends self-service settlement while operators can still resolve the order.
