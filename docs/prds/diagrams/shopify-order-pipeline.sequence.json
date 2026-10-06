@@ -68,7 +68,7 @@
       "from": "store",
       "to": "shopify",
       "y": 275,
-      "label": "order id and the Points discount",
+      "label": "order id and the points discount",
       "variant": "emphasis"
     },
     {

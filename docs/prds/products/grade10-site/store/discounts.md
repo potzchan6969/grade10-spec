@@ -99,22 +99,22 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
    - Qualifying goods: the cart's lines after their own discounts, without gift cards and without our gift lines
    - Apply stays off and says why while the session expired, this arm may not spend, the cart is locked for tender, the cart's customer is not the member, the balance is empty, or the points asked exceed what the offers leave of the goods
    - Beside the shop's offers, points are capped at what the offers leave of the goods: POS cuts a fixed order discount to fit, so points past that would be held for money the member never saves
-   - A points spend is refused while somebody else's discount is the sale's one custom order discount — a staff order discount, or a `Points` discount staff keyed on a sale the extension never marked — with 此單已有其他非會員系統的折扣，請先移除。 The shop's offer is never in that slot, so points go on beside it, and a coupon alone is not refused, because only points write the slot
+   - A points spend is refused while somebody else's discount is the sale's one custom order discount — a staff order discount, or a discount staff keyed under either points title on a sale the extension never marked — with 此單已有其他非會員系統的折扣，請先移除。 The shop's offer is never in that slot, so points go on beside it. A coupon alone goes on beside a staff order discount, because only points write the slot, but not beside one keyed under a points title: the order id Apply writes would make it read as the member's points
    - A sale already carrying **another customer** is refused rather than taken: attaching this member over them would spend their points on somebody else's basket, and earn on it
 7. **Apply — the store plans the sale** — from the cart's lines (a claim, bounded later by what the shop takes), the coupons chosen and the points asked for: coupons priced against the lines, gifts priced from the catalog, points capped at the goods and the balance, one `orders` row written for the session (origin `pos`, ref `pos-sale:<session>`) and the member's other open promises retired. A re-plan rewrites the same row; twenty plans per session per five minutes
 8. **Apply — the extension edits the cart**, each write confirmed against the cart signal, one deadline for the whole edit:
    1. `grade10_order_id` cart attribute — first, before any money: a sale carrying it and fewer benefits settles only what the shop took, a discount without it is money off nobody can bound
    2. Gift — a line added under a gift property and discounted to nothing; a gift carries no code at the till; a gift the oversell guard declines is skipped, a gift line left at full price is removed
-   3. Points — one order-level fixed-amount discount titled `Points`; a plan with no points removes the earlier one
+   3. Points — one order-level fixed-amount discount, titled as [Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules) says; a plan with no points removes the earlier one
    4. Product coupon or order coupon — added as a Shopify discount code the shop evaluates, whichever one the plan carries; a product coupon's code is minted the moment it is taken; taken only when the cart shows one more discount than before
    - A step that did not take is a sentence staff read aloud, never a retry loop
 9. **Apply — the store trims the promise** to what landed, and the cart has the last word: a write that landed after its own deadline counts as landed, so a coupon the shop is still taking off is never freed underneath it. Points the shop never discounted, a code it dropped, a coupon refused and a gift blocked come off the row. Idempotent, and a sale already settled is left alone
 10. **The extension keeps watching** — every cart signal is read against what the sale was promised, because anybody at the terminal can take a benefit off without telling it (POS's own 管理折扣 → 全部移除, a staff order discount replacing ours, the customer lifted off the sale). What the cart stops showing goes back to the member, our own gift line comes off once it stops being free, and staff are told in a sentence
-    - A `Points` discount POS cuts smaller after a line change, never past the amount written, keeps its points held; settlement takes them in proportion to what the discount took
+    - A points discount POS cuts smaller after a line change, never past the amount written, keeps its points held; settlement takes them in proportion to what the discount took
 11. **Staff tender** — Shopify POS takes the payment; nothing of ours runs
 12. **The paid order arrives** by webhook or sweep, carrying the attribute, and binds to the row only when the row is a till promise with no payment yet, the order came through the POS channel (a cart permalink could write our attribute on a web order), its customer is the member's, and the currency matches. Anything else counts `store.pos.sale.unbound` for an operator's claw-back, never silence
 13. **Settlement** — the shop's own allocations price the sale, line by line
-    - **Points** leave the balance at what the shop allocated to the `Points` cut
+    - **Points** leave the balance at what the shop allocated to the points discount
     - **A coupon** settles only where the order corroborates it — a product or order coupon by its own code among the codes the sale carried, a gift by its line — and the rest are freed and counted
     - **A discount no instrument accounts for**, a promotion the shop ran itself, is counted and never read as points
     - **Earning** is on the goods, as online
@@ -124,11 +124,11 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 | Button | Where | What comes off | The shop's offer |
 | --- | --- | --- | --- |
-| **全部移除** | The extension, 此單項目 | This sale's gift lines and `Points` discount; a code stays | Stays |
-| **移除所有折扣** (Remove every discount) | The extension, 此單項目 | Every code, the `Points` discount, a staff discount, and this sale's gift lines | Stays |
+| **全部移除** | The extension, 此單項目 | This sale's gift lines and points discount; a code stays | Stays |
+| **移除所有折扣** (Remove every discount) | The extension, 此單項目 | Every code, the points discount, a staff discount, and this sale's gift lines | Stays |
 | **全部移除** | POS, 管理折扣 | Every discount | Off for that cart, until 購物車 ⋯ → 自動折扣 puts it back |
 
-- **Before tender** — the extension's 全部移除 takes gift lines off by their property and the points discount by its title, as [Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules) names it, then tells the store what is left. The balance was never touched. A discount code — a product coupon or an order coupon — comes off only with every other discount (the platform offers nothing narrower), so staff are told; 移除所有折扣 is the last resort
+- **Before tender** — the extension's 全部移除 takes gift lines off by their property and the points discount by either points title, then tells the store what is left. The balance was never touched. A discount code — a product coupon or an order coupon — comes off only with every other discount (the platform offers nothing narrower), so staff are told; 移除所有折扣 is the last resort
 - **A coupon that would not come off** — it stays on the sale and the store is told so: the order id stays, so the landed order still binds, and the coupon's ride stays, so settlement has something to spend. Drop either and the shop goes on honouring the cut against a sale nobody can settle — the member keeps a coupon they used, and the shop pays for it twice
 - **The member taken off the sale** — the promise goes back for everything the sale no longer shows, and what can still be removed is. A cut nobody can remove keeps its ride and the order id with it: no sale binds while the cart names no customer, and the member coming back is what spends it
 - **After tender** — a refund, on the refund's own rule

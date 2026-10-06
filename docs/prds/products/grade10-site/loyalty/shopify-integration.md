@@ -16,7 +16,7 @@ records the order, and the programme moves the balance once.
 | Stage | Online | At the till |
 | --- | --- | --- |
 | Where points are chosen | The store's own `/checkout` page | The terminal, inside an identified session |
-| What carries the discount | One "Points" order discount on the draft order | The same "Points" amount off the cart |
+| What carries the discount | 🚧 One order discount titled "Deduction from Points" on the draft order; "Points", the title older orders carry, counts as the same discount | The same discount on the cart |
 | Who takes the money | Shopify's invoice page | The counter, in Shopify POS |
 | How the paid order is found | The draft is read back for the order it became | The store's order id on the cart |
 | When points leave the balance | On the paid order, once, scaled to what the shop applied | The same |
@@ -148,7 +148,7 @@ The webhook, signed over its own bytes. Each discount names itself, and each lin
 }
 ```
 
-The store finds its points by the title "Points", whatever case the shop wrote it in
+The store finds its points by either points title - [Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules) - whatever case or spaces the shop wrote it in
 
 ## *Store* — **Order marked paid**
 The bytes are verified, the delivery is deduped on Shopify's webhook id, and the draft is read back for the order it became, because a paid invoice carries no cart token. The qualifying goods are priced once and the order event is written with the status in one transaction, so a redelivery writes nothing.
@@ -221,10 +221,6 @@ does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
 
 The loyalty terminal is a Shopify POS UI extension.
 
-🚧 The points discount on the cart and paid order is titled "Deduction from
-Points"; a legacy "Points" discount remains the same points spend while the
-extension rollout completes.
-
 | Surface | Job | Spends |
 | --- | --- | --- |
 | Home tile | Opens the modal; badges only "membership unavailable" | Never |
@@ -263,10 +259,8 @@ extension rollout completes.
   goods covers the amount — [Discounts](/p/grade10-site/store/discounts)
 - **Plan** — one sale row per session, rewritten on every plan, capped at 20
   plans in 5 minutes
-- **Discount on the cart** — the store's order id first, then the "Points"
-  fixed discount; the promise is trimmed to what the cart shows
-- 🚧 **Title** — "Deduction from Points"; "Points", the title older orders
-  carry, counts as the same discount
+- **Discount on the cart** — the store's order id first, then the points
+  discount; the promise is trimmed to what the cart shows
 - **Shown before it commits** — points spent, money still due, balance after
   and points this sale will earn, priced by the platform
 - **Confirm** — the button locks while it runs, so a double tap spends once
@@ -290,7 +284,7 @@ One arm answers, and the store opens a session on it: 10 minutes, bound to the s
 Points and coupons, priced against the lines the terminal claims. The store writes one sale row per session and rewrites it on every later plan.
 
 ## *Shopify* — **Cart carries the discount**
-The store's order id goes onto the cart first, then the "Points" amount comes off it. A sale carrying the id and less money off settles only what the shop took off; money off with no id is a discount the store cannot bind to a sale.
+The store's order id goes onto the cart first, then the points discount goes on. A sale carrying the id and less money off settles only what the shop took off; money off with no id is a discount the store cannot bind to a sale.
 
 ```json
 {
@@ -345,7 +339,7 @@ The earn is priced on the goods that sale settled, whenever the sale gets an own
 
 :::flow{title="At the till" case="Undone before tender" diagram="assets/diagrams/shopify-till-undone.svg"}
 ## *Shopkeeper* — **Takes the benefits off**
-The gift lines, then the coupon discounts, then the "Points" discount, and the store's order id last, because a sale paid while the id is on the cart still binds to its row. The id stays on while a coupon code is on the sale, because Shopify will not remove one code at a time.
+The gift lines, then the coupon discounts, then the points discount, and the store's order id last, because a sale paid while the id is on the cart still binds to its row. The id stays on while a coupon code is on the sale, because Shopify will not remove one code at a time.
 
 ## *Store* — **Promise dropped**
 The terminal reports what the sale still shows, and the row is trimmed to it: the points come off the row whether or not the discount came off the cart. Nothing was debited, because nothing was held.
@@ -422,4 +416,30 @@ on is the owner's call.
 - **References** —
   [the Shopify membership and POS plan](/references/shopify-membership-pos)
   and [the POS extension notes](/references/shopify-pos-extension)
+:::
+
+:::detail{title="Product decisions" for="pm"}
+Shopify takes the money and shows the discounts; the programme moves the
+balance once, on the paid order. What a member and a shopkeeper read about
+their points is therefore what Shopify shows: the till's cart, the receipt and
+the paid order. A discount title that reads as a count of points makes each of
+them work out what the line means.
+
+**Not in scope.** A balance, a tier or a coupon held in Shopify. Relabelling
+the site's checkout summary row, the cart drawer footer or the till panel's row
+for the points spent. Retitling orders already paid.
+
+**Measurement.**
+
+| Signal | Definition | Owner |
+| --- | --- | --- |
+| New title paid | Share of points orders promised after both channels write "Deduction from Points" that are paid under that title; every one. | Product |
+| Expired till promises | Till promises that expire unpaid, per week; no higher after the title changes than before. | Product |
+
+**Decisions.**
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Title | Decided | "Deduction from Points", the owner's choice, because "Points" reads as a count of points rather than money taken off. English, like "Coupon": a discount title is one value written into Shopify and is not translated. | Product |
+| Older title | Decided | "Points" counts as the same discount for as long as orders exist, because a paid order keeps the title it was paid with. | Product |
 :::
