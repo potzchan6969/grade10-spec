@@ -627,6 +627,7 @@ function checkSuite(root, filePath, rulesRev) {
 
   if (spec && level === "feature") {
     for (const [id] of spec.journeys) {
+      if (spec.context.has(id)) continue;
       const num = Number(id.match(/-US-(\d+)$/)?.[1]);
       if (!seenJourneys.has(num))
         warn(1, `spec journey \`${id}\` has no section in this suite`);

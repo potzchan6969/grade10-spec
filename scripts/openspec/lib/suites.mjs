@@ -279,6 +279,9 @@ export function readSpecIds(specPath) {
   // A retired journey still names the deprecated cases that walked it: a
   // change's REMOVED heading before the fold, a `## Retired` line after it.
   const retired = new Set();
+  // A change restates a journey under Context only so its scenarios can serve
+  // it; the change's suite owes a section to the journeys it adds or modifies.
+  const context = new Set();
   let section = "";
   for (const line of `${text}\n${stories}`.split("\n")) {
     const h = line.match(/^##\s+(.+?)\s*$/);
@@ -286,6 +289,7 @@ export function readSpecIds(specPath) {
     const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
     if (j && section === "REMOVED User journeys") retired.add(j[1]);
     else if (j) journeys.set(j[1], j[2]);
+    if (j && section === "Context user journeys") context.add(j[1]);
     const r = section === "Retired" && line.match(/^[-*]\s+`([\w-]+-US-\d+)`/);
     if (r) retired.add(r[1]);
     const s = line.match(SCENARIO_HEADING);
@@ -295,6 +299,7 @@ export function readSpecIds(specPath) {
   }
   return {
     journeys,
+    context,
     retired,
     scenarios,
     groups,

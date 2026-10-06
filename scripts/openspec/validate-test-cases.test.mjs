@@ -609,3 +609,41 @@ test("a change suite traces the feature set groups its delta folds to, accepted 
     /the feature set does not fold: demo\/alpha: REMOVED Feature set names a root group more than once/,
   );
 });
+
+test("a change suite owes a section to the journeys it adds or modifies, not to its context journeys", () => {
+  const journey = (n) =>
+    [
+      `### demo-alpha-US-0${n}: Collector does thing ${n}`,
+      "",
+      "**As a** collector,",
+      `**I want** thing ${n},`,
+      "**so that** it is done.",
+      "",
+    ].join("\n");
+  const at = (heading) => {
+    const root = mkdtempSync(join(tmpdir(), "context-journey-"));
+    for (const [name, content] of Object.entries({
+      ...SPEC,
+      [`${CHANGE}/user-journeys.md`]: [
+        "## MODIFIED User journeys",
+        "",
+        journey(1),
+        `## ${heading}`,
+        "",
+        journey(2),
+      ].join("\n"),
+      [`${CHANGE}/feature-tcs.md`]: SUITE([]),
+    })) {
+      const file = join(root, name);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, content);
+    }
+    return run(root).stdout;
+  };
+
+  assert.doesNotMatch(at("Context user journeys"), /has no section/);
+  assert.match(
+    at("ADDED User journeys"),
+    /spec journey `demo-alpha-US-02` has no section in this suite/,
+  );
+});
