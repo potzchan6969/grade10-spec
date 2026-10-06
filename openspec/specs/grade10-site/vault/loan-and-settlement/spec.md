@@ -134,6 +134,7 @@ the calendar date in writing.
 - **WHEN** an advance of 3,900,000 HKD minor units is recorded
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-obp rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-49 - An advance with no bank reference is refused
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -142,6 +143,7 @@ the calendar date in writing.
 - **THEN** it is refused by name
 - **AND** the case stays in the vault with no advance recorded
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-apt rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-50 - A second advance on the same case is refused
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -150,6 +152,7 @@ the calendar date in writing.
 - **THEN** it is refused by name
 - **AND** the advance already recorded is unchanged
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-zk2 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-51 - An advance before the item is in custody is refused
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -463,6 +466,7 @@ returned, without a month of messages to add up.
   as if it had never been recorded.
 - **None yet** - a live loan carrying no repayment SHALL carry an empty list.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-0fj rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-27 - A repayment reads with the day it arrived and what was left
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower opens the case to see what a payment did
 
@@ -474,6 +478,7 @@ returned, without a month of messages to add up.
   transfer, naming day 10 as the day it reached us and the day it was
   recorded, and 1,300,000 HKD minor units as what was owed after it
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-agp rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-28 - A loan nobody has repaid says so
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower checks the case before their first payment
 
@@ -481,6 +486,7 @@ returned, without a month of messages to add up.
 - **WHEN** the borrower reads the case
 - **THEN** the read carries no repayment
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-7jd rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-29 - A repayment taken back leaves the list
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower reads the case after the bank sent a payment back
 
@@ -506,6 +512,7 @@ ahead of them, and what ends them.
   carry the reminders already sent with their days and the next weekly one
   by its date.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-job rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-30 - Only the reminders still ahead are named
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower plans when to pay from what is still coming
 
@@ -514,6 +521,7 @@ ahead of them, and what ends them.
 - **THEN** the reminder already sent is carried with the day it was sent and
   not as coming, and the remaining reminders are carried by their dates
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-fps rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-31 - A notice ends the reminder dates
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower who has had the final notice stops being promised more mail
 
@@ -521,6 +529,7 @@ ahead of them, and what ends them.
 - **WHEN** the borrower reads the case
 - **THEN** no reminder is carried as still to come
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-u2t rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-48 - Past due, the case names what comes next
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower past due reads what comes next
 
@@ -544,6 +553,7 @@ only in their mail.
 - **No notice** - a loan past its due date with no notice standing SHALL carry
   none, and no date to pay by.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-re7 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-32 - The notice reads with its date to pay by
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower reads how long is left to pay
 
@@ -553,6 +563,7 @@ only in their mail.
 - **THEN** the read carries 1 November as the day the notice was written and
   15 November as the date to pay by
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-57m rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-33 - A shortened notice period does not move the date shown
 **Serves:** grade10-site-vault-loan-and-settlement-US-04 - the borrower is held to the date staff gave them, not a later rule
 
@@ -561,6 +572,7 @@ only in their mail.
 - **WHEN** the borrower reads the case
 - **THEN** the date carried is the one the notice named
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-ygz rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-34 - A past-due loan with no notice shows none
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower running late has had no notice yet
 
@@ -602,6 +614,7 @@ of a live loan and in every message about money.
   carrying an unset value is refused by
   `grade10-site/vault/collector-notifications`, which states that rule.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-7o0 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-35 - The block names the account and the case reference
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower pays at their own bank without asking the shop where
 
@@ -612,6 +625,7 @@ of a live loan and in every message about money.
 - **AND** the read carries the due instant, the instant it was made at and
   what each further started day adds
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-yd8 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-36 - A money message carries the same block
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower pays from the message without opening the site
 
@@ -619,6 +633,7 @@ of a live loan and in every message about money.
 - **WHEN** a message naming an amount owed or an amount received is sent
 - **THEN** it carries the same values as the block on the case
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-u5e rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-37 - A case with no live loan names no account
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower whose item is only stored is not asked to pay
 
@@ -633,6 +648,7 @@ of a live loan and in every message about money.
 - **WHEN** the block is printed
 - **THEN** it shows a marked placeholder in place of the FPS id
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-p4p rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-47 - Production shows the counter line in place of the block
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower on a brand whose account is not set yet is still told where to pay
 
@@ -642,6 +658,7 @@ of a live loan and in every message about money.
 - **THEN** the read carries no payee, no FPS id, no bank account and no
   transfer reference
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-1f2 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-52 - A part payment at the counter is refused while nowhere to pay is set
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - the borrower is never sent a balance with no way to pay it
 
@@ -674,6 +691,7 @@ the dialog, before they send it.
   guard. Every refusal this capability names SHALL be raised again at the
   recording.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-adf rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-40 - The offer dialog derives the figures from the terms entered
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the operator prices a loan knowing what it will cost the borrower
 
@@ -683,6 +701,7 @@ the dialog, before they send it.
   HKD minor units to repay, 8,333 HKD minor units for a late day, and an
   annualised rate of 30.4%, alongside the valuation, the cap and the presets
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-pbl rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-41 - A bound the offer fails is named before the send
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the operator sees the cap before the worker teaches it
 
@@ -692,6 +711,7 @@ the dialog, before they send it.
 - **THEN** the dialog names that bound as unmet and what it requires, and the
   control that makes the offer is still there
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-kf3 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-42 - The vault dialog names the precondition that is missing
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the operator at the counter learns what the vaulting still needs
 
@@ -701,6 +721,7 @@ the dialog, before they send it.
   asks for no visit slot, and the control that confirms the vaulting is still
   there
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-3mx rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-43 - The payout dialog names the two people it needs
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - the treasurer sees why they may not pay out their own offer
 
@@ -708,6 +729,7 @@ the dialog, before they send it.
 - **WHEN** that operator opens the dialog that records the payout
 - **THEN** it names the two-people rule as unmet and what it requires
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-znu rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-44 - The due date and the reminder dates follow the value date
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the treasurer sees what the date they type fixes for the borrower
 
@@ -717,6 +739,7 @@ the dialog, before they send it.
 - **THEN** the due date it states moves from 15 October to 16 October and the
   reminder dates it states move with it
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-xm5 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-45 - A bound nobody has set refuses in production and passes outside it
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the operator on a shop that lends nothing yet reads why
 
@@ -726,6 +749,7 @@ the dialog, before they send it.
   offer goes through, and in production it names the refusal before the
   operator sends
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-9pz rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-46 - The recording refuses what the dialog let through
 **Serves:** The rule before the act - an operator who sends past a dialog still meets the recording's own guard
 

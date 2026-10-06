@@ -9,6 +9,7 @@
 **I want** my order to have a clear, stable payment reference I can quote,
 **so that** I can reference it when contacting support or making inquiries about my purchase, without a separate order ID to keep track of.
 
+<!-- trace:case id=g10.auction-winner-order.TC-ppj rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
 ### winner-order-US21-TC1-1: Invoice and payment references appear on both invoice methods
 
 **Classification:**
@@ -39,6 +40,7 @@
 * The card invoice and bank-transfer invoice use the same reference rules.
 * No receipt breakdown or receipt amount is asserted here.
 
+<!-- trace:case id=g10.auction-winner-order.TC-93n rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
 ### winner-order-US21-TC2-1: Invoice numbering continues after 99
 
 **Classification:**
@@ -68,6 +70,7 @@
 * The new invoice ID is `IN-LK423100`.
 * The payment reference remains `LK423`.
 
+<!-- trace:case id=g10.auction-winner-order.TC-ehf rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
 ### winner-order-US21-TC3-1: Listing-code allocation retries a projection collision
 
 **Classification:**
@@ -97,6 +100,7 @@
 * Allocation retries and stores a distinct valid code.
 * The code is not treated as collision-free merely because its source is a UUID or listing ID.
 
+<!-- trace:case id=g10.auction-winner-order.TC-wa2 rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
 ### winner-order-US21-TC4-1: A stored payment reference survives allocator changes
 
 **Classification:**
@@ -126,6 +130,7 @@
 * Both continue to use `LK423`.
 * No new listing receives a retained code.
 
+<!-- trace:case id=g10.auction-winner-order.TC-azi rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
 ### winner-order-US21-TC5-1: The public listing page withholds the payment reference
 
 **Classification:**
@@ -160,6 +165,7 @@
 **I want** my invoice and payment receipts to show stable public references built from my payment reference,
 **so that** I can contact Grade10, make a payment, and reconcile charges without exposing internal system keys.
 
+<!-- trace:case id=g10.auction-winner-order.TC-urm rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
 ### winner-order-US22-TC1-1: Reissued invoice IDs still find the order
 
 **Classification:**
@@ -189,6 +195,7 @@
 * Each lookup finds the same order.
 * The replacement invoice names the replaced invoice and keeps `LK423`.
 
+<!-- trace:case id=g10.auction-winner-order.TC-mr5 rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
 ### winner-order-US22-TC2-1: A finalized payment receives the new receipt identifier
 
 **Classification:**
@@ -220,6 +227,7 @@
 * A later finalized payment for that invoice receives `P2`, then `P10` without padding.
 * A receipt for another invoice starts at `P1` for that invoice.
 
+<!-- trace:case id=g10.auction-winner-order.TC-gfa rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
 ### winner-order-US22-TC3-1: Historical receipt identifiers stay unchanged
 
 **Classification:**
@@ -249,6 +257,7 @@
 * The historical receipt ID remains `REC-202609-LK7P2Q-01-P1`.
 * No receipt ID is created for the refund, reversal or void.
 
+<!-- trace:case id=g10.auction-winner-order.TC-gs5 rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
 ### winner-order-US22-TC4-1: Provider references stay internal
 
 **Classification:**

@@ -56,6 +56,7 @@ on refusing a second.
 The member SHALL NOT be told anything when an earlier claim is released, and
 SHALL NOT be shown which sale claims a coupon.
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-lbx rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-190 - A coupon on an unfinished checkout is still spendable
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -64,6 +65,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **THEN** the coupon applies to the new checkout
 - **AND** the earlier order is cancelled and its code deactivated
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-lfq rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-191 - A counter sale keeps its cart and loses the cut
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -72,6 +74,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **THEN** the checkout carries the coupon's cut
 - **AND** the counter sale is not cancelled, its code is deactivated, and the sale collects without the cut
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-m19 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-192 - The counter claims a coupon an open checkout holds
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -80,6 +83,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **THEN** the counter sale carries the coupon's cut
 - **AND** the online order is cancelled
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-hxh rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-193 - A second counter takes the coupon from the first
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -87,6 +91,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **WHEN** they present the same coupon at another till
 - **THEN** the second sale carries the cut and the first sale's code is deactivated
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-ail rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-194 - A claim is refused where the earlier checkout will not die
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -95,6 +100,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **THEN** it is refused, saying an earlier sale stands rather than that the coupon is unavailable
 - **AND** the earlier checkout keeps the cut
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-fwa rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-201 - A counter sale never refuses a claim
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -103,6 +109,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **THEN** it stands and the new sale carries the cut
 - **AND** the deactivation is retried until the shop agrees the code is gone
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-oc6 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-202 - A sale that did not carry the coupon gives it back
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -110,6 +117,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **WHEN** the sale settles
 - **THEN** the coupon is unused and spendable, and nothing is recorded as having come off that sale
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-pxx rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-200 - A coupon on a sale that took money is not moved
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -117,6 +125,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **WHEN** they claim that coupon on another sale
 - **THEN** the claim is refused and the paid sale keeps the cut
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-f9s rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-195 - A coupon two sales collected is spent once and reported
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -125,6 +134,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **THEN** the coupon is spent by whichever settles first
 - **AND** the other is reported with the order on it, and is not spent again
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-6ok rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-203 - A sale that gave a coupon back can claim it again
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -132,6 +142,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **WHEN** the same sale claims that coupon again
 - **THEN** the claim is made and the sale carries the cut
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-br3 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-204 - Asking twice for a claim that stands answers the same claim
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -139,6 +150,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **WHEN** the same sale asks for that claim again
 - **THEN** it is answered with the claim it already holds, and the coupon is claimed once
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-4ph rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-205 - A counter sale that runs out of time gives the coupon back
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -146,6 +158,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **WHEN** the sale runs out its own clock
 - **THEN** the coupon is spendable again at once, and the sale keeps its cart
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-lft rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-196 - No surface names the sale claiming a coupon
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -218,6 +231,7 @@ member presents is the code for that sale alone.
 - **AND** a later plan of the same sale keeps the coupon and mints no
   second code
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-fhj rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-197 - An unpaid sale never spent the coupon
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -291,6 +305,7 @@ redemption actually consumed a unit.
 - **THEN** the reversal is refused and the points stay spent
 - **AND** the operator is told why
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-m7u rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-198 - A reversal is refused while a sale claims the coupon
 **Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
 
@@ -298,6 +313,7 @@ redemption actually consumed a unit.
 - **WHEN** an operator reverses the redemption that issued it
 - **THEN** the reversal is refused, naming that sale
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-jqk rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-199 - A claim nothing moves is released on the programme's clock
 **Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
 
@@ -305,6 +321,7 @@ redemption actually consumed a unit.
 - **WHEN** the claim has stood longer than any code minted for it can be collected
 - **THEN** the coupon is spendable again and an operator can reverse the redemption that issued it
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-0nd rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-167 - A refunded sale does not return the coupon
 **Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
 

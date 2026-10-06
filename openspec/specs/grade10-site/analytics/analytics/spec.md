@@ -65,6 +65,7 @@ Started and Order Paid with Origin `web` — so anonymous browse merges
 onto the person after pay or sign-in. The order-only device used for an
 ownerless paid order SHALL NOT be reused as a browser device id.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-4pj rev=1 -->
 #### Scenario: grade10-site-analytics-SC-01 - A signed-in event is the user and the device
 
 **Serves:** Identity - a signed-in event names the user and the device
@@ -74,6 +75,7 @@ ownerless paid order SHALL NOT be reused as a browser device id.
 - **AND** it still names that device
 - **AND** Audience is `collector`
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-xtj rev=1 -->
 #### Scenario: grade10-site-analytics-SC-02 - An anonymous event is the device
 
 **Serves:** Identity - an anonymous event names only the device
@@ -82,6 +84,7 @@ ownerless paid order SHALL NOT be reused as a browser device id.
 - **THEN** the event is attributed to the device
 - **AND** it is not attributed to a user id
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-xjq rev=1 -->
 #### Scenario: grade10-site-analytics-SC-03 - A client cannot claim a user
 
 **Serves:** Identity - a client cannot claim a user id
@@ -89,6 +92,7 @@ ownerless paid order SHALL NOT be reused as a browser device id.
 - **WHEN** they submit an analytics event that names a user id
 - **THEN** the recorded event is not attributed to that user id
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-n19 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-04 - Staff are marked staff
 
 **Serves:** Identity - staff browsing the collector site are marked staff
@@ -96,6 +100,7 @@ ownerless paid order SHALL NOT be reused as a browser device id.
 - **WHEN** Grade10 records an analytics event for that visit
 - **THEN** Audience is `staff`
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-77x rev=1 -->
 #### Scenario: grade10-site-analytics-SC-34 - Sign-out starts a new device
 
 **Serves:** Identity - sign-out starts a new device
@@ -104,6 +109,7 @@ ownerless paid order SHALL NOT be reused as a browser device id.
 - **THEN** the next analytics event from that browser is attributed to a new device
 - **AND** it is not attributed to that collector
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-3pq rev=1 -->
 #### Scenario: grade10-site-analytics-SC-41 - Session expiry starts a new device
 
 **Serves:** Identity - session expiry starts a new device
@@ -119,6 +125,7 @@ order as a device and SHALL NOT be attributed to a user id. WHEN that
 order is later claimed, Grade10 SHALL NOT send Order Paid again and
 SHALL NOT merge that order device onto the claimer's profile.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-b8p rev=1 -->
 #### Scenario: grade10-site-analytics-SC-05 - An ownerless paid order sits on the order
 
 **Serves:** Identity - an ownerless paid order sits on the order alone
@@ -127,6 +134,7 @@ SHALL NOT merge that order device onto the claimer's profile.
 - **THEN** the event is attributed to that order as a device
 - **AND** it is not attributed to a user id
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-2py rev=1 -->
 #### Scenario: grade10-site-analytics-SC-06 - A later claim does not send Order Paid again
 
 **Serves:** Identity - a later claim does not resend or merge Order Paid
@@ -143,6 +151,7 @@ WHEN the store finds an account that already existed, it SHALL NOT
 record Account Created. The identity worker SHALL NOT record Mixpanel
 events.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-y2g rev=1 -->
 #### Scenario: grade10-site-analytics-SC-07 - A new account is created once
 
 **Serves:** Identity - Account Created fires once when the store first knows a user id
@@ -150,6 +159,7 @@ events.
 - **WHEN** the store creates an unverified account for that email
 - **THEN** Mixpanel records Account Created for that user id once
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-1h1 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-08 - Finding an existing account is not Account Created
 
 **Serves:** Identity - finding an existing account is not Account Created
@@ -157,6 +167,7 @@ events.
 - **WHEN** the store asks to create an account for that same email
 - **THEN** Mixpanel does not record Account Created for that request
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-w73 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-09 - Auth does not talk to Mixpanel
 
 **Serves:** Identity - the identity worker records no Mixpanel event
@@ -174,6 +185,7 @@ as the person's location: when no collector IP is known, engage SHALL set
 SHALL NOT store an IP address as an event or profile property; Mixpanel
 discards the address after deriving geolocation.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-3nr rev=1 -->
 #### Scenario: grade10-site-analytics-SC-38 - /api/track stamps the client IP
 
 **Serves:** Identity - client ingest stamps the collector IP for geo
@@ -182,6 +194,7 @@ discards the address after deriving geolocation.
   for geolocation
 - **AND** the event does not store an IP address as a property
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-5cv rev=1 -->
 #### Scenario: grade10-site-analytics-SC-39 - A server emit keeps the collector IP
 
 **Serves:** Identity - a server emit keeps the collector IP for geo
@@ -190,6 +203,7 @@ discards the address after deriving geolocation.
 - **THEN** the Mixpanel event carries that collector IP for geolocation
 - **AND** not the worker's address
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-kpf rev=1 -->
 #### Scenario: grade10-site-analytics-SC-40 - A profile write without a client IP does not stamp the worker
 
 **Serves:** Identity - a profile write without a client IP does not stamp the worker
@@ -224,6 +238,7 @@ The profile SHALL NOT carry email, name, phone, address, date of birth,
 document numbers, coupon codes, pass serials, a stored IP address, or a
 device fingerprint.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-o7d rev=1 -->
 #### Scenario: grade10-site-analytics-SC-25 - A tier change updates the snapshot
 
 **Serves:** User profile - a tier change updates the snapshot
@@ -231,18 +246,21 @@ device fingerprint.
 - **WHEN** they reach Gold
 - **THEN** the Mixpanel user profile's Tier is `Gold`
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-syh rev=1 -->
 #### Scenario: grade10-site-analytics-SC-26 - The browser cannot write a user profile
 
 **Serves:** User profile - the browser cannot write a user profile
 - **WHEN** the browser submits a user-profile update
 - **THEN** Mixpanel does not take that update as the person
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-d0t rev=1 -->
 #### Scenario: grade10-site-analytics-SC-27 - Contact fields stay off the profile
 
 **Serves:** User profile - contact fields stay off the snapshot
 - **WHEN** the backend writes a user profile
 - **THEN** the profile does not carry an email address
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-icd rev=1 -->
 #### Scenario: grade10-site-analytics-SC-37 - An anonymous device has no user profile
 
 **Serves:** User profile - an anonymous device has no user profile
@@ -263,18 +281,21 @@ Grade10 SHALL NOT send Mixpanel events for: refunds, points expiry,
 tier reviews as a stream, bid standing ticks, operator post-sale,
 document contents, or crawler answers from the serving worker.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-xi3 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-28 - Email is not an event property
 
 **Serves:** Refusals - email is not an event property
 - **WHEN** Grade10 records any Mixpanel event
 - **THEN** the event does not carry an email address
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-5sa rev=1 -->
 #### Scenario: grade10-site-analytics-SC-29 - Admin consoles send nothing
 
 **Serves:** Refusals - admin consoles send nothing to Mixpanel
 - **WHEN** an operator uses a Grade10 admin console
 - **THEN** Mixpanel records no event for that use
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-27a rev=1 -->
 #### Scenario: grade10-site-analytics-SC-30 - ZZZ storefront emit is not required
 
 **Serves:** Refusals - ZZZ storefront emit is not required
@@ -282,18 +303,21 @@ document contents, or crawler answers from the serving worker.
 - **THEN** Grade10 records the catalog
 - **AND** ZZZ is not required to emit storefront events
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-rx2 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-31 - The winner's invoice paid is Invoice Paid
 
 **Serves:** Events - the winner invoice paid is Invoice Paid
 - **WHEN** the winner's invoice is paid
 - **THEN** Mixpanel records Invoice Paid
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-ju7 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-32 - A bid does not record Lot Watched
 
 **Serves:** Events - a bid does not record Lot Watched
 - **WHEN** a collector places an accepted bid
 - **THEN** Mixpanel does not record Lot Watched for that bid
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-ubv rev=1 -->
 #### Scenario: grade10-site-analytics-SC-33 - A till paid order carries the session
 
 **Serves:** Events - a till paid order carries the till session
@@ -313,6 +337,7 @@ database until Mixpanel accepts it.
 - **Frozen** - A record SHALL keep the event name, time, distinct_id and `$insert_id` it was recorded with, and every attempt SHALL send those same values.
 - **Once per key** - Recording a second event with an `$insert_id` the worker already keeps SHALL NOT add a second record.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-pih rev=1 -->
 #### Scenario: grade10-site-analytics-SC-46 - A committed fact has its record
 **Serves:** Delivery - a paid order's event exists once its payment commits
 
@@ -321,6 +346,7 @@ database until Mixpanel accepts it.
 - **THEN** the worker keeps one record for that event
 - **AND** the record is sent even if the worker stops right after the commit
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-knh rev=1 -->
 #### Scenario: grade10-site-analytics-SC-47 - A rolled-back fact has none
 **Serves:** Delivery - a failed write leaves nothing to send
 
@@ -329,6 +355,7 @@ database until Mixpanel accepts it.
 - **THEN** the worker keeps no record for that event
 - **AND** Mixpanel never receives it
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-de4 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-48 - A replayed fact records once
 **Serves:** Delivery - a replayed webhook or reconcile pass counts once
 
@@ -345,6 +372,7 @@ Each worker's scheduled sweep sends the records waiting in its database.
 - **Sent again** - A record whose send fails for any reason other than Mixpanel refusing it SHALL be sent again on a later sweep, backing off, with no attempt limit.
 - **Counted once** - A record sent more than once SHALL count once in Mixpanel.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-r2p rev=1 -->
 #### Scenario: grade10-site-analytics-SC-49 - A waiting record is sent on the next sweep
 **Serves:** Delivery - a backend event reaches Mixpanel within a sweep
 
@@ -353,6 +381,7 @@ Each worker's scheduled sweep sends the records waiting in its database.
 - **THEN** Mixpanel receives the record
 - **AND** the worker no longer keeps it
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-5it rev=1 -->
 #### Scenario: grade10-site-analytics-SC-50 - An outage delays but does not lose
 **Serves:** Delivery - a long Mixpanel outage loses no backend event
 
@@ -361,6 +390,7 @@ Each worker's scheduled sweep sends the records waiting in its database.
 - **WHEN** Mixpanel recovers and the worker's next due sweep runs
 - **THEN** Mixpanel receives every waiting record
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-v9d rev=1 -->
 #### Scenario: grade10-site-analytics-SC-51 - A lost acknowledgement counts once
 **Serves:** Delivery - a send repeated after a lost ack counts once
 
@@ -376,6 +406,7 @@ A refusal is judged record by record, and a held record waits for an engineer.
 - **Held** - A held record SHALL NOT be sent again by the sweep and SHALL NOT be deleted by it.
 - **Visible** - Each worker SHALL report, on every sweep, how many records wait, the age of the oldest, and how many are held, and a held record SHALL raise an alarm.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-yhx rev=1 -->
 #### Scenario: grade10-site-analytics-SC-52 - One refused record in a batch
 **Serves:** Delivery - one bad record does not hold its neighbours
 
@@ -384,6 +415,7 @@ A refusal is judged record by record, and a held record waits for an engineer.
 - **THEN** the refused record is held
 - **AND** Mixpanel receives the other records
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-22m rev=1 -->
 #### Scenario: grade10-site-analytics-SC-53 - A held record stays until an engineer acts
 **Serves:** Delivery - a refused record is never dropped
 
@@ -399,6 +431,7 @@ Profile writes follow the latest-snapshot rule whatever fails.
 - **Latest wins** - For each profile property, the value Mixpanel ends on SHALL be the latest one written for that user.
 - **Not held up** - A later profile write SHALL NOT wait behind an earlier one that is held.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-mer rev=1 -->
 #### Scenario: grade10-site-analytics-SC-54 - A retried older write does not overwrite a newer one
 **Serves:** Delivery - a retried Tier never overwrites a newer Tier
 
@@ -407,6 +440,7 @@ Profile writes follow the latest-snapshot rule whatever fails.
 - **WHEN** the worker's sweep sends the user's profile
 - **THEN** the user's profile ends on the later Tier
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-brm rev=1 -->
 #### Scenario: grade10-site-analytics-SC-55 - A held write does not block a later one
 **Serves:** Delivery - a later profile write passes a held one
 
@@ -421,6 +455,7 @@ Erasure reaches the records waiting for Mixpanel.
 - **Deleted** - Erasing an account SHALL delete every unsent record for that account in every worker that keeps one, waiting or held.
 - **Erasure's own write** - The profile write the erasure itself makes SHALL still be sent.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-kt8 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-56 - Erasure deletes waiting and held records
 **Serves:** Delivery - a forgotten collector's records never reach Mixpanel
 
@@ -434,6 +469,7 @@ Erasure reaches the records waiting for Mixpanel.
 
 - **No-op** - A worker with no Mixpanel token SHALL record no backend send and SHALL log that it has none.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-ehg rev=1 -->
 #### Scenario: grade10-site-analytics-SC-57 - An empty token records nothing
 **Serves:** Delivery - a brand with no project yet keeps no records
 
@@ -446,6 +482,7 @@ Erasure reaches the records waiting for Mixpanel.
 - **Browser** - `/api/track` SHALL await one Mixpanel request per batch and answer 500 when it fails, and SHALL NOT keep the batch.
 - **Counters** - Datadog counters SHALL NOT be recorded for a later send.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-9wu rev=1 -->
 #### Scenario: grade10-site-analytics-SC-58 - A failed browser batch is not kept
 **Serves:** Delivery - browsing stays on the browser's own retry
 
@@ -511,18 +548,21 @@ that visit's device id, the event SHALL name that `$device_id`. WHEN
 Order Paid Origin is `web` and checkout started from a device, Order
 Paid SHALL still name that device and SHALL NOT drop it.
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-w72 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-10 - The browser cannot submit Order Paid
 
 **Serves:** Events - the browser cannot submit Order Paid
 - **WHEN** the browser submits an event named Order Paid
 - **THEN** ingest rejects it
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-su2 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-11 - The browser cannot submit Bid Placed
 
 **Serves:** Events - the browser cannot submit Bid Placed
 - **WHEN** the browser submits an event named Bid Placed
 - **THEN** ingest rejects it
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-4xt rev=1 -->
 #### Scenario: grade10-site-analytics-SC-12 - Page Viewed fires on in-page navigation
 
 **Serves:** Events - Page Viewed fires on in-page navigation
@@ -530,6 +570,7 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **WHEN** they open another page without a full document load
 - **THEN** Mixpanel records Page Viewed for that surface
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-7qm rev=1 -->
 #### Scenario: grade10-site-analytics-SC-35 - Page Viewed carries UTM from the landing
 
 **Serves:** Events - Page Viewed carries UTM from the landing
@@ -537,6 +578,7 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **WHEN** Mixpanel records Page Viewed
 - **THEN** the event includes those UTM Source, UTM Medium, UTM Campaign, and UTM Content values that were present
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-sss rev=1 -->
 #### Scenario: grade10-site-analytics-SC-44 - First Page Viewed may carry Initial Referrer
 
 **Serves:** Events - the first Page Viewed may carry Initial Referrer
@@ -544,6 +586,7 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **WHEN** Mixpanel records that Page Viewed
 - **THEN** the event includes Initial Referrer
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-asj rev=1 -->
 #### Scenario: grade10-site-analytics-SC-45 - Lot Viewed carries UTM from the landing
 
 **Serves:** Events - Lot Viewed carries UTM from the landing
@@ -551,12 +594,14 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **WHEN** Mixpanel records Lot Viewed
 - **THEN** the event includes those UTM Source, UTM Medium, UTM Campaign, and UTM Content values that were present
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-bk7 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-13 - Product Viewed names the source
 
 **Serves:** Events - Product Viewed names the merchandising source
 - **WHEN** a collector opens a product from the merchandised row
 - **THEN** Mixpanel records Product Viewed with Source `Row`
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-ni2 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-14 - Checkout Started is recorded when checkout is accepted
 
 **Serves:** Events - Checkout Started fires when checkout is accepted
@@ -565,6 +610,7 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **THEN** Mixpanel records Checkout Started for that order
 - **AND** the event is a server event
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-ya9 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-42 - Checkout Started names the browser device
 
 **Serves:** Identity - Checkout Started names the browser device
@@ -572,6 +618,7 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **WHEN** the store accepts checkout for that visit
 - **THEN** Checkout Started names that `$device_id`
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-j7u rev=1 -->
 #### Scenario: grade10-site-analytics-SC-15 - Order Paid carries member and points
 
 **Serves:** Events - Order Paid carries member, tier, and points
@@ -580,6 +627,7 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **AND** Points Earned and Points Spent are the integers that order credited and paid
 - **AND** Tier is the tier held when that spend was priced, when the programme priced it
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-lw5 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-36 - A web Order Paid still names the checkout device
 
 **Serves:** Identity - a web Order Paid still names the checkout device
@@ -588,6 +636,7 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **THEN** the event still names that device
 - **AND** browse events from that device can join the paid account after sign-in
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-8vy rev=1 -->
 #### Scenario: grade10-site-analytics-SC-43 - A server emit that continues a visit keeps the device
 
 **Serves:** Identity - a server emit that continues a visit keeps the device
@@ -595,12 +644,14 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **WHEN** a later server event for that visit is recorded and Grade10 still holds the device id
 - **THEN** the server event names that `$device_id`
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-v8r rev=1 -->
 #### Scenario: grade10-site-analytics-SC-16 - A refused checkout records nothing
 
 **Serves:** Events - a refused checkout records nothing
 - **WHEN** the store refuses checkout
 - **THEN** Mixpanel does not record Checkout Started
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-fpn rev=1 -->
 #### Scenario: grade10-site-analytics-SC-17 - Lot Viewed is not Product Viewed
 
 **Serves:** Events - Lot Viewed is not Product Viewed
@@ -608,6 +659,7 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **THEN** Mixpanel records Lot Viewed
 - **AND** it does not record Product Viewed for that listing
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-vau rev=1 -->
 #### Scenario: grade10-site-analytics-SC-18 - Bid Placed fires after the maximum is accepted
 
 **Serves:** Events - Bid Placed fires after the maximum is accepted
@@ -615,36 +667,42 @@ Paid SHALL still name that device and SHALL NOT drop it.
 - **THEN** Mixpanel records Bid Placed once for that bid
 - **AND** Maximum Minor is the accepted cap in integer minor units
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-ce8 rev=1 -->
 #### Scenario: grade10-site-analytics-SC-19 - Engine auto-bids are not Bid Placed
 
 **Serves:** Events - engine auto-bids are not Bid Placed
 - **WHEN** the auction engine places an auto-bid step under a collector's already-accepted maximum
 - **THEN** Mixpanel does not record Bid Placed for that step
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-4ge rev=1 -->
 #### Scenario: grade10-site-analytics-SC-59 - A refused maximum is not Bid Placed
 
 **Serves:** Events - a bid the auction refuses is not a bid in the funnel
 - **WHEN** the auction refuses a collector's maximum
 - **THEN** Mixpanel records neither Bid Placed nor Bidder Outbid for it
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-use rev=1 -->
 #### Scenario: grade10-site-analytics-SC-21 - Watching a lot is not a bid
 
 **Serves:** Events - watching a lot records Lot Watched
 - **WHEN** a collector watches a lot without bidding
 - **THEN** Mixpanel records Lot Watched
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-u9c rev=1 -->
 #### Scenario: grade10-site-analytics-SC-22 - A till identification success is Member Identified
 
 **Serves:** Events - a till identification success is Member Identified
 - **WHEN** a till identification succeeds
 - **THEN** Mixpanel records Member Identified with how they were found
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-hbr rev=1 -->
 #### Scenario: grade10-site-analytics-SC-23 - A till identification refusal is not Mixpanel
 
 **Serves:** Events - a till identification refusal is not Mixpanel
 - **WHEN** a till identification is refused
 - **THEN** Mixpanel does not record Member Identified
 
+<!-- trace:scenario id=g10.analytics-analytics.SC-6ma rev=1 -->
 #### Scenario: grade10-site-analytics-SC-24 - Vault payout is a funnel join
 
 **Serves:** Events - Vault Payout Recorded joins the funnel, not the ledger

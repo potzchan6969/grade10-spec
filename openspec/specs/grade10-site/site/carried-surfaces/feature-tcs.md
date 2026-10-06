@@ -600,7 +600,7 @@ into a search result.
 **so that** hiding the shop on the public site costs nothing to the lanes it
 is still sold on.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-weg rev=1 covers=g10.site-carried-surfaces.SC-eln,g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w,g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-zcr,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-6ym,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-lvd,g10.site-carried-surfaces.SC-tfq,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5,g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
+<!-- trace:case id=g10.site-carried-surfaces.TC-weg rev=1 covers=g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US4-TC1-1: Every store address answers on a lane that carries the store
 
 Runs once per row of **Test data**.
@@ -647,7 +647,7 @@ Runs once per row of **Test data**.
 * Step 1 returns status 200.
 * Step 2 renders that store surface, not the not-found surface.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-wk5 rev=1 covers=g10.site-carried-surfaces.SC-eln,g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w,g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-zcr,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-6ym,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-lvd,g10.site-carried-surfaces.SC-tfq,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5,g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
+<!-- trace:case id=g10.site-carried-surfaces.TC-wk5 rev=1 covers=g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US4-TC2-1: Collector reaches the checkout from a collection unchanged
 
 **Classification:**
@@ -682,7 +682,7 @@ Runs once per row of **Test data**.
 * The cart holds the card.
 * The checkout offers to pay.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-rjw rev=1 covers=g10.site-carried-surfaces.SC-eln,g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w,g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-zcr,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-6ym,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-lvd,g10.site-carried-surfaces.SC-tfq,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5,g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
+<!-- trace:case id=g10.site-carried-surfaces.TC-rjw rev=1 covers=none -->
 ### grade10-site-site-carried-surfaces-US4-TC3-1: Chrome and front door name the store on a carrying lane
 
 **Deprecated:** superseded by `US8-TC5-1`, which reads the same chrome and
@@ -718,7 +718,7 @@ front door for all three waiting products on a carrying lane.
   and a store card.
 * Step 3 renders the store.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-y8k rev=1 covers=g10.site-carried-surfaces.SC-eln,g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w,g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-zcr,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-6ym,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-lvd,g10.site-carried-surfaces.SC-tfq,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5,g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
+<!-- trace:case id=g10.site-carried-surfaces.TC-y8k rev=1 covers=g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
 ### grade10-site-site-carried-surfaces-US4-TC4-1: Opening the store on a lane moves one stated line
 
 **Deprecated:** superseded by `US8-TC6-1`, which proves the same one-line
@@ -1053,6 +1053,7 @@ ready to honour.
   booking surface.
 * Every chrome item under each <lang> opens a surface the build carries.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-7fd rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC11-1: No lane links a collector vault screen
 
 **Classification:**
@@ -1864,6 +1865,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-5a1 rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US8-TC9-1: On a lane that carries the vault, only the signing ceremony answers
 
 Runs once per row of **Test data**.

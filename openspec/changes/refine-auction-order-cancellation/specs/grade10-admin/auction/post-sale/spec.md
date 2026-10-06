@@ -20,6 +20,7 @@ emailed, the suspension is unchanged and the action cannot be undone. After
 confirmation, the queue SHALL filter by cancellation category and the order
 SHALL link to the lot while remaining terminal.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-6oq rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-150 - The cancellation dialog requires the reason and consequences
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
@@ -28,6 +29,7 @@ SHALL link to the lot while remaining terminal.
 - **THEN** a category and note are required
 - **AND** the confirmation names return to stock, no runner-up, winner email, unchanged suspension and no undo
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-1qh rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-151 - Cancellation categories filter the queue
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
@@ -54,6 +56,7 @@ clear the flag with a required reason and Finance's return reference when
 available. Grade10 SHALL record the actor and timestamp.
 Clearing the flag SHALL not revive the order or change the lot's stock outcome.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-23g rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-152 - A late payment is flagged without reviving the order
 **Serves:** post-sale-US-14 - Operator returns money paid after a cancel
 
@@ -70,6 +73,7 @@ Clearing the flag SHALL not revive the order or change the lot's stock outcome.
 - **THEN** Grade10 records the reason, any supplied reference, actor and timestamp
 - **AND** the flag clears while the order stays Cancelled and the lot stays in stock
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-30g rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-153 - Money that counts toward the balance wins the cancellation race
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 

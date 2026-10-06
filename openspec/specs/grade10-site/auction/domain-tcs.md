@@ -11,6 +11,7 @@
 catalogue and the listing page show,
 **so that** a collector shops the card I photographed rather than a placeholder.
 
+<!-- trace:case id=g10.auction-domain.TC-5l7 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j,g10.auction-listing-media.SC-41j,g10.auction-listing-media.SC-j5f,g10.auction-listing-media.SC-1mk,g10.auction-listing-media.SC-su1,g10.auction-listing-media.SC-y9i,g10.auction-listing-media.SC-dva,g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
 ### grade10-site-auction-e2e-US01-TC01-1: Confirmed gallery image reaches the catalogue card
 
 **Classification:**
@@ -54,6 +55,7 @@ catalogue and the listing page show,
 * <product> is stored as the gallery's first item and shows at card size in the media manager.
 * The catalogue card for <listing_1> shows <product> at card size, with <alt text> as its accessible name.
 
+<!-- trace:case id=g10.auction-domain.TC-acb rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j,g10.auction-listing-media.SC-41j,g10.auction-listing-media.SC-j5f,g10.auction-listing-media.SC-1mk,g10.auction-listing-media.SC-su1,g10.auction-listing-media.SC-y9i,g10.auction-listing-media.SC-dva,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
 ### grade10-site-auction-e2e-US01-TC02-1: Unsupported file never reaches the gallery or the catalogue
 
 **Classification:**
@@ -104,6 +106,7 @@ page,
 **so that** the card I chose, its images, and where its bidding stands are what
 I read.
 
+<!-- trace:case id=g10.auction-domain.TC-23e rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-fl9,g10.auction-listing-page.SC-aga,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
 ### grade10-site-auction-e2e-US02-TC01-1: Catalogue card opens its own lot page
 
 **Classification:**
@@ -143,6 +146,7 @@ I read.
 * No card offers Buy Now or a stock count.
 * Step 2 opens <listing_2>'s own address without a page load, showing that lot.
 
+<!-- trace:case id=g10.auction-domain.TC-yqv rev=1 covers=g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9,g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8 -->
 ### grade10-site-auction-e2e-US02-TC02-1: Lot page answers whole before scripts run
 
 **Classification:**
@@ -180,6 +184,7 @@ I read.
 * <listing_4>'s name, description, sale and current standing are in the response HTML.
 * Money reads as minor units with its currency code, and no reserve or Buy Now price appears.
 
+<!-- trace:case id=g10.auction-domain.TC-qvl rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-mda,g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
 ### grade10-site-auction-e2e-US02-TC03-1: Each auction surface names itself and is discoverable
 
 Runs once per row of **Test data**.
@@ -232,6 +237,7 @@ Runs once per row of **Test data**.
 **I want** to study the gallery, link my card once, and bid inside the window,
 **so that** the card I looked at is the card my bid stands on, with nothing taken from it until I win.
 
+<!-- trace:case id=g10.auction-domain.TC-rl3 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
 ### grade10-site-auction-e2e-US03-TC01-2: Gallery study leads to an accepted first bid
 
 **Classification:**
@@ -278,6 +284,7 @@ Runs once per row of **Test data**.
 * Highest bid reads <bid amount>, the bid count reads 1, and Recent Bids shows the user's own bid as You.
 * Step 4 shows nothing held or charged on <card>.
 
+<!-- trace:case id=g10.auction-domain.TC-5pk rev=2 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
 ### grade10-site-auction-e2e-US03-TC02-2: Bid below the next increment is refused on the bid form and recorded nowhere
 
 **Classification:**
@@ -336,6 +343,7 @@ Runs once per row of **Test data**.
 **so that** I keep the lead without sitting on the page, and nothing is taken
 from my card until I win.
 
+<!-- trace:case id=g10.auction-domain.TC-r2v rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7,g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
 ### grade10-site-auction-e2e-US04-TC01-1: Two maxima settle at the second-highest plus one increment
 
 **Classification:**
@@ -383,6 +391,7 @@ from my card until I win.
 * User A reads Your maximum, Highest bid and their standing as three separate facts.
 * After step 4 user B leads at <user A maximum> plus <increment>, with no bids recorded at the amounts in between.
 
+<!-- trace:case id=g10.auction-domain.TC-cru rev=2 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx -->
 ### grade10-site-auction-e2e-US04-TC02-2: Auto-bid raises the leader on their behalf, with nothing taken from the card
 
 **Classification:**
@@ -430,6 +439,7 @@ from my card until I win.
 * The bid count includes the raise, and the history shows it as placed on user A's behalf rather than as a manual bid.
 * Step 4 shows nothing held or charged on <card>.
 
+<!-- trace:case id=g10.auction-domain.TC-b5t rev=2 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7,g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx -->
 ### grade10-site-auction-e2e-US04-TC03-2: Lowering a maximum is refused on the bid form and the lead holds
 
 **Classification:**
@@ -485,6 +495,7 @@ from my card until I win.
 **I want** losing the lead to show on the lot and in my bids index,
 **so that** I can see I was outbid and what the next bid must clear.
 
+<!-- trace:case id=g10.auction-domain.TC-0cq rev=2 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
 ### grade10-site-auction-e2e-US05-TC01-2: Outbid standing reaches the lot page and the bids index
 
 **Classification:**
@@ -529,6 +540,7 @@ from my card until I win.
 * User A reads Outbid, with Your maximum still <user A maximum> and Highest bid at <user A maximum> plus <increment>.
 * <listing_6> appears once under Active with outbid standing, its price and currency code, and its latest activity time.
 
+<!-- trace:case id=g10.auction-domain.TC-57p rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj,g10.auction-listing-page.SC-fl9,g10.auction-listing-page.SC-aga -->
 ### grade10-site-auction-e2e-US05-TC02-1: Outbid summary opens its explanation and its lot
 
 **Classification:**
@@ -574,6 +586,7 @@ from my card until I win.
 **I want** a lot link I pass on to unfurl as that lot and open live,
 **so that** whoever I send it to reads the card I meant, not the catalogue.
 
+<!-- trace:case id=g10.auction-domain.TC-wrl rev=1 covers=g10.auction-listing-page.SC-mda,g10.auction-listing-page.SC-c09,g10.auction-listing-page.SC-y8j,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
 ### grade10-site-auction-e2e-US06-TC01-1: Shared link unfurls as the lot and stays put on hydration
 
 **Classification:**
@@ -620,6 +633,7 @@ from my card until I win.
 **I want** a bid accepted during extended bidding to move the close on the page,
 **so that** the time I read and the time I am judged by are the same.
 
+<!-- trace:case id=g10.auction-domain.TC-5yl rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
 ### grade10-site-auction-e2e-US07-TC02-1: Extension cap holds while the bid is still accepted
 
 **Classification:**
@@ -665,6 +679,7 @@ from my card until I win.
 
 <!-- archive fold: grade10-site-auction-e2e-US07-TC01 (2026-09-17-revise-auction-extended-bidding) replaced by US07-TC03-1 -->
 
+<!-- trace:case id=g10.auction-domain.TC-wh3 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-auction.SC-e9w,g10.auction-auction.SC-xd3,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-e2e-US07-TC03-2: Price-moving auto-bid in extended bidding restarts the timer on the open page
 
 **Classification:**
@@ -711,6 +726,7 @@ from my card until I win.
 * Step 3 reads Time left <extension duration>, labelled Extended bidding, with no reload.
 * The lot closes after step 4, and no further bid is placed.
 
+<!-- trace:case id=g10.auction-domain.TC-n2z rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c,g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-e2e-US07-TC04-1: Catalogue card and open lot page agree after an extension
 
 **Classification:**
@@ -768,6 +784,7 @@ from my card until I win.
 **so that** a rival, a signed-out visitor, or another storefront reads none of
 it.
 
+<!-- trace:case id=g10.auction-domain.TC-nhf rev=2 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
 ### grade10-site-auction-e2e-US08-TC01-2: Rival reads the price but never the leader's maximum
 
 **Classification:**
@@ -811,6 +828,7 @@ it.
 * Recent Bids names other users by listing pseudonym only, with no card facts.
 * The signed-out reader gets no private history and no maximum.
 
+<!-- trace:case id=g10.auction-domain.TC-n6x rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw,g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
 ### grade10-site-auction-e2e-US08-TC02-1: Signed-out visitor keeps their destination
 
 **Classification:**
@@ -849,6 +867,7 @@ it.
 
 <!-- archive fold: grade10-site-auction-e2e-US08-TC1 (2026-09-16-default-auction-bid-holds-off) replaced by US08-TC03-1 -->
 
+<!-- trace:case id=g10.auction-domain.TC-fp8 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-e2e-US08-TC03-2: A linked collector's bid stands at once on the card on file
 
 **Classification:**
@@ -902,6 +921,7 @@ it.
 **I want** a dead lot address to say so plainly,
 **so that** I am never shown an empty page in place of a lot.
 
+<!-- trace:case id=g10.auction-domain.TC-0rf rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13,g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8 -->
 ### grade10-site-auction-e2e-US09-TC01-1: Address naming no published lot answers not found
 
 **Classification:**
@@ -937,6 +957,7 @@ it.
 * The response has status 404 and the site's not-found surface is shown.
 * Neither an empty lot page nor the catalogue is shown in its place.
 
+<!-- trace:case id=g10.auction-domain.TC-13a rev=1 covers=g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
 ### grade10-site-auction-e2e-US09-TC02-1: Unavailable card capability fails the bid explicitly
 
 **Classification:**
@@ -977,6 +998,7 @@ it.
 * No bid, hold or fixture-backed outcome is created and Highest bid stays <current bid>.
 * The attempt appears as a failed event with a safe payment reason, and <listing_12> carries failed-only standing.
 
+<!-- trace:case id=g10.auction-domain.TC-qus rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
 ### grade10-site-auction-e2e-US09-TC03-1: A repeated card authorization event changes the lot once
 
 **Classification:**
@@ -1024,6 +1046,7 @@ it.
 **so that** what the written cases do not reach is found before a user
 finds it.
 
+<!-- trace:case id=g10.auction-domain.TC-cnk rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3,g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9 -->
 ### grade10-site-auction-e2e-US10-TC01-1: Roam the catalogue-to-bid path for one hour
 
 **Classification:**
@@ -1060,6 +1083,7 @@ finds it.
 * No lot offers Buy Now, a stock count, or a reserve state.
 * Every surprise is written up with enough detail to reproduce cold.
 
+<!-- trace:case id=g10.auction-domain.TC-6dl rev=2 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
 ### grade10-site-auction-e2e-US10-TC02-2: Roam competing maxima and the closing minutes for one hour
 
 **Classification:**
@@ -1114,6 +1138,7 @@ finds it.
 **so that** a saved link or an old search never shows me a lot that was
 withdrawn.
 
+<!-- trace:case id=g10.auction-domain.TC-dw9 rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw,g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
 ### grade10-site-auction-e2e-US11-TC01-1: Called-off lot is removed from the catalogue and its link
 
 **Classification:**
@@ -1162,6 +1187,7 @@ withdrawn.
 **I want** the lot page and My Auctions to show one final price and one result once the close is recorded,
 **so that** what I read on either is what the auction decided.
 
+<!-- trace:case id=g10.auction-domain.TC-3iz rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp,g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7,g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi,g10.auction-account-record.SC-n9l,g10.auction-account-record.SC-2e8 -->
 ### grade10-site-auction-e2e-US12-TC01-1: Winner and losing bidder read one result on the lot and My Auctions
 
 **Classification:**
@@ -1209,6 +1235,7 @@ withdrawn.
 * Step 5's row reads Didn't win, with Current bid <final price>, not <user B maximum>.
 * Step 5's row reads "Your card was not charged."
 
+<!-- trace:case id=g10.auction-domain.TC-8w7 rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp,g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-e2e-US12-TC02-1: Catalogue card and lot page turn at the close without a reload
 
 **Classification:**

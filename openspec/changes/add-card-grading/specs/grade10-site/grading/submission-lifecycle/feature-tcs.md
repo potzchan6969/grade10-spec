@@ -14,6 +14,7 @@
 **I want** the page to read one status in my words, a chip saying whose move it is, a rail from Planned to Home, and while the cards are away the grader's stages in its own words, the estimate, and Running late with the new date once it is set,
 **so that** I never have to ask the shop where my cards are, and waiting on the grader never reads as waiting on the shop.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-3jz rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC1-1: Status word, move chip and rail step agree at every status
 
 Runs once per row of **Test data**.
@@ -61,6 +62,7 @@ Runs once per row of **Test data**.
 * Every rail step before the row's step reads completed, and every step after reads upcoming.
 * No internal status name shows anywhere on the page.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-9gg rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC2-1: The grader's stages reach the page in its own words
 
 **Classification:**
@@ -92,6 +94,7 @@ Runs once per row of **Test data**.
 * Step 2: the stage staff recorded shows in the grader's own words.
 * Nothing to do shows beside the stages.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-14a rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC3-1: The estimate reads against the clock rather than a fixed date
 
 **Classification:**
@@ -127,6 +130,7 @@ Runs once per row of **Test data**.
 
 * The estimate reads <ship day> plus the level's quoted turnaround.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-2mc rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC4-1: Running late shows once the estimate passes, and a new date ends it
 
 **Classification:**
@@ -168,6 +172,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the new date, and no longer reads Running late, the estimate now being ahead.
 * Step 4: the running-late email names the new date, sent that day.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-4r2 rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC5-1: A submission id that does not exist shows the not-found page
 
 **Classification:**
@@ -201,6 +206,7 @@ Runs once per row of **Test data**.
 
 * The site's not-found page shows, naming nothing about the mistyped submission.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-cox rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC6-1: A failed load shows an error the collector can retry
 
 **Classification:**
@@ -231,6 +237,7 @@ Runs once per row of **Test data**.
 * Step 1: the failure shows in the error tone, with no status, chip or rail rendered.
 * Step 2: the page reads again once the request is retried.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-n4j rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC7-1: A reader who is neither the collector nor the link reads not found
 
 **Classification:**
@@ -262,6 +269,7 @@ Runs once per row of **Test data**.
 * Both steps show the site's not-found page.
 * Nothing on the page says whether that submission exists, and no card, name or pickup code shows.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-6rh rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC8-1: A plan kept signed out lands on its own page with no account
 
 Runs once per row of **Test data**.
@@ -300,6 +308,7 @@ Runs once per row of **Test data**.
 * Step 1: the plan's submission page opens, with no sign-in asked for and no not-found page.
 * Step 2: the same submission page opens.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-0kg rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC9-1: One card back ungraded leaves the submission ready to collect
 
 **Classification:**
@@ -331,6 +340,7 @@ Runs once per row of **Test data**.
 * Step 2: the submission still reads Ready to collect.
 * Step 3: the ungraded return shows on that card alone; the other three carry no ungraded line.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-otz rev=1 covers=g10.grading-submission-lifecycle.SC-8dw,g10.grading-submission-lifecycle.SC-xwm,g10.grading-submission-lifecycle.SC-1rg,g10.grading-submission-lifecycle.SC-3gk,g10.grading-submission-lifecycle.SC-05o,g10.grading-submission-lifecycle.SC-ge7,g10.grading-submission-lifecycle.SC-17s,g10.grading-submission-lifecycle.SC-k5p,g10.grading-submission-lifecycle.SC-kui,g10.grading-submission-lifecycle.SC-fda,g10.grading-submission-lifecycle.SC-s5n,g10.grading-submission-lifecycle.SC-mp1,g10.grading-submission-lifecycle.SC-mcw,g10.grading-submission-lifecycle.SC-ejt,g10.grading-submission-lifecycle.SC-sip -->
 ### grade10-site-grading-submission-lifecycle-US1-TC10-1: A card refused after payment has its fee and cover back
 
 **Classification:**
@@ -379,6 +389,7 @@ Runs once per row of **Test data**.
 **I want** to message the shop before Thursday 19:00 and collect the card at the counter against a receipt, with its fee back at the till the way I paid and the page saying what came back and why,
 **so that** a card I want to keep does not leave with the batch.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-48y rev=1 covers=g10.grading-submission-lifecycle.SC-szy,g10.grading-submission-lifecycle.SC-fln,g10.grading-submission-lifecycle.SC-5ig,g10.grading-submission-lifecycle.SC-ie0 -->
 ### grade10-site-grading-submission-lifecycle-US2-TC1-1: A card withdrawn before the batch closes shows collected with its fee refunded
 
 **Classification:**
@@ -410,6 +421,7 @@ Runs once per row of **Test data**.
 * The withdrawn card shows the Withdrawn badge.
 * The card's fee and cover lines show refunded the way they were paid.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-lsq rev=1 covers=g10.grading-submission-lifecycle.SC-szy,g10.grading-submission-lifecycle.SC-fln,g10.grading-submission-lifecycle.SC-5ig,g10.grading-submission-lifecycle.SC-ie0 -->
 ### grade10-site-grading-submission-lifecycle-US2-TC2-1: Withdrawing a card is not offered once the batch has closed
 
 **Classification:**
@@ -439,6 +451,7 @@ Runs once per row of **Test data**.
 
 * No withdraw act shows on any card.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-qv4 rev=1 covers=g10.grading-submission-lifecycle.SC-szy,g10.grading-submission-lifecycle.SC-fln,g10.grading-submission-lifecycle.SC-5ig,g10.grading-submission-lifecycle.SC-ie0 -->
 ### grade10-site-grading-submission-lifecycle-US2-TC3-1: Withdrawing one card leaves the rest of the submission unaffected
 
 **Classification:**
@@ -470,6 +483,7 @@ Runs once per row of **Test data**.
 * The withdrawn card shows the Withdrawn badge with its refund line.
 * The other three cards still show Handed in, with no change to their lines.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-k8d rev=1 covers=g10.grading-submission-lifecycle.SC-szy,g10.grading-submission-lifecycle.SC-fln,g10.grading-submission-lifecycle.SC-5ig,g10.grading-submission-lifecycle.SC-ie0 -->
 ### grade10-site-grading-submission-lifecycle-US2-TC4-1: Withdrawing the last card cancels the submission
 
 **Classification:**
@@ -511,6 +525,7 @@ Runs once per row of **Test data**.
 **I want** the grader's code and note on the card, a plain line saying the fee stands, and that the grade is the grader's decision with a review being a new submission at the grader's review fee,
 **so that** I know what the grader found, that I was told before I booked, and where to ask rather than argue with the shop.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-77a rev=1 covers=g10.grading-submission-lifecycle.SC-hct,g10.grading-submission-lifecycle.SC-6hk,g10.grading-submission-lifecycle.SC-l1l,g10.grading-submission-lifecycle.SC-92h -->
 ### grade10-site-grading-submission-lifecycle-US3-TC1-1: A card returned ungraded shows the grader's code, note and that the fee stands
 
 **Classification:**
@@ -542,6 +557,7 @@ Runs once per row of **Test data**.
 * The card's line states the fee stands.
 * No refund is offered on the card.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-eki rev=1 covers=g10.grading-submission-lifecycle.SC-hct,g10.grading-submission-lifecycle.SC-6hk,g10.grading-submission-lifecycle.SC-l1l,g10.grading-submission-lifecycle.SC-92h -->
 ### grade10-site-grading-submission-lifecycle-US3-TC2-1: A card below its named minimum grade shows raw with the fee standing
 
 **Classification:**
@@ -572,6 +588,7 @@ Runs once per row of **Test data**.
 * The card shows the Minimum grade not met badge, raw.
 * The card's line states the fee stands.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-xd4 rev=1 covers=g10.grading-submission-lifecycle.SC-hct,g10.grading-submission-lifecycle.SC-6hk,g10.grading-submission-lifecycle.SC-l1l,g10.grading-submission-lifecycle.SC-92h -->
 ### grade10-site-grading-submission-lifecycle-US3-TC3-1: The page names a review as a new submission at the grader's review fee
 
 **Classification:**
@@ -611,6 +628,7 @@ Runs once per row of **Test data**.
 **I want** the difference the fee sheet quoted me named on the grades email and on the page as due at the counter before collection,
 **so that** I know what to settle before I come in and it is the figure I was warned of.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-8yu rev=1 covers=g10.grading-submission-lifecycle.SC-iwf,g10.grading-submission-lifecycle.SC-7ku -->
 ### grade10-site-grading-submission-lifecycle-US4-TC1-1: A card moved up a level names the quoted difference as due at the counter
 
 **Classification:**
@@ -644,6 +662,7 @@ Runs once per row of **Test data**.
 * The money block shows 60000 (HKD, minor units) due at the counter before collection, matching the figure the review step quoted at booking.
 * Step 3: the grades email names the same difference as due at the counter before collection.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-68o rev=1 covers=g10.grading-submission-lifecycle.SC-iwf,g10.grading-submission-lifecycle.SC-7ku -->
 ### grade10-site-grading-submission-lifecycle-US4-TC2-1: No card moved up a level shows no upcharge due line
 
 **Classification:**
@@ -674,6 +693,7 @@ Runs once per row of **Test data**.
 * No card shows the Moved up a level badge.
 * The money block shows no due-at-the-counter line.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-r86 rev=1 covers=g10.grading-submission-lifecycle.SC-iwf,g10.grading-submission-lifecycle.SC-7ku -->
 ### grade10-site-grading-submission-lifecycle-US4-TC3-1: A different invoice figure leaves the upcharge at the sheet's difference
 
 **Classification:**
@@ -719,6 +739,7 @@ Runs once per row of **Test data**.
 **I want** to be told the same day, paid out at the card's declared value with its fee refunded inside the payout window, at the till or by transfer, and the payout reversed on its record if the card turns up,
 **so that** I never wait on the shop's claim against the grader or the courier.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-8n3 rev=1 covers=g10.grading-submission-lifecycle.SC-5vp,g10.grading-submission-lifecycle.SC-7qs,g10.grading-submission-lifecycle.SC-hmg,g10.grading-submission-lifecycle.SC-1ve -->
 ### grade10-site-grading-submission-lifecycle-US5-TC1-1: A card not returned or damaged is paid out at declared value with its fee refunded
 
 **Classification:**
@@ -751,6 +772,7 @@ Runs once per row of **Test data**.
 * The card shows the Not returned badge with the payout line.
 * The money block shows 500000 (HKD, minor units) paid out, with the card's fee refunded beside it and the cover kept, its route and its reference.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-wrb rev=1 covers=g10.grading-submission-lifecycle.SC-5vp,g10.grading-submission-lifecycle.SC-7qs,g10.grading-submission-lifecycle.SC-hmg,g10.grading-submission-lifecycle.SC-1ve -->
 ### grade10-site-grading-submission-lifecycle-US5-TC2-1: A payout reaches the collector by either route
 
 Runs once per row of **Test data**.
@@ -789,6 +811,7 @@ Runs once per row of **Test data**.
 
 * The money block names the route in the row.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-lwr rev=1 covers=g10.grading-submission-lifecycle.SC-5vp,g10.grading-submission-lifecycle.SC-7qs,g10.grading-submission-lifecycle.SC-hmg,g10.grading-submission-lifecycle.SC-1ve -->
 ### grade10-site-grading-submission-lifecycle-US5-TC3-1: A payout is reversed on its record when the card turns up
 
 **Classification:**
@@ -819,6 +842,7 @@ Runs once per row of **Test data**.
 * The card shows back on the submission with the reversal line, in place of the Not returned badge.
 * The money block shows the payout reversed on the same record.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-akz rev=1 covers=g10.grading-submission-lifecycle.SC-5vp,g10.grading-submission-lifecycle.SC-7qs,g10.grading-submission-lifecycle.SC-hmg,g10.grading-submission-lifecycle.SC-1ve -->
 ### grade10-site-grading-submission-lifecycle-US5-TC4-1: A card recorded damaged is told the same day, with its payout
 
 **Classification:**
@@ -852,6 +876,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-ygf rev=1 covers=g10.grading-submission-lifecycle.SC-5vp,g10.grading-submission-lifecycle.SC-7qs,g10.grading-submission-lifecycle.SC-hmg,g10.grading-submission-lifecycle.SC-1ve -->
 ### grade10-site-grading-submission-lifecycle-US5-TC5-1: A card that turns up is repaid before it goes home
 
 **Classification:**
@@ -893,6 +918,7 @@ Runs once per row of **Test data**.
 **I want** a four-digit code on the page and in the email, the shop's hours with no booking needed, what is due, and whether to bring an ID,
 **so that** I walk in and leave with the slabs on one visit.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-yi1 rev=1 covers=g10.grading-submission-lifecycle.SC-47a,g10.grading-submission-lifecycle.SC-70x,g10.grading-submission-lifecycle.SC-6wa,g10.grading-submission-lifecycle.SC-l1n,g10.grading-submission-lifecycle.SC-g8q,g10.grading-submission-lifecycle.SC-qjj,g10.grading-submission-lifecycle.SC-3it -->
 ### grade10-site-grading-submission-lifecycle-US6-TC1-1: The pickup card shows the code, the shop's hours and that no booking is needed
 
 **Classification:**
@@ -925,6 +951,7 @@ Runs once per row of **Test data**.
 * The pickup card shows one figure to settle.
 * Step 3: it carries the same four-digit code.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-g95 rev=1 covers=g10.grading-submission-lifecycle.SC-47a,g10.grading-submission-lifecycle.SC-70x,g10.grading-submission-lifecycle.SC-6wa,g10.grading-submission-lifecycle.SC-l1n,g10.grading-submission-lifecycle.SC-g8q,g10.grading-submission-lifecycle.SC-qjj,g10.grading-submission-lifecycle.SC-3it -->
 ### grade10-site-grading-submission-lifecycle-US6-TC2-1: At the ID-glance threshold the page asks for no ID, above it it asks for one
 
 **Classification:**
@@ -957,6 +984,7 @@ Runs once per row of **Test data**.
 * At 1000100 the pickup card names bringing an ID matching the collector's name.
 * Step 3: at 1000100 the hand-back runbook shows the ID line, and nothing from the ID is kept on the submission.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-za4 rev=1 covers=g10.grading-submission-lifecycle.SC-47a,g10.grading-submission-lifecycle.SC-70x,g10.grading-submission-lifecycle.SC-6wa,g10.grading-submission-lifecycle.SC-l1n,g10.grading-submission-lifecycle.SC-g8q,g10.grading-submission-lifecycle.SC-qjj,g10.grading-submission-lifecycle.SC-3it -->
 ### grade10-site-grading-submission-lifecycle-US6-TC3-1: Below the ID-glance threshold, the page asks the collector to bring nothing
 
 **Classification:**
@@ -988,6 +1016,7 @@ Runs once per row of **Test data**.
 * The pickup card's Bring line shows nothing.
 * Step 3: on the hand-back runbook no ID line shows, and the code and the name release the cards.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-lhf rev=1 covers=g10.grading-submission-lifecycle.SC-47a,g10.grading-submission-lifecycle.SC-70x,g10.grading-submission-lifecycle.SC-6wa,g10.grading-submission-lifecycle.SC-l1n,g10.grading-submission-lifecycle.SC-g8q,g10.grading-submission-lifecycle.SC-qjj,g10.grading-submission-lifecycle.SC-3it -->
 ### grade10-site-grading-submission-lifecycle-US6-TC4-1: What is due shows nothing owed, or one combined figure
 
 Runs once per row of **Test data**.
@@ -1026,6 +1055,7 @@ Runs once per row of **Test data**.
 
 * The pickup card's To settle line matches the row.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-bse rev=1 covers=g10.grading-submission-lifecycle.SC-47a,g10.grading-submission-lifecycle.SC-70x,g10.grading-submission-lifecycle.SC-6wa,g10.grading-submission-lifecycle.SC-l1n,g10.grading-submission-lifecycle.SC-g8q,g10.grading-submission-lifecycle.SC-qjj,g10.grading-submission-lifecycle.SC-3it -->
 ### grade10-site-grading-submission-lifecycle-US6-TC5-1: Nothing is handed back while an upcharge is unsettled
 
 **Classification:**
@@ -1058,6 +1088,7 @@ Runs once per row of **Test data**.
 
 * Step 3: the hand-back is refused by name until the figure is settled at the counter.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-rkr rev=1 covers=g10.grading-submission-lifecycle.SC-47a,g10.grading-submission-lifecycle.SC-70x,g10.grading-submission-lifecycle.SC-6wa,g10.grading-submission-lifecycle.SC-l1n,g10.grading-submission-lifecycle.SC-g8q,g10.grading-submission-lifecycle.SC-qjj,g10.grading-submission-lifecycle.SC-3it -->
 ### grade10-site-grading-submission-lifecycle-US6-TC6-1: A slab put into a vault case at the counter reads Vaulted
 
 **Classification:**
@@ -1093,6 +1124,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-34a rev=1 covers=g10.grading-submission-lifecycle.SC-47a,g10.grading-submission-lifecycle.SC-70x,g10.grading-submission-lifecycle.SC-6wa,g10.grading-submission-lifecycle.SC-l1n,g10.grading-submission-lifecycle.SC-g8q,g10.grading-submission-lifecycle.SC-qjj,g10.grading-submission-lifecycle.SC-3it -->
 ### grade10-site-grading-submission-lifecycle-US6-TC7-1: A vault reference that matches no case reads as plain text
 
 **Classification:**
@@ -1136,6 +1168,7 @@ Runs once per row of **Test data**.
 **I want** to name one person by their full name on the page before they come, change or remove them any time before collection, and see it logged in History,
 **so that** they collect with the code and the ID the pickup card asks for, and nobody else can.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-ptg rev=1 covers=g10.grading-submission-lifecycle.SC-a1i,g10.grading-submission-lifecycle.SC-w2k,g10.grading-submission-lifecycle.SC-0xf,g10.grading-submission-lifecycle.SC-qjs,g10.grading-submission-lifecycle.SC-bpr,g10.grading-submission-lifecycle.SC-9u0 -->
 ### grade10-site-grading-submission-lifecycle-US7-TC1-1: Naming a collector saves the full name and logs it in History
 
 **Classification:**
@@ -1175,6 +1208,7 @@ Runs once per row of **Test data**.
 * Step 3: History logs the name against its instant.
 * Step 4: no email is sent for the naming.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-asl rev=1 covers=g10.grading-submission-lifecycle.SC-a1i,g10.grading-submission-lifecycle.SC-w2k,g10.grading-submission-lifecycle.SC-0xf,g10.grading-submission-lifecycle.SC-qjs,g10.grading-submission-lifecycle.SC-bpr,g10.grading-submission-lifecycle.SC-9u0 -->
 ### grade10-site-grading-submission-lifecycle-US7-TC2-1: An empty name cannot be saved
 
 **Classification:**
@@ -1205,6 +1239,7 @@ Runs once per row of **Test data**.
 * Save stays disabled.
 * Nobody is named on the page.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-pqk rev=1 covers=g10.grading-submission-lifecycle.SC-a1i,g10.grading-submission-lifecycle.SC-w2k,g10.grading-submission-lifecycle.SC-0xf,g10.grading-submission-lifecycle.SC-qjs,g10.grading-submission-lifecycle.SC-bpr,g10.grading-submission-lifecycle.SC-9u0 -->
 ### grade10-site-grading-submission-lifecycle-US7-TC3-1: Changing the named person replaces the previous name and logs it
 
 **Classification:**
@@ -1244,6 +1279,7 @@ Runs once per row of **Test data**.
 * Step 3: History logs the change against its instant.
 * Step 4: on the hand-back runbook, the named person read from the page is Wong Siu Ming alone.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-f9x rev=1 covers=g10.grading-submission-lifecycle.SC-a1i,g10.grading-submission-lifecycle.SC-w2k,g10.grading-submission-lifecycle.SC-0xf,g10.grading-submission-lifecycle.SC-qjs,g10.grading-submission-lifecycle.SC-bpr,g10.grading-submission-lifecycle.SC-9u0 -->
 ### grade10-site-grading-submission-lifecycle-US7-TC4-1: Removing the named person returns the page to nobody named and logs it
 
 **Classification:**
@@ -1278,6 +1314,7 @@ Runs once per row of **Test data**.
 * Step 3: no email is sent for the removal.
 * Step 4: on the hand-back runbook no named person is read from the page.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-moj rev=1 covers=g10.grading-submission-lifecycle.SC-a1i,g10.grading-submission-lifecycle.SC-w2k,g10.grading-submission-lifecycle.SC-0xf,g10.grading-submission-lifecycle.SC-qjs,g10.grading-submission-lifecycle.SC-bpr,g10.grading-submission-lifecycle.SC-9u0 -->
 ### grade10-site-grading-submission-lifecycle-US7-TC5-1: Naming a collector is refused once the cards are already collected
 
 **Classification:**
@@ -1309,6 +1346,7 @@ Runs once per row of **Test data**.
 * Step 1: no naming field shows on a Collected submission.
 * Step 3: refused by name as already collected, what was typed still there.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-p8x rev=1 covers=g10.grading-submission-lifecycle.SC-a1i,g10.grading-submission-lifecycle.SC-w2k,g10.grading-submission-lifecycle.SC-0xf,g10.grading-submission-lifecycle.SC-qjs,g10.grading-submission-lifecycle.SC-bpr,g10.grading-submission-lifecycle.SC-9u0 -->
 ### grade10-site-grading-submission-lifecycle-US7-TC6-1: Somebody neither the collector nor the named person is turned away
 
 **Classification:**
@@ -1355,6 +1393,7 @@ Runs once per row of **Test data**.
 **I want** a reminder at 30 and 60 days costing nothing, the storage fee accruing per card and per month from day 90 and due before collection, and the written notice posted from day 180 giving me the notice period pinned at signing (90 days) from its posting, with the cards mine throughout,
 **so that** I am nudged, never surprised, and can still vault them instead.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-hs5 rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC1-1: The reminders at day 30 and day 60 cost nothing
 
 Runs once per row of **Test data**.
@@ -1395,6 +1434,7 @@ Runs once per row of **Test data**.
 * The uncollected ladder shows the rung in the row as passed, and none after it, with no charge against it.
 * The ladder shows each rung with the day it falls, counted from the ready day.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-11a rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC2-1: Storage accrues per card and per month started from day 90
 
 **Classification:**
@@ -1425,6 +1465,7 @@ Runs once per row of **Test data**.
 * The uncollected ladder shows the storage rung passed, at 4 cards times 3000 (HKD, minor units).
 * The money block shows the same storage figure due before collection.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-5qu rev=2 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC3-2: The written notice counts its period from its posting date, not from day 180
 
 **Classification:**
@@ -1455,6 +1496,7 @@ Runs once per row of **Test data**.
 
 * The uncollected ladder shows the notice rung with its posting date, and 87 days left of the 90 seeded as the notice period, counted from that posting date.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-lej rev=2 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC4-2: The cards stay the collector's and nothing further shows past the notice
 
 **Classification:**
@@ -1487,6 +1529,7 @@ Runs once per row of **Test data**.
 * Storage still accrues on the money block.
 * The page offers the vault instead.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-y1z rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC5-1: A slab vaulted instead of collected is excluded from the storage count
 
 **Classification:**
@@ -1517,6 +1560,7 @@ Runs once per row of **Test data**.
 * The uncollected ladder's cards-held count reads 3, excluding the vaulted card.
 * The storage figure is 3 cards times 3000 (HKD, minor units), not 4.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-v0r rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC6-1: Booking a visit or naming a collector does not pause the ladder
 
 **Classification:**
@@ -1549,6 +1593,7 @@ Runs once per row of **Test data**.
 * The storage figure still accrues at 4 cards times 3000 (HKD, minor units) a month started.
 * Nothing on the ladder reads as paused, held or waiting on the booked visit.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-ogb rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC7-1: Storage is taken at the till, a line per card, before hand-back
 
 **Classification:**
@@ -1586,6 +1631,7 @@ Runs once per row of **Test data**.
 * Step 1: nothing can be handed over yet.
 * Step 3: the storage accrued to that day is taken at the till, one line per card held.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-cf8 rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC8-1: A reminder names the code, what is due and the days ahead
 
 Runs once per row of **Test data**.
@@ -1626,6 +1672,7 @@ Runs once per row of **Test data**.
 * Step 2: a reminder has gone, naming the pickup code, what is due, the storage day and the notice day.
 * It says the reminder itself adds nothing.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-mu4 rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC9-1: The storage fee is told the day it starts
 
 **Classification:**
@@ -1656,6 +1703,7 @@ Runs once per row of **Test data**.
 
 * Step 2: the storage email names the fee for each card for each month, what is due now and the notice day.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-ly7 rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC10-1: The written notice is emailed the day it is posted
 
 **Classification:**
@@ -1695,6 +1743,7 @@ Runs once per row of **Test data**.
 
 * Step 3: the collector is sent the notice that day, naming what is due, the pickup code, the 90 days it gives from the posting date as the period pinned at signing, and the clause it acts under.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-eh9 rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC11-1: Nothing is sent about the uncollected cards after the notice
 
 **Classification:**
@@ -1728,6 +1777,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-5hz rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC12-1: A rung falls on the shop's day
 
 **Classification:**
@@ -1763,6 +1813,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-v3e rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC13-1: A submission whose every card is paid out climbs no rung
 
 **Classification:**
@@ -1800,6 +1851,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-sfv rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC14-1: Storage months come round on the day storage began
 
 **Classification:**
@@ -1835,6 +1887,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-vf3 rev=1 covers=g10.grading-submission-lifecycle.SC-ud7,g10.grading-submission-lifecycle.SC-9ig,g10.grading-submission-lifecycle.SC-tlh,g10.grading-submission-lifecycle.SC-opz,g10.grading-submission-lifecycle.SC-det,g10.grading-submission-lifecycle.SC-duo,g10.grading-submission-lifecycle.SC-x12,g10.grading-submission-lifecycle.SC-jli,g10.grading-submission-lifecycle.SC-5ht,g10.grading-submission-lifecycle.SC-vez,g10.grading-submission-lifecycle.SC-7wl -->
 ### grade10-site-grading-submission-lifecycle-US8-TC15-1: A card the grader held starts its storage from the day it came back
 
 **Classification:**
@@ -1876,6 +1929,7 @@ Runs once per row of **Test data**.
 **I want** the grade, grader and cert per slab with a look-up link, the slab photographs and the three documents with their fingerprints to stay on the page and under my account when I keep one,
 **so that** a vault valuation or an auction reads the record from there and my slab never enters the shop's stock.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-zk2 rev=1 covers=g10.grading-submission-lifecycle.SC-ko4,g10.grading-submission-lifecycle.SC-6ch,g10.grading-submission-lifecycle.SC-pry -->
 ### grade10-site-grading-submission-lifecycle-US9-TC1-1: The collected record shows the grade, grader, cert, photographs and documents
 
 **Classification:**
@@ -1906,6 +1960,7 @@ Runs once per row of **Test data**.
 * Each slab shows its grade, grader and cert with a Look up link, and its photograph.
 * The three documents show with their fingerprints and a download.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-cck rev=1 covers=g10.grading-submission-lifecycle.SC-ko4,g10.grading-submission-lifecycle.SC-6ch,g10.grading-submission-lifecycle.SC-pry -->
 ### grade10-site-grading-submission-lifecycle-US9-TC2-1: Signed in, the collected record also lists under the collector's account
 
 **Classification:**
@@ -1935,6 +1990,7 @@ Runs once per row of **Test data**.
 
 * The Collected submission shows in Your submissions with its status word.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-s38 rev=1 covers=g10.grading-submission-lifecycle.SC-ko4,g10.grading-submission-lifecycle.SC-6ch,g10.grading-submission-lifecycle.SC-pry -->
 ### grade10-site-grading-submission-lifecycle-US9-TC3-1: A card still held by the grader shows as held on an otherwise collected record
 
 **Classification:**
@@ -1967,6 +2023,7 @@ Runs once per row of **Test data**.
 * The held card shows the Held by the grader badge with the expected date, and the record names a second hand-back still to come.
 * The first receipt names the card still out.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-8uq rev=1 covers=g10.grading-submission-lifecycle.SC-ko4,g10.grading-submission-lifecycle.SC-6ch,g10.grading-submission-lifecycle.SC-pry -->
 ### grade10-site-grading-submission-lifecycle-US9-TC4-1: The held card's return closes the submission, keeping both receipts
 
 **Classification:**
@@ -2008,6 +2065,7 @@ Runs once per row of **Test data**.
 **I want** to cancel the submission from the page until the visit starts and until the counter checks or refuses a card, with the drop-off going with it, and after that to have the counter refuse the cards instead,
 **so that** nothing is left open in my name and nothing is owed.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-ctj rev=1 covers=g10.grading-submission-lifecycle.SC-nev,g10.grading-submission-lifecycle.SC-bed,g10.grading-submission-lifecycle.SC-gh0,g10.grading-submission-lifecycle.SC-3jh,g10.grading-submission-lifecycle.SC-zwq -->
 ### grade10-site-grading-submission-lifecycle-US10-TC1-1: Cancelling before hand-in closes the submission and its drop-off, with nothing owed
 
 Runs once per row of **Test data**.
@@ -2048,6 +2106,7 @@ Runs once per row of **Test data**.
 * Where a drop-off was booked, it closes with the submission.
 * The page states nothing was paid and nothing is owed.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-zwr rev=1 covers=g10.grading-submission-lifecycle.SC-nev,g10.grading-submission-lifecycle.SC-bed,g10.grading-submission-lifecycle.SC-gh0,g10.grading-submission-lifecycle.SC-3jh,g10.grading-submission-lifecycle.SC-zwq -->
 ### grade10-site-grading-submission-lifecycle-US10-TC2-1: The cancel act disappears once the cards are handed in
 
 **Classification:**
@@ -2080,6 +2139,7 @@ Runs once per row of **Test data**.
 * No Cancel this submission act shows on the page.
 * Step 3: the cancel is refused by name.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-33b rev=1 covers=g10.grading-submission-lifecycle.SC-nev,g10.grading-submission-lifecycle.SC-bed,g10.grading-submission-lifecycle.SC-gh0,g10.grading-submission-lifecycle.SC-3jh,g10.grading-submission-lifecycle.SC-zwq -->
 ### grade10-site-grading-submission-lifecycle-US10-TC3-1: Backing out of the cancel confirmation leaves the submission unchanged
 
 **Classification:**
@@ -2109,6 +2169,7 @@ Runs once per row of **Test data**.
 
 * The dialog closes, and the submission still reads Drop-off booked with its visit intact.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-ckd rev=1 covers=g10.grading-submission-lifecycle.SC-nev,g10.grading-submission-lifecycle.SC-bed,g10.grading-submission-lifecycle.SC-gh0,g10.grading-submission-lifecycle.SC-3jh,g10.grading-submission-lifecycle.SC-zwq -->
 ### grade10-site-grading-submission-lifecycle-US10-TC4-1: The last card refused at the counter cancels the submission
 
 **Classification:**
@@ -2142,6 +2203,7 @@ Runs once per row of **Test data**.
 * Step 1: the page states nothing was paid and nothing is owed.
 * Step 2: no message about the cancellation is in the submission's messages: the collector was told at the counter.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-a2m rev=1 covers=g10.grading-submission-lifecycle.SC-nev,g10.grading-submission-lifecycle.SC-bed,g10.grading-submission-lifecycle.SC-gh0,g10.grading-submission-lifecycle.SC-3jh,g10.grading-submission-lifecycle.SC-zwq -->
 ### grade10-site-grading-submission-lifecycle-US10-TC5-1: Cancel is withheld once the visit's start time comes or the counter checks or refuses a card
 
 Runs once per row of **Test data**.
@@ -2182,6 +2244,7 @@ Runs once per row of **Test data**.
 * Step 1: no Cancel this submission shows.
 * Step 2: the cancel is refused by name, and the submission is not cancelled.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-arv rev=1 covers=g10.grading-submission-lifecycle.SC-nev,g10.grading-submission-lifecycle.SC-bed,g10.grading-submission-lifecycle.SC-gh0,g10.grading-submission-lifecycle.SC-3jh,g10.grading-submission-lifecycle.SC-zwq -->
 ### grade10-site-grading-submission-lifecycle-US10-TC6-1: A plan nobody books expires on its own
 
 **Classification:**
@@ -2220,6 +2283,7 @@ Runs once per row of **Test data**.
 **I want** each status to offer only the acts it allows, editing the list before hand-in, withdrawing a card at Handed in, naming a collector when ready, and nothing while the grader has the cards,
 **so that** I am never shown a button that will only be refused.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-g1q rev=1 covers=g10.grading-submission-lifecycle.SC-5t2,g10.grading-submission-lifecycle.SC-kds,g10.grading-submission-lifecycle.SC-qt5,g10.grading-submission-lifecycle.SC-bfx,g10.grading-submission-lifecycle.SC-ikp,g10.grading-submission-lifecycle.SC-jx6 -->
 ### grade10-site-grading-submission-lifecycle-US11-TC1-1: Each status shows only the acts it allows
 
 Runs once per row of **Test data**.
@@ -2264,6 +2328,7 @@ Runs once per row of **Test data**.
 * Only the acts listed for that status show on the page.
 * No other act, control or button shows.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-i3k rev=2 covers=g10.grading-submission-lifecycle.SC-5t2,g10.grading-submission-lifecycle.SC-kds,g10.grading-submission-lifecycle.SC-qt5,g10.grading-submission-lifecycle.SC-bfx,g10.grading-submission-lifecycle.SC-ikp,g10.grading-submission-lifecycle.SC-jx6 -->
 ### grade10-site-grading-submission-lifecycle-US11-TC2-2: The edit of the list and the cancel go once the counter checks or refuses a card
 
 Runs once per row of **Test data**.
@@ -2306,6 +2371,7 @@ Runs once per row of **Test data**.
 * Step 3: the cancel is refused by name, and the submission is not cancelled.
 * After step 3, reloading the page shows both cards as before; where the counter refused the first card, it reads Refused at the counter with the reason as staff typed it.
 
+<!-- trace:case id=g10.grading-submission-lifecycle.TC-bu5 rev=1 covers=g10.grading-submission-lifecycle.SC-5t2,g10.grading-submission-lifecycle.SC-kds,g10.grading-submission-lifecycle.SC-qt5,g10.grading-submission-lifecycle.SC-bfx,g10.grading-submission-lifecycle.SC-ikp,g10.grading-submission-lifecycle.SC-jx6 -->
 ### grade10-site-grading-submission-lifecycle-US11-TC3-1: Editing a kept list saves the same submission and books nothing
 
 Runs once per row of **Test data**.

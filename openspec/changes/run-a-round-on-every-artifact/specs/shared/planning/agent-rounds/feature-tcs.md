@@ -10,6 +10,7 @@
 **I want** to say what is wanted in the planning channel and answer numbered questions in the thread it starts,
 **so that** the proposal, the decisions and the journeys land without my opening a terminal.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-h8c rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC1-1: First sentence opens the change and its thread
 
 **Classification:**
@@ -41,6 +42,7 @@
 * The reply starts the change's thread and names the change id.
 * `thread:` records the channel and the message the thread hangs off.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-3hn rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC2-1: Later replies use the one recorded thread
 
 **Classification:**
@@ -72,6 +74,7 @@
 * The landing reply is in <change thread>.
 * `thread:` is unchanged.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-lt1 rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC3-1: One word lands the three files that hand owns
 
 **Classification:**
@@ -105,6 +108,7 @@
 * `ui-design.md` is still drafted, and the designer is told it is their turn.
 * The reply names what landed, the handle and the stage the change reached.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-lqb rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC4-1: Message naming an open change opens no second change
 
 **Classification:**
@@ -136,6 +140,7 @@
 * No second change opens.
 * The reply is in <change thread>.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-v8o rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC5-1: First sentence from a teammate with no handle map entry
 
 **Classification:**
@@ -166,6 +171,7 @@
 * A change opens with its product manager unnamed, and the reply names its change id.
 * The reply says the hand is unnamed and asks for the handle.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-fnp rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC6-1: A round run from a terminal lands the same way
 
 **Classification:**
@@ -198,6 +204,7 @@
 * `decisions.md` is on `main` with `landed_by:` naming the product manager.
 * `rounds.md` gains the round's row.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-hp7 rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC7-1: A plan wake drafts the chain and lands nothing
 
 **Classification:**
@@ -230,6 +237,7 @@
 * The tech design, the requirements and the plan follow on the branch, in that order.
 * Each draft's summary names the perspectives that read it, the branch carries a push per artifact, and nothing is on `main`.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-5y7 rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC8-1: The summary's button is the word pressed
 
 **Classification:**
@@ -265,6 +273,7 @@
 * The proposal lands as it lands on a typed `land`: the same check, the same `landed_by:` line.
 * The unnamed member's press lands nothing, and the thread says the team map does not name them.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-1hw rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC9-1: A landing word wakes the run at once
 
 **Classification:**
@@ -298,6 +307,7 @@
 * The second wake fires on the `land` and carries the sentence before it.
 * The sentence alone is acknowledged after the minute.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-3yf rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC10-1: A sentence overlapping a change in flight is answered in its thread
 
 Runs once per row of **Test data**.
@@ -350,6 +360,7 @@ Runs once per row of **Test data**.
 **I want** to read its summary in the thread, remark on what to change, and say land,
 **so that** the design lands as I want it without my writing the file.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-koo rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC1-1: One word lands the design with the designer's handle
 
 **Classification:**
@@ -382,6 +393,7 @@ Runs once per row of **Test data**.
 * `rounds.md` gains the round's row.
 * The artifacts after the design are read again.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-7mg rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC2-1: Remark is applied as written and re-runs what it touches
 
 **Classification:**
@@ -414,6 +426,7 @@ Runs once per row of **Test data**.
 * The reply names the perspectives the edited lines summon.
 * A perspective the remark does not touch is not named.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ypk rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC3-1: Remark that settles a choice writes a decisions row
 
 **Classification:**
@@ -445,6 +458,7 @@ Runs once per row of **Test data**.
 * `decisions.md` gains a numbered row carrying the choice.
 * `rounds.md` gains the round's row.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ba1 rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC4-1: A round of one reader verifies itself
 
 **Classification:**
@@ -476,6 +490,7 @@ Runs once per row of **Test data**.
 * The reply names one reader, the one that argues the simpler shape.
 * The round's row names that one perspective and no separate verifier.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-prt rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC5-1: Design round with no frames writes a dated wait
 
 **Classification:**
@@ -507,6 +522,7 @@ Runs once per row of **Test data**.
 * A dated wait on the designer is written.
 * `ui-design.md` describes <a screen nobody has drawn> in no prose.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-cal rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC6-1: Only the hand of the stage can land the design
 
 **Classification:**
@@ -541,6 +557,7 @@ Runs once per row of **Test data**.
 * No `landed_by:` is written for it.
 * The reply names the hand the artifact waits on.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-5e4 rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC7-1: A remark on the page's marked lines
 
 Runs once per row of **Test data**.
@@ -581,6 +598,7 @@ Runs once per row of **Test data**.
 * The page gains what the table names.
 * No requirement is written from the remark before the page carries it.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-p9h rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC8-1: The relay moves `main` only on the hand's own word
 
 Runs once per row of **Test data**.
@@ -626,6 +644,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-0y1 rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC9-1: A group's landing carrying a draft `main` does not hold is refused
 
 Runs once per row of **Test data**.
@@ -677,6 +696,7 @@ Runs once per row of **Test data**.
 **I want** the proposed system, its data flow and its rejected options in a summary I can challenge in the thread before the plan is accepted,
 **so that** a wrong mechanism is caught before anything is built from it.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-eqc rev=1 covers=g10.shared-agent-rounds.SC-kgj,g10.shared-agent-rounds.SC-m9d,g10.shared-agent-rounds.SC-fda,g10.shared-agent-rounds.SC-p6s,g10.shared-agent-rounds.SC-12a,g10.shared-agent-rounds.SC-ego -->
 ### shared-planning-agent-rounds-US3-TC1-1: Summary carries the system, the flow and what was rejected
 
 **Classification:**
@@ -707,6 +727,7 @@ Runs once per row of **Test data**.
 * The summary names the proposed system, its data flow and the options rejected.
 * Each numbered question it carries has the agent's recommendation.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-cd0 rev=1 covers=g10.shared-agent-rounds.SC-kgj,g10.shared-agent-rounds.SC-m9d,g10.shared-agent-rounds.SC-fda,g10.shared-agent-rounds.SC-p6s,g10.shared-agent-rounds.SC-12a,g10.shared-agent-rounds.SC-ego -->
 ### shared-planning-agent-rounds-US3-TC2-1: Challenge becomes a decisions row with the agent's answer
 
 **Classification:**
@@ -739,6 +760,7 @@ Runs once per row of **Test data**.
 * `decisions.md` gains a numbered row carrying the challenge and the agent's answer.
 * The plan is still not accepted.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-iel rev=1 covers=g10.shared-agent-rounds.SC-kgj,g10.shared-agent-rounds.SC-m9d,g10.shared-agent-rounds.SC-fda,g10.shared-agent-rounds.SC-p6s,g10.shared-agent-rounds.SC-12a,g10.shared-agent-rounds.SC-ego -->
 ### shared-planning-agent-rounds-US3-TC3-1: The design's readers cite the eight principles
 
 **Classification:**
@@ -769,6 +791,7 @@ Runs once per row of **Test data**.
 * Each tech design finding that stood names the principle it holds the draft to.
 * The row names the perspectives run and what stood.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-yta rev=1 covers=g10.shared-agent-rounds.SC-kgj,g10.shared-agent-rounds.SC-m9d,g10.shared-agent-rounds.SC-fda,g10.shared-agent-rounds.SC-p6s,g10.shared-agent-rounds.SC-12a,g10.shared-agent-rounds.SC-ego -->
 ### shared-planning-agent-rounds-US3-TC4-1: A question the tech design cannot settle holds acceptance
 
 **Classification:**
@@ -814,6 +837,7 @@ Runs once per row of **Test data**.
 **I want** the agent to ask me what moves scope, is costly to undo or needs a fact only I have, as a numbered question with its recommendation, and to decide the rest on the best option and say so,
 **so that** I answer once and never argue with a draft.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ljb rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC1-1: A held row carries its recommendation and the hand
 
 **Classification:**
@@ -846,6 +870,7 @@ Runs once per row of **Test data**.
 * It carries a number and names the hand it waits on, and the draft after it takes the recommendation until the hand answers.
 * Only a choice that moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work is held.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-x4u rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC2-1: An answer writes the row and closes the question
 
 **Classification:**
@@ -876,6 +901,7 @@ Runs once per row of **Test data**.
 * The row for <question id> carries <answer>.
 * The change page no longer lists <question id> open.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-oql rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC3-1: A question id alone takes its recommendation
 
 **Classification:**
@@ -905,6 +931,7 @@ Runs once per row of **Test data**.
 * The row records the recommendation as the answer.
 * The question closes.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-x6w rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC4-1: A product detail goes to the page, not the decisions
 
 **Classification:**
@@ -936,6 +963,7 @@ Runs once per row of **Test data**.
 * The page carries a `❓` line for <a product detail nobody has confirmed>.
 * `decisions.md` holds no numbered row for it.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-b1a rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC5-1: Question ids are per change and never reused
 
 **Classification:**
@@ -965,6 +993,7 @@ Runs once per row of **Test data**.
 * The new question takes an id no earlier question on <change> used.
 * <question id> still carries its own answer.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-y3y rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC6-1: Open questions list per hand, and with none
 
 Runs once per row of **Test data**.
@@ -1004,6 +1033,7 @@ Runs once per row of **Test data**.
 * My turn shows what the table names, each question row carrying the change, the id, the question's first line and the thread link.
 * The change page lists each artifact's open question ids by hand.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-lsn rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC7-1: A reply naming an unissued question changes nothing
 
 **Classification:**
@@ -1035,6 +1065,7 @@ Runs once per row of **Test data**.
 * The reply says what it could not do.
 * No artifact reaches `main` on that reply.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-iqz rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC8-1: A reply that is none of the moves holds the question open
 
 **Classification:**
@@ -1065,6 +1096,7 @@ Runs once per row of **Test data**.
 * <question id> stays listed open on its hand.
 * No artifact reaches `main` on that reply.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-asm rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC9-1: A held row holds the landing until it is answered
 
 Runs once per row of **Test data**.
@@ -1104,6 +1136,7 @@ Runs once per row of **Test data**.
 * The landing is the one the table names.
 * A landing on `land with recommendations` records both rows as answered in its own commit.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ph0 rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC10-1: A run posts with its wake's token alone
 
 **Classification:**
@@ -1138,6 +1171,7 @@ Runs once per row of **Test data**.
 * Both later posts are refused.
 * The run holds no chat token of its own.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-f5c rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC11-1: Two replies inside a minute wake one run
 
 **Classification:**
@@ -1171,6 +1205,7 @@ Runs once per row of **Test data**.
 * The third reply wakes one more run once that wake finishes.
 * No two wakes run on <change thread> at once.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-8ox rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC12-1: A preference the round decides names what it passed over
 
 **Classification:**
@@ -1203,6 +1238,7 @@ Runs once per row of **Test data**.
 * The draft takes that option.
 * No question on it waits on the hand.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-skp rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC13-1: Any hand's reply overturns a row the round decided
 
 **Classification:**
@@ -1242,6 +1278,7 @@ Runs once per row of **Test data**.
 **I want** the change's agent to read my artifact again when something before it changes, and to open a round for me only when the change reaches it,
 **so that** nothing stale is built on and I am not asked to re-read for a typo.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-9yr rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC1-1: A landing reads every artifact after it, oldest first
 
 **Classification:**
@@ -1274,6 +1311,7 @@ Runs once per row of **Test data**.
 * Every artifact after the proposal is read, oldest first.
 * `reviewed:` carries one content id per artifact read.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-fjz rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC2-1: A read that changes nothing writes the record line alone
 
 **Classification:**
@@ -1306,6 +1344,7 @@ Runs once per row of **Test data**.
 * The reply says what was read and that nothing changed.
 * Writing `reviewed:` puts no artifact behind.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-g5c rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC3-1: A read that edits opens a round for that hand
 
 **Classification:**
@@ -1337,6 +1376,7 @@ Runs once per row of **Test data**.
 * A round opens for the design's hand, naming the change that reached the artifact.
 * The edited design does not reach `main` on the agent's own word.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-f2k rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC4-1: Edits outside the linked text leave the artifacts fresh
 
 Runs once per row of **Test data**.
@@ -1376,6 +1416,7 @@ Runs once per row of **Test data**.
 * No artifact of <change> goes behind.
 * No round opens and no content id moves.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-4t7 rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC5-1: A landing is refused while something before it is behind
 
 **Classification:**
@@ -1409,6 +1450,7 @@ Runs once per row of **Test data**.
 * `spec.md` does not reach `main`.
 * The reply names the behind artifact before it.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-hm7 rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC6-1: A waived artifact is fresh and holds nothing after it
 
 **Classification:**
@@ -1442,6 +1484,7 @@ Runs once per row of **Test data**.
 * The waived design puts nothing behind.
 * `spec.md` lands.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-20x rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC7-1: Behind holds no tick, no claim and no wait
 
 **Classification:**
@@ -1474,6 +1517,7 @@ Runs once per row of **Test data**.
 * The change's record carries the round's dated `awaiting: ui-design:` line on the designer, naming <a frame nobody drew>.
 * Neither is refused for the behind artifact.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-rqb rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC8-1: A landed Raised row puts the requirements and the cases behind
 
 **Classification:**
@@ -1505,6 +1549,7 @@ Runs once per row of **Test data**.
 * `spec.md` and `feature-tcs.md` go behind.
 * They are read again before `tasks.md` lands.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-i5c rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC9-1: Two landings before one read are read once
 
 **Classification:**
@@ -1536,6 +1581,7 @@ Runs once per row of **Test data**.
 * One run at a time reads <change>, and the second landing joins it.
 * The content ids it writes cover both edits.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-xhh rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC10-1: A run that loses the race says so and stops
 
 **Classification:**
@@ -1569,6 +1615,7 @@ Runs once per row of **Test data**.
 * The run says it lost the push and stopped.
 * Nothing the run drafted is on the branch.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-sjj rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC11-1: A landing with nothing after it opens no round
 
 **Classification:**
@@ -1599,6 +1646,7 @@ Runs once per row of **Test data**.
 * No round opens.
 * No `reviewed:` line changes.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-3cn rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC12-1: A read that edits several redraws each from the one before
 
 **Classification:**
@@ -1631,6 +1679,7 @@ Runs once per row of **Test data**.
 * Each edited artifact is redrawn from the redrawn one before it, and the artifacts after it are drafted from what was redrawn.
 * A round opens for every edited artifact's hand, and nothing but the proposal is on `main`.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-s2q rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC13-1: The fold at archive refuses a behind delta
 
 **Classification:**
@@ -1661,6 +1710,7 @@ Runs once per row of **Test data**.
 * The check refuses the fold.
 * It names the behind delta.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-3id rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC14-1: A resumed run continues from the pushed draft
 
 **Classification:**
@@ -1692,6 +1742,7 @@ Runs once per row of **Test data**.
 * It continues from the pushed draft rather than drafting it again.
 * A question already answered in the thread is not asked again.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-api rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC15-1: A wake past its budget posts the failure line
 
 Runs once per row of **Test data**.
@@ -1734,6 +1785,7 @@ Runs once per row of **Test data**.
 * The thread carries the failure line with <the run's link>.
 * The later reply wakes a run, so the thread was freed.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ivf rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC16-1: A read that changed nothing lands with no word
 
 **Classification:**
@@ -1767,6 +1819,7 @@ Runs once per row of **Test data**.
 * The commit changes nothing but `reviewed:` lines of <change>'s own record.
 * A commit touching anything else is refused.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-6cr rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC17-1: A landing wakes the relay once per change
 
 Runs once per row of **Test data**.
@@ -1817,6 +1870,7 @@ Runs once per row of **Test data**.
 **I want** each task group built test first, read by its perspectives and verified before its landing summary reaches me,
 **so that** I read a summary, not a diff.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-6qw rev=1 covers=g10.shared-agent-rounds.SC-bsq,g10.shared-agent-rounds.SC-64a,g10.shared-agent-rounds.SC-v4t -->
 ### shared-planning-agent-rounds-US6-TC1-1: A group lands its tests first, then its code
 
 **Classification:**
@@ -1847,6 +1901,7 @@ Runs once per row of **Test data**.
 * The tests <the scenario ids it covers> name land in their own commit, before the code.
 * The summary arrives after the group's readers and the verify, not before.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-82b rev=1 covers=g10.shared-agent-rounds.SC-bsq,g10.shared-agent-rounds.SC-64a,g10.shared-agent-rounds.SC-v4t -->
 ### shared-planning-agent-rounds-US6-TC2-1: Landing summary names the readers and the tests per scenario
 
 **Classification:**
@@ -1877,6 +1932,7 @@ Runs once per row of **Test data**.
 * It names the tests each scenario landed with.
 * The row carries the same perspectives, findings and tests.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-x11 rev=1 covers=g10.shared-agent-rounds.SC-bsq,g10.shared-agent-rounds.SC-64a,g10.shared-agent-rounds.SC-v4t -->
 ### shared-planning-agent-rounds-US6-TC3-1: The last group walks the journeys and leaves the suite
 
 **Classification:**
@@ -1910,6 +1966,7 @@ Runs once per row of **Test data**.
 * Each case the walk covers is marked automated.
 * A journey no suite can drive is named in the walk's row, and its cases stay manual.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-gts rev=1 covers=g10.shared-agent-rounds.SC-bsq,g10.shared-agent-rounds.SC-64a,g10.shared-agent-rounds.SC-v4t -->
 ### shared-planning-agent-rounds-US6-TC4-1: One reader argues the simpler shape for the whole change
 
 **Classification:**
@@ -1939,6 +1996,7 @@ Runs once per row of **Test data**.
 * One round covers the whole change, run by the reader that argues the simpler shape.
 * It runs before <change> reaches staging.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-3hh rev=1 covers=g10.shared-agent-rounds.SC-bsq,g10.shared-agent-rounds.SC-64a,g10.shared-agent-rounds.SC-v4t -->
 ### shared-planning-agent-rounds-US6-TC5-1: A tick naming a scenario no test reaches is refused
 
 **Classification:**
@@ -1980,6 +2038,7 @@ Runs once per row of **Test data**.
 **I want** to be asked whether a change whose goals moved is extended, superseded or split,
 **so that** a change mid-build is never rewritten in place without my word.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-gwe rev=1 covers=g10.shared-agent-rounds.SC-vji,g10.shared-agent-rounds.SC-2oy,g10.shared-agent-rounds.SC-mxx -->
 ### shared-planning-agent-rounds-US7-TC1-1: A moved goal asks extend, supersede or split
 
 Runs once per row of **Test data**.
@@ -2020,6 +2079,7 @@ Runs once per row of **Test data**.
 * A question to the product manager names extend, supersede and split.
 * No artifact after the moved line is rewritten in place.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-c09 rev=1 covers=g10.shared-agent-rounds.SC-vji,g10.shared-agent-rounds.SC-2oy,g10.shared-agent-rounds.SC-mxx -->
 ### shared-planning-agent-rounds-US7-TC2-1: The answer is recorded and does what it names
 
 Runs once per row of **Test data**.
@@ -2061,6 +2121,7 @@ Runs once per row of **Test data**.
 * The decisions row records the answer and the hand who gave it.
 * No goal or non-goal is rewritten in place.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-rch rev=1 covers=g10.shared-agent-rounds.SC-vji,g10.shared-agent-rounds.SC-2oy,g10.shared-agent-rounds.SC-mxx -->
 ### shared-planning-agent-rounds-US7-TC3-1: Nothing lands while a moved-goal question is open
 
 **Classification:**
@@ -2100,6 +2161,7 @@ Runs once per row of **Test data**.
 **I want** the cases the end-to-end walk automates left out of the run sheet,
 **so that** the pass on staging covers what only a deployed stack can show.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-wk6 rev=1 covers=g10.shared-agent-rounds.SC-tfp,g10.shared-agent-rounds.SC-4zp,g10.shared-agent-rounds.SC-7gw,g10.shared-agent-rounds.SC-pgk,g10.shared-agent-rounds.SC-r6o -->
 ### shared-planning-agent-rounds-US8-TC1-1: The run tab leaves automated cases out and says how many
 
 **Classification:**
@@ -2131,6 +2193,7 @@ Runs once per row of **Test data**.
 * The tab holds <cases still manual> alone.
 * The run says how many automated cases it left out.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-9du rev=1 covers=g10.shared-agent-rounds.SC-tfp,g10.shared-agent-rounds.SC-4zp,g10.shared-agent-rounds.SC-7gw,g10.shared-agent-rounds.SC-pgk,g10.shared-agent-rounds.SC-r6o -->
 ### shared-planning-agent-rounds-US8-TC2-1: The change page counts automated cases against the total
 
 **Classification:**
@@ -2162,6 +2225,7 @@ Runs once per row of **Test data**.
 * The row shows the suite's automated count against its total.
 * Both capabilities' cases are summed once, and a suite with no automated case reads 0 against its total rather than reading nothing.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ajl rev=1 covers=g10.shared-agent-rounds.SC-tfp,g10.shared-agent-rounds.SC-4zp,g10.shared-agent-rounds.SC-7gw,g10.shared-agent-rounds.SC-pgk,g10.shared-agent-rounds.SC-r6o -->
 ### shared-planning-agent-rounds-US8-TC3-1: Every case automated, and none
 
 Runs once per row of **Test data**.
@@ -2201,6 +2265,7 @@ Runs once per row of **Test data**.
 * The tab holds what the table names.
 * The run says how many cases it left out, zero included.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-4i0 rev=1 covers=g10.shared-agent-rounds.SC-tfp,g10.shared-agent-rounds.SC-4zp,g10.shared-agent-rounds.SC-7gw,g10.shared-agent-rounds.SC-pgk,g10.shared-agent-rounds.SC-r6o -->
 ### shared-planning-agent-rounds-US8-TC4-1: The suite runs on every push, its smoke cases on deploy and cut
 
 **Classification:**
@@ -2232,6 +2297,7 @@ Runs once per row of **Test data**.
 * The whole suite runs on the push.
 * The suite's smoke cases run on the deploy and on the cut.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-wzx rev=1 covers=g10.shared-agent-rounds.SC-tfp,g10.shared-agent-rounds.SC-4zp,g10.shared-agent-rounds.SC-7gw,g10.shared-agent-rounds.SC-pgk,g10.shared-agent-rounds.SC-r6o -->
 ### shared-planning-agent-rounds-US8-TC5-1: A case a store test decides flips with the test
 
 **Classification:**
@@ -2266,6 +2332,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-8w2 rev=1 covers=g10.shared-agent-rounds.SC-tfp,g10.shared-agent-rounds.SC-4zp,g10.shared-agent-rounds.SC-7gw,g10.shared-agent-rounds.SC-pgk,g10.shared-agent-rounds.SC-r6o -->
 ### shared-planning-agent-rounds-US8-TC6-1: The archive refuses a change whose journeys were never walked
 
 Runs once per row of **Test data**.
@@ -2356,6 +2423,7 @@ Runs once per row of **Test data**.
 **I want** one row per round saying which perspectives read the draft, what stood and what was asked,
 **so that** a round that found nothing and one that never ran do not look the same.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-1g1 rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC1-1: One row per round, on the page and in the file
 
 **Classification:**
@@ -2386,6 +2454,7 @@ Runs once per row of **Test data**.
 * One line per round names the artifact or group, the perspectives run, what stood and the question ids raised.
 * The page and the file carry the same three rounds.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-a9k rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC2-1: A task group's row names the tests per scenario
 
 **Classification:**
@@ -2415,6 +2484,7 @@ Runs once per row of **Test data**.
 * The row names the group, its perspectives and what stood.
 * It names the tests each of <the scenario ids it covers> landed with.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-kef rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC3-1: A round that found nothing still writes its row
 
 **Classification:**
@@ -2446,6 +2516,7 @@ Runs once per row of **Test data**.
 * The row names the perspectives run and that nothing stood.
 * It lists no question id.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-dsq rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC4-1: A landing or a tick with no row is refused
 
 Runs once per row of **Test data**.
@@ -2487,6 +2558,7 @@ Runs once per row of **Test data**.
 * The check refuses as the table names.
 * `rounds.md` is unchanged by the check.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-lii rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC5-1: A change on the old flow is not refused
 
 **Classification:**
@@ -2519,6 +2591,7 @@ Runs once per row of **Test data**.
 * The check does not refuse <change on the old flow>.
 * It names no missing row for it.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-lqo rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC6-1: A change with no round yet shows none and passes
 
 **Classification:**
@@ -2550,6 +2623,7 @@ Runs once per row of **Test data**.
 * The Rounds row lists no round.
 * The check does not refuse <change>.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ai2 rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC7-1: A row missing a column is refused
 
 **Classification:**
@@ -2582,6 +2656,7 @@ Runs once per row of **Test data**.
 * The check refuses and names the column the row leaves empty.
 * The file's other rows are not reported.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-59a rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC8-1: The record archives with the change and folds nowhere
 
 **Classification:**
@@ -2614,6 +2689,7 @@ Runs once per row of **Test data**.
 * `rounds.md` sits in the archived change with every row it had.
 * No durable file gained its rows.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-p91 rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC9-1: A ticked group with no row shows as having none
 
 **Classification:**
@@ -2646,6 +2722,7 @@ Runs once per row of **Test data**.
 * The ticked group with no row is listed as having no round.
 * The group that landed a round is not listed that way.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-q55 rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC10-1: A fix pass carries its row like any other round
 
 **Classification:**
@@ -2677,6 +2754,7 @@ Runs once per row of **Test data**.
 * Its perspectives name the reader who argues the simpler thing.
 * The Perspectives column names the verifier where one ran, and names none for this one-reader round.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-6sz rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC13-1: A fix pass's row is refused for the reader or the verifier it leaves out
 
 Runs once per row of **Test data**.
@@ -2734,6 +2812,7 @@ Runs once per row of **Test data**.
 - The product manager or the named owner accepts the plan, the Change Stages page's Stages row 5; a case names them as the human who accepts it - `Q116`.
 - The product manager answers a Raised row about a mechanism the tech design cannot settle, with the engineer - `Q116`, with `stage-changes-and-notify-hands`' `Q97`.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-b7s rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC11-1: The change page mirrors the thread and says what the hands are told
 
 **Classification:**
@@ -2785,6 +2864,7 @@ Run: 2026-09-20, amendment pass over the amended requirements and `decisions.md`
 
 Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Feature set), user-journeys.md, proposal.md, decisions.md with its Raised table, ui-design.md, the Agent Rounds and Change Stages pages and the Planning index, the store context; denied every `## Requirements` section, openspec/specs/ and openspec/changes/archive/.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-en7 rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC12-1: From the day the kept skills go, a change worked outside the round is refused
 
 **Classification:**

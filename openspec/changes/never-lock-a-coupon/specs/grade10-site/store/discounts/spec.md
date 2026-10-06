@@ -42,6 +42,7 @@ sale.
 - **WHEN** the collector submits the checkout
 - **THEN** the coupon's Shopify Discount code is minted and carried on the draft order
 
+<!-- trace:scenario id=g10.store-discounts.SC-v2s rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-11 - A refused mint refuses the checkout and keeps the coupon
 **Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
@@ -50,6 +51,7 @@ sale.
 - **THEN** the checkout is refused naming that coupon
 - **AND** no order is left behind, and the coupon is still spendable
 
+<!-- trace:scenario id=g10.store-discounts.SC-vsw rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-13 - A dead order's unspent code is deactivated
 **Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
@@ -57,6 +59,7 @@ sale.
 - **WHEN** that order is canceled or fails
 - **THEN** the code is deactivated and the coupon returns to the member
 
+<!-- trace:scenario id=g10.store-discounts.SC-cvt rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-19 - An expired sale's code dies when the coupon is claimed elsewhere
 **Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
@@ -65,6 +68,7 @@ sale.
 - **THEN** the code is deactivated and the cut comes off the expired sale
 - **AND** the sale is not cancelled and can still collect at full price
 
+<!-- trace:scenario id=g10.store-discounts.SC-2a7 rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-20 - A code does not go back on the sale it left
 **Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
@@ -72,6 +76,7 @@ sale.
 - **WHEN** that coupon is offered to the same sale again
 - **THEN** it is refused, naming a new sale as the remedy
 
+<!-- trace:scenario id=g10.store-discounts.SC-it9 rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-21 - A sale that collects a deactivated code is reported
 **Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
 

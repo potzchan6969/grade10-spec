@@ -214,6 +214,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** both show the payment reference
 - **AND** the card invoice requires no separate bank-reference identifier
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-dsa rev=1 -->
 #### Scenario: winner-order-SC-244 - The payment reference is shown unconditionally, not gated by payment method
 **Serves:** winner-order-US-22 - Winner reviews invoice and payment details
 
@@ -221,6 +222,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **WHEN** the winner opens each on Winner Order
 - **THEN** both orders show the payment reference
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-l1s rev=1 -->
 #### Scenario: winner-order-SC-245 - Stripe metadata carries the payment reference and never the provider reference to the winner
 **Serves:** winner-order-US-22 - Winner reviews invoice and payment details
 

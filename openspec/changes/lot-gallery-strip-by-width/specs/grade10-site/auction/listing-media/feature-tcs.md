@@ -10,6 +10,7 @@
 **so that** I can pick a listing off the catalogue and study its images on the
 details page.
 
+<!-- trace:case id=g10.auction-listing-media.TC-3vh rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### grade10-site-auction-listing-media-US5-TC2-1: Details gallery uses thumb, detail, and zoom
 
 **Classification:**
@@ -47,6 +48,7 @@ details page.
 * The main frame requests size `detail`.
 * Zoom requests size `zoom`.
 
+<!-- trace:case id=g10.auction-listing-media.TC-pls rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
 ### grade10-site-auction-listing-media-US5-TC8-1: Wide details gallery shows a left rail
 
 **Classification:**
@@ -82,6 +84,7 @@ details page.
 
 * A thumbnail rail is shown beside the main frame.
 
+<!-- trace:case id=g10.auction-listing-media.TC-pbt rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
 ### grade10-site-auction-listing-media-US5-TC9-1: Stacked details gallery hides the rail
 
 **Classification:**

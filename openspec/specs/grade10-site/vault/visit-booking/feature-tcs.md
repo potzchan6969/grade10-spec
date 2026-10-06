@@ -10,6 +10,7 @@
 **I want** to pick a shop and a free slot for my case whenever I am ready,
 **so that** I can agree terms first and carry the item in afterwards.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-a49 rev=2 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC1-2: A booking is taken at every live status but a draft
 
 Runs once per row of **Test data**.
@@ -51,6 +52,7 @@ Runs once per row of **Test data**.
 * Step 1 is answered as the row says.
 * Step 2 reads a visit at `<slot_1>` only where step 1 was accepted.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-npd rev=2 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC2-2: The collector books a free slot as an act on their own case
 
 **Classification:**
@@ -86,6 +88,7 @@ Runs once per row of **Test data**.
 * Step 3 reads a visit at `<shop_1>`, in `<slot_1>`.
 * Step 4 holds a letter naming `<shop_1>` and `<slot_1>`.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-xsa rev=1 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC3-1: Staff at the counter book the visit for the collector
 
 **Classification:**
@@ -117,6 +120,7 @@ Runs once per row of **Test data**.
 * The visit becomes the case's one live booking.
 * The collector is sent the booking confirmation, the same as if they had booked it themselves.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-jmy rev=2 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC4-2: Booking the slot the case already holds changes nothing
 
 **Classification:**
@@ -150,6 +154,7 @@ Runs once per row of **Test data**.
 * Step 2 reads the same one visit, unchanged.
 * Step 3 holds no second booking letter.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-lid rev=1 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC5-1: No booking picker is offered on a draft case
 
 **Classification:**
@@ -179,6 +184,7 @@ Runs once per row of **Test data**.
 
 * No visit booking picker is offered.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-3y9 rev=2 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC6-2: A slot just past its own start is refused at the limit
 
 **Classification:**
@@ -210,6 +216,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused as past.
 * Step 2 answers the free slots again, without `<slot_1>`.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-e5y rev=2 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC7-2: A window with no free slot is answered with none
 
 **Classification:**
@@ -239,6 +246,7 @@ Runs once per row of **Test data**.
 
 * Step 1 answers no slot.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-hza rev=2 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC8-2: A slot taken before the booking lands is refused by name
 
 **Classification:**
@@ -272,6 +280,7 @@ Runs once per row of **Test data**.
 * Step 2 does not offer `<slot_1>`.
 * Step 3 reads no visit.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-o5e rev=2 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC9-2: Calling the visit off leaves the case where it stood and takes a new booking
 
 **Classification:**
@@ -305,6 +314,7 @@ Runs once per row of **Test data**.
 * Step 2 reads `<case_1>` at `offer_made`, with its offer and item as before and no live visit.
 * Step 3 is accepted.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-1q3 rev=2 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
 ### grade10-site-vault-visit-booking-US1-TC10-2: A case holding no visit reads beside its lead's
 
 **Classification:**
@@ -343,6 +353,7 @@ Runs once per row of **Test data**.
 whether I moved it or the shop did,
 **so that** missing one day does not cost me the case.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-yox rev=1 covers=g10.vault-visit-booking.SC-dlg,g10.vault-visit-booking.SC-9i6,g10.vault-visit-booking.SC-pop,g10.vault-visit-booking.SC-dnx,g10.vault-visit-booking.SC-05h,g10.vault-visit-booking.SC-5cb,g10.vault-visit-booking.SC-f4c -->
 ### grade10-site-vault-visit-booking-US3-TC1-1: A move reads the shops and slots a first booking reads
 
 **Classification:**
@@ -389,6 +400,7 @@ whether I moved it or the shop did,
 the visit added to my phone's calendar,
 **so that** I turn up on the day, prepared.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-vbi rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC1-2: A booked case's read names the shop, its address and the slot
 
 **Classification:**
@@ -418,6 +430,7 @@ the visit added to my phone's calendar,
 * Step 1 names `<shop_1>`, its address and `<slot_1>`.
 * Step 1 carries the amount asked for.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-jgp rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC2-2: The calendar file is served for the collector's own case
 
 **Classification:**
@@ -450,6 +463,7 @@ the visit added to my phone's calendar,
 * Step 2 serves one calendar file naming `<shop_1>`, its address and `<slot_1>`.
 * Step 3 shows one entry at `<shop_1>`, in `<slot_1>`.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-bbl rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC3-2: A booked case reads the collector's identity verified
 
 **Classification:**
@@ -478,6 +492,7 @@ the visit added to my phone's calendar,
 
 * Step 1 reads the visit, and the identity verified.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-y7n rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC4-2: A booked case reads the collector's identity not yet verified
 
 **Classification:**
@@ -506,6 +521,7 @@ the visit added to my phone's calendar,
 
 * Step 1 reads the visit, and the identity not verified.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-54k rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC5-2: A booked case on the storage lane reads no amount asked for
 
 **Classification:**
@@ -534,6 +550,7 @@ the visit added to my phone's calendar,
 
 * Step 1 reads the visit, on the storage lane, with no amount asked for.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-fec rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC6-2: Moving the visit serves a file that replaces the old entry
 
 **Classification:**
@@ -566,6 +583,7 @@ the visit added to my phone's calendar,
 * Step 2 serves one file naming `<shop_2>` and `<slot_2>`, as the same entry the first file named.
 * Step 3 leaves one entry on the phone, at `<shop_2>` in `<slot_2>`.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-gkt rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC7-2: Calling the visit off serves its file as a cancellation
 
 **Classification:**
@@ -597,6 +615,7 @@ the visit added to my phone's calendar,
 * Step 2 serves the file as a cancellation of the same entry.
 * Step 3 leaves no entry on the phone.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-uj2 rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC8-2: A stale cached visit is repaired against the diary
 
 **Classification:**
@@ -627,6 +646,7 @@ the visit added to my phone's calendar,
 * The case's cached copy is repaired to match it.
 * No action is taken on the stale value.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-tlb rev=1 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC9-1: Visit completion turns on the slot's start at the limit
 
 Runs once per row of **Test data**.
@@ -664,6 +684,7 @@ Runs once per row of **Test data**.
 
 * The visit's state matches the row's outcome.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-7rs rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC10-2: An ended case's visit reads cancelled or a no-show
 
 Runs once per row of **Test data**.
@@ -703,6 +724,7 @@ Runs once per row of **Test data**.
 * The visit reads as the row's outcome.
 * The case keeps the visit's record; nothing is cleared.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-l10 rev=1 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC11-1: A standing visit reads the same when the case is opened
 
 **Classification:**
@@ -733,6 +755,7 @@ Runs once per row of **Test data**.
 * The shop, its address and the slot are named, the same as on the booked-visit screen.
 * Add to calendar, Move and Cancel visit are offered.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-wmr rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC12-2: The visit's messages carry its calendar file
 
 Runs once per row of **Test data**.
@@ -775,6 +798,7 @@ Runs once per row of **Test data**.
 * Step 2's message carries the visit's calendar file.
 * The file names the same visit step 3 reads.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-uf0 rev=2 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC13-2: A move never offers the visit's own slot back
 
 **Classification:**
@@ -804,6 +828,7 @@ Runs once per row of **Test data**.
 * Step 1 does not offer `<slot_1>`.
 * Step 1 offers every other free slot.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-enx rev=1 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
 ### grade10-site-vault-visit-booking-US4-TC17-1: A case the diary never booked is refused the calendar file
 
 **Classification:**

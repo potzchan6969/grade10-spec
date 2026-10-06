@@ -1239,6 +1239,7 @@ Runs once per row of **Test data**.
 * No Payment section appears.
 * Every other meta row and party block still renders.
 
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-x92 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-43 -->
 ### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders in Hong Kong as GMT+8
 
 **Classification:**

@@ -2787,6 +2787,7 @@ Runs once per row of **Test data**.
 **I want** Google's own prompt to offer my account without me opening sign-in first,
 **so that** I can sign in with a tap, and it never shows at the same time as a sign-in dialog I already opened.
 
+<!-- trace:case id=g10.shared-sign-in.TC-6rq rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC1-1: Signed-out visitor on a Google-enabled brand is shown the corner prompt unprompted
 
 **Classification:**
@@ -2814,6 +2815,7 @@ customer is signed out on a brand that has Google sign-in.
 * Google's own corner prompt appears offering sign-in.
 * No sign-in dialog is open.
 
+<!-- trace:case id=g10.shared-sign-in.TC-08n rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC2-1: Brand without Google sign-in never shows the prompt
 
 **Classification:**
@@ -2842,6 +2844,7 @@ customer is signed out on a brand that does not have Google sign-in.
 * No corner prompt appears.
 * No Google sign-in control of any kind is shown.
 
+<!-- trace:case id=g10.shared-sign-in.TC-y7m rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC3-1: Signed-in collector never sees the prompt
 
 **Classification:**
@@ -2878,6 +2881,7 @@ Runs once per row of **Test data**.
 
 * No corner prompt appears on `<brand>`.
 
+<!-- trace:case id=g10.shared-sign-in.TC-m40 rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC4-1: Prompt does not appear while the sign-in dialog is already open
 
 **Classification:**
@@ -2906,6 +2910,7 @@ customer is signed out on a brand that has Google sign-in, with the sign-in dial
 * No corner prompt appears while the dialog is open.
 * The sign-in dialog remains the only sign-in ask on the page.
 
+<!-- trace:case id=g10.shared-sign-in.TC-ma7 rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC5-1: Opening the sign-in dialog while the prompt is showing dismisses the prompt
 
 **Classification:**
@@ -2933,6 +2938,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * The corner prompt is dismissed.
 * Only the sign-in dialog remains as a sign-in ask.
 
+<!-- trace:case id=g10.shared-sign-in.TC-nvs rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC6-1: Completing the prompt signs the visitor in
 
 **Classification:**
@@ -2972,6 +2978,7 @@ Runs once per row of **Test data**.
 * The collector is signed in as `<outcome>` states.
 * The corner prompt is gone.
 
+<!-- trace:case id=g10.shared-sign-in.TC-7qn rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC7-1: Prompt is offered on any page a signed-out collector visits, including checkout
 
 **Classification:**
@@ -3008,6 +3015,7 @@ Runs once per row of **Test data**.
 
 * Google's own corner prompt appears on `<page>`.
 
+<!-- trace:case id=g10.shared-sign-in.TC-w1p rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC8-1: Ignoring the prompt leaves the page exactly as it was
 
 **Classification:**
@@ -3037,6 +3045,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * The interaction from step 1 completes exactly as it would with no prompt showing.
 * No sign-in dialog opens.
 
+<!-- trace:case id=g10.shared-sign-in.TC-2jt rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC9-1: Declining the dialog suppresses the prompt for the rest of the visit
 
 **Classification:**
@@ -3067,6 +3076,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * The collector remains signed out.
 * The corner prompt does not appear again on either page for the rest of the visit.
 
+<!-- trace:case id=g10.shared-sign-in.TC-f02 rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC10-1: Unverified Google account offered through the prompt does not sign in
 
 **Classification:**
@@ -3097,6 +3107,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * No account is created for `<unverified google email>`.
 * The collector is not signed in.
 
+<!-- trace:case id=g10.shared-sign-in.TC-x2b rev=1 covers=g10.shared-sign-in.SC-ph5,g10.shared-sign-in.SC-iaq,g10.shared-sign-in.SC-5lg,g10.shared-sign-in.SC-emf,g10.shared-sign-in.SC-bp4,g10.shared-sign-in.SC-75s,g10.shared-sign-in.SC-psv,g10.shared-sign-in.SC-l6p,g10.shared-sign-in.SC-qqs,g10.shared-sign-in.SC-fsu,g10.shared-sign-in.SC-dl3 -->
 ### shared-auth-sign-in-US11-TC11-1: Prompt failing to initialize does not block the page
 
 **Classification:**

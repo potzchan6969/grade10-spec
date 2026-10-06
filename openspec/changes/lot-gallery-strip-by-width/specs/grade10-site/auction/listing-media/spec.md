@@ -23,6 +23,7 @@ upscale it. An unknown size name SHALL be indistinguishable from a missing
 image. Video gallery items SHALL keep their original public path from
 admin-listing; named sizes apply to images only.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-wbd rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-21 - The catalogue uses card size for an image card
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -30,6 +31,7 @@ admin-listing; named sizes apply to images only.
 - **WHEN** a collector opens the auction catalogue
 - **THEN** that listing's card image is requested at size `card`
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-ds2 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-22 - The details gallery uses thumb, detail, and zoom
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -41,6 +43,7 @@ admin-listing; named sizes apply to images only.
 - **AND** the main frame requests size `detail`
 - **AND** zoom requests size `zoom`
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-7si rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-23 - An unknown size is not found
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -64,6 +67,7 @@ left thumbnail rail only when the gallery is wide enough to place that rail
 beside the main frame. When the gallery is stacked, it SHALL hide the rail and
 SHALL keep previous/next and carousel progress.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-yei rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-26 - Several images appear in gallery order
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -72,6 +76,7 @@ SHALL keep previous/next and carousel progress.
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows three images in the order A, B, C
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-iki rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-27 - One image has no strip
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -80,6 +85,7 @@ SHALL keep previous/next and carousel progress.
 - **THEN** the gallery shows that image
 - **AND** it does not show a thumbnail strip
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-70a rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-28 - No images still shows the listing
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -88,6 +94,7 @@ SHALL keep previous/next and carousel progress.
 - **THEN** the page shows the listing's title and bid panel
 - **AND** the gallery has no image
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-5tk rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-29 - Wide details gallery shows a left rail
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -97,6 +104,7 @@ SHALL keep previous/next and carousel progress.
 - **WHEN** a collector opens that listing
 - **THEN** a thumbnail rail is shown beside the main frame
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-cd3 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-30 - Stacked details gallery hides the rail
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 

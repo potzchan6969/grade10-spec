@@ -9,6 +9,7 @@
 **I want** every coupon I hold to be spendable on the sale in front of me, whatever checkout or counter sale I walked away from,
 **so that** changing my mind never costs me the coupon and never makes me wait.
 
+<!-- trace:case id=g10.loyalty-programme.TC-eg8 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC1-1: The next checkout takes the coupon and cancels the first order
 
 **Classification:**
@@ -48,6 +49,7 @@
 * <earlier order> reads cancelled.
 * The code minted for <earlier order> is no longer live.
 
+<!-- trace:case id=g10.loyalty-programme.TC-8x5 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC2-1: A counter sale keeps its cart and loses the cut
 
 **Classification:**
@@ -88,6 +90,7 @@
 * <counter sale A> still holds its goods and is not cancelled.
 * <counter sale A> collects at full price, with no cut for <coupon>.
 
+<!-- trace:case id=g10.loyalty-programme.TC-dcb rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC3-1: A till claims the coupon an open checkout holds
 
 Runs once per row of **Test data**.
@@ -128,6 +131,7 @@ Runs once per row of **Test data**.
 * The counter sale carries <coupon>'s cut.
 * <open checkout> reads cancelled.
 
+<!-- trace:case id=g10.loyalty-programme.TC-8wc rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC4-1: A second till takes the coupon from the first
 
 **Classification:**
@@ -165,6 +169,7 @@ Runs once per row of **Test data**.
 * The sale at <shop B> carries <coupon>'s cut.
 * The code minted for <coupon> on <counter sale A> is no longer live.
 
+<!-- trace:case id=g10.loyalty-programme.TC-i0e rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC5-1: A sale nobody paid leaves the coupon spendable
 
 Runs once per row of **Test data**.
@@ -204,6 +209,7 @@ Runs once per row of **Test data**.
 * <coupon> reads unused.
 * <coupon> can be chosen on a new checkout.
 
+<!-- trace:case id=g10.loyalty-programme.TC-1q0 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC6-1: No surface names the sale claiming a coupon
 
 **Classification:**
@@ -243,6 +249,7 @@ Runs once per row of **Test data**.
 * Every coupon the member holds reads as spendable on all three surfaces.
 * No surface names <counter sale A>, or any sale claiming a coupon.
 
+<!-- trace:case id=g10.loyalty-programme.TC-1jv rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC7-1: Two sales collect one coupon, which is spent once and reported
 
 **Classification:**
@@ -283,6 +290,7 @@ Runs once per row of **Test data**.
 * <coupon> reads used once, spent by <later sale>, the sale that settled first.
 * <counter sale A> is reported with the order on it, and spends <coupon> nowhere.
 
+<!-- trace:case id=g10.loyalty-programme.TC-y4l rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC8-1: A claim is refused where the earlier checkout will not die
 
 **Classification:**
@@ -324,6 +332,7 @@ Runs once per row of **Test data**.
 * No refusal says <coupon> is unavailable.
 * <open checkout> still carries <coupon>'s cut.
 
+<!-- trace:case id=g10.loyalty-programme.TC-x5l rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC9-1: A coupon on a sale that took the money does not move
 
 **Classification:**
@@ -361,6 +370,7 @@ Runs once per row of **Test data**.
 * The claim is refused.
 * <paid sale> still carries <coupon>'s cut.
 
+<!-- trace:case id=g10.loyalty-programme.TC-bq5 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC10-1: A claim stands where the shop keeps the earlier code
 
 **Classification:**
@@ -402,6 +412,7 @@ Runs once per row of **Test data**.
 * The deactivation is retried until the shop takes it.
 * The code on <counter sale A> is no longer live.
 
+<!-- trace:case id=g10.loyalty-programme.TC-4wf rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-fhj -->
 ### grade10-site-loyalty-programme-US11-TC11-1: A sale that gave no cut hands the coupon back
 
 **Classification:**
@@ -447,6 +458,7 @@ Runs once per row of **Test data**.
 **I want** to return a member's points and void their coupon while it is still unused,
 **so that** a reward we cannot honour costs the member nothing.
 
+<!-- trace:case id=g10.loyalty-programme.TC-pvr rev=1 covers=g10.loyalty-programme.SC-pkm,g10.loyalty-programme.SC-0nd,g10.loyalty-programme.SC-m7u,g10.loyalty-programme.SC-jqk -->
 ### grade10-site-loyalty-programme-US6-TC1-1: A reversal is refused and names the sale claiming the coupon
 
 **Classification:**
@@ -484,6 +496,7 @@ Runs once per row of **Test data**.
 * The reversal is refused.
 * The refusal names <counter sale A>.
 
+<!-- trace:case id=g10.loyalty-programme.TC-3dp rev=1 covers=g10.loyalty-programme.SC-pkm,g10.loyalty-programme.SC-0nd,g10.loyalty-programme.SC-m7u,g10.loyalty-programme.SC-jqk -->
 ### grade10-site-loyalty-programme-US6-TC2-1: A claim nothing moves stops refusing the operator
 
 **Classification:**

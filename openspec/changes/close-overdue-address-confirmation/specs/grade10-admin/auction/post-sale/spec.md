@@ -60,6 +60,7 @@ step. Recording it SHALL NOT reopen the window and SHALL NOT let the winner
 write again. Grade10 SHALL write an address-recorded invoice-log entry carrying
 the named operator, timestamp and reason.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ehu rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-75 - A reopen gives a fresh 48 hours
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -71,6 +72,7 @@ the named operator, timestamp and reason.
 - **AND** the order derives as Awaiting Setup from its reopened window
 - **AND** the winner can confirm a delivery address again
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-8of rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-76 - A reopen without a reason is refused
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -79,6 +81,7 @@ the named operator, timestamp and reason.
 - **THEN** Grade10 refuses it
 - **AND** the address deadline has still passed
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-u12 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-77 - An operator without the grant cannot reopen
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -87,6 +90,7 @@ the named operator, timestamp and reason.
 - **THEN** the reopen control is visible and disabled
 - **AND** Grade10 refuses the reopen on the server if it is attempted
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-lh7 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-78 - A third reopen is allowed
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -97,6 +101,7 @@ the named operator, timestamp and reason.
 - **THEN** Grade10 accepts the reopen
 - **AND** the address deadline is 48 hours from that reopen
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-blu rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-79 - The reopen is on the invoice log
 **Serves:** Audit trail - the reopen names who did it and why
 
@@ -105,6 +110,7 @@ the named operator, timestamp and reason.
 - **THEN** it holds a reopened entry with the named operator, its timestamp
   and that reason
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-pqn rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-80 - Reopening before the deadline is refused
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -114,6 +120,7 @@ the named operator, timestamp and reason.
 - **THEN** Grade10 refuses it
 - **AND** the address deadline is still 2026-09-18T14:00:00Z
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-w78 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-81 - No reopen once the invoice is sent
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -122,6 +129,7 @@ the named operator, timestamp and reason.
 - **THEN** Grade10 refuses it
 - **AND** the delivery address stays locked, changeable only by a re-quote
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-egm rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-82 - A confirmed address cannot reopen
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -131,6 +139,7 @@ the named operator, timestamp and reason.
 - **THEN** Grade10 refuses it
 - **AND** the order remains Preparing Invoice
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-jy7 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-83 - A cancelled order refuses a reopen
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -141,6 +150,7 @@ the named operator, timestamp and reason.
 - **AND** the order still derives as Cancelled
 - **AND** the lot stays in available stock
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-2g4 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-84 - An operator records the address without reopening
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -152,6 +162,7 @@ the named operator, timestamp and reason.
 - **AND** the order derives as Preparing Invoice
 - **AND** the address deadline has still passed, so the winner cannot change it
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-t9v rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-90 - Address write and reopen serialize
 **Serves:** post-sale-US-18 - Operator reopens the address form
 
@@ -162,6 +173,7 @@ the named operator, timestamp and reason.
   committed transition
 - **AND** no partial address overwrite is possible
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-su0 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-91 - Address recording is logged
 **Serves:** Audit trail - the reopen and phone-recorded address name who did them and why
 
@@ -198,6 +210,7 @@ SHALL NOT write `expired`.
 An operator without payment-processing SHALL be offered no settle or reissue
 control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-b5v rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-85 - An operator settles an expired invoice
 **Serves:** Resolving an unpaid order - the admin portal is the only place an expired invoice is paid
 
@@ -208,6 +221,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **AND** the invoice is `paid` and the order derives as Processing
 - **AND** the winner's order shows nothing owed and no card Pay control
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-cdi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-86 - A winner payment received at the deadline is refused
 **Serves:** Resolving an unpaid order - the winner cannot pay an expired invoice
 
@@ -218,6 +232,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **AND** the winner's card is not charged
 - **AND** the invoice is `expired`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-d1w rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-87 - A payment started in time completes after the deadline
 **Serves:** Resolving an unpaid order - a payment started in time counts
 
@@ -227,6 +242,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **THEN** the invoice is `paid` and the order derives as Processing
 - **AND** the invoice was never `expired`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-xct rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-88 - A payment started in time that fails expires the invoice then
 **Serves:** Resolving an unpaid order - a payment started in time counts
 
@@ -236,6 +252,7 @@ control on an expired invoice, and Grade10 SHALL refuse both actions from them.
 - **THEN** the invoice is `pending` until 2026-09-19T09:00:20Z
 - **AND** Grade10 writes `expired` at 2026-09-19T09:00:20Z
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-g73 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-89 - An operator without the grant cannot settle an expired invoice
 **Serves:** Resolving an unpaid order - settling needs payment-processing
 

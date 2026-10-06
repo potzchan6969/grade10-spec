@@ -36,6 +36,7 @@ through.
 
 The summary a round posts SHALL show the hand of the stage the moves that are theirs and no other hand's; a held row addressed to another hand SHALL be posted as the round's own reply in the change's thread, mentioning that hand, once per change, round and row, carrying the row's question, the sentence it would put on the page, and every decision row it touches quoted; and a reply from a hand MAY carry one answer and any number of remarks, a remark being applied and read again before anything lands.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-bwk rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-86 - A held row for QA is QA's reply
 **Serves:** shared-planning-agent-rounds-US-13 - the hand reads their moves and QA reads the row that is theirs
 
@@ -46,6 +47,7 @@ The summary a round posts SHALL show the hand of the stage the moves that are th
 - **AND** a re-run of the same round posts that reply no second time
 - **AND** the engineer's summary offers `land with recommendations` only while that row is open
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-eh0 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-87 - One reply, an answer and remarks
 **Serves:** shared-planning-agent-rounds-US-13 - one reply carries the hand's answer and remarks
 
@@ -57,6 +59,7 @@ The summary a round posts SHALL show the hand of the stage the moves that are th
 
 A product detail a build round lands on a page — from a fix pass, a decided row or a reader's finding — SHALL be written as a ❓ line naming the change's product manager, never as decided by the round, and the reply to the product manager SHALL quote the page's line before and after the change, nothing before for a line added and nothing after for a line removed; the line SHALL hold no landing, and once answered SHALL carry 🚧 until the change that delivers it archives.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-ffr rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-88 - A build round's product line reaches the product manager
 **Serves:** shared-planning-agent-rounds-US-10 - the product manager's page changes only on their word
 
@@ -70,6 +73,7 @@ A product detail a build round lands on a page — from a fix pass, a decided ro
 
 The landing of `spec.md` and `feature-tcs.md` SHALL be a move to the `qa` hand: the turn message every hand gets SHALL reach them naming the suite's path, its case count and `/tcs-review <change>`, the role's channel where the record names no QA; and the plan's walk group SHALL name the suite's review as an input beside the groups it needs.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-rad rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-89 - The suite's landing tells QA
 **Serves:** shared-planning-agent-rounds-US-11 - QA is asked the day the suite lands
 
@@ -78,6 +82,7 @@ The landing of `spec.md` and `feature-tcs.md` SHALL be a move to the `qa` hand: 
 - **THEN** QA receives one turn message naming the suite's path, its case count and the review command
 - **AND** a second push leaving the change in Specified sends it no second time
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-xw0 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-90 - The walk names the review
 **Serves:** shared-planning-agent-rounds-US-11 - the walk names QA's review as its input
 
@@ -89,6 +94,7 @@ The landing of `spec.md` and `feature-tcs.md` SHALL be a move to the `qa` hand: 
 
 The first round's interview SHALL ask about three questions, the ones whose answers change most what is built, one of them whether to do the change now, alone when nothing else is open; SHALL hold as a row, never apply as a default, any further choice that `A preference is decided, and a held row waits for its hand` holds; SHALL list every default it applies as decided by the round in the same message; and on `not now` SHALL write a wait on the product manager and draft nothing ahead.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-lv8 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-91 - About three questions and the defaults
 **Serves:** shared-planning-agent-rounds-US-14 - the product manager spends the round on decisions
 
@@ -101,6 +107,7 @@ The first round's interview SHALL ask about three questions, the ones whose answ
 
 The `apply` block's perspectives SHALL carry `when:` triggers read from the group's diff as an artifact's are: the build's three readings on `code`, the reader of words on `copy`, QA and the simpler thing always, a message catalog's line raising `copy` and never `code`; a group that lands prose alone SHALL be read by the reader of words, QA and the simpler thing, one that lands code by the build's three readings, QA and the simpler thing, and one that lands both by all.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-ocy rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-92 - A prose group summons the page's readers
 **Serves:** shared-planning-agent-rounds-US-13 - a hand's prose is read by the reader of words, not the build
 
@@ -109,6 +116,7 @@ The `apply` block's perspectives SHALL carry `when:` triggers read from the grou
 - **THEN** the reader of words, QA and the simpler thing are summoned and the build's three readings are not
 - **AND** a group whose diff touches a message catalog alone is read the same way
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-1qt rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-93 - A code group summons the build
 **Serves:** shared-planning-agent-rounds-US-12 - the engineer's code is read by the build
 
@@ -120,6 +128,7 @@ The `apply` block's perspectives SHALL carry `when:` triggers read from the grou
 
 A reader or verifier the round ran on the fallback model — `sonnet`, unless the definition already names it — SHALL be named in the row's perspectives cell and the summary's perspectives line as `<name> (fallback)`, written from the model the run reports; the landing SHALL accept that suffix alone and hold the name to the schema's list with it stripped; a dispatch the vendor killed SHALL be retried once on the fallback, and a reader still missing SHALL stop the round before the summary, the thread told which reader it lacks.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-g5b rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-95 - A verifier that fell back
 **Serves:** shared-planning-agent-rounds-US-12 - the engineer's row says which reader fell back
 
@@ -128,6 +137,7 @@ A reader or verifier the round ran on the fallback model — `sonnet`, unless th
 - **THEN** its perspectives cell reads `verifier (fallback)`, the summary's perspectives line reads the same, and the landing accepts it
 - **AND** a cell reading `verifier (banana)` is refused
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-6ut rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-105 - A reader the fallback could not run
 **Serves:** shared-planning-agent-rounds-US-13 - the hand is told the round is short a reader, not handed a thinner summary
 
@@ -139,6 +149,7 @@ A reader or verifier the round ran on the fallback model — `sonnet`, unless th
 
 A `--tests` path SHALL be bare, and the group's repository tag SHALL say which clone holds it; the landing SHALL resolve an application group's paths in the application clone it runs beside — `--app-root <dir>` when given, otherwise the clone the store's superproject names — and SHALL refuse a path that clone holds no file at, or a landing that reaches no clone, naming the path and the root it looked in.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-vus rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-96 - An application group's row lands
 **Serves:** shared-planning-agent-rounds-US-12 - the engineer lands an application group's row through the command
 
@@ -146,6 +157,7 @@ A `--tests` path SHALL be bare, and the group's repository tag SHALL say which c
 - **WHEN** the landing runs against the store clone from inside the application repository
 - **THEN** the path resolves in the application clone and the row lands
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-lek rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-97 - A path the application clone does not hold
 **Serves:** shared-planning-agent-rounds-US-12 - a row never names a file that is not there
 
@@ -158,6 +170,7 @@ A `--tests` path SHALL be bare, and the group's repository tag SHALL say which c
 
 One helper in `scripts/openspec/lib/` SHALL read a file for an id with a boundary after it, so `SC-1` never matches `SC-12`; the landing SHALL refuse a `--tests` entry whose resolved file carries no such scenario id, and the suite's validation SHALL refuse a Manual row whose named test resolves in this store and carries no such case id, skipping a path this store does not hold.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-t06 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-98 - A file credited for an id it does not carry
 **Serves:** shared-planning-agent-rounds-US-12 - a row never credits a file for what it does not prove
 
@@ -165,6 +178,7 @@ One helper in `scripts/openspec/lib/` SHALL read a file for an id with a boundar
 - **WHEN** the landing runs with the path resolved
 - **THEN** it is refused, naming the path and the id
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-5kc rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-106 - A Manual row's test carries no such case
 **Serves:** shared-planning-agent-rounds-US-11 - QA's Manual table credits only what a test proves
 
@@ -176,6 +190,7 @@ One helper in `scripts/openspec/lib/` SHALL read a file for an id with a boundar
 
 A landing on a group whose verify lane could not run SHALL take `--unrun "<why>"` and SHALL write `written, not run — <why>` as the first clause of the row's stood cell; the group's tasks SHALL stay unticked and the suite's Manual rows naming its walk SHALL read `to be walked in` until the run that ran the lane writes the row that says so and rewrites them; nothing SHALL refuse the tick on the clause.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-zua rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-99 - An unrun walk keeps its tasks unticked
 **Serves:** shared-planning-agent-rounds-US-12 - an unrun lane is said first and ticked later
 
@@ -188,6 +203,7 @@ A landing on a group whose verify lane could not run SHALL take `--unrun "<why>"
 
 The manual's checks SHALL count a capability a change declares as a `specs/<capability>/` directory among the changing, so a page whose `spec:` names it resolves before the delta exists; SHALL let a written design wait on its frame, refusing only a wait that names nothing; SHALL name two in-flight deltas that fold one requirement to each other however each is headed. The suite's validation SHALL refuse a `### Manual` outside `## Reconciliation` on a suite that carries a reconciliation, and the fold's strip SHALL cover the Manual rows.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-rw1 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-100 - A page written first resolves
 **Serves:** shared-planning-agent-rounds-US-10 - the product manager's page written first is not refused
 
@@ -195,6 +211,7 @@ The manual's checks SHALL count a capability a change declares as a `specs/<capa
 - **WHEN** `check:manual` runs
 - **THEN** the reference resolves
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-bgg rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-101 - A written design waits on its frame
 **Serves:** shared-planning-agent-rounds-US-15 - the designer's written design lands with its wait
 
@@ -202,6 +219,7 @@ The manual's checks SHALL count a capability a change declares as a `specs/<capa
 - **WHEN** `check:manual` runs
 - **THEN** the wait stands and is listed, and a wait naming nothing is refused where the record is read
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-nrs rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-102 - Two deltas on one requirement
 **Serves:** shared-planning-agent-rounds-US-16 - the engineer reads both changes before building on either
 
@@ -209,6 +227,7 @@ The manual's checks SHALL count a capability a change declares as a `specs/<capa
 - **WHEN** `check:manual` runs
 - **THEN** each change is named to the other with the other's heading, and the check fails
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-wiw rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-103 - A Manual table outside the reconciliation
 **Serves:** shared-planning-agent-rounds-US-11 - QA's suite is refused where it is written, not at the fold
 
@@ -220,6 +239,7 @@ The manual's checks SHALL count a capability a change declares as a `specs/<capa
 
 `pnpm plan done` SHALL read every bracketed case id in the group's end-to-end files, in the pass that reads a task's scenario ids, and SHALL refuse the tick for one the ticking change owns that is not `actual` in the store clone the registry names — draft, deprecated, or an older revision of a case its suite holds — or one no live suite issues under any revision, naming the id and its status. The change owns a case its own suites head; an id another change issued is that change's to sign and does not hold the tick.
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-psm rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-104 - A walk carrying a draft case's id
 **Serves:** shared-planning-agent-rounds-US-11 - no walk carries an id QA has not signed
 

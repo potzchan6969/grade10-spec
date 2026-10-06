@@ -19,6 +19,7 @@ SHALL render no item and SHALL NOT present previous/next as available.
 
 `ListingGallery` strip rules are unchanged by this requirement.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-nlz rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-47 - Wide ListingLotGallery shows a left rail
 **Serves:** Gallery strip - wide ListingLotGallery shows a left rail
 
@@ -28,6 +29,7 @@ SHALL render no item and SHALL NOT present previous/next as available.
 - **THEN** a thumbnail exists for each image in a rail beside the main frame
 - **AND** previous and next remain available
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ed7 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-48 - Stacked ListingLotGallery hides the rail
 **Serves:** Gallery strip - stacked ListingLotGallery hides the rail
 
@@ -38,6 +40,7 @@ SHALL render no item and SHALL NOT present previous/next as available.
 - **AND** previous and next remain available
 - **AND** carousel progress remains available
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ln3 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-49 - One ListingLotGallery image has no rail
 **Serves:** Gallery strip - one ListingLotGallery image has no rail
 

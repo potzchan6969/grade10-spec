@@ -11,6 +11,7 @@
 **I want** the lot page's blocks to show the gallery, my bidding and its disclosures as the contract states,
 **so that** every storefront composing them shows me the same thing.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-4f9 rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
 ### shared-ui-auction-listing-US1-TC27-1: Closed sold Recent bids show a winner crown
 
 **Classification:**
@@ -41,6 +42,7 @@
 * Step 1: the row shows a crown in the primary colour after the amount and before the You badge, with accessible name Winner.
 * Step 2: no row shows a crown.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-8pk rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
 ### shared-ui-auction-listing-US1-TC28-1: Equal-max non-leader shows earlier-leads tip
 
 **Classification:**
@@ -70,6 +72,7 @@
 * Step 1: the Info icon shows in the same tone as the row's amount.
 * Step 2: the tooltip reads When maximums match, the earlier one leads.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-1bg rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
 ### shared-ui-auction-listing-US1-TC29-1: No crown without its name
 
 **Classification:**

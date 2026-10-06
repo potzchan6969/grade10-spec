@@ -84,6 +84,7 @@ Sending the invoice SHALL retire the address deadline. The delivery address
 locks at send, per "The delivery address locks when the invoice is sent", so
 Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-oos rev=1 -->
 #### Scenario: winner-order-SC-144 - The address deadline counts from the extended close
 **Serves:** winner-order-US-23 - Winner gets the address form back
 
@@ -92,6 +93,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **WHEN** the winner opens the order
 - **THEN** the address deadline shown is 2026-09-14T09:00:00Z
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-r6m rev=1 -->
 #### Scenario: winner-order-SC-145 - An address received just inside the deadline is accepted
 **Serves:** winner-order-US-23 - Winner gets the address form back
 
@@ -100,6 +102,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **THEN** Grade10 accepts the confirmation
 - **AND** the order's derived status is Preparing Invoice
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-kz8 rev=1 -->
 #### Scenario: winner-order-SC-146 - An address received after the deadline is refused
 **Serves:** winner-order-US-23 - Winner gets the address form back
 
@@ -110,6 +113,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** the order has no confirmed delivery address
 - **AND** its derived status is still Setup Overdue
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-h4t rev=1 -->
 #### Scenario: winner-order-SC-147 - A confirmed address cannot be changed after the deadline
 **Serves:** winner-order-US-23 - Winner gets the address form back
 
@@ -124,6 +128,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
   2026-09-13T10:00:00Z
 - **AND** the order carries Contact Us and no change control
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-6ax rev=1 -->
 #### Scenario: winner-order-SC-148 - A reopen gives the winner a fresh 48 hours
 **Serves:** winner-order-US-23 - Winner gets the address form back
 
@@ -135,6 +140,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** the winner can confirm a delivery address again
 - **AND** Grade10 offers the winner no way to reopen it themselves
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-90v rev=1 -->
 #### Scenario: winner-order-SC-149 - A reopen sends the winner no letter
 **Serves:** winner-order-US-23 - Winner gets the address form back
 
@@ -144,6 +150,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **THEN** the order offers Confirm delivery address again
 - **AND** Grade10 sends the winner no letter about the reopen
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-js5 rev=1 -->
 #### Scenario: winner-order-SC-150 - Sending the invoice retires the address deadline
 **Serves:** Delivery address - sending the invoice retires the address deadline
 
@@ -154,6 +161,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** it shows the locked address and how to reach Grade10 to request a
   change
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-byg rev=1 -->
 #### Scenario: winner-order-SC-151 - A missed address deadline leaves the address book alone
 **Serves:** Delivery address - a missed address deadline leaves the address book alone
 

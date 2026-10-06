@@ -20,6 +20,7 @@ no running balance. It SHALL hide Pay, Submit Payment Proof, View Bank Details,
 address changes, invoice reissue and cancellation, and SHALL show no further
 payment deadline.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-34b rev=1 -->
 #### Scenario: winner-order-SC-156 - The partially paid order is locked
 **Serves:** winner-order-US-20 - Winner sees partial collection without a second order
 

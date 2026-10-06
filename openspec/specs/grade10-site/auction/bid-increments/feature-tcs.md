@@ -205,6 +205,7 @@ An open listing is available in <listing currency>.
 - `grade10-site-auction-bid-increments-SC-06` — API and operator-form currency refusal is covered by the backend and admin verification lanes.
 - `grade10-site-auction-bid-increments-SC-07` — Manual-floor calculation is covered by the backend auction test lane.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-n6d rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk,g10.auction-bid-increments.SC-w8f -->
 ### grade10-site-auction-bid-increments-US1-TC6-1: First bid at the opening price is accepted, then one increment applies
 
 Runs once per row of **Test data**.
@@ -249,6 +250,7 @@ Runs once per row of **Test data**.
 * Step 3: the minimum next amount is the opening price plus the increment at the opening price, the row's next minimum after.
 * On the USD 10000 row the USD 100 tier applies, not the USD 0 tier.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-9do rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk,g10.auction-bid-increments.SC-w8f -->
 ### grade10-site-auction-bid-increments-US1-TC7-1: First bid below the opening price is refused
 
 Runs once per row of **Test data**.
@@ -292,6 +294,7 @@ Runs once per row of **Test data**.
 * Step 3: the listing still has no accepted bid.
 * Step 3: the minimum next amount is still the row's opening price.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-4ox rev=2 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk,g10.auction-bid-increments.SC-w8f -->
 ### grade10-site-auction-bid-increments-US1-TC8-2: Lot starting at the ceiling takes one first bid there
 
 Runs once per row of **Test data**.

@@ -271,6 +271,7 @@ Runs once per row of **Test data**.
 * Step 3 shows <the successful Visa>, with Change no longer offered.
 * Step 4: nothing is held or charged on <the successful Visa> for <listing_2>.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-rg2 rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
 ### grade10-site-auction-bid-payment-method-US1-TC7-1: Only the winner pays, through Checkout on the winner order
 
 **Classification:**
@@ -311,6 +312,7 @@ Runs once per row of **Test data**.
 * Step 2: nothing is held or charged on either card, by the bids or by the close.
 * Step 4 opens the provider's hosted Checkout for the winner order's invoice.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-hgh rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
 ### grade10-site-auction-bid-payment-method-US1-TC8-1: A bid from an account with no linked card is refused, asking for a card
 
 **Classification:**
@@ -352,6 +354,7 @@ Runs once per row of **Test data**.
 * Step 4: Highest bid and the bid count are unchanged.
 * Step 5 shows no row for <listing_1>.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-ilh rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
 ### grade10-site-auction-bid-payment-method-US1-TC9-1: A bid on another card after the first accepted bid is refused as locked
 
 **Classification:**
@@ -393,6 +396,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the bid because the listing's card is locked.
 * Step 3: the current bid and leader are unchanged, and the collector's maximum stays <locked maximum> on <the successful Visa>.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-l7t rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
 ### grade10-site-auction-bid-payment-method-US1-TC10-1: A refused first bid leaves the card changeable
 
 **Classification:**
@@ -531,6 +535,7 @@ Runs once per row of **Test data**.
 **I want** the hold on my card cancelled,
 **so that** money is not held for a listing I cannot win.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-txz rev=1 covers=none -->
 ### grade10-site-auction-bid-payment-method-US3-TC1-1: Being outbid cancels the hold once, capturing nothing
 
 **Classification:**

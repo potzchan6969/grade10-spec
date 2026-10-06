@@ -178,6 +178,7 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The page is that lot's page.
 
+<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
 ### grade10-site-auction-listing-page-US3-TC3-1: Hidden lot's address shows Page not found
 
 **Classification:**
@@ -357,6 +358,7 @@ None.
 **I want** Watching to tell me email alerts are on and offer My Auctions,
 **so that** I know how to manage that lot without hunting for the account page.
 
+<!-- trace:case id=g10.auction-listing-page.TC-4op rev=1 covers=g10.auction-listing-page.SC-z67,g10.auction-listing-page.SC-omp -->
 ### grade10-site-auction-listing-page-US6-TC1-1: Watch announces alerts on and opens My Auctions
 
 **Classification:**
@@ -396,6 +398,7 @@ None.
 * Step 3: My Auctions opens and lists <lot_1> once, Your Standing `--`.
 * Step 3: <lot_1>'s email alerts switch is on.
 
+<!-- trace:case id=g10.auction-listing-page.TC-sip rev=1 covers=g10.auction-listing-page.SC-z67,g10.auction-listing-page.SC-omp -->
 ### grade10-site-auction-listing-page-US6-TC2-1: Signed-out viewer is offered sign-in, no watch
 
 **Classification:**
@@ -440,6 +443,7 @@ None.
 **I want** Unwatch to confirm alerts are off and let me Undo,
 **so that** a mis-tap does not force me to find the lot again.
 
+<!-- trace:case id=g10.auction-listing-page.TC-pjv rev=1 covers=g10.auction-listing-page.SC-15a -->
 ### grade10-site-auction-listing-page-US7-TC1-1: Unwatch removes the lot and turns alerts off
 
 **Classification:**
@@ -477,6 +481,7 @@ None.
 * Step 1: current bid, time left and bid panel are unchanged.
 * Step 2: <lot_2> is not listed.
 
+<!-- trace:case id=g10.auction-listing-page.TC-i5l rev=1 covers=g10.auction-listing-page.SC-15a -->
 ### grade10-site-auction-listing-page-US7-TC2-1: Undo restores the watch with alerts on
 
 **Classification:**
@@ -522,6 +527,7 @@ None.
 **I want** the watch control locked as Watching and one alerts toast when the bid bookmarks the lot,
 **so that** I am not invited to unwatch money I already put down, and I am not toasted on every revisit.
 
+<!-- trace:case id=g10.auction-listing-page.TC-jhd rev=1 covers=g10.auction-listing-page.SC-krh,g10.auction-listing-page.SC-arf,g10.auction-listing-page.SC-bs7 -->
 ### grade10-site-auction-listing-page-US8-TC1-1: First bid locks Watching and toasts alerts once
 
 **Classification:**
@@ -561,6 +567,7 @@ None.
 * Step 2: nothing changes; no Unwatch toast.
 * Step 3: the control still reads Watching, disabled; no alerts toast.
 
+<!-- trace:case id=g10.auction-listing-page.TC-amc rev=1 covers=g10.auction-listing-page.SC-krh,g10.auction-listing-page.SC-arf,g10.auction-listing-page.SC-bs7 -->
 ### grade10-site-auction-listing-page-US8-TC2-1: A second bid on the lot shows no alerts toast
 
 **Classification:**
@@ -604,6 +611,7 @@ None.
 **I want** no Watch / Watching control,
 **so that** I am not invited to watch a sale that has already ended.
 
+<!-- trace:case id=g10.auction-listing-page.TC-84a rev=1 covers=g10.auction-listing-page.SC-n70 -->
 ### grade10-site-auction-listing-page-US9-TC1-1: A closed lot shows no watch control
 
 Runs once per row of **Test data**.
@@ -654,6 +662,7 @@ Runs once per row of **Test data**.
 **I want** to reference and share a lot by its title and URL,
 **so that** I can discuss it with others and return to it easily.
 
+<!-- trace:case id=g10.auction-listing-page.TC-nis rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC1-1: Listing code absent from the response before scripts run
 
 **Classification:**
@@ -685,6 +694,7 @@ Runs once per row of **Test data**.
 * The source names the lot by its title.
 * The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
 
+<!-- trace:case id=g10.auction-listing-page.TC-87q rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC2-1: Listing code absent from the page once scripts finish running
 
 **Classification:**
@@ -716,6 +726,7 @@ Runs once per row of **Test data**.
 * The rendered page has no labelled listing-code or payment-reference field.
 * Every code occurrence in the source is the lower-case suffix of the canonical address.
 
+<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC3-1: Listing code absent from the shared-link preview
 
 **Classification:**
@@ -749,6 +760,7 @@ Runs once per row of **Test data**.
 Previously cached preview content may persist; the test does not require a
 purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
+<!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC4-1: Listing code absent from the page title and meta description
 
 **Classification:**
@@ -778,6 +790,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * Neither the tab title nor the meta description contains the listing code.
 
+<!-- trace:case id=g10.auction-listing-page.TC-udy rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC5-1: Listing code absent from the page's embedded data
 
 **Classification:**
@@ -808,6 +821,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * No field in the embedded data carries the listing code.
 
+<!-- trace:case id=g10.auction-listing-page.TC-yjo rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC6-1: Listing code absent from the page's own network responses
 
 **Classification:**
@@ -838,6 +852,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * No page response contains a separate listing-code or payment-reference field.
 
+<!-- trace:case id=g10.auction-listing-page.TC-cbx rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC7-1: Listing code does not resolve as a lot address
 
 **Classification:**
@@ -866,6 +881,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The address does not resolve to that lot's page.
 * The site's not-found surface is shown, the same as for any address naming no published lot.
 
+<!-- trace:case id=g10.auction-listing-page.TC-udv rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC8-1: Listing code stays absent regardless of the collector's signed-in state
 
 **Classification:**
@@ -896,6 +912,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix.
 * The title and address shown are identical in both views.
 
+<!-- trace:case id=g10.auction-listing-page.TC-6de rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC9-1: Listing code stays absent once an order exists on the lot
 
 **Classification:**
@@ -926,6 +943,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The page and preview contain no labelled listing-code or payment-reference field.
 * The code appears only as the lower-case suffix of the canonical address.
 
+<!-- trace:case id=g10.auction-listing-page.TC-y7l rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC10-1: An address naming no lot carries no listing code
 
 **Classification:**
@@ -955,6 +973,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Response status is 404.
 * No listing code appears anywhere in the response.
 
+<!-- trace:case id=g10.auction-listing-page.TC-90g rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC11-1: A listing removed from browse and search remains available at its original URL
 
 **Classification:**
@@ -989,6 +1008,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata.
 * Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`.
 
+<!-- trace:case id=g10.auction-listing-page.TC-k71 rev=1 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC12-1: A cached preview may persist after browse/search removal without private data
 
 **Classification:**
@@ -1029,6 +1049,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **I want** support to quickly identify which lot I'm referring to,
 **so that** my inquiry is resolved faster without having to copy listing URLs or titles.
 
+<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US11-TC1-1: No listing code available on the page for the collector to send
 
 **Classification:**
@@ -1058,6 +1079,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * The page has no labelled listing-code or payment-reference field for the collector to copy; its canonical address may end in the lower-case code suffix.
 
+<!-- trace:case id=g10.auction-listing-page.TC-wxd rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US11-TC2-1: A listing code known from elsewhere gives no working link
 
 **Classification:**
@@ -1086,6 +1108,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The listing code does not resolve to the lot.
 * No working link to the lot can be built from the code alone.
 
+<!-- trace:case id=g10.auction-listing-page.TC-h6y rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US11-TC3-1: Title and address stay the collector's only reference once an order exists
 
 **Classification:**
@@ -1115,6 +1138,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The title and canonical address are unchanged by the order.
 * The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix.
 
+<!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US11-TC4-1: Called-off listing remains directly accessible
 
 **Classification:**
@@ -1155,6 +1179,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **I want** a bid placed on another page to show on mine with the new price and close, without a reload,
 **so that** I bid against the price that stands.
 
+<!-- trace:case id=g10.auction-listing-page.TC-3rf rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC1-1: Another session's bid shows its price and bid count without a reload
 
 **Classification:**
@@ -1197,6 +1222,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Time left still counts to the scheduled close.
 * customer A's page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-d35 rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC2-1: Scheduled close with a bid turns to Extended bidding without a reload
 
 **Classification:**
@@ -1235,6 +1261,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Time left is labelled Extended bidding and counts to the scheduled close plus `<extension duration>`.
 * The page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-b7y rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC3-1: A page with no live line still catches up without a reload
 
 **Classification:**
@@ -1275,6 +1302,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Highest bid reads `<bid amount>` and the bid count includes customer B's bid.
 * customer A's page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-nz3 rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC4-1: A page that lost its line catches up when it returns
 
 **Classification:**
@@ -1316,6 +1344,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Highest bid reads `<bid amount>` and the bid count includes customer B's bid.
 * customer A's page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-5ps rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC5-1: Leader's own standing turns to Outbid without a reload
 
 **Classification:**
@@ -1359,6 +1388,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Step 3 reads Highest bid `<user A maximum>` plus `<increment>`.
 * Step 3 shows the next valid bid, Highest bid plus its increment.
 
+<!-- trace:case id=g10.auction-listing-page.TC-wzt rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC6-1: Live updates name no bidder and no maximum
 
 **Classification:**
@@ -1399,6 +1429,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * No message carries `<user A maximum>`, an account id, an email or a card detail.
 * Any bidder a message names appears only by the lot's pseudonym.
 
+<!-- trace:case id=g10.auction-listing-page.TC-0yw rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC7-1: A tied maximum that came second carries the earlier-leads tip
 
 **Classification:**
@@ -1438,6 +1469,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Step 3: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one.
 * Step 4: the tip reads When maximums match, the earlier one leads.
 
+<!-- trace:case id=g10.auction-listing-page.TC-7nz rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
 ### grade10-site-auction-listing-page-US12-TC8-1: An older tie lower down keeps the earlier-leads tip
 
 **Classification:**
@@ -1488,6 +1520,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **I want** the lot's countdown to agree with every other page on that lot, whatever my device's clock says,
 **so that** the time I see left is the time I have.
 
+<!-- trace:case id=g10.auction-listing-page.TC-o3v rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-listing-page-US13-TC1-1: Countdown agrees across devices whose clocks disagree
 
 Runs once per row of **Test data**.
@@ -1534,6 +1567,7 @@ Runs once per row of **Test data**.
 * Both pages read the same Time left, to the second, at step 3.
 * Neither page is off by `<device skew>`.
 
+<!-- trace:case id=g10.auction-listing-page.TC-56e rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-listing-page-US13-TC2-1: Last second never reads 0 while the lot takes bids
 
 **Classification:**
@@ -1573,6 +1607,7 @@ Runs once per row of **Test data**.
 * At step 2 Time left reads 1 second, never 0.
 * At step 3 Time left reads 0 or the lot reads Closed.
 
+<!-- trace:case id=g10.auction-listing-page.TC-iu2 rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-listing-page-US13-TC3-1: Countdown corrects itself after the page was away
 
 Runs once per row of **Test data**.
@@ -1619,6 +1654,7 @@ Runs once per row of **Test data**.
 
 * Both pages read the same Time left, to the second.
 
+<!-- trace:case id=g10.auction-listing-page.TC-ncg rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
 ### grade10-site-auction-listing-page-US13-TC4-1: A sub-second correction never makes the countdown jump up
 
 **Classification:**
@@ -1665,6 +1701,7 @@ Runs once per row of **Test data**.
 **I want** a lot past its close to read Closed until its result is recorded, then Won or Did not win,
 **so that** I am never shown a result the auction has not decided.
 
+<!-- trace:case id=g10.auction-listing-page.TC-ffc rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC1-1: Closed shows until the close is recorded, then the result
 
 Runs once per row of **Test data**.
@@ -1705,6 +1742,7 @@ Runs once per row of **Test data**.
 * Once the close passes, the page reads Closed with no result.
 * The page then reads `<result>`, without a reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-iet rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC2-1: A delayed close keeps Closed and never guesses a result
 
 **Classification:**
@@ -1745,6 +1783,7 @@ Runs once per row of **Test data**.
 * No step shows Won, Did not win or Ended before the close is recorded.
 * After step 4 the page reads Won, without a reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-jic rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC3-1: A bid still confirming at the close reads in existing words
 
 **Classification:**
@@ -1787,6 +1826,7 @@ Runs once per row of **Test data**.
 * At step 4 the bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
 * The lot reads Did not win for customer A, with customer B's price as Highest bid.
 
+<!-- trace:case id=g10.auction-listing-page.TC-51a rev=2 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC4-2: A bid reaching the auction after the close reads in existing words
 
 **Classification:**
@@ -1831,6 +1871,7 @@ Runs once per row of **Test data**.
 * At step 5 Highest bid reads `<leader price>`.
 * At step 5 customer A's page shows neither Won nor Did not win.
 
+<!-- trace:case id=g10.auction-listing-page.TC-1pq rev=2 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC5-2: A lone first bid refused past the close leaves the lot Ended with No bids
 
 **Classification:**
@@ -1874,6 +1915,7 @@ Runs once per row of **Test data**.
 * At step 5 the lot reads Ended, with No bids under it.
 * At step 5 the page shows neither Won nor Did not win.
 
+<!-- trace:case id=g10.auction-listing-page.TC-ecq rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC6-1: A later close turns a Closed page back to Extended bidding
 
 **Classification:**
@@ -1915,6 +1957,7 @@ Runs once per row of **Test data**.
 * At step 3 the bid controls are enabled.
 * No step shows Won, Did not win or Ended, and the page did not reload.
 
+<!-- trace:case id=g10.auction-listing-page.TC-4ba rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC7-1: A sold lot crowns its winning bid and no other
 
 **Classification:**
@@ -1947,6 +1990,7 @@ Runs once per row of **Test data**.
 * Step 3: customer A's winning row shows a crown named Winner after the amount.
 * Step 3: no other row, customer B's included, shows a crown.
 
+<!-- trace:case id=g10.auction-listing-page.TC-hqd rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
 ### grade10-site-auction-listing-page-US14-TC8-1: A lot without a winner crowns no bid
 
 **Classification:**

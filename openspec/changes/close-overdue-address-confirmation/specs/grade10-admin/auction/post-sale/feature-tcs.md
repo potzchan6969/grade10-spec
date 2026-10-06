@@ -9,6 +9,7 @@
 **I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
 **so that** a winner who got in touch can finish the order without me cancelling the lot.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-unr rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC1-1: Reopen gives a fresh 48 hours from the moment it reopens
 
 **Classification:**
@@ -48,6 +49,7 @@
 * The address deadline is 2026-09-09T09:00:00Z, 48 hours from `<the reopen>`.
 * It is not measured from the lot close.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-6p3 rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC2-1: Reopen without a reason is refused
 
 **Classification:**
@@ -80,6 +82,7 @@
 * The address deadline is unchanged.
 * The winner still cannot confirm an address.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-l8m rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC3-1: Reopen is refused without the payment-processing grant
 
 **Classification:**
@@ -111,6 +114,7 @@
 * The reopen is refused.
 * The address deadline is unchanged.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-r1s rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC4-1: Reopen derives Awaiting Setup from Setup Overdue
 
 **Classification:**
@@ -142,6 +146,7 @@
 * The address form is open again.
 * The row no longer needs action.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-htq rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC5-1: A second reopen starts the 48 hours again
 
 **Classification:**
@@ -180,6 +185,7 @@
 * The address deadline is 2026-09-12T15:00:00Z.
 * No cap on the number of reopens is applied.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-t9r rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC6-1: No reopen is offered once the invoice has been sent
 
 **Classification:**
@@ -211,6 +217,7 @@
 * The detail offers a re-quote and reissue instead.
 * The locked address is unchanged.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-itu rev=1 covers=g10adm.auction-post-sale.SC-egm -->
 ### post-sale-US18-TC27-1: A confirmed address cannot reopen
 
 **Classification:**
@@ -242,6 +249,7 @@
 * The order remains Preparing Invoice.
 * The winner receives no reopened address form.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-5rs rev=1 covers=g10adm.auction-post-sale.SC-fzv,g10adm.auction-post-sale.SC-blu,g10adm.auction-post-sale.SC-su0 -->
 ### post-sale-US18-TC7-1: Reopen is logged with its reason and its new close
 
 **Classification:**
@@ -278,6 +286,7 @@
 * It names the operator, `<reason>`, and the new address deadline.
 * Earlier entries are unchanged beside it.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-w9k rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
 ### post-sale-US18-TC8-1: The two pre-invoice outcomes filter apart
 
 **Classification:**
@@ -309,6 +318,7 @@
 * Step 2 lists `<preparing-invoice order>` and not `<awaiting-address order>`.
 * Each row wears one outcome.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-qkb rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
 ### post-sale-US18-TC9-1: Only the rows waiting on an operator need action
 
 Runs once per row of **Test data**.
@@ -349,6 +359,7 @@ Runs once per row of **Test data**.
 * The needs-action treatment matches the row.
 * `<expired-invoice order>` shows its Expired invoice status beside Pending Payment.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-6iu rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
 ### post-sale-US18-TC10-1: Awaiting Setup becomes Setup Overdue at the 48-hour address deadline
 
 Runs once per row of **Test data**. The Preparing Invoice stage is intentionally not included here because it does not derive Setup Overdue; TC24 asserts that absence.
@@ -387,6 +398,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The outcome is the one the row names.
 * The order is not expired or closed by the derived status.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-dkd rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
 ### post-sale-US18-TC24-1: Preparing Invoice does not derive Setup Overdue before invoice send
 
 **Classification:**
@@ -418,6 +430,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * No payment Overdue timer or payment deadline exists before invoice send.
 
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-kp5 rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC25-1: Concurrent address write and reopen serialize
 
 **Classification:**
@@ -449,6 +462,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The final snapshot and deadline match the last committed transition.
 * The order is internally consistent and no partial address overwrite exists.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-20s rev=1 covers=g10adm.auction-post-sale.SC-fzv,g10adm.auction-post-sale.SC-blu,g10adm.auction-post-sale.SC-su0 -->
 ### post-sale-US18-TC26-1: Phone-recorded address carries an audit actor and reason
 
 **Classification:**
@@ -479,6 +493,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The order derives as Preparing Invoice while the winner window remains closed.
 * The log names the operator, timestamp and reason.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-zl5 rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
 ### post-sale-US18-TC11-1: Send locks the address and starts the seven days
 
 **Classification:**
@@ -519,6 +534,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The payment deadline is 2026-09-12T09:00:00Z.
 * The delivery address is locked and the winner can no longer change it.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-84x rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
 ### post-sale-US18-TC12-1: Send is refused while no address is confirmed
 
 **Classification:**
@@ -550,6 +566,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * No invoice is issued and no payment deadline starts.
 * The order still derives Awaiting Setup.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-goe rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
 ### post-sale-US18-TC13-1: A closed window does not stop an operator sending
 
 **Classification:**
@@ -581,6 +598,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The order derives Pending Payment with a seven-day deadline.
 * The closed window gated the winner's write, not the operator's send.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-29v rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC14-1: Cancelling before a send returns the lot to available
 
 **Classification:**
@@ -618,6 +636,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The order derives Cancelled and leaves the pre-invoice queue.
 * The lot's inventory status is available and it can be listed again.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-f7o rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC15-1: A cancelled order refuses a reopen
 
 **Classification:**
@@ -649,6 +668,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The order still derives as Cancelled.
 * The lot stays in available stock.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-b2d rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
 ### post-sale-US18-TC16-1: An operator records the address without reopening
 
 **Classification:**
@@ -680,6 +700,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The address window is still closed.
 * The winner is offered no address form.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-o6m rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC17-1: Manual settlement pays an expired invoice and ends what is owed
 
 **Classification:**
@@ -720,6 +741,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The Expired invoice status is gone; the invoice reads paid.
 * Winner Order shows no amount owed and no card Pay.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-0g4 rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC18-1: A card payment just before the deadline is accepted
 
 **Classification:**
@@ -758,6 +780,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The card payment is accepted.
 * The order derives Processing and never showed Expired invoice.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-54p rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC19-1: The winner cannot pay by card after the deadline
 
 **Classification:**
@@ -797,6 +820,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * After reload, no card Pay is offered; Contact Us is.
 * The order still reads Pending Payment with Expired invoice.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-mpo rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC20-1: Reissuing an expired invoice gives card payment a fresh seven days
 
 **Classification:**
@@ -836,6 +860,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * Winner Order offers card Pay again.
 * The card payment is accepted; the order derives Processing.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-2qa rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC21-1: Settling or reissuing an expired invoice needs payment-processing
 
 Runs once per row of **Test data**.
@@ -876,6 +901,7 @@ Runs once per row of **Test data**.
 * The action is refused.
 * The order still reads Pending Payment with Expired invoice, deadline unchanged.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-o2f rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC22-1: A card payment started in time completes after the deadline
 
 **Classification:**
@@ -908,6 +934,7 @@ Runs once per row of **Test data**.
 * After confirmation the invoice is `paid` and the order is Processing.
 * The invoice log holds no expired entry.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-mon rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US18-TC23-1: A card payment started in time that fails expires the invoice when it fails
 
 **Classification:**

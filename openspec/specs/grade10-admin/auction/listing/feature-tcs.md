@@ -186,6 +186,7 @@ Runs once per row of **Test data**.
 * Step 1 refuses the save.
 * Step 1 stores no listing.
 
+<!-- trace:case id=g10adm.auction-listing.TC-uka rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso,g10adm.auction-listing.SC-a6f -->
 ### grade10-admin-auction-listing-US1-TC6-1: Draft keeps a starting price of 0 apart from an empty one
 
 **Classification:**
@@ -513,6 +514,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.auction-listing.TC-kmw rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k,g10adm.auction-listing.SC-x5f,g10adm.auction-listing.SC-89c,g10adm.auction-listing.SC-cps,g10adm.auction-listing.SC-tgj,g10adm.auction-listing.SC-8h3,g10adm.auction-listing.SC-mn8 -->
 ### grade10-admin-auction-listing-US2-TC9-1: Listing saves mixed media from its selected product
 
 **Classification:**
@@ -1227,6 +1229,7 @@ Runs once per row of **Test data**.
 * Step 2 shows the listing as created.
 * Step 3 reads 1800 seconds (30mins).
 
+<!-- trace:case id=g10adm.auction-listing.TC-h7v rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
 ### grade10-admin-auction-listing-US3-TC21-1: Create accepts a starting price of 0 in each currency
 
 Runs once per row of **Test data**.
@@ -1272,6 +1275,7 @@ Runs once per row of **Test data**.
 * Step 4 shows the listing as created.
 * Step 6 reads 0 minor units in the row's currency.
 
+<!-- trace:case id=g10adm.auction-listing.TC-fc7 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
 ### grade10-admin-auction-listing-US3-TC22-1: API create refuses a negative or non-whole starting price
 
 Runs once per row of **Test data**.
@@ -1315,6 +1319,7 @@ Runs once per row of **Test data**.
 * Step 2 reads the listing as a draft.
 * Step 2 reads starting price 0 minor units in the row's currency.
 
+<!-- trace:case id=g10adm.auction-listing.TC-1h5 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
 ### grade10-admin-auction-listing-US3-TC23-1: API create with no starting price is refused, not stored as 0
 
 Runs once per row of **Test data**.
@@ -1356,6 +1361,7 @@ Runs once per row of **Test data**.
 * Step 2 reads the listing as a draft.
 * Step 2 reads the starting price empty, not 0.
 
+<!-- trace:case id=g10adm.auction-listing.TC-ebb rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
 ### grade10-admin-auction-listing-US3-TC24-1: Operator lowers a created listing's starting price to 0
 
 **Classification:**
@@ -1397,6 +1403,7 @@ Runs once per row of **Test data**.
 * Step 5 reads 0 minor units JPY.
 * Step 5 reads the listing as created.
 
+<!-- trace:case id=g10adm.auction-listing.TC-g4v rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
 ### grade10-admin-auction-listing-US3-TC25-1: API create with 0 and no currency creates as HKD 0
 
 **Classification:**
@@ -1886,6 +1893,7 @@ Runs once per row of **Test data**.
 * Step 2 uses the video as the card's media.
 * Step 2 does not require a named physical side such as front.
 
+<!-- trace:case id=g10adm.auction-listing.TC-0q9 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-fcs,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC14-1: Listing starting at 0 publishes to its public address
 
 **Classification:**
@@ -1924,6 +1932,7 @@ Runs once per row of **Test data**.
 * Step 2 shows the listing as published, with no starting-price refusal.
 * Step 3 opens <listing_8>'s public page.
 
+<!-- trace:case id=g10adm.auction-listing.TC-pcd rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-fcs,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC15-1: Published listing refuses a change to a starting price of 0
 
 **Classification:**
@@ -2646,6 +2655,7 @@ surface for the same figure.
 **I want** the stock of a listing that closed with no winner to come back on its own, and a Relist on that listing,
 **so that** a card nobody bought goes back on sale without me hunting for its stock.
 
+<!-- trace:case id=g10adm.auction-listing.TC-tjt rev=2 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC1-2: Unsold close releases the hold with no operator step
 
 Runs once per row of **Test data**.
@@ -2703,6 +2713,7 @@ Runs once per row of **Test data**.
 * Step 6: the listing says its stock was released on `<close date>`.
 * Step 7 reads `<available after>`, `<available before>` plus `<held quantity>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-juv rev=2 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC2-2: Sold and live listings show no released note or Relist
 
 Runs once per row of **Test data**.
@@ -2751,6 +2762,7 @@ Runs once per row of **Test data**.
 * Step 3 shows no released-stock note.
 * Step 4 reads the row's stock outcome.
 
+<!-- trace:case id=g10adm.auction-listing.TC-xzh rev=2 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC3-2: Relist from the row opens a new draft holding stock on Save
 
 **Classification:**
@@ -2809,6 +2821,7 @@ Runs once per row of **Test data**.
 * Step 8: the row still reads Unsold and offers no Relist.
 * Step 9: `<listing_3>` still reads Unsold, closed, with its history.
 
+<!-- trace:case id=g10adm.auction-listing.TC-bf8 rev=2 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC4-2: Relist is hidden from an admin without the operate grant
 
 **Classification:**
@@ -2846,6 +2859,7 @@ Runs once per row of **Test data**.
 * Step 1: the row reads Unsold and shows no Relist, not even disabled.
 * Step 3 shows no Relist.
 
+<!-- trace:case id=g10adm.auction-listing.TC-hh5 rev=1 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC5-1: Clean-up frees each earlier Unsold hold once
 
 **Classification:**
@@ -2908,6 +2922,7 @@ Runs once per row of **Test data**.
 * Step 10: the stock was released on `<recent close date>`, not repeated.
 * Step 12 still reads `<available after>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-et4 rev=1 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC6-1: No note or Relist while the release is retried
 
 **Classification:**
@@ -2963,6 +2978,7 @@ Runs once per row of **Test data**.
 * Step 10: the listing says its stock was released, dated the successful release.
 * Step 12: the row offers Relist.
 
+<!-- trace:case id=g10adm.auction-listing.TC-r14 rev=1 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC7-1: Relist is not offered in a campaign or after call-off
 
 Runs once per row of **Test data**.
@@ -3008,6 +3024,7 @@ Runs once per row of **Test data**.
 * Step 1: the row reads the row's status and offers no Relist.
 * Step 3 shows no Relist.
 
+<!-- trace:case id=g10adm.auction-listing.TC-smc rev=1 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC8-1: Relist left unsaved stores nothing and stays offered
 
 **Classification:**
@@ -3055,6 +3072,7 @@ Runs once per row of **Test data**.
 * Step 7 shows the same number of draft rows as step 1.
 * Step 8 still reads `<available before>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-tr8 rev=1 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC9-1: A second Relist editor saved after the first is refused
 
 **Classification:**
@@ -3115,6 +3133,7 @@ media tagged to that Cert first,
 **so that** I can build the listing gallery from the source most likely to
 document the unit I selected.
 
+<!-- trace:case id=g10adm.auction-listing.TC-hhu rev=1 covers=g10adm.auction-listing.SC-vhc,g10adm.auction-listing.SC-lvn -->
 ### grade10-admin-auction-listing-US11-TC1-1: A Cert listing offers only matching source media
 
 **Classification:**
@@ -3155,6 +3174,7 @@ document the unit I selected.
 * Step 3 offers untagged media and media tagged to <selected Cert ID>.
 * Step 3 leaves media tagged to <other Cert ID> out of the main selector.
 
+<!-- trace:case id=g10adm.auction-listing.TC-qqv rev=1 covers=g10adm.auction-listing.SC-vhc,g10adm.auction-listing.SC-lvn -->
 ### grade10-admin-auction-listing-US11-TC2-1: A Cert without printed ID gets untagged media
 
 **Classification:**
@@ -3197,6 +3217,7 @@ document the unit I selected.
 * The selector offers untagged product media, including <untagged media>.
 * Media tagged to <other Cert ID> is absent from the main selector.
 
+<!-- trace:case id=g10adm.auction-listing.TC-hb3 rev=1 covers=g10adm.auction-listing.SC-vhc,g10adm.auction-listing.SC-lvn -->
 ### grade10-admin-auction-listing-US11-TC3-1: A source from another product is refused
 
 **Classification:**
@@ -3238,6 +3259,7 @@ before I add it,
 **so that** I can make an intentional exception without mistaking it for the
 selected unit's normal media.
 
+<!-- trace:case id=g10adm.auction-listing.TC-hhx rev=1 covers=g10adm.auction-listing.SC-xyf,g10adm.auction-listing.SC-01q,g10adm.auction-listing.SC-emr -->
 ### grade10-admin-auction-listing-US12-TC1-1: The Other Cert drawer groups media by printed ID
 
 **Classification:**
@@ -3279,6 +3301,7 @@ selected unit's normal media.
 * Step 3 groups media for <other Cert ID A> and <other Cert ID B> under their printed Cert IDs.
 * Step 3 leaves untagged product media out of the Other Cert drawer.
 
+<!-- trace:case id=g10adm.auction-listing.TC-l19 rev=1 covers=g10adm.auction-listing.SC-xyf,g10adm.auction-listing.SC-01q,g10adm.auction-listing.SC-emr -->
 ### grade10-admin-auction-listing-US12-TC2-1: Adding other-Cert media identifies its source Cert
 
 **Classification:**
@@ -3320,6 +3343,7 @@ selected unit's normal media.
 * Step 3 adds <source media> to the listing gallery.
 * Step 3 names <source Cert ID> as the source Cert.
 
+<!-- trace:case id=g10adm.auction-listing.TC-msa rev=1 covers=g10adm.auction-listing.SC-xyf,g10adm.auction-listing.SC-01q,g10adm.auction-listing.SC-emr -->
 ### grade10-admin-auction-listing-US12-TC3-1: Source media additions use existing listing authority
 
 **Classification:**
@@ -3361,6 +3385,7 @@ another Cert's media,
 **so that** I can start an unnumbered listing without assuming a numbered
 copy's photographs apply.
 
+<!-- trace:case id=g10adm.auction-listing.TC-pxu rev=1 covers=g10adm.auction-listing.SC-itk -->
 ### grade10-admin-auction-listing-US13-TC1-1: A No Cert ID listing offers only untagged media
 
 **Classification:**
@@ -3410,6 +3435,7 @@ and then editable with its order,
 **so that** the listing records what I chose even if Inventory source media
 changes later.
 
+<!-- trace:case id=g10adm.auction-listing.TC-7b7 rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC1-1: Saved source media copies current bytes and alt text
 
 **Classification:**
@@ -3450,6 +3476,7 @@ changes later.
 
 * Step 3 shows a copy of <source media>'s bytes and <source alt text>.
 
+<!-- trace:case id=g10adm.auction-listing.TC-i8h rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC2-1: Listing gallery copy supports alt and order edits
 
 **Classification:**
@@ -3489,6 +3516,7 @@ changes later.
 * Step 3 shows <listing alt text> for <listing media>.
 * Step 3 shows <listing media> after <other listing media>.
 
+<!-- trace:case id=g10adm.auction-listing.TC-mop rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC3-1: Later source edits leave the listing snapshot unchanged
 
 **Classification:**
@@ -3533,6 +3561,7 @@ changes later.
 * Step 4 keeps the original bytes and <original alt text>.
 * Step 4 still shows the copy before <other listing media>.
 
+<!-- trace:case id=g10adm.auction-listing.TC-mx8 rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC4-1: Retagging source media preserves the listing snapshot
 
 **Classification:**
@@ -3573,6 +3602,7 @@ changes later.
 
 * Step 2 keeps the same bytes and alt text as before the retag.
 
+<!-- trace:case id=g10adm.auction-listing.TC-kk1 rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC5-1: Untagging source media preserves the listing snapshot
 
 **Classification:**
@@ -3611,6 +3641,7 @@ changes later.
 
 * Step 2 keeps the same bytes and alt text as before the untag.
 
+<!-- trace:case id=g10adm.auction-listing.TC-xa0 rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC6-1: Physical Cert removal deletes the source and preserves the listing snapshot
 
 **Classification:**
@@ -3653,6 +3684,7 @@ changes later.
 * Step 1 deletes the Cert record and its tagged source media.
 * Step 2 keeps the same bytes and alt text as before that removal.
 
+<!-- trace:case id=g10adm.auction-listing.TC-h87 rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC7-1: Source selection accepts an eighth gallery item
 
 **Classification:**
@@ -3690,6 +3722,7 @@ changes later.
 
 * Step 3 shows eight gallery items, including <source media>.
 
+<!-- trace:case id=g10adm.auction-listing.TC-14t rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC8-1: A ninth source item is refused
 
 **Classification:**
@@ -3728,6 +3761,7 @@ changes later.
 * Step 3 still shows eight gallery items.
 * Step 3 leaves <source media> out of the saved gallery.
 
+<!-- trace:case id=g10adm.auction-listing.TC-qbp rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC9-1: Source media and direct uploads share one ordered gallery
 
 **Classification:**
@@ -3766,6 +3800,7 @@ changes later.
 * Step 3 shows both items in the chosen order.
 * Step 3 shows no more than eight items.
 
+<!-- trace:case id=g10adm.auction-listing.TC-y48 rev=1 covers=g10adm.auction-listing.SC-hqh,g10adm.auction-listing.SC-cyr,g10adm.auction-listing.SC-eys,g10adm.auction-listing.SC-2vy,g10adm.auction-listing.SC-38a,g10adm.auction-listing.SC-79q,g10adm.auction-listing.SC-p6h,g10adm.auction-listing.SC-z0t,g10adm.auction-listing.SC-fbm,g10adm.auction-listing.SC-vmr -->
 ### grade10-admin-auction-listing-US14-TC10-1: A missing source media item refuses Save
 
 **Classification:**
@@ -3803,6 +3838,7 @@ changes later.
 **I want** to see a listing's code on its admin screen,
 **so that** I can match a support, finance or reconciliation request that quotes the code (or the payment reference built from it) back to the right listing and order.
 
+<!-- trace:case id=g10adm.auction-listing.TC-4tj rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC1-1: Operator sees the code on a newly created listing
 
 **Classification:**
@@ -3833,6 +3869,7 @@ changes later.
 * The Listings table and listing detail screen show the same listing code.
 * The code is present with no further operator action.
 
+<!-- trace:case id=g10adm.auction-listing.TC-01g rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC2-1: A draft listing shows no listing code yet
 
 **Classification:**
@@ -3861,6 +3898,7 @@ changes later.
 
 * The draft's admin screen shows no listing code.
 
+<!-- trace:case id=g10adm.auction-listing.TC-q6k rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC3-1: Listing code matches its fixed two-letter-prefix shape
 
 **Classification:**
@@ -3892,6 +3930,7 @@ changes later.
 * Its first two characters are letters only, drawn from `ABCDEFGHJKMNPQRSTVWXYZ`, with no digit.
 * Its remaining three characters are drawn from the full Crockford Base32 charset `0123456789ABCDEFGHJKMNPQRSTVWXYZ`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-0qe rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC4-1: Two listings receive distinct codes
 
 **Classification:**
@@ -3922,6 +3961,7 @@ changes later.
 
 * `<listing_1>` and `<listing_2>` show different listing codes.
 
+<!-- trace:case id=g10adm.auction-listing.TC-8gd rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC5-1: A closed listing keeps its original listing code
 
 **Classification:**
@@ -3951,6 +3991,7 @@ changes later.
 
 * The admin screen still shows `<listing code>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-z3q rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC6-1: A called-off listing keeps its original listing code
 
 **Classification:**
@@ -3980,6 +4021,7 @@ changes later.
 
 * The admin screen still shows `<listing code>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-m09 rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC7-1: Listing code has no editable control on the form or the API
 
 **Classification:**
@@ -4013,6 +4055,7 @@ changes later.
 * The API write is refused.
 * The listing code remains `<listing code>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-63a rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC8-1: Listing code follows existing admin listing access
 
 **Classification:**
@@ -4045,6 +4088,7 @@ changes later.
 * The other operator receives the ordinary listing-access denial and cannot read private listing data.
 * Knowing `LK423` does not grant or broaden admin access; no separate code permission is evaluated.
 
+<!-- trace:case id=g10adm.auction-listing.TC-gc4 rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC9-1: Allocation retries a projected collision
 
 **Classification:**
@@ -4074,6 +4118,7 @@ changes later.
 * Allocation retries atomically.
 * The stored code has the required shape and differs from the colliding code.
 
+<!-- trace:case id=g10adm.auction-listing.TC-4rj rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC10-1: A retained listing-code reservation is never allocated again
 
 **Classification:**
@@ -4103,6 +4148,7 @@ changes later.
 * `LK423` remains unavailable.
 * The later listing receives a different code.
 
+<!-- trace:case id=g10adm.auction-listing.TC-1jo rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
 ### grade10-admin-auction-listing-US72-TC11-1: Cancel preserves the canonical URL and does not release it
 
 **Classification:**
@@ -4144,6 +4190,7 @@ changes later.
 **I want** a saved draft to suggest a listing slug from its title and stable code,
 **so that** I can start with a distinct public address and learn before Save when a chosen address is already reserved.
 
+<!-- trace:case id=g10adm.auction-listing.TC-agw rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC1-1: A saved draft receives a title-and-code slug
 
 **Classification:**
@@ -4173,6 +4220,7 @@ changes later.
 * The Slug field is prefilled with normalized title words followed by the lower-case code, such as `charizard-psa-10-<lowercase code>`.
 * The complete slug is at most 64 characters.
 
+<!-- trace:case id=g10adm.auction-listing.TC-7zt rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC2-1: A titleless draft uses the neutral slug prefix
 
 **Classification:**
@@ -4200,6 +4248,7 @@ changes later.
 
 * The draft receives a slug in the form `lot-<lowercase code>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-w2u rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC3-1: An untouched generated slug follows a title edit
 
 **Classification:**
@@ -4229,6 +4278,7 @@ changes later.
 * The slug title portion is regenerated.
 * The lower-case listing-code suffix is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-sry rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC4-1: An operator-edited slug survives a title edit
 
 **Classification:**
@@ -4257,6 +4307,7 @@ changes later.
 
 * The operator's slug remains unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-6k1 rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC5-1: Leaving Slug reports a retained address collision
 
 **Classification:**
@@ -4288,6 +4339,7 @@ changes later.
 * The value remains available for correction.
 * Helper text states: `Slug must be unique. Completed, expired, and unsold listings also reserve their addresses.`
 
+<!-- trace:case id=g10adm.auction-listing.TC-m70 rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
 ### grade10-admin-auction-listing-US73-TC6-1: Save remains authoritative after a race
 
 **Classification:**

@@ -11,6 +11,7 @@ either tender,
 **so that** I can understand my available options without encountering an action
 that cannot change the cart.
 
+<!-- trace:case id=g10.shared-store-cart.TC-xwj rev=1 covers=g10.shared-store-cart.SC-ka5,g10.shared-store-cart.SC-rxp,g10.shared-store-cart.SC-x7g,g10.shared-store-cart.SC-q34,g10.shared-store-cart.SC-ufi -->
 ### shared-ui-store-cart-US9-TC1-1: Read-only promo context has no mutation controls
 
 **Classification:**
@@ -42,6 +43,7 @@ that cannot change the cart.
 * The typed-code input and its Apply control are absent.
 * No applicable held code has an Apply control.
 
+<!-- trace:case id=g10.shared-store-cart.TC-0x0 rev=1 covers=g10.shared-store-cart.SC-ka5,g10.shared-store-cart.SC-rxp,g10.shared-store-cart.SC-x7g,g10.shared-store-cart.SC-q34,g10.shared-store-cart.SC-ufi -->
 ### shared-ui-store-cart-US9-TC2-1: Read-only points context has no entry controls
 
 **Classification:**
@@ -73,6 +75,7 @@ that cannot change the cart.
 * The points amount input, Apply control, and Use max control are absent.
 * No points amount is applied and the cart summary is unchanged.
 
+<!-- trace:case id=g10.shared-store-cart.TC-jzc rev=1 covers=g10.shared-store-cart.SC-ka5,g10.shared-store-cart.SC-rxp,g10.shared-store-cart.SC-x7g,g10.shared-store-cart.SC-q34,g10.shared-store-cart.SC-ufi -->
 ### shared-ui-store-cart-US9-TC3-1: Interactive callbacks expose their matching actions
 
 **Classification:**
@@ -106,6 +109,7 @@ that cannot change the cart.
 * Each activation reaches its matching callback once with the supplied code, held-code id, or points amount.
 * The drawer keeps display-only context and action availability independent; supplying one callback does not invent or suppress another action.
 
+<!-- trace:case id=g10.shared-store-cart.TC-gia rev=1 covers=g10.shared-store-cart.SC-ka5,g10.shared-store-cart.SC-rxp,g10.shared-store-cart.SC-x7g,g10.shared-store-cart.SC-q34,g10.shared-store-cart.SC-ufi -->
 ### shared-ui-store-cart-US9-TC4-1: Missing one callback gates only its action
 
 **Classification:**

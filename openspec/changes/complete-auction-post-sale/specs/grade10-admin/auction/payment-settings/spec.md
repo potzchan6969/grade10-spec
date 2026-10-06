@@ -35,6 +35,7 @@ SHALL be refused without changing any stored value.
 Scenario `grade10-admin-auction-payment-settings-SC-01` keeps its title with
 its id. The title is historical: the operator holds payment processing.
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-erw rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-01 - Settlement operator reads all currency minimums
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 
@@ -45,6 +46,7 @@ its id. The title is historical: the operator holds payment processing.
 Scenario `grade10-admin-auction-payment-settings-SC-02` keeps its title with
 its id. The title is historical: the operator holds payment processing.
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-veg rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-02 - Settlement operator replaces the mapping
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 
@@ -53,6 +55,7 @@ its id. The title is historical: the operator holds payment processing.
 - **THEN** Grade10 stores and returns exactly USD 100, HKD 500, and JPY 100 minor units
 - **AND** records the acting operator and save timestamp
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-ieg rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-03 - Invalid mapping is atomic
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 
@@ -61,6 +64,7 @@ its id. The title is historical: the operator holds payment processing.
 - **THEN** Grade10 refuses the save
 - **AND** all three stored values remain unchanged
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-s8d rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-04 - Other operators cannot read or write minimums
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 
@@ -68,6 +72,7 @@ its id. The title is historical: the operator holds payment processing.
 - **WHEN** they request or submit Payment settings
 - **THEN** Grade10 refuses the operation
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-qzp rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-05 - Finance keeps the minimums
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 
@@ -120,6 +125,7 @@ It SHALL NOT change a sent invoice or anything the winner reads.
 **Access** - Only an operator with payment processing, `auction:payment`,
 SHALL open or save Payment Settings.
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-pzf rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-06 - No rule saved yet
 **Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
@@ -127,6 +133,7 @@ SHALL open or save Payment Settings.
 - **WHEN** an operator with payment processing opens Payment settings
 - **THEN** USD, HKD and JPY each show no rule
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-cac rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-07 - A save replaces the rules whole
 **Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
@@ -137,6 +144,7 @@ SHALL open or save Payment Settings.
   JPY
 - **AND** records that operator and the time of the save
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-5h3 rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-08 - Half a rule or a percentage out of range is refused
 **Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
@@ -146,6 +154,7 @@ SHALL open or save Payment Settings.
 - **THEN** Grade10 refuses each save
 - **AND** the stored rules are unchanged
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-su9 rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-09 - A rule grosses the subtotal up
 **Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
@@ -154,6 +163,7 @@ SHALL open or save Payment Settings.
 - **THEN** it suggests a fee of 11225 and an order total of 323225 minor units
   in HKD
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-lon rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-10 - Other operators cannot read or change the rules
 **Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
@@ -162,6 +172,7 @@ SHALL open or save Payment Settings.
 - **THEN** Grade10 refuses the operation
 - **AND** the stored rules are unchanged
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-g3v rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-11 - Each rule shows its fee on an example subtotal
 **Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 

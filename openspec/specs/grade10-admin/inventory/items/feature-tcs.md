@@ -18,6 +18,7 @@ by its owner's exact email, and read its owner by name, its facts and whether
 a place marks it,
 **so that** I can answer who has what without opening every case.
 
+<!-- trace:case id=g10adm.inventory-items.TC-19a rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC1-1: Items opens on marked items and a row opens its item
 
 **Classification:**
@@ -63,6 +64,7 @@ a place marks it,
 * The place row names the vault, `<case_1>`'s reference and its status.
 * Step 4 opens `<case_1>` on the vault console.
 
+<!-- trace:case id=g10adm.inventory-items.TC-tp4 rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC2-1: The all and retired tabs list what they name
 
 **Classification:**
@@ -101,6 +103,7 @@ a place marks it,
 * Step 1 lists `<item_1>` and `<item_2>`, marked and not marked alike, and not `<item_3>`.
 * Step 2 lists `<item_3>` with lost as why it was retired, and neither live item.
 
+<!-- trace:case id=g10adm.inventory-items.TC-h30 rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC3-1: One search finds an item by each key it reads
 
 Runs once per row of **Test data**.
@@ -143,6 +146,7 @@ Runs once per row of **Test data**.
 
 * The list holds `<item_4>` as the row says.
 
+<!-- trace:case id=g10adm.inventory-items.TC-w2x rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC4-1: Search never finds an owner by name or part of an email
 
 Runs once per row of **Test data**.
@@ -183,6 +187,7 @@ Runs once per row of **Test data**.
 * No row is listed.
 * The empty state names the search and offers a way to clear it.
 
+<!-- trace:case id=g10adm.inventory-items.TC-gr3 rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC5-1: The owner cell reads each kind of owner
 
 Runs once per row of **Test data**.
@@ -226,6 +231,7 @@ Runs once per row of **Test data**.
 * Step 2 does as the row says.
 * Step 3 opens the item and its owner cell reads the same.
 
+<!-- trace:case id=g10adm.inventory-items.TC-udu rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC6-1: Reading an owner's name is recorded on the audit chain
 
 **Classification:**
@@ -256,6 +262,7 @@ Runs once per row of **Test data**.
 * The page reads `<collector C>`'s name as the owner.
 * The audit chain holds an entry for the name read, naming the staff member.
 
+<!-- trace:case id=g10adm.inventory-items.TC-42v rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC7-1: An item whose owners disagree shows both to staff
 
 **Classification:**
@@ -290,6 +297,7 @@ Runs once per row of **Test data**.
 * `<item_7>` reads marked by the vault on `<case_7>`.
 * A warning shows the vault's owner, `<collector A>`, and the register's, `<collector B>`.
 
+<!-- trace:case id=g10adm.inventory-items.TC-mkc rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC9-1: An empty tab and a missing item say so
 
 Runs once per row of **Test data**.
@@ -327,6 +335,7 @@ Runs once per row of **Test data**.
 
 * The page shows what the row says, and the console's navigation still works.
 
+<!-- trace:case id=g10adm.inventory-items.TC-kz9 rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC10-1: Items and one item are refused without the inventory read
 
 Runs once per row of **Test data**.
@@ -365,6 +374,7 @@ Runs once per row of **Test data**.
 * The page is refused, naming `inventory:read`.
 * No item, owner or fact is shown.
 
+<!-- trace:case id=g10adm.inventory-items.TC-b8u rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC11-1: A failed read shows its error and retries
 
 **Classification:**
@@ -395,6 +405,7 @@ Runs once per row of **Test data**.
 * Step 1 shows a pending state, then an error with a retry.
 * Step 2 loads the marked tab.
 
+<!-- trace:case id=g10adm.inventory-items.TC-ycw rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC12-1: The place row stands when the vault cannot be read
 
 **Classification:**
@@ -426,6 +437,7 @@ Runs once per row of **Test data**.
 * The place row names the vault and `<case_1>`'s reference.
 * The place row's status reads unavailable.
 
+<!-- trace:case id=g10adm.inventory-items.TC-3hh rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC13-1: The register's owner stands once the vault releases the item
 
 **Classification:**
@@ -460,6 +472,7 @@ Runs once per row of **Test data**.
 * The place row reads closed by the vault on the day, with no reason.
 * The moves section has no new move.
 
+<!-- trace:case id=g10adm.inventory-items.TC-t75 rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC14-1: An item read from the register as its case runs to a forfeit
 
 **Classification:**
@@ -503,6 +516,7 @@ Runs once per row of **Test data**.
 * Its newest move reads from `<collector A>` to the lender, made by the vault on `<case_14>`.
 * Step 10 lists that one item.
 
+<!-- trace:case id=g10adm.inventory-items.TC-vz8 rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC15-1: A search from the marked tab reads every item
 
 **Classification:**
@@ -543,6 +557,7 @@ one of the company's entities, with its category, title, description, grader,
 grade and cert, and to correct a fact later,
 **so that** the register says what the item is, whoever brought it in.
 
+<!-- trace:case id=g10adm.inventory-items.TC-xh1 rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC1-1: A graded item is registered under an account by exact email
 
 **Classification:**
@@ -591,6 +606,7 @@ grade and cert, and to correct a fact later,
 * The owner reads `<collector A>` by name; who edited it last is this staff member, now.
 * The moves section says the item has not changed owner.
 
+<!-- trace:case id=g10adm.inventory-items.TC-z3b rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC2-1: An item with no grader carries no grade or cert
 
 Runs once per row of **Test data**.
@@ -636,6 +652,7 @@ Runs once per row of **Test data**.
 * Step 5 offers the custodian and not the lender.
 * The new item reads no grader, no grade and no cert, owned by the entity's registered name.
 
+<!-- trace:case id=g10adm.inventory-items.TC-sp2 rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC3-1: The lists of categories and graders are closed
 
 **Classification:**
@@ -669,6 +686,7 @@ Runs once per row of **Test data**.
 * No field takes a grader typed by hand.
 * The description's help says a grader not listed, its grade and cert go in the description.
 
+<!-- trace:case id=g10adm.inventory-items.TC-g23 rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC4-1: Title and description at their limits
 
 Runs once per row of **Test data**.
@@ -707,6 +725,7 @@ Runs once per row of **Test data**.
 
 * The outcome is the row's; a refusal registers no item.
 
+<!-- trace:case id=g10adm.inventory-items.TC-fyy rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC5-1: A grader and cert already on a live item is refused
 
 Runs once per row of **Test data**.
@@ -749,6 +768,7 @@ Runs once per row of **Test data**.
 * No second item is registered.
 * Step 4 opens the page of `<item_9>`.
 
+<!-- trace:case id=g10adm.inventory-items.TC-nn1 rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC6-1: The owner field takes only an email an account holds
 
 Runs once per row of **Test data**.
@@ -787,6 +807,7 @@ Runs once per row of **Test data**.
 
 * The owner field and Register read as the row says.
 
+<!-- trace:case id=g10adm.inventory-items.TC-okp rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC7-1: Editing an item's facts keeps its owner and records the edit
 
 **Classification:**
@@ -821,6 +842,7 @@ Runs once per row of **Test data**.
 * Who edited it last is this staff member, now.
 * The moves section is unchanged.
 
+<!-- trace:case id=g10adm.inventory-items.TC-o9h rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC8-1: An edit to a grader and cert another live item holds is refused
 
 **Classification:**
@@ -852,6 +874,7 @@ Runs once per row of **Test data**.
 * Step 3 is refused in the dialog: these grader and cert are already on `<title_9>`, with a link to it.
 * `<item_10>` still reads `AB777`.
 
+<!-- trace:case id=g10adm.inventory-items.TC-4in rev=1 covers=g10adm.inventory-items.SC-gyp,g10adm.inventory-items.SC-v3t,g10adm.inventory-items.SC-9v8,g10adm.inventory-items.SC-ins,g10adm.inventory-items.SC-g7s,g10adm.inventory-items.SC-ro5,g10adm.inventory-items.SC-law,g10adm.inventory-items.SC-3l7,g10adm.inventory-items.SC-h7o,g10adm.inventory-items.SC-3gy,g10adm.inventory-items.SC-udb,g10adm.inventory-items.SC-qr6,g10adm.inventory-items.SC-o2j,g10adm.inventory-items.SC-x19 -->
 ### grade10-admin-inventory-items-US2-TC9-1: Without the inventory write the register reads only
 
 **Classification:**
@@ -894,6 +917,7 @@ custodian, never the lender, with a reason and a proof document where I have
 one,
 **so that** anyone can later read who moved it, when, why and on what proof.
 
+<!-- trace:case id=g10adm.inventory-items.TC-vs9 rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC1-1: An item moves to an account with a reason and a proof
 
 **Classification:**
@@ -939,6 +963,7 @@ one,
 * The top move reads from `<collector A>`, to `<collector B>`, this staff member, now, the reason, and the proof to download.
 * The audit log records the move.
 
+<!-- trace:case id=g10adm.inventory-items.TC-pir rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC2-1: An item moves to the custodian with no proof
 
 **Classification:**
@@ -971,6 +996,7 @@ one,
 * The page reads the custodian's registered name as owner.
 * The top move's proof cell says no proof was given.
 
+<!-- trace:case id=g10adm.inventory-items.TC-yi8 rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC3-1: A move needs a found owner and a reason
 
 Runs once per row of **Test data**.
@@ -1009,6 +1035,7 @@ Runs once per row of **Test data**.
 
 * Transfer stays disabled and the owner is unchanged.
 
+<!-- trace:case id=g10adm.inventory-items.TC-3wd rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC4-1: A proof is up to 5 PDF, PNG or JPG files of 10 MB each
 
 Runs once per row of **Test data**.
@@ -1050,6 +1077,7 @@ Runs once per row of **Test data**.
 * The six-file row offers no way to pick a sixth file; five stay listed.
 * A refused row names its file under the picker and does not list it; Transfer stays offered.
 
+<!-- trace:case id=g10adm.inventory-items.TC-46a rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC5-1: A proof removed before the move is not kept
 
 **Classification:**
@@ -1080,6 +1108,7 @@ Runs once per row of **Test data**.
 * Step 2 leaves no file under the picker.
 * The top move's proof cell says no proof was given.
 
+<!-- trace:case id=g10adm.inventory-items.TC-33b rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC6-1: An item whose owner was erased moves the same way
 
 **Classification:**
@@ -1115,6 +1144,7 @@ Runs once per row of **Test data**.
 * The page reads the custodian as owner and `Charizard 1999 Base Set` as the title.
 * The top move reads from erased to the custodian.
 
+<!-- trace:case id=g10adm.inventory-items.TC-4ou rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC7-1: A move never names the lender
 
 **Classification:**
@@ -1145,6 +1175,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused.
 * `<item_12>` is still owned by `<collector A>`, with no new move.
 
+<!-- trace:case id=g10adm.inventory-items.TC-l1c rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC8-1: Opening a proof is recorded on the audit log
 
 **Classification:**
@@ -1174,6 +1205,7 @@ Runs once per row of **Test data**.
 * The proof downloads.
 * The audit log records the opening and who opened it.
 
+<!-- trace:case id=g10adm.inventory-items.TC-ef6 rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC9-1: Without the transfer grant there is no move and no proof
 
 **Classification:**
@@ -1206,6 +1238,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused and returns no file.
 * Step 3 is refused and the owner is unchanged.
 
+<!-- trace:case id=g10adm.inventory-items.TC-h7f rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC10-1: Transfer stays disabled while the new owner is the present one
 
 **Classification:**
@@ -1245,6 +1278,7 @@ Runs once per row of **Test data**.
 **I want** the move refused while a place marks the item, naming the place,
 **so that** I never move an item the vault is still keeping for its owner.
 
+<!-- trace:case id=g10adm.inventory-items.TC-t2x rev=1 covers=g10adm.inventory-items.SC-4vp,g10adm.inventory-items.SC-91a -->
 ### grade10-admin-inventory-items-US4-TC1-1: A marked item offers no transfer and names its place
 
 **Classification:**
@@ -1276,6 +1310,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused, naming the vault.
 * The owner is unchanged and no move is recorded.
 
+<!-- trace:case id=g10adm.inventory-items.TC-pf9 rev=1 covers=g10adm.inventory-items.SC-4vp,g10adm.inventory-items.SC-91a -->
 ### grade10-admin-inventory-items-US4-TC2-1: A mark that lands after the page opened refuses the transfer
 
 **Classification:**
@@ -1317,6 +1352,7 @@ lost, destroyed or left the platform the same way,
 **so that** each object has one live record and the history of the others
 stays readable.
 
+<!-- trace:case id=g10adm.inventory-items.TC-uih rev=1 covers=g10adm.inventory-items.SC-b2c,g10adm.inventory-items.SC-uc3,g10adm.inventory-items.SC-ynw,g10adm.inventory-items.SC-b91,g10adm.inventory-items.SC-93o -->
 ### grade10-admin-inventory-items-US5-TC1-1: An item retired for each reason reads only and keeps its history
 
 Runs once per row of **Test data**.
@@ -1362,6 +1398,7 @@ Runs once per row of **Test data**.
 * It offers no Edit, Transfer or Retire; its facts and its move still read.
 * Step 4 lists `<item_15>` with the reason.
 
+<!-- trace:case id=g10adm.inventory-items.TC-jk7 rev=1 covers=g10adm.inventory-items.SC-b2c,g10adm.inventory-items.SC-uc3,g10adm.inventory-items.SC-ynw,g10adm.inventory-items.SC-b91,g10adm.inventory-items.SC-93o -->
 ### grade10-admin-inventory-items-US5-TC2-1: A retired item's grader and cert can name a new item
 
 **Classification:**
@@ -1393,6 +1430,7 @@ Runs once per row of **Test data**.
 * A new item is registered carrying PSA and `AB555`.
 * `<item_16>` still reads retired with the same facts.
 
+<!-- trace:case id=g10adm.inventory-items.TC-tin rev=1 covers=g10adm.inventory-items.SC-b2c,g10adm.inventory-items.SC-uc3,g10adm.inventory-items.SC-ynw,g10adm.inventory-items.SC-b91,g10adm.inventory-items.SC-93o -->
 ### grade10-admin-inventory-items-US5-TC3-1: A retired item is restored with a reason
 
 **Classification:**
@@ -1425,6 +1463,7 @@ Runs once per row of **Test data**.
 * It leaves the retired tab of Items.
 * The audit log's restore entry names `<item_17>` and does not carry the reason's text.
 
+<!-- trace:case id=g10adm.inventory-items.TC-7ds rev=1 covers=g10adm.inventory-items.SC-b2c,g10adm.inventory-items.SC-uc3,g10adm.inventory-items.SC-ynw,g10adm.inventory-items.SC-b91,g10adm.inventory-items.SC-93o -->
 ### grade10-admin-inventory-items-US5-TC4-1: A restore is refused while a live item holds its cert
 
 **Classification:**
@@ -1456,6 +1495,7 @@ Runs once per row of **Test data**.
 * Step 3 is refused, naming `<title_18>`.
 * `<item_16>` still reads retired.
 
+<!-- trace:case id=g10adm.inventory-items.TC-af8 rev=1 covers=g10adm.inventory-items.SC-b2c,g10adm.inventory-items.SC-uc3,g10adm.inventory-items.SC-ynw,g10adm.inventory-items.SC-b91,g10adm.inventory-items.SC-93o -->
 ### grade10-admin-inventory-items-US5-TC5-1: A mark that lands after the page opened refuses the retire
 
 **Classification:**
@@ -1495,6 +1535,7 @@ Runs once per row of **Test data**.
 **I want** to close the mark that is still showing, with a reason,
 **so that** the item reads as not marked and can be moved or retired.
 
+<!-- trace:case id=g10adm.inventory-items.TC-cif rev=1 covers=g10adm.inventory-items.SC-t3v,g10adm.inventory-items.SC-iac,g10adm.inventory-items.SC-m22 -->
 ### grade10-admin-inventory-items-US6-TC1-1: A mark the vault let go of is closed with a reason
 
 Runs once per row of **Test data**.
@@ -1539,6 +1580,7 @@ Runs once per row of **Test data**.
 * `<item_19>` reads not marked and offers Transfer and Retire.
 * `<item_19>` leaves the marked tab of Items.
 
+<!-- trace:case id=g10adm.inventory-items.TC-z4f rev=1 covers=g10adm.inventory-items.SC-t3v,g10adm.inventory-items.SC-iac,g10adm.inventory-items.SC-m22 -->
 ### grade10-admin-inventory-items-US6-TC2-1: Close mark is not offered while the vault still holds the item
 
 Runs once per row of **Test data**.
@@ -1580,6 +1622,7 @@ Runs once per row of **Test data**.
 * Step 1 offers no Close mark on the place row.
 * Step 2 is refused and `<item_1>` still reads marked.
 
+<!-- trace:case id=g10adm.inventory-items.TC-c47 rev=1 covers=g10adm.inventory-items.SC-t3v,g10adm.inventory-items.SC-iac,g10adm.inventory-items.SC-m22 -->
 ### grade10-admin-inventory-items-US6-TC3-1: A later word from the vault does not reopen a closed mark
 
 **Classification:**
@@ -1609,6 +1652,7 @@ Runs once per row of **Test data**.
 
 * `<item_19>` reads not marked; the place row still reads closed by hand.
 
+<!-- trace:case id=g10adm.inventory-items.TC-l43 rev=1 covers=g10adm.inventory-items.SC-t3v,g10adm.inventory-items.SC-iac,g10adm.inventory-items.SC-m22 -->
 ### grade10-admin-inventory-items-US6-TC4-1: A hand close on a forfeited case moves the item to the lender once
 
 **Classification:**
@@ -1655,6 +1699,7 @@ each item's grader, grade and cert,
 **so that** the person is forgotten and the objects the house holds keep
 their record.
 
+<!-- trace:case id=g10adm.inventory-items.TC-bs3 rev=1 covers=g10adm.inventory-items.SC-p6v,g10adm.inventory-items.SC-xp1,g10adm.inventory-items.SC-x39,g10adm.inventory-items.SC-vig -->
 ### grade10-admin-inventory-items-US8-TC1-1: An owner's items lose the person and keep the object
 
 **Classification:**
@@ -1689,6 +1734,7 @@ their record.
 * Category trading card, PSA, grade 9 and `AB900` still read.
 * Step 3 finds `<item_21>`; step 4 finds nothing.
 
+<!-- trace:case id=g10adm.inventory-items.TC-3ml rev=1 covers=g10adm.inventory-items.SC-p6v,g10adm.inventory-items.SC-xp1,g10adm.inventory-items.SC-x39,g10adm.inventory-items.SC-vig -->
 ### grade10-admin-inventory-items-US8-TC2-1: Erasure is refused while a place marks the person's item
 
 Runs once per row of **Test data**.
@@ -1728,6 +1774,7 @@ Runs once per row of **Test data**.
 * Step 1 shows a line per marked item, naming its item id, the vault and its case.
 * Step 2 is refused; every item still reads `<collector G>` as owner, title and description intact.
 
+<!-- trace:case id=g10adm.inventory-items.TC-2rh rev=1 covers=g10adm.inventory-items.SC-p6v,g10adm.inventory-items.SC-xp1,g10adm.inventory-items.SC-x39,g10adm.inventory-items.SC-vig -->
 ### grade10-admin-inventory-items-US8-TC3-1: A move loses the person's side and keeps the proof while the other party remains
 
 Runs once per row of **Test data**.
@@ -1772,6 +1819,7 @@ Runs once per row of **Test data**.
 * The proof cell reads as the row says.
 * Step 1's inventory line reads nothing remaining, whether or not the proof is kept.
 
+<!-- trace:case id=g10adm.inventory-items.TC-zdn rev=1 covers=g10adm.inventory-items.SC-p6v,g10adm.inventory-items.SC-xp1,g10adm.inventory-items.SC-x39,g10adm.inventory-items.SC-vig -->
 ### grade10-admin-inventory-items-US8-TC4-1: Running the erasure a second time changes nothing
 
 **Classification:**

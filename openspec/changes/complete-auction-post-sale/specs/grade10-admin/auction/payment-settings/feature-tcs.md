@@ -10,6 +10,7 @@
 premium for each auction currency,
 **so that** invoice amounts follow the configured policy.
 
+<!-- trace:case id=g10adm.auction-payment-settings.TC-6js rev=1 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d,g10adm.auction-payment-settings.SC-qzp -->
 ### grade10-admin-auction-payment-settings-US-01-TC4-1: An operator without payment processing is refused
 
 **Classification:**
@@ -39,6 +40,7 @@ premium for each auction currency,
 * Both operations are refused.
 * The stored mapping is unchanged.
 
+<!-- trace:case id=g10adm.auction-payment-settings.TC-gof rev=1 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d,g10adm.auction-payment-settings.SC-qzp -->
 ### grade10-admin-auction-payment-settings-US1-TC5-1: Finance saves the minimums in major units, zero included
 
 **Classification:**
@@ -77,6 +79,7 @@ premium for each auction currency,
 **I want** to set, per currency, the card rule that prices a card invoice's processing fee,
 **so that** a card invoice's fee always covers what Stripe takes, without an operator working it out by hand.
 
+<!-- trace:case id=g10adm.auction-payment-settings.TC-df4 rev=1 covers=g10adm.auction-payment-settings.SC-pzf,g10adm.auction-payment-settings.SC-cac,g10adm.auction-payment-settings.SC-5h3,g10adm.auction-payment-settings.SC-su9,g10adm.auction-payment-settings.SC-lon,g10adm.auction-payment-settings.SC-g3v -->
 ### grade10-admin-auction-payment-settings-US2-TC1-1: No rule until Finance sets one
 
 **Classification:**
@@ -109,6 +112,7 @@ premium for each auction currency,
 * After the reload, HKD reads 3.4% and HKD 2.35, with no rule in USD or JPY.
 * The save records the finance operator and the time.
 
+<!-- trace:case id=g10adm.auction-payment-settings.TC-eng rev=1 covers=g10adm.auction-payment-settings.SC-pzf,g10adm.auction-payment-settings.SC-cac,g10adm.auction-payment-settings.SC-5h3,g10adm.auction-payment-settings.SC-su9,g10adm.auction-payment-settings.SC-lon,g10adm.auction-payment-settings.SC-g3v -->
 ### grade10-admin-auction-payment-settings-US2-TC2-1: The rule shows its fee on an example subtotal, and prices a card invoice
 
 **Classification:**
@@ -141,6 +145,7 @@ premium for each auction currency,
 * The example reads a fee of HKD 37.63 on a subtotal of HKD 1,000.00, in the console's money format.
 * The quote's computed fee reads 11225 and the total 323225 minor units in HKD, read-only with the HKD rule it came from.
 
+<!-- trace:case id=g10adm.auction-payment-settings.TC-40o rev=1 covers=g10adm.auction-payment-settings.SC-pzf,g10adm.auction-payment-settings.SC-cac,g10adm.auction-payment-settings.SC-5h3,g10adm.auction-payment-settings.SC-su9,g10adm.auction-payment-settings.SC-lon,g10adm.auction-payment-settings.SC-g3v -->
 ### grade10-admin-auction-payment-settings-US2-TC3-1: Half a rule or a percentage out of range is refused
 
 **Classification:**
@@ -173,6 +178,7 @@ premium for each auction currency,
 * Each save is refused.
 * The stored rules still hold only HKD 3.4% and 235 minor units.
 
+<!-- trace:case id=g10adm.auction-payment-settings.TC-ape rev=1 covers=g10adm.auction-payment-settings.SC-pzf,g10adm.auction-payment-settings.SC-cac,g10adm.auction-payment-settings.SC-5h3,g10adm.auction-payment-settings.SC-su9,g10adm.auction-payment-settings.SC-lon,g10adm.auction-payment-settings.SC-g3v -->
 ### grade10-admin-auction-payment-settings-US2-TC4-1: Staff can neither read nor change the card rules
 
 **Classification:**

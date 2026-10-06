@@ -15,6 +15,7 @@ what is gone, what it costs and how many are left,
 **so that** I never open a product that has gone or reach for a price the shop
 has left behind.
 
+<!-- trace:case id=g10.store-product-listing.TC-hgz rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC1-1: A published product is listed within seconds
 
 **Classification:**
@@ -47,6 +48,7 @@ has left behind.
 * Step 2 lists <a product> at both locations.
 * Step 3 reads one more than <the listing's count> above the grid, and each of <a product>'s facets counts one more.
 
+<!-- trace:case id=g10.store-product-listing.TC-rjj rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC2-1: A product taken down leaves within seconds
 
 **Classification:**
@@ -78,6 +80,7 @@ has left behind.
 * Step 2 lists <a product> at neither location.
 * Step 3 reads one fewer than <the listing's count> above the grid, and each of <a product>'s facets counts one fewer.
 
+<!-- trace:case id=g10.store-product-listing.TC-ift rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC3-1: A card follows the shop's price and stock
 
 **Classification:**
@@ -120,6 +123,7 @@ has left behind.
 * Step 3 shows <new price> on the card.
 * Step 4 stops the quantity at <new count>.
 
+<!-- trace:case id=g10.store-product-listing.TC-yl5 rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC4-1: A change the shop never reported is caught by the re-read
 
 **Classification:**
@@ -150,6 +154,7 @@ has left behind.
 
 * Step 3 names the world <new label>.
 
+<!-- trace:case id=g10.store-product-listing.TC-yla rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC5-1: A location holding no copy answers from the one the store keeps
 
 **Classification:**
@@ -189,6 +194,7 @@ has left behind.
 **I want** the listing to keep answering when the shop's own service is down,
 **so that** I can go on browsing and come back to buy when it is up.
 
+<!-- trace:case id=g10.store-product-listing.TC-izq rev=1 covers=g10.store-product-listing.SC-bcq -->
 ### grade10-site-store-product-listing-US15-TC1-1: The listing lists while the shop is down
 
 **Classification:**

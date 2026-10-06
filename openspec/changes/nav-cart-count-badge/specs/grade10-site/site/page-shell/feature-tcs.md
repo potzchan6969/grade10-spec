@@ -9,6 +9,7 @@
 **I want** the header to show the same active-line count as my cart drawer as my cart changes,
 **so that** I can see how many active lines I hold from any surface without opening the drawer.
 
+<!-- trace:case id=g10.site-page-shell.TC-19a rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC1-1: Reviewed active lines match the drawer title count
 
 Runs once per row of **Test data**.
@@ -54,6 +55,7 @@ Runs once per row of **Test data**.
 * Drawer title count equals the header count.
 * Header count uses the round brand indicator.
 
+<!-- trace:case id=g10.site-page-shell.TC-yv8 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC2-1: Quantity and checkout eligibility do not replace active lines
 
 **Classification:**
@@ -88,6 +90,7 @@ Runs once per row of **Test data**.
 * Sold-out and unavailable lines contribute nothing.
 * Drawer title count equals the header count.
 
+<!-- trace:case id=g10.site-page-shell.TC-mz6 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC3-1: Cart count follows navigation across available cart surfaces
 
 **Classification:**
@@ -121,6 +124,7 @@ Runs once per row of **Test data**.
 * Both surfaces show the same active-line count.
 * The drawer remains closed.
 
+<!-- trace:case id=g10.site-page-shell.TC-mv8 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC4-1: Adding a line refreshes the closed drawer count
 
 **Classification:**
@@ -154,6 +158,7 @@ Runs once per row of **Test data**.
 * Header shows 1 active line.
 * The count updates without opening the drawer.
 
+<!-- trace:case id=g10.site-page-shell.TC-wf5 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC5-1: Quantity changes preserve the distinct active-line count
 
 **Classification:**
@@ -187,6 +192,7 @@ Runs once per row of **Test data**.
 * Header still shows 1 active line.
 * Drawer title count equals the header count.
 
+<!-- trace:case id=g10.site-page-shell.TC-id6 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC6-1: Explicit review refreshes the displayed active-line count
 
 **Classification:**
@@ -219,6 +225,7 @@ Runs once per row of **Test data**.
 * Header reflects the newly reviewed active-line count.
 * The unavailable line contributes nothing.
 
+<!-- trace:case id=g10.site-page-shell.TC-xq5 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC7-1: An empty reviewed cart retains an unbadged control
 
 **Classification:**
@@ -248,6 +255,7 @@ Runs once per row of **Test data**.
 
 * Cart remains visible without a count badge.
 
+<!-- trace:case id=g10.site-page-shell.TC-70a rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC8-1: Initial unknown count appears only after successful review
 
 **Classification:**
@@ -282,6 +290,7 @@ Runs once per row of **Test data**.
 * Cart remains visible throughout.
 * Successful review displays the active-line count.
 
+<!-- trace:case id=g10.site-page-shell.TC-fj9 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC9-1: Failed cart review clears the previously known count
 
 **Classification:**
@@ -314,6 +323,7 @@ Runs once per row of **Test data**.
 * The previous count badge is absent.
 * Cart remains visible.
 
+<!-- trace:case id=g10.site-page-shell.TC-vv4 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC10-1: Retry restores the count after a failed review
 
 **Classification:**
@@ -345,6 +355,7 @@ Runs once per row of **Test data**.
 
 * Header shows the newly reviewed active-line count.
 
+<!-- trace:case id=g10.site-page-shell.TC-ux8 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC11-1: Signed-out visitors never display a member cart count
 
 **Classification:**
@@ -373,6 +384,7 @@ Runs once per row of **Test data**.
 
 * Cart remains visible without a count badge.
 
+<!-- trace:case id=g10.site-page-shell.TC-szw rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC12-1: Signing out clears the count before another review
 
 **Classification:**
@@ -403,6 +415,7 @@ Runs once per row of **Test data**.
 * The previous member count disappears immediately.
 * Cart remains visible without a count badge.
 
+<!-- trace:case id=g10.site-page-shell.TC-rbe rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC13-1: Changing members cannot display the previous member count
 
 **Classification:**
@@ -437,6 +450,7 @@ Runs once per row of **Test data**.
 * Pending review shows no count badge.
 * Completed review shows only customer B active-line count.
 
+<!-- trace:case id=g10.site-page-shell.TC-yag rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC14-1: Removing the last active line clears the badge
 
 **Classification:**
@@ -468,6 +482,7 @@ Runs once per row of **Test data**.
 * Cart remains visible without a count badge.
 
 
+<!-- trace:case id=g10.site-page-shell.TC-4mi rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC15-1: Same-member refresh retains the last verified count
 
 **Classification:**

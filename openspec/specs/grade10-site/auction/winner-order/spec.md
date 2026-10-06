@@ -2082,6 +2082,7 @@ be refused as an empty Country/Region.
 refused with a field refusal beside Country/Region, as for other empty
 required address fields.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-fm8 rev=1 -->
 #### Scenario: winner-order-SC-174 - Delivery Add Address lists every country and region
 **Serves:** winner-order-US-01 - choosing where the lot ships on delivery Add Address
 
@@ -2089,6 +2090,7 @@ required address fields.
 - **WHEN** the winner opens the Country/Region picker
 - **THEN** the popup lists every country and region in A–Z order
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-ckz rev=1 -->
 #### Scenario: winner-order-SC-175 - Typing filters the list to matching names
 **Serves:** winner-order-US-01 - finding a country or region by search on delivery Add Address
 
@@ -2097,6 +2099,7 @@ required address fields.
 - **THEN** the list shows only names that match that query
 - **AND** names that do not match are not shown
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-98w rev=1 -->
 #### Scenario: winner-order-SC-178 - A query with no match leaves the list empty
 **Serves:** winner-order-US-01 - searching for a country or region that is not in the catalogue
 
@@ -2104,12 +2107,14 @@ required address fields.
 - **WHEN** the winner types a query that matches no catalogue name
 - **THEN** the list shows no country or region options
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-vuk rev=1 -->
 #### Scenario: winner-order-SC-176 - The field reads Country/Region
 **Serves:** winner-order-US-01 - naming the destination on delivery Add Address
 
 - **WHEN** a winner is on Winner Order setup delivery Add Address
 - **THEN** the picker field label reads Country/Region
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-h2c rev=1 -->
 #### Scenario: winner-order-SC-177 - An empty Country/Region is refused
 **Serves:** winner-order-US-01 - confirming delivery Add Address without a country or region
 
@@ -2299,6 +2304,7 @@ Pay Now after an unfinished session SHALL start a fresh session. An unfinished
 session SHALL NOT change the invoice, its amount or its deadline. Grade10 SHALL
 NOT show the order as paid before it records the invoice `paid`.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-bbg rev=1 -->
 #### Scenario: winner-order-SC-49 - A timed-out payment session stays payable
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2307,6 +2313,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **THEN** the page says payment was not completed
 - **AND** the order is still Pending Payment with Pay Now available
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-7ra rev=1 -->
 #### Scenario: winner-order-SC-50 - Pay Now after an unfinished session starts fresh
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2314,6 +2321,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **WHEN** the winner selects Pay Now
 - **THEN** a new payment session starts for the same invoice amount
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-u5t rev=1 -->
 #### Scenario: winner-order-SC-51 - A completed session confirms before reading Preparing Shipment
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2324,6 +2332,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **THEN** the page shows Confirming payment
 - **AND** the order does not yet read Preparing Shipment
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-49w rev=1 -->
 #### Scenario: winner-order-SC-52 - A recorded payment reads Preparing Shipment
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2384,6 +2393,7 @@ SHALL not derive a second Expired order status.
   not lift it
 - **AND** offers Pay what is owed
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-y2j rev=1 -->
 #### Scenario: winner-order-SC-242 - An unpaid order shows the invoice and the pay control
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2392,6 +2402,7 @@ SHALL not derive a second Expired order status.
 - **THEN** the sidebar shows every invoice line and the pay control
 - **AND** the confirmed delivery address and the lot
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-apq rev=1 -->
 #### Scenario: winner-order-SC-243 - An order preparing its invoice offers no payment
 **Serves:** winner-order-US-19 - Winner confirms where a won lot ships
 
@@ -2551,6 +2562,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **THEN** both show the payment reference
 - **AND** the card invoice requires no separate bank-reference identifier
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-dsa rev=1 -->
 #### Scenario: winner-order-SC-244 - The payment reference is shown unconditionally, not gated by payment method
 **Serves:** winner-order-US-22 - Winner reviews invoice and payment details
 
@@ -2558,6 +2570,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **WHEN** the winner opens each on Winner Order
 - **THEN** both orders show the payment reference
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-l1s rev=1 -->
 #### Scenario: winner-order-SC-245 - Stripe metadata carries the payment reference and never the provider reference to the winner
 **Serves:** winner-order-US-22 - Winner reviews invoice and payment details
 

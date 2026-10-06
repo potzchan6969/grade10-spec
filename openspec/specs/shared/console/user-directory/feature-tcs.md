@@ -286,6 +286,7 @@ created account on success, and reports the existing account through
 **so that** my console opens the account it created or the one already there
 without the components deciding what comes next.
 
+<!-- trace:case id=g10.shared-user-directory.TC-2uc rev=1 covers=g10.shared-user-directory.SC-3w0,g10.shared-user-directory.SC-uox,g10.shared-user-directory.SC-bm5,g10.shared-user-directory.SC-d4y,g10.shared-user-directory.SC-8ij,g10.shared-user-directory.SC-iqr,g10.shared-user-directory.SC-aan -->
 ### shared-console-user-directory-US6-TC1-1: Create appears only with a create handler
 
 **Classification:**
@@ -313,6 +314,7 @@ Signed in as admin(console renders the directory without a create handler).
 
 * Create is not offered.
 
+<!-- trace:case id=g10.shared-user-directory.TC-al1 rev=1 covers=g10.shared-user-directory.SC-3w0,g10.shared-user-directory.SC-uox,g10.shared-user-directory.SC-bm5,g10.shared-user-directory.SC-d4y,g10.shared-user-directory.SC-8ij,g10.shared-user-directory.SC-iqr,g10.shared-user-directory.SC-aan -->
 ### shared-console-user-directory-US6-TC2-1: Create dialog collects console vocabulary and reports success
 
 **Classification:**
@@ -356,6 +358,7 @@ Signed in as admin(console supplies a create handler and its role vocabulary). C
 * Step 4 succeeds.
 * Step 5 reports the created account's identifier; the components decide nothing about what shows next.
 
+<!-- trace:case id=g10.shared-user-directory.TC-aih rev=1 covers=g10.shared-user-directory.SC-3w0,g10.shared-user-directory.SC-uox,g10.shared-user-directory.SC-bm5,g10.shared-user-directory.SC-d4y,g10.shared-user-directory.SC-8ij,g10.shared-user-directory.SC-iqr,g10.shared-user-directory.SC-aan -->
 ### shared-console-user-directory-US6-TC3-1: Create dialog offers no password field
 
 **Classification:**
@@ -385,6 +388,7 @@ Signed in as admin(console supplies a create handler).
 * The dialog collects name, email, and roles.
 * The dialog offers no password field.
 
+<!-- trace:case id=g10.shared-user-directory.TC-p29 rev=1 covers=g10.shared-user-directory.SC-3w0,g10.shared-user-directory.SC-uox,g10.shared-user-directory.SC-bm5,g10.shared-user-directory.SC-d4y,g10.shared-user-directory.SC-8ij,g10.shared-user-directory.SC-iqr,g10.shared-user-directory.SC-aan -->
 ### shared-console-user-directory-US6-TC4-1: Taken email refuses on the form before review
 
 **Classification:**
@@ -422,6 +426,7 @@ Signed in as admin(console supplies a create handler and an email lookup). An ac
 * Step 3 stays on the create form, does not open the review, shows the duplicate refuse and open-existing, and does not call create.
 * Step 5 reports <existing account>'s identifier through `onOpenExisting`; the components decide nothing about what shows next.
 
+<!-- trace:case id=g10.shared-user-directory.TC-07a rev=1 covers=g10.shared-user-directory.SC-3w0,g10.shared-user-directory.SC-uox,g10.shared-user-directory.SC-bm5,g10.shared-user-directory.SC-d4y,g10.shared-user-directory.SC-8ij,g10.shared-user-directory.SC-iqr,g10.shared-user-directory.SC-aan -->
 ### shared-console-user-directory-US6-TC5-1: Create warns when the email is malformed or off the console list
 
 **Classification:**
@@ -463,6 +468,7 @@ Signed in as admin(console supplies a create handler and a non-empty list of all
 * Step 5 creates the account.
 * Step 6 shows the malformed note, then creates after confirm.
 
+<!-- trace:case id=g10.shared-user-directory.TC-ttp rev=1 covers=g10.shared-user-directory.SC-3w0,g10.shared-user-directory.SC-uox,g10.shared-user-directory.SC-bm5,g10.shared-user-directory.SC-d4y,g10.shared-user-directory.SC-8ij,g10.shared-user-directory.SC-iqr,g10.shared-user-directory.SC-aan -->
 ### shared-console-user-directory-US6-TC6-1: Create warns when a locked role is selected, and combines with an email check
 
 **Classification:**
@@ -506,6 +512,7 @@ Signed in as admin(console supplies a create handler, a locked-role list, and a 
 * Step 5 creates the account.
 * Step 6 shows email and locked-role notes on the same confirmation; the typed email and the locked role label are both in bold.
 
+<!-- trace:case id=g10.shared-user-directory.TC-ce7 rev=1 covers=g10.shared-user-directory.SC-3w0,g10.shared-user-directory.SC-uox,g10.shared-user-directory.SC-bm5,g10.shared-user-directory.SC-d4y,g10.shared-user-directory.SC-8ij,g10.shared-user-directory.SC-iqr,g10.shared-user-directory.SC-aan -->
 ### shared-console-user-directory-US6-TC7-1: Create reviews a free well-formed on-list email with no locked role
 
 **Classification:**

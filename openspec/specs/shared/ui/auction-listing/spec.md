@@ -633,6 +633,7 @@ The first chip SHALL NOT be replaced by the typed raise floor.
 - **WHEN** the bid card renders quick-bid chips
 - **THEN** the three amounts are 124000, 128000, and 136000 HKD minor units
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-2s5 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-52 - Before any bid chip 1x is the opening price
 **Serves:** Quick bids - a collector meets the chips on a lot nobody has bid on
 
@@ -740,6 +741,7 @@ rule.
 **Committed amounts** - Committed amounts remain an integer count of minor
 units at or above the existing floor rules.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-9e0 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-38 - A draft at the ceiling is accepted
 **Serves:** Custom maximum ceiling - a draft at the ceiling is accepted
 
@@ -747,6 +749,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector enters `9999999999` into the custom maximum field
 - **THEN** the draft shown is `9999999999`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-8ym rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-39 - A typed digit beyond the ceiling restores the previous draft
 **Serves:** Custom maximum ceiling - a typed digit beyond the ceiling restores the previous draft
 
@@ -754,6 +757,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector types `0` into the custom maximum field
 - **THEN** the draft remains `9999999999`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-wdd rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-40 - A paste beyond the ceiling from an empty field stays empty
 **Serves:** Custom maximum ceiling - a paste beyond the ceiling from an empty field stays empty
 
@@ -763,6 +767,7 @@ units at or above the existing floor rules.
 - **AND** no invalid-amount message appears solely because of the rejected
   paste
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-z2x rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-41 - A paste beyond the ceiling restores the prior draft
 **Serves:** Custom maximum ceiling - a paste beyond the ceiling restores the prior draft
 
@@ -770,6 +775,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector pastes `99999999999` into the custom maximum field
 - **THEN** the draft remains `500`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-y2e rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-42 - A fractional paste that exceeds after whole-major cleaning restores the prior draft
 **Serves:** Custom maximum ceiling - a fractional paste that exceeds after whole-major cleaning restores the prior draft
 
@@ -777,6 +783,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector pastes `10000000000.99` into the custom maximum field
 - **THEN** the draft remains `500`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-xxl rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-43 - Raise path restores on overshoot
 **Serves:** Custom maximum ceiling - raise path restores on overshoot
 
@@ -785,6 +792,7 @@ units at or above the existing floor rules.
 - **WHEN** a collector types `1` into the custom maximum field
 - **THEN** the draft remains `9999999999`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-6n7 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-53 - A fractional paste at the ceiling after cleaning is accepted
 **Serves:** Custom maximum ceiling - a fractional paste at the ceiling after cleaning is accepted
 
@@ -823,6 +831,7 @@ leads.
 `winner` and `samePricePriorityTip` and SHALL thread them to
 `ListingBidHistoryList`.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-13j rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-50 - Closed sold Recent bids show a winner crown
 **Serves:** Public bid history outcome - closed sold Recent bids show a winner crown
 
@@ -834,6 +843,7 @@ leads.
 - **AND** no live bid card history row shows a winner crown without
   `isWinner`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-alr rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
 **Serves:** Public bid history outcome - equal-max non-leader shows earlier-leads tip
 
@@ -843,6 +853,7 @@ leads.
 - **THEN** the tooltip states that when maximums match, the earlier one
   leads
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-4a9 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-54 - No crown without its name
 **Serves:** Public bid history outcome - no crown without its name
 

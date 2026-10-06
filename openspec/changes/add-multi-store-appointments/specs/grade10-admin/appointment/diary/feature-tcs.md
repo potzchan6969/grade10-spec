@@ -9,6 +9,7 @@
 **I want** to set up the shop, its desks and rooms, its hours and the services each can take,
 **so that** collectors book into the capacity the shop actually has.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-xl1 rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC1-1: New shop offers its first slot
 
 **Classification:**
@@ -48,6 +49,7 @@
 
 * Step 5 lists Monday times from 10:00 on, the last ending by 14:00.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-w82 rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC2-1: Shop with no assigned resource is offered nowhere
 
 **Classification:**
@@ -83,6 +85,7 @@
 
 * `<unassigned shop>` is not among them.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-7iy rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC3-1: Retired shop keeps its day readable
 
 **Classification:**
@@ -122,6 +125,7 @@
 * Step 3 does not offer `<shop_1>`.
 * Step 4 shows `<a live booking>` in its lane.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-iz7 rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC4-1: Service created with its shape
 
 **Classification:**
@@ -163,6 +167,7 @@ The admin is signed in with the manage grant and is on the services list under `
 
 * The service is listed, active, with those values.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-42c rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC5-1: Resources assigned per shop set each shop's capacity
 
 **Classification:**
@@ -195,6 +200,7 @@ The admin is signed in with the manage grant and is on the services list under `
 * Step 3 shows a capacity of 2 on each time.
 * Step 4 shows a capacity of 1.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-to4 rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC6-1: Retired service leaves the public list and keeps its bookings
 
 **Classification:**
@@ -226,6 +232,7 @@ The admin is signed in with the manage grant and is on the services list under `
 * Step 2 does not list `<grading service>`.
 * Step 3 lists `<a live booking>` under the service's name.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-aey rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC7-1: Questions are asked in the order they were added
 
 **Classification:**
@@ -261,6 +268,7 @@ The admin is signed in with the manage grant and has `<grading service>` open.
 
 * The details step asks the `choice` question first, marked required, then the `text` question.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-8pa rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC8-1: Weekly rule opens the shop and a resource keeps its own hours
 
 **Classification:**
@@ -298,6 +306,7 @@ The admin is signed in with the manage grant and has `<grading service>` open.
 * Step 1 lists the rule under Tuesday.
 * Step 3 shows the desk's lane open 09:00 to 18:00 and the room's lane open 10:00 to 13:00.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-ayp rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC9-1: Special dates close a day or run it on other hours
 
 **Classification:**
@@ -338,6 +347,7 @@ The admin is signed in with the manage grant and has `<grading service>` open.
 * Step 3 shows `<the coming Monday>` as unavailable.
 * Step 4 lists times from 12:00, the last ending by 15:00.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-h0r rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC10-1: Read grant sees the diary and no write control
 
 **Classification:**
@@ -367,6 +377,7 @@ The admin is signed in with the read grant and without the manage grant.
 * Each surface lists its records.
 * No control that creates, edits, retires, blocks, books, moves, cancels or closes out is rendered on any of them.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-zvs rev=1 covers=g10adm.appointment-diary.SC-u7p,g10adm.appointment-diary.SC-69a,g10adm.appointment-diary.SC-lpa,g10adm.appointment-diary.SC-9ka,g10adm.appointment-diary.SC-6sq,g10adm.appointment-diary.SC-qbg,g10adm.appointment-diary.SC-t36,g10adm.appointment-diary.SC-l71,g10adm.appointment-diary.SC-lol,g10adm.appointment-diary.SC-2mf,g10adm.appointment-diary.SC-6tw,g10adm.appointment-diary.SC-xsz,g10adm.appointment-diary.SC-w8r -->
 ### grade10-admin-appointment-diary-US1-TC11-1: Every write lands an audit entry naming the operator
 
 **Classification:**
@@ -406,6 +417,7 @@ The admin is signed in with the read grant and without the manage grant.
 **I want** to read the day by desk and room, close one when it cannot be used, and record who came,
 **so that** the diary matches what is happening in the shop.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-7sg rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC1-1: Day lays out one lane per resource
 
 **Classification:**
@@ -444,6 +456,7 @@ The admin is signed in with the read grant and without the manage grant.
 * The first lane shows `<a live booking>` at 10:00 and the second shows `<a block>` at 14:00.
 * Both are placed on the shop's clock, with the zone named.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-9e8 rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC2-1: Stepping between days moves the lanes with the date
 
 **Classification:**
@@ -480,6 +493,7 @@ The admin is signed in with the read grant and without the manage grant.
 * The date shown is the day after `<the day>`.
 * The lanes show `<tomorrow's booking>` and not `<a live booking>`.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-nec rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC3-1: Desk blocked with a reason
 
 **Classification:**
@@ -518,6 +532,7 @@ The admin is signed in with the read grant and without the manage grant.
 * Step 2 shows the block from 12:00 to 14:00 with the reason Maintenance.
 * Step 3 offers no time on the first desk whose visit overlaps 12:00 to 14:00.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-nc0 rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC4-1: Whole shop blocked for the day
 
 **Classification:**
@@ -556,6 +571,7 @@ The admin is signed in with the read grant and without the manage grant.
 * Step 2 shows the block in every lane with the reason Stocktake.
 * Step 3 shows tomorrow as unavailable.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-kgz rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC5-1: Removing a block reopens the span
 
 **Classification:**
@@ -585,6 +601,7 @@ The admin is signed in with the read grant and without the manage grant.
 
 * Times inside `<a block>`'s span are offered again.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-7q0 rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC6-1: Product booking shows its case and cannot be moved from the console
 
 **Classification:**
@@ -621,6 +638,7 @@ The admin is signed in with the read grant and without the manage grant.
 * It shows the product as the vault and names `<a case>`.
 * No move and no cancel is offered.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-yhc rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC7-1: Visit marked completed
 
 **Classification:**
@@ -656,6 +674,7 @@ The admin is signed in with the read grant and without the manage grant.
 
 * The booking reads `completed` in its lane.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-yc2 rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC8-1: Visit marked a no-show
 
 **Classification:**
@@ -691,6 +710,7 @@ The admin is signed in with the read grant and without the manage grant.
 
 * The booking reads `no_show`.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-m77 rev=1 covers=g10adm.appointment-diary.SC-abv,g10adm.appointment-diary.SC-i8u,g10adm.appointment-diary.SC-54d,g10adm.appointment-diary.SC-pi1,g10adm.appointment-diary.SC-k1g,g10adm.appointment-diary.SC-s3a,g10adm.appointment-diary.SC-0xi,g10adm.appointment-diary.SC-jzc,g10adm.appointment-diary.SC-6y1 -->
 ### grade10-admin-appointment-diary-US2-TC9-1: Closed booking offers no action
 
 **Classification:**
@@ -734,6 +754,7 @@ The admin is signed in with the read grant and without the manage grant.
 **I want** to book, move or cancel a visit for a collector who walked in or called,
 **so that** a collector without the site in front of them still gets a desk that is expecting them.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-ugp rev=1 covers=g10adm.appointment-diary.SC-5pv,g10adm.appointment-diary.SC-imo,g10adm.appointment-diary.SC-hxu,g10adm.appointment-diary.SC-5p9,g10adm.appointment-diary.SC-ith,g10adm.appointment-diary.SC-pai -->
 ### grade10-admin-appointment-diary-US3-TC1-1: Walk-in booked with a name and no address
 
 **Classification:**
@@ -765,6 +786,7 @@ The admin is signed in with the read grant and without the manage grant.
 * The booking is live at 10:00 with source `operator` and booked by the admin.
 * No mail is sent.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-3r4 rev=1 covers=g10adm.appointment-diary.SC-5pv,g10adm.appointment-diary.SC-imo,g10adm.appointment-diary.SC-hxu,g10adm.appointment-diary.SC-5p9,g10adm.appointment-diary.SC-ith,g10adm.appointment-diary.SC-pai -->
 ### grade10-admin-appointment-diary-US3-TC2-1: Operator names the desk
 
 **Classification:**
@@ -795,6 +817,7 @@ The admin is signed in with the read grant and without the manage grant.
 * The booking sits in the second desk's lane.
 * The first desk is still offered at 10:00.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-ghd rev=1 covers=g10adm.appointment-diary.SC-5pv,g10adm.appointment-diary.SC-imo,g10adm.appointment-diary.SC-hxu,g10adm.appointment-diary.SC-5p9,g10adm.appointment-diary.SC-ith,g10adm.appointment-diary.SC-pai -->
 ### grade10-admin-appointment-diary-US3-TC3-1: Direct booking moved to another time
 
 **Classification:**
@@ -826,6 +849,7 @@ The admin is signed in with the read grant and without the manage grant.
 * The booking is live at 14:00 with the same attendee and the same answer to `<a question>`.
 * 10:00 is offered again.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-ta0 rev=1 covers=g10adm.appointment-diary.SC-5pv,g10adm.appointment-diary.SC-imo,g10adm.appointment-diary.SC-hxu,g10adm.appointment-diary.SC-5p9,g10adm.appointment-diary.SC-ith,g10adm.appointment-diary.SC-pai -->
 ### grade10-admin-appointment-diary-US3-TC4-1: Direct booking cancelled after confirmation
 
 **Classification:**
@@ -857,6 +881,7 @@ The admin is signed in with the read grant and without the manage grant.
 * The booking reads `cancelled`.
 * Step 3 offers 10:00 again.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-bdf rev=1 covers=g10adm.appointment-diary.SC-5pv,g10adm.appointment-diary.SC-imo,g10adm.appointment-diary.SC-hxu,g10adm.appointment-diary.SC-5p9,g10adm.appointment-diary.SC-ith,g10adm.appointment-diary.SC-pai -->
 ### grade10-admin-appointment-diary-US3-TC5-1: Full time refused by name
 
 **Classification:**
@@ -893,6 +918,7 @@ The admin is signed in with the read grant and without the manage grant.
 * The console says the time is full.
 * No new booking appears in any lane.
 
+<!-- trace:case id=g10adm.appointment-diary.TC-3rl rev=1 covers=g10adm.appointment-diary.SC-5pv,g10adm.appointment-diary.SC-imo,g10adm.appointment-diary.SC-hxu,g10adm.appointment-diary.SC-5p9,g10adm.appointment-diary.SC-ith,g10adm.appointment-diary.SC-pai -->
 ### grade10-admin-appointment-diary-US3-TC6-1: Bookings list narrows and searches
 
 **Classification:**

@@ -166,6 +166,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **WHEN** an offer expiring in 30 days is written
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-4yo rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-30 - An offer at the loan-to-value bound is made and one unit past it is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
@@ -218,6 +219,7 @@ flow before its values are decided.
 - **WHEN** a storage case is taken through to the vault
 - **THEN** nothing refuses it
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-p9g rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-31 - A production offer with no licence line is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - a production offer whose loan would print no licence is refused
 
@@ -225,6 +227,7 @@ flow before its values are decided.
 - **WHEN** an offer is written
 - **THEN** it is refused by name, naming the licence number
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-fyi rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-32 - A production offer with nowhere to pay is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - a production offer whose loan would name nowhere to pay is refused
 
@@ -357,6 +360,7 @@ closed.
 **An answer to a closed offer** - SHALL be refused by name, and SHALL leave
 the live offer open and unanswered.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-44j rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-26 - A replaced offer reads as closed beside the new one
 **Serves:** grade10-site-vault-valuation-and-offer-US-05 - the collector sees which offer is gone and which one is theirs to answer
 
@@ -365,6 +369,7 @@ the live offer open and unanswered.
 - **THEN** the read carries the 3,000,000 HKD minor units offer as superseded and the 4,000,000 HKD minor units offer as open, with its terms
 - **AND** the case's history carries the day the first closed
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-l0m rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-27 - An answer naming the replaced offer is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-05 - the collector's answer never lands on the offer that was withdrawn
 
@@ -380,6 +385,7 @@ and nothing where it has none. A valuation SHALL keep no grader, grade or cert
 of its own: a correction SHALL be made on the register, from the Case tab's
 Edit, and every later read SHALL show it.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-1yc rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-33 - A slab is valued beside its grader, grade and cert
 **Serves:** grade10-site-vault-valuation-and-offer-US-06 - staff value the slab in their hand against what the register says it is
 
@@ -387,6 +393,7 @@ Edit, and every later read SHALL show it.
 - **WHEN** staff open Record a valuation
 - **THEN** a read-only line reads PSA, `10` and `12345678` above the amount
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-e0k rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-34 - An item with no grader shows no line
 **Serves:** grade10-site-vault-valuation-and-offer-US-06 - staff value a watch nobody graded
 
@@ -394,6 +401,7 @@ Edit, and every later read SHALL show it.
 - **WHEN** staff open Record a valuation
 - **THEN** no grader, grade or cert line is shown
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-s2f rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-35 - A correction is made on the register and read everywhere
 **Serves:** grade10-site-vault-valuation-and-offer-US-06 - staff find the slab says 9, not 10
 
@@ -436,6 +444,7 @@ SHALL be taken as above; once the sweep has closed the offer as expired, a
 decline SHALL be refused by name as naming no open offer. Only an accept is
 refused as an offer that ran out.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-0ka rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-21 - The offer reads with its terms and its valuation
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector reads every figure they are being asked to agree to before they answer
 
@@ -443,6 +452,7 @@ refused as an offer that ran out.
 - **WHEN** its owner reads the case
 - **THEN** the read carries the 4,000,000 HKD minor units, the 60 days, the 160,000 HKD minor units of interest, the total of 4,160,000 HKD minor units, what a late day costs, the day to answer by and the 10,000,000 HKD minor units the offer was judged against
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-22e rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-22 - Accept is confirmed before it is sent
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector is shown what accepting costs before the answer goes
 
@@ -451,6 +461,7 @@ refused as an offer that ran out.
 - **THEN** the case is `accepted` and the answer carries the case as it now stands
 - **AND** the booked visit is as it was, and no visit is booked by the answer
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-gvt rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-23 - Decline is confirmed before it is sent
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector who says no is told what they keep - the request and the visit
 
@@ -459,6 +470,7 @@ refused as an offer that ran out.
 - **THEN** the offer is closed as declined by the collector and the case is `under_valuation`
 - **AND** the booked visit stands
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-cxs rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-24 - An answer is sent once and the case is read again
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector who presses twice sends one answer and reads where the case stands
 
@@ -467,6 +479,7 @@ refused as an offer that ran out.
 - **THEN** the first lands and answers the case as `accepted`
 - **AND** the second is refused by name and changes nothing
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-df1 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-25 - The day to answer by leaves with the offer
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector reads the day to answer by while it still means something
 
@@ -485,6 +498,7 @@ out, the offer was replaced, or the case moved under the answer.
 **Nothing moves** - a refused answer SHALL leave the case and its offers as
 they were, so the next read shows where the case now stands.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-k5k rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-28 - An offer that ran out under the reader
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector whose offer lapsed under them is told where they answered
 
@@ -493,6 +507,7 @@ they were, so the next read shows where the case now stands.
 - **THEN** the answer is refused by name as an offer that ran out
 - **AND** the next read reads an offer that ran out
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-rua rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-29 - A case that moved under the answer
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector whose case moved under them reads why the answer did not land
 

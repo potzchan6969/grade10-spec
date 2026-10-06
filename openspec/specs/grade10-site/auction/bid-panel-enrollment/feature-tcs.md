@@ -528,6 +528,7 @@ enrolled after my first accepted bid,
 * The tooltip authorizes the card for bidding.
 * The tooltip does not promise a bid-time hold.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-aoq rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC12-1: A refused card link keeps setup open and links nothing
 
 Runs once per row of **Test data**.
@@ -586,6 +587,7 @@ Runs once per row of **Test data**.
 * Step 10: presets and the custom maximum are visible and disabled.
 * Step 11: the primary bid action reads "Link a card to bid".
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-cld rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC13-1: A retry after a refused link links the card
 
 **Classification:**
@@ -631,6 +633,7 @@ Runs once per row of **Test data**.
 * Step 7: the linked card is shown, with Change available.
 * Step 8: presets and the custom maximum are enabled.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-8yx rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC14-1: Card brands beyond Visa link through setup
 
 Runs once per row of **Test data**.
@@ -680,6 +683,7 @@ Runs once per row of **Test data**.
 * Step 5: a linked brand shows in the linked-card slot.
 * Any refused brand is reported to the spec's author, not failed.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-ywm rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC15-1: Setup says the card is charged only on a win
 
 **Classification:**
@@ -719,6 +723,7 @@ Runs once per row of **Test data**.
 * Step 3 names no hold and no authorization.
 * Step 4 reads "Link Card".
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-vbn rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC16-1: Committing a maximum answers Leading or Outbid at once
 
 Runs once per row of **Test data**.

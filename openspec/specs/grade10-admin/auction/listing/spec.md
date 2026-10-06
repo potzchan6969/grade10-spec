@@ -137,6 +137,7 @@ minimum increment.
 - **THEN** Grade10 refuses the write
 - **AND** the currency is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-a6f rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-124 - Draft saves a starting price of 0
 **Serves:** grade10-admin-auction-listing-US-01 - Operator prices an unfinished no-reserve lot at nothing
 
@@ -482,6 +483,7 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rhp rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-125 - Create accepts a starting price of 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a no-reserve lot that opens at nothing
 
@@ -490,6 +492,7 @@ be refused.
 - **THEN** the form and the API accept each create
 - **AND** each listing is created with a starting price of 0 minor units in its currency
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-v2q rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-125a - Create with 0 and no currency stores HKD 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -497,6 +500,7 @@ be refused.
 - **WHEN** a create is sent to the API with a starting price of 0 minor units
 - **THEN** the listing is created with a starting price of 0 minor units `HKD`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hze rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-126 - Create refuses a negative starting price on the API
 **Serves:** grade10-admin-auction-listing-US-03 - A script cannot create what the form refuses
 
@@ -505,6 +509,7 @@ be refused.
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-zho rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-127 - An empty starting price is not stored as 0 at create
 **Serves:** grade10-admin-auction-listing-US-03 - An operator who forgot the price cannot create a free lot
 
@@ -513,6 +518,7 @@ be refused.
 - **THEN** Grade10 refuses the create
 - **AND** the draft's starting price stays empty, not 0
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rfu rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-128 - Operator lowers a created listing's starting price to 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator turns a priced lot into a no-reserve one before it goes live
 
@@ -521,6 +527,7 @@ be refused.
 - **THEN** Grade10 stores 0 minor units `JPY`
 - **AND** the listing remains created
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-fcs rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-129 - A listing starting at 0 publishes
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a no-reserve lot in front of collectors
 
@@ -865,6 +872,7 @@ reading a published listing SHALL receive the gallery in its display order.
 - **WHEN** an operator uploads an image
 - **THEN** Grade10 refuses the upload
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-x5f rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-95 - Operator combines direct uploads and product assets
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -872,6 +880,7 @@ reading a published listing SHALL receive the gallery in its display order.
 - **WHEN** an authorized operator adds direct uploads and selects product assets in an interleaved order
 - **THEN** Grade10 saves one listing gallery in that order
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-89c rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-96 - Listing selection is limited to its product assets
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -880,6 +889,7 @@ reading a published listing SHALL receive the gallery in its display order.
 - **THEN** Grade10 refuses the selection
 - **AND** the listing gallery is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-cps rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-97 - The combined gallery cannot exceed eight items
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -888,6 +898,7 @@ reading a published listing SHALL receive the gallery in its display order.
 - **THEN** Grade10 refuses the operation
 - **AND** the gallery still has eight items
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-tgj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-98 - Saving snapshots selected product assets
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -895,6 +906,7 @@ reading a published listing SHALL receive the gallery in its display order.
 - **WHEN** an authorized operator selects it and saves the listing
 - **THEN** Grade10 stores that asset in the listing gallery as saved media
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-8h3 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-99 - A missing source asset refuses Save
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -903,6 +915,7 @@ reading a published listing SHALL receive the gallery in its display order.
 - **WHEN** the operator saves the listing
 - **THEN** Grade10 refuses the save
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-mn8 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-100 - A saved listing does not follow later product-gallery changes
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -1736,6 +1749,7 @@ inventory hold at that close and SHALL NOT wait for an operator.
 - A listing that closes with a winner SHALL NOT release under this rule; its
   hold moves to sold as before.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-t6r rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-130 - A close with no bids releases the hold
 **Serves:** grade10-admin-auction-listing-US-09 - the operator finds the stock back without a step
 
@@ -1763,6 +1777,7 @@ inventory hold at that close and SHALL NOT wait for an operator.
 - **AND** the release is retried until it succeeds, and then the reservation is
   closed once
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-5vh rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-146 - A close with only outbid bids releases the hold
 **Serves:** grade10-admin-auction-listing-US-09 - the operator finds the stock back without a step
 
@@ -1778,6 +1793,7 @@ The admin page of a listing that closed with no winner SHALL show that its stock
 was released, with the date and time of the release, once the release has
 completed.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-le0 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-134 - An Unsold listing shows the release date
 **Serves:** grade10-admin-auction-listing-US-09 - the operator sees the stock is back
 
@@ -1826,6 +1842,7 @@ The editor SHALL show the refusal's name inline.
 Every refusal of an ordinary draft save, such as available stock below the
 quantity, SHALL apply as well.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-4ez rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-135 - Relist opens the editor with the lot filled in
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
@@ -1838,6 +1855,7 @@ quantity, SHALL apply as well.
   copy, starting price, currency and both gallery items
 - **AND** it has no window, slug or listing code yet
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-lc6 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-136 - Relist stores nothing until Save
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
@@ -1848,6 +1866,7 @@ quantity, SHALL apply as well.
 - **AND** when the operator instead saves, a new draft holds three units,
   available falls by three and the Unsold listing is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-z9c rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-137 - Relist shows on the row of a released Unsold listing only
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
@@ -1856,6 +1875,7 @@ quantity, SHALL apply as well.
 - **WHEN** an operator holding `auction:operate` opens the Listings table
 - **THEN** only the Unsold listing's row offers Relist
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-j1h rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-138 - An operator without the grant is not offered Relist
 **Serves:** grade10-admin-auction-listing-US-09 - only an operator who can operate auctions relists
 
@@ -1864,6 +1884,7 @@ quantity, SHALL apply as well.
 - **WHEN** they open the Listings table
 - **THEN** the listing's row shows no Relist
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-suv rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-141 - Relist waits for the stock release
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
@@ -1873,6 +1894,7 @@ quantity, SHALL apply as well.
 - **THEN** the listing's row shows no Relist
 - **AND** once the release completes, the row offers Relist
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-lqj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-142 - A listing in a campaign offers no Relist
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
@@ -1880,6 +1902,7 @@ quantity, SHALL apply as well.
 - **WHEN** an operator holding `auction:operate` opens the Listings table
 - **THEN** the listing's row shows no Relist
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-nq1 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-143 - Relist is hidden once the listing is relisted
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
@@ -1887,6 +1910,7 @@ quantity, SHALL apply as well.
 - **WHEN** an operator holding `auction:operate` opens the Listings table
 - **THEN** the Unsold listing's row shows no Relist
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2m4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-144 - Only the first of two Relist editors saves
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
@@ -1897,6 +1921,7 @@ quantity, SHALL apply as well.
 - **AND** the second is refused as already relisted, stores nothing and
   available stays two
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-9uj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-145 - Save refuses a source that cannot be relisted
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
@@ -1960,6 +1985,7 @@ A successful save of source media SHALL keep the existing listing-owned
 snapshot independent of later source byte or alt-text edits, source
 reordering, tag changes, and Cert-record deletion.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-vhc rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-101 - Cert listing defaults to matching product media
 **Serves:** grade10-admin-auction-listing-US-11 - Operator starts a Cert-specific listing with its usual media
 
@@ -1968,6 +1994,7 @@ reordering, tag changes, and Cert-record deletion.
 - **THEN** it offers untagged product media and media tagged to the selected record
 - **AND** media tagged to the other record is absent
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xyf rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-103 - Other Cert media is grouped by printed Cert ID
 **Serves:** grade10-admin-auction-listing-US-12 - Operator deliberately uses another Cert's media
 
@@ -1976,6 +2003,7 @@ reordering, tag changes, and Cert-record deletion.
 - **THEN** the drawer contains the hidden media grouped and named by each printed Cert ID
 - **AND** untagged product media is not in the drawer
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-01q rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-104 - Adding other-Cert media names its source Cert
 **Serves:** grade10-admin-auction-listing-US-12 - Operator deliberately uses another Cert's media
 
@@ -1984,6 +2012,7 @@ reordering, tag changes, and Cert-record deletion.
 - **THEN** the source media is added to the listing gallery
 - **AND** the addition names `PSA-123` as the source Cert ID
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-itk rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-105 - No Cert ID defaults to untagged product media
 **Serves:** grade10-admin-auction-listing-US-13 - Operator lists an unnumbered unit
 
@@ -1992,6 +2021,7 @@ reordering, tag changes, and Cert-record deletion.
 - **THEN** it offers untagged product media only
 - **AND** Cert-tagged media is absent
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hqh rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-106 - Save copies selected source bytes and current alt text
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -1999,6 +2029,7 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** an authorized operator adds the source and saves the listing
 - **THEN** the listing gallery owns a copy of the source bytes and current alt text
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-cyr rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-107 - Listing copy alt text and order remain editable
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2006,6 +2037,7 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** an authorized operator edits the copied alt text and reorders the gallery
 - **THEN** the saved listing gallery retains the edited alt text and chosen order
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-eys rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-108 - Later source edits do not alter a listing copy
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2013,6 +2045,7 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** Inventory changes the source bytes, alt text, or source order
 - **THEN** the listing copy's bytes, alt text, and listing order remain unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2vy rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-109 - Retagging source media does not alter a listing copy
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2020,6 +2053,7 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** Inventory retags the source media to another same-product Cert record
 - **THEN** the listing copy's bytes and alt text remain unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-38a rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-110 - Untagging source media does not alter a listing copy
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2027,6 +2061,7 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** Inventory clears the source media tag
 - **THEN** the listing copy's bytes and alt text remain unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-79q rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-111 - Removing a source Cert unit deletes its media but not a listing copy
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2034,6 +2069,7 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** Inventory removes that physical unit and Cert record, deleting its tagged source media
 - **THEN** the listing copy's bytes and alt text remain unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-p6h rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-112 - A source item can fill the eighth gallery place
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2041,6 +2077,7 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** an authorized operator adds and saves the source item
 - **THEN** the listing gallery contains eight items in the selected order
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-z0t rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-113 - A ninth source item is refused
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2049,6 +2086,7 @@ reordering, tag changes, and Cert-record deletion.
 - **THEN** Grade10 refuses the operation
 - **AND** the gallery still has eight items
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-lvn rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-114 - A source item from another product is refused
 **Serves:** grade10-admin-auction-listing-US-11 - Operator starts a Cert-specific listing with its usual media
 
@@ -2057,6 +2095,7 @@ reordering, tag changes, and Cert-record deletion.
 - **THEN** Grade10 refuses the selection
 - **AND** the listing gallery is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-emr rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-115 - Unauthorized source reads and additions are refused
 **Serves:** grade10-admin-auction-listing-US-12 - Operator deliberately uses another Cert's media
 
@@ -2065,6 +2104,7 @@ reordering, tag changes, and Cert-record deletion.
 - **THEN** Grade10 refuses the read and addition under existing authorization
 - **AND** the listing gallery is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-fbm rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-116 - Direct uploads and source media share one gallery order
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2072,6 +2112,7 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** an authorized operator adds both in a chosen order and saves the listing
 - **THEN** the listing gallery contains both items in that order
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-vmr rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-117 - A source missing at Save time refuses the save
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
@@ -2112,6 +2153,7 @@ admin access or expose private listing data.
   grade10-admin's listing screens; the code's absence from grade10-site's
   public listing pages is specified by `grade10-site/auction/listing-page`.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-cza rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-87 - Operator reads a newly saved draft's code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -2122,6 +2164,7 @@ admin access or expose private listing data.
 - **AND** the code's first 2 characters are letters drawn from
   `ABCDEFGHJKMNPQRSTVWXYZ`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xrt rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-88 - An unsaved draft shows no listing code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -2129,6 +2172,7 @@ admin access or expose private listing data.
 - **WHEN** an operator opens its admin screen
 - **THEN** no listing code is shown
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-7j9 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-89 - The listing code has no editable control
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -2138,6 +2182,7 @@ admin access or expose private listing data.
   it
 - **AND** an API write attempting to set the listing code is refused
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xa1 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-90 - A closed or called-off listing keeps its listing code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -2145,6 +2190,7 @@ admin access or expose private listing data.
 - **WHEN** the listing is closed, or called off before close
 - **THEN** its admin screen still shows the same listing code
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hby rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-91 - Two listings never show the same code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -2152,6 +2198,7 @@ admin access or expose private listing data.
 - **WHEN** an operator reads each listing's code on its admin screen
 - **THEN** the two codes are different
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-6yj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-92 - A projected collision retries
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -2161,6 +2208,7 @@ admin access or expose private listing data.
 - **THEN** allocation retries atomically
 - **AND** the stored code has the required shape and differs from the reserved code
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-phl rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-93 - Deletion does not release a code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -2169,6 +2217,7 @@ admin access or expose private listing data.
 - **THEN** `LK423` remains unavailable
 - **AND** the later listing receives a different code
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rax rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-94 - A known code does not grant admin access
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
@@ -2203,6 +2252,7 @@ overwriting an address they chose.
   claims a slug after an available field-exit check, Grade10 SHALL refuse the
   Save and leave the draft's stored slug unchanged.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-w4n rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-118 - First saved draft receives a generated slug
 **Serves:** grade10-admin-auction-listing-US-73 - Operator starts from a distinct public address
 
@@ -2210,6 +2260,7 @@ overwriting an address they chose.
 - **WHEN** an operator saves it
 - **THEN** the draft stores a listing code and slug `charizard-psa-10-<lowercase code>`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hi0 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-119 - A title-less saved draft uses the neutral prefix
 **Serves:** grade10-admin-auction-listing-US-73 - Operator can save an unfinished listing without losing a valid address
 
@@ -2217,6 +2268,7 @@ overwriting an address they chose.
 - **WHEN** an operator saves it
 - **THEN** the draft stores slug `lot-<lowercase code>`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-7ew rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-120 - A title edit refreshes an untouched generated slug
 **Serves:** grade10-admin-auction-listing-US-73 - Operator keeps the generated address aligned with the title while drafting
 
@@ -2224,6 +2276,7 @@ overwriting an address they chose.
 - **WHEN** an operator changes its title
 - **THEN** the slug's title portion changes and its lower-case code suffix stays the same
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-jow rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-121 - A title edit preserves an operator slug
 **Serves:** grade10-admin-auction-listing-US-73 - Operator retains an address they selected
 
@@ -2231,6 +2284,7 @@ overwriting an address they chose.
 - **WHEN** the operator changes its title
 - **THEN** the slug remains unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-96t rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-122 - Slug field exit reports a retained collision
 **Serves:** grade10-admin-auction-listing-US-73 - Operator learns that a chosen address is unavailable before Save
 
@@ -2238,6 +2292,7 @@ overwriting an address they chose.
 - **WHEN** an operator leaves Slug on another draft
 - **THEN** the editor reports the slug unavailable, keeps its value for correction, and shows the retained-address note
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-tb7 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-123 - Save rejects a collision after an available check
 **Serves:** grade10-admin-auction-listing-US-73 - Operator receives the authoritative collision result when another save races
 

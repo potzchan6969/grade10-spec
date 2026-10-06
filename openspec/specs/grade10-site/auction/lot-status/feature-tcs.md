@@ -103,6 +103,7 @@ Runs once per row of **Test data**.
 **I want** draft lots and called-off lots absent from browse, search and my watchlist,
 **so that** I can use a called-off lot's original address directly without it appearing as an available auction.
 
+<!-- trace:case id=g10.auction-lot-status.TC-22a rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw -->
 ### grade10-site-auction-lot-status-US2-TC1-1: Hidden lots are not in the catalogue
 
 Runs once per row of **Test data**.

@@ -90,6 +90,7 @@ other route.
 - **Verified before read** — a finding that stands is applied to the draft
   before the hand reads it, and a finding that falls is not shown as a question
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-3y9 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-01 - A draft reaches its hand read and verified
 **Serves:** shared-planning-agent-rounds-US-02 - the designer finds a summary waiting instead of an empty file
 
@@ -98,6 +99,7 @@ other route.
 - **AND** one reply in the thread carries the draft's summary of one screen, the perspectives that read it, the findings that stood, and each numbered question with its recommendation
 - **AND** a finding the verifier rejected appears neither in the draft nor in the summary
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-xhl rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-02 - Nothing lands without the hand's word
 **Serves:** shared-planning-agent-rounds-US-02 - the designer's word is the only thing that puts the design on `main`
 
@@ -106,6 +108,7 @@ other route.
 - **THEN** the artifact is not on `main`
 - **AND** no further step of the round runs
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-kgj rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-03 - A finding that stands changes the draft
 **Serves:** shared-planning-agent-rounds-US-03 - the engineer who will build the change challenges a mechanism the readers have already argued over
 
@@ -142,6 +145,7 @@ artifact's stage, and a word from any other teammate SHALL be refused.
 - **Another teammate's word** — refused, with a reply naming whose word the
   artifact waits on; reassigning the hand is the way around
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-o3z rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-04 - One word lands every artifact of that hand
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager says land once and the three artifacts they own land together
 
@@ -151,6 +155,7 @@ artifact's stage, and a word from any other teammate SHALL be refused.
 - **AND** the design is left drafted and the designer is told it is their turn
 - **AND** the thread carries one reply naming what landed, the handle whose word landed it, and the stage the change reached
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-ks3 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-05 - Anybody but the hand is refused
 **Serves:** shared-planning-agent-rounds-US-02 - the designer's own word is what the design waits on, and nobody else's
 
@@ -192,6 +197,7 @@ land both files, together.
 - **AND** no agent is dispatched to decide between them
 - **AND** the product manager's word at the reconciliation lands both files together
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-osr rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-07 - A reading raises what it cannot settle
 **Serves:** shared-planning-agent-rounds-US-04 - the hand is asked the one thing the two readings could not decide
 
@@ -281,6 +287,7 @@ taken as a remark.
   applied to the page as written; from any other hand it becomes a `❓` line on
   the page for the product manager
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-u76 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-11 - A question answered by its id alone
 **Serves:** shared-planning-agent-rounds-US-04 - the hand takes the recommendation without retyping it
 
@@ -289,6 +296,7 @@ taken as a remark.
 - **THEN** the row is written with the recommended option
 - **AND** the question closes
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-pb0 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-12 - A remark is applied and re-read narrowly
 **Serves:** shared-planning-agent-rounds-US-02 - the designer says what to change and reads which readers ran again
 
@@ -298,6 +306,7 @@ taken as a remark.
 - **AND** the reply in the thread names those perspectives
 - **AND** `rounds.md` gains a row naming the remark
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-m9d rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-13 - A remark settles a question that was asked
 **Serves:** shared-planning-agent-rounds-US-03 - the engineer's challenge before acceptance is answered where the next reader will find it
 
@@ -307,6 +316,7 @@ taken as a remark.
 - **AND** `rounds.md` gains the round's row naming the remark
 - **AND** the thread carries the agent's answer to the challenge
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-fe8 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-14 - A hand's own push is their word
 **Serves:** shared-planning-agent-rounds-US-02 - the designer changes the file directly and the round takes it
 
@@ -315,6 +325,7 @@ taken as a remark.
 - **AND** no question is raised about them
 - **AND** the round continues from what is pushed
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-vhq rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-15 - A reply the round cannot apply is answered
 **Serves:** shared-planning-agent-rounds-US-04 - the hand learns their words were read and what they did not reach
 
@@ -324,6 +335,7 @@ taken as a remark.
 - **AND** the question stays open on that hand
 - **AND** no artifact reaches `main` on that reply
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-z40 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-16 - A remark on a page's marked lines
 **Serves:** shared-planning-agent-rounds-US-02 - the designer's words about the product reach the page the product manager keeps
 
@@ -367,6 +379,7 @@ A message in the planning channel that addresses the app and names no existing c
   the team map does not name takes the held row unaddressed, and the row asks
   for the handle
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-aw7 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-17 - A product manager opens a change from one sentence
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager says what is wanted and never opens a terminal
 
@@ -376,6 +389,7 @@ A message in the planning channel that addresses the app and names no existing c
 - **AND** the asker's handle is written as its `hands: pm`
 - **AND** the first reply in that message's thread names the change's id
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-mr8 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-18 - A later message joins the change it names
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager answers where the change already lives
 
@@ -383,6 +397,7 @@ A message in the planning channel that addresses the app and names no existing c
 - **THEN** it is answered in that change's thread and the reply names that change's id
 - **AND** no second change is opened
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-ehb rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-19 - An asker the team map does not know
 **Serves:** shared-planning-agent-rounds-US-01 - a teammate's sentence opens the change and the handle is asked for afterwards
 
@@ -391,6 +406,7 @@ A message in the planning channel that addresses the app and names no existing c
 - **THEN** the change opens with its product manager unnamed
 - **AND** the reply says the hand is unnamed and asks for the handle
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-s1y rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-80 - A sentence overlaps a change in flight
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager's next sentence reaches the change that already covers it instead of opening a second one
 
@@ -411,6 +427,7 @@ dated wait instead.
   has drawn writes a dated `awaiting: ui-design:` line on the designer, and
   describes no screen in prose in its place
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-vh6 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-20 - A design needs a frame nobody drew
 **Serves:** shared-planning-agent-rounds-US-02 - the designer is asked for the frame rather than handed a screen written out in words
 
@@ -447,6 +464,7 @@ group of work.
 - **Holds no stage** — neither row holds a stage, a tick, a claim or a wait; a
   held row holds the change's landings and nothing else
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-aor rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-21 - A preference is decided, and one that moves scope is held
 **Serves:** shared-planning-agent-rounds-US-04 - the hand is asked the choices only they can take and reads the rest already decided
 
@@ -473,6 +491,7 @@ group of work.
 - **AND** the row is no open question, and no list carries it
 - **AND** a tick, a claim and a wait are taken as usual
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-z36 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-72 - A held row holds the landing until answered or waved through
 **Serves:** shared-planning-agent-rounds-US-04 - the hand's answer is what lets the change land, and one phrase waives it
 
@@ -502,6 +521,7 @@ the draft that depends on it.
 - **Before what depends on it** — the artifact that owns the finding is written
   before the draft that would have stated it
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-bvo rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-24 - A draft needs a value nobody confirmed
 **Serves:** shared-planning-agent-rounds-US-04 - the hand confirms a value where every reader of the product will find it
 
@@ -510,6 +530,7 @@ the draft that depends on it.
 - **AND** the draft states no value in its place
 - **AND** no numbered decisions row is written for it
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-fda rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-25 - A finding names a state and a mechanism
 **Serves:** shared-planning-agent-rounds-US-03 - the engineer who will build the change challenges the mechanism in the design it is about, not in the requirement drawn from it
 
@@ -533,6 +554,7 @@ decided SHALL be listed nowhere.
   and the thread
 - **None** — a reader with no open question is shown the changes on them alone
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-ynm rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-26 - A hand reads their open questions first
 **Serves:** shared-planning-agent-rounds-US-04 - the hand finds every question waiting on them in one place
 
@@ -541,6 +563,7 @@ decided SHALL be listed nowhere.
 - **THEN** both questions are listed above the changes on them, each with its change, its id, its first line and the thread
 - **AND** the change page shows those ids on the artifact rows they were raised against
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-l1g rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-27 - A hand with no open question
 **Serves:** shared-planning-agent-rounds-US-04 - the hand with nothing to answer reads their changes without a gap
 
@@ -611,6 +634,7 @@ it, and SHALL NOT be given any other reader's findings or verdicts.
 - **AND** neither is given the other's findings
 - **AND** neither is given a verifier's verdict
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-p6s rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-31 - A design's reader names the principle
 **Serves:** shared-planning-agent-rounds-US-03 - the engineer who will build the change reads a finding as a claim against a stated principle
 
@@ -739,6 +763,7 @@ from the files.
 - **Never held** — a tick, a claim and a wait are never held by a behind
   artifact, in any of the three states
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-z8s rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-37 - A landing puts what follows it behind
 **Serves:** shared-planning-agent-rounds-US-05 - the hand of an artifact learns it is behind from the change itself
 
@@ -785,6 +810,7 @@ artifact after the one that moved, oldest first.
   found right is the one thing the agent lands on its own; every other landing
   waits for a hand's word
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-b3r rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-39 - A read that changes nothing says so
 **Serves:** shared-planning-agent-rounds-US-05 - the hand is told their artifact was read and is not asked to read it
 
@@ -794,6 +820,7 @@ artifact after the one that moved, oldest first.
 - **AND** the thread carries one reply naming what was read and saying nothing changed
 - **AND** no `rounds.md` row is written and the artifact's hand is asked nothing
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-hma rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-40 - A read that edits opens a round
 **Serves:** shared-planning-agent-rounds-US-05 - the hand is brought in only when the change reaches their artifact
 
@@ -803,6 +830,7 @@ artifact after the one that moved, oldest first.
 - **AND** no `reviewed:` line is written for it
 - **AND** the edited artifact does not land until that hand's word
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-l3x rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-41 - Artifacts are read oldest first, each redrawn from the one before it
 **Serves:** shared-planning-agent-rounds-US-05 - one landing clears a chain of artifacts in the order they were drawn
 
@@ -813,6 +841,7 @@ artifact after the one that moved, oldest first.
 - **AND** a round opens for every artifact it redrew, nothing lands, and the hands land them in the chain's order
 - **AND** a draft that needs what only a hand holds writes the dated wait, and nothing that depends on it is drafted
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-b5m rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-42 - A landing with nothing after it says nothing more
 **Serves:** shared-planning-agent-rounds-US-05 - a hand whose artifact is the last one reads one reply and no more
 
@@ -845,6 +874,7 @@ cases, and SHALL land nothing.
 - **What only a hand holds** — the draft that needs it writes the dated wait,
   and nothing that depends on it is drafted
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-esw rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-71 - A plan wake drafts the chain and lands nothing
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager's one sentence comes back as a change drafted as far as it can be
 
@@ -868,6 +898,7 @@ is behind, and the fold at archive SHALL refuse a behind delta.
   with what else still refuses
 - **Never held** — a tick, a claim and a wait are refused by neither
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-fxl rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-43 - A landing is refused and says which
 **Serves:** shared-planning-agent-rounds-US-05 - the hand asked to land learns which earlier artifact has not been read
 
@@ -895,6 +926,7 @@ nothing in place.
 - **Never in place** — no artifact is redrawn to the moved goal before the
   product manager answers
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-vji rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-45 - A moved goal asks the product manager
 **Serves:** shared-planning-agent-rounds-US-07 - the product manager is asked before a change mid-build becomes another change
 
@@ -903,6 +935,7 @@ nothing in place.
 - **THEN** the product manager is asked one numbered question offering extend, supersede or split
 - **AND** no artifact after `decisions.md` is redrawn
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-2oy rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-46 - Nothing lands until the answer
 **Serves:** shared-planning-agent-rounds-US-07 - the product manager's answer is what lets the change move again
 
@@ -911,6 +944,7 @@ nothing in place.
 - **THEN** the landing is refused and names that question
 - **AND** a tick and a claim are still taken
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-mxx rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-47 - Each answer opens or closes what it names
 **Serves:** shared-planning-agent-rounds-US-07 - the product manager says one word and the change, or its successor, goes on from there
 
@@ -1002,6 +1036,7 @@ in the landing's own commit.
   reading of the whole change carries its row like any other round: the
   simpler-thing reader reads it, and a round of one reader names no verifier
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-14t rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-51 - A reader sees what a round did
 **Serves:** shared-planning-agent-rounds-US-09 - a reader of the change tells a round that found nothing from one that never ran
 
@@ -1034,6 +1069,7 @@ in the landing's own commit.
 - **WHEN** `pnpm check:manual` runs and the change's `decisions.md` holds no row with that id
 - **THEN** the check refuses and names the id and the change
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-f9e rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-79 - A fix pass is a round with a row
 **Serves:** shared-planning-agent-rounds-US-09 - a reader of the change finds the fix passes in the record beside the groups
 
@@ -1060,6 +1096,7 @@ show what the thread and the messages say, read from `main` and nowhere else.
 - **One wording** — the message's words come from one module the workflow and
   the manual both import, so Told now and the Slack message are one text
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-m18 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-81 - The change page mirrors the thread
 **Serves:** shared-planning-agent-rounds-US-09 - a reader of the change follows what happened without opening Slack
 
@@ -1130,6 +1167,7 @@ SHALL reach the engineer only after its readers have run.
 5. The group's `rounds.md` row lands in the store before the group's tasks are
    ticked
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-bsq rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-57 - The tests land in their own commit
 **Serves:** shared-planning-agent-rounds-US-06 - the engineer reads a group whose tests were written before its code
 
@@ -1137,6 +1175,7 @@ SHALL reach the engineer only after its readers have run.
 - **THEN** the tests its scenario ids name land in a commit carrying no code for the group
 - **AND** the code lands after them
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-64a rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-58 - The landing summary names its readers and tests
 **Serves:** shared-planning-agent-rounds-US-06 - the engineer reads a summary rather than the diff
 
@@ -1177,6 +1216,7 @@ leave those walks as the change's end-to-end suite.
   durable ones; a change nobody walks owes no walk row, and a change on the
   old flow owes neither
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-tfp rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-59 - The walk leaves the suite and marks its cases
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases the walk now covers
 
@@ -1192,6 +1232,7 @@ leave those walks as the change's end-to-end suite.
 - **THEN** one reader argues the simpler shape for the whole change
 - **AND** the change does not go to staging before that reading
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-4zp rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-85 - The archive holds the walk and the whole-change reading
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate archives nothing whose journeys were never walked
 
@@ -1203,6 +1244,7 @@ leave those walks as the change's end-to-end suite.
 - **AND** it reads the rows and the groups on `main`, where a landing writes them, and the journeys of each capability the change specifies — the delta's file where it carries one, the durable one where it leans on it
 - **AND** a change whose journeys say nobody walks it owes no walk row, and a change on the old flow is asked for neither
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-7gw rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-78 - A case a store test decides flips with the test
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases a test already decides and which are still theirs to walk
 
@@ -1212,6 +1254,7 @@ leave those walks as the change's end-to-end suite.
 - **AND** the case names that test as what decides it
 - **AND** a case only the end-to-end walk drives is flipped by the walk's commit instead, and a case neither decides stays manual with its reason
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-pgk rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-107 - A case an application test decides names it by the repository's tag
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases a test in the application repository already decides
 
@@ -1232,6 +1275,7 @@ and SHALL say how many it left out.
   sentence naming the case id; the sheet stays the record of the walk and
   posts nothing to the thread itself
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-r6o rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-61 - Automated cases are left out and counted
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate walks the cases the suite cannot show
 
@@ -1280,6 +1324,7 @@ test reaches.
 - **The row first** — the group's `rounds.md` row lands in the store before the
   tick
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-v4t rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-63 - A tick naming a scenario no test reaches is refused
 **Serves:** shared-planning-agent-rounds-US-06 - the engineer's tick says which behaviour landed and which test proves it
 
@@ -1311,6 +1356,7 @@ SHALL be recorded in the change's record.
   branch is the same round, and a change whose thread cannot be reached is
   worked that way
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-e3a rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-64 - The thread's address is written once
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager keeps answering in the thread their first sentence started
 
@@ -1354,6 +1400,7 @@ thread.
   wake past its budget without it posts the failure line with the run's link
   and frees the thread
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-zmy rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change
 **Serves:** shared-planning-agent-rounds-US-05 - the hand's artifact is read again because the push told the relay, once
 
@@ -1363,6 +1410,7 @@ thread.
 - **AND** the relay queues each against that change's thread
 - **AND** nothing is posted where the repository variable carrying the wakes is off
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-2x6 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-67 - The workflow holds no session, no write permission and no chat token
 **Serves:** shared-planning-agent-rounds-US-05 - the read again the hand meets is run by the relay and never by the push
 
@@ -1370,6 +1418,7 @@ thread.
 - **THEN** it holds no agent session, no write permission on the store and no chat token
 - **AND** the wake is the only thing it posts
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-afx rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-75 - A wake that does not finish says so
 **Serves:** shared-planning-agent-rounds-US-05 - the hand waiting on a read again is told when it did not finish, and where to look
 
@@ -1378,6 +1427,7 @@ thread.
 - **THEN** the thread carries the failure line with that run's link
 - **AND** the thread is free for the next wake
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-1e2 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-76 - One wake runs per thread, and a message during a run fires again after it
 **Serves:** shared-planning-agent-rounds-US-04 - the hand types three lines and is answered once, and nothing they say is lost
 
@@ -1387,6 +1437,7 @@ thread.
 - **AND** a reply arriving while that wake runs fires one more wake once it finishes, carrying that reply
 - **AND** two wakes never run on one thread
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-5op rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-83 - A landing word wakes the run at once
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager says land and the landing starts, not a minute later
 
@@ -1459,6 +1510,7 @@ inside the writable set.
 - **The refusal names its check** — a landing the relay refuses leaves `main`
   where it was, and the run's reply names the check that refused it
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-db1 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-73 - A run lands through the relay, which checks the word
 **Serves:** shared-planning-agent-rounds-US-02 - the designer's own word is what puts the design on `main`, whoever is running
 
@@ -1471,6 +1523,7 @@ inside the writable set.
 - **AND** a word from anybody else moves nothing, and the run's reply names the check the relay refused
 - **AND** a `main` that moved under the run is read again once and asked again
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-pgu rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-77 - A reviewed-only landing needs no word
 **Serves:** shared-planning-agent-rounds-US-05 - the hand is not asked for a word to record a read that changed nothing
 
@@ -1505,6 +1558,7 @@ wake was given, and SHALL never hold the chat token.
   it, the button comes off the message so nobody presses twice, and a press
   by a member the team map does not name lands nothing and says so
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-kmg rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-74 - A run posts through the relay and never holds the token
 **Serves:** shared-planning-agent-rounds-US-04 - the hand reads the round's reply in their own thread, from a run that can reach nothing else
 
@@ -1513,6 +1567,7 @@ wake was given, and SHALL never hold the chat token.
 - **AND** that token reaches that thread alone and expires with the wake's budget
 - **AND** the run holds no chat token
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-v3d rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-82 - The summary's button is the word pressed
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager lands the proposal from the summary with one press, and the thread reads who did
 

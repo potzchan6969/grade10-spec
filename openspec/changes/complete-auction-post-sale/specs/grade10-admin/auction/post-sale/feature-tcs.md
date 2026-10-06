@@ -45,6 +45,7 @@
 * All reads 9, and the lot 30 minutes from its close is on no segment.
 * Each order's status reads as its winner reads it on their own order.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-ljg rev=1 covers=g10adm.auction-post-sale.SC-r6h,g10adm.auction-post-sale.SC-1yv,g10adm.auction-post-sale.SC-fxm,g10adm.auction-post-sale.SC-r3o,g10adm.auction-post-sale.SC-05a,g10adm.auction-post-sale.SC-71a,g10adm.auction-post-sale.SC-9oe,g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-cnh,g10adm.auction-post-sale.SC-8dq,g10adm.auction-post-sale.SC-w38,g10adm.auction-post-sale.SC-whp,g10adm.auction-post-sale.SC-iyb,g10adm.auction-post-sale.SC-kqf,g10adm.auction-post-sale.SC-8wv,g10adm.auction-post-sale.SC-d6e -->
 ### post-sale-US1-TC6-1: Search finds an order by any of its codes or the winner's email
 
 **Classification:**
@@ -78,6 +79,7 @@
 * With `Collector@Ex`, Needs action and All read 1, and every other segment 0.
 * The order shows `IN-LK42302` as its current invoice, with `IN-LK42301` marked Replaced.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-y02 rev=1 covers=g10adm.auction-post-sale.SC-r6h,g10adm.auction-post-sale.SC-1yv,g10adm.auction-post-sale.SC-fxm,g10adm.auction-post-sale.SC-r3o,g10adm.auction-post-sale.SC-05a,g10adm.auction-post-sale.SC-71a,g10adm.auction-post-sale.SC-9oe,g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-cnh,g10adm.auction-post-sale.SC-8dq,g10adm.auction-post-sale.SC-w38,g10adm.auction-post-sale.SC-whp,g10adm.auction-post-sale.SC-iyb,g10adm.auction-post-sale.SC-kqf,g10adm.auction-post-sale.SC-8wv,g10adm.auction-post-sale.SC-d6e -->
 ### post-sale-US1-TC7-1: Rows lead with the longest wait, offer their action and keep their filters
 
 **Classification:**
@@ -124,6 +126,7 @@
 **I want** each order on its own page, leading with its status, the rule behind it and the one thing to do next, with its whole history on one timeline,
 **so that** I act on an order, or hand it to a colleague by its link, without piecing it together from several screens.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-pce rev=1 covers=g10adm.auction-post-sale.SC-ngp,g10adm.auction-post-sale.SC-0gj,g10adm.auction-post-sale.SC-nfo,g10adm.auction-post-sale.SC-15a,g10adm.auction-post-sale.SC-ydn,g10adm.auction-post-sale.SC-bcb,g10adm.auction-post-sale.SC-d8k,g10adm.auction-post-sale.SC-lc8,g10adm.auction-post-sale.SC-f7t,g10adm.auction-post-sale.SC-59i,g10adm.auction-post-sale.SC-r4l -->
 ### post-sale-US2-TC5-1: The order page leads with its status and the one thing to do next
 
 **Classification:**
@@ -158,6 +161,7 @@
 * The reload and the new window open the same order.
 * The Cancelled order reads Cancelled with a Test badge, and offers no primary action and no More.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-xbe rev=1 covers=g10adm.auction-post-sale.SC-ngp,g10adm.auction-post-sale.SC-0gj,g10adm.auction-post-sale.SC-nfo,g10adm.auction-post-sale.SC-15a,g10adm.auction-post-sale.SC-ydn,g10adm.auction-post-sale.SC-bcb,g10adm.auction-post-sale.SC-d8k,g10adm.auction-post-sale.SC-lc8,g10adm.auction-post-sale.SC-f7t,g10adm.auction-post-sale.SC-59i,g10adm.auction-post-sale.SC-r4l -->
 ### post-sale-US2-TC6-1: Comments and log entries share one timeline
 
 **Classification:**
@@ -190,6 +194,7 @@
 * The empty comment is refused with a sentence saying why.
 * The comment offers no edit or delete.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-jip rev=1 covers=g10adm.auction-post-sale.SC-ngp,g10adm.auction-post-sale.SC-0gj,g10adm.auction-post-sale.SC-nfo,g10adm.auction-post-sale.SC-15a,g10adm.auction-post-sale.SC-ydn,g10adm.auction-post-sale.SC-bcb,g10adm.auction-post-sale.SC-d8k,g10adm.auction-post-sale.SC-lc8,g10adm.auction-post-sale.SC-f7t,g10adm.auction-post-sale.SC-59i,g10adm.auction-post-sale.SC-r4l -->
 ### post-sale-US2-TC7-1: A refused send keeps the dialog and what was typed
 
 **Classification:**
@@ -221,6 +226,7 @@
 * The first confirm is refused with a sentence saying Shipping & Handling is needed; the dialog stays open with Insurance still `40.00`, and no invoice is sent.
 * The second confirm sends an invoice with Shipping & Handling of 8000 and Insurance of 4000 minor units in HKD.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-rp1 rev=1 covers=g10adm.auction-post-sale.SC-gw4,g10adm.auction-post-sale.SC-i7j,g10adm.auction-post-sale.SC-seg,g10adm.auction-post-sale.SC-cbk,g10adm.auction-post-sale.SC-yd7,g10adm.auction-post-sale.SC-i16 -->
 ### post-sale-US2-TC8-1: The page names the rule behind Payment Overdue, and a reissue needs a reason
 
 **Classification:**
@@ -261,6 +267,7 @@
 **I want** every payment that reaches an order recorded, and one the invoice did not expect flagged for me,
 **so that** no money a winner sends is dropped, and I know what to check or have finance return.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-kbs rev=1 covers=g10adm.auction-post-sale.SC-uf1,g10adm.auction-post-sale.SC-3uf,g10adm.auction-post-sale.SC-n2q,g10adm.auction-post-sale.SC-7jf,g10adm.auction-post-sale.SC-3bt,g10adm.auction-post-sale.SC-en4,g10adm.auction-post-sale.SC-c66,g10adm.auction-post-sale.SC-ccp,g10adm.auction-post-sale.SC-btq,g10adm.auction-post-sale.SC-gmi,g10adm.auction-post-sale.SC-amp -->
 ### post-sale-US3-TC5-1: Payments the invoice did not expect are flagged and cleared one at a time
 
 **Classification:**
@@ -296,6 +303,7 @@
 * After the second, the order is listed under Waiting on winner, still reading Pending Payment.
 * The timeline shows both flagged payment entries and both flag cleared entries, with the operator and the reasons.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-umi rev=1 covers=g10adm.auction-post-sale.SC-uf1,g10adm.auction-post-sale.SC-3uf,g10adm.auction-post-sale.SC-n2q,g10adm.auction-post-sale.SC-7jf,g10adm.auction-post-sale.SC-3bt,g10adm.auction-post-sale.SC-en4,g10adm.auction-post-sale.SC-c66,g10adm.auction-post-sale.SC-ccp,g10adm.auction-post-sale.SC-btq,g10adm.auction-post-sale.SC-gmi,g10adm.auction-post-sale.SC-amp -->
 ### post-sale-US3-TC4-1: Card money pays an expired invoice late, and counts toward nothing in any other state
 
 **Classification:**
@@ -336,6 +344,7 @@
 **I want** to record dispatch with the carrier and the tracking number, then delivery with the carrier's proof, on the order,
 **so that** the winner can follow the lot, and only someone allowed to ship records a shipment.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-7o6 rev=1 covers=g10adm.auction-post-sale.SC-10k,g10adm.auction-post-sale.SC-js8,g10adm.auction-post-sale.SC-tl1,g10adm.auction-post-sale.SC-0vy,g10adm.auction-post-sale.SC-usw,g10adm.auction-post-sale.SC-82s,g10adm.auction-post-sale.SC-7rg,g10adm.auction-post-sale.SC-b2b,g10adm.auction-post-sale.SC-0ln -->
 ### post-sale-US4-TC1-1: Dispatch then delivery moves the order to Delivered
 
 **Classification:**
@@ -367,6 +376,7 @@
 * After dispatch the order reads Shipped; after delivery it reads Delivered.
 * The timeline shows the dispatched entry with the carrier, the tracking number, the tracker link, the operator and the delivery address, and the delivery confirmed entry with the date and the image.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-75e rev=1 covers=g10adm.auction-post-sale.SC-10k,g10adm.auction-post-sale.SC-js8,g10adm.auction-post-sale.SC-tl1,g10adm.auction-post-sale.SC-0vy,g10adm.auction-post-sale.SC-usw,g10adm.auction-post-sale.SC-82s,g10adm.auction-post-sale.SC-7rg,g10adm.auction-post-sale.SC-b2b,g10adm.auction-post-sale.SC-0ln -->
 ### post-sale-US4-TC2-1: Dispatch and delivery out of order, or without tracking, are refused
 
 **Classification:**
@@ -406,6 +416,7 @@
 **I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-rh9 rev=1 covers=g10adm.auction-post-sale.SC-qvj,g10adm.auction-post-sale.SC-omk,g10adm.auction-post-sale.SC-t9u,g10adm.auction-post-sale.SC-tj1,g10adm.auction-post-sale.SC-hgh,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-qv1,g10adm.auction-post-sale.SC-36t,g10adm.auction-post-sale.SC-g1u,g10adm.auction-post-sale.SC-qtj -->
 ### post-sale-US5-TC13-1: Grade10 computes the card fee, tracking the subtotal until send
 
 **Classification:**
@@ -439,6 +450,7 @@
 * At 316000 the fee reads 11366 and the total 327366.
 * The send succeeds, and the invoice is `pending` with a fee of 11366 and a total of 327366 minor units in HKD.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-ir2 rev=1 covers=g10adm.auction-post-sale.SC-qvj,g10adm.auction-post-sale.SC-omk,g10adm.auction-post-sale.SC-t9u,g10adm.auction-post-sale.SC-tj1,g10adm.auction-post-sale.SC-hgh,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-qv1,g10adm.auction-post-sale.SC-36t,g10adm.auction-post-sale.SC-g1u,g10adm.auction-post-sale.SC-qtj -->
 ### post-sale-US5-TC14-1: No card rule refuses the send
 
 **Classification:**
@@ -470,6 +482,7 @@
 * No fee shows; the field offers nothing to type.
 * The send is refused with `CARD_FEE_UNSET`, a sentence saying the USD card fee is not set, and a link to Payment Settings.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-42i rev=1 covers=g10adm.auction-post-sale.SC-qvj,g10adm.auction-post-sale.SC-omk,g10adm.auction-post-sale.SC-t9u,g10adm.auction-post-sale.SC-tj1,g10adm.auction-post-sale.SC-hgh,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-qv1,g10adm.auction-post-sale.SC-36t,g10adm.auction-post-sale.SC-g1u,g10adm.auction-post-sale.SC-qtj -->
 ### post-sale-US5-TC15-1: A total that moved since it was read is refused
 
 **Classification:**
@@ -501,6 +514,7 @@
 * Shipping & Handling and Insurance still read `80.00` and `40.00`.
 * No invoice is issued.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-dxc rev=1 covers=g10adm.auction-post-sale.SC-qvj,g10adm.auction-post-sale.SC-omk,g10adm.auction-post-sale.SC-t9u,g10adm.auction-post-sale.SC-tj1,g10adm.auction-post-sale.SC-hgh,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-qv1,g10adm.auction-post-sale.SC-36t,g10adm.auction-post-sale.SC-g1u,g10adm.auction-post-sale.SC-qtj -->
 ### post-sale-US5-TC16-1: The send shows its deadline, and a sent fee never moves
 
 **Classification:**
@@ -533,6 +547,7 @@
 * The dialog showed the payment deadline 2026-09-19 17:00, Hong Kong time, and the invoice carries 2026-09-19T09:00:00Z.
 * After the rule changes, the invoice still carries a fee of 11225 and a total of 323225 minor units in HKD.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-smi rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
 ### post-sale-US5-TC17-1: An edit before send keeps the waiting time and adds no mark
 
 **Classification:**
@@ -612,6 +627,7 @@
 * `<listing_1>` reads Extended beside its status, and its status is unchanged.
 * `<listing_2>` and `<listing_3>` do not read Extended.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-v7u rev=1 covers=g10adm.auction-post-sale.SC-hvd,g10adm.auction-post-sale.SC-jck,g10adm.auction-post-sale.SC-bps -->
 ### post-sale-US6-TC2-1: Extended bidding is not an outcome filter
 
 **Classification:**
@@ -657,6 +673,7 @@
 **I want** to see how long an unpaid order has waited, and settle, reissue, or cancel it from the order itself,
 **so that** a lot whose winner has not paid stops being an open-ended obligation.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-w3j rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk,g10adm.auction-post-sale.SC-obc,g10adm.auction-post-sale.SC-5ky,g10adm.auction-post-sale.SC-5at,g10adm.auction-post-sale.SC-hto,g10adm.auction-post-sale.SC-ltc,g10adm.auction-post-sale.SC-3fi -->
 ### post-sale-US7-TC32-1: A method switch on reissue prices the fee by the new method
 
 **Classification:**
@@ -690,6 +707,7 @@
 * Once typed, the bank transfer fee reads 5000.
 * Back on card the fee reads 11366, computed from the HKD card rule, read-only.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-mqb rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk,g10adm.auction-post-sale.SC-obc,g10adm.auction-post-sale.SC-5ky,g10adm.auction-post-sale.SC-5at,g10adm.auction-post-sale.SC-hto,g10adm.auction-post-sale.SC-ltc,g10adm.auction-post-sale.SC-3fi -->
 ### post-sale-US7-TC33-1: Record payment starts at the balance and says what the payment does
 
 **Classification:**
@@ -723,6 +741,7 @@
 * At `2000.00` the balance after reads 112000 minor units in HKD, and the dialog says the order will read Partially Paid.
 * After the commit the invoice is `paid`, the order reads Preparing Shipment, and the payment carries bank transfer, `HSBC-778812`, 2026-09-25 and the slip.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-7l8 rev=1 covers=g10adm.auction-post-sale.SC-68u,g10adm.auction-post-sale.SC-ir3,g10adm.auction-post-sale.SC-bgi,g10adm.auction-post-sale.SC-prr,g10adm.auction-post-sale.SC-bgy,g10adm.auction-post-sale.SC-gj2,g10adm.auction-post-sale.SC-vsz,g10adm.auction-post-sale.SC-7fn,g10adm.auction-post-sale.SC-b9o,g10adm.auction-post-sale.SC-2fi,g10adm.auction-post-sale.SC-b5v,g10adm.auction-post-sale.SC-cdi,g10adm.auction-post-sale.SC-d1w,g10adm.auction-post-sale.SC-xct,g10adm.auction-post-sale.SC-g73 -->
 ### post-sale-US7-TC34-1: Record payment refuses what it cannot record
 
 **Classification:**
@@ -766,6 +785,7 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * The timeline holds no payment recorded entry.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-o29 rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk,g10adm.auction-post-sale.SC-obc,g10adm.auction-post-sale.SC-5ky,g10adm.auction-post-sale.SC-5at,g10adm.auction-post-sale.SC-hto,g10adm.auction-post-sale.SC-ltc,g10adm.auction-post-sale.SC-3fi -->
 ### post-sale-US7-TC35-1: Setup Overdue is the only waiting mark, and a flagged order counts from its flag
 
 **Classification:**
@@ -800,6 +820,7 @@ Runs once per row of **Test data**.
 * The third reads Preparing Invoice, 80 hours, with no mark.
 * The fourth has waited 2 days, since its flag.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-amb rev=1 covers=g10adm.auction-post-sale.SC-3p6,g10adm.auction-post-sale.SC-34a,g10adm.auction-post-sale.SC-lq4,g10adm.auction-post-sale.SC-r1r,g10adm.auction-post-sale.SC-vg7 -->
 ### post-sale-US7-TC36-1: A missing grant is named, and proof files open for every operator
 
 **Classification:**
@@ -834,6 +855,7 @@ Runs once per row of **Test data**.
 * The server refuses both actions and stores no file.
 * The cancel succeeds: the order reads Cancelled, and the timeline names the finance operator.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-h29 rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk,g10adm.auction-post-sale.SC-obc,g10adm.auction-post-sale.SC-5ky,g10adm.auction-post-sale.SC-5at,g10adm.auction-post-sale.SC-hto,g10adm.auction-post-sale.SC-ltc,g10adm.auction-post-sale.SC-3fi -->
 ### post-sale-US7-TC37-1: Money that counts toward nothing blocks neither a reissue nor a cancel
 
 **Classification:**
@@ -875,6 +897,7 @@ Runs once per row of **Test data**.
 payments that failed,
 **so that** I can tell a buyer who tried and could not from one who never engaged.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-gwq rev=1 covers=g10adm.auction-post-sale.SC-ua0,g10adm.auction-post-sale.SC-j3o,g10adm.auction-post-sale.SC-hgz,g10adm.auction-post-sale.SC-k8l,g10adm.auction-post-sale.SC-jce,g10adm.auction-post-sale.SC-dgt,g10adm.auction-post-sale.SC-fzw,g10adm.auction-post-sale.SC-37a -->
 ### post-sale-US8-TC9-1: A log entry names the operator signed in, not the one claimed
 
 **Classification:**
@@ -947,6 +970,7 @@ payments that failed,
 * Neither the refund record nor the timeline shows `12345678`.
 * The order reads Refunded, the lot is back in stock, and a second refund is refused.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-d65 rev=1 covers=g10adm.auction-post-sale.SC-7fc,g10adm.auction-post-sale.SC-dzs,g10adm.auction-post-sale.SC-dwy,g10adm.auction-post-sale.SC-brr,g10adm.auction-post-sale.SC-qno -->
 ### post-sale-US16-TC3-1: A refund of the overpaid difference keeps the status
 
 **Classification:**
@@ -977,6 +1001,7 @@ payments that failed,
 * The order still reads Preparing Shipment.
 * The second refund is refused.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-iym rev=1 covers=g10adm.auction-post-sale.SC-7fc,g10adm.auction-post-sale.SC-dzs,g10adm.auction-post-sale.SC-dwy,g10adm.auction-post-sale.SC-brr,g10adm.auction-post-sale.SC-qno -->
 ### post-sale-US16-TC4-1: An FPS email is kept to its first letter and domain
 
 **Classification:**

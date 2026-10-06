@@ -86,6 +86,7 @@ one variant SHALL open in the form as a free item, whether the reward is
 opened or duplicated into a new one. Any other stored product coupon SHALL
 open as money off, a capped or wider 100% discount included.
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-7w0 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-158 - A reward with a definition is created from the console alone
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
@@ -94,6 +95,7 @@ open as money off, a capped or wider 100% discount included.
 - **THEN** the reward is saved with that definition, with no separate API
   call
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-72a rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-187 - A free item is created from one variant
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
@@ -101,6 +103,7 @@ open as money off, a capped or wider 100% discount included.
 - **THEN** the reward is saved as a product coupon at 100%, with no maximum
   discount, scoped to that variant
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-zq0 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-188 - A stored free item reopens as a free item
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
@@ -111,6 +114,7 @@ open as money off, a capped or wider 100% discount included.
 - **THEN** Free item is chosen, with that variant picked
 - **AND** 50000 HKD minor units is its minimum spend
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-jnr rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-189 - A capped or wider 100% discount stays money off
 **Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 

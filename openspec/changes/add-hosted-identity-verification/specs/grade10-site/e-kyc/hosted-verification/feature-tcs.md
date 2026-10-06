@@ -10,6 +10,7 @@
 **so that** my appointment is about my card rather than my passport, and a
 document problem reaches me while I can still do something about it.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-prt rev=2 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC1-2: Approved hosted check verifies the case before the visit
 
 **Classification:**
@@ -50,6 +51,7 @@ document problem reaches me while I can still do something about it.
 * The identity names the provider that performed the check.
 * The user's verification surface asks for no document number, no expiry and no image of the document.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-urm rev=2 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC2-2: Invitation opens the check it was issued for
 
 **Classification:**
@@ -88,6 +90,7 @@ document problem reaches me while I can still do something about it.
 * The check that opens is the one raised for `<a case in invited>`.
 * The surface offers nothing that selects `<a second case in invited>` or its user.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-i7a rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC4-1: Invitation secret is left nowhere it can be read
 
 **Classification:**
@@ -128,6 +131,7 @@ document problem reaches me while I can still do something about it.
 * The secret is in no log line.
 * The secret is in no referrer the provider receives.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-xd3 rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC5-1: Asking twice leaves one working invitation
 
 **Classification:**
@@ -167,6 +171,7 @@ document problem reaches me while I can still do something about it.
 * Both requests answer with that check.
 * The user holds one working invitation.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-77s rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC6-1: Unproven verdict changes nothing and is not stored
 
 Runs once per row of **Test data**.
@@ -207,6 +212,7 @@ Runs once per row of **Test data**.
 * No verified identity is created.
 * The attempt is counted rather than written to any durable record.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-bbu rev=2 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC7-2: Verdict naming a check nobody raised creates nothing
 
 **Classification:**
@@ -242,6 +248,7 @@ Runs once per row of **Test data**.
 * Nothing is created.
 * The attempt is counted as rejected.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-bd1 rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC8-1: Repeated verdict is applied once
 
 **Classification:**
@@ -280,6 +287,7 @@ Runs once per row of **Test data**.
 * One verified identity exists and the case's identity is unchanged.
 * No packet is voided a second time.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-bu7 rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC9-1: Verdict for a check that is no longer live binds nothing
 
 Runs once per row of **Test data**.
@@ -320,6 +328,7 @@ Runs once per row of **Test data**.
 * No identity is bound to the case.
 * Any identity the verdict created is discarded.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-htc rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC10-1: Grade10's own refusals decline an approved verdict
 
 Runs once per row of **Test data**.
@@ -360,6 +369,7 @@ Runs once per row of **Test data**.
 * The refusal named is the one in the row.
 * No verified identity exists.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-i0p rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC11-1: Check that cannot be raised invites nobody and is reported
 
 **Classification:**
@@ -399,6 +409,7 @@ Runs once per row of **Test data**.
 * The admin is told the check could not be raised.
 * Step 4 raises one check and sends one invitation.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-1gc rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC12-1: Tampered invitation values open no other check
 
 Runs once per row of **Test data**.
@@ -448,6 +459,7 @@ Runs once per row of **Test data**.
 **so that** a check I could not finish costs me nothing but the counter's own
 minute.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-arb rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC6-1: User returning mid-check carries on where they were
 
 **Classification:**
@@ -485,6 +497,7 @@ minute.
 * The invitation opens on the device that started the check.
 * The provider's check continues rather than starting over.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-uv9 rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC14-1: Invitation says what to do next in every state
 
 Runs once per row of **Test data**.
@@ -532,6 +545,7 @@ Runs once per row of **Test data**.
 * The page says what to do next, as the row names it.
 * The page names no identity field.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-vai rev=2 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC8-2: Counter check withdraws a live hosted check
 
 **Classification:**
@@ -572,6 +586,7 @@ Runs once per row of **Test data**.
 * The hosted check is Withdrawn.
 * The old invitation starts no check.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-k6a rev=2 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC9-2: Counter check after a decline is recorded as an override
 
 **Classification:**
@@ -611,6 +626,7 @@ Runs once per row of **Test data**.
 * The check carrying `<the override reason>` is accepted on the case's own rules, and is recorded as an override naming the admin who gave it.
 * The declined check stays on record beside it.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-mi0 rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC10-1: Provider outage does not stop a visit
 
 **Classification:**
@@ -649,6 +665,7 @@ Runs once per row of **Test data**.
 * The check is recorded and the case proceeds.
 * No call to the provider was required for it to succeed.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-y9g rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC7-1: Declined user is told what to do and not why
 
 **Classification:**
@@ -687,6 +704,7 @@ Runs once per row of **Test data**.
 * The page says the document can be checked at the store.
 * The page shows no reason it did not pass.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-ian rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC1-1: Decided invitation opens to state and nothing else
 
 **Classification:**
@@ -725,6 +743,7 @@ Runs once per row of **Test data**.
 * The page shows the state and what to do next.
 * The page names no identity field and no reason.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-5f4 rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC2-1: Expired invitation is refused and says how to be invited again
 
 **Classification:**
@@ -762,6 +781,7 @@ Runs once per row of **Test data**.
 * The invitation is refused as expired.
 * The page says how to be invited again.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-s8j rev=2 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC3-2: Check that runs out of time expires
 
 Runs once per row of **Test data**.
@@ -802,6 +822,7 @@ Runs once per row of **Test data**.
 * The check is Expired.
 * The outcome is the one the row names.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-yux rev=2 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC11-2: Verdict that never arrives leaves the check stalled
 
 **Classification:**
@@ -840,6 +861,7 @@ Runs once per row of **Test data**.
 * The case shows it as stalled rather than as arriving.
 * The check is read back from the provider and settled from what it says.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-a7d rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC12-1: Stalled check the provider never settles expires
 
 **Classification:**
@@ -879,6 +901,7 @@ Runs once per row of **Test data**.
 * The case shows it as lapsed.
 * Step 3 invites the case again.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-6to rev=2 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC4-2: Decided check does not move again
 
 Runs once per row of **Test data**.
@@ -918,6 +941,7 @@ Runs once per row of **Test data**.
 * The decided check stays where it is.
 * Asking issues a new check with its own invitation.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-7lm rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC5-1: Withdrawing a check frees the case to be invited again
 
 **Classification:**
@@ -958,6 +982,7 @@ Runs once per row of **Test data**.
 * The old invitation starts no check.
 * The new invitation starts one.
 
+<!-- trace:case id=g10.e-kyc-hosted-verification.TC-lzi rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC13-1: Admin clears a check that is going nowhere
 
 **Classification:**

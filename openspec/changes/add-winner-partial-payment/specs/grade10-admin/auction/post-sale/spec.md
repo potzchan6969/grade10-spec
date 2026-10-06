@@ -28,6 +28,7 @@ the operator to confirm the overpayment before recording it and marking the
 invoice Paid. The payment record SHALL keep the full amount; the excess SHALL
 not become a separate adjustment line.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-fmz rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-140 - A partial payment starts collection
 **Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
 
@@ -36,6 +37,7 @@ not become a separate adjustment line.
 - **THEN** the payment is accepted with its own receipt number
 - **AND** the order reads Partially Paid with 60000 minor units remaining
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-z26 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-141 - Repeated payments keep one order history
 **Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
 
@@ -44,6 +46,7 @@ not become a separate adjustment line.
 - **THEN** both payments remain in oldest-first order
 - **AND** the order remains Partially Paid
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-u2w rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-143 - An overpayment needs confirmation before Paid
 **Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
 
@@ -62,6 +65,7 @@ the real balance and every payment. An exact balance payment SHALL close the
 invoice without a second tolerance prompt. A payment SHALL never be discarded
 or silently rounded.
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-k4t rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-142 - The closing prompt does not discard the payment
 **Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
 
