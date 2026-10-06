@@ -41,6 +41,7 @@ may want.
 - **A card nobody can buy** — a card the catalogue lists with nothing for sale
   shows its rail like any other card.
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-dar rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-01 - The rail arrives with the card
 **Serves:** `grade10-site-store-cross-sell-US-01`, `grade10-site/store/product-page#grade10-site-store-product-page-US-01` - the collector reads a card and the next card is already under it
 
@@ -97,8 +98,9 @@ similar cards to fill.
 - **WHEN** a collector opens its page
 - **THEN** the rail is under the card, headed, holding that one card
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-ufp rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-06 - The card being read is never under itself
-**Serves:** The rail - the card a collector is on is kept out of the set composed for it
+**Serves:** grade10-site-store-cross-sell-US-01 - the collector is never offered the card they are reading
 
 - **GIVEN** a card a stock keeper also chose as one of its own picks, and cards sharing its world
 - **WHEN** a collector opens its page
@@ -152,8 +154,9 @@ SHALL leave no space for one.
 - **The heading goes with it** — no heading is drawn where no rail is.
 - **No space** — the page reads as a card with nothing under it, not as a card
   missing something.
-- **A rail the site cannot compose** — where the site cannot compose the rail,
-  the card's page answers whole and shows no rail, as with nothing to show.
+- **A rail the site cannot compose** - where the site cannot compose the rail,
+  the card's page answers whole and shows no rail for that minute, as with
+  nothing to show.
 - **Switched off** — where the store has switched the rail off for its brand
   and environment, every card's page answers whole and shows no rail, as with
   nothing to show.
@@ -216,8 +219,9 @@ card itself, SHALL be that card's picks.
 - **WHEN** the stock keeper adds a card to them in Shopify
 - **THEN** reading the card's page afresh within a minute shows the added card among the picks, in the stock keeper's order
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-64a rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-13 - A pick the catalogue no longer holds
-**Serves:** Picks - a chosen card the catalogue has let go never reaches the collector
+**Serves:** grade10-site-store-cross-sell-US-03 - the stock keeper's chosen card the catalogue has let go never reaches the collector
 
 - **GIVEN** a card with three chosen cards, one of them no longer in the catalogue
 - **WHEN** a collector opens its page
@@ -301,8 +305,9 @@ sharing this card's world, its language or its collectible type.
 - **WHEN** a collector opens its page
 - **THEN** the card the catalogue gained later is before the other
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-4e3 rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-19 - A fact shared twice counts once
-**Serves:** Similar cards - two cards sharing one fact rank alike however many worlds, languages or collectible types each carries
+**Serves:** grade10-site-store-cross-sell-US-02 - the collector meets two cards sharing one fact in newest order, however many worlds each carries
 
 - **GIVEN** a card in two worlds, with no picks
 - **AND** another card in both of those worlds, gained by the catalogue in March
@@ -392,8 +397,9 @@ and every card already in the rail as a pick.
 - **THEN** the rail holds the card for sale
 - **AND** the card with nothing for sale is not in the rail
 
+<!-- trace:scenario id=g10.store-cross-sell.SC-63s rev=1 -->
 #### Scenario: grade10-site-store-cross-sell-SC-22 - A pick is not repeated among the similar cards
-**Serves:** Similar cards - a card shown under the one being read is shown once
+**Serves:** grade10-site-store-cross-sell-US-01 - the collector meets a chosen card once, in its pick position
 
 - **GIVEN** a card whose single pick also shares its world, and three other cards sharing its world
 - **WHEN** a collector opens its page
@@ -450,10 +456,11 @@ The shared UI package SHALL export, from its public entry,
 - **Nothing of its own** — it takes the cards and their order as given: it
   reads no catalogue, cuts no list, orders nothing and decides nothing about
   what a card is worth showing.
-- **What the tiles owe it** — a heading that needs no browse label, a
-  sold-out tile that still opens and a tile given its address that is a link
-  to it are `shared/ui/store-home`'s and `shared/ui/store-product-listing`'s
-  rules, carried by this change's deltas on them.
+- **What the tiles owe it** - a heading that needs no browse label and a tile
+  given its address that is a link to it are `shared/ui/store-home`'s and
+  `shared/ui/store-product-listing`'s rules, carried by this change's deltas on
+  them; a sold-out tile that still opens where it does not sell is
+  `shared/ui/store-product-listing`'s tile rule.
 
 #### Scenario: grade10-site-store-cross-sell-SC-25 - An application imports the surface
 **Serves:** Rail block - an application builds the section under a card from the package rather than its own copy
