@@ -3,7 +3,7 @@
 ## Feature set
 
 - Tile contract
-  - Supplied photo: the photo draws as supplied in every tile status, never blended into the well
+  - Photo as supplied: the photo draws as supplied in every tile status, never blended into the well
 
 ## ADDED Requirements
 
