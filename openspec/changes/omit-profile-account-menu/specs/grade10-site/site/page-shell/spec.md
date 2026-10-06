@@ -120,7 +120,7 @@ Activating Sign Out SHALL start sign-out.
 **Not offered** - The menu SHALL NOT offer KYC or My Auction Orders.
 
 <!-- trace:scenario id=g10.site-page-shell.SC-wjc rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-54 - Account menu once Store answers
+#### Scenario: grade10-site-site-page-shell-SC-56 - Account menu once Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu once Store answers
 
 - **GIVEN** a signed-in collector and Store answers
@@ -130,7 +130,7 @@ Activating Sign Out SHALL start sign-out.
 - **AND** the menu does not offer KYC or My Auction Orders
 
 <!-- trace:scenario id=g10.site-page-shell.SC-59q rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-55 - Sign out from the menu
+#### Scenario: grade10-site-site-page-shell-SC-57 - Sign out from the menu
 **Serves:** grade10-site-site-page-shell-US-03 - leaving the session from the header
 
 - **GIVEN** a signed-in collector with the account menu open
@@ -138,7 +138,7 @@ Activating Sign Out SHALL start sign-out.
 - **THEN** sign-out starts
 
 <!-- trace:scenario id=g10.site-page-shell.SC-0q3 rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-56 - Account menu omits My Orders before Store answers
+#### Scenario: grade10-site-site-page-shell-SC-58 - Account menu omits My Orders before Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu before Store answers
 
 - **GIVEN** a signed-in collector and Store does not yet answer
@@ -147,7 +147,7 @@ Activating Sign Out SHALL start sign-out.
 - **AND** the menu does not offer My Orders
 
 <!-- trace:scenario id=g10.site-page-shell.SC-vo4 rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-57 - Account menu omits Profile where the account page is withheld
+#### Scenario: grade10-site-site-page-shell-SC-59 - Account menu omits Profile where the account page is withheld
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on a build without the account page
 
 - **GIVEN** a signed-in collector, Store answers, and the site withholds the account page
@@ -156,7 +156,7 @@ Activating Sign Out SHALL start sign-out.
 - **AND** the menu does not offer Profile
 
 <!-- trace:scenario id=g10.site-page-shell.SC-sna rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-58 - The auction-launch account menu
+#### Scenario: grade10-site-site-page-shell-SC-60 - The auction-launch account menu
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on auction launch
 
 - **GIVEN** a signed-in collector on a build that withholds Store, the account
@@ -165,7 +165,7 @@ Activating Sign Out SHALL start sign-out.
 - **THEN** the menu offers My Auctions and Sign Out, in that order, and no other item
 
 <!-- trace:scenario id=g10.site-page-shell.SC-4zh rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-59 - Account menu shows the sign-in email and avatar
+#### Scenario: grade10-site-site-page-shell-SC-61 - Account menu shows the sign-in email and avatar
 **Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
 
 - **GIVEN** a signed-in collector
@@ -173,7 +173,7 @@ Activating Sign Out SHALL start sign-out.
 - **THEN** the menu shows the small initial avatar of their sign-in email, then the email, above the items
 
 <!-- trace:scenario id=g10.site-page-shell.SC-kyr rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-60 - Sign Out reads in Title Case
+#### Scenario: grade10-site-site-page-shell-SC-62 - Sign Out reads in Title Case
 **Serves:** grade10-site-site-page-shell-US-03 - leaving the session from the header
 
 - **GIVEN** a signed-in collector with the account menu open
@@ -181,7 +181,7 @@ Activating Sign Out SHALL start sign-out.
 - **THEN** the last item reads "Sign Out"
 
 <!-- trace:scenario id=g10.site-page-shell.SC-th1 rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-61 - Account menu omits Membership where the membership page is withheld
+#### Scenario: grade10-site-site-page-shell-SC-63 - Account menu omits Membership where the membership page is withheld
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on a build without the membership page
 
 - **GIVEN** a signed-in collector, Store answers, and the site withholds the membership page
@@ -189,7 +189,7 @@ Activating Sign Out SHALL start sign-out.
 - **THEN** the menu does not offer Membership
 
 <!-- trace:scenario id=g10.site-page-shell.SC-70a rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-62 - My Orders opens order history
+#### Scenario: grade10-site-site-page-shell-SC-64 - My Orders opens order history
 **Serves:** grade10-site-site-page-shell-US-03 - reaching order history from the header
 
 - **GIVEN** a signed-in collector, Store answers, and the account menu is open
@@ -197,7 +197,7 @@ Activating Sign Out SHALL start sign-out.
 - **THEN** they arrive at My Orders at `/profile/orders`
 
 <!-- trace:scenario id=g10.site-page-shell.SC-lcs rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-63 - My Auctions opens My Auctions
+#### Scenario: grade10-site-site-page-shell-SC-65 - My Auctions opens My Auctions
 **Serves:** grade10-site-site-page-shell-US-03 - reaching My Auctions from the header
 
 - **GIVEN** a signed-in collector with the account menu open

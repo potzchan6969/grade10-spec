@@ -24,7 +24,7 @@ a page-shell case.
   Sign Out. `shared/ui/site-chrome` keeps optional `onProfile`; its feature
   set lists the account menu's items in their fixed order, and its
   handler-gated line names search, account, cart, Profile, My Orders and
-  Membership.
+  Membership, and the account slot.
 - **Second orders item** - `SiteHeader` drops `onOrders` and `copy.orders`,
   and `grade10-site/auction/auction-orders` drops its account-menu link: the
   menu entry was decided away, and no consumer supplies it (Q10, Q11).

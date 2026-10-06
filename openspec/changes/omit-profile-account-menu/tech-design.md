@@ -57,7 +57,7 @@ Three props with one ternary each say the same thing with no indirection.
 ### One Rule for Withheld Pages
 
 The app keeps one mechanism for My Orders, Profile and Membership: a handler
-is supplied only from its page's gate. `grade10-site-site-page-shell-SC-58`
+is supplied only from its page's gate. `grade10-site-site-page-shell-SC-60`
 pins the auction-launch menu exactly, since there every one of those pages is
 withheld whatever Q1 and Q5 decide. On a Store build the scenarios assert
 order relative to My Auctions and Sign Out, never a full list, so neither
@@ -72,15 +72,15 @@ with new ids. The app's citations move with them (task 2.1 to 2.4).
 
 | Retired | Becomes |
 | --- | --- |
-| `grade10-site-site-page-shell-SC-17` | `grade10-site-site-page-shell-SC-54`: My Orders before My Auctions, Sign Out last, no KYC or My Auction Orders; no Profile, no full list |
-| `grade10-site-site-page-shell-SC-18` | `grade10-site-site-page-shell-SC-55`, without the account-page line, which `grade10-site-site-page-shell-SC-08` holds |
-| `grade10-site-site-page-shell-SC-27` | `grade10-site-site-page-shell-SC-56`, without Profile |
-| `grade10-site-site-page-shell-SC-28` | `grade10-site-site-page-shell-SC-57`, on the account page being withheld |
-| `grade10-site-site-page-shell-SC-29` | `grade10-site-site-page-shell-SC-58`, the exact auction-launch menu |
-| `grade10-site-site-page-shell-SC-30`, `grade10-site-site-page-shell-SC-33` | `grade10-site-site-page-shell-SC-59`, `grade10-site-site-page-shell-SC-60`, unchanged in meaning |
+| `grade10-site-site-page-shell-SC-17` | `grade10-site-site-page-shell-SC-56`: My Orders before My Auctions, Sign Out last, no KYC or My Auction Orders; no Profile, no full list |
+| `grade10-site-site-page-shell-SC-18` | `grade10-site-site-page-shell-SC-57`, without the account-page line, which `grade10-site-site-page-shell-SC-08` holds |
+| `grade10-site-site-page-shell-SC-27` | `grade10-site-site-page-shell-SC-58`, without Profile |
+| `grade10-site-site-page-shell-SC-28` | `grade10-site-site-page-shell-SC-59`, on the account page being withheld |
+| `grade10-site-site-page-shell-SC-29` | `grade10-site-site-page-shell-SC-60`, the exact auction-launch menu |
+| `grade10-site-site-page-shell-SC-30`, `grade10-site-site-page-shell-SC-33` | `grade10-site-site-page-shell-SC-61`, `grade10-site-site-page-shell-SC-62`, unchanged in meaning |
 | `grade10-site-site-page-shell-SC-31` | Nothing: the site always has the email (Context), so the label fallback is `SiteHeader`'s alone, held by `shared-ui-site-chrome-SC-35` |
-| `grade10-site-site-page-shell-SC-32`, `grade10-site-site-page-shell-SC-34` | Nothing: Membership's place is ❓ (Q5) and the app never offered it; `grade10-site-site-page-shell-SC-61` keeps the settled half, no Membership where its page is withheld |
-| None | `grade10-site-site-page-shell-SC-62` and `grade10-site-site-page-shell-SC-63`, the My Orders and My Auctions destinations the old requirement stated without a scenario |
+| `grade10-site-site-page-shell-SC-32`, `grade10-site-site-page-shell-SC-34` | Nothing: Membership's place is ❓ (Q5) and the app never offered it; `grade10-site-site-page-shell-SC-63` keeps the settled half, no Membership where its page is withheld |
+| None | `grade10-site-site-page-shell-SC-64` and `grade10-site-site-page-shell-SC-65`, the My Orders and My Auctions destinations the old requirement stated without a scenario |
 
 Account-page Sign Out lives only in `The account control leads where the
 collector can go` (`grade10-site-site-page-shell-SC-08`); the new menu
@@ -91,7 +91,7 @@ requirement has no **Profile sign-out** clause.
 `onOrders` and `copy.orders` come off `SiteHeaderProps` and `SiteHeaderCopy`
 with their render path and docstring, so the five items are the whole set
 (`shared-ui-site-chrome-SC-17`). A type test holds the props closed
-(`shared-ui-site-chrome-SC-41`), so a later re-addition fails `typecheck`
+(`shared-ui-site-chrome-SC-42`), so a later re-addition fails `typecheck`
 rather than waiting on a story. No consumer adapts: grade10 supplies
 neither, and zzz renders its own header.
 
@@ -116,7 +116,7 @@ page-shell delta; group 3 carries the matching row.
 | Q1 answer | page-shell delta adds | grade10 |
 | --- | --- | --- |
 | **Wherever carried** | **The menu**: "Where the site carries the account page, Profile SHALL join first"; **Each item**: "Activating Profile SHALL take them to the account page"; a scenario for each | No code; tests assert Profile first with `profile` open and keep the `ROUTES.profile` destination assertion |
-| **Never** | **Withheld pages** becomes "The menu SHALL NOT offer Profile"; `grade10-site-site-page-shell-SC-57` widens to every build | Delete `onProfile` at `SiteShell.tsx:156-158`; tests assert no Profile with `profile` open |
+| **Never** | **Withheld pages** becomes "The menu SHALL NOT offer Profile"; `grade10-site-site-page-shell-SC-59` widens to every build | Delete `onProfile` at `SiteShell.tsx:156-158`; tests assert no Profile with `profile` open |
 
 ## Risks / Trade-offs
 
@@ -124,7 +124,7 @@ page-shell delta; group 3 carries the matching row.
   Mitigation: each withheld-page test drives its gate through
   `withGateOverride`, so supplying a handler outside its gate fails it
 - **[Risk] A later change supplies `onMembership` on every build** →
-  Mitigation: the `grade10-site-site-page-shell-SC-61` test runs with
+  Mitigation: the `grade10-site-site-page-shell-SC-63` test runs with
   `membership` shut and `store` open
 - **[Risk] The walk breaks when Q5 adds Membership on a Store lane** →
   Mitigation: the walk reads the lane's gates from `gatesFor`, asserts order

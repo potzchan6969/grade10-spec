@@ -3,11 +3,11 @@
 - [ ] 1.1 Tests first, in their own commit: a type test beside
       `packages/ui/src/blocks/site-chrome/site-header.tsx` asserting with
       `expectTypeOf` that `SiteHeaderProps` has no `onOrders` and
-      `SiteHeaderCopy` no `orders` (`shared-ui-site-chrome-SC-41`)
+      `SiteHeaderCopy` no `orders` (`shared-ui-site-chrome-SC-42`)
 - [ ] 1.2 Remove `onOrders` and `copy.orders` from `SiteHeaderProps` and
       `SiteHeaderCopy`, with their render path and the docstring's Orders
       sentence (`shared-ui-site-chrome-SC-17`,
-      `shared-ui-site-chrome-SC-41`). The commit stops at the Design Override
+      `shared-ui-site-chrome-SC-42`). The commit stops at the Design Override
       hook; it changes no drawn state, so show the person
       its lines and add the trailer only on their yes
 - [ ] 1.3 Waits on Q7. In the account-menu story Q7 settles, with every
@@ -34,7 +34,7 @@ Menu Requirement Is Replaced.
       Orders immediately before My Auctions, Sign Out last and reading
       "Sign Out", and no KYC or My Auction Orders, with no Profile
       assertion; its Profile click moves to group 3
-      (`grade10-site-site-page-shell-SC-54`, `grade10-site-site-page-shell-SC-60`)
+      (`grade10-site-site-page-shell-SC-56`, `grade10-site-site-page-shell-SC-62`)
 - [ ] 2.2 Add `membership` to the test's `gateState` and assert each
       withheld page: `store` shut gives no My Orders and Sign Out last;
       `profile` shut with `store` open opens on My Orders with no Profile;
@@ -42,19 +42,19 @@ Menu Requirement Is Replaced.
       shut give exactly My Auctions then Sign Out. In
       `src/store-shut.test.tsx`, drop the Profile assertion from the
       no-My-Orders test
-      (`grade10-site-site-page-shell-SC-56`, `grade10-site-site-page-shell-SC-57`,
-      `grade10-site-site-page-shell-SC-61`, `grade10-site-site-page-shell-SC-58`)
+      (`grade10-site-site-page-shell-SC-58`, `grade10-site-site-page-shell-SC-59`,
+      `grade10-site-site-page-shell-SC-63`, `grade10-site-site-page-shell-SC-60`)
 - [ ] 2.3 Destinations in `SiteShell.test.tsx`: cite the My Orders
       (`ROUTES.orderHistory`) and My Auctions (`ROUTES.auctionWatchlist`)
       tests and delete the duplicate My Orders test that cites a retired
       case id; add one where activating Sign Out in the menu runs sign-out
-      (`grade10-site-site-page-shell-SC-62`, `grade10-site-site-page-shell-SC-63`,
-      `grade10-site-site-page-shell-SC-55`)
+      (`grade10-site-site-page-shell-SC-64`, `grade10-site-site-page-shell-SC-65`,
+      `grade10-site-site-page-shell-SC-57`)
 - [ ] 2.4 Move the sign-in email tests in `SiteShell.test.tsx` and
       `src/chrome/navigation.test.tsx` from `grade10-site-site-page-shell-SC-17`
       to their own scenario, and delete the label-fallback test: a signed-in
       session always carries an email, and the fallback is `SiteHeader`'s
-      (`grade10-site-site-page-shell-SC-59`)
+      (`grade10-site-site-page-shell-SC-61`)
 - [ ] 2.5 Cite the account page's Sign Out test in
       `src/pages/profile/ProfilePage.test.tsx`
       (`grade10-site-site-page-shell-SC-08`)

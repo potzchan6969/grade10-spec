@@ -47,7 +47,7 @@ reimplementing its behavior.
 * Step 3: no other account-menu handler is invoked.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-thx rev=1 covers=g10.shared-site-chrome.SC-cp9 -->
-### shared-ui-site-chrome-US1-TC21-1: Profile is omitted when onProfile is not supplied
+### shared-ui-site-chrome-US1-TC25-1: Profile is omitted when onProfile is not supplied
 
 **Classification:**
 
@@ -78,7 +78,7 @@ reimplementing its behavior.
 * Step 3: no Profile item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-3cf rev=1 covers=g10.shared-site-chrome.SC-bjp -->
-### shared-ui-site-chrome-US1-TC22-1: Activating Profile invokes its handler
+### shared-ui-site-chrome-US1-TC26-1: Activating Profile invokes its handler
 
 **Classification:**
 
@@ -205,7 +205,7 @@ reimplementing its behavior.
 * Step 3: no Profile, My Orders or Membership control.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-hf6 rev=1 covers=g10.shared-site-chrome.SC-61e -->
-### shared-ui-site-chrome-US1-TC23-1: The header takes no second orders item
+### shared-ui-site-chrome-US1-TC27-1: The header takes no second orders item
 
 **Classification:**
 
@@ -237,16 +237,16 @@ reimplementing its behavior.
 
 ## Reconciliation
 
-**Run:** QA1 blind pass, 2026-10-06, for `omit-profile-account-menu`, `shared/ui/site-chrome`. It wrote US1-TC21 and US1-TC22 and raised two questions, now rows of `decisions.md`'s `## Raised` table. It left no statement of what it read and was denied, so none is claimed here.
+**Run:** QA1 blind pass, 2026-10-06, for `omit-profile-account-menu`, `shared/ui/site-chrome`. It wrote US1-TC25 and US1-TC26 and raised two questions, now rows of `decisions.md`'s `## Raised` table. It left no statement of what it read and was denied, so none is claimed here.
 
 **Run:** QA2 reconciliation, 2026-10-06. The blind cases were joined to the modified requirement's scenarios on `Header controls`. It moves `shared-ui-site-chrome-SC-39` and `shared-ui-site-chrome-SC-17`; the rest are carried word for word. `shared-ui-site-chrome-SC-17` and `shared-ui-site-chrome-SC-29` leave `**Out of suite:**`, because the page-shell cases that walked them changed.
 
-**Run:** QA2 reconciliation rerun, 2026-10-06. It joined the two cases the first QA2 run left out of the table, US1-TC8 and US1-TC23, and folded the second as a scenario.
+**Run:** QA2 reconciliation rerun, 2026-10-06. It joined the two cases the first QA2 run left out of the table, US1-TC8 and US1-TC27, and folded the second as a scenario.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `shared-ui-site-chrome-US1-TC21-1` | Reached | `shared-ui-site-chrome-SC-30`: no `onProfile`, the menu opens on My Orders; its Membership result agrees with `shared-ui-site-chrome-SC-38` |
-| `shared-ui-site-chrome-US1-TC22-1` | Reached | `shared-ui-site-chrome-SC-32` |
+| `shared-ui-site-chrome-US1-TC25-1` | Reached | `shared-ui-site-chrome-SC-30`: no `onProfile`, the menu opens on My Orders; its Membership result agrees with `shared-ui-site-chrome-SC-38` |
+| `shared-ui-site-chrome-US1-TC26-1` | Reached | `shared-ui-site-chrome-SC-32` |
 | `shared-ui-site-chrome-US1-TC18-2` | Rewritten, bumped | `shared-ui-site-chrome-SC-39` dropped its withheld-address line: `SiteHeader` never routes, and **No application state** already says so. The case drops its no-navigation result and takes the scenario's "no other handler" result |
 | Raised: Profile without `copy.profile` | Landed as Q8, settled | `SiteHeaderCopy` requires `profile`, so Profile always has its label; only Membership's copy is optional, which is why only Membership names both |
 | Raised: the account entry in the handler-gated line | Landed as Q9, settled | `Nav` shows its account control only with a handler or an account slot, and `SiteHeader` always supplies one. The feature set keeps account in the line; the proposal's line now names it too |
@@ -254,7 +254,7 @@ reimplementing its behavior.
 | `shared-ui-site-chrome-US1-TC15-2` | Rewritten, bumped | `shared-ui-site-chrome-SC-17` was out of suite, walked by page-shell `US3-TC7-1`, which this change rewrote without Profile or Membership. The case already supplied every handler; it adds `accountEmail` and the email, KYC and "no other item" results, and now traces it with `shared-ui-site-chrome-SC-37` |
 | `**Out of suite:**` | Rewritten | Only `shared-ui-site-chrome-SC-34` stays out, walked by page-shell `US3-TC6-1` and `US3-TC7-2`, which both assert the email with its small initial avatar |
 | `shared-ui-site-chrome-US1-TC8-1` | Reached, result joined | `shared-ui-site-chrome-SC-16` and `shared-ui-site-chrome-SC-33`: no case asserted that a signed-out header ignores the Profile, My Orders and Membership handlers, so the result joined this case on the same run and its version stands. It leaves the smoke suite, which `shared-ui-site-chrome-US1-TC15-2` holds for the journey |
-| `shared-ui-site-chrome-US1-TC23-1` | Case added, folded as a scenario | The requirement says `SiteHeaderProps` and `SiteHeaderCopy` take no second orders item, and no scenario stated it: `shared-ui-site-chrome-SC-17` proves the rendered menu, not the types. Folded as `shared-ui-site-chrome-SC-41`, which this case walks and task 1.1 tests |
+| `shared-ui-site-chrome-US1-TC27-1` | Case added, folded as a scenario | The requirement says `SiteHeaderProps` and `SiteHeaderCopy` take no second orders item, and no scenario stated it: `shared-ui-site-chrome-SC-17` proves the rendered menu, not the types. Folded as `shared-ui-site-chrome-SC-42`, which this case walks and task 1.1 tests |
 | `shared-ui-site-chrome-SC-17` | Bumped | It adds "and no other item": `SiteHeader` drops its second orders item, so the account menu's five items are the whole set |
 | Contradictions | None | Where a case and a scenario state the same behaviour they agree |
 

@@ -8,7 +8,8 @@
   - Public types: `SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession`
 - Header controls
   - Handler-gated: search, account, cart, Profile, My Orders, and Membership
-    render only when their handler is supplied; Membership also needs its copy
+    render only when their handler is supplied, or, for account, its slot;
+    Membership also needs its copy
   - No wishlist: the header does not offer a wishlist control
   - Account menu: Sign In when signed out; signed in, the sign-in email with
     its initial avatar above the items in one fixed order - Profile, My
@@ -229,7 +230,7 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 - **AND** the menu does not offer Membership
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-61e rev=1 -->
-#### Scenario: shared-ui-site-chrome-SC-41 - SiteHeader takes no second orders item
+#### Scenario: shared-ui-site-chrome-SC-42 - SiteHeader takes no second orders item
 **Serves:** Chrome exports - the public types name only the account menu's five items
 
 - **GIVEN** an application renders `SiteHeader`
