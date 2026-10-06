@@ -99,7 +99,7 @@ export const ClosedSold: Story = {
     expect(canvas.getByText("Winning bid")).toBeVisible();
     expect(canvas.getByText("Closed")).toBeVisible();
     expect(canvas.getByText("30 Aug 2026")).toBeVisible();
-    expect(canvas.getByText("Closed at 17:15. Ran 7d 15h")).toBeVisible();
+    expect(canvas.getByText("Closed at 17:15 HKT. Ran 7d 15h")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: /watch/i }),
     ).not.toBeInTheDocument();
