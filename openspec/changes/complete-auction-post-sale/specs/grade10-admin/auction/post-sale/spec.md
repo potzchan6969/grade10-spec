@@ -41,6 +41,8 @@ dispatch and delivery recorded, with every change on one timeline.
 - Grants
   - Named access: a control the operator lacks stays listed, disabled, and names the access it needs
   - Proof files: every operator who can open the order reads them; attaching one needs the grant of its action
+- Setup
+  - Reopen setup: an operator gives a winner in Setup Overdue a fresh 48 hours, with a reason, or records the setup themselves, never after the invoice is sent
 - Listings
   - Extended: a lot still taking bids past its scheduled close reads Extended in the Listings table
   - Open order: a won lot's Listings row opens its order
@@ -1565,6 +1567,175 @@ Open order, which opens that lot's order page.
 - **GIVEN** a closed lot with a winner
 - **WHEN** an operator chooses Open order on its Listings row
 - **THEN** that lot's order page opens
+
+### Requirement: An operator reopens the address form
+
+An operator holding payment-processing SHALL be able to reopen setup, the
+address form, on an auction order in Setup Overdue whose address deadline has
+passed. Reopen setup is that status's primary action, per "The order detail
+explains its status":
+
+1. Open the order and read when its address deadline passed and how many times
+   the address form has already been reopened.
+2. Give a reason. The reason is mandatory.
+3. Commit.
+
+On commit Grade10 SHALL set the order's address deadline to 48
+hours from the moment of the reopen, per
+`grade10-site/auction/winner-order`, and SHALL write a reopened entry to the
+invoice log carrying the named operator, the timestamp and the reason.
+
+A reopen SHALL write no status directly. Its reopened facts SHALL derive
+Awaiting Setup. Its invoice status SHALL stay `not_issued`, and no order SHALL
+be suspended or cancelled by it. Grade10 SHALL place no limit on how many times
+one order's address form is reopened.
+
+Grade10 SHALL refuse a reopen when the reason is missing, when the order's
+address deadline has not passed, when the order already has a confirmed address,
+when the order's invoice has been sent, since the delivery address locks at send,
+and when the order's invoice status is `cancelled`, since cancellation has
+already returned the lot to available stock. An operator without
+payment-processing SHALL see the reopen control visible and disabled, and
+Grade10 SHALL refuse the same action on the server.
+
+An operator holding payment-processing SHALL also be able to record setup,
+the delivery address, billing address and payment method the winner would
+confirm, without reopening the address form, only for an unconfirmed Setup
+Overdue order whose invoice status is `not_issued`, so a winner who gives their
+setup by telephone is quoted in one step. The reason is mandatory. Recording
+setup SHALL NOT reopen the window and SHALL NOT let the winner write again.
+Grade10 SHALL refuse it without a reason, after address confirmation, after
+invoice send, with cancellation requested and on a cancelled order. Grade10
+SHALL write an address-recorded invoice-log entry carrying the named operator,
+timestamp and reason. An operator without payment-processing SHALL see the
+record control visible and disabled, and Grade10 SHALL refuse the same action
+on the server.
+
+Reopening and recording setup each need payment-processing, per "Payment and
+shipment are separate grants", and each carries a reason, per "History is
+append-only and retained".
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ehu rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-75 - A reopen gives a fresh 48 hours
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order in Setup Overdue whose address deadline was
+  at 2026-09-14T09:00:00Z
+- **AND** an operator holding payment-processing
+- **WHEN** they reopen the address form with a reason at 2026-09-16T14:00:00Z
+- **THEN** the order's address deadline is 2026-09-18T14:00:00Z
+- **AND** the order derives as Awaiting Setup from its reopened window
+- **AND** the winner can confirm a delivery address again
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-8of rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-76 - A reopen without a reason is refused
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order whose address deadline was 2026-09-14T09:00:00Z
+- **WHEN** an operator attempts to reopen the address form without a reason
+- **THEN** Grade10 refuses it
+- **AND** the address deadline has still passed
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-u12 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-77 - An operator without the grant cannot reopen
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an operator who does not hold payment-processing
+- **WHEN** they open an auction order whose address deadline has passed
+- **THEN** the reopen control is visible and disabled
+- **AND** Grade10 refuses the reopen on the server if it is attempted
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-lh7 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-78 - A third reopen is allowed
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order whose address form has been reopened twice and whose
+  address deadline has passed again
+- **WHEN** an operator holding payment-processing reopens it a third time with
+  a reason
+- **THEN** Grade10 accepts the reopen
+- **AND** the address deadline is 48 hours from that reopen
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-blu rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-79 - The reopen is on the invoice log
+**Serves:** Audit trail - the reopen names who did it and why
+
+- **GIVEN** an auction order an operator reopened with a reason
+- **WHEN** an operator reads the invoice log
+- **THEN** it holds a reopened entry with the named operator, its timestamp
+  and that reason
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-pqn rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-80 - Reopening before the deadline is refused
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order in Awaiting Setup whose address deadline is
+  at 2026-09-18T14:00:00Z
+- **WHEN** an operator attempts to reopen the address form at 2026-09-17T10:00:00Z
+- **THEN** Grade10 refuses it
+- **AND** the address deadline is still 2026-09-18T14:00:00Z
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-w78 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-81 - No reopen once the invoice is sent
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order whose invoice an operator has sent
+- **WHEN** an operator attempts to reopen its address form
+- **THEN** Grade10 refuses it
+- **AND** the delivery address stays locked, changeable only by a re-quote
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-egm rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-82 - A confirmed address cannot reopen
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order in Preparing Invoice with a confirmed address,
+  no sent invoice, and an address deadline that has passed
+- **WHEN** an operator attempts to reopen its address form with a reason
+- **THEN** Grade10 refuses it
+- **AND** the order remains Preparing Invoice
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-jy7 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-83 - A cancelled order refuses a reopen
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order an operator cancelled before any invoice was sent,
+  whose lot has returned to available stock
+- **WHEN** an operator attempts to reopen its address form
+- **THEN** Grade10 refuses it
+- **AND** the order still derives as Cancelled
+- **AND** the lot stays in available stock
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-2g4 rev=2 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-84 - An operator records setup without reopening
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an auction order in Setup Overdue whose address deadline was
+  at 2026-09-14T09:00:00Z
+- **WHEN** an operator holding payment-processing records the delivery address,
+  billing address and payment method the winner gave them by telephone
+- **THEN** Grade10 accepts it
+- **AND** the order derives as Preparing Invoice
+- **AND** the address deadline has still passed, so the winner cannot change it
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-t9v rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-90 - Address write and reopen serialize
+**Serves:** Setup - reopen setup or record it
+
+- **GIVEN** an expired order with no confirmed address
+- **WHEN** a winner address write and an operator reopen are submitted concurrently
+- **THEN** Grade10 serializes the operations under the order boundary
+- **AND** the final address snapshot and persisted deadline match the last
+  committed transition
+- **AND** no partial address overwrite is possible
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-su0 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-91 - Address recording is logged
+**Serves:** Setup - the reopen and phone-recorded setup name who did them and why
+
+- **GIVEN** an operator records setup supplied by phone without reopening
+- **WHEN** another operator reads the invoice log
+- **THEN** it contains an address-recorded entry with the named operator,
+  timestamp and reason
 
 ## REMOVED Requirements
 

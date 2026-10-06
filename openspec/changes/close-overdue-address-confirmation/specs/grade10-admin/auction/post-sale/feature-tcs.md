@@ -668,8 +668,8 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The order still derives as Cancelled.
 * The lot stays in available stock.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-b2d rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC16-1: An operator records the address without reopening
+<!-- trace:case id=g10adm.auction-post-sale.TC-b2d rev=2 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
+### post-sale-US18-TC16-2: An operator records setup without reopening
 
 **Classification:**
 
@@ -692,7 +692,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 **Steps:**
 
 1. Open `<missed-deadline order>`.
-2. Record the delivery address the winner gave by telephone.
+2. Record the delivery address, billing address and payment method the winner gave by telephone.
 
 **Expected Results:**
 
@@ -1007,7 +1007,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 | Raised | Disposition |
 | --- | --- |
 | Whether a cancelled order's address form can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US18-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
-| Whether an operator may record the address without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US18-TC16-1` |
+| Whether an operator may record setup without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US18-TC16-2`, which now records the whole setup as `complete-auction-post-sale` states it |
 | How the 48-hour address deadline changes the queue | **Folded in:** `post-sale-US18-TC4-1` and `post-sale-US18-TC10-1` cover Setup Overdue and reopen to Awaiting Setup; `post-sale-US18-TC24-1` asserts Preparing Invoice does not derive Setup Overdue or start a payment timer before invoice send. |
 | Address write/reopen race and phone-recorded audit entry | **Folded in:** `SC-90`/`SC-91` with `post-sale-US18-TC25-1`/`TC26-1`. |
 | Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US18-TC13-1` reads it that way |
@@ -1018,3 +1018,4 @@ of any requirement, and a scenario draft written without sight of this suite.
 | Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** This change checks only the existing reissue deadline behavior. |
 | Whether settling an expired invoice restores bidding | **Already decided** on the Winner Order page: paying does not restore bidding by itself. Suspension belongs to `grade10-site/auction/bidder-suspension` |
 | Whether the winner is told about a reissue | **Out of scope**, with the other letters, in a follow-on change |
+| Who owns the reopen and record-setup requirement | **Moved** to `complete-auction-post-sale` (`decisions.md` Q10), which this change depends on. Its scenarios keep their ids and markers: `SC-75` to `SC-84`, `SC-90` and `SC-91` now sit in that change's post-sale delta. This suite's `post-sale-US18-TC1-1` to `TC7-1`, `TC15-1`, `TC16-2`, `TC25-1`, `TC26-1` and `TC27-1` still cover them |
