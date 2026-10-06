@@ -69,9 +69,10 @@ member cart.
 
 While that read is pending, the drawer SHALL use the loading behavior defined
 by `shared/ui/store-cart` and SHALL NOT present held price or availability as
-confirmed. If the read fails, the drawer SHALL remain unresolved, SHALL keep
-Checkout unavailable, and SHALL tell the collector once during that open. A
-later open SHALL start another read.
+confirmed. If the read fails, the drawer SHALL present the cart as
+`grade10-site/store/cart-validation` requires for a read that cannot complete,
+and SHALL tell the collector once during that open. A later open SHALL start
+another read.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-a52 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-04 - A signed-in collector sees the member cart
@@ -159,8 +160,9 @@ other discount unless the existing combined basket quote supplies the accepted c
 ### Requirement: Drawer changes stay on the current cart
 
 A quantity change or removal in the drawer SHALL update the same member cart
-the drawer opened. After loading finishes, unavailable-line cleanup SHALL use
-the removal and single-notice behavior defined by `shared/ui/store-cart`.
+the drawer opened. After loading finishes, the drawer SHALL remove withdrawn
+lines as `grade10-site/store/cart-validation` requires, through the removal
+and single-notice behavior defined by `shared/ui/store-cart`.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-5bv rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-11 - A collector edits the opened cart
