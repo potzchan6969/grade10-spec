@@ -44,7 +44,7 @@ sign-in surface decides the session.
 ### Requirement: Your Orders presents newest active and past orders
 
 The page SHALL present orders newest first. It SHALL pass the customer-facing
-badge defined by `grade10-site/store/order-status` to every order summary. It
+badge defined by `grade10-site/commerce/order-status` to every order summary. It
 SHALL classify `processing`, `shipped`, and `pickup` as Active, and `completed`,
 `canceled`, and `refunded` as Past.
 

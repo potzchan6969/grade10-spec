@@ -20,7 +20,7 @@ refund, or tracking information. The first delivery establishes the baseline.
   from the existing shared Order Details block and the current Store order read.
 - Integrate both pages through `@grade10/store-frontend`; the Grade10
   application does not call the Store transport or Shopify directly.
-- Derive every displayed badge from `grade10-site/store/order-status`, and keep
+- Derive every displayed badge from `grade10-site/commerce/order-status`, and keep
   quoted, paid, refunded, fulfilment, and delivery facts distinct.
 - Prefer the Store-supplied shop order number in customer-facing order labels,
   while keeping the immutable Store order id as the route and action key.

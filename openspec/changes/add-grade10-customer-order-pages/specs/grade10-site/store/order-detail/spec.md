@@ -56,7 +56,7 @@ the session.
 ### Requirement: The detail preserves the order facts the Store supplies
 
 The page SHALL pass the customer-facing badge defined by
-`grade10-site/store/order-status` to the detail block. It SHALL identify the
+`grade10-site/commerce/order-status` to the detail block. It SHALL identify the
 order by its Store-supplied shop order number when that value is present and
 non-empty, otherwise by its Store order id. The immutable Store order id SHALL
 remain the route key in either case. The page SHALL show the placed date,

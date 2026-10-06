@@ -91,7 +91,7 @@ Add pure customer-order projections beside the order presentation layer:
 | Payment method | typed payment instrument | optional `OrderDetailsPayment` |
 | Tracking target | tracking URL string or null | safe absolute `https` URL or null |
 
-The status badge comes from `grade10-site/store/order-status`; these pages
+The status badge comes from `grade10-site/commerce/order-status`; these pages
 consume that frontend rule and do not copy it. Formatting stays at the
 application boundary where locale is known. Arithmetic uses minor units before
 formatting. Both pages display a trimmed, non-empty `orderName` when supplied
