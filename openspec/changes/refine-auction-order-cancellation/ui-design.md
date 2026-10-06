@@ -39,8 +39,7 @@ cancelled notice in `winner-order-SC-143`.
   fields are admin application work; no reusable `@grade10/ui` export exists
   for this workflow
 - **i18n:** cancellation categories, required-field errors, consequence
-  preview, Paid after cancel flag, Finance return direction, payment-processing clear action and
-  winner Contact Us copy are new catalog work in the appropriate admin or
+  preview, Paid after cancel flag, Finance return direction and the payment-processing clear action are new catalog work in the appropriate admin or
   shared layer, answered in every locale that layer serves
 
 ### Winner Order
@@ -49,7 +48,7 @@ cancelled notice in `winner-order-SC-143`.
   `Text` in the existing preview assembly
 - **Existing shared block:** `AuctionOrderDetail` keeps the supplied lot and
   winning-bid facts; it does not receive the operator category or note
-- **i18n:** Cancelled on {date} and Contact Us copy are catalog work; the
+- **i18n:** Cancelled on {date} (a day-only date in the viewer's local zone) and the winner Contact Us copy are catalog work; the
   cancellation reason has no winner-facing key
 
 ## States

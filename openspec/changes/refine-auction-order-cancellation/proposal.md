@@ -14,8 +14,8 @@ starts at no data because free-text reasons cannot be counted.
 
 ## What Changes
 
-- **The winner sees what happened.** Winner Order reads `Cancelled on {date}`,
-  keeps the lot and the winning bid, and offers Contact Us as the only action.
+- **The winner sees what happened.** Winner Order reads `Cancelled on {date}`
+  (a day-only date in the viewer's local zone), keeps the lot and the winning bid, and offers Contact Us as the only action.
   It gives no reason, as the cancellation letter already does not.
 - **The operator picks a reason category.** Non-payment, Missed setup, Winner
   asked, Lot issue or Other, plus the mandatory note. The queue filters
@@ -31,8 +31,9 @@ starts at no data because free-text reasons cannot be counted.
   for Finance to return outside Grade10.
 - **A card payment that lands after the cancel is flagged.** The payment is
   recorded, the order stays Cancelled and carries a Paid after cancel flag;
-  Finance returns the money outside Grade10 and any operator with
-  `auction:payment` clears the flag with a reason and any return reference.
+  Finance returns the money outside Grade10. Each late payment carries its own
+  flag, and any operator with `auction:payment` clears it with a written
+  reason and an optional return reference. This change owns that rule.
 
 No running rule is reversed: cancel stays operator-only, terminal, and
 unable to lift a suspension.
@@ -68,8 +69,10 @@ None.
 - **Overlaps.** `add-winner-bank-transfer`, `add-winner-partial-payment` and
   `add-winner-refund` also modify the unpaid-order actions in `post-sale`.
   This change's delta applies after them, copying their text rather than
-  today's durable spec. `close-overdue-address-confirmation` already cancels
-  before an invoice exists and is unchanged by this.
+  today's durable spec. `complete-auction-post-sale` depends on this change: it points at this
+  change's rule for clearing a Paid after cancel flag and does not restate it.
+  `close-overdue-address-confirmation` already cancels before an invoice
+  exists and is unchanged by this.
 
 ## Open Questions
 

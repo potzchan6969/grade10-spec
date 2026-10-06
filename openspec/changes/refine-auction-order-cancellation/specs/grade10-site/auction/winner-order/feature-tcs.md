@@ -9,8 +9,8 @@
 **I want** Winner Order to say it was cancelled and when,
 **so that** I know the order is closed and how to contact Grade10.
 
-<!-- trace:case id=g10.auction-winner-order.TC-3x8 rev=1 covers=g10.auction-winner-order.SC-1fb -->
-### winner-order-US13-TC1-1: Cancelled keeps the lot and winning bid visible
+<!-- trace:case id=g10.auction-winner-order.TC-3x8 rev=2 covers=g10.auction-winner-order.SC-1fb -->
+### winner-order-US13-TC1-2: Cancelled keeps the lot and winning bid visible
 
 **Classification:**
 
@@ -35,7 +35,7 @@
 
 **Expected Results:**
 
-* The page says Cancelled on the cancellation date.
+* The page says Cancelled on the cancellation day, as a day-only date in the winner's local zone.
 * The lot and winning bid remain visible.
 * Contact Us is the only action.
 * No cancellation reason is shown.
