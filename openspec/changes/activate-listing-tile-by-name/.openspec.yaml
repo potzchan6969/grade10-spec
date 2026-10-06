@@ -6,4 +6,7 @@ hands:
   tech: "@ecchochan"
   qa: "@ecchochan"
   dev: "@ecchochan"
-design_waived: "the code lands wholly in packages/ui of this store - ProductCard already draws the name control, and the one keyboard stop is a tab-order change to the photo; the grade10 site already passes onProductClick, so its one group is the walk, a test with no code"
+depends_on:
+  - add-store-cross-sell
+awaiting:
+  test-cases: "2026-10-06, a fresh blind QA1 pass for grade10-site/store/product-listing, whose anchors moved after the last one, and for grade10-site/store/product-page, whose delta is new; then Dev's re-read and QA2"
