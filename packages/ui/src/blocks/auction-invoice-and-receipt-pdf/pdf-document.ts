@@ -53,20 +53,30 @@ export type PdfDocumentCopy = {
 /**
  * The regular face every line falls back to, and a bold face for titles,
  * headings and totals. The Latin path gets a real bold standard font for
- * free; a storefront whose document needs the embedded CJK fallback has no
- * bold face provisioned for it, so `bold` is the same face as `regular`
- * there - plain weight throughout rather than a missing glyph.
+ * free; a document drawn in an embedded face takes its bold from
+ * `boldFontBytes`, and without one `bold` is the same face as `regular` -
+ * plain weight throughout rather than a missing glyph.
  */
 export type Fonts = { regular: PDFFont; bold: PDFFont };
+
+/** The embedded faces a caller supplies when the standard fonts cannot draw its text. */
+export type PdfRenderOptions = {
+  fontBytes?: ArrayBuffer | null;
+  boldFontBytes?: ArrayBuffer | null;
+};
 
 export async function loadFonts(
   pdf: PDFDocument,
   fontBytes?: ArrayBuffer | null,
+  boldFontBytes?: ArrayBuffer | null,
 ): Promise<Fonts> {
   if (fontBytes) {
     pdf.registerFontkit(fontkit);
-    const font = await pdf.embedFont(fontBytes, { subset: true });
-    return { regular: font, bold: font };
+    const regular = await pdf.embedFont(fontBytes, { subset: true });
+    const bold = boldFontBytes
+      ? await pdf.embedFont(boldFontBytes, { subset: true })
+      : regular;
+    return { regular, bold };
   }
   return {
     regular: await pdf.embedFont(StandardFonts.Helvetica),

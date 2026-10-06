@@ -5,6 +5,7 @@ import type {
   PdfDocumentCopy,
   PdfLineItem,
   PdfPartyAddress,
+  PdfRenderOptions,
 } from "./pdf-document";
 import {
   A4_HEIGHT,
@@ -88,9 +89,7 @@ export type InvoicePdfData = {
   copy: InvoicePdfCopy;
 };
 
-export type InvoicePdfRenderOptions = {
-  fontBytes?: ArrayBuffer | null;
-};
+export type InvoicePdfRenderOptions = PdfRenderOptions;
 
 export { addressLines };
 
@@ -278,7 +277,7 @@ export async function InvoicePdf(
   pdf.setCreationDate(data.sentAt);
   pdf.setModificationDate(data.sentAt);
 
-  const fonts = await loadFonts(pdf, options.fontBytes);
+  const fonts = await loadFonts(pdf, options.fontBytes, options.boldFontBytes);
 
   const page = pdf.addPage([A4_WIDTH, A4_HEIGHT]);
   let y = A4_HEIGHT - MARGIN;
