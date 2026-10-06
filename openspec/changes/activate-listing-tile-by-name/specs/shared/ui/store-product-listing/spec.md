@@ -140,6 +140,7 @@ product is sold out, or hold a cart quantity.
 - **THEN** nothing opens
 - **AND** neither the name nor the image is offered as a control
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-14a rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-100 - A tile given its address alone is a link
 **Serves:** Tile contract - a tile given its address alone is a link
 
@@ -280,6 +281,7 @@ inside a product card, the tile's requirement makes it a pointer target.
 - **WHEN** an application renders the product card image without a product card
 - **THEN** it renders and behaves as specified, with no missing-context error
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-7v7 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-101 - The image used alone is its own stop
 **Serves:** Accessibility - the image used alone is its own stop
 

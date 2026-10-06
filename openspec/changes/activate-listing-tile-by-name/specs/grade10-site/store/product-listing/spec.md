@@ -14,6 +14,7 @@ A card on the browse listing SHALL open its own product page from its name
 and from its photo alike. Because the listing sells, a sold-out card SHALL
 open from neither.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-o14 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-55 - A card's name opens its own page
 **Serves:** grade10-site-store-product-listing-US-16 - Collector opens a card from the listing
 
@@ -22,6 +23,7 @@ open from neither.
 - **THEN** that card's own page renders
 - **AND** activating the card's photo instead renders the same page
 
+<!-- trace:scenario id=g10.store-product-listing.SC-biu rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-56 - A sold-out card does not open
 **Serves:** grade10-site-store-product-listing-US-16 - Collector opens a card from the listing
 

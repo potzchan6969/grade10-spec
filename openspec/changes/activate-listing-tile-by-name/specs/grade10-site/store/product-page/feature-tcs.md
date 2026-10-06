@@ -10,6 +10,7 @@
 **so that** the card I opened is the one I land on, at an address that answers
 on its own.
 
+<!-- trace:case id=g10.store-product-page.TC-3jw rev=1 covers=g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
 ### grade10-site-store-product-page-US2-TC1-1: Card opens from the grid at its own address
 
 **Classification:**

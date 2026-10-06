@@ -285,6 +285,7 @@ Runs once per row of **Test data**.
 * Step 5 logs one tile activation for `<product_3>`, the same as step 3.
 * Step 7 lands focus on the name, underlined, not on the photo.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-64a rev=1 covers=g10.shared-store-product-listing.SC-14a -->
 ### shared-ui-store-product-listing-US1-TC11-1: Name is a link where the tile is given an address alone
 
 Runs once per row of **Test data**.
@@ -332,6 +333,7 @@ Runs once per row of **Test data**.
 * Step 7 follows the row's **Address** in the story's frame.
 * The Actions panel logs no tile activation throughout.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-1vn rev=1 covers=g10.shared-store-product-listing.SC-7v7 -->
 ### shared-ui-store-product-listing-US1-TC12-1: Photo used alone keeps its own keyboard stop and name
 
 **Classification:**

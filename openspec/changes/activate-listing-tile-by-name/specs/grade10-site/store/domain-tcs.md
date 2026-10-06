@@ -10,6 +10,7 @@
 own page,
 **so that** I can inspect the card I chose in the catalogue.
 
+<!-- trace:case id=g10.store-domain.TC-k4u rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4,g10.store-product-listing.SC-aty,g10.store-product-listing.SC-ksc,g10.store-product-listing.SC-o37,g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
 ### grade10-site-store-e2e-US1-TC1-1: Collection tile leads to its product page
 
 **Classification:**

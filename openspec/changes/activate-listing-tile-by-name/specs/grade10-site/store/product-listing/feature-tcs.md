@@ -9,6 +9,7 @@
 **I want** a card's name to open its product, as its photo does,
 **so that** the name I read first takes me to the product I came for.
 
+<!-- trace:case id=g10.store-product-listing.TC-fjr rev=1 covers=g10.store-product-listing.SC-o14,g10.store-product-listing.SC-biu -->
 ### grade10-site-store-product-listing-US16-TC1-1: Card's name and photo each open its own product page
 
 Runs once per row of **Test data**.
@@ -51,6 +52,7 @@ Runs once per row of **Test data**.
 * Step 3 opens the row's **Outcome**, at `<lang>/store/products/<handle>` for that card.
 * The product page names the row's **Card**, not a neighbouring card.
 
+<!-- trace:case id=g10.store-product-listing.TC-xoj rev=1 covers=g10.store-product-listing.SC-o14,g10.store-product-listing.SC-biu -->
 ### grade10-site-store-product-listing-US16-TC2-1: Sold-out card opens from neither its name nor its photo
 
 **Classification:**
