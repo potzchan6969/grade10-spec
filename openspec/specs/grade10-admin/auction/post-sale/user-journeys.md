@@ -96,3 +96,9 @@ payments that failed,
 **As a** payment operator working an invoice a winner cannot pay in one go,
 **I want** to record each payment as it arrives, smaller than the balance owed, and see the order until it is settled,
 **so that** every partial payment ends up correctly recorded without me tracking the balance outside Grade10.
+
+### post-sale-US-19: Operator settles an expired invoice
+
+**As an** operator,
+**I want** an expired invoice settled only in the admin portal, and a card payment started in time to count,
+**so that** a winner who paid just before the deadline is never expired, and one who paid after it is never charged.

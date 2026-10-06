@@ -122,6 +122,12 @@ current currency minimum,
 **I want** a locked order with Contact Us and a receipt for every payment made so far,
 **so that** I always have proof of what I have paid, without needing to track a running balance myself.
 
+### winner-order-US-23: Winner gets the address form back
+
+**As a** winner who missed the 48-hour address deadline,
+**I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
+**so that** I can still settle the lot I won once I have told Grade10 where to ship it.
+
 ## Retired
 
 - `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.
