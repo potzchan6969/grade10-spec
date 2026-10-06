@@ -8,8 +8,6 @@
   supplies — no new content, no new requirement.
 - Route every label the renderer draws through a `copy` argument, matching
   the no-i18n-in-`@grade10/ui` rule every other block already follows (Q20).
-- Give the caller a winner-stated IANA zone that is fixed on each invoice
-  revision, including when setup was recorded by phone (Q25).
 
 ## Non-Goals
 
@@ -28,10 +26,9 @@
 - Resolving the invoice/receipt ID format disagreement
   (`docs/references/auction-invoice-and-receipt-contents.md#open-questions`).
   Out of scope, as it is everywhere else that has touched these documents.
+- Collecting or storing a winner-selected time zone for document dates.
 - Changing anything `winner-order/spec.md` already requires about either
   document's content, controls or visibility.
-- Inferring a winner's zone from their address, phone country or the PDF
-  reader's machine after issue.
 
 ## Decisions
 
@@ -61,7 +58,8 @@
 | Q22 | Q19 dropped bank rails as a non-goal "until a concrete requirement resurfaces one" — the author has now supplied one: a mockup of InvoicePdf's own "Bank details" section, full width below Order Total (the position Q12 already settled, before Q19 retired the section entirely), with three columns — SWIFT (Beneficiary, SWIFT/BIC, Account/IBAN), FPS (FPS ID, Beneficiary), HK local transfer (Bank & code, Beneficiary, Account no.) — and a reference line: "Enter this reference in your bank app's Memo or Remarks field. Missing it delays verification. Quote this reference on your transfer: `<bank reference>`". The pre-Q18 DOM contract's `bankRails` was an opaque `ReactNode` a consumer composed itself; the pdf-lib renderer takes only plain values, so this needs an actual typed shape, not a restoration of the old prop. `bankReference` (Q13) was removed as "redundant once `bankRails` carries the reference" — true only while `bankRails` was opaque content a consumer could embed it in; a structured `bankRails` needs it as one of its own fields. Two open questions: (1) does the section render on every invoice, or only a bank-transfer one; (2) does the reference live as its own field inside the new `bankRails` type, or return as a separate top-level prop? | (1) Only on a bank-transfer invoice — `winner-order/spec.md`'s Invoice fields table already fixes this for **Bank reference** ("Shown to the winner only on a bank transfer invoice"), and a card invoice has no transfer to receive. `bankRails` is optional on `InvoicePdfData`; the section renders only when given, drawn by `InvoicePdf` alone (never `ReceiptPdf` — a receipt is for a payment already made). (2) One field inside the new type, `reference: string`, not a second top-level prop — keeps `bankRails`'s presence the single thing that drives the whole section, the same grouping the mockup itself draws (author's choice) | A second top-level `bankReference` prop, independent of `bankRails` — rejected: reopens exactly the duplicate-display problem Q13 already resolved, this time between two structured props instead of a prop and a blob |
 | Q23 | The author asked to remove the footer sentence entirely from both InvoicePdf and ReceiptPdf ("This invoice records the charges for the lot shown above." / "This receipt records the payment snapshot shown above.") — boilerplate no requirement ever pinned to a specific claim, and the Feature set's "A footer line" bullet was never backed by its own scenario. Drop `footer`/`copy.footer` and `drawFooter` entirely, or keep the field and let a caller pass an empty string? | Remove `footer` from `InvoicePdfCopy`/`ReceiptPdfCopy` and `drawFooter` from both renderers entirely (author's choice) | Keep the field, let callers pass an empty string — rejected: a field every caller must fill with an empty value just to render nothing is dead weight on the contract, not a real reserved slot |
 | Q24 | Which direction does the replacement relationship read on the PDF? | The new invoice names the prior invoice with `Replaces invoice {id}`; the prior invoice remains retained and the new invoice is the current payable record. The renderer exposes this as `replacesInvoice`, coordinated with `define-public-auction-identifiers` (author's clarification) | Keep the old `Replaced by` wording — rejected: it points from the prior invoice to the new one and conflicts with the requested document wording |
-| Q25 | Which zone should the documents use when the winner and PDF reader may be in different places? | Use the winner's stated IANA zone, confirmed with online setup or entered by the operator from the winner's phone statement; snapshot it on each invoice revision and use it for that revision's receipts (author's choice). A payment-processing operator can record a missing zone on an older order with a reason before another send, but cannot replace a zone already confirmed. An existing revision with no snapshot renders in labelled `Asia/Hong_Kong` time, while already archived bytes stay untouched. Q5's component-only page waiver is superseded by the source rule and its PRD lines. | Use the PDF reader's current zone — rejected because document dates would change with the reader or first cache fill. Infer from address or phone — rejected because neither identifies a time zone reliably. |
+| Q25 | Which zone should the documents use? | Superseded by Q26. The earlier accepted winner-zone decision remains in the immutable acceptance snapshot. | - |
+| Q26 | Does the accepted winner-zone addition still govern invoice and receipt dates after PR #921? | No. PR #921 sets both PDFs to `Asia/Hong_Kong` labelled `GMT+8`. The winner-zone setup, phone-entry, revision snapshot and renderer input are removed from this change. | Keep the previously accepted Q25 winner-zone contract, which conflicts with the later fixed-zone document requirement |
 
 ## Raised
 

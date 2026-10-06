@@ -56,8 +56,8 @@ removed, per the amendment note above each one.
 - Presentation-only contract
   - Every amount arrives as a preformatted string; neither renderer
     computes, sums or reformats a value
-  - Every date arrives as a `Date` and the winner's IANA time-zone identifier;
-    the renderer formats that instant once in the winner's zone
+  - Every date arrives as a `Date`; the renderer formats that instant once in
+    `Asia/Hong_Kong` and labels it `GMT+8`
   - Every label arrives through a `copy` argument; neither renderer imports
     `@grade10/i18n` or hardcodes a label
 - Reserved extension slots
@@ -457,25 +457,6 @@ receipt; none is conditional on being given.
 - **THEN** all four payment-breakdown lines still appear, in their fixed
   order
 - **AND** none is dropped for reading zero
-
-### Requirement: Dates render in the winner's time zone
-
-Every document date uses the winner's time zone, matching the payment deadline
-the winner sees.
-
-**Given** — `InvoicePdfData` and `ReceiptPdfData` SHALL each require the
-winner's IANA time-zone identifier. InvoicePdf and ReceiptPdf SHALL render
-every date as the winner's calendar date and clock time, with that zone's
-name. Neither renderer SHALL read the server's or viewer's local zone.
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-43 - A date renders in the winner's time zone with its zone name
-
-**Serves:** Presentation-only contract - every date renders in the winner's time zone
-
-- **GIVEN** a `Date` value and a winner zone whose calendar date differs from Hong Kong for that instant
-- **WHEN** InvoicePdf renders its issue and deadline rows and ReceiptPdf renders its paid-at row
-- **THEN** each row shows that instant's winner-zone calendar date and clock
-  time, followed by that zone's name
 
 ### Requirement: InvoicePdf and ReceiptPdf render only what they are given
 

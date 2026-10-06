@@ -114,7 +114,7 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Payment processing fee | Priced by the payment method, below. On every invoice, and never dropped |
 | Order total | The total payable — the subtotal plus the payment processing fee |
 | Sent at | When the operator sent the invoice. Stored in UTC |
-| Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC, displayed in the winner's own zone |
+| Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC; shown in the viewer's local zone on Winner Order and in `Asia/Hong_Kong` as `GMT+8` on the invoice PDF |
 | Replaces invoice | On a replacement invoice only: the prior invoice ID named by `Replaces invoice {id}` |
 | Invoice status | Per `grade10-site/auction/order-status`. A replaced invoice holds none |
 
@@ -966,9 +966,9 @@ shipping difference discovered after payment.
 ### Requirement: The payment deadline is fixed when the invoice is sent
 
 The payment deadline SHALL be 7 calendar days from the moment an operator
-sends the invoice. Grade10 SHALL fix it at send, store it in UTC, and display
-it in the winner's own timezone on both the invoice and the auction order, per
-`shared/dates-and-times`.
+sends the invoice. Grade10 SHALL fix it at send and store it in UTC. Winner
+Order SHALL display it in the viewer's local zone. The invoice PDF SHALL
+display it in `Asia/Hong_Kong`, labelled `GMT+8`, per `shared/dates-and-times`.
 
 Nothing the winner does SHALL move the deadline — not a failed payment, and
 not leaving the order untouched — except uploading payment proof, which stops
@@ -996,9 +996,11 @@ reissuing the invoice to `pending`, or SHALL settle manually or cancel, per
 
 - **GIVEN** an auction order whose invoice an operator sent at
   2026-09-12T09:00:00Z
-- **WHEN** the winner reads the invoice
+- **AND** the winner opens Winner Order in a browser set to `America/New_York`
+- **WHEN** the winner reads the order and its invoice PDF
 - **THEN** the payment deadline is 2026-09-19T09:00:00Z
-- **AND** it is displayed in the winner's own timezone as an absolute datetime
+- **AND** Winner Order shows it as an absolute datetime at 05:00 `EDT`
+- **AND** the invoice PDF shows it at 17:00 `GMT+8`
 - **AND** no countdown is shown
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-9ea rev=1 -->
@@ -1064,7 +1066,7 @@ follows up per `grade10-admin/auction/post-sale`.
 - **WHEN** the winner opens Winner Order
 - **THEN** Confirm delivery address is offered
 - **AND** the confirm deadline shown under the control is 2026-09-19T13:30:00Z
-  displayed in the winner's zone as an absolute datetime
+  displayed in the viewer's local zone as an absolute datetime
 - **AND** no countdown is shown
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-36a rev=1 -->
@@ -1124,7 +1126,7 @@ vocabulary in `grade10-site/auction/order-status`.
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
 
-Step subtext SHALL use day-only dates in the winner's zone. While Address is
+Step subtext SHALL use day-only dates in the viewer's local zone. While Address is
 current and awaiting confirm, subtext SHALL read `Confirm by {date}`. While
 Payment is current and the invoice is `pending`, subtext SHALL read
 `Pay by {date}`. While the invoice is `payment_verifying`, Payment subtext

@@ -302,17 +302,6 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 On a paid invoice | Counts above the Order Total | Overpaid |
 | 🚧 On an invoice in any other state, which no card payment can start on | Counts toward nothing | Unexpected status |
 
-### Winner Time Zone
-
-- 🚧 **Invoice dates** - the quote shows the winner's confirmed IANA zone;
-  send is refused while the order has none. Each issued invoice keeps that
-  zone for its dates and for receipts paid against it
-- 🚧 **Phone setup** - the operator enters the winner's stated IANA zone
-  with the addresses; an absent or invalid zone refuses the record
-- 🚧 **Older orders** - when an order has no zone, the operator records the
-  zone the winner states, with a reason, before sending or reissuing; an
-  already issued document keeps its original dates
-
 ### Manual Payment Collection
 
 - 🚧 **Record payment** - one dialog for money received outside the card
@@ -337,7 +326,7 @@ on winner, In transit, Closed and All, opening on Needs action.
   fresh 48 hours; repeatable, writes no status directly but its reopened facts
   derive Awaiting Setup, never on a cancelled order. Or, only while the order
   is unconfirmed Setup Overdue and its invoice is `not_issued`, the operator
-  records an address and the winner's stated IANA time zone by phone, leaving
+  records an address by phone, leaving
   the form closed. Both
   paths refuse once an address is confirmed, an invoice is sent, or cancellation
   is requested or complete

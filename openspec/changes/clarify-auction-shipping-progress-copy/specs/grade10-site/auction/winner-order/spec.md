@@ -25,7 +25,7 @@ vocabulary in `grade10-site/auction/order-status`.
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
 
-Step subtext SHALL use day-only dates in the winner's zone. While Address is
+Step subtext SHALL use day-only dates in the viewer's local zone. While Address is
 current and awaiting confirm, subtext SHALL read `Confirm by {date}`. While
 Payment is current and the invoice is `pending`, subtext SHALL read
 `Pay by {date}`. While the invoice is `payment_verifying`, Payment subtext

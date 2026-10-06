@@ -86,6 +86,7 @@
 **Expected Results:**
 
 * One payment-reminder letter names <total> and the payment deadline.
+* The deadline uses `Asia/Hong_Kong` and is labelled `GMT+8`.
 * No separate invoice-sent letter exists.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-5o0 rev=1 covers=g10.auction-notifications-order.SC-2d0,g10.auction-notifications-order.SC-kkg,g10.auction-notifications-order.SC-s24,g10.auction-notifications-order.SC-dv3,g10.auction-notifications-order.SC-nrz,g10.auction-notifications-order.SC-7jz,g10.auction-notifications-order.SC-pnf,g10.auction-notifications-order.SC-wmw,g10.auction-notifications-order.SC-y5o,g10.auction-notifications-order.SC-3di,g10.auction-notifications-order.SC-18a,g10.auction-notifications-order.SC-4u6,g10.auction-notifications-order.SC-jw9,g10.auction-notifications-order.SC-qsh,g10.auction-notifications-order.SC-qmq,g10.auction-notifications-order.SC-pqi,g10.auction-notifications-order.SC-gec,g10.auction-notifications-order.SC-kas,g10.auction-notifications-order.SC-mva,g10.auction-notifications-order.SC-7pc,g10.auction-notifications-order.SC-ek4,g10.auction-notifications-order.SC-q85,g10.auction-notifications-order.SC-n3n,g10.auction-notifications-order.SC-dnr -->

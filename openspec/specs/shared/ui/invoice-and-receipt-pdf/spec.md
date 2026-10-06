@@ -56,8 +56,8 @@ removed, per the amendment note above each one.
 - Presentation-only contract
   - Every amount arrives as a preformatted string; neither renderer
     computes, sums or reformats a value
-  - Every date arrives as a `Date` and the winner's IANA time-zone identifier;
-    the renderer formats that instant once in the winner's zone
+  - Every date arrives as a `Date`; the renderer formats that instant once in
+    `Asia/Hong_Kong` and labels it `GMT+8`
   - Every label arrives through a `copy` argument; neither renderer imports
     `@grade10/i18n` or hardcodes a label
 - Reserved extension slots
@@ -441,8 +441,8 @@ Every document date uses Asia/Hong_Kong, matching emails and terms, and names
 the offset **GMT+8**.
 
 **Given** — InvoicePdf and ReceiptPdf SHALL render every date as the Hong Kong
-calendar date and clock time, followed by `GMT+8`, regardless of the machine
-or the winner's zone.
+calendar date and clock time, followed by `GMT+8`, regardless of the machine's
+zone.
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-43 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-43 - A date renders in Hong Kong as GMT+8
