@@ -24,7 +24,7 @@ Winner Order surface. No group has an owner until an engineer claims it.
 - [ ] 3.2 Wire the existing consuming-app proof dialog and Winner Order page to the approved feedback contract and exact success and failure copy; keep the existing upload procedure and i18n boundary (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
 - [ ] 3.3 Verify the consuming-app typecheck, lint, focused Winner Order tests and the focused browser E2E journey (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
 
-## 4. The walk - Preview payment proof feedback (grade10-spec)
+## 4. The walk - Preview payment proof feedback (grade10-spec) (owner: @htonyl)
 
 - [ ] 4.1 Walk the standalone success, failure and busy stories, then the page flow from pending bank-transfer invoice through success and Payment Verifying; cover `winner-order-SC-102`, `winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219` and `winner-order-SC-220`
 - [ ] 4.2 Run the focused preview checks after the walk and record any implementation defect against the owning group
