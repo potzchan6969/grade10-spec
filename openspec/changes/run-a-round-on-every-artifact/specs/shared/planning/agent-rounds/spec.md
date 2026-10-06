@@ -648,13 +648,21 @@ and everything after an artifact SHALL be drawn from it.
   carries one `upstream:` entry and one `reviewed:` line per artifact id, never
   one per capability
 - **A change's own artifact, whole** — every line of it is upstream
-- **A task group's reading, scoped** — a group's readers are given the plan,
-  the proposal, the decisions and the designs whole, and of the journeys and
-  requirements only the capabilities its task lines cite; the cases only where
-  a task line names `feature-tcs.md`. A group that cites no capability is given
-  every one, and freshness still reads the whole set
+- **A task group's reading, by citation** — a group's readers are given the
+  plan's opening and the group's own section, and the proposal, the decisions
+  and the designs. Of the journeys, requirements and cases they are given only
+  what the group's section cites by backticked id: a scenario's requirement, a
+  journey with its cases, a case. Each file a block comes from keeps its
+  opening, and a requirements file its removed and renamed requirements. A
+  group that cites none of the change's ids is given no journey, requirement
+  or case. The rest of the change stays open on demand, and freshness still
+  reads the whole set
+- **A citation the tools can read** — a group whose section names one of the
+  change's ids without backticks is refused, naming the id; an id the change
+  does not issue brings nothing, and the round prints it
 - **A page, in sections** — only the sections the change links, because a page
-  carries the marks of many changes
+  carries the marks of many changes. A link to a section the page does not
+  carry gives the whole page, and the round prints the link
 - **The record is never upstream** — a change's own `.openspec.yaml` is in no
   upstream set
 - **A waived artifact is fresh** — a waiver says nothing is owed, so nothing
@@ -662,14 +670,47 @@ and everything after an artifact SHALL be drawn from it.
 - **The code keeps no read record** — no `reviewed:` line is written for the
   code; a behind `tasks.md` refuses the group's landing instead
 
-#### Scenario: shared-planning-agent-rounds-SC-108 - A group's reader is given the capabilities it cites
+#### Scenario: shared-planning-agent-rounds-SC-108 - A group's reader is given the blocks it cites
 **Serves:** Perspectives as data - a group's reading holds what the group builds, not the whole change
 
-- **GIVEN** a change specifying two capabilities, and a group whose tasks cite scenarios of one
+- **GIVEN** a change specifying two capabilities, and a group whose task lines cite one scenario of one
 - **WHEN** a reader of that group is dispatched
-- **THEN** it is given the plan, the proposal, the decisions and the designs whole
-- **AND** the journeys and requirements of the cited capability alone
-- **AND** a group whose tasks cite no capability is given every capability's
+- **THEN** it is given the plan's opening and the group's own section, and the proposal, the decisions and the designs
+- **AND** of the cited capability its opening, the requirement holding the scenario, and its removed and renamed requirements
+- **AND** nothing of the other capability, and no other group's section
+
+#### Scenario: shared-planning-agent-rounds-SC-109 - A cited journey brings its cases
+**Serves:** Perspectives as data - a walk's reader is given the journeys it walks and their cases
+
+- **GIVEN** a group whose task lines cite one journey, and one case of another journey
+- **WHEN** a reader of that group is dispatched
+- **THEN** it is given the cited journey and every case under it
+- **AND** of the other journey, the cited case alone
+
+#### Scenario: shared-planning-agent-rounds-SC-110 - A group that cites nothing is given no capability
+**Serves:** Perspectives as data - a group that builds no cited behaviour reads no requirement
+
+- **GIVEN** a group whose task lines cite none of the change's ids
+- **WHEN** a reader of that group is dispatched
+- **THEN** it is given no journey, requirement or case
+- **AND** a reading of the whole change is given every capability whole
+
+#### Scenario: shared-planning-agent-rounds-SC-111 - A linked page section is given alone
+**Serves:** Perspectives as data - a page carries many changes' marks, and a reader is given only the sections this one links
+
+- **GIVEN** a proposal linking a page section that holds a flow whose steps are headings
+- **WHEN** a reader of any artifact is dispatched
+- **THEN** it is given that section to the end of its flow
+- **AND** nothing of the section after it
+- **AND** a link to a section the page does not carry gives the whole page, and the link is printed
+
+#### Scenario: shared-planning-agent-rounds-SC-112 - A bare id stops the group's reading
+**Serves:** Perspectives as data - a citation the tools cannot read is fixed before a round leans on it
+
+- **GIVEN** a group whose section names one of the change's scenario ids without backticks
+- **WHEN** the round asks for its readers
+- **THEN** it is refused, naming the group and the id
+- **AND** a backticked id the change does not issue brings nothing, and is printed
 
 #### Scenario: shared-planning-agent-rounds-SC-32 - A waived design leaves nothing behind it
 **Serves:** Read again, in order - a change that owes no design still lands its requirements

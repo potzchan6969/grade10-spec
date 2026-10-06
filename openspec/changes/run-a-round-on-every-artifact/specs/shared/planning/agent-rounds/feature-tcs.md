@@ -2,7 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-20, tcs-rules r3.0
-**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-108, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-67
+**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-108, shared-planning-agent-rounds-SC-109, shared-planning-agent-rounds-SC-110, shared-planning-agent-rounds-SC-111, shared-planning-agent-rounds-SC-112, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-67
 
 ## shared-planning-agent-rounds-US1: Product manager opens a change from one sentence
 
@@ -2806,7 +2806,11 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 * `shared-planning-agent-rounds-SC-28` - every round reads one table: `pnpm run test:openspec`, which reads the perspectives the schema records per artifact.
 * `shared-planning-agent-rounds-SC-29` - a new reader is one row: `pnpm run test:openspec`, as above.
 * `shared-planning-agent-rounds-SC-30` - a reader sees no other reader's output: `scripts/openspec/perspectives.test.mjs`, which gives each challenger the draft and what is before it alone.
-* `shared-planning-agent-rounds-SC-108` - a group's reader is given the capabilities it cites: `scripts/openspec/perspectives.test.mjs`, which builds a group's bundle over a change of two capabilities.
+* `shared-planning-agent-rounds-SC-108` - a group's reader is given the blocks it cites: `scripts/openspec/perspectives.test.mjs`, which builds a group's bundle over a change of two capabilities and reads the lines each entry names.
+* `shared-planning-agent-rounds-SC-109` - a cited journey brings its cases: `scripts/openspec/perspectives.test.mjs`, as above, over a walk that cites a journey and one case of another.
+* `shared-planning-agent-rounds-SC-110` - a group that cites nothing is given no capability: `scripts/openspec/perspectives.test.mjs`, as above, beside the whole change's reading.
+* `shared-planning-agent-rounds-SC-111` - a linked page section is given alone: `scripts/openspec/perspectives.test.mjs`, over a page whose flow writes its steps as headings, and the manual's own test of the section's lines against the text it hashes.
+* `shared-planning-agent-rounds-SC-112` - a bare id stops the group's reading: `scripts/openspec/perspectives.test.mjs`, which asks for a group's bundle over a section that names one of the change's ids bare.
 * `shared-planning-agent-rounds-SC-35` - the content id comparison: the store's unit tests over the content id, a pure derivation no surface shows.
 * `shared-planning-agent-rounds-SC-67` - the wake step holds no session, no write permission and no chat token: `scripts/openspec/reread-workflow.test.mjs`, which reads the step's permissions and its environment. A static reading of a workflow file is no walk through an interface, so the case the blind pass wrote for it is gone.
 
