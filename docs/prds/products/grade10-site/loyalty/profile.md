@@ -6,16 +6,20 @@ reviewed: 2026-10-06
 ---
 
 An account is a member. The membership is run from `/membership`; the
-account itself, its name, email and mobile number, is on
+account's name and email, and the mobile number the store keeps for it, are on
 [the account profile](/p/grade10-site/account/profile).
 
 ## Behind the Account
 
 | Record | System | Holds | Made |
 | --- | --- | --- | --- |
-| Account | The identity system | Name, email, mobile number, sign-in | At registration |
+| Account | The identity system | Name, email, sign-in | At registration |
+| Account profile | The store | The name chosen for the shop, bio, mobile number | The first time the store writes for the account |
 | Member | The programme | An opaque user id, the ledger, the tier | With the account |
 | Shopify customer | The shop | The same opaque key in a customer metafield, never the account id | Paired behind the account, once the email is verified |
+
+🚧 **Avatar** — the account profile also holds the avatar a collector chooses
+for the shop — [Profile](/p/grade10-site/account/profile)
 
 :::flow{title="From registration to a paired member"}
 ## *Member* — **Registers**

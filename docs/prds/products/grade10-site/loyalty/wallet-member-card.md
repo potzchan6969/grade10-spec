@@ -2,6 +2,7 @@
 title: Member Card in a Wallet
 spec: grade10-site/store/wallet-member-card
 order: 8
+reviewed: 2026-10-06
 ---
 
 ## Wallets
@@ -44,6 +45,13 @@ Apple code identifies and moves nothing.
 
 - **Shows** — the member's name, the tier they hold, and the points they can
   spend
+- **Name** — the one the site shows: the name chosen for the shop, else the
+  account name, else the address before the `@`; carried whole, and the wallet
+  app lays it out
+- **A name that cannot be read** — the refresh fails and the pass stays as it
+  was, name included, until a later lap reads it
+- **A name chosen for the shop** — needs no account service, so the pass
+  refreshes with it through an outage, whoever else the same lap refreshes
 - **Language** — the membership page's own words, in every language the site
   speaks; the phone picks, and a phone set to none of them reads the brand's
   default, English for Grade10
@@ -90,6 +98,9 @@ Apple code identifies and moves nothing.
 | Order | **Changed passes first** — the sweep reads the programme's ledger and tier log and brings those passes forward — then each wallet's refresh, then what the vendor is owed |
 
 - **A spend or an earn reaches the pass on the next lap**
+- **A new name** — a name saved on the profile reaches the pass on the next
+  lap, and within the daily floor at the latest; a change to the account name
+  reaches it within the daily floor
 - **A dormant pass** — read once a day, and sends nothing
 - **An unrecorded change is still on time** — points expiring, a tier term
   ending or an invitation lapsing marks the pass due that instant, not on the
