@@ -1209,11 +1209,13 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 ### shared-auth-users-US5-TC4-1: Elevated role without user:set-role is refused
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1229,11 +1231,10 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<elevated name>` | Almost Admin |
-| `<elevated email>` | almost.admin@example.com, any address no account holds |
-| `<elevated role>` | `admin`, any role other than `user` |
+| `<elevated role>` | `<elevated name>` | `<elevated email>`, any address no account holds | Outcome |
+| --- | --- | --- | --- |
+| `staff` | Almost Staff | almost.staff@example.com | Refused; no account holds the address |
+| `admin` | Almost Admin | almost.admin@example.com | Refused; no account holds the address |
 
 **Steps:**
 
@@ -1251,7 +1252,7 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -1291,7 +1292,7 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1334,7 +1335,7 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
