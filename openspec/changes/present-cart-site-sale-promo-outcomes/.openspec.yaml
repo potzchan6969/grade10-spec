@@ -1,2 +1,3 @@
 schema: grade10-planning
 created: 2026-09-10
+design_waived: "both task groups land in this store: story proofs and any fix in packages/ui store-cart, with no application-repository work; Grade10 prices the shop's sale at the invoice, and a follow-on change owns pricing it in its drawer"
