@@ -64,6 +64,27 @@ export const Default: Story = {
     expect(
       selected?.querySelector('[data-slot="radio-button"][data-checked]'),
     ).toBeTruthy();
+    const next = canvas
+      .getByText("Tsim Sha Tsui")
+      .closest('[data-slot="radio-card"]');
+    if (!(next instanceof HTMLElement)) {
+      throw new Error("Tsim Sha Tsui card is missing");
+    }
+    const control = next.querySelector('[data-slot="radio-button"]');
+    if (!(control instanceof HTMLElement)) {
+      throw new Error("Tsim Sha Tsui radio is missing");
+    }
+    await userEvent.pointer({
+      keys: "[MouseLeft]",
+      target: control,
+      coords: {
+        x: control.offsetWidth - 8,
+        y: control.offsetHeight - 8,
+      },
+    });
+    expect(
+      next.querySelector('[data-slot="radio-button"][data-checked]'),
+    ).toBeTruthy();
   },
 };
 
