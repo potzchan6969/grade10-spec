@@ -31,7 +31,7 @@ Needs group 3's moved test and reducible count landed.
 - [ ] 4.3 Add `inventory.reverseRegularIntake` as an `inventory:write` elevated procedure audited against the product (`grade10-admin-inventory-catalog-SC-190`)
 - [ ] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend` in grade10.
 
-## 5. Remove an unmoved Cert record (grade10)
+## 5. Remove an unmoved Cert record (grade10) (owner: @mason5991)
 
 Needs group 3's moved test landed.
 
