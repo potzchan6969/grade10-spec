@@ -11,14 +11,13 @@
   (`packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductRelatedRail.tsx`).
   They pass the photo's address and nothing about its shape
 - **The address keeps the photo's shape** — `productSummary` passes the
-  shop's own photo, or the rail's resized by width alone (`sizedImageUrl(url,
-  { width })`,
-  `packages/grade10-store/frontend/src/features/products/product/domain/models/Product.ts:90`),
+  shop's own photo, or the rail's resized by width alone
+  (`packages/grade10-store/frontend/src/features/products/product/presentation/mappers/productSummary.ts:48`),
   so the shop's CDN never crops or pads it; the well alone decides the fit
 - **The code already holds the fit** — b632582fe set `object-contain` ahead
-  of acceptance, inside the application's current pin (`c1a6d0286`). What is
-  missing is a test that fails without it, and a story that shows a photo
-  that is not square
+  of acceptance, and the application's pin carries it. What is missing is a
+  test that fails without it, and a story that shows a photo that is not
+  square
 
 ## Decisions
 
@@ -27,9 +26,10 @@ filling the rest. This file decides where that lives and how it is held.
 
 ### The well owns the fit, in CSS on the one element
 
-- **`object-contain` on the `<img>`** — the photo scales to touch the well's
-  nearer pair of edges and is centred, its default `object-position`. The
-  well's gradient shows in the space the photo leaves
+- **`object-contain` on the `<img>`** — scales the photo, up or down, until it
+  meets the two edges along its longer side, centred on the other axis, its
+  default `object-position`. The well's gradient shows in the space the photo
+  leaves
 - **No prop** — the fit is not a consumer choice; a prop would let one
   surface crop again. The three surfaces take the change by submodule bump
   with no code change
@@ -48,19 +48,34 @@ filling the rest. This file decides where that lives and how it is held.
   passes when the painted box lies inside the well on every side, meets the
   well's two edges along the photo's longer side, and is centred on the
   other axis; it fails on `object-cover`, `object-fill`, `object-scale-down`,
-  an off-centre position or an inset that clips
-- **One story, four statuses** — `ProductCardImage` → Non Square Photo
-  renders a portrait photo in available, on-sale, sold-out and in-cart wells
-  side by side, and its play test checks each; the four single-status
-  stories keep their square photo
+  an off-centre position or an inset that clips. On each Non Square Photo
+  well it also checks that the space the photo leaves on each side is at least
+  the well's computed corner radius, so a fixture cannot drift into the
+  corners that `shared-ui-store-product-listing-SC-63a` governs
+- **Six wells, and the square on `Default`** — `ProductCardImage` → Non
+  Square Photo renders, side by side, a portrait photo in available, on-sale,
+  sold-out and in-cart wells, then an available landscape photo and an
+  available portrait photo smaller than the well. Its play test checks each
+  well. The small photo is how the test holds the enlargement:
+  `object-scale-down` leaves it short of the well's edges and fails. The four
+  single-status stories keep their square photo, and `Default` takes the same
+  play test: its painted box meets all four of the well's edges, and the
+  well's computed `overflow` is `hidden` with a corner radius above zero, so
+  the photo's corners round with the well's and nothing else of it is cut
+- **Fixtures beside `product-card.fixture.png`** —
+  `product-card.portrait.fixture.png`, shot on white;
+  `product-card.landscape.fixture.png`; `product-card.small.fixture.png`, a
+  portrait smaller than the well at every story width. All three are far
+  enough from square that their corners clear the well's rounded corners
 - **The walk reads the same fit in the application** — on each of the
   three surfaces, with every catalogue photo answered by a portrait or a
   landscape image, so a surface that wraps or restyles the tile is caught
 
-### Hover and position stay as shipped
+### Hover, position and corners stay as shipped
 
-`decisions.md` Q4 and Q5 keep the `<img>` as it is: `object-contain` centres
-the photo and scales it to the well's nearer pair of edges, and `scale-105`
+`decisions.md` Q4, Q5 and Q6 keep the `<img>` as it is: `object-contain`
+scales the photo, up or down, until it meets the two edges along its longer
+side, centred on the other axis; it carries the well's radius, and `scale-105`
 still grows it on hover. The test reads the photo at rest.
 
 ## Risks / Trade-offs
@@ -80,5 +95,5 @@ still grows it on hover. The test reads the photo at rest.
 
 ## Migration Plan
 
-Nothing to migrate. The code is already on `main` and in the application's
-pin. Rollback is reverting b632582fe in this store and bumping the pin.
+Nothing to migrate. The code is already on `main` and inside the
+application's pin. Rollback is reverting b632582fe in this store and bumping the pin.
