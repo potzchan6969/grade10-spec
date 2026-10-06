@@ -622,12 +622,17 @@ function appendMissing(currentText, deltaText) {
   return kept.join("\n\n");
 }
 
+/** A Raised, Settled or Out of suite item that stands for an empty list:
+ * `None`, bulleted or italic or bare, closing there or going on with `yet`,
+ * `for`, a stop, a semicolon or a dash. */
+const PLACEHOLDER = /^(?:[-*]\s+)?\*?None(?:$|[.;:]| yet\b| for\b| [—-] )/;
+
 function listItems(text) {
   const items = [];
   let fresh = true;
   for (const line of (text ?? "").split("\n")) {
     if (line.trim() === "") fresh = true;
-    else if (fresh || /^([-*] |\*None yet\b)/.test(line)) {
+    else if (fresh || /^[-*] /.test(line) || PLACEHOLDER.test(line)) {
       items.push(line);
       fresh = false;
     } else items[items.length - 1] += `\n${line}`;
@@ -639,7 +644,7 @@ function mergeList(currentText, deltaText) {
   const items = [
     ...new Set([...listItems(currentText), ...listItems(deltaText)]),
   ];
-  const real = items.filter((item) => !/^(\*None yet\b|None\.$)/.test(item));
+  const real = items.filter((item) => !PLACEHOLDER.test(item));
   const kept = real.length ? real : items.slice(0, 1);
   const isItem = (item) => /^[-*] /.test(item);
   if (kept.length === 0) return "";

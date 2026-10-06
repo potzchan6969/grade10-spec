@@ -1766,18 +1766,28 @@ test("suite fold needs its date", () => {
   );
 });
 
-test("suite fold drops a None. placeholder once the other side lists items", () => {
-  const merged = merge(
-    suiteOf(
-      group(1, caseBlock("site-search-US1-TC1-1")),
-      "## Settled\n\n- Kept.",
-    ),
-    suiteOf(
-      group(2, caseBlock("site-search-US2-TC1-1")),
-      "## Settled\n\nNone.",
-    ),
-  );
-  assert.match(merged, /## Settled\n\n- Kept\.\n$/);
+test("suite fold drops a None placeholder, however worded, once the other side lists items", () => {
+  for (const placeholder of [
+    "None.",
+    "None yet.",
+    "None yet - the first blind pass on these two journeys.",
+    "*None yet — suite pending review.*",
+    "- None; this change introduces no unresolved product question.",
+    "- None for this slice.",
+    "- None — no earlier review decision is being carried into this change.",
+  ]) {
+    const merged = merge(
+      suiteOf(
+        group(1, caseBlock("site-search-US1-TC1-1")),
+        "## Settled\n\n- Kept.",
+      ),
+      suiteOf(
+        group(2, caseBlock("site-search-US2-TC1-1")),
+        `## Settled\n\n${placeholder}`,
+      ),
+    );
+    assert.match(merged, /## Settled\n\n- Kept\.\n$/, placeholder);
+  }
 });
 
 test("suite fold refuses a case older than the durable revision", () => {
