@@ -16,8 +16,9 @@ order, or return to the Store when the account is empty.
 🚧 **Private address** — a signed-in collector reaches their Store purchases at
 `grade10.com/profile/orders`; sign-in keeps the collector at that address
 
-🚧 **Active and Past** — the page keeps orders needing attention above completed
-or refunded purchases, with the newest order first in each group
+🚧 **Active and Past** — the page keeps orders needing attention above
+completed, canceled or refunded purchases, with the newest order first in each
+group
 
 🚧 **Order actions** — a collector opens one order or follows a Store-supplied
 carrier address when it is safe to open
