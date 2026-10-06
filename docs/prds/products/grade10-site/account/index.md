@@ -7,8 +7,8 @@ A collector's own page on the Grade10 site, at `grade10.com/profile`. Signed
 out, it asks for sign-in — [Accounts](/p/shared/auth) covers what a session is
 and how sign-in and sign-out work, the same way across every brand.
 
-- **Profile** — the display name and bio a collector shows about themselves,
-  and the address they signed in with ([Profile](/p/grade10-site/account/profile))
+- **Profile** — what a collector shows about themselves, and the address they
+  signed in with ([Profile](/p/grade10-site/account/profile))
 - **KYC** — the verified standing that clears a high-value order, a
   high-value bid, or a vault visit, what the check keeps, and how it is run
   ([KYC](/p/grade10-site/account/kyc))

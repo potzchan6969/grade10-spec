@@ -227,14 +227,17 @@ The loyalty terminal is a Shopify POS UI extension.
 | Modal | Identify, read the panel, spend, confirm a collection | Through a session |
 | Customer details badge | The member's name, tier and balance for any paired customer staff find in Shopify's own search | Never |
 
-- **The member's name** — on the badge and in the modal, the name the site
-  shows: the name chosen for the shop, else the account name, else the address
-  before the `@`, sent whole for the till to lay out; 會員 when the account
-  service cannot give one
 - **Three apps** — development, staging and production, each extension-only
   with no server, no scopes and no admin access of its own; a manager
   activates a version per location and pins the tile
 - **The sale always goes on** — every refusal leaves staff in a normal sale
+
+### Member Name
+
+- **The member's name** — on the badge and in the modal, the name the site
+  shows: the name chosen for the shop, else the account name, else the address
+  before the `@`, sent whole for the till to lay out; 會員 for a member with
+  no name chosen for the shop while the account service cannot be reached
 
 ### Session
 

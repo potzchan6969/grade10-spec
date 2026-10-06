@@ -18,7 +18,11 @@ without the card, so a surface takes the part it needs.
 - 🚧 **Edit control** — the read view offers editing only when the application
   names it and handles it
 - **Form** — edits the display name and bio, and reports what the collector
-  submitted
+  submitted, or that they cancelled, with no values
+- 🚧 **Cancel** — the form offers cancel only when the application names it
+  and handles it
+- 🚧 **Bio** — the form edits it in several lines, and the read view shows
+  the lines as typed
 - 🚧 **Avatar** — the read view and the form show the image they are given,
   and the fallback the application supplies when there is none or it fails to
   load; the form lets the collector choose a new image, preview it, or remove
@@ -34,8 +38,11 @@ What is valid, what is stored, and every word on screen belong to the
 application.
 
 - 🚧 **Limits** — the form applies only the length limits the application
-  passes, and refuses nothing itself; a refusal reaches the collector through
-  the error the application supplies
+  passes; a refusal reaches the collector through the error the application
+  supplies
+- ❓ **Empty name** — the form as it ships disables save while the display
+  name is empty; design confirms keeping save enabled so the application's
+  refusal shows, as recommended, or keeping it disabled
 
 The rules those props carry — the field limits, what falls back where — are
 [the account profile](/p/grade10-site/account/profile); this capability is

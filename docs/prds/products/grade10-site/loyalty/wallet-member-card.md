@@ -50,7 +50,7 @@ Apple code identifies and moves nothing.
   app lays it out
 - **A name that cannot be read** — the refresh fails and the pass stays as it
   was, name included, until a later lap reads it
-- **A name chosen for the shop** — needs no account service, so the pass
+- 🚧 **A name chosen for the shop** — needs no account service, so the pass
   refreshes with it through an outage, whoever else the same lap refreshes
 - **Language** — the membership page's own words, in every language the site
   speaks; the phone picks, and a phone set to none of them reads the brand's
@@ -95,6 +95,7 @@ Apple code identifies and moves nothing.
 | --- | --- |
 | Lap | **Every 5 minutes** |
 | Floor | **Every pass read at least once in 24 hours** |
+| Due | **Four ways** — the instant an unrecorded change falls due, the daily floor, a change in the programme's ledger or tier log, and a name saved on the profile, best effort |
 | Order | **Changed passes first** — the sweep reads the programme's ledger and tier log and brings those passes forward — then each wallet's refresh, then what the vendor is owed |
 
 - **A spend or an earn reaches the pass on the next lap**

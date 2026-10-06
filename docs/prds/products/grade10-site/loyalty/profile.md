@@ -6,7 +6,7 @@ reviewed: 2026-10-06
 ---
 
 An account is a member. The membership is run from `/membership`; the
-account's name and email, and the mobile number the store keeps for it, are on
+collector's name, bio and email are shown on
 [the account profile](/p/grade10-site/account/profile).
 
 ## Behind the Account

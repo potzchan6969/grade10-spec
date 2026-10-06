@@ -23,8 +23,9 @@ avatar within 7 days of first sign-in.
 
 - **One name everywhere.** The profile, the till and the wallet pass show one
   name: the name the member chose for the shop, else their account name, else
-  the part of their email before the `@`. When the account service cannot give
-  it, the till shows 會員 and a pass stays as it was.
+  the part of their email before the `@`. While the account service cannot be
+  reached, a member with no name chosen for the shop shows as 會員 at the till,
+  and their pass stays as it was.
 - **Avatars.** A collector uploads an image, cropped square, and can remove it
   again; with none set, the profile shows the display name's first letter. Which file limit a collector meets is open (decisions Q10).
 - **Email is shown, read-only,** in the read view and in the form alike.
@@ -37,8 +38,20 @@ avatar within 7 days of first sign-in.
   and cancel states, the card's loading and failed states, and what a
   signed-out or failed read does are recorded as scenarios.
 
-No breaking changes: every field that exists today keeps its name, type, and
-limits, the mobile number included.
+Breaking changes, each named to the consumers it moves; every stored field
+keeps its name, type and limits, the mobile number included:
+
+- **`StoreProfile`** becomes the view the page reads — both brands' storefronts
+  and the store demo decode it
+- **`profile.update`** answers `saved` carrying the profile, or `refused`
+  with its reason — the profile feature in `@grade10/store-frontend`
+- **`ProfileView`** loses its `email` prop — both brands' `ProfilePage`
+- **`ProfileFormProps`** makes its two length limits required — every
+  `ProfileForm` consumer, which the compiler names
+- **`avatarInitial`** reads a label whole, for its first letter or digit in
+  any script — the account menu in `SiteHeader` passes the address before the
+  `@`, and the bid history in `ListingBidHistoryList` changes with it
+  (decisions Q17)
 
 ## Non-Goals
 
@@ -57,10 +70,12 @@ See [Non-Goals](decisions.md#non-goals).
 ### Modified Capabilities
 
 - `grade10-site/store/wallet-member-card`: a pass shows the member's name by
-  the store's one rule, a refresh that cannot get it leaves the pass as it
-  was, and a new name reaches the pass within the daily floor.
+  the store's one rule, a refresh that cannot reach the account service for a
+  member with no name chosen for the shop leaves the pass as it was, a profile save is a fourth way a pass falls due, and a new name reaches
+  the pass within the daily floor.
 - `grade10-site/store/membership`: the till shows the member's name by the
-  same rule, and 會員 when the account service cannot give one.
+  same rule, and 會員 for a member with no name chosen for the shop while the
+  account service cannot be reached.
 
 ## Impact
 
@@ -81,8 +96,11 @@ See [Non-Goals](decisions.md#non-goals).
   grade10-spec repository, and it lands before the grade10 side can consume
   it.
 - **Design system** — no new component, variant, or token. `Avatar`,
-  `AvatarImage`, and `AvatarFallback` already ship from
-  `@grade10/design-system`.
+  `AvatarImage`, `AvatarFallback` and `Textarea` already ship from
+  `@grade10/design-system`. `avatarInitial` widens to any script and reads a
+  label whole, which moves the account menu (`packages/ui/src/blocks/site-chrome/site-header.tsx`) and
+  the bid history
+  (`packages/ui/src/blocks/auction-listing/listing-bid-history-list.tsx`).
 - **Figma** — the `store-profile` block has no published frames and no
   `.figma.ts` mappings, unlike `store-product-listing`; whether that holds is
   the designer's (decisions Q5).
@@ -96,10 +114,12 @@ See [Non-Goals](decisions.md#non-goals).
 - [Profile · Fields](../../../docs/prds/products/grade10-site/account/profile.md#fields)
 - [Profile · Before the First Save](../../../docs/prds/products/grade10-site/account/profile.md#before-the-first-save)
 - [Profile · Editing](../../../docs/prds/products/grade10-site/account/profile.md#editing)
+- [Profile · Failures](../../../docs/prds/products/grade10-site/account/profile.md#failures)
 - [Profile · Address](../../../docs/prds/products/grade10-site/account/profile.md#address)
 - [Profile · Designs](../../../docs/prds/products/grade10-site/account/profile.md#designs)
 - [Profile Blocks · Blocks](../../../docs/prds/products/shared/ui/store-profile.md#blocks)
 - [Profile Blocks · Left to the Application](../../../docs/prds/products/shared/ui/store-profile.md#left-to-the-application)
 - [Profile (loyalty) · Behind the Account](../../../docs/prds/products/grade10-site/loyalty/profile.md#behind-the-account)
 - [Member Card in a Wallet · On the Pass](../../../docs/prds/products/grade10-site/loyalty/wallet-member-card.md#on-the-pass)
-- [Shopify Integration · POS Extension](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#pos-extension)
+- [Member Card in a Wallet · Staying Current](../../../docs/prds/products/grade10-site/loyalty/wallet-member-card.md#staying-current)
+- [Shopify Integration · Member Name](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#member-name)
