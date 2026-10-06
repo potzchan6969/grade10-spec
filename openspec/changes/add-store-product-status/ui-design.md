@@ -41,8 +41,12 @@ Shopify.
 - **Cart drawer:** `CartDrawer` from `@grade10/ui`, with its checkout action
   and refusal notice.
 - **Copy:** reuse the existing availability and sold-out messages and
-  `checkout.review.blocked`; add `checkout.review.filledShort` (`{title}`,
-  `{count}`) for a line the shop would fill short. No new variant-choice
+  `checkout.review.blocked`; add `checkout.review.soldOut`,
+  `checkout.review.unavailable`, `checkout.review.reduced` (`{count}`) and
+  `checkout.review.repriced` (`{price}`), each with `{title}`, for the
+  outcome the checkout answer gives each moved line, and
+  `checkout.review.filledShort` (`{title}`, `{count}`) for a line the shop
+  would fill short. No new variant-choice
   label, component or token is needed.
 
 ## States
