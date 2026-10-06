@@ -29,8 +29,8 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 ### shared-ui-store-cart-US-16: Shopper's promo replaces the site sale
 
 **As a** shopper,
-**I want** a replacing promo to put list prices back on the lines and show
-only that code's Discount in the footer,
+**I want** a replacing promo to put the list price back on each line it takes
+the sale from and show only that code's Discount in the footer,
 **so that** I know the site sale is no longer on those lines.
 
 ### shared-ui-store-cart-US-17: Shopper removes a promo and keeps the site sale
