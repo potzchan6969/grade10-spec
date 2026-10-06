@@ -35,7 +35,10 @@ The work is tests, the re-cited host tests, that one host fix and the walk.
 - A host wiring change beyond the `loading` fix, a new prop, or a change to
   the block's look.
 - A Figma or design-sync change for `Cart Item Slot`; the designer owns R2.
-- The Grade10 host's failed-read walk, which `add-store-cart-drawer-ui` owns.
+- Automating the failed first read in the walk: group 2's host tests prove
+  `shared-ui-store-cart-SC-48` and `shared-ui-store-cart-SC-51`, and US3-TC3-1
+  and US3-TC4-1 stay unautomated Staging cases. A failed review over a read basket keeps the
+  state `add-store-cart-drawer-ui` gives it.
 
 ## Decisions
 
@@ -78,7 +81,7 @@ known to load, so a row skeleton draws lines that may not exist.
 | `shared-ui-store-cart-SC-44` | `CartDrawerBody` story `Empty` |
 | `shared-ui-store-cart-SC-08`, `shared-ui-store-cart-SC-40` | New `CartDrawer` stories `LoadingWithLines`, with an applied promo so the Discount row has a skeleton, and `LoadingNoLines`, both under a controlled `loading` held in the story's args, so a tester ends the read from the Controls panel |
 | `shared-ui-store-cart-SC-42` | A new `CartDrawer` story `OnlyDelistedLines`, opened by an Open Cart button, whose every line turns `unavailable` after the open read |
-| `shared-ui-store-cart-SC-48` | The Grade10 host tests in `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx`, since the block cannot tell an unread cart from an empty one |
+| `shared-ui-store-cart-SC-48`, `shared-ui-store-cart-SC-51` | The Grade10 host tests in `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx`, since the block cannot tell an unread cart from an empty one |
 
 Empty-state parts are read through the design-system slots
 (`data-slot="empty-state-icon"`, `empty-state-description`,
@@ -119,6 +122,14 @@ Two host tests cite `shared-ui-store-cart-SC-48`: a first open that fails both
 `getCart` never answers. Both expect the drawer loading with no empty state and
 no footer. The cart-validation test at `CartDrawer.test.tsx:748`, whose first
 basket read fails, also expects no empty state.
+
+A member's review calls the API even for an empty basket
+(`packages/grade10-store/frontend/src/features/orders/cart/data/repositories/CartRepositoryImpl.ts:84-88`),
+while a guest's skips it (`:91-94`). A basket read empty is read (Q11), so the
+fix ends loading on it when its review fails, and the drawer shows the empty
+state behind the Retry toast. A third host test cites
+`shared-ui-store-cart-SC-51`: a first open whose `getCart` answers no lines and
+whose `reviewCart` fails, expecting the empty state and no footer.
 
 **Rejected - raise it against `add-store-cart-drawer-ui`.** The unread-cart
 clause is this change's requirement, so this change proves and fixes it.

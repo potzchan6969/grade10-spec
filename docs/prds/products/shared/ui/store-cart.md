@@ -33,8 +33,8 @@ own.
 body, a skeleton for the title's count and no footer. If that read fails, the
 application also says the cart could not be checked and offers Retry, naming
 no line, as [Cart Validation](../../grade10-site/store/cart-validation.md) asks
-for a cart whose lines are not loaded. The drawer never shows the empty state
-for a cart nobody has checked.
+for a cart whose lines are not loaded. A cart read empty shows the empty
+state, even when its price check fails.
 
 🚧 **Only delisted lines** - the drawer shows the empty state and removes them
 with its one toast.

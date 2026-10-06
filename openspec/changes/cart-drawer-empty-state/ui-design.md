@@ -47,6 +47,7 @@ No new primitive, variant, or token. `EmptyState` already exists.
 | Loading with lines | Row, count badge and summary skeletons; Checkout disabled; no empty state | `shared-ui-store-cart-SC-08` |
 | Loading, no lines | Blank body; count badge skeleton; no footer; no empty state | `shared-ui-store-cart-SC-40` |
 | Not read yet | As Loading, no lines, while the consumer has never read the cart, its first read pending or failed | `shared-ui-store-cart-SC-48` |
+| Read empty, check failed | As Empty, beside the consumer's Retry | `shared-ui-store-cart-SC-51` |
 | Only delisted lines | Empty state; one removal toast; no count badge | `shared-ui-store-cart-SC-42` |
 | Only sold-out lines | The lines, marked sold out; footer; no count badge; no empty state | `shared-ui-store-cart-SC-45` |
 | Count | One per line, whatever its quantity; sold-out and unavailable lines left out; an unavailable line still passed is not drawn | `shared-ui-store-cart-SC-05`, `shared-ui-store-cart-SC-49`, `shared-ui-store-cart-SC-50` |

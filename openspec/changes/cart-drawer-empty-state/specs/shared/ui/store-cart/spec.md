@@ -118,6 +118,8 @@ footer SHALL stay hidden.
 
 **Unread cart** - The drawer cannot tell a cart nobody has read from an empty
 one, so a consumer that has not yet read the cart's lines SHALL hold `loading`.
+A consumer that has read the cart and found no lines SHALL NOT hold `loading`
+for a status-and-price read that failed.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-dvb rev=2 -->
 #### Scenario: shared-ui-store-cart-SC-08 - Cart opened in loading state
@@ -148,6 +150,16 @@ one, so a consumer that has not yet read the cart's lines SHALL hold `loading`.
 - **THEN** the consumer holds `loading`
 - **AND** the empty-cart empty state is not shown
 - **AND** the footer is hidden
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-25l rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-51 - A cart read empty shows the empty state when its price check fails
+**Serves:** shared-ui-store-cart-US-03 - Shopper opens the cart on current prices
+
+- **GIVEN** a consumer that has read the cart and found no lines
+- **AND** its status-and-price read failed
+- **WHEN** the drawer is open
+- **THEN** the consumer does not hold `loading`
+- **AND** the design-system empty state shows and the footer is hidden
 
 ## ADDED Requirements
 
