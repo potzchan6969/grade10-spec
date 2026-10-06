@@ -67,11 +67,18 @@ winner of three lots has three orders, each with its own deadlines.
 
 ### My Auction Orders
 
-Every won lot on one list, opened from the account menu beside My
-Auctions: the lot with View lot, the auction, the winning bid, the status and
-one next action — Complete Order Setup while Awaiting Setup, Pay Invoice
-while Pending Payment, and View detail otherwise. Orders waiting on the winner come first, then the rest by newest
+Every won lot on one list: the lot with View lot, the auction, the winning
+bid, the status and one next action — Complete Order Setup while Awaiting
+Setup, Pay Invoice while Pending Payment, and View detail otherwise. Orders
+waiting on the winner come first, then the rest by newest
 close, and an empty list points to My Auctions.
+
+**Not in the account menu** — a winner opens each order from its Won row on
+My Auctions, so the menu offers no second orders item
+
+❓ **Opened from** — no link in the site opens the list; Product (@tangconst)
+confirms whether My Auctions links to it, or each Won row stays the only way
+to an order
 
 ::changes{spec="grade10-site/auction/auction-orders"}
 
@@ -601,6 +608,7 @@ a second payment provider, and changes to the bid-time rules.
 | Cancelled content | Decided | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
 | Cancelling a paid order | 🚧 In flight | An order with money counting toward its balance cannot be cancelled; it is refunded instead. Only unpaid orders are cancelled, so the cancelled letter names no payment. Chosen over cancelling a paid order, which would leave money with no order to return it against. Owned by `refine-auction-order-cancellation` Q13. | Product (@jeffffej0909) |
 | A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
+| Opening My Auction Orders | ❓ Open | The account menu offers no orders item beside My Auctions, and each Won row opens its own order, so nothing in the site opens the list. Either My Auctions links to the list, or each Won row stays the only way to an order. Recommended: My Auctions links to it, so the list this page decides on stays reachable. | Product (@tangconst) |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Country or region on delivery setup | Decided | On Winner Order delivery Add Address, country or region lists every country and region A–Z in a searchable field; typing filters matching names. **BREAKING** vs letter typeahead on Select (`full-winner-order-country-region-list` non-goal reversed). Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set and over letter-jump Select. | Product (@tangconst) |
