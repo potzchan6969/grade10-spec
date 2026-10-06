@@ -64,11 +64,3 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
       `packages/grade10-auction/contracts/src/bidIncrements.ts`.
 - [ ] 4.3 Verify - `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       and the auction backend lane.
-
-## 5. Bid ceiling walk (grade10) (owner: @htonyl)
-
-- [ ] 5.1 Walk the JPY rows against the deployed service: a lot starting at
-      JPY 5,000,000,000 takes one first bid there, and a maximum of
-      5,000,000,001 sent to the service is refused naming the ceiling.
-      `grade10-site-auction-bid-increments-US1-TC8-2`,
-      `grade10-site-auction-bid-increments-US2-TC3-2`
