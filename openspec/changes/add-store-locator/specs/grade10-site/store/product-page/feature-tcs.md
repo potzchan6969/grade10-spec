@@ -1,7 +1,7 @@
 # grade10-site/store/product-page Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-14, tcs-rules r3.0
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-product-page-US10: Collector opens Store Locator from free pick-up
 
@@ -12,6 +12,8 @@ Store Locator,
 
 <!-- trace:case id=g10.store-product-page.TC-ka9 rev=1 covers=g10.store-product-page.SC-21b -->
 ### grade10-site-store-product-page-US10-TC1-1: Free pick-up store name opens Store Locator
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -28,22 +30,70 @@ Store Locator,
 
 **Pre-conditions:**
 
-* The site answers a product page that shows free pick-up at Hong Kong Grade10 Store.
-* The site answers Store Locator.
+* The site under test is a build that carries the store surfaces.
+
+**Test data:**
+
+| `<product>` |
+| --- |
+| A card with its one item for sale |
+| A sold-out card |
 
 **Steps:**
 
-1. Navigate to <grade10 product url> for a product showing free pick-up.
-2. Activate the Hong Kong Grade10 Store name in the free pick-up claim.
-3. Check the destination.
+1. Navigate to <grade10 product url> for `<product>`.
+2. Find the free pick-up claim on the page.
+3. Click the store name in the claim.
 
 **Expected Results:**
 
-* Store Locator renders.
-* Location & Hours for Hong Kong Grade10 Store is visible.
+* Step 2: the claim names Hong Kong Grade10 Store, and the name is a link.
+* Step 3 opens Store Locator in the same tab, the Location & Hours heading showing.
 
----
+### grade10-site-store-product-page-US10-TC2-1: Shipping label with no page behind it is not a link
 
-**Out of suite:** none for this change's product-page journey — SC-25 is covered.
-Existing product-page journeys and suites remain on the durable capability and
-on `redesign-store-product-detail-page`.
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-10
+
+**Pre-conditions:**
+
+* The site under test is a build that carries the store surfaces.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<product>` | A card with its one item for sale |
+
+**Steps:**
+
+1. Navigate to <grade10 product url> for `<product>`.
+2. Find Shipping fee in the line Shipping calculated at checkout.
+3. Click Shipping fee.
+4. Press Tab through the page from the card's name to the footer.
+
+**Expected Results:**
+
+* Step 2: Shipping fee is plain text, not a link.
+* Step 3 leaves the page and its address unchanged, with no `#` added.
+* Step 4 stops on the pick-up store name and skips Shipping fee.
+
+## Reconciliation
+
+**Run:** QA2 reconciliation, 2026-10-06, in a fresh context. Read: this suite, the change's `domain-tcs.md`, the delta `spec.md` with its scenarios, `tech-design.md`, `decisions.md`, `tasks.md` and the Product Details and Store Locator pages. The blind pass recorded no Run line of its own; its question is the product-page row of `decisions.md`'s `## Raised`. A second QA2 run, 2026-10-06 in a fresh context after the accept review's edits, read the same set and the application repository's product view and `StoreProductMetadata`, and checked each disposition below against the current scenarios.
+
+- **Folded** — `grade10-site-store-product-page-US10-TC1-1` to `grade10-site-store-product-page-SC-25`, a sold-out card as a row because the claim is on every card; `grade10-site-store-product-page-US10-TC2-1` to `grade10-site-store-product-page-SC-33`, now naming the Shipping fee label the scenario names rather than the whole shipping line
+- **Raised, answered** — whether the store name opens Store Locator in the same tab (Q20): it does, in the product page's language. `grade10-site-store-product-page-SC-25` now says so, and `grade10-site-store-product-page-US10-TC1-1` gains the same-tab result
+- **Covered at domain** — `grade10-site-store-e2e-US7-TC1-1` walks `grade10-site-store-product-page-SC-25`'s language: the address keeps the product page's prefix and the name reads the same on both pages
+- **Contradicted** — none
+- **Uncovered anchors** — none: `grade10-site-store-product-page-US-10` carries both cases, and both leaves of the Free pick-up group are reached
