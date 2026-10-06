@@ -38,6 +38,7 @@ The action SHALL be shown as a readable name. The recorded action identity
 SHALL remain available on the row. The trail SHALL order by time: newest-first
 unless the auditor chooses oldest-first. Newest-first SHALL be the default.
 
+<!-- trace:scenario id=g10.shared-audit.SC-9n2 rev=1 -->
 #### Scenario: shared-console-audit-SC-10 - A row names the subject user id
 **Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
@@ -46,6 +47,7 @@ unless the auditor chooses oldest-first. Newest-first SHALL be the default.
 - **THEN** that row names that subject user id
 - **AND** it does not name them by email
 
+<!-- trace:scenario id=g10.shared-audit.SC-ylk rev=1 -->
 #### Scenario: shared-console-audit-SC-11 - The action has a readable name
 **Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
@@ -53,12 +55,14 @@ unless the auditor chooses oldest-first. Newest-first SHALL be the default.
 - **THEN** the action is shown as a readable name
 - **AND** the recorded action identity is still available on the row
 
+<!-- trace:scenario id=g10.shared-audit.SC-mum rev=1 -->
 #### Scenario: shared-console-audit-SC-03 - Newest-first is the default
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **WHEN** the auditor opens the Audit section with no sort chosen
 - **THEN** later writes appear before earlier writes
 
+<!-- trace:scenario id=g10.shared-audit.SC-z5c rev=1 -->
 #### Scenario: shared-console-audit-SC-04 - Oldest-first orders by time
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
@@ -92,6 +96,7 @@ SHALL restore them.
 WHEN a filtered read succeeds and matches no rows, the surface SHALL say
 there are no matches, distinct from a trail that has no writes.
 
+<!-- trace:scenario id=g10.shared-audit.SC-1hn rev=1 -->
 #### Scenario: shared-console-audit-SC-01 - Filters combine
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
@@ -99,6 +104,7 @@ there are no matches, distinct from a trail that has no writes.
 - **WHEN** the auditor filters to one product and one subject user id
 - **THEN** only rows for that product and that subject remain
 
+<!-- trace:scenario id=g10.shared-audit.SC-u0a rev=1 -->
 #### Scenario: shared-console-audit-SC-02 - A date range covers both calendar days
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
@@ -106,6 +112,7 @@ there are no matches, distinct from a trail that has no writes.
 - **WHEN** the auditor sets a date range whose end day is that day
 - **THEN** that write remains
 
+<!-- trace:scenario id=g10.shared-audit.SC-1gn rev=1 -->
 #### Scenario: shared-console-audit-SC-05 - Audit offers no email filter
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
@@ -114,6 +121,7 @@ there are no matches, distinct from a trail that has no writes.
 - **THEN** they are not offered an email filter
 - **AND** they can still filter by actor or subject user id
 
+<!-- trace:scenario id=g10.shared-audit.SC-7pf rev=1 -->
 #### Scenario: shared-console-audit-SC-06 - The trail never returns an email
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
@@ -121,6 +129,7 @@ there are no matches, distinct from a trail that has no writes.
 - **THEN** no row has an email field
 - **AND** the list input has no email field
 
+<!-- trace:scenario id=g10.shared-audit.SC-15d rev=1 -->
 #### Scenario: shared-console-audit-SC-07 - The location restores filters and sort
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
@@ -128,6 +137,7 @@ there are no matches, distinct from a trail that has no writes.
 - **WHEN** the auditor opens that same location
 - **THEN** the same filters and sort are applied
 
+<!-- trace:scenario id=g10.shared-audit.SC-wnk rev=1 -->
 #### Scenario: shared-console-audit-SC-08 - No matches is not an empty trail
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
@@ -136,6 +146,7 @@ there are no matches, distinct from a trail that has no writes.
 - **THEN** the surface says there are no matches
 - **AND** that message is distinct from a trail with no writes
 
+<!-- trace:scenario id=g10.shared-audit.SC-dlc rev=1 -->
 #### Scenario: shared-console-audit-SC-09 - One product's silence does not hold a filtered page
 **Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
@@ -158,6 +169,7 @@ the actor id SHALL be a link to that account. WHEN the subject type is `user`
 and the same conditions hold, the subject id SHALL be a link. WHEN they
 cannot, the ids SHALL be shown and SHALL NOT link.
 
+<!-- trace:scenario id=g10.shared-audit.SC-rqe rev=1 -->
 #### Scenario: shared-console-audit-SC-12 - Expanding shows roles and details
 **Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
@@ -165,12 +177,14 @@ cannot, the ids SHALL be shown and SHALL NOT link.
 - **THEN** they see the actor's roles at the time of the write
 - **AND** they see those details
 
+<!-- trace:scenario id=g10.shared-audit.SC-pcc rev=1 -->
 #### Scenario: shared-console-audit-SC-13 - Actor and subject ids can be copied
 **Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
 - **WHEN** a row names an actor user id and a subject user id
 - **THEN** the auditor can copy each id
 
+<!-- trace:scenario id=g10.shared-audit.SC-w54 rev=1 -->
 #### Scenario: shared-console-audit-SC-14 - Directory links only for directory people the operator can open
 **Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
@@ -180,6 +194,7 @@ cannot, the ids SHALL be shown and SHALL NOT link.
 - **AND** `system`, a prefixed machine id, and a non-user subject stay plain text
 - **AND** an operator who cannot open the directory sees the id and no link
 
+<!-- trace:scenario id=g10.shared-audit.SC-l5y rev=1 -->
 #### Scenario: shared-console-audit-SC-15 - Email and hashes stay off the row
 **Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
@@ -198,6 +213,7 @@ products that answered. A broken chain SHALL still offer a jump to that
 position. A chain that does not answer the page SHALL still say paging is
 held.
 
+<!-- trace:scenario id=g10.shared-audit.SC-1a3 rev=1 -->
 #### Scenario: shared-console-audit-SC-17 - A quiet trail is one line; an issue is a notice
 **Serves:** shared-console-audit-US-04 - Auditor sees chain health without a product list
 
@@ -212,6 +228,7 @@ held.
 - **THEN** that product is named in a notice
 - **AND** products that answered are not listed on the strip
 
+<!-- trace:scenario id=g10.shared-audit.SC-7ok rev=1 -->
 #### Scenario: shared-console-audit-SC-16 - A broken chain opens at that position
 **Serves:** shared-console-audit-US-03 - Auditor jumps to a chain break
 

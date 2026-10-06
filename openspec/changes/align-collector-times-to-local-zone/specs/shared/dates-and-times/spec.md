@@ -21,6 +21,7 @@ A surface that judges a calendar day for the business SHALL keep using the
 brand's zone, so the day it shows is the day the brand's own counter, paper
 and records are on.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-q9t rev=1 -->
 #### Scenario: shared-dates-and-times-SC-10 - Operator readers in different zones
 **Serves:** Stated zones - operator surfaces state UTC
 
@@ -28,6 +29,7 @@ and records are on.
 - **WHEN** each renders it in an operator table
 - **THEN** both show identical text
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-4ud rev=1 -->
 #### Scenario: shared-dates-and-times-SC-11 - An instant near midnight
 **Serves:** Stated zones - a stated zone near midnight
 
@@ -36,6 +38,7 @@ and records are on.
 - **THEN** the day shown is the brand's
 - **AND** every surface of that brand shows the same one
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-nes rev=1 -->
 #### Scenario: shared-dates-and-times-SC-29 - Two collectors read different collector clocks
 **Serves:** Stated zones - collector surfaces use the viewer's zone
 
@@ -55,6 +58,7 @@ time SHALL carry no zone.
 A deadline on an invoice, receipt, terms page, or email SHALL be stated in
 Asia/Hong_Kong and SHALL name **GMT+8**.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-jjm rev=1 -->
 #### Scenario: shared-dates-and-times-SC-12 - The auction page shows a close
 **Serves:** Stated zones - a collector deadline follows the viewer
 
@@ -64,6 +68,7 @@ Asia/Hong_Kong and SHALL name **GMT+8**.
 - **AND** each names that viewer's short zone
 - **AND** the New York rendering is not suffixed `HKT`
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-h8g rev=1 -->
 #### Scenario: shared-dates-and-times-SC-13 - A page and a message disagree on the zone name
 **Serves:** Stated zones - mail names GMT+8; the page follows the viewer
 
@@ -72,6 +77,7 @@ Asia/Hong_Kong and SHALL name **GMT+8**.
 - **THEN** the email states Asia/Hong_Kong as GMT+8
 - **AND** the page states the viewer's local moment
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-upj rev=1 -->
 #### Scenario: shared-dates-and-times-SC-14 - A closed listing
 **Serves:** Stated zones - a closed listing follows the viewer
 
@@ -86,6 +92,7 @@ A date rendered into a message the platform sends â€” an email, a notification â
 SHALL be stated in Asia/Hong_Kong, SHALL name **GMT+8**, and SHALL be worded in
 English regardless of where the message is opened.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-ec5 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-15 - An auction email states GMT+8
 **Serves:** Sent messages - a message states GMT+8
 
@@ -94,6 +101,7 @@ English regardless of where the message is opened.
 - **THEN** the time is stated in Asia/Hong_Kong
 - **AND** the rendering names `GMT+8`
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-ufo rev=1 -->
 #### Scenario: shared-dates-and-times-SC-16 - Two recipients read one time
 **Serves:** Sent messages - two recipients read one time
 
@@ -110,6 +118,7 @@ viewer's `timeZone` with shape `DD Mon YYYY, HH:MM`, month names from
 
 Operator tables and admin surfaces SHALL continue to use the UTC moment shape.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-uu8 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-23 - Two zones read different clocks
 **Serves:** Stated zones - a collector reads their local zone
 

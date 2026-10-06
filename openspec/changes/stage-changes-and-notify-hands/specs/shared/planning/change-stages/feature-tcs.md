@@ -436,6 +436,7 @@ Runs once per row of **Test data**.
 * The read stops with a refusal naming the path it could not open.
 * No message goes out for that push.
 
+<!-- trace:case id=g10.shared-change-stages.TC-4v6 rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC14-1: An open Raised row reaches Specified, tells the product manager and holds acceptance
 
 **Classification:**
@@ -847,6 +848,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * The component reads Unknown, with its receipt link and no deployed ref beside it.
 * The change page carries no delivery row naming staging.
 
+<!-- trace:case id=g10.shared-change-stages.TC-iu3 rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-0sk,g10.shared-change-stages.SC-ds0,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-pi0,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC12-1: The tech design or its waiver holds Specified
 
 Runs once per row of **Test data**.
@@ -886,6 +888,7 @@ Runs once per row of **Test data**.
 * The stepper shows Specified as the current stage.
 * The tech design row reads what the row states.
 
+<!-- trace:case id=g10.shared-change-stages.TC-ya4 rev=1 covers=g10.shared-change-stages.SC-2go,g10.shared-change-stages.SC-pp7,g10.shared-change-stages.SC-k99,g10.shared-change-stages.SC-kgm,g10.shared-change-stages.SC-ycx,g10.shared-change-stages.SC-rq1,g10.shared-change-stages.SC-0sk,g10.shared-change-stages.SC-ds0,g10.shared-change-stages.SC-rtp,g10.shared-change-stages.SC-pci,g10.shared-change-stages.SC-hyl,g10.shared-change-stages.SC-4ju,g10.shared-change-stages.SC-9vq,g10.shared-change-stages.SC-hds,g10.shared-change-stages.SC-ln5,g10.shared-change-stages.SC-pfs,g10.shared-change-stages.SC-53e,g10.shared-change-stages.SC-nfz,g10.shared-change-stages.SC-pi0,g10.shared-change-stages.SC-s89,g10.shared-change-stages.SC-pkk,g10.shared-change-stages.SC-pg5,g10.shared-change-stages.SC-irv,g10.shared-change-stages.SC-71a,g10.shared-change-stages.SC-nbi,g10.shared-change-stages.SC-m1h,g10.shared-change-stages.SC-3s4,g10.shared-change-stages.SC-ncu,g10.shared-change-stages.SC-0ph -->
 ### shared-planning-change-stages-US2-TC13-1: Requirements and cases without the tech design stay at Designed
 
 **Classification:**

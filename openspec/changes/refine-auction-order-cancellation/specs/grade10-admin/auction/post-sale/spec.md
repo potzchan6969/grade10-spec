@@ -37,6 +37,7 @@ SHALL link to the lot while remaining terminal.
 - **WHEN** the operator filters by one category
 - **THEN** only matching cancelled orders are returned
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kcq rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-154 - A cancelled order links to its returned lot
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
@@ -65,6 +66,7 @@ Clearing the flag SHALL not revive the order or change the lot's stock outcome.
 - **THEN** the payment is recorded and the order remains Cancelled
 - **AND** the order is flagged Paid after cancel for an operator with `auction:payment`
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-18a rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-155 - Clearing a late-payment flag leaves the cancellation intact
 **Serves:** post-sale-US-14 - Operator returns money paid after a cancel
 
@@ -82,6 +84,7 @@ Clearing the flag SHALL not revive the order or change the lot's stock outcome.
 - **THEN** Grade10 refuses cancellation
 - **AND** the order follows its recorded-payment outcome
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-i4m rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-156 - Money that counts toward nothing does not block cancellation
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 

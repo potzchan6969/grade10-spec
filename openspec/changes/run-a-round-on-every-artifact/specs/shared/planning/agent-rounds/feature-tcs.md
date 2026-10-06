@@ -2382,6 +2382,7 @@ Runs once per row of **Test data**.
 * The preflight ends as the table names.
 * A refusal names what the record lacks and the row that would fill it.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-d8u rev=1 covers=g10.shared-agent-rounds.SC-tfp,g10.shared-agent-rounds.SC-4zp,g10.shared-agent-rounds.SC-7gw,g10.shared-agent-rounds.SC-pgk,g10.shared-agent-rounds.SC-r6o,g10.shared-agent-rounds.SC-la4 -->
 ### shared-planning-agent-rounds-US8-TC7-1: A failed run-sheet row reaches the thread only as QA's sentence
 
 **Classification:**

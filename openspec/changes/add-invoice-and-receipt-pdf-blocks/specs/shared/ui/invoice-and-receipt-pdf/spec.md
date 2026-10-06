@@ -260,6 +260,7 @@ boxed Subtotal/Payment Processing Fee/Order Total summary. When omitted or
 reformat the tax amount, and the tax line does not define a tax rate,
 jurisdiction or formal tax receipt.
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-i50 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-52 - A supplied tax line renders on both documents
 
 **Serves:** InvoicePdf export - the optional tax line renders when supplied
@@ -271,6 +272,7 @@ jurisdiction or formal tax receipt.
   boxed summary
 - **AND** each document shows the amount exactly as supplied
 
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-m09 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-53 - An omitted tax line does not render
 
 **Serves:** InvoicePdf export - the optional tax line is omitted when not supplied

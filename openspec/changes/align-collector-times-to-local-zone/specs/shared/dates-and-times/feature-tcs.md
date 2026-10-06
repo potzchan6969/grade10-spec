@@ -11,6 +11,7 @@
 **I want** clocks on the site to follow my zone and documents to name GMT+8,
 **so that** a listing close and a letter never disagree on the label by accident.
 
+<!-- trace:case id=g10.shared-dates-and-times.TC-aa8 rev=1 covers=g10.shared-dates-and-times.SC-q9t,g10.shared-dates-and-times.SC-4ud,g10.shared-dates-and-times.SC-nes,g10.shared-dates-and-times.SC-jjm,g10.shared-dates-and-times.SC-h8g,g10.shared-dates-and-times.SC-upj,g10.shared-dates-and-times.SC-uu8 -->
 ### shared-dates-and-times-US1-TC12-1: Auction page close follows the viewer
 
 **Classification:**
@@ -41,6 +42,7 @@
 * Each names that viewer's short zone.
 * The New York rendering is not suffixed `HKT`.
 
+<!-- trace:case id=g10.shared-dates-and-times.TC-iko rev=1 covers=g10.shared-dates-and-times.SC-ec5,g10.shared-dates-and-times.SC-ufo -->
 ### shared-dates-and-times-US1-TC15-1: An auction email states GMT+8
 
 **Classification:**
@@ -69,6 +71,7 @@
 * The time is stated in Asia/Hong_Kong.
 * The rendering names `GMT+8`.
 
+<!-- trace:case id=g10.shared-dates-and-times.TC-pbx rev=1 covers=g10.shared-dates-and-times.SC-q9t,g10.shared-dates-and-times.SC-4ud,g10.shared-dates-and-times.SC-nes,g10.shared-dates-and-times.SC-jjm,g10.shared-dates-and-times.SC-h8g,g10.shared-dates-and-times.SC-upj,g10.shared-dates-and-times.SC-uu8 -->
 ### shared-dates-and-times-US1-TC23-1: Two zones read different collector clocks
 
 **Classification:**
@@ -97,6 +100,7 @@
 * The clock values differ.
 * Neither string contains `UTC` or `HKT`.
 
+<!-- trace:case id=g10.shared-dates-and-times.TC-r8d rev=1 covers=g10.shared-dates-and-times.SC-q9t,g10.shared-dates-and-times.SC-4ud,g10.shared-dates-and-times.SC-nes,g10.shared-dates-and-times.SC-jjm,g10.shared-dates-and-times.SC-h8g,g10.shared-dates-and-times.SC-upj,g10.shared-dates-and-times.SC-uu8 -->
 ### shared-dates-and-times-US1-TC29-1: Two collectors read different collector clocks
 
 **Classification:**

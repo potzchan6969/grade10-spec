@@ -322,6 +322,7 @@ requirements and the suite rather than at Designed.
   wait on another hand; the product manager SHALL answer it, with the
   engineer's challenge informing the answer
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-0sk rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-85 - The UI design alone proves Designed
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a change whose UI design has landed and whose planning run has not started
 
@@ -339,6 +340,7 @@ requirements and the suite rather than at Designed.
 **AND** the change SHALL name the tech design as what it owes
 **AND** once `tech-design.md` lands its stage SHALL be Specified
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-ds0 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-87 - A question the tech design cannot settle holds acceptance only
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads why a specified change is not accepted
 
@@ -754,6 +756,7 @@ An open question is a line nobody has answered yet, and it holds no stage.
 **THEN** the decisions row SHALL show a count of two
 **AND** the UI design SHALL show the handle that landed it
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-pi0 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-88 - An open Raised row is not an open question
 **Serves:** shared-planning-change-stages-US-02 - the product manager learns of an open Raised row from the Specified turn and the refusal, not from the question lists
 

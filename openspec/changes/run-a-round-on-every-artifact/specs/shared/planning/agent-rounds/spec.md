@@ -1285,6 +1285,7 @@ and SHALL say how many it left out.
 - **AND** it says how many it left out
 - **AND** the change page shows the automated count against the suite's total
 
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-la4 rev=1 -->
 #### Scenario: shared-planning-agent-rounds-SC-61a - A failed row reaches the thread as QA's sentence
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate says what failed where the change's hands already read
 

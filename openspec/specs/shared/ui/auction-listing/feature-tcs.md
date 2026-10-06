@@ -996,6 +996,7 @@ Runs once per row of **Test data**.
 * No row shows a crown.
 * No row carries an accessible name the copy does not supply, Winner included.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-pz8 rev=1 covers=g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-as2 -->
 ### shared-ui-auction-listing-US1-TC55-1: A catalogue tile close follows the viewer zone
 
 **Classification:**

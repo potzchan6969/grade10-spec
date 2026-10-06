@@ -115,6 +115,7 @@ for the action. An entry SHALL NOT keep an email.
 - **WHEN** an identity action is recorded
 - **THEN** the entry does not keep a secret
 
+<!-- trace:scenario id=g10.shared-audit.SC-nte rev=1 -->
 #### Scenario: shared-auth-audit-SC-26 - Recovery codes stay off the trail
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 
@@ -168,12 +169,14 @@ sign-out, SHALL NOT write an entry.
 - **WHEN** the identity trail cannot accept an entry for a revoke
 - **THEN** the session remains signed in
 
+<!-- trace:scenario id=g10.shared-audit.SC-06a rev=1 -->
 #### Scenario: shared-auth-audit-SC-27 - An unrecorded product create does not create the account
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
 - **WHEN** the identity trail cannot accept an entry for a trusted product creating an account
 - **THEN** no account is created from that request
 
+<!-- trace:scenario id=g10.shared-audit.SC-88n rev=1 -->
 #### Scenario: shared-auth-audit-SC-28 - An unrecorded verify does not mark the account verified
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -181,6 +184,7 @@ sign-out, SHALL NOT write an entry.
 - **WHEN** the identity trail cannot accept an entry for a trusted product marking that email verified
 - **THEN** the account remains unverified
 
+<!-- trace:scenario id=g10.shared-audit.SC-h1r rev=1 -->
 #### Scenario: shared-auth-audit-SC-29 - An unrecorded regenerate does not replace the codes
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 
@@ -205,12 +209,14 @@ sign-out, SHALL NOT write an entry.
 - **WHEN** a collector signs out
 - **THEN** no identity trail entry is written for that sign-out
 
+<!-- trace:scenario id=g10.shared-audit.SC-2og rev=1 -->
 #### Scenario: shared-auth-audit-SC-34 - An unrecorded delete does not remove the account
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
 - **WHEN** the identity trail cannot accept an entry for deleting an account
 - **THEN** the account remains
 
+<!-- trace:scenario id=g10.shared-audit.SC-0sh rev=1 -->
 #### Scenario: shared-auth-audit-SC-35 - A failed enable record leaves the factor active
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 
@@ -218,6 +224,7 @@ sign-out, SHALL NOT write an entry.
 - **THEN** the factor remains active
 - **AND** the request does not succeed
 
+<!-- trace:scenario id=g10.shared-audit.SC-bgp rev=1 -->
 #### Scenario: shared-auth-audit-SC-36 - An unrecorded disable does not remove the factor
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 
@@ -234,6 +241,7 @@ identity trail SHALL append an entry for that write. For a trusted-product
 create or verify, the actor SHALL be the system. The subject SHALL be the
 user id. The entry SHALL NOT name an email.
 
+<!-- trace:scenario id=g10.shared-audit.SC-fa1 rev=1 -->
 #### Scenario: shared-auth-audit-SC-15 - A trusted product creating an account is on the trail
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -242,6 +250,7 @@ user id. The entry SHALL NOT name an email.
 - **THEN** the identity trail records that write for the new user id
 - **AND** the outcome is `created`
 
+<!-- trace:scenario id=g10.shared-audit.SC-f32 rev=1 -->
 #### Scenario: shared-auth-audit-SC-18 - A trusted product creating a verified account is on the trail
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -250,6 +259,7 @@ user id. The entry SHALL NOT name an email.
 - **THEN** the identity trail records that write for the new user id
 - **AND** the outcome is `created`
 
+<!-- trace:scenario id=g10.shared-audit.SC-osr rev=1 -->
 #### Scenario: shared-auth-audit-SC-19 - A trusted product verifying an unverified account is on the trail
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -257,6 +267,7 @@ user id. The entry SHALL NOT name an email.
 - **WHEN** a trusted product marks that email verified
 - **THEN** the identity trail records that write for that user id
 
+<!-- trace:scenario id=g10.shared-audit.SC-ubk rev=1 -->
 #### Scenario: shared-auth-audit-SC-20 - A product-write entry names the system and the user id
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -265,6 +276,7 @@ user id. The entry SHALL NOT name an email.
 - **AND** names the subject by user id
 - **AND** it does not name them by email
 
+<!-- trace:scenario id=g10.shared-audit.SC-tej rev=1 -->
 #### Scenario: shared-auth-audit-SC-25 - Deleting an account is on the trail
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -278,6 +290,7 @@ existed and identity data does not change (`already-unverified` or
 `already-verified`), the identity trail SHALL NOT append an entry for that
 request.
 
+<!-- trace:scenario id=g10.shared-audit.SC-oue rev=1 -->
 #### Scenario: shared-auth-audit-SC-16 - A trusted product finding an unverified account is not on the trail
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -285,6 +298,7 @@ request.
 - **WHEN** a trusted product asks to create an unverified account for that same email
 - **THEN** no identity trail entry is written for that request
 
+<!-- trace:scenario id=g10.shared-audit.SC-7no rev=1 -->
 #### Scenario: shared-auth-audit-SC-17 - A trusted product finding a verified account is not on the trail
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -292,6 +306,7 @@ request.
 - **WHEN** a trusted product asks to create an unverified account for that same email
 - **THEN** no identity trail entry is written for that request
 
+<!-- trace:scenario id=g10.shared-audit.SC-5fv rev=1 -->
 #### Scenario: shared-auth-audit-SC-32 - A trusted product verifying an already-verified account is not on the trail
 **Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
 
@@ -313,30 +328,35 @@ SHALL append an entry for that write. The actor and the subject SHALL be
 named by user id. The entry SHALL NOT name an email. The entry SHALL NOT
 keep the codes. A failed enable record SHALL NOT reverse the factor.
 
+<!-- trace:scenario id=g10.shared-audit.SC-nr9 rev=1 -->
 #### Scenario: shared-auth-audit-SC-21 - Regenerating recovery codes is on the trail
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 
 - **WHEN** an operator regenerates second-factor recovery codes
 - **THEN** the identity trail records that actor, that subject, and the regenerate
 
+<!-- trace:scenario id=g10.shared-audit.SC-tl6 rev=1 -->
 #### Scenario: shared-auth-audit-SC-22 - Enabling a second factor is on the trail
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 
 - **WHEN** a second factor first becomes active for an account
 - **THEN** the identity trail records that actor, that subject, and the enable
 
+<!-- trace:scenario id=g10.shared-audit.SC-ccw rev=1 -->
 #### Scenario: shared-auth-audit-SC-23 - Starting enrollment is not the enable entry
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 
 - **WHEN** a person starts second-factor enrollment and the factor is not yet active
 - **THEN** the identity trail does not record an enable for that start
 
+<!-- trace:scenario id=g10.shared-audit.SC-yjy rev=1 -->
 #### Scenario: shared-auth-audit-SC-24 - Disabling a second factor is on the trail
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 
 - **WHEN** a second factor is removed from an account
 - **THEN** the identity trail records that actor, that subject, and the disable
 
+<!-- trace:scenario id=g10.shared-audit.SC-gkn rev=1 -->
 #### Scenario: shared-auth-audit-SC-37 - A later proof records a missing enable
 **Serves:** shared-auth-audit-US-05 - Auditor traces a second-factor write
 

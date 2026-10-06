@@ -71,6 +71,7 @@
 
 * Only orders cancelled for Lot issue are returned.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-hmz rev=1 covers=g10adm.auction-post-sale.SC-6oq,g10adm.auction-post-sale.SC-1qh,g10adm.auction-post-sale.SC-kcq,g10adm.auction-post-sale.SC-30g,g10adm.auction-post-sale.SC-i4m -->
 ### post-sale-US13-TC3-1: A cancelled order links to its returned lot
 
 **Classification:**
@@ -99,6 +100,7 @@
 
 * The link opens the same lot, available for manual relisting.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-2ai rev=1 covers=g10adm.auction-post-sale.SC-6oq,g10adm.auction-post-sale.SC-1qh,g10adm.auction-post-sale.SC-kcq,g10adm.auction-post-sale.SC-30g,g10adm.auction-post-sale.SC-i4m -->
 ### post-sale-US13-TC4-1: Money that counts toward nothing does not block cancellation
 
 **Classification:**
@@ -127,6 +129,7 @@
 * Cancellation succeeds, the order reads Cancelled and the lot returns to stock.
 * The recorded payment remains available for Finance to return outside Grade10.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-0dj rev=1 covers=g10adm.auction-post-sale.SC-6oq,g10adm.auction-post-sale.SC-1qh,g10adm.auction-post-sale.SC-kcq,g10adm.auction-post-sale.SC-30g,g10adm.auction-post-sale.SC-i4m -->
 ### post-sale-US13-TC5-1: Money that counts toward the balance blocks cancellation
 
 **Classification:**
@@ -189,6 +192,7 @@
 * The payment is kept in the invoice log.
 * The order remains Cancelled and shows Paid after cancel.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-5vf rev=1 covers=g10adm.auction-post-sale.SC-23g,g10adm.auction-post-sale.SC-18a -->
 ### post-sale-US14-TC2-1: Clearing the late-payment flag keeps the order cancelled
 
 **Classification:**
