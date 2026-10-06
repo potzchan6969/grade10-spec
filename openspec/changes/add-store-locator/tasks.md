@@ -1,0 +1,50 @@
+## 1. The block, the reveal and the labels (grade10-spec)
+
+Q9 to Q16, Q19 and Q22 are answered before the group is claimed: the catalogs
+carry Q10 and Q11's words, and the stories draw the look Q14 to Q16, Q19 and
+Q22 settle.
+
+- [ ] 1.1 The tests this group's scenarios name, in their own commit before its code, ticked last: `packages/ui/src/blocks/store-locator/public-exports.test.ts` and the block's stories with play functions for the facts drawn, the one map control and a keyboard walk that stops once on the map and never inside the frame, the facts drawn from fixture values no catalog holds, and `@ts-expect-error` on a block missing its map embed or its Maps destination (`shared-ui-store-locator-SC-01`, `shared-ui-store-locator-SC-02`, `shared-ui-store-locator-SC-03`, `shared-ui-store-locator-SC-05`, `shared-ui-store-locator-SC-06`); a `StoreProductMetadata` story supplied no href that finds neither label a link; `packages/i18n` tests that `head.storeLocator` differs from every other head entry and that ZZZ answers no `product.hongKongGrade10Store`
+- [ ] 1.2 Make `shared-ui-store-locator-SC-01`, `shared-ui-store-locator-SC-02`, `shared-ui-store-locator-SC-03`, `shared-ui-store-locator-SC-05` and `shared-ui-store-locator-SC-06` pass: `StoreLocator`, `StoreLocatorProps`, `StoreLocatorCopy` and `StoreLocatorHoursRow` in `packages/ui/src/blocks/store-locator/store-locator.tsx`, re-exported from `packages/ui/src/index.ts`, with the props `tech-design.md` tables; the map an `inert` frame under one link opening in a new tab; `Default` and `Narrow` stories
+- [ ] 1.3 The first-paint reveal in CSS, as `tech-design.md` states it: `blocks/shared/use-first-paint-reveal.ts` loses the hook and its state, and order details, order history, auction record and winner order move to the classes with their stories in the same commit; the motion values do not change. The Design Override hook stops the commit: show the person its lines, and only on their yes end the message with `Design-Override: first-paint reveal runs in CSS so server markup is visible before scripts; motion values unchanged`
+- [ ] 1.4 `StoreProductMetadata` drops the `#` defaults of `pickupHref` and `shippingFeeHref`; a label with no href is drawn as the line's text, with or without the underline as Q22 answers. The Design Override hook stops the commit: show the person its lines, and only on their yes end the message with `Design-Override: a fulfilment label with no page is text, not a # link`
+- [ ] 1.5 The preview's Store Locator page story composes `StoreLocator` between `SiteHeader` and `Footer`, its content file supplying the block's props; its play function stops waiting on a reveal. The Design Override hook stops the commit: show the person its lines, and only on their yes end the message with `Design-Override: the Store Locator page story composes the shared StoreLocator block`
+- [ ] 1.6 The catalogs: a `storeLocator` namespace in the grade10 layer for `en`, `zh-Hant` and `zh-Hans` — heading, hours heading, map title, map link name, address lines and seven day rows; `head.storeLocator` in the same three; `chrome.nav.storeLocator` in the shared layer for all four languages; `product.hongKongGrade10Store` moved from `shared/` to a grade10 `product` file per language, assembled in `src/catalogs.ts`
+- [ ] 1.7 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm run test:stories:app`, `pnpm --dir packages/i18n test`, `pnpm run validate:changes add-store-locator`, `pnpm check:manual`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
+
+## 2. Store Locator on the site (grade10)
+
+Needs group 1 landed.
+
+- [ ] 2.1 Bump `external/grade10-spec` to the commit carrying group 1
+- [ ] 2.2 The tests this group's scenarios name, in their own commit before its code, ticked last: `src/surfaces.test.ts` and the serving tests over production and staging gates — the address not found, no chrome entry and no sitemap entry where the store is withheld, all three where it is carried, at the unprefixed English address and each language's prefixed one (`grade10-site-site-carried-surfaces-SC-41`); `src/chrome/SiteShell.test.tsx` for the header's last item before Help, the Help column's first link and the current marking with Store unmarked (`grade10-site-store-store-locator-SC-06`, `grade10-site-store-store-locator-SC-07`, `grade10-site-store-store-locator-SC-08`); `StoreLocatorPage` tests rendered in English and Traditional Chinese, the map's link opening Google Maps at the shop's address (`grade10-site-store-store-locator-SC-02`, `grade10-site-store-store-locator-SC-04`, `grade10-site-store-store-locator-SC-05`, `grade10-site-store-store-locator-SC-10`); `src/surfaceHead.test.ts` for a title and a description apart from Store home's, the listing's and a card's (`grade10-site-store-store-locator-SC-03`); `src/surfaces.test.ts`'s `a shared link unfurls` run over every prerendered surface rather than its three, so Store Locator's Open Graph tags are held with the others' (`grade10-site-site-crawlable-pages-SC-06`); `e2e/tests/store/store-locator.spec.ts` with scripts off for the page whole and visible in the first response and the map opening Google Maps, with scripts on for the content staying shown as they start, with the embedded map's requests blocked for the map still opening Google Maps, and at 375 CSS pixels for no sideways scroll (`grade10-site-store-store-locator-SC-01`, `grade10-site-store-store-locator-SC-09`, `grade10-site-store-store-locator-SC-11`, `grade10-site-store-store-locator-SC-12`, `grade10-site-store-store-locator-SC-13`)
+- [ ] 2.3 Make `grade10-site-site-carried-surfaces-SC-41`, `grade10-site-store-store-locator-SC-01`, `grade10-site-store-store-locator-SC-02`, `grade10-site-store-store-locator-SC-03`, `grade10-site-store-store-locator-SC-04`, `grade10-site-store-store-locator-SC-05`, `grade10-site-store-store-locator-SC-09`, `grade10-site-store-store-locator-SC-10`, `grade10-site-store-store-locator-SC-11`, `grade10-site-store-store-locator-SC-12` and `grade10-site-store-store-locator-SC-13` pass: the `storeLocator` row in `src/surfaces.ts` behind the store's gate at Q9's address, `routes/store-locator.tsx` in `MODULES` for the language-prefixed addresses and `...at("storeLocator", MODULES.storeLocator)` in `routesFor`, ranked with the other top-level surfaces, for the unprefixed English one, `pages/store-locator/StoreLocatorPage.tsx` composing `StoreLocator` from the catalogs, and `pages/store-locator/shop.ts` building the Maps destination and the embed from one address query
+- [ ] 2.4 Make `grade10-site-store-store-locator-SC-06`, `grade10-site-store-store-locator-SC-07` and `grade10-site-store-store-locator-SC-08` pass: `NAV_LINKS` ends on `storeLocator`; the footer's Store Locator is a `FooterSiteLink` drawn first in the Help column where the build carries `storeLocator`; `UnwrittenFooterLink` goes
+- [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `node apps/frontend/grade10/scripts/check-public-pages.mjs` on the staging and the production build (`grade10-site-store-store-locator-SC-01` in the written document), `pnpm run check:submodules`, `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/store-locator.spec.ts`
+
+## 3. Free pick-up opens Store Locator (grade10)
+
+Needs group 2's row.
+
+- [ ] 3.1 The tests this group's scenarios name, in their own commit before its code, ticked last: `pages/store/ProductPage.test.tsx` for the store name as a same-tab link to the Store Locator address in the page's language and Shipping fee as text (`grade10-site-store-product-page-SC-25`, `grade10-site-store-product-page-SC-33`)
+- [ ] 3.2 Make `grade10-site-store-product-page-SC-25` and `grade10-site-store-product-page-SC-33` pass: `ProductView` gains an optional `pickupHref` passed to `StoreProductMetadata`; `ProductPage` passes `addressOf("storeLocator")` where the build carries it
+- [ ] 3.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, the product page's serving and hydration tests
+
+## 4. The manual (grade10-spec)
+
+4.1 waits for group 5's walk to have run.
+
+- [ ] 4.1 Take the 🚧 off the delivered outcomes on `docs/prds/products/grade10-site/store/store-locator.md`, the Free Pick-up section of `docs/prds/products/grade10-site/store/product-page.md`, `docs/prds/products/grade10-site/site/carried-surfaces.md`, the Store Locator line of `docs/prds/products/grade10-site/site/page-shell.md` and `docs/prds/products/shared/ui/store-locator.md`, whose Designs section gains the block's `::story` cards; restate no requirement
+- [ ] 4.2 Verify: `pnpm run tcs:validate`, `pnpm check:manual`
+
+## 5. The walk (grade10)
+
+Needs `feature-tcs.md` reviewed (`/tcs-review add-store-locator`) as its
+input, and groups 1 to 3 landed. The walks live in
+`apps/frontend/grade10/e2e/tests/store/store-locator.spec.ts`; the isolated
+stack carries the store, and the uat lane walks the same file against a build
+that withholds it, asserting the shape the lane's own gates name.
+
+- [ ] 5.1 One test per case the lanes reach, under a describe per journey, end to end through the collector's browser — with scripts off for the first response, by keyboard for the map — kept as the change's end-to-end suite: `grade10-site-store-store-locator-US-01`, `grade10-site-store-store-locator-US-02`, `grade10-site-store-product-page-US-10` on the isolated stack; `grade10-site-site-carried-surfaces-US-01` and `grade10-site-site-carried-surfaces-US-03` on both lanes
+- [ ] 5.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:apps/frontend/grade10/e2e/tests/store/store-locator.spec.ts`, in the walks' own commit; the cases that stay manual are named in their suite and in the walk's `rounds.md` row
+- [ ] 5.3 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/store-locator.spec.ts` and, after the uat deploy, `pnpm --dir apps/frontend/grade10 run e2e:uat -- e2e/tests/store/store-locator.spec.ts`
