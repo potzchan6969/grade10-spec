@@ -17,8 +17,8 @@ have shown when they opened the cart.
 
 **Metric:** share of checkout requests refused for a line the cart had shown as
 fine. A stated derivation and stated re-read moments move it toward zero; it is
-unmeasured today, so the first delivery sets the baseline. *(Assumption — the
-source PRD names no metric.)*
+unmeasured today, so the first delivery sets the baseline — the Measurement row
+of [Cart Validation](../../../docs/prds/products/grade10-site/store/cart-validation.md).
 
 **Acceptance signal:** a signed-in collector who opens the cart is told about
 every line that moved before they press checkout, not after.
@@ -43,8 +43,9 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   request. A shop that exposes no count, or a count of zero while still
   offering the variant, bounds nothing.
 - **A card's tile reflects its most available variant.** Out of stock only when
-  every variant on it is. Its page presents one sellable item and reads
-  availability from that item's internal Shopify sale identity.
+  every variant on it is. The tile shows the price of the card's one sellable
+  item, and its page presents that item and reads availability from its
+  internal Shopify sale identity.
 - **Browse surfaces communicate no quantity.** No remaining count, no scarcity
   treatment, no label separating one available variant from another. A
   collector may still request a quantity while adding from a browse surface,
@@ -64,9 +65,12 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   order from an earlier read, however recent.
 - **A line that cannot be filled in full is reduced to what remains** and
   reported as adjusted; one that cannot be filled at all is reported out of
-  stock and left for the collector to remove. A line is never grown.
-- **A withdrawn product is reported as unavailable,** distinctly from out of
-  stock.
+  stock and left for the collector to remove, and checkout waits until they
+  do. A line is never grown.
+- **A withdrawn product leaves the cart and is named.** When the cart opens or
+  checkout finds it, a line whose product left the channel, or whose variant
+  no longer exists, is removed and one notice names every line removed; a
+  line that sold out stays for the collector to remove.
 - **A repriced line is shown at the current price,** the change disclosed as
   plainly rising as falling, and the disclosed price becomes the line's price
   from then on. No browser-supplied or recorded price ever reaches a checkout
@@ -125,8 +129,12 @@ states what the store puts into them.
 - `grade10-site/store/product-listing`: remove stock-derived quantity limits
   and low-stock counts from listing tiles.
 - `grade10-site/store/product-page`: remove stock-derived quantity limits and
-  low-stock counts from the product page while keeping its one sellable item
-  and internal Shopify sale identity; the page offers no variant choice.
+  low-stock counts from the product page; the page answers, adds and reads sold
+  out for its one sellable item through the internal Shopify sale identity, and
+  offers no variant choice. `A card is added to the cart from its own page`
+  is retired and replaced by `A card's one item is added to the cart from its
+  own page`, whose scenarios take new ids because the old ones add a chosen
+  grade.
 
 ## Impact
 
@@ -150,3 +158,17 @@ the variant and availability behavior specified here.
 the Store domain test suite is updated with that path. The product-detail
 preview uses the same one-item presentation and keeps its Shopify sale
 identifier out of shopper-facing copy.
+
+`redesign-store-product-detail-page` also changes the product page. This change
+accepts first and carries the one-item add and sold-out requirements; the
+redesign rebases against the folded page (decisions Q5). The shared blocks'
+remaining-count element and stepper ceiling stay until the designer answers Q8.
+
+## References
+
+- [Product Status](../../../docs/prds/products/grade10-site/commerce/product-status.md)
+- [Product Status · Browsing Limits](../../../docs/prds/products/grade10-site/commerce/product-status.md#browsing-limits)
+- [Product Status · Quantity Requests](../../../docs/prds/products/grade10-site/commerce/product-status.md#quantity-requests)
+- [Cart Validation](../../../docs/prds/products/grade10-site/store/cart-validation.md)
+- [Product Listing](../../../docs/prds/products/grade10-site/store/product-listing.md)
+- [Product Details](../../../docs/prds/products/grade10-site/store/product-page.md)
