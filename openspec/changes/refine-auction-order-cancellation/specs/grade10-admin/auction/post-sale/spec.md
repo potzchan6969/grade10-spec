@@ -23,7 +23,7 @@ confirmation, the queue SHALL filter by cancellation category and the order
 SHALL link to the lot while remaining terminal.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-6oq rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-150 - The cancellation dialog requires the reason and consequences
+#### Scenario: grade10-admin-auction-post-sale-SC-230 - The cancellation dialog requires the reason and consequences
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
 - **GIVEN** an unpaid auction order
@@ -32,7 +32,7 @@ SHALL link to the lot while remaining terminal.
 - **AND** the confirmation names return to stock, no runner-up, winner email, unchanged suspension and no undo
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-1qh rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-151 - Cancellation categories filter the queue
+#### Scenario: grade10-admin-auction-post-sale-SC-231 - Cancellation categories filter the queue
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
 - **GIVEN** cancelled orders with different reason categories
@@ -40,7 +40,7 @@ SHALL link to the lot while remaining terminal.
 - **THEN** only matching cancelled orders are returned
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-kcq rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-154 - A cancelled order links to its returned lot
+#### Scenario: grade10-admin-auction-post-sale-SC-234 - A cancelled order links to its returned lot
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
 - **GIVEN** a cancelled auction order whose lot returned to stock
@@ -64,7 +64,7 @@ flag with its reason, reference, actor and time.
 Clearing a flag SHALL NOT revive the order or change the lot's stock outcome.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-23g rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-152 - A late payment is flagged without reviving the order
+#### Scenario: grade10-admin-auction-post-sale-SC-232 - A late payment is flagged without reviving the order
 **Serves:** post-sale-US-14 - Operator returns money paid after a cancel
 
 - **GIVEN** a cancelled order
@@ -73,7 +73,7 @@ Clearing a flag SHALL NOT revive the order or change the lot's stock outcome.
 - **AND** the order is flagged Paid after cancel for an operator with `auction:payment`
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-18a rev=2 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-155 - Clearing a late-payment flag leaves the cancellation intact
+#### Scenario: grade10-admin-auction-post-sale-SC-235 - Clearing a late-payment flag leaves the cancellation intact
 **Serves:** post-sale-US-14 - Operator returns money paid after a cancel
 
 - **GIVEN** a cancelled order with two late payments, each flagged Paid after cancel, and Finance returned the first
@@ -83,16 +83,16 @@ Clearing a flag SHALL NOT revive the order or change the lot's stock outcome.
 - **AND** the order stays Cancelled and the lot stays in stock
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-30g rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-153 - Money that counts toward the balance wins the cancellation race
+#### Scenario: grade10-admin-auction-post-sale-SC-233 - Money that counts toward the balance wins the cancellation race
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
-- **GIVEN** an unpaid order whose card payment counts toward the balance and commits before an operator's cancellation commits
+- **GIVEN** an unpaid order whose card payment settles the invoice, counts toward the balance and commits before an operator's cancellation commits
 - **WHEN** the operator confirms cancellation
-- **THEN** Grade10 refuses cancellation
-- **AND** the order follows its recorded-payment outcome
+- **THEN** Grade10 refuses cancellation with "This order has a recorded payment. Refund it instead of cancelling."
+- **AND** the order reads Paid and the lot stays with it
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-i4m rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-156 - Money that counts toward nothing does not block cancellation
+#### Scenario: grade10-admin-auction-post-sale-SC-236 - Money that counts toward nothing does not block cancellation
 **Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
 
 - **GIVEN** an unpaid order with a recorded payment that counts toward nothing

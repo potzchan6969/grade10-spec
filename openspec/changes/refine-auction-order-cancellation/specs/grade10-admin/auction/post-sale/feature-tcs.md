@@ -155,7 +155,8 @@
 
 **Expected Results:**
 
-* Cancellation is refused and the order follows its recorded-payment outcome.
+* Cancellation is refused with "This order has a recorded payment. Refund it instead of cancelling."
+* The order reads Paid and the lot stays with it.
 
 ## post-sale-US14: Operator returns money paid after a cancel
 
@@ -192,8 +193,8 @@
 * The payment is kept in the invoice log.
 * The order remains Cancelled and shows Paid after cancel.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-5vf rev=2 covers=g10adm.auction-post-sale.SC-23g,g10adm.auction-post-sale.SC-18a -->
-### post-sale-US14-TC2-2: Clearing the late-payment flag keeps the order cancelled
+<!-- trace:case id=g10adm.auction-post-sale.TC-5vf rev=3 covers=g10adm.auction-post-sale.SC-23g,g10adm.auction-post-sale.SC-18a -->
+### post-sale-US14-TC2-3: Clearing the late-payment flag keeps the order cancelled
 
 **Classification:**
 
@@ -211,18 +212,18 @@
 **Pre-conditions:**
 
 * A cancelled order has two late payments, each with its own Paid after cancel flag.
-* Finance returned both payments outside Grade10; one has a return reference and one has none.
+* Finance returned both payments outside Grade10; one has a return reference and one has none (the first none, the second one).
 
 **Steps:**
 
-1. As an operator holding `auction:payment`, clear the first payment's flag with a written reason and its return reference.
+1. As an operator holding `auction:payment`, clear the first payment's flag with a written reason and no return reference.
 2. Check the second payment's flag.
-3. Clear the second flag with a written reason and no return reference.
+3. Clear the second flag with a written reason and its return reference.
 
 **Expected Results:**
 
 * Each clear action succeeds and records the reason, actor and timestamp.
-* The first records its supplied return reference; the second needs none.
+* The first records no return reference; the second records its supplied one.
 * After step 1 the second payment is still flagged.
 * The order remains Cancelled and its lot remains in stock.
 
@@ -232,4 +233,4 @@
 
 | Finding | Disposition |
 | --- | --- |
-| Cancellation is reasoned, terminal and flags late payment without revival | **Folded in:** `grade10-admin-auction-post-sale-SC-150`–`SC-156` |
+| Cancellation is reasoned, terminal and flags late payment without revival | **Folded in:** `grade10-admin-auction-post-sale-SC-230`–`SC-236` |

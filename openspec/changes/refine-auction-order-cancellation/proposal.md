@@ -16,7 +16,9 @@ starts at no data because free-text reasons cannot be counted.
 
 - **The winner sees what happened.** Winner Order reads `Cancelled on {date}`
   (a day-only date in the viewer's local zone), keeps the lot and the winning bid, and offers Contact Us as the only action.
-  It gives no reason, as the cancellation letter already does not.
+  It gives no reason, as the cancellation letter already does not. Contact
+  Us opens the ready email with the generic reason `order cancelled`; the
+  operator's category and note stay internal.
 - **The operator picks a reason category.** Non-payment, Missed setup, Winner
   asked, Lot issue or Other, plus the mandatory note. The queue filters
   cancelled orders by category, which is what makes the metric countable.
@@ -54,7 +56,8 @@ None.
   filter, the confirmation dialog, the link to the lot, and the Paid after
   cancel flag with its clearing.
 - `grade10-site/auction/winner-order`: the cancelled notice, with the lot,
-  the winning bid and Contact Us.
+  the winning bid and Contact Us, and the `order cancelled` reason of the
+  ready email.
 
 ## Impact
 
