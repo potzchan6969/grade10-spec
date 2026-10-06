@@ -80,6 +80,7 @@
 | Q53 | Is the rail's region named through the heading's id, or by the heading's words? | By the heading's words (`aria-label`), since the section header takes no id and one more prop widens `shared/ui/store-home` a second time - decided by the round | `aria-labelledby` with an id on the header |
 | Q54 | Where the row does not fit, how does a collector with a mouse and no trackpad scroll it? | By the row's own scrollbar, which the browser draws under the row where a mouse is the pointer, with part of the next tile showing as the cue; no arrows - decided by the round | Arrows either side of the row, a control the design system and the Figma file draw nowhere yet |
 | Q55 | Can the store switch the rail off without a code change to the feature? | Yes: one switch per brand and environment in the store's config, on wherever the store runs; off, the card's read asks the shop for no picks and answers the card alone, so the page shows no rail as with nothing to show (`grade10-site-store-cross-sell-SC-34`) - decided by the round, @ecchochan taking every hand, 2026-09-28 | A switch an operator flips from the admin console, stored in the database, which the store's other kill switch for points tender does not need either and which a read the tRPC cache holds for a minute would not honour sooner |
+| Q56 | Does this change still state that a sold-out tile opens where it does not sell? | No: `activate-listing-tile-by-name`'s tile requirement states it as part of when any tile opens, with `shared-ui-store-product-listing-SC-97` (that change's Q9). This delta drops its requirement "A sold-out tile still opens where its activation is handled" and SC-91; US1-TC1 walks `shared-ui-store-product-listing-SC-97` unchanged, and the two changes land as a stack, this one first, accepted back to back from one tree that holds this drop and never from a tree without it - decided by the round, 2026-10-06 | The rule in two requirements, one from each change, once both fold |
 
 ## Raised
 
@@ -94,7 +95,7 @@
 | grade10-site/store/cross-sell | Blind pass: Is a card sharing two of the three facts ranked above a card sharing only the first? | Q27 |
 | grade10-site/store/cross-sell | Blind pass: Narrow viewport: scroll, wrap, or fewer tiles, and does the cap hold there? | Q51 |
 | grade10-site/store/cross-sell | Scenario pass: the rail's export requirement states behaviour for `StoreSectionHeader` and `ProductCard`, whose contracts other capabilities own, while the proposal modified none. | Q28 |
-| shared/ui/store-product-listing | Plan reader: `activate-listing-tile-by-name` adds `shared-ui-store-product-listing-SC-88` (sold out and an activation callback → the name stays inert), against this change's `shared-ui-store-product-listing-SC-91`. | Q29 |
+| shared/ui/store-product-listing | Plan reader: `activate-listing-tile-by-name` adds `shared-ui-store-product-listing-SC-88` (sold out and an activation callback → the name stays inert), against this change's SC-91. | Q29 |
 | grade10-site/store/cross-sell | Build readers: the rail's `cards` accepts four `ProductSummary` fields it never draws. | Q30 |
 | shared/ui/store-product-listing | Build readers: the discriminator task 1.3 promised to `activate-listing-tile-by-name` is written nowhere. | Q31 |
 | grade10-site/store/cross-sell | Build readers: an unparseable `createdAt` sorts oldest silently. | Q32 |
@@ -115,3 +116,4 @@
 | shared/ui/store-product-listing | Build: the tile as a link waits on a round nobody has opened, and the suite's served-tile case is blocked on it. | Q52 |
 | grade10-site/store/cross-sell | Build: the section header takes no id for the region to be labelled by. | Q53 |
 | grade10-site/store/cross-sell | Design readers: nothing lets a mouse with no trackpad scroll a row that does not fit. | Q54 |
+| shared/ui/store-product-listing | `activate-listing-tile-by-name` acceptance review: the sold-out rule sits in this delta's requirement and in that change's tile requirement, so the durable spec would state it twice. | Q56 |

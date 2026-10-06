@@ -27,8 +27,8 @@ where the tile sells.
 in a new tab, and its address can be copied —
 [You May Also Like](/p/grade10-site/store/cross-sell)'s tiles
 
-🚧 **Opens where it does not sell** — on a surface that draws no cart control,
-a sold-out tile still opens its product, sold-out treatment and all —
+**Opens where it does not sell** - on a surface that draws no cart control,
+a sold-out tile still opens its product, sold-out treatment and all -
 [You May Also Like](/p/grade10-site/store/cross-sell), and the
 [Main Page](/p/grade10-site/store/home)'s row of cards
 
