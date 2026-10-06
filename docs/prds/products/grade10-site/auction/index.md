@@ -38,14 +38,14 @@ when its timer runs out with no new bid.
 Confirms a delivery address and chooses card or bank transfer within 48 hours
 — [Post-Bidding · Winner Order](/p/grade10-site/auction/post-bidding#winner-order).
 ## *Operator* — **Sends the invoice**
-Prices shipping and insurance for that address and sends the invoice; the
+Prices shipping and insurance for that address, adds any tax for the order, and sends the invoice; the
 7-day payment window starts — [Auction Management · Payment](/p/grade10-admin/auction/management#payment).
 ## *Winner* — **Pays**
 By card, which Grade10 confirms on its own, or by bank transfer quoting the
 reference and uploading proof an operator checks.
 ## *Operator* — **Ships**
-Records dispatch with the carrier and tracking number, then delivery; the
-winner reads both on the order.
+Records dispatch with the tracking number, then delivery; the winner reads
+the tracking number as the link to the carrier's tracking page.
 :::
 
 :::detail{title="Code map" for="engineer"}

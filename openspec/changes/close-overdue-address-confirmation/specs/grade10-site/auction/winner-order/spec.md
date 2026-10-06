@@ -1,48 +1,15 @@
 # grade10-site/auction/winner-order Specification
 
-## Purpose
-What a winner is handed when a lot closes and what they do with it: two
-windows that end — 48 hours to confirm where the lot ships, then 7 days from
-send to pay the invoice an operator quotes for that address — a single fresh
-card charge, and the receipt, tracker and delivery proof the order keeps
-afterwards. A window that has closed is reopened by Grade10, never by the
-winner.
-
 ## Feature set
 
-- Order at lot close
-  - Address first: a closed lot opens an order that waits for the winner's delivery address, with no invoice and nothing yet to pay
-  - Address confirm window: 48 hours from lot close; when it passes, Confirm is hidden, Contact Us appears, and the order derives as Setup Overdue
-  - One order per lot: a winner of three lots confirms three addresses and receives three invoices
-- Invoice
-  - Operator quote: Shipping & Handling, and Insurance when added, are quoted by an operator for the confirmed address, never estimated
-  - Order total: names every component a winner is asked to pay, so a total is explicable line by line
-  - Fee tooltips: Buyer’s Premium, Shipping & Handling, and Payment Processing Fee carry brief info tooltips on the order summary
-  - Invoice PDF: once sent, the winner can view and download the invoice; hidden before send and when Cancelled
 - Delivery address
-  - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it, which is what lets an invoice be prepared
-  - Missed deadline closes the form: after the address deadline the winner can neither confirm an address nor change a confirmed one
-  - Reopening: only an operator reopens an unconfirmed Setup Overdue address
-    form, which gives a fresh 48 hours, or records an address the winner gives
-    by phone
-  - Locking at send: the address stops moving once the invoice is sent; a change after that goes through Grade10
-- Settlement
-  - Card only for the winner while `pending`: the order offers one payment method; every other method is an operator's backup
-  - Expired ends self-service Pay: when the invoice is `expired`, card Pay is hidden and Contact Us appears in the overdue alert
-- Payment deadline
-  - Seven days from send: the window opens when the winner has an amount to pay, not before
-  - Absolute datetime display: the deadline is shown as a datetime in the viewer's local zone; no countdown
-- Progress presentation
-  - Five steps: Address → Invoice → Payment → Shipping → Completed; Cancelled and Refunded show no stepper
-  - Day-only step dates: Address while awaiting reads Confirm by …; Payment while due reads Pay by …; long copy wraps
-- Records the winner keeps
-  - Payment receipt: what was paid, itemised, with the method that paid it
-  - Receipt PDF: after payment, view and download beside the invoice PDF
-  - Shipping tracker and delivery proof: unchanged
+  - Missed deadline closes the form: after the address deadline, counted from the lot's actual close and judged by when Grade10 receives the write, the winner cannot put an address on the order; the account address book stays open
+  - Reopened by an operator: the winner has no way to reopen the form; an operator reopens it or records the address, and the winner then confirms as before
+  - Retired at send: sending the invoice retires the address deadline
 
 ## ADDED Requirements
 
-### Requirement: A missed address deadline closes the whole address form
+### Requirement: A missed address deadline closes the address form
 
 This requirement builds on "The address confirm window is 48 hours from lot
 close", which sets the address deadline, hides Confirm once it passes, and
@@ -63,8 +30,7 @@ SHALL refuse the winner's address writes on the order:
 
 | Winner's write | Behaviour after the address deadline |
 | --- | --- |
-| Confirm a delivery address for the first time | Refused |
-| Change an already-confirmed delivery address | Refused, and the change control is hidden as Confirm is |
+| Confirm a delivery address | Refused |
 | Add, edit or archive an address in the account address book | Unaffected |
 
 The account address book is account-wide and shared across storefronts, per
@@ -72,13 +38,12 @@ The account address book is account-wide and shared across storefronts, per
 an address on this order SHALL be refused.
 
 Grade10 SHALL offer the winner no way to reopen the address form. Only an
-operator SHALL reopen an unconfirmed Setup Overdue order with invoice status
-`not_issued`, per `grade10-admin/auction/post-sale`; a reopen SHALL set the
-address deadline to 48 hours from the moment of the reopen, and the winner
-SHALL then confirm or change the address as before. Grade10 SHALL send the
-winner no letter when the form is reopened; the operator tells them directly.
-An operator SHALL also be able to record a delivery address on the order
-themselves after the deadline, without reopening the form.
+operator reopens it or records the address, per
+"An operator reopens the address form" in `grade10-admin/auction/post-sale`;
+after a reopen the winner SHALL confirm the address as before. A confirmed
+address stays locked, per "The delivery address locks when the invoice is
+sent". Grade10 SHALL send the winner no letter when the form is reopened; the
+operator tells them directly.
 
 Sending the invoice SHALL retire the address deadline. The delivery address
 locks at send, per "The delivery address locks when the invoice is sent", so
@@ -113,21 +78,6 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** the order has no confirmed delivery address
 - **AND** its derived status is still Setup Overdue
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-h4t rev=1 -->
-#### Scenario: winner-order-SC-147 - A confirmed address cannot be changed after the deadline
-**Serves:** winner-order-US-23 - Winner gets the address form back
-
-- **GIVEN** an auction order in Preparing Invoice whose winner confirmed an
-  address at 2026-09-13T10:00:00Z and whose address deadline was
-  2026-09-14T09:00:00Z
-- **AND** no invoice has been sent
-- **WHEN** the winner attempts to change the confirmed delivery address at
-  2026-09-14T09:01:00Z
-- **THEN** Grade10 refuses the change
-- **AND** the order's delivery address is the one confirmed at
-  2026-09-13T10:00:00Z
-- **AND** the order carries Contact Us and no change control
-
 <!-- trace:scenario id=g10.auction-winner-order.SC-6ax rev=1 -->
 #### Scenario: winner-order-SC-148 - A reopen gives the winner a fresh 48 hours
 **Serves:** winner-order-US-23 - Winner gets the address form back
@@ -152,7 +102,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-js5 rev=1 -->
 #### Scenario: winner-order-SC-150 - Sending the invoice retires the address deadline
-**Serves:** Delivery address - sending the invoice retires the address deadline
+**Serves:** Delivery address - retired at send
 
 - **GIVEN** an auction order whose winner confirmed an address and whose
   invoice an operator sent at 2026-09-13T09:00:00Z
@@ -163,7 +113,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-byg rev=1 -->
 #### Scenario: winner-order-SC-151 - A missed address deadline leaves the address book alone
-**Serves:** Delivery address - a missed address deadline leaves the address book alone
+**Serves:** Delivery address - missed deadline closes the form
 
 - **GIVEN** an auction order whose address deadline has passed
 - **WHEN** the winner edits a saved address in their account address book and
@@ -171,3 +121,82 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **THEN** Grade10 accepts both writes
 - **AND** neither reaches that auction order
 - **AND** the order still has no confirmed delivery address
+
+## MODIFIED Requirements
+
+### Requirement: The payment deadline is fixed when the invoice is sent
+
+The payment deadline SHALL be 7 calendar days from the moment an operator
+sends the invoice. Grade10 SHALL fix it at send and store it in UTC. Winner
+Order SHALL display it in the viewer's local zone. The invoice PDF SHALL
+display it in `Asia/Hong_Kong`, labelled `GMT+8`, per `shared/dates-and-times`.
+
+Nothing the winner does SHALL move the deadline — not a failed payment, and
+not leaving the order untouched — except uploading payment proof, which stops
+it, per "The winner uploads payment proof once". While the invoice is
+`payment_verifying` the deadline SHALL NOT run. When an operator returns the
+proof, the deadline SHALL be the moment of return plus the time left at
+upload. Otherwise only an operator SHALL set a new deadline, by reissuing the
+invoice, per `grade10-admin/auction/post-sale`.
+
+An auction order with no sent invoice SHALL have no payment deadline, and its
+invoice status SHALL never become `expired`. The winner-facing address confirm
+window is separate and does not write `expired` on the invoice.
+
+When the deadline passes with the invoice `pending`, Grade10 SHALL set the
+invoice status to `expired`, per `grade10-site/auction/order-status`, unless a
+card payment Grade10 received before the deadline is still awaiting its
+outcome. While that outcome is awaited the invoice stays `pending`, the order
+reads Pending Payment and Winner Order offers no Pay Now, per
+`grade10-admin/auction/post-sale`. A card session that ends unpaid after the
+deadline - declined, timed out or abandoned - SHALL count as a failed outcome:
+Grade10 SHALL write `expired` when the session ends, and the invoice SHALL NOT
+stay `pending` past it. That replaces the timed-out and abandoned outcomes of
+"An unfinished card payment leaves the invoice payable", which hold only
+before the deadline. Otherwise the order reads Payment Overdue. The winner
+SHALL NOT be offered card payment or proof upload while the invoice is
+`expired`, and Pay Now stays closed; the order SHALL show Contact Us in its
+overdue alert. An operator SHALL restore self-service payment only by
+reissuing the invoice to `pending`, or SHALL settle manually or cancel, per
+`grade10-admin/auction/post-sale`.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-9nm rev=1 -->
+#### Scenario: winner-order-SC-31 - The deadline is seven days from send
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose invoice an operator sent at
+  2026-09-12T09:00:00Z
+- **AND** the winner opens Winner Order in a browser set to `America/New_York`
+- **WHEN** the winner reads the order and its invoice PDF
+- **THEN** the payment deadline is 2026-09-19T09:00:00Z
+- **AND** Winner Order shows it as an absolute datetime at 05:00 `EDT`
+- **AND** the invoice PDF shows it at 17:00 `GMT+8`
+- **AND** no countdown is shown
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-9ea rev=1 -->
+#### Scenario: winner-order-SC-33 - A declined payment does not move the deadline
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose sent invoice has a payment deadline of
+  2026-09-19T09:00:00Z
+- **WHEN** the winner's card is declined twice
+- **THEN** the payment deadline is still 2026-09-19T09:00:00Z
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1d9 rev=1 -->
+#### Scenario: winner-order-SC-37 - An expired invoice refuses card payment
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose invoice status is `expired`
+- **WHEN** the winner opens the order
+- **THEN** Grade10 offers no card Pay control
+- **AND** the overdue alert carries Contact Us
+- **AND** a card payment attempt for that invoice is refused
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-6v5 rev=1 -->
+#### Scenario: winner-order-SC-107 - A deadline that passes while proof is checked expires nothing
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** an invoice that became `payment_verifying` at 2026-09-13T09:00:00Z with a deadline of 2026-09-19T09:00:00Z
+- **WHEN** 2026-09-20T09:00:00Z arrives with no operator action
+- **THEN** the invoice is still `payment_verifying`
+- **AND** the order derives as Payment Verifying

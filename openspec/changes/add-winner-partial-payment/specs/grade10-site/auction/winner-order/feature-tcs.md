@@ -37,7 +37,7 @@
 
 * The page reads Partially Paid.
 * Pay, Submit Payment Proof, View Bank Details and a payment deadline are absent.
-* The page offers Contact Us and no running balance.
+* The page offers Contact Us, shows the full invoice amount and no remaining balance.
 * Each recorded payment has a separate receipt link, oldest first.
 
 ## Settled

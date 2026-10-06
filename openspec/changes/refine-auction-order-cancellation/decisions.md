@@ -35,9 +35,12 @@
 | Q10 | How is a Paid after cancel payment returned? | Finance returns it outside Grade10; any operator with `auction:payment` clears the flag with a reason and records Finance's return reference when available (recommended) | Requiring a reference for every return, which could keep a returned payment flagged when Finance has none; widening the Refund action in `add-winner-refund` to cancelled orders |
 | Q11 | How is success measured? | Cancellations each month by category, and winner contacts per 100 cancellations, with a category filter on the queue (recommended) | Category counts only; no measurement |
 | Q12 | What is left out? | Auto-cancel, runner-up offers, telling other bidders, cancelling a paid order | Any of them in scope |
+| Q13 | Can an operator cancel an order that has been paid? | No. Money that counts toward the balance refuses the cancel; that order is refunded instead, so the cancelled letter names no payment. The page line is `Cancelling a paid order` in `docs/prds/products/grade10-site/auction/post-bidding.md` (recommended) | Cancelling a paid order and naming a refund in the letter, which leaves money with no order to return it against |
+| Q14 | How is the Paid after cancel flag cleared? | Each late payment after cancellation carries its own flag. Anyone with `auction:payment` clears it with a written reason and an optional return reference; Grade10 records the actor and time. This change owns the rule, and `complete-auction-post-sale` points at it (planning owner) | One flag per order cleared once for every payment; requiring a return reference; leaving the rule to `complete-auction-post-sale` |
+| Q15 | What does Contact Us on a cancelled Winner Order open? | The ready email with a new generic reason `order cancelled`: subject `Auction lot {lot title}: order cancelled`, status label `Cancelled`, the invoice id in the body when one exists. The operator's category and note stay internal. This change modifies the reason-set requirement, which no other in-flight change edits; "Contact Us opens a copy-first ready email" stays with `complete-auction-post-sale` (planning owner) | A reason naming the cancellation cause, which shows the winner the internal reason; no ready email on a cancelled order |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-admin/auction/post-sale` | Who clears a Paid-after-cancel flag, and whether that action can revive the order | Q6 |
+| `grade10-admin/auction/post-sale` | Who clears a Paid-after-cancel flag, and whether that action can revive the order | Q14 |

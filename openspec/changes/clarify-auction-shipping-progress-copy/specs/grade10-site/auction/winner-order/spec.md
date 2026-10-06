@@ -78,7 +78,7 @@ Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
 - **THEN** the title badge uses Badge `default`
 - **AND** Shipping is the current progress step with the day-only ship date
 - **AND** a known tracking number is the external carrier link
-- **AND** the surface adds no separate Track shipment control or carrier name
+- **AND** Order Progress adds no separate Track shipment control and no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fm0 rev=1 -->
 #### Scenario: winner-order-SC-56 - Cancelled hides the stepper

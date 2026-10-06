@@ -10,7 +10,7 @@
 ## Boundaries
 
 - **No persistent change** - No API, database field, derived-status rule, or stepper animation changes.
-- **No tracker change** - The carrier link, tracking chrome, and Shipped or Delivered letters remain as they are.
+- **Tracking chrome** - Keep the existing carrier link on the tracking number; Order Progress adds no separate carrier name. The carrier-name row in `Records the winner keeps` is not touched here: `add-winner-order-tax-line` owns that requirement and removes the name. Shipped and Delivered letters stay as they are.
 - **No application group** - The store owns the catalogues, preview, fixtures, and story assertions. A consuming application only takes the published submodule update.
 
 ## Verification

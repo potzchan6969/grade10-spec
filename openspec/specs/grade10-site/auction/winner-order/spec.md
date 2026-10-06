@@ -75,13 +75,19 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Refunded order: shows the terminal outcome while retaining invoices and receipts
   - Refund details: Amount, Transfer to and Reason; Reference for a bank refund; Note only when the operator recorded one
   - Payment receipt: proof of what was paid, itemised, retrievable for the life of the account
-  - Shipping tracker: where the lot is once it has left
+  - Shipping tracker: the tracking number is the link to the carrier tracking page, with no separate carrier name
   - Delivery proof: what the carrier recorded on handover, given what these lots are worth
   - Receipt identifier: a receipt for a finalized payment uses the invoice payload plus its unpadded per-invoice sequence; historic receipt IDs remain unchanged
+  - Receipt: it itemises Tax when added
+  - Cancelled order notice: explains the terminal date, retained lot and winning bid
+  - Contact Us: gives the winner the only next action, with the `order cancelled` ready email
+  - Payment receipts: lists every partial payment on the existing receipt row
 - Settlement
   - Single fresh charge: one transaction for the final amount, retryable on failure
+  - Operator-collected balance: keeps a partially paid invoice out of winner self-service
 - Payment deadline
   - Seven days from close: a fixed end to the winner's obligation, unmoved by anything they do to the invoice
+  - Closed after partial payment: removes the self-service deadline once collection starts
 - Contact Us on locked orders
   - Copy-first ready email: Contact Us opens a dialog with To, Subject and Message; Copy Message is first, Open Mail App is second
   - Subject names invoice or lot: the order's current invoice id when one exists; lot title when setup is overdue and no invoice has been issued
@@ -90,6 +96,15 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
 - Order-progress tracking
   - Tracking number: while fulfilment is `fulfilled` with a tracking number, Order Progress makes the number an external link to the carrier tracking page; no Track shipment control or carrier name appears in Order Progress; the link remains after delivery is confirmed
+- Settlement progress
+  - Five presentation steps: Address → Invoice → Payment → Shipping → Completed
+  - Preparing Shipment and Shipped share the Shipping step as **current** (progress); Preparing Shipment subtext reads Preparing to ship
+  - Status badges: Preparing Shipment and Shipped use Badge `default` (muted fill) on Winner Order, matching My Auctions
+- Tax on a winner's order
+  - Before send: Tax reads TBD with an info tip
+  - After send: Tax shows the operator's amount or is absent when none
+  - Itemisation: the invoice and receipt carry Tax between Insurance and Subtotal
+  - Card fee base: Tax is part of the Subtotal the payment fee grosses up
 
 ## Requirements
 
@@ -111,7 +126,7 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
 | Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
-| Tax | An optional caller-supplied `taxLine`; no rate, jurisdiction or formal tax receipt is defined here |
+| Tax | Optional. Added by an operator for the order, and greater than zero when added. Grade10 defines no rate, jurisdiction or formal tax receipt |
 | Subtotal | The sum of the components above |
 | Payment processing fee | Priced by the payment method, below. On every invoice, and never dropped |
 | Order total | The total payable — the subtotal plus the payment processing fee |
@@ -139,10 +154,14 @@ settlement SHALL drop or change it.
 
 Wherever the winner reads the invoice's lines — the order, the receipt, and
 any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
-**Free**, SHALL show a Payment Processing Fee of zero as **Free**, and SHALL
-leave the Insurance line out when the operator added none. Insurance and
-Payment Processing Fee are separate lines: omitting Insurance does not replace
-it with the fee.
+**Free**, SHALL show a Payment Processing Fee of zero as **Free**, SHALL
+leave the Insurance line out when the operator added none, and SHALL leave the
+Tax line out when the operator added none. Insurance and Payment Processing
+Fee are separate lines: omitting Insurance does not replace it with the fee.
+
+Where the Tax line is shown, Winner Order's Order Summary SHALL place it
+between Insurance and Payment Processing Fee, and the invoice and receipt PDFs
+SHALL place it between Insurance and Subtotal.
 
 On Winner Order's order summary, Grade10 SHALL offer brief info tooltips beside
 **Buyer’s Premium**, **Shipping & Handling**, **Insurance**, and **Payment Processing Fee**
@@ -157,15 +176,15 @@ SHALL still carry Subtotal.
 No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-6nv rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-6nv rev=2 -->
 #### Scenario: winner-order-SC-04 - An estimated total is marked as one
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent a bank transfer invoice with a winning bid of
-  250000, a buyer's premium of 50000, shipping of 8000, insurance of 4000 and
+  250000, a buyer's premium of 50000, shipping of 8000, insurance of 4000, tax of 6000 and
   a payment processing fee of 0 minor units in HKD
 - **WHEN** the winner reads the invoice
-- **THEN** the order total is 312000 minor units in HKD
+- **THEN** the order total is 318000 minor units in HKD
 - **AND** no component is marked as an estimate
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-33a rev=1 -->
@@ -250,6 +269,34 @@ historical: a manually settled order keeps its payment processing fee.
 - **WHEN** the winner opens the order
 - **THEN** the Payment Processing Fee line is shown and reads Free
 - **AND** the order total is 312000 minor units in HKD
+
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ppq rev=1 -->
+#### Scenario: winner-order-SC-215 - An invoice with no tax shows no Tax line
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice without adding Tax
+- **WHEN** the winner reads the invoice, receipt, or Order Summary
+- **THEN** no Tax line is shown
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-deu rev=1 -->
+#### Scenario: winner-order-SC-216 - Tax is included in the card fee base
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an invoice whose winning bid, buyer's premium, shipping, insurance,
+  and Tax total 318000 minor units in HKD
+- **WHEN** Grade10 prices its card payment processing fee
+- **THEN** the Subtotal used for the gross-up is 318000 minor units in HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-4z7 rev=1 -->
+#### Scenario: winner-order-SC-214 - Tax is itemised on the invoice and receipt
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** a paid auction order whose invoice includes Tax of 6000 minor units
+  in HKD
+- **WHEN** the winner reads the invoice and receipt
+- **THEN** each shows Tax of 6000 minor units in HKD between Insurance and
+  Subtotal
 
 ### Requirement: Insurance info tooltip
 
@@ -653,8 +700,8 @@ account SHALL NOT shorten the 7 years.
 
 | Record | When | Contents |
 | --- | --- | --- |
-| Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, any tax amount, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
-| Shipping tracker | Fulfilment status is `fulfilled` | Carrier name, tracking number, and a link to the carrier |
+| Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, Tax when added, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
+| Shipping tracker | Fulfilment status is `fulfilled` | The tracking number, as the link to the carrier tracking page. No separate carrier name |
 | Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided - handover timestamp, signature, proof-of-delivery image |
 
 Each receipt issued after this change SHALL carry a receipt ID, unique across
@@ -704,15 +751,15 @@ A receipt SHALL record the amount settled, the payment method, and the external
 reference when one was recorded. No proof file, the winner's or an operator's,
 SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-49p rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-49p rev=2 -->
 #### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order paid at an order total of 316000 minor units in HKD
 - **WHEN** the winner opens the order a year later
 - **THEN** the receipt shows the winning bid, buyer's premium, Shipping &
-  Handling, insurance, any tax amount supplied by the separate tax capability,
-  the subtotal, the payment processing fee, and the order total
+  Handling, insurance, Tax when added, the subtotal, the payment processing
+  fee, and the order total
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-9qq rev=1 -->
 #### Scenario: winner-order-SC-19 - A manually settled receipt records payment facts
@@ -726,15 +773,16 @@ SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
 - **AND** it carries no settlement-origin badge
 - **AND** it shows no proof file
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=2 -->
 #### Scenario: winner-order-SC-20 - The tracker appears once the lot is dispatched
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose fulfilment status has just become
   `fulfilled` with a tracking number attached
 - **WHEN** the winner opens the order
-- **THEN** it shows the carrier name, the tracking number, and a link to the
-  carrier
+- **THEN** it shows the tracking number as the link to the carrier tracking
+  page
+- **AND** it shows no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-8xb rev=1 -->
 #### Scenario: winner-order-SC-21 - Delivery proof records what the carrier provided
@@ -1113,7 +1161,7 @@ winner SHALL not be offered a way to reopen either window.
 ### Requirement: Winner Order shows five progress steps
 
 Winner Order SHALL present settlement progress as five steps in this order:
-**Address**, **Invoice**, **Payment**, **Shipped**, **Completed**. The steps
+**Address**, **Invoice**, **Payment**, **Shipping**, **Completed**. The steps
 SHALL be presentation only and SHALL NOT replace the derived order status
 vocabulary in `grade10-site/auction/order-status`.
 
@@ -1122,17 +1170,20 @@ vocabulary in `grade10-site/auction/order-status`.
 | Address | Awaiting Setup or Setup Overdue |
 | Invoice | Preparing Invoice |
 | Payment | Pending Payment (invoice `pending`), Payment Overdue (invoice `expired`), or Payment Verifying |
-| Shipped | Processing or Shipped |
+| Shipping | Preparing Shipment or Shipped |
 | Completed | Delivered |
 
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
 
-Step subtext SHALL use day-only dates in the viewer's local zone. While Address is
+Step subtext SHALL use day-only dates in the winner's zone. While Address is
 current and awaiting confirm, subtext SHALL read `Confirm by {date}`. While
 Payment is current and the invoice is `pending`, subtext SHALL read
 `Pay by {date}`. While the invoice is `payment_verifying`, Payment subtext
-SHALL name no date. Description copy SHALL wrap so five columns do not
+SHALL name no date. While Shipping is current and the derived status is
+**Preparing Shipment**, Shipping subtext SHALL read **Preparing to ship**.
+While Shipping is current and the derived status is **Shipped**, Shipping
+subtext SHALL use the day-only ship date when one is known. Description copy SHALL wrap so five columns do not
 overflow.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-11o rev=1 -->
@@ -1148,10 +1199,28 @@ overflow.
 #### Scenario: winner-order-SC-55 - Processing maps under Shipped
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
-- **GIVEN** an auction order whose derived status is Processing
+The scenario title is historical for its permanent trace identity. Its normative
+Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
+
+- **GIVEN** an auction order whose derived status is Preparing Shipment
 - **WHEN** the winner opens Winner Order
-- **THEN** the progress stepper marks Shipped as the current step
-- **AND** does not invent a Processing step label
+- **THEN** the progress stepper marks Shipping as the current (progress) step
+- **AND** Shipping subtext reads Preparing to ship
+- **AND** the title badge uses Badge `default`
+- **AND** does not invent a Preparing Shipment step label
+- **AND** does not leave Shipping incomplete or upcoming while Payment is complete
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-lk0 rev=1 -->
+#### Scenario: winner-order-SC-253 - A shipped order keeps Shipping current
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order whose derived status is Shipped, with a day-only
+  ship date and a tracking number when one is known
+- **WHEN** the winner opens Winner Order
+- **THEN** the title badge uses Badge `default`
+- **AND** Shipping is the current progress step with the day-only ship date
+- **AND** a known tracking number is the external carrier link
+- **AND** Order Progress adds no separate Track shipment control and no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fm0 rev=1 -->
 #### Scenario: winner-order-SC-56 - Cancelled hides the stepper
@@ -1850,19 +1919,26 @@ multi-line field that shares TextInput's label, status and message contract.
 The ready email's subject and body identify the order so support can open it
 without a follow-up.
 
-**Subject** - When the order's current invoice id exists, the subject SHALL be
+**Subject** - For `order cancelled` the subject SHALL be
+`Auction lot {lot title}: order cancelled`, invoice or not. Otherwise, when
+the order's current invoice id exists, the subject SHALL be
 `Auction order {invoice id}: {reason}`. When no invoice id exists (including
 setup overdue before send), the subject SHALL be
 `Auction lot {lot title}: {reason}`.
 
 **Reason** - On Winner Order the reason fragment SHALL be one of
-`setup overdue`, `payment overdue`, or `partial payment`.
+`setup overdue`, `payment overdue`, `partial payment`, or `order cancelled`.
+A Cancelled Winner Order is locked, so it offers Contact Us under "Contact Us
+opens a copy-first ready email" with the `order cancelled` reason. The
+operator's cancellation category and note SHALL NOT appear in the subject or
+body.
 
 **Body** - Message SHALL greet Grade10, say the winner needs help with this
 auction order, name the lot title, name the status label for the reason
-(`Setup overdue`, `Payment overdue`, or `Partially paid`), and leave space
-for the winner's question. When an invoice id exists and the reason is not
-setup overdue, the body SHALL name that invoice id.
+(`Setup overdue`, `Payment overdue`, `Partially paid`, or `Cancelled`), and
+leave space for the winner's question. When an invoice id exists and the reason
+is not setup overdue, the body SHALL name that invoice id; a Cancelled order
+that never had an invoice names none.
 
 **Partial payment** - When the reason is partial payment, the body MAY list
 receipt ids and MUST NOT name the remaining balance. When no receipt id
@@ -1912,6 +1988,16 @@ exists yet, the body SHALL list none.
 - **WHEN** the winner opens Contact Us
 - **THEN** Subject is `Auction order IN-LK42302: payment overdue`
 - **AND** Subject does not name `IN-LK42301`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-e1w rev=1 -->
+#### Scenario: winner-order-SC-275 - Contact Us on a cancelled order names the lot and the cancellation
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** a cancelled auction order for lot title "Charizard Base Set PSA 10", with current invoice id `IN-LK42301` and an operator cancellation category and note
+- **WHEN** the winner chooses Contact Us
+- **THEN** Subject is `Auction lot Charizard Base Set PSA 10: order cancelled`
+- **AND** Message names that lot title, that invoice id and status Cancelled
+- **AND** neither Subject nor Message names the cancellation category or note
 
 ### Requirement: Add Address collects phone with country
 
@@ -2671,3 +2757,92 @@ not require carrier name in Order Progress.
 - **WHEN** the winner opens the order
 - **THEN** Order Progress still shows the tracking number as a link to the
   carrier tracking page
+
+### Requirement: Tax info tooltip
+
+On Winner Order's Order Summary, Tax explains itself whenever the line is shown.
+
+**Tooltip** - Grade10 SHALL offer a brief info tooltip beside Tax whenever the
+Tax line is shown.
+
+**Copy** - The tooltip SHALL read `Set by Grade10 for where your order ships.
+Some orders have none.`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-d0w rev=1 -->
+#### Scenario: winner-order-SC-217 - A shown Tax line carries its info tooltip
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice with Tax of 6000 minor units in HKD
+- **WHEN** the winner reads Order Summary
+- **THEN** the Tax line shows 6000 minor units in HKD
+- **AND** the Tax line sits between Insurance and Payment Processing Fee
+- **AND** it offers an info tooltip reading `Set by Grade10 for where your order
+  ships. Some orders have none.`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-mph rev=1 -->
+#### Scenario: winner-order-SC-212 - An absent Tax line offers no tooltip
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice without adding Tax
+- **WHEN** the winner reads Order Summary
+- **THEN** no Tax line is shown
+- **AND** no Tax tooltip is offered
+
+### Requirement: Tax before the invoice is sent
+
+Before an operator sends the invoice, Order Summary names Tax without an amount.
+
+**Before send** - Before an operator has sent the invoice, Winner Order's Order
+Summary SHALL show Tax as TBD with the other fee rows.
+
+**No amount** - Grade10 SHALL NOT show a calculated Tax amount before the
+operator sends the invoice.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1ok rev=1 -->
+#### Scenario: winner-order-SC-213 - Tax reads TBD before the invoice is sent
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order before an operator has sent its invoice
+- **WHEN** the winner reads Order Summary
+- **THEN** Tax is shown as TBD with the other fee rows
+- **AND** no calculated Tax amount is shown
+- **AND** the Tax line offers its info tooltip
+
+### Requirement: Winner Order explains cancellation without exposing the reason
+
+For a cancelled auction order, Winner Order SHALL show the cancellation date as a
+day-only date in the viewer's local zone, the lot and winning bid, and Contact Us as the only next action. It SHALL not show
+the operator's category or note, SHALL not show a stepper or payment action,
+and SHALL preserve the order's retained facts.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1fb rev=2 -->
+#### Scenario: winner-order-SC-143 - Cancelled keeps the lot and winning bid visible
+**Serves:** winner-order-US-13 - Winner learns their order was cancelled
+
+- **GIVEN** a cancelled auction order with a lot and winning bid
+- **WHEN** the winner opens Winner Order
+- **THEN** it shows Cancelled on the recorded day in the viewer's local zone, the lot and winning bid
+- **AND** it shows Contact Us only, without the internal reason
+
+### Requirement: Winner Order shows a locked partially paid record
+
+When an operator has recorded money but has not closed the invoice, Winner
+Order SHALL show Partially Paid as a locked state with Contact Us and a receipt
+link for each payment in the existing receipt row, oldest first. It SHALL show
+no running balance: it SHALL keep showing the full invoice amount, never a
+remaining balance. It SHALL hide Pay, Submit Payment Proof, View Bank Details,
+address changes, invoice reissue and cancellation, and SHALL show no further
+payment deadline.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-34b rev=1 -->
+#### Scenario: winner-order-SC-156 - The partially paid order is locked
+**Serves:** winner-order-US-20 - Winner sees partial collection without a second order
+
+- **GIVEN** an order with one partial payment and money still due
+- **WHEN** the winner opens Winner Order
+- **THEN** it reads Partially Paid
+- **AND** it offers Contact Us, shows the full invoice amount and shows no
+  remaining balance
+- **AND** it shows a separate receipt link for each recorded payment, oldest first
+- **AND** it shows no Pay, Submit Payment Proof, View Bank Details, reissue,
+  address change or cancel action

@@ -9,10 +9,10 @@ fields table reserved a Tax line and left it empty, "reserved for the separate
 tax change"; nobody opened that change, so the reservation has sat unfilled
 while the rest of the invoice shipped.
 
-The gap is not theoretical. `InvoicePdf` and `ReceiptPdf` already carry a
-`taxLine` slot that no consumer can fill, the receipt requirement already
-itemises "any tax amount", and three feature test cases already name a tax
-amount they cannot exercise. Every layer was built ready for a line that has
+The gap is not theoretical. `InvoicePdf` and `ReceiptPdf` already render an optional `taxLine`,
+but no consumer has a tax amount to pass. The
+receipt requirement already itemises "any tax amount", and three feature test
+cases already name a tax amount they cannot exercise. Every layer was built ready for a line that has
 no source.
 
 Today an operator with a taxable lot has one option: fold the tax into
@@ -30,9 +30,9 @@ watch.
 - **Tax becomes an amount the operator enters**, on the quote, beside
   Insurance and under the same rules: optional, above zero when added, absent
   when none, and changeable on a reissue with a reason
-- **The Order Summary gains a Tax line**, between Insurance and Subtotal. It
-  reads TBD before send, like the other quoted rows, then shows the amount or
-  disappears
+- **The Order Summary gains a Tax line**, between Insurance and Payment
+  Processing Fee. It reads TBD before send, like the other quoted rows, then
+  shows the amount or disappears
 - **Tax sits inside the Subtotal**, so a card invoice's processing fee is
   grossed up on it and Grade10 keeps the Subtotal whole
 - **The line carries an info tip** reading `Set by Grade10 for where your order
@@ -42,8 +42,14 @@ watch.
   what a winner in Awaiting Setup actually wonders, since the row reads TBD
   whether or not they will owe anything. The tip rides the line rather than
   appearing in one status and vanishing in the next
-- **The invoice and the receipt state it**, filling the `taxLine` slot the
-  PDF blocks already expose
+- **The invoice and the receipt state it** as the optional `taxLine` the PDF
+  blocks already accept, before the boxed Subtotal summary
+- **The receipt names Tax when added.** `Records the winner keeps` replaces
+  "any tax amount supplied by the separate tax capability" with "Tax when
+  added", and `winner-order-SC-18` follows
+- **The shipping tracker is the tracking number as the carrier link**, with no
+  separate carrier name, in `Records the winner keeps` and `winner-order-SC-20`.
+  This carries `clarify-auction-shipping-progress-copy` Q6
 - **Grade10 prices nothing.** No rate, no regime, no jurisdiction rule, no tax
   provider. The operator decides the amount and owns it
 
@@ -62,9 +68,11 @@ See [Non-Goals](decisions.md#non-goals).
 - `grade10-site/auction/winner-order`: the Tax line becomes a stated
   requirement instead of a reserved row — its place in the summary, its TBD
   before send, its absence when none, its presence in the Subtotal, and its
-  place on the invoice and the receipt
+  place on the invoice and the receipt. `Records the winner keeps` is modified
+  here for the receipt's Tax wording and the tracker's carrier link, since one
+  change may edit a requirement at a time
 - `grade10-admin/auction/post-sale`: the quote takes an optional Tax amount,
-  refuses it at zero, carries it through a reissue, and logs it
+  refuses it at zero, and carries it through a reissue
 
 ## Impact
 
@@ -72,16 +80,22 @@ See [Non-Goals](decisions.md#non-goals).
   that contains it
 - **The operator quote and reissue forms** — one optional amount field each
 - **`shared/ui/invoice-and-receipt-pdf`** — no contract change; this change
-  supplies the `taxLine` the block already accepts
+  supplies Tax as the optional `taxLine` its durable contract already defines
 - **The audit log** — Tax joins the quoted amounts a reissue records before
-  and after
+  and after, written by `complete-auction-post-sale`'s `Invoice log history`
+  (Q8), not by this change
 - **The set of quoted amounts is enumerated in six places** in
   `openspec/specs/grade10-admin/auction/post-sale/spec.md` — the reissue
   action summary, the audit `Changed parts` cell, the quote steps, the send
   refusals, the reissue requirement, and what counts as a change. Adding Tax
   moves all six in step, or names the set once and has the others refer to it.
+  The `Changed parts` cell is `complete-auction-post-sale`'s, per Q8, so this
+  change moves the other five.
   The fee rows that carry an info tip are a seventh such set, in the other
-  capability. The requirements round decides both together
+  capability. This change adds Tax to each post-sale set in place and gives
+  the Tax tip its own requirement beside Insurance's. Naming each set once
+  waits for the third line of this shape, per [Q9](decisions.md#decisions)
+
 **No new journey.** Tax is an amount inside `winner-order-US-01` and
 `post-sale-US-05`, not a new walk. The winner-order journeys delta is context
 only, deliberately.

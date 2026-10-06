@@ -1,15 +1,5 @@
 # grade10-site/auction/account-record Specification
 
-## Purpose
-
-A signed-in collector's own record of the auction listings they bookmark —
-by watching or by bidding — on one My Auctions table: how a watch is made
-and removed, how a bid enrolls the list, what Status shows while a listing is
-open and after it closes, and what a winner and a losing bidder
-are told once a listing closes. The detailed Bidding index and listing
-history remain the contract of `grade10-site/auction/bidding-history`.
-Owner-only — nobody but the collector sees their record.
-
 ## Feature set
 
 - Won Status

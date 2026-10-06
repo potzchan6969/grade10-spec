@@ -22,7 +22,7 @@ payments that failed,
 ### post-sale-US-05: Operator quotes and sends a winner's invoice
 
 **As an** operator,
-**I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
+**I want** to price Shipping & Handling, and Insurance and Tax when the lot needs them, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
 ### post-sale-US-02: Operator closes out a won listing
@@ -78,3 +78,21 @@ payments that failed,
 **As an** operator,
 **I want** Setup Overdue and Payment Overdue as queue outcomes,
 **so that** I find deadline-missed orders the same way the winner's Status names them.
+
+### post-sale-US-13: Operator cancels an order knowing what follows
+
+**As an** operator with payment processing,
+**I want** to pick why I am cancelling and see what the cancel sets off before I confirm, then reach the lot to relist it,
+**so that** I never cancel by surprise and every cancellation can be counted by reason.
+
+### post-sale-US-14: Operator returns money paid after a cancel
+
+**As an** operator,
+**I want** a cancelled order that received a card payment afterwards to be flagged until I clear it with a reason,
+**so that** no winner is left paying for a lot they no longer have.
+
+### post-sale-US-12: Operator collects a lot's price across more than one payment
+
+**As a** payment operator working an invoice a winner cannot pay in one go,
+**I want** to record each payment as it arrives, smaller than the balance owed, and see the order until it is settled,
+**so that** every partial payment ends up correctly recorded without me tracking the balance outside Grade10.

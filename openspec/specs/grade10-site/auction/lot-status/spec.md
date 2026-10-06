@@ -7,6 +7,7 @@
     the internal lot status
   - Worked out, not saved: taken from the lot, so it always matches the lot
   - Lot, not order: the winner's order status is shown separately
+  - Preparing Shipment maps to Ended (was Processing)
 - Hidden lots
   - Never shown: Draft and Called off lots do not appear on any
     collector page
@@ -53,7 +54,7 @@ Hidden:
 | Awaiting Setup | Ended |
 | Preparing Invoice | Ended |
 | Pending Payment | Ended |
-| Processing | Ended |
+| Preparing Shipment | Ended |
 | Shipped | Ended |
 | Delivered | Ended |
 | Cancelled | Ended |
@@ -99,10 +100,10 @@ lot status.
 #### Scenario: grade10-site-auction-lot-status-SC-04 - A lot with a winner is Ended whatever state its order is in
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
-- **GIVEN** three lots with a winner, whose orders are awaiting payment, shipped
-  and cancelled
+- **GIVEN** four lots with a winner, whose orders are awaiting payment,
+  Preparing Shipment, Shipped, and Cancelled
 - **WHEN** Grade10 works out their external lot status
-- **THEN** all three are Ended
+- **THEN** all four are Ended
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-flh rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-12 - A lot that ended with no winner is Ended

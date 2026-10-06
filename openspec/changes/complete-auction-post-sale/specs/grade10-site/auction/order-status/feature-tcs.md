@@ -144,6 +144,185 @@ Runs once per row of **Test data**.
 * The invoice status is unchanged.
 * The order derives as the row's **The order derives as**.
 
+### auction-status-US1-TC20-1: Proof upload is refused on an invoice that is not pending
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** auction-status-US-01
+
+**Pre-conditions:**
+
+* An auction order whose invoice status is `<status>`.
+
+**Test data:**
+
+| `<status>` |
+| --- |
+| `not_issued` |
+| `paid` |
+| `cancelled` |
+
+**Steps:**
+
+1. Record a winner proof upload against the invoice.
+2. Read the invoice status.
+
+**Expected Results:**
+
+* The upload is refused.
+* The invoice status is still `<status>`.
+
+### auction-status-US1-TC21-1: A new order starts not issued and unfulfilled, and expiry writes only the invoice status
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** auction-status-US-01
+
+**Pre-conditions:**
+
+* A published lot with a winning bid, whose close is due.
+
+**Steps:**
+
+1. Let the lot close, and read the new auction order's invoice and fulfilment statuses.
+2. Send its invoice with a payment deadline of 2026-09-19T09:00:00Z, then let that deadline pass with no payment.
+3. Read both statuses again.
+
+**Expected Results:**
+
+* Step 1 reads `not_issued` and `unfulfilled`.
+* Step 3 reads `expired` and `unfulfilled`.
+
+### auction-status-US1-TC22-1: Reissuing an expired invoice makes it pending with the new deadline
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** auction-status-US-01
+
+**Pre-conditions:**
+
+* An auction order whose invoice status is `expired`.
+* admin(operator with payment processing).
+
+**Steps:**
+
+1. Reissue the invoice with a fresh deadline and a reason.
+2. Read the invoice status and the payment deadline.
+
+**Expected Results:**
+
+* The invoice status is `pending`.
+* The payment deadline is the one the reissue set.
+
+### auction-status-US1-TC23-1: A write the transitions do not allow leaves the invoice status unchanged
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** auction-status-US-01
+
+**Pre-conditions:**
+
+* An auction order in the row's starting state.
+* admin(operator with payment processing).
+
+**Test data:**
+
+| Starting state | Write |
+| --- | --- |
+| `paid` | Set the invoice status to `pending` |
+| `cancelled` | Record a payment against the invoice |
+| `not_issued`, with no delivery address confirmed | Send the invoice |
+
+**Steps:**
+
+1. Attempt the row's write.
+2. Read the invoice status.
+
+**Expected Results:**
+
+* The write is refused.
+* The invoice status is still the row's starting status.
+
+### auction-status-US1-TC24-1: Proof moves a pending invoice to payment_verifying, and an operator moves it on
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** auction-status-US-01
+
+**Pre-conditions:**
+
+* An auction order whose bank transfer invoice is `pending` and whose fulfilment status is `unfulfilled`.
+* admin(operator with payment processing).
+
+**Test data:**
+
+| `<check>` | `<invoice status>` | `<order status>` |
+| --- | --- | --- |
+| return | `pending` | Pending Payment |
+| confirm | `paid` | Preparing Shipment |
+
+**Steps:**
+
+1. Record a winner proof upload, and read the invoice status.
+2. As the operator, <check> the proof.
+3. Read the invoice status and the derived order status.
+
+**Expected Results:**
+
+* Step 1 reads `payment_verifying`.
+* Step 3 reads <invoice status> and <order status>.
+
 ## Settled
 
 - A card payment that completes is never turned away: at the order total it pays a pending invoice, and an expired one flagged Paid late; anywhere else it is recorded, flagged, and moves nothing.
@@ -152,6 +331,24 @@ Runs once per row of **Test data**.
 
 **Run:** The same agent wrote the blind cases and the scenarios, so the two readings are not independent. The cases were written from the Feature set, the journey and the post-sale requirement on money that lands, then joined to the scenarios on their anchors.
 
-- **Covered:** `auction-status-SC-55` ← `US1-TC16-1`; `-SC-56` ← `US1-TC17-1`; `-SC-57` ← `US1-TC18-1`; `-SC-25` and `-SC-46` ← `US1-TC19-1`.
-- **Kept with the durable suite:** the restated scenarios whose lines did not move.
+**Run:** 2026-10-06, QA2. A fresh reader joined every scenario and every case in this suite on their anchors. "Kept with the durable suite" did not hold: the durable suite asserts few of the restated scenarios, so each is named below.
+
+| Spec scenario | Disposition |
+| --- | --- |
+| `auction-status-SC-01`, `SC-02` | Were uncovered; added `US1-TC21-1` |
+| `auction-status-SC-03` | Was uncovered; added `US1-TC22-1` |
+| `auction-status-SC-42` | Covered by the durable `auction-status-US1-TC13-1`, restored from its archive |
+| `auction-status-SC-13`, `SC-14`, `SC-22` | Were uncovered; added `US1-TC23-1` |
+| `auction-status-SC-25` | Covered by `US1-TC19-1`, and by the durable `auction-status-US1-TC2-1` |
+| `auction-status-SC-45`, `SC-47` | Were uncovered once their archived cases were lost; added `US1-TC24-1` |
+| `auction-status-SC-46` | Covered by `US1-TC19-1` for the card payment, by the durable `auction-status-US1-TC14-1` for the reissue, and for cancel and manual settlement by `post-sale-US7-TC19-1`, which states them on the operator's side |
+| `auction-status-SC-48` | Covered by the durable `auction-status-US1-TC15-1` for `expired`, and by `US1-TC20-1` for the other three |
+| `auction-status-SC-55` | Covered by `US1-TC16-1` |
+| `auction-status-SC-56` | Covered by `US1-TC17-1` |
+| `auction-status-SC-57` | Covered by `US1-TC18-1` |
+| Contradicted readings | None |
+
+- **Covered** - each blind case reaches the scenario named for it; none carries behaviour no scenario states.
+- **Restored** - the durable `auction-status-US1-TC13-1` to `-TC15-1`, archived with `2026-09-18-add-winner-bank-transfer` and left behind by its fold, are back in the durable suite as drafts.
+- **Raised for the human** - the same archive's `auction-status-US1-TC4-1` to `-TC12-1` were lost too, but `close-overdue-address-confirmation` has since issued those ids with other meanings, so the validator reads them as live. Their scenarios are covered above; the ids need a decision in that change.
 - **Out of suite:** none.

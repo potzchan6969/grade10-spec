@@ -1,11 +1,5 @@
 # grade10-site/auction/order-status Specification
 
-## Purpose
-
-The auction order's state: two independently written primitives for the money
-and the goods, the conditions that qualify them, and the single ordered
-derivation that resolves one status a buyer and an operator both read.
-
 ## Feature set
 
 - Derived order status

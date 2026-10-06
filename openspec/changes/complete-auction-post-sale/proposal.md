@@ -28,9 +28,21 @@ winner confirming setup, in production. It is 0 today, since no send succeeds.
   operator's own, typed as an integer of zero or more; empty means zero. The
   sent invoice never re-prices, and no send needs the payment provider
 - **Tax on the quote**, as `add-winner-order-tax-line` writes it
-- **The winner's page keeps its design.** Only the admin console is
+- **The winner's page keeps its layout.** Only the admin console is
   redesigned. Behind the page, bank transfer is offered only where Grade10
   holds bank details for the currency, and setup stays locked once confirmed
+- **Order setup takes the settled answers.** Card is offered only in a
+  currency with a card fee rule, and reads not yet available elsewhere; where
+  neither method is offered, the winner reads that payment is not yet
+  available, with Contact Us, and the setup deadline keeps running. Each method
+  shows its fee wording. Billing Add Address uses the delivery Country/Region
+  list, names read in the account's language, and an unsaved one-time address
+  stays on the order until setup ends
+- **Copy Message confirms in place.** The button reads Copied for a moment, and
+  no toast appears
+- **WhatsApp for transfer contact.** The order page shows the winner's phone
+  from the delivery address, where an operator reaches them about a transfer
+  or a proof
 - **What was seen is sent.** A send or reissue carries the total the operator
   read, and is refused when Grade10 now prices it differently; the dialog shows
   the new total
@@ -41,6 +53,9 @@ winner confirming setup, in production. It is 0 today, since no send succeeds.
   comments. The listing queue and its requirements are removed
 - **Proofs the operator can open.** The winner's files open on the order page;
   a returned proof carries a reason the winner reads, and the deadline resumes
+- **Reopen setup and record setup on the order.** An operator gives a winner
+  in Setup Overdue a fresh 48 hours with a reason, or records the winner's
+  setup given by phone, never after the invoice is sent
 - **Dispatch and delivery on the order**, with the carrier and tracking number,
   then the carrier's proof
 - **Money that lands is always recorded.** A card payment the invoice did not
@@ -67,26 +82,40 @@ See [Non-Goals](decisions.md#non-goals).
 ### Modified Capabilities
 
 - `grade10-site/auction/winner-order`: bank transfer only where Grade10 holds
-  bank details, a proof file judged by its content, and no card payment
-  started on an expired or checked invoice.
+  bank details, card only where Finance set a card fee rule, what the winner
+  reads where neither is offered, the fee wording at the method choice, Copy
+  Message confirming through its own state, the billing Country/Region list,
+  names in the account's language, the one-time address kept on the order, and
+  no card payment started on an expired or checked invoice.
 - `grade10-admin/auction/post-sale`: the Orders worklist and order page, the
   fee by payment method, what was seen is sent, proofs, dispatch and delivery
-  on the order, money that lands, the grant table, how long an order waited in
+  on the order, money that lands, the operator's reopen and record-setup
+  actions, the winner's phone for WhatsApp contact, the
+  grant table, how long an order waited in
   place of the 72-hour mark, and the listing queue's requirements removed.
-- `grade10-admin/auction/payment-settings`: the card fee rule, and payment
-  processing in place of settlement as the grant.
+- `grade10-admin/auction/payment-settings`: the card fee rule, card at order
+  setup only where a rule is saved, and payment processing in place of
+  settlement as the grant.
 - `grade10-site/auction/order-status`: an expired or verifying invoice never
   starts a card payment, and one that completes anyway is recorded.
+- `grade10-admin/auction` domain suite (`domain-tcs.md`): the durable
+  `grade10-admin-auction-e2e-US3-TC1-1`, a lot collected through to delivered,
+  is rewritten as `-TC1-2` for the Orders worklist and order page - worklist,
+  Send invoice, Record payment, Dispatch, Confirm delivery - and returns to
+  draft. `-US3-TC2-1`, a wire request that releases the card hold, is
+  deprecated as `-TC2-2`, since the wire request no longer exists. Both keep
+  their trace markers with the revision raised.
 
 ## Impact
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | Reads `Awaiting Setup`; My auction orders names all twelve statuses from the catalog; the winner's page keeps its design and procedures |
+| `apps/frontend/grade10` | Reads `Awaiting Setup`; My auction orders names all twelve statuses from the catalog; the winner's page keeps its layout, and its setup takes the method availability, fee wording, billing list, account-language names, the kept one-time address and Copy Message's own confirmation |
 | `apps/admin/grade10` | Orders replaces the Queue and Winner orders tabs, with a page per order at its own address and a dialog per action; Payment Settings gains the card fee rule; the Test tab gains test winners |
-| Auction service | The card fee rule; a card fee Grade10 computes and a bank transfer fee the operator sets; send and reissue priced again against the total read; order status read from the order's facts; money that lands recorded and flagged; proof files served to operators; order-level dispatch and delivery; the worklist query; the listing-level post-sale actions removed; test winners |
-| Store service | Passes the winner procedures through unchanged, with the session's user |
+| Auction service | The card fee rule; a card fee Grade10 computes and a bank transfer fee the operator sets; send and reissue priced again against the total read; order status read from the order's facts; money that lands recorded and flagged; proof files served to operators; order-level dispatch and delivery; the worklist query; the listing-level post-sale actions removed; test winners; the methods offered per currency and the winner's one-time address kept on the order |
+| Store service | Passes the winner procedures through unchanged, with the session's user, and forwards the new one-time address procedure |
 | `apps/emails` | The Proof not accepted letter's template |
+| `apps/preview` | The Contact Us preview's Copy Message reads Copied with no toast |
 | `@grade10/ui`, `@grade10/design-system` | No export or token change |
 
 ## Ordering and Dependencies
@@ -102,8 +131,11 @@ See [Non-Goals](decisions.md#non-goals).
   left as it is
 - **Beside `add-my-auction-orders`.** Pay with Card starts a fresh session each
   time, as that change writes it
-- **Beside the other post-sale changes.** Partial payments, cancellation
-  reasons and reopening the address form add their own requirements, and the
+- **Before `close-overdue-address-confirmation`**, which declares this change.
+  Reopening and recording setup are this change's requirement; that change
+  keeps the persisted address deadline they reset.
+- **Beside the other post-sale changes.** Partial payments and cancellation
+  reasons add their own requirements, and the
   order page carries their actions. The worklist places Partially Paid under
   Waiting on winner and keeps the cancellation category filter. Card money
   counts toward a balance only where "Money that lands is always recorded"

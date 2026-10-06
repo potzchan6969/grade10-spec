@@ -110,6 +110,18 @@ current currency minimum,
 **I want** my invoice and payment receipts to show stable public references built from my payment reference,
 **so that** I can contact Grade10, make a payment, and reconcile charges without exposing internal system keys.
 
+### winner-order-US-13: Winner learns their order was cancelled
+
+**As a** winner whose order an operator cancelled,
+**I want** Winner Order to say it was cancelled and when, with the lot I won and a way to contact Grade10,
+**so that** I know the order is closed and who to ask about it.
+
+### winner-order-US-20: Winner waits out a partial payment an operator is collecting
+
+**As a** winner whose invoice an operator has started collecting in parts,
+**I want** a locked order with Contact Us and a receipt for every payment made so far,
+**so that** I always have proof of what I have paid, without needing to track a running balance myself.
+
 ## Retired
 
 - `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.

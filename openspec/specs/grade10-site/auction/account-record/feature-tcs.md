@@ -446,8 +446,8 @@ Runs once per row of **Test data**.
 ## grade10-site-auction-account-record-US3: Follow a listing I won through to delivery
 
 **As a** winner,
-**I want** to see what I owe and where my card is,
-**so that** I do not have to ask Grade10 what happens next.
+**I want** a paid, undispatched Won row to read Preparing Shipment,
+**so that** My Auctions matches Winner Order without implying the lot shipped.
 
 <!-- trace:case id=g10.auction-account-record.TC-hj7 rev=1 covers=g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb -->
 ### grade10-site-auction-account-record-US3-TC2-1: A Won row follows the proof check's outcome
@@ -564,6 +564,75 @@ Runs once per row of **Test data**.
 
 * Your Standing reads the row's value.
 * The row offers View order.
+
+<!-- trace:case id=g10.auction-account-record.TC-lvl rev=1 covers=g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb -->
+### grade10-site-auction-account-record-US3-TC20-1: Paid undispatched Won row reads Preparing Shipment
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-03
+
+**Pre-conditions:**
+
+* customer(winner) is on My Auctions with <won_preparing_shipment>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <won_preparing_shipment> | A won listing with invoice `paid` and fulfilment `unfulfilled` |
+
+**Steps:**
+
+1. Read Status on that row.
+
+**Expected result:**
+
+* Status reads Preparing Shipment.
+* Status badge uses `default`.
+
+### grade10-site-auction-account-record-US3-TC23-1: Shipped Won row keeps the default badge
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-03
+
+**Pre-conditions:**
+
+* customer(winner) is on My Auctions with <won_shipped>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <won_shipped> | A won listing with invoice `paid`, fulfilment `fulfilled`, and no delivery confirmation |
+
+**Steps:**
+
+1. Read Status on that row.
+
+**Expected result:**
+
+* Status reads Shipped.
+* Status badge uses `default`.
 
 ---
 
@@ -1045,25 +1114,23 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-account-record-US8: Winner opens settlement from My Auctions
+## grade10-site-auction-account-record-US8: Winner revisits a partially paid order
 
-**As a** winner,
-**I want** every Won row to open Winner Order without helper clutter,
-**so that** I can continue settlement without reading contact copy on the table.
+**As a** winner with an order being collected in parts,
+**I want** My Auctions to keep the Won row linked to the order,
+**so that** I can return to the locked payment record.
 
 <!-- trace:case id=g10.auction-account-record.TC-hc2 rev=1 covers=g10.auction-account-record.SC-chv -->
-### grade10-site-auction-account-record-US8-TC1-1: Every Won row opens its own Winner Order
-
-Runs once per row of **Test data**.
+### grade10-site-auction-account-record-US8-TC1-1: A partially paid Won row opens Winner Order
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1071,27 +1138,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) won <lot>, whose order reads the row's state.
-
-**Test data:**
-
-| Order state |
-| --- |
-| Awaiting Setup |
-| Pending Payment |
-| Payment Overdue |
-| Cancelled |
-| Refunded |
+* customer owns a Won lot whose order is Partially Paid.
 
 **Steps:**
 
-1. Navigate to <my auctions url>.
-2. Click View order on <lot>'s row.
+1. Open My Auctions and read the Won row.
+2. Select View order.
 
 **Expected Results:**
 
-* Step 1: <lot>'s row reads Won with the row's state and offers View order.
-* Step 2: Winner Order opens for <lot>'s order.
+* The row status is Partially Paid with its warning treatment.
+* View order opens the Partially Paid Winner Order.
 
 <!-- trace:case id=g10.auction-account-record.TC-flb rev=2 covers=g10.auction-account-record.SC-chv -->
 ### grade10-site-auction-account-record-US8-TC2-2: A Didn't win row offers no View order
@@ -1443,10 +1500,7 @@ Runs once per row of **Test data**.
 
 | Finding | Disposition |
 | --- | --- |
-| Suite required View order on every Won | Folded as SC-56 |
-| Suite required no View order on Didn’t win | Folded as SC-57 |
-| Suite required no row contact / no Won helpers | Folded as SC-22 amend + SC-58 |
-| My Auctions uses Status for both overdue outcomes | Folded as SC-63 |
+| The Won row remains linked while collection is partial | **Folded in:** `grade10-site-auction-account-record-SC-62` |
 
 **Run:** QA2 rerun, 2026-10-01. QA1's blind pass read the frozen Purpose and Feature set, the change's journeys, `proposal.md`, `decisions.md` with its `## Raised`, the linked pages under `docs/prds/`, `openspec/config.yaml`'s context, the durable suite and the change's domain draft with their `## Reconciliation` stripped; it was denied every `## Requirements` section, `openspec/specs/` beyond those, and the archive. QA2 read both readings, the delta, `tech-design.md`, `tasks.md`, and the built My Auctions row mapping in grade10 for reference. It is a statement, not proof.
 

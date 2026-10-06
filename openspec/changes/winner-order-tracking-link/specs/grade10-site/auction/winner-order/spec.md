@@ -22,9 +22,7 @@ Progress SHALL show no separate Track shipment control or carrier name. The
 link SHALL remain after `delivery_confirmed` is set while the fulfilment stays
 `fulfilled`.
 
-This requirement governs the live Winner Order presentation only. The carrier
-data a winner keeps remains governed by `Records the winner keeps`; it does
-not require carrier name in Order Progress.
+This requirement governs the live Winner Order presentation only.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-h7d rev=1 -->
 #### Scenario: winner-order-SC-251 - A dispatched lot shows the tracking number as the carrier link

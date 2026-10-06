@@ -83,7 +83,7 @@
 * Badge reads Shipped and uses `default`.
 * Shipping is the current progress step with the day-only ship date.
 * The tracking number is the external carrier link.
-* No separate Track shipment control or carrier name appears.
+* Order Progress adds no separate Track shipment control and no separate carrier name.
 
 ## Reconciliation
 
