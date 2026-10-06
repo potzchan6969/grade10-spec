@@ -481,19 +481,6 @@ none marked when no item owns it,
 * The account label in place of the sign-in email is `SiteHeader`'s alone: a
   signed-in collector always has an email.
 
-## REMOVED Settled
-
-* Signed-in account entry opens a menu, the sign-in email with its small
-  initial avatar above the items, offering My Auctions and Sign Out on
-  auction launch, plus Profile once carried, My Orders and Membership once
-  Store answers — not the profile directly; the header offers Sign Out from
-  that menu as well as the profile wherever it is carried.
-* The account menu's item order under every combination of {Profile carried,
-  Store answers} is fully specified: Profile (when carried), My Orders (when
-  Store answers), My Auctions, Membership (when Store answers), Sign Out — in
-  that fixed order, each omitted independently when its own condition is not
-  met.
-
 ## Reconciliation
 
 **Run:** QA1 blind pass, 2026-10-06, for `omit-profile-account-menu`, `grade10-site/site/page-shell`. It rewrote US3-TC3, US3-TC5 and US3-TC11, retired US3-TC2, added a KYC result to US3-TC7, and raised one question, now a row of `decisions.md`'s `## Raised` table. It left no statement of what it read and was denied, so none is claimed here.
@@ -504,7 +491,7 @@ none marked when no item owns it,
 
 **Run:** QA2 reconciliation, third run, 2026-10-06, after Page Shell · Account Menu gained its Withheld pages line and the proposal became neutral on Q1. Every case and scenario was joined again; no disposition moved. It dropped the journeys file's context journeys, which no scenario or case of this change anchors on.
 
-**Run:** QA2 reconciliation, fourth run, 2026-10-06, after the acceptance review's third round. The journey dropped its Cart clause, so `grade10-site-site-page-shell-US3-TC6-1` and `grade10-site-site-page-shell-US3-TC7-2` dropped their Cart results and keep their versions. The three deprecated cases cover none. The suite retracts the durable Settled lines this change makes false. No other disposition moved.
+**Run:** QA2 reconciliation, fourth run, 2026-10-06, after the acceptance review's third round. The journey dropped its Cart clause, so `grade10-site-site-page-shell-US3-TC6-1` and `grade10-site-site-page-shell-US3-TC7-2` dropped their Cart results and keep their versions. The three deprecated cases cover none. The two durable Settled lines this change makes false are struck by hand at acceptance. No other disposition moved.
 
 **Run:** QA2 reconciliation, fifth run, 2026-10-06, after the deltas' feature sets kept only the lines they change (Q12). The anchor `grade10-site-site-page-shell-US-03` did not move, and every case and scenario was joined again; no disposition moved. The Context journeys row now gives its reason without the suite warning, which the gate no longer issues for a context journey.
 
@@ -529,7 +516,7 @@ none marked when no item owns it,
 | `grade10-site-site-page-shell-US3-TC13-1` | Case added | `grade10-site-site-page-shell-SC-65` had no case, before this change or after it |
 | Raised: Membership in the journey once Store answers | Landed as Q5, journey corrected | The journey named Membership once Store answers and "never a Profile item", while the page holds both open. Page Shell is the source, so the journey names neither until Q1 and Q5 are answered |
 | Raised: the label fallback without an email | Landed as Q14, settled | The site always has the email, so page-shell drops the fallback with its scenario and `grade10-site-site-page-shell-US3-TC9-2` retires |
-| Settled: the menu's Profile and Membership lines | Retracted | The durable suite settled Profile once carried and Membership once Store answers, in two lines, which Product holds open (Q1, Q5). `## REMOVED Settled` retracts both, and `## Settled` states the menu this change settles, its withheld pages and the label fallback (Q14) |
+| Settled: the menu's Profile and Membership lines | Retracted | The durable suite settled Profile once carried and Membership once Store answers, in two lines, which Product holds open (Q1, Q5). The fold has no rule that removes a durable Settled line, so acceptance strikes both from the durable suite by hand. `## Settled` states the menu this change settles, its withheld pages and the label fallback (Q14) |
 | Journey: Cart in the bar | Dropped | No scenario serving `grade10-site-site-page-shell-US-03` states Cart; `grade10-site-site-page-shell-US-04` and `grade10-site-site-page-shell-US-06` own it, so the clause and the two Cart results left |
 | Context journeys | Dropped, one restated | No scenario or case of this change anchors on US-01, US-02, US-04, US-06 or US-07. `grade10-site-site-page-shell-SC-13` and `grade10-site-site-page-shell-SC-14` serve `grade10-site-site-page-shell-US-05`, so the journeys file restates it as context beside `grade10-site-site-page-shell-US-03`, which the change modifies |
 | `grade10-site-site-page-shell-US5-TC2-2` | Rewritten, bumped | `grade10-site-site-page-shell-SC-14` now reads "the account page". The case opens the account page on staging, which carries it, in place of `<grade10 profile url>`. It asserts no marked item and nothing about a listed surface, so its marker covers `grade10-site-site-page-shell-SC-14` alone |

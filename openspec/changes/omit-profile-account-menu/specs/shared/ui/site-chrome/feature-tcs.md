@@ -309,12 +309,6 @@ reimplementing its behavior.
   `SiteHeader` always supplies one: `onSignIn` signed out, the account menu
   signed in.
 
-## REMOVED Settled
-
-* `onOrders` ("My Auction Orders") keeps its existing export contract; a
-  dedicated account-menu requirement for it is `add-my-auction-orders`'s to
-  raise, not this capability's.
-
 ## Reconciliation
 
 **Run:** QA1 blind pass, 2026-10-06, for `omit-profile-account-menu`, `shared/ui/site-chrome`. It wrote US1-TC25 and US1-TC26 and raised two questions, now rows of `decisions.md`'s `## Raised` table. It left no statement of what it read and was denied, so none is claimed here.
@@ -325,7 +319,7 @@ reimplementing its behavior.
 
 **Run:** QA2 reconciliation, third run, 2026-10-06, after US1-TC8's marker was narrowed to the two Chrome exports scenarios it walks. Every Header controls scenario the old marker named is still covered by a durable case under that group, US1-TC5 to US1-TC20, so nothing is left uncovered. No disposition moved.
 
-**Run:** QA2 reconciliation, fourth run, 2026-10-06, after the acceptance review's third round. `## REMOVED Settled` retracts the durable line that kept `onOrders`, and `## Settled` records Q8, Q9 and Q11. No case or scenario moved.
+**Run:** QA2 reconciliation, fourth run, 2026-10-06, after the acceptance review's third round. The durable Settled line that kept `onOrders` is now false, and acceptance strikes it by hand, because the fold has no rule that removes one. `## Settled` records Q8, Q9 and Q11. No case or scenario moved.
 
 **Run:** QA2 reconciliation, fifth run, 2026-10-06, after the delta's feature set kept only the Handler-gated and Account menu lines (Q12). `Chrome exports` and `Header controls` still resolve from the durable feature set, so every case keeps its trace. `shared-ui-site-chrome-SC-17` and `shared-ui-site-chrome-SC-29` now serve `Header controls`, and no case moved.
 
