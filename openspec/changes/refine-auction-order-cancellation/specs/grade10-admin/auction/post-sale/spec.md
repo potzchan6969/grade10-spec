@@ -4,7 +4,7 @@
 
 - Resolving an unpaid order
   - Cancellation record: captures a reason, consequences and the lot link before a terminal cancel
-  - Paid after cancel: catches each payment received after cancellation, as its own flag, until finance returns it and an operator clears it
+  - Paid after cancel: catches each payment received after cancellation, as its own flag, until an operator clears it
 - Queue
   - Cancellation filters: groups cancelled orders by reason and flags late payment
 
@@ -14,7 +14,9 @@
 
 An operator SHALL choose exactly one category from Non-payment, Missed setup,
 Winner asked, Lot issue, and Other, and enter a note before
-confirming an unpaid auction-order cancellation. The confirmation SHALL show
+confirming an unpaid auction-order cancellation. The category and note
+together are the mandatory reason that "An operator resolves an unpaid order"
+requires for a cancellation. The confirmation SHALL show
 that the lot returns to stock, no runner-up offer is made, the winner is
 emailed, the suspension is unchanged and the action cannot be undone. After
 confirmation, the queue SHALL filter by cancellation category and the order
@@ -55,7 +57,10 @@ Cancelled, give that payment its own Paid after cancel flag, and expose the
 flag for Finance to return the money outside Grade10. Each late payment
 carries its own flag, and clearing one flag SHALL NOT clear another. Any
 operator holding `auction:payment` may clear a flag with a written reason and
-an optional return reference. Grade10 SHALL record the actor and timestamp.
+an optional return reference; the clear is the operator's word that the money
+is dealt with, not a record Grade10 checks. Grade10 SHALL record the actor and
+timestamp, and the invoice log SHALL record the late payment and each cleared
+flag with its reason, reference, actor and time.
 Clearing a flag SHALL NOT revive the order or change the lot's stock outcome.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-23g rev=1 -->

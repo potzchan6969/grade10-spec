@@ -10,7 +10,7 @@
 ## 3. Backend (owner: @htonyl)
 
 - [x] 3.1 Require category and note, show consequences, return the lot to stock and keep cancellation terminal (`grade10-admin-auction-post-sale-SC-150`, `SC-151`).
-- [x] 3.2 Record late payments, expose the queue flag and allow an `auction:payment` operator to clear only the flag after Finance returns the money (`SC-152`).
+- [x] 3.2 Record late payments, expose the queue flag and allow an `auction:payment` operator to clear only the flag, with a reason and an optional return reference (`SC-152`).
 - [ ] 3.3 Allow cancellation after money that counts toward nothing, and refuse it after money that counts toward the balance (`SC-153`, `SC-156`).
 - [ ] 3.4 Record a required reason and optional return reference when clearing the late-payment flag (`SC-155`).
 
