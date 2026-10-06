@@ -318,6 +318,7 @@ Runs once per row of **Test data**.
 * `address_confirmed` is true and `address_window_open` is still false.
 * The order derives as Preparing Invoice.
 
+<!-- trace:case id=g10.auction-order-status.TC-k6b rev=1 covers=g10.auction-order-status.SC-e3m -->
 ### auction-status-US6-TC13-1: Phone address recording refuses after send, confirmation or cancellation
 
 **Classification:**
@@ -356,6 +357,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 | --- | --- |
 | What fact says the window is open — a stored closing time, close plus 48 hours, or a reopen count | **Left to the engineer.** The requirement says the condition is read from the order's own facts and stored as no enum, which `auction-status-SC-30` proves. Which fact carries it is `tech-design.md` |
 | Whether an operator may correct the address on a closed-window order | **Folded in** after a grilling round. They may, without reopening — `auction-status-SC-35` and `auction-status-US6-TC12-1` |
+| Whether recording refuses an ineligible order | **Folded in:** an order with a confirmed address, a sent invoice, cancellation requested or cancelled refuses it — `auction-status-SC-36` and `auction-status-US6-TC13-1` |
 | How a passed address deadline reads | **Folded in:** an unconfirmed elapsed window derives Setup Overdue; a reopened window derives Awaiting Setup; Preparing Invoice does not derive Setup Overdue. Its payment Overdue timer starts only after invoice send and winner visibility. |
 | What `not_issued` becomes on a pre-invoice cancellation | **Dropped.** the durable Winner Order rules already permits `not_issued` to `cancelled`. The suite was blind to it |
 | What a reissue does to a stored `expired` | **Dropped.** Already settled by the durable Winner Order rules, and out of scope here |

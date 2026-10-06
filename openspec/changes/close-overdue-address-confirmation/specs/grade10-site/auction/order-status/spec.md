@@ -119,6 +119,7 @@ afterwards.
 - **AND** `address_window_open` is still false
 - **AND** the order derives as Preparing Invoice
 
+<!-- trace:scenario id=g10.auction-order-status.SC-e3m rev=1 -->
 #### Scenario: auction-status-SC-36 - Recording a phone address refuses ineligible orders
 **Serves:** Guards - pre-invoice overdue address recording only
 
