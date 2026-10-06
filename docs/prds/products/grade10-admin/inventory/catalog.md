@@ -158,6 +158,11 @@ second gallery.
 - **Change history** — `ChangeHistoryDialog.tsx`
 - **Cert ID correction and assignment** — `correctCertId` and `assignCertId`
   in `services/inventoryMutations.ts`
+- **Intake reversal** — `reverseRegularIntake` and `reverseCertIntake` in
+  `services/inventoryMutations.ts`
+- **Moved test and reducible count** — `selectMovedInventoryCertIds` in
+  `repositories/reservations.ts`, `selectRegularStockReducible` in
+  `repositories/changelogs.ts`
 - **Copy facts** — `normalizeUnitFacts` in `services/unitFacts.ts`
 - **Unit history** — the `unit` filter in `repositories/changelogs.ts`
 - **Cert ID details** — `CertIdDetailDialog.tsx`
