@@ -1,8 +1,7 @@
 # shared/auth/users Test Cases
 
-**Status:** reopened
-**Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-09-29
-**Drafts styled:** 2026-10-04, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-users-US1: Operator lists people in the identity directory
 
@@ -1382,7 +1381,7 @@ before anything is erased.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -1412,7 +1411,7 @@ Signed in as <a subject user id>, on <Your data page>. No erasure request is ope
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -1440,7 +1439,7 @@ Signed in as <a subject user id>, on <Your data page>. No erasure request is ope
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1469,7 +1468,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> has a
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1498,7 +1497,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> previ
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -1527,7 +1526,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> previ
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
@@ -1556,7 +1555,7 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1593,7 +1592,7 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1622,7 +1621,7 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1651,7 +1650,7 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
@@ -1726,29 +1725,29 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 - `US2-TC7-1` — Retired (`deprecated`), on writing its Playwright walk: `US2-TC1-1`'s own cached-read assertion (`store.page`'s pre-ban session, read with no `fresh` flag) already proves the same close once its `test.fail` placeholder for the then-unfixed cache is removed. A Case That Already Exists Is Not Written Twice.
 - `US3-TC7-1` — Approved (`actual`).
 
-**Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` and `openspec/changes/archive/` entirely, and `tech-design.md`. Fourteen cases came back over two journeys; the scenario pass issued `shared-auth-users-SC-36` to `shared-auth-users-SC-39`, `shared-auth-users-SC-43` to `shared-auth-users-SC-50`.
+**Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` and `openspec/changes/archive/` entirely, and `tech-design.md`. Fourteen cases came back over two journeys; the scenario pass issued a range of scenarios, a range of scenarios.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `shared-auth-users-US2-TC1-1` to `shared-auth-users-US2-TC7-1` | Carried | ban and unban behaviour the durable spec already states and this delta does not touch; the cases came across with the journey as the durable suite words them, and the erasure cases take the ids after them |
-| `shared-auth-users-US6-TC1-1` | Joined | `shared-auth-users-SC-45` |
-| `shared-auth-users-US6-TC2-1` | Joined | `shared-auth-users-SC-46` |
-| `shared-auth-users-US6-TC3-1` | Joined | `shared-auth-users-SC-47` |
-| `shared-auth-users-US6-TC4-1` | Joined | `shared-auth-users-SC-44` |
-| `shared-auth-users-US6-TC5-1` | Joined | `shared-auth-users-SC-37` |
-| `shared-auth-users-US6-TC6-1` | Joined | `shared-auth-users-SC-38` |
-| `shared-auth-users-US6-TC7-1` | Joined | `shared-auth-users-SC-48`; the cancel is refused from the first instant of the day an erasure may run and the request stays open, which the author confirmed as Q50 |
-| `shared-auth-users-US6-TC8-1` | Joined | `shared-auth-users-SC-36`; the take-over keeps the day an erasure may run, confirmed as Q51 |
-| Raised: what the account holder sees once a filing takes their request over | Escalated, then folded, then corrected | settled as Q48 and Q65: the request is the shop's from the take-over on, and the account holder's own cancel is refused. Folded as `shared-auth-users-SC-40`. The first fold read the page after a lifted ban, which nothing reaches: no standing changes while an erasure request is open. `shared-auth-users-SC-40` now sends the own cancel instead, walked by `shared-auth-users-US6-TC9-2`, the case's version bumped because the requirement changed what it verifies |
-| Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as Q49: there is neither. No scenario beyond `shared-auth-users-SC-44`, which already lets a new request be filed once none is open |
-| Raised: the maturity guard behind the cancel | Deferred | the behaviour stands in `shared-auth-users-SC-48`; the mechanism that enforces it is the tech design's cancel binding, raised for engineering in `decisions.md` |
-| `shared-auth-users-SC-43` | Case added | `shared-auth-users-US6-TC10-1`, tracing `Erasure requests`, the group the scenario serves, so the group anchor is walked |
-| `shared-auth-users-SC-49` | Case added | `shared-auth-users-US2-TC8-1` |
-| `shared-auth-users-SC-50` | Case added | `shared-auth-users-US2-TC9-1` |
-| `shared-auth-users-SC-39` | Case added | `shared-auth-users-US2-TC10-1` |
-| `shared-auth-users-SC-41` | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q52; walked by `shared-auth-users-US2-TC11-1` |
-| `shared-auth-users-SC-42` | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC12-1` walks it, a row per filer |
-| Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names `shared-auth-users-SC-45`, `shared-auth-users-SC-46`, `shared-auth-users-SC-47`, `shared-auth-users-SC-44` and `shared-auth-users-SC-48`, beside the vault scenarios that state what the same rows render |
+| `shared-auth-users-US6-TC1-1` | Joined | its scenario |
+| `shared-auth-users-US6-TC2-1` | Joined | its scenario |
+| `shared-auth-users-US6-TC3-1` | Joined | its scenario |
+| `shared-auth-users-US6-TC4-1` | Joined | its scenario |
+| `shared-auth-users-US6-TC5-1` | Joined | its scenario |
+| `shared-auth-users-US6-TC6-1` | Joined | its scenario |
+| `shared-auth-users-US6-TC7-1` | Joined | its scenario; the cancel is refused from the first instant of the day an erasure may run and the request stays open, which the author confirmed as Q50 |
+| `shared-auth-users-US6-TC8-1` | Joined | its scenario; the take-over keeps the day an erasure may run, confirmed as Q51 |
+| Raised: what the account holder sees once a filing takes their request over | Escalated, then folded, then corrected | settled as Q48 and Q65: the request is the shop's from the take-over on, and the account holder's own cancel is refused. Folded as its scenario. The first fold read the page after a lifted ban, which nothing reaches: no standing changes while an erasure request is open. its scenario now sends the own cancel instead, walked by `shared-auth-users-US6-TC9-2`, the case's version bumped because the requirement changed what it verifies |
+| Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as Q49: there is neither. No scenario beyond the one that already lets a new request be filed once none is open |
+| Raised: the maturity guard behind the cancel | Deferred | the behaviour stands in its scenario; the mechanism that enforces it is the tech design's cancel binding, raised for engineering in `decisions.md` |
+| its scenario | Case added | `shared-auth-users-US6-TC10-1`, tracing `Erasure requests`, the group the scenario serves, so the group anchor is walked |
+| its scenario | Case added | `shared-auth-users-US2-TC8-1` |
+| its scenario | Case added | `shared-auth-users-US2-TC9-1` |
+| its scenario | Case added | `shared-auth-users-US2-TC10-1` |
+| its scenario | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q52; walked by `shared-auth-users-US2-TC11-1` |
+| its scenario | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC12-1` walks it, a row per filer |
+| Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names the scenarios these states prove, beside the vault scenarios that state what the same rows render |
 
 ### Manual
 
