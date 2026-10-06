@@ -92,10 +92,10 @@ The row holds Shopify's facts verbatim; no column holds a badge or a note.
 
 ### The settled-order pull writes the facts, from GraphQL only
 
-`updateSettlementSnapshot` writes the four new columns whole, beside
+`updateSettlementSnapshot` writes the four new fact columns whole, beside
 `fulfillment_status`, under the same claim guard. They are current state, so
 a read overwrites them rather than filling nulls; a pull that misses writes
-nothing.
+nothing and leaves the order due.
 
 - **Rejected: webhook bodies as a source** — the REST bodies speak another
   vocabulary (`partial` for `PARTIALLY_FULFILLED`) and carry no return
@@ -109,33 +109,64 @@ Completed and `ORDER_COMPLETION_CASES`.
 
 | Arm | Selects | Window |
 | --- | --- | --- |
-| Due | `payment_ref` set and `fulfillment_checked_at` null | None |
-| Open | `payment_ref` set, `canceled_at` and `closed_at` null, checked 55 minutes ago or more | Created in the last 90 days |
+| Due | `payment_ref` and `read_due_at` set, and `fulfillment_checked_at` null, before `read_due_at`, or 5 minutes old or more | None |
+| Open | `payment_ref` set, `canceled_at` and `closed_at` null, `fulfillment_checked_at` null or 55 minutes old or more | Placed in the last 90 days |
+
+The claim ranks what the arms select, so neither a retry nor the backfill
+holds back a fresh mark or an hourly re-check.
+
+| Rank | Rows | Within the rank |
+| --- | --- | --- |
+| 1. Unanswered | `read_due_at` later than `fulfillment_checked_at`, or than `created_at` when never asked | Oldest mark first |
+| 2. Re-check | The Open arm, and every Due row not in rank 1 or 3 | `fulfillment_checked_at asc nulls first` |
+| 3. Backfill | `read_due_at` no later than `created_at`, outside the Open arm | `fulfillment_checked_at asc nulls first` |
 
 - **55 minutes, not 60** — `FULFILLMENT_STALE_MS`, which the Open arm and the
   on-read refresh share, drops from 60 to 55 minutes. At 60 the next 5-minute
   tick can read a change 65 minutes after the last read, past the hour the
   page and the Freshness requirement allow; at 55 that tick comes at most 60
   minutes after it
-- **Due first** — the claim orders by `fulfillment_checked_at asc nulls first`,
-  as it does now, so a new settlement, a new till sale and the backfill are
-  read before the hourly re-checks
+- **Retry at 5 minutes** — a Due row whose last read missed is asked again
+  once that read is 5 minutes old, in rank 2 or 3, so a failing provider is
+  asked about each marked order at most once a tick and only with reads the
+  first rank leaves
+- **Not held** — when the provider answers `notFound` to a claimed pull,
+  `clearOrderReadDue` clears the mark under that claim, and the order is
+  logged and counted on `commerce.fulfillment_refresh.missed`; a
+  `paymentError` or a failed call leaves the mark
 - **Till sales join** — the `origin <> 'pos'` and `status = 'paid'` gates go;
-  any order with a `payment_ref` is an order Shopify holds, which is the
-  answer Q15 recommends
-- **On-read refresh** — `refreshFulfillmentIfStale` gates on `payment_ref`
-  alone, and `refreshOnFulfillmentEvent` drops its `open` short-circuit
+  any order with a `payment_ref` is an order Shopify holds, and the page reads
+  a till sale through the same rules. An order with none has nothing in
+  Shopify to read, whatever Q15 decides
+- **On-read refresh** — `refreshFulfillmentIfStale` drops its Store status
+  gate and keeps its `payment_ref` gate and its 90-day window, and
+  `refreshOnFulfillmentEvent` drops its `open` short-circuit
 
 ### A payment webhook marks the order due
 
-After a `PAYMENT_TOPICS` delivery is recorded, the route sets the matching
-order's `fulfillment_checked_at` to null in one statement keyed by provider and
-`payment_ref`, whether or not a transition matched. A refund or cancel is then
-read within one cron tick (5 min). The row is the work list, so no new table
-is needed.
+After the webhook service answers a verified `PAYMENT_TOPICS` delivery
+(`orders/paid`, `orders/cancelled`, `refunds/create`, `orders/edited`),
+whatever it answers, `duplicate` included, the route sets the matching
+order's `read_due_at` to now in one statement keyed by provider and
+`payment_ref`. A mark that fails answers 500, so Shopify sends the delivery
+again; the service answers that one `duplicate`, and the route marks again. A
+claimed pull that is written, or answered `notFound`, clears the mark only
+where `read_due_at` is no later than its claim; any other miss leaves it, so a
+later tick asks again, open order or archived. An order paid in full,
+refunded or canceled is then read within one cron tick (5 min). A void or an
+expiry arrives on no subscribed topic, so it reaches the row through the Open
+arm within the hour, as the page says. The row is the work list, so no new
+table is needed.
 
-- **Idempotent** — a redelivery sets null again; a pull in flight loses its
-  claim and its stale write is refused
+- **Idempotent** — a redelivery, `duplicate` included, moves the mark
+  forward. A mark set while a pull is in flight is later than that pull's
+  claim, so the write leaves it and the next tick reads the order again
+- **Owed apart from asked** — `fulfillment_checked_at` says when the order
+  was last asked about and backs a failing provider off; `read_due_at` says a
+  read is owed, and only a written read or a `notFound` clears it
+- **Rejected: nulling `fulfillment_checked_at` as the mark** — the claim
+  stamps it before the provider answers, so a missed read of an archived or
+  canceled order clears the mark, and the Open arm never selects it again
 - **Rejected: pulling inside the webhook** — a pull that misses after taking
   the claim leaves the order unread for an hour; the mark leaves it due
 
@@ -148,9 +179,9 @@ surface's `statusOf` returns `orderStatus(order).badge`.
 
 ## Database Schema
 
-`store.orders` gains four nullable columns. All are Shopify's facts, written
-only by the settled-order pull; the badge and note are derived and never
-stored.
+`store.orders` gains five nullable columns: four of Shopify's facts, written
+only by the settled-order pull, and the mark that a read is owed. The badge
+and note are derived and never stored.
 
 | Column | Type | Null | Default | Shopify source |
 | --- | --- | --- | --- | --- |
@@ -158,17 +189,21 @@ stored.
 | `canceled_at` | `timestamptz` | yes | none | `cancelledAt` |
 | `closed_at` | `timestamptz` | yes | none | `closedAt`, set exactly when `closed` is true |
 | `return_status` | `text` | yes | none | `returnStatus`, verbatim |
+| `read_due_at` | `timestamptz` | yes | none | None: set to now by a payment webhook and to `created_at` by the backfill, cleared by a written read or a `notFound` |
 
-- **No index** — the cron's claim already filters on `fulfillment_checked_at`
-  and `created_at`; the two new predicates narrow a set of at most 20 rows a
-  tick
+- **One partial index** — on `read_due_at` where it is set, because the Due
+  arm has no 90-day window and would otherwise scan every order each tick;
+  the Open arm keeps the claim's existing filters
 - **No constraint on values** — the rule reads an unknown value as its
   default, so a check would refuse a value Shopify adds tomorrow and stop the
   pull
-- **Backfill** — the migration sets `fulfillment_checked_at = null` on every
-  row with a `payment_ref`, carrying a `-- lock:` line: row locks on
-  `store.orders` for one UPDATE, applied through the Migrate workflow. The cron
-  then reads each order once, 20 a tick
+- **Backfill** — the migration sets `read_due_at = created_at` on every row
+  with a `payment_ref`, carrying a `-- lock:` line: row locks on
+  `store.orders` for one UPDATE, applied through the Migrate workflow. A mark
+  no later than the order's placement is the backfill's alone, since a
+  webhook marks at now; the cron reads each order once, whatever its age, in
+  rank 2 while the Open arm holds it and in rank 3 after, and an order whose
+  read misses stays due
 - **Spelling** — store-side names spell `canceled` (Q13); the vendor contract
   `ShopifyOrder.cancelledAt` keeps Shopify's own
 
@@ -177,14 +212,15 @@ stored.
 | Function | Input | Output | Writes |
 | --- | --- | --- | --- |
 | `orderStatus` (contracts) | `{ canceledAt, closedAt, financialStatus, fulfillmentStatus, returnStatus }` | `{ badge, note }`, `note` null where no rule matches | Nothing; no clock, no I/O |
-| `pullSettlementSnapshot` | Order row, optional `claimedAt` | `written`, `missed` with reason, or `failed` | The snapshot and the four new columns, one UPDATE |
-| `updateSettlementSnapshot` | Adds `financialStatus`, `canceledAt`, `closedAt`, `returnStatus` | `void` | Overwrites the four new columns where the claim still holds |
-| `claimOrdersDueForRead` (replaces `claimUndeliveredOrders`) | `now`, `staleBefore`, `createdAfter`, `limit` | Claimed rows | Stamps `fulfillment_checked_at`, `FOR UPDATE SKIP LOCKED` |
-| `markOrderReadDue` | `provider`, `paymentRef` | `{ marked: boolean }` | `fulfillment_checked_at = null` |
+| `pullSettlementSnapshot` | Order row, optional `claimedAt` | `written`, `missed` with reason, or `failed` | The snapshot and the four fact columns, one UPDATE |
+| `updateSettlementSnapshot` | Adds `financialStatus`, `canceledAt`, `closedAt`, `returnStatus` | `void` | Overwrites the four fact columns where the claim still holds; under a claim, sets `read_due_at` null where it is no later than `claimedAt` |
+| `claimOrdersDueForRead` (replaces `claimUndeliveredOrders`) | `now`, `staleBefore`, `retryBefore`, `createdAfter`, `limit` | Claimed rows | Stamps `fulfillment_checked_at`, `FOR UPDATE SKIP LOCKED` |
+| `markOrderReadDue` | `provider`, `paymentRef`, `now` | `{ marked: boolean }` | `read_due_at = now` |
+| `clearOrderReadDue` | `orderId`, `claimedAt` | `void` | `read_due_at` null where it is no later than `claimedAt` |
 
 **Boundaries** — the webhook route marks; the cron entrypoint
 `runStoreFulfillmentRefresh` claims and pulls; the repository owns all SQL;
-the provider adapter owns the GraphQL read. No flow writes more than one row.
+the provider adapter owns the GraphQL read. Each flow writes one order row.
 
 **Example** — a paid web order archived by the shop after its parcel left:
 
@@ -196,7 +232,8 @@ the provider adapter owns the GraphQL read. No flow writes more than one row.
 | `refunds/create`, marked due, read next tick | `PARTIALLY_REFUNDED` | `FULFILLED` | `2026-10-05T09:12Z` | null | `RETURNED` | Refunded |
 
 The last row carries note `items-returned-partial-refund`. Once closed it
-leaves the Open arm; the refund webhook is what brings it back.
+leaves the Open arm; the refund webhook's mark brings it back, and stays
+until a read is written.
 
 ```mermaid
 flowchart LR
@@ -224,25 +261,65 @@ them unchanged. No field is removed and no procedure is added.
 - **[Risk] Your Orders shows an older badge than Order Details just
   refreshed** → both read one row, so the gap closes on the next list fetch;
   payment webhooks mark the order due, so the cron reads it within 5 minutes,
-  and a fulfilment, archive or return change within the hour for an order
-  created in the last 90 days; an older order is read again only when a
-  payment webhook marks it due (Q23)
+  and any other change within the hour for an order placed in the last 90
+  days; an older order is read again only when a payment webhook marks it due
+  or a shipment event reads it (Q23)
+- **[Risk] More than 20 orders marked due in one tick** → unanswered marks
+  are read first, oldest mark first, so the 5-minute bound holds while marks
+  stay within 20 a tick; the due-mark gauge in Observability alarms past 5
+  minutes, and the batch is raised
+- **[Risk] The provider keeps refusing one order** → its mark stays, and it
+  is asked again at most every 5 minutes, ranked behind fresh marks and the
+  hourly re-checks, so it costs only a read they leave; counted on
+  `commerce.fulfillment_refresh.missed` with its reason. An order the provider
+  answers `notFound` for has its mark cleared and is counted the same way
 - **[Risk] A shop that never archives keeps every order in the Open arm, past
   the cron's 240 reads an hour** → the claim reads the oldest check first, so
-  every order is still reached; a count of claimed and due rows per tick is
-  logged, and the batch is raised if the due arm stops emptying
+  every order is still reached, later than the hour; the open-order gauge in
+  Observability alarms past 60 minutes, and the batch is raised. Migration
+  step 3 shows the batch fits before the backfill runs
 - **[Risk] An order reopened after Shopify archived it keeps Completed** →
   it leaves the Open arm once closed, and is read again only on a payment
-  webhook or a fulfilment event; Q24 decides whether the hour must reach it
+  webhook's mark or a fulfilment event; Q24 decides whether the hour must
+  reach it
 - **[Risk] `returnStatus` needs an access scope the app lacks, and the whole
   order query fails** → checked against the dev shop before the query ships
   (Migration Plan, step 1); a missing scope joins the ops scope list before
   `pnpm run shopify:webhooks` runs again
+- **[Risk] A web checkout Shopify never recorded reads Processing for
+  good** → Your Orders lists every web order today
+  (`packages/grade10-store/backend/src/repositories/orders.ts:297-300`), and
+  one with no `payment_ref` has no facts, so every fact reads its default.
+  The interim adapter reads it Canceled (`orderStatus.ts:22`). The frontend
+  switch waits on Q15's answer (Migration Plan, step 4)
 - **[Risk] The badge reads Processing while the backfill drains** → the
-  frontend switch ships only after the due arm is empty in that environment
+  frontend switch ships only once every order the backfill marked has been
+  asked since the migration and no unanswered mark is older than 5 minutes in
+  that environment; until then the pages read the interim adapter
+- **[Risk] The Open arm's first pass delays the hourly re-check** → the
+  widened arm first reads every order placed in the last 90 days that it has
+  not read within the hour, till sales and archived web orders included,
+  longest unread first, so an undelivered order's re-check waits behind them
+  for that pass; shipment events and Order Details reads still refresh it.
+  The backfill of older orders takes only reads ranks 1 and 2 leave
 - **[Risk] A paid till sale never reaches fulfilled and archived in Shopify,
   so it reads Processing** → checked on the staging shop before the frontend
   switch; if so, it goes back to the product manager, as Q12 says
+
+## Observability
+
+Each `fulfillment` cron tick records two gauges through `ddGauge`, beside the
+claimed count per rank already logged, and each has a monitor in the
+application's `docs/operations.md` that also alerts on absent data.
+
+| Gauge | Measures | Alarm |
+| --- | --- | --- |
+| `commerce.fulfillment_refresh.due_age_seconds` | The oldest unanswered mark's age: now less `read_due_at`, over rank 1 | Past 300 (5 minutes) |
+| `commerce.fulfillment_refresh.open_age_seconds` | The longest an order the Open arm holds has gone unasked: now less `fulfillment_checked_at`, or `created_at` when never asked | Past 3600 (60 minutes) |
+
+The first holds the 5-minute bound and the second the hour; a read that is
+asked and misses is counted on `commerce.fulfillment_refresh.missed`. Either
+alarm means the batch of 20 no longer fits, and the batch is raised.
 
 ## Migration Plan
 
@@ -253,14 +330,19 @@ them unchanged. No field is removed and no procedure is added.
 2. **Backend** — migration in both store backends, the wire fields, the
    writer, the cron's due set and the webhook mark, deployed together. The
    badge does not change yet: the pages still use the interim adapter
-3. **Backfill** — the Migrate workflow applies the migration; watch the due
-   count fall to zero
-4. **Frontend** — the projections switch to `orderStatus`, the adapter and
-   the SQL mirror are deleted, and the admin surface follows
+3. **Backfill** — before it, count the orders with a `payment_ref` placed in
+   the last 90 days and the older ones, and record each count over 240 an
+   hour as its drain time: the first is the Open arm's first pass, the second
+   runs in the reads left over. If the first pass is past 4 hours, raise the
+   batch for it. Count also the orders Shopify holds open placed in the last
+   90 days, which the Open arm reads once an hour from then on, and record it
+   against 240 an hour: past it, raise the batch before the backfill. The
+   Migrate workflow then applies the migration; watch the count of orders the
+   backfill marked and not yet asked fall to zero
+4. **Frontend** — once Q15's answer has landed, the projections switch to
+   `orderStatus`, the adapter and the SQL mirror are deleted, and the admin
+   surface follows. Under the recommended answer, Your Orders lists only
+   orders with a `payment_ref`, the filter `add-grade10-customer-order-pages`
+   owns; under the other, the rule reads the pre-Shopify input Q15 adds
 5. **Rollback** — revert the frontend to the adapter; the columns are
    additive and stay
-
-## Open Questions
-
-- **Due-count alarm** — the threshold for a due arm that has not emptied,
-  set once staging shows the steady-state volume
