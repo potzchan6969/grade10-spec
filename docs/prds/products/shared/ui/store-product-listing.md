@@ -13,9 +13,10 @@ and load more as the shopper scrolls.
 
 ## Product Tile
 
-🚧 **Whole photo** - the square well shows the full picture; leftover space is
-the well, not a cropped edge. Available, on sale, sold out and in cart all do
-this.
+🚧 **Whole photo** - the square well shows the full picture, centred and as
+large as it fits; leftover space is the well, not a cropped edge. Available, on
+sale, sold out and in cart all do this. A photo that grows on hover may lose its
+edges until the pointer leaves.
 
 🚧 **Photo as supplied** - the photo is not blended into the well. Available,
 on sale, sold out and in cart all do this; a sold-out photo takes its sold-out
@@ -150,4 +151,5 @@ it. The first two rows place two parts of its map; the rest decide the tile.
 | Sold-out opens where nothing sells | Decided | A surface that draws no cart control carries the collector on to another product, so it has no reason to stop at a card nobody can buy. Ruled out: a sold-out tile inert everywhere, a dead end on that surface. | Product |
 | The underline means it opens | Decided | A name that opens is underlined on hover and on keyboard focus, and a name that does not open stays plain, so the underline never promises a press that does nothing. Ruled out: an underline on every name. | Product |
 | Photo as supplied | Decided | The photo is not blended into the well. Multiply made a white studio fill read as transparent, and muddied a real catalogue photo once it letterboxes. A white fill shows white inside the grey well. | Product |
+| Measure for the whole photo | ❓ Open | Whether showing the whole photo on the tile is measured. Recommended: no measure, since the tile now draws the photo it is given. The other options are the rate at which slab and box tiles open their product, which could rise or fall when the photo works, or a new event that records each tile's photo shape. | Product |
 :::
