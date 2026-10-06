@@ -307,6 +307,8 @@ const VISIT_DAYS: readonly BookingDay[] = Array.from(
   },
 );
 
+const NEXT_AVAILABLE_VISIT_DATE = VISIT_DAYS.find((day) => day.available)?.date;
+
 const THIRD_HKT_10 = Date.UTC(2026, 8, 3, 2, 0);
 const VISIT_SLOTS: readonly BookingSlot[] = [0, 15, 30, 45, 75, 90, 105].map(
   (minutes) => ({
@@ -317,13 +319,13 @@ const VISIT_SLOTS: readonly BookingSlot[] = [0, 15, 30, 45, 75, 90, 105].map(
 );
 
 const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
-  dayTitle: "Pick a day",
-  timeTitle: "Pick a time",
+  dayTitle: "Choose a Day",
+  timeTitle: "Choose a Time",
   previousMonth: "Previous month",
   nextMonth: "Next month",
   timesIn: "Times in",
-  pickADay: "Pick a day to see its times.",
-  noTimes: "Nothing is free on this day any more.",
+  pickADay: "Choose a day to see its times.",
+  noTimes: "Nothing is free on this day.",
 };
 
 const SHOP_NAME = "Hong Kong Grade10 Store";
@@ -332,36 +334,24 @@ const SHOP_ADDRESS = "13 Pak Sha Road, Causeway Bay, Hong Kong";
 const GRADING_VISIT_SERVICE: BookingService = {
   id: "svc_grading",
   slug: "grading",
-  name: "Card grading",
-  description: "Bring a card in and have it graded at the desk.",
-  durationLabel: "30 min",
-  questions: [
-    {
-      id: "format",
-      label: "Is the card raw or slabbed?",
-      kind: "choice",
-      options: ["Raw", "Slabbed"],
-      required: true,
-    },
-  ],
+  name: "Card Grading",
+  durationLabel: "~30 min",
+  questions: [],
 };
 
 const VAULT_DROP_OFF_SERVICE: BookingService = {
   id: "svc_vault_drop_off",
   slug: "vault-drop-off",
-  name: "Vault drop-off",
-  description:
-    "Bring collectibles to vault. Staff register them at the counter.",
-  durationLabel: "30 min",
+  name: "Vault Drop-Off",
+  durationLabel: "~30 min",
   questions: [],
 };
 
 const CONSULTATION_VISIT_SERVICE: BookingService = {
   id: "svc_consultation",
   slug: "consultation",
-  name: "Collection consultation",
-  description: "Talk through a collection with a specialist.",
-  durationLabel: "60 min",
+  name: "Collection Consultation",
+  durationLabel: "~60 min",
   questions: [],
 };
 
@@ -416,33 +406,34 @@ const BOOKING_STATE_LABELS: Record<BookingRecordState, string> = {
 };
 
 const SERVICE_PICKER_COPY: BookingServicePickerCopy = {
-  title: "What are you coming in for?",
+  title: "Choose a Service",
 };
 
 const BOOK_VISIT_NAV_COPY = {
-  continue: "Continue",
-  back: "Back",
-  slotTitle: "Select a date and time",
-  prepTitle: "What to prepare",
+  continue: "Choose a Date and Time",
+  change: "Change",
+  changeService: "Change service",
+  changeDate: "Change date",
+  prepTitle: "What to Prepare",
 };
 
 const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
-  title: "Your details",
+  title: "Your Details",
   name: "Name",
   email: "Email",
   phone: "Phone",
-  notes: "Anything we should know?",
-  notesHint: "Told the desk as a reference — not an intake record.",
+  notes: "Notes",
+  notesHint: "For the desk only — not an intake record.",
   optional: "optional",
   nameMissing: "Tell us your name.",
   emailMissing: "Tell us where to send the confirmation.",
   emailInvalid: "That doesn’t look like an email address.",
   answerMissing: "Pick one to continue.",
-  submit: "Book the visit",
+  submit: "Book the Visit",
 };
 
 const SUMMARY_COPY: BookingSummaryCopy = {
-  title: "Your visit",
+  title: "Your Visit",
   service: "Service",
   location: "Shop",
   when: "When",
@@ -479,20 +470,20 @@ const VISIT_CONFIRMATION_COPY: BookingConfirmationCopy = {
 };
 
 const VISIT_PREP_TIPS = [
-  "Bring the collectibles you want to vault",
+  "Bring the pieces you want to vault",
   "Bring photo ID",
-  "You do not need a Grade10 account beforehand — walk-ins are fine",
-  "Staff register each item at the counter, then you sign on the iPad",
+  "You do not need a Grade10 account",
+  "Staff register each item, then you sign on the iPad",
 ] as const;
 
 const GRADING_PREP_TIPS = [
   "Bring the card you want graded",
   "Bring photo ID",
-  "Say at the desk whether it is raw or already slabbed",
+  "Say at the desk if it is raw or already slabbed",
 ] as const;
 
 const CONSULTATION_PREP_TIPS = [
-  "Bring photos or a short list of pieces you want to talk through",
+  "Bring photos or a short list of pieces to talk through",
   "Bring photo ID",
 ] as const;
 
@@ -575,6 +566,7 @@ export type {
   VaultAssetStatus,
 };
 export {
+  ACCOUNT_EMAIL,
   APPOINTMENTS_COPY,
   assetSubtitle,
   BOOK_VISIT_NAV_COPY,
@@ -588,6 +580,7 @@ export {
   GRADING_VISIT_SERVICE,
   INTAKE_FIXTURE,
   MANAGE_CARD_COPY,
+  NEXT_AVAILABLE_VISIT_DATE,
   PORTFOLIO_SUMMARY,
   prepTipsForService,
   REGISTER_CATEGORIES,

@@ -75,6 +75,18 @@ export const Default: Story = {
     ).toHaveAttribute("data-today", "true");
     expect(canvas.getByRole("combobox", { name: /month/i })).toBeVisible();
     expect(canvas.getByRole("combobox", { name: /year/i })).toBeVisible();
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Oct",
+    );
+    await userEvent.click(canvas.getByRole("combobox", { name: /month/i }));
+    const monthList = await within(canvasElement.ownerDocument.body).findByRole(
+      "listbox",
+    );
+    expect(
+      within(monthList).getByRole("option", { name: "October" }),
+    ).toBeVisible();
+    expect(within(monthList).queryByRole("option", { name: "Oct" })).toBeNull();
+    await userEvent.keyboard("{Escape}");
     expect(
       canvas.getByRole("button", { name: /previous month/i }),
     ).toHaveAccessibleName();
@@ -87,7 +99,7 @@ export const Default: Story = {
     );
     expect(args.onMonthChange).not.toHaveBeenCalled();
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
-      "October",
+      "Oct",
     );
     expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
       "28",
@@ -96,7 +108,7 @@ export const Default: Story = {
     await userEvent.click(canvas.getByRole("button", { name: /next month/i }));
     expect(args.onMonthChange).toHaveBeenCalled();
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
-      "November",
+      "Nov",
     );
     expect(canvas.queryByRole("gridcell", { selected: true })).toBeNull();
 
@@ -104,7 +116,7 @@ export const Default: Story = {
       canvas.getByRole("button", { name: /previous month/i }),
     );
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
-      "October",
+      "Oct",
     );
     expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
       "28",
@@ -117,7 +129,7 @@ export const Default: Story = {
     firstCell.focus();
     await userEvent.keyboard("{ArrowLeft}");
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
-      "November",
+      "Nov",
     );
     expect(firstCell).toHaveFocus();
   },

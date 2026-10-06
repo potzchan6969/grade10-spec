@@ -33,6 +33,8 @@ type BookingDetailsFormProps = {
   questions: readonly BookingQuestion[];
   /** Seeds the fields, so a refused time keeps what the collector typed. */
   initialValues?: Partial<BookingDetailsValues>;
+  /** Locks email to the seeded value — native readOnly, still submitted. */
+  emailReadOnly?: boolean;
   pending?: boolean;
   error?: ReactNode;
   onSubmit: (values: BookingDetailsValues) => void;
@@ -58,6 +60,7 @@ function BookingDetailsForm({
   copy,
   questions,
   initialValues,
+  emailReadOnly = false,
   pending = false,
   error,
   onSubmit,
@@ -113,7 +116,10 @@ function BookingDetailsForm({
           label={copy.email}
           message={errors.email}
           name="email"
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={
+            emailReadOnly ? undefined : (event) => setEmail(event.target.value)
+          }
+          readOnly={emailReadOnly}
           status={errors.email ? "error" : "default"}
           type="email"
           value={email}

@@ -28,7 +28,7 @@
     "other": "Something else"
   },
   "visit": {
-    "title": "Your visit",
+    "title": "Your Visit",
     "at": "{location}, {when}",
     "book": "Book a visit",
     "pick": "Bring the item with you. Nothing happens to it until you have agreed what should.",

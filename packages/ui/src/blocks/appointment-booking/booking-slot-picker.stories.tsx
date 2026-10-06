@@ -44,7 +44,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Times in HKT")).toBeInTheDocument();
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
-      "September",
+      "Sep",
     );
     expect(canvas.getByRole("combobox", { name: /year/i })).toHaveTextContent(
       "2026",
@@ -58,7 +58,7 @@ export const Default: Story = {
     );
 
     expect(canvas.queryByRole("radio", { name: /^11:00/ })).toBeNull();
-    await userEvent.click(canvas.getByRole("radio", { name: /^10:15/ }));
+    await userEvent.click(canvas.getByRole("button", { name: "10:15" }));
     expect(args.onSelectSlot).toHaveBeenCalledWith(SEPTEMBER_3_SLOTS[1]);
 
     await userEvent.click(

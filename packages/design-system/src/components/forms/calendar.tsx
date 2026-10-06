@@ -154,6 +154,20 @@ function CalendarRoot({
   );
 }
 
+function isMonthDropdown(options: DropdownProps["options"]): boolean {
+  return (
+    (options?.length ?? 0) > 0 &&
+    (options?.length ?? 0) <= 12 &&
+    (options ?? []).every((option) => option.value >= 0 && option.value <= 11)
+  );
+}
+
+function shortMonthName(monthIndex: number, localeCode: string): string {
+  return new Date(2020, monthIndex, 1).toLocaleDateString(localeCode, {
+    month: "short",
+  });
+}
+
 function CalendarDropdown({
   options,
   value,
@@ -163,7 +177,17 @@ function CalendarDropdown({
   "aria-label": ariaLabel,
 }: DropdownProps) {
   const allowMonthNav = useContext(MonthNavContext);
+  const { dayPickerProps } = useDayPicker();
   const selected = value === undefined ? null : String(value);
+  const monthMenu = isMonthDropdown(options);
+  const localeCode = dayPickerProps.locale?.code ?? "en";
+  const selectedMonth = options?.find(
+    (option) => String(option.value) === selected,
+  );
+  const triggerLabel =
+    monthMenu && selectedMonth != null
+      ? shortMonthName(selectedMonth.value, localeCode)
+      : undefined;
   return (
     <Select
       disabled={disabled}
@@ -192,7 +216,11 @@ function CalendarDropdown({
           className,
         )}
       >
-        <SelectValue />
+        {triggerLabel == null ? (
+          <SelectValue />
+        ) : (
+          <SelectValue>{triggerLabel}</SelectValue>
+        )}
       </SelectTrigger>
       <SelectContent align="center" alignItemWithTrigger={false}>
         {(options ?? []).map((option) => (
@@ -432,8 +460,11 @@ const DEFAULT_END_MONTH = new Date(new Date().getFullYear() + 10, 11);
  * fixed year, or a single label (`captionLayout`).
  *
  * Overflow days are selectable and do not move the caption. Only chevrons
- * and the month/year dropdowns change month. Arrow / Page / Home / End stay
- * on this grid. Unselectable days are the caller's `disabled` matcher.
+ * and the month/year dropdowns change month. The month dropdown uses the
+ * The month dropdown trigger uses the locale's short month name (`Sep`) so
+ * the caption width holds while paging; the open list uses the full name
+ * (`September`). Arrow / Page / Home / End stay on this grid.
+ * Unselectable days are the caller's `disabled` matcher.
  *
  * **No Figma component set yet** — Storybook-first. Do not add variant axes
  * until design publishes Calendar.
@@ -513,7 +544,7 @@ function Calendar({
 
   return (
     <MonthNavContext.Provider value={allowMonthNav}>
-      <div ref={rootRef}>
+      <div className="w-fit" ref={rootRef}>
         <DayPicker
           {...props}
           animate={animate}

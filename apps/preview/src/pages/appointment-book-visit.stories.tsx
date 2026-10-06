@@ -3,9 +3,15 @@ import {
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   BookingDetailsForm,
@@ -14,15 +20,17 @@ import {
   BookingSlotPicker,
   BookingSummary,
 } from "@grade10/ui";
-import { MapPin } from "@phosphor-icons/react";
+import { Storefront } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, within } from "storybook/test";
 import {
+  ACCOUNT_EMAIL,
   BOOK_VISIT_NAV_COPY,
   BOOK_VISIT_SERVICES,
   CAUSEWAY_BAY,
   DETAILS_FORM_COPY,
+  NEXT_AVAILABLE_VISIT_DATE,
   prepTipsForService,
   SERVICE_PICKER_COPY,
   SLOT_PICKER_COPY,
@@ -33,11 +41,7 @@ import {
   VISIT_SLOTS,
   VISIT_TIME_ZONE,
 } from "./vault-content";
-import {
-  AppointmentPageShell,
-  PageHeader,
-  ProposalBanner,
-} from "./vault-shared";
+import { AppointmentPageShell, PageHeader } from "./vault-shared";
 import { navigateToStory, STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
 const READY_SERVICES = {
@@ -47,7 +51,7 @@ const READY_SERVICES = {
 
 const CONTACT_SEED = {
   name: "Alex Chan",
-  email: "collector@example.com",
+  email: ACCOUNT_EMAIL,
 };
 
 type BookVisitView = "service" | "slot" | "details";
@@ -74,13 +78,18 @@ function BookVisitPage() {
     setServiceId(id);
   }
 
-  function goBack() {
-    if (view === "details") {
-      setView("slot");
-      return;
-    }
+  function changeService() {
     clearSlot();
     setView("service");
+  }
+
+  function changeDate() {
+    setView("slot");
+  }
+
+  function openSlotStep() {
+    setSelectedDate(NEXT_AVAILABLE_VISIT_DATE);
+    setView("slot");
   }
 
   function selectSlot(slot: BookingSlot) {
@@ -94,47 +103,42 @@ function BookVisitPage() {
       <Breadcrumbs>
         <BreadcrumbItem href={STORE_LOCATOR_HREF}>Appointment</BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem current>Book a visit</BreadcrumbItem>
+        <BreadcrumbItem current>Book a Visit</BreadcrumbItem>
       </Breadcrumbs>
 
-      <PageHeader
-        title="Book a visit"
-        description="Optional diary at the Hong Kong Grade10 Store. Walk-in is fine. Answers help the desk prepare — they are not an intake record."
-      />
-
-      {view === "details" ? (
-        <ProposalBanner title="Notes are for the desk">
-          Name, email, questions and notes are a reference for the counter.
-          Vault drop-off does not open an intake tracker. Incoming items do not
-          block another booking.
-        </ProposalBanner>
-      ) : null}
+      <PageHeader title="Book a Visit" />
 
       {view === "service" ? (
         <VStack gap="lg" hAlign="stretch">
+          <Card
+            aria-label={CAUSEWAY_BAY.name}
+            className="w-fit max-w-full self-start"
+            role="group"
+          >
+            <CardContent>
+              <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4">
+                <span className="col-start-1 row-start-1 flex size-4 items-center self-center text-primary">
+                  <Storefront aria-hidden size={16} />
+                </span>
+                <CardTitle className="col-start-2 row-start-1">
+                  {CAUSEWAY_BAY.name}
+                </CardTitle>
+                <CardDescription className="col-start-2 row-start-2 text-secondary-foreground">
+                  {CAUSEWAY_BAY.address}
+                </CardDescription>
+              </div>
+            </CardContent>
+          </Card>
           <BookingServicePicker
             copy={SERVICE_PICKER_COPY}
             services={READY_SERVICES}
             selectedId={serviceId}
             onSelect={selectService}
           />
-          <HStack gap="sm" vAlign="start">
-            <span className="mt-0.5 shrink-0 text-primary">
-              <MapPin aria-hidden size={20} />
-            </span>
-            <VStack gap="none" hAlign="start">
-              <Text as="span" weight="medium">
-                {CAUSEWAY_BAY.name}
-              </Text>
-              <Text as="span" size="sm" tone="secondary">
-                {CAUSEWAY_BAY.address}
-              </Text>
-            </VStack>
-          </HStack>
           <div>
             <Button
               disabled={serviceId === undefined}
-              onClick={() => setView("slot")}
+              onClick={openSlotStep}
               type="button"
             >
               {BOOK_VISIT_NAV_COPY.continue}
@@ -142,30 +146,60 @@ function BookVisitPage() {
           </div>
         </VStack>
       ) : (
-        <div className="grid items-start gap-8 lg:grid-cols-[20rem_minmax(0,1fr)]">
-          <VStack className="lg:sticky lg:top-8" gap="md" hAlign="stretch">
-            <div>
-              <Button onClick={goBack} type="button" variant="ghost">
-                {BOOK_VISIT_NAV_COPY.back}
-              </Button>
-            </div>
+        <div className="overflow-hidden rounded-2xl border border-border bg-card lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
+          <aside className="border-b border-border p-5 lg:border-r lg:border-b-0">
             <BookingSummary
+              className="rounded-none border-0 bg-transparent p-0"
               copy={SUMMARY_COPY}
-              service={service?.name}
+              service={
+                service ? (
+                  <VStack gap="none" hAlign="start">
+                    <span>{service.name}</span>
+                    {service.durationLabel ? (
+                      <span className="font-normal text-sm text-secondary-foreground">
+                        {service.durationLabel}
+                      </span>
+                    ) : null}
+                  </VStack>
+                ) : undefined
+              }
+              serviceAction={
+                <Link
+                  aria-label={BOOK_VISIT_NAV_COPY.changeService}
+                  className="p-0"
+                  onClick={changeService}
+                  render={<button type="button" />}
+                  size="sm"
+                  variant="secondary"
+                >
+                  {BOOK_VISIT_NAV_COPY.change}
+                </Link>
+              }
               location={CAUSEWAY_BAY.name}
               address={CAUSEWAY_BAY.address}
-              start={selectedStart}
-              end={selectedEnd}
+              start={view === "details" ? selectedStart : undefined}
+              end={view === "details" ? selectedEnd : undefined}
+              whenAction={
+                view === "details" ? (
+                  <Link
+                    aria-label={BOOK_VISIT_NAV_COPY.changeDate}
+                    className="p-0"
+                    onClick={changeDate}
+                    render={<button type="button" />}
+                    size="sm"
+                    variant="secondary"
+                  >
+                    {BOOK_VISIT_NAV_COPY.change}
+                  </Link>
+                ) : undefined
+              }
               timeZone={VISIT_TIME_ZONE}
               timeZoneLabel="Hong Kong time"
             />
-          </VStack>
+          </aside>
 
           {view === "slot" ? (
-            <VStack gap="md" hAlign="stretch">
-              <Text as="h2" size="lg" weight="medium">
-                {BOOK_VISIT_NAV_COPY.slotTitle}
-              </Text>
+            <div className="p-5 md:p-6">
               <BookingSlotPicker
                 copy={SLOT_PICKER_COPY}
                 month={VISIT_MONTH}
@@ -185,14 +219,15 @@ function BookVisitPage() {
                 }}
                 onSelectSlot={selectSlot}
               />
-            </VStack>
+            </div>
           ) : (
-            <VStack gap="lg" hAlign="stretch">
+            <VStack className="p-5 md:p-6" gap="lg" hAlign="stretch">
               {service ? (
                 <BookingDetailsForm
                   key={service.id}
                   copy={DETAILS_FORM_COPY}
                   questions={service.questions}
+                  emailReadOnly
                   initialValues={CONTACT_SEED}
                   onSubmit={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
                 />
@@ -247,11 +282,11 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Book a visit" }),
+      canvas.getByRole("heading", { level: 1, name: "Book a Visit" }),
     ).toBeVisible();
-    expect(canvas.getByText("Card grading")).toBeVisible();
-    expect(canvas.getByText("Vault drop-off")).toBeVisible();
-    expect(canvas.getByText("Collection consultation")).toBeVisible();
+    expect(canvas.getByText("Card Grading")).toBeVisible();
+    expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
+    expect(canvas.getByText("Collection Consultation")).toBeVisible();
     expect(
       canvas.getByText("13 Pak Sha Road, Causeway Bay, Hong Kong"),
     ).toBeVisible();
@@ -268,11 +303,31 @@ export const Default: Story = {
       canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
     ).toBeNull();
     for (const name of [
-      /Card grading/,
-      /Vault drop-off/,
-      /Collection consultation/,
+      /Card Grading/,
+      /Vault Drop-Off/,
+      /Collection Consultation/,
     ]) {
       expect(canvas.getByRole("radio", { name })).not.toBeChecked();
     }
+  },
+};
+
+export const Slot: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("radio", { name: /Card Grading/ }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
+    );
+    expect(canvas.queryByRole("button", { name: "Back" })).toBeNull();
+    expect(
+      canvas.getByRole("button", {
+        name: BOOK_VISIT_NAV_COPY.changeService,
+      }),
+    ).toBeVisible();
+    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
+      "2",
+    );
+    expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
   },
 };
