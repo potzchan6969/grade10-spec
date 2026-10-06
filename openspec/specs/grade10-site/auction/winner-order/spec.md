@@ -1,6 +1,7 @@
 # grade10-site/auction/winner-order Specification
 
 ## Purpose
+
 What a winner is sent after a lot closes and what they do with it: one order
 per lot, a delivery address, payment method and billing address they choose, an
 operator's invoice priced for both, payment by card or by a bank transfer they
@@ -63,8 +64,8 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Replacement invoice: a reissue's new invoice says `Replaces invoice {id}` and names the prior invoice it replaces
 - Bank transfer
   - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the payment reference to quote; the bank-rail presentation is governed by `add-winner-how-to-pay-rails`
-  - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
-  - Payment Verifying: the deadline stops, Pay with Card and further uploads are hidden
+  - Payment proof: one upload of 1 to 3 files (1 required) in Submit Payment Proof, behind inline irreversible microcopy; on success toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying; on a failed upload the dialog stays open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.**; while submitting or converting HEIC the form locks and leave is blocked
+  - Payment Verifying: the deadline stops, Submit Payment Proof, View Bank Details and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
   - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
@@ -87,7 +88,8 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Address hidden until open: `support@grade10.com` is not on the order page before Contact Us
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
-
+- Order-progress tracking
+  - Tracking number: while fulfilment is `fulfilled` with a tracking number, Order Progress makes the number an external link to the carrier tracking page; no Track shipment control or carrier name appears in Order Progress; the link remains after delivery is confirmed
 
 ## Requirements
 
@@ -1518,36 +1520,51 @@ invoice while an operator checks it.
    (JPEG), or HEIC/HEIF of at most **5 MB** (5,242,880 bytes). The set SHALL
    total at most **15 MB** (15,728,640 bytes). HEIC/HEIF SHALL be converted to
    JPEG before storage so an operator can open it without a special viewer.
-2. Read a confirm step saying nothing can be added after upload.
-3. Confirm.
+2. Read irreversible microcopy saying nothing can be added or changed after
+   submit (inline in Submit Payment Proof - no second confirm screen).
+3. Confirm submit.
 
-**On confirm** - On confirm Grade10 SHALL store the files against the
-invoice, set the invoice status to `payment_verifying`, stop the payment
+**On confirm** - On a successful confirm Grade10 SHALL store the files against
+the invoice, set the invoice status to `payment_verifying`, stop the payment
 deadline and record the time left, per `grade10-site/auction/order-status`,
 and write a proof-uploaded entry to the invoice log. The order SHALL derive as
-Payment Verifying. No letter is sent.
+Payment Verifying. Winner Order SHALL show a success toast titled **Proof
+submitted** with description **We'll verify your payment shortly.** No letter
+is sent.
 
 **Payment Verifying** - While the invoice is `payment_verifying`, Winner Order
 SHALL show no payment deadline running, SHALL offer no card Pay and no upload,
-and SHALL refuse a further upload.
+SHALL hide Submit Payment Proof and View Bank Details, and SHALL refuse a
+further upload. It SHALL show an inline default Alert with the Hourglass icon,
+stating that Grade10 is verifying the transfer and will email when payment is
+confirmed. The Alert sits under Order progress on small viewports and under the
+lot from `lg` up, where the Preparing Invoice alert sits.
+
+**Busy** - While the upload is submitting, or while HEIC/HEIF is converting,
+Submit Payment Proof SHALL lock the whole form and SHALL block leave (Cancel,
+Escape and overlay dismiss do nothing) until that beat finishes.
 
 **Refused** - Grade10 SHALL refuse the whole upload and store nothing when any
-file breaks step 1, SHALL refuse a confirm with no file, and SHALL refuse an
+file breaks step 1. It SHALL judge a file's type by its content, not its name:
+a file whose content is not PDF, PNG, JPEG, HEIC or HEIF SHALL be refused and
+never relabelled. Grade10 SHALL refuse a confirm with no file, and SHALL refuse an
 upload on a card invoice, on any invoice not `pending`, and from anyone but
 the order's winner.
 
-**Nothing stored until it succeeds** - Leaving the confirm step without
-confirming SHALL store nothing. An upload that fails part-way SHALL store
-nothing and leave the invoice `pending`, and the winner may upload again; the
-one upload counts only once an upload succeeds.
+**Nothing stored until it succeeds** - Leaving Submit Payment Proof without a
+successful confirm SHALL store nothing. An upload that fails part-way SHALL
+store nothing, leave the invoice `pending`, keep Submit Payment Proof open with
+the draft the winner had entered, and show an error toast titled **Proof not
+submitted** with description **Nothing was saved. Try again.**; the winner may
+upload again. The one upload counts only once an upload succeeds.
 
-**Who reads the files** - Proof files SHALL be readable by any operator who
-can open the order, per `grade10-admin/auction/post-sale`, and never by the
-winner. Winner Order, the receipt and every letter SHALL show no proof file
-and no file name, the winner's or an operator's. Only the Payment Verifying
+**Who reads the files** - Payment proof files SHALL be readable by any operator
+who can open the order, per `grade10-admin/auction/post-sale`, and never by the
+winner. Winner Order, the receipt and every letter SHALL show no payment proof
+file and no file name, the winner's or an operator's. Only the Payment Verifying
 status shows that proof was sent.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-bsl rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-bsl rev=2 -->
 #### Scenario: winner-order-SC-99 - Uploading proof stops the deadline
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -1556,6 +1573,7 @@ status shows that proof was sent.
 - **THEN** the invoice is `payment_verifying` and the order derives as Payment Verifying
 - **AND** the time left recorded is 6 days
 - **AND** Winner Order offers no card Pay and no further upload
+- **AND** Submit Payment Proof and View Bank Details are hidden
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-q86 rev=1 -->
 #### Scenario: winner-order-SC-100 - Files outside the limits are refused
@@ -1576,12 +1594,12 @@ status shows that proof was sent.
 - **THEN** Grade10 refuses it
 - **AND** the files already stored are unchanged
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-7jw rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-7jw rev=2 -->
 #### Scenario: winner-order-SC-102 - Leaving the confirm step uploads nothing
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
 - **GIVEN** a bank transfer invoice that is `pending`
-- **WHEN** the winner chooses one PNG, reads the confirm step, and leaves without confirming
+- **WHEN** the winner chooses one PNG, reads the irreversible microcopy, and leaves without confirming
 - **THEN** no file is stored
 - **AND** the invoice is still `pending` and the winner can upload
 
@@ -1616,8 +1634,8 @@ status shows that proof was sent.
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
 - **GIVEN** an invoice that is `payment_verifying`
-- **WHEN** a card payment is attempted for it
-- **THEN** Grade10 refuses it and makes no charge
+- **WHEN** the winner tries to start a card payment for it
+- **THEN** Grade10 starts none and makes no charge
 - **AND** the invoice is still `payment_verifying`
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-d3x rev=1 -->
@@ -1629,13 +1647,15 @@ status shows that proof was sent.
 - **THEN** neither offers an upload
 - **AND** Grade10 refuses both attempts
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-uxu rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-uxu rev=2 -->
 #### Scenario: winner-order-SC-119 - An upload that fails part-way stores nothing
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** a bank transfer invoice that is `pending`
+- **GIVEN** a bank transfer invoice that is `pending` and Submit Payment Proof open with a filled draft
 - **WHEN** the winner confirms three files and the upload fails before it completes
 - **THEN** no file is stored and the invoice is still `pending`
+- **AND** Submit Payment Proof stays open with the draft
+- **AND** an error toast reads **Proof not submitted** / **Nothing was saved. Try again.**
 - **AND** the winner can upload again
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-7nh rev=1 -->
@@ -1645,6 +1665,43 @@ status shows that proof was sent.
 - **GIVEN** an auction order whose bank transfer invoice is `pending`, won by another collector
 - **WHEN** a signed-in collector who is not its winner attempts an upload against it
 - **THEN** Grade10 refuses it
+- **AND** the invoice is still `pending`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-8q1 rev=1 -->
+#### Scenario: winner-order-SC-218 - Successful proof submit shows the success toast
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** a bank transfer invoice that is `pending`
+- **WHEN** the winner confirms a valid proof upload
+- **THEN** the invoice is `payment_verifying` and the order derives as Payment Verifying
+- **AND** a success toast reads **Proof submitted** / **We'll verify your payment shortly.**
+- **AND** an inline default Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed, under Order progress on small viewports and under the lot from `lg` up
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-bb1 rev=1 -->
+#### Scenario: winner-order-SC-219 - Leave is blocked while submitting or converting
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** Submit Payment Proof is open and either the upload is submitting or HEIC conversion is running
+- **WHEN** the winner tries Cancel, Escape or overlay dismiss
+- **THEN** the dialog stays open
+- **AND** the form stays locked until that beat finishes
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-8uw rev=1 -->
+#### Scenario: winner-order-SC-220 - Confirm stays inline microcopy
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** a bank transfer invoice that is `pending`
+- **WHEN** the winner opens Submit Payment Proof
+- **THEN** irreversible microcopy says nothing can be added or changed after submit
+- **AND** no second confirm screen is shown
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ddi rev=1 -->
+#### Scenario: winner-order-SC-239 - A file whose content is not a type Grade10 takes is refused
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** a bank transfer invoice that is `pending`
+- **WHEN** an upload carries a GIF file named `slip.jpg`
+- **THEN** Grade10 refuses the whole upload and stores no file
 - **AND** the invoice is still `pending`
 
 ### Requirement: Returned proof reopens the invoice
@@ -2578,3 +2635,39 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **WHEN** Grade10 creates the Stripe payment for that order
 - **THEN** the Stripe payment's metadata carries `payment_reference_code` equal to the order's payment reference
 - **AND** Stripe's own returned provider reference appears on no surface the winner reads
+
+### Requirement: Winner Order makes the tracking number the carrier link
+
+While an auction order's fulfilment is `fulfilled` and it has a tracking
+number, Winner Order SHALL show that number as the external link to the carrier
+tracking page in Order Progress. The link SHALL open in a new tab. Order
+Progress SHALL show no separate Track shipment control or carrier name. The
+link SHALL remain after `delivery_confirmed` is set while the fulfilment stays
+`fulfilled`.
+
+This requirement governs the live Winner Order presentation only. The carrier
+data a winner keeps remains governed by `Records the winner keeps`; it does
+not require carrier name in Order Progress.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-h7d rev=1 -->
+#### Scenario: winner-order-SC-251 - A dispatched lot shows the tracking number as the carrier link
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order whose fulfilment status has just become
+  `fulfilled` with a tracking number attached
+- **WHEN** the winner opens the order
+- **THEN** Order Progress shows the tracking number as a link to the carrier
+  tracking page
+- **AND** the link opens in a new tab
+- **AND** it shows no separate Track shipment control and no carrier name in
+  Order Progress
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-k4r rev=1 -->
+#### Scenario: winner-order-SC-252 - The tracker remains after delivery is confirmed
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order that is `fulfilled` with a tracking number, and
+  `delivery_confirmed` is set
+- **WHEN** the winner opens the order
+- **THEN** Order Progress still shows the tracking number as a link to the
+  carrier tracking page

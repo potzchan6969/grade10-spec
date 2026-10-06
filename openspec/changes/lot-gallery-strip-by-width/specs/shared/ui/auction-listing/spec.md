@@ -1,3 +1,13 @@
+# shared/ui/auction-listing Specification
+
+## Purpose
+Shared auction listing blocks disclose the buyer's premium on the bid panel
+before a collector commits a maximum. They are the shared listing product-page
+blocks every auction storefront composes: the media gallery, the bid panel,
+the bid history, and the details section. The bid history carries accepted
+instants so collector activity can be localized without changing the listing's
+authoritative event data.
+
 ## Feature set
 
 - Gallery strip
@@ -48,4 +58,13 @@ SHALL render no item and SHALL NOT present previous/next as available.
 - **WHEN** it renders
 - **THEN** that image is shown
 - **AND** no thumbnail rail is shown
+- **AND** previous and next are not available
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-1mh rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-56 - Empty ListingLotGallery has no item or navigation
+**Serves:** Gallery strip - empty ListingLotGallery has no item or navigation
+
+- **GIVEN** `ListingLotGallery` with no images
+- **WHEN** it renders
+- **THEN** no image is shown
 - **AND** previous and next are not available

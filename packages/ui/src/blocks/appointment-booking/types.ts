@@ -1,8 +1,5 @@
 import type { ReactNode } from "react";
 
-/** The five picks of the flow, in the order the collector makes them. */
-type BookingStep = "service" | "location" | "day" | "time" | "details";
-
 /** One thing a service asks at booking; the label is the operator's words. */
 type BookingQuestion = {
   id: string;
@@ -74,5 +71,4 @@ export type {
   BookingRecordState,
   BookingService,
   BookingSlot,
-  BookingStep,
 };

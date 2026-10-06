@@ -42,8 +42,44 @@
 **Expected result:**
 
 * Status reads Preparing Shipment.
+* Status badge uses `default`.
+
+### grade10-site-auction-account-record-US3-TC23-1: Shipped Won row keeps the default badge
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-03
+
+**Pre-conditions:**
+
+* customer(winner) is on My Auctions with <won_shipped>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <won_shipped> | A won listing with invoice `paid`, fulfilment `fulfilled`, and no delivery confirmation |
+
+**Steps:**
+
+1. Read Status on that row.
+
+**Expected result:**
+
+* Status reads Shipped.
+* Status badge uses `default`.
 
 ## Reconciliation
 
 - **Covered:** `grade10-site-auction-account-record-SC-20` ← `US3-TC20-1`.
+- **Covered:** `grade10-site-auction-account-record-SC-23` ← `US3-TC23-1`.
 - **Raised:** none.

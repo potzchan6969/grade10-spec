@@ -1,4 +1,18 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
+import type {
+  BookingConfirmationCopy,
+  BookingDay,
+  BookingDetailsFormCopy,
+  BookingLocation,
+  BookingManageCardCopy,
+  BookingRecord,
+  BookingRecordState,
+  BookingService,
+  BookingServicePickerCopy,
+  BookingSlot,
+  BookingSlotPickerCopy,
+  BookingSummaryCopy,
+} from "@grade10/ui";
 import {
   FacebookLogo,
   InstagramLogo,
@@ -27,30 +41,52 @@ const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
 const ACCOUNT_EMAIL = "collector@example.com";
 
 /** Storybook ids for vault proposal pages (workbench deep links). */
-const VAULT_SUBMIT_STORY_ID = "pages-vault-submit--default";
-const VAULT_CONFIRMATION_STORY_ID =
-  "pages-vault-submission-confirmation--default";
-const VAULT_TRACKER_STORY_ID = "pages-vault-intake-tracker--in-transit";
+const VAULT_BOOK_VISIT_STORY_ID = "pages-appointment-book-visit--default";
+const VAULT_CONFIRMATION_STORY_ID = "pages-appointment-confirmation--default";
+const VAULT_MY_VISITS_STORY_ID = "pages-appointment-appointments--default";
+const VAULT_MANAGE_VISIT_STORY_ID = VAULT_MY_VISITS_STORY_ID;
+const VAULT_TRACKER_STORY_ID = "pages-vault-intake-tracker--registered";
 const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
 const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--in-vault";
 const VAULT_RETRIEVAL_STORY_ID = "pages-vault-request-retrieval--default";
+
+const VAULT_SUBMIT_STORY_ID = VAULT_BOOK_VISIT_STORY_ID;
 
 function storyHref(storyId: string): string {
   return `?path=/story/${storyId}`;
 }
 
 const VAULT_PORTFOLIO_HREF = storyHref(VAULT_PORTFOLIO_STORY_ID);
-const VAULT_SUBMIT_HREF = storyHref(VAULT_SUBMIT_STORY_ID);
+const VAULT_BOOK_VISIT_HREF = storyHref(VAULT_BOOK_VISIT_STORY_ID);
+const VAULT_SUBMIT_HREF = VAULT_BOOK_VISIT_HREF;
 const VAULT_ITEM_DETAIL_HREF = storyHref(VAULT_ITEM_DETAIL_STORY_ID);
 const VAULT_RETRIEVAL_HREF = storyHref(VAULT_RETRIEVAL_STORY_ID);
 const VAULT_TRACKER_HREF = storyHref(VAULT_TRACKER_STORY_ID);
 const VAULT_CONFIRMATION_HREF = storyHref(VAULT_CONFIRMATION_STORY_ID);
+const VAULT_MANAGE_VISIT_HREF = storyHref(VAULT_MANAGE_VISIT_STORY_ID);
+const VAULT_MY_VISITS_HREF = storyHref(VAULT_MY_VISITS_STORY_ID);
+
+/** Inventory register categories — [Items](docs/prds/products/grade10-admin/inventory/items.md). */
+const REGISTER_CATEGORIES = [
+  { value: "trading-card", label: "Trading card" },
+  { value: "comic", label: "Comic" },
+  { value: "coin", label: "Coin" },
+  { value: "banknote", label: "Banknote" },
+  { value: "stamp", label: "Stamp" },
+  { value: "bullion", label: "Bullion" },
+  { value: "watch", label: "Watch" },
+  { value: "jewellery", label: "Jewellery" },
+  { value: "memorabilia", label: "Memorabilia" },
+  { value: "other", label: "Other" },
+] as const;
+
+type RegisterCategory = (typeof REGISTER_CATEGORIES)[number]["value"];
+type ItemCondition = "Graded" | "Raw";
 
 type VaultAssetStatus =
-  | "Submitted"
-  | "In transit"
-  | "At store"
-  | "Intake"
+  | "Registered"
+  | "Pre-check"
+  | "Signing"
   | "Imaging"
   | "In Vault"
   | "Retrieval pending"
@@ -61,9 +97,11 @@ type ValuationSource = "Declared" | "Intake estimate" | "Market";
 type VaultAsset = {
   id: string;
   name: string;
-  set: string;
+  category: RegisterCategory;
+  categoryLabel: string;
+  condition: ItemCondition;
   grade: string;
-  cert: string;
+  cert: string | null;
   vaultId: string | null;
   status: VaultAssetStatus;
   estimateHkd: number;
@@ -75,7 +113,9 @@ const VAULT_ASSETS: VaultAsset[] = [
   {
     id: "va-001",
     name: "1999 Charizard",
-    set: "Base Set · Holofoil",
+    category: "trading-card",
+    categoryLabel: "Trading card · Base Set Holofoil",
+    condition: "Graded",
     grade: "PSA 10",
     cert: "51234567",
     vaultId: "G10-VLT-004821",
@@ -86,22 +126,26 @@ const VAULT_ASSETS: VaultAsset[] = [
   },
   {
     id: "va-002",
-    name: "2023 Pikachu SAR",
-    set: "Scarlet & Violet · 151",
-    grade: "PSA 10",
-    cert: "81220991",
-    vaultId: "G10-VLT-004902",
+    name: "Rolex Submariner Date",
+    category: "watch",
+    categoryLabel: "Watch · 126610LN",
+    condition: "Raw",
+    grade: "Raw",
+    cert: null,
+    vaultId: "G10-VLT-004910",
     status: "In Vault",
-    estimateHkd: 42000,
+    estimateHkd: 72000,
     valuationSource: "Intake estimate",
     imageSrc: SCAN_IMAGE,
   },
   {
     id: "va-003",
-    name: "2000 Blastoise",
-    set: "Base Set 2",
-    grade: "BGS 9.5",
-    cert: "00110283",
+    name: "Amazing Spider-Man #300",
+    category: "comic",
+    categoryLabel: "Comic · CGC 9.8",
+    condition: "Graded",
+    grade: "CGC 9.8",
+    cert: "44129001",
     vaultId: null,
     status: "Imaging",
     estimateHkd: 18500,
@@ -110,13 +154,29 @@ const VAULT_ASSETS: VaultAsset[] = [
   },
   {
     id: "va-004",
-    name: "2020 Umbreon VMAX",
-    set: "Evolving Skies",
-    grade: "CGC 10",
-    cert: "44129001",
+    name: "1887 Victoria sovereign",
+    category: "coin",
+    categoryLabel: "Coin · Gold",
+    condition: "Raw",
+    grade: "Raw",
+    cert: null,
     vaultId: null,
-    status: "In transit",
-    estimateHkd: 27600,
+    status: "Registered",
+    estimateHkd: 6200,
+    valuationSource: "Declared",
+    imageSrc: SCAN_IMAGE,
+  },
+  {
+    id: "va-005",
+    name: "2023 Pikachu SAR",
+    category: "trading-card",
+    categoryLabel: "Trading card · SV 151",
+    condition: "Graded",
+    grade: "PSA 10",
+    cert: "81220991",
+    vaultId: null,
+    status: "Pre-check",
+    estimateHkd: 42000,
     valuationSource: "Declared",
     imageSrc: SCAN_IMAGE,
   },
@@ -213,7 +273,8 @@ const VAULT_FOOTER = {
       heading: "VAULT",
       links: [
         { label: "My Portfolio", href: VAULT_PORTFOLIO_HREF },
-        { label: "Submit to Vault", href: VAULT_SUBMIT_HREF },
+        { label: "Book a visit", href: VAULT_BOOK_VISIT_HREF },
+        { label: "Appointments", href: VAULT_MY_VISITS_HREF },
       ],
     },
     {
@@ -233,36 +294,257 @@ const VAULT_FOOTER = {
   ],
 };
 
-const MANIFEST_FIXTURE = {
-  submissionId: "SUB-2026-09140",
-  qrCode: "G10-SUB-202609140-QR",
+const VISIT_TIME_ZONE = "Asia/Hong_Kong";
+const VISIT_MONTH = "2026-09";
+
+const VISIT_DAYS: readonly BookingDay[] = Array.from(
+  { length: 30 },
+  (_, index) => {
+    const day = index + 1;
+    const date = `${VISIT_MONTH}-${String(day).padStart(2, "0")}`;
+    const sunday = new Date(Date.UTC(2026, 8, day)).getUTCDay() === 0;
+    return { date, available: day >= 2 && !sunday };
+  },
+);
+
+const THIRD_HKT_10 = Date.UTC(2026, 8, 3, 2, 0);
+const VISIT_SLOTS: readonly BookingSlot[] = [0, 15, 30, 45, 75, 90, 105].map(
+  (minutes) => ({
+    start: THIRD_HKT_10 + minutes * 60_000,
+    end: THIRD_HKT_10 + (minutes + 30) * 60_000,
+    remaining: 1,
+  }),
+);
+
+const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
+  dayTitle: "Pick a day",
+  timeTitle: "Pick a time",
+  previousMonth: "Previous month",
+  nextMonth: "Next month",
+  timesIn: "Times in",
+  pickADay: "Pick a day to see its times.",
+  noTimes: "Nothing is free on this day any more.",
+};
+
+const SHOP_NAME = "Hong Kong Grade10 Store";
+const SHOP_ADDRESS = "13 Pak Sha Road, Causeway Bay, Hong Kong";
+
+const GRADING_VISIT_SERVICE: BookingService = {
+  id: "svc_grading",
+  slug: "grading",
+  name: "Card grading",
+  description: "Bring a card in and have it graded at the desk.",
+  durationLabel: "30 min",
+  questions: [
+    {
+      id: "format",
+      label: "Is the card raw or slabbed?",
+      kind: "choice",
+      options: ["Raw", "Slabbed"],
+      required: true,
+    },
+  ],
+};
+
+const VAULT_DROP_OFF_SERVICE: BookingService = {
+  id: "svc_vault_drop_off",
+  slug: "vault-drop-off",
+  name: "Vault drop-off",
+  description:
+    "Bring collectibles to vault. Staff register them at the counter.",
+  durationLabel: "30 min",
+  questions: [],
+};
+
+const CONSULTATION_VISIT_SERVICE: BookingService = {
+  id: "svc_consultation",
+  slug: "consultation",
+  name: "Collection consultation",
+  description: "Talk through a collection with a specialist.",
+  durationLabel: "60 min",
+  questions: [],
+};
+
+const BOOK_VISIT_SERVICES: readonly BookingService[] = [
+  GRADING_VISIT_SERVICE,
+  VAULT_DROP_OFF_SERVICE,
+  CONSULTATION_VISIT_SERVICE,
+];
+
+const CAUSEWAY_BAY: BookingLocation = {
+  id: "loc_causeway_bay",
+  slug: "causeway-bay",
+  name: SHOP_NAME,
+  address: SHOP_ADDRESS,
+  timeZone: VISIT_TIME_ZONE,
+};
+
+const VISIT_RECORD: BookingRecord = {
+  id: "bk_vault",
+  service: VAULT_DROP_OFF_SERVICE.name,
+  location: SHOP_NAME,
+  address: SHOP_ADDRESS,
+  timeZone: VISIT_TIME_ZONE,
+  start: Date.UTC(2026, 8, 3, 2, 15),
+  end: Date.UTC(2026, 8, 3, 2, 45),
+  state: "booked",
+};
+
+const GRADING_VISIT_RECORD: BookingRecord = {
+  ...VISIT_RECORD,
+  id: "bk_grading",
+  service: GRADING_VISIT_SERVICE.name,
+  start: Date.UTC(2026, 8, 10, 6, 0),
+  end: Date.UTC(2026, 8, 10, 7, 0),
+};
+
+const COMPLETED_VISIT_RECORD: BookingRecord = {
+  ...VISIT_RECORD,
+  id: "bk_vault_done",
+  start: Date.UTC(2026, 7, 24, 2, 0),
+  end: Date.UTC(2026, 7, 24, 2, 30),
+  state: "completed",
+};
+
+const VISIT_NOW_MS = Date.UTC(2026, 8, 1, 4, 0);
+
+const BOOKING_STATE_LABELS: Record<BookingRecordState, string> = {
+  booked: "Booked",
+  cancelled: "Cancelled",
+  completed: "Completed",
+  no_show: "No show",
+};
+
+const SERVICE_PICKER_COPY: BookingServicePickerCopy = {
+  title: "What are you coming in for?",
+};
+
+const BOOK_VISIT_NAV_COPY = {
+  continue: "Continue",
+  back: "Back",
+  slotTitle: "Select a date and time",
+  prepTitle: "What to prepare",
+};
+
+const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
+  title: "Your details",
+  name: "Name",
+  email: "Email",
+  phone: "Phone",
+  notes: "Anything we should know?",
+  notesHint: "Told the desk as a reference — not an intake record.",
+  optional: "optional",
+  nameMissing: "Tell us your name.",
+  emailMissing: "Tell us where to send the confirmation.",
+  emailInvalid: "That doesn’t look like an email address.",
+  answerMissing: "Pick one to continue.",
+  submit: "Book the visit",
+};
+
+const SUMMARY_COPY: BookingSummaryCopy = {
+  title: "Your visit",
+  service: "Service",
+  location: "Shop",
+  when: "When",
+};
+
+const MANAGE_CARD_COPY: BookingManageCardCopy = {
+  service: "Service",
+  location: "Shop",
+  when: "When",
+  state: BOOKING_STATE_LABELS,
+  move: "Move the visit",
+  cancel: "Cancel the visit",
+  cancelTitle: "Cancel this visit?",
+  cancelBody: "The desk goes back to being free, and we’ll send you a note.",
+  cancelConfirm: "Yes, cancel it",
+  cancelKeep: "Keep it",
+};
+
+const APPOINTMENTS_COPY = {
+  upcomingHeading: "Upcoming",
+  pastHeading: "Past",
+  emptyTitle: "No appointments yet",
+  emptyDescription: "Book a visit and it shows up here.",
+};
+
+const VISIT_CONFIRMATION_COPY: BookingConfirmationCopy = {
+  title: "You’re booked",
+  body: "We’ve sent the details to your email, with a calendar file.",
+  service: "Service",
+  location: "Shop",
+  when: "When",
+  manage: "Move or cancel this visit",
+  calendar: "Add to calendar",
+};
+
+const VISIT_PREP_TIPS = [
+  "Bring the collectibles you want to vault",
+  "Bring photo ID",
+  "You do not need a Grade10 account beforehand — walk-ins are fine",
+  "Staff register each item at the counter, then you sign on the iPad",
+] as const;
+
+const GRADING_PREP_TIPS = [
+  "Bring the card you want graded",
+  "Bring photo ID",
+  "Say at the desk whether it is raw or already slabbed",
+] as const;
+
+const CONSULTATION_PREP_TIPS = [
+  "Bring photos or a short list of pieces you want to talk through",
+  "Bring photo ID",
+] as const;
+
+function prepTipsForService(serviceId: string): readonly string[] {
+  if (serviceId === GRADING_VISIT_SERVICE.id) return GRADING_PREP_TIPS;
+  if (serviceId === CONSULTATION_VISIT_SERVICE.id)
+    return CONSULTATION_PREP_TIPS;
+  return VISIT_PREP_TIPS;
+}
+
+const VISIT_FIXTURE = {
+  visitId: "VIS-2026-09140",
   email: ACCOUNT_EMAIL,
   phone: "+852 9123 4567",
+  shop: SHOP_NAME,
+  address: SHOP_ADDRESS,
+  bringTips: VISIT_PREP_TIPS,
+};
+
+/** Items after counter registration — intake tracker fixtures. */
+const INTAKE_FIXTURE = {
+  caseId: "CASE-2026-09140",
+  shop: SHOP_NAME,
   items: [
     {
-      name: "1999 Charizard · Base Set Holofoil",
+      name: "1999 Charizard",
+      category: "Trading card",
+      condition: "Graded" as ItemCondition,
       grade: "PSA 10",
       cert: "51234567",
       declaredHkd: 95000,
     },
     {
-      name: "2023 Pikachu SAR · SV 151",
-      grade: "PSA 10",
-      cert: "81220991",
-      declaredHkd: 40000,
+      name: "1887 Victoria sovereign",
+      category: "Coin",
+      condition: "Raw" as ItemCondition,
+      grade: "Raw",
+      cert: null,
+      declaredHkd: 6200,
     },
-  ],
-  packingTips: [
-    "Put each slab in a team bag",
-    "Wrap in bubble wrap",
-    "Use a hard box",
-    "Insert packing slip inside",
-    "Tape shipping label outside",
   ],
 };
 
 function formatHkd(amount: number): string {
   return `HK$${amount.toLocaleString("en-HK")}`;
+}
+
+function assetSubtitle(asset: VaultAsset): string {
+  if (asset.condition === "Graded" && asset.cert) {
+    return `${asset.categoryLabel} · ${asset.grade}`;
+  }
+  return `${asset.categoryLabel} · Raw`;
 }
 
 function statusBadgeVariant(
@@ -271,9 +553,9 @@ function statusBadgeVariant(
   switch (status) {
     case "In Vault":
       return "success";
-    case "In transit":
-    case "At store":
-    case "Intake":
+    case "Registered":
+    case "Pre-check":
+    case "Signing":
     case "Imaging":
       return "info";
     case "Retrieval pending":
@@ -285,19 +567,50 @@ function statusBadgeVariant(
   }
 }
 
-export type { ValuationSource, VaultAsset, VaultAssetStatus };
+export type {
+  ItemCondition,
+  RegisterCategory,
+  ValuationSource,
+  VaultAsset,
+  VaultAssetStatus,
+};
 export {
+  APPOINTMENTS_COPY,
+  assetSubtitle,
+  BOOK_VISIT_NAV_COPY,
+  BOOK_VISIT_SERVICES,
+  CAUSEWAY_BAY,
+  COMPLETED_VISIT_RECORD,
+  CONSULTATION_VISIT_SERVICE,
+  DETAILS_FORM_COPY,
   formatHkd,
-  MANIFEST_FIXTURE,
+  GRADING_VISIT_RECORD,
+  GRADING_VISIT_SERVICE,
+  INTAKE_FIXTURE,
+  MANAGE_CARD_COPY,
   PORTFOLIO_SUMMARY,
+  prepTipsForService,
+  REGISTER_CATEGORIES,
   SCAN_IMAGE,
+  SERVICE_PICKER_COPY,
+  SHOP_ADDRESS,
+  SHOP_NAME,
+  SLOT_PICKER_COPY,
+  SUMMARY_COPY,
   statusBadgeVariant,
   VAULT_ASSETS,
+  VAULT_BOOK_VISIT_HREF,
+  VAULT_BOOK_VISIT_STORY_ID,
   VAULT_CONFIRMATION_HREF,
   VAULT_CONFIRMATION_STORY_ID,
+  VAULT_DROP_OFF_SERVICE,
   VAULT_FOOTER,
   VAULT_ITEM_DETAIL_HREF,
   VAULT_ITEM_DETAIL_STORY_ID,
+  VAULT_MANAGE_VISIT_HREF,
+  VAULT_MANAGE_VISIT_STORY_ID,
+  VAULT_MY_VISITS_HREF,
+  VAULT_MY_VISITS_STORY_ID,
   VAULT_PORTFOLIO_HREF,
   VAULT_PORTFOLIO_STORY_ID,
   VAULT_RETRIEVAL_HREF,
@@ -307,4 +620,13 @@ export {
   VAULT_SUBMIT_STORY_ID,
   VAULT_TRACKER_HREF,
   VAULT_TRACKER_STORY_ID,
+  VISIT_CONFIRMATION_COPY,
+  VISIT_DAYS,
+  VISIT_FIXTURE,
+  VISIT_MONTH,
+  VISIT_NOW_MS,
+  VISIT_PREP_TIPS,
+  VISIT_RECORD,
+  VISIT_SLOTS,
+  VISIT_TIME_ZONE,
 };

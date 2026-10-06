@@ -13,8 +13,8 @@ import {
   formatHkd,
   PORTFOLIO_SUMMARY,
   VAULT_ASSETS,
+  VAULT_BOOK_VISIT_STORY_ID,
   VAULT_ITEM_DETAIL_STORY_ID,
-  VAULT_SUBMIT_STORY_ID,
   type VaultAsset,
   type VaultAssetStatus,
 } from "./vault-content";
@@ -38,10 +38,9 @@ const FILTERS: { key: FilterKey; label: string }[] = [
 ];
 
 const INCOMING: VaultAssetStatus[] = [
-  "Submitted",
-  "In transit",
-  "At store",
-  "Intake",
+  "Registered",
+  "Pre-check",
+  "Signing",
   "Imaging",
 ];
 
@@ -112,20 +111,21 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
 
       <PageHeader
         title="My Vault Portfolio"
-        description="Physical assets stored at Crown Fine Art. Estimates always name their source."
+        description="Physical assets stored after a shop visit. Estimates always name their source."
         actions={
           <Button
             type="button"
-            onClick={() => navigateToStory(VAULT_SUBMIT_STORY_ID)}
+            onClick={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
           >
-            Submit to Vault
+            Book a vault visit
           </Button>
         }
       />
 
       <ProposalBanner title="Day-one scope">
         List for Auction is Proposed. Live market feed is Proposed — values show
-        Declared or Intake estimate today.
+        Declared or Intake estimate today. Incoming items do not block booking
+        another vault visit.
       </ProposalBanner>
 
       <PortfolioSummary
@@ -141,9 +141,9 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
       {empty ? (
         <VaultEmptyState
           title="No vaulted items yet"
-          description="Submit graded slabs to start your portfolio. We authenticate, scan, and store them at Crown Fine Art."
-          actionLabel="Submit to Vault"
-          onAction={() => navigateToStory(VAULT_SUBMIT_STORY_ID)}
+          description="Book a visit or walk in. Staff register your items at the counter, you sign, then we scan and store."
+          actionLabel="Book a vault visit"
+          onAction={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
         />
       ) : (
         <>

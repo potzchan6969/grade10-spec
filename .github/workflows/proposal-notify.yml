@@ -138,12 +138,28 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
           WORKFLOW_ID: ${{ github.event.workflow_run.workflow_id }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
           RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          base="$(gh api \
-            "repos/$REPOSITORY/actions/workflows/$WORKFLOW_ID/runs?branch=main&per_page=100" \
-            --jq "[.workflow_runs[] | select(.conclusion == \"success\" and .run_number < $RUN_NUMBER)] | sort_by(.run_number) | last | .head_sha // empty")"
+          # GitHub can return an old workflow-run listing. Accept its base
+          # only when the listing includes the deploy that woke this job.
+          # Retry a fresh URL before failing; the next deploy can still catch
+          # up from the last successful one.
+          base=""
+          for attempt in 1 2 3; do
+            runs="$(gh api \
+              "repos/$REPOSITORY/actions/workflows/$WORKFLOW_ID/runs?branch=main&per_page=100&seen=$RUN_ID-$attempt")"
+            if base="$(printf '%s' "$runs" | node scripts/openspec/select-deployed-base.mjs \
+              "$RUN_ID" "$RUN_NUMBER" "$HEAD_SHA")"; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::Manual run listing did not include this deploy after 3 attempts."
+              exit 1
+            fi
+            sleep 3
+          done
           if [ -z "$base" ] || ! git merge-base --is-ancestor "$base" "$HEAD_SHA"; then
             base="$(git rev-parse "$HEAD_SHA^")"
             echo "::notice::No earlier successful deploy on this history; reading from $base."

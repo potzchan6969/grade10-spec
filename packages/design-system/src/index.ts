@@ -23,6 +23,7 @@ export * from "./components/display/tabs";
 export * from "./components/display/text";
 export * from "./components/forms/autocomplete";
 export * from "./components/forms/button";
+export * from "./components/forms/calendar";
 export * from "./components/forms/checkbox-button";
 export * from "./components/forms/checkbox-list";
 export * from "./components/forms/checkbox-list-input";

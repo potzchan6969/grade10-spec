@@ -1,7 +1,7 @@
 # grade10-site/auction/winner-order Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-29, tcs-rules r3.0
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## winner-order-US9: Winner pays an invoice by bank transfer
 
@@ -9,8 +9,8 @@
 **I want** to choose bank transfer, see where to send the money and what reference to quote, and send Grade10 proof,
 **so that** Grade10 can match my payment and my deadline stops while it is checked.
 
-<!-- trace:case id=g10.auction-winner-order.TC-sls rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC28-1: Successful proof submit toasts and shows Payment Verifying
+<!-- trace:case id=g10.auction-winner-order.TC-isg rev=2 covers=g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-8q1 -->
+### winner-order-US9-TC2-2: Uploading proof stops the deadline and reads Payment Verifying
 
 **Classification:**
 
@@ -27,113 +27,40 @@
 
 **Pre-conditions:**
 
-* customer(winner) is signed in on <the winner's auction order url> for <pending_bank_transfer_order>.
+* customer(winner) is on <winner order url> for <order bt>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <pending_bank_transfer_order> | An auction order whose invoice was sent for bank transfer and is pending |
-| <valid_proof> | One PDF under 5 MB with sender name, transfer date and transaction reference filled |
+| <order bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <time left> | 3 days 4 hours (273600s) before the payment deadline |
+| <proof> | One PDF under 5 MB |
 
 **Steps:**
 
-1. Open Submit Payment Proof from Order summary.
-2. Enter <valid_proof>.
-3. Choose Submit Payment Proof.
+1. Click Submit Payment Proof.
+2. Choose <proof>.
+3. Submit the proof.
 
-**Expected result:**
+**Expected Results:**
 
-* A success toast reads Proof submitted / We'll verify your payment shortly.
+* A toast reads Proof submitted and We'll verify your payment shortly.
 * The order reads Payment Verifying.
-* Submit Payment Proof and View Bank Details are hidden.
+* The deadline stops with <time left> kept.
+* A default inline Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed: under Order progress on small viewports and under the lot from `lg` up.
+* Card Pay, Submit Payment Proof, View Bank Details and further uploads are hidden.
+* <proof> and its file name are not shown.
 
-<!-- trace:case id=g10.auction-winner-order.TC-nfm rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC29-1: Failed proof upload stays open with the draft
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* customer(winner) is signed in on <the winner's auction order url> for <pending_bank_transfer_order>.
-* Submit Payment Proof is open with a filled draft.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <pending_bank_transfer_order> | An auction order whose invoice was sent for bank transfer and is pending |
-| <upload_failure> | The upload fails before it completes |
-
-**Steps:**
-
-1. Confirm Submit Payment Proof with a valid draft.
-2. Let <upload_failure> occur.
-
-**Expected result:**
-
-* No file is stored and the invoice stays pending.
-* Submit Payment Proof stays open with the draft.
-* An error toast reads Proof not submitted / Nothing was saved. Try again.
-
-<!-- trace:case id=g10.auction-winner-order.TC-xl5 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC30-1: Leave is blocked while submitting or converting HEIC
+<!-- trace:case id=g10.auction-winner-order.TC-8kk rev=2 covers=g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-8uw -->
+### winner-order-US9-TC7-2: Backing out of the confirm step uploads nothing
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* customer(winner) has Submit Payment Proof open on <pending_bank_transfer_order>.
-* Either submit is in flight or HEIC conversion is running.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <pending_bank_transfer_order> | An auction order whose invoice was sent for bank transfer and is pending |
-
-**Steps:**
-
-1. While the form is busy, choose Cancel.
-2. Press Escape.
-3. Dismiss via the overlay.
-
-**Expected result:**
-
-* The dialog stays open.
-* The form stays locked until the busy beat finishes.
-
-<!-- trace:case id=g10.auction-winner-order.TC-ppn rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC31-1: Confirm stays inline irreversible microcopy
-
-**Classification:**
-
-* **Severity:** minor
+* **Severity:** normal
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
@@ -143,54 +70,31 @@
 
 **Pre-conditions:**
 
-* customer(winner) is signed in on <the winner's auction order url> for <pending_bank_transfer_order>.
+* customer(winner) is on <winner order url> for <order bt>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <pending_bank_transfer_order> | An auction order whose invoice was sent for bank transfer and is pending |
+| <order bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <proof> | Two PNG files |
 
 **Steps:**
 
-1. Open Submit Payment Proof from Order summary.
+1. Click Submit Payment Proof.
+2. Choose <proof>.
+3. Read the inline warning that files cannot be added or changed after submission.
+4. Cancel without submitting.
 
-**Expected result:**
+**Expected Results:**
 
-* Irreversible microcopy says nothing can be added or changed after submit.
 * No second confirm screen is shown.
+* No proof is stored.
+* The order still reads Pending Payment; the deadline runs.
+* Submit Payment Proof is still offered.
 
-<!-- trace:case id=g10.auction-winner-order.TC-lnx rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC26-1: No card payment starts while proof is checked
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* customer(winner) holds an auction order whose bank transfer invoice is `payment_verifying`.
-
-**Steps:**
-
-1. As the winner, try to start a card payment for the invoice.
-
-**Expected Results:**
-
-* No card payment starts, and no card is charged.
-* The invoice is still `payment_verifying`.
-
-<!-- trace:case id=g10.auction-winner-order.TC-jvj rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### winner-order-US9-TC27-1: A file whose content is not a type Grade10 takes is refused
+<!-- trace:case id=g10.auction-winner-order.TC-q03 rev=2 covers=g10.auction-winner-order.SC-uxu -->
+### winner-order-US9-TC14-2: An upload cut off part-way leaves the invoice pending
 
 **Classification:**
 
@@ -198,31 +102,95 @@
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** security
+* **Type:** functional
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** winner-order-US-09
 
 **Pre-conditions:**
 
-* customer(winner) holds an auction order whose bank transfer invoice is `pending`.
+* customer(winner) is on <winner order url> for <order bt>.
+* The connection is set to drop during upload.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order bt> | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| <proof> | Three allowed files under 5 MB |
 
 **Steps:**
 
-1. Send Grade10 an upload carrying a GIF file named `slip.jpg`.
+1. Click Submit Payment Proof.
+2. Choose <proof> and submit.
+3. Let the connection drop during upload.
+4. Restore the connection and submit <proof> again.
 
 **Expected Results:**
 
-* Grade10 refuses the whole upload.
-* No file is stored.
-* The invoice is still `pending`.
+* Step 3: Submit Payment Proof stays open with <proof> selected.
+* Step 3: a toast reads Proof not submitted and Nothing was saved. Try again.
+* Step 3: the order reads Pending Payment; the deadline runs; nothing is stored.
+* Step 4: the upload is accepted.
+
+<!-- trace:case id=g10.auction-winner-order.TC-xl5 rev=2 covers=g10.auction-winner-order.SC-bb1 -->
+### winner-order-US9-TC30-2: Busy proof form blocks every leave route
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner) is signed in on <winner order url> for <pending bank-transfer order>.
+* Submit Payment Proof is open.
+
+**Test data:**
+
+| <busy work> | <leave route> |
+| --- | --- |
+| Proof submission in progress | Cancel |
+| HEIC conversion in progress | Escape |
+| Proof submission in progress | Overlay dismiss |
+
+**Steps:**
+
+1. Start <busy work>.
+2. Use <leave route>.
+
+**Expected Results:**
+
+* Submit Payment Proof stays open.
+* The form remains locked until <busy work> finishes.
 
 ## Reconciliation
 
-- **Covered:** `winner-order-SC-218` ← `US9-TC5-1`; `winner-order-SC-119`
-  (modified) ← `US9-TC6-1`; `winner-order-SC-219` ← `US9-TC7-1`;
-  `winner-order-SC-220` ← `US9-TC8-1`; `winner-order-SC-117` ← `US9-TC26-1`;
-  `winner-order-SC-239` ← `US9-TC27-1`.
-- **Raised:** none.
+**Run input:** QA1 wrote four blind cases from frozen `winner-order-US-09` and
+the `Bank transfer` Feature set root. QA2 reconciled those cases against the
+proposal, decisions, UI design, technical design, tasks, delta scenarios and
+journeys, the durable Winner Order suite, Post-Bidding, and active overlapping
+auction changes. This statement records the input to reconciliation, not proof
+that implementation works.
+
+| Blind case or scenario | Disposition |
+| --- | --- |
+| `winner-order-US9-TC28-1` | **Folded into:** `winner-order-US9-TC2-2`. The same successful-upload route now verifies the toast, Payment Verifying Alert and hidden payment controls. |
+| `winner-order-US9-TC29-1` | **Folded into:** `winner-order-US9-TC14-2`. The existing interrupted-upload route now verifies the open draft and failure toast before retry. |
+| `winner-order-US9-TC31-1` | **Folded into:** `winner-order-US9-TC7-2`. The existing back-out route now verifies inline irreversible microcopy and no second confirm screen. |
+| `winner-order-US9-TC30-2` | **Covered:** `winner-order-SC-219`. Busy leave blocking is a distinct route with no durable case. |
+| `winner-order-SC-99`, `winner-order-SC-100`, `winner-order-SC-101`, `winner-order-SC-103`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-121` and `winner-order-SC-239` | **Covered in durable suite:** unchanged Bank transfer scenarios retain their existing cases. |
+| Product questions | **Settled:** none. Decisions Q1-Q16 and the Post-Bidding Payment Verifying alert decide the behavior. |
+| Uncovered scenarios | **None.** SC-218, SC-219 and SC-220 map to revised or distinct cases; SC-119 maps to the revised retry case. |

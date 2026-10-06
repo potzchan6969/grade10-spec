@@ -1,6 +1,7 @@
 # shared/ui/auction-listing Specification
 
 ## Purpose
+
 Shared auction listing blocks disclose the buyer's premium on the bid panel
 before a collector commits a maximum. They are the shared listing product-page
 blocks every auction storefront composes: the media gallery, the bid panel,
@@ -18,6 +19,7 @@ authoritative event data.
   - Fallback to src: an omitted thumb or zoom uses the main source
 - Gallery strip
   - Several items: more than one image shows a strip; one item does not
+  - Lot gallery by width: ListingLotGallery shows a left rail when wide enough beside the stage; stacked keeps previous/next and progress only
 - Consumer labels
   - Supplied copy: accessible names come from the application
 - Bid history
@@ -861,3 +863,56 @@ leads.
 - **WHEN** the Recent bids list renders
 - **THEN** no row shows a crown
 - **AND** no row carries an accessible name the consumer did not supply
+
+### Requirement: ListingLotGallery shows a left rail only when wide enough
+
+`ListingLotGallery` SHALL render several images with a left thumbnail rail
+only when the gallery is wide enough to place that rail beside the main
+frame. When the gallery is stacked (not wide enough for that rail), it SHALL
+hide the thumbnail rail and SHALL keep previous/next and carousel progress
+available.
+
+With exactly one image it SHALL hide the rail and previous/next. With none it
+SHALL render no item and SHALL NOT present previous/next as available.
+
+`ListingGallery` strip rules are unchanged by this requirement.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-nlz rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-47 - Wide ListingLotGallery shows a left rail
+**Serves:** Gallery strip - wide ListingLotGallery shows a left rail
+
+- **GIVEN** `ListingLotGallery` with two or more images in a gallery column
+  wide enough for a left rail beside the main frame
+- **WHEN** it renders
+- **THEN** a thumbnail exists for each image in a rail beside the main frame
+- **AND** previous and next remain available
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ed7 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-48 - Stacked ListingLotGallery hides the rail
+**Serves:** Gallery strip - stacked ListingLotGallery hides the rail
+
+- **GIVEN** `ListingLotGallery` with two or more images in a stacked gallery
+  column that is not wide enough for a left rail beside the main frame
+- **WHEN** it renders
+- **THEN** no thumbnail rail is shown
+- **AND** previous and next remain available
+- **AND** carousel progress remains available
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ln3 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-49 - One ListingLotGallery image has no rail
+**Serves:** Gallery strip - one ListingLotGallery image has no rail
+
+- **GIVEN** `ListingLotGallery` with exactly one image
+- **WHEN** it renders
+- **THEN** that image is shown
+- **AND** no thumbnail rail is shown
+- **AND** previous and next are not available
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-1mh rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-56 - Empty ListingLotGallery has no item or navigation
+**Serves:** Gallery strip - empty ListingLotGallery has no item or navigation
+
+- **GIVEN** `ListingLotGallery` with no images
+- **WHEN** it renders
+- **THEN** no image is shown
+- **AND** previous and next are not available
