@@ -137,7 +137,8 @@ product is sold out, or hold a cart quantity.
 - **THEN** the product name does not activate
 - **AND** the product image does not activate
 
-#### Scenario: shared-ui-store-product-listing-SC-94 - A sold-out tile opens where it does not sell
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-t2f rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-97 - A sold-out tile opens where it does not sell
 **Serves:** Tile contract - a sold-out tile opens where it does not sell
 
 - **GIVEN** a product supplied as sold out, a tile-activation callback and no cart handler
@@ -145,7 +146,8 @@ product is sold out, or hold a cart quantity.
 - **THEN** tile activation is reported once for each, identifying that product
 - **AND** the tile keeps the sold-out treatment
 
-#### Scenario: shared-ui-store-product-listing-SC-95 - A tile that opens is one stop
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ou9 rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-98 - A tile that opens is one stop
 **Serves:** Accessibility - a tile that opens is one stop
 
 - **GIVEN** a product that is not sold out, a tile-activation callback and a cart handler
@@ -154,7 +156,8 @@ product is sold out, or hold a cart quantity.
 - **AND** assistive technology announces one control named for the product
 - **AND** Enter or Space on the focused name reports tile activation once
 
-#### Scenario: shared-ui-store-product-listing-SC-96 - The name shows that it opens
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-30a rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-99 - The name shows that it opens
 **Serves:** Tile contract - the name shows that it opens
 
 - **GIVEN** a tile that opens, and a tile that does not

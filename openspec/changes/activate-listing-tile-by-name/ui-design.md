@@ -32,6 +32,6 @@ always-underlined link.
 | Name activates with photo | `shared-ui-store-product-listing-SC-87` | [Named Once](?path=/story/store-product-listing-productcard--named-once), [ProductBrowse Default](?path=/story/store-product-listing-productbrowse--default) |
 | Sold-out tile inert where it sells — name plain text, no underline, no focus | `shared-ui-store-product-listing-SC-88` | [`ProductCard` → Sold Out](?path=/story/store-product-listing-productcard--sold-out) |
 | No callback — name and photo inert | `shared-ui-store-product-listing-SC-89` | Omit `onClick` / `onProductClick` in isolation stories |
-| Sold-out tile opens where it does not sell | `shared-ui-store-product-listing-SC-94` | [`ProductCard` → Sold Out Opens Where Nothing Sells](?path=/story/store-product-listing-productcard--sold-out-opens-where-nothing-sells) |
-| One keyboard stop — Tab reaches the name and the cart, not the photo | `shared-ui-store-product-listing-SC-95` | [`ProductCard` → Named Once](?path=/story/store-product-listing-productcard--named-once) |
-| The name shows that it opens — underline on hover and focus; plain at rest | `shared-ui-store-product-listing-SC-96` | [`ProductCard` → Named Once](?path=/story/store-product-listing-productcard--named-once) |
+| Sold-out tile opens where it does not sell | `shared-ui-store-product-listing-SC-97` | [`ProductCard` → Sold Out Opens Where Nothing Sells](?path=/story/store-product-listing-productcard--sold-out-opens-where-nothing-sells) |
+| One keyboard stop — Tab reaches the name and the cart, not the photo | `shared-ui-store-product-listing-SC-98` | [`ProductCard` → Named Once](?path=/story/store-product-listing-productcard--named-once) |
+| The name shows that it opens — underline on hover and focus; plain at rest | `shared-ui-store-product-listing-SC-99` | [`ProductCard` → Named Once](?path=/story/store-product-listing-productcard--named-once) |

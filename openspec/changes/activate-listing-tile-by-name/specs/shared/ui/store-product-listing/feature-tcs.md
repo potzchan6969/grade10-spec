@@ -10,6 +10,7 @@
 **I want** each tile to show what its surface supplies and to sell only where its surface sells,
 **so that** a tile reads the same wherever the store draws it.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-e05 rev=1 covers=g10.shared-store-product-listing.SC-7pj -->
 ### shared-ui-store-product-listing-US1-TC4-1: Name opens the product the same way as the photo
 
 Runs once per row of **Test data**.
@@ -53,6 +54,7 @@ Runs once per row of **Test data**.
 * Step 4 logs one tile activation for `<product_1>`, the same as step 2.
 * Step 4 logs nothing else: no cart change, no second activation.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-5vw rev=1 covers=g10.shared-store-product-listing.SC-7pj -->
 ### shared-ui-store-product-listing-US1-TC5-1: Name in the browse grid opens its own product
 
 **Classification:**
@@ -85,6 +87,7 @@ Runs once per row of **Test data**.
 * Step 2 logs one product activation, for `<product_2>`.
 * Step 4 logs one product activation, for `<product_1>`.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-rny rev=1 covers=g10.shared-store-product-listing.SC-30a -->
 ### shared-ui-store-product-listing-US1-TC6-1: Name is plain at rest and underlined on hover
 
 **Classification:**
@@ -116,6 +119,7 @@ Runs once per row of **Test data**.
 * Step 2 underlines the name.
 * Step 3 removes the underline.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-63a rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-yv9 -->
 ### shared-ui-store-product-listing-US1-TC7-1: Name is the tile's one keyboard stop and opens from the keyboard
 
 **Classification:**
@@ -154,6 +158,7 @@ Runs once per row of **Test data**.
 * Step 6 logs one more tile activation for `<product_1>`, and the page does not scroll.
 * Step 7 announces one control named for `<product_1>`; the photo is not announced as a control.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-rg1 rev=1 covers=g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-30a -->
 ### shared-ui-store-product-listing-US1-TC8-1: Sold-out name and photo stay inert on a tile that sells
 
 **Classification:**
@@ -191,6 +196,7 @@ Runs once per row of **Test data**.
 * Step 6 never lands focus on the name or the photo.
 * Neither the name nor the photo is offered as a link or a button.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-lbw rev=1 covers=g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-30a -->
 ### shared-ui-store-product-listing-US1-TC9-1: No activation callback leaves name and photo inert
 
 **Classification:**
@@ -226,6 +232,7 @@ Runs once per row of **Test data**.
 * Step 6 never lands focus on the name or the photo.
 * Neither the name nor the photo is offered as a link or a button.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-xph rev=1 covers=g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-ezf -->
 ### shared-ui-store-product-listing-US1-TC10-1: Sold-out name and photo open on a tile that does not sell
 
 **Classification:**
@@ -264,11 +271,11 @@ None yet.
 ## Reconciliation
 
 - **Raised, landed** — the blind pass asked three questions, each landed in `decisions.md`: which keys open the name (Q5: Enter and Space on a button, Enter on a link), whether the keyboard stops on the photo and the name or on one (Q6: the name alone, the one control announced), and whether an inert name takes the underline (Q7: no, plain text with no focus). US1-TC7 was re-worded to Tab stopping on the name and the cart control and never the photo, Enter and Space each reporting once, and one control announced; US1-TC8 and US1-TC9 to an inert name that stays plain text on hover and takes no focus
-- **Raised, folded** — US1-TC6 and US1-TC7 assert the underline on hover and on keyboard focus that Q2 decides; the delta states it as `shared-ui-store-product-listing-SC-96`, which US1-TC6 walks on hover and US1-TC7 on focus, and US1-TC8 and US1-TC9 on a name that does not open
+- **Raised, folded** — US1-TC6 and US1-TC7 assert the underline on hover and on keyboard focus that Q2 decides; the delta states it as `shared-ui-store-product-listing-SC-99`, which US1-TC6 walks on hover and US1-TC7 on focus, and US1-TC8 and US1-TC9 on a name that does not open
 - **Contradicted** — none: where a case and a scenario state the same behaviour they agree
-- **Uncovered anchors** — none of this delta's: `shared-ui-store-product-listing-SC-87` is walked by `shared-ui-store-product-listing-US1-TC4-1` on the tile and `shared-ui-store-product-listing-US1-TC5-1` in the browse grid, `shared-ui-store-product-listing-SC-88` by `shared-ui-store-product-listing-US1-TC8-1`, `shared-ui-store-product-listing-SC-89` by `shared-ui-store-product-listing-US1-TC9-1`, `shared-ui-store-product-listing-SC-95` by `shared-ui-store-product-listing-US1-TC7-1`, and `shared-ui-store-product-listing-SC-94` by `shared-ui-store-product-listing-US1-TC10-1`, since this suite is the one the durable suite starts from; `add-store-cross-sell`'s `shared-ui-store-product-listing-US1-TC1-1` is retired at that change's fold. `shared-ui-store-product-listing-SC-04` to `shared-ui-store-product-listing-SC-09` are carried unchanged in the modified requirement and are not this change's to cover
+- **Uncovered anchors** — none of this delta's: `shared-ui-store-product-listing-SC-87` is walked by `shared-ui-store-product-listing-US1-TC4-1` on the tile and `shared-ui-store-product-listing-US1-TC5-1` in the browse grid, `shared-ui-store-product-listing-SC-88` by `shared-ui-store-product-listing-US1-TC8-1`, `shared-ui-store-product-listing-SC-89` by `shared-ui-store-product-listing-US1-TC9-1`, `shared-ui-store-product-listing-SC-98` by `shared-ui-store-product-listing-US1-TC7-1`, and `shared-ui-store-product-listing-SC-97` by `shared-ui-store-product-listing-US1-TC10-1`, since this suite is the one the durable suite starts from; `add-store-cross-sell`'s `shared-ui-store-product-listing-US1-TC1-1` is retired at that change's fold. `shared-ui-store-product-listing-SC-04` to `shared-ui-store-product-listing-SC-09` are carried unchanged in the modified requirement and are not this change's to cover
 - **Carried, not this change's** — the image requirement's `shared-ui-store-product-listing-SC-46` to `shared-ui-store-product-listing-SC-50`, `shared-ui-store-product-listing-SC-52` to `shared-ui-store-product-listing-SC-54`, `shared-ui-store-product-listing-SC-65` and `shared-ui-store-product-listing-SC-66` are carried word for word; the capability's suite refresh owes them cases
 - **Reworded for the one keyboard stop** — `shared-ui-store-product-listing-SC-51` moves focus into the image rather than onto it, where Tab now lands on the cart control, walked by US1-TC7's cart-control result; `shared-ui-store-product-listing-SC-55` keeps its outcome, no cart control on a surface that does not sell, which US1-TC10 shows on its tile with no cart handler
-- **Cases added after the reconciliation** — US1-TC10 (`shared-ui-store-product-listing-SC-94`), written from the scenario at the acceptance review, so it is not blind
+- **Cases added after the reconciliation** — US1-TC10 (`shared-ui-store-product-listing-SC-97`), written from the scenario at the acceptance review, so it is not blind
 
 **Run:** Blind feature pass (QA1) on 2026-10-05 for `activate-listing-tile-by-name`, `shared/ui/store-product-listing`. Read the caller's isolated bundle only: the capability's Purpose and Feature set (outline), its `user-journeys.md`, the change's `proposal.md`, `decisions.md` with its Raised table, `ui-design.md` with scenario ids stripped, `openspec/config.yaml` context, the PRD pages `shared/ui/store-product-listing` and `grade10-site/store/product-listing`, and `add-store-cross-sell`'s in-flight suite for this capability with its Reconciliation stripped; plus `docs/governance/specs-to-test-cases.md` and `docs/governance/tcs-conventions.md`. Denied and not opened: every Requirements section, this change's delta `spec.md`, `openspec/specs/`, the rest of `openspec/changes/` and its archive, and `packages/` source.
