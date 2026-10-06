@@ -916,6 +916,25 @@ test("a case revised under its durable marker and a story under MODIFIED User jo
   assert.match(suite, /site-search-US2-TC2-1: Kept case/);
 });
 
+test("a story heading that lagged its journey may take the journey's title the change restates", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "## User journeys\n\n### site-search-US-02: Reader searches and saves\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "## Context user journeys\n\n### site-search-US-02: Reader searches and saves\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "feature-tcs.md"),
+    "# Search cases\n\n## site-search-US2: Reader searches and saves\n\n### site-search-US2-TC3-1: Saved search reopens\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  assert.deepEqual(acceptanceReadiness(root, CHANGE), []);
+});
+
 test("a change may retitle a case it added at its previous acceptance", () => {
   const { root } = sandbox();
   writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
