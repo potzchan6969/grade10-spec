@@ -18,7 +18,7 @@
       winner crown and equal-max tip; preview closed history sets
       `isWinner` when sold.
 - [x] 2.3 Verify — `pnpm run typecheck` as needed.
-- [ ] 2.4 Draw the crown only where `copy.winner` is supplied, with no
+- [x] 2.4 Draw the crown only where `copy.winner` is supplied, with no
       built-in name, and correct the `isWinner` and `samePricePriority` doc
       comments in `types.ts` (a crown, not a badge; any tied row listed
       below another, not only at the leading price); the Default and ClosedSoldEqualMax plays still
