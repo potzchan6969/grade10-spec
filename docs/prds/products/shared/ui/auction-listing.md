@@ -42,8 +42,13 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   in the viewer's local zone; the application supplies the locale, the
   time zone and the activity copy, and a non-timestamp state may supply its
   own display text; collector deadline and catalogue tile close lines use
-  the same locale and zone, and a deadline names that viewer's short zone
-  (HKT, EDT)
+  the same locale and zone, and a deadline that shows a clock names the
+  viewer's zone: its short name in US English, HKT in Hong Kong, or an offset
+  such as GMT+9 where US English has none
+- 🚧 **Closed lot** - the bid card names the viewer's zone after a closed lot's
+  close time when it shows a clock, as it does after an open lot's deadline; a
+  close day alone names none
+  ([Dates and Times](/p/platform/shared/dates-and-times))
 - 🚧 **Winner after close** — when the lot is closed and sold, the winning
   public row shows a primary crown after the amount (`isWinner`; accessible
   name from consumer copy)

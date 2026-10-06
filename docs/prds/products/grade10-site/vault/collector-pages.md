@@ -98,8 +98,8 @@ again.
 - **History** — every event the collector may see, actor kind only, never a
   staff id; the counter's own records stay staff-only
 - **Clocks** — a day and a deadline, on the case and in every email, are
-  the shop's own — Hong Kong time — and a deadline names the zone it is
-  stated in; a timeline stamp places an instant and stays UTC
+  the shop's own — Hong Kong time — and a deadline that shows a clock names
+  the zone it is stated in; a timeline stamp places an instant and stays UTC
 - ❓ **The case on screen** — the stages, whose the item is, the answers to
   the offer and each act's confirmation; @tangconst
 
@@ -135,6 +135,8 @@ again.
   pay by, what is owed as at that day and what each further day adds, the
   condition on which the item lapses, that taking it is a person's decision,
   and that no further reminder follows
+- 🚧 **Hong Kong time named** - every email's footer reads "Dates and times are
+  in Hong Kong time (GMT+8)." ([Dates and Times](/p/platform/shared/dates-and-times))
 - **Reminders** — **7 days** and **1 day** before the due date, then every
   **7 days** overdue; each names the balance and the date, the overdue one that
   interest runs at the same daily rate with no fee; stopping at the notice

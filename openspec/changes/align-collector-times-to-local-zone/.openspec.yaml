@@ -6,4 +6,4 @@ hands:
   tech: "@tangconst"
   qa: "@tangconst"
   dev: "@tangconst"
-design_waived: "no new screen or state; collector clocks reuse the local-moment shape, and document clocks keep the existing PDF and email layout with a zone label change"
+ui_waived: "no new screen or state; collector clocks reuse the local-moment shape, and document clocks keep the existing PDF and email layout with a zone label change"

@@ -65,8 +65,8 @@ vendor is involved.
   line, and the loan agreement states that the lender executes it on the
   advance
 - **Dates** — through the platform's one date module: a document is dated the
-  day it was signed on the shop's own clock, and a deadline names the zone it
-  is stated in
+  day it was signed on the shop's own clock, and a deadline that shows a clock
+  names the zone it is stated in
 - **Not printed** — cooling-off, and a redemption period no regime has named
 
 ## Consent and identity on the certificate
