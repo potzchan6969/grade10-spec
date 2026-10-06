@@ -10,8 +10,8 @@
 and item facts,
 **so that** I can understand what is available before I decide to buy.
 
-<!-- trace:case id=g10.store-product-page.TC-otm rev=1 covers=g10.store-product-page.SC-n6k,g10.store-product-page.SC-dd3,g10.store-product-page.SC-h7c -->
-### grade10-site-store-product-page-US6-TC1-1: Product page shows ordered media and price context
+<!-- trace:case id=g10.store-product-page.TC-otm rev=2 covers=g10.store-product-page.SC-n6k,g10.store-product-page.SC-dd3,g10.store-product-page.SC-h7c -->
+### grade10-site-store-product-page-US6-TC1-2: Product page shows ordered media and price context
 
 **Classification:**
 
@@ -50,7 +50,7 @@ and item facts,
 
 * The media gallery renders both images for <product_1> in catalogue order with descriptive alternative text.
 * The purchase context shows current price <current price> and greater compare-at price <compare-at price>.
-* The purchase context says only <available quantity> remain.
+* The purchase context says nothing about how many remain.
 
 <!-- trace:case id=g10.store-product-page.TC-jw5 rev=1 covers=g10.store-product-page.SC-n6k,g10.store-product-page.SC-dd3,g10.store-product-page.SC-h7c -->
 ### grade10-site-store-product-page-US6-TC2-1: Product without images shows an accessible placeholder
