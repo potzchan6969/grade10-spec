@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "54ce8cd9287416c82153a8fd855d7f88534ad30c6886eb2eefc602a16cb9a9dd"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "cf040b9d31f6c562c0debb6833af240258a0386a",
+    "capturedAt": "2026-10-06T00:55:19.195Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A reversal is confirmed with remarks first",
+          "Requirement: A reversal lands whole against holds and other changes",
+          "Requirement: An unmoved Cert record can be removed as never received",
+          "Requirement: Cert ID details shows each unit's history",
+          "Requirement: Change history fields identify every transition",
+          "Requirement: Inventory may own optional Cert ID records and copy facts",
+          "Requirement: Only an inventory admin who may write inventory reverses an intake",
+          "Requirement: Product inventory snapshot fields",
+          "Requirement: Regular stock intaken since its latest move can be reduced",
+          "Requirement: The product page and history name each hold's holder"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

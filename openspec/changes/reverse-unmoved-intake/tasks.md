@@ -1,6 +1,6 @@
 # Tasks: Reverse unmoved intake
 
-## 1. Manual page (grade10-spec)
+## 1. Manual page (grade10-spec) (owner: @mason5991)
 
 - [ ] 1.1 Add to the Intake code map of `docs/prds/products/grade10-admin/inventory/catalog.md`: `reverseRegularIntake` and `reverseCertIntake` in `services/inventoryMutations.ts`, and the moved test `selectMovedInventoryCertIds` and the reducible count `selectRegularStockReducible` in `repositories/`. The 🚧 on Units entered by mistake stays until the walk is verified; taking it off is the archive's step.
 - [ ] 1.2 Verify: `pnpm check:manual`, `pnpm run validate:changes reverse-unmoved-intake` and `pnpm run lint` in grade10-spec.
