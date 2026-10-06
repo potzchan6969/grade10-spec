@@ -68,15 +68,15 @@ winner of three lots has three orders, each with its own deadlines.
 ### My Auction Orders
 
 Every won lot on one list: the lot with View lot, the auction, the winning
-bid, the status and one next action — Complete Order Setup while Awaiting
+bid, the status and one next action - Complete Order Setup while Awaiting
 Setup, Pay Invoice while Pending Payment, and View detail otherwise. Orders
 waiting on the winner come first, then the rest by newest
 close, and an empty list points to My Auctions.
 
-**Not in the account menu** — a winner opens each order from its Won row on
+**Not in the account menu** - a winner opens each order from its Won row on
 My Auctions, so the menu offers no second orders item
 
-❓ **Opened from** — no link in the site opens the list; Product (@tangconst)
+❓ **Opened from** - no link in the site opens the list; Product (@tangconst)
 confirms whether My Auctions links to it, or each Won row stays the only way
 to an order
 

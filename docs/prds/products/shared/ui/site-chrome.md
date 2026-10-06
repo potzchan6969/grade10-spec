@@ -24,29 +24,29 @@ currency.
 
 ## Account Entry
 
-**`SiteHeader`** — a compound header wraps the design-system `Nav` with
+**`SiteHeader`** - a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu when signed in, with an initial avatar above the
 sign-in email, then My Auctions and Sign Out
 
-**Profile** — first in the menu, only when `onProfile` is supplied
+**Profile** - first in the menu, only when `onProfile` is supplied
 
-**My Orders** — ahead of My Auctions, only when `onMyOrders` is supplied
+**My Orders** - ahead of My Auctions, only when `onMyOrders` is supplied
 
-**Membership** — after My Auctions, only when `onMembership` and
+**Membership** - after My Auctions, only when `onMembership` and
 `copy.membership` are supplied
 
-🚧 **No other item** — the menu offers nothing beyond these, KYC and a second
+🚧 **No other item** - the menu offers nothing beyond these, KYC and a second
 orders item included
 
-❓ **Avatar without an email** — when `accountEmail` is not supplied, the menu
+❓ **Avatar without an email** - when `accountEmail` is not supplied, the menu
 shows `copy.accountMenuLabel` and no avatar; the designer (@tangconst)
 confirms that look
 
-❓ **Account menu story** — which items the Auction & Store story shows once
+❓ **Account menu story** - which items the Auction & Store story shows once
 Profile and Membership are settled; the designer (@tangconst) confirms
 
-**Compact menu** — below a 896px-wide container, a leading menu control opens a
+**Compact menu** - below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
 style, then language through a nested drawer (the language label is not in the
 compact bar). Account / Sign In and Cart stay in the bar; search moves into the

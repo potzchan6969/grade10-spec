@@ -35,14 +35,14 @@ chrome, including on auction-first launch.
 
 ## Account Menu
 
-**Account menu** — signed in, an initial avatar sits above the email, above
+**Account menu** - signed in, an initial avatar sits above the email, above
 the items: My Auctions and Sign Out on auction launch; My Orders and My
 Auctions once Store answers, with Sign Out always last. KYC stays out.
 
-**Withheld pages** — the menu never offers an item whose page the site
+**Withheld pages** - the menu never offers an item whose page the site
 withholds: My Orders, Profile or Membership
 
-**My Orders** — ahead of My Auctions once Store answers, opening
+**My Orders** - ahead of My Auctions once Store answers, opening
 `/profile/orders`, and omitted until then on the same gate as Cart
 
 ❓ **Membership** — after My Auctions once Store answers; Product confirms
@@ -53,7 +53,7 @@ same rule as Profile
 account page is carried, which today is development and staging only, or the
 menu never offers it
 
-**Sign Out on the account page** — the account page offers Sign Out as well,
+**Sign Out on the account page** - the account page offers Sign Out as well,
 wherever it is carried
 
 ## Help
