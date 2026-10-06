@@ -45,6 +45,7 @@ import {
   automatedGateOf,
   buildGrid,
   caseRow,
+  caseRows,
   inReadingOrder,
   selectCases,
   surfacePrefill,
@@ -204,6 +205,330 @@ test("a test data table reaches the row as field and value", () => {
 test("a data-driven case says so, because a tester runs it once per row", () => {
   assert.equal(journey.cases[0].perRow, true);
   assert.equal(journey.cases[1].perRow, false);
+});
+
+test("a Field | Value table is one table, header apart from its row", () => {
+  assert.deepEqual(journey.cases[0].tables, [
+    {
+      headers: ["Field", "Value"],
+      rows: [["`<a thing>`", "A thing worth 12000000"]],
+    },
+  ]);
+});
+
+const PER_ROW = `# demo/thing/widget Test Cases
+
+**Status:** in-review
+
+## demo-thing-widget-US2: Rows open rows
+
+**As a** collector,
+**I want** a row,
+**so that** it is one walk.
+
+### demo-thing-widget-US2-TC1-1: Ending one session leaves the other
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** demo-thing-widget-US-02
+
+**Pre-conditions:**
+
+* <subject account> holds <session to end>.
+
+**Test data:**
+
+| <session to end> | <session that remains> |
+| --- | --- |
+| The session naming the site | The session naming the console |
+| The session naming the console | The session naming the site |
+
+**Steps:**
+
+1. End <session to end> from its entry.
+2. Read <session that remains>.
+
+**Expected Results:**
+
+* Step 3 no longer lists <session to end>.
+* Step 3 lists only <session that remains>.
+
+### demo-thing-widget-US2-TC2-1: An off-brand location is ignored
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** demo-thing-widget-US-02
+
+**Pre-conditions:**
+
+customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| \`<collector email>\` | collector@example.com, an address with an account |
+
+| \`<off-brand location>\` | \`<why it is off brand>\` |
+| --- | --- |
+| https://collector-rewards.example.com/claim | an address outside this store |
+| <zzz sign-in url> | another brand of this store |
+
+**Steps:**
+
+1. Submit <collector email> at the email step.
+2. Follow the link.
+
+**Expected Results:**
+
+* The collector lands on this brand.
+* The collector is not sent to <off-brand location>.
+* Grade10 answers as the row states.
+
+### demo-thing-widget-US2-TC3-1: Later sign-in enters one account
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** demo-thing-widget-US-02
+
+**Pre-conditions:**
+
+* <link-created email> has an account created by an emailed link.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| \`<link-created email>\` | collector-link@example.com, an account created by an emailed link |
+
+| \`<method>\` | \`<outcome>\` |
+| --- | --- |
+| A later emailed link at <link-created email> | the same account, not a second one |
+
+**Steps:**
+
+1. Complete sign-in by <method>.
+
+**Expected Results:**
+
+* The person enters <outcome>.
+* No second account exists for <link-created email>.
+
+### demo-thing-widget-US2-TC4-1: A closed lot shows no watch control
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** demo-thing-widget-US-02
+
+**Pre-conditions:**
+
+* <closed lot> is closed as the row states.
+
+**Test data:**
+
+| Closed lot | Viewer |
+| --- | --- |
+| Sold, with a winner | customer(signed in) |
+
+**Steps:**
+
+1. Navigate to <closed lot url>.
+
+**Expected Results:**
+
+* The lot page renders.
+
+### demo-thing-widget-US2-TC5-1: One table that does not run per row
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** demo-thing-widget-US-02
+
+**Pre-conditions:**
+
+None.
+
+**Test data:**
+
+| <session to end> | <session that remains> |
+| --- | --- |
+| The session naming the site | The session naming the console |
+
+**Steps:**
+
+1. End <session to end>.
+
+**Expected Results:**
+
+* <session to end> is gone.
+`;
+
+const perRowJourney = parseSuite(PER_ROW).journeys[0];
+const perRowRead = {
+  rel: "openspec/specs/demo/thing/widget/feature-tcs.md",
+  level: "feature",
+  capabilityId: "demo/thing/widget",
+};
+const perRowCase = (n) => ({
+  read: perRowRead,
+  tc: { ...perRowJourney.cases[n], journey: perRowJourney },
+});
+
+test("a run table prints once per value row, with the cell in square brackets", () => {
+  const rows = caseRows(perRowCase(0));
+  assert.equal(rows.length, 2);
+  assert.equal(at(rows[0], "Case ID"), "demo-thing-widget-US2-TC1-1");
+  assert.equal(at(rows[1], "Case ID"), "demo-thing-widget-US2-TC1-1");
+  assert.equal(
+    at(rows[0], "Steps"),
+    "1. End [The session naming the site] from its entry.\n2. Read [The session naming the console].",
+  );
+  assert.equal(
+    at(rows[1], "Steps"),
+    "1. End [The session naming the console] from its entry.\n2. Read [The session naming the site].",
+  );
+  assert.equal(
+    at(rows[0], "Expected results"),
+    "Step 3 no longer lists [The session naming the site].\nStep 3 lists only [The session naming the console].",
+  );
+  assert.equal(
+    at(rows[0], "Pre-conditions"),
+    "<subject account> holds [The session naming the site].",
+  );
+  assert.equal(
+    at(rows[0], "Test data"),
+    "<session to end>: The session naming the site\n<session that remains>: The session naming the console",
+  );
+  assert.equal(at(rows[0], "Web"), "to_do");
+  assert.equal(at(rows[0], "Auto web"), "n/a");
+  assert.equal(at(rows[1], "Auto mobile"), "n/a");
+  assert.equal(at(rows[0], "Steps").includes("Runs once per row"), false);
+});
+
+test("shared Field | Value stays in the cell, and a plain column is not filled into the sentence", () => {
+  const rows = caseRows(perRowCase(1));
+  assert.equal(rows.length, 2);
+  assert.equal(
+    at(rows[1], "Pre-conditions"),
+    "customer is on <grade10 sign-in url> naming [<zzz sign-in url>], signed out.",
+  );
+  assert.equal(
+    at(rows[1], "Steps"),
+    "1. Submit <collector email> at the email step.\n2. Follow the link.",
+  );
+  assert.equal(
+    at(rows[1], "Expected results"),
+    "The collector lands on this brand.\nThe collector is not sent to [<zzz sign-in url>].\nGrade10 answers as the row states.",
+  );
+  assert.equal(
+    at(rows[0], "Expected results"),
+    "The collector lands on this brand.\nThe collector is not sent to [https://collector-rewards.example.com/claim].\nGrade10 answers as the row states.",
+  );
+  assert.equal(
+    at(rows[1], "Test data"),
+    "`<collector email>`: collector@example.com, an address with an account\n`<off-brand location>`: <zzz sign-in url>\n`<why it is off brand>`: another brand of this store",
+  );
+});
+
+test("a name inside a run cell stays, and the shared name in the sentence stays", () => {
+  const [row] = caseRows(perRowCase(2));
+  assert.equal(
+    at(row, "Steps"),
+    "1. Complete sign-in by [A later emailed link at <link-created email>].",
+  );
+  assert.equal(
+    at(row, "Expected results"),
+    "The person enters [the same account, not a second one].\nNo second account exists for <link-created email>.",
+  );
+  assert.equal(
+    at(row, "Pre-conditions"),
+    "<link-created email> has an account created by an emailed link.",
+  );
+  assert.equal(
+    at(row, "Test data"),
+    "`<link-created email>`: collector-link@example.com, an account created by an emailed link\n`<method>`: A later emailed link at <link-created email>\n`<outcome>`: the same account, not a second one",
+  );
+});
+
+test("a header matches case-sensitively, so Closed lot does not fill <closed lot>", () => {
+  const [row] = caseRows(perRowCase(3));
+  assert.equal(
+    at(row, "Pre-conditions"),
+    "<closed lot> is closed as the row states.",
+  );
+  assert.equal(at(row, "Steps"), "1. Navigate to <closed lot url>.");
+  assert.equal(
+    at(row, "Test data"),
+    "Closed lot: Sold, with a winner\nViewer: customer(signed in)",
+  );
+});
+
+test("a column table without the per-row line stays one row, unfilled", () => {
+  const rows = caseRows(perRowCase(4));
+  assert.equal(rows.length, 1);
+  assert.equal(at(rows[0], "Steps"), "1. End <session to end>.");
+  assert.equal(at(rows[0], "Expected results"), "<session to end> is gone.");
+});
+
+test("a per-row case adds one grid line per value row", () => {
+  const { lines } = buildGrid([perRowCase(0)]);
+  assert.deepEqual(
+    lines.map((line) => line.kind),
+    ["capability", "journey", "case", "case"],
+  );
 });
 
 test("only `actual` cases leave the store by default", () => {

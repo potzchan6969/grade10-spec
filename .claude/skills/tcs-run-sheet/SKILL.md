@@ -101,6 +101,24 @@ in the same pass when the request covers both.
   if **Automation status** is `automated`, else `n/a`. `skipped` is a case
   somebody chose not to walk. The pass rate ignores `n/a` and counts `skipped`
   against the run.
+- **A per-row case prints once per value row.** A case that says `Runs once
+  per row of **Test data**.` becomes one sheet row for each body row of its
+  run table. The header and the `| --- |` line are names. Each row keeps the
+  case id, and the Summary counts each printed row. A `<name>` in the
+  pre-conditions, the steps, and the expected results is filled from that row
+  when the name is a column of the run table. The value is wrapped in square
+  brackets: `End <session to end>` prints as `End [The session naming the site]`,
+  and a value that is already a placeholder prints as `[<zzz sign-in url>]`.
+  A column that is not a `<name>` in the sentence stays in the Test data cell,
+  and the sentence stays as written. A `<name>` that matches no run-table
+  column stays in angle brackets. The match ignores backticks and one pair of
+  angle brackets on the header, and it is case-sensitive, so `Closed lot` does
+  not fill `<closed lot>`. A `Field | Value` table is shared setup: it is
+  copied into every row's Test data cell, and its names stay `<name>` in the
+  sentence, including inside a filled run cell. A case whose only table is
+  `Field | Value` stays one sheet row, and the reminder line stays on its
+  steps. On an expanded row that line is left off. The `n/a` prefill is copied
+  onto each row.
 - **The Summary tab gives each run four rows**, one per surface, grouped under
   the first. Identity, env and the commit sit once, on that first row. Marking a
   cell moves the counts; no second sync is needed.
