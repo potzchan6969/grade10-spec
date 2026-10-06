@@ -212,11 +212,12 @@ assistive technology.
 #### Scenario: shared-ui-site-chrome-SC-23 - Empty cart hides the count
 **Serves:** Header controls - empty cart hides the count
 
-- **GIVEN** `SiteHeader` with a cart handler and `cartItemCount` of `0` (or omitted)
+- **GIVEN** `SiteHeader` with a cart handler, `copy.cart` of `Basket`, and
+  `cartItemCount` of `0` (or omitted)
 - **WHEN** the header renders
 - **THEN** the cart control appears
 - **AND** no count indicator appears on it
-- **AND** the cart control's accessible name carries no count
+- **AND** the cart control's accessible name is `Basket`, with no count
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-1ow rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-24 - One active line shows `1`
@@ -227,15 +228,19 @@ assistive technology.
 - **THEN** a brand count indicator on the cart control displays `1`
 - **AND** the cart control's accessible name includes `1`
 - **AND** the count indicator itself is hidden from assistive technology
+- **AND** the badged control reaches `Nav` as its `cartSlot`, with no built-in
+  cart control beside it
+- **AND** `NavProps` takes no cart count
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-xw7 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-25 - Multi-item count matches the drawer title
 **Serves:** Header controls - multi-item count matches the drawer title
 
-- **GIVEN** `SiteHeader` with a cart handler and `cartItemCount` of `3`
+- **GIVEN** `SiteHeader` with a cart handler, `copy.cart` of `Basket`, and
+  `cartItemCount` of `3`
 - **WHEN** the header renders
 - **THEN** a brand count indicator on the cart control displays `3`
-- **AND** the cart control's accessible name includes `3`
+- **AND** the cart control's accessible name is `Basket (3)`
 - **AND** `CartDrawerHeader` given the same count of `3` shows `3` in its
   title badge
 
