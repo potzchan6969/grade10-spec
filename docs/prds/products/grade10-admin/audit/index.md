@@ -29,7 +29,6 @@ linking. Every chain opens on a genesis row its migration wrote, so an emptied
 table reads as broken rather than as a clean start.
 
 :::flow{title="An auditor's pass"}
-
 ## Sign in and clear the second factor
 
 The auditor role holds exactly one permission, so the Audit section is the only
