@@ -53,6 +53,9 @@ winner confirming setup, in production. It is 0 today, since no send succeeds.
   comments. The listing queue and its requirements are removed
 - **Proofs the operator can open.** The winner's files open on the order page;
   a returned proof carries a reason the winner reads, and the deadline resumes
+- **Reopen setup and record setup on the order.** An operator gives a winner
+  in Setup Overdue a fresh 48 hours with a reason, or records the winner's
+  setup given by phone, never after the invoice is sent
 - **Dispatch and delivery on the order**, with the carrier and tracking number,
   then the carrier's proof
 - **Money that lands is always recorded.** A card payment the invoice did not
@@ -87,7 +90,8 @@ See [Non-Goals](decisions.md#non-goals).
   or checked invoice.
 - `grade10-admin/auction/post-sale`: the Orders worklist and order page, the
   fee by payment method, what was seen is sent, proofs, dispatch and delivery
-  on the order, money that lands, the winner's phone for WhatsApp contact, the
+  on the order, money that lands, the operator's reopen and record-setup
+  actions, the winner's phone for WhatsApp contact, the
   grant table, how long an order waited in
   place of the 72-hour mark, and the listing queue's requirements removed.
 - `grade10-admin/auction/payment-settings`: the card fee rule, card at order
@@ -121,8 +125,11 @@ See [Non-Goals](decisions.md#non-goals).
   left as it is
 - **Beside `add-my-auction-orders`.** Pay with Card starts a fresh session each
   time, as that change writes it
-- **Beside the other post-sale changes.** Partial payments, cancellation
-  reasons and reopening the address form add their own requirements, and the
+- **Before `close-overdue-address-confirmation`**, which declares this change.
+  Reopening and recording setup are this change's requirement; that change
+  keeps the persisted address deadline they reset.
+- **Beside the other post-sale changes.** Partial payments and cancellation
+  reasons add their own requirements, and the
   order page carries their actions. The worklist places Partially Paid under
   Waiting on winner and keeps the cancellation category filter. Card money
   counts toward a balance only where "Money that lands is always recorded"

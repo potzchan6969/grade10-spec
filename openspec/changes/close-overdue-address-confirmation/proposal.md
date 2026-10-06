@@ -34,11 +34,11 @@ too short.
   reopens the form or records the order address. Invoice send locks the address.
 - **The deadline counts from the actual close**, after any extended bidding. A
   write is judged by when Grade10 receives it.
-- **An operator reopens an unconfirmed Setup Overdue address form**, with a
-  mandatory reason, which gives the winner a fresh 48 hours. There is no limit
-  on reopens, and a cancelled order never reopens.
-- **An operator can record an address the winner gives by phone**, without
-  reopening the form.
+- **The operator's reopen and record-setup actions are
+  `complete-auction-post-sale`'s.** An operator reopens an unconfirmed Setup
+  Overdue address form, with a mandatory reason, for a fresh 48 hours, or
+  records the winner's setup given by phone, without reopening. This change
+  stores the deadline those actions reset and gates the winner's write on it.
 - **An unconfirmed passed address deadline derives Setup Overdue.** Preparing
   Invoice stays distinct after an address is confirmed. Its payment Overdue
   timer starts only after the invoice is sent and visible to the winner.
@@ -86,24 +86,27 @@ None.
 - `grade10-site/auction/order-status`: a new requirement adding the condition
   `address_window_open`, which gates the winner's address write; an
   unconfirmed missed deadline derives Setup Overdue.
-- `grade10-admin/auction/post-sale`: two new requirements — an operator reopens
-  the address form or records the address, and only an operator settles an
-  expired invoice.
+- `grade10-admin/auction/post-sale`: one new requirement — only an operator
+  settles an expired invoice. The requirement that an operator reopens the
+  address form or records setup is `complete-auction-post-sale`'s, which this
+  change depends on.
 
 ## Impact
 
 | Consumer | Change |
 | --- | --- |
 | `apps/frontend/grade10` | After the address deadline, Winner Order hides the address change control as it hides Confirm, and refuses an address write. |
-| `apps/admin/grade10` | Reopen address form, with a mandatory reason; record an address by phone; settle an expired invoice. |
+| `apps/admin/grade10` | Settle an expired invoice. The reopen and record-setup controls are `complete-auction-post-sale`'s. |
 | Auction service | A deadline a reopen resets, refusal of late address writes, and an invoice held `pending` while a payment started in time confirms. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. |
 
 ## Ordering and dependencies
 
 - **Builds on the durable address deadline, `not_issued` invoice state and
-  address lock at send.** This change has no dependency on an archived or
-  unfinished change.
+  address lock at send, and on `complete-auction-post-sale`**, declared in
+  `.openspec.yaml`. That change owns the operator's reopen-setup and
+  record-setup actions and their requirement; this change owns the persisted
+  address deadline and `address_window_open` they act on.
 - **Owns the queue mark mapping, derived condition, audit entries and race
   behavior.** It does not reopen the winner-facing deadline wording.
 - **Cumulative feature sets.** The delta files copy that change's feature set and
@@ -123,7 +126,8 @@ None.
 ## Assumptions
 
 - **A reopen needs payment-processing**, the grant that already covers reissue
-  and manual settlement, and is written to the invoice log.
+  and manual settlement, and is written to the invoice log, as
+  `complete-auction-post-sale` states.
 - **"Started" means Grade10 received the winner's payment** before the deadline,
   not that the winner opened the page.
 - **The 48 hours stay one Grade10-owned figure.** A new figure applies to lots

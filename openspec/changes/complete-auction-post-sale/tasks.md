@@ -37,6 +37,8 @@
 - [ ] 5.2 The winner entrypoint exposes the winner methods under their current names and its prototype equals the allowlist; the store router forwards them unchanged and ignores a client-sent `userId`; `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts`, `apps/backend/grade10/store/test/db/auctionRouter.spec.ts`
 - [ ] 5.3 Delete the `postSale`, `settlements` and `fulfillment` routers, services and repositories, the `payment_settlements` fallback in `accountRecord.ts` and the operator members of `WinnerOrderServiceApi`; `pnpm run typecheck`, `node scripts/test.mjs apps/backend/grade10/auction`
 
+- [ ] 5.4 `setup.ts` `reopenSetup` and `recordSetup` behind `auction:payment`: a mandatory reason, refused after invoice send, on a cancelled order and on a confirmed address, an address deadline 48 hours from the reopen, and the `address_reopened` and `address_recorded` log rows; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts` (post-sale `SC-75` to `SC-84`, `SC-90`, `SC-91`)
+
 ## 6. Test Winners (grade10)
 
 - [ ] 6.2 `services/orders/testWinners.ts`: `createTestWinner` (plus-tag rule, `createUnverifiedAccount`, `ACCOUNT_EXISTS`, `ensureTestBidder`, `insertClosedSandboxLot`, `closeOne`, replay by account) and `listTestWinners`; `trpc/routers/testWinners.ts` on the `testBids` middleware; `apps/backend/grade10/auction/test/db/trpc/testWinners.spec.ts`

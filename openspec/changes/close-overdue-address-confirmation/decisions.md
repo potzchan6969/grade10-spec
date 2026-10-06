@@ -24,6 +24,7 @@
 | Q6 | Which clock decides a late address write? | The time Grade10 receives the write, measured from the actual lot close after extended bidding | The browser submission time |
 | Q7 | Does reopening notify the winner? | No; the operator tells the winner directly | A new notification letter |
 | Q8 | How is a card payment near the deadline treated? | A payment received before the deadline remains valid even if confirmation follows later; one received at or after the deadline is refused and not charged | Judging only by when the winner opened or submitted the payment page |
+| Q10 | Which change owns the operator's reopen-setup and record-setup actions? | `complete-auction-post-sale`, which already holds the Reopen setup primary action, the grant and the log entries on the order page. This change depends on it and keeps the persisted address deadline and `address_window_open` | Keeping a second "An operator reopens the address form" requirement here, which two in-flight changes may not both add |
 | Q9 | Does Preparing Invoice derive Setup Overdue? | No. Setup Overdue applies only to an unconfirmed elapsed address window. Preparing Invoice has a confirmed address; its payment Overdue timer starts only when the invoice is sent and visible to the winner. | Applying Setup Overdue to an order waiting for invoice preparation |
 
 ## Raised
@@ -31,3 +32,4 @@
 | Capability | Raised | Landed |
 | --- | --- | --- |
 | `grade10-admin/auction/post-sale` | Whether Setup Overdue also applies to Preparing Invoice | Q9 |
+| `grade10-admin/auction/post-sale` | Who owns the operator reopen-setup and record-setup actions | Q10 |

@@ -25,19 +25,21 @@ migration with a repair report rather than guessing a deadline.
 - `packages/grade10-auction/backend/src/rpc/AuctionService.ts` exposes the
   winner-facing deadline/refusal facts and applies receipt-time validation.
 - `packages/grade10-auction/backend/src/services/admin/postSale.ts`, its
-  repository and router own reopen, reasoned phone-address recording and
-  expired-invoice settlement.
+  repository and router own expired-invoice settlement. The operator's reopen
+  and reasoned phone-recorded setup are `complete-auction-post-sale`'s
+  `reopenSetup` and `recordSetup`, which this change's deadline serves.
 - `packages/grade10-auction/backend/src/services/auctions/winnerInvoice.ts`
   retires the address window at invoice send and preserves payment-at-deadline
   semantics.
 - Order-status and Winner Order contracts expose the deadline, refusal and
   operator-contact facts; no winner-facing reopen mutation is added.
 
-Reopen requires the existing operator grant, a reason, an unconfirmed Setup
-Overdue order and no sent invoice; each reopen gets a fresh 48-hour deadline and
-an invoice-log entry carrying the named actor, timestamp and reason.
-Phone-recorded address changes get a matching address-recorded invoice-log entry
-with actor, timestamp and reason. The same transaction boundary prevents a late
+`complete-auction-post-sale` owns the operator actions: reopen requires the
+existing operator grant, a reason, an unconfirmed Setup Overdue order and no
+sent invoice, and each reopen gets a fresh 48-hour deadline and an invoice-log
+entry carrying the named actor, timestamp and reason. A phone-recorded setup
+gets a matching address-recorded entry. Here the reopen only resets the
+persisted `address_deadline_at`. The same transaction boundary prevents a late
 winner write, operator recording, reopen, or invoice send from racing into an
 inconsistent address snapshot.
 
