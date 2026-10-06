@@ -3,7 +3,7 @@
 ### post-sale-US-05: Operator quotes and sends a winner's invoice
 
 **As an** operator,
-**I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
+**I want** to price Shipping & Handling, and Insurance and Tax when the lot needs them, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
 ### post-sale-US-07: Operator resolves an unpaid order

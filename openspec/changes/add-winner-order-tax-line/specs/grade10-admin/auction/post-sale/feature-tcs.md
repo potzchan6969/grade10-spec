@@ -191,7 +191,7 @@
 
 ### Escalated
 
-- Is removing Tax on a reissue a change of its own, distinct from changing its amount? -> `Q8`; answered under `## Settled`, and walked by `post-sale-US7-TC46-1` -> `post-sale-SC-210`
+- Is removing Tax on a reissue a change of its own, distinct from changing its amount? -> decisions Q8; answered under `## Settled`, and walked by `post-sale-US7-TC46-1` -> `post-sale-SC-210`
 
 ### Carried Unchanged
 
