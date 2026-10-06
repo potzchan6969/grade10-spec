@@ -174,7 +174,7 @@ product is sold out, or hold a cart quantity.
 
 - **GIVEN** a tile that opens, and a tile that does not
 - **WHEN** a shopper hovers over each name and moves keyboard focus through each tile
-- **THEN** the name that opens is underlined on hover and on focus, and plain at rest
+- **THEN** the name that opens is underlined on hover and on keyboard focus, and plain at rest
 - **AND** the name that does not open is plain text throughout and takes no focus
 
 ### Requirement: The product card image displays photo, sale, sold-out, and cart overlay
@@ -219,9 +219,11 @@ The cart control's accessible names SHALL come from the supplied copy. The
 image SHALL contain no default, fallback, or built-in copy.
 
 `ProductCardImage` SHALL be renderable on its own, outside `ProductCard`.
-Used on its own and given an activation callback or an address, the image
-SHALL open as one control named for the product, which the keyboard reaches;
-inside a product card, the tile's requirement makes it a pointer target.
+Used on its own, the image SHALL open where a tile would: given an activation
+callback or the product's address, unless the product is sold out and a cart
+handler is supplied. Where it opens on its own, it SHALL be one control the
+keyboard reaches, named by the product name supplied with it; inside a
+product card, the tile's requirement makes it a pointer target.
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-uoy rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-46 - No image source
@@ -282,13 +284,14 @@ inside a product card, the tile's requirement makes it a pointer target.
 - **THEN** it renders and behaves as specified, with no missing-context error
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-7v7 rev=1 -->
-#### Scenario: shared-ui-store-product-listing-SC-101 - The image used alone is its own stop
-**Serves:** Accessibility - the image used alone is its own stop
+#### Scenario: shared-ui-store-product-listing-SC-101 - The image used alone opens by the tile's rule, as its own stop
+**Serves:** Accessibility - the image used alone opens by the tile's rule, as its own stop
 
 - **GIVEN** the product card image rendered without a product card, with the product's name and a tile-activation callback
 - **WHEN** a shopper moves keyboard focus to the image and presses Enter
 - **THEN** focus stops on the image, announced as one control named for the product
 - **AND** tile activation is reported once
+- **AND** the same image given a sold-out product and a cart handler as well is no control, and pressing it reports nothing
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-ck1 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-53 - The stepper collapses after blur or pointer leave

@@ -4,6 +4,10 @@
   callback or an address, and not sold out where a cart handler is given)
   and draws the name as `ProductCardActivation` where it holds, plain text
   where it does not; landed with `add-store-cross-sell`
+- **The image alone has a second rule** — `ProductCardImage` opens wherever
+  it is given a callback or an address (`product-card-image.tsx:92`), sold
+  out with a cart handler included; inside a card this never shows, because
+  the card passes neither to a tile that does not open
 - **The photo is a second stop** — `ProductCardImage` draws its own
   `ProductCardActivation`, named for the product by `aria-label`, ahead of
   the name in document order; Tab inside a selling tile goes photo, cart
@@ -13,6 +17,13 @@
   buttons, and giving its tiles their addresses is the listing's own round
   ([Product Listing Blocks](../../../docs/prds/products/shared/ui/store-product-listing.md),
   Product decisions, Tile as a link)
+- **Every surface opens without a page load** — the listing and the front
+  door's row navigate in their callbacks
+  (`apps/frontend/grade10/src/pages/store/ProductListingPage.tsx:575`,
+  `StoreHomePage.tsx:226`), and `useInAppLinks`
+  (`apps/frontend/grade10/src/chrome/useInAppLinks.ts`, mounted in
+  `root.tsx:259`) takes a plain press on the rail's links as a router
+  navigation, so the product page's rule needs no code
 - **Tests find the photo by role** — the grade10 helpers and four unit test
   files read the photo as a control named for the product
 
@@ -20,25 +31,54 @@
 
 **Goals**
 
-- **One rule, one place** — whether a tile opens stays `ProductCard`'s one
-  computation; the photo and the name never decide it apart
-- **No contract change** — `ProductCardProps`, `ProductCardImageProps` and
-  the package entry's exports stay as they are
+- **One rule, one place** — whether a product opens is one function, which
+  `ProductCard` and `ProductCardImage` both call; the photo, the name and the
+  image used alone never decide it apart
+- **No type change** — `ProductCardProps`, `ProductCardImageProps` and the
+  package entry's exports stay as they are; `ProductCardImage` used alone
+  changes behaviour only for a sold-out product given a cart handler, which
+  no consumer renders
 
 **Non-Goals**
 
 - **Addresses on the listing** — the listing keeps its callback
-- **The image used alone** — a `ProductCardImage` outside a card is not a
-  tile, so it keeps its named, focusable control
+- **A pointer target outside a card** — a `ProductCardImage` used alone is
+  not a tile, so it keeps its named, focusable control
 
 ## Decisions
+
+### One function decides when a product opens
+
+- **`productCardOpens`** — in `product-card-activation.tsx` beside
+  `ProductCardActivation`, exported from the module and not from the package
+  entry: true given `onClick` or `href`, unless `soldOut` and
+  `onCartQuantityChange` are both given
+- **`ProductCard`** — calls it for the name, and passes `onClick` and `href`
+  to the photo's well unchanged
+- **`ProductCardImageWell`** — the well both the image alone and the card
+  draw (next section) calls it in place of `onClick != null || href != null`,
+  so the photo never decides apart from the name; `ProductCardImage`'s
+  `onClick`, `href` and `name` docs drop the claim that the card filters
+  them, and say the image applies the tile's rule and names its control by
+  `name`
+- **Rejected: `name` required on `ProductCardImageProps`** — Figma's Product
+  Card Image set carries no name, so its Code Connect example would stop
+  compiling, and a well that does not open names nothing; the requirement
+  names the control by the name supplied with it, as Q10 makes the name a
+  supplied fact, and the prop's doc says the image that opens needs it
+- **Rejected: the card filtering what it passes, as now** — the image used
+  alone would keep its own rule
+- **Stories** — `SoldOutWithHandler`, the image alone sold out with no cart
+  handler, still opens; its doc says the image applies the tile's rule, not
+  that the card decides
 
 ### Inside a card, the photo is a pointer target
 
 The spec governs which control is the stop and what is announced. The
 implementation:
 
-- **`ProductCardImageWell`** — the body of `product-card-image.tsx`, taking
+- **`ProductCardImageWell`** — the body of `product-card-image.tsx`, which
+  decides whether the photo opens by `productCardOpens`, taking
   `ProductCardImageProps` and `pointerOnly`, exported from the module and not
   from the package entry, as `ProductCardActivation` already is
 - **`ProductCardImage`** — renders the well with `pointerOnly={false}`;
