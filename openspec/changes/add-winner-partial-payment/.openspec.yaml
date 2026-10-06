@@ -3,3 +3,5 @@ created: 2026-09-17
 promoted_by: "@htonyl"
 depends_on:
   - add-winner-bank-transfer
+awaiting:
+  specs: 2026-10-06, the durable winner-order receipt rule (openspec/specs/grade10-site/auction/winner-order/spec.md, both copies of its tolerance-close sentence, winner-order-SC-206 and case US2-TC6-1) still says tolerance-close; define-public-auction-identifiers owns that requirement and retires the wording

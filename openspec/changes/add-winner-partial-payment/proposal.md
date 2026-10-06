@@ -14,7 +14,7 @@ rest, and nothing about what was received or what remains is written down
 anywhere a receipt or an audit trail can show.
 
 **Metric:** share of partially-paid invoices whose payments are fully
-recorded in Grade10 before the order reaches Processing, replacing today's
+recorded in Grade10 before the order reaches Preparing Shipment, replacing today's
 zero — no invoice can record a partial payment at all.
 
 ## What Changes
