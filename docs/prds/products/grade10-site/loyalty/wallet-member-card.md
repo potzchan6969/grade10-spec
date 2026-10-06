@@ -8,8 +8,8 @@ order: 8
 
 | Wallet | Code | Identifies | Spends and collects | Offered |
 | --- | --- | --- | --- | --- |
-| Google | Made on the phone from a secret the pass holds · rotates · one use | Every visit, no signal needed | Yes | 🚧 Issuer account, class and key pending |
-| Apple | Made by Grade10 and printed into the pass · never changes | Every visit, no signal needed | No — the member opens the card on the site; fixed in code, not a switch | 🚧 Developer Program, pass type identifiers, certificate and artwork pending |
+| Google | Made on the phone from a secret the pass holds · rotates · one use | Every visit, no signal needed | Yes | 🚧 Yes, once the issuer account, an approved class and the key are set |
+| Apple | Made by Grade10 and printed into the pass · never changes | Every visit, no signal needed | No — the member opens the card on the site; fixed in code, not a switch | 🚧 Yes, once the Developer Program, pass type identifiers, certificate and artwork are in place |
 
 A pass is a rendering of the member card, never a second source of it. What
 it solves is distribution: a code that has to be fetched cannot live on a lock
@@ -53,8 +53,14 @@ Apple code identifies and moves nothing.
 - **Ending** — immediate; the vendor's own copy is discharged by the sweep
 - **Removing it is not ending** — deleting the pass from the phone's wallet
   app changes nothing about the membership
-- 🚧 **Operator ending** — for a member who has lost their phone; no console
-  surface yet
+- 🚧 **Operator ending** — for a member whose phone is gone. An operator
+  holding `store:write` ends one wallet's pass from the member's record, which
+  names the wallets the member holds, and confirms the wallet first. It ends
+  at once, as the member's own does, and the member is sent no message. The
+  audit trail records who ended which wallet and when, and records an attempt
+  that found no live pass as ending nothing. Without `store:write` the record
+  names no wallet and offers no ending, and the act is refused. A record whose
+  wallets cannot be read says so, never that the member holds none
 - **Welcome message** — carries no save action, in either wallet
 - **Erasure** — the row stays, armed and empty; the secret goes, so a device
   fetching the pass sees nobody. Google is told; Apple keeps no copy
@@ -107,14 +113,14 @@ In this order, because each step needs the one above it:
    `packages/app-env`. None of the three is a secret, and all three appear in
    every save link a member opens. Until the issuer and the key are both set,
    no save action is drawn
+9. ❓ *Design* — **The save action as Google's own "Add to Google Wallet"
+   button**, which Google's brand guidelines expect, rather than a text
+   button. Design's call
 
 ### Apple
 
 Only `WALLET_PASS_KEY` is shared with Google: a brand carrying both wallets
 seals both their secrets under the one key. In this order:
-
-❓ **A second brand issuing** — nothing in the package is brand-specific; the
-first brand asking decides the certificate handling. Product's call.
 
 1. *Operations* — **Enrol in the Apple Developer Program** in the
    organisation's name. A pass type identifier belongs to a team, and the
@@ -145,7 +151,8 @@ first brand asking decides the certificate handling. Product's call.
 8. *Engineering* — **Set the secrets** with `pnpm run secrets`:
    `WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_APPLE_APNS_KEY`,
    `WALLET_PASS_AUTH_KEY` — which derives every pass's authentication token —
-   and `WALLET_PASS_KEY`, shared with Google. Then **record the pass type
+   and `WALLET_PASS_KEY` only where Google has not already set it, never a new
+   value once a pass exists. Then **record the pass type
    identifier, the team id, the APNs key id and the organisation name Wallet
    shows as the issuer** in `packages/app-env`. A certificate with no
    `WALLET_PASS_AUTH_KEY` draws no save action at all
@@ -159,6 +166,19 @@ first brand asking decides the certificate handling. Product's call.
    device three ways — as shipped, with the header omitted, and over the
    certificate — and record which produces a list request, not which returns
    200
+10. ❓ *Design* — **The save action as Apple's own "Add to Apple Wallet"
+    badge**, rather than a text button. It is licensed only while the
+    organisation is an Apple Developer Program member, and downloaded from the
+    developer site under the Wallet Marketing Agreement. Design's call
+
+### Launch Check
+
+- 🚧 *Engineering* — **Run `pnpm run secrets --check`** against the deployed
+  workers, after the last step for each wallet. It fails, naming the secret,
+  where `packages/app-env` records a wallet's issuer for that brand and
+  environment and one of that wallet's secrets is unset, and passes for a
+  brand that issues no pass. `WALLET_APPLE_APNS_KEY` is expected only where
+  the Apple issuer records an APNs key id
 
 ### Standing Obligations
 
@@ -191,6 +211,10 @@ first brand asking decides the certificate handling. Product's call.
   parse, and stops there rather than taking the other wallet's lap down with it
 - **Renewal** — Engineering owns the calendar; renewing is the certificate, key
   and secrets steps run again against the same identifiers
+- ❓ **A second brand issuing** — its own pass type identifiers and
+  certificate, since a certificate is bound to its pass type identifier.
+  Whether it enrols under the same Apple Developer team, and so shows the same
+  organisation name, is Product's call
 
 Pushes with no fetches is the signal to act on: APNs answers 200 for a device
 that then does nothing, so which `store.wallet.apple.*` counter stops is what
@@ -213,4 +237,35 @@ names the fault.
 - **Pass building** — `packages/wallet-pass`
 - **Secrets** — `packages/grade10-store/backend/src/secrets.ts`; the issuer,
   class and pass identifiers in `packages/app-env`
+:::
+
+:::detail{title="Product decisions" for="pm"}
+A member at the counter is identified from the lock screen, with no sign-in
+and no signal. A pass that still identifies somebody after the phone is gone
+is a credential nobody can take back, so it ends at once, by the member or by
+an operator.
+
+| User | Situation | Desired outcome |
+| --- | --- | --- |
+| Member | At the counter, no signal | Identified from the lock screen |
+| Member | Phone gone, own page out of reach | The pass on it stops identifying them, and a new one is a tap away |
+| Operator | A member asks for the lost phone's pass to be ended | Ends the wallet the member holds, without asking them to remember which |
+
+**Not in scope.** NFC. Anything on the pass beyond the card. Spending or
+collecting from an Apple pass. A save action in the welcome message. A pass
+for ZZZ.
+
+**Measurement.**
+
+| Signal | Definition | Owner |
+| --- | --- | --- |
+| Passes saved | Passes saved per week, per wallet, once that wallet is enrolled | Product |
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Operator ending's grant | Decided | `store:write`, the grant that already shows any member's live till code from the same record. Ending a pass is less than handing out a code, and the member adds a new pass in a tap. Staff hold it, as well as admins | Product |
+| Which pass an operator ends | Decided | One wallet per act, from the wallets the record names. A wallet the operator guessed ends nothing, while the real pass goes on identifying the member | Product |
+| Reason for an operator ending | Decided | None typed. The cause is always the lost phone, the act moves no value, and the member adds a new pass in a tap | Product |
+| Message to the member | Decided | None. The member asked for the ending, and their own page shows the wallet no longer held | Product |
+| Ending on one's own record | Decided | Allowed. Their own page ends it anyway, and an ending widens nothing | Product |
 :::
