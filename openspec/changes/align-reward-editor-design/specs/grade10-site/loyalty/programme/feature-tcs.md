@@ -9,7 +9,7 @@
 **I want** the reward form to set a reward's kind, discount, scope and combine setting,
 **so that** publishing any reward never needs the admin API.
 
-<!-- trace:case id=g10.loyalty-programme.TC-nzm rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
+<!-- trace:case id=g10.loyalty-programme.TC-nzm rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC1-1: A money-off reward is authored from the console alone
 
 Runs once per row of **Test data**.
@@ -66,7 +66,7 @@ Runs once per row of **Test data**.
 * Step 7 shows Money off with <discount>, <scope> and <stacks with>.
 * Where the row left it empty, the maximum discount is still empty.
 
-<!-- trace:case id=g10.loyalty-programme.TC-bju rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
+<!-- trace:case id=g10.loyalty-programme.TC-bju rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC2-1: A free item is created in two choices
 
 **Classification:**
@@ -115,7 +115,7 @@ Runs once per row of **Test data**.
 * Step 6 lists <name>, its terms taking everything off <variant_1>.
 * Step 7 shows the Free item card chosen, <variant_1> picked.
 
-<!-- trace:case id=g10.loyalty-programme.TC-7q7 rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
+<!-- trace:case id=g10.loyalty-programme.TC-7q7 rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC3-1: A free item built through money off reopens and duplicates as one
 
 **Classification:**
@@ -157,7 +157,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the Free item card chosen, <variant_1> picked.
 * Step 3 shows <minimum spend> as the minimum spend.
 
-<!-- trace:case id=g10.loyalty-programme.TC-nuz rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
+<!-- trace:case id=g10.loyalty-programme.TC-nuz rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC4-1: Any other 100% coupon reopens as money off
 
 Runs once per row of **Test data**.
@@ -206,7 +206,7 @@ Runs once per row of **Test data**.
 * The Money off card is chosen.
 * The discount and scope match the row.
 
-<!-- trace:case id=g10.loyalty-programme.TC-tuu rev=1 covers=g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr -->
+<!-- trace:case id=g10.loyalty-programme.TC-tuu rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC5-1: A capped 100% discount on one variant reopens as money off
 
 **Classification:**
@@ -238,6 +238,7 @@ Runs once per row of **Test data**.
 * Discount reads A percentage at 100%, with a maximum discount of HKD 100.
 * The variant is picked.
 
+<!-- trace:case id=g10.loyalty-programme.TC-xlj rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC6-1: A gift with a purchase is created and reopens as a gift
 
 **Classification:**
@@ -283,6 +284,7 @@ Runs once per row of **Test data**.
 * Step 6 shows the Gift with a purchase card chosen.
 * Step 6 shows <variant_1> as the gift, <minimum spend> as the minimum spend.
 
+<!-- trace:case id=g10.loyalty-programme.TC-gm2 rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC7-1: A product or catalog filter scope saves the reward online only
 
 Runs once per row of **Test data**.
@@ -340,6 +342,7 @@ Runs once per row of **Test data**.
 * Step 6 adds <name> to the rewards list.
 * Step 7 shows the channels the row names.
 
+<!-- trace:case id=g10.loyalty-programme.TC-0t9 rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC8-1: A money-off reward edited into a free item reopens as one
 
 **Classification:**
@@ -383,6 +386,7 @@ Runs once per row of **Test data**.
 * Step 5 shows the Free item card chosen, <variant_1> picked.
 * Step 5 shows no amount or whole-order scope carried over.
 
+<!-- trace:case id=g10.loyalty-programme.TC-90b rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC9-1: A reward missing a required part is not created
 
 Runs once per row of **Test data**.
@@ -435,6 +439,7 @@ Runs once per row of **Test data**.
 * Step 4 names the gap where the row says.
 * Step 5 lists no reward named <name>.
 
+<!-- trace:case id=g10.loyalty-programme.TC-z6o rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC10-1: A free item's basket check takes the item off only when it is held
 
 Runs once per row of **Test data**.
@@ -486,6 +491,7 @@ Runs once per row of **Test data**.
 * Step 6 shows the row's verdict.
 * Step 6 shows no line added to the basket.
 
+<!-- trace:case id=g10.loyalty-programme.TC-y2e rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC11-1: The reward editor follows the approved page layout
 
 Runs once per row of **Test data**.
@@ -531,6 +537,7 @@ Runs once per row of **Test data**.
 * Step 3 keeps the save bar on screen, and the rail where the row says.
 * Step 4 opens the rewards list, each state a tinted badge.
 
+<!-- trace:case id=g10.loyalty-programme.TC-2kx rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC12-1: A product-scoped reward stored for the till saves online only
 
 Runs once per row of **Test data**.
@@ -590,6 +597,7 @@ Runs once per row of **Test data**.
 **I want** every reward I redeem — money off, a gift, or a physical item — to become a coupon with its own kind, discount and scope,
 **so that** a physical reward settles like an ordinary purchase and I never wait for a separate collection.
 
+<!-- trace:case id=g10.loyalty-programme.TC-t2k rev=1 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32 -->
 ### grade10-site-loyalty-programme-US7-TC1-1: A coupon scoped to products or a filter is online only at the till
 
 Runs once per row of **Test data**.
@@ -639,6 +647,7 @@ Runs once per row of **Test data**.
 * Step 2 shows the coupon as the row's At the till column says.
 * Step 3 matches the row: the sale's price unchanged where not applied or refused.
 
+<!-- trace:case id=g10.loyalty-programme.TC-9xj rev=1 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32 -->
 ### grade10-site-loyalty-programme-US7-TC2-1: A coupon takes off what its discount and scope name
 
 Runs once per row of **Test data**.
@@ -691,6 +700,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the row's Taken off.
 * Step 3 shows full price on every line the scope does not match.
 
+<!-- trace:case id=g10.loyalty-programme.TC-ixx rev=1 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32 -->
 ### grade10-site-loyalty-programme-US7-TC3-1: A gift adds its free line once the basket reaches its minimum spend
 
 Runs once per row of **Test data**.
@@ -737,6 +747,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the row's Outcome.
 * Where the coupon is refused, the order total is unchanged.
 
+<!-- trace:case id=g10.loyalty-programme.TC-xnm rev=1 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32 -->
 ### grade10-site-loyalty-programme-US7-TC4-1: A free item's coupon rings its variant up at nothing at the till
 
 Runs once per row of **Test data**.
