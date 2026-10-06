@@ -1,0 +1,327 @@
+{
+  "version": 2,
+  "change": "separate-site-and-admin-sessions",
+  "baseline": "c3f0c0192fa8bbd76d396ae5861a687cb5789fec0a3be43bf81db7976e5bb4d1",
+  "fingerprint": "3d0ad9b9ae375f829378f17e4a8b051058c91beb6eb4042e444cc97b3de88d10",
+  "reviewedBy": "sean",
+  "acceptedAt": "2026-10-06T06:10:36.185Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/account.md#registration-and-login",
+      "sha256": "280c5e0c580060dc58978e62f7b9f073de91858c3375970f89bf76ada9171249",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/auth/index.md#collector-half",
+      "sha256": "d043c32f443765bc6372a112c415181305573fd7db585cd6baee7d2e7ad8146a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/auth/session.md#two-sessions",
+      "sha256": "ff637d87d7f9cb4e15d26db7c29b98e7ca3224de4d77ec5e35dfd241cfff80ea",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/auth/sessions.md#revoke",
+      "sha256": "60e8190a3dd6c65f91f3d3061d23782dc917969ae7f8608ac304d708c3915a9c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/auth/sign-in.md#following-the-link",
+      "sha256": "a7eb9ef70f9bf0dfdca3fd3d41893d696d9e9c33a5f556a4b2e04e3b15bd834f",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/console/user-directory.md#account-panel",
+      "sha256": "e70c7a4f3f129ffb5d5821bd4915757f2a9be5d9d90e82d3b9099886b74f9ef8",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/decisions.md",
+      "sha256": "ae4c012ea5ff027506e07941916ac1738ab5e79e43825463dbe38652f7238fc6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/proposal.md",
+      "sha256": "d839ba2b6d8b93b213c598d1808145aff5d8ee1fecc10cf235aa6d74213f14a6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/domain-tcs.md",
+      "sha256": "9268bac153f22f61f10ea24463d5303aa666fcc488c656ca2ebde0ec46a7013e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/session/feature-tcs.md",
+      "sha256": "7b5ebddc198623836f1674b5ea9f8fc7dd5d6adf7f17d725476865bb107861ff",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/session/spec.md",
+      "sha256": "a1a00189f9f362a61fd7c22e3a67551814280a085a572fde076c985e6c1b8a3e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/session/user-journeys.md",
+      "sha256": "ff5bf811864e2536f38e32deec2bda6de7bd5ae6031d8dd32cae1e067c178c4e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sessions/feature-tcs.md",
+      "sha256": "dd3d0997f00952ad82657bb9669409f78462033253f703a9aaa02066cbd0a5b2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sessions/spec.md",
+      "sha256": "d13fd4054c59d5af7329b774b541d09473cde8d93f437224e9d08b746c926ce2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sessions/user-journeys.md",
+      "sha256": "e8806d87f3c1fb3c5fce2b695bc790c5445adc0e210e34e53fd27413d7ed996b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sign-in/feature-tcs.md",
+      "sha256": "fec3747d2af349d08fae6a4781274dcb3cfd8b010d43f35d9414a5abc7e22671",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sign-in/spec.md",
+      "sha256": "b89ad42759c07c6a6d012476751ca74c6d1c7d81017fd7bc2dc24c61451ae3da",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sign-in/user-journeys.md",
+      "sha256": "e0298dc64f0d606a6374616bbc5adfb7a9cfe679edbfa28e916e6c1b0c57f449",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sign-out/feature-tcs.md",
+      "sha256": "707ee25592a3bf0e216cf651bae4fc1ffe278be88d1cc23c48a7af33d28efa93",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sign-out/spec.md",
+      "sha256": "97e98086c861cf6d22a9a41360922aa36a964725629df94b73ef3e9d1fa62c30",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/auth/sign-out/user-journeys.md",
+      "sha256": "a139cdffea6dbde539b735508ff751877f2f49e7a3ee11e79ec3d58cc72e6c96",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/console/user-directory/feature-tcs.md",
+      "sha256": "8a5328dd04dfed6a112bca584fa933b2a83ecb6513695edbfc758cc334c84931",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/console/user-directory/spec.md",
+      "sha256": "af49e83fa1a662c5e8d3d5c9816bc5f4a5bac3b74a5377a5e72b441f41b80bb0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/specs/shared/console/user-directory/user-journeys.md",
+      "sha256": "2978b5d6bda7f136d1ec13cb6679890bf732039b85284e7928e13b6eaf580ab0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/tech-design.md",
+      "sha256": "82baf32268612df101a646b297dab72907171fc759e45f7271e087a4eb80310f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/ui-design.md",
+      "sha256": "6127e2137901ce7a9b60f0fbb04fd8ddfd73d8c788bd46c1fd7306913f9123f9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/auth/domain-tcs.md",
+      "sha256": "e69963f5330645bff66260d71516bbda1af9734f34caf665fb0b5e92e632e7bd",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/session/feature-tcs.md",
+      "sha256": "61728ac9304e0172ce64ba037ed4625f23147072ee8114b0aa18a98a9f78ec2f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/session/spec.md",
+      "sha256": "d4594d6a690240d5a991cd257035d617e89b1167018473322cbc7b00402a6eee",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/session/user-journeys.md",
+      "sha256": "7cdbf53141f36a0882d4c21fb19115ce17839cb54064171bc794ee2eb8729f80",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sessions/feature-tcs.md",
+      "sha256": "651bbafa7f86632f57b815fb6f143a54e51d12af34aaebb32a2d961e4a863857",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sessions/spec.md",
+      "sha256": "24a000e26ba812c3725d5b2989a5a2c334d76e80fd55a7e8381c15dd12be228d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sessions/user-journeys.md",
+      "sha256": "d99c744e30c431ab2801f0bd0a3fedc553ba59e6bdb5691febdbc6a69069f198",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+      "sha256": "0f4d21fd5561e91db2d02d0de078a7feb999684c535a504e0ce13daa2691a4a7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-in/spec.md",
+      "sha256": "8b2c41f5d22658c0280f10fa6b2c673eb52720e7e2909f08a0cb127a1deeb1e4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-in/user-journeys.md",
+      "sha256": "3fec5ad401e0931012fce75f3396b652eba05bc3e853295a9b9d11d68b91627e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-out/feature-tcs.md",
+      "sha256": "77e8660b36dff8ce3eeccfa2180c44594fe9442e014e8cd8e2c92c75353f8858",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-out/spec.md",
+      "sha256": "ba768edcad2d72b1dff8921fef7d2c742ff24596e90ac8b225ecb6e1a567faf5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-out/user-journeys.md",
+      "sha256": "25ceb1d38d86a12608ec584579d0d9ef9794e3f82c949a79b62b7cb9a5e13b9c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/console/user-directory/feature-tcs.md",
+      "sha256": "8fb5f9fa49cd444201ab23bd577389e8e18c20a4dd787795e3314b1c44ba1552",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/console/user-directory/spec.md",
+      "sha256": "d27c7bc5295e99e2c8dffb9b7c807efe63374f4bc3341be4e5155f5edfe3dedc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/console/user-directory/user-journeys.md",
+      "sha256": "4119a5b681e7301a21b02282a4b449de2fc041444fd22b5110a3c70d5d494409",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/separate-site-and-admin-sessions/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/session/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/session/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A sign-in covers the surface that made it, on its own brand",
+        "Requirement: A signed-in person is named by id, email, name, and roles",
+        "Requirement: An open surface keeps up with the session on this device",
+        "Requirement: Every open surface of the brand in this browser keeps up",
+        "Requirement: Every open tab of a surface in this browser keeps up",
+        "Requirement: Release asks operators to sign in to the console once more",
+        "Requirement: Second factor and recent sign-in are read on the console's own session",
+        "Requirement: Sign-in covers the brand, not another brand",
+        "Requirement: The console accepts only a session the console made",
+        "Requirement: The site session and the console session last and end on their own",
+        "Requirement: What an open surface shows about the person follows the person"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/session/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/sessions/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/sessions/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: An operator who can revoke can end a session",
+        "Requirement: Only operators who can list sessions see them"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/sessions/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-in/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A failed link follow lands on the brand home with a toast",
+        "Requirement: A failed link follow leaves the asking surface with the failure announced",
+        "Requirement: A new link replaces earlier unused links",
+        "Requirement: A sign-in dialog closes when the session arrives",
+        "Requirement: A sign-in signs in the surface that asked for it",
+        "Requirement: A signed-in mismatch prompts Switch or Stay instead of replacing the session",
+        "Requirement: A surface still waiting stops waiting once its address settles elsewhere",
+        "Requirement: A trusted product may create or enter an account by a verified email",
+        "Requirement: Google's auto-prompt offers sign-in and yields to the sign-in dialog",
+        "Requirement: Sign-in stays on the brand",
+        "Requirement: Sign-in-link emails are capped per address"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-in/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-out/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-out/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A confirmed sign-out returns the surface to its signed-out presentation"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/sign-out/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/console/user-directory/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/console/user-directory/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A session is named without its secret"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/console/user-directory/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

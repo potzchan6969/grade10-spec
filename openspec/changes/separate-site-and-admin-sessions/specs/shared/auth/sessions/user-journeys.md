@@ -1,16 +1,12 @@
-## User journeys
-
-### shared-auth-sessions-US-01: Operator lists a person's sessions
-
-**As an** operator who can list sessions,
-**I want** to see one account's sessions without their secrets,
-**so that** I can tell which device is signed in without becoming that person.
+## Context user journeys
 
 ### shared-auth-sessions-US-02: Operator ends a session
 
 **As an** operator who can revoke,
 **I want** to end one session or every session of an account,
 **so that** a stolen device is signed out, including my own if I revoke the current one.
+
+## ADDED User journeys
 
 ### shared-auth-sessions-US-03: Operator tells a console session from a site session
 
@@ -23,3 +19,7 @@
 **As an** operator,
 **I want** ending every session of an account to close its site and console sessions together,
 **so that** a person I have cut off keeps no live console session.
+
+## MODIFIED User journeys
+
+## REMOVED User journeys

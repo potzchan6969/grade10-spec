@@ -1,22 +1,17 @@
-# shared/auth/sessions Specification
-
-## Purpose
-How an operator on either brand lists a person's sessions and ends one or
-all of them. Sign-out of the current surface is `shared/auth/sign-out`. A
-ban still disables the whole account (`shared/auth/users`).
+# shared/auth/sessions — delta
 
 ## Feature set
 
 - Session list
   - One account: an operator with `session:list` lists sessions by user id, never the secret
-- Revoke
-  - One or all: a revoke ends that session; revoking every session is allowed; revoking the current one signs the operator out
-  - Closes within 70 seconds: even a cached browse read stops answering signed in, not only a mutation or an elevated call
-  - Both surfaces: ending every session, like a ban, closes the site and the console sessions together
 - Surface named
   - Site or console: each listed session says which surface it belongs to
+- Revoke
+  - One or all: a revoke ends that session; revoking every session is allowed; revoking the current one signs the operator out
+  - Both surfaces: ending every session, like a ban, closes the site and the console sessions together
+  - Closes within 70 seconds: even a cached browse read stops answering signed in, not only a mutation or an elevated call
 
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Only operators who can list sessions see them
 

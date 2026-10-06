@@ -26,7 +26,7 @@ requirements of `shared-ui/auth-user-directory` forward; only the home moved.
   - Actions together: hand-offs and standing moves the console offered, hand-offs before ban, unban, or erase
   - Standing with its reason: a banned account shows why in the panel when the console supplies it; the table Status cell stays one line
   - Timeline: when the account joined, and that it is banned when it is, without inventing a time the console did not supply
-  - Session detail: where a session was raised and when it ends, never what authenticates it
+  - Session detail: where a session was raised, when it ends, and which surface it belongs to, never what authenticates it
 - Narrowing and order
   - Fixed filter shape: Type, Roles, Status and Email — labels and option words from the consumer; no role vocabulary inside the component
   - Exclusive Type: Elevated or Users; Roles is choosable only for Elevated
@@ -51,7 +51,9 @@ requirements of `shared-ui/auth-user-directory` forward; only the home moved.
   - Create review: after Create on a free email (or when lookup is skipped or fails open), a confirmation previews the trimmed draft; a malformed or off-list email, or a chosen locked role, adds a note on that same confirmation; a clean draft still shows the confirmation; Back returns to the form; confirming then creates
 
 ## Requirements
+
 ### Requirement: The user directory exports
+
 The console package SHALL export, from its public entry, exactly these
 components for the user directory surface: `UserTable`, `UserRolesDialog`,
 `UserModerationDialog`, `UserSessionsDialog`, `UserAccountPanel`,
@@ -156,14 +158,15 @@ identifier. When the account holds no sessions, ending every session SHALL NOT
 be offered.
 
 A session SHALL be able to carry, beside its identifier, when it began, when
-it ends without a revocation, and where it was raised — each supplied by the
-consumer already in words, each rendered when supplied and omitted when not.
+it ends without a revocation, where it was raised, and which surface it
+belongs to, the site or the console — each supplied by the consumer already in
+words, each rendered when supplied and omitted when not.
 
 <!-- trace:scenario id=g10.shared-user-directory.SC-uz8 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-07 - An operator reads where an account is signed in
 **Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
 
-- **WHEN** the dialog renders an account's sessions
+- **WHEN** the dialog or the account panel renders an account's sessions
 - **THEN** each is named by its identifier
 - **AND THEN** no authenticating secret is rendered
 
@@ -171,7 +174,7 @@ consumer already in words, each rendered when supplied and omitted when not.
 #### Scenario: shared-console-user-directory-SC-08 - An account holds no sessions
 **Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
 
-- **WHEN** the dialog renders an account with no sessions
+- **WHEN** the dialog or the account panel renders an account with no sessions
 - **THEN** it says so
 - **AND THEN** the control that ends every session is unavailable
 
@@ -182,7 +185,32 @@ consumer already in words, each rendered when supplied and omitted when not.
 - **GIVEN** a session the consumer supplied with where it was raised and when it ends
 - **WHEN** that session renders
 - **THEN** both are shown as the consumer supplied them
-- **AND THEN** a session supplied with neither shows its identifier alone
+- **AND THEN** a session supplied with neither shows no place and no end time,
+  only its identifier and whatever else it was supplied, such as its surface
+
+#### Scenario: shared-console-user-directory-SC-40 - A session says which surface it belongs to
+**Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
+
+- **GIVEN** two sessions of one account, the consumer supplying the site as one's surface and the console as the other's
+- **WHEN** the dialog and the account panel each render them
+- **THEN** each view shows the surface the consumer supplied beside each session
+- **AND THEN** the two sessions read as different surfaces in both views
+
+#### Scenario: shared-console-user-directory-SC-41 - Ending one session leaves the other's surface standing
+**Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
+
+- **GIVEN** two sessions of one account, the consumer supplying the site as one's surface and the console as the other's
+- **WHEN** the operator ends one of them from the dialog or from the account panel's sessions area
+- **THEN** that view reports the ended session by its own identifier
+- **AND THEN** the session the consumer still supplies shows its own surface, in the dialog and in the panel
+
+#### Scenario: shared-console-user-directory-SC-42 - A session supplied no surface shows none
+**Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
+
+- **GIVEN** two sessions of one account, the consumer supplying the console as one's surface and none for the other
+- **WHEN** the dialog and the account panel each render them
+- **THEN** the first shows the console as its surface
+- **AND THEN** the other shows no surface, neither the site's nor the console's, beside whatever else it was supplied
 
 ### Requirement: One confirmation serves every moderation move
 
@@ -466,7 +494,6 @@ move to the console, which confirms it in `UserModerationDialog`.
 - **THEN** the panel reports the move and collects no confirmation of its own
 - **AND THEN** nothing is reported as confirmed until the moderation dialog reports it
 
-
 ### Requirement: The directory offers create only with a handler
 
 Create is a console-gated move: the components collect the fields and report
@@ -587,4 +614,3 @@ confirming that review SHALL then call the create handler.
 - **THEN** the confirmation opens and the create handler has not run
 - **AND THEN** confirming the review calls the create handler
 - **AND THEN** Back from the confirmation returns to the create form and creates nothing
-

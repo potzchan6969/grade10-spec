@@ -1,12 +1,4 @@
-# shared/auth/sign-out Specification
-
-## Purpose
-What activating a sign-out control does on any signed-in surface of either
-brand: what the person sees while the request runs, what a confirmed sign-out
-leaves them looking at, and what a refused one tells them. One contract for
-the grade10 site's profile, the zzz storefront's profile, and both admin
-panels, so no sign-out tap ends in silence. Where the sign-out button sits and
-what a surface cleans up afterwards stay with the surface.
+# shared/auth/sign-out — delta
 
 ## Feature set
 
@@ -19,22 +11,7 @@ what a surface cleans up afterwards stay with the surface.
 - Own session only
   - One surface: signing out ends that surface's session and leaves the other surface signed in
 
-## Requirements
-
-### Requirement: A sign-out control shows the request in flight
-
-A signed-in surface's sign-out control SHALL show a busy state while the
-sign-out request runs and SHALL NOT accept another activation until the
-request settles.
-
-<!-- trace:scenario id=g10.shared-sign-out.SC-9oa rev=1 -->
-#### Scenario: shared-auth-sign-out-SC-01 - The control is busy while sign-out runs
-**Serves:** shared-auth-sign-out-US-01 - Collector or operator signs out and lands signed out
-
-- **GIVEN** a signed-in surface with a sign-out control
-- **WHEN** the person activates it
-- **THEN** the control shows a busy state until the auth service answers
-- **AND** activating it again during that time does nothing
+## MODIFIED Requirements
 
 ### Requirement: A confirmed sign-out returns the surface to its signed-out presentation
 
@@ -77,29 +54,3 @@ sign-out.
 - **WHEN** they sign out of the site and the auth service confirms
 - **THEN** the site shows the marketing page
 - **AND** the console still shows them signed in
-
-### Requirement: A refused sign-out is reported, never silent
-
-WHEN a sign-out request fails or the auth service refuses it, the surface
-SHALL stay in its signed-in presentation and SHALL show failure feedback
-beside the sign-out control. The control SHALL remain usable, and a retry
-SHALL clear the feedback while the new request runs.
-
-<!-- trace:scenario id=g10.shared-sign-out.SC-ud0 rev=1 -->
-#### Scenario: shared-auth-sign-out-SC-04 - A refused sign-out is reported
-**Serves:** shared-auth-sign-out-US-02 - Collector or operator retries a refused sign-out
-
-- **GIVEN** a signed-in surface whose sign-out request the auth service
-  refuses
-- **WHEN** the person activates sign-out
-- **THEN** the surface stays signed in
-- **AND** failure feedback appears beside the control
-
-<!-- trace:scenario id=g10.shared-sign-out.SC-i5o rev=1 -->
-#### Scenario: shared-auth-sign-out-SC-05 - A retry clears the failure
-**Serves:** shared-auth-sign-out-US-02 - Collector or operator retries a refused sign-out
-
-- **GIVEN** a surface showing sign-out failure feedback
-- **WHEN** the person activates sign-out again
-- **THEN** the feedback clears for the new attempt
-- **AND** a confirmed answer signs the surface out

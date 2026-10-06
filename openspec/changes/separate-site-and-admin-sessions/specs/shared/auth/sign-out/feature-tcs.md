@@ -1,7 +1,6 @@
 # shared/auth/sign-out Test Cases
 
-**Status:** reopened
-**Reviewed:** 2026-09-23, tcs-rules r3.0, lapsed 2026-10-06
+**Status:** pending-review
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-sign-out-US1: Collector or operator signs out and lands signed out
@@ -9,96 +8,6 @@
 **As a** signed-in person,
 **I want** the control to show the request in flight and, on success, leave the signed-in surface,
 **so that** I know the tap registered and I am not still looking at my account.
-
-<!-- trace:case id=g10.shared-sign-out.TC-lsq rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
-### shared-auth-sign-out-US1-TC1-1: Sign-out control is busy until the request settles
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-sign-out-US-01
-
-**Pre-conditions:**
-
-* customer is signed in on <grade10 profile url>.
-* Network manipulation holds the sign-out request in flight.
-
-**Steps:**
-
-1. Navigate to <grade10 profile url>.
-2. Activate the sign-out control.
-3. Sign out again while the request is still running.
-
-**Expected Results:**
-
-* The control shows a busy state until the auth service answers.
-* The second activation starts no second request.
-
-<!-- trace:case id=g10.shared-sign-out.TC-p3n rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
-### shared-auth-sign-out-US1-TC2-1: Operator sign-out returns the admin panel to sign-in
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-out-US-01
-
-**Pre-conditions:**
-
-* admin is signed in on <grade10 admin console url>.
-
-**Steps:**
-
-1. Navigate to <grade10 admin console url>.
-2. Activate the sign-out control and wait for the auth service to confirm.
-
-**Expected Results:**
-
-* The panel shows its sign-in page.
-
-<!-- trace:case id=g10.shared-sign-out.TC-r6b rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
-### shared-auth-sign-out-US1-TC3-1: Collector sign-out returns the grade10 site to marketing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-out-US-01
-
-**Pre-conditions:**
-
-* customer is signed in on <grade10 profile url>.
-
-**Steps:**
-
-1. Navigate to <grade10 profile url>.
-2. Activate the sign-out control and wait for the auth service to confirm.
-
-**Expected Results:**
-
-* The site shows the marketing page.
 
 ### shared-auth-sign-out-US1-TC4-1: Console sign-out control is busy until the request settles
 
@@ -130,76 +39,6 @@
 
 * The control shows a busy state until the auth service answers.
 * The second activation starts no second request.
-
----
-
-## shared-auth-sign-out-US2: Collector or operator retries a refused sign-out
-
-**As a** signed-in person,
-**I want** a refused sign-out named as a failure I can retry,
-**so that** a network miss does not leave me signed in with no explanation.
-
-<!-- trace:case id=g10.shared-sign-out.TC-d61 rev=1 covers=g10.shared-sign-out.SC-ud0,g10.shared-sign-out.SC-i5o -->
-### shared-auth-sign-out-US2-TC1-1: Refused sign-out is reported beside the control
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-sign-out-US-02
-
-**Pre-conditions:**
-
-* customer is signed in on <grade10 profile url>.
-* <The sign-out endpoint> is mocked to refuse the request.
-
-**Steps:**
-
-1. Navigate to <grade10 profile url>.
-2. Activate the sign-out control.
-
-**Expected Results:**
-
-* The surface stays signed in.
-* Failure feedback appears beside the sign-out control.
-
-<!-- trace:case id=g10.shared-sign-out.TC-t2b rev=1 covers=g10.shared-sign-out.SC-ud0,g10.shared-sign-out.SC-i5o -->
-### shared-auth-sign-out-US2-TC2-1: Retry clears the failure and can complete
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-sign-out-US-02
-
-**Pre-conditions:**
-
-* customer is signed in on <grade10 profile url> with sign-out failure feedback showing.
-* <The sign-out endpoint> then confirms.
-
-**Steps:**
-
-1. Navigate to <grade10 profile url>.
-2. Activate the sign-out control again.
-
-**Expected Results:**
-
-* The failure feedback clears for the new attempt.
-* A confirmed answer signs the surface out.
 
 ---
 
@@ -287,6 +126,8 @@
 * Step 1 shows the site returned to marketing.
 * Step 2 shows the console open as <operator account>, with no signed-out message.
 * Step 3 still shows the console open as <operator account>.
+
+---
 
 ## Settled
 
