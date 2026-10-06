@@ -9,6 +9,7 @@
 **I want** a dynamic code or my email to identify me, staff to see the name the site knows me by, and staff to spend my points once,
 **so that** a replayed code is refused, a miss discloses nothing, and points settle once whether paid online or at the till.
 
+<!-- trace:case id=g10.store-membership.TC-23a rev=1 covers=g10.store-membership.SC-y0k -->
 ### grade10-site-store-membership-US2-TC12-1: Till names the member by the site's one rule
 
 Runs once per row of **Test data**.
@@ -57,6 +58,7 @@ Runs once per row of **Test data**.
 * Step 2 reads the row's name.
 * Step 4 reads the same name.
 
+<!-- trace:case id=g10.store-membership.TC-zhi rev=1 covers=g10.store-membership.SC-a70,g10.store-membership.SC-y0k -->
 ### grade10-site-store-membership-US2-TC13-1: Till shows 會員 when the account service cannot give the name
 
 Runs once per row of **Test data**.
@@ -103,6 +105,7 @@ Runs once per row of **Test data**.
 * Step 2 reads 會員 as the name.
 * Step 2 still shows <member_1>'s tier and balance.
 
+<!-- trace:case id=g10.store-membership.TC-g53 rev=1 covers=g10.store-membership.SC-jjw,g10.store-membership.SC-y0k -->
 ### grade10-site-store-membership-US2-TC14-1: A name saved on the profile shows at the till through an account-service outage
 
 **Classification:**
@@ -145,6 +148,7 @@ Runs once per row of **Test data**.
 * Step 2 reads <saved name>, not 會員.
 * Step 4 reads <saved name>.
 
+<!-- trace:case id=g10.store-membership.TC-80o rev=1 covers=g10.store-membership.SC-ymg -->
 ### grade10-site-store-membership-US2-TC15-1: Till is sent an 80-character name whole
 
 **Classification:**

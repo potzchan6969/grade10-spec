@@ -9,6 +9,7 @@
 **I want** my card in the wallet my phone already has, scannable without signal and naming me as the site does,
 **so that** I am served from my lock screen instead of signing in and waiting for a code with a queue behind me.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-mbs rev=1 covers=g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-fjc -->
 ### grade10-site-store-wallet-member-card-US6-TC10-1: Pass names the member by the site's one rule
 
 Runs once for each <member state> row on each <wallet>.
@@ -59,6 +60,7 @@ Runs once for each <member state> row on each <wallet>.
 
 * Step 4 reads the row's name.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-0d5 rev=1 covers=g10.store-wallet-member-card.SC-vzv -->
 ### grade10-site-store-wallet-member-card-US6-TC11-1: An account-name change reaches the pass within the daily floor
 
 **Classification:**
@@ -96,6 +98,7 @@ Runs once for each <member state> row on each <wallet>.
 
 * Within <floor> of step 1, the wallet is sent the pass naming <new name>.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-nck rev=1 covers=g10.store-wallet-member-card.SC-nmv -->
 ### grade10-site-store-wallet-member-card-US6-TC12-1: A name the account service cannot give leaves the pass as it was
 
 **Classification:**
@@ -138,6 +141,7 @@ Runs once for each <member state> row on each <wallet>.
 * Step 2 finds nothing sent: the pass still shows <name> and <old balance>.
 * Step 5 finds the pass sent naming <name> with <new balance>.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-scs rev=1 covers=g10.store-wallet-member-card.SC-4hb -->
 ### grade10-site-store-wallet-member-card-US6-TC13-1: Pass is sent an 80-character name whole
 
 Runs once per row of **Test data**.
@@ -181,6 +185,7 @@ Runs once per row of **Test data**.
 
 * Step 3 names the member <long name>, all 80 characters.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-nh4 rev=1 covers=g10.store-wallet-member-card.SC-nmv,g10.store-wallet-member-card.SC-92j -->
 ### grade10-site-store-wallet-member-card-US6-TC14-1: A saved name refreshes the pass through an account-service outage
 
 **Classification:**

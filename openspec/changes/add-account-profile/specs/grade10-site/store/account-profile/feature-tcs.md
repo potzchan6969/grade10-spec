@@ -14,6 +14,7 @@
 **I want** the account page to show my profile even if I have never saved,
 **so that** I am not asked to create a record, and nobody else can open mine.
 
+<!-- trace:case id=g10.store-account-profile.TC-8jx rev=1 covers=g10.store-account-profile.SC-xen,g10.store-account-profile.SC-h0u,g10.store-account-profile.SC-dzo,g10.store-account-profile.SC-4fv -->
 ### grade10-site-store-account-profile-US1-TC1-1: Never-saved collector sees a complete profile from sign-in
 
 Runs once per row of **Test data**.
@@ -62,6 +63,7 @@ Runs once per row of **Test data**.
 * No member-since date shows, and no error.
 * An edit control is offered.
 
+<!-- trace:case id=g10.store-account-profile.TC-onn rev=1 covers=g10.store-account-profile.SC-zfy -->
 ### grade10-site-store-account-profile-US1-TC2-1: Nameless account shows the address before the @ as its name
 
 **Classification:**
@@ -97,6 +99,7 @@ Runs once per row of **Test data**.
 * The display name reads `mika.tan`, the part of <signed-in address> before the `@`.
 * The avatar shows `M`, the first letter of `mika.tan`.
 
+<!-- trace:case id=g10.store-account-profile.TC-h3c rev=1 covers=g10.store-account-profile.SC-m0o,g10.store-account-profile.SC-ul5 -->
 ### grade10-site-store-account-profile-US1-TC3-1: Saved profile reads back, member-since at the first save
 
 **Classification:**
@@ -138,6 +141,7 @@ Runs once per row of **Test data**.
 * The email reads the signed-in address.
 * Member-since reads <first save date>, not <later save date>.
 
+<!-- trace:case id=g10.store-account-profile.TC-ji1 rev=1 covers=g10.store-account-profile.SC-yoh -->
 ### grade10-site-store-account-profile-US1-TC4-1: Signed-out visit to the profile asks for sign-in
 
 **Classification:**
@@ -168,6 +172,7 @@ Runs once per row of **Test data**.
 * Step 1 shows no profile field.
 * After step 2, the page shows customer's own profile.
 
+<!-- trace:case id=g10.store-account-profile.TC-3qj rev=1 covers=g10.store-account-profile.SC-02h -->
 ### grade10-site-store-account-profile-US1-TC5-1: Signed-out profile requests are refused
 
 Runs once per row of **Test data**.
@@ -207,6 +212,7 @@ Runs once per row of **Test data**.
 * The request is refused as signed out.
 * No profile is returned or written.
 
+<!-- trace:case id=g10.store-account-profile.TC-hxg rev=1 covers=g10.store-account-profile.SC-1s9 -->
 ### grade10-site-store-account-profile-US1-TC6-1: Naming another collector reaches only the caller's own profile
 
 Runs once per row of **Test data**.
@@ -252,6 +258,7 @@ Runs once per row of **Test data**.
 * Step 2 answers with customer A's profile, or refuses; never customer B's.
 * Step 3 still reads <B's name>.
 
+<!-- trace:case id=g10.store-account-profile.TC-akz rev=1 covers=g10.store-account-profile.SC-rz7,g10.store-account-profile.SC-9g2 -->
 ### grade10-site-store-account-profile-US1-TC7-1: A record the store wrote gives no name and no member-since
 
 Runs once per row of **Test data**.
@@ -303,6 +310,7 @@ Runs once per row of **Test data**.
 **I want** to save a trimmed display name and an optional bio,
 **so that** an empty or over-length name is refused, and cancelling discards the draft.
 
+<!-- trace:case id=g10.store-account-profile.TC-k08 rev=1 covers=g10.store-account-profile.SC-h0u,g10.store-account-profile.SC-1ku,g10.store-account-profile.SC-6r5,g10.store-account-profile.SC-zu6 -->
 ### grade10-site-store-account-profile-US2-TC1-1: First save stores a trimmed name and bio and starts member-since
 
 Runs once per row of **Test data**.
@@ -354,6 +362,7 @@ Runs once per row of **Test data**.
 * Member-since reads <save date>.
 * After step 6, the same name, bio and member-since show.
 
+<!-- trace:case id=g10.store-account-profile.TC-vg5 rev=1 covers=g10.store-account-profile.SC-1ku -->
 ### grade10-site-store-account-profile-US2-TC2-1: Display name saves at its limits
 
 Runs once per row of **Test data**.
@@ -397,6 +406,7 @@ Runs once per row of **Test data**.
 * Step 4 returns to the read view.
 * After step 5, the display name reads the row's saved value.
 
+<!-- trace:case id=g10.store-account-profile.TC-9b5 rev=1 covers=g10.store-account-profile.SC-3hb -->
 ### grade10-site-store-account-profile-US2-TC3-1: Empty display name is refused and the input kept
 
 Runs once per row of **Test data**.
@@ -445,6 +455,7 @@ Runs once per row of **Test data**.
 * The form still holds <typed name> and <typed bio>.
 * After step 6, the display name reads <stored name>, and the bio is the one stored before.
 
+<!-- trace:case id=g10.store-account-profile.TC-d5l rev=1 covers=g10.store-account-profile.SC-6r5,g10.store-account-profile.SC-kuq -->
 ### grade10-site-store-account-profile-US2-TC4-1: Bio saves at its limit, and an emptied bio clears
 
 Runs once per row of **Test data**.
@@ -487,6 +498,7 @@ Runs once per row of **Test data**.
 * Step 4 returns to the read view.
 * After step 5, the bio shows the row's outcome.
 
+<!-- trace:case id=g10.store-account-profile.TC-gd4 rev=1 covers=g10.store-account-profile.SC-pve,g10.store-account-profile.SC-d7k -->
 ### grade10-site-store-account-profile-US2-TC5-1: Name and bio fields take nothing past their limits
 
 Runs once per row of **Test data**.
@@ -529,6 +541,7 @@ Runs once per row of **Test data**.
 * Step 3 leaves <field> holding <limit>, never more.
 * After step 5, <field> reads no more than <limit>.
 
+<!-- trace:case id=g10.store-account-profile.TC-p9l rev=1 covers=g10.store-account-profile.SC-3hb,g10.store-account-profile.SC-pve,g10.store-account-profile.SC-d7k,g10.store-account-profile.SC-cll -->
 ### grade10-site-store-account-profile-US2-TC6-1: Store refuses an over-limit, empty or fieldless save
 
 Runs once per row of **Test data**.
@@ -576,6 +589,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the save, naming the row's reason.
 * Step 3 still reads <stored name> and <stored bio>.
 
+<!-- trace:case id=g10.store-account-profile.TC-5ip rev=1 covers=g10.store-account-profile.SC-akq -->
 ### grade10-site-store-account-profile-US2-TC7-1: Cancel discards the draft
 
 **Classification:**
@@ -620,6 +634,7 @@ Runs once per row of **Test data**.
 * Step 6 returns to the read view showing <stored name>, <stored bio> and the stored avatar.
 * Step 7 opens the form holding <stored name> and <stored bio>, with the stored avatar.
 
+<!-- trace:case id=g10.store-account-profile.TC-hx6 rev=1 covers=g10.store-account-profile.SC-plw -->
 ### grade10-site-store-account-profile-US2-TC8-1: Two collectors save the same display name
 
 **Classification:**
@@ -661,6 +676,7 @@ Runs once per row of **Test data**.
 * After step 5, customer B's display name reads <shared name>.
 * Step 6 still reads <shared name>.
 
+<!-- trace:case id=g10.store-account-profile.TC-ouz rev=1 covers=g10.store-account-profile.SC-1ku,g10.store-account-profile.SC-pve,g10.store-account-profile.SC-6r5 -->
 ### grade10-site-store-account-profile-US2-TC9-1: Store trims a value before it measures the limit
 
 Runs once per row of **Test data**.
@@ -708,6 +724,7 @@ Runs once per row of **Test data**.
 **I want** an accepted image as my avatar and a remove that restores my display name's first letter,
 **so that** a bad file is refused and the letter follows the display name I actually have.
 
+<!-- trace:case id=g10.store-account-profile.TC-hdw rev=1 covers=g10.store-account-profile.SC-tbm -->
 ### grade10-site-store-account-profile-US3-TC1-1: Chosen image becomes the avatar, square
 
 Runs once for each <image> row on each <profile url>.
@@ -758,6 +775,7 @@ Runs once for each <image> row on each <profile url>.
 * After step 5, the same avatar shows.
 * Step 6 shows a square image, 512 by 512 pixels.
 
+<!-- trace:case id=g10.store-account-profile.TC-bst rev=1 covers=g10.store-account-profile.SC-f4k -->
 ### grade10-site-store-account-profile-US3-TC2-1: Removing the avatar restores the display name's first letter
 
 **Classification:**
@@ -797,6 +815,7 @@ Runs once for each <image> row on each <profile url>.
 * Step 4 returns to the read view showing `K`.
 * After step 5, `K` still shows.
 
+<!-- trace:case id=g10.store-account-profile.TC-5zw rev=1 covers=g10.store-account-profile.SC-ps1,g10.store-account-profile.SC-el0 -->
 ### grade10-site-store-account-profile-US3-TC3-1: The letter follows a newly saved display name
 
 Runs once per row of **Test data**.
@@ -843,6 +862,7 @@ Runs once per row of **Test data**.
 
 * Step 4 shows the row's letter in the avatar's place, not `K`.
 
+<!-- trace:case id=g10.store-account-profile.TC-quh rev=1 covers=g10.store-account-profile.SC-5wx -->
 ### grade10-site-store-account-profile-US3-TC4-1: A file that is not an image is refused
 
 **Classification:**
@@ -881,6 +901,7 @@ Runs once per row of **Test data**.
 * By step 4, <not an image> is refused with a reason shown.
 * After step 5, the stored avatar still shows.
 
+<!-- trace:case id=g10.store-account-profile.TC-b0n rev=1 covers=g10.store-account-profile.SC-5wx,g10.store-account-profile.SC-31a -->
 ### grade10-site-store-account-profile-US3-TC5-1: Store refuses an avatar upload outside its type and size
 
 Runs once per row of **Test data**.
@@ -920,6 +941,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the upload, naming the row's reason.
 * Step 3 still carries the stored avatar.
 
+<!-- trace:case id=g10.store-account-profile.TC-l56 rev=1 covers=g10.store-account-profile.SC-q8y -->
 ### grade10-site-store-account-profile-US3-TC6-1: A refused name keeps the newly accepted avatar
 
 **Classification:**
@@ -961,6 +983,7 @@ Runs once per row of **Test data**.
 * Step 5 shows <new image> as the avatar.
 * After step 6, the avatar is <new image> and the display name reads <stored name>.
 
+<!-- trace:case id=g10.store-account-profile.TC-cny rev=1 covers=g10.shared-store-profile.SC-2r8 -->
 ### grade10-site-store-account-profile-US3-TC7-1: An avatar that fails to load shows the display name's first letter
 
 **Classification:**
@@ -997,6 +1020,7 @@ Runs once per row of **Test data**.
 * Step 1 shows `K`, the first letter of <stored name>, in the avatar's place, no broken image.
 * Step 2 shows the same `K` in the form's avatar.
 
+<!-- trace:case id=g10.store-account-profile.TC-n6h rev=1 covers=g10.store-account-profile.SC-xy9,g10.store-account-profile.SC-f4k -->
 ### grade10-site-store-account-profile-US3-TC8-1: An avatar's old address stops answering once it is replaced or removed
 
 Runs once per row of **Test data**.
@@ -1039,6 +1063,7 @@ Runs once per row of **Test data**.
 * For the chosen-image row, the new avatar's address differs from <old address>.
 * Step 5 returns no image.
 
+<!-- trace:case id=g10.store-account-profile.TC-ln4 rev=1 covers=g10.store-account-profile.SC-31a -->
 ### grade10-site-store-account-profile-US3-TC9-1: Store accepts an avatar upload at the 5 MB limit
 
 **Classification:**
@@ -1075,6 +1100,7 @@ Runs once per row of **Test data**.
 * Step 2 accepts the upload.
 * Step 3 carries an avatar.
 
+<!-- trace:case id=g10.store-account-profile.TC-ld5 rev=1 covers=g10.store-account-profile.SC-tb6 -->
 ### grade10-site-store-account-profile-US3-TC10-1: An avatar saved on its own starts member-since
 
 Runs once per row of **Test data**.
@@ -1152,6 +1178,7 @@ Runs once per row of **Test data**.
 **I want** the address on the page to be the one I signed in with, and an edit that carries an email to be refused,
 **so that** I cannot change how I sign in from this page.
 
+<!-- trace:case id=g10.store-account-profile.TC-b6f rev=1 covers=g10.store-account-profile.SC-dzo -->
 ### grade10-site-store-account-profile-US4-TC1-1: Email shows read-only in the read view and the form
 
 Runs once per row of **Test data**.
@@ -1197,6 +1224,7 @@ Runs once per row of **Test data**.
 * Step 3 shows <signed-in address> in the form.
 * Step 4 changes nothing: the email still reads <signed-in address>.
 
+<!-- trace:case id=g10.store-account-profile.TC-ta1 rev=1 covers=g10.store-account-profile.SC-mtr -->
 ### grade10-site-store-account-profile-US4-TC2-1: A save carrying an email is refused
 
 Runs once per row of **Test data**.
@@ -1250,6 +1278,7 @@ Runs once per row of **Test data**.
 **I want** a failed read reported and a failed save to keep what I typed,
 **so that** a network miss does not look like an empty profile or a successful save.
 
+<!-- trace:case id=g10.store-account-profile.TC-1k8 rev=1 covers=g10.store-account-profile.SC-tvg -->
 ### grade10-site-store-account-profile-US5-TC1-1: Failed read says the profile could not be read, not an empty profile
 
 **Classification:**
@@ -1285,6 +1314,7 @@ Runs once per row of **Test data**.
 * Step 1 shows that the profile could not be read.
 * Step 1 shows no profile field, not <stored name>, and no edit control.
 
+<!-- trace:case id=g10.store-account-profile.TC-2i3 rev=1 covers=g10.store-account-profile.SC-7oe -->
 ### grade10-site-store-account-profile-US5-TC2-1: Failed save keeps what was typed and stores nothing
 
 **Classification:**
@@ -1329,6 +1359,7 @@ Runs once per row of **Test data**.
 * The form still holds <typed name> and <typed bio>.
 * After step 6, the profile reads <stored name> and <stored bio>.
 
+<!-- trace:case id=g10.store-account-profile.TC-hqp rev=1 covers=g10.store-account-profile.SC-zxs -->
 ### grade10-site-store-account-profile-US5-TC3-1: A failed or refused avatar saves nothing else and keeps both
 
 Runs once per row of **Test data**.

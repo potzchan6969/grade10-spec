@@ -31,6 +31,7 @@ input. A profile SHALL be readable and editable by its owner alone, and a
 request without a session SHALL be refused. A signed-out visit to the account
 page SHALL ask the visitor to sign in.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-02h rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-01 - Signed-out request is refused
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -38,6 +39,7 @@ page SHALL ask the visitor to sign in.
 - **WHEN** it reads or edits a profile
 - **THEN** the system refuses it as unauthenticated and returns no profile data
 
+<!-- trace:scenario id=g10.store-account-profile.SC-yoh rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-34 - A signed-out visit asks for sign-in
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -46,6 +48,7 @@ page SHALL ask the visitor to sign in.
 - **THEN** the page asks them to sign in and shows no profile
 - **AND** once they sign in, the page shows their own profile
 
+<!-- trace:scenario id=g10.store-account-profile.SC-1s9 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-02 - A collector cannot address another collector's profile
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -65,6 +68,7 @@ and the wallet pass show for the member. Reading a profile SHALL NOT create or
 modify stored data; the collector's profile record is created when they first
 save.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-xen rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-03 - A collector who has never saved sees a profile
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -76,6 +80,7 @@ save.
 - **AND** the page offers editing, not creation — nothing asks them to create a
   profile first
 
+<!-- trace:scenario id=g10.store-account-profile.SC-zfy rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-04 - A collector whose session carries no name
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -86,6 +91,7 @@ save.
   the `@`, and the avatar shows its first letter
 - **AND** nothing shows a generated identifier in place of a name
 
+<!-- trace:scenario id=g10.store-account-profile.SC-2jt rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-05 - A read stores nothing
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -93,6 +99,7 @@ save.
 - **WHEN** they open their account page any number of times
 - **THEN** no profile record is created for them
 
+<!-- trace:scenario id=g10.store-account-profile.SC-rz7 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-06 - A display name the collector never chose is not shown as theirs
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -102,6 +109,7 @@ save.
 - **THEN** the display name shown is the account name, else the part of the
   signed-in address before the `@`, not the unset placeholder
 
+<!-- trace:scenario id=g10.store-account-profile.SC-m0o rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-07 - Saved values win over session defaults
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -119,6 +127,7 @@ fields — display name, bio or avatar — and not the date some other part of t
 store created their record. Display name, bio, and avatar SHALL be editable by
 the collector; email SHALL NOT.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-ul5 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-08 - Every field is present
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -127,6 +136,7 @@ the collector; email SHALL NOT.
 - **THEN** the page shows their display name, bio, avatar, signed-in email
   address, and the date they first saved their profile
 
+<!-- trace:scenario id=g10.store-account-profile.SC-h0u rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-09 - Member-since is absent before the first save
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -135,6 +145,7 @@ the collector; email SHALL NOT.
 - **THEN** no member-since date is shown, and its absence is not presented as
   an error
 
+<!-- trace:scenario id=g10.store-account-profile.SC-9g2 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-10 - A record another part of the store created dates nothing
 **Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
@@ -144,6 +155,7 @@ the collector; email SHALL NOT.
 - **THEN** no member-since date is shown, and that record's creation date is
   not presented as the date they joined
 
+<!-- trace:scenario id=g10.store-account-profile.SC-tb6 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-35 - An avatar saved on its own starts member-since
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -159,6 +171,7 @@ collector reads their profile and while they edit it, and SHALL NOT offer any
 way to change it from the account page. An edit that carries an email
 address SHALL be refused.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-dzo rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-11 - The address shown is the one signed in with
 **Serves:** grade10-site-store-account-profile-US-04 - Collector's email stays the signed-in address
 
@@ -166,6 +179,7 @@ address SHALL be refused.
 - **WHEN** they open their account page, and when they edit their profile
 - **THEN** that address is shown in both, and no control edits it
 
+<!-- trace:scenario id=g10.store-account-profile.SC-mtr rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-12 - An edit carrying an email is refused
 **Serves:** grade10-site-store-account-profile-US-04 - Collector's email stays the signed-in address
 
@@ -179,12 +193,14 @@ name and SHALL require the result to be between 1 and 80 characters. A display
 name SHALL NOT be required to be unique. Length SHALL be counted in UTF-16
 code units, as the field and the store both count it.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-1ku rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-13 - Whitespace is trimmed before saving
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a collector saves a display name with leading or trailing whitespace
 - **THEN** the saved and returned display name has that whitespace removed
 
+<!-- trace:scenario id=g10.store-account-profile.SC-3hb rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-14 - An empty display name is refused
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
@@ -192,6 +208,7 @@ code units, as the field and the store both count it.
 - **THEN** the system refuses the edit, states that a display name is required,
   and changes nothing
 
+<!-- trace:scenario id=g10.store-account-profile.SC-pve rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-15 - An over-length display name is refused
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
@@ -200,6 +217,7 @@ code units, as the field and the store both count it.
 - **THEN** the system refuses the edit, states the 80-character limit, and
   changes nothing
 
+<!-- trace:scenario id=g10.store-account-profile.SC-plw rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-16 - Two collectors may hold the same display name
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
@@ -212,12 +230,14 @@ code units, as the field and the store both count it.
 The system SHALL trim a submitted bio, SHALL accept up to 500 characters,
 counted the same way, and SHALL let a collector clear it.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-6r5 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-17 - A bio within the limit is saved
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a collector saves a bio of 500 characters or fewer after trimming
 - **THEN** the system stores it and the page shows it
 
+<!-- trace:scenario id=g10.store-account-profile.SC-d7k rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-18 - An over-length bio is refused
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
@@ -225,6 +245,7 @@ counted the same way, and SHALL let a collector clear it.
 - **THEN** the system refuses the edit, states the 500-character limit, and
   changes nothing
 
+<!-- trace:scenario id=g10.store-account-profile.SC-kuq rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-19 - A bio is cleared
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
@@ -248,6 +269,7 @@ system MAY answer the replaced image's address until that cache expires. A
 rejected upload SHALL leave the previous avatar in place and SHALL state why
 it was rejected.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-tbm rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-20 - An accepted upload becomes the avatar
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -255,6 +277,7 @@ it was rejected.
 - **THEN** the system stores it square at 512 by 512 pixels, and their account
   page shows it as their avatar on this and every later visit
 
+<!-- trace:scenario id=g10.store-account-profile.SC-5wx rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-21 - An unsupported image type is refused
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -263,6 +286,7 @@ it was rejected.
 - **THEN** the system refuses it, states the accepted types, and the previous
   avatar is unchanged
 
+<!-- trace:scenario id=g10.store-account-profile.SC-31a rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-22 - An oversized image is refused
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -270,6 +294,7 @@ it was rejected.
 - **THEN** the system refuses it, states the 5 MB limit, and the previous
   avatar is unchanged
 
+<!-- trace:scenario id=g10.store-account-profile.SC-xy9 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-23 - A new upload replaces the previous avatar
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -287,6 +312,7 @@ system SHALL show the display name's first letter in its place: one character,
 the first letter or digit in any script, upper-cased, as the account menu
 draws it, and `?` for a display name with neither.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-f4k rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-24 - Removing an avatar restores the letter
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -296,6 +322,7 @@ draws it, and `?` for a display name with neither.
   image stops answering at its address, and the storage sweep deletes it once
   it is a day old
 
+<!-- trace:scenario id=g10.store-account-profile.SC-4fv rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-25 - A collector who never uploaded sees the letter
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -303,6 +330,7 @@ draws it, and `?` for a display name with neither.
 - **WHEN** they open their account page
 - **THEN** the page shows their display name's first letter
 
+<!-- trace:scenario id=g10.store-account-profile.SC-ps1 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-26 - The letter follows the display name
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -310,6 +338,7 @@ draws it, and `?` for a display name with neither.
 - **WHEN** they change their display name
 - **THEN** the letter shown is the new display name's first letter
 
+<!-- trace:scenario id=g10.store-account-profile.SC-el0 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-36 - The letter is read in any script
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -331,6 +360,7 @@ and the text fields SHALL report each outcome and SHALL NOT present a refused
 text save as having undone an accepted avatar change. An edit whose avatar is
 refused SHALL save none of its text fields.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-zu6 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-27 - A save persists and is reflected immediately
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
@@ -338,6 +368,7 @@ refused SHALL save none of its text fields.
 - **THEN** the system stores them and the page shows the updated profile
   without needing a reload
 
+<!-- trace:scenario id=g10.store-account-profile.SC-akq rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-28 - Cancelling discards edits
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
@@ -345,6 +376,7 @@ refused SHALL save none of its text fields.
 - **WHEN** they cancel
 - **THEN** the page shows the stored profile again and nothing was stored
 
+<!-- trace:scenario id=g10.store-account-profile.SC-cll rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-29 - A save with no field is refused
 **Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
@@ -352,6 +384,7 @@ refused SHALL save none of its text fields.
 - **THEN** the system refuses it, stating that it carried nothing to save, and
   stores nothing
 
+<!-- trace:scenario id=g10.store-account-profile.SC-q8y rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-30 - An accepted avatar stands when the text save is refused
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
@@ -362,6 +395,7 @@ refused SHALL save none of its text fields.
   refused, and keeps the collector's entered text so they can retry
 - **AND** the stored display name and bio are unchanged
 
+<!-- trace:scenario id=g10.store-account-profile.SC-zxs rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-33 - A refused avatar saves nothing else
 **Serves:** grade10-site-store-account-profile-US-05 - Collector is told when a read or save fails
 
@@ -376,6 +410,7 @@ refused SHALL save none of its text fields.
 The system SHALL tell the collector when their profile could not be loaded or
 saved, and SHALL NOT present a partially loaded profile as if it were complete.
 
+<!-- trace:scenario id=g10.store-account-profile.SC-tvg rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-31 - A failed read is reported
 **Serves:** grade10-site-store-account-profile-US-05 - Collector is told when a read or save fails
 
@@ -383,6 +418,7 @@ saved, and SHALL NOT present a partially loaded profile as if it were complete.
 - **THEN** the page states that the profile could not be loaded and shows no
   profile fields
 
+<!-- trace:scenario id=g10.store-account-profile.SC-7oe rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-32 - A failed save keeps the collector's input
 **Serves:** grade10-site-store-account-profile-US-05 - Collector is told when a read or save fails
 

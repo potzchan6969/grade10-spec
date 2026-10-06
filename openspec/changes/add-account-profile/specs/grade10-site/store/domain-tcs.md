@@ -9,6 +9,7 @@
 **I want** the name I save on my profile to be the one staff see at the till and the one my wallet pass shows,
 **so that** the site, the counter and my phone name me the same way.
 
+<!-- trace:case id=g10.store-domain.TC-82a rev=1 covers=g10.store-account-profile.SC-zu6,g10.store-wallet-member-card.SC-gvk -->
 ### grade10-site-store-e2e-US7-TC1-1: A name saved on the profile shows at the till and on the pass
 
 **Classification:**
