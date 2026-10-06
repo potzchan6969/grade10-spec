@@ -91,7 +91,7 @@ never shows: a signed-in collector always has an email.
 
 **Migration:** Replaced by "Signed-in collectors open what the build carries
 from the account menu", whose scenarios carry every settled outcome under new
-ids. Membership's place in the menu waits on Q5, account-page sign-out stays
+numbers; a carried scenario keeps its trace marker. Membership's place in the menu waits on Q5, account-page sign-out stays
 with the account control requirement, and the label fallback is `SiteHeader`'s
 alone, in `shared/ui/site-chrome`.
 
@@ -119,7 +119,7 @@ Activating Sign Out SHALL start sign-out.
 
 **Not offered** - The menu SHALL NOT offer KYC or My Auction Orders.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-wjc rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-y2l rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-56 - Account menu once Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu once Store answers
 
@@ -129,7 +129,7 @@ Activating Sign Out SHALL start sign-out.
 - **AND** Sign Out is the last item
 - **AND** the menu does not offer KYC or My Auction Orders
 
-<!-- trace:scenario id=g10.site-page-shell.SC-59q rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-04a rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-57 - Sign out from the menu
 **Serves:** grade10-site-site-page-shell-US-03 - leaving the session from the header
 
@@ -137,7 +137,7 @@ Activating Sign Out SHALL start sign-out.
 - **WHEN** they activate Sign Out
 - **THEN** sign-out starts
 
-<!-- trace:scenario id=g10.site-page-shell.SC-0q3 rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-u71 rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-58 - Account menu omits My Orders before Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu before Store answers
 
@@ -146,7 +146,7 @@ Activating Sign Out SHALL start sign-out.
 - **THEN** the menu offers My Auctions, and Sign Out as the last item
 - **AND** the menu does not offer My Orders
 
-<!-- trace:scenario id=g10.site-page-shell.SC-vo4 rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-agf rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-59 - Account menu omits Profile where the account page is withheld
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on a build without the account page
 
@@ -155,7 +155,7 @@ Activating Sign Out SHALL start sign-out.
 - **THEN** the menu opens on My Orders
 - **AND** the menu does not offer Profile
 
-<!-- trace:scenario id=g10.site-page-shell.SC-sna rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-n9c rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-60 - The auction-launch account menu
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on auction launch
 
@@ -164,7 +164,7 @@ Activating Sign Out SHALL start sign-out.
 - **WHEN** they activate the account control
 - **THEN** the menu offers My Auctions and Sign Out, in that order, and no other item
 
-<!-- trace:scenario id=g10.site-page-shell.SC-4zh rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-3y1 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-61 - Account menu shows the sign-in email and avatar
 **Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
 
@@ -172,7 +172,7 @@ Activating Sign Out SHALL start sign-out.
 - **WHEN** they activate the account control
 - **THEN** the menu shows the small initial avatar of their sign-in email, then the email, above the items
 
-<!-- trace:scenario id=g10.site-page-shell.SC-kyr rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-m6b rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-62 - Sign Out reads in Title Case
 **Serves:** grade10-site-site-page-shell-US-03 - leaving the session from the header
 

@@ -74,7 +74,7 @@ without a second auction-orders link.
 * The menu offers, in order, Profile, My Orders, My Auctions, and Sign out.
 * The menu does not offer KYC.
 
-<!-- trace:case id=g10.site-page-shell.TC-obx rev=2 covers=g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-59q -->
+<!-- trace:case id=g10.site-page-shell.TC-obx rev=2 covers=g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-04a -->
 ### grade10-site-site-page-shell-US3-TC3-2: Sign Out is offered in the menu and on the account page
 
 **Classification:**
@@ -139,7 +139,7 @@ without a second auction-orders link.
 
 * Step 2 opens <grade10 site url><lang>/profile/orders.
 
-<!-- trace:case id=g10.site-page-shell.TC-5jl rev=2 covers=g10.site-page-shell.SC-0q3 -->
+<!-- trace:case id=g10.site-page-shell.TC-5jl rev=2 covers=g10.site-page-shell.SC-u71 -->
 ### grade10-site-site-page-shell-US3-TC5-2: Menu without Store omits My Orders and Profile where the account page is carried
 
 **Classification:**
@@ -172,7 +172,7 @@ without a second auction-orders link.
 * Step 2: no My Orders item.
 * Step 2: no Profile item.
 
-<!-- trace:case id=g10.site-page-shell.TC-1su rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0q3,g10.site-page-shell.SC-sna,g10.site-page-shell.SC-4zh -->
+<!-- trace:case id=g10.site-page-shell.TC-1su rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1 -->
 ### grade10-site-site-page-shell-US3-TC6-1: Auction-launch account menu shows email, avatar, and reduced items
 
 Runs once per row of **Test data**.
@@ -215,7 +215,7 @@ Runs once per row of **Test data**.
 * Step 3: My Auctions, then Sign Out, and nothing else.
 * Step 3: no Profile, My Orders or Membership item.
 
-<!-- trace:case id=g10.site-page-shell.TC-wll rev=2 covers=g10.site-page-shell.SC-wjc,g10.site-page-shell.SC-4zh -->
+<!-- trace:case id=g10.site-page-shell.TC-wll rev=2 covers=g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-3y1 -->
 ### grade10-site-site-page-shell-US3-TC7-2: Store-launch account menu puts My Orders ahead of My Auctions
 
 **Classification:**
@@ -251,7 +251,7 @@ Runs once per row of **Test data**.
 * Step 3: no KYC item.
 * Step 3: no item opening <grade10 my auction orders url>.
 
-<!-- trace:case id=g10.site-page-shell.TC-7s9 rev=1 covers=g10.site-page-shell.SC-kyr -->
+<!-- trace:case id=g10.site-page-shell.TC-7s9 rev=1 covers=g10.site-page-shell.SC-m6b -->
 ### grade10-site-site-page-shell-US3-TC8-1: Sign Out item reads in Title Case
 
 **Classification:**
@@ -341,7 +341,7 @@ Runs once per row of **Test data**.
 * The supplied Membership handler is invoked.
 * The browser does not navigate to `/membership`, `/join`, or any other membership address.
 
-<!-- trace:case id=g10.site-page-shell.TC-fa4 rev=2 covers=g10.site-page-shell.SC-wjc -->
+<!-- trace:case id=g10.site-page-shell.TC-fa4 rev=2 covers=g10.site-page-shell.SC-y2l -->
 ### grade10-site-site-page-shell-US3-TC11-2: Account menu offers no Profile where the account page is carried
 
 **Classification:**
@@ -377,7 +377,7 @@ Runs once per row of **Test data**.
 * Step 3: My Orders comes before My Auctions.
 * Step 3: Sign Out is the last item.
 
-<!-- trace:case id=g10.site-page-shell.TC-kw9 rev=1 covers=g10.site-page-shell.SC-vo4,g10.site-page-shell.SC-th1 -->
+<!-- trace:case id=g10.site-page-shell.TC-kw9 rev=1 covers=g10.site-page-shell.SC-agf,g10.site-page-shell.SC-th1 -->
 ### grade10-site-site-page-shell-US3-TC12-1: Store menu leaves out the account and membership pages a build withholds
 
 **Classification:**
@@ -448,7 +448,7 @@ Runs once per row of **Test data**.
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `grade10-site-site-page-shell-US3-TC1-1` | Reached | `grade10-site-site-page-shell-SC-07`; unchanged |
-| `grade10-site-site-page-shell-US3-TC2-2` | Retired, `deprecated`, bumped | It put Profile first, which the removed `grade10-site-site-page-shell-SC-17` stated; the Store menu is `grade10-site-site-page-shell-US3-TC7-2`. Its marker names that retired scenario |
+| `grade10-site-site-page-shell-US3-TC2-2` | Retired, `deprecated`, bumped | It put Profile first, which the removed `grade10-site-site-page-shell-SC-17` stated; the Store menu is `grade10-site-site-page-shell-US3-TC7-2`. Its marker names that scenario's trace id, which `grade10-site-site-page-shell-SC-56` carries at revision 2 |
 | `grade10-site-site-page-shell-US3-TC3-2` | Reached, bumped | `grade10-site-site-page-shell-SC-08` and `grade10-site-site-page-shell-SC-57`. The account page offers Sign Out only on a build that carries it, so the case runs on staging |
 | `grade10-site-site-page-shell-US3-TC4-1` | Reached | `grade10-site-site-page-shell-SC-64`; unchanged |
 | `grade10-site-site-page-shell-US3-TC5-2` | Raised, blocked, moved to unit | Its no-My-Orders result is `grade10-site-site-page-shell-SC-58`. Its no-Profile result, with the account page carried and Store withheld, is the "never" answer to Q1, and task 3.1 tests that state in `store-shut.test.tsx`. No lane carries the account page and withholds Store (grade10 `src/surfaces.ts:343-399`), so the case runs on the rendered shell with the gates overridden. **Blocked:** Product |

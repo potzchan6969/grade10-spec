@@ -68,7 +68,9 @@ open question moves them.
 The OpenSpec CLI refuses a MODIFIED requirement that drops a scenario, and an
 issued id is never reused, so the menu requirement is removed and added as
 `Signed-in collectors open what the build carries from the account menu`,
-with new ids. The app's citations move with them (task 2.1 to 2.4).
+with new scenario numbers. Each scenario the table carries keeps its trace
+marker, at revision 2 where its meaning moved and at revision 1 where the
+table calls it unchanged. The app's citations move with them (task 2.1 to 2.4).
 
 | Retired | Becomes |
 | --- | --- |
