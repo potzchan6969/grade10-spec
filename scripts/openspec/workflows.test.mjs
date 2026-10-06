@@ -197,10 +197,9 @@ test("the notifier runs once the manual and the viewer deployed, and only then",
     branches: ["main"],
   });
   assert.equal(YAML.parse(read(".github/workflows/manual.yml")).name, "Manual");
-  assert.equal(
-    notify.jobs.notify.if,
-    "github.event.workflow_run.conclusion == 'success'",
-  );
+  assert.match(notify.jobs.notify.if, /workflow_run\.conclusion == 'success'/);
+  assert.match(notify.jobs.notify.if, /workflow_run\.event == 'push'/);
+  assert.match(notify.jobs.notify.if, /workflow_run\.head_branch == 'main'/);
   // The deployed head, never `github.sha`, which under `workflow_run` is
   // whatever `main` holds when the run starts.
   assert.equal(
