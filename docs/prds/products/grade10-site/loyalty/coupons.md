@@ -24,7 +24,7 @@ so redefining the reward never rewrites a coupon a member already holds —
 | What it takes off | What that definition says |
 | Uses | **One** |
 | Who | The member who redeemed it |
-| Channels | Only the selling channels the definition names |
+| Channels | Only the selling channels the definition names; online alone for a scope the till cannot match — [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
@@ -44,6 +44,10 @@ so redefining the reward never rewrites a coupon a member already holds —
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
+- 🚧 **Refused at the till by its scope** — a coupon scoped to named products
+  or a catalog filter is refused from the member's panel and from their own
+  phone alike, whatever channels it names —
+  [Reward Types](/p/grade10-site/loyalty/rewards#reward-types)
 - 🚧 **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
@@ -150,7 +154,7 @@ quietly lost a coupon.
 | Not held | Not a coupon this member holds; a code bound to another member is answered as one nobody minted |
 | Not standing | Already spent, or otherwise not available |
 | Expired | Its own validity passed |
-| Wrong channel | The definition does not name the channel it is being spent in |
+| Wrong channel | Not good in the channel it is being spent in — [Validity](#validity) |
 | Not eligible | The definition's eligibility is not met |
 | 🚧 An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
 | 🚧 Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |

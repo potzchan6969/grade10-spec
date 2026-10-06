@@ -38,6 +38,10 @@ Both kinds state:
 | A free booster pack | 100% | The variant it names | — |
 | A free booster pack over $500 | A free line, the pack's own variant | — | $500 |
 
+**Online only by product or filter** — a product coupon scoped to named
+products or to a catalog filter is good online only, because a sale at the
+till names its goods by variant alone.
+
 ## Ways to Get a Reward
 
 | Way | When | Cost |
