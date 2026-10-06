@@ -1,3 +1,5 @@
+# shared/auth/audit Specification
+
 ## Feature set
 
 - Account lifecycle
@@ -141,12 +143,14 @@ A ban entry SHALL keep the operator's reason when one was given. An entry
 SHALL NOT keep secrets, recovery codes, or fields that are not the reason
 for the action. An entry SHALL NOT keep an email.
 
+<!-- trace:scenario id=g10.shared-audit.SC-m8q rev=1 -->
 #### Scenario: shared-auth-audit-SC-08 - A ban reason is on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
 - **WHEN** an operator bans an account with a reason
 - **THEN** the trail entry keeps that reason
 
+<!-- trace:scenario id=g10.shared-audit.SC-qhl rev=1 -->
 #### Scenario: shared-auth-audit-SC-09 - Secrets stay off the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
@@ -170,6 +174,7 @@ or searching the directory, listing sessions, a trusted product reading
 whether an account exists or reading a session, and collector sign-in or
 sign-out, SHALL NOT write an entry.
 
+<!-- trace:scenario id=g10.shared-audit.SC-r7d rev=1 -->
 #### Scenario: shared-auth-audit-SC-10 - An entry cannot be rewritten
 **Serves:** shared-auth-audit-US-03 - Operator cannot act off the trail
 
@@ -177,24 +182,28 @@ sign-out, SHALL NOT write an entry.
 - **WHEN** anyone tries to edit or remove that entry
 - **THEN** the entry is unchanged
 
+<!-- trace:scenario id=g10.shared-audit.SC-1rb rev=1 -->
 #### Scenario: shared-auth-audit-SC-11 - An unrecorded action does not run
 **Serves:** shared-auth-audit-US-03 - Operator cannot act off the trail
 
 - **WHEN** the identity trail cannot accept an entry for a ban
 - **THEN** the account is not banned
 
+<!-- trace:scenario id=g10.shared-audit.SC-r4t rev=1 -->
 #### Scenario: shared-auth-audit-SC-12 - A directory list is not on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
 - **WHEN** an operator lists accounts
 - **THEN** no identity trail entry is written for that list
 
+<!-- trace:scenario id=g10.shared-audit.SC-jbf rev=1 -->
 #### Scenario: shared-auth-audit-SC-13 - A session list is not on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
 - **WHEN** an operator lists a person's sessions
 - **THEN** no identity trail entry is written for that list
 
+<!-- trace:scenario id=g10.shared-audit.SC-ci1 rev=1 -->
 #### Scenario: shared-auth-audit-SC-14 - An unrecorded revoke does not run
 **Serves:** shared-auth-audit-US-03 - Operator cannot act off the trail
 

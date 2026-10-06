@@ -1,3 +1,5 @@
+# shared/console/audit Specification
+
 ## Purpose
 
 The auditor's merged trail on both brands' consoles: how they filter, sort,
@@ -150,9 +152,11 @@ hash, an email, or recovery codes.
 The auditor SHALL be able to copy the actor user id and, when present, the
 subject user id.
 
-WHEN the operator can open an account in the users directory, the actor user
-id and the subject user id SHALL be links to that account. WHEN they cannot,
-the ids SHALL be shown and SHALL NOT link.
+WHEN the operator can open an account in the users directory and the id is a
+directory person — a user id, not `system` and not a prefixed machine id —
+the actor id SHALL be a link to that account. WHEN the subject type is `user`
+and the same conditions hold, the subject id SHALL be a link. WHEN they
+cannot, the ids SHALL be shown and SHALL NOT link.
 
 #### Scenario: shared-console-audit-SC-12 - Expanding shows roles and details
 **Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
@@ -167,12 +171,13 @@ the ids SHALL be shown and SHALL NOT link.
 - **WHEN** a row names an actor user id and a subject user id
 - **THEN** the auditor can copy each id
 
-#### Scenario: shared-console-audit-SC-14 - Directory links only when the operator can open Users
+#### Scenario: shared-console-audit-SC-14 - Directory links only for directory people the operator can open
 **Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
 - **GIVEN** an operator who can open an account in the users directory
-- **WHEN** they read a row that names a subject user id
-- **THEN** that subject user id is a link to that account
+- **WHEN** they read a row whose subject type is `user` and whose subject id is a directory person
+- **THEN** that subject id is a link to that account
+- **AND** `system`, a prefixed machine id, and a non-user subject stay plain text
 - **AND** an operator who cannot open the directory sees the id and no link
 
 #### Scenario: shared-console-audit-SC-15 - Email and hashes stay off the row

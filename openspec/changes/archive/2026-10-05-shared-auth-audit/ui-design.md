@@ -65,7 +65,7 @@ and a refused/unreachable chain are already the section's; they stay.
 | Readable action | label shown; recorded identity still on the row | `shared-console-audit-SC-11` |
 | Expanded row | roles + details; no hash, email, or codes | `shared-console-audit-SC-12`, `shared-console-audit-SC-15` |
 | Copy ids | `IconButton` on actor and subject | `shared-console-audit-SC-13` |
-| Directory link vs plain id | `Link` iff `user:list` | `shared-console-audit-SC-14` |
+| Directory link vs plain id | `Link` iff `user:list` and the id is a directory person; subject only when type is `user` | `shared-console-audit-SC-14` |
 | All chains reading | one `Text` line; products not listed | `shared-console-audit-SC-17` |
 | Chain issue | `Notice` names the failing product; answering products stay off the strip | `shared-console-audit-SC-17` |
 | Jump | chain strip “broken at N” sets product + `atSeq` | `shared-console-audit-SC-16` |
