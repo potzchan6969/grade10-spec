@@ -68,7 +68,7 @@ at the prices I see on them.
 
 **Pre-conditions:**
 
-* The story holds two `<sale line>`s, one of them holding two, a `<full price line>` and a `<sold-out line>`.
+* The story holds two `<sale line>`s, one of them holding two, a `<full price line>`, a `<sold-out line>` and an `<unavailable line>`.
 * No promo code is applied.
 
 **Test data:**
@@ -78,7 +78,8 @@ at the prices I see on them.
 | `<sale line>` | Each line the site sale cuts: price `<sale price>`, the price of one, list price `<list price>` above it |
 | `<full price line>` | A line the site sale does not cut: price `<full price>`, no list price supplied |
 | `<sold-out line>` | A line the shop no longer sells, marked sold out |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out one |
+| `<unavailable line>` | A line whose product the shop has delisted |
+| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
 
 **Steps:**
 
@@ -86,15 +87,18 @@ at the prices I see on them.
 2. Read each `<sale line>`'s prices.
 3. Read `<full price line>`'s prices.
 4. Read `<sold-out line>`.
-5. Read the summary rows in the footer.
+5. Look for `<unavailable line>` among the lines.
+6. Read the summary rows in the footer.
 
 **Expected Results:**
 
 * Step 2: each line shows `<sale price>`, with `<list price>` struck through.
+* Step 2: the line holding two shows quantity 2 and `<sale price>`, not twice it.
 * Step 3: `<full price>` alone, nothing struck through.
 * Step 4: the line is marked sold out.
-* Step 5: the Subtotal reads `<subtotal>`.
-* Step 5: no row names the site sale, and no discount row shows.
+* Step 5: `<unavailable line>` is not listed.
+* Step 6: the Subtotal reads `<subtotal>`.
+* Step 6: no row names the site sale, and no discount row shows.
 
 <!-- trace:case id=g10.shared-store-cart.TC-wrx rev=1 covers=g10.shared-store-cart.SC-ycc,g10.shared-store-cart.SC-ahq -->
 ### shared-ui-store-cart-US13-TC3-1: A list price equal to the price is still struck through
@@ -170,7 +174,7 @@ row.
 | `<sale line>` | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
 | `<stacking code>` | The held code the story lets stack on the site sale |
 | `<code discount>` | The amount the story supplies for `<stacking code>` |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out one |
+| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
 
 **Steps:**
 
@@ -222,8 +226,8 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 | --- | --- |
 | `<sale line>` | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
 | `<refused code>` | The code the story refuses on the site sale |
-| `<refusal reason>` | The sentence the story supplies for refusing the typed `<refused code>`, unlike any held ticket's reason: `This promo code cannot stack on the store sale` |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out one |
+| `<refusal reason>` | The sentence the story supplies for refusing the typed `<refused code>`, unlike any held ticket's reason: `This promo code cannot stack on the site sale` |
+| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
 | `<total before>` | The footer's total before the attempt |
 
 **Steps:**
@@ -352,8 +356,8 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 | --- | --- |
 | `<sale line>` | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
 | `<picked code>` | A held code listed with its Apply control, which the site sale refuses |
-| `<refusal reason>` | The sentence the story's quote supplies for refusing `<picked code>`, unlike any held ticket's reason: `This promo code cannot stack on the store sale` |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out one |
+| `<refusal reason>` | The sentence the story's quote supplies for refusing `<picked code>`, unlike any held ticket's reason: `This promo code cannot stack on the site sale` |
+| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
 | `<total before>` | The footer's total before the attempt |
 
 **Steps:**
@@ -410,7 +414,7 @@ the sale from and show only that code's Discount in the footer,
 | `<replaced line>` | A line the code took the site sale from: price `<list price A>`, no list price supplied |
 | `<kept sale line>` | A line the code left on the site sale: price `<sale price B>`, list price `<list price B>` above it |
 | `<code discount>` | The amount the story supplies for the replacing code |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out one |
+| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
 
 **Steps:**
 
@@ -462,7 +466,7 @@ the site sale, put the sale back on the lines while the sale still runs,
 | Field | Value |
 | --- | --- |
 | `<replaced line>` | Each line the code took the site sale from: list price `<list price>`, sale price `<sale price>` below it |
-| `<subtotal after>` | Each line's price times its quantity, added up over every line but a sold-out one, after the removal |
+| `<subtotal after>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one, after the removal |
 
 **Steps:**
 
@@ -506,7 +510,7 @@ the site sale, put the sale back on the lines while the sale still runs,
 | --- | --- |
 | `<sale line>` | Each line on the site sale: price `<sale price>`, list price `<list price>` above it |
 | `<stacking code>` | The held code the story lets stack on the site sale |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out one |
+| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
 
 **Steps:**
 
@@ -532,30 +536,44 @@ the site sale, put the sale back on the lines while the sale still runs,
 
 **Run:** QA2 for `present-cart-site-sale-promo-outcomes`, 2026-10-06, in a fresh context, after the QA1 rerun and Dev's scenarios on the Replaced and Held, cannot apply anchors. Read: the blind cases above, `spec.md` (`## Feature set` and the requirements), `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the Cart Drawer pages under `docs/prds/products/shared/ui/` and `docs/prds/products/grade10-site/store/`, and the block, stories and fixtures under `packages/ui/src/blocks/store-cart/`. Anchors: `shared-ui-store-cart-US-13` to `US-17` and the root group Site sale and promo outcomes.
 
+**Run:** QA2 rerun, 2026-10-06, in a fresh context, after the scenarios named the line off the sale in each outcome. Read the same sources, the change below it, `cart-drawer-empty-state`, and Grade10's cart in the application repository. Anchors unchanged.
+
+**Run:** QA1 blind pass, 2026-10-07, in a fresh context, after the Subtotal anchor named unavailable lines. Read `## Purpose` and `## Feature set` of the durable and delta `spec.md`, the delta `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised`, `ui-design.md` with its States scenario column stripped, the Cart Drawer, Grade10 Cart Drawer and Discounts pages, `openspec/config.yaml`'s `context`, this suite with `## Reconciliation` and trace-marker `covers` stripped, and its `## Settled`; no `domain-tcs.md` sits above `shared/ui`. Denied every `## Requirements` section, `tech-design.md`, `tasks.md`, QA2 material and `openspec/changes/archive/`.
+
+**Run:** QA2, 2026-10-07, in a fresh context, after that QA1 pass. Read the cases above, `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the Cart Drawer pages under `docs/prds/products/shared/ui/` and `docs/prds/products/grade10-site/store/`, `cart-drawer-empty-state`, and Grade10's cart in the application repository. Anchors: `shared-ui-store-cart-US-13` to `US-17` and the root group Site sale and promo outcomes, its Subtotal naming unavailable lines.
+
 | Reading | Anchor | Disposition |
 | --- | --- | --- |
 | `shared-ui-store-cart-US13-TC1-1` | US-13 | Covered by `shared-ui-store-cart-SC-26`: the sale price beside the struck list price, on the CartItem Sale Price story |
 | `shared-ui-store-cart-US13-TC2-1` | US-13 | Covered by `shared-ui-store-cart-SC-26`. Case repaired: the On Sale cart holds a sale line holding two, as the scenario and task 1.1 do, and the Subtotal is each line's price times its quantity, `decisions.md` Q7 |
-| `shared-ui-store-cart-US13-TC3-1` | US-13 | Covered by `shared-ui-store-cart-SC-47`, on the CartItem Equal List Price story |
+| `shared-ui-store-cart-US13-TC3-1` | US-13 | Covered by `shared-ui-store-cart-SC-52`, on the CartItem Equal List Price story |
 | `shared-ui-store-cart-US14-TC1-1` | US-14 | Covered by `shared-ui-store-cart-SC-27`. Case repaired: the Subtotal is each line's price times its quantity, Q7 |
 | `shared-ui-store-cart-US15-TC1-1` | US-15 | Covered by `shared-ui-store-cart-SC-28`, the typed code. Case repaired: the Subtotal, as Q7 |
 | `shared-ui-store-cart-US15-TC2-1` | US-15 | Covered by `shared-ui-store-cart-SC-29` |
-| `shared-ui-store-cart-US15-TC3-1` | US-15 | Covered by `shared-ui-store-cart-SC-46` |
-| `shared-ui-store-cart-US15-TC4-1` | US-15 | Folded: a held code picked from the ones that can apply and refused by the quote leaves the lines and the totals on the sale, and the sheet says why. `shared-ui-store-cart-SC-28` now names a code typed or picked, and task 1.1 has the Refuse story refuse a picked held code with the same sentence. The case asserts nothing about where the picked ticket sits afterwards: that is R5, open for the designer as a ❓ on the Cart Drawer page. Case repaired: the Subtotal, as Q7, and the refusal sentence the story supplies |
+| `shared-ui-store-cart-US15-TC3-1` | US-15 | Covered by `shared-ui-store-cart-SC-53` |
+| `shared-ui-store-cart-US15-TC4-1` | US-15 | Folded: a held code picked from the ones that can apply and refused by the quote leaves the lines and the totals on the sale, and the sheet says why. `shared-ui-store-cart-SC-28` now names a code typed or picked, and task 1.1 has the Refuse story refuse a picked held code with the same sentence. The case asserts nothing about where the picked ticket sits afterwards: that is R5, open for the designer on the Cart Drawer page. Case repaired: the Subtotal, as Q7, and the refusal sentence the story supplies |
 | `shared-ui-store-cart-US16-TC1-1` | US-16 | Covered by `shared-ui-store-cart-SC-30`. Case repaired: it now reads the line the code left on the sale beside the line it took, folded from `US16-TC2-1` |
 | `shared-ui-store-cart-US16-TC2-1` | US-16 | Folded into `US16-TC1-1` and dropped: both read the Replace story's lines and footer, and `SC-30` is one scenario naming both lines |
 | `shared-ui-store-cart-US17-TC1-1` | US-17 | Covered by `shared-ui-store-cart-SC-31`, the replacing branch. Case repaired: the Subtotal, as Q7 |
 | `shared-ui-store-cart-US17-TC2-1` | US-17 | Covered by `shared-ui-store-cart-SC-31`, the stacked branch. Case repaired: the Subtotal, as Q7 |
 | `shared-ui-store-cart-US17-TC3-1`, earlier run | US-17 | Rejected and dropped: whether the sale still runs is the quote's, and the drawer renders the lines it is given |
 | Feature set, Subtotal | US-13 | Anchor repaired to the Cart Drawer page's words: "as shown" read as the sum of the prices shown, and every blind Subtotal row summed unit prices against Q7. No reading's outcome moves: Dev's scenarios already said price times quantity, and the cases are repaired above |
-| `shared-ui-store-cart-SC-26` to `SC-31`, `SC-46`, `SC-47` | US-13 to US-17 | Every scenario is reached by a case above |
+| `shared-ui-store-cart-SC-26` to `SC-31`, `SC-52`, `SC-53` | US-13 to US-17 | Every scenario is reached by a case above |
 | R1, struck price on a line both repriced and on sale | US-13 | Settled as Q6: not this change's; open on the Grade10 Cart Drawer page for the Grade10 product owner |
 | R2, a code that replaces the sale on some lines only | US-16, US-17 | Settled as Q3: line by line, from the quote |
 | R3, a sold-out line in the Subtotal | US-13 | Settled as Q4: left out |
 | R4, a list price equal to the price | US-13 | Settled as Q5: struck through |
-| R5, the ticket of a picked code the quote refuses | US-15 | Raised for the designer, ❓ on the Cart Drawer page. No case asserts it and no scenario is written |
+| R5, the ticket of a picked code the quote refuses | US-15 | Raised for the designer, open on the Cart Drawer page. No case asserts it and no scenario is written |
 | R6, a line holding more than one in the Subtotal | US-13 | Settled as Q7: price times quantity |
-| R7, the struck price read aloud | US-13 | Raised for the designer, ❓ on the Cart Drawer page. No case asserts it and no scenario is written |
+| R7, the struck price read aloud | US-13 | Raised for the designer, open on the Cart Drawer page. No case asserts it and no scenario is written |
+| `shared-ui-store-cart-SC-27`, `SC-28`, `SC-31`, the line off the sale | US-14, US-15, US-17 | Covered: `US13-TC2-1` reads the line off the sale at its price alone on On Sale, and task 1.1 asserts nothing struck on it on every Auto Discount story. The outcome cases read the sale lines only; the drawer prices each line from what it is given |
+| `shared-ui-store-cart-SC-52`, `SC-53` | US-13, US-15 | Renumbered from `SC-47` and `SC-46`, above `SC-51`, the highest id `cart-drawer-empty-state` issues for this capability. Trace ids unchanged |
+| Requirement A site sale reaches the drawer only on its lines, the Subtotal | US-13 | Repaired: the Subtotal sums every visible item but a sold-out one, as `cart-drawer-empty-state` defines a visible item, so an unavailable line the consumer has not yet removed is left out. Grade10 already leaves both out: `reviewedSubtotalMinor`, `packages/grade10-store/frontend/src/features/orders/cart/domain/models/Cart.ts:165` in the application repository. No case moves: no story holds an unavailable line |
+| Feature set, Subtotal, second repair | US-13 | Anchor repaired to the Cart Drawer page's words, which now match the requirement: the Subtotal leaves out sold-out and unavailable lines, as the drawer title's count does. No reading's outcome moves: no story holds an unavailable line, and every case's Subtotal leaves out the sold-out line |
+| `shared-ui-store-cart-US15-TC1-1`, `US15-TC4-1`, the refusal sentence | US-15 | Test data reworded to `This promo code cannot stack on the site sale`, the reader's word the page uses, as task 1.1 now supplies it. It still differs from the held ticket's reason |
+| `shared-ui-store-cart-US13-TC2-1`, the unavailable line | US-13 | Covered by `shared-ui-store-cart-SC-26`. Case repaired: the On Sale story now holds an `unavailable` line, as the scenario and task 1.1 do, so the case reads it gone from the lines and left out of the Subtotal. The earlier rows that said no story holds one are superseded |
+| Every case's `<subtotal>` | US-13 to US-17 | Reworded to leave out sold-out and unavailable lines, as the Subtotal anchor does. Only On Sale holds an unavailable line, so no other case's value moves |
+| `shared-ui-store-cart-US13-TC2-1`, the line holding two | US-13 | Covered by `shared-ui-store-cart-SC-26`: the line shows quantity 2 and the price of one, as Q7 settles |
 
 - **Uncovered anchors** - none: every journey US-13 to US-17 is traced by a case, and each outcome under the root group by a scenario
 - **Open for the designer** - R5 and R7; neither blocks a case
@@ -563,7 +581,7 @@ the site sale, put the sale back on the lines while the sale still runs,
 ## Settled
 
 - **A code replacing the sale on some lines** - line by line, as the quote supplies each line
-- **A sold-out line in the Subtotal** - left out, as the count badge leaves it out
+- **Sold-out and unavailable lines in the Subtotal** - left out, as the drawer title's count leaves them out
 - **A line holding more than one** - the Subtotal counts its price times its quantity; the line shows the price of one
 - **A list price equal to the price** - the drawer strikes any list price it is given and compares no amounts
 - **A held code picked and then refused** - the lines and the totals stay on the sale and the sheet says why, as for a typed code
