@@ -5,6 +5,7 @@ import type {
   PdfDocumentCopy,
   PdfLineItem,
   PdfPartyAddress,
+  PdfRenderOptions,
 } from "./pdf-document";
 import {
   A4_HEIGHT,
@@ -78,9 +79,7 @@ export type ReceiptPdfData = {
   copy: ReceiptPdfCopy;
 };
 
-export type ReceiptPdfRenderOptions = {
-  fontBytes?: ArrayBuffer | null;
-};
+export type ReceiptPdfRenderOptions = PdfRenderOptions;
 
 export { addressLines };
 
@@ -201,7 +200,7 @@ export async function ReceiptPdf(
   pdf.setCreationDate(data.paidAt);
   pdf.setModificationDate(data.paidAt);
 
-  const fonts = await loadFonts(pdf, options.fontBytes);
+  const fonts = await loadFonts(pdf, options.fontBytes, options.boldFontBytes);
 
   const page = pdf.addPage([A4_WIDTH, A4_HEIGHT]);
   let y = A4_HEIGHT - MARGIN;
