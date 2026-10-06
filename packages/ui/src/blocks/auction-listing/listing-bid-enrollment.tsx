@@ -165,7 +165,7 @@ function PaymentFieldSlot({
       aria-disabled={disabled || undefined}
       data-slot="payment-field"
       data-state={content == null ? "empty" : "ready"}
-      className={`grid w-full overflow-hidden transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${content == null ? "grid-rows-[0fr]" : "grid-rows-[1fr]"} ${disabled ? "pointer-events-none opacity-60" : ""}`}
+      className={`grid w-full shrink-0 overflow-hidden transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${content == null ? "grid-rows-[0fr]" : "grid-rows-[1fr]"} ${disabled ? "pointer-events-none opacity-60" : ""}`}
       inert={disabled ? true : undefined}
     >
       <div className="min-h-0 w-full">
