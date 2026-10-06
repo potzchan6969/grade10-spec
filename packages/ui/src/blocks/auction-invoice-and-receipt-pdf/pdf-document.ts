@@ -1,6 +1,7 @@
 import fontkit from "@pdf-lib/fontkit";
 import type { PDFDocument, PDFFont, PDFPage } from "pdf-lib";
 import { rgb, StandardFonts } from "pdf-lib";
+import { formatZoneOffset } from "../../lib/format-datetime";
 
 /**
  * The A4 layout and drawing primitives shared by every document this
@@ -87,11 +88,9 @@ export async function loadFonts(
 /** Every document is issued from Hong Kong, whichever storefront it names. */
 const DOCUMENT_TIME_ZONE = "Asia/Hong_Kong";
 
-/**
- * Asia/Hong_Kong labelled GMT+8, matching emails and terms.
- */
-function documentZoneName(): string {
-  return "GMT+8";
+/** The document zone's offset at the instant, `GMT+8`, matching emails and terms. */
+function documentZoneName(at: Date): string {
+  return formatZoneOffset(DOCUMENT_TIME_ZONE, at);
 }
 
 /** `September 24, 2026, 12:30 GMT+8`. */
@@ -108,7 +107,7 @@ export function formatDateTime(value: Date): string {
     minute: "2-digit",
     hourCycle: "h23",
   }).format(value);
-  return `${date}, ${time} ${documentZoneName()}`;
+  return `${date}, ${time} ${documentZoneName(value)}`;
 }
 
 export function addressLines(address: PdfPartyAddress): string[] {

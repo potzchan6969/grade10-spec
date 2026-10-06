@@ -18,9 +18,12 @@ import type {
 
 /** Hong Kong, September 2026: the calendar every fixture is drawn on. */
 const FIXTURE_MONTH = "2026-09";
-const FIXTURE_TIME_ZONE_LABEL = formatViewerZoneName(FIXTURE_TIME_ZONE);
 /** 1 Sep 2026 12:00 in Hong Kong. */
 const FIXTURE_BOOKING_NOW_MS = Date.UTC(2026, 8, 1, 4, 0);
+const FIXTURE_TIME_ZONE_LABEL = formatViewerZoneName(
+  FIXTURE_TIME_ZONE,
+  FIXTURE_BOOKING_NOW_MS,
+);
 
 const STATE_LABELS: Record<BookingRecordState, string> = {
   booked: "Booked",

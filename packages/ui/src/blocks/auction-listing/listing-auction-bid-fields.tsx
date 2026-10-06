@@ -15,6 +15,7 @@ import {
   formatLocalDay,
   formatLocalMoment,
   formatLocalTime,
+  formatViewerZoneName,
   type ShippedLocale,
 } from "../../lib/format-datetime";
 import { formatMoney } from "../../lib/format-money";
@@ -248,7 +249,7 @@ function compactClosedSummary(
   if (!view.closed || view.deadlineAtMs == null) return null;
 
   const date = formatLocalDay(view.deadlineAtMs, { locale, timeZone });
-  const time = formatLocalTime(view.deadlineAtMs, { locale, timeZone });
+  const time = `${formatLocalTime(view.deadlineAtMs, { locale, timeZone })} ${formatViewerZoneName(timeZone, view.deadlineAtMs)}`;
   const ranDuration =
     view.opensAtMs != null
       ? formatAccessibleText(
@@ -422,7 +423,7 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
       : null;
   const closedTime =
     view.closed && view.deadlineAtMs != null
-      ? formatLocalTime(view.deadlineAtMs, { locale, timeZone })
+      ? `${formatLocalTime(view.deadlineAtMs, { locale, timeZone })} ${formatViewerZoneName(timeZone, view.deadlineAtMs)}`
       : null;
   const ranDuration =
     view.closed && view.opensAtMs != null && view.deadlineAtMs != null
