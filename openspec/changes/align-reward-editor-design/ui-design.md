@@ -83,6 +83,8 @@ or `@grade10/ui` export, variant or token changes.
 | Free item card | One variant at nothing, once the member has it in the basket. |
 | Gift card | A free line for one variant, added once the basket reaches a minimum spend. |
 | Kind note, edit only | Changing the kind rewrites what the next redemption gets. Coupons already issued keep the terms they were bought under. |
+| Retired handover note, edit only | Stored as a manual handover, a handover the programme has retired. Choose Money off, Free item or Gift with a purchase to give it a coupon; until then the other fields save on their own and the handover stays. A counter collection reads `Stored as a counter collection` in its place |
+| List terms, retired handover | `Manual handover · retired`; `Collected at the counter: {name} · {days} days · retired` |
 | Free item picker | The item — One variant. Its coupon takes 100% off it. |
 | Gift picker hint | One variant, added to the order as a free line. |
 | Products picker hint | Every variant of a picked product counts. |
@@ -93,6 +95,8 @@ or `@grade10/ui` export, variant or token changes.
 | Units | `days after redemption`, `points`; stock's unit field has a hidden label |
 | Window | Live window; one error, `Ends before it starts.`, on Live until |
 | Sentence | Staging's, ending "once the member has it in the basket" |
+| Till panel, online only | 此優惠只限網上訂單, the till's own words (grade10 `integrations/shopify-pos/grade10/src/acts/view.ts:279`) |
+| Reward menu, online only | `Online store only`, the menu's own words (`packages/i18n/messages/shared/en/membership.json`, `onlyOnline`) |
 
 ### Basket Verdicts
 
@@ -142,6 +146,9 @@ line to check.", and the Shopify footnote.
   is untrue for an archived or scheduled reward
 - **List terms keep staging's words** — the mock's "off order" and "Free off 1
   variant" name no item
+- **A retired handover's note** - the mock draws no reward stored as a
+  manual handover or a counter collection; the edit page shows a warning note
+  above the kind cards, with no card chosen and no fields for a kind
 - **Staging's extras stay** — searchable facet pickers in place of chips,
   Everything (free) on any scope, a basket line added by search and removed
   by a button, Duplicate and Archive
@@ -153,9 +160,12 @@ line to check.", and the Shopify footnote.
 | New Reward | A kind chosen, fields for that kind shown | `grade10-site-loyalty-programme-SC-158` |
 | New Reward | Free item chosen: one variant picker and minimum spend, no discount or scope | `grade10-site-loyalty-programme-SC-187` |
 | Edit Reward | Stored 100% with no cap on one variant opens on the Free item card | `grade10-site-loyalty-programme-SC-188` |
-| Edit Reward | Stored 100% with a cap, on two variants or on a product, opens on Money off | `grade10-site-loyalty-programme-SC-189` |
-| New Reward | Money off scoped to named products or a catalog filter: the scope note shows, Online is chosen, In store and Both are unavailable | `grade10-site-loyalty-programme-SC-211` |
-| Edit Reward | Stored products reward naming the till opens on Online; moving its scope to named variants shows its stored channels again | `grade10-site-loyalty-programme-SC-212` |
-| Save bar | Each missing part named as a button that lands on its field; `Ends before it starts.` on Live until | `grade10-site-loyalty-programme-SC-213` |
-| Rail | Each row of Basket Verdicts, and staging's "Finish the coupon to check it." and "Add a line to check." | `grade10-site-loyalty-programme-SC-214` |
-| Edit Reward | Stored manual handover or counter collection keeps its kind, unchanged, while the fields beside it are edited; a duplicate opens on Money off | **Out of suite:** grade10 `rewardCouponDraft.test.ts`, the stored manual handover and counter collection |
+| Edit Reward | Stored 100% with a cap, or on two variants, or on one product, opens on Money off | `grade10-site-loyalty-programme-SC-189` |
+| New Reward | Money off scoped to named products or a catalog filter: the scope note shows, Online is chosen, In store and Both are unavailable | `grade10-site-loyalty-programme-SC-228` |
+| Edit Reward | Stored products reward naming the till opens on Online; moving its scope to named variants shows its stored channels again | `grade10-site-loyalty-programme-SC-229` |
+| Save bar | Each missing part named as a button that lands on its field; `Ends before it starts.` on Live until | `grade10-site-loyalty-programme-SC-230` |
+| Rail | Each row of Basket Verdicts, and staging's "Finish the coupon to check it." and "Add a line to check." | `grade10-site-loyalty-programme-SC-231` |
+| Edit Reward | Stored manual handover or counter collection: the retired handover note above the kind cards, no card chosen, no fields for a kind; the fields beside it save and the handover stays; choosing a card gives it a coupon; a duplicate opens on Money off | `grade10-site-loyalty-programme-SC-225` |
+| Rewards List | A retired handover's terms end `retired` | **Out of suite:** copy under the Reward form leaf, `rewardCopy.test.ts` in tasks 6.7 |
+| Till panel | A coupon scoped to named products or a catalog filter reads 此優惠只限網上訂單, whatever channels it names, and staff cannot tap it | `grade10-site-loyalty-programme-SC-227` |
+| Reward menu | A reward scoped to named products or a catalog filter reads `Online store only`, whatever channels it names | `grade10-site-loyalty-programme-SC-224` |

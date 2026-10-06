@@ -20,8 +20,10 @@
   and the till panel marks such a coupon online only. The programme's channel
   guard reads the stored channels alone, so a coupon stored for the till
   through the admin API passes it when the member presents it from their own
-  phone. The scope rule is written twice, in the console's `onlineOnly` and
-  the store's `panelCoupon`
+  phone, and the member's reward menu names the stored channels (grade10
+  `packages/loyalty/backend/src/services/rewards/catalog.ts:48-58`), so such a
+  reward stored for both reads as good everywhere. The scope rule is written
+  twice, in the console's `onlineOnly` and the store's `panelCoupon`
 
 ## Goals / Non-Goals
 
@@ -33,7 +35,7 @@
 
 **Non-Goals:**
 
-- No wire change, and no backend change beyond the till's scope rule
+- No wire change, and no backend change beyond the scope rule's readers
 - No hint under its control: Astryx draws a field's description above the
   control, with no theme hook, and redrawing it in a dozen field words would
   re-wire each one's `aria-describedby`
@@ -175,6 +177,12 @@ panel move to level 4. The end-to-end helpers that find the page title by
   comes from `goodsOf`, which `@grade10/coupons-contracts` exports, so it is
   the sum the minimum spend is checked against; a line's cut comes from the
   evaluator's per-line result, never recomputed in the view
+- **Retired handover** - a reward stored as a manual handover or a counter
+  collection drafts as `preserve_existing` and saves its handover as stored
+  (grade10 `rewardCouponDraft.ts:46-53`, `:193-201`), until a kind card
+  replaces it with a fresh draft (`RewardEditor.tsx:275`). Its note and list
+  terms name a handover rather than a kind (`RewardEditor.tsx:263-264`,
+  `rewardCopy.ts:170-173`), so a kind stays the product coupon or the gift
 - **Save bar** — `Panel sticky="bottom"` at the end of the page, after the
   form and the rail, so it stays on screen on a phone once the rail stacks
   under the form; the ready sentence in the success tone; a gap stays a quiet
@@ -183,14 +191,16 @@ panel move to level 4. The end-to-end helpers that find the page title by
 ### Online Only by Product or Filter
 
 One rule, read everywhere: `tillCanMatch(targetKind)` in
-`@grade10/loyalty-contracts` `couponGuard.ts`, beside `rewardCouponGuard`,
-true for named variants and the whole order. The missing parts and the
-basket check were built before this change, and their tests cite their
-scenarios the same way.
+`@grade10/loyalty-contracts` `couponGuard.ts`, true for named variants and the
+whole order, and `effectiveChannels(definition)` beside it: the stored
+channels, or online alone for a product coupon whose target the till cannot
+match. The missing parts and the basket check were built before this change,
+and their tests cite their scenarios the same way.
 
-- **Guard** — `rewardCouponGuard` refuses `in_store` with `wrong_channel` for
-  a product coupon whose target the till cannot match, whatever channels it
-  names. `decideCoupon` runs the guard for the quote and the claim alike
+- **Guard** — `rewardCouponGuard` refuses with `wrong_channel` a channel
+  `effectiveChannels` leaves out, so `in_store` is refused for a product
+  coupon whose target the till cannot match, whatever channels it names.
+  `decideCoupon` runs the guard for the quote and the claim alike
   (grade10 `packages/loyalty/backend/src/services/rewards/coupons.ts:365`),
   and both till entries reach it through `planTillSale`: the staff panel, and
   `presentCoupon` for the member's own phone. *Rejected:* a check in
@@ -211,17 +221,26 @@ scenarios the same way.
   `packages/grade10-store/backend/src/services/pos/sale/sale.ts:606-609`), so
   a member's own coupon and a registry code read the one rule; the till view
   refuses its tap (`integrations/shopify-pos/grade10/src/acts/view.ts:221`)
+- **Member menu** — the catalog's `couponTermsOf` names `effectiveChannels`
+  rather than the stored channels, so the menu's limit line reads online only
+  for such a reward; `RewardMenu` and its projection stay as they are.
+  *Rejected:* deciding it in the menu's projection, which would need the
+  coupon's target on the wire
 - **No maximum discount** — a percentage with `maxCutMinor: null` takes its
   whole rate; `evaluate.test.ts` already holds the case
 
 | Scenario | Test |
 | --- | --- |
-| `grade10-site-loyalty-programme-SC-209` | `packages/coupons/contracts/test/evaluate.test.ts`, the uncapped percentage |
-| `grade10-site-loyalty-programme-SC-210` | `packages/loyalty/backend/test/services/rewards/coupons.test.ts`, `decideCoupon` refusing the till for a products and a filter target naming both channels; `packages/grade10-store/backend/test/services/pos/sale/sale.test.ts`, a member's own coupon scoped to products, and to a filter, naming both channels, online only on the panel; `integrations/shopify-pos/grade10/src/acts/view.test.ts`, the online-only coupon not offered to staff; `packages/grade10-store/backend/test/services/pos/sale/present.test.ts`, the member presenting one refused |
-| `grade10-site-loyalty-programme-SC-211` | `RewardEditor.test.tsx`, a new reward scoped to products, and to a filter |
-| `grade10-site-loyalty-programme-SC-212` | `RewardEditor.test.tsx`, a stored products reward naming both channels, saved unchanged, then moved to named variants |
-| `grade10-site-loyalty-programme-SC-213` | `rewardGaps.test.ts` and `RewardEditor.test.tsx`, each missing part and the inverted window held in the save bar |
-| `grade10-site-loyalty-programme-SC-214` | `basketVerdict.test.ts`, each verdict from the evaluator's result |
+| `grade10-site-loyalty-programme-SC-158`, `grade10-site-loyalty-programme-SC-187`, `grade10-site-loyalty-programme-SC-188`, `grade10-site-loyalty-programme-SC-189` | `rewardCouponDraft.test.ts`, each choice saved and each stored shape reopened, as tasks 4.1 records |
+| `grade10-site-loyalty-programme-SC-152` | `packages/coupons/contracts/test/evaluate.test.ts`, a fixed amount online; `packages/grade10-store/backend/test/services/pos/sale/sale.test.ts`, a fixed amount scoped to named variants planned at the till |
+| `grade10-site-loyalty-programme-SC-226` | `packages/coupons/contracts/test/evaluate.test.ts`, the uncapped percentage |
+| `grade10-site-loyalty-programme-SC-227` | `packages/loyalty/backend/test/services/rewards/coupons.test.ts`, `decideCoupon` refusing the till for a products and a filter target naming both channels; `packages/grade10-store/backend/test/services/pos/sale/sale.test.ts`, a member's own coupon scoped to products, and to a filter, naming both channels, online only on the panel; `integrations/shopify-pos/grade10/src/acts/view.test.ts`, the online-only coupon not offered to staff; `packages/grade10-store/backend/test/services/pos/sale/present.test.ts`, the member presenting one refused |
+| `grade10-site-loyalty-programme-SC-224` | `packages/loyalty/backend/test/services/rewards/menu.test.ts`, a reward scoped to named products and one scoped to a filter, each stored for both channels, offered with online alone |
+| `grade10-site-loyalty-programme-SC-228` | `RewardEditor.test.tsx`, a new reward scoped to products, and to a filter |
+| `grade10-site-loyalty-programme-SC-229` | `RewardEditor.test.tsx`, a stored products reward naming both channels, saved unchanged, then moved to named variants |
+| `grade10-site-loyalty-programme-SC-230` | `rewardGaps.test.ts` and `RewardEditor.test.tsx`, each missing part and the inverted window held in the save bar |
+| `grade10-site-loyalty-programme-SC-231` | `basketVerdict.test.ts`, each verdict from the evaluator's result |
+| `grade10-site-loyalty-programme-SC-225` | `rewardCouponDraft.test.ts`, the stored manual handover and counter collection, edited, duplicated and given Money off; `RewardEditor.test.tsx` and `rewardCopy.test.ts`, the note and the list terms naming a handover |
 
 ## Risks / Trade-offs
 
