@@ -24,19 +24,21 @@ actually creates the checkout session.
 
 ## Empty Cart
 
-🚧 **Empty** — when the cart holds nothing, the design-system empty state: a
-cart icon, a title, and a line under it where the application supplies one. It
-offers no action of its own.
+🚧 **Empty** - when the cart holds nothing, the design-system empty state: a
+cart icon, a title, and a line under it where the application supplies one,
+with no count badge and no footer. It offers no action of its own.
 
-🚧 **Not read yet** — a cart with no lines shows a blank body, a skeleton for
-the count badge and no footer until its read answers. An application that has
-not read the cart keeps the drawer loading, so the drawer never shows the empty
-state for a cart nobody has checked.
+🚧 **Not read yet** - until the cart is read, the drawer stays loading: a blank
+body, a skeleton for the count badge and no footer. If that read fails, the
+application also says the cart could not be checked and offers Retry, naming
+no line, as [Cart Validation](../../grade10-site/store/cart-validation.md) asks
+for a cart whose lines are not loaded. The drawer never shows the empty state
+for a cart nobody has checked.
 
-🚧 **Only delisted lines** — the drawer removes them with its one toast, then
-shows the empty state.
+🚧 **Only delisted lines** - the drawer shows the empty state and removes them
+with its one toast.
 
-🚧 **Only sold-out lines** — not empty: the lines show marked sold out, with the
+🚧 **Only sold-out lines** - not empty: the lines show marked sold out, with the
 footer and no count badge.
 
 ## Tender Actions
