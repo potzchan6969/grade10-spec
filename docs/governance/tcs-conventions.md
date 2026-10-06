@@ -123,6 +123,19 @@ A card for sale whose world, language and collectible type no other product for 
 
 **Holds for:** staging.
 
+### Put a card in the Main Page's merchandised row
+
+A card among the 5 that the Main Page's merchandised row shows.
+
+1. Open the Main Page and note the first collection tile in its grid.
+2. In the staging shop's admin, go to Products > Collections and open that collection.
+3. Add the card to the collection.
+4. Set the collection's sort to Manually and drag the card into its first 5 products.
+5. Click Save.
+6. Wait 60 seconds past the save, then reload the Main Page until the row shows the card.
+
+**Holds for:** staging.
+
 ### Sell a card out
 
 A card the catalogue lists with nothing for sale.
