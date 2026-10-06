@@ -64,3 +64,8 @@
   transitions" so `pending` to `expired` at the deadline carries the in-flight
   card payment exception, and the write when that session ends unpaid.
   - Verification: `pnpm check:manual` shows no overlap.
+- [ ] 5.2 After `complete-auction-post-sale` archives, MODIFY Winner Order's
+  "An unfinished card payment leaves the invoice payable" so its timed-out and
+  abandoned outcomes apply before the deadline only, and point at "The payment
+  deadline is fixed when the invoice is sent" for a session started in time.
+  - Verification: `pnpm check:manual` shows no overlap.
