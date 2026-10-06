@@ -5,7 +5,7 @@
 
 ## shared-ui-store-product-listing-US1: What the listing surface holds
 
-**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/store/home` and `grade10-site/store/product-listing`, which compose the surface
+**Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
 **As a** shopper reading a surface that composes the listing's tiles,
 **I want** each tile to show what its surface supplies and to sell only where its surface sells,
 **so that** a tile reads the same wherever the store draws it.
@@ -142,7 +142,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** 2026-10-06, QA2 reconciliation for `drop-product-listing-photo-multiply`, in a fresh context. Joined the three blind cases and the delta's two scenarios on `Tile contract` and its `Supplied photo` part. Read the delta `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the page [Product Listing Blocks](../../../../../../../docs/prds/products/shared/ui/store-product-listing.md), `packages/ui/src/blocks/store-product-listing/product-card-image.tsx` and its stories, and the application's listing, home and You May Also Like surfaces and their end-to-end tests. No durable suite or `## Settled` exists for this capability, and no `domain-tcs.md` traces it.
+**Run:** 2026-10-06, QA2 reconciliation for `drop-product-listing-photo-multiply`, in a fresh context. Joined the three blind cases and the delta's two scenarios on `Tile contract` and its `Photo as supplied` part. Read the delta `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the page [Product Listing Blocks](../../../../../../../docs/prds/products/shared/ui/store-product-listing.md), `packages/ui/src/blocks/store-product-listing/product-card-image.tsx` and its stories, and the application's listing, home and You May Also Like surfaces and their end-to-end tests. No durable suite or `## Settled` exists for this capability, and no `domain-tcs.md` traces it.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
@@ -152,8 +152,8 @@ Runs once per row of **Test data**.
 | `shared-ui-store-product-listing-SC-64` | Reached | US1-TC15, US1-TC17 |
 | `shared-ui-store-product-listing-SC-64a` | Reached | US1-TC16 |
 
-- **Raised for the human** — none. Q2, the Figma frame's redraw, is the design hand's work and no case depends on it; it is settled in `decisions.md` as owed without holding acceptance
-- **Folded** — none: no case carries an outcome the scenarios do not state
-- **Rejected** — none
-- **Contradicted** — none: where a case and a scenario state the same behaviour they agree
-- **Automation** — `tasks.md` 1.1 flips US1-TC15 and US1-TC16 to `automated`, decided by `product-card-image.stories.tsx`; 3.1 flips US1-TC17, decided by the three application end-to-end tests
+- **Raised for the human** - none from the blind pass. R1 in `decisions.md`, whether the designer redraws the Figma frame, was raised at review; no case depends on it
+- **Folded** - none: no case carries an outcome the scenarios do not state
+- **Rejected** - none
+- **Contradicted** - none: where a case and a scenario state the same behaviour they agree
+- **Automation** - `tasks.md` 1.1 flips US1-TC15 and US1-TC16 to `automated`, decided by `product-card-image.stories.tsx`; 3.1 flips US1-TC17, decided by the three application end-to-end tests
