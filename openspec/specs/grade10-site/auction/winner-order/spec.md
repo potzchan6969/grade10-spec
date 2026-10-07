@@ -78,7 +78,7 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Refunded order: shows the terminal outcome while retaining invoices and receipts
   - Refund details: Amount, Transfer to and Reason; Reference for a bank refund; Note only when the operator recorded one
   - Payment receipt: proof of what was paid, itemised, retrievable for the life of the account
-  - Shipping tracker: the tracking number is the link to the carrier tracking page, with no separate carrier name
+  - Shipping tracker: the tracking number is the link to the carrier tracking page when the operator recorded a tracker link, plain text otherwise, with no separate carrier name
   - Delivery proof: what the carrier recorded on handover, given what these lots are worth
   - Receipt identifier: a receipt for a finalized payment uses the invoice payload plus its unpadded per-invoice sequence; historic receipt IDs remain unchanged
   - Receipt: it itemises Tax when added
@@ -704,7 +704,7 @@ account SHALL NOT shorten the 7 years.
 | Record | When | Contents |
 | --- | --- | --- |
 | Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, Tax when added, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
-| Shipping tracker | Fulfilment status is `fulfilled` | The tracking number, as the link to the carrier tracking page. No separate carrier name |
+| Shipping tracker | Fulfilment status is `fulfilled` | The tracking number, as the link to the carrier tracking page when the operator recorded a tracker link, plain text otherwise. No separate carrier name |
 | Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided - handover timestamp, signature, proof-of-delivery image |
 
 Each receipt issued after this change SHALL carry a receipt ID, unique across
@@ -776,7 +776,7 @@ SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
 - **AND** it carries no settlement-origin badge
 - **AND** it shows no proof file
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=2 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=3 -->
 #### Scenario: winner-order-SC-20 - The tracker appears once the lot is dispatched
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
@@ -784,7 +784,7 @@ SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
   `fulfilled` with a tracking number attached
 - **WHEN** the winner opens the order
 - **THEN** it shows the tracking number as the link to the carrier tracking
-  page
+  page when the operator recorded a tracker link, and as plain text otherwise
 - **AND** it shows no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-8xb rev=1 -->

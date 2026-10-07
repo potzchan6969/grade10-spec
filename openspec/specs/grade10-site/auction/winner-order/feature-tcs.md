@@ -2011,8 +2011,8 @@ is still owed, a tracker, and proof of what was handed over,
 * Each still shows its row's values.
 * No receipt was reissued.
 
-<!-- trace:case id=g10.auction-winner-order.TC-4zy rev=2 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### winner-order-US2-TC2-2: A dispatched lot shows the tracking number as the carrier link
+<!-- trace:case id=g10.auction-winner-order.TC-4zy rev=3 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
+### winner-order-US2-TC2-3: A dispatched lot shows the tracking number as the carrier link only with a tracker link
 
 **Classification:**
 
@@ -2029,23 +2029,26 @@ is still owed, a tracker, and proof of what was handed over,
 
 **Pre-conditions:**
 
-* customer(winner) is on <winner order url> for <order_shipped>.
+* customer(winner) is on <winner order url> for <order_shipped> and <order_shipped_no_link>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <order_shipped> | A paid order dispatched with a carrier and <tracking number> |
+| <order_shipped> | A paid order dispatched with a carrier, <tracking number> and a recorded tracker link |
+| <order_shipped_no_link> | A paid order dispatched with a carrier and <tracking number>, and no tracker link |
 
 **Steps:**
 
-1. Read the shipment section.
+1. Read the shipment section of <order_shipped>.
 2. Click <tracking number>.
+3. Read the shipment section of <order_shipped_no_link>.
 
 **Expected Results:**
 
 * Step 1: <tracking number> shows as a link, with no separate carrier name.
-* Step 2: the carrier's tracking page opens.
+* Step 2: the tracker link opens.
+* Step 3: <tracking number> shows as plain text, with no carrier name and no Track shipment control.
 
 <!-- trace:case id=g10.auction-winner-order.TC-l8v rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
 ### winner-order-US2-TC3-1: Delivery proof keeps the carrier's timestamp and signature
@@ -6469,7 +6472,7 @@ that implementation works.
 - `winner-order-US1-TC1-2`, from `-TC1-1`: Shipping & Handling, Insurance and Tax read TBD before send and no charge is marked as an estimate, instead of reading as estimates; the payable-at-close result is dropped, since `winner-order-US1-TC3-1` refuses payment until the address is confirmed -> `winner-order-SC-04`, `winner-order-SC-213`
 - `winner-order-US1-TC2-2`, from `-TC2-1`: Shipping & Handling, Insurance and Tax read TBD, instead of still to be calculated -> `winner-order-SC-213`
 - `winner-order-US2-TC1-2`, from `-TC1-1`: the receipt lines read insurance when added and Tax when added, instead of any tax -> `winner-order-SC-18`
-- `winner-order-US2-TC2-2`, from `-TC2-1`: the tracker shows the tracking number as the carrier link and no separate carrier name, instead of the carrier and the tracking number -> `winner-order-SC-20`
+- `winner-order-US2-TC2-3`, from `-TC2-1`: the tracker shows the tracking number as the carrier link when the operator recorded a tracker link and as plain text otherwise, and no separate carrier name, instead of the carrier and the tracking number -> `winner-order-SC-20`
 
 ### Rejected
 
@@ -6482,7 +6485,7 @@ that implementation works.
 ### Carried Unchanged
 
 - **Invoice fields** - `winner-order-SC-05`, `winner-order-SC-38`, `winner-order-SC-39`, `winner-order-SC-62`, `winner-order-SC-63`, `winner-order-SC-69`, `winner-order-SC-110`, `winner-order-SC-111` keep their meaning and their durable coverage. `winner-order-SC-04` changed meaning to a taxed total and is reached above by `winner-order-US1-TC31-1` and `winner-order-US1-TC1-2`
-- **Records the winner keeps** - `winner-order-SC-19`, `winner-order-SC-21`, `winner-order-SC-36`, `winner-order-SC-112`, `winner-order-SC-113`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-135`, `winner-order-SC-133`, `winner-order-SC-247`, `winner-order-SC-222`, `winner-order-SC-223`, `winner-order-SC-246` keep their meaning and their durable coverage. `winner-order-SC-18` and `winner-order-SC-20` changed and are reached above by `winner-order-US2-TC1-2` and `winner-order-US2-TC2-2`
+- **Records the winner keeps** - `winner-order-SC-19`, `winner-order-SC-21`, `winner-order-SC-36`, `winner-order-SC-112`, `winner-order-SC-113`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-135`, `winner-order-SC-133`, `winner-order-SC-247`, `winner-order-SC-222`, `winner-order-SC-223`, `winner-order-SC-246` keep their meaning and their durable coverage. `winner-order-SC-18` and `winner-order-SC-20` changed and are reached above by `winner-order-US2-TC1-2` and `winner-order-US2-TC2-3`
 
 **Out of suite:** none of this change's scenarios.
 
