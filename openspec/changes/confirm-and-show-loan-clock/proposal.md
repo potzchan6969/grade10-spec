@@ -14,8 +14,8 @@ hour, the trace a misplaced press leaves on the audit trail, fall to none.
 
 ## What Changes
 
-- **Cancel visit asks first** - the confirm names the slot on the shop's
-  clock, and says the collector is emailed and the case keeps its status, so
+- **Cancel visit asks first** - the confirm names the slot on the booked
+  shop's clock, and says the collector is emailed and the case keeps its status, so
   the operator checks the one fact a misplaced press would get wrong.
 - **Send forfeiture notice asks first** - the confirm names the address the
   notice goes to and the date to pay by it sets, in the destructive tone, so
