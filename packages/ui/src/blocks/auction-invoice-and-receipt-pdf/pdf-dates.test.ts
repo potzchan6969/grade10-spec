@@ -161,4 +161,23 @@ describe("a document's date rows, read from the rendered page", () => {
     expect(gmtRows(await drawnStrings(english))).toEqual(expected);
     expect(gmtRows(await drawnStrings(french))).toEqual(expected);
   });
+
+  // shared-ui-invoice-and-receipt-pdf-SC-55, shared-ui-invoice-and-receipt-pdf-US1-TC50-1
+  it("draws the receipt's date paid the same way under translated copy", async () => {
+    const instant = new Date("2026-09-01T12:00:00Z");
+    const translated = {
+      ...RECEIPT_COPY,
+      datePaidLabel: "Date du paiement",
+    };
+    const [english, french] = await Promise.all([
+      ReceiptPdf({ ...RECEIPT, paidAt: instant }),
+      ReceiptPdf({ ...RECEIPT, paidAt: instant, copy: translated }),
+    ]);
+    expect(gmtRows(await drawnStrings(english))).toEqual([
+      "September 1, 2026, 20:00 GMT+8",
+    ]);
+    expect(gmtRows(await drawnStrings(french))).toEqual([
+      "September 1, 2026, 20:00 GMT+8",
+    ]);
+  });
 });

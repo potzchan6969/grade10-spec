@@ -114,3 +114,15 @@ export const Failed: Story = {
     ).toBeNull();
   },
 };
+
+/** A label the consumer passes replaces the zone's short name, as the drop-off page does. */
+export const LabelFromTheConsumer: Story = {
+  args: { timeZoneLabel: "Hong Kong Standard Time" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText("Times in Hong Kong Standard Time"),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText("Times in HKT")).not.toBeInTheDocument();
+  },
+};
