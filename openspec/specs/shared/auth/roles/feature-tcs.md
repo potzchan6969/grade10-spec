@@ -445,7 +445,7 @@
 
 **Pre-conditions:**
 
-* admin(only operator role is `finance`) is on <grade10 admin auction url>.
+* admin(only operator role is `finance`) is signed in on <grade10 admin url>.
 * <auction order> is awaiting payment.
 * <vault case> is awaiting payout.
 
@@ -458,20 +458,21 @@
 
 **Steps:**
 
-1. Open <auction order>.
-2. Record a payment against <auction order>.
-3. Try to record a shipment on <auction order>.
-4. Try to record a refund on <auction order>.
-5. On <grade10 admin auction catalog url>, try an auction operate action.
-6. Try to write the auction catalogue.
-7. On <grade10 admin url>, try a store write.
-8. On <grade10 admin vault url>, try to open <vault case>.
-9. Try to pay out <vault case>.
+1. On <grade10 admin auction url>, open the Orders tab and open <auction order>.
+2. Click `Record payment` and record the payment of <auction order>.
+3. Look at `Dispatch` on <auction order>.
+4. Look at `Refund` on <auction order>.
+5. Open the Listings tab and look for `Create listing`.
+6. Open the Campaigns tab and look for `Open new campaign`.
+7. Look for Store in the console's navigation.
+8. Look for Vault in the console's navigation, then navigate to <grade10 admin vault url>/cases/<vault case>.
 
 **Expected Results:**
 
-* Steps 1 and 2 are allowed; <auction order> shows the payment recorded.
-* The shipment, the refund, the operate action, the catalogue write, the store write, the vault case and the payout are refused.
+* Step 1 shows <auction order>; step 2 records the payment and <auction order> shows it.
+* `Dispatch` is disabled with "Needs shipment processing", and `Refund` with "Needs refund processing".
+* The Listings tab offers no `Create listing`, and the Campaigns tab no `Open new campaign`.
+* Store and Vault are not in the navigation, and step 8 lands on another section, so neither <vault case> nor its payout is offered.
 * <auction order> shows no shipment and no refund; <vault case> shows no payout.
 
 <!-- trace:case id=g10.shared-roles.TC-bs3 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
@@ -506,15 +507,15 @@
 
 **Steps:**
 
-1. On <grade10 admin grading url>, record a grading counter act.
-2. Approve <grading request>.
-3. On <grade10 admin appointments url>, change <booking>.
-4. On <grade10 admin inventory url>, change the stock of <stock item>.
-5. On <grade10 admin auction catalog url>, write the auction catalogue.
+1. On <grade10 admin grading url>/walk-in, click `Start at the desk` and record a walk-in submission.
+2. On <grade10 admin grading url>/settings, click `Approve` on <grading request>.
+3. On <grade10 admin appointments url>, open the Bookings tab, click `Open` on <booking>, then `Move` it to another free slot.
+4. On <stock item>'s product page under <grade10 admin inventory url>, click `Intake` and add one unit.
+5. On <grade10 admin auction url>, open the Campaigns tab, click `Open new campaign` and save it.
 
 **Expected Results:**
 
-* The counter act, the approval, the booking change, the stock change and the catalogue write are each allowed.
+* The walk-in submission, the approval, the moved booking, the added unit and the new campaign are each saved and shown.
 
 <!-- trace:case id=g10.shared-roles.TC-tw2 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC15-1: Staff and admin move an item and open its proof
@@ -549,13 +550,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin item page url> for `<item_1>`.
-2. Click the proof on the top move.
-3. Transfer `<item_1>` to the custodian with a reason.
+2. In the Moves panel, click the proof's file name on the top move.
+3. Click `Transfer`, choose the custodian as Owner, enter a Reason, and click `Transfer`.
 
 **Expected Results:**
 
 * The proof downloads.
-* `<item_1>` reads the custodian as owner, with the move at the top.
+* `<item_1>` reads the custodian as owner, with the move at the top of the Moves panel.
 
 <!-- trace:case id=g10.shared-roles.TC-gu0 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC16-1: Treasurer holds no inventory grant
@@ -627,13 +628,14 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open <vault case>'s identity capture.
-2. Open <vault case>'s signed document.
+1. On the Queue tab, open <vault case> and go to its Documents tab.
+2. Click `View photograph` on the identity record.
+3. Click `Download` on the signed document.
 
 **Expected Results:**
 
-* The identity capture shows.
-* The signed document shows.
+* The identity photograph shows.
+* The signed document downloads.
 
 <!-- trace:case id=g10.shared-roles.TC-ug8 rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC2-1: Staff runs a vault case and is refused its money
@@ -670,17 +672,17 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Start a valuation on <vault case A>.
-2. Make an offer on <vault case A>.
-3. Try to pay out <vault case B>.
-4. Try to record a repayment on <vault case C>.
-5. Try to open the vault money book.
-6. On <grade10 admin auction url>, try to record a payment against <auction order>.
+1. Open <vault case A> from the Queue tab and click `Start the valuation` on its Case tab.
+2. Click `Make an offer` on <vault case A>'s Case tab and send the offer.
+3. Open <vault case B> and look for its Payouts tab.
+4. Open <vault case C> and look for its Payouts tab.
+5. On <grade10 admin vault url>, look for the Money tab.
+6. On <grade10 admin auction url>, open the Orders tab, open <auction order> and look at `Record payment`.
 
 **Expected Results:**
 
 * Steps 1 and 2 are allowed; <vault case A> shows the valuation started and the offer made.
-* The payout, the repayment, the money book and the auction payment are refused.
+* <vault case B> and <vault case C> show no Payouts tab, the vault shows no Money tab, and `Record payment` is disabled with "Needs payment processing".
 * <vault case B> shows no payout, <vault case C> no repayment, <auction order> no payment.
 
 <!-- trace:case id=g10.shared-roles.TC-8gk rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
@@ -714,16 +716,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open <vault case B>.
-2. Pay out <vault case B>.
-3. Try to start a valuation on <vault case A>.
-4. Try to make an offer on <vault case A>.
-5. Try to open <vault case B>'s identity document.
+1. On the Queue tab, open <vault case B>.
+2. On its Payouts tab, click `Record the payout` and record it.
+3. Open <vault case A> and look for `Start the valuation` on its Case tab.
+4. Look for `Make an offer` on the same tab.
+5. Open <vault case B>'s Documents tab and look for `View photograph` on the identity record.
 
 **Expected Results:**
 
-* Step 1 shows the case; step 2 is allowed and <vault case B> shows the payout.
-* Steps 3, 4 and 5 are refused.
+* Step 1 shows the case; step 2 records the payout and <vault case B> shows it.
+* <vault case A>'s Case tab offers no `Start the valuation` and no `Make an offer`, and <vault case B>'s Documents tab offers no `View photograph`.
 * <vault case A> shows no valuation started and no offer made, and no identity document shows.
 
 <!-- trace:case id=g10.shared-roles.TC-zgr rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
@@ -755,14 +757,14 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open <vault case>.
-2. Try to open <vault case>'s identity capture.
-3. Try to open <vault case>'s signed document.
+1. On the Queue tab, open <vault case>.
+2. Go to its Documents tab and look for `View photograph` on the identity record.
+3. Look for `Download` on the signed document.
 
 **Expected Results:**
 
 * Step 1 shows the case.
-* Steps 2 and 3 are refused; neither document shows.
+* The Documents tab offers neither `View photograph` nor `Download`; neither document shows.
 
 <!-- trace:case id=g10.shared-roles.TC-dak rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC5-1: One person holding staff and treasurer cannot pay out their own offer
@@ -795,9 +797,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Make an offer on <vault case> and have the customer accept it.
-2. Try to pay out <vault case>.
-3. As <second operator>, pay out <vault case>.
+1. On <vault case>'s Case tab, click `Make an offer` and send it, then have the customer accept it on their vault case page.
+2. On <vault case>'s Payouts tab, click `Record the payout` and confirm.
+3. As <second operator>, open <vault case>'s Payouts tab and record the payout.
 
 **Expected Results:**
 
