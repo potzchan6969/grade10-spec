@@ -59,9 +59,9 @@ walked away from**.
 - **A counter sale a reward's code has left takes no reward again.** The
   remedy is a new sale, and points still go on. A counter sale a newer promise
   retired takes no new plan at all, and the till tells staff to ring the goods
-  on a new sale. A fresh scan on the cart of a sale still open, carrying the
-  member's reward code, is not yet decided, since a till session ends long
-  before a sale's hour (decisions.md, Raised R1).
+  on a new sale. A fresh scan on the cart of the member's own sale still open
+  continues that sale and the code it carries, since a till session ends long
+  before a sale's hour.
 - **A sale that collects a code this store deactivated is reported, and pays
   for the coupon once.** It spends the coupon where no other sale claims it.
   Today nothing looks: a reward's code is the only one that never reaches the
@@ -93,16 +93,18 @@ None.
   claim is the only live one; a claim's retry key answers only while the claim
   stands; a reversal is refused only while a sale claims the coupon, and the
   programme's own clock never frees a coupon whose code is live; a claim a
-  checkout left before its order was written is released by the next claim;
-  the member's coupon list and `CouponList`'s contract carry no code for a
-  reward coupon; what a redemption forfeits when it
-  lapses unused is its coupon, never a code minted for one sale.
+  checkout left before its order was written is released by the next claim,
+  and a checkout writing its order more than a minute after its claim is
+  refused; the member's coupon list and `CouponList`'s contract carry no code
+  for a reward coupon; what a redemption forfeits when it lapses unused is its
+  coupon, never a code minted for one sale.
 - `grade10-site/store/discounts`: at the till a gift reaches the sale as its
   own line and carries no code, and the till journey names a reward coupon,
   a product coupon or a gift; an online order that expires keeps its code
   and a counter sale that runs out its hour, or that a newer promise retires,
   loses it; a counter sale a reward's code has left takes no reward again, and
-  one a newer promise retired takes no new plan; a paid sale carrying a code
+  one a newer promise retired takes no new plan, while a fresh scan continues
+  the member's own open sale and its code; a paid sale carrying a code
   this store deactivated spends the coupon where no other sale claims it, and
   is reported.
 
@@ -130,14 +132,19 @@ None.
   coupon already used on another order.
 - **`@grade10/ui`** (this store) - `CouponList`'s contract wording only: it
   carries a code where the consumer passes one, and a reward coupon carries
-  none. No component changes.
+  none. `RewardMenu`'s channel clause, which this change restates, names the
+  one channel a reward is good at, where it is good at only one, so
+  align-reward-editor-design's online-only scope lands on the same words. No
+  component changes.
 - **Consumer apps** — the Grade10 site's cart drawer and `/checkout`, the
   membership wallet, and the POS till.
 
-No domain impact: `grade10-site/store/domain-tcs.md` walks a paid till sale
-settling points and its own product coupon, which this change does not move.
-It moves sales nobody paid, and paid sales carrying a code their order gave
-up. The loyalty domain has one capability and no domain suite.
+Domain impact: `grade10-site/store/domain-tcs.md`'s
+`grade10-site-store-e2e-US4-TC1-1` walks a paid till sale settling points and
+its own product coupon, a path this change does not move. It traces
+`grade10-site-store-discounts-US-04`, which more scenarios now serve, so the
+change carries the case with its words unchanged and its marker naming them.
+The loyalty domain has one capability and no domain suite.
 
 ## References
 
