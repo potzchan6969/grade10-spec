@@ -152,7 +152,7 @@ Runs once per row of **Test data**.
 | `shared-ui-store-product-listing-SC-64` | Reached | US1-TC15, US1-TC17 |
 | `shared-ui-store-product-listing-SC-64a` | Reached | US1-TC16 |
 
-- **Raised for the human** - none from the blind pass. R1 in `decisions.md`, whether the designer redraws the Figma frame, was raised at review; no case depends on it
+- **Raised for the human** - none from the blind pass. R1 in `decisions.md`, whether the designer redraws the Figma frame, was raised at review and is handed to the redraw-store-product-card-frames change as Q2; no case depends on it
 - **Folded** - none: no case carries an outcome the scenarios do not state
 - **Rejected** - none
 - **Contradicted** - none: where a case and a scenario state the same behaviour they agree

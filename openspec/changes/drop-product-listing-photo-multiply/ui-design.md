@@ -12,8 +12,8 @@
 | Sold out, where the tile sells | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-productcardimage--sold-out) | none |
 | Sold out, where nothing sells | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler) | none |
 
-The Figma frame still draws the photo multiplied. Whether the designer redraws
-it is open (R1).
+The Figma frame still draws the photo multiplied. Its redraw is handed to the
+redraw-store-product-card-frames change (Q2); the stories are the look until then.
 
 ## Components
 

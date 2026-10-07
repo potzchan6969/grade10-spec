@@ -40,11 +40,6 @@ See [Non-Goals](decisions.md#non-goals).
   - **You May Also Like** - `packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductRelatedRail.tsx`,
     through `StoreProductRelatedRail` and `ProductCard`
 
-## Open questions
-
-- R1 - whether the Product Card Image Figma frame is redrawn with the photo
-  unblended; the designer answers it in `decisions.md`
-
 ## References
 
 - [Product Listing Blocks · Product Tile](../../../docs/prds/products/shared/ui/store-product-listing.md#product-tile)
