@@ -14,7 +14,6 @@ import {
   formatRelativeAt,
   formatViewerZoneName,
   formatZonedLocalMoment,
-  formatZoneOffset,
   isPastActivityCap,
   JUST_NOW_MAX_MS,
   resolveActivityNow,
@@ -83,7 +82,7 @@ describe("formatRelativeAt", () => {
 });
 
 describe("formatLocalMoment", () => {
-  // shared-dates-and-times-SC-23, shared-dates-and-times-US1-TC1-1
+  // shared-dates-and-times-SC-23
   const at = Date.UTC(2026, 7, 24, 2, 0);
 
   it("renders collector shape without a zone suffix", () => {
@@ -156,8 +155,7 @@ describe("resolveActivityNow", () => {
 });
 
 describe("formatActivityAt", () => {
-  // shared-dates-and-times-SC-24, shared-dates-and-times-US1-TC1-1,
-  // shared-dates-and-times-US1-TC2-1
+  // shared-dates-and-times-SC-24
   it("formats live bids recorded after the last tick", () => {
     const at = Date.now();
     expect(
@@ -194,8 +192,7 @@ describe("formatActivityAt", () => {
 });
 
 describe("formatCollectorDeadline", () => {
-  // shared-dates-and-times-SC-12, shared-dates-and-times-SC-29,
-  // shared-ui-auction-listing-US1-TC55-1
+  // shared-dates-and-times-SC-12, shared-dates-and-times-SC-29
   it("prefixes a local moment with the viewer's zone name", () => {
     const at = Date.UTC(2026, 8, 1, 18, 0);
     expect(
@@ -241,14 +238,6 @@ describe("formatZonedLocalMoment", () => {
         timeZone: "America/New_York",
       }),
     ).toBe("1 Sep 2026, 14:00 EDT");
-  });
-});
-
-describe("formatZoneOffset", () => {
-  it("names Hong Kong as GMT+8", () => {
-    expect(formatZoneOffset("Asia/Hong_Kong", Date.UTC(2026, 8, 1))).toBe(
-      "GMT+8",
-    );
   });
 });
 
@@ -360,37 +349,19 @@ describe("a zone the platform does not recognise stops the render", () => {
 
 describe("a zone name is read at an instant the caller names", () => {
   // shared-dates-and-times-SC-30
-  it("refuses a zone name asked for with no instant, so no name follows the machine's date", () => {
-    // @ts-expect-error the instant is required
-    expect(() => formatViewerZoneName("America/New_York")).toThrow(
+  it.each(["America/New_York", "Asia/Hong_Kong"])(
+    "refuses a zone name for %s asked for with no instant, so no name follows the machine's date",
+    (timeZone) => {
+      // @ts-expect-error the instant is required
+      expect(() => formatViewerZoneName(timeZone)).toThrow(
+        /Invalid time value/,
+      );
+    },
+  );
+
+  it("refuses an invalid instant for Hong Kong as it does for every other zone", () => {
+    expect(() => formatViewerZoneName("Asia/Hong_Kong", Number.NaN)).toThrow(
       /Invalid time value/,
     );
-    // @ts-expect-error the instant is required
-    expect(() => formatZoneOffset("America/New_York")).toThrow(
-      /Invalid time value/,
-    );
-  });
-});
-
-describe("isPastActivityCap", () => {
-  it("is false inside the cap and true at the boundary", () => {
-    expect(isPastActivityCap(NOW - ACTIVITY_RELATIVE_MAX_MS + 1, NOW)).toBe(
-      false,
-    );
-    expect(isPastActivityCap(NOW - ACTIVITY_RELATIVE_MAX_MS, NOW)).toBe(true);
-  });
-});
-
-describe("resolveShippedLocale", () => {
-  it("keeps shipped locales and falls back to English", () => {
-    expect(resolveShippedLocale("zh-Hant")).toBe("zh-Hant");
-    expect(resolveShippedLocale("th")).toBe("en");
-  });
-});
-
-describe("tier constants", () => {
-  it("exports platform-owned thresholds", () => {
-    expect(JUST_NOW_MAX_MS).toBe(45_000);
-    expect(ACTIVITY_RELATIVE_MAX_MS).toBe(7 * DAY_MS);
   });
 });

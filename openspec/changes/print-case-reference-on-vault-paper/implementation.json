@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "54e5382a83e21ceb22ec06978ea375f43cded9fa75a39870818fbc940fba0c7f"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ede9e27e77a89dbc5644fb0b2e5ae9626ff8db79",
+    "capturedAt": "2026-10-07T03:13:33.656Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A case carries a six-character reference"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A document names the case by its reference"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/vault/domain-tcs.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

@@ -177,14 +177,6 @@ export function formatLocalMoment(
   return `${day} ${month} ${year}, ${hours}:${minutes}`;
 }
 
-/** Deadline shape: `24 Aug 2026, 18:00 HKT` or `23 Aug 2026, 22:00 EDT`. */
-export function formatZonedLocalMoment(
-  at: Date | number,
-  options: { locale?: ShippedLocale; timeZone: string },
-): string {
-  return `${formatLocalMoment(at, options)} ${formatViewerZoneName(options.timeZone, at)}`;
-}
-
 /** Collector local calendar day: `24 Aug 2026`. */
 export function formatLocalDay(
   at: Date | number,
@@ -203,6 +195,22 @@ export function formatLocalTime(
   return `${hours}:${minutes}`;
 }
 
+/** Collector local clock with the viewer's zone named: `18:00 HKT`. */
+export function formatZonedLocalTime(
+  at: Date | number,
+  options: { locale?: ShippedLocale; timeZone: string },
+): string {
+  return `${formatLocalTime(at, options)} ${formatViewerZoneName(options.timeZone, at)}`;
+}
+
+/** Deadline shape: `24 Aug 2026, 18:00 HKT` or `23 Aug 2026, 22:00 EDT`. */
+export function formatZonedLocalMoment(
+  at: Date | number,
+  options: { locale?: ShippedLocale; timeZone: string },
+): string {
+  return `${formatLocalDay(at, options)}, ${formatZonedLocalTime(at, options)}`;
+}
+
 export function formatCollectorDeadline(
   at: Date | number,
   {
@@ -219,32 +227,27 @@ type CollectorClockOptions = {
   timeZone: string;
 };
 
-/** Viewer zone as an offset, e.g. `GMT+8`. Documents use this, not `HKT`. */
-export function formatZoneOffset(timeZone: string, at: Date | number): string {
-  const raw =
-    new Intl.DateTimeFormat("en-US", {
-      timeZone,
-      timeZoneName: "shortOffset",
-    })
-      .formatToParts(parseInstant(at))
-      .find((part) => part.type === "timeZoneName")?.value ?? "GMT";
-  return raw.replace(/^UTC/, "GMT").replace(/([+-])0(\d)(?::00)?$/, "$1$2");
-}
-
-/** Viewer short name at that instant: `HKT`, `EDT`. Hong Kong is always `HKT`. */
+/**
+ * Viewer short name at that instant: `HKT`, `EDT`, or the offset (`GMT+9`)
+ * where US English has no short name. Hong Kong is always `HKT`. The instant is
+ * parsed first, so an invalid one stops every zone alike.
+ */
 export function formatViewerZoneName(
   timeZone: string,
   at: Date | number,
 ): string {
+  const instant = parseInstant(at);
   if (timeZone === "Asia/Hong_Kong") return "HKT";
-  const raw =
-    new Intl.DateTimeFormat("en-US", {
-      timeZone,
-      timeZoneName: "short",
-    })
-      .formatToParts(parseInstant(at))
-      .find((part) => part.type === "timeZoneName")?.value ?? "GMT";
-  return raw.replace(/^UTC/, "GMT");
+  const name = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    timeZoneName: "short",
+  })
+    .formatToParts(instant)
+    .find((part) => part.type === "timeZoneName");
+  if (name === undefined) {
+    throw new RangeError(`No zone name for ${timeZone} at ${instant}`);
+  }
+  return name.value.replace(/^UTC/, "GMT");
 }
 
 /** Auction listing close prefix in the viewer's zone. */
@@ -269,18 +272,6 @@ export function formatListingOpens(
   options: CollectorClockOptions,
 ): string {
   return formatCollectorDeadline(at, { ...options, prefix: "Opens" });
-}
-
-export function formatClosedAt(
-  at: Date | number,
-  {
-    locale = "en",
-    timeZone,
-    template,
-  }: { locale?: ShippedLocale; timeZone: string; template: string },
-): string {
-  const when = formatZonedLocalMoment(at, { locale, timeZone });
-  return template.replace("{when}", when);
 }
 
 export function formatRelativeAt(
@@ -381,15 +372,3 @@ export function resolveShippedLocale(input: string): ShippedLocale {
   }
   return "en";
 }
-
-/** @deprecated Use {@link formatMoment}. */
-export const formatAuctionMoment = formatMoment;
-
-/** @deprecated Use {@link formatListingEnds}. */
-export const formatAuctionDeadline = formatListingEnds;
-
-/** @deprecated Use {@link formatListingClosed}. */
-export const formatAuctionClosed = formatListingClosed;
-
-/** @deprecated Use {@link formatListingOpens}. */
-export const formatAuctionOpens = formatListingOpens;

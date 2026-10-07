@@ -23,7 +23,7 @@ group names to the tests that already prove them.
       `pnpm run validate:changes align-collector-times-to-local-zone` and
       `pnpm check:manual`.
 
-## 2. Zone names, the closed lot and sent-message wording (grade10-spec) (owner: @sean)
+## 2. Zone names, the closed lot and sent-message wording (grade10-spec) (owner: @seankcw)
 
 Needs group 1, which is built. It does not wait on group 3.
 
@@ -36,7 +36,7 @@ judges, and no longer a collector deadline's day, which
 `shared-dates-and-times-SC-38` reads in the viewer's zone. The same
 `packages/utils/test/dates.test.ts` still verifies it, and no test cites its id.
 
-- [ ] 2.1 Add the tests first, in their own commit, each citing its scenario id
+- [x] 2.1 Add the tests first, in their own commit, each citing its scenario id
       and the case id it decides, and the formatter, story and PDF tests that
       already prove other ids gain their citations in the same commit: a New
       York deadline reads `EDT` in September and `EST` in January
@@ -77,44 +77,49 @@ judges, and no longer a collector deadline's day, which
       `shared-ui-invoice-and-receipt-pdf-SC-43`,
       `shared-ui-invoice-and-receipt-pdf-SC-54` and
       `shared-ui-invoice-and-receipt-pdf-SC-55`.
-- [ ] 2.2 Make the instant a required argument of the viewer zone name and the
-      zone offset helpers, and have every caller pass the instant it names, so
-      no zone name follows the machine's date, covering
-      `shared-dates-and-times-SC-30`.
-- [ ] 2.3 Require `locale` on the catalogue tile, so an omitted language fails
+- [x] 2.2 Make the instant a required argument of the viewer zone name, parsed
+      before any zone is named, and have every caller pass the instant it
+      names, so no zone name follows the machine's date: the booking blocks
+      pass the slot's start, the slot picker the picked day or the month it
+      shows. Covering `shared-dates-and-times-SC-30`.
+- [x] 2.3 Require `locale` on the catalogue tile, so an omitted language fails
       to compile, covering `shared-ui-auction-listing-SC-55`.
-- [ ] 2.4 Derive the PDF label from the document zone through the offset
-      helper instead of a literal, with the rendered text unchanged, covering
+- [x] 2.4 Derive the PDF label from the document zone through the
+      formatter's own `timeZoneName: "shortOffset"` option instead of a
+      literal, with the rendered text unchanged, covering
       `shared-ui-invoice-and-receipt-pdf-SC-43` and
       `shared-ui-invoice-and-receipt-pdf-SC-54`.
-- [ ] 2.5 Name the viewer's short zone after the close time in the lot bid
+- [x] 2.5 Name the viewer's short zone after the close time in the lot bid
       card's closed block, in the desktop block and in the compact summary
-      line, wherever the close shows a clock, through the zone-name helper the
-      open lot's deadline uses; a close shown as a day alone names none,
+      line, wherever the close shows a clock, from one reading of the close
+      that both read and through the zoned clock the open lot's deadline uses;
+      a close shown as a day alone names none,
       covering `shared-dates-and-times-SC-14` and
       `shared-dates-and-times-SC-38`.
-- [ ] 2.6 Say `Dates and times are Hong Kong time (GMT+8).` in the footer of
+- [x] 2.6 Say `Dates and times are Hong Kong time (GMT+8).` in the footer of
       the grading letter template, `apps/emails/emails/grading/_components/grading-letter.tsx`,
       and `Dates and times are in Hong Kong time (GMT+8).` in the vault
       fixture's footer lines, `footerLines` in
-      `apps/emails/emails/vault/fixtures.ts`. Neither has a test lane here;
-      tasks 3.1 and 3.4 prove the rendered letters.
-- [ ] 2.7 Rename the booking summary's `ViewerZoneNewYork` story, in
-      `packages/ui/src/blocks/appointment-booking/booking-summary.stories.tsx`,
-      to `ShopZoneNewYork`, in the tests-first commit of task 2.1, and reword
-      the comment on `zoneLabel` in
+      `apps/emails/emails/vault/fixtures.ts`. Neither has a test lane here.
+      Tasks 3.1 and 3.4 prove the application's catalogue lines, not these two
+      previews, which stay checked by hand against them.
+- [x] 2.7 Reword the comment on `zoneLabel` in
       `packages/ui/src/blocks/appointment-booking/booking-copy.ts` from the
       viewer's short name to the short name of the zone the block is given,
-      which is the shop's. The booking blocks are on the shop's clock (Q16, Q22),
-      so the story is a shop in New York, not a viewer. No scenario or case
-      reads the booking blocks, so this task cites none.
-- [ ] 2.8 Verify: `pnpm --filter @grade10/ui run typecheck`,
-      `pnpm --filter @grade10/emails run typecheck`, the node and story lanes,
-      `pnpm run lint`,
+      which is the shop's. The booking blocks are on the shop's clock (Q16,
+      Q22). This task first named a `ViewerZoneNewYork` story on the booking
+      summary to rename `ShopZoneNewYork`; `9a02503a1` removed that story, so
+      nothing is renamed. No scenario or case reads the booking blocks, so this
+      task cites none.
+- [x] 2.8 Verify: `pnpm --filter @grade10/ui run typecheck`,
+      `pnpm --filter @grade10/emails run typecheck`, the node and story lanes
+      of `packages/ui` and the story lane of `apps/preview`
+      (`pnpm --dir apps/preview exec vitest run --project storybook`), whose
+      page stories read the closed block's text, `pnpm run lint`,
       `pnpm run validate:changes align-collector-times-to-local-zone` and
       `pnpm check:manual`.
 
-## 3. Bump the store and state sent messages in GMT+8 (grade10) (owner: @sean)
+## 3. Bump the store and state sent messages in GMT+8 (grade10) (owner: @seankcw)
 
 Needs group 2 landed on the store's main, and `external/grade10-spec` bumped to
 it, before it starts. The store pin, `2608abf84`, is behind store main, so the
@@ -169,7 +174,7 @@ bump lands with its typecheck fixes in one pull request.
       unit lanes, the grading and vault backend email tests, `pnpm run lint`,
       and the listing-page end-to-end smoke.
 
-## 4. Move the collector pages onto the viewer's zone and the invoice page onto GMT+8 (grade10) (owner: @sean)
+## 4. Move the collector pages onto the viewer's zone and the invoice page onto GMT+8 (grade10) (owner: @seankcw)
 
 Needs group 3's bump landed. Shop-clock pages are not moved: a page that books
 or confirms a visit, or a vault or signing page, keeps the shop's clock, and how

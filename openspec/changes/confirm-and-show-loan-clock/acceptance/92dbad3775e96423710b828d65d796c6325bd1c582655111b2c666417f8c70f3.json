@@ -1,0 +1,79 @@
+{
+  "version": 2,
+  "change": "confirm-and-show-loan-clock",
+  "baseline": "e9d308412cae0a62e9d8b71a886f76326ef0c2d7d2e4bd5ad20660159a57fd4c",
+  "fingerprint": "92dbad3775e96423710b828d65d796c6325bd1c582655111b2c666417f8c70f3",
+  "reviewedBy": "@ecchochan",
+  "acceptedAt": "2026-10-07T04:02:35.275Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/vault/operator-console.md#one-case",
+      "sha256": "e247fa4c1bbdd5bf9ac3fbbd96827419beaad1652ed653813b3cbcde0c8efae5",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/confirm-and-show-loan-clock/decisions.md",
+      "sha256": "a3cb69a26cef831ed59a3f7bedcdf35bc47632dfdd0dff63482187ff18ee6016",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/confirm-and-show-loan-clock/proposal.md",
+      "sha256": "4774ce70814d264a4057b8b2eae433a53be0bf3011abec74c5f0a26625da8c29",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/confirm-and-show-loan-clock/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "d4d878061d8167489f0075f46512a34501b71e9ca87de5dcbd05c4cd70e63d70",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/confirm-and-show-loan-clock/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "76567c106e497e12a29459fe5c4a99a2542d0915e0b0979d5884d082c43a7915",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/confirm-and-show-loan-clock/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "c91319b1852996dd7aec00db149487ad876bf8cb670075be3dfb92c9e84e86dc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/confirm-and-show-loan-clock/tech-design.md",
+      "sha256": "0e029053132ff08afc432a7b7be580d174e807a0bec029ba1f8eaebc2473b90f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "sha256": "14dbaebf277f840ba034942097b92fead7322c2e429b1b1217439360abb4581f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "sha256": "a4d26bf15c98abdd744a4140f1bc56ca7f18a4848676a695b1ba37a9956b0bd9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "sha256": "cfaf5a1a6358d12ea63b12586d13bdea08ca26f1f9a140dbcfaa37f2c8096d3a",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A late loan's clock reads beside the case's status",
+        "Requirement: Cancelling a visit asks first, naming the slot",
+        "Requirement: Sending the forfeiture notice asks first, naming the address and the date to pay by"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
