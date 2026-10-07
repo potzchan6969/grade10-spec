@@ -51,5 +51,5 @@ Needs groups 2 and 3. Walks the draft `feature-tcs.md` cases; human QA reviews t
 
 `define-public-auction-identifiers` archived on 2026-10-06, so this change carries every edit to the requirement.
 
-- [x] 5.1 Add the receipt's "Tax when added" wording and the tracker's carrier-link row to `Records the winner keeps`: the receipt lists Tax, and the tracker shows the tracking number as the link with no separate carrier name (`winner-order-SC-18`, `winner-order-SC-20`; `clarify-auction-shipping-progress-copy` Q6)
-- [ ] 5.2 Verify the Winner Order receipt and tracker against `winner-order-US2-TC1-2` and `winner-order-US2-TC2-2`
+- [x] 5.1 Add the receipt's "Tax when added" wording and the tracker's carrier-link row to `Records the winner keeps`: the receipt lists Tax, and the tracker shows the tracking number as the link when the operator recorded a tracker link, plain text otherwise, with no separate carrier name (`winner-order-SC-18`, `winner-order-SC-20`; `clarify-auction-shipping-progress-copy` Q6, Q7)
+- [ ] 5.2 Verify the Winner Order receipt and tracker against `winner-order-US2-TC1-2` and `winner-order-US2-TC2-3`

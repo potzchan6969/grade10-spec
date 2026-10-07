@@ -49,7 +49,8 @@ watch.
   added", and `winner-order-SC-18` follows
 - **The shipping tracker is the tracking number as the carrier link**, with no
   separate carrier name, in `Records the winner keeps` and `winner-order-SC-20`.
-  This carries `clarify-auction-shipping-progress-copy` Q6
+  It is a link only when the operator recorded a tracker link, and plain text
+  otherwise. This carries `clarify-auction-shipping-progress-copy` Q6 and Q7
 - **Grade10 prices nothing.** No rate, no regime, no jurisdiction rule, no tax
   provider. The operator decides the amount and owns it
 
