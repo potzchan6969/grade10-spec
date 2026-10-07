@@ -139,7 +139,7 @@ holds back a fresh mark or an hourly re-check.
   gate and keeps its `payment_ref` gate and its 90-day window, and
   `refreshOnFulfillmentEvent` drops its `open` short-circuit
 
-### A payment webhook marks the order due
+### A payment or fulfilment webhook marks the order due
 
 After the webhook service answers a verified `PAYMENT_TOPICS` delivery
 (`orders/paid`, `orders/cancelled`, `refunds/create`, `orders/edited`),
@@ -155,6 +155,13 @@ expiry arrives on no subscribed topic, so it reaches the row through the Open
 arm within the hour, as the page says. The row is the work list, so no new
 table is needed.
 
+- **Fulfilment topics mark too** - a `fulfillments/create` or
+  `fulfillments/update` delivery marks the order the same way before
+  `refreshOnFulfillmentEvent` pulls, and a failed mark answers 500. The route
+  answers a missed pull 200
+  (`packages/grade10-store/backend/src/routes/webhooks.ts:204-215`), so
+  without the mark a shipment on an archived order that the pull misses is
+  never read, past what the page says
 - **Idempotent** - a redelivery, `duplicate` included, moves the mark
   forward. A mark set while a pull is in flight is later than that pull's
   claim, so the write leaves it and the next tick reads the order again
@@ -217,7 +224,7 @@ and note are derived and never stored.
 | `canceled_at` | `timestamptz` | yes | none | `cancelledAt` |
 | `closed_at` | `timestamptz` | yes | none | `closedAt`, set exactly when `closed` is true |
 | `return_status` | `text` | yes | none | `returnStatus`, verbatim |
-| `read_due_at` | `timestamptz` | yes | none | None: set to now by a payment webhook and to `created_at` by the backfill, cleared by a written read or a `notFound` |
+| `read_due_at` | `timestamptz` | yes | none | None: set to now by a payment or fulfilment webhook and to `created_at` by the backfill, cleared by a written read or a `notFound` |
 
 - **One partial index** - on `read_due_at` where it is set, because the Due
   arm has no 90-day window and would otherwise scan every order each tick;
@@ -266,7 +273,7 @@ until a read is written.
 
 ```mermaid
 flowchart LR
-  S[Shopify order] -- payment webhook --> W[Webhook route]
+  S[Shopify order] -- payment or fulfilment webhook --> W[Webhook route]
   W -- mark due --> R[(store.orders)]
   M[1-min cron] -- claim unanswered --> R
   M -- getOrder --> S
@@ -294,7 +301,7 @@ them unchanged. No field is removed and no procedure is added.
   payment webhooks mark the order due, so the next minute's trigger reads it,
   and any other change within the hour for an order Shopify holds open placed
   in the last 90 days; an older or archived order is read again only when a
-  payment webhook marks it due or a shipment event reads it (Q23, Q24)
+  payment or fulfilment webhook marks it due (Q23, Q24)
 - **[Risk] More than 20 orders marked due in one minute** → unanswered marks
   are read first, oldest mark first, on every trigger, so the 5-minute bound
   holds while marks stay within 20 a minute; the due-mark gauge in
@@ -307,11 +314,11 @@ them unchanged. No field is removed and no procedure is added.
 - **[Risk] A shop that never archives keeps every order in the Open arm, past
   the cron's 240 reads an hour** → the claim reads the oldest check first, so
   every order is still reached, later than the hour; the open-order gauge in
-  Observability alarms past 60 minutes, and the batch is raised. Migration
+  Observability alarms past 55 minutes, and the batch is raised. Migration
   step 3 shows the batch fits before the backfill runs
 - **[Risk] An order reopened after Shopify archived it keeps Completed** →
   it leaves the Open arm once closed, and is read again only on a payment
-  webhook's mark or a fulfilment event, as the page says (Q24)
+  or fulfilment webhook's mark, as the page says (Q24)
 - **[Risk] `returnStatus` needs an access scope the app lacks, and the whole
   order query fails** → checked against the dev shop before the query ships
   (Migration Plan, step 1); a missing scope joins the ops scope list before
