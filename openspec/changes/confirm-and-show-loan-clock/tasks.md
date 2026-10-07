@@ -63,7 +63,7 @@ and 5 cite the ones it serves.
 - [ ] 3.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck,
       `pnpm run lint` and the Storybook lane for the two stories.
 
-## 4. Cancel visit asks first (grade10)
+## 4. Cancel visit asks first (grade10) (owner: @ecchochan)
 
 Starts from the console zone fix's commit and from
 `read-vault-console-on-shop-clock`'s where they have landed, and takes their
