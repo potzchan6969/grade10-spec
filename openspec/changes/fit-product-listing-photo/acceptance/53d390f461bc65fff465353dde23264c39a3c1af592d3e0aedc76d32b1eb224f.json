@@ -1,0 +1,86 @@
+{
+  "version": 2,
+  "change": "fit-product-listing-photo",
+  "baseline": "a295f69f6f1967cd2a8a04097a0310edd95a8cd29856caec98ee3486dedbc0c6",
+  "fingerprint": "53d390f461bc65fff465353dde23264c39a3c1af592d3e0aedc76d32b1eb224f",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T12:01:41.751Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/shared/ui/store-product-listing.md#product-tile",
+      "sha256": "da812b55f66e8ac5f97cb72b899a08138ae8ed0f93d26b359da1b3bd89c951e5",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/fit-product-listing-photo/decisions.md",
+      "sha256": "75c3029ccaaa961ef7b477af27bed2ea2e7e9c909262079fa8873d9f1aae4b00",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fit-product-listing-photo/proposal.md",
+      "sha256": "262a42158ce980fdf365fcd7630e9798451068a8fef22da90cbb3ded4473e07a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fit-product-listing-photo/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "42e654595966c7dd027c46f8014a8c12cc28054b847fed6d0f8ceda97a0bb941",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fit-product-listing-photo/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "ec613812c838d1c6e065c91c7f2b44f106722ccd3cfe9a4fdf38d520c0d08795",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fit-product-listing-photo/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fit-product-listing-photo/tech-design.md",
+      "sha256": "ccdb84052d7b68d4f7ddd310fc975d2b1b08c88bb7fe13e7fb2f5dea2c334d73",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/fit-product-listing-photo/ui-design.md",
+      "sha256": "d585c953b7415a178fbdf01b27408dfcc6d227f491d26879e100cc53fde6b0a3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "edc42be33b2df8e1552d79c3cc45aca69d5f034bfad6a1b7238f725ad4411e07",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "2746e655600ab0629dc9c89eb9ffb168f79f71d7d4a434a32d064c55b4865c58",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/fit-product-listing-photo/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The product photo fits inside the well"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

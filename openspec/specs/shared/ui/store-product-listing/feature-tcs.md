@@ -606,25 +606,184 @@ Runs once per row of **Test data**.
 * Step 4: the photo's white fill reads white, as in the file.
 * Step 5: the photo's computed blend mode is `normal`.
 
+<!-- trace:case id=g10.shared-store-product-listing.TC-pov rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
+### shared-ui-store-product-listing-US1-TC18-1: Non-square photo shows whole in every tile status
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Tile contract
+
+**Pre-conditions:**
+
+* `ProductCardImage` is open in Storybook, drawn as its Non Square Photo story, `<portrait photo>` in one well per status.
+* The pointer rests outside every well.
+
+**Test data:**
+
+| Status | Outcome |
+| --- | --- |
+| Available | whole photo, the well beside it |
+| On sale | whole photo, the well beside it |
+| Sold out | whole photo, faded, the well beside it |
+| In cart | whole photo, the well beside it |
+
+| Field | Value |
+| --- | --- |
+| `<portrait photo>` | `product-card.portrait.fixture.png`, taller than wide |
+
+**Steps:**
+
+1. Find the well that draws `<portrait photo>` in the row's **Status**.
+2. Look at the photo's top and bottom edges.
+3. Look at the space left and right of the photo.
+
+**Expected Results:**
+
+* Step 1 shows the well square, in the row's **Status**.
+* Step 2: the photo's top and bottom edges meet the well's top and bottom, nothing cut off.
+* Step 3: the well's own background fills an equal space on each side of the photo.
+* Sold out row: the whole photo is faded.
+
+<!-- trace:case id=g10.shared-store-product-listing.TC-vn1 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
+### shared-ui-store-product-listing-US1-TC19-1: Landscape, square and small photos each show whole
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Tile contract
+
+**Pre-conditions:**
+
+* `ProductCardImage` is open in Storybook.
+* The pointer rests outside every well.
+
+**Test data:**
+
+| Story | Photo | Shape | Outcome |
+| --- | --- | --- | --- |
+| Non Square Photo | `<landscape photo>` | wider than tall | left and right edges meet the well; the well fills above and below equally |
+| Default | `<square photo>` | square, at the limit | the photo fills the well; no well shows beside it; only its corners round with the well's |
+| Non Square Photo | `<small photo>` | taller than wide, smaller than the well | enlarged until its top and bottom edges meet the well; the well fills left and right equally |
+
+| Field | Value |
+| --- | --- |
+| `<landscape photo>` | `product-card.landscape.fixture.png` |
+| `<square photo>` | `product-card.fixture.png` |
+| `<small photo>` | `product-card.small.fixture.png` |
+
+**Steps:**
+
+1. Open the row's **Story**.
+2. Find the available well that draws the row's **Photo**.
+3. Compare the well with the row's **Photo** opened on its own.
+
+**Expected Results:**
+
+* Step 2 shows the well square.
+* Step 3 matches the row's **Outcome**.
+* Step 3: every edge of the photo opened on its own also shows in the well, all but the corners the row's **Outcome** rounds.
+
+<!-- trace:case id=g10.shared-store-product-listing.TC-e18 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
+### shared-ui-store-product-listing-US1-TC20-1: Slab tile shows the whole slab on every store surface
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Tile contract
+
+**Pre-conditions:**
+
+* `<slab card>` is for sale on the staging storefront, its first photo `<slab photo>`.
+* `<slab card>` is in the Main Page's merchandised row, by the recipe "Put a card in the Main Page's merchandised row".
+* `<slab card>` is a pick on `<another card>`, by the recipe "Choose picks on a staging-shop card".
+* The browser window is the row's **Viewport** wide.
+* The pointer rests outside the tile for `<slab card>`.
+
+**Test data:**
+
+| Surface | Page | Viewport | Outcome |
+| --- | --- | --- | --- |
+| Store listing | `<grade10 browse listing url>` | 1440 pixels | whole slab in the tile |
+| Store listing | `<grade10 browse listing url>` | 390 pixels | whole slab in the tile |
+| Main Page row | `<grade10 store url>` | 1440 pixels | whole slab in the tile |
+| You May Also Like | `<another card>`'s page | 1440 pixels | whole slab in the tile |
+
+| Field | Value |
+| --- | --- |
+| `<slab card>` | a graded slab for sale, not in the cart |
+| `<slab photo>` | a studio photo of the whole slab, label to base, taller than wide, shot on white so its edges show against the well |
+| `<another card>` | any other card for sale on the staging storefront |
+
+**Steps:**
+
+1. Navigate to the row's **Page**.
+2. Scroll to the tile for `<slab card>`.
+3. Look at the slab's label at the top of the photo.
+4. Look at the slab's base at the bottom of the photo.
+5. Look at the space left and right of the photo.
+
+**Expected Results:**
+
+* Step 2 shows the tile with its well square.
+* Step 3: the whole label shows, its top edge inside the well.
+* Step 4: the slab's base shows, its bottom edge inside the well.
+* Step 5: the well's own background fills an equal space on each side of the photo.
+
 ## Settled
 
 - **A tile with no name** - outside the contract: a tile is always given its product's name as text, and the catalogue authors a title for every product, so no case walks a nameless tile
+- **Hover** - a photo the tile grows on hover may lose its edges until the pointer leaves; the whole photo holds at rest
+- **Position and size** - a photo that leaves part of the well empty sits centred, scaled up or down until it meets the two edges along its longer side
+- **Corners** - a square photo, or one close enough to square that its corners reach into the well's rounded corners, rounds with them there, which is not a crop
 
 ## Reconciliation
 
-- **Raised, landed** - the 2026-10-05 pass asked three questions, each landed in `decisions.md`: which keys open the name (Q5), whether the keyboard stops on the photo and the name or on one (Q6), and whether an inert name takes the underline (Q7). US1-TC7 was re-worded to Tab stopping on the name and the cart control and never the photo, Enter and Space each reporting once, and one control announced; US1-TC8 and US1-TC9 to an inert name that stays plain text on hover and takes no focus
-- **Raised, settled** - QA2 on 2026-10-06 asked what opens a tile given no name; landed as Q10 from `ProductCardProps.name`, a required string the screen reader reads: a nameless tile is outside the contract, recorded under Settled, no case and no scenario
-- **Folded into spec** - US1-TC8's address-alone row keeps a sold-out tile given its address and a cart handler inert, no link drawn; the requirement says so and no scenario proved it, so `shared-ui-store-product-listing-SC-88` now gives the tile both a callback and its address. US1-TC12 keeps a `ProductCardImage` used alone a named, focusable control, as the tech design and the UI design state and no requirement did; the image requirement now says so and `shared-ui-store-product-listing-SC-101` proves it, through the Opens Alone story US1-TC12 opens. The 2026-10-06 review found the image used alone opening wherever it is given a callback, sold out on a tile that sells included; Q14 puts it under the tile's rule, the requirement and `shared-ui-store-product-listing-SC-101` say so, and US1-TC12 gained the Sold Out Where It Sells row
-- **Folded into case** - `shared-ui-store-product-listing-SC-55`, re-worded here to focus moving through the tile, had no case that checks the cart control on a tile that does not sell; US1-TC4 gained a Tab walk and a Cart control column, its second row showing none on hover or on focus. QA2 on 2026-10-06 drafted the sold-out tile that does not sell again, with the name's underline and Tab landing on the name; that run is US1-TC10's, so its results joined US1-TC10 and no second case was issued. `shared-ui-store-product-listing-SC-88` gives the tile a callback and its address together, which no row of US1-TC8 did; QA2 added that row first, as the Sold Out story draws it, and kept the callback-alone row as the listing gives its cards
-- **Trace fixed** - each case's `covers` listed the scenarios it walked, chosen by their results; it now lists every scenario serving its `**Trace:**` anchor, in the folded spec's order, as `docs/governance/test-traceability.md` requires: Tile contract for the seven cases tracing it, `add-store-cross-sell`'s link scenario included, and Accessibility for US1-TC7 and US1-TC12. Which case walks which scenario is under Walked
-- **Contradicted** - none: where a case and a scenario state the same behaviour they agree
-- **Re-read** - `shared-ui-store-product-listing-SC-99` now names keyboard focus, as the requirement does; US1-TC7 and US1-TC10 reach the name by Tab and US1-TC6 by hover, so each stands unchanged
-- **Walked** - `shared-ui-store-product-listing-SC-87` by US1-TC4 on the tile and US1-TC5 in the browse grid; `shared-ui-store-product-listing-SC-88` by US1-TC8; `shared-ui-store-product-listing-SC-89` by US1-TC9, whose Inert story gives neither a callback nor an address; `shared-ui-store-product-listing-SC-97` by US1-TC10; `shared-ui-store-product-listing-SC-98` by US1-TC7; `shared-ui-store-product-listing-SC-99` by US1-TC6 on hover, US1-TC7 on keyboard focus, US1-TC10 on a tile that does not sell, US1-TC11 on a name that is a link, and US1-TC8 and US1-TC9 on a name that does not open; `shared-ui-store-product-listing-SC-100` by US1-TC11, whose plain press on the photo is shown by the photo's link opening the same address on a modified press, since a plain press leaves Storybook; `shared-ui-store-product-listing-SC-101` by US1-TC12; `shared-ui-store-product-listing-SC-51`, re-worded to focus moving into the image, by US1-TC7's cart-control result; `shared-ui-store-product-listing-SC-55` by US1-TC4's second row
-- **Retired elsewhere** - `add-store-cross-sell` retired its blind US1-TC1 when its requirement for a sold-out tile that opens where it does not sell left its delta (its Q56, this change's Q9), so US1-TC10 alone walks `shared-ui-store-product-listing-SC-97`
-- **Carried, not this change's** - `shared-ui-store-product-listing-SC-04` to `shared-ui-store-product-listing-SC-09`, `shared-ui-store-product-listing-SC-46` to `shared-ui-store-product-listing-SC-50`, `shared-ui-store-product-listing-SC-52` to `shared-ui-store-product-listing-SC-54`, `shared-ui-store-product-listing-SC-65` and `shared-ui-store-product-listing-SC-66` are carried word for word; the capability's suite refresh owes them cases
-- **Uncovered** - none of this delta's scenarios
-- **QA2, 2026-10-07** - each case re-read against the scenarios its anchor holds once `add-store-cross-sell` and this change fold: every `covers` lists them in order, and nothing is contradicted, raised or uncovered; US1-TC4's Test data now joins its cells with a comma, not a dash
-- **Cases from QA2** - US1-TC11 and US1-TC12, and US1-TC10's underline and Tab results, were drafted by QA2 on 2026-10-06, which read the delta; they are not blind, and the one blind pass is the Run line below
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `shared-ui-store-product-listing-US1-TC18-1` | Folded | `shared-ui-store-product-listing-SC-63` in all four statuses on the portrait photo. Sharpened to a pointer outside the wells, since the scenario reads the photo at rest (Q4) |
+| `shared-ui-store-product-listing-US1-TC19-1` | Folded | `shared-ui-store-product-listing-SC-63` for the landscape and the small photo: its equal space either side and its enlarged small photo are Q5, raised by the blind pass as R3. The square row is `shared-ui-store-product-listing-SC-63a` at its limit: its corners round with the well's, which Q6 settles is not a crop, so its every-edge result now spares the corners the row rounds. Its portrait row is dropped: it walked US1-TC18's available row by the same route. Sharpened to a pointer outside the wells (Q4), and to the story fixtures in place of photos the tester uploads |
+| `shared-ui-store-product-listing-US1-TC20-1` | Folded | `shared-ui-store-product-listing-SC-63` on the store listing, the Main Page row and You May Also Like. Sharpened to a pointer outside the tile (Q4), and to a slab photo shot on white, so the space beside the photo is told apart from the photo's own ground |
+| `shared-ui-store-product-listing-SC-63` | Reached | US1-TC18, US1-TC19, US1-TC20. Their photos are far enough from square that their corners clear the well's rounded corners, as the scenario's GIVEN states: the play test holds the story fixtures to it, and a slab, label to base, is far from square. Its revision moves to 3, since its GIVEN no longer takes a photo close to square |
+| `shared-ui-store-product-listing-SC-63a` | Reached | US1-TC19's square row. A photo close to square meets the same rule on two edges, and `Default`'s play test reads the same geometry, so no fixture of its own is needed |
+| The requirement's hover clause | Uncovered, with reason | A permission, not an outcome: the well may clip a grown photo until the pointer leaves (Q4). No scenario states it, and no case walks it |
+
+- **Raised, landed** - R2 landed as Q4 and R3 as Q5, both in `## Settled`. R1 landed as Q7: showing the whole photo is not measured, and no case depends on it. Q6, the photo's corners, came from the accept review and is in `## Settled` too
+- **Rejected** - the blind pass's case for the photo drawn without multiply: `drop-product-listing-photo-multiply` owns that requirement, so its cases are that change's
+- **Contradicted** - none: where a case and a scenario state the same behaviour, they agree
+- **Uncovered** - no scenario. Only the hover clause, which states no outcome
+- **Automated by the story** - the Non Square Photo play test decides US1-TC18 whole, and with the same play test on `Default` it decides US1-TC19 whole; group 1 flips both. US1-TC20 stays manual, under `### Manual`
+- **Ids moved** - the blind pass issued US1-TC11 to US1-TC14. On this capability, `add-store-cross-sell` holds US1-TC1 to US1-TC3, and the open planning branches of `activate-listing-tile-by-name` and `drop-product-listing-photo-multiply` hold US1-TC4 to US1-TC12 and US1-TC15 to US1-TC17. The three kept here are US1-TC18 to US1-TC20
 
 **Run:** Blind feature pass on `shared/ui/store-product-listing`, run for `add-store-cross-sell`. Read: the isolated bundle under `.round/blind-store-product-listing/` — `outline.md` (`## Purpose`, `## Feature set` only), `user-journeys.md`, `decisions.md`, `ui-design.md`, `prd-cross-sell.md`, `prd-store-product-listing.md`, `context.md` — plus `docs/governance/specs-to-test-cases.md` for the rulebook and `openspec/specs/grade10-site/auction/auction/feature-tcs.md` for house style. Denied: the capability's `## Requirements` in `spec.md`, every other file under `openspec/specs/` and `openspec/changes/`, and `openspec/changes/archive/` entirely.
 
@@ -647,3 +806,17 @@ Runs once per row of **Test data**.
 - **Rejected** - none
 - **Contradicted** - none: where a case and a scenario state the same behaviour they agree
 - **Automation** - `tasks.md` 1.1 flips US1-TC15 and US1-TC16 to `automated`, decided by `product-card-image.stories.tsx`; 3.1 flips US1-TC17, decided by the application's `product-photo.spec.ts`, one test per surface
+
+**Run:** QA2 reconciliation on 2026-10-06 for `fit-product-listing-photo`, in a fresh context, after the second accept review restated the corner rule in Q6 and split `shared-ui-store-product-listing-SC-63` and `shared-ui-store-product-listing-SC-63a` at the well's rounded corners. Read the change's proposal, decisions, journeys, UI design, technical design, tasks and delta `spec.md`, the page [Product Listing Blocks](../../../../../../../docs/prds/products/shared/ui/store-product-listing.md), the durable `spec.md`, the open changes and their planning branches on this capability for their ids, `docs/governance/tcs-conventions.md` for the recipes the cases name, `packages/ui/src/blocks/store-product-listing/product-card-image.tsx` and its stories for what ships, and the application's `StoreHomePage.tsx` and catalogue collection read for the Main Page row's recipe. No `domain-tcs.md`, `product-tcs.md` or `platform-tcs.md` traces this capability, so no suite above it moves. The blind pass left no Run line, so what it read is not on record; its questions are R2 and R3 in `decisions.md`.
+
+**Rerun:** 2026-10-07, fresh context, on the stack above `drop-product-listing-photo-multiply`. Every disposition above holds against the delta, Q1 to Q7, the page's Whole photo line and `product-card-image.tsx`. `shared-ui-store-product-listing-SC-63` is this change's own id, issued 2026-09-09 with b632582fe before the stack's `SC-64` and `SC-92` to `SC-101`; `SC-63a` sits beside it. Each case's `covers` names exactly the 27 scenarios that serve Tile contract in the durable spec and the stack, in source order.
+
+### Manual
+
+What stays manual, and why. Each row names the test that proves part of the case, in these words, and what a person walks beyond it:
+
+- the walk - `apps/frontend/grade10/e2e/tests/store/listing-photo.spec.ts`, in the application repository, one test per surface, each citing the case; its stack answers every photo with a stand-in, so the shop's own photo address is not in play
+
+| Manual | Why |
+| --- | --- |
+| `shared-ui-store-product-listing-US1-TC20-1` | to be walked in group 3's walk, which proves the whole photo on the store listing, the Main Page row and You May Also Like; a person reads a real slab photo, served from the shop's own address, on each surface of the staging storefront |
