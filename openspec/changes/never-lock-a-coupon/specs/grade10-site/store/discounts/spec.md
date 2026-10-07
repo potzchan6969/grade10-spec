@@ -19,7 +19,8 @@
     says it carried, and reported
 - Two channels
   - A counter sale a reward's code has left takes no reward again, and points
-    still go on; one a newer promise retired takes no new plan
+    still go on; one a newer promise retired takes no new plan; a fresh scan
+    continues the member's own open sale and its code
 
 ## REMOVED Feature set
 
@@ -226,10 +227,13 @@ promise, one whose coupon was claimed elsewhere among them — SHALL take no new
 plan, and staff SHALL be told to ring the goods on a new sale rather than to
 scan the member's card again, since a fresh scan would leave the deactivated
 code on the same cart. A till session lives ten minutes and a sale's hour
-outlasts it, so a closed sale's next plan reaches the store from a fresh scan
-on the same cart: a plan from a new session of the same member, on a cart
-whose sale of theirs has closed and carries a reward's code, SHALL be refused
-the same way, and SHALL mint nothing onto that cart. Where a reward's code has
+outlasts it, so a sale's next plan can reach the store from a fresh scan on
+the same cart. A plan from a new session of the same member, on a cart whose
+sale of theirs has closed and carries a reward's code, SHALL be refused the
+same way, and SHALL mint nothing onto that cart. A plan from a new session of
+the same member, on a cart whose sale of theirs is still open, SHALL continue
+that sale: it SHALL plan onto the same order and reuse the code already minted
+for it, and SHALL NOT retire that sale or mint a second code. Where a reward's code has
 left a sale that is still open — cleared off it — the sale SHALL take no reward
 again, that coupon or another, and the refusal SHALL name a new sale rather
 than repeat the remedy that took the code off. A re-plan that names no reward
@@ -286,6 +290,15 @@ SHALL go through, so points still go on that sale.
 - **WHEN** staff scan the member's card again on that cart and plan it
 - **THEN** they are told the sale has closed and to ring the goods on a new one
 - **AND** no code is minted onto that cart
+
+<!-- trace:scenario id=g10.store-discounts.SC-8ib rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-30 - A fresh scan on an open sale's cart continues it
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
+
+- **GIVEN** a till sale carrying a member's reward code, still open, its till session expired
+- **WHEN** staff scan the member's card again on that cart and plan it
+- **THEN** the plan goes through on the same sale, and the cart carries the one code minted for it
+- **AND** the sale is not retired and its code is not deactivated
 
 <!-- trace:scenario id=g10.store-discounts.SC-6co rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-29 - A paid sale asks for a new sale
