@@ -243,7 +243,7 @@ only their footer label moves, in groups 2 and 3.
       `pnpm run lint`, and the catalogue, My Auctions and invoice page
       end-to-end smoke.
 
-## 5. The walk (grade10)
+## 5. The walk (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its input; human QA reviews cases after
 deployment (`/tcs-review align-collector-times-to-local-zone`), and
