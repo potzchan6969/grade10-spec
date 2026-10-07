@@ -1381,22 +1381,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in) leads `<lot_2>`.
-* `<lot_2>`'s close has passed, and recording it is held back.
+* customer A(signed in) leads <lot_2>.
+* <lot_2>'s close has passed, and recording it is held back.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_2>` | An HKD lot led by customer A, its close passed and not yet recorded |
+| <lot_2> | An HKD lot led by customer A, its close passed and not yet recorded |
 
 **Steps:**
 
-1. Navigate to `<my auctions url>`.
-2. Find `<lot_2>`'s row and read its tab and Your Standing.
+1. Navigate to <grade10 my auctions url>.
+2. Find <lot_2>'s row and read its tab and Your Standing.
 3. Let recording the close resume.
-4. Reload `<my auctions url>`.
-5. Find `<lot_2>`'s row and read Your Standing.
+4. Reload <grade10 my auctions url>.
+5. Find <lot_2>'s row and read Your Standing.
 
 **Expected Results:**
 
@@ -1421,25 +1421,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer B(signed in) bid `<customer B bid>` on `<lot_3>`.
-* customer A has since raised `<lot_3>`'s current bid to `<current bid>`.
+* customer B(signed in) bid <customer B bid> on <lot_3>.
+* customer A has since raised <lot_3>'s current bid to <current bid>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_3>` | An open HKD lot, its close more than an hour away |
-| `<customer B bid>` | 100000 minor units |
-| `<current bid>` | 120000 minor units, above `<customer B bid>` |
+| <lot_3> | An open HKD lot, its close more than an hour away |
+| <customer B bid> | 100000 minor units |
+| <current bid> | 120000 minor units, above <customer B bid> |
 
 **Steps:**
 
-1. As customer B, navigate to `<my auctions url>`.
-2. Find `<lot_3>`'s row in the Active tab.
+1. As customer B, navigate to <grade10 my auctions url>.
+2. Find <lot_3>'s row in the Active tab.
 
 **Expected Results:**
 
-* Current bid reads `<current bid>`, not `<customer B bid>`.
+* Current bid reads <current bid>, not <customer B bid>.
 * Your Standing reads Outbid, with the next valid bid.
 
 <!-- trace:case id=g10.auction-account-record.TC-hgl rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
