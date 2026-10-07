@@ -271,7 +271,7 @@ one language or one brand.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-t5o rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-09 - A confirmed combination carries its note
-**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
+**Serves:** Secondary note - a partial refund before shipping names its note for the surface that shows one
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `unfulfilled`, and payment state is `partially_refunded`
 - **WHEN** its order status is resolved
@@ -280,7 +280,7 @@ one language or one brand.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-x4g rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-10 - An unconfirmed combination carries no note
-**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
+**Serves:** Secondary note - an order no confirmed note fits leaves that surface its badge alone
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `in_progress`, and payment state is `paid`
 - **WHEN** its order status is resolved
@@ -289,7 +289,7 @@ one language or one brand.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-34p rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-11 - The mapping emits no display copy
-**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
+**Serves:** Secondary note - the message catalogs, not the rule, give that surface its words
 
 - **GIVEN** any order that resolves to a note
 - **WHEN** its order status is resolved
@@ -298,7 +298,7 @@ one language or one brand.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-zkk rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-24 - A return chooses the refund's note
-**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
+**Serves:** Secondary note - a return names which refund note that surface shows
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, payment state is `partially_refunded`, and return state is `returned`
 - **WHEN** its order status is resolved
@@ -307,7 +307,7 @@ one language or one brand.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-7ce rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-25 - Only a completed return reads as returned
-**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
+**Serves:** Secondary note - a return only requested leaves that surface the refund note
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, payment state is `refunded`, and Shopify return status is `RETURN_REQUESTED`
 - **WHEN** its order status is resolved
@@ -316,7 +316,7 @@ one language or one brand.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-cvt rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-26 - A voided payment carries the void's note
-**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
+**Serves:** Secondary note - a voided payment names its note for the surface that shows one
 
 - **GIVEN** an order whose order state is `open` and payment state is `voided`
 - **WHEN** its order status is resolved
@@ -325,7 +325,7 @@ one language or one brand.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-zdo rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-27 - A held order carrying a partial refund carries the hold's refund note
-**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
+**Serves:** Secondary note - a held order carrying a partial refund names one note for both
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `on_hold`, and payment state is `partially_refunded`
 - **WHEN** its order status is resolved
@@ -334,7 +334,7 @@ one language or one brand.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-er5 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-28 - An expired payment reads Processing with its note
-**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
+**Serves:** Secondary note - an expired payment names its note for the surface that shows one
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `unfulfilled`, and payment state is `expired`
 - **WHEN** its order status is resolved
