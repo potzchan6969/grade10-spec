@@ -1,5 +1,4 @@
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
-import { formatViewerZoneName } from "../../lib/format-datetime";
 import type { BookingConfirmationCopy } from "./booking-confirmation";
 import type { BookingDetailsFormCopy } from "./booking-details-form";
 import type { BookingLocationPickerCopy } from "./booking-location-picker";
@@ -20,10 +19,6 @@ import type {
 const FIXTURE_MONTH = "2026-09";
 /** 1 Sep 2026 12:00 in Hong Kong. */
 const FIXTURE_BOOKING_NOW_MS = Date.UTC(2026, 8, 1, 4, 0);
-const FIXTURE_TIME_ZONE_LABEL = formatViewerZoneName(
-  FIXTURE_TIME_ZONE,
-  FIXTURE_BOOKING_NOW_MS,
-);
 
 const STATE_LABELS: Record<BookingRecordState, string> = {
   booked: "Booked",
@@ -198,7 +193,6 @@ export {
   DETAILS_FORM_COPY,
   FIXTURE_BOOKING_NOW_MS,
   FIXTURE_MONTH,
-  FIXTURE_TIME_ZONE_LABEL,
   GRADING_SERVICE,
   LATER_RECORD,
   LIVE_RECORD,

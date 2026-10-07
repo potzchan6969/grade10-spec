@@ -14,7 +14,6 @@ import {
   formatRelativeAt,
   formatViewerZoneName,
   formatZonedLocalMoment,
-  formatZoneOffset,
   isPastActivityCap,
   JUST_NOW_MAX_MS,
   resolveActivityNow,
@@ -239,14 +238,6 @@ describe("formatZonedLocalMoment", () => {
         timeZone: "America/New_York",
       }),
     ).toBe("1 Sep 2026, 14:00 EDT");
-  });
-});
-
-describe("formatZoneOffset", () => {
-  it("names Hong Kong as GMT+8", () => {
-    expect(formatZoneOffset("Asia/Hong_Kong", Date.UTC(2026, 8, 1))).toBe(
-      "GMT+8",
-    );
   });
 });
 

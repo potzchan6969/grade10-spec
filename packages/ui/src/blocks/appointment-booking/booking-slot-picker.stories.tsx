@@ -5,7 +5,6 @@ import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
 import { BookingSlotPicker } from "./booking-slot-picker";
 import {
   FIXTURE_MONTH,
-  FIXTURE_TIME_ZONE_LABEL,
   SEPTEMBER_3_SLOTS,
   SEPTEMBER_DAYS,
   SLOT_PICKER_COPY,
@@ -27,7 +26,6 @@ const meta = {
     selectedDate: "2026-09-03",
     slots: { status: "ready", data: SEPTEMBER_3_SLOTS },
     timeZone: FIXTURE_TIME_ZONE,
-    timeZoneLabel: FIXTURE_TIME_ZONE_LABEL,
     onMonthChange: fn(),
     onSelectDay: fn(),
     onSelectSlot: fn(),
