@@ -76,10 +76,11 @@ None.
   and [Post-Bidding · My Auction Orders](../../../docs/prds/products/grade10-site/auction/post-bidding.md#my-auction-orders).
 - Durable suites: acceptance strikes by hand the `## Settled` lines this
   change makes false, because the fold has no rule that removes a Settled
-  line. In `grade10-site/site/page-shell`: "Signed-in account entry opens a
-  menu, the sign-in email with its small initial avatar ..." and "The
-  account menu's item order under every combination of {Profile carried,
-  Store answers} ...". In `shared/ui/site-chrome`: "`onOrders` ("My Auction
+  line. In `grade10-site/site/page-shell`, the line that reads "plus Profile
+  once carried, My Orders and Membership once Store answers", and the line
+  that opens "The account menu's item order under every combination of
+  {Profile carried, Store answers}"; this change's own Settled line on the
+  menu holds neither. In `shared/ui/site-chrome`: "`onOrders` ("My Auction
   Orders") keeps its existing export contract ..." and "The small initial
   avatar sits above the account label, never beside it." Each suite's
   Reconciliation quotes its lines.
