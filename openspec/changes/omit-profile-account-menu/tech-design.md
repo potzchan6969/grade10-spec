@@ -22,8 +22,8 @@
   `ProfilePage`, which renders Sign Out (`src/pages/profile/ProfilePage.tsx:107`)
 
 Every settled page line already runs except the header's closed set. The
-app's account-menu tests still assert Profile on every Store build and cite
-scenarios this change rewrites.
+app's account-menu tests cite the scenarios this change retires, and one
+asserts the label fallback the site never shows.
 
 ## Goals / Non-Goals
 
@@ -90,8 +90,10 @@ table calls it unchanged. The app's citations move with them (task 2.1 to 2.4).
 | None | `grade10-site-site-page-shell-SC-66` and `grade10-site-site-page-shell-SC-67`, Profile first wherever the account page is carried and its destination (Q1) |
 
 Account-page Sign Out lives only in `The account control leads where the
-collector can go` (`grade10-site-site-page-shell-SC-08`); the new menu
-requirement has no **Profile sign-out** clause.
+collector can go`; the new menu requirement has no **Profile sign-out**
+clause. `grade10-site-site-page-shell-SC-08` moves to revision 2: the
+account page offers Sign Out wherever the site carries it, as
+`ProfilePage.tsx:107` does.
 
 ### SiteHeader Drops Its Second Orders Item
 
@@ -120,6 +122,10 @@ requirement states activation once, "Activating each item SHALL invoke the
 matching supplied handler", and `shared-ui-site-chrome-SC-43` gives My
 Orders the scenario Profile and Membership already have; it passes on
 arrival.
+
+The site-chrome Handler-gated line folds over `nav-cart-count-badge`'s
+(Q12), naming Profile and Membership beside the account and cart slots that
+`Nav` already gates (`nav.tsx:326-327`). It asks for no code.
 
 **Rejected:** naming a sixth item in the fixed order. It keeps a prop for a
 destination no product offers.
