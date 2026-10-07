@@ -49,7 +49,7 @@ removed, per the amendment note above each one.
 - Party address fields
   - Bill To and Ship To each render as up to seven lines — recipient, company,
     phone, address line 1, address line 2, a combined city/region/postal-code line,
-    and country — every field optional except recipient, each line withheld
+    and country — company, phone, address line 2 and state optional, each line withheld
     rather than blank when not given, and the whole block reading
     "Not recorded" when no address is given at all
 - Document shape
