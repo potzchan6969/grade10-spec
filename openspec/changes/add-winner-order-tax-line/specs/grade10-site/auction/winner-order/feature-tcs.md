@@ -330,3 +330,35 @@ is still owed, a tracker, and proof of what was handed over,
 - **Records the winner keeps** - `winner-order-SC-19`, `winner-order-SC-21`, `winner-order-SC-36`, `winner-order-SC-112`, `winner-order-SC-113`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-135`, `winner-order-SC-133`, `winner-order-SC-247`, `winner-order-SC-222`, `winner-order-SC-223`, `winner-order-SC-246` keep their meaning and their durable coverage. `winner-order-SC-18` and `winner-order-SC-20` changed and are reached above by `winner-order-US2-TC1-2` and `winner-order-US2-TC2-3`
 
 **Out of suite:** none of this change's scenarios.
+
+| Finding | Disposition |
+| --- | --- |
+| The winner sees retained facts without the internal reason | **Folded in:** `winner-order-SC-143` |
+| Contact Us on a cancelled order reads `order cancelled` | **Folded in:** `winner-order-SC-275` |
+
+| Finding | Disposition |
+| --- | --- |
+| The winner sees receipts without a second order or deadline | **Folded in:** `winner-order-SC-156` |
+
+Two independent readings of the same anchors: this suite, written without sight
+of any requirement, and a scenario draft written without sight of this suite.
+What they disagreed about is below.
+
+| Raised | Disposition |
+| --- | --- |
+| Which clock decides a confirmation sent at 47:59 and arriving at 48:01 | **Folded in.** Nobody had decided it. The requirement now judges a write by the moment Grade10 receives it, and `winner-order-SC-145` and `winner-order-SC-146` are phrased on receipt rather than on submission |
+| What the address deadline is measured from on an extended lot | **Folded in.** The scenario pass had already fixed it on the actual close; `winner-order-SC-144` proves it against a lot whose scheduled and actual closes differ |
+| Whether a winner may add an address to the account book while the address form is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-151` and `winner-order-US23-TC9-1` |
+| Whether a reopen after send does anything | **Already decided**, in `grade10-admin/auction/post-sale`: a reopen is refused once the invoice is sent. The suite could not see it |
+| Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-149` and `winner-order-US23-TC10-1` |
+| What a missed address deadline does to the reminder letters | **Dropped.** Address reminders belong to the durable Winner Order rules. Recorded here so the next blind pass does not raise it again |
+| Whether a winner may change a confirmed address after the deadline | **Dropped** after the planning owner decided that a confirmed address locks on confirm and this change adds no winner change control. The change scenario and its case are retired with their ids; the lock is the durable Winner Order rule |
+| Scenarios the payment-deadline requirement restates: `winner-order-SC-31`, `SC-33`, `SC-37` and `SC-107` | **Not this change's.** They are durable scenarios the modified requirement carries unchanged, and the durable suite covers them. This suite adds a case only for the scenarios this change writes |
+| What a card session that ends unpaid after the payment deadline does | **Folded in** after the planning owner decided it counts as a failed outcome: the invoice is written `expired` when the session ends and Pay Now stays closed. The requirement is the payment deadline's; `grade10-admin-auction-post-sale-SC-93` and `post-sale-US19-TC9-1` prove it |
+| Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-23`; the journeys those cases walk are durable and reach the suite at archive |
+| Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here but the payment deadline became ADDED after `check:manual` refused a draft that folded requirements the durable Winner Order rules also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |
+| Cases the address deadline on `main` now covers | **Dropped** after the durable Winner Order rules took on the 48-hour address deadline: Contact Us in place of the form, no suspension or cancellation, the displayed deadline, nothing to pay at close, and seven days from send. Its own suite walks them. The rest were renumbered under `winner-order-US23` |
+
+An operator may record a delivery address after the address deadline without
+reopening it. Neither reading proposed it; the action is
+`complete-auction-post-sale`'s.
