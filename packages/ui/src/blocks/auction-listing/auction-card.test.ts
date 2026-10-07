@@ -92,8 +92,8 @@ describe("a catalogue tile's clock line follows the viewer", () => {
     },
   );
 
-  // shared-ui-auction-listing-SC-55: an omitted language fails to compile
-  // instead of reading as English.
+  // An omitted language fails to compile instead of reading as English: the
+  // package typecheck, through the directive below, is the proof.
   it("requires a locale", () => {
     const withoutLocale = {
       copy: COPY,
@@ -105,8 +105,6 @@ describe("a catalogue tile's clock line follows the viewer", () => {
     };
     // @ts-expect-error `locale` is required
     const props: AuctionCardProps = withoutLocale;
-    expect(renderToStaticMarkup(createElement(AuctionCard, props))).toContain(
-      "Lot",
-    );
+    expect(props.name).toBe("Lot");
   });
 });

@@ -5,7 +5,6 @@ import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
 import { BookingSlotPicker } from "./booking-slot-picker";
 import {
   FIXTURE_MONTH,
-  FIXTURE_TIME_ZONE_LABEL,
   SEPTEMBER_3_SLOTS,
   SEPTEMBER_DAYS,
   SLOT_PICKER_COPY,
@@ -27,7 +26,6 @@ const meta = {
     selectedDate: "2026-09-03",
     slots: { status: "ready", data: SEPTEMBER_3_SLOTS },
     timeZone: FIXTURE_TIME_ZONE,
-    timeZoneLabel: FIXTURE_TIME_ZONE_LABEL,
     onMonthChange: fn(),
     onSelectDay: fn(),
     onSelectSlot: fn(),
@@ -112,5 +110,17 @@ export const Failed: Story = {
     expect(
       canvas.queryByText("Nothing is free on this day any more."),
     ).toBeNull();
+  },
+};
+
+/** A label the consumer passes replaces the zone's short name, as the drop-off page does. */
+export const LabelFromTheConsumer: Story = {
+  args: { timeZoneLabel: "Hong Kong Standard Time" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText("Times in Hong Kong Standard Time"),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText("Times in HKT")).not.toBeInTheDocument();
   },
 };

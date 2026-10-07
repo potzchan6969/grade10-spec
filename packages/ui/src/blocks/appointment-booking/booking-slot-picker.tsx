@@ -11,6 +11,7 @@ import {
   dateFromDay,
   dateFromMonth,
   dayFromDate,
+  dayInstant,
   monthFromDate,
   monthInstant,
 } from "./calendar";
@@ -70,6 +71,13 @@ function BookingSlotPicker({
   onSelectSlot,
   className,
 }: BookingSlotPickerProps) {
+  // The name a reader sees is the one in force at the times shown: the picked
+  // slot, else the picked day, else the month being browsed.
+  const labelInstant =
+    selectedStart ??
+    (selectedDate !== undefined
+      ? dayInstant(selectedDate)
+      : monthInstant(month));
   return (
     <div
       className={cn(
@@ -102,12 +110,7 @@ function BookingSlotPicker({
           {copy.timeTitle}
         </Text>
         <Text as="span" data-slot="booking-zone" size="sm" tone="secondary">
-          {copy.timesIn}{" "}
-          {zoneLabel(
-            timeZone,
-            selectedStart ?? monthInstant(month),
-            timeZoneLabel,
-          )}
+          {copy.timesIn} {zoneLabel(timeZone, labelInstant, timeZoneLabel)}
         </Text>
         {selectedDate === undefined ? (
           <Text as="span" size="sm" tone="muted">

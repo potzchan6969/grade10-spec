@@ -14,8 +14,7 @@ import {
   formatCollectorDeadline,
   formatLocalDay,
   formatLocalMoment,
-  formatLocalTime,
-  formatViewerZoneName,
+  formatZonedLocalTime,
   type ShippedLocale,
 } from "../../lib/format-datetime";
 import { formatMoney } from "../../lib/format-money";
@@ -240,37 +239,57 @@ type PriceBlockProps = {
   compactTime?: boolean;
 };
 
+type ClosedClose = {
+  /** The close's day in the viewer's zone, naming no zone. */
+  day: string;
+  /** The close's clock in the viewer's zone, naming it: `20:00 HKT`. */
+  time: string;
+  /** How long the lot ran; null while its opening time is not known. */
+  ran: string | null;
+};
+
+/**
+ * A closed lot's close, read once for the wide block and the compact summary:
+ * the day, the clock with the viewer's zone named, and how long it ran.
+ */
+function closedClose(
+  view: ListingAuctionBidView,
+  locale: ShippedLocale,
+  timeZone: string,
+): ClosedClose | null {
+  if (!view.closed || view.deadlineAtMs == null) return null;
+  const at = view.deadlineAtMs;
+  const options = { locale, timeZone };
+  return {
+    day: formatLocalDay(at, options),
+    time: formatZonedLocalTime(at, options),
+    ran:
+      view.opensAtMs != null
+        ? formatAccessibleText(
+            elapsedDurationParts(
+              Math.max(0, Math.floor((at - view.opensAtMs) / 1000)),
+            ),
+          )
+        : null,
+  };
+}
+
 function compactClosedSummary(
   copy: ListingAuctionBidFieldsCopy,
   view: ListingAuctionBidView,
   locale: ShippedLocale,
   timeZone: string,
 ): string | null {
-  if (!view.closed || view.deadlineAtMs == null) return null;
-
-  const date = formatLocalDay(view.deadlineAtMs, { locale, timeZone });
-  const time = `${formatLocalTime(view.deadlineAtMs, { locale, timeZone })} ${formatViewerZoneName(timeZone, view.deadlineAtMs)}`;
-  const ranDuration =
-    view.opensAtMs != null
-      ? formatAccessibleText(
-          elapsedDurationParts(
-            Math.max(
-              0,
-              Math.floor((view.deadlineAtMs - view.opensAtMs) / 1000),
-            ),
-          ),
-        )
-      : null;
-
-  if (ranDuration == null) {
-    return `${copy.closedAt.replace("{when}", `${date} ${time}`)}`;
-  }
+  const close = closedClose(view, locale, timeZone);
+  if (close == null) return null;
+  const when = `${close.day} ${close.time}`;
+  if (close.ran == null) return copy.closedAt.replace("{when}", when);
 
   // Fold the calendar day into `{time}` so the line reads
   // "Closed at {date} {time}. Ran {duration}".
   return copy.closedSummary
-    .replace("{time}", `${date} ${time}`)
-    .replace("{duration}", ranDuration);
+    .replace("{time}", when)
+    .replace("{duration}", close.ran);
 }
 
 function CompactTimeLine({
@@ -417,33 +436,15 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
     locale,
     timeZone,
   );
-  const closedDay =
-    view.closed && view.deadlineAtMs != null
-      ? formatLocalDay(view.deadlineAtMs, { locale, timeZone })
-      : null;
-  const closedTime =
-    view.closed && view.deadlineAtMs != null
-      ? `${formatLocalTime(view.deadlineAtMs, { locale, timeZone })} ${formatViewerZoneName(timeZone, view.deadlineAtMs)}`
-      : null;
-  const ranDuration =
-    view.closed && view.opensAtMs != null && view.deadlineAtMs != null
-      ? formatAccessibleText(
-          elapsedDurationParts(
-            Math.max(
-              0,
-              Math.floor((view.deadlineAtMs - view.opensAtMs) / 1000),
-            ),
-          ),
-        )
-      : null;
+  const close = closedClose(view, locale, timeZone);
   const closedSubtext =
-    closedTime != null && ranDuration != null
+    close?.ran != null
       ? copy.closedSummary
-          .replace("{time}", closedTime)
-          .replace("{duration}", ranDuration)
+          .replace("{time}", close.time)
+          .replace("{duration}", close.ran)
       : null;
   const closedPrimary =
-    closedDay ??
+    close?.day ??
     (view.deadlineAtMs != null
       ? formatLocalMoment(view.deadlineAtMs, { locale, timeZone })
       : view.countdown);

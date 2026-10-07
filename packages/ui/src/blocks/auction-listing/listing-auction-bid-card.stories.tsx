@@ -7,7 +7,6 @@ import {
   FIXTURE_SHIPPED_LOCALE,
   FIXTURE_TIME_ZONE,
 } from "../../lib/datetime-fixtures";
-import { formatCollectorDeadline } from "../../lib/format-datetime";
 import { DEFAULT_LISTING_CURRENCY } from "../../lib/format-money";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import {
@@ -551,32 +550,21 @@ export const ClosedSoldEqualMaxWithoutWinnerCopy: Story = {
 };
 
 /**
+ * The deadline line of an open lot names the viewer's own zone: the same close
+ * reads `20:00 HKT` in Hong Kong (`DeadlineZoneHongKong`) and `08:00 EDT` here.
+ *
  * Scenario: shared-dates-and-times-SC-12 - The auction page shows a close
  * Scenario: shared-dates-and-times-SC-29 - Two collectors read different collector clocks
+ * Case: shared-dates-and-times-US1-TC10-1
  */
 export const ViewerZoneNewYork: Story = {
   args: {
     timeZone: FIXTURE_ALT_TIME_ZONE,
-    view: liveView({
-      deadlineAtMs: Date.UTC(2026, 8, 1, 18, 0),
-    }),
+    view: liveView({ deadlineAtMs: Date.UTC(2027, 8, 1, 12, 0) }),
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const ny = formatCollectorDeadline(Date.UTC(2026, 8, 1, 18, 0), {
-      locale: FIXTURE_SHIPPED_LOCALE,
-      timeZone: FIXTURE_ALT_TIME_ZONE,
-      prefix: COPY.endsLabel,
-    });
-    const hk = formatCollectorDeadline(Date.UTC(2026, 8, 1, 18, 0), {
-      locale: FIXTURE_SHIPPED_LOCALE,
-      timeZone: FIXTURE_TIME_ZONE,
-      prefix: COPY.endsLabel,
-    });
-    expect(ny).not.toBe(hk);
-    expect(ny).toMatch(/ EDT$/);
-    expect(canvas.getByText(ny)).toBeInTheDocument();
-    expect(canvas.queryByText(hk)).not.toBeInTheDocument();
+    expect(canvas.getByText("Ends 1 Sep 2027, 08:00 EDT")).toBeInTheDocument();
     expect(canvas.queryByText(/HKT|\bUTC\b/)).not.toBeInTheDocument();
   },
 };
@@ -613,22 +601,6 @@ export const DeadlineZoneHongKong: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Ends 1 Sep 2027, 20:00 HKT")).toBeInTheDocument();
     expect(canvas.queryByText(/\bUTC\b/)).not.toBeInTheDocument();
-  },
-};
-
-/**
- * Scenario: shared-dates-and-times-SC-12 - The auction page shows a close
- * Case: shared-dates-and-times-US1-TC10-1
- */
-export const DeadlineZoneNewYorkAtTheSameClose: Story = {
-  args: {
-    timeZone: FIXTURE_ALT_TIME_ZONE,
-    view: liveView({ deadlineAtMs: SEPTEMBER_2027_CLOSE_MS }),
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Ends 1 Sep 2027, 08:00 EDT")).toBeInTheDocument();
-    expect(canvas.queryByText(/HKT|\bUTC\b/)).not.toBeInTheDocument();
   },
 };
 
@@ -749,6 +721,10 @@ export const ClosedDayAloneNewYork: Story = {
   },
 };
 
+/** The countdown's text, `4h 59m 59s`: a duration, never a clock. */
+const DURATION = /^(\d+\s?[dhms]\s?)+$/i;
+const NAMES_A_ZONE = /HKT|EDT|EST|GMT|UTC/;
+
 /**
  * The time left and the label above it carry no zone; only the dated deadline
  * line under them does.
@@ -768,10 +744,14 @@ export const OpenLotTimeLeftNamesNoZone: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getAllByText("Time left").length).toBeGreaterThan(0);
+    const left = canvas.getAllByText(DURATION);
+    expect(left.length).toBeGreaterThan(0);
+    for (const element of left) {
+      expect(element.textContent).not.toMatch(NAMES_A_ZONE);
+    }
     for (const named of canvas.getAllByText(/\bE[DS]T\b/)) {
       expect(named.textContent).toMatch(/^Ends /);
     }
-    expect(canvas.queryByText(/^Time left .*E[DS]T/)).not.toBeInTheDocument();
   },
 };
 
@@ -802,9 +782,13 @@ export const ScheduledLotOpensInNamesNoZone: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Opens in")).toBeInTheDocument();
+    const left = canvas.getAllByText(DURATION);
+    expect(left.length).toBeGreaterThan(0);
+    for (const element of left) {
+      expect(element.textContent).not.toMatch(NAMES_A_ZONE);
+    }
     for (const named of canvas.getAllByText(/\bE[DS]T\b/)) {
-      expect(named.textContent).toMatch(/^Opens /);
-      expect(named.textContent).not.toMatch(/^Opens in/);
+      expect(named.textContent).toMatch(/^Opens [^i]/);
     }
   },
 };

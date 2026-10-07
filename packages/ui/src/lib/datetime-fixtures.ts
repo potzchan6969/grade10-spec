@@ -1,12 +1,9 @@
 import { getMessages } from "@grade10/i18n";
 import type { ActivityTimeCopy } from "./format-datetime";
 import {
-  formatListingClosed,
-  formatListingEnds,
-  formatListingOpens,
+  formatDay,
   formatLocalDay,
   formatLocalMoment,
-  formatZonedLocalMoment,
 } from "./format-datetime";
 
 export const FIXTURE_SHIPPED_LOCALE = "en" as const;
@@ -40,26 +37,6 @@ export const FIXTURE_BALANCE_EXPIRY_SOON_AT_MS = Date.UTC(2026, 8, 9);
 export const FIXTURE_TIER_RENEWAL_AT_MS = Date.UTC(2027, 2, 1);
 export const FIXTURE_MEMBER_SINCE_AT_MS = Date.UTC(2024, 2, 12);
 
-export const FIXTURE_AUCTION_DEADLINE = formatListingEnds(
-  FIXTURE_AUCTION_ENDS_AT_MS,
-  viewerClock,
-);
-export const FIXTURE_AUCTION_OPENS_DEADLINE = formatListingOpens(
-  FIXTURE_AUCTION_OPENS_AT_MS,
-  viewerClock,
-);
-export const FIXTURE_AUCTION_CLOSED = formatListingClosed(
-  FIXTURE_AUCTION_CLOSED_AT_MS,
-  viewerClock,
-);
-export const FIXTURE_AUCTION_OPENS = formatListingOpens(
-  FIXTURE_AUCTION_OPENS_AT_MS,
-  viewerClock,
-);
-export const FIXTURE_BID_LANDED_AT = formatLocalMoment(
-  FIXTURE_BID_LANDED_AT_MS,
-  viewerClock,
-);
 export const FIXTURE_ORDER_PLACED_DAY = formatLocalDay(
   FIXTURE_ORDER_PLACED_AT_MS,
   viewerClock,
@@ -72,36 +49,28 @@ export const FIXTURE_REFUND_DAY = formatLocalDay(
   FIXTURE_REFUND_AT_MS,
   viewerClock,
 );
-export const FIXTURE_MEMBER_FIRST_USE_AT = formatZonedLocalMoment(
+export const FIXTURE_MEMBER_FIRST_USE_AT = formatLocalMoment(
   FIXTURE_MEMBER_FIRST_USE_AT_MS,
   viewerClock,
 );
 export const FIXTURE_PLACED_ON = `Placed on ${FIXTURE_ORDER_PLACED_DAY}`;
 export const FIXTURE_PLACED_ON_WITH_PERIOD = `Placed on ${FIXTURE_ORDER_PLACED_DAY}.`;
-export const FIXTURE_BALANCE_EXPIRY_DAY = formatLocalDay(
+export const FIXTURE_BALANCE_EXPIRY_DAY = formatDay(
   FIXTURE_BALANCE_EXPIRY_AT_MS,
-  viewerClock,
 );
-export const FIXTURE_BALANCE_EXPIRY_SOON_DAY = formatLocalDay(
+export const FIXTURE_BALANCE_EXPIRY_SOON_DAY = formatDay(
   FIXTURE_BALANCE_EXPIRY_SOON_AT_MS,
-  viewerClock,
 );
-export const FIXTURE_TIER_RENEWAL_DAY = formatLocalDay(
-  FIXTURE_TIER_RENEWAL_AT_MS,
-  viewerClock,
-);
-export const FIXTURE_MEMBER_SINCE = `Member since ${formatLocalDay(FIXTURE_MEMBER_SINCE_AT_MS, viewerClock)}`;
-export const FIXTURE_LOYALTY_PURCHASE_DAY = formatLocalDay(
+export const FIXTURE_TIER_RENEWAL_DAY = formatDay(FIXTURE_TIER_RENEWAL_AT_MS);
+export const FIXTURE_MEMBER_SINCE = `Member since ${formatDay(FIXTURE_MEMBER_SINCE_AT_MS)}`;
+export const FIXTURE_LOYALTY_PURCHASE_DAY = formatDay(
   FIXTURE_LOYALTY_PURCHASE_AT_MS,
-  viewerClock,
 );
-export const FIXTURE_LOYALTY_REDEEM_DAY = formatLocalDay(
+export const FIXTURE_LOYALTY_REDEEM_DAY = formatDay(
   FIXTURE_LOYALTY_REDEEM_AT_MS,
-  viewerClock,
 );
-export const FIXTURE_LOYALTY_ADJUST_DAY = formatLocalDay(
+export const FIXTURE_LOYALTY_ADJUST_DAY = formatDay(
   FIXTURE_LOYALTY_ADJUST_AT_MS,
-  viewerClock,
 );
 export const FIXTURE_REFUND_MESSAGE = `Out of stock. Refund issued on ${FIXTURE_REFUND_DAY}`;
 export const FIXTURE_CANCELED_MESSAGE = `Canceled by customer on ${FIXTURE_REFUND_DAY}`;

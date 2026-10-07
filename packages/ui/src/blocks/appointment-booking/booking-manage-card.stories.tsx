@@ -1,12 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, screen, userEvent, within } from "storybook/test";
 import { BookingManageCard } from "./booking-manage-card";
-import {
-  CANCELLED_RECORD,
-  FIXTURE_TIME_ZONE_LABEL,
-  LIVE_RECORD,
-  MANAGE_CARD_COPY,
-} from "./fixtures";
+import { CANCELLED_RECORD, LIVE_RECORD, MANAGE_CARD_COPY } from "./fixtures";
 
 const meta = {
   title: "Appointment Booking/BookingManageCard",
@@ -16,7 +11,6 @@ const meta = {
   args: {
     copy: MANAGE_CARD_COPY,
     record: LIVE_RECORD,
-    timeZoneLabel: FIXTURE_TIME_ZONE_LABEL,
     onMove: fn(),
     onCancel: fn(),
   },
