@@ -14,9 +14,9 @@ square well in every tile status: available, on sale, sold out and in cart.
 The photo SHALL be centred in the well and scaled, up or down, until it meets
 the two edges along its longer side. Where the photo is not square, the well's
 background SHALL fill the rest. No edge of the photo SHALL be cropped while the
-tile is at rest, except where the photo reaches into the well's rounded
-corners, which it SHALL follow; that is not a crop. Where the tile grows its
-photo on hover, the well MAY clip the grown photo until the hover ends.
+tile is at rest. Where the photo reaches into the well's rounded corners, it
+SHALL follow their curve; that is not a crop. Where the tile grows its photo
+on hover, the well MAY clip the grown photo until the hover ends.
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-8fs rev=3 -->
 #### Scenario: shared-ui-store-product-listing-SC-63 - The whole photo is visible
