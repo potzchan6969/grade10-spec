@@ -45,10 +45,14 @@ filling the rest. This file decides where that lives and how it is held.
 - **Geometry, not class names** — a play test waits for the photo to decode,
   then computes the painted box from `naturalWidth`, `naturalHeight` and the
   element's box under its computed `object-fit` and `object-position`. It
-  passes when the painted box lies inside the well on every side, meets the
-  well's two edges along the photo's longer side, and is centred on the
-  other axis; it fails on `object-cover`, `object-fill`, `object-scale-down`,
-  an off-centre position or an inset that clips. On each Non Square Photo
+  measures against the well's inner box, inside its 1px border
+  (`product-card-image.tsx:105`), which is the box the photo fills. It
+  passes when the well's inner box is square, the painted box lies inside it
+  on every side, meets its two edges along the photo's longer side, and is
+  centred on the other axis; it fails on `object-cover`, `object-fill`,
+  `object-scale-down`, an off-centre position or an inset that clips. On the
+  sold-out well it also checks that the photo's computed opacity is below 1,
+  the sold-out fade. On each Non Square Photo
   well it also checks that the space the photo leaves on each side is at least
   the well's computed corner radius, so a fixture cannot drift into the
   corners that `shared-ui-store-product-listing-SC-63a` governs
