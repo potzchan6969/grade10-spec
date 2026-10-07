@@ -21,9 +21,11 @@
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -51,9 +53,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -95,9 +99,11 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 A signed-in collector has activity on one open listing, one closed listing, and one canceled listing.
@@ -124,9 +130,11 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -187,9 +195,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -228,9 +238,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -277,9 +289,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -360,9 +374,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -403,9 +419,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -535,9 +553,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -574,9 +594,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
