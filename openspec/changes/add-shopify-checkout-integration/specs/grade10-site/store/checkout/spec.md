@@ -21,7 +21,7 @@ from.
 - Frontend payment attempts
   - Pending request: prevent another frontend submission while awaiting a response
   - Same cart: a later Pay on the unchanged cart returns its open invoice
-  - Changed cart: a later Pay after a cart edit discards the earlier invoice and creates another
+  - Changed cart: the edit discards the earlier invoice, and a later Pay creates another
   - Fixed purchase: later cart edits do not alter the invoice
 - Frontend order settlement and return
   - Order state: read existing pending and paid outcomes
@@ -116,8 +116,9 @@ existing authenticated creation flow. Each new Pay submission SHALL invoke
 creation with the current reviewed basket and accepted tender. A submission
 whose lines are exactly the member's cart SHALL be that cart's checkout: while
 the cart is unchanged since an open invoice was created for it, creation SHALL
-return that invoice; once the cart has changed, creation SHALL discard the
-cart's earlier invoice so it can no longer be paid, and create another.
+return that invoice. A change to the cart's lines or tender SHALL discard the
+cart's earlier invoice so it can no longer be paid, and the next creation SHALL
+create another.
 
 **Handoff** - The frontend SHALL open the hosted URL returned by the existing
 backend. Shopify owns address, shipping, tax and payment. The frontend SHALL
@@ -127,8 +128,9 @@ an invoice is the backend's answer to the cart, never a browser decision.
 **Request** - The frontend SHALL prevent another submission while awaiting
 the current response. After it resolves, a later Pay is a fresh creation
 request. The invoice fixes the purchased lines and tender; subsequent cart
-edits SHALL not alter that purchase. A cart edit alone SHALL discard no
-invoice; the next Pay on the changed cart does.
+edits SHALL not alter that purchase. The edit SHALL be saved without waiting
+on Shopify; an invoice the edit could not discard SHALL be discarded by the
+next Pay on the changed cart.
 
 **Outcomes** - The frontend SHALL present the existing named-line refusal,
 verification, settling and failure responses. A transport failure SHALL not
@@ -183,15 +185,15 @@ remain unchanged; typed email SHALL not substitute for sign-in on this frontend.
 - **AND** the request's resolution restores the appropriate ready or outcome state
 
 <!-- trace:scenario id=g10.store-checkout.SC-cc7 rev=2 -->
-#### Scenario: grade10-site-store-checkout-SC-35 - A Pay after a cart edit replaces the invoice
+#### Scenario: grade10-site-store-checkout-SC-35 - A cart edit after Pay discards the invoice
 **Serves:** grade10-site-store-checkout-US-01 - The collector pays the invoice's purchase
 
 - **GIVEN** creation accepted a reviewed basket and tender and its invoice remains unpaid
 - **WHEN** the collector edits the cart during hosted payment
-- **THEN** the existing invoice is not updated or repriced
+- **THEN** the edit is saved without waiting on Shopify
+- **AND** the existing invoice is not updated or repriced, and can no longer be paid
 - **WHEN** the collector presses Pay on the changed cart
-- **THEN** the earlier invoice can no longer be paid
-- **AND** a new invoice is created for the then-current cart and tender
+- **THEN** a new invoice is created for the then-current cart and tender
 
 <!-- trace:scenario id=g10.store-checkout.SC-8hm rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-38 - A lost response offers the existing failure treatment
@@ -258,7 +260,7 @@ native Continue shopping action or Shopify account path is required.
 **Serves:** grade10-site-store-checkout-US-03 - The collector keeps the cart built after Pay
 
 - **GIVEN** the collector increased a variant's quantity and changed tender during hosted payment
-- **WHEN** the earlier invoice is paid and the payment is recorded, by webhook, re-check or operator sync
+- **WHEN** the earlier invoice is paid before the edit discards it, and the payment is recorded, by webhook, re-check or operator sync
 - **THEN** the paid order shows the invoice's purchase
 - **AND** the frontend's refreshed cart shows the changed lines and tender, unchanged
 

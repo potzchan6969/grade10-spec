@@ -103,6 +103,13 @@ reconciliation.
   `cart_id` and `cart_version` with a recorded ref and
   `payment_checkout_url` is answered as `created`, with no order written and
   no provider call.
+- **Edit** - each cart procedure that writes (`setLine`, `merge`,
+  `setTender`, `review`), once its write commits, lists the active cart's open
+  orders with a recorded ref and a `cart_version` below the cart's. Any it
+  finds are retired past the response with `defer`: the draft is deleted at
+  Shopify, then the order is `canceled`. Best effort, so a lost or refused
+  retire leaves the order to the next Pay or the reconcile give-up; a cart
+  with no such order makes no Shopify call.
 - **Changed cart** - the existing supersede pass, run before the new order and
   again after its refs, also lists every other open order with this
   `cart_id`: the draft is retired at Shopify, then the order is `canceled`; a
@@ -176,9 +183,9 @@ or transaction ownership beyond existing cart operations.
 - **Member changes during a request** - Capture the originating member scope
   and reject stale UI effects after sign-out or switching member; do not render
   another member's order or redirect from their late response.
-- **Cart edits during payment** - The invoice remains fixed and stays payable
-  until the next Pay or the reconcile give-up. Paid in that window, it settles
-  its order and the edited cart is kept.
+- **Cart edits during payment** - The invoice remains fixed and the edit
+  discards it. Paid before the discard lands, or where the discard failed and
+  the next Pay has not run, it settles its order and the edited cart is kept.
 - **Real-shop setup** - Fixture proof cannot prove extension placement or
   provider payment. Record those observations only in an authorized staging walk.
 

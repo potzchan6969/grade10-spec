@@ -16,7 +16,7 @@ cannot tell the cart an invoice bought from one built afterwards.
 ## What changes
 
 - **Drawer** - Use the live basket and accepted tender already answered by the store; call checkout from the drawer.
-- **Invoice** - Each new Pay submission calls creation. On the unchanged cart it returns the cart's open invoice; after a cart edit it discards that invoice and creates another.
+- **Invoice** - Each new Pay submission calls creation. On the unchanged cart it returns the cart's open invoice. A cart edit discards that invoice without waiting on Shopify, and the next Pay creates another.
 - **Cart** - A member holds one cart. Paying its invoice clears that cart, lines and tender; a cart changed after Pay, or built after an earlier payment, is kept.
 - **Outcomes** - Handle the existing redirect, verification, refusal, settling and failure responses without inventing a backend guarantee.
 - **Return** - Use the existing order surfaces and the Shopify confirmation extension's static Grade10 Your Orders link.
@@ -55,8 +55,8 @@ No domain impact: existing store domain journeys do not trace checkout outcomes.
 ## Decisions
 
 The product owner's answers settle the amendment: one cart per member; a new Pay
-on the unchanged cart returns its open invoice and a Pay after an edit replaces
-it; the invoice fixes the purchase; payment clears only the cart it bought.
+on the unchanged cart returns its open invoice and an edit discards it; the
+invoice fixes the purchase; payment clears only the cart it bought.
 
 ## Planning Amendment
 

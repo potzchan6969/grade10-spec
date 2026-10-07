@@ -295,9 +295,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(member) is on <grade10 store url>.
-* An earlier hosted invoice remains payable.
-* The drawer holds <changed basket> and <changed tender>.
-* The current basket review and accepted tender are ready.
+* An earlier hosted invoice for the cart remains unpaid.
 
 **Test data:**
 
@@ -309,15 +307,17 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open the cart drawer.
-2. Read the current basket and accepted tender.
-3. Click Proceed to Checkout in the drawer.
-4. Read the returned hosted invoice.
+2. Change the cart to <changed basket> and <changed tender>.
+3. Open the earlier hosted invoice.
+4. Click Proceed to Checkout in the drawer.
+5. Read the returned hosted invoice.
 
 **Expected Results:**
 
+* The edits are saved without waiting on the earlier invoice.
+* The earlier invoice can no longer be paid.
 * The submission carries the current basket and accepted tender.
 * Creation is called again and returns a different hosted URL, which opens.
-* The earlier invoice can no longer be paid.
 
 <!-- trace:case id=g10.store-checkout.TC-w18 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC8-1: Terminal intent replay retains its existing outcome
@@ -1847,7 +1847,7 @@ Runs once per row of **Test data**.
 
 * customer(member) is on an existing hosted invoice.
 * The Grade10 cart is edited during payment to <edited cart>, and its tender changed.
-* The invoice is paid and order reads return <invoice purchase> as paid.
+* The invoice is paid before the edit discards it, and order reads return <invoice purchase> as paid.
 
 **Test data:**
 
@@ -2143,7 +2143,7 @@ Runs once per row of **Test data**.
 ## Settled
 
 - One cart per member; one payable invoice stands for it.
-- Pay on the unchanged cart returns its open invoice; Pay after an edit discards it and creates another.
+- Pay on the unchanged cart returns its open invoice; an edit discards it, and the next Pay creates another.
 - The invoice fixes the purchase; paying it clears the cart it was made from and never a cart changed since.
 - No matching purchase uses the existing orders states and actions.
 
