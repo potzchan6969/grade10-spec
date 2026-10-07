@@ -231,6 +231,41 @@ Runs once per row of **Test data**.
 | 0 | warning |
 | 120 | plain |
 
+### grade10-site-loyalty-programme-US4-TC8-1: The member's coupon list shows no code for a reward coupon
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(member holding <coupon>), which no sale claims.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <coupon> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off one product |
+
+**Steps:**
+
+1. Navigate to <grade10 loyalty url>.
+2. Read <coupon> in the member's coupons.
+
+**Expected Results:**
+
+* Step 2 shows what <coupon> takes off, its state and when it ends.
+* <coupon> shows no discount code and no action to copy one.
+
 ---
 
 ## grade10-site-loyalty-programme-US6: Operator reverses a redemption a member cannot be given
@@ -1316,6 +1351,54 @@ Runs once per row of **Test data**.
 * Step 3 lists <coupon> as unused, not lapsed.
 * Step 4 counts no forfeit for <coupon>.
 * Step 8 is not refused, and the checkout carries <coupon>'s cut.
+
+### grade10-site-loyalty-programme-US11-TC19-1: A checkout whose order is written over a minute after its claim is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-loyalty-programme-US-11
+
+**Pre-conditions:**
+
+* customer(member holding <coupon>) is signed in on <grade10 store url>, with <line_1> in the cart.
+* The store's write of the checkout's order is held back <write delay> past the programme's claim on <coupon>.
+
+**Test data:**
+
+| <write delay> | Step 3 answers |
+| --- | --- |
+| 50 seconds | Goes through, the checkout carrying <coupon>'s cut |
+| 70 seconds | Refused, and no order is written for the checkout |
+
+| Field | Value |
+| --- | --- |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
+| <line_1> | One HK$780.00 product |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Choose <coupon>.
+3. Submit the checkout.
+4. Read the member's orders.
+5. Read <coupon> in the member's coupons on <grade10 loyalty url>.
+
+**Expected Results:**
+
+* Step 3 answers as the row's second column says.
+* Step 4 shows an order for the checkout only where step 3 went through.
+* Step 5 lists <coupon> as unused.
 
 ## Settled
 

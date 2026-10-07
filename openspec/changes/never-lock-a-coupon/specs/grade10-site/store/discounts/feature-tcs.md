@@ -713,6 +713,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | Tendered, and its paid order has reached the store | <counter sale A>'s own session, still open, on the next cart, with <line_1> rung up and the member on it |
 | Its last plan was 61 minutes ago, never tendered | A new session from scanning the member's card again, on <counter sale A>'s cart |
+| Retired, never tendered: the member submitted <later checkout> on <grade10 store url> | A new session from scanning the member's card again, on <counter sale A>'s cart |
 
 | Field | Value |
 | --- | --- |
@@ -720,6 +721,7 @@ Runs once per row of **Test data**.
 | <points> | 100, worth HK$100.00 |
 | <line_1> | One HK$780.00 product, on <counter sale A> |
 | <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> |
+| <later checkout> | An online checkout the member submitted with <coupon>, after <counter sale A> was planned |
 
 **Steps:**
 
@@ -829,6 +831,8 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10.store-discounts.TC-hz8 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC11-1: A fresh scan on an open sale's cart continues it with its one code
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** critical
@@ -844,11 +848,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(shop staff) planned <counter sale A> at <shop A> for customer(member holding <coupon> and at least <points> points), with <coupon> on it, 12 minutes ago.
+* admin(shop staff) planned <counter sale A> at <shop A> for customer(member holding <coupon> and at least <points> points), with <coupon> on it, <plan age> ago.
 * Nobody tendered <counter sale A>, and its own till session has expired.
 * The member is still on <counter sale A>'s cart in Shopify POS.
 
 **Test data:**
+
+| <plan age> |
+| --- |
+| 12 minutes |
+| 59 minutes |
 
 | Field | Value |
 | --- | --- |
@@ -870,6 +879,50 @@ Runs once per row of **Test data**.
 * Step 3 goes through, and the sale carries <points> points and <coupon>'s cut.
 * Step 4 shows only the code minted for <coupon> when <counter sale A> was planned.
 * Step 3 planned <counter sale A>'s own order, which holds <line_1>, is not retired, and keeps that code live.
+
+### grade10-site-store-discounts-US4-TC12-1: A fresh scan of another member never continues an open sale
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-discounts-US-04
+
+**Pre-conditions:**
+
+* admin(shop staff) planned <counter sale A> at <shop A> for customer A(member holding <coupon>), with <coupon> on it, 12 minutes ago.
+* Nobody tendered <counter sale A>, and its own till session has expired.
+* customer A is still on <counter sale A>'s cart in Shopify POS.
+* customer B(member holding at least <points> points) is at the counter.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <coupon> | A reward coupon customer A holds, unused, inside its validity, scoped to <line_1>'s own variant |
+| <points> | 100, worth HK$100.00 |
+| <line_1> | One HK$780.00 product, on <counter sale A> |
+| <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> |
+
+**Steps:**
+
+1. Scan customer B's card on <counter sale A>'s cart.
+2. Choose <points> points in customer B's panel.
+3. Apply the sale.
+4. Read <counter sale A>'s order.
+
+**Expected Results:**
+
+* Step 3 plans nothing onto <counter sale A>'s order.
+* Step 4 shows the order still naming customer A and holding <line_1>.
+* Step 4 shows no points of customer B on the order.
 
 ## Settled
 
