@@ -86,7 +86,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** QA2 on 2026-10-06. Joined the 2 blind cases and the one scenario on journey US-01 and the Feature set's status badge. Kept both ids and versions. Relabelled one row of `US1-TC7-1` from `Delivered` to `All done`: the row proves a second label on one variant, and `Delivered` is the claim Order Status forbids a Store badge to make. Rerun in a fresh context after each accept review: no change. The delta leaves journey US-02 untouched, so this suite holds no US2 section and the durable `US2-TC1-1` stands.
+**Run:** QA2 on 2026-10-06. Joined the 2 blind cases and the one scenario on journey US-01 and the Feature set's status badge. Kept both ids and versions. Relabelled one row of `US1-TC7-1` from `Delivered` to `All done`: the row proves a second label on one variant, and `Delivered` is the claim Order Status forbids a Store badge to make. Rerun in a fresh context after each accept review, and on 2026-10-07 after QA1's second pass on Order Status: no change. The delta leaves journey US-02 untouched, so this suite holds no US2 section and the durable `US2-TC1-1` stands.
 
 | Finding | Disposition |
 | --- | --- |
