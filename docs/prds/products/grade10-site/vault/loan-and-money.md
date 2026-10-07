@@ -108,6 +108,9 @@ every bound unset and writes no offer in production.
   interest, total, late-day figure and annualised rate it derives, and the six
   gates; the vault dialog its two preconditions; the payout dialog the two
   people, the due date and the reminder days the recording fixes
+- ❓ **A notice to a case with no address** - the notice is recorded and its
+  cure date runs with nobody emailed; whether it is refused instead is
+  Legal's to confirm
 
 ## Reading the book
 
