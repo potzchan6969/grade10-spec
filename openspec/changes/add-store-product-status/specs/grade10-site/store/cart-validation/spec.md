@@ -263,6 +263,18 @@ different from one whose card was withdrawn from sale.
 - **AND** that line is identified as unavailable, leaves the cart, and is named
   in one removal notice
 
+<!-- trace:scenario id=g10.store-cart-validation.SC-v8d rev=1 -->
+#### Scenario: grade10-site-store-cart-validation-SC-29 - A variant deleted while the cart was open
+**Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
+
+- **GIVEN** a cart whose open read confirmed every line
+- **AND** the variant one line holds deleted since, on a product still
+  published
+- **WHEN** the collector offers the cart for checkout
+- **THEN** no checkout order is created
+- **AND** that line is identified as unavailable, leaves the cart, and is named
+  in one removal notice
+
 ### Requirement: A line whose price changed is shown at the current price before checkout
 
 A line whose price moved shows the current price and says so once, and no
