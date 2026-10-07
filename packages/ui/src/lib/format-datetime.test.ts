@@ -6,9 +6,9 @@ import {
 import {
   ACTIVITY_RELATIVE_MAX_MS,
   formatActivityAt,
+  formatCalendarDayLabel,
   formatCollectorDeadline,
   formatListingEnds,
-  formatCalendarDayLabel,
   formatLocalDay,
   formatLocalMoment,
   formatLocalTime,

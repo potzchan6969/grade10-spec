@@ -79,10 +79,7 @@ const preview: Preview = {
         method: "alphabetical",
         order: [
           "Pages",
-          [
-            "Appointment",
-            ["Book Visit", "Confirmation", "Appointments"],
-          ],
+          ["Appointment", ["Book Visit", "Confirmation", "Appointments"]],
           "*",
           "Components",
         ],
