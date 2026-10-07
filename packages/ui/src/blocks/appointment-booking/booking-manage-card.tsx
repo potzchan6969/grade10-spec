@@ -44,6 +44,8 @@ type BookingManageCardProps = LocaleProps & {
   copy: BookingManageCardCopy;
   record: BookingRecord;
   timeZoneLabel?: string;
+  /** The instant the visit is judged against, as epoch milliseconds. */
+  now?: number;
   pending?: boolean;
   error?: ReactNode;
   onMove: () => void;
@@ -52,15 +54,16 @@ type BookingManageCardProps = LocaleProps & {
 };
 
 /**
- * One booking. While it is live the card offers a move and a cancel, and
- * reports the cancel only after the collector confirms it; a closed booking
- * shows its state and offers nothing.
+ * One booking. While it is booked and has not ended the card offers a move
+ * and a cancel, and reports the cancel only after the collector confirms it;
+ * a visit marked in, ended or closed shows its state and offers nothing.
  */
 function BookingManageCard({
   copy,
   record,
   timeZoneLabel,
   locale,
+  now = Date.now(),
   pending = false,
   error,
   onMove,
@@ -68,7 +71,7 @@ function BookingManageCard({
   className,
 }: BookingManageCardProps) {
   const [confirming, setConfirming] = useState(false);
-  const live = record.state === "booked";
+  const open = record.state === "booked" && record.end > now;
 
   function confirmCancel() {
     setConfirming(false);
@@ -76,10 +79,7 @@ function BookingManageCard({
   }
 
   return (
-    <Card
-      className={cn("gap-3", className)}
-      data-slot="booking-manage-card"
-    >
+    <Card className={cn("gap-3", className)} data-slot="booking-manage-card">
       <CardHeader className="items-center">
         <CardTitle className="text-base leading-snug">
           {record.service}
@@ -147,7 +147,7 @@ function BookingManageCard({
           ) : null}
         </VStack>
       </CardContent>
-      {live ? (
+      {open ? (
         <CardFooter className="flex-col items-stretch justify-start gap-2 border-border bg-transparent sm:flex-row sm:items-center">
           <Button
             className="w-full sm:w-auto"

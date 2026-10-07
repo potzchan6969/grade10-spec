@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, screen, userEvent, within } from "storybook/test";
 import { BookingManageCard } from "./booking-manage-card";
-import { CANCELLED_RECORD, LIVE_RECORD, MANAGE_CARD_COPY } from "./fixtures";
+import {
+  CANCELLED_RECORD,
+  CHECKED_IN_RECORD,
+  FIXTURE_BOOKING_NOW_MS,
+  LIVE_RECORD,
+  MANAGE_CARD_COPY,
+} from "./fixtures";
 
 const meta = {
   title: "Appointment Booking/BookingManageCard",
@@ -11,6 +17,7 @@ const meta = {
   args: {
     copy: MANAGE_CARD_COPY,
     record: LIVE_RECORD,
+    now: FIXTURE_BOOKING_NOW_MS,
     onMove: fn(),
     onCancel: fn(),
   },
@@ -57,9 +64,30 @@ export const Closed: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Cancelled")).toBeInTheDocument();
+    expect(canvasElement.querySelector('[data-slot="card-footer"]')).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Move the visit" })).toBeNull();
     expect(
-      canvasElement.querySelector('[data-slot="card-footer"]'),
+      canvas.queryByRole("button", { name: "Cancel the visit" }),
     ).toBeNull();
+  },
+};
+
+/** Marked in: the state shows, and neither a move nor a cancel is offered. */
+export const CheckedIn: Story = {
+  args: { record: CHECKED_IN_RECORD },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Checked in")).toBeInTheDocument();
+    expect(canvasElement.querySelector('[data-slot="card-footer"]')).toBeNull();
+  },
+};
+
+/** Still booked but past its end: nothing to move or cancel any more. */
+export const Ended: Story = {
+  args: { now: LIVE_RECORD.end },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Booked")).toBeInTheDocument();
     expect(canvas.queryByRole("button", { name: "Move the visit" })).toBeNull();
     expect(
       canvas.queryByRole("button", { name: "Cancel the visit" }),

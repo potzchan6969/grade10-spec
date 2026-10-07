@@ -380,21 +380,21 @@ const GRADING_VISIT_SERVICE: BookingService = {
   durationLabel: "~30 min",
   questions: [
     {
-      id: "quantity",
+      key: "quantity",
       label: "Estimated Quantity",
       kind: "select",
       options: ["1–5 cards", "6–20 cards", "21+ cards"],
       required: true,
     },
     {
-      id: "company",
+      key: "company",
       label: "Preferred Grading Company",
-      kind: "choice",
+      kind: "radio",
       options: ["PSA", "Beckett (BGS)", "CGC", "Undecided / Need Advice"],
       required: true,
     },
     {
-      id: "value",
+      key: "value",
       label: "Estimated Total Value (HKD)",
       kind: "number",
       required: false,
@@ -403,9 +403,9 @@ const GRADING_VISIT_SERVICE: BookingService = {
       hint: "For insurance reference",
     },
     {
-      id: "notes",
+      key: "notes",
       label: "Additional Notes",
-      kind: "textarea",
+      kind: "long_text",
       required: false,
       placeholder:
         "Any specific cards or requests you’d like us to know in advance?",
@@ -421,9 +421,9 @@ const VAULT_DROP_OFF_SERVICE: BookingService = {
   durationLabel: "~30 min",
   questions: [
     {
-      id: "itemType",
+      key: "itemType",
       label: "Item Type",
-      kind: "choices",
+      kind: "checkboxes",
       options: [
         "Graded Slabs (PSA / BGS / CGC)",
         "Ungraded / Raw Cards",
@@ -433,14 +433,14 @@ const VAULT_DROP_OFF_SERVICE: BookingService = {
       required: true,
     },
     {
-      id: "count",
+      key: "count",
       label: "Estimated Item Count",
       kind: "select",
       options: ["1–5 items", "6–15 items", "16+ items"],
       required: true,
     },
     {
-      id: "value",
+      key: "value",
       label: "Estimated Total Vault Value (HKD)",
       kind: "number",
       required: true,
@@ -460,7 +460,7 @@ const CONSULTATION_VISIT_SERVICE: BookingService = {
   durationLabel: "~60 min",
   questions: [
     {
-      id: "topic",
+      key: "topic",
       label: "Consultation Topic",
       kind: "select",
       options: [
@@ -472,9 +472,9 @@ const CONSULTATION_VISIT_SERVICE: BookingService = {
       required: true,
     },
     {
-      id: "details",
+      key: "details",
       label: "Details of Your Collection / Inquiry",
-      kind: "textarea",
+      kind: "long_text",
       required: true,
       placeholder:
         "Briefly describe the key items you’d like to consult on (e.g., 1997 Pokémon Carddass PSA 10, looking to consignment).",
@@ -527,9 +527,10 @@ const VISIT_NOW_MS = Date.UTC(2026, 8, 1, 4, 0);
 
 const BOOKING_STATE_LABELS: Record<BookingRecordState, string> = {
   booked: "Booked",
+  checked_in: "Checked in",
   cancelled: "Cancelled",
-  completed: "Completed",
-  no_show: "No show",
+  completed: "Visited",
+  no_show: "Missed",
 };
 
 const SERVICE_PICKER_COPY: BookingServicePickerCopy = {
@@ -557,6 +558,7 @@ const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
   emailInvalid: "That doesn’t look like an email address.",
   phoneMissing: "Enter a phone number.",
   answerMissing: "This is needed to continue.",
+  choose: "Choose",
   submit: "Confirm Appointment",
 };
 
@@ -593,6 +595,8 @@ const VISIT_CONFIRMATION_COPY: BookingConfirmationCopy = {
   service: "Service",
   location: "Shop",
   when: "When",
+  beforeYouCome: "Before you come",
+  answers: "What you told us",
   manage: "Move or cancel this visit",
   calendar: "Add to calendar",
 };
@@ -683,6 +687,8 @@ export {
   formatHkd,
   GRADING_VISIT_RECORD,
   GRADING_VISIT_SERVICE,
+  INTAKE_TRACKER_HREF,
+  INTAKE_TRACKER_STORY_ID,
   MANAGE_CARD_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
   PORTFOLIO_SUMMARY,
@@ -716,8 +722,6 @@ export {
   VAULT_SITE_HEADER,
   VAULT_SUBMIT_HREF,
   VAULT_SUBMIT_STORY_ID,
-  INTAKE_TRACKER_HREF,
-  INTAKE_TRACKER_STORY_ID,
   VISIT_CONFIRMATION_COPY,
   VISIT_DAYS,
   VISIT_FIXTURE,
