@@ -1,18 +1,24 @@
 import { getMessages } from "@grade10/i18n";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ListingBidHistoryRow, ShippedLocale } from "../../index";
-import {
-  ClockProvider,
-  createFrameClockStore,
-  ListingBidHistoryList,
-} from "../../index";
+import { ListingBidHistoryList } from "../../index";
 
-/** The page's clock, thirty days after the older rows, so they read as a local moment. */
+/** The clock, thirty days after the older rows, so they read as a local moment. */
 const NOW = Date.UTC(2026, 9, 1);
 const FIVE_MINUTES_AGO = NOW - 5 * 60 * 1000;
 const NAMES_A_ZONE = /\b(UTC|GMT|HKT|JST|PDT|EDT|EST)\b|GMT[+-]/;
+
+// The list reads the device clock when no provider is given.
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.setSystemTime(NOW);
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 function row(id: string, acceptedAtMs: number): ListingBidHistoryRow {
   return {
@@ -30,15 +36,12 @@ function drawn(
   timeZone: string,
 ): string[] {
   const markup = renderToStaticMarkup(
-    createElement(ClockProvider, {
-      store: createFrameClockStore(() => NOW),
-      children: createElement(ListingBidHistoryList, {
-        rows,
-        currency: "HKD",
-        locale,
-        timeZone,
-        activityTimeCopy: getMessages("grade10", locale).dates,
-      }),
+    createElement(ListingBidHistoryList, {
+      rows,
+      currency: "HKD",
+      locale,
+      timeZone,
+      activityTimeCopy: getMessages("grade10", locale).dates,
     }),
   );
   return markup
