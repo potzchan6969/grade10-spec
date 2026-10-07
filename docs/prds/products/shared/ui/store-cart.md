@@ -107,7 +107,7 @@ its title and the line under it.
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Empty cart | ❓ Product manager to confirm: no metric, since the change corrects how a shared block looks and the host's cart analytics own any measure; or the share of empty-cart opens followed by a product view in the same session, measured in the Grade10 host. Recommended: no metric | Product |
+| Empty cart | The CartDrawer Empty State, Empty State Without Description, Loading No Lines, Only Delisted Lines and Only Sold Out Lines stories and the CartDrawerBody Empty story each show their state, and their play tests pass. | Engineering |
 
 **Decisions.**
 

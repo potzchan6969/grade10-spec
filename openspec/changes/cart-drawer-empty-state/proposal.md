@@ -9,7 +9,8 @@ design-system already has `EmptyState` for no-data surfaces. Slot-driven
 Browse More also forces every store host to invent a catalogue handoff the
 empty state should not own.
 
-**Metric:** ❓ product manager - recommended: none; R1 in `decisions.md`.
+**Metric:** an Engineering signal: the empty-cart stories show their state
+and their play tests pass (Q13).
 
 **Acceptance signal:** an empty cart shows `EmptyState` with a cart icon, the
 consumer title (and optional description), no action button and no item
@@ -84,7 +85,6 @@ In `decisions.md`.
 
 ## Open Questions
 
-- ❓ product manager - the change's metric, R1 in `decisions.md`.
 - ❓ designer - the Figma cart frames that still draw `Cart Item Slot`, R2 in
   `decisions.md`.
 - ❓ designer - what the drawer shows after the first cart read fails, R7 in
