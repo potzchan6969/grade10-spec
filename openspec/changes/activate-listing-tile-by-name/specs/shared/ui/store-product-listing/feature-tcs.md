@@ -5,7 +5,7 @@
 
 ## shared-ui-store-product-listing-US1: What the listing surface holds
 
-**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
+**Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
 **As a** shopper reading a surface that composes the listing's tiles,
 **I want** each tile to show what its surface supplies and to sell only where its surface sells,
 **so that** a tile reads the same wherever the store draws it.
