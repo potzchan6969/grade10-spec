@@ -31,8 +31,8 @@ Sold-out that still opens, including hover scale: `add-store-cross-sell` Q50,
 ## Components
 
 - `ProductCardImage` from `@grade10/ui` - contain fit; the well's gradient
-  fills the rest; drawn without multiply, as `drop-product-listing-photo-multiply`
-  Q1 decides for every tile status; sold-out fade unchanged; hover scale
+  fills the rest; drawn without multiply, as `drop-product-listing-photo-multiply`,
+  its Q1, decides for every tile status; sold-out fade unchanged; hover scale
   unchanged
 - `ProductCard` from `@grade10/ui` - composes the image; unchanged export
 
@@ -53,4 +53,4 @@ No new primitive, variant, token, or compound export.
 | Square, available | Whole photo at all four edges, its corners rounded with the well's | `Tile contract` | `shared-ui-store-product-listing-SC-63a` |
 | Available, hovered | The photo grows; the well may cut its edges until the pointer leaves | `Tile contract` | **Out of suite:** a permission, not an outcome (Q4) |
 | Sold-out that opens, photo grows on hover | The sold-out photo grows on hover | `Tile contract` | **Out of suite:** `add-store-cross-sell` Q50 |
-| Photo drawn as supplied, no multiply | The photo as the shop supplied it, not blended into the well | `Tile contract` | **Out of suite:** the requirement on `drop-product-listing-photo-multiply`, its Q1 |
+| Photo drawn as supplied, no multiply | The photo as the shop supplied it, not blended into the well | `Tile contract` | **Out of suite:** `drop-product-listing-photo-multiply`, its Q1 |

@@ -20,7 +20,7 @@ Metric: none - the tile draws the photo it is given (Q7 in `decisions.md`).
 
 - **Phone cart visibility** — `show-listing-cart-on-touch`
 - **Sort defaults** — `default-listing-sort-to-latest`
-- **No multiply on the photo** — `drop-product-listing-photo-multiply`
+- **Photo drawn without multiply** — `drop-product-listing-photo-multiply`
 - **Sold-out hover** — `add-store-cross-sell` Q50
 - **Boneyard skeleton re-capture**
 
@@ -45,8 +45,8 @@ Metric: none - the tile draws the photo it is given (Q7 in `decisions.md`).
   change. The fit shipped ahead of acceptance (b632582fe) and is inside the
   application's pin
 - **Overlap** — `add-store-cross-sell` Q50 owns hover on a sold-out tile.
-  `drop-product-listing-photo-multiply` owns the photo drawn without multiply
-  (Q3); this change adds no second requirement for it
+  `drop-product-listing-photo-multiply`, its Q1, owns the photo drawn without
+  multiply (Q3); this change adds no second requirement for it
 
 ## References
 
