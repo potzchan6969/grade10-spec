@@ -1091,7 +1091,7 @@ Runs once per row of **Test data**.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
