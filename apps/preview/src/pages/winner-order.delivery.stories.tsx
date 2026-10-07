@@ -151,12 +151,16 @@ export const Shipped: Story = {
     await winnerOrderSettled(canvasElement);
     expect(canvas.getByText("Order Progress")).toBeVisible();
     const trackingLink = canvas.getByRole("link", { name: /SF1234567890/ });
-    expect(trackingLink.getAttribute("href")).toContain("SF1234567890");
+    expect(trackingLink).toHaveAttribute(
+      "href",
+      "https://www.sf-express.com/us/en/dynamic_function/waybill/#search/bill-number/SF1234567890",
+    );
     expect(trackingLink).toHaveAttribute("target", "_blank");
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Shipping")).toBeVisible();
     expect(canvas.getByText("26 Sep 2026")).toBeVisible();
     expect(canvas.queryByRole("button", { name: "Track shipment" })).toBeNull();
+    expect(canvas.queryByText("SF Express", { exact: true })).toBeNull();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
@@ -173,8 +177,13 @@ export const Delivered: Story = {
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("28 Sep 2026")).toBeVisible();
     const trackingLink = canvas.getByRole("link", { name: /SF1234567890/ });
-    expect(trackingLink.getAttribute("href")).toContain("SF1234567890");
+    expect(trackingLink).toHaveAttribute(
+      "href",
+      "https://www.sf-express.com/us/en/dynamic_function/waybill/#search/bill-number/SF1234567890",
+    );
     expect(trackingLink).toHaveAttribute("target", "_blank");
+    expect(canvas.queryByRole("button", { name: "Track shipment" })).toBeNull();
+    expect(canvas.queryByText("SF Express", { exact: true })).toBeNull();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
