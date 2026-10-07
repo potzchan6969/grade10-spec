@@ -5,10 +5,10 @@
 - One case
   - A loan's clock: past its due date the header counts the days past due,
     and once a forfeiture notice stands it names the date to pay by instead,
-    on the shop's clock
+    both on the brand's calendar
   - Asked before the collector is emailed: cancelling the visit and sending
-    the forfeiture notice each ask first, naming the slot, or the address and
-    the date to pay by
+    the forfeiture notice each ask first, naming the slot on the booked shop's
+    clock, or the address and the date to pay by
 
 ## ADDED Requirements
 
