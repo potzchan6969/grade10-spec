@@ -1,0 +1,171 @@
+{
+  "version": 2,
+  "change": "never-lock-a-coupon",
+  "baseline": "69f671f753c7aa742fac63459d5d1d4e0c06240ef4fbaac479551c18a44caaad",
+  "fingerprint": "33d04ba62b8251bcc2dee6eab2521b3867202c627c6fbc1ee7e43da87b6f10f4",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T11:52:26.614Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/coupons.md#applying-one",
+      "sha256": "cffe1351336a3e7048c245f5d2cf2878e1f6adf06b57e10e8ca0fa97d0b3a9e3",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/coupons.md#refusals",
+      "sha256": "81c0b8a0bc252a38e2b5a68d211edf9bd4d1664151aa2ec27062e3c28073b88f",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/coupons.md#spending-one",
+      "sha256": "f641c422bc6772c7a2c6f29d875870b492ac7f2d629ccb2ba818c1f4b599563d",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/rewards.md#cancelling-a-redemption",
+      "sha256": "a085a4ba7c4bc9abb82bd7764b6b296ce62044aad304a0b2ff35cbe2dfe62443",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/discounts.md#online-draft-order-mechanism",
+      "sha256": "0a447d2c720976c86df6214cc1f801440b62e76d706140122841fd4d563a28c8",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/discounts.md#undo",
+      "sha256": "0830d404129a2c0dff4c5f9d8c3739ca50932472e12d96b69bdd7af3536ba7cd",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/decisions.md",
+      "sha256": "c61776ec441e320c225ff20dcf78abf2eb3b1e55d2138ca1ef6b2a15832eb810",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/proposal.md",
+      "sha256": "33840c0dc37c235f583f4b2114a79d315024f839149e05b62a044e58fb42791b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "48136ad8f15e63eea0b2253f23065d5fe367d5910051e0bd04dd0026997044a9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "53bd5c057623073371606647ecfaf8e3a41833a41c590654e6924aed4a890b73",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "9a54194ab915e9bd8a29b94cdbebd3ac67a6070b8165d05d51fff528714f1663",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/specs/grade10-site/store/discounts/feature-tcs.md",
+      "sha256": "7a9aa45c7a14ea42e5a370f8fd13487d6ca49ca0e9912ce70d5bd05462a4a964",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/specs/grade10-site/store/discounts/spec.md",
+      "sha256": "78b045f8b95a5073352be371dd606e46fa938606c7e35047190ca4436c1e1bea",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/specs/grade10-site/store/discounts/user-journeys.md",
+      "sha256": "b8a8c82e69f8bf34d3bdc3df878814df839c52b60422da03bff6744b42edaf93",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "30d3a2ccd60d4057da8a833ccffcd93e67a38f59117a9881d895393328e33a07",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/never-lock-a-coupon/tech-design.md",
+      "sha256": "93dfdaccf0535c65f7e96bb8bbf4ce52e6e0412663fb2da66ed5ec1e3e03e029",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "cce40cd989f0fc8c747a25a957c96ad8362e0630e70953fb51f6fac2528b7b97",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "9cb7ebd638bd912f94d8d7637c9caa3dc301c852237b4eb17e50a2a319b11ead",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "e280bf67d7cd72f58917ce0ac1c65c72ce11ebfdf87dd38f43814a24c82ab966",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/discounts/feature-tcs.md",
+      "sha256": "657d5905eddaa534b552265ccc7b46235068279476c99c73423549e0fb321053",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/discounts/spec.md",
+      "sha256": "ddd445a6a3b6f0412ed57a5fbc6301cb2a25365f6624b08d492b1b1dc09f18f8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/discounts/user-journeys.md",
+      "sha256": "2e3d6ce5881a1cc175a308e67143ba5694bc98050d05c4f7f505558e6ed2927d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "890001c5dad9efd56d17bda336dffd0a8f02c0c07fae564c3a22f90e065d177c",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A coupon is held by nothing, and the newest claim is the only live one",
+        "Requirement: A member runs their own membership from one surface",
+        "Requirement: A redemption settles as a coupon, whatever the reward",
+        "Requirement: A spent redemption stays spent when its artifact expires",
+        "Requirement: Every recorded mutation answers the same way when retried",
+        "Requirement: Reversing a redemption restores the points it consumed, while its coupon is unused",
+        "Requirement: The membership surface exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/discounts/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/discounts/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A code carries its own coupon's combine setting",
+        "Requirement: A coupon reaches the order as its own ephemeral Shopify Discount code",
+        "Requirement: A live cart price previews locally, and mints nothing until an order claims the coupon",
+        "Requirement: A sale that loses its claim loses its code, and a paid sale is settled against what it carried",
+        "Requirement: The same discount-code mechanism applies online and at the POS till"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/discounts/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "anchors": []
+    }
+  ]
+}

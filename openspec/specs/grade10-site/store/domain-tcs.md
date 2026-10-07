@@ -156,7 +156,7 @@ when I open it,
 **I want** staff to take my points and my product coupon off one sale,
 **so that** both settle once, when I pay.
 
-<!-- trace:case id=g10.store-domain.TC-gdu rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9 -->
+<!-- trace:case id=g10.store-domain.TC-gdu rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uae,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-fc9,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-e2e-US4-TC1-1: Points and a product coupon settle together on one till sale
 
 **Classification:**
@@ -288,3 +288,9 @@ when I open it,
 * Step 1 is refused, not hidden.
 * Step 3 applies the points.
 * The member's balance drops once, by <points>, when the sale is paid.
+
+## Reconciliation
+
+**Run:** 2026-10-07 · carried US4-TC1-1 with its id, revision and words, so its marker names every scenario that serves `grade10-site-store-discounts-US-04` in this change; the path it walks is unchanged.
+
+**Run:** 2026-10-07 · US4-TC1-1 covers a double tap by the durable scenario's trace id, `g10.store-membership.SC-uae`, in place of SC-uaf, a second id the migration minted for add-account-profile's copy of SC-77. Its revision, words and path are unchanged.
