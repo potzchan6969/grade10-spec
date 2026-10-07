@@ -29,8 +29,9 @@ describe("a booking block's default zone label", () => {
     vi.useRealTimers();
   });
 
-  // shared-dates-and-times-SC-30: the name a reader sees is the one in force at
-  // the instant it labels, never the one in force on the machine's date.
+  // The name a reader sees is the one in force at the instant it labels, never
+  // the one in force on the machine's date. No scenario reads the booking
+  // blocks (tasks 2.2 and 2.7), so this test cites none.
   it("is the zone's name at the slot's start, whatever the machine's date", () => {
     vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(new Date("2027-01-15T12:00:00Z"));

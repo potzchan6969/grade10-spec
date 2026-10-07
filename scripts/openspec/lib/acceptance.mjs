@@ -34,7 +34,7 @@ import {
 } from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
-import { foldChecks } from "./fold-checks.mjs";
+import { foldChecks, purposeOf } from "./fold-checks.mjs";
 import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
 
 const TRACE_MARKER_LINE =
@@ -465,10 +465,6 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
     ...rendered.split("\n"),
   );
   return `${lines.join("\n").replace(/\n*$/, "\n")} `.trimEnd();
-}
-
-function purposeOf(text) {
-  return sectionByName(rootSections(text).sections, "Purpose")?.raw;
 }
 
 function mergePurpose(

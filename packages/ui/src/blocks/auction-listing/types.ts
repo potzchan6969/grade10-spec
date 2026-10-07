@@ -36,7 +36,12 @@ export type ListingUserMaximumHistoryRow = {
 };
 
 export type ListingLotGalleryImage = {
+  /** Main stage image. Also the fallback when `thumbSrc` or `zoomSrc` is omitted. */
   src: string;
+  /** Thumbnail rail image. Falls back to `src`. */
+  thumbSrc?: string;
+  /** Zoom dialog image. Falls back to `src`. */
+  zoomSrc?: string;
   alt: string;
 };
 

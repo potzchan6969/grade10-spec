@@ -70,11 +70,19 @@ const preview: Preview = {
       },
     },
     /* Read top-down: the assemblies this workbench owns, then the compound
-     * components they are built from, then the primitives underneath. */
+     * components they are built from, then the primitives underneath.
+     * Appointment follows the booking flow; every other group stays
+     * alphabetical. The workbench preview restates this order: Storybook
+     * reads `storySort` from that file and does not follow a re-export. */
     options: {
       storySort: {
         method: "alphabetical",
-        order: ["Pages", "*", "Components"],
+        order: [
+          "Pages",
+          ["Appointment", ["Book Visit", "Confirmation", "Appointments"]],
+          "*",
+          "Components",
+        ],
       },
     },
 

@@ -2,10 +2,8 @@ import {
   FIXTURE_LOYALTY_ADJUST_DAY,
   FIXTURE_LOYALTY_PURCHASE_DAY,
   FIXTURE_LOYALTY_REDEEM_DAY,
-  FIXTURE_SHIPPED_LOCALE,
-  FIXTURE_TIME_ZONE,
 } from "../../lib/datetime-fixtures";
-import { formatLocalDay } from "../../lib/format-datetime";
+import { formatDay } from "../../lib/format-datetime";
 import type { ActivityEntry, CouponItem, RewardMenuItem } from "./types";
 
 /* Grade10's own programme content, for the examples only. A consumer supplies
@@ -42,7 +40,7 @@ const COUPONS: CouponItem[] = [
     amount: "HK$50",
     code: "GRD-50-7Q2M",
     description: "HK$50 off any order",
-    expiry: `Valid until ${formatLocalDay(Date.UTC(2026, 11, 31), { locale: FIXTURE_SHIPPED_LOCALE, timeZone: FIXTURE_TIME_ZONE })}`,
+    expiry: `Valid until ${formatDay(Date.UTC(2026, 11, 31))}`,
     status: "open",
   },
   {
@@ -50,14 +48,14 @@ const COUPONS: CouponItem[] = [
     amount: "HK$100",
     code: "GRD-100-XK4P",
     description: "HK$100 off any order",
-    expiry: `Valid until ${formatLocalDay(Date.UTC(2026, 9, 15), { locale: FIXTURE_SHIPPED_LOCALE, timeZone: FIXTURE_TIME_ZONE })}`,
+    expiry: `Valid until ${formatDay(Date.UTC(2026, 9, 15))}`,
     status: "spent",
   },
   {
     id: "coupon-void",
     amount: "HK$50",
     code: "GRD-50-9ZZT",
-    expiry: `Expired ${formatLocalDay(Date.UTC(2026, 5, 30), { locale: FIXTURE_SHIPPED_LOCALE, timeZone: FIXTURE_TIME_ZONE })}`,
+    expiry: `Expired ${formatDay(Date.UTC(2026, 5, 30))}`,
     status: "void",
   },
   {
@@ -65,7 +63,7 @@ const COUPONS: CouponItem[] = [
     amount: "10%",
     code: "GRD-10-M3RT",
     description: "10% off graded cards",
-    expiry: `Expired ${formatLocalDay(Date.UTC(2026, 4, 1), { locale: FIXTURE_SHIPPED_LOCALE, timeZone: FIXTURE_TIME_ZONE })}`,
+    expiry: `Expired ${formatDay(Date.UTC(2026, 4, 1))}`,
     status: "expired",
   },
 ];

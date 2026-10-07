@@ -58,8 +58,8 @@ counter's form is `grade10-admin/vault/operator-queue`.
     opened, and a clash is redrawn rather than shared
   - The id stays the key: the address, every link and every lookup keep the id,
     and the reference is what is spoken and typed
-  - Where it is read: the collector's own read of the case, every letter, and
-    the counter's search
+  - Where it is read: the collector's own read of the case, every letter, the
+    signed paper, and the counter's search
 - A draft staff opened
   - Under the collector's account: among their own cases as a draft opened at
     the counter, changed like any draft of theirs
@@ -382,10 +382,11 @@ counter and type into a bank form.
 - **The id stays the key** - every link to a case and every lookup SHALL keep
   the id, and a reference SHALL NOT stand in a link.
 - **Where it is read** - a reference SHALL be carried on the collector's own
-  read of their cases, on the read of the case itself, and on the answer to
-  the send. The letter that carries it is
-  `grade10-site/vault/collector-notifications`'s, and the counter's search
-  over it is `grade10-admin/vault/operator-queue`'s.
+  read of their cases, on the read of the case itself, on the answer to the
+  send, and on the signed paper. The letter that carries it is
+  `grade10-site/vault/collector-notifications`'s, what the paper prints is
+  `grade10-site/vault/documents-and-signing`'s, and the counter's search over
+  it is `grade10-admin/vault/operator-queue`'s.
 
 <!-- trace:scenario id=g10.vault-case-intake.SC-u8f rev=1 -->
 #### Scenario: grade10-site-vault-case-intake-SC-19 - A case is opened with its reference

@@ -3,7 +3,10 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { Calendar } from "@grade10/design-system/components/forms/calendar";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { formatLocalTime } from "../../lib/format-datetime";
+import {
+  formatCalendarDayLabel,
+  formatLocalTime,
+} from "../../lib/format-datetime";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
 import { type LocaleProps, zoneLabel } from "./booking-copy";
@@ -11,6 +14,7 @@ import {
   dateFromDay,
   dateFromMonth,
   dayFromDate,
+  dayInstant,
   monthFromDate,
   monthInstant,
 } from "./calendar";
@@ -36,6 +40,8 @@ type BookingSlotPickerProps = LocaleProps & {
   /** Inclusive bounds the collector can step within. */
   minMonth?: string;
   maxMonth?: string;
+  /** Frozen shop-local today the grid marks; omit it and the calendar uses now. */
+  today?: Date;
   days: AsyncState<readonly BookingDay[]>;
   selectedDate?: string;
   slots: AsyncState<readonly BookingSlot[]>;
@@ -58,6 +64,7 @@ function BookingSlotPicker({
   month,
   minMonth,
   maxMonth,
+  today,
   days,
   selectedDate,
   slots,
@@ -70,6 +77,17 @@ function BookingSlotPicker({
   onSelectSlot,
   className,
 }: BookingSlotPickerProps) {
+  const timeHeading =
+    selectedDate === undefined
+      ? copy.timeTitle
+      : formatCalendarDayLabel(selectedDate, locale);
+  // The name a reader sees is the one in force at the times shown: the picked
+  // slot, else the picked day, else the month being browsed.
+  const labelInstant =
+    selectedStart ??
+    (selectedDate !== undefined
+      ? dayInstant(selectedDate)
+      : monthInstant(month));
   return (
     <div
       className={cn(
@@ -90,6 +108,7 @@ function BookingSlotPicker({
               maxMonth={maxMonth}
               minMonth={minMonth}
               month={month}
+              today={today}
               onMonthChange={onMonthChange}
               onSelectDay={onSelectDay}
               selectedDate={selectedDate}
@@ -99,15 +118,10 @@ function BookingSlotPicker({
       </VStack>
       <VStack data-slot="booking-time-picker" gap="sm" hAlign="stretch">
         <Text as="h2" size="lg" weight="medium">
-          {copy.timeTitle}
+          {timeHeading}
         </Text>
         <Text as="span" data-slot="booking-zone" size="sm" tone="secondary">
-          {copy.timesIn}{" "}
-          {zoneLabel(
-            timeZone,
-            selectedStart ?? monthInstant(month),
-            timeZoneLabel,
-          )}
+          {copy.timesIn} {zoneLabel(timeZone, labelInstant, timeZoneLabel)}
         </Text>
         {selectedDate === undefined ? (
           <Text as="span" size="sm" tone="muted">
@@ -122,7 +136,7 @@ function BookingSlotPicker({
                 </Text>
               ) : (
                 <fieldset
-                  aria-label={copy.timeTitle}
+                  aria-label={timeHeading}
                   className="m-0 grid min-w-0 grid-cols-2 gap-2 border-0 p-0 sm:grid-cols-3"
                 >
                   {list.map((slot) => {
@@ -161,6 +175,7 @@ function SlotCalendar({
   month,
   minMonth,
   maxMonth,
+  today,
   selectedDate,
   onMonthChange,
   onSelectDay,
@@ -170,6 +185,7 @@ function SlotCalendar({
   month: string;
   minMonth?: string;
   maxMonth?: string;
+  today?: Date;
   selectedDate?: string;
   onMonthChange: (month: string) => void;
   onSelectDay: (date: string) => void;
@@ -177,8 +193,12 @@ function SlotCalendar({
   const available = new Set(
     days.filter((day) => day.available).map((day) => day.date),
   );
+  // Use label instead of dropdown when there's only one month option
+  const captionLayout =
+    minMonth && maxMonth && minMonth === maxMonth ? "label" : "dropdown";
   return (
     <Calendar
+      captionLayout={captionLayout}
       disabled={(date) => !available.has(dayFromDate(date))}
       endMonth={maxMonth ? dateFromMonth(maxMonth) : undefined}
       labels={{
@@ -195,6 +215,7 @@ function SlotCalendar({
       }}
       selected={selectedDate ? dateFromDay(selectedDate) : undefined}
       startMonth={minMonth ? dateFromMonth(minMonth) : undefined}
+      today={today}
     />
   );
 }

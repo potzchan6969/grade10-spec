@@ -73,9 +73,9 @@ acceptance publishes them. These are the implementation choices under them.
 | Piece | Where | What it does |
 | --- | --- | --- |
 | Local moment | `lib/format-datetime.ts` | `DD Mon YYYY, HH:MM` in the supplied zone, no suffix; activity time falls back to it after seven days |
-| Zoned moment | same | the local moment plus the viewer's short name; `formatCollectorDeadline`, `formatListing{Ends,Opens,Closed}` and `formatClosedAt` all go through it |
+| Zoned moment | same | the local moment plus the viewer's short name; `formatCollectorDeadline` and `formatListing{Ends,Opens,Closed}` go through it; `formatClosedAt`, which no caller used, went in group 2 |
 | Viewer zone name | same | `Asia/Hong_Kong` is `HKT`; any other zone is `Intl` `en-US` short name at the instant, so `EDT`, `EST` and `PDT` in North America and a `GMT+N` offset elsewhere, a zone at zero offset `GMT` (`UTC` rewritten) |
-| Offset helper | same | `formatZoneOffset`, `GMT+8` style; exported and tested, called by nothing until the PDF label uses it |
+| Offset helper | same | `formatZoneOffset`, `GMT+8` style, called by nothing until the PDF label used it; dropped in group 2, which prints the offset through the formatter's own `timeZoneName: "shortOffset"` (Decision 5) |
 | Catalogue tile | `blocks/auction-listing/auction-card.tsx` | static Ends / Opens / Closed line from `{ locale, timeZone }` |
 | Lot bid card | `blocks/auction-listing/listing-auction-bid-fields.tsx` | `Ends` / `Opens` line through the zoned moment; threads `locale` and `timeZone` down to bid history; its closed block names no zone yet |
 | PDF dates | `blocks/auction-invoice-and-receipt-pdf/pdf-document.ts` | `formatDateTime` is `Asia/Hong_Kong` wall time in English plus the literal `GMT+8`; every meta-row date goes through it |
@@ -103,16 +103,19 @@ typecheck all pass.
    nothing builds one); a fixed list of regional names. Decided as Q5 and Q18.
 
 2. **The name is chosen by the instant, never by the clock.** `at` is what
-   makes a January close `EST`. `formatViewerZoneName` and `formatZoneOffset`
-   default `at` to `Date.now()`, and the booking blocks call the first with
-   no instant, so those names follow the machine's date. Make `at` required;
-   the booking blocks pass the slot's start, so the default label of a shop
-   outside Hong Kong never follows the machine's date. That corrects the
+   makes a January close `EST`. `formatViewerZoneName` defaulted `at` to
+   `Date.now()`, and the booking blocks called it with no instant, so those
+   names followed the machine's date. Make `at` required and parse it before
+   any zone is named, so an invalid instant stops Hong Kong as it stops every
+   zone; the booking blocks pass the slot's start, and the slot picker the
+   picked day or the month it shows, so the default label of a shop outside
+   Hong Kong never follows the machine's date. That corrects the
    default and promises no wording: the blocks keep the shop's clock, their
    default label is the zone's short name, `HKT` for Hong Kong, a page may pass
    its own, and how the blocks name the zone is left out (Q16, Q27, Decision
-   11). The summary's New York story and the `zoneLabel` comment still say the
-   viewer's zone and are reworded to the shop's (task 2.7).
+   11). The `zoneLabel` comment said the viewer's zone and is reworded to the
+   shop's (task 2.7); the booking summary's New York story is gone
+   (`9a02503a1`).
 
 3. **`AuctionCard` takes `locale` and `timeZone`, both required.** The spec
    says it requires both; the code requires `timeZone` and defaults `locale`
@@ -133,9 +136,10 @@ typecheck all pass.
    older activity row name none.
    The bid card's closed block builds its day and time from `formatLocalDay` /
    `formatLocalTime` and names no zone, in two places: `TimeBlock`'s closed subtext on wide screens
-   and `compactClosedSummary` on narrow ones. Both name the zone through
-   `formatViewerZoneName(timeZone, closeInstant)` after the time, the call the
-   open lot's deadline line already makes. The wide block shows a clock only
+   and `compactClosedSummary` on narrow ones. Both read one closed-close
+   reading, the day, the clock and how long the lot ran, and name the zone
+   through `formatZonedLocalTime`, which `formatZonedLocalMoment`, the open
+   lot's deadline line, builds on. The wide block shows a clock only
    when the lot's open time is known, in `Closed at {time}. Ran {duration}`,
    and names the zone there; without it the block shows the close day alone,
    which reads in the viewer's zone and names none. The narrow summary shows a clock with the open time known
@@ -144,11 +148,13 @@ typecheck all pass.
    read `08:00 EDT` and the same lot closed read `08:00`.
 
 5. **The PDF label is derived from the document zone.** The literal `GMT+8` in
-   `documentZoneName()` can drift from `DOCUMENT_TIME_ZONE`. Call the offset
-   helper with the document zone and the instant instead; Hong Kong has no
-   daylight saving, so the output is unchanged and the helper has a caller.
-   Rejected: deleting the helper, because the application's emails and any
-   later document need the same rule.
+   `documentZoneName()` can drift from `DOCUMENT_TIME_ZONE`. The formatter that
+   already pins the document zone asks `Intl` for `timeZoneName: "shortOffset"`,
+   so the label comes from the zone; Hong Kong has no daylight saving, so the
+   output is unchanged. Rejected: keeping `formatZoneOffset` for the
+   application's emails and any later document, because the emails and the
+   invoice page go through date-fns (Decisions 7 and 11) and the PDF was its
+   only caller; a later store document repeats one `Intl` option.
 
 6. **A document's date words and `GMT+8` ignore the copy language.** The
    renderer prints the month in English and the offset as the helper returns it;
@@ -162,8 +168,10 @@ typecheck all pass.
    calls in `emailPort.ts` for the order letters and three in `render.tsx` for
    the lot letters (`closesAt`, `scheduledClosesAt` and `startsAt`). The store's
    sample strings in `apps/emails` print `GMT+8`, the application's emails do
-   not. The fix is `timeZone: "Asia/Hong_Kong"` at each call, which the
-   date-fns `zzz` token prints as `GMT+8`. Rejected: a store-side email
+   not. Each call passes the brand zone, `Asia/Hong_Kong`, through one helper,
+   `mailTime(at)` in `mailZone.ts`, which also binds the mail's English, so a
+   mail date cannot print without a zone; the date-fns `zzz` token prints
+   `GMT+8`. Rejected: a store-side email
    formatter, because the sender is the application's backend and the templates
    take strings.
 
@@ -179,10 +187,13 @@ typecheck all pass.
    (`packages/grading/backend/src/email/messages.ts` and
    `packages/vault/backend/src/email/messages.ts`) read `Dates and times are in
    {zone}.`, filled with the long name `Hong Kong Standard Time` by `zoneName`
-   in each package's `letters/format.ts`. All four change to their one line; the
-   application fills the offset from the brand zone through `formatZone`, so a
-   footer cannot drift from the clock its dates are read on, and each render
-   test takes the new text. The grading test has a snapshot too. The vault's
+   in each package's `letters/format.ts`. All four change to their one line, and
+   `zoneName` goes. The application does not derive the offset: a letter has no
+   instant in scope and nothing below a service reads the clock, so the
+   catalogue holds the literal line and each render test holds the brand zone
+   to `GMT+8` through `formatZone`, in a winter and a summer instant, so a
+   footer cannot drift from the clock its dates are read on. Each render test
+   takes the new text. The grading test has a snapshot too. The vault's
    render test asserts no zone line today and the vault has no snapshot, so
    group 3 adds the assertion. The grading spec says the footer "says so" and
    the vault spec names the footer's party and complaints contact and no zone,
@@ -219,9 +230,10 @@ typecheck all pass.
 
 11. **Three application pages take the store's formatter; the invoice page
     states the brand zone.** The catalogue tile, My Auctions and Winner Order
-    pass the viewer's zone and name it through `formatCollectorDeadline` and the
-    `formatListing*` helpers, not `@grade10/utils/dates`, so one function owns
-    the rule and New York reads `EDT`, not `GMT-4` (Q7). A day with no clock on
+    pass the viewer's zone and name it through `formatZonedLocalMoment`, and a
+    day alone through `formatLocalDay`, each page resolving the shipped locale
+    once, not through `@grade10/utils/dates`, so one function owns the rule and
+    New York reads `EDT`, not `GMT-4` (Q7). A day with no clock on
     Winner Order is the viewer's day, as the durable spec reads its step
     subtext, and names no zone (Q20). A surface whose own spec fixes its zone
     keeps it (Q29). The invoice page is the invoice
@@ -234,10 +246,9 @@ typecheck all pass.
     date-fns `zzz` token prints `GMT+8`. Its payment deadline carries a clock
     and names `GMT+8`. Design note, with no scenario or case behind it: its
     sent day carries no clock, so it reads the Hong Kong day and names no zone
-    (Q12, Q21). Rejected: composing `formatLocalMoment` with
-    `formatZoneOffset` from `@grade10/ui`, which both export and which would
-    print the same text, because it adds a second import to a page that needs
-    none and leaves the page and the emails on two routes to one label.
+    (Q12, Q21). Rejected: composing the name from `@grade10/ui`, because it adds
+    a second import to a page that needs none and leaves the page and the
+    emails on two routes to one label.
     Shop-clock pages stay where they are: a page that books or confirms a
     visit, or a vault or signing page, keeps the shop's clock whatever zone the
     viewer is in (Q22, Q25), so a viewer in New York reads Hong Kong time
@@ -324,8 +335,9 @@ datetime. Read in `winnerOrderView.ts` at `grade10` main on 2026-10-06:
   arguments and `formatCollectorDeadline` gains a suffix. The application has
   no `AuctionCard` caller and one `formatCollectorDeadline` caller, so the
   bump lands with its fix in one pull request.
-- [The closed block has two code paths] -> the wide block and the compact line
-  both name the zone, and the test reads both.
+- [The closed block has two layouts] -> the wide block and the compact line
+  read one closed-close reading, so the zone is named in one place, and the
+  stories read both.
 - [Each footer line has two copies, the store's preview and the application's
   catalogue, for grading letters and for vault letters] -> each pair carries one
   line, and the application's render tests hold the text.
@@ -364,5 +376,5 @@ datetime. Read in `winnerOrderView.ts` at `grade10` main on 2026-10-06:
 
 ## Open Questions
 
-- Whether to delete `formatClosedAt`, which no block or application surface
-  calls. It changes no scenario, so it can wait.
+None. `formatClosedAt` and its `formatAuction*` aliases, which no block or
+application surface called, were deleted in group 2.

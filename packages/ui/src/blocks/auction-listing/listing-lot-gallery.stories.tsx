@@ -11,15 +11,33 @@ const IMAGE = new URL(
 const { auctionListing } = getMessages("grade10", "en");
 
 const COPY = {
+  zoom: auctionListing.clickToZoom,
   previous: auctionListing.previousImage,
   next: auctionListing.nextImage,
   images: auctionListing.auctionImages,
 };
 
+const source = (kind: string, image: string) => `${IMAGE}?${kind}=${image}`;
+
 const THREE_IMAGES = [
-  { src: IMAGE, alt: "Lot image 1, front" },
-  { src: IMAGE, alt: "Lot image 2, back" },
-  { src: IMAGE, alt: "Lot image 3, detail" },
+  {
+    src: source("detail", "front"),
+    thumbSrc: source("thumb", "front"),
+    zoomSrc: source("zoom", "front"),
+    alt: "Lot image 1, front",
+  },
+  {
+    src: source("detail", "back"),
+    thumbSrc: source("thumb", "back"),
+    zoomSrc: source("zoom", "back"),
+    alt: "Lot image 2, back",
+  },
+  {
+    src: source("detail", "detail"),
+    thumbSrc: source("thumb", "detail"),
+    zoomSrc: source("zoom", "detail"),
+    alt: "Lot image 3, detail",
+  },
 ] as const;
 
 const meta = {
@@ -56,6 +74,13 @@ export const SeveralImages: Story = {
     expect(thumbnails[0].getBoundingClientRect().left).toBeLessThan(
       stage.getBoundingClientRect().left,
     );
+    expect(
+      canvas.getByRole("img", { name: "Lot image 1, front" }),
+    ).toHaveAttribute("src", THREE_IMAGES[0].src);
+    expect(thumbnails[0].querySelector("img")).toHaveAttribute(
+      "src",
+      THREE_IMAGES[0].thumbSrc,
+    );
     expect(canvas.getByText("1 / 3")).toBeInTheDocument();
     expect(
       canvas.queryByRole("button", { name: "Previous image" }),
@@ -76,7 +101,51 @@ export const SeveralImages: Story = {
     expect(canvas.getByText("2 / 3")).toBeInTheDocument();
     expect(
       canvas.getByRole("img", { name: "Lot image 2, back" }),
-    ).toBeInTheDocument();
+    ).toHaveAttribute("src", THREE_IMAGES[1].src);
+
+    await userEvent.click(canvas.getByRole("button", { name: COPY.zoom }));
+    const page = within(document.body);
+    const zoomDialog = await page.findByRole("dialog", { name: COPY.zoom });
+    expect(
+      within(zoomDialog).getByRole("img", { name: "Lot image 2, back" }),
+    ).toHaveAttribute("src", THREE_IMAGES[1].zoomSrc);
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() =>
+      expect(
+        page.queryByRole("dialog", { name: COPY.zoom }),
+      ).not.toBeInTheDocument(),
+    );
+    expect(canvas.getByText("2 / 3")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("img", { name: "Lot image 2, back" }),
+    ).toHaveAttribute("src", THREE_IMAGES[1].src);
+
+    const stageRegion = canvas.getByRole("region", { name: "Auction images" });
+    stageRegion.focus();
+    await userEvent.keyboard("{ArrowRight}");
+    expect(canvas.getByText("3 / 3")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("img", { name: "Lot image 3, detail" }),
+    ).toHaveAttribute("src", THREE_IMAGES[2].src);
+    await userEvent.click(canvas.getByRole("button", { name: COPY.zoom }));
+    const selectedZoomDialog = await page.findByRole("dialog", {
+      name: COPY.zoom,
+    });
+    expect(
+      within(selectedZoomDialog).getByRole("img", {
+        name: "Lot image 3, detail",
+      }),
+    ).toHaveAttribute("src", THREE_IMAGES[2].zoomSrc);
+    await userEvent.click(
+      within(selectedZoomDialog).getByRole("button", {
+        name: "Close dialog",
+      }),
+    );
+    await waitFor(() =>
+      expect(
+        page.queryByRole("dialog", { name: COPY.zoom }),
+      ).not.toBeInTheDocument(),
+    );
 
     const gallery = canvasElement.querySelector<HTMLElement>(
       '[data-slot="listing-lot-gallery"]',
@@ -89,26 +158,36 @@ export const SeveralImages: Story = {
         canvas.queryByRole("button", { name: /^Thumbnail:/ }),
       ).not.toBeInTheDocument(),
     );
-    expect(canvas.getByText("2 / 3")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelectorAll('img[src*="?thumb="]'),
+      ).toHaveLength(0),
+    );
+    expect(canvas.getByText("3 / 3")).toBeInTheDocument();
     expect(
-      canvas.getByRole("img", { name: "Lot image 2, back" }),
+      canvas.getByRole("img", { name: "Lot image 3, detail" }),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Previous image" }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: "Next image" }),
-    ).toBeInTheDocument();
+      canvas.queryByRole("button", { name: "Next image" }),
+    ).not.toBeInTheDocument();
 
     gallery.style.width = "36rem";
     await waitFor(() =>
       expect(
-        canvas.getByRole("button", { name: "Thumbnail: Lot image 2, back" }),
+        canvas.getByRole("button", { name: "Thumbnail: Lot image 3, detail" }),
       ).toHaveAttribute("aria-current", "true"),
     );
-    expect(canvas.getByText("2 / 3")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelector(`img[src="${THREE_IMAGES[2].thumbSrc}"]`),
+      ).toBeInTheDocument(),
+    );
+    expect(canvas.getByText("3 / 3")).toBeInTheDocument();
     expect(
-      canvas.getByRole("img", { name: "Lot image 2, back" }),
+      canvas.getByRole("img", { name: "Lot image 3, detail" }),
     ).toBeInTheDocument();
   },
 };
@@ -135,6 +214,9 @@ export const StackedSeveralImages: Story = {
     expect(
       canvas.getByRole("button", { name: "Next image" }),
     ).toBeInTheDocument();
+    expect(canvasElement.querySelectorAll('img[src*="?thumb="]')).toHaveLength(
+      0,
+    );
 
     await userEvent.click(
       canvas.getByRole("button", {
@@ -157,7 +239,7 @@ export const StackedSeveralImages: Story = {
 export const SingleImage: Story = {
   name: "Single image",
   args: {
-    images: [{ src: IMAGE, alt: "Lot image, front" }],
+    images: [{ src: source("detail", "single"), alt: "Lot image, front" }],
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -177,6 +259,20 @@ export const SingleImage: Story = {
     expect(
       canvas.queryByRole("navigation", { name: "Auction images" }),
     ).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("button", { name: COPY.zoom }));
+    const page = within(document.body);
+    const zoomDialog = await page.findByRole("dialog", { name: COPY.zoom });
+    expect(
+      within(zoomDialog).getByRole("img", { name: "Lot image, front" }),
+    ).toHaveAttribute("src", source("detail", "single"));
+    await userEvent.click(
+      within(zoomDialog).getByRole("button", { name: "Close dialog" }),
+    );
+    await waitFor(() =>
+      expect(
+        page.queryByRole("dialog", { name: COPY.zoom }),
+      ).not.toBeInTheDocument(),
+    );
   },
 };
 
@@ -198,6 +294,9 @@ export const EmptyGallery: Story = {
     ).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("navigation", { name: "Auction images" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: COPY.zoom }),
     ).not.toBeInTheDocument();
   },
 };

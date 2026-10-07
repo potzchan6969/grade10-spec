@@ -15,16 +15,19 @@ import { expect, within } from "storybook/test";
 import {
   APPOINTMENTS_COPY,
   COMPLETED_VISIT_RECORD,
+  firstAvailableVisitDay,
   GRADING_VISIT_RECORD,
   MANAGE_CARD_COPY,
   SLOT_PICKER_COPY,
+  slotsForVisitDay,
   VAULT_BOOK_VISIT_STORY_ID,
   VISIT_DAYS,
-  VISIT_MONTH,
+  VISIT_MAX_MONTH,
+  VISIT_MIN_MONTH,
   VISIT_NOW_MS,
   VISIT_RECORD,
-  VISIT_SLOTS,
   VISIT_TIME_ZONE,
+  VISIT_TODAY_DATE,
 } from "./vault-content";
 import {
   AppointmentPageShell,
@@ -53,7 +56,10 @@ function split(list: readonly BookingRecord[], now: number) {
 function AppointmentsPage({ empty = false }: { empty?: boolean }) {
   const [records, setRecords] = useState(() => seedRecords(empty));
   const [movingId, setMovingId] = useState<string | null>(null);
-  const [selectedDate, setSelectedDate] = useState("2026-09-03");
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(
+    "2026-09-03",
+  );
+  const [selectedMonth, setSelectedMonth] = useState("2026-09");
   const { upcoming, past } = split(records, VISIT_NOW_MS);
 
   function updateRecord(id: string, patch: Partial<BookingRecord>) {
@@ -64,13 +70,18 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
     );
   }
 
+  function handleMonthChange(month: string) {
+    setSelectedMonth(month);
+    setSelectedDate(firstAvailableVisitDay(month));
+  }
+
   function renderCard(record: BookingRecord) {
     return (
       <VStack gap="lg" hAlign="stretch" key={record.id}>
         <BookingManageCard
           copy={MANAGE_CARD_COPY}
           record={record}
-          timeZoneLabel="Hong Kong time"
+          timeZoneLabel="Asia/Hong Kong time"
           onMove={() => setMovingId(record.id)}
           onCancel={() => {
             updateRecord(record.id, { state: "cancelled" });
@@ -80,16 +91,20 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
         {movingId === record.id && record.state === "booked" ? (
           <BookingSlotPicker
             copy={SLOT_PICKER_COPY}
-            month={VISIT_MONTH}
-            minMonth={VISIT_MONTH}
-            maxMonth={VISIT_MONTH}
+            month={selectedMonth}
+            minMonth={VISIT_MIN_MONTH}
+            maxMonth={VISIT_MAX_MONTH}
+            today={VISIT_TODAY_DATE}
             days={{ status: "ready", data: VISIT_DAYS }}
             selectedDate={selectedDate}
-            slots={{ status: "ready", data: VISIT_SLOTS }}
+            slots={{
+              status: "ready",
+              data: selectedDate ? slotsForVisitDay(selectedDate) : [],
+            }}
             selectedStart={record.start}
             timeZone={VISIT_TIME_ZONE}
-            timeZoneLabel="Hong Kong time"
-            onMonthChange={() => {}}
+            timeZoneLabel="Asia/Hong Kong time"
+            onMonthChange={handleMonthChange}
             onSelectDay={setSelectedDate}
             onSelectSlot={(slot) => {
               updateRecord(record.id, {
@@ -179,7 +194,7 @@ export const Default: Story = {
     ).toBeVisible();
     expect(canvas.getByText("Upcoming")).toBeVisible();
     expect(canvas.getAllByText("Vault Drop-Off").length).toBeGreaterThan(0);
-    expect(canvas.getByText("Card Grading")).toBeVisible();
+    expect(canvas.getByText("Grading Submission")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Open" }),
     ).not.toBeInTheDocument();

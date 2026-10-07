@@ -3,12 +3,6 @@ import {
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
@@ -20,7 +14,6 @@ import {
   BookingSlotPicker,
   BookingSummary,
 } from "@grade10/ui";
-import { Storefront } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -30,17 +23,19 @@ import {
   BOOK_VISIT_SERVICES,
   CAUSEWAY_BAY,
   DETAILS_FORM_COPY,
+  firstAvailableVisitDay,
   NEXT_AVAILABLE_VISIT_DATE,
   prepTipsForService,
   SERVICE_PICKER_COPY,
-  SHOP_NAME,
   SLOT_PICKER_COPY,
   SUMMARY_COPY,
+  slotsForVisitDay,
   VAULT_CONFIRMATION_STORY_ID,
   VISIT_DAYS,
-  VISIT_MONTH,
-  VISIT_SLOTS,
+  VISIT_MAX_MONTH,
+  VISIT_MIN_MONTH,
   VISIT_TIME_ZONE,
+  VISIT_TODAY_DATE,
 } from "./vault-content";
 import { AppointmentPageShell, PageHeader } from "./vault-shared";
 import { navigateToStory, STORE_LOCATOR_HREF } from "./workbench-story-nav";
@@ -53,6 +48,7 @@ const READY_SERVICES = {
 const CONTACT_SEED = {
   name: "Alex Chan",
   email: ACCOUNT_EMAIL,
+  phoneCountry: "HK",
 };
 
 type BookVisitView = "service" | "slot" | "details";
@@ -63,11 +59,19 @@ function BookVisitPage() {
   const [selectedDate, setSelectedDate] = useState<string | undefined>();
   const [selectedStart, setSelectedStart] = useState<number | undefined>();
   const [selectedEnd, setSelectedEnd] = useState<number | undefined>();
+  const [selectedMonth, setSelectedMonth] = useState<string>(VISIT_MIN_MONTH);
   const service = BOOK_VISIT_SERVICES.find((row) => row.id === serviceId);
   const prepTips = prepTipsForService(service?.id ?? "");
 
   function clearSlot() {
     setSelectedDate(undefined);
+    setSelectedStart(undefined);
+    setSelectedEnd(undefined);
+  }
+
+  function handleMonthChange(month: string) {
+    setSelectedMonth(month);
+    setSelectedDate(firstAvailableVisitDay(month));
     setSelectedStart(undefined);
     setSelectedEnd(undefined);
   }
@@ -109,62 +113,25 @@ function BookVisitPage() {
 
       <PageHeader title="Book a Visit" />
 
-      {view === "service" ? (
-        <VStack gap="lg" hAlign="stretch">
-          <Card
-            aria-label={SHOP_NAME}
-            className="w-fit max-w-full self-start"
-            role="group"
-          >
-            <CardContent>
-              <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4">
-                <span className="col-start-1 row-start-1 flex size-4 items-center self-center text-primary">
-                  <Storefront aria-hidden size={16} />
-                </span>
-                <CardTitle className="col-start-2 row-start-1">
-                  {CAUSEWAY_BAY.name}
-                </CardTitle>
-                <CardDescription className="col-start-2 row-start-2 text-secondary-foreground">
-                  {CAUSEWAY_BAY.address}
-                </CardDescription>
-              </div>
-            </CardContent>
-          </Card>
-          <BookingServicePicker
-            copy={SERVICE_PICKER_COPY}
-            services={READY_SERVICES}
-            selectedId={serviceId}
-            onSelect={selectService}
-          />
-          <div>
-            <Button
-              disabled={serviceId === undefined}
-              onClick={openSlotStep}
-              type="button"
-            >
-              {BOOK_VISIT_NAV_COPY.continue}
-            </Button>
-          </div>
-        </VStack>
-      ) : (
-        <div className="overflow-hidden rounded-2xl border border-border bg-card lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
-          <aside className="border-b border-border p-5 lg:border-r lg:border-b-0">
-            <BookingSummary
-              className="rounded-none border-0 bg-transparent p-0"
-              copy={SUMMARY_COPY}
-              service={
-                service ? (
-                  <VStack gap="none" hAlign="start">
-                    <span>{service.name}</span>
-                    {service.durationLabel ? (
-                      <span className="font-normal text-sm text-secondary-foreground">
-                        {service.durationLabel}
-                      </span>
-                    ) : null}
-                  </VStack>
-                ) : undefined
-              }
-              serviceAction={
+      <div className="overflow-hidden rounded-2xl border border-border bg-card lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <aside className="border-b border-border p-5 lg:border-r lg:border-b-0">
+          <BookingSummary
+            className="rounded-none border-0 bg-transparent p-0"
+            copy={SUMMARY_COPY}
+            service={
+              view !== "service" && service ? (
+                <VStack gap="none" hAlign="start">
+                  <span>{service.name}</span>
+                  {service.durationLabel ? (
+                    <span className="font-normal text-sm text-secondary-foreground">
+                      {service.durationLabel}
+                    </span>
+                  ) : null}
+                </VStack>
+              ) : undefined
+            }
+            serviceAction={
+              view !== "service" ? (
                 <Link
                   aria-label={BOOK_VISIT_NAV_COPY.changeService}
                   className="p-0"
@@ -175,96 +142,119 @@ function BookVisitPage() {
                 >
                   {BOOK_VISIT_NAV_COPY.change}
                 </Link>
-              }
-              location={CAUSEWAY_BAY.name}
-              address={CAUSEWAY_BAY.address}
-              start={view === "details" ? selectedStart : undefined}
-              end={view === "details" ? selectedEnd : undefined}
-              whenAction={
-                view === "details" ? (
-                  <Link
-                    aria-label={BOOK_VISIT_NAV_COPY.changeDate}
-                    className="p-0"
-                    onClick={changeDate}
-                    render={<button type="button" />}
-                    size="sm"
-                    variant="secondary"
-                  >
-                    {BOOK_VISIT_NAV_COPY.change}
-                  </Link>
-                ) : undefined
-              }
-              timeZone={VISIT_TIME_ZONE}
-              timeZoneLabel="Hong Kong time"
-            />
-          </aside>
-
-          {view === "slot" ? (
-            <div className="p-5 md:p-6">
-              <BookingSlotPicker
-                copy={SLOT_PICKER_COPY}
-                month={VISIT_MONTH}
-                minMonth={VISIT_MONTH}
-                maxMonth={VISIT_MONTH}
-                days={{ status: "ready", data: VISIT_DAYS }}
-                selectedDate={selectedDate}
-                slots={{ status: "ready", data: VISIT_SLOTS }}
-                selectedStart={selectedStart}
-                timeZone={VISIT_TIME_ZONE}
-                timeZoneLabel="Hong Kong time"
-                onMonthChange={() => {}}
-                onSelectDay={(date) => {
-                  setSelectedDate(date);
-                  setSelectedStart(undefined);
-                  setSelectedEnd(undefined);
-                }}
-                onSelectSlot={selectSlot}
-              />
-            </div>
-          ) : (
-            <VStack className="p-5 md:p-6" gap="lg" hAlign="stretch">
-              {service ? (
-                <BookingDetailsForm
-                  key={service.id}
-                  copy={DETAILS_FORM_COPY}
-                  questions={service.questions}
-                  emailReadOnly
-                  initialValues={CONTACT_SEED}
-                  onSubmit={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
-                />
-              ) : null}
-              {prepTips.length > 0 ? (
-                <section
-                  aria-labelledby="prep-checklist"
-                  className="flex flex-col gap-4"
+              ) : undefined
+            }
+            location={CAUSEWAY_BAY.name}
+            address={CAUSEWAY_BAY.address}
+            start={view === "details" ? selectedStart : undefined}
+            end={view === "details" ? selectedEnd : undefined}
+            whenAction={
+              view === "details" ? (
+                <Link
+                  aria-label={BOOK_VISIT_NAV_COPY.changeDate}
+                  className="p-0"
+                  onClick={changeDate}
+                  render={<button type="button" />}
+                  size="sm"
+                  variant="secondary"
                 >
-                  <h2
-                    className="font-heading text-xl font-medium"
-                    id="prep-checklist"
-                  >
-                    {BOOK_VISIT_NAV_COPY.prepTitle}
-                  </h2>
-                  <ol className="grid gap-3 sm:grid-cols-2">
-                    {prepTips.map((tip, index) => (
-                      <li
-                        key={tip}
-                        className="flex gap-3 rounded-(--radius-lg) border border-border p-3"
-                      >
-                        <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium tabular-nums">
-                          {index + 1}
-                        </span>
-                        <Text className="self-center" size="sm">
-                          {tip}
-                        </Text>
-                      </li>
-                    ))}
-                  </ol>
-                </section>
-              ) : null}
-            </VStack>
-          )}
-        </div>
-      )}
+                  {BOOK_VISIT_NAV_COPY.change}
+                </Link>
+              ) : undefined
+            }
+            timeZone={VISIT_TIME_ZONE}
+            timeZoneLabel="Asia/Hong Kong time"
+          />
+        </aside>
+
+        {view === "service" ? (
+          <VStack className="p-5 md:p-6" gap="lg" hAlign="stretch">
+            <BookingServicePicker
+              copy={SERVICE_PICKER_COPY}
+              services={READY_SERVICES}
+              selectedId={serviceId}
+              onSelect={selectService}
+            />
+            <div>
+              <Button
+                disabled={serviceId === undefined}
+                onClick={openSlotStep}
+                type="button"
+              >
+                {BOOK_VISIT_NAV_COPY.continue}
+              </Button>
+            </div>
+          </VStack>
+        ) : view === "slot" ? (
+          <div className="p-5 md:p-6">
+            <BookingSlotPicker
+              copy={SLOT_PICKER_COPY}
+              month={selectedMonth}
+              minMonth={VISIT_MIN_MONTH}
+              maxMonth={VISIT_MAX_MONTH}
+              today={VISIT_TODAY_DATE}
+              days={{ status: "ready", data: VISIT_DAYS }}
+              selectedDate={selectedDate}
+              slots={{
+                status: "ready",
+                data: selectedDate ? slotsForVisitDay(selectedDate) : [],
+              }}
+              selectedStart={selectedStart}
+              timeZone={VISIT_TIME_ZONE}
+              timeZoneLabel="Asia/Hong Kong time"
+              onMonthChange={handleMonthChange}
+              onSelectDay={(date) => {
+                setSelectedDate(date);
+                setSelectedStart(undefined);
+                setSelectedEnd(undefined);
+              }}
+              onSelectSlot={selectSlot}
+            />
+          </div>
+        ) : (
+          <VStack className="p-5 md:p-6" gap="lg" hAlign="stretch">
+            {service ? (
+              <BookingDetailsForm
+                key={service.id}
+                copy={DETAILS_FORM_COPY}
+                questions={service.questions}
+                description={service.description}
+                emailDisabled
+                initialValues={CONTACT_SEED}
+                onSubmit={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
+              />
+            ) : null}
+            {prepTips.length > 0 ? (
+              <section
+                aria-labelledby="prep-checklist"
+                className="flex flex-col gap-4"
+              >
+                <h2
+                  className="font-heading text-xl font-medium"
+                  id="prep-checklist"
+                >
+                  {BOOK_VISIT_NAV_COPY.prepTitle}
+                </h2>
+                <ol className="grid gap-3 sm:grid-cols-2">
+                  {prepTips.map((tip, index) => (
+                    <li
+                      key={tip}
+                      className="flex gap-3 rounded-(--radius-lg) border border-border p-3"
+                    >
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium tabular-nums">
+                        {index + 1}
+                      </span>
+                      <Text className="self-center" size="sm">
+                        {tip}
+                      </Text>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            ) : null}
+          </VStack>
+        )}
+      </div>
     </AppointmentPageShell>
   );
 }
@@ -285,15 +275,23 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "Book a Visit" }),
     ).toBeVisible();
-    expect(canvas.getByText("Card Grading")).toBeVisible();
+    expect(canvas.getByText("Grading Submission")).toBeVisible();
     expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
-    expect(canvas.getByText("Collection Consultation")).toBeVisible();
+    expect(canvas.getByText("Listing to Store/Auction")).toBeVisible();
     expect(
       canvas.getByText("13 Pak Sha Road, Causeway Bay, Hong Kong"),
     ).toBeVisible();
     expect(
+      canvasElement.querySelector('[data-slot="booking-summary"]'),
+    ).not.toBeNull();
+    expect(
       canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
     ).toBeDisabled();
+    expect(
+      canvas.queryByRole("button", {
+        name: BOOK_VISIT_NAV_COPY.changeService,
+      }),
+    ).toBeNull();
     expect(
       canvasElement.querySelector('[data-slot="booking-steps"]'),
     ).toBeNull();
@@ -304,9 +302,9 @@ export const Default: Story = {
       canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
     ).toBeNull();
     for (const name of [
-      /Card Grading/,
+      /Grading Submission/,
       /Vault Drop-Off/,
-      /Collection Consultation/,
+      /Listing to Store\/Auction/,
     ]) {
       expect(canvas.getByRole("radio", { name })).not.toBeChecked();
     }
@@ -316,7 +314,9 @@ export const Default: Story = {
 export const Slot: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("radio", { name: /Card Grading/ }));
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    );
     await userEvent.click(
       canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
     );
@@ -329,6 +329,35 @@ export const Slot: Story = {
     expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
       "2",
     );
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Sep",
+    );
+    expect(canvas.queryByRole("combobox", { name: /year/i })).toBeNull();
+    expect(canvas.getByText("2026")).toBeVisible();
     expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Oct",
+    );
+    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
+      "1",
+    );
+    expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Dec",
+    );
+    expect(canvas.getByRole("button", { name: "Next month" })).toBeDisabled();
+    expect(
+      canvas.getByRole("button", { name: /December 1st, 2026/ }),
+    ).toBeEnabled();
+    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
+      "1",
+    );
+    expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: /December 2nd, 2026/ }),
+    ).toBeDisabled();
   },
 };

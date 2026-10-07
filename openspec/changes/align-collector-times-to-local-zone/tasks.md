@@ -42,7 +42,7 @@ and that change's group 4 builds and verifies them; the operator table and the
 collector's vault history they read stay as they are, so no task here cites
 them.
 
-- [ ] 2.1 Add the tests first, in their own commit, each citing its scenario id
+- [x] 2.1 Add the tests first, in their own commit, each citing its scenario id
       and the case id it decides, and the formatter, story and PDF tests that
       already prove other ids gain their citations in the same commit: a New
       York deadline reads `EDT` in September and `EST` in January
@@ -83,40 +83,45 @@ them.
       `shared-ui-invoice-and-receipt-pdf-SC-43`,
       `shared-ui-invoice-and-receipt-pdf-SC-54` and
       `shared-ui-invoice-and-receipt-pdf-SC-55`.
-- [ ] 2.2 Make the instant a required argument of the viewer zone name and the
-      zone offset helpers, and have every caller pass the instant it names, so
-      no zone name follows the machine's date, covering
-      `shared-dates-and-times-SC-30`.
-- [ ] 2.3 Require `locale` on the catalogue tile, so an omitted language fails
+- [x] 2.2 Make the instant a required argument of the viewer zone name, parsed
+      before any zone is named, and have every caller pass the instant it
+      names, so no zone name follows the machine's date: the booking blocks
+      pass the slot's start, the slot picker the picked day or the month it
+      shows. Covering `shared-dates-and-times-SC-30`.
+- [x] 2.3 Require `locale` on the catalogue tile, so an omitted language fails
       to compile, covering `shared-ui-auction-listing-SC-55`.
-- [ ] 2.4 Derive the PDF label from the document zone through the offset
-      helper instead of a literal, with the rendered text unchanged, covering
+- [x] 2.4 Derive the PDF label from the document zone through the
+      formatter's own `timeZoneName: "shortOffset"` option instead of a
+      literal, with the rendered text unchanged, covering
       `shared-ui-invoice-and-receipt-pdf-SC-43` and
       `shared-ui-invoice-and-receipt-pdf-SC-54`.
-- [ ] 2.5 Name the viewer's short zone after the close time in the lot bid
+- [x] 2.5 Name the viewer's short zone after the close time in the lot bid
       card's closed block, in the desktop block and in the compact summary
-      line, wherever the close shows a clock, through the zone-name helper the
-      open lot's deadline uses; a close shown as a day alone names none,
+      line, wherever the close shows a clock, from one reading of the close
+      that both read and through the zoned clock the open lot's deadline uses;
+      a close shown as a day alone names none,
       covering `shared-dates-and-times-SC-14` and
       `shared-dates-and-times-SC-38`.
-- [ ] 2.6 Say `Dates and times are Hong Kong time (GMT+8).` in the footer of
+- [x] 2.6 Say `Dates and times are Hong Kong time (GMT+8).` in the footer of
       the grading letter template, `apps/emails/emails/grading/_components/grading-letter.tsx`,
       and `Dates and times are in Hong Kong time (GMT+8).` in the vault
       fixture's footer lines, `footerLines` in
-      `apps/emails/emails/vault/fixtures.ts`. Neither has a test lane here;
-      tasks 3.1 and 3.4 prove the rendered letters.
-- [ ] 2.7 Rename the booking summary's `ViewerZoneNewYork` story, in
-      `packages/ui/src/blocks/appointment-booking/booking-summary.stories.tsx`,
-      to `ShopZoneNewYork`, in the tests-first commit of task 2.1, and reword
-      the comment on `zoneLabel` in
+      `apps/emails/emails/vault/fixtures.ts`. Neither has a test lane here.
+      Tasks 3.1 and 3.4 prove the application's catalogue lines, not these two
+      previews, which stay checked by hand against them.
+- [x] 2.7 Reword the comment on `zoneLabel` in
       `packages/ui/src/blocks/appointment-booking/booking-copy.ts` from the
       viewer's short name to the short name of the zone the block is given,
-      which is the shop's. The booking blocks are on the shop's clock (Q16, Q22),
-      so the story is a shop in New York, not a viewer. No scenario or case
-      reads the booking blocks, so this task cites none.
-- [ ] 2.8 Verify: `pnpm --filter @grade10/ui run typecheck`,
-      `pnpm --filter @grade10/emails run typecheck`, the node and story lanes,
-      `pnpm run lint`,
+      which is the shop's. The booking blocks are on the shop's clock (Q16,
+      Q22). This task first named a `ViewerZoneNewYork` story on the booking
+      summary to rename `ShopZoneNewYork`; `9a02503a1` removed that story, so
+      nothing is renamed. No scenario or case reads the booking blocks, so this
+      task cites none.
+- [x] 2.8 Verify: `pnpm --filter @grade10/ui run typecheck`,
+      `pnpm --filter @grade10/emails run typecheck`, the node and story lanes
+      of `packages/ui` and the story lane of `apps/preview`
+      (`pnpm --dir apps/preview exec vitest run --project storybook`), whose
+      page stories read the closed block's text, `pnpm run lint`,
       `pnpm run validate:changes align-collector-times-to-local-zone` and
       `pnpm check:manual`.
 
@@ -126,7 +131,7 @@ Needs group 2 landed on the store's main, and `external/grade10-spec` bumped to
 it, before it starts. The store pin, `2608abf84`, is behind store main, so the
 bump lands with its typecheck fixes in one pull request.
 
-- [ ] 3.1 Add the tests first, in their own commit: an auction email states its
+- [x] 3.1 Add the tests first, in their own commit: an auction email states its
       close, setup and payment times as `GMT+8` and reads the same for two
       recipients (`shared-dates-and-times-US1-TC8-1`), on the order letters
       through `emailPort.ts` and on the lot letters through `render.tsx`, whose
@@ -147,10 +152,10 @@ bump lands with its typecheck fixes in one pull request.
       `shared-dates-and-times-SC-12`, `shared-dates-and-times-SC-13`,
       `shared-dates-and-times-SC-15`, `shared-dates-and-times-SC-16`,
       `shared-dates-and-times-SC-35` and `shared-dates-and-times-SC-36`.
-- [ ] 3.2 Bump `external/grade10-spec` and fix what the typecheck then names;
+- [x] 3.2 Bump `external/grade10-spec` and fix what the typecheck then names;
       the listing view's unconfirmed-clock deadline now carries the zone name,
       covering `shared-dates-and-times-SC-12`.
-- [ ] 3.3 State every date in the auction emails in Asia/Hong_Kong as `GMT+8`
+- [x] 3.3 State every date in the auction emails in Asia/Hong_Kong as `GMT+8`
       by passing the brand zone at each `formatDeadline` call, which prints
       `UTC` today: the eleven in the email port,
       `packages/grade10-auction/backend/src/email/emailPort.ts`, for the order
@@ -159,7 +164,7 @@ bump lands with its typecheck fixes in one pull request.
       letters (`closesAt`, `scheduledClosesAt` and `startsAt`), covering
       `shared-dates-and-times-SC-13`, `shared-dates-and-times-SC-15` and
       `shared-dates-and-times-SC-16`.
-- [ ] 3.4 Say `Dates and times are Hong Kong time (GMT+8).` in the grading
+- [x] 3.4 Say `Dates and times are Hong Kong time (GMT+8).` in the grading
       letter footer, from the catalogue line in
       `packages/grading/backend/src/email/messages.ts` and the zone it is
       filled with in `packages/grading/backend/src/email/letters/format.ts`,
@@ -172,7 +177,8 @@ bump lands with its typecheck fixes in one pull request.
       vault test from task 3.1 passes; the vault has no snapshot to update.
       Covering `shared-dates-and-times-SC-35`.
 - [ ] 3.5 Verify: the application typecheck, the auction frontend and backend
-      unit lanes, the grading and vault backend email tests, `pnpm run lint`,
+      unit lanes, the `apps/backend/grade10/auction` db lane that holds the
+      mail specs, the grading and vault backend email tests, `pnpm run lint`,
       and the listing-page end-to-end smoke.
 
 ## 4. Move the collector pages onto the viewer's zone and the invoice page onto GMT+8 (grade10) (owner: @seankcw)
@@ -182,7 +188,7 @@ or confirms a visit, or a vault or signing page, keeps the shop's clock, and how
 it names the zone is left out (Q27). Vault emails keep their Hong Kong clock;
 only their footer label moves, in groups 2 and 3.
 
-- [ ] 4.1 Add the tests first, in their own commit: the catalogue tile's Ends,
+- [x] 4.1 Add the tests first, in their own commit: the catalogue tile's Ends,
       Opens and Closed lines, My Auctions' watching and bidding rows and the
       four Winner Order lines that print a clock (`Payment deadline restarted`,
       `Payment deadline passed`, `Pay by` on the pay control and `Confirm by`
@@ -201,18 +207,17 @@ only their footer label moves, in groups 2 and 3.
       page's payment deadline reads the Hong Kong clock and `GMT+8` for both
       viewers, never `UTC`, `HKT` or `EDT`
       (`shared-dates-and-times-US1-TC17-1`). Covering
-      `shared-dates-and-times-SC-12`, `shared-dates-and-times-SC-14`,
-      `shared-dates-and-times-SC-29`, `shared-dates-and-times-SC-37`,
-      `winner-order-SC-31` and `winner-order-SC-66`.
-- [ ] 4.2 Take the viewer's zone in the catalogue tile, `ListingCatalogueCard`,
+      `shared-dates-and-times-SC-14`, `shared-dates-and-times-SC-29`,
+      `shared-dates-and-times-SC-37`, `winner-order-SC-31` and
+      `winner-order-SC-66`.
+- [x] 4.2 Take the viewer's zone in the catalogue tile, `ListingCatalogueCard`,
       and name it through the store's formatter instead of the application's,
       which prints `GMT+8` for every viewer, covering
       `shared-dates-and-times-SC-14` and `shared-dates-and-times-SC-29`.
-- [ ] 4.3 Take the viewer's zone in My Auctions, `AccountAuctionRecordPage`, for
+- [x] 4.3 Take the viewer's zone in My Auctions, `AccountAuctionRecordPage`, for
       its watching and bidding rows, which read `GMT+8` and `UTC` today,
-      covering `shared-dates-and-times-SC-12` and
-      `shared-dates-and-times-SC-29`.
-- [ ] 4.4 Take the viewer's zone in Winner Order, `winnerOrderView.ts`, which
+      covering `shared-dates-and-times-SC-29`.
+- [x] 4.4 Take the viewer's zone in Winner Order, `winnerOrderView.ts`, which
       reads `UTC` today because no call is given a zone. Four lines print a
       clock through `formatDeadline` and are deadlines, so each reads the
       viewer's zone and names it, through the store's formatter: `Payment
@@ -231,7 +236,7 @@ only their footer label moves, in groups 2 and 3.
       `winner-order-SC-66` the day-only form; `Cancelled on` and `Missed setup
       deadline` have no scenario. Covering `winner-order-SC-31`,
       `winner-order-SC-66` and `shared-dates-and-times-SC-29`.
-- [ ] 4.5 State the invoice page's dates, `AuctionInvoicePage.tsx`, which read
+- [x] 4.5 State the invoice page's dates, `AuctionInvoicePage.tsx`, which read
       `UTC` today, in `Asia/Hong_Kong`: pass the brand zone as `timeZone` to the
       `formatDeadline` and `formatDay` calls the page already makes from
       `@grade10/utils/dates`, as task 3.3 does for the auction emails. The

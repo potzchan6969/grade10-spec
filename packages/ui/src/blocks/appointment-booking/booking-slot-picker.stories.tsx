@@ -1,11 +1,10 @@
 import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
 import { BookingSlotPicker } from "./booking-slot-picker";
 import {
   FIXTURE_MONTH,
-  FIXTURE_TIME_ZONE_LABEL,
   SEPTEMBER_3_SLOTS,
   SEPTEMBER_DAYS,
   SLOT_PICKER_COPY,
@@ -27,7 +26,6 @@ const meta = {
     selectedDate: "2026-09-03",
     slots: { status: "ready", data: SEPTEMBER_3_SLOTS },
     timeZone: FIXTURE_TIME_ZONE,
-    timeZoneLabel: FIXTURE_TIME_ZONE_LABEL,
     onMonthChange: fn(),
     onSelectDay: fn(),
     onSelectSlot: fn(),
@@ -46,9 +44,23 @@ export const Default: Story = {
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
       "Sep",
     );
-    expect(canvas.getByRole("combobox", { name: /year/i })).toHaveTextContent(
-      "2026",
+    expect(canvas.queryByRole("combobox", { name: /year/i })).toBeNull();
+    expect(canvas.getByText("2026")).toBeVisible();
+    await userEvent.click(canvas.getByRole("combobox", { name: /month/i }));
+    const monthList = await within(canvasElement.ownerDocument.body).findByRole(
+      "listbox",
     );
+    expect(
+      within(monthList)
+        .getAllByRole("option")
+        .map((option) => option.textContent),
+    ).toEqual(["September", "October"]);
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => {
+      expect(
+        within(canvasElement.ownerDocument.body).queryByRole("listbox"),
+      ).toBeNull();
+    });
     expect(canvas.getByRole("grid")).toBeVisible();
 
     const sunday = canvas.getByRole("button", { name: /September 6th, 2026/ });
@@ -56,6 +68,9 @@ export const Default: Story = {
     expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
       "3",
     );
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "Sep 3, Thurs" }),
+    ).toBeVisible();
 
     expect(canvas.queryByRole("radio", { name: /^11:00/ })).toBeNull();
     await userEvent.click(canvas.getByRole("button", { name: "10:15" }));
@@ -86,6 +101,9 @@ export const LastMonth: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Next month" })).toBeDisabled();
     expect(
+      canvas.getByRole("heading", { level: 2, name: "Pick a time" }),
+    ).toBeVisible();
+    expect(
       canvas.getByText("Pick a day to see its times."),
     ).toBeInTheDocument();
   },
@@ -112,5 +130,17 @@ export const Failed: Story = {
     expect(
       canvas.queryByText("Nothing is free on this day any more."),
     ).toBeNull();
+  },
+};
+
+/** A label the consumer passes replaces the zone's short name, as the drop-off page does. */
+export const LabelFromTheConsumer: Story = {
+  args: { timeZoneLabel: "Hong Kong Standard Time" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText("Times in Hong Kong Standard Time"),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText("Times in HKT")).not.toBeInTheDocument();
   },
 };

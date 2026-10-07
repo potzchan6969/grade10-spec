@@ -4,9 +4,14 @@ import type { ReactNode } from "react";
 type BookingQuestion = {
   id: string;
   label: string;
-  kind: "text" | "choice";
+  kind: "text" | "textarea" | "choice" | "choices" | "select" | "number";
   options?: readonly string[];
   required: boolean;
+  placeholder?: string;
+  /** Tooltip on the label. */
+  hint?: string;
+  /** Uneditable text before a number, e.g. `$`. */
+  prefix?: string;
 };
 
 type BookingService = {
@@ -38,11 +43,12 @@ type BookingSlot = { start: number; end: number; remaining: number };
 type BookingAnswers = Readonly<Record<string, string>>;
 
 /** What the details form hands back: trimmed, and nothing normalized beyond
- * that. An empty phone or notes is `""`. */
+ * that. An empty phone or notes is `""`. Phone is E.164 when parseable. */
 type BookingDetailsValues = {
   name: string;
   email: string;
   phone: string;
+  phoneCountry: string;
   notes: string;
   answers: BookingAnswers;
 };

@@ -1,10 +1,35 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { CheckboxList } from "@grade10/design-system/components/forms/checkbox-list";
+import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
+import { NumberInput } from "@grade10/design-system/components/forms/number-input";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@grade10/design-system/components/forms/select";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
+import { Textarea } from "@grade10/design-system/components/forms/textarea";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { type FormEvent, type ReactNode, useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
+import {
+  AuctionPhoneField,
+  auctionPhoneConfirmValue,
+  auctionPhoneSoftReady,
+} from "@grade10/ui";
+import { Info } from "@phosphor-icons/react";
+import { type FormEvent, type ReactNode, useId, useState } from "react";
+import type { Country } from "react-phone-number-input";
 import type {
   BookingAnswers,
   BookingDetailsValues,
@@ -16,7 +41,10 @@ type BookingDetailsFormCopy = {
   name: string;
   email: string;
   phone: string;
-  notes: string;
+  phonePlaceholder?: string;
+  countrySearchPlaceholder?: string;
+  /** Omit it and the built-in notes field is not rendered. */
+  notes?: string;
   /** Shown under notes when the answers are for the desk only. */
   notesHint?: string;
   /** Marks an optional field and an optional question: `Optional`. */
@@ -24,6 +52,7 @@ type BookingDetailsFormCopy = {
   nameMissing: string;
   emailMissing: string;
   emailInvalid: string;
+  phoneMissing: string;
   answerMissing: string;
   submit: string;
 };
@@ -31,10 +60,12 @@ type BookingDetailsFormCopy = {
 type BookingDetailsFormProps = {
   copy: BookingDetailsFormCopy;
   questions: readonly BookingQuestion[];
+  /** Intro under the title — usually the service's description. */
+  description?: ReactNode;
   /** Seeds the fields, so a refused time keeps what the collector typed. */
   initialValues?: Partial<BookingDetailsValues>;
-  /** Locks email to the seeded value — native readOnly, still submitted. */
-  emailReadOnly?: boolean;
+  /** Locks email to the seeded value — native disabled, still submitted. */
+  emailDisabled?: boolean;
   pending?: boolean;
   error?: ReactNode;
   onSubmit: (values: BookingDetailsValues) => void;
@@ -44,12 +75,15 @@ type BookingDetailsFormProps = {
 type FieldErrors = {
   name?: string;
   email?: string;
+  phone?: string;
   answers: Readonly<Record<string, string>>;
 };
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const NO_ERRORS: FieldErrors = { answers: {} };
+
+const CHOICE_JOIN = "\n";
 
 /**
  * Name, email, phone, the service's questions in order, and notes. Refuses to
@@ -59,8 +93,9 @@ const NO_ERRORS: FieldErrors = { answers: {} };
 function BookingDetailsForm({
   copy,
   questions,
+  description,
   initialValues,
-  emailReadOnly = false,
+  emailDisabled = false,
   pending = false,
   error,
   onSubmit,
@@ -69,6 +104,9 @@ function BookingDetailsForm({
   const [name, setName] = useState(initialValues?.name ?? "");
   const [email, setEmail] = useState(initialValues?.email ?? "");
   const [phone, setPhone] = useState(initialValues?.phone ?? "");
+  const [phoneCountry, setPhoneCountry] = useState<string | undefined>(
+    initialValues?.phoneCountry ?? "HK",
+  );
   const [notes, setNotes] = useState(initialValues?.notes ?? "");
   const [answers, setAnswers] = useState<BookingAnswers>(
     initialValues?.answers ?? {},
@@ -81,10 +119,28 @@ function BookingDetailsForm({
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    const values = collect({ name, email, phone, notes, answers }, questions);
+    const phoneCountryValue = phoneCountry
+      ? (phoneCountry as Country)
+      : undefined;
+    const values = collect(
+      {
+        name,
+        email,
+        phone: auctionPhoneConfirmValue(phone, phoneCountryValue),
+        phoneCountry: phoneCountry ?? "",
+        notes,
+        answers,
+      },
+      questions,
+    );
     const found = validate(values, questions, copy);
     setErrors(found);
-    if (found.name || found.email || Object.keys(found.answers).length > 0) {
+    if (
+      found.name ||
+      found.email ||
+      found.phone ||
+      Object.keys(found.answers).length > 0
+    ) {
       return;
     }
     onSubmit(values);
@@ -98,9 +154,16 @@ function BookingDetailsForm({
       onSubmit={handleSubmit}
     >
       <VStack gap="md" hAlign="stretch">
-        <Text as="h2" size="lg" weight="medium">
-          {copy.title}
-        </Text>
+        <VStack gap="xs" hAlign="stretch">
+          <Text as="h2" size="lg" weight="medium">
+            {copy.title}
+          </Text>
+          {description ? (
+            <Text as="p" size="sm" tone="secondary">
+              {description}
+            </Text>
+          ) : null}
+        </VStack>
         <TextInput
           autoComplete="name"
           label={copy.name}
@@ -117,20 +180,24 @@ function BookingDetailsForm({
           message={errors.email}
           name="email"
           onChange={
-            emailReadOnly ? undefined : (event) => setEmail(event.target.value)
+            emailDisabled ? undefined : (event) => setEmail(event.target.value)
           }
-          readOnly={emailReadOnly}
+          disabled={emailDisabled}
           status={errors.email ? "error" : "default"}
           type="email"
           value={email}
         />
-        <TextInput
-          autoComplete="tel"
-          inputMode="tel"
+        <AuctionPhoneField
+          country={phoneCountry ? (phoneCountry as Country) : undefined}
+          countrySearchPlaceholder={copy.countrySearchPlaceholder}
+          defaultCountry="HK"
           label={`${copy.phone} (${copy.optional})`}
+          message={errors.phone}
           name="phone"
-          onChange={(event) => setPhone(event.target.value)}
-          type="tel"
+          onChange={setPhone}
+          onCountryChange={(next) => setPhoneCountry(next ?? "")}
+          placeholder={copy.phonePlaceholder}
+          status={errors.phone ? "error" : "default"}
           value={phone}
         />
         {questions.map((question) => (
@@ -143,19 +210,21 @@ function BookingDetailsForm({
             question={question}
           />
         ))}
-        <VStack gap="xs" hAlign="stretch">
-          <TextInput
-            label={`${copy.notes} (${copy.optional})`}
-            name="notes"
-            onChange={(event) => setNotes(event.target.value)}
-            value={notes}
-          />
-          {copy.notesHint ? (
-            <Text as="p" size="sm" tone="muted">
-              {copy.notesHint}
-            </Text>
-          ) : null}
-        </VStack>
+        {copy.notes ? (
+          <VStack gap="xs" hAlign="stretch">
+            <TextInput
+              label={`${copy.notes} (${copy.optional})`}
+              name="notes"
+              onChange={(event) => setNotes(event.target.value)}
+              value={notes}
+            />
+            {copy.notesHint ? (
+              <Text as="p" size="sm" tone="muted">
+                {copy.notesHint}
+              </Text>
+            ) : null}
+          </VStack>
+        ) : null}
         {error ? (
           <Text as="p" data-slot="booking-details-error" size="sm" tone="error">
             {error}
@@ -182,15 +251,15 @@ function QuestionField({
   optional: string;
   onAnswer: (value: string) => void;
 }) {
-  const label = question.required
-    ? question.label
-    : `${question.label} (${optional})`;
+  const selectId = useId();
+  const label = questionLabel(question, optional);
+  const fieldLabel = <QuestionLabel hint={question.hint} label={label} />;
   if (question.kind === "choice") {
     return (
       <VStack data-slot="booking-question" gap="xs" hAlign="stretch">
         <RadioList
           aria-invalid={error ? true : undefined}
-          label={label}
+          label={fieldLabel}
           onValueChange={(value) => onAnswer(String(value))}
           value={answer}
         >
@@ -208,17 +277,165 @@ function QuestionField({
       </VStack>
     );
   }
+  if (question.kind === "choices") {
+    const selected = splitChoices(answer);
+    return (
+      <VStack data-slot="booking-question" gap="xs" hAlign="stretch">
+        <CheckboxList label={fieldLabel}>
+          {(question.options ?? []).map((option) => (
+            <CheckboxListInput
+              checked={selected.has(option)}
+              key={option}
+              onCheckedChange={(checked) => {
+                onAnswer(
+                  joinChoices(
+                    question.options ?? [],
+                    selected,
+                    option,
+                    checked === true,
+                  ),
+                );
+              }}
+            >
+              {option}
+            </CheckboxListInput>
+          ))}
+        </CheckboxList>
+        {error ? (
+          <Text as="span" size="sm" tone="error">
+            {error}
+          </Text>
+        ) : null}
+      </VStack>
+    );
+  }
+  if (question.kind === "select") {
+    return (
+      <VStack data-slot="booking-question" gap="xs" hAlign="stretch">
+        <VStack gap="xs" hAlign="stretch">
+          <label
+            className="text-sm font-medium text-secondary-foreground"
+            htmlFor={selectId}
+          >
+            {fieldLabel}
+          </label>
+          <Select
+            onValueChange={(value) => {
+              if (typeof value === "string") onAnswer(value);
+            }}
+            value={answer === "" ? null : answer}
+          >
+            <SelectTrigger
+              aria-invalid={error ? true : undefined}
+              aria-label={question.label}
+              className="w-full"
+              id={selectId}
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent
+              alignItemWithTrigger={false}
+              aria-label={question.label}
+            >
+              {(question.options ?? []).map((option) => (
+                <SelectItem key={option} label={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </VStack>
+        {error ? (
+          <Text as="span" size="sm" tone="error">
+            {error}
+          </Text>
+        ) : null}
+      </VStack>
+    );
+  }
+  if (question.kind === "textarea") {
+    return (
+      <Textarea
+        data-slot="booking-question"
+        label={fieldLabel}
+        message={error}
+        name={`question-${question.id}`}
+        onChange={(event) => onAnswer(event.target.value)}
+        placeholder={question.placeholder}
+        status={error ? "error" : "default"}
+        value={answer}
+      />
+    );
+  }
+  if (question.kind === "number") {
+    return (
+      <NumberInput
+        data-slot="booking-question"
+        label={fieldLabel}
+        message={error}
+        min={0}
+        name={`question-${question.id}`}
+        onChange={(event) => onAnswer(event.target.value)}
+        placeholder={question.placeholder}
+        prefix={question.prefix}
+        status={error ? "error" : "default"}
+        value={answer}
+      />
+    );
+  }
   return (
     <TextInput
       data-slot="booking-question"
-      label={label}
+      label={fieldLabel}
       message={error}
       name={`question-${question.id}`}
       onChange={(event) => onAnswer(event.target.value)}
+      placeholder={question.placeholder}
       status={error ? "error" : "default"}
       value={answer}
     />
   );
+}
+
+function QuestionLabel({ hint, label }: { hint?: string; label: string }) {
+  if (!hint) return label;
+  return (
+    <HStack className="min-w-0" gap="xs" vAlign="center">
+      <span>{label}</span>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger
+            aria-label={hint}
+            className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+            closeOnClick={false}
+          >
+            <Info aria-hidden size={12} />
+          </TooltipTrigger>
+          <TooltipContent>{hint}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </HStack>
+  );
+}
+
+function questionLabel(question: BookingQuestion, optional: string) {
+  return question.required ? question.label : `${question.label} (${optional})`;
+}
+
+function splitChoices(answer: string) {
+  return new Set(answer === "" ? [] : answer.split(CHOICE_JOIN));
+}
+
+function joinChoices(
+  options: readonly string[],
+  selected: ReadonlySet<string>,
+  option: string,
+  on: boolean,
+) {
+  const next = new Set(selected);
+  if (on) next.add(option);
+  else next.delete(option);
+  return options.filter((item) => next.has(item)).join(CHOICE_JOIN);
 }
 
 /** Trims every text and keeps only the answers the service asks for. */
@@ -234,7 +451,8 @@ function collect(
   return {
     name: raw.name.trim(),
     email: raw.email.trim().toLowerCase(),
-    phone: raw.phone.trim(),
+    phone: raw.phone,
+    phoneCountry: raw.phoneCountry,
     notes: raw.notes.trim(),
     answers,
   };
@@ -251,6 +469,10 @@ function validate(
       answers[question.id] = copy.answerMissing;
     }
   }
+  const phoneCountry = values.phoneCountry
+    ? (values.phoneCountry as Country)
+    : undefined;
+  const phoneReady = auctionPhoneSoftReady(values.phone, phoneCountry);
   return {
     name: values.name === "" ? copy.nameMissing : undefined,
     email:
@@ -259,6 +481,7 @@ function validate(
         : EMAIL.test(values.email)
           ? undefined
           : copy.emailInvalid,
+    phone: !phoneReady ? copy.phoneMissing : undefined,
     answers,
   };
 }

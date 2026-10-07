@@ -1610,8 +1610,9 @@ the invoice, set the invoice status to `payment_verifying`, stop the payment
 deadline and record the time left, per `grade10-site/auction/order-status`,
 and write a proof-uploaded entry to the invoice log. The order SHALL derive as
 Payment Verifying. Winner Order SHALL show a success toast titled **Proof
-submitted** with description **We'll verify your payment shortly.** No letter
-is sent.
+submitted** with description **We'll verify your payment shortly.** for an
+English locale, and localized copy for Simplified Chinese and Traditional
+Chinese. No letter is sent.
 
 **Payment Verifying** - While the invoice is `payment_verifying`, Winner Order
 SHALL show no payment deadline running, SHALL offer no card Pay and no upload,
@@ -1636,8 +1637,9 @@ the order's winner.
 successful confirm SHALL store nothing. An upload that fails part-way SHALL
 store nothing, leave the invoice `pending`, keep Submit Payment Proof open with
 the draft the winner had entered, and show an error toast titled **Proof not
-submitted** with description **Nothing was saved. Try again.**; the winner may
-upload again. The one upload counts only once an upload succeeds.
+submitted** with description **Nothing was saved. Try again.** for an English
+locale, and localized copy for Simplified Chinese and Traditional Chinese; the
+winner may upload again. The one upload counts only once an upload succeeds.
 
 **Who reads the files** - Payment proof files SHALL be readable by any operator
 who can open the order, per `grade10-admin/auction/post-sale`, and never by the

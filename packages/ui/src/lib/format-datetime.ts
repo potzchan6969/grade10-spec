@@ -177,14 +177,6 @@ export function formatLocalMoment(
   return `${day} ${month} ${year}, ${hours}:${minutes}`;
 }
 
-/** Deadline shape: `24 Aug 2026, 18:00 HKT` or `23 Aug 2026, 22:00 EDT`. */
-export function formatZonedLocalMoment(
-  at: Date | number,
-  options: { locale?: ShippedLocale; timeZone: string },
-): string {
-  return `${formatLocalMoment(at, options)} ${formatViewerZoneName(options.timeZone, at)}`;
-}
-
 /** Collector local calendar day: `24 Aug 2026`. */
 export function formatLocalDay(
   at: Date | number,
@@ -194,6 +186,54 @@ export function formatLocalDay(
   return `${day} ${month} ${year}`;
 }
 
+const EN_WEEKDAY_SHORT = [
+  "Sun",
+  "Mon",
+  "Tues",
+  "Wed",
+  "Thurs",
+  "Fri",
+  "Sat",
+] as const;
+
+/** Shop calendar day label: `Sep 3, Thurs`. `date` is `YYYY-MM-DD`. */
+export function formatCalendarDayLabel(
+  date: string,
+  locale: ShippedLocale = "en",
+): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  if (!match) {
+    throw new RangeError(`Not a calendar day: ${date}`);
+  }
+  const year = Number(match[1]);
+  const monthIndex = Number(match[2]) - 1;
+  const day = Number(match[3]);
+  const local = new Date(year, monthIndex, day);
+  if (
+    local.getFullYear() !== year ||
+    local.getMonth() !== monthIndex ||
+    local.getDate() !== day
+  ) {
+    throw new RangeError(`Not a calendar day: ${date}`);
+  }
+
+  if (locale === "en") {
+    return `${UTC_MONTHS[monthIndex]} ${day}, ${EN_WEEKDAY_SHORT[local.getDay()]}`;
+  }
+
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat(intlLocale(locale), {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    })
+      .formatToParts(local)
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  ) as Record<string, string>;
+  return `${parts.month} ${parts.day}, ${parts.weekday}`;
+}
+
 /** Collector local clock: `18:00`. */
 export function formatLocalTime(
   at: Date | number,
@@ -201,6 +241,22 @@ export function formatLocalTime(
 ): string {
   const { hours, minutes } = localParts(parseInstant(at), locale, timeZone);
   return `${hours}:${minutes}`;
+}
+
+/** Collector local clock with the viewer's zone named: `18:00 HKT`. */
+export function formatZonedLocalTime(
+  at: Date | number,
+  options: { locale?: ShippedLocale; timeZone: string },
+): string {
+  return `${formatLocalTime(at, options)} ${formatViewerZoneName(options.timeZone, at)}`;
+}
+
+/** Deadline shape: `24 Aug 2026, 18:00 HKT` or `23 Aug 2026, 22:00 EDT`. */
+export function formatZonedLocalMoment(
+  at: Date | number,
+  options: { locale?: ShippedLocale; timeZone: string },
+): string {
+  return `${formatLocalDay(at, options)}, ${formatZonedLocalTime(at, options)}`;
 }
 
 export function formatCollectorDeadline(
@@ -219,32 +275,27 @@ type CollectorClockOptions = {
   timeZone: string;
 };
 
-/** Viewer zone as an offset, e.g. `GMT+8`. Documents use this, not `HKT`. */
-export function formatZoneOffset(timeZone: string, at: Date | number): string {
-  const raw =
-    new Intl.DateTimeFormat("en-US", {
-      timeZone,
-      timeZoneName: "shortOffset",
-    })
-      .formatToParts(parseInstant(at))
-      .find((part) => part.type === "timeZoneName")?.value ?? "GMT";
-  return raw.replace(/^UTC/, "GMT").replace(/([+-])0(\d)(?::00)?$/, "$1$2");
-}
-
-/** Viewer short name at that instant: `HKT`, `EDT`. Hong Kong is always `HKT`. */
+/**
+ * Viewer short name at that instant: `HKT`, `EDT`, or the offset (`GMT+9`)
+ * where US English has no short name. Hong Kong is always `HKT`. The instant is
+ * parsed first, so an invalid one stops every zone alike.
+ */
 export function formatViewerZoneName(
   timeZone: string,
   at: Date | number,
 ): string {
+  const instant = parseInstant(at);
   if (timeZone === "Asia/Hong_Kong") return "HKT";
-  const raw =
-    new Intl.DateTimeFormat("en-US", {
-      timeZone,
-      timeZoneName: "short",
-    })
-      .formatToParts(parseInstant(at))
-      .find((part) => part.type === "timeZoneName")?.value ?? "GMT";
-  return raw.replace(/^UTC/, "GMT");
+  const name = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    timeZoneName: "short",
+  })
+    .formatToParts(instant)
+    .find((part) => part.type === "timeZoneName");
+  if (name === undefined) {
+    throw new RangeError(`No zone name for ${timeZone} at ${instant}`);
+  }
+  return name.value.replace(/^UTC/, "GMT");
 }
 
 /** Auction listing close prefix in the viewer's zone. */
@@ -269,18 +320,6 @@ export function formatListingOpens(
   options: CollectorClockOptions,
 ): string {
   return formatCollectorDeadline(at, { ...options, prefix: "Opens" });
-}
-
-export function formatClosedAt(
-  at: Date | number,
-  {
-    locale = "en",
-    timeZone,
-    template,
-  }: { locale?: ShippedLocale; timeZone: string; template: string },
-): string {
-  const when = formatZonedLocalMoment(at, { locale, timeZone });
-  return template.replace("{when}", when);
 }
 
 export function formatRelativeAt(
@@ -381,15 +420,3 @@ export function resolveShippedLocale(input: string): ShippedLocale {
   }
   return "en";
 }
-
-/** @deprecated Use {@link formatMoment}. */
-export const formatAuctionMoment = formatMoment;
-
-/** @deprecated Use {@link formatListingEnds}. */
-export const formatAuctionDeadline = formatListingEnds;
-
-/** @deprecated Use {@link formatListingClosed}. */
-export const formatAuctionClosed = formatListingClosed;
-
-/** @deprecated Use {@link formatListingOpens}. */
-export const formatAuctionOpens = formatListingOpens;

@@ -181,20 +181,27 @@ function CalendarDropdown({
   const selected = value === undefined ? null : String(value);
   const monthMenu = isMonthDropdown(options);
   const localeCode = dayPickerProps.locale?.code ?? "en";
-  const selectedMonth = options?.find(
-    (option) => String(option.value) === selected,
-  );
+  const pickable = (options ?? []).filter((option) => !option.disabled);
+  const shown =
+    pickable.find((option) => String(option.value) === selected) ??
+    options?.find((option) => String(option.value) === selected) ??
+    pickable[0];
+  if (pickable.length <= 1) {
+    const text =
+      monthMenu && shown != null
+        ? shortMonthName(shown.value, localeCode)
+        : (shown?.label ?? "");
+    return (
+      <span className={cn("px-2 text-sm font-medium", className)}>{text}</span>
+    );
+  }
   const triggerLabel =
-    monthMenu && selectedMonth != null
-      ? shortMonthName(selectedMonth.value, localeCode)
+    monthMenu && shown != null
+      ? shortMonthName(shown.value, localeCode)
       : undefined;
   return (
     <Select
       disabled={disabled}
-      items={(options ?? []).map((option) => ({
-        label: option.label,
-        value: String(option.value),
-      }))}
       modal={false}
       onValueChange={(next) => {
         if (next == null) {
@@ -223,12 +230,8 @@ function CalendarDropdown({
         )}
       </SelectTrigger>
       <SelectContent align="center" alignItemWithTrigger={false}>
-        {(options ?? []).map((option) => (
-          <SelectItem
-            disabled={option.disabled}
-            key={option.value}
-            value={String(option.value)}
-          >
+        {pickable.map((option) => (
+          <SelectItem key={option.value} value={String(option.value)}>
             {option.label}
           </SelectItem>
         ))}
@@ -460,11 +463,12 @@ const DEFAULT_END_MONTH = new Date(new Date().getFullYear() + 10, 11);
  * fixed year, or a single label (`captionLayout`).
  *
  * Overflow days are selectable and do not move the caption. Only chevrons
- * and the month/year dropdowns change month. The month dropdown uses the
- * The month dropdown trigger uses the locale's short month name (`Sep`) so
- * the caption width holds while paging; the open list uses the full name
- * (`September`). Arrow / Page / Home / End stay on this grid.
- * Unselectable days are the caller's `disabled` matcher.
+ * and the month/year dropdowns change month. A caption menu lists only
+ * months or years inside `startMonth`/`endMonth`; one remaining choice is
+ * a label, not a menu. The month dropdown trigger uses the locale's short
+ * month name (`Sep`) so the caption width holds while paging; the open
+ * list uses the full name (`September`). Arrow / Page / Home / End stay
+ * on this grid. Unselectable days are the caller's `disabled` matcher.
  *
  * **No Figma component set yet** — Storybook-first. Do not add variant axes
  * until design publishes Calendar.

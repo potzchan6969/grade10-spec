@@ -10,7 +10,7 @@
 ## Non-Goals
 
 - Changing `ListingGallery` (the older zoom-dialog gallery) strip rules.
-- Changing image sizes, alt text, zoom, or admin upload rules.
+- Changing image alt text or admin upload rules.
 - Renaming package exports or folding `ListingGallery` into
   `ListingLotGallery` in this change.
 - PDP column ratios (tablet half/half, desktop sidebar width) as
@@ -24,6 +24,7 @@
 | Q2 | What replaces the strip on a stacked several-image gallery? | Previous/next and carousel progress remain; no substitute strip below the stage - decided by the round | Keep a horizontal strip under the progress; omit previous/next when the strip is hidden |
 | Q3 | Does this rule apply to `ListingGallery` as well as `ListingLotGallery`? | `ListingLotGallery` and the site details gallery that compose it only; leave `ListingGallery` unchanged - decided by the round | One strip rule for every gallery export in the package |
 | Q4 | Is the width threshold a named product value? | No — “wide enough for a left rail beside the main frame” is the product rule; the implementation threshold stays in code - decided by the round | Publishing a pixel or rem breakpoint as a durable requirement |
+| Q5 | Does the details gallery retain its named image sizes and zoom behavior as the rail adapts to width? | Yes — the rail uses `thumb`, the main frame uses `detail`, and opening the selected image uses `zoom`, as SC-22 already requires - confirmed by the user | Use the main source for every slot and defer zoom |
 
 ## Raised
 
