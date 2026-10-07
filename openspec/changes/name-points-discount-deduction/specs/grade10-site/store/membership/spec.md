@@ -22,9 +22,9 @@ other instrument, never more than promised. At the till, only the sale's one
 custom order discount, for a fixed amount, SHALL count under either title;
 an offer or a code titled the same SHALL never count. That discount SHALL
 be the member's only on a sale carrying the store's order id; on a sale
-without one it is somebody else's discount, and Apply SHALL be refused until
-staff remove it, a coupon-only Apply included, since the order id Apply
-writes would make it read as the member's. Applying points again SHALL write
+without one it is somebody else's discount, and the panel SHALL offer no
+points, no coupon and no Apply until staff remove it, since the order id
+Apply writes would make it read as the member's. Applying points again SHALL write
 the title "Deduction from Points", whatever title the sale carried before.
 The promise SHALL sit outside the order's own one-coupon limit, so a reward
 coupon and a points discount can both apply to the same order. Nothing SHALL
