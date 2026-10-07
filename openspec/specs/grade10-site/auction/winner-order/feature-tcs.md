@@ -2226,7 +2226,7 @@ is still owed, a tracker, and proof of what was handed over,
 
 | Field | Value |
 | --- | --- |
-| <shipped order> | A paid order with fulfilment fulfilled, a tracking number and delivery not confirmed |
+| <shipped order> | A paid order with fulfilment fulfilled, a tracking number, an operator tracker link and delivery not confirmed |
 | <tracking number> | The tracking number recorded for <shipped order> |
 | <carrier tracking URL> | The carrier's tracking page for <shipped order> |
 
@@ -2265,7 +2265,7 @@ is still owed, a tracker, and proof of what was handed over,
 
 | Field | Value |
 | --- | --- |
-| <delivered order> | A paid order with fulfilment fulfilled, delivery confirmed and a tracking number |
+| <delivered order> | A paid order with fulfilment fulfilled, delivery confirmed, a tracking number and an operator tracker link |
 | <tracking number> | The tracking number recorded for <delivered order> |
 | <carrier tracking URL> | The carrier's tracking page for <delivered order> |
 
@@ -2355,6 +2355,44 @@ is still owed, a tracker, and proof of what was handed over,
 * Shipping is the current progress step with the day-only ship date.
 * The tracking number is the external carrier link.
 * Order Progress adds no separate Track shipment control and no separate carrier name.
+
+<!-- trace:case id=g10.auction-winner-order.TC-gg7 rev=1 covers=g10.auction-winner-order.SC-tgb -->
+### winner-order-US2-TC14-1: Shipped order without a tracker link shows the number as plain text
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <untracked-link order>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <untracked-link order> | A paid order with fulfilment fulfilled and a tracking number, where the operator recorded no tracker link |
+| <tracking number> | The tracking number recorded for <untracked-link order> |
+
+**Steps:**
+
+1. Read Order Progress.
+2. Select <tracking number>.
+
+**Expected Results:**
+
+* Order Progress shows <tracking number> as plain text, not a link.
+* Order Progress shows no carrier name and no Track shipment control.
+* Step 2 opens nothing.
 
 ---
 
@@ -6445,15 +6483,16 @@ that implementation works.
 
 | Finding | Disposition |
 | --- | --- |
-| `US2-TC2-1` is the durable retained-record case with carrier identity | **Dropped:** this suite no longer carries a copy of `TC-4zy`; `add-winner-order-tax-line` revises it to `US2-TC2-2` (tracking number as the carrier link, no separate carrier name), and `winner-order-SC-20` is reached there. This change's own requirement and cases require no carrier name |
+| `US2-TC2-1` is the durable retained-record case with carrier identity | **Dropped:** this suite no longer carries a copy of `TC-4zy`; `add-winner-order-tax-line` revises it to `US2-TC2-3` (tracking number as the carrier link only with a tracker link, no separate carrier name), and `winner-order-SC-20` is reached there. This change's own requirement and cases require no carrier name |
 | `winner-order-SC-251` - fulfilled order shows and opens the tracking-number link | **Covered:** `winner-order-SC-251` ← `US2-TC13-1` |
 | `winner-order-SC-252` - link remains after delivery is confirmed | **Covered:** `winner-order-SC-252` ← `US2-TC12-2` |
 | The Raised questions about the Track shipment control and Delivered state | **Settled:** decisions Q1 and Q3; the shipped case checks no separate control, and the delivered case checks the link remains |
+| `winner-order-SC-276` - no tracker link recorded shows the number as plain text | **Covered:** `winner-order-SC-276` ← `US2-TC14-1`; planning owner's decision Q6 |
 | Root group and journey coverage | **Covered:** both cases trace `winner-order-US-02`; neither case adds behavior outside `Order-progress tracking` |
-| Uncovered scenarios | **None.** Both delta scenarios have a case; the durable suite and auction domain suite add no other scenario for this change's frozen anchors |
+| Uncovered scenarios | **None.** All three delta scenarios have a case; the durable suite and auction domain suite add no other scenario for this change's frozen anchors |
 
 - **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
-- **Covered:** `winner-order-SC-253` ← `US2-TC20-1`.
+- **Covered:** `winner-order-SC-253` ← `US2-TC20-2`.
 - **Raised:** none.
 
 **Run:** The blind pass read the Purpose, Feature set, `winner-order-US-01`, the proposal, decisions, UI design without scenario dispositions, and the linked PRD. It did not read durable or change requirements.
