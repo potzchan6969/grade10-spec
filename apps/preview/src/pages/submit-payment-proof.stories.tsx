@@ -207,3 +207,116 @@ export const SubmitFailure: Story = {
     expect(args.onSubmit).not.toHaveBeenCalled();
   },
 };
+
+/** A dirty, non-busy draft asks before leaving and stays open when declined. */
+export const DirtyLeave: Story = {
+  name: "Confirm dirty leave",
+  args: { onSubmit: fn() },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+    await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
+
+    const originalConfirm = window.confirm;
+    const confirmationMessages: string[] = [];
+    window.confirm = (message?: string) => {
+      confirmationMessages.push(message ?? "");
+      return confirmationMessages.length > 1;
+    };
+    try {
+      await userEvent.click(modal.getByRole("button", { name: "Cancel" }));
+      expect(
+        page.getByRole("dialog", { name: "Submit Payment Proof" }),
+      ).toBeVisible();
+      await userEvent.click(modal.getByRole("button", { name: "Cancel" }));
+      await waitFor(() => {
+        expect(page.queryByRole("dialog")).not.toBeInTheDocument();
+      });
+    } finally {
+      window.confirm = originalConfirm;
+    }
+
+    expect(confirmationMessages).toEqual([
+      "Leave without submitting? Your payment proof will not be saved.",
+      "Leave without submitting? Your payment proof will not be saved.",
+    ]);
+  },
+};
+
+/** Submitting locks the form and blocks Cancel, Escape and overlay dismiss. */
+export const SubmittingBusy: Story = {
+  name: "Submitting",
+  args: { onSubmit: fn() },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+
+    await fillProofForm(modal);
+    await userEvent.click(
+      modal.getByRole("button", { name: "Submit Payment Proof" }),
+    );
+
+    const cancel = modal.getByRole("button", { name: "Cancel" });
+    expect(cancel).toBeDisabled();
+    expect(modal.getByLabelText("Sender Name")).toBeDisabled();
+    await userEvent.keyboard("{Escape}");
+    const overlay = canvasElement.ownerDocument.querySelector(
+      '[data-slot="dialog-overlay"]',
+    );
+    expect(overlay).toBeTruthy();
+    await userEvent.click(overlay as HTMLElement);
+    expect(
+      page.getByRole("dialog", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
+    await waitFor(() => {
+      expect(page.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+  },
+};
+
+/** HEIC ingest enters its busy state and blocks leaving while conversion runs. */
+export const ConvertingHeic: Story = {
+  name: "Converting HEIC",
+  args: { onSubmit: fn() },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+    const heic = new File(["preview-heic"], "transfer-receipt.heic", {
+      type: "image/heic",
+    });
+    const fileInput = modal
+      .getByRole("button", { name: "Choose Files" })
+      .closest('[data-slot="file-dropzone"]')
+      ?.querySelector('input[type="file"]');
+    expect(fileInput).toBeTruthy();
+
+    await userEvent.upload(fileInput as HTMLInputElement, heic);
+    expect(modal.getByText("Converting HEIC…")).toBeVisible();
+    expect(modal.getByRole("button", { name: "Cancel" })).toBeDisabled();
+    await userEvent.keyboard("{Escape}");
+    const overlay = canvasElement.ownerDocument.querySelector(
+      '[data-slot="dialog-overlay"]',
+    );
+    expect(overlay).toBeTruthy();
+    await userEvent.click(overlay as HTMLElement);
+    expect(
+      page.getByRole("dialog", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
+    await waitFor(() => {
+      expect(modal.queryByText("Converting HEIC…")).not.toBeInTheDocument();
+    });
+    const originalConfirm = window.confirm;
+    window.confirm = () => true;
+    try {
+      await userEvent.click(modal.getByRole("button", { name: "Cancel" }));
+      await waitFor(() => {
+        expect(page.queryByRole("dialog")).not.toBeInTheDocument();
+      });
+    } finally {
+      window.confirm = originalConfirm;
+    }
+  },
+};

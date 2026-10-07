@@ -736,34 +736,29 @@ function FeaturedAuctionsPair({
   const [paused, setPaused] = useState(false);
   const [playKey, setPlayKey] = useState(0);
   const reduceMotion = useReducedMotion();
-  const [pairReady, setPairReady] = useState(() => Boolean(reduceMotion));
-  const directionRef = useRef(1);
+  const [pairReady, setPairReady] = useState(false);
+  const isPairReady = pairReady || Boolean(reduceMotion);
+  const [direction, setDirection] = useState(1);
   const safeIndex = lots.length === 0 ? 0 : Math.min(index, lots.length - 1);
   const lot = lots[safeIndex];
-  const direction = directionRef.current;
+
+  if (lots.length > 0 && index >= lots.length) setIndex(0);
 
   useEffect(() => {
-    if (index >= lots.length) setIndex(0);
-  }, [index, lots.length]);
-
-  useEffect(() => {
-    if (reduceMotion) {
-      setPairReady(true);
-      return;
-    }
+    if (reduceMotion || pairReady) return;
     const timer = window.setTimeout(
       () => setPairReady(true),
       PAIR_FIRST_ENTER_MS,
     );
     return () => window.clearTimeout(timer);
-  }, [reduceMotion]);
+  }, [pairReady, reduceMotion]);
 
   // Reduced motion: advance on an interval with no progress tween.
   // biome-ignore lint/correctness/useExhaustiveDependencies: playKey and safeIndex re-arm the timer after each move.
   useEffect(() => {
     if (!reduceMotion || lots.length <= 1 || paused) return;
     const timer = window.setTimeout(() => {
-      directionRef.current = 1;
+      setDirection(1);
       setIndex((current) => (current + 1) % lots.length);
       setPlayKey((key) => key + 1);
     }, PAIR_AUTO_MS);
@@ -776,16 +771,16 @@ function FeaturedAuctionsPair({
       return;
     }
     const last = lots.length - 1;
-    if (safeIndex === last && nextIndex === 0) directionRef.current = 1;
-    else if (safeIndex === 0 && nextIndex === last) directionRef.current = -1;
-    else directionRef.current = nextIndex > safeIndex ? 1 : -1;
+    if (safeIndex === last && nextIndex === 0) setDirection(1);
+    else if (safeIndex === 0 && nextIndex === last) setDirection(-1);
+    else setDirection(nextIndex > safeIndex ? 1 : -1);
     setIndex(nextIndex);
     setPlayKey((key) => key + 1);
   }
 
   function advanceFromTimer() {
     if (paused || lots.length <= 1) return;
-    directionRef.current = 1;
+    setDirection(1);
     setIndex((current) => (current + 1) % lots.length);
     setPlayKey((key) => key + 1);
   }
@@ -881,7 +876,7 @@ function FeaturedAuctionsPair({
               aria-live="polite"
               className="relative w-full overflow-visible sm:min-h-[28rem]"
             >
-              {pairReady ? (
+              {isPairReady ? (
                 <AnimatePresence custom={direction} mode="sync">
                   <motion.div
                     key={lot.id}

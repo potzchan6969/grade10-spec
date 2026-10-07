@@ -41,20 +41,26 @@ function AuctionCatalogueAllAuctionsGrid({
   revealed = true,
   className,
 }: AuctionCatalogueAllAuctionsGridProps) {
-  const [visibleCount, setVisibleCount] = useState(() =>
-    Math.min(PAGE_SIZE, lots.length),
-  );
-  const [loadingMore, setLoadingMore] = useState(false);
+  const lotsKey = lots.map((lot) => lot.id).join("\0");
+  const [gridState, setGridState] = useState(() => ({
+    lotsKey,
+    visibleCount: Math.min(PAGE_SIZE, lots.length),
+    loadingMore: false,
+  }));
+  if (gridState.lotsKey !== lotsKey) {
+    setGridState({
+      lotsKey,
+      visibleCount: Math.min(PAGE_SIZE, lots.length),
+      loadingMore: false,
+    });
+  }
+  const { loadingMore, visibleCount } = gridState;
   const sentinelRef = useRef<HTMLDivElement>(null);
   const requestedAtCountRef = useRef<number | null>(null);
-  const lotsKey = lots.map((lot) => lot.id).join("\0");
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: lotsKey resets when the id set changes at the same length.
   useEffect(() => {
-    setVisibleCount(Math.min(PAGE_SIZE, lots.length));
-    setLoadingMore(false);
     requestedAtCountRef.current = null;
-  }, [lotsKey, lots.length]);
+  }, [lotsKey]);
 
   const visibleLots = lots.slice(0, visibleCount);
   const hasMore = visibleCount < lots.length;
@@ -62,8 +68,11 @@ function AuctionCatalogueAllAuctionsGrid({
   useEffect(() => {
     if (!loadingMore) return;
     const timer = window.setTimeout(() => {
-      setVisibleCount((current) => Math.min(current + PAGE_SIZE, lots.length));
-      setLoadingMore(false);
+      setGridState((current) => ({
+        ...current,
+        visibleCount: Math.min(current.visibleCount + PAGE_SIZE, lots.length),
+        loadingMore: false,
+      }));
     }, LOAD_MORE_MS);
     return () => window.clearTimeout(timer);
   }, [loadingMore, lots.length]);
@@ -83,7 +92,7 @@ function AuctionCatalogueAllAuctionsGrid({
         }
         if (requestedAtCountRef.current === visibleCount) return;
         requestedAtCountRef.current = visibleCount;
-        setLoadingMore(true);
+        setGridState((current) => ({ ...current, loadingMore: true }));
       },
       { rootMargin: "200px 0px" },
     );

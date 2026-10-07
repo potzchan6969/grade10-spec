@@ -59,6 +59,7 @@ export const WINNER_ORDER_SAVED_ADDRESS_CAP = 5;
 const SAVE_FOR_FUTURE_REFUSED_TOOLTIP =
   "You already have 5 saved addresses. Remove one to save another.";
 
+// eslint-disable-next-line react-refresh/only-export-components -- Stories share these fixture records from this preview module.
 export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   [
     {
@@ -81,6 +82,7 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   ] as const;
 
 /** Five named addresses — the book is full; save for future is refused. */
+// eslint-disable-next-line react-refresh/only-export-components -- Stories share these fixture records from this preview module.
 export const WINNER_ORDER_FULL_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   [
     {
@@ -373,21 +375,26 @@ function WinnerOrderSetupDialog({
   const [draftOption, setDraftOption] =
     useState<WinnerOrderSavedAddress | null>(null);
   const [deliverySnapshot, setDeliverySnapshot] =
-    useState<AddressSnapshot | null>(null);
+    useState<AddressSnapshot | null>(() =>
+      initialStep > 1 && savedAddressesProp[0]
+        ? snapshotFromAddress(savedAddressesProp[0])
+        : null,
+    );
   const [paymentMethod, setPaymentMethod] =
     useState<WinnerOrderSetupPaymentMethod | null>(null);
   const [sameAsDelivery, setSameAsDelivery] = useState(true);
   const [newAddressOpen, setNewAddressOpen] = useState(initialNewAddressOpen);
-  const [saveForFuture, setSaveForFuture] = useState(true);
-  const [addressFormKey, setAddressFormKey] = useState(0);
+  const [saveForFuture, setSaveForFuture] = useState(
+    savedAddressesProp.length < WINNER_ORDER_SAVED_ADDRESS_CAP,
+  );
+  const [addressFormKey, setAddressFormKey] = useState(1);
   const [exitingIds, setExitingIds] = useState(() => new Set<string>());
   const [enteringIds, setEnteringIds] = useState(() => new Set<string>());
   const exitTimersRef = useRef<Map<string, number>>(new Map());
   const enterTimersRef = useRef<Map<string, number>>(new Map());
   const offerBankTransfer = currency === "HKD";
 
-  useEffect(() => {
-    if (!open) return;
+  function resetDialogState() {
     for (const timerId of exitTimersRef.current.values()) {
       window.clearTimeout(timerId);
     }
@@ -415,18 +422,20 @@ function WinnerOrderSetupDialog({
     setAddressFormKey((key) => key + 1);
     setExitingIds(new Set());
     setEnteringIds(new Set());
-  }, [open, savedAddressesProp, initialNewAddressOpen, initialStep]);
+  }
 
   useEffect(() => {
+    const exitTimers = exitTimersRef.current;
+    const enterTimers = enterTimersRef.current;
     return () => {
-      for (const timerId of exitTimersRef.current.values()) {
+      for (const timerId of exitTimers.values()) {
         window.clearTimeout(timerId);
       }
-      for (const timerId of enterTimersRef.current.values()) {
+      for (const timerId of enterTimers.values()) {
         window.clearTimeout(timerId);
       }
-      exitTimersRef.current.clear();
-      enterTimersRef.current.clear();
+      exitTimers.clear();
+      enterTimers.clear();
     };
   }, []);
 
@@ -483,6 +492,11 @@ function WinnerOrderSetupDialog({
     return null;
   }
 
+  function closeAfterConfirm() {
+    resetDialogState();
+    onOpenChange(false);
+  }
+
   function finishSetup() {
     const delivery = deliveryPayload();
     if (!delivery || !paymentMethod) return;
@@ -494,7 +508,7 @@ function WinnerOrderSetupDialog({
         billing: delivery,
         sameAsDelivery,
       });
-      onOpenChange(false);
+      closeAfterConfirm();
       return;
     }
 
@@ -506,7 +520,7 @@ function WinnerOrderSetupDialog({
       billing: snapshotPayload(billing),
       sameAsDelivery,
     });
-    onOpenChange(false);
+    closeAfterConfirm();
   }
 
   function goNext() {
@@ -648,6 +662,7 @@ function WinnerOrderSetupDialog({
       );
       if (!leave) return;
     }
+    if (!next && open) resetDialogState();
     onOpenChange(next);
   }
 

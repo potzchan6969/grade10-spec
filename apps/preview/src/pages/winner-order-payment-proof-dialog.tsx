@@ -26,6 +26,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { toastProofNotSubmitted } from "./winner-order-proof-feedback";
 
 /** Preview-only bank details — Grade10 / HSBC Hong Kong sample until Finance confirms live values. */
+// eslint-disable-next-line react-refresh/only-export-components -- Bank detail fixtures are shared with preview stories.
 export const WINNER_ORDER_BANK_DETAILS = {
   beneficiaryName: "Grade10 Finance Limited",
   beneficiaryAddress: "Unit 2602, 28 Stanley Street, Central, Hong Kong",

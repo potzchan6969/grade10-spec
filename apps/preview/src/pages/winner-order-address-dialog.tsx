@@ -49,6 +49,7 @@ export const WINNER_ORDER_SAVED_ADDRESS_CAP = 5;
 const SAVE_FOR_FUTURE_REFUSED_TOOLTIP =
   "You already have 5 saved addresses. Remove one to save another.";
 
+// eslint-disable-next-line react-refresh/only-export-components -- Stories share these fixture records from this preview module.
 export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   [
     {
@@ -65,6 +66,7 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   ] as const;
 
 /** Five named addresses — the book is full; save for future is refused. */
+// eslint-disable-next-line react-refresh/only-export-components -- Stories share these fixture records from this preview module.
 export const WINNER_ORDER_FULL_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   [
     {
@@ -209,8 +211,7 @@ function WinnerOrderAddressDialog({
   const exitTimersRef = useRef<Map<string, number>>(new Map());
   const enterTimersRef = useRef<Map<string, number>>(new Map());
 
-  useEffect(() => {
-    if (!open) return;
+  function resetDialogState() {
     for (const timerId of exitTimersRef.current.values()) {
       window.clearTimeout(timerId);
     }
@@ -227,18 +228,20 @@ function WinnerOrderAddressDialog({
     setAttempted(false);
     setExitingIds(new Set());
     setEnteringIds(new Set());
-  }, [open, savedAddressesProp, initialNewAddressOpen]);
+  }
 
   useEffect(() => {
+    const exitTimers = exitTimersRef.current;
+    const enterTimers = enterTimersRef.current;
     return () => {
-      for (const timerId of exitTimersRef.current.values()) {
+      for (const timerId of exitTimers.values()) {
         window.clearTimeout(timerId);
       }
-      for (const timerId of enterTimersRef.current.values()) {
+      for (const timerId of enterTimers.values()) {
         window.clearTimeout(timerId);
       }
-      exitTimersRef.current.clear();
-      enterTimersRef.current.clear();
+      exitTimers.clear();
+      enterTimers.clear();
     };
   }, []);
 
@@ -253,12 +256,12 @@ function WinnerOrderAddressDialog({
   function confirm() {
     if (selectedSaved) {
       onConfirm(confirmPayload(selectedSaved));
-      onOpenChange(false);
+      handleOuterOpenChange(false);
       return;
     }
     if (selectedDraft) {
       onConfirm(confirmPayload(selectedDraft));
-      onOpenChange(false);
+      handleOuterOpenChange(false);
     }
   }
 
@@ -356,6 +359,7 @@ function WinnerOrderAddressDialog({
 
   function handleOuterOpenChange(next: boolean) {
     if (!next && newAddressOpen) return;
+    if (!next && open) resetDialogState();
     onOpenChange(next);
   }
 
