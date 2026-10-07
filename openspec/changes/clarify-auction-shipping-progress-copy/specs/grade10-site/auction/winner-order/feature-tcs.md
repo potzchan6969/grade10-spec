@@ -48,8 +48,8 @@
 * Shipping subtext reads Preparing to ship.
 * No step is labelled Preparing Shipment.
 
-<!-- trace:case id=g10.auction-winner-order.TC-7j8 rev=1 covers=g10.auction-winner-order.SC-lk0 -->
-### winner-order-US2-TC20-1: Shipped keeps Shipping current
+<!-- trace:case id=g10.auction-winner-order.TC-7j8 rev=2 covers=g10.auction-winner-order.SC-lk0 -->
+### winner-order-US2-TC20-2: Shipped keeps Shipping current
 
 **Classification:**
 
@@ -72,7 +72,7 @@
 
 | Field | Value |
 | --- | --- |
-| <order_shipped> | A paid, fulfilled order with a ship date and tracking number |
+| <order_shipped> | A paid, fulfilled order with a ship date, a tracking number and a recorded tracker link |
 
 **Steps:**
 
@@ -88,5 +88,5 @@
 ## Reconciliation
 
 - **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
-- **Covered:** `winner-order-SC-253` ← `US2-TC20-1`.
+- **Covered:** `winner-order-SC-253` ← `US2-TC20-2`.
 - **Raised:** none.
