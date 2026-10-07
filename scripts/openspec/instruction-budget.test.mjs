@@ -19,23 +19,17 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 // Words. AGENTS.md loads on every path; each `rules.<artifact>` block loads on
 // that artifact's path through the CLI. The schema instruction and template are
 // the rules' home on the artifact path, so a block holds what only it says.
-// 2500 until the lifecycle grew its eighth artifact. The table of artifacts is
-// the one thing AGENTS.md cannot link away — an agent that reads nothing else
-// reads it — so a row costs what a row costs, and the raise buys a little
-// headroom rather than a blank cheque. 2660 once Design Override put the
-// agreed look in the one file every agent reads before it builds.
-const AGENTS_BUDGET = 2660;
+// The clarification format lives in AGENTS.md. Transfer 310 words from the
+// round-summary allowance so the combined budget stays unchanged.
+const AGENTS_BUDGET = 2970;
 // The `workflow-round` skill loads on every artifact of every change, and the seven
 // line skills load it rather than restating it, so it carries the procedure
 // for all of them. 3200 is its size after the pass that gave the landing,
 // the wake and the chain one home each (`Q77`): the next rule earns its
 // words by cutting others, or raises this number in a commit that says why.
 const ROUND_BUDGET = 3200;
-// The round's conduct: the skill's step 5 loads it every round, to lay out the
-// summary, so it costs what the skill costs. 1280 is its size after the
-// clarification-request shape gained its one canonical home; the skills link
-// there rather than restating its fields.
-const ROUND_SUMMARY_BUDGET = 1280;
+// The round summary links to AGENTS.md for the clarification format.
+const ROUND_SUMMARY_BUDGET = 970;
 // The skills a line command loads: the seven command skills a hand invokes,
 // and the four role skills each of those loads for its rules, beside `workflow-round`,
 // which carries the procedure for all of them. Each number is that skill's
