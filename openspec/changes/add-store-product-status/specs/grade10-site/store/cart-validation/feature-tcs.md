@@ -474,6 +474,50 @@ Runs once per row of **Test data**.
 * Step 2: the line shows HKD 123.00 and says the price changed.
 * Step 3: HKD 246.00 (24600 minor units).
 
+<!-- trace:case id=g10.store-cart-validation.TC-9z9 rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-c5i,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-tuc,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2,g10.store-cart-validation.SC-q4f -->
+### grade10-site-store-cart-validation-US1-TC13-1: Sold-out line the shop sells again reads current on the next open
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-validation-US-01
+
+**Pre-conditions:**
+
+* customer(member) is signed in and is on <grade10 store url>.
+* The cart holds 2 of <product_a> and 1 of <product_b>, both added while for sale.
+* Since then, <product_a> is sold out by the recipe "Sell a card out".
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_a> | A card with one variant |
+| <product_b> | Another card with one variant, for sale |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Read <product_a>'s line and Proceed to Checkout.
+3. Close the cart drawer.
+4. In the staging shop's admin, set <product_a>'s inventory to 10.
+5. Open the cart drawer.
+6. Read <product_a>'s line and Proceed to Checkout.
+
+**Expected Results:**
+
+* Step 2: the line is marked sold out; Proceed to Checkout cannot be pressed.
+* Step 6: the line reads 2, with no sold-out or adjusted marking.
+* Step 6: Proceed to Checkout can be pressed.
+
 ---
 
 ## grade10-site-store-cart-validation-US2: Collector offers the cart for checkout
@@ -573,7 +617,14 @@ when I cannot, I know exactly what to fix.
 **Pre-conditions:**
 
 * customer(member) is signed in and is on <grade10 store url>.
-* The cart holds 3 of <product_a>, 1 each of <product_b>, <product_c>, <product_d> and <product_g>, all for sale.
+* The cart holds 3 of <product_a>, 1 each of <product_b>, <product_c>, <product_d>, <product_e> and <product_g>, all for sale.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_d> | A card with one variant |
+| <product_e> | A card with two variants, its line holding the second |
 
 **Steps:**
 
@@ -582,15 +633,16 @@ when I cannot, I know exactly what to fix.
 3. In the staging shop's admin, set every variant of <product_b> to inventory 0, not sold when out of stock.
 4. In the staging shop's admin, change <product_c>'s price.
 5. In the staging shop's admin, remove <product_d> from the store's sales channel.
-6. In the still-open drawer, click Proceed to Checkout.
-7. Read the drawer.
+6. In the staging shop's admin, delete the variant <product_e>'s line holds.
+7. In the still-open drawer, click Proceed to Checkout.
+8. Read the drawer.
 
 **Expected Results:**
 
-* Step 6 leaves the browser on Grade10.
-* Step 7: <product_a> is named adjusted, <product_b> sold out, <product_c> repriced and <product_d> unavailable, all at once.
-* Step 7: <product_d>'s line has left the cart, and the removal notice names it.
-* Step 7: <product_g> is not named.
+* Step 7 leaves the browser on Grade10.
+* Step 8: <product_a> is named adjusted, <product_b> sold out, <product_c> repriced, <product_d> and <product_e> unavailable, all at once.
+* Step 8: the lines for <product_d> and <product_e> have left the cart, and one removal notice names both.
+* Step 8: <product_g> is not named.
 
 <!-- trace:case id=g10.store-cart-validation.TC-emi rev=1 covers=none -->
 ### grade10-site-store-cart-validation-US2-TC4-1: Open-time read does not carry a later checkout
@@ -708,6 +760,49 @@ Runs once per row of **Test data**.
 * Step 4: <product_a> is named as the row says.
 * Step 5 opens Shopify's checkout page without the lines being added again.
 * Step 6: <product_a> as the row says, and <product_b> at its current price.
+
+<!-- trace:case id=g10.store-cart-validation.TC-w6k rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
+### grade10-site-store-cart-validation-US2-TC7-1: Line reduced when the cart opened goes to checkout at what the shop can fill
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-validation-US-02
+
+**Pre-conditions:**
+
+* customer(member) is signed in and is on <grade10 store url>.
+* The cart holds 3 of <product_a>, added while it was tracked at 10, and 1 of <product_b>, for sale.
+* Since then, <product_a> is tracked at 2 in the staging shop's admin, not sold when out of stock.
+* The cart's goods are under HKD 120,000.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <product_a> | A card with one variant |
+| <product_b> | Another card with one variant, tracked at 10 |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Read <product_a>'s line and Proceed to Checkout.
+3. Click Proceed to Checkout.
+4. Read Shopify's checkout page.
+
+**Expected Results:**
+
+* Step 2: the line reads 2, marked adjusted; Proceed to Checkout can be pressed.
+* Step 3 opens Shopify's checkout page, with no line named as moved.
+* Step 4: 2 of <product_a> and 1 of <product_b>.
 
 ---
 

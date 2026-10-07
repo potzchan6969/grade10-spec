@@ -129,14 +129,17 @@ its own page,
 **Steps:**
 
 1. Navigate to <product url>.
-2. Click the add control.
-3. Open the cart drawer if the add did not open it.
-4. Read the lines and the URL.
+2. Read the cart in the site header.
+3. Click the add control.
+4. Read the cart in the site header.
+5. Open the cart drawer if the add did not open it.
+6. Read the lines and the URL.
 
 **Expected Results:**
 
-* Step 4: one line of <product>, quantity 1.
-* Step 4: the URL is still <product url>.
+* Step 4: the cart in the site header shows 1 item, where step 2 showed none.
+* Step 6: one line of <product>, quantity 1.
+* Step 6: the URL is still <product url>.
 
 <!-- trace:case id=g10.store-product-page.TC-4xf rev=2 covers=g10.store-product-page.SC-fpg,g10.store-product-page.SC-b01,g10.store-product-page.SC-y8c,g10.store-product-page.SC-o6j,g10.store-product-page.SC-gvt -->
 ### grade10-site-store-product-page-US3-TC3-2: Adding the same item again keeps one line

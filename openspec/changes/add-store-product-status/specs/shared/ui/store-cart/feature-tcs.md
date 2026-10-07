@@ -43,7 +43,7 @@ sells.
 | --- | --- |
 | `<cart_6>` | `<active line>` and `<delisted line>`, 1 each |
 | `<active line>` | an active line |
-| `<delisted line>` | a line the catalogue no longer sells |
+| `<delisted line>` | a line whose product left the store's sales channel, or whose variant no longer exists |
 
 **Steps:**
 
@@ -197,7 +197,7 @@ sells.
 | Field | Value |
 | --- | --- |
 | `<cart_8>` | `<delisted line>` and `<sold-out line>`, 1 each, no active line |
-| `<delisted line>` | a line the catalogue no longer sells |
+| `<delisted line>` | a line whose product left the store's sales channel, or whose variant no longer exists |
 | `<sold-out line>` | a line still in the catalogue, sold out |
 
 **Steps:**
