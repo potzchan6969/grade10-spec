@@ -123,6 +123,22 @@ test("a delta Purpose that replaces the durable Purpose fails; one that extends 
   assert.deepEqual(rules(extended.warnings), ["fold:purpose"]);
 });
 
+test("an untitled delta's Purpose that replaces the durable Purpose fails", () => {
+  const { root } = sandbox();
+  write(
+    root,
+    "openspec/specs/site/search/spec.md",
+    "# Search\n\n## Purpose\n\nReaders search the catalogue.\n\n## Requirements\n\n### Requirement: Existing\n\nThe system SHALL exist.\n",
+  );
+  const delta = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  writeFileSync(delta, readFileSync(delta, "utf8").replace("# Search\n\n", ""));
+  const replaced = preflightChange(root, CHANGE, passing);
+  assert.deepEqual(rules(replaced.failures), ["fold:purpose"]);
+});
+
 test("several changes print one summary row each and keep their own details", () => {
   const { root } = sandbox();
   const results = [
