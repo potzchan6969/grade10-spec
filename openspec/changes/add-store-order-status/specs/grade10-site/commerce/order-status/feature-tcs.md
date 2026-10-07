@@ -502,6 +502,41 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the same as step 5.
 * Step 3: the note reads the same as step 6, or neither step shows one.
 
+<!-- trace:case id=g10.commerce-order-status.TC-fde rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-nmr,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-9sm,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5 -->
+### grade10-site-commerce-order-status-US1-TC12-1: A just-placed web order reads Processing on both pages
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-commerce-order-status-US-01
+
+**Pre-conditions:**
+
+* customer(owns `<order_10>`) is signed in on the staging storefront.
+* `<order_10>` is a web checkout on the staging storefront, paid by card, completed less than a minute ago.
+
+**Steps:**
+
+1. Navigate to `<grade10 site url>/profile/orders`.
+2. Reload every 10 seconds until `<order_10>` is listed.
+3. Read `<order_10>`'s status badge.
+4. Click View Details on `<order_10>`'s card.
+5. Read the order's status badge.
+
+**Expected Results:**
+
+* Step 3: the badge reads Processing, not blank.
+* Step 4: Order Details opens for `<order_10>`.
+* Step 5: the badge reads Processing.
+
 ---
 
 ## grade10-site-commerce-order-status-US2: Collector understands a refund or a hold
@@ -548,6 +583,8 @@ Runs once per row of **Test data**.
 | No | `partially_refunded` | `partially_fulfilled` | absent | Refunded | `partial-refund-partly-shipped` |
 | No | `partially_refunded` | `unfulfilled` | absent | Refunded | `partial-refund-unshipped` |
 | No | `refunded` | `fulfilled` | `RETURN_REQUESTED` | Refunded | `refunded-all-items-shipped` |
+| No | `refunded` | `fulfilled` | `IN_PROGRESS` | Refunded | `refunded-all-items-shipped` |
+| No | `refunded` | `fulfilled` | `returned` | Refunded | `items-returned` |
 | No | `paid` | `partially_fulfilled` | absent | Shipped | `some-items-shipped` |
 | No | `partially_refunded` | `on_hold` | absent | Processing | `on-hold-partial-refund` |
 | No | `paid` | `on_hold` | absent | Processing | `on-hold` |
@@ -637,6 +674,7 @@ Runs once per row of **Test data**.
 | Yes | `refunded` | `unfulfilled` | No | absent | Canceled |
 | Yes | `pending` | `unfulfilled` | No | absent | Canceled |
 | Yes | `authorized` | `unfulfilled` | No | absent | Canceled |
+| Yes | `partially_refunded` | `unfulfilled` | No | absent | Canceled |
 
 **Steps:**
 
@@ -648,6 +686,52 @@ Runs once per row of **Test data**.
 
 * Step 2: the badge reads the row's Badge.
 * Step 3: no note.
+
+<!-- trace:case id=g10.commerce-order-status.TC-z0s rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
+### grade10-site-commerce-order-status-US2-TC4-1: Neither page shows a note beside the badge
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-commerce-order-status-US-02
+
+**Pre-conditions:**
+
+* customer(owns `<order_11>`) is signed in on the staging storefront.
+* `<order_11>` is a web order in the staging shop's admin, set to the row's state.
+
+**Test data:**
+
+| State in the staging shop's admin | Badge |
+| --- | --- |
+| Paid, fulfilment on hold | Processing |
+| Paid, fulfilled, one item refunded, not archived | Refunded |
+| Paid, one of two items fulfilled, not archived | Shipped |
+
+**Steps:**
+
+1. Navigate to `<grade10 site url>/profile/orders`.
+2. Read `<order_11>`'s card around its status badge.
+3. Click View Details on `<order_11>`'s card.
+4. Read the page around the order's status badge.
+
+**Expected Results:**
+
+* Step 2: the badge reads the row's Badge.
+* Step 2: no note about the order's state beside or under the badge.
+* Step 3: Order Details opens for `<order_11>`.
+* Step 4: the badge reads the row's Badge.
+* Step 4: no note about the order's state beside or under the badge.
 
 ---
 
@@ -705,7 +789,9 @@ Runs once per row of **Test data**.
 * Step 4: the badge reads the same as step 2.
 
 <!-- trace:case id=g10.commerce-order-status.TC-e0j rev=1 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
-### grade10-site-commerce-order-status-US3-TC2-1: Both surfaces follow an archive within the hour
+### grade10-site-commerce-order-status-US3-TC2-1: An open order's fulfilment or archive reaches both pages within the hour
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -724,23 +810,31 @@ Runs once per row of **Test data**.
 
 * The staging shop does not archive an order on its own once it is fulfilled and paid.
 * customer(owns `<order_7>`) is signed in on the staging storefront.
-* `<order_7>` is a web order placed in the last 90 days in the staging shop's admin, paid, fulfilled and not archived.
+* `<order_7>` is a web order in the staging shop, placed at the row's Placed, in the row's State before.
+
+**Test data:**
+
+| Placed | State before | Change in the staging shop's admin | Badge before | Badge after |
+| --- | --- | --- | --- | --- |
+| Within the last day | Paid, unfulfilled, not archived | Fulfil every item | Processing | Shipped |
+| Within the last day | Paid, fulfilled, not archived | Archive the order | Shipped | Completed |
+| 89 days before the run | Paid, fulfilled, not archived | Archive the order | Shipped | Completed |
 
 **Steps:**
 
 1. Navigate to `<grade10 site url>/profile/orders`.
 2. Read `<order_7>`'s status badge.
-3. In the staging shop's admin, archive `<order_7>`, and note the time.
+3. In the staging shop's admin, make the row's Change on `<order_7>`, and note the time.
 4. Reload Your Orders every 5 minutes, for at most 60 minutes, until `<order_7>`'s badge changes.
 5. Click View Details on `<order_7>`'s card.
 6. Read the order's status badge.
 
 **Expected Results:**
 
-* Step 2: the badge reads Shipped.
-* Step 4: the badge reads Completed within 60 minutes of step 3.
+* Step 2: the badge reads the row's Badge before.
+* Step 4: the badge reads the row's Badge after within 60 minutes of step 3.
 * Step 5: Order Details opens for `<order_7>`.
-* Step 6: the badge reads Completed.
+* Step 6: the badge reads the row's Badge after.
 
 <!-- trace:case id=g10.commerce-order-status.TC-wg0 rev=1 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
 ### grade10-site-commerce-order-status-US3-TC3-1: An order placed before this delivery reads by the rule
@@ -787,11 +881,13 @@ Runs once per row of **Test data**.
 * Step 4: the badge reads the same as step 2.
 
 <!-- trace:case id=g10.commerce-order-status.TC-4f0 rev=1 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
-### grade10-site-commerce-order-status-US3-TC4-1: Both surfaces follow a refund within 5 minutes
+### grade10-site-commerce-order-status-US3-TC4-1: A payment, refund or cancellation reaches both pages within 5 minutes
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -806,23 +902,34 @@ Runs once per row of **Test data**.
 
 * The staging shop does not archive an order on its own once it is fulfilled and paid.
 * customer(owns `<order_9>`) is signed in on the staging storefront.
-* `<order_9>` is a web order in the staging shop's admin, paid, fulfilled and not archived.
+* `<order_9>` is a web order in the staging shop, placed at the row's Placed, in the row's State before.
+
+**Test data:**
+
+| Placed | State before | Change in the staging shop's admin | Badge before | Badge after |
+| --- | --- | --- | --- | --- |
+| Within the last day | Paid, fulfilled, not archived | Refund the order in full | Shipped | Refunded |
+| Within the last day | Paid, fulfilled, not archived | Refund one item | Shipped | Refunded |
+| Within the last day | Paid, unfulfilled, not archived | Cancel the order, refunding nothing | Processing | Canceled |
+| Within the last day | Payment pending, fulfilled, archived | Record the payment in full | Shipped | Completed |
+| Within the last day | Paid, fulfilled, archived | Refund one item | Completed | Refunded |
+| 91 days before the run | Paid, fulfilled, not archived | Refund one item | Shipped | Refunded |
 
 **Steps:**
 
 1. Navigate to `<grade10 site url>/profile/orders`.
 2. Read `<order_9>`'s status badge.
-3. In the staging shop's admin, refund `<order_9>` in full, and note the time.
+3. In the staging shop's admin, make the row's Change on `<order_9>`, and note the time.
 4. Reload Your Orders every minute, for at most 5 minutes, until `<order_9>`'s badge changes.
 5. Click View Details on `<order_9>`'s card.
 6. Read the order's status badge.
 
 **Expected Results:**
 
-* Step 2: the badge reads Shipped.
-* Step 4: the badge reads Refunded within 5 minutes of step 3.
+* Step 2: the badge reads the row's Badge before.
+* Step 4: the badge reads the row's Badge after within 5 minutes of step 3.
 * Step 5: Order Details opens for `<order_9>`.
-* Step 6: the badge reads Refunded.
+* Step 6: the badge reads the row's Badge after.
 
 ## Settled
 
