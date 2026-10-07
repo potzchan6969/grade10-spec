@@ -9,3 +9,5 @@ hands:
 ui_waived: "no new screen or state; collector clocks reuse the local-moment
   shape, and document clocks keep the existing PDF and email layout with a zone
   label change"
+reviewed:
+  user-journeys: "31495e72"
