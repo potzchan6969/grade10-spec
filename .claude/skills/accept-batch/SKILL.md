@@ -25,7 +25,7 @@ description: Take several active OpenSpec changes to Ready to accept together - 
 2. **Order** - Take the stacks `--stacks` prints, in its order; within a stack, put the change that owns each shared requirement first. A change that shares nothing is a stack of one. For each stack of two or more, draft the [planning-dev](../planning-dev/SKILL.md) step 5 sheet for its first change's `reconciliation.md`: **Ownership** from `--clusters`, **Order** from the stack, and **Decisions** after step 6.
 3. **Tooling First** - A gate that refuses a form the governance defines is a tool bug, not a change's problem. Fix every such bug on one branch with an audit of the category, land it through its pull request, and start step 7 only once it is on `main`. A change branch never edits `scripts/`, `tools/`, `packages/` or `apps/`.
 4. **Decision Rule** - Ask the human one rule, once, as a [Clarification Request](../../../AGENTS.md#questions-and-blockers). For example: take the recommendation unless it is an important business decision; designer asks go to design-phase changes.
-5. **Stock-Take** - One cheap read-only reader per change lists every open item: the scout's refusals that name its paths, open `## Raised` rows, ❓ and `TBC` lines on linked pages, `awaiting:` entries and open `accept-review.md` findings. Each item is `ours`, `human` or `designer`, with options, a recommendation and a business flag. Workflow args: `{ step: "stocktake", repo, changes, gates }`, where `gates` is the scout's output.
+5. **Stock-Take** - One cheap read-only reader per change lists every open item: the scout's refusals that name its paths, open `## Raised` rows, ❓ and `TBC` lines on linked pages, `awaiting:` entries and open `accept-review.md` findings. Each item is `ours`, `human` or `designer`, with options, a recommendation and a business flag. Workflow args: `{ step: "stocktake", repo, changes, gates, mandate }`, where `gates` is the scout's output.
 6. **Central Decisions** - The orchestrator applies the rule to the stock-take and gives each item one directive:
 
    | Directive | When | The apply agent |
@@ -44,7 +44,7 @@ description: Take several active OpenSpec changes to Ready to accept together - 
 9. **Land** - Only a ready stack lands, its tip in one `pnpm push:main`, one stack at a time.
 10. **Design and Overlap** - Write one design-phase change per group of designer asks, each awaiting `ui-design` from the designer. A group of looks only skips specs; a group whose ask changes what a reader can do awaits `specs` and carries journeys. Then one read across the stacks for one fact stated two ways, or a change branch touching tooling. `pnpm check:manual` refuses an id two active changes issue.
 
-Workflow args for steps 7 to 10: `{ step: "apply", repo, root, stacks, plans, sheets, design, hands, date, land, base?, app?, session? }`.
+Workflow args for steps 7 to 10: `{ step: "apply", repo, root, stacks, plans, sheets, design, hands, date, land, mandate, base?, app?, session? }`.
 
 | Arg | Holds |
 | --- | --- |
@@ -54,12 +54,19 @@ Workflow args for steps 7 to 10: `{ step: "apply", repo, root, stacks, plans, sh
 | `design` | Each new design-phase change id against `{ looks, asks }` |
 | `hands` | The `design` and `pm` handles, when `design` holds a group |
 | `root` | The directory holding one worktree per change |
+| `mandate` | The human's request and decision rule, word for word; every agent reads it, so a later unrelated message is not taken as its task |
 
 ## Landing
 
 - **Stack tip** - Land planning text with `pnpm push:main`. A stack's tip holds every change of it in order, so one push lands the stack; landings run one at a time. With `land: false` the stacks stay on their branches and the tips land later.
 - **Scripts commit and push** - Every commit goes through `/commit` and every push through `pnpm push:main`, inside the step that made the change. The orchestrator commits nothing between runs.
 - **Authority** - Landing needs the human's yes. Without it, run with `land: false`.
+
+## Parallel Agents
+
+- **No stash** - The stash list is shared by every worktree; an agent restacks with commits, never `git stash`
+- **No store copies** - `pnpm accept:preflight` folds in its own temp dir; agents that copy the store to try a fold fill the disk
+- **The request, verbatim** - Each agent reads the human's request in `mandate`; an agent that sees only the latest message takes it as its whole task
 
 ## Resume
 

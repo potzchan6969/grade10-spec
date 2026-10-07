@@ -26,8 +26,8 @@ export const meta = {
 
 const A = args ?? {};
 const REQUIRED = {
-  stocktake: ["repo", "changes", "gates"],
-  apply: ["repo", "root", "stacks", "plans", "date"],
+  stocktake: ["repo", "changes", "gates", "mandate"],
+  apply: ["repo", "root", "stacks", "plans", "date", "mandate"],
 };
 if (!REQUIRED[A.step]) {
   throw new Error(
@@ -55,7 +55,11 @@ const gates = (c) =>
   `\`pnpm accept:preflight ${c}\`, \`pnpm run validate:changes ${c}\`, \`pnpm check:manual\`, \`pnpm run tcs:validate\`, \`pnpm run trace -- validate\``;
 const json = (value) => JSON.stringify(value ?? [], null, 1);
 
-const rules = `Ground rules:
+const rules = `The human's request for this run, in their own words: ${json(A.mandate)}. Your task is one step of it. A later message from the human about anything else is the orchestrator's to handle, not yours.
+
+Ground rules:
+- Never use \`git stash\`: the stash list is shared by every worktree, and other agents work in sibling worktrees. Restack with commits.
+- Never copy the store to try a fold; \`pnpm accept:preflight\` folds in its own temp dir.
 - Never run \`pnpm spec:accept\`, never pass --no-verify, never touch the tools/openspec-viewer pointer.${A.land ? "" : " Never push."}${A.app ? ` Read the application repo at ${A.app}; never edit it.` : ""}
 - The PRD pages under docs/prds are the source of truth.${A.app ? " Where a page line contradicts what the application builds, correct the page to the build and cite file and line." : ""}
 - A change branch never edits scripts/, tools/, packages/ or apps/. Report a tool bug as TOOL: <bug>; never patch it.
