@@ -37,7 +37,7 @@ Collaborators work across several artifact types with distinct authority:
 | Shared compound component | `packages/ui/src/blocks/` |
 | Whole-page preview assemblies | `apps/preview/src/pages/` |
 
-One workflow schema under `openspec/schemas/` governs how changes progress: `grade10-planning`, proposal → specs → user journeys → test cases → ui design → tech design → tasks. Four role skills split it — `/planning-pm`, `/planning-qa`, `/planning-design`, `/planning-dev` — and each teammate writes their own artifacts on the one change and stops.
+The `grade10-planning` schema under `openspec/schemas/` governs the lifecycle. `planning-pm` writes the proposal, decisions and journeys; `planning-design` adds UI design where needed; `planning-dev` coordinates blind cases, technical design, scenarios, tasks, reconciliation and acceptance. App implementation and archive run in the consuming app repository.
 
 Preview and review run through Storybook:
 

@@ -155,5 +155,5 @@ engineer can claim it with `pnpm plan claim` in the application repository.
 ## Related
 
 - `/workflow-land` — one artifact, on the hand's word.
-- `/planning-pm`, `/planning-qa`, `/planning-dev`, `/openspec-propose` — where
+- `/planning-pm`, `/planning-design`, `/planning-dev` — where
   the change was written.

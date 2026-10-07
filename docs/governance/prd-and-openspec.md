@@ -194,7 +194,7 @@ After implementation is verified, whether or not it is deployed yet:
 1. complete the required task groups and validation; `pnpm run archive:preflight` refuses while a task is unchecked unless `tasks_waived: <who, why>` records the exception;
 2. confirm the first task claim recorded `contractBaseline` in `implementation.json`; record the verified repository commits and concrete deploy components;
 3. run `pnpm run archive:preflight <change>`. It compares the claimed paths and anchors with the current durable contract. Add a compatibility acknowledgement for each difference; semantic entries name their evidence;
-4. take the 🚧 marks off outcomes this implementation verified. Deployment availability is recorded separately. Run `pnpm check:manual` after page changes;
+4. preserve any decision that outlives the change in the PRD's `Product decisions` block and record what moved, or `none`, for archive preflight; take the 🚧 marks off outcomes this implementation verified. Deployment availability is recorded separately. Run `pnpm check:manual` after page changes;
 5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, keeping the accepted snapshot, acceptance and implementation records, tasks and `rounds.md`. Archive preserves planning and implementation history and does not fold requirements again;
 6. deploy independently of archive. After deployment makes the implementation available, human QA reviews cases with `/tcs-review` and uses `/tcs-run-sheet` for any manual execution. QA does not gate archive; case classification is not a pass/fail result;
 7. leave links between the durable spec, the page and the archive where they aid discovery.

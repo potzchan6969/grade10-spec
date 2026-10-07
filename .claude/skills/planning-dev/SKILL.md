@@ -127,9 +127,8 @@ implementation, verification, and a final end-to-end walk.
   acceptance verdict, baseline, accepted fingerprint and published revision.
   Name any remaining decision or failed check; do not claim acceptance or
   publication from a draft or review alone.
-- **Implementation** - Pass the accepted change to
-  [openspec-apply-change](../openspec-apply-change/SKILL.md), which owns claims
-  and implementation against the durable contract.
-- **Archive** - After verified implementation, use
-  [openspec-archive-change](../openspec-archive-change/SKILL.md) for evidence,
-  compatibility reconciliation and archival.
+- **App Repository Handoff** - Planning ends with the accepted contract
+  published. Pass the change id, accepted fingerprint and published store
+  revision to the app repository's implementation workflow. Implementation,
+  verification and archive run there under its own skills; do not invoke this
+  store's apply or archive skills for app work.

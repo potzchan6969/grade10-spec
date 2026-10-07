@@ -31,7 +31,7 @@ const ROUND_BUDGET = 3200;
 // The round summary links to AGENTS.md for the clarification format.
 const ROUND_SUMMARY_BUDGET = 970;
 // The skills a line command loads: the seven command skills a hand invokes,
-// and the four role skills each of those loads for its rules, beside `workflow-round`,
+// and the three role skills each of those loads for its rules, beside `workflow-round`,
 // which carries the procedure for all of them. Each number is that skill's
 // size after the pass that gave its rules one home - `Q84` for the role
 // skills, the overlap pass for the command ones: the next rule earns its words
@@ -45,11 +45,11 @@ const SKILLS_BUDGET = {
   // 178 after the enforcement audit's pass cut its three rules to a pointer
   // at the instruction that holds them.
   "workflow-tasks": 178,
-  "workflow-build": 472,
+  // 560 after absorbing apply rules; the combined build/apply load shrinks.
+  "workflow-build": 560,
   // 366 once the whole-change landing's command took its own line.
   "workflow-land": 366,
   "planning-pm": 2740,
-  "planning-qa": 4446,
   // 1879 after design questions link to the shared clarification-request
   // shape instead of defining a competing one.
   "planning-design": 1879,
@@ -269,10 +269,10 @@ test("every slash name a skill or a governance page writes resolves to a skill",
   );
 });
 
-// The three skills task 3.10 kept until the line is adopted (`Q84`). Each
+// The remaining skills task 3.10 kept until the line is adopted (`Q84`). Each
 // exists and opens naming the `/workflow-<artifact>` skill that replaced it.
 // This list empties at this change's archive.
-const KEPT_SKILLS = ["dev-help", "openspec-propose", "spec-push"];
+const KEPT_SKILLS = ["dev-help", "spec-push"];
 
 test("each kept skill exists and opens naming its workflow replacement", () => {
   for (const name of KEPT_SKILLS) {

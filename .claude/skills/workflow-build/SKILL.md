@@ -8,10 +8,31 @@ description: Run a round on one task group - its tests in their own commit, then
 **The artifact:** one task group of `tasks.md`, and the code and tests it
 names. One round per group.
 
-**The rules:** `openspec-apply-change` - what to read before editing, where a
-product detail goes, and the checks each kind of work owes - plus
-[`docs/governance/system-design.md`](../../../docs/governance/system-design.md),
-which the group's readers hold the code to.
+- **Baseline** - Read the acceptance record and snapshot, proposal, designs,
+  tasks, current durable contract and PRD. Before the first task, record the
+  claim baseline and target scope:
+
+  ```bash
+  pnpm plan claim <change> <group>
+  ```
+
+- **Contract** - Implement against the rolling durable contract. Put changed
+  product outcomes on the PRD first, then update the contract through a change;
+  keep implementation mechanisms in the technical design. Follow
+  [PRD maintenance](../../../docs/governance/prd-and-openspec.md#maintenance-workflow-for-future-agents).
+- **Shared UI** - Use `design-system-primitives` for primitives. Shared blocks
+  live in `packages/ui`; app state and wiring stay in the consuming app. Apply
+  [package validation](../../../AGENTS.md#validation) and
+  [system design](../../../docs/governance/system-design.md).
+  Verify shared block changes with their stories:
+
+  ```bash
+  pnpm run test:stories:ui
+  ```
+
+- **Closeout** - Keep unaffected groups moving when the durable contract is
+  refined. Follow [verified closeout](../../../docs/governance/prd-and-openspec.md#7-finish-a-change-without-losing-context)
+  for implementation evidence, compatibility acknowledgement and archive.
 
 Then follow `workflow-round`, and [Round Summary and
 Landing](../../../docs/governance/round-summary.md) for what a round owes its
@@ -47,8 +68,8 @@ the ticks that follow go through `pnpm plan done`.
 
 - **Never weaken a test** — no skip, no relaxed assertion, no deleted case; a
   finding that asks for one is not carried
-- **Never edit the durable specs** — `openspec/specs/` moves at the fold, and
-  the fold is the archive's
+- **Never edit the durable specs** — `openspec/specs/` changes through accepted deltas;
+  archive does not fold it again
 - **Never restyle [the agreed look](../../../AGENTS.md#design-override)**
 - **Never invent a product policy** — a product detail lands on the page as a
   ❓ line, and the group stops for it
