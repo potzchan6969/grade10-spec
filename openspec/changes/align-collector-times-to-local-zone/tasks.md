@@ -36,6 +36,12 @@ judges, and no longer a collector deadline's day, which
 `shared-dates-and-times-SC-38` reads in the viewer's zone. The same
 `packages/utils/test/dates.test.ts` still verifies it, and no test cites its id.
 
+`shared-dates-and-times-SC-39` and `shared-dates-and-times-SC-40` carry the
+admin surface exception for `read-vault-console-on-shop-clock` (decisions Q30),
+and that change's group 4 builds and verifies them; the operator table and the
+collector's vault history they read stay as they are, so no task here cites
+them.
+
 - [x] 2.1 Add the tests first, in their own commit, each citing its scenario id
       and the case id it decides, and the formatter, story and PDF tests that
       already prove other ids gain their citations in the same commit: a New
