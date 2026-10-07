@@ -53,7 +53,11 @@ See [Non-Goals](decisions.md#non-goals).
 
 - `grade10-site/store/product-page`: free pick-up at Hong Kong Grade10 Store
   opens Store Locator, and a fulfilment label with no page is not a link
-- `grade10-site/site/carried-surfaces`: Store Locator joins the store's set
+- `grade10-site/site/carried-surfaces`: Store Locator joins the store's set,
+  and the requirement that lists each set states the site's lanes as built -
+  staging-2 and uat, and the front door and grading gates (grade10
+  `apps/frontend/grade10/src/surfaces.ts:343-399`). The front door scenarios
+  that read a production build move to a build that carries the front door
 
 ## Impact
 
@@ -119,14 +123,6 @@ No platform impact: no cross-product path.
 - The page's look drawn in Figma, in draw-store-locator-page: the designer
   confirms or redraws this change's interim answers to Q14 to Q16, Q19 and
   Q22
-- The lanes in `grade10-site/site/carried-surfaces`, as its own change: the
-  requirement "Each waiting product waits for its own launch" names no
-  staging-2 or uat lane and no front door or grading gate, and carries the
-  front door on every lane, while the site and the Carried Surfaces page have
-  staging-2 and uat lanes and both gates, and withhold the front door on uat
-  and production (grade10 `apps/frontend/grade10/src/surfaces.ts:343-399`).
-  This change adds a requirement of its own for Store Locator and leaves that
-  one alone
 - The store-product blocks' export contract under `shared/ui`, so a later
   prop change to `StoreProductMetadata` and its siblings has a delta to land
   in; today only the site-level product page carries its behaviour

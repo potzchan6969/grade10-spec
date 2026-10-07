@@ -38,3 +38,11 @@ is still sold on.
 serve me from,
 **so that** I am never shown a case to open or a visit to book that nobody is
 ready to honour.
+
+### grade10-site-site-carried-surfaces-US-08: Collector uses a product on the lane it is open on
+
+**As a** collector,
+**I want** every vault, booking, profile and membership surface to work
+unchanged where its product is open,
+**so that** hiding a product on the public site costs nothing to the lanes it
+is still used on.
