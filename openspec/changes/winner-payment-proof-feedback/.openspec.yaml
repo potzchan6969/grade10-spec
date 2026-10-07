@@ -1,12 +1,17 @@
 schema: grade10-planning
 created: 2026-09-29
-design_waived: "Preview composition of existing Dialog/FileDropzone/Toast; no application-repo task group and no new Figma-owned component"
+design_waived: "Preview composition of existing Dialog/FileDropzone/Toast; no
+  application-repo task group and no new Figma-owned component"
 hands:
   pm: "@tangconst"
   design: "@tangconst"
   tech: "@tangconst"
   qa: "@tangconst"
   dev: "@tangconst"
-decisions_carried: "Q1–Q16 on docs/prds/products/grade10-site/auction/post-bidding.md Paying · Submit Payment Proof 🚧 lines and Proof submit feedback Product decisions row"
+decisions_carried: "Q1–Q16 on
+  docs/prds/products/grade10-site/auction/post-bidding.md Paying · Submit
+  Payment Proof 🚧 lines and Proof submit feedback Product decisions row"
 depends_on:
   - complete-auction-post-sale
+reviewed:
+  user-journeys: 587d8fe5
