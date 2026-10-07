@@ -2,7 +2,12 @@
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { cliArgs } from "./lib/args.mjs";
-import { changeClusters, formatClusters } from "./lib/clusters.mjs";
+import {
+  changeClusters,
+  changeStacks,
+  formatClusters,
+  formatStacks,
+} from "./lib/clusters.mjs";
 import { formatPreflight, preflightChange } from "./lib/preflight.mjs";
 
 const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
@@ -14,17 +19,23 @@ const take = (flag) => {
   return value ?? "";
 };
 const root = take("--root") ?? HERE;
-const clusters = args.includes("--clusters");
-if (clusters) args.splice(args.indexOf("--clusters"), 1);
+const flag = (name) => {
+  const at = args.indexOf(name);
+  if (at >= 0) args.splice(at, 1);
+  return at >= 0;
+};
+const clusters = flag("--clusters");
+const stacks = flag("--stacks");
 const listed = take("--changes");
 const changeIds = [
   ...new Set([...(listed ?? "").split(","), ...args].filter(Boolean)),
 ];
 if (clusters) console.log(formatClusters(changeClusters(root)));
-if (clusters && changeIds.length === 0) process.exit(0);
+if (stacks) console.log(formatStacks(changeStacks(root, changeIds)));
+if ((clusters || stacks) && changeIds.length === 0) process.exit(0);
 if (changeIds.length === 0 || listed === "") {
   console.error(
-    "usage: pnpm run accept:preflight <change-id>... [--changes a,b,c] | --clusters [--root <store>]",
+    "usage: pnpm run accept:preflight <change-id>... [--changes a,b,c] [--clusters] [--stacks] [--root <store>]",
   );
   process.exit(2);
 }
