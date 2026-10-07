@@ -30,7 +30,7 @@ Needs group 1. `decisions.md` Q5 settles one lead of 30 days.
 
 The programme already does this; the group pins it with a test and changes no code.
 
-- [ ] 5.1 The test this group's scenario names, in its own commit, ticked last: in `src/testing/suites/redemptionExpiry.ts`, a member brought to nothing by a correction while their clock still runs has a redemption reversed, another has an order paid partly with points refunded, and a third has the points paid toward an order returned by an operator through `returnSpend`; each gets its points back dying at the running clock, and the clock does not move; a fourth, brought to nothing the same way, is granted points and its clock moves out to a year from the grant, never back (`grade10-site-loyalty-programme-SC-232`, `grade10-site-loyalty-programme-SC-180`)
+- [ ] 5.1 The test this group's scenario names, in its own commit, ticked last: in `src/testing/suites/redemptionExpiry.ts`, a member brought to nothing by a correction while their clock still runs has a redemption reversed, another has an order paid partly with points refunded, and a third has the points paid toward an order returned by an operator through `returnSpend`; each gets its points back dying at the running clock, and the clock does not move; a fourth, brought to nothing the same way, is granted points and its clock moves out to a year from the grant, never back (`grade10-site-loyalty-programme-SC-254`, `grade10-site-loyalty-programme-SC-180`)
 - [ ] 5.2 Verify: `pnpm run test:backend`
 
 ## 6. The walk - one member's reminders across a life (grade10)

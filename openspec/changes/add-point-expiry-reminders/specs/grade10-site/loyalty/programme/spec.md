@@ -181,7 +181,7 @@ whole amount it removed.
 - **AND** the answer names the points it could not return, rather than refusing the reversal
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-guq rev=2 -->
-#### Scenario: grade10-site-loyalty-programme-SC-232 - Points given back to a balance brought to nothing keep the running day
+#### Scenario: grade10-site-loyalty-programme-SC-254 - Points given back to a balance brought to nothing keep the running day
 **Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-06` - points given back keep the running day
 
 - **GIVEN** a member whose balance a claw-back or a correction brought to nothing while their window still runs
