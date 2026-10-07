@@ -507,8 +507,10 @@ Runs once per row of **Test data**.
 ## grade10-site-commerce-order-status-US2: Collector understands a refund or a hold
 
 **As a** collector whose order was partly refunded or put on hold,
-**I want** a note explaining what happened to the part of my order that changed,
-**so that** I do not have to contact support to learn whether my items shipped.
+**I want** its badge to report the refund ahead of any shipping, and a held
+order as still being prepared,
+**so that** I can tell a refund from a shipment, and a held order from a
+finished one, without contacting support.
 
 <!-- trace:case id=g10.commerce-order-status.TC-8hx rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
 ### grade10-site-commerce-order-status-US2-TC1-1: A confirmed combination names its one note
@@ -571,38 +573,6 @@ The order is not archived in any row.
 * Step 3: exactly one note identifier, the row's Note.
 * Step 3: the note is an identifier, carrying no display words.
 
-<!-- trace:case id=g10.commerce-order-status.TC-fur rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
-### grade10-site-commerce-order-status-US2-TC2-1: Every note has words in each catalog language
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-02
-
-**Blocked:** Product manager - whether a surface shows the note in this delivery, and so whether the catalogs hold its words now, is open in `decisions.md` (Q14).
-
-**Pre-conditions:**
-
-* None.
-
-**Steps:**
-
-1. List every note identifier the order status rule can name.
-2. Read each identifier from the Grade10 message catalogs in every language Grade10 speaks.
-
-**Expected Results:**
-
-* Step 2: every identifier resolves to words in every language.
-* Step 2: no identifier resolves to its own key.
-
 <!-- trace:case id=g10.commerce-order-status.TC-dxg rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
 ### grade10-site-commerce-order-status-US2-TC3-1: Combination no confirmed note fits carries its badge alone
 
@@ -635,6 +605,8 @@ Runs once per row of **Test data**.
 | No | `paid` | `fulfilled` | Yes | absent | Completed |
 | No | `paid` | `fulfilled` | Yes | `RETURNED` | Completed |
 | Yes | `refunded` | `unfulfilled` | No | absent | Canceled |
+| Yes | `pending` | `unfulfilled` | No | absent | Canceled |
+| Yes | `authorized` | `unfulfilled` | No | absent | Canceled |
 
 **Steps:**
 
@@ -828,6 +800,10 @@ Runs once per row of **Test data**.
 - A fulfilled, archived order paid only in part reads Shipped: Completed needs it paid in full.
 - An expired payment reads Processing with the `payment-expired` note; only a cancellation or a void reads Canceled.
 - A canceled order refunded in full carries no note; `awaiting-refund` is for money still to come back.
+- A canceled order whose payment was only pending or authorized carries no note; `awaiting-refund` needs money taken.
+- A held order carrying a partial refund carries `on-hold-partial-refund`, one note naming both.
+- No surface shows the note in this delivery, so no catalog holds its words yet.
+- A change to an order Shopify has archived reaches the badge on its next payment, refund, cancellation or shipment, not within the hour.
 - Your Orders and Order Details derive the badge from one stored row, so they differ only until Your Orders loads again. An order paid in full, refunded or canceled reaches the row within 5 minutes; any other change, a payment voided or expired included, within the hour, for an order placed in the last 90 days.
 
 ## Reconciliation
@@ -856,16 +832,17 @@ Runs once per row of **Test data**.
 | `grade10-site-commerce-order-status-SC-29` | Covered by `US3-TC4-1`; the webhook mark and the cron read behind it are tasks 3.1 and 6.3 |
 | `grade10-site-commerce-order-status-SC-30` | Covered by `US3-TC2-1`. **Fixed in the tech design:** the Open arm and the on-read refresh re-read at 55 minutes, so the 5-minute tick reaches an archive within the 60 minutes the case allows; task 3.1 tests the bound |
 | QA2: e2e set-up of a paid, fulfilled order still open | **Folded in:** the shop's archiving setting is a pre-condition of `US1-TC1-1`, `US1-TC6-1`, `US1-TC9-1`, `US3-TC1-1`, `US3-TC2-1`, `US3-TC3-1` and `US3-TC4-1`. A tester cannot reach that state by reopening an archived order, since the stored copy keeps it closed (Q24) |
-| QA2: a change to an order Shopify already archived | **Raised for the human:** Q24; no case asserts it, and the page marks it open |
+| QA2: a change to an order Shopify already archived | **Raised, settled:** Q24; the hour covers orders Shopify holds open, so no case asserts a reopened order |
 | QA1: partly fulfilled, paid and archived | **Raised, settled:** Q19 |
 | QA1: partly paid for Completed | **Raised, settled:** Q9 |
 | QA1: expired payment | **Raised, settled:** Q20 |
-| QA1: canceled order whose money went back | **Raised, settled** in full by Q21, folded as the canceled `refunded` row of `US2-TC3-1`; **raised for the human** in part by Q18, and no case asserts it |
-| QA1: held order with a partial refund, which note | **Raised for the human:** Q22; the `on_hold` and `partially_refunded` row of `US2-TC1-1` holds the recommendation, and Q22's answer rewrites that row |
+| QA1: canceled order whose money went back | **Raised, settled** in full by Q21, folded as the canceled `refunded` row of `US2-TC3-1`, and in part by Q18 |
+| Accept review: `awaiting-refund` on a canceled order that took no money | **Raised, settled:** Q18; **Folded in:** the canceled `pending` and `authorized` rows of `US2-TC3-1` |
+| QA1: held order with a partial refund, which note | **Raised, settled:** Q22; the `on_hold` and `partially_refunded` row of `US2-TC1-1` asserts it |
 | QA1: how long the two surfaces may differ | **Raised, settled:** Q23; the page and the delta's Freshness clause hold its bounds, and `US3-TC2-1` and `US3-TC4-1` assert them |
 | QA2: a void or an expiry within 5 minutes | **Fixed in the page and the delta:** no subscribed webhook reports one, so it takes the hourly read, the arm `US3-TC2-1` asserts for an archive; Q23 |
 | QA2: what reads an order older than 90 days again | **Fixed in `decisions.md` and the tech design:** a payment webhook's mark or a shipment event; Q23, Q24. The page promises nothing for such an order, so no case asserts it |
-| `US2-TC2-1` catalog words for every note | **Raised for the human:** Q14 decides whether the catalogs hold note words in this delivery; the case stays draft and **Blocked** |
+| `US2-TC2-1` catalog words for every note | **Dropped:** Q14 - no surface shows the note in this delivery, so no catalog holds its words |
 | Rejected cases | none |
 | Contradicted readings | none |
 | Uncovered anchors | none |
