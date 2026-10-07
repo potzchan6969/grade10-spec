@@ -23,7 +23,7 @@ group names to the tests that already prove them.
       `pnpm run validate:changes align-collector-times-to-local-zone` and
       `pnpm check:manual`.
 
-## 2. Zone names, the closed lot and sent-message wording (grade10-spec)
+## 2. Zone names, the closed lot and sent-message wording (grade10-spec) (owner: @seankcw)
 
 Needs group 1, which is built. It does not wait on group 3.
 
