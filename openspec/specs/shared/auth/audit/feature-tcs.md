@@ -577,7 +577,7 @@ Runs once per row of **Test data**.
 * Step 5 lists as the row's outcome states.
 
 <!-- trace:case id=g10.shared-audit.TC-8lh rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
-### shared-auth-audit-US4-TC3-1: Verify flip and delete are on the trail; unrecorded writes do not land
+### shared-auth-audit-US4-TC3-1: Verify flip and delete are on the trail
 
 **Classification:**
 
@@ -596,34 +596,29 @@ Runs once per row of **Test data**.
 
 * <unverified email> holds an unverified account.
 * <account to delete> exists.
-* The identity trail accepts entries.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<unverified email>` | unverified.buyer@example.com |
+| `<unverified email>` | unverified.buyer@example.com, an unverified account |
+| `<unverified account id>` | That account's user id |
 | `<account to delete>` | An account holding `user` only |
-| `<fresh email>` | fresh.buyer@example.com, any address no account holds |
-| `<second unverified email>` | second.unverified@example.com, an unverified account |
-| `<second account to delete>` | A second account holding `user` only |
+| `<deleted account id>` | That account's user id |
+| `<start time>` | The time just before step 1 |
 
 **Steps:**
 
 1. Send the trusted-product verify call for <unverified email>.
 2. As admin(holds `user:delete`), delete <account to delete>.
-3. As admin(holds `audit:read`), read the identity trail on <grade10 admin audit url>.
-4. Mock the identity trail to refuse a new entry.
-5. Send the trusted-product create call for <fresh email>.
-6. Send the trusted-product verify call for <second unverified email>.
-7. As admin(holds `user:delete`), delete <second account to delete>.
+3. As admin(holds `audit:read`), open <grade10 admin audit url>.
+4. Filter by subject id <unverified account id>, from <start time>.
+5. Filter by subject id <deleted account id>, from <start time>.
 
 **Expected Results:**
 
-* Step 3 lists the verify and the deletion.
-* Step 5 creates no account for <fresh email>.
-* Step 6 leaves <second unverified email> unverified.
-* Step 7 leaves <second account to delete> in place.
+* Step 4 lists the verify.
+* Step 5 lists the deletion, naming the operator and <deleted account id>.
 
 <!-- trace:case id=g10.shared-audit.TC-wuf rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
 ### shared-auth-audit-US4-TC4-1: Trusted-product verify of a new email is on the trail as created
@@ -699,6 +694,52 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3 lists no entry for the request.
+
+<!-- trace:case id=g10.shared-audit.TC-fvb rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
+### shared-auth-audit-US4-TC6-1: An unrecorded create, verify or delete does not land
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-audit-US-04
+
+**Pre-conditions:**
+
+* The row's starting account exists, or does not.
+* The identity trail is mocked to refuse a new entry.
+
+**Test data:**
+
+| Starting account | Write sent | Outcome |
+| --- | --- | --- |
+| None at <fresh email> | Trusted-product create for <fresh email> | No account holds <fresh email> |
+| Unverified at <unverified email> | Trusted-product verify for <unverified email> | The account at <unverified email> is still unverified |
+| <account to delete> | admin(holds `user:delete`) deletes <account to delete> | <account to delete> still exists |
+
+| Field | Value |
+| --- | --- |
+| `<fresh email>` | fresh.buyer@example.com, any address no account holds |
+| `<unverified email>` | unverified.buyer@example.com, an unverified account |
+| `<account to delete>` | An account holding `user` only |
+
+**Steps:**
+
+1. Send the row's write.
+2. Read the row's account.
+
+**Expected Results:**
+
+* Step 2 answers as the row's outcome states.
 
 ---
 
