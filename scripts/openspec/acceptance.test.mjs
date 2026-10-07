@@ -144,6 +144,127 @@ The system SHALL return updated matching items.
   );
 });
 
+// The change template starts at `## Purpose`, so a delta written from it
+// carries no title: its top-level sections are its sections.
+const untitled = (files) =>
+  files["openspec/changes/build-alpha/specs/site/search/spec.md"].replace(
+    /^# Search\n\n/,
+    "",
+  );
+
+test("an untitled delta for a new capability takes its title from its path and claims what it moves", () => {
+  const { root, files } = sandbox();
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/specs/site/search/spec.md"),
+    untitled(files),
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(
+    folded,
+    /^# site\/search Specification\n\n## Purpose\n\nReaders find items\./,
+  );
+  assert.match(folded, /## Feature set\n\n### Search/);
+  assert.match(folded, /### Requirement: Search results/);
+  assert.deepEqual(
+    contractTargets(root, CHANGE).find(
+      (target) => target.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Purpose", "Requirement: Search results"],
+  );
+});
+
+// A delta's own title names the change, not the capability: every durable
+// spec, and the skeleton `openspec archive` writes, is titled from its path.
+test("a titled delta for a new capability takes its title from its path", () => {
+  const { root, files } = sandbox();
+  writeFileSync(
+    join(root, SEARCH_DELTA, "spec.md"),
+    `# Search — delta\n\n${untitled(files)}`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(folded, /^# site\/search Specification\n\n## Purpose\n/);
+  assert.doesNotMatch(folded, /Search — delta/);
+});
+
+test("an untitled delta folds its feature set and requirements under the durable title", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "spec.md",
+    `# Search
+
+## Purpose
+
+Readers find items.
+
+## Feature set
+
+- Current basket
+  - Review: live
+
+## Requirements
+
+### Requirement: Search results
+
+The system SHALL return matching items.
+`,
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "spec.md"),
+    `## Feature set
+
+- Saved searches
+  - Recall: one tap
+
+## ADDED Requirements
+
+### Requirement: Saved searches
+
+The system SHALL recall a saved search.
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(folded, /^# Search\n\n## Purpose\n\nReaders find items\./);
+  assert.match(folded, /- Current basket[\s\S]*- Saved searches/);
+  assert.match(
+    folded,
+    /Requirement: Search results[\s\S]*Requirement: Saved searches/,
+  );
+  assert.deepEqual(
+    contractTargets(root, CHANGE).find(
+      (target) => target.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Requirement: Saved searches"],
+  );
+});
+
+test("an untitled delta's uncommitted Purpose edit skips the drift check and says why", (t) => {
+  const { root, files } = sandbox();
+  const deltaPath = join(root, SEARCH_DELTA, "spec.md");
+  writeFileSync(deltaPath, untitled(files));
+  git(root, "init", "-q");
+  commitAll(root, "delta written");
+  writeFileSync(
+    deltaPath,
+    untitled(files).replace("Readers find items.", "Readers find more items."),
+  );
+  const warn = t.mock.method(console, "warn", () => {});
+  prepareAcceptance(root, CHANGE);
+  assert.match(
+    warn.mock.calls.map((call) => call.arguments.join(" ")).join("\n"),
+    /site\/search\/spec\.md: Purpose drift not checked - its Purpose has uncommitted edits/,
+  );
+});
+
 test("contract outputs reject a feature-group removal without a durable feature set", () => {
   const { root } = sandbox();
   const durablePath = join(root, "openspec/specs/site/search/spec.md");

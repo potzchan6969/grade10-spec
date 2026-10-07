@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { outline } from "../../../tools/manual/src/store/markdown.mts";
+import { deltaSections } from "../../../tools/manual/src/store/read-changes.mts";
 
 const CASE_LINE = /^###\s+(\S+-TC\d+)-(\d+)\b[:\s-]*(.*)$/i;
 const CASE_MARKER = /<!--\s*trace:case id=(\S+)/;
@@ -25,8 +25,8 @@ export function casesOf(text) {
 }
 
 export function purposeOf(text) {
-  const top = outline(text).find((section) => section.level === 1);
-  return top?.children.find((section) => section.heading === "Purpose")?.raw;
+  return deltaSections(text).find((section) => section.heading === "Purpose")
+    ?.raw;
 }
 
 function suiteFindings(path, durable, folded) {

@@ -17,6 +17,7 @@ import YAML from "yaml";
 import { RULES } from "../../../tools/manual/check/context.mjs";
 import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
 import {
+  leadingTitle,
   outline,
   sectionSpan,
   trimBlank,
@@ -177,10 +178,7 @@ function durableFor(root, capability, filename) {
 }
 
 function requirementBlocks(text) {
-  const top = outline(text).find((section) => section.level === 1);
-  const requirements = top?.children.find(
-    (section) => section.heading === "Requirements",
-  );
+  const requirements = sectionByName(deltaSections(text), "Requirements");
   return new Map(
     (requirements?.children ?? [])
       .filter((section) => /^Requirement:\s*/i.test(section.heading))
@@ -199,17 +197,6 @@ function renderRequirement(
   return `### Requirement: ${name}${body ? `\n\n${body}` : ""}`;
 }
 
-function rootSections(text) {
-  const heading = outline(text).find((section) => section.level === 1);
-  return { heading: heading?.heading ?? "", sections: heading?.children ?? [] };
-}
-
-function documentSections(text) {
-  const roots = outline(text);
-  const title = roots.find((section) => section.level === 1);
-  return title ? title.children : roots;
-}
-
 function renderSection(section) {
   return `${"#".repeat(section.level)} ${section.heading}${section.raw ? `\n\n${section.raw}` : ""}`;
 }
@@ -218,12 +205,18 @@ function sectionByName(sections, name) {
   return sections.find((section) => section.heading === name);
 }
 
+function claimsFeatureSet(sections) {
+  return ["Feature set", "REMOVED Feature set"].some((name) =>
+    sectionByName(sections, name),
+  );
+}
+
 function usId(heading) {
   return /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(heading)?.[1] ?? null;
 }
 
 function journeyIds(text) {
-  const section = sectionByName(documentSections(text ?? ""), "User journeys");
+  const section = sectionByName(deltaSections(text ?? ""), "User journeys");
   return new Set((section?.children ?? []).map((one) => usId(one.heading)));
 }
 
@@ -236,21 +229,15 @@ function mergeJourneys(
 ) {
   if (/\*\*Walked by:\*\*/.test(deltaText)) return currentText ?? deltaText;
   const current = currentText ?? deltaText;
-  const currentDoc = {
-    heading: rootSections(current).heading,
-    sections: documentSections(current),
-  };
-  const deltaDoc = { heading: "", sections: documentSections(deltaText) };
-  const currentJourneySection = sectionByName(
-    currentDoc.sections,
-    "User journeys",
-  );
+  const currentSections = deltaSections(current);
+  const fromDelta = deltaSections(deltaText);
+  const currentJourneySection = sectionByName(currentSections, "User journeys");
   const live = new Map(
     (currentJourneySection?.children ?? [])
       .filter((section) => usId(section.heading))
       .map((section) => [usId(section.heading), section]),
   );
-  const retired = new Set(readRetiredIds(currentDoc.sections));
+  const retired = new Set(readRetiredIds(currentSections));
   const durableIds = new Set(currentText ? live.keys() : []);
   const ownIds = journeyIds(priorText);
   const deltaHeld = [
@@ -259,7 +246,7 @@ function mergeJourneys(
     "ADDED User journeys",
     "MODIFIED User journeys",
   ]
-    .map((name) => sectionByName(deltaDoc.sections, name))
+    .map((name) => sectionByName(fromDelta, name))
     .filter(Boolean);
   const deltaIds = new Set();
   for (const section of deltaHeld) {
@@ -283,7 +270,7 @@ function mergeJourneys(
       retired.delete(id);
     }
   }
-  const removed = sectionByName(deltaDoc.sections, "REMOVED User journeys");
+  const removed = sectionByName(fromDelta, "REMOVED User journeys");
   for (const journey of removed?.children ?? []) {
     const id = usId(journey.heading);
     if (!id || !live.has(id))
@@ -294,12 +281,13 @@ function mergeJourneys(
     retired.add(id);
   }
   const rendered = [];
-  if (currentDoc.heading) rendered.push(`# ${currentDoc.heading}`);
+  const title = leadingTitle(outline(current));
+  if (title) rendered.push(`# ${title}`);
   rendered.push("## User journeys");
   for (const journey of live.values()) rendered.push(renderSection(journey));
   if (retired.size > 0) {
     rendered.push("## Retired");
-    const oldRetired = sectionByName(currentDoc.sections, "Retired");
+    const oldRetired = sectionByName(currentSections, "Retired");
     const priorLines =
       oldRetired?.raw.split("\n").filter((line) => line.trim() !== "") ?? [];
     const known = new Set(
@@ -321,9 +309,9 @@ function readRetiredIds(sections) {
 }
 
 function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
-  const deltaSections = rootSections(deltaText).sections;
-  const deltaFeature = sectionByName(deltaSections, "Feature set");
-  const removedFeature = sectionByName(deltaSections, "REMOVED Feature set");
+  const delta = deltaSections(deltaText);
+  const deltaFeature = sectionByName(delta, "Feature set");
+  const removedFeature = sectionByName(delta, "REMOVED Feature set");
   const splitGroups = (raw) => {
     const groups = new Map();
     let items = null;
@@ -345,7 +333,7 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   const removedGroups = splitGroups(removedFeature?.raw ?? "");
   if (!deltaFeature && removedGroups.size === 0) return currentSpec;
   const currentFeature = sectionByName(
-    rootSections(currentSpec).sections,
+    deltaSections(currentSpec),
     "Feature set",
   );
   if (!currentFeature && removedGroups.size > 0)
@@ -368,10 +356,7 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
       ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
       : [];
   if (priorText) {
-    const priorFeature = sectionByName(
-      rootSections(priorText).sections,
-      "Feature set",
-    );
+    const priorFeature = sectionByName(deltaSections(priorText), "Feature set");
     const priorGroups = splitGroups(priorFeature?.raw ?? "");
     const shape = (items) =>
       withoutTraceMarkers((items ?? []).flat().join("\n"));
@@ -505,10 +490,7 @@ function mergePurpose(
   baseText,
 ) {
   if (!deltaPurpose) return currentSpec;
-  const currentPurpose = sectionByName(
-    rootSections(currentSpec).sections,
-    "Purpose",
-  );
+  const currentPurpose = sectionByName(deltaSections(currentSpec), "Purpose");
   if (
     !priorText &&
     typeof baseText === "string" &&
@@ -518,10 +500,7 @@ function mergePurpose(
       `${capability}: accepted Purpose changed since this delta's Purpose was written; fold the durable Purpose's changes into this delta's Purpose and commit it`,
     );
   if (priorText) {
-    const priorPurpose = sectionByName(
-      rootSections(priorText).sections,
-      "Purpose",
-    );
+    const priorPurpose = sectionByName(deltaSections(priorText), "Purpose");
     if (currentPurpose?.raw !== priorPurpose?.raw) {
       throw new Error(
         `${capability}: accepted Purpose changed since this amendment began; rebase the delta before acceptance`,
@@ -809,7 +788,7 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
   );
   if (texts[0] === texts[1]) return texts[0];
   const docs = texts.map((text) => {
-    const sections = documentSections(text);
+    const sections = deltaSections(text);
     const headerEnd = Math.min(
       ...sections.map((section) => section.line),
       text.split("\n").length + 1,
@@ -936,16 +915,10 @@ function foldOne(
   const durableExists = existsSync(durablePath);
   let durable = durableExists ? readFileSync(durablePath, "utf8") : "";
   const original = durable;
-  const delta = outline(deltaText).find((section) => section.level === 1);
-  if (!delta) throw new Error(`${capability}: delta has no title`);
-  if (!durableExists) durable = `# ${delta.heading}\n`;
-  const durableTop = outline(durable).find((section) => section.level === 1);
-  const deltaPurpose = delta.children.find(
-    (section) => section.heading === "Purpose",
-  );
-  const existingPurpose = durableTop?.children.find(
-    (section) => section.heading === "Purpose",
-  );
+  const delta = deltaSections(deltaText);
+  if (!durableExists) durable = `# ${capability} Specification\n`;
+  const deltaPurpose = sectionByName(delta, "Purpose");
+  const existingPurpose = sectionByName(deltaSections(durable), "Purpose");
   if (!existingPurpose && !deltaPurpose)
     throw new Error(
       `${capability}: new durable spec needs a Purpose section before acceptance`,
@@ -957,21 +930,14 @@ function foldOne(
     priorText,
     baseText,
   );
-  const deltaFeatureSet = delta.children.find(
-    (section) => section.heading === "Feature set",
-  );
-  const deltaRemovedFeatureSet = delta.children.some(
-    (section) => section.heading === "REMOVED Feature set",
-  );
-  if (deltaFeatureSet || deltaRemovedFeatureSet)
+  if (claimsFeatureSet(delta))
     durable = mergeFeatureSet(durable, deltaText, capability, priorText);
   const requirements = new Map(requirementBlocks(durable));
   const priorRequirements =
     priorText === null ? new Map() : requirementBlocks(priorText);
   const sameRequirement = (left, right) =>
     withoutTraceMarkers(left?.raw) === withoutTraceMarkers(right?.raw);
-  const sections = deltaSections(deltaText);
-  for (const section of sections) {
+  for (const section of delta) {
     const kind = deltaKindOf(section.heading);
     if (!kind) continue;
     if (kind === "renamed") {
@@ -1176,19 +1142,11 @@ export function contractTargets(root, changeId) {
     .sort();
   for (const deltaPath of deltas) {
     const deltaText = readFileSync(join(root, deltaPath), "utf8");
-    const delta = outline(deltaText).find((section) => section.level === 1);
+    const sections = deltaSections(deltaText);
     const anchors = new Set();
-    if (delta?.children.some((section) => section.heading === "Purpose"))
-      anchors.add("Purpose");
-    if (
-      delta?.children.some(
-        (section) =>
-          section.heading === "Feature set" ||
-          section.heading === "REMOVED Feature set",
-      )
-    )
-      anchors.add("Feature set");
-    for (const section of deltaSections(deltaText)) {
+    if (sectionByName(sections, "Purpose")) anchors.add("Purpose");
+    if (claimsFeatureSet(sections)) anchors.add("Feature set");
+    for (const section of sections) {
       const kind = deltaKindOf(section.heading);
       if (!kind) continue;
       if (kind === "renamed") {
