@@ -164,6 +164,8 @@ The change directory is named `add-store-product-status` and carries five
 capabilities; the name is left alone so the open pull request keeps its
 history. Its standalone Storybook product-detail preview is updated to match
 the variant and availability behavior specified here.
+The card's structured data carries one offer, for its one item, because
+Crawlable Pages restates only what the page shows (decisions Q24).
 
 `product-status` walks the listing, product page and cart as one Store path;
 the Store domain test suite is updated with that path. The product-detail
@@ -204,4 +206,5 @@ folds its own `shared/ui/store-cart` delta first, the
 - [Product Details](../../../docs/prds/products/grade10-site/store/product-page.md)
 - [Cart Drawer](../../../docs/prds/products/grade10-site/store/cart.md)
 - [Store Cart](../../../docs/prds/products/shared/ui/store-cart.md)
+- [Crawlable Pages · Structured Data](../../../docs/prds/products/grade10-site/site/crawlable-pages.md#structured-data)
 - [Checkout](../../../docs/prds/products/grade10-site/store/checkout.md)
