@@ -1,6 +1,6 @@
 # shared/auth/audit Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 **Out of suite:** shared-auth-audit-SC-30, shared-auth-audit-SC-31, shared-auth-audit-SC-33 — collector sign-in/out and trusted-product account reads stay off the trail; held by identityTrail.spec negatives in grade10
@@ -18,7 +18,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -60,7 +60,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -98,7 +98,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -136,7 +136,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
