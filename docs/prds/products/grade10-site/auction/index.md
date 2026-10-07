@@ -44,7 +44,7 @@ Prices shipping and insurance for that address, adds any tax for the order, and 
 By card, which Grade10 confirms on its own, or by bank transfer quoting the
 reference and uploading proof an operator checks.
 ## *Operator* — **Ships**
-Records dispatch with the tracking number, then delivery; the winner reads
+🚧 Records dispatch with the tracking number, then delivery; the winner reads
 the tracking number as the link to the carrier's tracking page when the
 operator recorded a tracker link, and as plain text when none was.
 :::

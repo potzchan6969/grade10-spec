@@ -26,7 +26,7 @@ as plain text, with no carrier name and no Track shipment control.
 
 This requirement governs the live Winner Order presentation only.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-h7d rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-h7d rev=2 -->
 #### Scenario: winner-order-SC-251 - A dispatched lot shows the tracking number as the carrier link
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
@@ -39,7 +39,7 @@ This requirement governs the live Winner Order presentation only.
 - **AND** it shows no separate Track shipment control and no carrier name in
   Order Progress
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-k4r rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-k4r rev=2 -->
 #### Scenario: winner-order-SC-252 - The tracker remains after delivery is confirmed
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
