@@ -60,6 +60,9 @@ NOT render a separate Get directions control.
 **Required map** - The map embed source and the Maps destination SHALL be
 required props: a `StoreLocator` missing either SHALL NOT type-check.
 
+**Required hours** - The hours SHALL be a non-empty list: a `StoreLocator`
+given no hours row SHALL NOT type-check.
+
 <!-- trace:scenario id=g10.shared-store-locator.SC-7zw rev=1 -->
 #### Scenario: shared-ui-store-locator-SC-02 - Supplied shop facts render
 **Serves:** Location & Hours - an application passes its shop and sees it drawn as given
@@ -97,4 +100,12 @@ required props: a `StoreLocator` missing either SHALL NOT type-check.
 
 - **WHEN** an application renders `StoreLocator` without a map embed source
   or without a Maps destination
+- **THEN** its type check refuses it
+
+<!-- trace:scenario id=g10.shared-store-locator.SC-4q9 rev=1 -->
+#### Scenario: shared-ui-store-locator-SC-07 - A block with no hours does not build
+**Serves:** Location & Hours - an application cannot draw a shop with no opening hours
+
+- **WHEN** an application renders `StoreLocator` with an empty list of hours
+  rows
 - **THEN** its type check refuses it

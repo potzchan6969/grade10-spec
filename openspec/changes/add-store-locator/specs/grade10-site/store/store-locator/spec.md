@@ -19,8 +19,9 @@ sets.
 - Location & Hours
   - Supplied shop: the one Hong Kong shop's map, name, street address and week
     hours in the response, visible before any script runs
-  - Brand copy: the heading and the store name are the brand's words in the
-    collector's language; the name is the free pick-up claim's
+  - Brand copy: the heading, the store name, the address and the hours are
+    the brand's words in the collector's language; the name is the free
+    pick-up claim's
   - Not a finder: no search, store list, distance, filter or store picker
   - Its own title: title and description differ from Store home, the listing
     and Product Details
@@ -34,8 +35,6 @@ sets.
   - Footer: Store Locator is the first link of the Help column, ahead of Docs
   - Current marking: the header marks Store Locator while the collector is on
     it
-  - Carried with the store: a build without the store names no Store Locator
-    in its header, its footer or its sitemap
 - Narrow width
   - 375 CSS pixels: the page scrolls only vertically, and map, address, hours
     and chrome reflow rather than clip
@@ -61,9 +60,14 @@ visible before any script runs, and never hidden again once scripts run.
 | Address | 13 Pak Sha Road, Causeway Bay, Hong Kong |
 | Hours | 11am – 9pm, every day |
 
-**Brand copy** - The heading and the store name SHALL be the brand's words in
-the collector's language. The store name SHALL be the same words the free
-pick-up claim on a product page uses in that language.
+**Address** - Store Locator SHALL answer at `store-locator` beneath the
+language prefix, a top-level address outside the store's own, so no address
+beneath the store is Store Locator's.
+
+**Brand copy** - The heading, the store name, the street address and the
+hours SHALL be the brand's words in the collector's language, the hours
+written in that language's own format. The store name SHALL be the same words
+the free pick-up claim on a product page uses in that language.
 
 **Not a finder** - The page SHALL NOT offer store search, a store list,
 distance, filters, or a store picker.
@@ -105,8 +109,8 @@ from Store home's, the browse listing's and a product page's, as
 
 - **GIVEN** a collector reading the site in Traditional Chinese
 - **WHEN** they open Store Locator
-- **THEN** the heading and the store name are the brand's Traditional Chinese
-  words
+- **THEN** the heading, the store name, the street address and the hours are
+  the brand's Traditional Chinese words
 - **AND** the store name reads exactly as the free pick-up claim on a product
   page reads in Traditional Chinese
 
