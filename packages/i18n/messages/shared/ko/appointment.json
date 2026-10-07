@@ -42,6 +42,8 @@
     "name": "이름",
     "email": "이메일",
     "phone": "전화번호",
+    "phoneIncomplete": "전화번호를 모두 입력해 주세요.",
+    "phonePlaceholder": "+852 1234 5678",
     "notes": "미리 알려 주실 내용이 있나요?",
     "optional": "선택",
     "nameMissing": "이름을 입력해 주세요.",
