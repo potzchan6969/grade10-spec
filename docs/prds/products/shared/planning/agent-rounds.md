@@ -33,6 +33,15 @@ One round per artifact, and one per task group while the change is building.
   agent's recommendation, or a `❓` line on the page; every other preference the
   round decides on the best option, says so, and one reply from you overturns
   it
+- 🚧 **A raised question comes with its recommendation** — the blind reading
+  still raises each point its input did not settle, with the options and the
+  one it recommends; a reading that raises nothing has failed
+- 🚧 **A settled question closes** — the planner closes one that the page, the
+  build or a sensible default settles, as decided by the round, naming the
+  source; one reply from you reopens it
+- 🚧 **A look never holds a feature** — a designer's ask about a look ships as
+  the recommended interim and waits on the designer in a change of its own,
+  listed under them on [Pending](/pending)
 - 🚧 **One sentence plans the change** — the first message drafts every artifact
   of the chain, each from the one before it and each read by its perspectives,
   and lands nothing; you read the held questions, not seven documents
@@ -47,9 +56,9 @@ One round per artifact, and one per task group while the change is building.
   then independently writes the technical design, requirements, scenarios and
   tasks from the same anchors; QA2 reads both outputs and reconciles coverage,
   testability, task coverage and technical contradictions
-- 🚧 **One human resolves every question** — the same named human answers all
-  product questions QA2 raises before accepting the plan; a remaining question
-  holds acceptance
+- 🚧 **One human resolves what stays open** — a question stays open only when
+  the test in **A question, not a guess** holds it; the same named human
+  answers each before accepting the plan, and an open one holds acceptance
 - 🚧 **The engineer challenges the tech design** — there is no tech PIC: the
   engineer who will build the change challenges the proposed system, its data
   flow and its rejected options before the plan is accepted, and the human who
@@ -232,7 +241,9 @@ propose, and that every step passes through layers of checks. The brief is
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused from the change's first landing on, and on every change once the old skills go. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards each deployment and release. | QA, Engineering |
 | Runner | Decided | A custom Slack app, the relay in this repository and a hosted Routine; the relay checks the word before `main` moves and says when a run did not finish. | Operations, Engineering |
-| Who is asked, and when | Decided | Each hand reads a message that is theirs; one human resolves all planning questions before plan acceptance; QA performs human verification only after implementation is complete; the product manager answers any line a build round puts on their page. | Product, QA |
+| Who is asked, and when | Decided | Each hand reads a message that is theirs; one human resolves every planning question still open before plan acceptance; QA performs human verification only after implementation is complete; the product manager answers any line a build round puts on their page. | Product, QA |
+| Raised questions | Decided | The blind reading raises every unsettled point with a recommendation; the planner closes what the page, the build or a sensible default settles; only a held question holds acceptance. | Product, QA |
+| A designer's ask | Decided | A look ships as the recommended interim and waits on the designer in a change of its own; it never holds a feature's acceptance. | Product, Design |
 | The interview's size | Decided | About three questions, none trivial, that change what is built, one whether to do it now; the rest listed as decided. | Product |
 | Verified together | Decided | One verifier over a round's readings; a round of one reader verifies itself. | Engineering |
 | The record's paths | Decided | A group's repository tag says where its paths live, and the landing resolves them in the application clone beside it, so every row lands through the command. | Engineering |
