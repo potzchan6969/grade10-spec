@@ -235,13 +235,16 @@ neither decides on the other's data. Five minutes is past any checkout still
 running, and the promise's own row write refuses a claim it made more than a
 minute before, so a release never meets a row still being written
 (`SC-244`). That refusal leaves through the promise's guard, which gives the
-claim back as on every other exit, and reaches the checkout as a value; the
-sentence the member reads is raised in `decisions.md`, and its answer moves
-only the cause and its copy. A younger claim may be a checkout still being promised, so the
-operation answers
-`too_recent` and the claim is refused by name, as an earlier sale that stands
-(`SC-242`); the race retry above has already run by then. The sweep still
-releases one nobody claims again.
+claim back as on every other exit, and reaches the sale as a value with a
+cause of its own, `took_too_long` (Q32). The till plan writes its row through
+the same `promiseOrder` (`services/pos/sale/sale.ts:181`), so both channels
+meet it: online it is a `CouponRefusalCause` with its own copy, and at the
+till a plan refusal with its own sentence. `wallet_unavailable` would say the
+wallet could not be read, which is false here. A younger claim may be a
+checkout still being promised, so the operation answers `too_recent` and the
+claim is refused by name, as an earlier sale that stands (`SC-242`); the race
+retry above has already run by then. The sweep still releases one nobody
+claims again.
 
 The member's coupon list already carries no code for a reward coupon: the
 block takes one only where its consumer passes it

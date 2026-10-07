@@ -94,8 +94,8 @@ None.
   stands; a reversal is refused only while a sale claims the coupon, and the
   programme's own clock never frees a coupon whose code is live; a claim a
   checkout left before its order was written is released by the next claim,
-  and a checkout writing its order more than a minute after its claim is
-  refused; the member's coupon list and `CouponList`'s contract carry no code
+  and a sale writing its order more than a minute after its claim is
+  refused, saying it took too long; the member's coupon list and `CouponList`'s contract carry no code
   for a reward coupon; what a redemption forfeits when it lapses unused is its
   coupon, never a code minted for one sale.
 - `grade10-site/store/discounts`: at the till a gift reaches the sale as its
@@ -122,14 +122,15 @@ None.
 - **Store contracts** (`packages/grade10-store/contracts`) —
   `PosSalePlanResult` names the member's coupon; `PosSalePlanInput` carries the
   order id the cart already names; `CouponRefusalCause` gains
-  `held_elsewhere`; the till plan refusal gains `coupon_off_sale` and
-  `coupon_held_elsewhere`.
+  `held_elsewhere` and `took_too_long`; the till plan refusal gains
+  `coupon_off_sale`, `coupon_held_elsewhere` and `took_too_long`.
 - **POS extension** (`integrations/shopify-pos/grade10`) — the till's
-  sentences for both new refusals, `sale_closed`'s sentence naming a new
+  sentences for the three new refusals, `sale_closed`'s sentence naming a new
   sale, and the cart's order id sent with each plan.
-- **`@grade10/i18n`** (this store) — `checkout.refusal.held_elsewhere` in
-  every locale, and `checkout.refusal.idempotency_conflict` reworded to a
-  coupon already used on another order.
+- **`@grade10/i18n`** (this store) — `checkout.refusal.held_elsewhere` and
+  `checkout.refusal.took_too_long` in every locale, and
+  `checkout.refusal.idempotency_conflict` reworded to a coupon already used on
+  another order.
 - **`@grade10/ui`** (this store) - `CouponList`'s contract wording only: it
   carries a code where the consumer passes one, and a reward coupon carries
   none. `RewardMenu`'s channel clause, which this change restates, names the

@@ -65,8 +65,8 @@
 - [ ] 9.4 A claim the programme answers `not_available` first runs the unsettled releases of this member's dead orders carrying that coupon, then asks once more
 - [ ] 9.5 Tests first: the cart drawer offers every coupon the member holds that is not spent, lapsed or void, among them one whose cancelled order has not yet given it back and one whose claim names an order never written, whatever that claim's age `grade10-site-loyalty-programme-SC-196`
 - [ ] 9.6 The drawer offers every reward coupon the wallet quote returns, as the till panel does, and reads no orders to decide it: `spendableRewards` and its read of open orders go (`services/orders/quote.ts:263-293`)
-- [ ] 9.7 Tests first, across both ledgers with the programme's own operation: a claim a checkout left when it stopped before its order was written is released and taken at the till and online once it is five minutes old, and a younger one is refused by name and not released; a checkout that writes its order more than a minute after its claim is refused `grade10-site-loyalty-programme-SC-241`, `grade10-site-loyalty-programme-SC-242`, `grade10-site-loyalty-programme-SC-244`
-- [ ] 9.8 The programme's `releaseUnwrittenClaim` releases a coupon's pending claim for an order id only where it is older than five minutes, and answers `too_recent` otherwise; a claim the programme answers `not_available` calls it where the wallet's `reservedForOrderId` names no store row, then asks once more, and refuses by name on `too_recent`, as the supersede pass does for a checkout that will not close; the promise's row write refuses a claim it made more than a minute before
+- [ ] 9.7 Tests first, across both ledgers with the programme's own operation: a claim a checkout left when it stopped before its order was written is released and taken at the till and online once it is five minutes old, and a younger one is refused by name and not released; a sale that writes its order more than a minute after its claim is refused, online and at the till `grade10-site-loyalty-programme-SC-241`, `grade10-site-loyalty-programme-SC-242`, `grade10-site-loyalty-programme-SC-244`
+- [ ] 9.8 The programme's `releaseUnwrittenClaim` releases a coupon's pending claim for an order id only where it is older than five minutes, and answers `too_recent` otherwise; a claim the programme answers `not_available` calls it where the wallet's `reservedForOrderId` names no store row, then asks once more, and refuses by name on `too_recent`, as the supersede pass does for a checkout that will not close; the promise's row write refuses a claim it made more than a minute before, as `took_too_long` (12.6)
 
 ## 10. Let a sale go on without its reward (grade10)
 
@@ -81,6 +81,7 @@
 
 - [ ] 11.1 `checkout.refusal.held_elsewhere` in every locale the store speaks: "An earlier order still carries this promo code.", true of an order that took the money, one that could not be closed and one still being submitted
 - [ ] 11.2 `checkout.refusal.idempotency_conflict` says the promo code was used on another order, not that it is held for another checkout, in every locale
+- [ ] 11.3 `checkout.refusal.took_too_long` in every locale the store speaks: "This checkout took too long. Submit it again."
 
 ## 12. Carry the refusal by name (grade10)
 
@@ -88,6 +89,8 @@
 - [ ] 12.2 `CouponRefusalCause` gains `held_elsewhere`; `checkoutResult` carries it as its own cause rather than English detail inside `coupon_refused`, and the cart drawer and `/checkout` render its copy; the till plan maps `coupon_held_elsewhere` from that cause rather than from `SALE_HOLDS_IT`'s sentence (`services/pos/sale/sale.ts:659`), and the store's own `idempotency_conflict` sentence (`services/coupons/apply.ts:125`) says the coupon was used on another order
 - [ ] 12.3 Move the spec submodule to the commit carrying group 11's copy
 - [ ] 12.4 The till's `coupon_held_elsewhere` sentence says an earlier order of the member's still carries this coupon, with no advice to try again, since an order that took the money never lets it go (`integrations/shopify-pos/grade10/src/till/sentences.ts:48-49`)
+- [ ] 12.5 Tests first: a sale whose order is written more than a minute after its claim reaches the checkout and the till as `took_too_long`, never as `wallet_unavailable` or an unnamed refusal `grade10-site-loyalty-programme-SC-244`
+- [ ] 12.6 `CouponRefusalCause` gains `took_too_long`, and `checkoutResult` carries it as its own cause, rendered with group 11's copy; the till plan refusal gains `took_too_long`, whose sentence tells staff the sale took too long and to apply it again: 此單處理時間過長，請再套用一次。
 
 ## 13. Spend a coupon a paid sale carried (grade10)
 

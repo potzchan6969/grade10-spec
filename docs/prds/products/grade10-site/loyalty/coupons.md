@@ -153,7 +153,7 @@ quietly lost a coupon.
 | Wrong channel | The definition does not name the channel it is being spent in |
 | Not eligible | The definition's eligibility is not met |
 | 🚧 An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
-| ❓ Written too late | A checkout whose order is written more than a minute after its claim; the coupon is back in the wallet, and the words the member reads are the product manager's to confirm |
+| 🚧 Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
 
 ### Basket
 

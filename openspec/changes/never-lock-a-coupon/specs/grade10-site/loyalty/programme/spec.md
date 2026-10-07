@@ -60,9 +60,11 @@ A coupon an ended order has not yet given back SHALL NOT refuse a claim: the
 claim SHALL take it back from that order first, as it does from any earlier
 sale. A claim left by a checkout that stopped before its order was written
 SHALL NOT refuse a claim either once it is five minutes old, past any checkout
-still writing that order: the new claim SHALL release it first. A checkout
-SHALL NOT write its order more than a minute after its claim, and SHALL be
-refused instead, so a release never meets an order still being written.
+still writing that order: the new claim SHALL release it first. A sale,
+online or at the till, SHALL NOT write its order more than a minute after its
+claim, and SHALL be refused instead, so a release never meets an order still
+being written. That refusal SHALL say the sale took too long and ask for it
+again, never that the coupon is unavailable or the wallet could not be read.
 
 A counter sale SHALL release its claim when another sale claims the coupon,
 when a newer promise retires the sale, or an hour after its last plan,
@@ -230,12 +232,12 @@ as `grade10-site/store/membership` requires.
 - **AND** the claim that stood is not released
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-6jz rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-244 - A checkout that writes its order a minute after its claim is refused
+#### Scenario: grade10-site-loyalty-programme-SC-244 - A sale that writes its order a minute after its claim is refused
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
-- **GIVEN** a checkout that claimed a member's coupon and has not yet written its order
+- **GIVEN** an online checkout or a till sale that claimed a member's coupon and has not yet written its order
 - **WHEN** it comes to write the order more than a minute after the claim
-- **THEN** the checkout is refused and no order is written
+- **THEN** the sale is refused and no order is written, the member told the checkout took too long and to submit it again, or staff told the sale took too long and to apply it again
 - **AND** the coupon is spendable again
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-lft rev=1 -->
