@@ -101,9 +101,10 @@ stops being owed and that nothing is sent. What follows is how it lands.
   and for points paid at checkout that a refund or an operator returns
   (`reversePay` in `services/ledger/payment.ts`, which `returnSpend` in
   `services/ledger/spends.ts` calls for the operator); only `operatorCreditLife` in
-  `services/ledger/expiry.ts`, which grants and corrections call, starts a
-  window where nothing is live. The programme delta states this, and one
-  behavior test pins it; no writer changes. A reminder dropped when the
+  `services/ledger/expiry.ts`, which grants and corrections call, moves the
+  clock where nothing is live, out to a window from the credit's own day and
+  never back (`advanceMemberClock`). The programme delta states both, and one
+  behavior test pins them; no writer changes. A reminder dropped when the
   balance emptied is then answered again with the same identity, by
   construction.
 - **Grade10's value is one lead of 30 days**, Q5 in `decisions.md`; the code

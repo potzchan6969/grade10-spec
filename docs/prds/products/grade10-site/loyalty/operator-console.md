@@ -3,7 +3,7 @@ title: Operator Console
 spec: grade10-site/loyalty/programme
 audience: operator
 order: 9
-reviewed: 2026-10-06
+reviewed: 2026-10-07
 ---
 
 ## Moving Points
@@ -16,9 +16,10 @@ part on one question: do the points count toward the tier?
   it can promote a member
 - **Correction** — putting a mistake right; adds to or takes from the
   redeemable balance alone, so it never promotes anyone
-- **Neither moves a running date** — the points take the date the balance
-  already has; where nothing is live they start twelve months from their own
-  day — [Points](/p/grade10-site/loyalty/points#expiry)
+- **Neither moves a live date** — the points take the date the balance
+  already has; where nothing is live they lapse on the later of twelve months
+  from their own day and the day still running —
+  [Points](/p/grade10-site/loyalty/points#expiry)
 - **The form states the date** — before the operator writes, it names the
   day the points will lapse
 - **Both carry a reason** — what the operator types goes to the audit trail;

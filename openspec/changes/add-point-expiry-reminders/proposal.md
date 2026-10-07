@@ -51,6 +51,10 @@ owed a reminder is what makes that a small change rather than another argument a
   brought to nothing, so a reminder dropped then is owed again. The programme
   already does this; its expiry requirement now says so, where its feature set
   started a window from a reversal's own day.
+- **A grant onto an emptied balance moves the day out.** A grant or a
+  correction onto a balance brought to nothing lapses on the later of a year
+  from its own day and the day still running, as the programme already does,
+  so a reminder on the old day is owed nothing.
 - **Nothing is delivered.** No email, no push, no page reads what is raised.
   A reminder names no channel and the programme sends nothing.
 
@@ -62,13 +66,14 @@ What this change leaves out is in [decisions](decisions.md#non-goals).
 
 - Added: `grade10-site/loyalty/expiry-reminders`
 - Modified: `grade10-site/loyalty/programme` - the inactivity expiry
-  requirement states the day returned points take; no behaviour changes
+  requirement states the day returned points and operator credits
+  take; no behaviour changes
 
 ## Impact
 
 - **Spec store** - one new capability beside `grade10-site/loyalty/programme`,
   and a manual page for it; the programme's expiry requirement and Points state
-  the day returned points take. No component export changes, and no consuming
+  the day returned points and operator credits take. No component export changes, and no consuming
   application adapts: nothing renders a reminder.
 - **Application** - the programme's own service. No member surface, no
   operator console, no till.

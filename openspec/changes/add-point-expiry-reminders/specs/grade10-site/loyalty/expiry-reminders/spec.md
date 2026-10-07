@@ -170,12 +170,12 @@ member's account has been deleted, or the programme no longer carries the lead
 time it names. It SHALL NOT wait on any scheduled process,
 and SHALL stop being owed whether or not anything has read it.
 
-<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-vup rev=1 -->
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-vup rev=2 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-08 - Activity that moves the day ends the reminder
 **Serves:** Keeping a reminder true - activity that moves the day ends the reminder
 
-- **WHEN** a member owed a reminder buys, redeems, or has an operator restart their window, and the day their balance expires moves further out
-- **THEN** the reminder owed against the day it replaced is immediately no longer owed
+- **WHEN** the day a member's balance expires moves further out because they buy, redeem or have an operator restart their window, or because an operator grants or corrects points onto their balance brought to nothing
+- **THEN** no reminder is owed against the day it replaced, from that moment
 - **AND** nothing is owed for the new day until it falls within a lead time
 
 <!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-4iv rev=1 -->

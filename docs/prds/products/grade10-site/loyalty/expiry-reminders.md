@@ -31,9 +31,10 @@ reminder.
   so two lead times on one date are two reminders and never one repeated
 - 🚧 **Raised once** - the same member, day and lead time raise one reminder,
   however often the programme looks
-- 🚧 **Dropped when the day moves** - buying, redeeming or an operator
-  restarting the window moves the day, and a reminder still owed against the
-  day it replaced is dropped
+- 🚧 **Dropped when the day moves** - buying, redeeming, an operator
+  restarting the window, or a grant or a correction onto a balance brought to
+  nothing moves the day, and a reminder still owed against the day it
+  replaced is dropped - [Points](/p/grade10-site/loyalty/points#expiry)
 - 🚧 **Dropped when there is nothing left** - the balance lapsing, or a
   claw-back, a correction or a deleted account bringing it to nothing, drops
   what is still owed
