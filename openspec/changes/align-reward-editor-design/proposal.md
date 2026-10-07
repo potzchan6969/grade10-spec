@@ -92,16 +92,14 @@ The goals, the non-goals and the decisions behind them are in
   that coupon from the member's own phone
 - **Depends on never-lock-a-coupon** - never-lock modifies "A redemption
   settles as a coupon", so this change leaves that requirement alone, since
-  the store refuses two in-flight changes folding one requirement, and narrows
-  its counter paragraph from "A reward names a kind, a discount and a scope"
-  instead. Its scenarios *A coupon reaches the counter by the member
-  presenting it* and *Staff apply a member's coupon from the till session*
-  give the sale the cut of any product coupon, against the till refusing a
-  scope it cannot match. This change needs never-lock to narrow their GIVEN
-  to "a product coupon scoped to named variants or the whole order", and is
-  accepted only after it. Rebased onto it, the till row on Coupons · Applying
-  One keeps both facts: a scope the till can match, and a gift going on as its
-  own line
+  the store refuses two in-flight changes folding one requirement. Its
+  scenarios *A coupon reaches the counter by the member presenting it* and
+  *Staff apply a member's coupon from the till session* name any product
+  coupon, and this change's "A reward names a kind, a discount and a scope"
+  takes a coupon scoped to named products or a catalog filter out of both
+  ways into a counter sale. It is accepted after never-lock with no edit to
+  it. Rebased onto it, the till row on Coupons · Applying One keeps both
+  facts: a scope the till can match, and a gift going on as its own line
 
 ## Success
 
