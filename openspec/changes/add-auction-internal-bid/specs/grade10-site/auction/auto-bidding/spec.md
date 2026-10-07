@@ -154,6 +154,83 @@ The title is historical: its extension window is now extended bidding.
 - **THEN** the listing enters extended bidding
 
 
+### Requirement: Maximum fields
+
+Each accepted commitment SHALL carry these fields. Grade10 SHALL show a
+bidder their own row, distinct from the listing's current bid. Grade10
+SHALL NOT disclose a leading bidder's maximum to another bidder, to an
+unauthenticated reader, or in any public listing fact. The current bid
+is the second-highest maximum plus one increment, so that second-highest
+amount is implied by the price. A leading maximum is revealed only once
+it has been beaten: the new current bid is that maximum plus one
+increment, unless the increment would pass the new leader's maximum. An
+operator SHALL see every committed maximum and its Accepted At, except the
+house maximum: only an operator holding `auction:reserve` SHALL see it, and
+every commitment, raise and lower of it with its Accepted At, per
+`grade10-admin/auction/internal-bid`.
+
+| Field | Meaning |
+| --- | --- |
+| Maximum | Integer minor units in the listing's currency, with that listing's ISO 4217 code |
+| Accepted At | When Grade10 accepted this commitment |
+| Standing | Leading or not leading, as a fact apart from the current bid |
+
+| Standing | Meaning |
+| --- | --- |
+| Leading | This commitment is the highest, or it ties the highest and Grade10 accepted it first |
+| Not leading | A higher commitment exists, or an equal earlier one does |
+
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-nqo rev=1 -->
+#### Scenario: grade10-site-auction-auto-bidding-SC-05 - A bidder reads their own commitment
+**Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
+
+- **GIVEN** bidder A has committed a maximum of 50000 minor units while the current bid is 25000 minor units
+- **WHEN** bidder A opens the listing
+- **THEN** they see their own maximum of 50000 minor units
+- **AND** they see the current bid of 25000 minor units as a separate fact
+- **AND** they see that they lead
+
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-dmo rev=1 -->
+#### Scenario: grade10-site-auction-auto-bidding-SC-06 - An overtaken bidder sees that they no longer lead
+**Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
+
+- **GIVEN** bidder A has been overtaken on a listing
+- **WHEN** bidder A opens it
+- **THEN** they see that they do not lead
+- **AND** they see their own committed maximum unchanged
+
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-x57 rev=1 -->
+#### Scenario: grade10-site-auction-auto-bidding-SC-07 - A leader's maximum is not public
+**Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
+
+- **GIVEN** bidder A leads with a committed maximum of 50000 minor units while the current bid is 25000
+- **WHEN** any other bidder reads the listing's public facts
+- **THEN** those facts carry the current bid of 25000 minor units
+- **AND** they do not carry, and do not allow deriving, A's maximum of 50000
+
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-aqd rev=1 -->
+#### Scenario: grade10-site-auction-auto-bidding-SC-08 - An operator can answer a dispute
+**Serves:** grade10-site-auction-auto-bidding-US-04 - Operator traces every committed maximum
+
+- **GIVEN** a listing with several committed maximums
+- **WHEN** an authorized operator reads its bid history
+- **THEN** each commitment shows its bidder, its maximum, and its Accepted At
+
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-j3t rev=1 -->
+#### Scenario: grade10-site-auction-auto-bidding-SC-45 - A secret-floor operator traces every house commitment
+**Serves:** grade10-site-auction-auto-bidding-US-04 - Operator traces every committed maximum
+
+- **GIVEN** an `HKD` listing starting at 20000 HKD minor units, where the
+  house maximum of 25000 was committed at 18:00:00 UTC and raised to 30000
+  at 18:10:00 UTC while it led, collector A committed 40000 at 18:20:00 UTC
+  and collector C 60000 at 18:30:00 UTC, and the house maximum was lowered to
+  21000 at 19:00:00 UTC, all in HKD minor units
+- **WHEN** an operator holding `auction:reserve` reads its bid history
+- **THEN** it shows the house's maximum at 25000, 30000 and 21000 HKD minor
+  units, with Accepted At 18:00:00, 18:10:00 and 19:00:00 UTC
+- **AND** it shows A's and C's commitments, each with its maximum and
+  Accepted At
+
 ## ADDED Requirements
 
 ### Requirement: The house maximum bids as any maximum does

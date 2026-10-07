@@ -97,3 +97,15 @@ changing nothing. The letters the close owes are
 - **WHEN** its timer and a read settle it at the same moment
 - **THEN** it is closed once, sold at its current bid to the house's
   pseudonym, with no winner order
+
+<!-- trace:scenario id=g10.auction-auction.SC-cqt rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-106 - A lot only the house bid on closes sold at the opening price
+**Serves:** `Closing a lot the house leads` - the house's lone bid ends a lot as any lone bid does
+
+- **GIVEN** an open `HKD` listing with extended bidding on, a starting price
+  of 20000 HKD minor units, and one bid: the house's at 20000, committed
+  before its scheduled close
+- **WHEN** the scheduled close arrives and extended bidding ends with no other
+  bid
+- **THEN** a collector reads it Ended, sold at 20000 HKD minor units
+- **AND** Grade10 closes it bought in, with no winner order

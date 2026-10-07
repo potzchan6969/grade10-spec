@@ -45,7 +45,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- | --- | --- |
 | House wins | The house leads under a committed internal bid, over customer A | Bought in | Offered | `<available before>` plus `<held quantity>` |
 | Collector beats the house | customer A leads over the house's committed internal bid | Not Bought in, not Unsold | Not offered | `<available before>` |
-| Nobody bids | No bid; the internal bid was not placed at its time | Unsold | Offered | `<available before>` plus `<held quantity>` |
+| Nobody bids | No bid and no internal bid | Unsold | Offered | `<available before>` plus `<held quantity>` |
 
 **Steps:**
 
@@ -57,3 +57,86 @@ Runs once per row of **Test data**.
 
 * Step 2 reads the row's Listings table status and Relist.
 * Step 3 reads the row's available count.
+
+### grade10-admin-auction-listing-US9-TC11-1: The Bought in filter lists bought-in lots only
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* `<listing_2>` closed with the house leading under its internal bid.
+* `<listing_3>` closed with no bid and no internal bid.
+* `<listing_4>` closed with customer A leading over the house's internal bid.
+* admin(staff, holds auction:operate) is on <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_2>` | A closed HKD listing the house bought in |
+| `<listing_3>` | A closed HKD listing that closed Unsold |
+| `<listing_4>` | A closed HKD listing customer A won |
+
+**Steps:**
+
+1. Select the Bought in filter.
+2. Select the Unsold filter.
+3. Select the Won filter.
+
+**Expected Results:**
+
+* Step 1 lists `<listing_2>`, and neither `<listing_3>` nor `<listing_4>`.
+* Step 2 lists `<listing_3>`, not `<listing_2>`.
+* Step 3 lists `<listing_4>`, not `<listing_2>`.
+
+### grade10-admin-auction-listing-US9-TC12-1: A bought-in lot follows Unsold's Relist exclusions
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* `<listing_5>` closed Bought in, its stock released, and is as the row states.
+* admin(staff, holds auction:operate) is on <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_5>` | A closed HKD listing the house bought in |
+
+| Row | `<listing_5>` |
+| --- | --- |
+| In a campaign | Listed under a campaign |
+| Already relisted | In no campaign; Relist was already used and its new draft saved |
+
+**Steps:**
+
+1. Read `<listing_5>`'s row in the Listings table.
+
+**Expected Results:**
+
+* Step 1: the row reads Bought in and offers no Relist.

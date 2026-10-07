@@ -60,6 +60,8 @@ Runs once per row of **Test data**.
 
 ### grade10-site-auction-auction-US11-TC13-1: A lot whose only bid is the house's extends and closes sold at the starting price
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** major
@@ -75,7 +77,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_2>`'s internal bid of `<house maximum>` was committed with no other bid, so the house leads at `<starting price>`.
+* `<listing_2>` is published and taking bids with no bid, and its internal bid of `<house maximum>` is set at the row's commit time.
 * `<listing_2>`'s scheduled close is a few minutes away, and no collector will bid.
 * customer C is on the lot page for `<listing_2>`.
 
@@ -87,6 +89,11 @@ Runs once per row of **Test data**.
 | `<starting price>` | 400000 minor units (HK$4,000.00) |
 | `<house maximum>` | 600000 minor units (HK$6,000.00) |
 | `<extension duration>` | 1800s (30mins) |
+
+| Row | Commit time |
+| --- | --- |
+| Before the close | 1 minute from now, before the scheduled close |
+| At the scheduled close | Exactly the scheduled close |
 
 **Steps:**
 

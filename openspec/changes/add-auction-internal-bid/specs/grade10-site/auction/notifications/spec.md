@@ -22,6 +22,8 @@ a lot that closes with a winner who is not the recipient:
 - **Close** - enrolled bidders SHALL get the did-not-win letter and enrolled
   watch-only collectors the watched sold letter, each naming the winning bid
   when it is supplied.
+- **No public bid, no letter** - a lower of the house maximum, and a house
+  maximum that is not placed, write no public bid and SHALL send no letter.
 - **The house** - Grade10 SHALL address no letter of this capability, and no
   winner letter of `grade10-site/auction/notifications-order`, to the house.
 
@@ -29,7 +31,7 @@ No letter SHALL say or imply that a bid, a lead or a win was the house's.
 
 <!-- trace:scenario id=g10.auction-notifications.SC-kl5 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-49 - A collector outbid by the house gets the outbid letter
-**Serves:** grade10-site-auction-notifications-US-06 - a collector bidding against the house hears as usual
+**Serves:** grade10-site-auction-notifications-US-03 - a collector the house outbids hears as usual and can raise
 
 - **GIVEN** a collector who leads a lot with email alerts on
 - **WHEN** the house's committed maximum takes the lead from them
@@ -69,3 +71,24 @@ No letter SHALL say or imply that a bid, a lead or a win was the house's.
   that lot owes
 - **THEN** no letter is addressed to the house
 - **AND** no auction-won or setup letter is sent for the lot
+
+<!-- trace:scenario id=g10.auction-notifications.SC-mma rev=1 -->
+#### Scenario: grade10-site-auction-notifications-SC-53 - A bidder hears the new-bid letter when the house bids
+**Serves:** grade10-site-auction-notifications-US-04 - a collector who bid hears the lot moved, whoever moved it
+
+- **GIVEN** a lot where collector A leads and collector B, outbid earlier,
+  has email alerts on
+- **WHEN** the house's committed maximum places a bid on the lot
+- **THEN** Grade10 sends B the new-bid letter it sends when a collector bids
+- **AND** the letter does not say the bid is the house's
+
+<!-- trace:scenario id=g10.auction-notifications.SC-mnu rev=1 -->
+#### Scenario: grade10-site-auction-notifications-SC-54 - A house lower or a house maximum not placed mails nobody
+**Serves:** House participation - bidders hear only of bids they could see
+
+- **GIVEN** two lots, each with enrolled bidders and watchers who have email
+  alerts on
+- **WHEN** the house maximum on the first reaches its time short of the
+  minimum next bid and is not placed, and the placed house maximum on the
+  second is lowered without moving its lead or its price
+- **THEN** Grade10 sends no outbid, new-bid or other letter for either lot

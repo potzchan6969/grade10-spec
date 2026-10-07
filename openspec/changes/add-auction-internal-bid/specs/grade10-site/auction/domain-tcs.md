@@ -26,9 +26,8 @@
 
 **Pre-conditions:**
 
-* <listing_17>'s internal bid of <house maximum> was committed at its time, with no other bid, so the house leads at <starting price>.
-* <listing_17>'s scheduled close is 10 minutes away.
-* customer A(card linked) is signed in on the lot page for <listing_17>, email alerts on.
+* customer A(card linked) leads <listing_17> at <starting price> with maximum <user A maximum>, email alerts on, and will not bid again.
+* <listing_17> has an internal bid of <house maximum>, its <commit time> still ahead.
 * customer D watches <listing_17>, email alerts on, and will not bid.
 
 **Test data:**
@@ -40,12 +39,13 @@
 | <house maximum> | 600000 minor units (HK$6,000.00) |
 | <user A maximum> | 500000 minor units (HK$5,000.00), below <house maximum> |
 | <final price> | 508000 minor units: <user A maximum> plus its 8000 increment |
+| <commit time> | 5 minutes before the scheduled close |
 | <extension duration> | 1800s (30mins) |
 
 **Steps:**
 
-1. As customer A, enter <user A maximum> in the custom maximum on the bid panel and confirm.
-2. As customer A, read the standing, Highest bid and Recent bids.
+1. Wait until <commit time> passes.
+2. As customer A, read the standing, Highest bid and Recent bids on the lot page for <listing_17>.
 3. Read the mail sent to customer A.
 4. Wait through the scheduled close and the extended close, with no further bid.
 5. As customer A, read the lot's state.
@@ -54,8 +54,8 @@
 
 **Expected Results:**
 
-* Step 1 is accepted; step 2 reads Outbid, Highest bid <final price>.
-* Step 2: Recent bids lists customer A at <user A maximum>, then the house at <final price> under its listing pseudonym.
+* Step 2 reads Outbid, Highest bid <final price>.
+* Step 2: Recent bids lists customer A at <starting price>, then the house at <final price> under its listing pseudonym.
 * Step 3: one You have been outbid letter, and no New bid letter.
 * Step 4: the lot enters extended bidding at the scheduled close and closes <extension duration> after it.
 * Step 5 reads Did not win, sold at <final price>, the crowned row the house's pseudonym.

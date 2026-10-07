@@ -7,7 +7,7 @@
 
 * Every listing below is an HKD listing in no campaign, starting price `<starting price>`, extension duration 1800s (30mins) and no cap, unless its row says otherwise.
 * HKD increments follow the Bidding page's schedule: HK$80 (8000 minor units) from HK$4,000 and HK$200 (20000 minor units) from HK$8,000.
-* Amounts are integer minor units of the listing's currency; HKD has two decimals, so 400000 minor units read HK$4,000.00.
+* Amounts are integer minor units of the listing's currency; HKD has two decimals, so 400000 minor units read HK$4,000.00. An admin enters an internal bid in whole major units, as the custom maximum takes them.
 * customer A and customer B are collectors with a linked card, signed in on separate sessions; a maximum is entered in the custom maximum on the bid panel.
 
 | Field | Value |
@@ -122,7 +122,7 @@ Runs once per row of **Test data**.
 * Step 4 shows the internal bid committed at the row's `<commit time>`.
 * Step 5 reads the row's outcome.
 
-### grade10-admin-auction-internal-bid-US1-TC3-1: A commit time outside the window or a missing value is refused
+### grade10-admin-auction-internal-bid-US1-TC3-1: A value outside the save limits or a missing value is refused
 
 Runs once per row of **Test data**.
 
@@ -154,6 +154,8 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | Before the start | 600000 minor units | 1 minute before `<start>` |
 | After the scheduled close | 600000 minor units | 1 minute after `<scheduled close>` |
+| Above the ceiling | 8000000100 minor units (HK$80,000,001), one major unit above the HKD ceiling | 30 minutes after `<start>` |
+| Below the starting price | 399900 minor units (HK$3,999), one major unit below `<starting price>` | 30 minutes after `<start>` |
 | No time | 600000 minor units | Empty |
 | No amount | Empty | 30 minutes after `<start>` |
 
@@ -211,7 +213,7 @@ Runs once per row of **Test data**.
 * Step 3: Highest bid reads `<starting price>`, the first maximum on the starting price.
 * Step 3: Recent bids holds customer A's row only.
 
-### grade10-admin-auction-internal-bid-US1-TC5-1: An internal bid is refused on a closed or called-off listing
+### grade10-admin-auction-internal-bid-US1-TC5-1: An internal bid is refused on a draft, closed or called-off listing
 
 Runs once per row of **Test data**.
 
@@ -241,6 +243,7 @@ Runs once per row of **Test data**.
 
 | Row | `<listing_5>` |
 | --- | --- |
+| Draft | A draft holding a starting price, a start an hour away and a close a day later, never created |
 | Closed | Closed Unsold after its close |
 | Canceled | Called off before its close |
 
@@ -298,9 +301,188 @@ Runs once per row of **Test data**.
 * Step 4: the house leads at `<customer A maximum>` plus its increment, 508000 minor units.
 * Step 5 is refused at the ceiling; the house still leads.
 
-### grade10-admin-auction-internal-bid-US1-TC7-1: The amount is held in minor units of the listing's currency
+### grade10-admin-auction-internal-bid-US1-TC7-1: The amount is entered in whole major units and held in minor units
 
 Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Pre-conditions:**
+
+* `<listing_25>` is published in the row's currency, with no internal bid.
+* admin(holds auction:reserve) is on `<listing_25>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_25>` | A published listing in the row's currency, starting price 0, scheduled close a day away |
+| `<commit time>` | An hour from now |
+
+| Row | Currency | Amount typed | Read back from the API |
+| --- | --- | --- | --- |
+| HKD | HKD | 6000 | 600000 minor units, HKD |
+| USD | USD | 750 | 75000 minor units, USD |
+| JPY | JPY | 80000 | 80000 minor units, JPY, no decimals |
+
+**Steps:**
+
+1. In the Internal bid section, type the row's amount and `<commit time>`.
+2. Read the amount as the section formats it.
+3. Click Save.
+4. Read `<listing_25>`'s internal bid from the API.
+
+**Expected Results:**
+
+* Step 2 shows the amount as a formatted decimal in the row's currency.
+* Step 3 saves the internal bid.
+* Step 4 reads the row's integer minor units with the row's ISO 4217 code.
+
+### grade10-admin-auction-internal-bid-US1-TC8-1: An internal bid set on a created listing commits once published
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Pre-conditions:**
+
+* `<listing_26>` is created, not yet published, with no internal bid.
+* admin(holds auction:reserve and auction:operate) is on `<listing_26>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_26>` | A created HKD listing, start `<start>` 15 minutes away, scheduled close a day later |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<commit time>` | 10 minutes after `<start>` |
+
+**Steps:**
+
+1. In the Internal bid section, enter `<house maximum>` and `<commit time>`.
+2. Click Save.
+3. Publish `<listing_26>` now.
+4. Wait until `<commit time>` passes, with no collector bid.
+5. Reload the editor and read the Internal bid section.
+6. As customer B, open the lot page for `<listing_26>` and read Highest bid and Recent bids.
+
+**Expected Results:**
+
+* Step 2 saves the internal bid on the created listing, not yet committed.
+* Step 5 shows the internal bid committed at `<commit time>`.
+* Step 6: the house leads at `<starting price>`, one bid, under its listing pseudonym.
+
+### grade10-admin-auction-internal-bid-US1-TC9-1: A commit time already past is refused on a lot taking bids
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Pre-conditions:**
+
+* `<listing_27>` is published and taking bids, led by customer A at `<starting price>`, with no internal bid.
+* admin(holds auction:reserve) is on `<listing_27>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_27>` | A published HKD listing, started 2 hours ago, scheduled close a day away |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<past time>` | 1 minute ago, after the start and inside the window |
+
+**Steps:**
+
+1. In the Internal bid section, enter `<house maximum>` and `<past time>`.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+4. As customer B, read Highest bid and Recent bids on the lot page for `<listing_27>`.
+
+**Expected Results:**
+
+* Step 2 is refused, and says the time has passed.
+* Step 3 shows no internal bid.
+* Step 4: customer A still leads at `<starting price>`; Recent bids gains no row.
+
+### grade10-admin-auction-internal-bid-US1-TC10-1: A window change on a created listing clears the internal bid only when the time falls outside
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Pre-conditions:**
+
+* `<listing_28>` is created, not yet published, with an internal bid of `<house maximum>` at `<commit time>`.
+* admin(holds auction:reserve and auction:operate) is on `<listing_28>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_28>` | A created HKD listing, start `<start>` a day away, scheduled close `<scheduled close>` two days away |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<commit time>` | 2 hours after `<start>` |
+
+| Row | Window change | Internal bid after Save |
+| --- | --- | --- |
+| Start past the time | Start moved to 1 minute after `<commit time>` | Cleared |
+| Close before the time | Scheduled close moved to 1 minute before `<commit time>` | Cleared |
+| Start on the time | Start moved to exactly `<commit time>` | Kept, `<house maximum>` at `<commit time>` |
+| Close on the time | Scheduled close moved to exactly `<commit time>` | Kept, `<house maximum>` at `<commit time>` |
+
+**Steps:**
+
+1. Make the row's window change in the listing form.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+
+**Expected Results:**
+
+* Step 2 saves the window change.
+* Step 3 reads the row's internal bid.
+* Step 3: in a Cleared row, the section says the window change cleared the internal bid.
+
+### grade10-admin-auction-internal-bid-US1-TC11-1: A second save edits the one internal bid
 
 **Classification:**
 
@@ -317,31 +499,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_25>` is published in the row's currency, with no internal bid.
+* `<listing_29>` is published and taking bids, with no bids and no internal bid.
 * admin(holds auction:reserve) is signed in to the admin.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_25>` | A published listing in the row's currency, scheduled close a day away |
-
-| Row | Currency | Amount entered | Read back |
-| --- | --- | --- | --- |
-| HKD | HKD | HK$6,000.00 | 600000 minor units, HKD |
-| USD | USD | $750.00 | 75000 minor units, USD |
-| JPY | JPY | ¥80,000 | 80000 minor units, JPY, no decimals |
+| `<listing_29>` | A published HKD listing taking bids, scheduled close a day away |
+| `<first amount>` | 600000 minor units (HK$6,000.00) |
+| `<first time>` | 10 minutes from now |
+| `<second amount>` | 700000 minor units (HK$7,000.00) |
+| `<second time>` | 30 minutes from now |
 
 **Steps:**
 
-1. Set an internal bid of the row's amount on `<listing_25>`, its time an hour ahead.
-2. Read `<listing_25>`'s internal bid from the API.
-3. Open `<listing_25>`'s editor and read the Internal bid section.
+1. Set an internal bid of `<first amount>` at `<first time>` on `<listing_29>`.
+2. Set an internal bid of `<second amount>` at `<second time>` on `<listing_29>`.
+3. Read `<listing_29>`'s internal bid from the API.
+4. Wait until `<first time>` passes, and read Recent bids on the lot page as customer B.
+5. Wait until `<second time>` passes, and read Highest bid and Recent bids again.
 
 **Expected Results:**
 
-* Step 2 reads the row's integer minor units with the row's ISO 4217 code.
-* Step 3 shows the amount as a formatted decimal in the row's currency.
+* Step 2 is accepted.
+* Step 3 reads one internal bid: `<second amount>` at `<second time>`.
+* Step 4: Recent bids holds no row.
+* Step 5: the house leads at `<starting price>`, one bid.
 
 ---
 
@@ -723,6 +907,50 @@ Runs once per row of **Test data**.
 * Step 2 stores no new time.
 * Step 3 still shows `<house maximum>` committed at `<commit time>`.
 
+### grade10-admin-auction-internal-bid-US3-TC5-1: A raise still short of the next minimum is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-03
+
+**Pre-conditions:**
+
+* `<listing_30>` is published and taking bids, its internal bid of `<house maximum>` committed.
+* customer A leads `<listing_30>` at `<current bid>` with maximum `<customer A maximum>`.
+* admin(holds auction:reserve) is on `<listing_30>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_30>` | A published HKD listing taking bids, scheduled close a day away |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<customer A maximum>` | 700000 minor units (HK$7,000.00) |
+| `<current bid>` | 608000 minor units: `<house maximum>` plus its 8000 increment |
+| `<short raise>` | 615900 minor units (HK$6,159), one major unit below `<current bid>` plus its 8000 increment |
+
+**Steps:**
+
+1. In the Internal bid section, change the amount to `<short raise>`.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+4. As customer A, read Highest bid, the standing and Recent bids on the lot page for `<listing_30>`.
+
+**Expected Results:**
+
+* Step 2 is refused, and says the amount is short of the next minimum.
+* Step 3 still shows `<house maximum>`, committed.
+* Step 4: customer A still leads at `<current bid>`; Recent bids gains no row.
+
 ---
 
 ## grade10-admin-auction-internal-bid-US4: Admin lowers a committed internal bid without moving the lead
@@ -880,7 +1108,7 @@ Runs once per row of **Test data**.
 **I want** to see that an internal bid was not placed because the price had already passed it,
 **so that** I can raise it or let the lot sell.
 
-### grade10-admin-auction-internal-bid-US5-TC1-1: Placed at the next minimum, not placed one unit below it
+### grade10-admin-auction-internal-bid-US5-TC1-1: Placed at the next minimum, not placed one major unit below it
 
 Runs once per row of **Test data**.
 
@@ -912,9 +1140,8 @@ Runs once per row of **Test data**.
 
 | Row | Bidding at `<commit time>` | Next minimum | Internal bid | Outcome |
 | --- | --- | --- | --- | --- |
-| One unit short | customer A leads at 600000 with maximum 700000 | 608000 | 607900 | Not placed; customer A leads at 600000 |
+| One major unit short | customer A leads at 600000 with maximum 700000 | 608000 | 607900 | Not placed; customer A leads at 600000 |
 | At the next minimum | customer A leads at 600000 with maximum 700000 | 608000 | 608000 | Placed; customer A leads at 616000, the internal bid plus its 8000 increment |
-| Below the starting price | No bids | `<starting price>` | 399900 | Not placed; no bids |
 | At the starting price | No bids | `<starting price>` | 400000 | Placed; the house leads at `<starting price>` |
 
 **Steps:**
@@ -1014,6 +1241,136 @@ Runs once per row of **Test data**.
 * Step 2: the row does not read Bought in and offers no Relist.
 * Step 3 finds customer A's order for `<listing_20>`, at winning bid `<final price>`.
 
+### grade10-admin-auction-internal-bid-US5-TC4-1: A not-placed internal bid can be lowered
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Pre-conditions:**
+
+* `<listing_31>` is published and taking bids, led by customer A at `<current bid>` with maximum `<customer A maximum>`.
+* `<listing_31>`'s internal bid of `<short amount>` was not placed at its time.
+* admin(holds auction:reserve) is on `<listing_31>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_31>` | A published HKD listing taking bids, scheduled close a day away |
+| `<customer A maximum>` | 700000 minor units (HK$7,000.00) |
+| `<current bid>` | 600000 minor units |
+| `<short amount>` | 550000 minor units, below `<current bid>` |
+| `<lowered amount>` | 500000 minor units, below `<short amount>` |
+
+**Steps:**
+
+1. In the Internal bid section, change the amount to `<lowered amount>`.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+4. As customer A, read Highest bid, the standing and Recent bids on the lot page for `<listing_31>`.
+
+**Expected Results:**
+
+* Step 2 is accepted.
+* Step 3 shows `<lowered amount>`, still not placed.
+* Step 4: customer A still leads at `<current bid>`; Recent bids gains no row.
+
+### grade10-admin-auction-internal-bid-US5-TC5-1: A not-placed internal bid can be removed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Pre-conditions:**
+
+* `<listing_32>` is published and taking bids, led by customer A at `<current bid>`.
+* `<listing_32>`'s internal bid of `<short amount>` was not placed at its time.
+* admin(holds auction:reserve) is on `<listing_32>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_32>` | A published HKD listing taking bids, scheduled close a day away |
+| `<current bid>` | 600000 minor units |
+| `<short amount>` | 550000 minor units, below `<current bid>` |
+
+**Steps:**
+
+1. Remove the internal bid from the Internal bid section.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+4. As customer A, read Highest bid and Recent bids on the lot page for `<listing_32>`.
+
+**Expected Results:**
+
+* Step 2 saves the removal.
+* Step 3 shows no internal bid.
+* Step 4: customer A still leads at `<current bid>`; Recent bids gains no row.
+
+### grade10-admin-auction-internal-bid-US5-TC6-1: Raising a not-placed internal bid still short is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Pre-conditions:**
+
+* `<listing_33>` is published and taking bids, led by customer A at `<current bid>` with maximum `<customer A maximum>`.
+* `<listing_33>`'s internal bid of `<short amount>` was not placed at its time.
+* admin(holds auction:reserve) is on `<listing_33>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_33>` | A published HKD listing taking bids, scheduled close a day away |
+| `<customer A maximum>` | 700000 minor units (HK$7,000.00) |
+| `<current bid>` | 600000 minor units |
+| `<short amount>` | 550000 minor units, below `<current bid>` |
+| `<short raise>` | 607900 minor units (HK$6,079), one major unit below `<current bid>` plus its 8000 increment |
+
+**Steps:**
+
+1. In the Internal bid section, change the amount to `<short raise>`.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+4. As customer A, read Highest bid and Recent bids on the lot page for `<listing_33>`.
+
+**Expected Results:**
+
+* Step 2 is refused, and says the amount is short of the next minimum.
+* Step 3 still shows `<short amount>`, not placed.
+* Step 4: customer A still leads at `<current bid>`; Recent bids gains no row.
+
 ---
 
 ## grade10-admin-auction-internal-bid-US6: Admin reads a lot the house bought in
@@ -1051,10 +1408,11 @@ Runs once per row of **Test data**.
 | `<listing_21>` | A published HKD listing in no campaign |
 | `<house maximum>` | 600000 minor units (HK$6,000.00) |
 
-| Row | Leader at the close | Orders after the close |
-| --- | --- | --- |
-| House wins | The house, at 508000 over customer A's maximum of 500000 | No order for `<listing_21>` in any segment |
-| Collector beats the house | customer A, at 608000 with maximum 700000 | customer A's order, winning bid 608000 |
+| Row | Leader at the close | Orders after the close | customer A's row on My Auctions |
+| --- | --- | --- | --- |
+| House wins | The house, at 508000 over customer A's maximum of 500000 | No order for `<listing_21>` in any segment | Didn't win, card not charged |
+| Collector beats the house | customer A, at 608000 with maximum 700000 | customer A's order, winning bid 608000 | Won, with View order |
+| House alone | The house, at `<starting price>`, with no collector bid | No order for `<listing_21>` in any segment | No row; customer A never bid |
 
 **Steps:**
 
@@ -1065,17 +1423,17 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2 reads the row's Orders outcome.
-* Step 3: in the House wins row, customer A reads Didn't win, card not charged; in the other, Won with View order.
+* Step 3 reads the row's My Auctions outcome.
 
 ---
 
 ## grade10-admin-auction-internal-bid-US7: Admin keeps protected lots secret from staff
 
 **As an** auction admin,
-**I want** operators without secret-floor access never to see an internal bid or learn that a lot has one,
-**so that** the house's floor stays known only to those allowed to set it.
+**I want** operators without secret-floor access never to see an internal bid's amount or time, or learn that an open lot has one,
+**so that** the house's floor stays known only to those allowed to set it while the lot is selling.
 
-### grade10-admin-auction-internal-bid-US7-TC1-1: Staff without secret-floor access see no internal bid
+### grade10-admin-auction-internal-bid-US7-TC1-1: Staff without secret-floor access cannot tell an open lot is protected
 
 Runs once per row of **Test data**.
 
@@ -1094,8 +1452,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_22>` is published and taking bids, with an internal bid in the row's state.
-* `<listing_23>` is published and taking bids, with no internal bid.
+* `<listing_22>` is published and taking bids, with an internal bid in the row's state; customer A bid on it.
+* `<listing_23>` is published and taking bids, with no internal bid; customer A and customer B bid on it.
 * The row's admin, without auction:reserve, is on <grade10 auction admin listings url>.
 
 **Test data:**
@@ -1114,13 +1472,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read `<listing_22>`'s and `<listing_23>`'s rows in the Listings table.
-2. Open `<listing_22>`.
-3. Open `<listing_23>`.
+2. Open `<listing_22>` and read it, its bids included.
+3. Open `<listing_23>` and read it, its bids included.
 
 **Expected Results:**
 
 * Step 1: the two rows differ in nothing an internal bid would explain.
 * Step 2 shows no Internal bid section and no amount, time or state of one.
+* Step 2: in a committed row, the house's bids read under its listing pseudonym, as customer B's do in step 3.
 * Step 2 and step 3 read alike: nothing tells `<listing_22>` is protected.
 
 ### grade10-admin-auction-internal-bid-US7-TC2-1: The API refuses every internal bid read and write without secret-floor access
@@ -1171,7 +1530,9 @@ Runs once per row of **Test data**.
 * Step 3: both calls are refused for the missing access, with the same answer for both listings.
 * Step 4: `<listing_22>` still holds `<house maximum>` at its time; `<listing_23>` holds none.
 
-### grade10-admin-auction-internal-bid-US7-TC3-1: The audit trail records an internal bid set, never its amount
+### grade10-admin-auction-internal-bid-US7-TC3-1: The audit trail records each internal bid act, never its amount or time
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1188,7 +1549,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_24>` is published, with no internal bid.
+* `<listing_24>` is published, with the internal bid the row starts from.
 * admin(holds auction:reserve) is on `<listing_24>`'s editor from <grade10 auction admin listings url>.
 
 **Test data:**
@@ -1197,15 +1558,141 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<listing_24>` | A published HKD listing, scheduled close a day away |
 | `<house maximum>` | 612300 minor units (HK$6,123.00), an amount no other entry carries |
-| `<commit time>` | 2 hours from now |
+| `<commit time>` | 2 hours 17 minutes from now, a time no other entry carries |
+| `<changed maximum>` | 645600 minor units (HK$6,456.00), an amount no other entry carries |
+
+| Row | Starts from | Act | Entry records |
+| --- | --- | --- | --- |
+| Set | No internal bid | Enter `<house maximum>` and `<commit time>` | An internal bid was set |
+| Change | `<house maximum>` at `<commit time>` | Change the amount to `<changed maximum>` | An internal bid was changed |
+| Remove | `<house maximum>` at `<commit time>` | Remove the internal bid | An internal bid was removed |
 
 **Steps:**
 
-1. In the Internal bid section, enter `<house maximum>` and `<commit time>`.
+1. In the Internal bid section, make the row's act.
 2. Click Save.
 3. Open `<grade10 audit trail url>` and find the newest entry for `<listing_24>`.
 
 **Expected Results:**
 
-* Step 3 shows one entry recording that an internal bid was set on `<listing_24>`, by the admin, at Grade10's time.
-* Step 3: no entry shows `<house maximum>` in any form, 612300 or 6,123.
+* Step 3 shows one entry recording the row's act on `<listing_24>`, by the admin, at Grade10's time.
+* Step 3: no entry shows `<house maximum>` or `<changed maximum>` in any form, such as 612300 or 6,123.
+* Step 3: no entry shows `<commit time>`.
+
+### grade10-admin-auction-internal-bid-US7-TC4-1: After the close staff see Bought in, never the amount or time
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Pre-conditions:**
+
+* `<listing_34>` closed with the house leading under its internal bid of `<house maximum>` at `<commit time>`, over customer A.
+* admin(staff, holds auction:operate, not auction:reserve) is on <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_34>` | An HKD listing in no campaign, closed Bought in |
+| `<house maximum>` | 612300 minor units (HK$6,123.00), an amount the lot's bids never reached |
+| `<commit time>` | The internal bid's set time |
+
+**Steps:**
+
+1. Read `<listing_34>`'s row in the Listings table.
+2. Open `<listing_34>` and read it, its bids included.
+
+**Expected Results:**
+
+* Step 1: the row reads Bought in and offers Relist.
+* Step 2 shows no Internal bid section.
+* Step 2 shows neither `<house maximum>` nor `<commit time>`.
+
+### grade10-admin-auction-internal-bid-US7-TC5-1: A staff window change that clears the internal bid tells staff nothing
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Pre-conditions:**
+
+* `<listing_35>` is created, not yet published, with an internal bid of `<house maximum>` at `<commit time>`.
+* `<listing_36>` is created, not yet published, with the same window and no internal bid.
+* admin(staff, holds auction:write and auction:operate, not auction:reserve) is on <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_35>` | A created HKD listing, start `<start>` a day away, scheduled close two days away |
+| `<listing_36>` | A created HKD listing like `<listing_35>`, with no internal bid |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<commit time>` | 2 hours after `<start>` |
+| `<new start>` | 1 minute after `<commit time>` |
+
+**Steps:**
+
+1. Open `<listing_35>`, move its start to `<new start>`, and click Save.
+2. Open `<listing_36>`, move its start to `<new start>`, and click Save.
+3. As admin(holds auction:reserve), open `<listing_35>`'s editor and read the Internal bid section.
+
+**Expected Results:**
+
+* Step 1 and step 2 save alike, and neither mentions an internal bid.
+* Step 3 shows no internal bid, and says the window change cleared it.
+
+### grade10-admin-auction-internal-bid-US7-TC6-1: Stats counts the house as a bidder, matching the public count
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Pre-conditions:**
+
+* `<listing_37>`'s internal bid is committed, and the house leads it over customer A, the only collector who bid.
+* admin(staff, holds auction:operate, not auction:reserve) is on <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_37>` | A published HKD listing taking bids, protected by a committed internal bid |
+| `<bidder count>` | 2: customer A and the house |
+
+**Steps:**
+
+1. Open Stats on `<listing_37>`'s row and read the bidder and bid counts.
+2. As customer B, open the lot page for `<listing_37>` and read its bid count and Recent bids.
+
+**Expected Results:**
+
+* Step 1 counts `<bidder count>` bidders, the house included.
+* Step 1's bid count equals step 2's, the house's bids included.

@@ -60,6 +60,16 @@ remaining inventory hold at that close and SHALL NOT wait for an operator.
 - **THEN** the listing is Unsold and its hold is released in full
 - **AND** the product's available rises by two
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-02v rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-147 - A bought-in close releases the hold
+**Serves:** grade10-admin-auction-listing-US-09 - the house bought the lot in and the stock comes back
+
+- **GIVEN** a published listing of a created product with an active hold of
+  one unit, where the house leads
+- **WHEN** the listing closes
+- **THEN** the listing is Bought in and its hold is released in full
+- **AND** the product's available rises by one
+
 ### Requirement: An Unsold listing says its stock was released
 
 The admin page of a listing that closed with no winner, or closed bought in,
@@ -208,16 +218,6 @@ quantity, SHALL apply as well.
   stock not released in turn
 - **AND** no listing is stored and available is unchanged
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-02v rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-147 - A bought-in close releases the hold
-**Serves:** grade10-admin-auction-listing-US-09 - the house bought the lot in and the stock comes back
-
-- **GIVEN** a published listing of a created product with an active hold of
-  one unit, where the house leads
-- **WHEN** the listing closes
-- **THEN** the listing is Bought in and its hold is released in full
-- **AND** the product's available rises by one
-
 <!-- trace:scenario id=g10adm.auction-listing.SC-khm rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-148 - Relist from a bought-in listing carries no internal bid
 **Serves:** grade10-admin-auction-listing-US-09 - a lot the house bought in goes back on sale
@@ -229,6 +229,16 @@ quantity, SHALL apply as well.
 - **THEN** the new draft has no internal bid
 - **AND** the Bought in listing still reads Bought in
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-jqy rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-153 - A bought-in lot offers Relist under the Unsold exclusions
+**Serves:** grade10-admin-auction-listing-US-09 - a bought-in lot goes back on sale only where an unsold one would
+
+- **GIVEN** three Bought in listings: one in no campaign whose stock was
+  released, one in a campaign whose stock was released, and one in no
+  campaign whose stock release has not completed
+- **WHEN** an operator holding `auction:operate` opens the Listings table
+- **THEN** only the first listing's row offers Relist
+
 ## ADDED Requirements
 
 ### Requirement: The Listings table reads Bought in
@@ -237,7 +247,8 @@ A listing that closed bought in under `grade10-site/auction/auction` SHALL
 read **Bought in** in the Listings table, under its Closed status, where an
 Unsold listing reads Unsold. It SHALL NOT read Unsold and SHALL NOT be
 counted in the Unsold view, and it SHALL NOT be counted in the Won view or
-offer an order to open. Every operator who can read the Listings table SHALL
+offer an order to open. The Listings table SHALL offer a **Bought in** view
+beside Unsold and Won, holding exactly the listings that closed bought in. Every operator who can read the Listings table SHALL
 see the label once the listing has closed; before its close, no row SHALL say
 that the house leads or that the listing has an internal bid.
 
@@ -270,3 +281,11 @@ that the house leads or that the listing has an internal bid.
 - **WHEN** they open the Listings table
 - **THEN** its row reads as any published listing with a leading bid
 - **AND** nothing on the row says Bought in, the house or an internal bid
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ls6 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-152 - The Bought in view holds only bought-in lots
+**Serves:** grade10-admin-auction-listing-US-09 - the operator finds every lot the house bought in
+
+- **GIVEN** the listings of `grade10-admin-auction-listing-SC-149`
+- **WHEN** an operator filters the Listings table to Bought in
+- **THEN** it holds the house's listing alone

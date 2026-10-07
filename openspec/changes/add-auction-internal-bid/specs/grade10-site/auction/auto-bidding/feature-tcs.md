@@ -155,7 +155,7 @@ Runs once per row of **Test data**.
 **I want** to read every committed maximum and when it was accepted,
 **so that** I can answer a dispute about who committed what.
 
-### grade10-site-auction-auto-bidding-US4-TC2-1: The house's commitments are traced with when they were accepted
+### grade10-site-auction-auto-bidding-US4-TC2-1: The house's commitment, raise and lower are traced with when each was accepted
 
 **Classification:**
 
@@ -173,7 +173,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer A committed `<customer A maximum>` on `<listing_5>`.
-* `<listing_5>`'s internal bid of `<house maximum>` was committed at `<commit time>`, then raised to `<raised maximum>` at `<raise time>`.
+* `<listing_5>`'s internal bid of `<house maximum>` was committed at `<commit time>`, raised to `<raised maximum>` at `<raise time>`, then lowered to `<lowered maximum>` at `<lower time>`, the house leading at `<current bid>` throughout.
 * admin(holds auction:reserve and auction:operate) is on <grade10 auction admin listings url>.
 
 **Test data:**
@@ -181,11 +181,14 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_5>` | A published HKD listing taking bids |
-| `<customer A maximum>` | 700000 minor units (HK$7,000.00) |
+| `<customer A maximum>` | 500000 minor units (HK$5,000.00) |
 | `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<current bid>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
 | `<commit time>` | The internal bid's set time |
 | `<raised maximum>` | 750000 minor units (HK$7,500.00) |
 | `<raise time>` | When the admin saved the raise |
+| `<lowered maximum>` | 650000 minor units (HK$6,500.00), above `<current bid>` |
+| `<lower time>` | When the admin saved the lower |
 
 **Steps:**
 
@@ -197,3 +200,45 @@ Runs once per row of **Test data**.
 * Step 2 lists customer A's commitment, with its Accepted At.
 * Step 2 lists the house's `<house maximum>` accepted at `<commit time>`, not at when it was set.
 * Step 2 lists the house's `<raised maximum>` accepted at `<raise time>`, as a new commitment.
+* Step 2 lists the house's `<lowered maximum>` accepted at `<lower time>`.
+
+### grade10-site-auction-auto-bidding-US4-TC3-1: Staff without secret-floor access read no house maximum in the trace
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auto-bidding-US-04
+
+**Pre-conditions:**
+
+* customer A committed `<customer A maximum>` on `<listing_6>`.
+* `<listing_6>`'s internal bid of `<house maximum>` was committed, and the house leads at `<current bid>`.
+* admin(staff, holds auction:operate, not auction:reserve) is on <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_6>` | A published HKD listing taking bids |
+| `<customer A maximum>` | 500000 minor units (HK$5,000.00) |
+| `<house maximum>` | 612300 minor units (HK$6,123.00), an amount no bid reaches |
+| `<current bid>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
+
+**Steps:**
+
+1. Open `<listing_6>`'s bid history.
+2. Read each committed maximum and each bid.
+
+**Expected Results:**
+
+* Step 2 lists customer A's commitment, with its Accepted At.
+* Step 2 shows `<house maximum>` nowhere, and no row names the house or an internal bid.
+* Step 2: the house's bid at `<current bid>` reads under its listing pseudonym, nothing naming the house.
