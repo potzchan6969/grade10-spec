@@ -23,8 +23,17 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
 - **Line classification** - `classifyCartLine`
   (`packages/grade10-store/contracts/src/cartReview.ts:61-104`) is the one
   rule the cart review, the checkout pricing and the fixture client share. A
+  variant the live read does not return, whether its product left the channel
+  or the variant was deleted, is `unavailable`
+  (`packages/grade10-store/backend/src/services/cart/review.ts:58-65`); one
+  the shop does not offer for sale is `soldOut`; a request above a count above
+  zero is `adjusted`. A
   reprice rides beside any status, so a line that shrank and was repriced
   carries both
+- **Line title** - `lineTitle` (`cartReview.ts:106-110`) names the variant
+  beside the product unless it is a single-variant product's `Default Title`;
+  a line the read no longer returns keeps the title its cart row recorded
+  (`services/cart/cart.ts:155-162`)
 - **Cart-open read** - `reviewCart` (`packages/grade10-store/backend/src/services/cart/cart.ts:121-162`)
   reads the shop live, then writes the reduced quantity and the live price
   back to the member cart rows, so a disclosed price is the line's price
@@ -56,7 +65,7 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
 
 **Non-Goals:**
 
-- A Store API, backend, database or shared-block contract change
+- A Store API, backend, database or shared-block export change
 - The admin test harnesses (`apps/admin/grade10/src/pages/product-detail-test`,
   `cart-test`); they are engineering instruments, not surfaces a collector
   browses
@@ -77,7 +86,8 @@ the code above.
 | Browse availability | `productSummary` keeps `soldOut: sellableVariant(product) === null` and the price of `pricedVariant`; every surface drawing a `ProductCard` (listing, front door, related rail) goes through it | A per-surface mapping; a rollup from a count |
 | Page sale item | `pricedVariant(product)` is the page's one item: price, availability, SKU and cart add read the same object; no chooser, no variant title on the page | A variant chooser; status for a variant the page cannot add |
 | No browse ceiling | `ProductBuyBox` passes `saleItem: { availableForSale }` only. `sellableQuantity`, `scarceQuantity`, `remainingToSay` and their exports are deleted | Keeping the count "advisory" on the stepper |
-| Cart line title | `lineTitle` keeps naming the variant on the cart line; the page never does | Hiding the variant in the cart, where the collector tells two lines apart |
+| Cart line status | Store Cart's restated meanings are the ones `classifyCartLine` already assigns, so `unavailable`, `soldOut` and `adjusted` need no code change; a deleted variant leaves the cart under the open read's one removal notice, named by its recorded title | A status of its own for a deleted variant, which the collector resolves as they do a withdrawn product |
+| Cart line title | `lineTitle` keeps naming the variant on the cart line, so two lines of one card read apart once its one item moves; the page never names it | Hiding the variant in the cart, where the collector tells two lines apart |
 | Checkout contradicts the cart | On `amendCart` naming lines, the drawer runs the cart-open read again through `retryReview`, as **Back to the cart** requires. That read applies the open rules to every line: withdrawn leaves and is named in the removal notice, sold out stays marked, a short line is reduced, a repriced line shows its struck price. One persistent notice under `checkout.review.blocked` lists each line of the checkout answer's `lines` with the outcome that answer gives it, never one from the read that follows, which can answer differently: `checkout.review.soldOut` for `soldOut`, `checkout.review.unavailable` for `unavailable`, `checkout.review.reduced` (`{title}`, `{count}` from `quantity`) for `adjusted`, and `checkout.review.repriced` (`{title}`, `{price}`) where `previousUnitPriceMinor` is set, so a line that shrank and was repriced says both (decisions Q12). The lines in the cart then show the read that follows | Folding the checkout's lines into the review cache, which writes nothing back, so the next open reports the same reprice twice; a second notice vocabulary |
 | Shop fills short | `quantityClamped` is an `amendCart` answer (`packages/grade10-store/frontend/src/features/orders/checkout/domain/models/CheckoutResolution.ts:92`), so it takes the row above. The refusal itself changes no line; it names its line and count in the one notice through a new `checkout.review.filledShort` message (`{title}`, `{count}`). The cart-open read that follows, under **Back to the cart**, reduces the line under **Reduced** when the shop's live count bounds the request, and the line reads adjusted | The count-free `reason.quantityClamped` |
 | Checkout read fails | `catalog_unavailable` sets the same unchecked state a failed cart-open read sets: lines, prices and totals read unchecked, the persistent notice names every line with Retry, Proceed to Checkout stays disabled. The state is one derived flag, `reviewUnchecked = review.state === "failed" \|\| checkoutReadFailed`; Retry clears `checkoutReadFailed` only when its read returns | A second failure path with its own copy; clearing on a timer or on close |
