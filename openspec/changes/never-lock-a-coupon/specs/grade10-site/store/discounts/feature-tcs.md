@@ -933,6 +933,7 @@ Runs once per row of **Test data**.
 - A counter sale a newer promise retired, one whose coupon was claimed elsewhere among them, takes no new plan, points included, and the till asks staff to ring the goods on a new sale; a sale a reward was cleared off still takes points, and no reward
 - A till session lives ten minutes and a sale's hour outlasts it, so a sale that ran out its hour is reached again only by a fresh scan, and that scan is refused as a closed sale where the cart still carries its reward's code. A fresh scan on a cart whose sale of the same member is still open continues that sale and its code (Q27)
 - A reward taken off by POS's own 管理折扣 → 全部移除 is cleared off the sale the same as by 移除所有折扣
+- A fresh scan on the cart of the member's own closed sale that carries no reward's code is not refused: the apply takes that sale's gift lines and points off the cart and opens a new sale, and a cart tendered without a new apply is settled against the closed sale, a gift's line on it reported (Q31)
 
 ## Reconciliation
 
@@ -966,5 +967,9 @@ Runs once per row of **Test data**.
 - **A fresh scan on an open sale's cart (Q27), unblocked and agreed** - US4-TC11-1 walks `grade10-site-store-discounts-SC-30` at 12 and at 59 minutes after the plan, inside the sale's hour; the block recorded above is cleared
 - **A fresh scan on a retired sale's cart, agreed** - US4-TC8-1's third row scans the member onto the cart of a sale a newer promise retired, which the requirement refuses as a closed sale carrying a reward's code
 - **Another member's fresh scan (Q30), rewritten to the page** - US4-TC12-1 read only that nothing lands on the open sale. Step 6 of the Discounts page refuses an apply while another customer is on the cart, so step 3 is refused saying so. It takes `g10.store-discounts.TC-f3f`
-- **Raised** - R5, a fresh scan on a closed sale's cart that carries no reward's code, is marked ❓ on the Discounts page; no case walks it until it is answered
+- **Uncovered anchors** - none
+
+**Run:** QA2, 2026-10-07, tcs-rules r4, in a fresh context after accept-review settled Raised R5 as Q31. It read this suite, the delta, `tech-design.md`, `decisions.md` with its Raised table, the Discounts and Coupons pages and the application repository's till apply, and checked the suite with `validate:changes`, `tcs:validate` and `trace validate`. No anchor moved and the delta did not change.
+
+- **A fresh scan on a closed sale's cart that carries no reward's code (Q31), settled as built** - the run above raised it as R5. The requirement refuses a fresh scan only on a closed sale whose cart carries a reward's code, and the extension's apply takes the closed sale's gift lines and points off before it plans (`acts/flow.ts:1085-1089`, `:646-651`), so no gift's line stays beside the new sale. No scenario states it and no case walks it; a cart tendered without a new apply is US3-TC9-1's and US4-TC6-1's
 - **Uncovered anchors** - none
