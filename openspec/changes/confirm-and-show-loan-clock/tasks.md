@@ -24,7 +24,7 @@ and 5 cite the ones it serves.
 - [ ] 2.3 Verify: the contracts unit tests, `pnpm run test:backend` for the
       vault worker's notice and forfeiture suites, and the typecheck.
 
-## 3. The loan's clock in the case header (grade10)
+## 3. The loan's clock in the case header (grade10) (owner: @ecchochan)
 
 - [ ] 3.1 Add the tests first, in their own commit: `loanClock` and
       `loanClockWords` for each row of the requirement's table, the count
