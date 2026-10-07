@@ -66,7 +66,7 @@ The stage says how far a change has got, and only what is on `main` proves it.
 | 2 | Designed | `ui-design.md` or `ui_waived:` |
 | 3 | Specified | QA1 cases in `feature-tcs.md` · Dev's `tech-design.md` or `design_waived:` · Dev's requirements and scenarios in `spec.md`; an open Raised row holds acceptance, never this rung |
 | 4 | Planned | `tasks.md` |
-| 5 | Accepted | `acceptance.json` records the immutable planning fingerprint of the reconciled plan after one human resolves every raised question |
+| 5 | Accepted | `acceptance.json` records the immutable planning fingerprint of the reconciled plan after one human resolves every Raised row still open |
 | 6 | Building | `implementation.json` names that historical acceptance and the first-claim durable-spec baseline and target scope |
 | 7 | Implementation complete | every task is ticked · `implementation.json` records the repository commit and concrete application component ids |
 | 8 | Archived | the change's directory under the archive · archive preflight verifies historical acceptance, implementation ancestry and the claimed durable-spec scope, with acknowledgement for every difference, without folding |
@@ -85,7 +85,9 @@ receipts are read separately for each environment and application component.
 ### Requirement: Acceptance records the resolved plan before implementation
 
 The change SHALL reach Accepted only after QA2 has reconciled the independent
-QA1 and Dev readings and one human has resolved every raised question.
+QA1 and Dev readings and one human has resolved every Raised row still open. A
+Raised row is open while its `Landed` cell is empty or names a held `Q<n>`; a
+row QA2 landed on a `Q<n>` the round decided is closed.
 
 - **Record** — `acceptance.json` SHALL name the change, canonical planning
   fingerprint, review baseline, reviewer, acceptance time, scoped artifacts
@@ -96,9 +98,9 @@ QA1 and Dev readings and one human has resolved every raised question.
   supersedes and SHALL NOT rewrite earlier acceptance evidence
 - **Fold** — `pnpm run spec:accept <change>` SHALL fold the accepted
   requirements, journeys and PRD sources before implementation starts
-- **Held** — an unresolved Raised row or a changed review baseline SHALL
-  refuse acceptance until the human resolves it and the reconciled plan is
-  accepted again
+- **Held** — an open Raised row or a changed review baseline SHALL refuse
+  acceptance until the human resolves it and the reconciled plan is accepted
+  again; a closed Raised row SHALL hold nothing
 - **Acceptance only** — an open Raised row SHALL hold acceptance alone and
   SHALL NOT hold Specified or any rung before it; the product manager's turn
   at Specified SHALL be to resolve the open rows, a row about the tech design
@@ -107,13 +109,14 @@ QA1 and Dev readings and one human has resolved every raised question.
   record of the engineer's word on the tech design; the engineer's challenge
   lands as decisions rows or Raised rows, which already hold acceptance
 
-<!-- trace:scenario id=g10.shared-change-stages.SC-2go rev=1 -->
-#### Scenario: shared-planning-change-stages-SC-79 - Acceptance waits for every raised question
-**Serves:** shared-planning-change-stages-US-02 - the product manager accepts only a reconciled plan whose questions are resolved
+<!-- trace:scenario id=g10.shared-change-stages.SC-2go rev=2 -->
+#### Scenario: shared-planning-change-stages-SC-79 - Acceptance waits for every open Raised row
+**Serves:** shared-planning-change-stages-US-02 - the product manager accepts only a reconciled plan whose open questions are resolved
 
-**GIVEN** QA2 has reconciled QA1's cases and Dev's requirements, scenarios and tasks, with one Raised row still open
+**GIVEN** QA2 has reconciled QA1's cases and Dev's requirements, scenarios and tasks, with one Raised row still open and one landed on a `Q<n>` the round decided
 **WHEN** `pnpm run accept:preflight` or `pnpm run spec:accept` runs
-**THEN** acceptance SHALL be refused and name the unresolved row
+**THEN** acceptance SHALL be refused and name the open row
+**AND** the closed row SHALL NOT be named
 **AND** the stage SHALL stay below Accepted
 **AND** the open row SHALL NOT hold the stage below Specified
 

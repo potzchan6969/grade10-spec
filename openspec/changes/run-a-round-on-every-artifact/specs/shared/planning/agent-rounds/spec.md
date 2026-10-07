@@ -13,7 +13,7 @@ read again before anything lands after it, with one record row per round.
 - The round
   - Six steps: ask, draft on the change's branch, challenge by one agent per perspective, verify by one agent over every reader's findings, read by the hand, land on their word
   - Your word lands it: the landing writes `landed_by:` and the round's row, tells the next hand, and reads again what comes after
-  - Blind readings exempt: the requirements' challenge is the two independent readings, its verify the reconciliation, with its stops on the product manager and no verifier over them
+  - Blind readings exempt: the requirements' challenge is the two independent readings, its verify the reconciliation, with no verifier over them and only a held question or a contradiction stopping on the product manager
   - Sized by the diff: the perspectives summoned are read from what the draft touches, the simpler-thing reader always, and a round of one reader verifies itself
 - Your moves
   - Answer: `Q<n>: <answer>` writes the answer into the decisions row, and `Q<n>` alone takes the recommendation
@@ -23,8 +23,8 @@ read again before anything lands after it, with one record row per round.
   - First sentence: a message in the planning channel naming no change opens one, with the asker as its product manager
   - Overlap in flight: a sentence naming no change that overlaps an active change's capability or the page sections it would mark is answered in that change's thread, and that change's stage and who asks say whether it is extended, held for its product manager, or depended on by a new change
 - Questions, never guesses
-  - Decided by the round: a preference the round can take is decided on the best option and recorded as a numbered `## Decisions` row, and one reply from any hand overturns it
-  - Held for its hand: a choice that moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work waits on its hand and holds the change's landings
+  - Decided by the round: a preference or a raised question the round can take is decided on its recommendation and recorded as a numbered `## Decisions` row, and one reply from any hand overturns it
+  - Held for its hand: a question raised by a reading or met by the round that moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work waits on its hand and holds the change's landings
   - Ids per change: issued per change and never reused
   - Page lines: a product detail is a `❓` line on the page the change links
   - Listed per hand: the change page and My turn list the held rows addressed to each hand
@@ -179,9 +179,10 @@ land both files, together.
   from the same anchors, neither reader seeing the other's output
 - **No verifier over them** — no agent reads both readings to decide which is
   right
-- **Stops on the product manager** — a disagreement or a question neither
-  reading can settle is asked of the product manager, who reads the
-  requirements and the cases together
+- **Stops on the product manager** — a contradiction between the two readings
+  is asked of the product manager whatever the default; a point neither
+  reading settles is asked only when the held test holds it, and the
+  reconciliation closes it as decided by the round otherwise
 - **The writer reconciles** — the run that took both readings joins them; it
   does not verify itself
 - **The simpler thing after** — once reconciled, the simpler thing reads both
@@ -197,14 +198,14 @@ land both files, together.
 - **AND** no agent is dispatched to decide between them
 - **AND** the product manager's word at the reconciliation lands both files together
 
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-osr rev=1 -->
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-osr rev=2 -->
 #### Scenario: shared-planning-agent-rounds-SC-07 - A reading raises what it cannot settle
-**Serves:** shared-planning-agent-rounds-US-04 - the hand is asked the one thing the two readings could not decide
+**Serves:** shared-planning-agent-rounds-US-04 - the hand is asked only the point the readings left open that the held test holds
 
 - **WHEN** a reading meets a behaviour the anchors do not settle
-- **THEN** the product manager is asked it as a numbered question
-- **AND** neither reading decides it
-- **AND** the requirements and the cases are shown to the product manager together
+- **THEN** it is raised with its options and the one it recommends, and neither reading decides it
+- **AND** a point the held test holds is asked of the product manager as a numbered question, with the requirements and the cases shown together
+- **AND** every other point closes on its recommendation as decided by the round, citing the page line where one settles it
 
 ### Requirement: A round's size is read from the draft
 
@@ -418,31 +419,37 @@ A message in the planning channel that addresses the app and names no existing c
 
 ### Requirement: A draft waits for what only its hand can give
 
-A draft SHALL NOT invent what only the artifact's hand holds; it SHALL write a
-dated wait instead.
+A draft SHALL NOT invent what only the artifact's hand holds, and SHALL NOT
+hold a feature on a look.
 
 - **The frames come from the designer** — a designer's ask carries the links to
   the frames the design is drawn from
-- **A frame nobody drew** — a draft of `ui-design.md` needing a frame nobody
-  has drawn writes a dated `awaiting: ui-design:` line on the designer, and
-  describes no screen in prose in its place
+- **A frame nobody drew** — a feature's draft of `ui-design.md` needing a look
+  no frame covers writes a States row marked as the interim, built from the
+  store's existing blocks and tokens, and describes no new screen in prose
+- **A look the store cannot build** — a look that needs a new variant, token
+  or block ships without that look
+- **The frame waits in the designer's change** — the question waits in the
+  designer's change for that capability, never on the feature's `awaiting:`
 
-<!-- trace:scenario id=g10.shared-agent-rounds.SC-vh6 rev=1 -->
+<!-- trace:scenario id=g10.shared-agent-rounds.SC-vh6 rev=2 -->
 #### Scenario: shared-planning-agent-rounds-SC-20 - A design needs a frame nobody drew
-**Serves:** shared-planning-agent-rounds-US-02 - the designer is asked for the frame rather than handed a screen written out in words
+**Serves:** shared-planning-agent-rounds-US-02 - the designer is asked for the frame while the feature ships its interim
 
-- **WHEN** a draft of `ui-design.md` needs a screen no frame in the designer's ask covers
-- **THEN** the change's record gains a dated `awaiting: ui-design:` line naming the screen and the designer
-- **AND** the draft describes no screen of its own in its place
+- **WHEN** a feature's draft of `ui-design.md` needs a look no frame in the designer's ask covers
+- **THEN** its States table gains a row marked as the interim, built from the store's existing blocks and tokens
+- **AND** the designer's change for that capability carries the question, waiting through `awaiting: ui-design` on the designer
+- **AND** the feature's record gains no `awaiting: ui-design:` line
 
 ### Requirement: A preference is decided, and a held row waits for its hand
 
 A round decides a preference on the best option, and holds only what a person
 has to take.
 
-Every preference and every product decision a round meets SHALL be written as
-a numbered row in the change's `decisions.md`, and the round SHALL hold the row
-for its hand only where the choice moves the change's scope, is costly to undo,
+Every preference, every product decision and every question raised by a
+reading or met by the round SHALL be written as a numbered row in the change's
+`decisions.md`, a raised question through its Raised row's `Landed` cell, and
+the round SHALL hold the row for its hand only where the choice moves the change's scope, is costly to undo,
 needs a fact only a person has, or divides its options by more than a task
 group of work.
 

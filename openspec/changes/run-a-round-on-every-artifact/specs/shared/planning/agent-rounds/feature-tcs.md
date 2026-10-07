@@ -490,8 +490,8 @@ Runs once per row of **Test data**.
 * The reply names one reader, the one that argues the simpler shape.
 * The round's row names that one perspective and no separate verifier.
 
-<!-- trace:case id=g10.shared-agent-rounds.TC-prt rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
-### shared-planning-agent-rounds-US2-TC5-1: Design round with no frames writes a dated wait
+<!-- trace:case id=g10.shared-agent-rounds.TC-prt rev=2 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
+### shared-planning-agent-rounds-US2-TC5-2: Design round with no frame ships the interim and asks in the designer's change
 
 **Classification:**
 
@@ -508,19 +508,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <change> links a page section naming <a screen nobody has drawn>.
+* <change> links a page section naming <a look nobody has drawn> on <capability>.
 * admin(designer of <change>) is in <change thread>.
 
 **Steps:**
 
 1. Ask for the design in <change thread> with no frame link.
 2. Read the reply.
-3. Check the change's record.
+3. Check `ui-design.md` and the change's record.
+4. Check the designer's change for <capability>.
 
 **Expected Results:**
 
-* A dated wait on the designer is written.
-* `ui-design.md` describes <a screen nobody has drawn> in no prose.
+* `ui-design.md` carries a States row marked as the interim, built from the store's existing blocks and tokens, and describes no new screen in prose.
+* <change>'s record carries no `awaiting: ui-design:` line.
+* The designer's change for <capability> carries the question, waiting through `awaiting: ui-design` on the designer.
 
 <!-- trace:case id=g10.shared-agent-rounds.TC-cal rev=1 covers=g10.shared-agent-rounds.SC-3y9,g10.shared-agent-rounds.SC-xhl,g10.shared-agent-rounds.SC-ks3,g10.shared-agent-rounds.SC-pb0,g10.shared-agent-rounds.SC-fe8,g10.shared-agent-rounds.SC-z40,g10.shared-agent-rounds.SC-vh6,g10.shared-agent-rounds.SC-db1 -->
 ### shared-planning-agent-rounds-US2-TC6-1: Only the hand of the stage can land the design
@@ -834,11 +836,11 @@ Runs once per row of **Test data**.
 ## shared-planning-agent-rounds-US4: Hand answers only what only they can
 
 **As a** hand,
-**I want** the agent to ask me what moves scope, is costly to undo or needs a fact only I have, as a numbered question with its recommendation, and to decide the rest on the best option and say so,
+**I want** the agent to ask me, of every question raised by a reading or met by the round, what moves scope, is costly to undo or needs a fact only I have, as a numbered question with its recommendation, and to decide the rest on the best option and say so,
 **so that** I answer once and never argue with a draft.
 
-<!-- trace:case id=g10.shared-agent-rounds.TC-ljb rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
-### shared-planning-agent-rounds-US4-TC1-1: A held row carries its recommendation and the hand
+<!-- trace:case id=g10.shared-agent-rounds.TC-ljb rev=2 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
+### shared-planning-agent-rounds-US4-TC1-2: A held row carries its recommendation and the hand, and a settled raised row closes
 
 **Classification:**
 
@@ -856,6 +858,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * A draft round on <change> turns on <a choice that moves the change's scope>.
+* A blind reading of <change> raised <a point a page line settles>.
 * admin(hand of <change>'s open artifact) is in <change thread>.
 
 **Steps:**
@@ -869,6 +872,7 @@ Runs once per row of **Test data**.
 * The row reads `❓ <role> - recommended: <option>`, with the options it was chosen over beside it.
 * It carries a number and names the hand it waits on, and the draft after it takes the recommendation until the hand answers.
 * Only a choice that moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work is held.
+* The Raised row for <a point a page line settles> lands on a row reading `<option> - decided by the round`, citing the page line, and the thread asks nothing about it.
 
 <!-- trace:case id=g10.shared-agent-rounds.TC-x4u rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC2-1: An answer writes the row and closes the question
@@ -3013,13 +3017,13 @@ Slack thread either.
 | `US2-TC2-1` | A remark in the thread, and the readers it re-runs in the session |
 | `US2-TC3-1` | A remark in the thread that settles a question |
 | `US2-TC4-1` | Which readers a round dispatched, inside the session |
-| `US2-TC5-1` | The dated wait a design round writes, inside the session |
+| `US2-TC5-2` | The interim a design round writes and the question it puts in the designer's change, inside the session |
 | `US2-TC7-1` | A remark in the thread on a page's marked lines |
 | `US3-TC1-1` | The tech design's summary as the planning run posts it, read by the engineer |
 | `US3-TC2-1` | A challenge typed in the thread, and the answer to it |
 | `US3-TC3-1` | The readers' own findings, inside the session |
 | `US3-TC4-1` | The Raised row the planning run writes, the product manager's answer in the thread, and an acceptance refused and then taken by the human who accepts the plan |
-| `US4-TC1-1` | The question as the thread carries it |
+| `US4-TC1-2` | The question as the thread carries it, and the raised row the reconciliation closes |
 | `US4-TC2-1` | An answer typed in the thread |
 | `US4-TC3-1` | A question id typed alone in the thread |
 | `US4-TC4-1` | The page line a round writes instead of a row, inside the session |
