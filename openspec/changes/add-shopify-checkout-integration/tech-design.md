@@ -91,14 +91,17 @@ reconciliation.
 
 - **`store.carts`** - one `active` row per member by a partial unique index,
   the tender columns `cart_tender` held, and `version`, bumped by a write that
-  changes a line or the tender and by a review write-back that changed a row.
+  changes a line or the tender and by a review write-back that changed a row,
+  and `edited_version`, bumped with it by the member's own writes (`setLine`,
+  `merge`, `setTender`) and never by a review write-back.
   A read never creates a cart; the first write does, under the owner lock.
   `status` is `active` or `converted`; a converted cart stays as the record.
 - **`store.cart_lines`** - keyed `(cart_id, variant_id)`, cascading from its
   cart. `cart_tender` is dropped.
 - **Linking** - `createCheckout` reads the active cart and its lines in one
   statement. When the request's items are exactly those lines, the order
-  records `cart_id` and `cart_version`. Any other basket records neither.
+  records `cart_id`, `cart_version` and `cart_edited_version`. Any other
+  basket records none of them.
 - **Same cart** - an open (`pending`/`processing`) web order for the same
   `cart_id` and `cart_version` with a recorded ref and
   `payment_checkout_url` is answered as `created`, with no order written and
@@ -117,8 +120,10 @@ reconciliation.
   `cart_id`: the draft is retired at Shopify, then the order is `canceled`; a
   draft that will not die stays for the reconcile pass.
 - **Payment** - `applyOrderTransition(paid)` runs one guarded UPDATE in its
-  transaction: `converted` where `id = cart_id`, `version = cart_version` and
-  `status = 'active'`. It replaces the matching-line delete and the tender
+  transaction: `converted` where `id = cart_id`,
+  `edited_version = cart_edited_version` and `status = 'active'`, so a review
+  write-back between payment and settlement (a line lowered to the stock the
+  sale left, a reprice, a retitle) does not keep the paid cart. It replaces the matching-line delete and the tender
   delete. A concurrent edit holds the cart row; Postgres re-reads the version
   after it commits.
 - **Till** - untouched: till sales promise caller-priced lines and never read
@@ -136,10 +141,10 @@ and real staging payment are later, separately authorized operational work.
 
 | Table | Change |
 | --- | --- |
-| `store.carts` | New: `id`, `user_id`, `status`, `version`, `coupon_kind`, `coupon_code`, `coupon_id`, `spend_points`, timestamps; `uq_carts_active` on `user_id` where `status = 'active'` |
+| `store.carts` | New: `id`, `user_id`, `status`, `version`, `edited_version`, `coupon_kind`, `coupon_code`, `coupon_id`, `spend_points`, timestamps; `uq_carts_active` on `user_id` where `status = 'active'` |
 | `store.cart_lines` | Rebuilt keyed `(cart_id, variant_id)`, `cart_id` cascading from `carts` |
 | `store.cart_tender` | Dropped |
-| `store.orders` | `cart_id` (set null on cart delete), `cart_version`, `payment_checkout_url`; partial index on `cart_id` |
+| `store.orders` | `cart_id` (set null on cart delete), `cart_version`, `cart_edited_version`, `payment_checkout_url`; partial index on `cart_id` |
 
 One migration per brand, identical. It drops and rebuilds the cart tables
 rather than copying them: the store runs on staging only, where carts are

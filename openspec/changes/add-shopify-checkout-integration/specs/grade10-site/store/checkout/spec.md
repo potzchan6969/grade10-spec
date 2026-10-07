@@ -219,9 +219,11 @@ from Shopify. After observing a paid web order it SHALL refresh existing cart
 and tender reads. Payment SHALL clear the cart the invoice was made from, its
 lines and its tender, in the same step that records the payment, whichever
 path learns of it: the payment webhook, the order's own re-check or an
-operator sync. A cart changed after Pay, or built after an earlier payment,
-SHALL be kept as it is; an order whose lines were not the member's cart
-SHALL clear no cart.
+operator sync. A cart the collector changed after Pay, or built after an
+earlier payment, SHALL be kept as it is; the store's own review of the cart
+against the shop, lowering a line to stock or updating its price or title, is
+not such a change. An order whose lines were not the member's cart SHALL
+clear no cart.
 
 **Return** - The existing Shopify Thank You and Order status extensions SHALL
 offer a static Grade10 Your Orders link. The existing order surface SHALL show
