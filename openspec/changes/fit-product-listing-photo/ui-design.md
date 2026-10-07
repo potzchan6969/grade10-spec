@@ -11,10 +11,10 @@ Layout SoT: Storybook `Store Product Listing/ProductCardImage` (and tiles on
 | Surface | Storybook (SoT) | Figma (historical) |
 | --- | --- | --- |
 | Non-square photo: portrait in available, on sale, sold out and in cart; landscape and a small portrait, available | 🚧 `ProductCardImage` → Non Square Photo, six wells side by side, its fixtures beside `product-card.fixture.png`; the page's `::story` "The whole photo in the well" moves to it once it is built | [Product Card Image](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074&m=dev) |
-| Available, a square photo filling the well | [`ProductCardImage` → Default](?path=/story/store-product-listing-productcardimage--default) | — |
-| On sale | [`ProductCardImage` → Sale](?path=/story/store-product-listing-productcardimage--sale) | — |
-| Sold out (inert, listing) | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-productcardimage--sold-out) | — |
-| In cart | [`ProductCardImage` → In Cart](?path=/story/store-product-listing-productcardimage--in-cart) | — |
+| Available, a square photo filling the well | [`ProductCardImage` → Default](?path=/story/store-product-listing-productcardimage--default) | none |
+| On sale | [`ProductCardImage` → Sale](?path=/story/store-product-listing-productcardimage--sale) | none |
+| Sold out (inert, listing) | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-productcardimage--sold-out) | none |
+| In cart | [`ProductCardImage` → In Cart](?path=/story/store-product-listing-productcardimage--in-cart) | none |
 
 The four single-status stories keep their square photo, which fills the well;
 `Default`'s play test reads it at all four edges, its corners rounded with the
