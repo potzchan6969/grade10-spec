@@ -762,6 +762,80 @@ test("acceptance keeps the durable journeys of a file with no title", () => {
   );
 });
 
+const SPEC_TEMPLATE = new URL(
+  "../../openspec/schemas/grade10-planning/templates/spec.md",
+  import.meta.url,
+);
+const TEMPLATE_FILL = [
+  [
+    "One or two sentences",
+    "Readers find items. They search the catalogue by the words they type.",
+  ],
+  ["group name", "Search"],
+  ["Name: why this item exists", "Query: find an item by its words"],
+  ["requirement name", "Search results"],
+  ["requirement text", "The system SHALL return the items the query matches."],
+  ["scenario name", "Results match"],
+  ["<capability>-US-<n>", "Search"],
+  ["the walk this rule sits on", "a reader searches"],
+  ["condition", "a reader searches"],
+  ["expected outcome", "matching items appear"],
+];
+
+/** The spec template as it stands, each comment the fill knows filled and
+ * every other comment on a line of its own dropped; a comment inside a line
+ * is a placeholder, and one the fill does not know fails. */
+function deltaFromTemplate() {
+  return readFileSync(SPEC_TEMPLATE, "utf8")
+    .replace(/<!--([\s\S]*?)-->/g, (comment, inner, at, text) => {
+      const lead = inner.trim();
+      const fill = TEMPLATE_FILL.find(([key]) => lead.startsWith(key));
+      const before = text.slice(text.lastIndexOf("\n", at) + 1, at);
+      const after = text.slice(at + comment.length).split("\n", 1)[0];
+      const alone = before.trim() === "" && after.trim() === "";
+      assert.ok(fill || alone, `fill the template placeholder "${lead}"`);
+      return fill?.[1] ?? "";
+    })
+    .replaceAll("<capability>", "site-search");
+}
+
+test("a change written from the spec template folds into a new durable spec", () => {
+  const { root } = sandbox();
+  writeFileSync(join(root, SEARCH_DELTA, "spec.md"), deltaFromTemplate());
+  const prepared = prepareAcceptance(root, CHANGE);
+  const durable = prepared.outputs.get("openspec/specs/site/search/spec.md");
+  assert.match(durable, /^# site\/search Specification\n/);
+  assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
+  assert.match(durable, /## Feature set\n\n- Search\n {2}- Query: find/);
+  assert.match(durable, /### Requirement: Search results/);
+  assert.match(durable, /#### Scenario: site-search-SC-01 - Results match/);
+  assert.deepEqual(
+    prepared.contractTargets.find(
+      (one) => one.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Purpose", "Requirement: Search results"],
+  );
+});
+
+test("a change written from the spec template folds onto a durable spec", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "spec.md",
+    "# site/search Specification\n\n## Purpose\n\nReaders find items.\n\n## Feature set\n\n- Browse\n  - Shelf: see every item\n\n## Requirements\n\n### Requirement: Shelf\n\nThe system SHALL list every item.\n",
+  );
+  writeFileSync(join(root, SEARCH_DELTA, "spec.md"), deltaFromTemplate());
+  const durable = prepareAcceptance(root, CHANGE).outputs.get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(durable, /^# site\/search Specification\n/);
+  assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
+  assert.match(durable, /- Browse\n {2}- Shelf: see every item/);
+  assert.match(durable, /- Search\n {2}- Query: find an item by its words/);
+  assert.match(durable, /### Requirement: Shelf/);
+  assert.match(durable, /### Requirement: Search results/);
+});
+
 function writeDurable(root, name, content) {
   const target = join(root, "openspec/specs/site/search", name);
   mkdirSync(dirname(target), { recursive: true });
