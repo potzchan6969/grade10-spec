@@ -87,8 +87,6 @@ In `decisions.md`.
 
 - ❓ designer - the Figma cart frames that still draw `Cart Item Slot`, R2 in
   `decisions.md`.
-- ❓ designer - what the drawer shows after the first cart read fails, R7 in
-  `decisions.md`.
 
 ## References
 

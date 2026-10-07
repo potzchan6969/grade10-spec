@@ -34,11 +34,10 @@ not read. While the read runs, it shows a blank body, a skeleton for the
 title's count and no footer. A cart read empty shows the empty state, even
 when its price check fails.
 
-❓ **First read fails** - whether the drawer keeps that blank body while the
-application offers Retry and names no line, as
+🚧 **First read fails** - the drawer keeps that blank body, never the empty
+state, while the application offers Retry and names no line, as
 [Cart Validation](../../grade10-site/store/cart-validation.md) asks for a cart
-whose lines are not loaded, or shows an unchecked cart of its own. The
-designer's call.
+whose lines are not loaded.
 
 🚧 **Only delisted lines** - the drawer shows the empty state and removes them
 with its one toast.
