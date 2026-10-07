@@ -11,25 +11,25 @@ without the card, so a surface takes the part it needs.
 
 ## Blocks
 
-- **Card** — shows whichever body the application selects: loading, empty,
+- **Card** - shows whichever body the application selects: loading, empty,
   failed or ready; it decides nothing itself
-- **Read view** — shows the display name, bio and meta it is given, and
+- **Read view** - shows the display name, bio and meta it is given, and
   defaults none of them
-- 🚧 **Edit control** — the read view offers editing only when the application
+- 🚧 **Edit control** - the read view offers editing only when the application
   names it and handles it
-- **Form** — edits the display name and bio, and reports what the collector
+- **Form** - edits the display name and bio, and reports what the collector
   submitted, or that they cancelled, with no values
-- 🚧 **Cancel** — the form offers cancel only when the application names it
+- 🚧 **Cancel** - the form offers cancel only when the application names it
   and handles it
-- 🚧 **Bio** — the form edits it in several lines, and the read view shows
+- 🚧 **Bio** - the form edits it in several lines, and the read view shows
   the lines as typed
-- 🚧 **Avatar** — the read view and the form show the image they are given,
+- 🚧 **Avatar** - the read view and the form show the image they are given,
   and the fallback the application supplies when there is none or it fails to
   load; the form lets the collector choose a new image, preview it, or remove
   the current one, and judges no file
-- 🚧 **Email** — the read view and the form show the address they are given,
+- 🚧 **Email** - the read view and the form show the address they are given,
   and neither edits it
-- **Saving** — while a save is pending, the form's save shows busy and
+- **Saving** - while a save is pending, the form's save shows busy and
   cannot be sent again
 
 ## Left to the Application
@@ -37,13 +37,12 @@ without the card, so a surface takes the part it needs.
 What is valid, what is stored, and every word on screen belong to the
 application.
 
-- 🚧 **Limits** — the form applies only the length limits the application
+- 🚧 **Limits** - the form applies only the length limits the application
   passes; a refusal reaches the collector through the error the application
   supplies
-- ❓ **Empty name** — the form as it ships disables save while the display
-  name is empty; design confirms keeping save enabled so the application's
-  refusal shows, as recommended, or keeping it disabled
+- 🚧 **Empty name** - save stays enabled while the display name is empty, so
+  the application's refusal shows
 
-The rules those props carry — the field limits, what falls back where — are
+The rules those props carry - the field limits, what falls back where - are
 [the account profile](/p/grade10-site/account/profile); this capability is
 the component contract underneath it.

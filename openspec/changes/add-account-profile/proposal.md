@@ -27,7 +27,8 @@ avatar within 7 days of first sign-in.
   reached, a member with no name chosen for the shop shows as 會員 at the till,
   and their pass stays as it was.
 - **Avatars.** A collector uploads an image, cropped square, and can remove it
-  again; with none set, the profile shows the display name's first letter. Which file limit a collector meets is open (decisions Q10).
+  again; with none set, the profile shows the display name's first letter. The
+  page takes any image the browser can read and sends it square at 512 px.
 - **Email is shown, read-only,** in the read view and in the form alike.
 - **Member-since is the first save.** The page shows the date the collector
   first saved their profile, and nothing before that.
@@ -102,8 +103,9 @@ See [Non-Goals](decisions.md#non-goals).
   the bid history
   (`packages/ui/src/blocks/auction-listing/listing-bid-history-list.tsx`).
 - **Figma** — the `store-profile` block has no published frames and no
-  `.figma.ts` mappings, unlike `store-product-listing`; whether that holds is
-  the designer's (decisions Q5).
+  `.figma.ts` mappings, unlike `store-product-listing`; it is built from the
+  requirements, and draw-account-menu-and-profile asks the designer to confirm
+  or redraw it (decisions Q5).
 - **Auth service** — its account lookups return the account name, so the till
   and the wallet sweep can name a member with no session. It deploys before
   the store.
@@ -123,3 +125,5 @@ See [Non-Goals](decisions.md#non-goals).
 - [Member Card in a Wallet · On the Pass](../../../docs/prds/products/grade10-site/loyalty/wallet-member-card.md#on-the-pass)
 - [Member Card in a Wallet · Staying Current](../../../docs/prds/products/grade10-site/loyalty/wallet-member-card.md#staying-current)
 - [Shopify Integration · Member Name](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#member-name)
+- [Account Data · Ownership](../../../docs/prds/platform/account-data.md#ownership)
+- [Account Data · Examples (store)](../../../docs/prds/platform/account-data.md#examples-store)
