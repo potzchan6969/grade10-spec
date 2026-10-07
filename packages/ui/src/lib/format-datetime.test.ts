@@ -8,6 +8,7 @@ import {
   formatActivityAt,
   formatCalendarDayLabel,
   formatCollectorDeadline,
+  formatDay,
   formatListingEnds,
   formatLocalDay,
   formatLocalMoment,
@@ -123,6 +124,37 @@ describe("formatLocalDay and formatLocalTime", () => {
       formatLocalTime(at, { locale: "en", timeZone: "Asia/Hong_Kong" }),
     ).toBe("17:15");
   });
+});
+
+describe("a Chinese or Korean month keeps its unit in a collector date", () => {
+  const at = Date.UTC(2026, 8, 1, 12, 0);
+
+  it.each([
+    ["zh-Hant", "1 9月 2026"],
+    ["zh-Hans", "1 9月 2026"],
+    ["ko", "1 9월 2026"],
+  ] as const)(
+    "%s reads September as the same month the UTC day reads",
+    (locale, day) => {
+      const options = { locale, timeZone: "Asia/Hong_Kong" };
+
+      expect(formatLocalDay(at, options)).toBe(day);
+      expect(formatLocalMoment(at, options)).toBe(`${day}, 20:00`);
+      expect(formatZonedLocalMoment(at, options)).toBe(`${day}, 20:00 HKT`);
+      expect(formatCollectorDeadline(at, { ...options, prefix: "Ends" })).toBe(
+        `Ends ${day}, 20:00 HKT`,
+      );
+    },
+  );
+
+  it.each(["en", "zh-Hant", "zh-Hans", "ko"] as const)(
+    "%s reads the local day of a UTC viewer as the UTC day",
+    (locale) => {
+      expect(formatLocalDay(at, { locale, timeZone: "UTC" })).toBe(
+        formatDay(at, locale),
+      );
+    },
+  );
 });
 
 describe("formatCalendarDayLabel", () => {
