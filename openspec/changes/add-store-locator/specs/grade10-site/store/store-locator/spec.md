@@ -103,6 +103,15 @@ from Store home's, the browse listing's and a product page's, as
 - **AND** nothing offers search, a store list, distance, filters, or a store
   picker
 
+<!-- trace:scenario id=g10.store-store-locator.SC-iwa rev=1 -->
+#### Scenario: grade10-site-store-store-locator-SC-14 - Store Locator answers at its own address
+**Serves:** grade10-site-store-store-locator-US-01 - the collector who follows Store Locator in any language lands on one address outside the store's
+
+- **WHEN** a collector opens Store Locator in any language
+- **THEN** its address is `store-locator` directly beneath that language's
+  prefix
+- **AND** no part of the store's own address comes before `store-locator`
+
 <!-- trace:scenario id=g10.store-store-locator.SC-vb8 rev=1 -->
 #### Scenario: grade10-site-store-store-locator-SC-10 - The page speaks the collector's language
 **Serves:** grade10-site-store-store-locator-US-01 - the collector reading the site in Traditional Chinese meets the shop under the name the free pick-up claim gave it
