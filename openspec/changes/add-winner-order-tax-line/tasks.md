@@ -23,17 +23,17 @@ Needs `add-shipping-insurance-order-summary-tooltip`.
 
 Needs group 1.
 
-- [ ] 2.1 Add admin frontend tests for entering optional positive Tax on a first quote, leaving it empty, refusing zero and changing or removing Tax on a reissue (`post-sale-SC-155`, `post-sale-SC-156`, `post-sale-SC-157`, `post-sale-SC-158`, `post-sale-SC-210`)
+- [x] 2.1 Add admin frontend tests for entering optional positive Tax on a first quote, leaving it empty, refusing zero and changing or removing Tax on a reissue (`post-sale-SC-155`, `post-sale-SC-156`, `post-sale-SC-157`, `post-sale-SC-158`, `post-sale-SC-210`)
 - [x] 2.2 Add the optional Tax amount field beside Insurance on the quote and reissue forms; send `null` for an empty field and show the command's validation refusal without coercing zero to absence
 - [x] 2.3 Show the recalculated Subtotal, Payment Processing Fee and Order Total from the quote preview
-- [ ] 2.4 Add the operator field and refusal copy in every Grade10 admin locale
+- [x] 2.4 Add the operator field and refusal copy in every Grade10 admin locale
 - [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused admin quote and reissue E2E journey
 
 ## 3. Winner summary, invoice and receipt (grade10) (owner: @htonyl)
 
 Needs group 1.
 
-- [ ] 3.1 Add winner frontend and document tests for pre-send TBD, the shown Tax amount and tip, absence after an untaxed send, card-fee inclusion, PDF line order and absence from both PDFs (`winner-order-SC-215`, `winner-order-SC-216`, `winner-order-SC-217`, `winner-order-SC-212`, `winner-order-SC-213`, `winner-order-SC-214`)
+- [x] 3.1 Add winner frontend and document tests for pre-send TBD, the shown Tax amount and tip, absence after an untaxed send, card-fee inclusion, PDF line order and absence from both PDFs (`winner-order-SC-215`, `winner-order-SC-216`, `winner-order-SC-217`, `winner-order-SC-212`, `winner-order-SC-213`, `winner-order-SC-214`)
 - [x] 3.2 Add Tax between Insurance and Payment Processing Fee in the Winner Order line projection: TBD with its tip before send, formatted from the invoice after send and omitted after an untaxed send
 - [x] 3.3 Supply the existing invoice and receipt PDF blocks the `taxLine` when Tax is present (`winner-order-SC-214`), and `null` when absent
 - [x] 3.4 Add the Tax label and `Set by Grade10 for where your order ships. Some orders have none.` tooltip in every Grade10 site locale
