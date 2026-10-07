@@ -14,7 +14,7 @@ asks to be erased. An operator ends it for a member whose phone is gone.
   - Ending one: immediate, by the member, or by an operator holding
     `store:write` for a member whose phone is gone
 - Configuration
-  - Launch check: fails, naming each missing secret, where a wallet's
+  - Launch check: fails, naming each missing secret or record, where a wallet's
     issuer is recorded and one of that wallet's secrets is unset; reports no
     wallet secret missing where no issuer is recorded
 
