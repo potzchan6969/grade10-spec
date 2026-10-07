@@ -12,3 +12,4 @@ ui_waived: "no new screen or state; collector clocks reuse the local-moment
 reviewed:
   user-journeys: "31495e72"
   specs: bfcf234f
+  test-cases: bfcf234f
