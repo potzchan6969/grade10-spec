@@ -7,7 +7,7 @@
 
 **As a** member,
 **I want** a dynamic code or my email to identify me, staff to see the name the site knows me by, and staff to spend my points once,
-**so that** a replayed code is refused, a miss discloses nothing, and points settle once whether paid online or at the till.
+**so that** a replayed code is refused, a miss discloses nothing, points settle once whether paid online or at the till, and the sale and the paid order show my points as money taken off.
 
 <!-- trace:case id=g10.store-membership.TC-23a rev=1 covers=g10.store-membership.SC-e9k,g10.store-membership.SC-y0k -->
 ### grade10-site-store-membership-US2-TC17-1: Till names the member by the site's one rule
