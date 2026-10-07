@@ -1,0 +1,145 @@
+{
+  "version": 2,
+  "change": "add-point-expiry-reminders",
+  "baseline": "3ea7e86c9f66dd0646cf84b7e778a88e2bf269a52a27b53f7f9daee85e53e270",
+  "fingerprint": "4b30dc381f6791c0f8ce0d952a0959c81caa1f30b16925e51e99d3105b3240b7",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T11:53:37.276Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/expiry-reminders.md#delivery",
+      "sha256": "8a5b02189e9a26ea10fca8eb26f1838b6388e962808c41d6665034c09bfce48c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/expiry-reminders.md#raising-a-reminder",
+      "sha256": "736094f4b28809c856877c21febfbf25fe1509ef1a97aa4e7589dc2571cf84b5",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/expiry-reminders.md#values",
+      "sha256": "567e60095172400829f3a7af9a60baeef2c02e1a3b1a7af1357acc76e65dce74",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/expiry-reminders.md#what-a-reminder-holds",
+      "sha256": "72eaca8a5c71d9a1e27770a46e6f8908202626d7517384146ff73c6c17a68501",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/points.md#expiry",
+      "sha256": "6f10765431a2fcf77df0a0d39691aa2a7f2f343e5e40e86e1d71ff5fc362d719",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/decisions.md",
+      "sha256": "028f143941b65787439a9dfad7847918777b271e0d482b31ffc82bfbe9fed083",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/proposal.md",
+      "sha256": "0fbc5bb529c3e9652007cbe12743a090fa7ef3d4e79ec26f6a000aea9c415270",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/specs/grade10-site/loyalty/expiry-reminders/feature-tcs.md",
+      "sha256": "5e9eede81d5f83becab5c22b17642cf99500ef9f4e9d403afaad45d7a02cc9cd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/specs/grade10-site/loyalty/expiry-reminders/spec.md",
+      "sha256": "82d5c0873a8168886c96f4fdc3447414544ae583780df05ccf2772d200c47de4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/specs/grade10-site/loyalty/expiry-reminders/user-journeys.md",
+      "sha256": "03751f24b334d6fb468760a368ffc48779f694b9fb3af677deaa0864c5bef0e4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "2d24c2159ae520362a4feb37521c891d8b7c7fcbafeb6715358e2702b3e8b239",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "ab68901431c5e14b10a6c66d9ccf1717e29c32ed49bda27fff7c579d1a8a35b4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "ed543b71d3d760ecffbf1c349ece7096ebf18341a2cafe44141de1563f3ad165",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-point-expiry-reminders/tech-design.md",
+      "sha256": "1ea7bb3e2c3bfd2a70aad0eee8d68f0f75a20f8118f90d30f9346070d383647a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/expiry-reminders/feature-tcs.md",
+      "sha256": "5e9eede81d5f83becab5c22b17642cf99500ef9f4e9d403afaad45d7a02cc9cd",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/expiry-reminders/spec.md",
+      "sha256": "0dca8e9368dc80be84c85db261f636d805cede2d65581ec4194b919cf7bc145d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/expiry-reminders/user-journeys.md",
+      "sha256": "03751f24b334d6fb468760a368ffc48779f694b9fb3af677deaa0864c5bef0e4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "5a88631876491edd6ad093c47722306a285054a687006604473dc7043cfda644",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "e988438f23753c6db2bb621cd4e657f2efb02de2a97361c723dc879f44d90ac9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "e280bf67d7cd72f58917ce0ac1c65c72ce11ebfdf87dd38f43814a24c82ab966",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/loyalty/expiry-reminders/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/expiry-reminders/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A reminder names no channel and delivers nothing",
+        "Requirement: A reminder that has stopped being true is no longer owed",
+        "Requirement: The programme answers which members are owed an expiry reminder"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/expiry-reminders/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The redeemable balance expires after a period of inactivity"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

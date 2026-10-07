@@ -30,13 +30,17 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
   - Inactivity expiry: the whole balance lapses on one date after the
     inactivity window with no earn and no redemption; either pushes that date
     out, never in
-  - Operator credits: a grant, a correction, a reversal or a reward given
-    outright takes the date the balance already names and pushes it no
-    further; where nothing is live, it starts the window from its own day
+  - Operator credits: a grant, a correction or a reward given outright takes
+    the date the balance already names and pushes it no further; where nothing
+    is live, a grant or a correction lapses on the later of a window from its
+    own day and the day still running, moving that day out and never back
   - Purchase recording: a completed sale reaches the programme exactly once,
     from any channel, even when loyalty is unreachable
   - Refund claw-back: returned money loses the points it earned, never more
     than the member still holds from it, and the tier is judged again at once
+  - Returned points: points a reversal gives back, or points paid at checkout
+    that a refund or an operator returns, rejoin the window already running,
+    even onto a balance brought to nothing, and start no window of their own
 - Tiers and invitations
   - Instant promotion: reaching the threshold promotes at that purchase; the
     next purchase earns at the new rate
@@ -227,17 +231,21 @@ SHALL NOT pull a member's expiry earlier than an activity already recorded, so a
 late-arriving record can shorten no balance.
 
 The balance SHALL stop counting at the instant the window passes, without
-waiting for any scheduled process. A refund, a claw-back, an operator
-correction, a campaign grant, or a reward an operator hands over outright SHALL
-NOT reset the window. Points already expired SHALL NOT be revived by later
-activity.
+waiting for any scheduled process. A refund, a claw-back, or a reward an
+operator hands over outright SHALL NOT reset the window, and neither SHALL an
+operator correction or a campaign grant while the member holds a point that is
+still live. Points already expired SHALL NOT be revived by later activity.
 
 A member who holds any redeemable points SHALL have exactly one date on which
-all of them expire. A credit an operator records SHALL take the date the
-member's window already names, whatever date its own event carries. Where the
-member holds no point that is still live, such a credit SHALL start the window
-from its own date instead, which starts no life for anything that has already
-lapsed.
+all of them expire. A grant or a correction an operator records SHALL take the
+date the member's window already names, whatever date its own event carries.
+Where the member holds no point that is still live, such a credit SHALL
+instead expire on the later of an inactivity window after its own date and the
+date the member's window already names, moving the window out to it and never
+back, which starts no life for anything that has already lapsed. Points a reversal gives back, and points paid at checkout
+that a refund or an operator returns, SHALL rejoin the window already running,
+even where the member holds no point that is still live, and SHALL NOT start a
+window of their own.
 
 A reversal SHALL give back only points that still have life. Where the
 member's window has passed, what the debit took SHALL NOT be written back: no
@@ -284,19 +292,19 @@ whole amount it removed.
 - **THEN** the new earning starts a fresh balance and a fresh inactivity window
 - **AND** nothing that expired returns
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-v4d rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-v4d rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-98 - A correction does not extend the balance's life
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** an operator corrects a balance, or a refund claws points back
+- **WHEN** an operator corrects a balance that holds live points, or a refund claws points back
 - **THEN** the member's inactivity window is unchanged
 - **AND** points the correction adds expire with the rest of the balance
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-0nq rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-0nq rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-99 - A campaign grant does not keep the balance alive
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** an operator grants campaign points as a reward
+- **WHEN** an operator grants campaign points as a reward to a member who holds live points
 - **THEN** the member's inactivity window is unchanged
 - **AND** the granted points expire with the rest of the balance, on the date that window already names
 
@@ -340,13 +348,14 @@ whole amount it removed.
 - **THEN** it reports how many members it did not reach
 - **AND** the next pass covers them, with no state carried between passes
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-pgz rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-pgz rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-180 - Operator points to an empty balance start the window
 **Serves:** grade10-site-loyalty-programme-US-05 - operator points to an empty balance start the window
 
 - **WHEN** an operator adds points to a member who holds no live points
-- **THEN** those points expire an inactivity window after their own date
-- **AND** a credit whose own date is already an inactivity window past is written already lapsed, and nothing that had lapsed counts again
+- **THEN** those points expire on the later of an inactivity window after their own date and the date the member's window already names
+- **AND** the member's window moves out to that date and never back
+- **AND** a credit whose own date is already an inactivity window past, for a member whose window has also passed, is written already lapsed, and nothing that had lapsed counts again
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-zl6 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-181 - A backdated grant joins the window already running
@@ -370,6 +379,15 @@ whole amount it removed.
 - **WHEN** a payment in points is reversed after the member's window has passed
 - **THEN** no points are written back and the balance stays empty
 - **AND** the answer names the points it could not return, rather than refusing the reversal
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-guq rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-254 - Points given back to a balance brought to nothing keep the running day
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-06` - points given back keep the running day
+
+- **GIVEN** a member whose balance a claw-back or a correction brought to nothing while their window still runs
+- **WHEN** a redemption of theirs is reversed, or points they paid at checkout come back through a refund or an operator's return
+- **THEN** the returned points expire on the date that window already names
+- **AND** the member's inactivity window is unchanged
 
 ### Requirement: A tier ladder is ordered, and refused at boot when it is not
 
