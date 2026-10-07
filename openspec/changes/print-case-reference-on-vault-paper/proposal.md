@@ -66,7 +66,6 @@ None.
 ## References
 
 - [Documents and Signing · Document Terms](../../../docs/prds/products/grade10-site/vault/documents-and-signing.md#document-terms)
-- [Collector Pages · Case Page](../../../docs/prds/products/grade10-site/vault/collector-pages.md#case-page)
 
 ## Follow-on changes
 

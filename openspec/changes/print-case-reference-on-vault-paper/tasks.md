@@ -1,6 +1,6 @@
 ## 1. The manual (grade10-spec)
 
-- [ ] 1.1 Keep the 🚧 lines that name the paper's case by its reference: **The case** under `## Document terms` in `docs/prds/products/grade10-site/vault/documents-and-signing.md`, and **Case reference on the paper** in `docs/prds/products/grade10-site/vault/collector-pages.md`, each naming the certificate beside the page, restating no requirement
+- [ ] 1.1 Keep the 🚧 line that names the paper's case by its reference: **The case** under `## Document terms` in `docs/prds/products/grade10-site/vault/documents-and-signing.md`, naming the certificate beside the page, restating no requirement
 - [ ] 1.2 Verify: `pnpm check:manual`, `openspec validate print-case-reference-on-vault-paper --strict`
 
 ## 2. The case reference on the paper (grade10)

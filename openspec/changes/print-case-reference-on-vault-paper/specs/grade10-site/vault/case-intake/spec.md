@@ -1,3 +1,5 @@
+# grade10-site/vault/case-intake Specification
+
 ## Feature set
 
 - Opening a request
