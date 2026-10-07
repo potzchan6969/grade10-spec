@@ -7,7 +7,7 @@
 - [ ] 1.2 Verify: `openspec validate confirm-and-show-loan-clock --strict` and
       `pnpm check:manual`.
 
-## 2. The cure date as one function (grade10)
+## 2. The cure date as one function (grade10) (owner: @ecchochan)
 
 Moves the worker's cure-date arithmetic into `@grade10/vault-contracts` with
 no change in what the worker writes. No scenario turns on it alone; groups 4
