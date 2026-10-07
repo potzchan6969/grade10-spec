@@ -1,0 +1,96 @@
+{
+  "version": 2,
+  "change": "present-cart-site-sale-promo-outcomes",
+  "baseline": "54ec1201dcaa1606c53c6a2816c1a532ce951ce1ebbbe23366cc9d63d2bb47f7",
+  "fingerprint": "7d55961e237df5e598a087f0197580494b3d3b24ce81fd9ad58cd13d12f45429",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T12:07:34.679Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#rules",
+      "sha256": "bdc85660d54f65236667149f1f140a9df32ef6427164f20541f3dc1291f3d51c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/discounts.md#one-discount-at-a-time",
+      "sha256": "8fc01bec2175a6e58d7c691c32bb8f20e1c2579d05a7a2789d2ddf6aab2f51fa",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-cart.md#site-sale-and-promo-codes",
+      "sha256": "409e8f8a9d1f5496ddffe65e4b87d5a795813a39996a2d4e9e3006d3f535a778",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/present-cart-site-sale-promo-outcomes/decisions.md",
+      "sha256": "159c2fb8b8e43ade950090275c549f6a6555ee3ecc798bb6ef35e11f221bc866",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/present-cart-site-sale-promo-outcomes/proposal.md",
+      "sha256": "f3516517886721d7ae73daaecd0ea18a6294fb81b27dfdce62cbde9901e17dc8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/present-cart-site-sale-promo-outcomes/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "5e8b7868bb57e9622dcbe25b1bdabe538b6b9d072f57b45e9024c28400905aea",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/present-cart-site-sale-promo-outcomes/specs/shared/ui/store-cart/spec.md",
+      "sha256": "d4e04546a8257391f1b27fc6536aaea4eca637a27abc29d565d04f15e7d8eede",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/present-cart-site-sale-promo-outcomes/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "2bc3839d65277ad70b7f2862329dab6a036085592aa28baf6939c28d0216798c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/present-cart-site-sale-promo-outcomes/ui-design.md",
+      "sha256": "7b954ba60bdf99283579ba9d31b2dc43625a35176ad4b85f795ce4518dd09189",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "b9b69d831dc3c35f7bd6d32c9e4a5d1dc266b2d27154406ac64cb71acc070367",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "sha256": "3435ba354fc0a031cc54520b93194a412307ec846d6fb5f7e00a27d524080a49",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "25c653f39bf9ee64ce714d794becde659d334878720a3f4929de18e25a175b77",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/present-cart-site-sale-promo-outcomes/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A held code that cannot apply is muted with its reason",
+        "Requirement: A refused promo leaves the site sale in place and names the refusal",
+        "Requirement: A replacing promo takes the sale from its lines and shows only the code's discount",
+        "Requirement: A site sale reaches the drawer only on its lines",
+        "Requirement: A stacked promo keeps the sale lines and adds only the code's discount",
+        "Requirement: Removing a promo drops its discount and returns the sale it had replaced"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
