@@ -50,7 +50,7 @@ outside `ProductBrowse`, so a later surface can reuse one without the others.
 
 - **GIVEN** a product tile whose card is activatable and whose cart control needs a name
 - **WHEN** the consumer supplies the tiles and the words around them
-- **THEN** the card's accessible name is the product's own name, supplied once per product
+- **THEN** the tile's one control that opens it is named by the product's own name, supplied once per product
 - **AND** the cart control's name comes from the list's copy, supplied once for every tile
 - **AND** no prop repeats either
 
