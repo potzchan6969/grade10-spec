@@ -3,7 +3,7 @@
 **Status:** pending-review
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## grade10-site-store-e2e-US8: Collector goes from free pick-up to the shop on Google Maps
+## grade10-site-store-e2e-US10: Collector goes from free pick-up to the shop on Google Maps
 
 **As a** collector,
 **I want** free pick-up on a card's page to take me to the shop's page and on
@@ -11,8 +11,8 @@ to Google Maps,
 **so that** the shop I would pick up from is the one I find, in my own
 language.
 
-<!-- trace:case id=g10.store-domain.TC-frk rev=1 covers=g10.store-product-page.SC-21b,g10.store-product-page.SC-res,g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr,g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-ca5,g10.store-store-locator.SC-91n,g10.store-store-locator.SC-w6y -->
-### grade10-site-store-e2e-US8-TC1-1: Free pick-up leads to the same shop and on to Maps
+<!-- trace:case id=g10.store-domain.TC-frk rev=1 covers=g10.store-product-page.SC-21b,g10.store-product-page.SC-res,g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-iwa,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr,g10.store-store-locator.SC-gk9,g10.store-store-locator.SC-ca5,g10.store-store-locator.SC-91n,g10.store-store-locator.SC-w6y -->
+### grade10-site-store-e2e-US10-TC1-1: Free pick-up leads to the same shop and on to Maps
 
 Runs once per row of **Test data**.
 
