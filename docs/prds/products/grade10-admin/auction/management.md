@@ -126,8 +126,8 @@ the card is in the winner's hands. The collector's half is
   until the close, or down only where the leader and the current bid stay as
   they are. A maximum already short of the next bid at its time is not placed,
   and the admin sees that. Only operators who may see a secret floor see it;
-  other operators see the house's bids under its pseudonym, and Bought in
-  after the close. Relist does not carry it
+  other operators see the house's bids labelled House, and Bought in after
+  the close. Relist does not carry it
 - 🚧 **Bought in** - a lot the internal bid wins closes with no order and no
   winner letters, releases its stock as an Unsold close does, offers Relist,
   and reads Bought in in the Listings table, with a filter of its own.
@@ -558,7 +558,7 @@ settings.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Called-off address reuse | 🚧 In flight | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
-| Internal bid | 🚧 In flight | One house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
+| Internal bid | 🚧 In flight | One house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see its bids labelled House, never its amount or time. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
 | House win | 🚧 In flight | Public as sold; for operators Bought in, with no order, stock released and Relist offered. Chosen over closing Unsold, which tells collectors a house bid existed, and over plain Unsold internally, which mixes bought-in lots into unsold counts. | Product (@htonyl) |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
