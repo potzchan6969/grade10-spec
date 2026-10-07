@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-10-07
+hands:
+  pm: "@ecchochan"
+  dev: "@ecchochan"
+ui_waived: "no screen or state moves: the vault backend renders the paper as a PDF, not a store block, and only the value in its Case fact and footer changes"
