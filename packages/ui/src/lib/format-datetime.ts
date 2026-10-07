@@ -99,7 +99,9 @@ function localParts(date: Date, locale: ShippedLocale, timeZone: string) {
 
   return {
     day: parts.day ?? "0",
-    month: parts.month ?? "???",
+    // Month-only, as the UTC path reads it: a whole date hands Chinese the
+    // month as `9` and its `月` as a literal part, which is dropped above.
+    month: monthName(date, locale, timeZone),
     year: parts.year ?? "0000",
     hours: (parts.hour ?? "00").padStart(2, "0"),
     minutes: (parts.minute ?? "00").padStart(2, "0"),
