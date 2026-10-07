@@ -189,7 +189,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Search commit or suggestion | Share of listing sessions that commit free text or take a suggestion, and time from first keystroke to a product open or narrowed grid. Unmeasured; first delivery sets the baseline. | Product |
 | Listing answer time | From a narrowing to its first grid, p95, measured at the edge. ❓ Unmeasured — nothing emits it; the staging figures are in [the design note](/references/store-catalogue-index). | Engineering |
 | Change to listing | From the shop's read answering a change to the mirror every location reads, p95; and from the shop's report to its read answering, p95. ❓ Unmeasured until the release carries it. | Engineering |
-| Opens from the name | ❓ Product manager confirms. Proposed: the share of listing-to-product opens that start from the name rather than the photo, which nothing can read, because a card reports one open and names no control. Recommended: drop it, or measure product opens from the listing, which the product page already receives as the source of each open. | Product |
+| Product opens from the listing | Share of listing visits that open a product, read as Product Viewed with Source `Listing` or `Search` - [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events). The share before and after one stop to open shows whether it lifts listing opens. | Product |
 
 **Decisions.**
 

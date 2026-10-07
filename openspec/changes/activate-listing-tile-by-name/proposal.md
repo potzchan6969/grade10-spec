@@ -10,9 +10,9 @@ and the photo is still its own keyboard stop named for the product, so a Tab
 user passes two stops per tile and a screen reader announces each product
 twice.
 
-Metric: ❓ product manager confirms (R2) - the share of listing-to-product
-opens that start from the name rather than the photo, which nothing records
-today.
+Metric: product opens from the listing - Product Viewed with Source
+`Listing` or `Search`, which the site already sends, before and after one stop
+to open (Q17).
 
 ## What Changes
 
@@ -108,9 +108,7 @@ opens by the tile's rule.
 
 ## Open questions
 
-- **Map** - ❓ whether Responsive layout and Load more stay their own
-  Feature set groups (Q11, R1)
-- **Metric** - ❓ what to measure (R2)
+- none - Q1 to Q17 are in `decisions.md`
 
 ## References
 
