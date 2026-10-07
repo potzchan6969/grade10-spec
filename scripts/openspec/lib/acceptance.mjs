@@ -378,12 +378,23 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
     const itemShape = (items, label) =>
       shape((items ?? []).filter((one) => labelOf(one) === label));
     const touched = new Map();
-    for (const [group, items] of [...deltaGroups, ...removedGroups]) {
-      const labels = touched.get(group) ?? new Set();
-      if (items.length === 0 || items.some((item) => !labelOf(item)))
-        labels.add(null);
-      for (const item of items) labels.add(labelOf(item));
-      touched.set(group, labels);
+    const touch = (group, label) =>
+      touched.set(group, (touched.get(group) ?? new Set()).add(label));
+    for (const [group, items] of deltaGroups) {
+      const current = baseGroups.get(group) ?? [];
+      for (const item of items) {
+        const label = labelOf(item);
+        const same = (one) => shape([one]) === shape([item]);
+        const restated = label
+          ? holding(current, label).length === 1 &&
+            same(current[holding(current, label)[0]])
+          : current.some(same);
+        if (!restated) touch(group, label);
+      }
+    }
+    for (const [group, items] of removedGroups) {
+      if (items.length === 0) touch(group, null);
+      for (const item of items) touch(group, labelOf(item));
     }
     for (const [group, labels] of touched) {
       const drifted = labels.has(null)

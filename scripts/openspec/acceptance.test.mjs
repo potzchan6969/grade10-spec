@@ -2046,3 +2046,10 @@ test("an amendment still refuses a Feature set item another change edited after 
     /Feature set group "Closed role set" changed since this amendment began/,
   );
 });
+
+test("an amendment passes when it restates a Feature set item another change reworded after acceptance", () => {
+  const prior = "- Closed role set\n  - Named roles: user, admin\n";
+  const durable = "- Closed role set\n  - Named roles: user, admin, owner\n";
+  const merged = amendFeatures(prior, durable, durable);
+  assert.match(merged, /Named roles: user, admin, owner/);
+});
