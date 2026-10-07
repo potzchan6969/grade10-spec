@@ -70,8 +70,8 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    [Clarification Request](../../../AGENTS.md#questions-and-blockers).
    The same human resolves questions that affect behaviour, scope, design,
    architecture or tasks. Update the source first,
-   then dependent artifacts. A changed anchor restarts QA1 and Dev; another
-   edit reruns QA2. Confirm artifacts are complete and new cases remain draft.
+   then dependent artifacts and apply the restart rule under Prepare. Confirm
+   artifacts are complete and new cases remain draft.
 5. **Reconcile the Cluster** - Before `accept-review`, group the open
    changes that edit one durable requirement or are linked by `depends_on`
    (the preflight's `--clusters` report lists them); a change in no cluster
@@ -106,14 +106,7 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    [publishing workflow](../../../AGENTS.md#pushes-pull-requests-and-commits)
    to land the accepted contract before implementation.
 
-## Artifacts
-
-| Artifact | Owner | Contract |
-| --- | --- | --- |
-| `tech-design.md` | Dev | Implementation decisions, interfaces and risks |
-| `spec.md` | QA1 outline, Dev scenarios | Frozen anchors and accepted requirements |
-| `feature-tcs.md` | QA1, QA2 | Blind draft cases and reconciliation |
-| `tasks.md` | Dev | Scenario-linked groups and verification |
+## Artifact Constraints
 
 Every external implementation change needs `tech-design.md`; use
 `design_waived: <why>` only for work wholly in this store. Each scenario has
