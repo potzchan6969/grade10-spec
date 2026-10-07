@@ -1,7 +1,7 @@
 # shared/auth/audit Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-10-05, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-10-07, tcs-rules r4
 
 ## shared-auth-audit-US1: Operator's identity action is recorded
 
@@ -791,7 +791,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -831,7 +831,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -874,7 +874,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -911,19 +911,19 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** 2026-10-05 · blind cases for US-04 and US-05 reconciled against the scenario pass after identity-trail code shipped in grade10#219.
+**Run:** 2026-10-05 · blind cases for US-04 and US-05 reconciled against the scenario pass after identity-trail code shipped in grade10#219. Reviewed 2026-10-07.
 
-| Spec scenario or anchor                             | Suite coverage                                                                                                             |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| shared-auth-audit-SC-15, SC-18, SC-20               | US4-TC1-1                                                                                                                  |
-| shared-auth-audit-SC-16, SC-17, SC-32               | US4-TC2-1                                                                                                                  |
-| shared-auth-audit-SC-19, SC-25, SC-27, SC-28, SC-34 | US4-TC3-1                                                                                                                  |
-| shared-auth-audit-SC-21, SC-22, SC-23, SC-24, SC-26 | US5-TC1-1                                                                                                                  |
-| shared-auth-audit-SC-29, SC-35, SC-36, SC-37        | US5-TC2-1                                                                                                                  |
-| shared-auth-audit-SC-30, SC-31, SC-33               | Out of suite — collector sign-in/out and trusted-product reads stay off the trail; covered by identityTrail.spec negatives |
-| Uncovered anchors                                   | none                                                                                                                       |
-| Contradicted readings                               | none                                                                                                                       |
+| Case | Disposition | Where it went / why |
+| --- | --- | --- |
+| `shared-auth-audit-US4-TC1-1`, `shared-auth-audit-US4-TC2-1` | Joined | their scenarios; walked in review through a guest checkout, which reaches the trusted-product create |
+| `shared-auth-audit-US4-TC3-1` | Joined, then split | the blind case held the verify flip, the unrecorded writes and the delete; review split it into the verify flip, `shared-auth-audit-US4-TC6-1` for the unrecorded create, verify or delete, and `shared-auth-audit-US4-TC7-1` for the delete through the console erasure checklist |
+| `shared-auth-audit-US4-TC4-1`, `shared-auth-audit-US4-TC5-1` | Case added | the verify of a new email recorded as created, and the verify of an already-verified account left off the trail |
+| `shared-auth-audit-US5-TC1-1`, `shared-auth-audit-US5-TC2-1` | Joined | their scenarios |
+| `shared-auth-audit-US5-TC3-1` | Case added | an unrecorded regenerate or disable leaves the second factor as it was |
+| `shared-auth-audit-US1-TC5-1`, `shared-auth-audit-US1-TC6-1` | Case added in review | collector sign-in and sign-out, and trusted-product reads, stay off the trail. The run had left them out of suite on grade10's `identityTrail.spec`, which names no test for them |
+| Uncovered anchors | none | |
+| Contradicted readings | none | |
 
 ### Manual
 
-None — identityTrail.spec.ts and security.spec.ts hold the automated coverage for these cases.
+None — every case runs as an automated test; the ones whose Testability names manual can also be walked by hand.
