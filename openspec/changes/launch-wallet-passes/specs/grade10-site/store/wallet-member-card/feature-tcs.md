@@ -507,6 +507,14 @@ Runs once per row of **Test data**.
 - **Ids** - `grade10-site-store-wallet-member-card-SC-38` keeps the id this change issued on main. `grade10-site-store-wallet-member-card-SC-61` to `grade10-site-store-wallet-member-card-SC-74` sit above SC-60, the highest id the add-account-profile branch issues for this capability. Every trace id is the capability's own, except `grade10-site-store-wallet-member-card-SC-12`'s, carried with its requirement
 - **Raised** - nothing new; R1 stays open for Design and R2 for Product. No case changed
 
+**Run:** 2026-10-07, QA2 in a fresh context, after the scenario for an ending of a pass added after the record opened and its case landed. It read this suite, the delta's Purpose, feature set and scenarios, `decisions.md` with its `## Raised`, `tasks.md`, the [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) page, the stack's branches above this one, and `passes.ts:125-188` and `MemberCardSection.tsx:86-110` in grade10.
+
+- **Agreed** - `grade10-site-store-wallet-member-card-SC-75` is walked by US9-TC13: the record opened before the new pass, the new pass identifying nobody after the ending, and the audit row saying a pass was ended. Q24, which the first QA2 run lists as landed, is now stated by the requirement and this scenario, so Settled no longer lists it
+- **Agreed, the member's path** - US9-TC13's member ends the pass before adding a new one. The member's page offers no save in a wallet already held (`apps/frontend/grade10/src/pages/membership/sections/MemberCardSection.tsx:95` in grade10), so ending first is how a member reaches the scenario's new pass
+- **Agreed, the anchors' wording** - the Purpose's operator sentence and the Launch check's "secret or record" move no case's covers: the record is the APNs key id, named by `grade10-site-store-wallet-member-card-SC-61`, out of suite with the Configuration group
+- **Ids** - `grade10-site-store-wallet-member-card-SC-75` sits above SC-60, the highest id add-account-profile issues for this capability, and above every id another branch in the stack issues for it. US-09 and its US9 cases are this change's alone. The trace ids `SC-p9m` and `TC-it3` are issued nowhere else
+- **Raised** - nothing new. R1 is handed to confirm-loyalty-surface-looks as Q12, and Q21, Product's, is deferred to the first change adding a second brand that issues a pass. No case changed
+
 ### Manual
 
 No case is decided by an automated test yet. The tests that prove part of each, in these words:
@@ -528,5 +536,5 @@ No case is decided by an automated test yet. The tests that prove part of each, 
 | `grade10-site-store-wallet-member-card-US9-TC9-1` | the store's suite for an ending on the operator's own record is task 2's; a person signs in as an operator who is also a member |
 | `grade10-site-store-wallet-member-card-US9-TC10-1` | a person signs in as shop staff; which roles hold `store:write` is the console's role table, which no test here reads |
 | `grade10-site-store-wallet-member-card-US9-TC11-1` | the store's suite for the nothing-held answer and its audit outcome is task 2's; flipped once task 2.5 links it |
-| `grade10-site-store-wallet-member-card-US9-TC13-1` | the store's suite for an ending after a new pass was added is task 2's; flipped once task 2.5 links it |
 | `grade10-site-store-wallet-member-card-US9-TC12-1` | the grant test, which fails until the read needs `store:write`, and the store's suite for a `support` operator's refused read are task 2's; flipped on the grant test once task 2.5 links it |
+| `grade10-site-store-wallet-member-card-US9-TC13-1` | the store's suite for an ending after a new pass was added is task 2's; flipped once task 2.5 links it |
