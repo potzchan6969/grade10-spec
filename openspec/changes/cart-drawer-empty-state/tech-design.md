@@ -34,7 +34,8 @@ The work is tests, the re-cited host tests, that one host fix and the walk.
 
 - A host wiring change beyond the `loading` fix, a new prop, or a change to
   the block's look.
-- A Figma or design-sync change for `Cart Item Slot`; the designer owns R2.
+- A Figma or design-sync change for `Cart Item Slot`; redrawing the frames is
+  handed to redraw-store-cart-frames (Q15).
 - A drawer state of its own for a failed first read; the drawer keeps the
   loading treatment (Q14), and the host fix stands under any later answer.
 - Automating the failed first read in the walk: group 2's host tests prove

@@ -85,8 +85,7 @@ In `decisions.md`.
 
 ## Open Questions
 
-- ❓ designer - the Figma cart frames that still draw `Cart Item Slot`, R2 in
-  `decisions.md`.
+None.
 
 ## References
 

@@ -115,5 +115,4 @@ its title and the line under it.
 | Empty cart action | Decided | None. The drawer offers no Browse More, so no host has to build a way into the catalogue that an empty cart cannot complete | Product |
 | Few items | Decided | The drawer lists only what the cart holds and scrolls what does not fit, instead of filling five rows with placeholders | Product |
 | Look | Decided | The block's stories are the agreed look; the Figma cart frames are historical | Design |
-| Figma cart frames | Open | ❓ Designer to confirm: retire `Cart Item Slot` and redraw the empty frames to match the empty-cart story, or label the frames historical in Figma. Recommended: redraw | Design |
 :::
