@@ -9,7 +9,7 @@
 - [ ] 2.1 Map `bid.avatarInitial` into `ListingBidHistoryRow.initials` in `listingBidHistory`; stop using `bid.pseudonym` for the avatar. `grade10-site-auction-listing-page-SC-52`, `grade10-site-auction-listing-page-SC-53`
 - [ ] 2.2 Add or update listing mapper / ListingView tests for rival letters, the viewer row, and live update paths. `grade10-site-auction-listing-page-SC-52`, `grade10-site-auction-listing-page-SC-53`
 
-## 3. Verify (grade10)
+## 3. Verify (grade10) (owner: @mason5991)
 
 - [ ] 3.1 Run the auction-service and grade10-auction frontend tests touched by groups 1 and 2.
 - [ ] 3.2 Manually open a lot with two bidders whose emails start with different letters and confirm Recent Bids avatars differ while labels stay Bidder N / You.
