@@ -8,7 +8,7 @@ order: 10
 
 | Rule | Value |
 | --- | --- |
-| Lead times | ❓ How many days before the day, and how many reminders. Product |
+| Lead times | 🚧 One reminder, 30 days before the day, when the profile's warning starts |
 | Smallest balance reminded about | 🚧 Any balance of 1 point or more |
 | Clock | 🚧 Asia/Hong_Kong, the same clock the window runs on |
 | Repeats | 🚧 One reminder per member, per expiry date, per lead time |
@@ -80,7 +80,7 @@ without the rule for who is owed one changing again.
 | What is raised | Decided | That a reminder is owed, naming the member, the day, the points and the lead time. | Product |
 | Why nothing is sent yet | Decided | The channel is its own choice; knowing who is owed a reminder is what lets it be made later. | Product |
 | How lead times are set | Decided | As a set the programme carries, so one reminder or a ladder is a value rather than a rule; a programme without a lead-time setting owes no reminder and still starts. | Product |
-| Lead times | ❓ Open | How many days before the day, and how many reminders. | Product |
+| Lead times | Decided | One reminder, 30 days before the day, so it starts with the profile's warning and a channel added later inherits one value; a ladder is a value added later with no rule change. | Product |
 | Smallest balance reminded about | Decided | Any balance of 1 point or more: 1 point pays $1 at checkout, so no balance is too small to spend, and the profile already warns on any balance. | Product |
 | Which channel carries it | ❓ Open | Email, push, the wallet card, the site, or more than one. | Product |
 | Declining reminders | ❓ Open | Whether a member can turn them off, and where. | Product |

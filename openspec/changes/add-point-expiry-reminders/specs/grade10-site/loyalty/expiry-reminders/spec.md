@@ -16,7 +16,8 @@ warning without deriving again who is owed one.
     value the programme carries rather than a rule; a programme without a
     lead-time setting owes no reminder and still starts, while a setting that
     cannot work stops the programme from starting
-  - Grade10's lead times: the set Grade10's own programme carries
+  - Grade10's lead times: one lead of 30 days, so a reminder is owed from the
+    day the profile's expiry warning starts
   - Raised once: a reminder is told apart by its member, day and lead time, so
     the same three are one reminder however often the programme is asked
 - What a reminder holds
@@ -66,6 +67,10 @@ setting written with no lead in it, holding a lead under 1 day, repeating a
 lead, or holding a lead as long as the shortest the programme's expiry window
 can run or longer - 365 days on a twelve-month window, 181 on a six-month one -
 SHALL fail the product at start-up, naming what it refuses.
+
+**Grade10's lead times** - Grade10's programme SHALL carry one lead time of 30
+days, so a Grade10 member is owed one reminder, from the day their balance
+expires within 30 days.
 
 **No points** - A member holding no redeemable points SHALL be owed nothing,
 whatever date their window carries.
@@ -137,6 +142,14 @@ whatever date their window carries.
 - **WHEN** the programme carries a lead-time setting written with no lead in it, holding a lead under 1 day, repeating a lead, or holding a lead as long as the shortest its expiry window can run or longer, such as 365 days on a twelve-month window or 181 on a six-month one
 - **THEN** the product fails at start-up, naming what it refuses
 - **AND** a lead one day shorter than the shortest the window can run, such as 364 days on a twelve-month window, starts
+
+<!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-aib rev=1 -->
+#### Scenario: grade10-site-loyalty-expiry-reminders-SC-21 - Grade10's programme owes one reminder 30 days ahead
+**Serves:** Raising a reminder - Grade10's programme owes one reminder 30 days ahead
+
+- **WHEN** the programme runs Grade10's own configuration and a member's day is 30 whole days or fewer after today, on the programme's clock
+- **THEN** that member is owed one reminder for that day, naming the 30-day lead
+- **AND** a member whose day is 31 days off is owed none
 
 <!-- trace:scenario id=g10.loyalty-expiry-reminders.SC-9az rev=1 -->
 #### Scenario: grade10-site-loyalty-expiry-reminders-SC-15 - The points a reminder names stay current

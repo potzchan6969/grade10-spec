@@ -34,9 +34,8 @@ owed a reminder is what makes that a small change rather than another argument a
 - **A lead time is configuration, not a rule.** The programme carries a set of
   them, so one reminder or a ladder of them is a value the product picks. A
   programme without a lead-time setting owes no reminder and still starts; a
-  setting that cannot work stops it from starting. Which
-  values Grade10 carries is held for Product in
-  [decisions](decisions.md#decisions).
+  setting that cannot work stops it from starting. Grade10 carries one lead
+  of 30 days, the day the profile's warning starts.
 - **One reminder per member, day and lead time.** Two lead times on one day are
   two reminders, each naming its lead; asking again raises no second one.
 - **The points it names stay current.** A grant, a correction or a claw-back

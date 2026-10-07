@@ -15,10 +15,10 @@ Needs group 1. Nothing here changes a writer, a sweep or a table.
 
 ## 3. Grade10's lead times (grade10)
 
-Needs group 1, `decisions.md` Q5 answered, and the delta's requirement and scenario for the Grade10's lead times anchor written from that answer; 3.1 and 3.2 then name that scenario.
+Needs group 1. `decisions.md` Q5 settles one lead of 30 days.
 
-- [ ] 3.1 `expiry.reminderLeadDays` in `GRADE10_LOYALTY_PROGRAM` (`packages/app-env/src/loyalty.ts`) set to the leads Q5 settles, or left out where it settles none, with the header comment saying which
-- [ ] 3.2 Verify: `pnpm run typecheck`, `pnpm run test:backend` - `apps/backend/grade10/loyalty/test/db/program.spec.ts` parses the config the worker boots on and asserts Grade10's lead times as the scenario states them
+- [ ] 3.1 `expiry.reminderLeadDays: [30]` in `GRADE10_LOYALTY_PROGRAM` (`packages/app-env/src/loyalty.ts`), with the header comment saying the reminder starts on the day the profile's expiry warning does (`grade10-site-loyalty-expiry-reminders-SC-21`)
+- [ ] 3.2 Verify: `pnpm run typecheck`, `pnpm run test:backend` - `apps/backend/grade10/loyalty/test/db/program.spec.ts` parses the config the worker boots on and asserts one lead of 30 days, owing a member 30 days off and not one 31 days off (`grade10-site-loyalty-expiry-reminders-SC-21`)
 
 ## 4. The record (grade10, grade10-spec)
 

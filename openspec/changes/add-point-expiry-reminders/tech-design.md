@@ -106,10 +106,10 @@ stops being owed and that nothing is sent. What follows is how it lands.
   behavior test pins it; no writer changes. A reminder dropped when the
   balance emptied is then answered again with the same identity, by
   construction.
-- **Grade10's value is Q5's** in `decisions.md`; the code does not depend on
-  it. It is one line of `GRADE10_LOYALTY_PROGRAM`, left out where Q5 settles
-  none, and the delta's Grade10's lead times anchor gains its requirement and
-  scenario from that answer. Q6 settles any balance of 1 point or more, the
+- **Grade10's value is one lead of 30 days**, Q5 in `decisions.md`; the code
+  does not depend on it. It is one line of `GRADE10_LOYALTY_PROGRAM`,
+  `reminderLeadDays: [30]`, the same horizon as the profile's
+  `EXPIRY_WARNING_DAYS`. Q6 settles any balance of 1 point or more, the
   delta's "still holds points", so the read carries no minimum.
 
 ## Service Interfaces
