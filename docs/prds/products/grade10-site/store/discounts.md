@@ -147,7 +147,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 - **Replay is dead** — a card presentation is consumed by one guarded update, so two tills scanning at once open exactly one session
 - **Throttles** — short-code misses ten per five minutes per shop, email and phone twenty, plans twenty per session
 - 🚧 **A row that closed cannot be rewritten** — a sale that landed, whose own hour ran out, or that a newer promise retired, refuses the next plan and asks staff to ring the goods on a new sale rather than reopening itself: a fresh scan would leave a deactivated code on the same cart
-- ❓ **A fresh scan on a cart that carries a reward's code** — a till session lives ten minutes and a sale's hour outlasts it, so staff reach the cart again through a fresh scan. Whether that scan continues the member's own open sale and its code, or is refused and asks for a new sale, is the product manager's to confirm
+- 🚧 **A fresh scan on an open sale's cart** - a till session lives ten minutes and a sale's hour outlasts it, so staff reach the cart again through a fresh scan; on the member's own open sale it continues that sale and the code it carries, and only a closed sale is refused
 - **A tender reaches stored value, and comes back only whole** — one discount over every line the shop sold, so a gift card on the sale is part-paid by points (`store.points_tender.gift_card_on_sale`) and nothing comes back while the card is kept; the member left short is counted (`store.points_tender.return_held`) and paid by hand
 :::
 
