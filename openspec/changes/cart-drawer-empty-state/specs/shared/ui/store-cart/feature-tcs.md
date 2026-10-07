@@ -161,23 +161,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The drawer renders `<cart_5>`, loaded.
+* The Mixed Line States story renders `<cart_5>`, loaded.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<cart_5>` | 1 active line and 1 sold-out line |
+| `<cart_5>` | `<active line>`, `<sold-out line>` and a line marked unavailable |
+| `<active line>` | an active line |
+| `<sold-out line>` | a line marked sold out |
 
 **Steps:**
 
-1. Open the drawer on `<cart_5>`.
+1. Navigate to the Store Cart/CartDrawer Mixed Line States story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 3. Look at the drawer title.
 
 **Expected Results:**
 
-* Step 2: both lines show, the sold-out one marked sold out.
+* Step 2: `<active line>` and `<sold-out line>` show, the second marked sold out.
 * Step 3: the count beside the drawer title reads `1`.
 
 <!-- trace:case id=g10.shared-store-cart.TC-6tu rev=1 covers=g10.shared-store-cart.SC-9dd,g10.shared-store-cart.SC-dcr,g10.shared-store-cart.SC-utr,g10.shared-store-cart.SC-e4c,g10.shared-store-cart.SC-j31,g10.shared-store-cart.SC-xfz,g10.shared-store-cart.SC-62u,g10.shared-store-cart.SC-gx1,g10.shared-store-cart.SC-tou -->
@@ -758,12 +760,12 @@ sells.
 - **Raised, landed, folded** - QA1 asked whether a cart read empty whose price check fails is read or unchecked (R5). Its lines are loaded and there are none, so it is read (Q11): the unread-cart clause ends `loading` on it, `shared-ui-store-cart-SC-51` states it, US3-TC4-1 walks it and a third host test of group 2 proves it. The page's Not read yet line said `checked` where it meant `read`; it now says a cart read empty shows the empty state
 - **Raised, landed, folded** - QA1 asked whether a line of 3 units counts 3 or 1 (R6). The count is one per line, as the block counts and as `nav-cart-count-badge` counts the site header's cart (Q12): the badge requirement says so, `shared-ui-store-cart-SC-50` states it, and US2-TC1-2 gains the row that raises a line to 3 units. The Background line holding every counted line at 1 unit is gone, and the page's count line no longer reads as units
 - **Rejected in part** - US3-TC3-1 expected the host's toast with Retry and no line named. No scenario of this capability states that toast; Cart Validation owns it (`docs/prds/products/grade10-site/store/cart-validation.md`), so the case keeps only what `shared-ui-store-cart-SC-48` states
-- **Corrected** - US3-TC1-2 walks the Loading With Lines story, which holds `loading` and applies a promo code, so every skeleton it expects is there to see; the timed Fetching On Open story ends its read before a tester can look, and applies no promo. US3-TC2-1 walks the Loading No Lines story and ends the read by setting `loading` to false in the Controls panel, for the same reason. US2-TC5-1, US2-TC6-1, US6-TC4-1 and US6-TC6-1 walk the stories group 1 adds for their carts, and US2-TC1-2 and US2-TC7-1 walk `Default`, whose 2 lines are `shared-ui-store-cart-SC-23`'s own and whose stepper and remove control reach every row of US2-TC1-2, so a tester builds no cart by hand. `Default` copies its lines into its own state once, so the Background sends Controls panel steps only to stories that pass their args to the drawer
+- **Corrected** - US3-TC1-2 walks the Loading With Lines story, which holds `loading` and applies a promo code, so every skeleton it expects is there to see; the timed Fetching On Open story ends its read before a tester can look, and applies no promo. US3-TC2-1 walks the Loading No Lines story and ends the read by setting `loading` to false in the Controls panel, for the same reason. US2-TC4-1, US2-TC5-1, US2-TC6-1, US6-TC4-1 and US6-TC6-1 walk the stories group 1 adds for their carts, and US2-TC1-2 and US2-TC7-1 walk `Default`, whose 2 lines are `shared-ui-store-cart-SC-23`'s own and whose stepper and remove control reach every row of US2-TC1-2, so a tester builds no cart by hand. `Default` copies its lines into its own state once, so the Background sends Controls panel steps only to stories that pass their args to the drawer
 - **Corrected, signed in** - US3-TC3-1 now walks a signed-in customer, as US3-TC4-1 does. A guest's cart is read from the browser, not the network (`packages/grade10-store/frontend/src/features/orders/cart/data/repositories/CartRepositoryImpl.ts:46-53` in the Grade10 repository), so failing the network cannot fail a guest's first read
 - **Contradicted** - none
 - **Uncovered anchors** - none. US-02, US-03 and US-06 each have cases. The `Drawer export contract` group is served only by `shared-ui-store-cart-SC-01`, `shared-ui-store-cart-SC-22` and `shared-ui-store-cart-SC-43`, Out of suite and proven by the package's public-entry test and `pnpm run typecheck`. `shared-ui-store-cart-SC-13` stays walked by US6-TC3-1
 - **Revised in place** - US2-TC1, US2-TC2, US2-TC3 and US3-TC1 move to revision 2 and carry the durable `trace:case` markers, so the fold replaces the five-row cases. The five-row scenarios retire with their requirement, and no artifact of the change cites them in backticks, since the fold leaves them issued nowhere
-- **Carried for its marker** - US2-TC4-1 is the durable case restyled, its behaviour unchanged. No story holds its cart of 1 active and 1 sold-out line, so `/tcs-review` prepares one before it runs. US6-TC1-1 to US6-TC3-1 are the durable cases restyled, their behaviour, id and revision unchanged, so their `covers` can name `shared-ui-store-cart-SC-49` and `shared-ui-store-cart-SC-42`, which the change adds to US-06
+- **Carried for its marker** - US2-TC4-1 is the durable case restyled, its behaviour unchanged; it walks the Mixed Line States story group 1 adds. US6-TC1-1 to US6-TC3-1 are the durable cases restyled, their behaviour, id and revision unchanged, so their `covers` can name `shared-ui-store-cart-SC-49` and `shared-ui-store-cart-SC-42`, which the change adds to US-06
 - **Folded, count** - the badge requirement leaves out unavailable lines as well as sold-out ones (Q10). `shared-ui-store-cart-SC-49` states it and US6-TC6-1 walks it on the Mixed Line States story, which keeps the unavailable line the drawer asks to remove; `shared-ui-store-cart-SC-42` gains the hidden count badge, which US6-TC4-1 already expects at its step 4
 - **Reworded, count** - every case names the count as the page does, the count beside the drawer title, and looks at the drawer title for it, since `header` also names the site header's cart count (Q10). The badge requirement ties the badge to that name, so no case's meaning or revision moves
 - **Markers** - each case's `covers` names every scenario serving its `Trace` journey, in the folded spec's order, as `docs/governance/test-traceability.md` requires: `shared-ui-store-cart-SC-50` after `shared-ui-store-cart-SC-05` for US-02, `shared-ui-store-cart-SC-51` after `shared-ui-store-cart-SC-48` for US-03, and `shared-ui-store-cart-SC-49` after the status scenario for US-06. `shared-ui-store-cart-SC-08` and `shared-ui-store-cart-SC-01` move to revision 2, the second because the exports it imports change. `shared-ui-store-cart-SC-50`, `shared-ui-store-cart-SC-51`, US3-TC4-1 and US6-TC6-1 take numbers above every one the base branch and the active changes on the capability issue, the highest being scenario 39, which `add-store-cart-drawer-ui` issues
