@@ -338,5 +338,4 @@ landing, which needs no word. Every other landing waits for a hand's word.
 - [`.claude/agents/README.md`](../../agents/README.md) - the readers
 - [`docs/governance/writing.md`](../../../docs/governance/writing.md) - the house style
 - `planning-pm`, `planning-design`, `planning-dev` - the rules each artifact
-  must meet, which the line commands load; `planning-qa` is a redirect to
-  `planning-dev`
+  must meet, which the line commands load

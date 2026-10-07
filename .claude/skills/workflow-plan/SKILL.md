@@ -5,40 +5,37 @@ description: Run a round on the product manager's three artifacts of a change - 
 
 # The Product Manager's Round
 
-**The artifacts:** `proposal.md`, `decisions.md` and
-`specs/<capability>/user-journeys.md`, in that order. They stop there: the
-planning and acceptance are `/planning-dev`'s.
-
-**The rules:** `planning-pm` - the interview, the PRD marks, what each file
-holds and where a statement belongs - plus, as you reach each artifact:
+- **Scope** - Accept a requested outcome or existing change id. Draft `proposal.md`, `decisions.md` and `specs/<capability>/user-journeys.md`, in that order.
+- **Artifact Rules** - Use [planning-pm](../planning-pm/SKILL.md) for the interview, PRD marks, artifact contents and delivery-planning handoff. The [Interview](../../../docs/governance/round-summary.md#interview) owns the questions.
+- **Round** - Follow `workflow-round` ([skill](../workflow-round/SKILL.md)) once per artifact for readers, questions, summary and landing. Read each artifact's enriched instructions as you reach it:
 
 ```bash
 openspec instructions proposal --change <change>
+```
+
+```bash
 openspec instructions decisions --change <change>
+```
+
+```bash
 openspec instructions user-journeys --change <change>
 ```
 
-Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
-landing and the re-read. One round per artifact.
-
 ## Opening a Change From One Sentence
 
-A sentence addressed to the app in the planning channel that names no existing
-change opens one. From a wake the sentence is the first of `.round/relay.json`'s
-`messages`; from a terminal it is the argument.
+- **Input** - A planning-channel sentence naming no change comes from the first of `.round/relay.json`'s `messages`; a terminal sentence is the argument. A message naming an existing change uses its thread and opens nothing.
+- **Overlap** - Read active changes before opening one. A change whose proposal links the page sections the sentence would mark overlaps it too. The manual's stage comes from [stageOf](../../../tools/manual/src/api/stages.ts). Read archive only for the last table row. Where a change overlaps, answer in that change's thread and use its stage and asker below.
+- **Active Changes** - List the changes:
 
-**A sentence that overlaps a change in flight** — read what is in flight
-before opening, off what the store already prints: `pnpm run plan:preflight`
-lists the changes, `pnpm run spec:id <capability>` names the change carrying a
-delta on the capability the sentence is about, and each change page in the
-manual shows its stage (`stageOf` in
-[`tools/manual/src/api/stages.ts`](../../../tools/manual/src/api/stages.ts)). A
-change whose proposal links the page sections the sentence would mark overlaps
-it too. `openspec/changes/archive/` is read for the last row alone, which is
-the only one an archived change answers. Where one overlaps, answer in that
-change's thread and take the row for its stage and who asked. The rows are
-`shared/planning/agent-rounds`' own, under **A first sentence opens a
-change**, and nothing beyond them is restated here:
+```bash
+pnpm run plan:preflight
+```
+
+- **Capability Deltas** - Identify the change carrying the capability's delta:
+
+```bash
+pnpm run spec:id <capability>
+```
 
 | The change in flight is | The run does |
 | --- | --- |
@@ -48,37 +45,27 @@ change**, and nothing beyond them is restated here:
 | Building | Writes a held row on its product manager: split, recommended; supersede where the sentence contradicts what is built |
 | Implementation complete or Archived | Opens a change, `depends_on:` naming it |
 
-Where no change overlaps, or where the row above opens a new change, what the
-sentence opens:
 
-1. **The id** — drawn from the sentence with `slugOf` as
-   [`tools/manual/src/editor/propose.ts`](../../../tools/manual/src/editor/propose.ts)
-   derives it
-2. **The record** — `pnpm openspec new change <id> --schema grade10-planning`,
-   with `depends_on: <change>` in it where the row above named one, and from a
-   wake `node scripts/openspec/relay-post.mjs --bind <change>` right after it,
-   which makes the thread the change room's alias
-3. **The hand** — `hands: pm: @<handle>`, the asker's handle from the team map
-   (`docs/prds/team.yaml`). An asker the map does not name opens the change
-   with its product manager unnamed, and the reply says so and asks for the
-   handle
-4. **The branch** — `claude/<id>`, pushed
-5. **The reply** — the change's id, said back in the thread that message
-   started, which `pnpm run round:thread <change> <channel>/<ts>` records
+Where no change overlaps, or the table opens a new one:
 
-A message naming a change that already exists is answered in that change's
-thread, the reply names that change's id, and nothing is opened.
+1. **Id** - Derive it from the sentence with `slugOf` in [propose.ts](../../../tools/manual/src/editor/propose.ts).
+2. **Record** - Create it with the repository schema; add `depends_on: <change>` where the table requires it.
 
-## What Is Yours to Ask
+   ```bash
+   pnpm openspec new change <id> --schema grade10-planning
+   ```
 
-The interview is the ask step, per [Round Summary and Landing ·
-Interview](../../../docs/governance/round-summary.md#interview). After it a
-preference or a product decision is a `Q<n>` row, held or decided, a product
-detail a ❓ line on the page.
+   From a wake, bind the thread immediately after creation:
+
+   ```bash
+   node scripts/openspec/relay-post.mjs --bind <change>
+   ```
+
+3. **Hand** - Set `hands: pm: @<handle>` from `docs/prds/team.yaml`. If the asker is absent from the map, leave the PM unnamed and request their handle in the reply.
+4. **Branch** - Create and push `claude/<id>`, the round workflow's branch convention.
+5. **Reply** - Name the change id in the originating thread. Use workflow-round's thread-recording procedure.
 
 ## The Whole Plan in One Wake
 
-- **The three files start the chain** — draft ahead, as `workflow-round` says, in the
-  order the schema gives them, and landed nowhere
-- **Where the chain stopped** — hand on with the change's `awaiting: specs:`
-  line only where it stopped before the requirements, as `planning-pm` says
+- **Draft Chain** - Draft the three artifacts in the order the schema gives them, landed nowhere; workflow-round owns the draft-ahead procedure.
+- **Completion** - Return the three drafts and round outcome. Hand the settled artifacts to planning-dev as planning-pm directs; if requirements cannot start, record `awaiting: specs:` with the missing input.
