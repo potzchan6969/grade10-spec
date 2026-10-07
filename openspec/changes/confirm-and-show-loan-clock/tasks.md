@@ -158,7 +158,7 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after
 deployment (`/tcs-review confirm-and-show-loan-clock`), and `/tcs-run-sheet`
 executes manual cases when needed. Groups 2 to 5 landed first.
 
-- [ ] 6.1 Walk the three journeys through the console in
+- [x] 6.1 Walk the three journeys through the console in
       `apps/frontend/grade10/e2e/tests/vault/console.spec.ts`, with a payout
       seeded days back so the loan is past due: cancel a visit, keep it, then
       cancel it and read the collector's message
