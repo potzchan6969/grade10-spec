@@ -494,31 +494,36 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** shared-auth-audit-US-04
 
 **Pre-conditions:**
 
+* customer is not signed in on <grade10 store url>.
 * No account holds <new email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<new email>` | new.buyer@example.com, any address no account holds |
+| `<new email>` | An inbox the tester reads, held by no account, for example new.buyer+20261007@example.com |
+| `<product>` | Any in-stock product on <grade10 store url> |
+| `<test card>` | The staging shop's test card that pays successfully |
 | `<start time>` | The time just before step 1 |
 
 **Steps:**
 
-1. Send the trusted-product create call for an unverified account at <new email>.
-2. As admin(holds `audit:read`), open <grade10 admin audit url>.
-3. Filter to the identity product, from <start time>.
+1. Add <product> to the cart on <grade10 store url>.
+2. Check out as a guest with <new email>.
+3. Pay with <test card>.
+4. As admin(holds `audit:read`), open <grade10 admin audit url>.
+5. Filter to the identity product, from <start time>.
 
 **Expected Results:**
 
-* Step 3 lists the write for the new user id, with outcome `created`.
+* Step 5 lists the write for a new user id, with outcome `created`.
 * The entry names the system as actor and the subject by user id, not by <new email>.
 
 <!-- trace:case id=g10.shared-audit.TC-2mz rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
@@ -534,37 +539,42 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** shared-auth-audit-US-04
 
 **Pre-conditions:**
 
+* customer is not signed in on <grade10 store url>.
 * An account holds <existing email>, in the row's standing.
 
 **Test data:**
 
-| Account at `<existing email>` | Request sent | Outcome |
+| Account at `<existing email>` | How it was made | Outcome |
 | --- | --- | --- |
-| Unverified | Create an unverified account | No trail entry |
-| Verified | Create an unverified account | No trail entry |
-| Verified | Mark the email verified | No trail entry |
+| Unverified | An earlier paid guest checkout with <existing email> | No trail entry |
+| Verified | A sign-in with <existing email>, then a sign-out | No trail entry |
 
 | Field | Value |
 | --- | --- |
-| `<existing email>` | existing.buyer@example.com, the address on file |
+| `<existing email>` | An inbox the tester reads, holding the row's account |
+| `<existing account id>` | That account's user id |
+| `<product>` | Any in-stock product on <grade10 store url> |
+| `<test card>` | The staging shop's test card that pays successfully |
 | `<start time>` | The time just before step 1 |
 
 **Steps:**
 
-1. Send the row's request as a trusted product for <existing email>.
-2. As admin(holds `audit:read`), open <grade10 admin audit url>.
-3. Filter to the identity product, from <start time>.
+1. Add <product> to the cart on <grade10 store url>.
+2. Check out as a guest with <existing email>.
+3. Pay with <test card>.
+4. As admin(holds `audit:read`), open <grade10 admin audit url>.
+5. Filter by subject id <existing account id>, from <start time>.
 
 **Expected Results:**
 
-* Step 3 lists as the row's outcome states.
+* Step 5 lists as the row's outcome states.
 
 <!-- trace:case id=g10.shared-audit.TC-8lh rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
 ### shared-auth-audit-US4-TC3-1: Verify flip and delete are on the trail; unrecorded writes do not land
@@ -651,6 +661,44 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3 lists the write for the new user id, with outcome `created`.
+
+<!-- trace:case id=g10.shared-audit.TC-jo4 rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
+### shared-auth-audit-US4-TC5-1: Trusted-product verify of an already-verified account is not on the trail
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-audit-US-04
+
+**Pre-conditions:**
+
+* A verified account holds <existing email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<existing email>` | existing.buyer@example.com, a verified account |
+| `<existing account id>` | That account's user id |
+| `<start time>` | The time just before step 1 |
+
+**Steps:**
+
+1. Send the trusted-product verify call for <existing email>.
+2. As admin(holds `audit:read`), open <grade10 admin audit url>.
+3. Filter by subject id <existing account id>, from <start time>.
+
+**Expected Results:**
+
+* Step 3 lists no entry for the request.
 
 ---
 
