@@ -181,8 +181,7 @@ Runs once per row of **Test data**.
 | `shared-ui-store-product-listing-SC-63a` | Reached | US1-TC19's square row. A photo close to square meets the same rule on two edges, and `Default`'s play test reads the same geometry, so no fixture of its own is needed |
 | The requirement's hover clause | Uncovered, with reason | A permission, not an outcome: the well may clip a grown photo until the pointer leaves (Q4). No scenario states it, and no case walks it |
 
-- **Raised for the human** - R1, whether showing the whole photo is measured, is the product manager's, open on [Product Listing Blocks](../../../../../../../docs/prds/products/shared/ui/store-product-listing.md). No case depends on it
-- **Raised, landed** - R2 landed as Q4 and R3 as Q5, both in `## Settled`. Q6, the photo's corners, came from the accept review and is in `## Settled` too
+- **Raised, landed** - R2 landed as Q4 and R3 as Q5, both in `## Settled`. R1 landed as Q7: showing the whole photo is not measured, and no case depends on it. Q6, the photo's corners, came from the accept review and is in `## Settled` too
 - **Rejected** - the blind pass's case for the photo drawn without multiply: `drop-product-listing-photo-multiply` owns that requirement, so its cases are that change's
 - **Contradicted** - none: where a case and a scenario state the same behaviour, they agree
 - **Uncovered** - no scenario. Only the hover clause, which states no outcome

@@ -5,7 +5,7 @@
 Catalogue photos of slabs and boxes are cropped in the listing tile well, so
 the collectible is incomplete until the collector opens the product page.
 
-Metric: ❓ product manager - R1 in `decisions.md`.
+Metric: none - the tile draws the photo it is given (Q7 in `decisions.md`).
 
 ## What Changes
 
@@ -47,10 +47,6 @@ Metric: ❓ product manager - R1 in `decisions.md`.
 - **Overlap** — `add-store-cross-sell` Q50 owns hover on a sold-out tile.
   `drop-product-listing-photo-multiply` owns the photo drawn without multiply
   (Q3); this change adds no second requirement for it
-
-## Open questions
-
-- **Metric** — R1 in `decisions.md`, owed by the product manager
 
 ## References
 
