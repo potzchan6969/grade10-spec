@@ -62,10 +62,9 @@
 - [ ] 5.1 After `complete-auction-post-sale` archives, MODIFY Order Status's
   "An auction order carries two writable status fields" and "Permitted
   transitions" so `pending` to `expired` at the deadline carries the in-flight
-  card payment exception, and the write when that session ends unpaid.
+  card payment exception, and the write when that session ends unpaid. Also
+  drop "and has no cancellation requested" from the durable `address_window_open`
+  line, since no spec defines that state and `complete-auction-post-sale`'s
+  record and reopen refusals no longer name it.
   - Verification: `pnpm check:manual` shows no overlap.
-- [ ] 5.2 After `complete-auction-post-sale` archives, MODIFY Winner Order's
-  "An unfinished card payment leaves the invoice payable" so its timed-out and
-  abandoned outcomes apply before the deadline only, and point at "The payment
-  deadline is fixed when the invoice is sent" for a session started in time.
-  - Verification: `pnpm check:manual` shows no overlap.
+- [x] 5.2 Satisfied by `complete-auction-post-sale`'s MODIFIED Winner Order "An unfinished card payment leaves the invoice payable", which already applies its timed-out and abandoned outcomes before the deadline only and points at "The payment deadline is fixed when the invoice is sent"; no follow-up after it archives.

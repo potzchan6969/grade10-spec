@@ -15,6 +15,7 @@
   - One timeline: the invoice log, the fulfilment log and comments, oldest first
   - Dialogs: each action restates what will happen, and a refusal reads as a sentence
   - Money in major units: an operator types `50.00` for HK$50
+  - Hong Kong time: every date and time on the worklist, the order page, the timeline and the send and reissue dialog reads in Hong Kong time
   - Winner contact: the phone number from the confirmed delivery address, where an operator reaches the winner on WhatsApp about a transfer or a proof
 - Quote and send
   - Fee by payment method: a card invoice's fee is computed from the Stripe card rule in Payment Settings; a bank transfer invoice's fee is typed by the operator, zero or more
@@ -27,9 +28,11 @@
   - Counts toward nothing: money on a replaced invoice, a cancelled order, at another amount or on an invoice in any other state pays nothing and blocks nothing, and finance returns it outside Grade10
   - Flags per payment: each flag is cleared on its own, with a reason
 - Fulfilment on the order
-  - Dispatch: the carrier and the tracking number, on a Preparing Shipment order
+  - Dispatch: the carrier, the tracking number and, when there is one, the carrier's tracker link, on a Preparing Shipment order
+  - What the winner reads: the tracking number as the tracker link when one was given, plain text when none, never a carrier name or a Track shipment control
   - Delivery: the date and the carrier's proof, on a Shipped order
 - Audit trail
+  - Sent twice: an operator action repeated with the same request happens once and answers what it first did
   - Signed-in operator: every operator entry names the operator signed in and the time on Grade10's clock
 - Grants
   - Named access: a control the operator lacks stays listed, disabled, and names the access it needs
@@ -324,7 +327,7 @@ receipt's receipt ID and internal audit number, per
 | Field | Notes |
 | --- | --- |
 | Log type | Address reopened, address recorded, order edited before send, sent, expired, reissued, proof uploaded, proof confirmed, proof returned, paid, payment recorded, cancelled, refunded, payment attempt failed, flagged payment, flag cleared |
-| Timestamp | Stored in UTC, displayed in Hong Kong time for every operator |
+| Timestamp | Stored in UTC, displayed in Hong Kong time for every operator, per "Order dates and times read in Hong Kong time" |
 | Invoice ID | The invoice the entry concerns |
 | Internal audit number | Sent, reissued, paid and payment recorded entries: the number of the invoice or receipt the entry issued |
 | Invoice status after the log entry | |
@@ -1323,8 +1326,9 @@ and the new one, and keep every amount the operator entered, so they read the
 new total before they send again.
 
 **The deadline** - Before the operator sends, the dialog SHALL show, to the
-minute, the payment deadline the send will set: 7 calendar days from the
-moment of send, or the current deadline on a reissue that keeps it.
+minute and in Hong Kong time, the payment deadline the send will set: 7
+calendar days from the moment of send, or the current deadline on a reissue
+that keeps it.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-hgh rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-170 - A total that changed since it was read refuses the send
@@ -1351,6 +1355,64 @@ moment of send, or the current deadline on a reissue that keeps it.
 - **THEN** the dialog showed a payment deadline of 2026-09-19T09:00:00Z, to the
   minute, in Hong Kong time
 - **AND** the invoice carries that deadline
+
+### Requirement: Order dates and times read in Hong Kong time
+
+Every date and time the Orders workspace shows an operator SHALL read in Hong
+Kong time (Asia/Hong_Kong, GMT+8), whatever zone the operator's browser is in.
+Grade10 stores each in UTC. This is the exception to UTC on admin surfaces that
+`shared/dates-and-times` carries for Orders, per `align-collector-times-to-local-zone`.
+
+| Surface | What reads in Hong Kong time |
+| --- | --- |
+| Orders worklist | Every date or time a row shows |
+| Order page | The address deadline, the payment deadline and every other date or time the page states |
+| Timeline and invoice log | Each entry's timestamp |
+| Send and reissue dialog | The payment deadline the send sets, to the minute |
+
+A date an operator types stays the calendar date they typed. It carries no time
+and no zone.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-3j8 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-239 - Operators in different zones read the same Hong Kong time
+**Serves:** post-sale-US-02 - Operator works one order from its own page
+
+- **GIVEN** a Pending Payment order whose payment deadline is 2026-09-19T09:00:00Z
+  and whose invoice was sent at 2026-09-12T09:00:00Z
+- **WHEN** one operator whose browser is set to London and another whose
+  browser is set to Tokyo read the order page and its timeline
+- **THEN** both read the payment deadline as 2026-09-19 17:00 in Hong Kong time
+- **AND** both read the sent entry's timestamp as 2026-09-12 17:00 in Hong Kong
+  time
+
+### Requirement: An operator action sent twice happens once
+
+Each operator action on an order carries one request, made when its dialog
+opens. Grade10 SHALL carry out a request once. A repeat of it, such as a double
+click or a retry after a reply was lost, SHALL answer what the first one did,
+write no second log entry, send no second letter and move no second amount.
+Grade10 SHALL refuse a request already used for another action or with other
+values, change nothing, and tell the operator to open the dialog again.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-lfk rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-240 - A repeated send happens once
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an auction order in Preparing Invoice
+- **WHEN** an operator sends the invoice and the same request reaches Grade10
+  a second time
+- **THEN** the second answers the outcome of the first
+- **AND** the order holds one invoice, one sent entry on its log and one invoice
+  letter
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-98a rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-241 - A request used for another action is refused
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an operator who sent the invoice on an order with one request
+- **WHEN** the same request is made to record a payment on that order
+- **THEN** Grade10 refuses it and the dialog tells the operator to open it again
+- **AND** no payment is recorded and the log gains no entry
 
 ### Requirement: Dispatch and delivery are recorded on the order
 
@@ -1390,6 +1452,31 @@ log history", and send the winner the shipped or delivered letter, per
 - **THEN** the order derives as Shipped
 - **AND** the fulfilment log shows a dispatched entry with that carrier, that
   tracking number, the operator and the delivery address as it stood
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-9wm rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-237 - A dispatch with a tracker link gives the winner a link
+**Serves:** post-sale-US-04 - Operator records in-house shipment
+
+- **GIVEN** a Preparing Shipment order
+- **WHEN** an operator holding shipment processing records dispatch with
+  carrier `SF Express`, tracking number `SF1234567890` and the tracker link
+  `https://www.sf-express.com/track/SF1234567890`
+- **THEN** the winner reads the tracking number `SF1234567890` as a link to
+  that tracker link
+- **AND** the winner reads no carrier name
+- **AND** the winner sees no Track shipment control
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-pvi rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-238 - A dispatch with no tracker link gives the winner plain text
+**Serves:** post-sale-US-04 - Operator records in-house shipment
+
+- **GIVEN** a Preparing Shipment order
+- **WHEN** an operator holding shipment processing records dispatch with
+  carrier `SF Express`, tracking number `SF1234567890` and no tracker link
+- **THEN** the order derives as Shipped
+- **AND** the winner reads the tracking number `SF1234567890` as plain text,
+  not a link
+- **AND** the winner reads no carrier name and sees no Track shipment control
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-7rg rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-174 - Delivery with proof completes the order
@@ -1605,7 +1692,7 @@ Overdue order whose invoice status is `not_issued`, so a winner who gives their
 setup by telephone is quoted in one step. The reason is mandatory. Recording
 setup SHALL NOT reopen the window and SHALL NOT let the winner write again.
 Grade10 SHALL refuse it without a reason, after address confirmation, after
-invoice send, with cancellation requested and on a cancelled order. Grade10
+invoice send and on a cancelled order. Grade10
 SHALL write an address-recorded invoice-log entry carrying the named operator,
 timestamp and reason. An operator without payment-processing SHALL see the
 record control visible and disabled, and Grade10 SHALL refuse the same action
@@ -1618,6 +1705,10 @@ fee rule for the currency, and bank transfer where Grade10 holds no bank
 details for it. A reopen in a currency that offers neither method SHALL still
 be allowed, and the winner then reads that payment is not yet available, with
 Contact Us, per `grade10-site/auction/winner-order`.
+
+**One order at a time** - Grade10 SHALL serialize the winner's address write,
+the reopen, the record of setup and the invoice send under the order's
+boundary, so each reads the state the one before it left.
 
 Reopening and recording setup each need payment-processing, per "Payment and
 shipment are separate grants", and each carries a reason, per "History is
@@ -1726,15 +1817,18 @@ append-only and retained".
 - **AND** the address deadline has still passed, so the winner cannot change it
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-t9v rev=1 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-90 - Address write and reopen serialize
+#### Scenario: grade10-admin-auction-post-sale-SC-90 - Address write, reopen, record and send serialize
 **Serves:** Setup - reopen setup or record it
 
 - **GIVEN** an expired order with no confirmed address
-- **WHEN** a winner address write and an operator reopen are submitted concurrently
+- **WHEN** a winner address write, an operator reopen, an operator record of
+  setup and an operator invoice send are submitted concurrently
 - **THEN** Grade10 serializes the operations under the order boundary
 - **AND** the final address snapshot and persisted deadline match the last
   committed transition
 - **AND** no partial address overwrite is possible
+- **AND** a send that commits carries the setup the transition before it left,
+  and one refused for lack of setup changes nothing
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-su0 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-91 - Address recording is logged

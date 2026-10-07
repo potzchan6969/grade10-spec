@@ -399,6 +399,7 @@ one field read Country/Region, every country and region in A-Z order, typing
 narrows the list, a query with no match leaves it empty, and an empty
 Country/Region is refused beside the field.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-rlh rev=1 -->
 #### Scenario: winner-order-SC-259 - Billing Add Address lists every country and region
 **Serves:** winner-order-US-11 - Winner bills a won lot to a different address
 
@@ -408,6 +409,7 @@ Country/Region is refused beside the field.
 - **THEN** the popup lists every country and region in A-Z order, the same
   list as delivery Add Address
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-1i2 rev=1 -->
 #### Scenario: winner-order-SC-260 - Typing filters the billing list to matching names
 **Serves:** winner-order-US-11 - Winner bills a won lot to a different address
 
@@ -430,6 +432,7 @@ alphabetically in that language.
 **Stored** - The country or region an address holds SHALL NOT change with the
 language; a winner who changes language reads the same choice in the new one.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-05o rev=1 -->
 #### Scenario: winner-order-SC-261 - A Traditional Chinese account reads and searches names in Traditional Chinese
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -455,6 +458,7 @@ offer it again, including when an operator reopens setup.
 **The order's alone** - It SHALL stay on this order only and SHALL NOT enter
 the account address book or any other order.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-zyl rev=1 -->
 #### Scenario: winner-order-SC-254 - An unsaved one-time delivery address is there on return
 **Serves:** winner-order-US-12 - Winner confirms delivery when five addresses are already saved
 
@@ -466,6 +470,7 @@ the account address book or any other order.
   addresses
 - **AND** the winner can select it and confirm setup with it
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-z4a rev=1 -->
 #### Scenario: winner-order-SC-255 - An unsaved one-time billing address is there on return
 **Serves:** winner-order-US-11 - Winner bills a won lot to a different address
 
@@ -477,6 +482,7 @@ the account address book or any other order.
 - **THEN** the one-time billing address is still offered for billing
 - **AND** the account address book does not hold it
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-m55 rev=1 -->
 #### Scenario: winner-order-SC-256 - The one-time address is gone once the setup deadline passes
 **Serves:** winner-order-US-07 - Winner misses the address deadline
 
