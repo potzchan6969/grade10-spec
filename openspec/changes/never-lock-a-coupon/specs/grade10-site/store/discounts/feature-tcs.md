@@ -880,6 +880,7 @@ Runs once per row of **Test data**.
 * Step 4 shows only the code minted for <coupon> when <counter sale A> was planned.
 * Step 3 planned <counter sale A>'s own order, which holds <line_1>, is not retired, and keeps that code live.
 
+<!-- trace:case id=g10.store-discounts.TC-f3f rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC12-1: A fresh scan of another member never continues an open sale
 
 **Classification:**
@@ -920,7 +921,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3 plans nothing onto <counter sale A>'s order.
+* Step 3 is refused, telling staff the sale carries another customer, and plans nothing onto <counter sale A>'s order.
 * Step 4 shows the order still naming customer A and holding <line_1>.
 * Step 4 shows no points of customer B on the order.
 
@@ -930,7 +931,7 @@ Runs once per row of **Test data**.
 - A gift on a counter sale carries no code; when its claim leaves — at the hour, or claimed elsewhere — its line stays on the cart, and a sale paid showing that line is settled by it as by a code
 - A sale that collects a deactivated code is reported to an operator by the commerce monitors' alert, whose log line names the order
 - A counter sale a newer promise retired, one whose coupon was claimed elsewhere among them, takes no new plan, points included, and the till asks staff to ring the goods on a new sale; a sale a reward was cleared off still takes points, and no reward
-- A till session lives ten minutes and a sale's hour outlasts it, so a sale that ran out its hour is reached again only by a fresh scan, and that scan is refused as a closed sale. A fresh scan on a cart whose sale of the same member is still open continues that sale and its code (Q27)
+- A till session lives ten minutes and a sale's hour outlasts it, so a sale that ran out its hour is reached again only by a fresh scan, and that scan is refused as a closed sale where the cart still carries its reward's code. A fresh scan on a cart whose sale of the same member is still open continues that sale and its code (Q27)
 - A reward taken off by POS's own 管理折扣 → 全部移除 is cleared off the sale the same as by 移除所有折扣
 
 ## Reconciliation
@@ -958,4 +959,12 @@ Runs once per row of **Test data**.
 - **Allocations scope (Q22), rewritten to the spec** - the settlement requirement is scoped to a sale that names the shop's allocations, so US4-TC5-1's and US4-TC6-1's pre-conditions now have the paid order name them. US4-TC9-1 settles a gift by its line, which the transport requirement reads whatever the order names. No case walks a sale that names none
 - **Renumbered, agreed** - the Agreed bullet cites `grade10-site-loyalty-programme-SC-234`, the programme scenario once issued as 224
 - **Still blocked** - US4-TC11-1 waits on Raised R1, as above
+- **Uncovered anchors** - none
+
+**Run:** QA2, 2026-10-07, tcs-rules r4, in a fresh context after QA1's update pass on the fresh scan. That pass left no run line, so whether it was blind is unrecorded. It read both suites, both deltas, `tech-design.md`, `tasks.md`, `decisions.md` with its Raised table, the Discounts page and the application repository, and checked the suite with `tcs:validate` and `trace validate`.
+
+- **A fresh scan on an open sale's cart (Q27), unblocked and agreed** - US4-TC11-1 walks `grade10-site-store-discounts-SC-30` at 12 and at 59 minutes after the plan, inside the sale's hour; the block recorded above is cleared
+- **A fresh scan on a retired sale's cart, agreed** - US4-TC8-1's third row scans the member onto the cart of a sale a newer promise retired, which the requirement refuses as a closed sale carrying a reward's code
+- **Another member's fresh scan (Q30), rewritten to the page** - US4-TC12-1 read only that nothing lands on the open sale. Step 6 of the Discounts page refuses an apply while another customer is on the cart, so step 3 is refused saying so. It takes `g10.store-discounts.TC-f3f`
+- **Raised** - R5, a fresh scan on a closed sale's cart that carries no reward's code, is marked ❓ on the Discounts page; no case walks it until it is answered
 - **Uncovered anchors** - none

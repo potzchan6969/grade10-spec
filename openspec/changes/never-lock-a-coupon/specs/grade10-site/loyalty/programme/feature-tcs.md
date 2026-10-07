@@ -231,6 +231,7 @@ Runs once per row of **Test data**.
 | 0 | warning |
 | 120 | plain |
 
+<!-- trace:case id=g10.loyalty-programme.TC-odc rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k,g10.loyalty-programme.SC-ipk -->
 ### grade10-site-loyalty-programme-US4-TC8-1: The member's coupon list shows no code for a reward coupon
 
 **Classification:**
@@ -1352,6 +1353,7 @@ Runs once per row of **Test data**.
 * Step 4 counts no forfeit for <coupon>.
 * Step 8 is not refused, and the checkout carries <coupon>'s cut.
 
+<!-- trace:case id=g10.loyalty-programme.TC-hfo rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC19-1: A checkout whose order is written over a minute after its claim is refused
 
 Runs once per row of **Test data**.
@@ -1441,4 +1443,11 @@ Runs once per row of **Test data**.
 - **Renumbered, agreed** - the scenarios once issued as 224 to 232 are `grade10-site-loyalty-programme-SC-234` to `grade10-site-loyalty-programme-SC-242`, and US7-TC5-1 is US7-TC6-1, above `align-reward-editor-design` and `add-point-expiry-reminders`. No citation of the old numbers is left in the change or on the pages, and no trace id here is held by `earn-boosts`, `align-reward-editor-design` or `add-point-expiry-reminders`
 - **Case trace id reissued, agreed** - US11-TC18-1 takes `g10.loyalty-programme.TC-ixy` at its first revision, since `align-reward-editor-design`'s US7-TC3-1 holds the id it had; its covers list is unchanged
 - **Covers, agreed** - every case's marker lists every scenario its journey's delta carries; `grade10-site-loyalty-programme-SC-233` is on every US-11 marker
+- **Uncovered anchors** - none
+
+**Run:** QA2, 2026-10-07, tcs-rules r4, in a fresh context after QA1's update pass on the fresh scan, the late order write and the code-free coupon list. That pass left no run line, so whether it was blind is unrecorded. It read both suites, both deltas, `tech-design.md`, `tasks.md`, `decisions.md` with its Raised table, the Coupons, Profile and Discounts pages, and the application repository, and checked both suites with `tcs:validate` and `trace validate`. No anchor moved: US-04 joins the journeys file as context for `grade10-site-loyalty-programme-SC-243`, and the feature set's root groups are unchanged.
+
+- **The coupon list carries no reward code, agreed** - US4-TC8-1 walks `grade10-site-loyalty-programme-SC-243`'s reward coupon in the member's wallet. Its store-coupon half is `CouponList`'s contract alone: no consumer passes a code (Q29), so no member surface reaches it and no case here walks it
+- **A late order write is refused, agreed** - US11-TC19-1 walks `grade10-site-loyalty-programme-SC-244` either side of the minute. Step 3 reads the refusal and not its words, which wait on Raised R4
+- **Markers** - US4-TC8-1 takes `g10.loyalty-programme.TC-odc` and US11-TC19-1 `g10.loyalty-programme.TC-hfo`, each listing every scenario its journey's delta carries. US4-TC1-1, US4-TC3-1 and US4-TC4-1 are carried with their words, and lack **Suites** as the durable suite does
 - **Uncovered anchors** - none
