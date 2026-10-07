@@ -10,7 +10,7 @@
 the counter's search finds,
 **so that** the paper, my letters and the console all point at one case.
 
-<!-- trace:case id=g10.vault-domain.TC-qsi rev=1 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1,g10.vault-documents-and-signing.SC-a2s,g10.vault-documents-and-signing.SC-keq,g10.vault-documents-and-signing.SC-8ct,g10.vault-documents-and-signing.SC-08p -->
+<!-- trace:case id=g10.vault-domain.TC-qsi rev=1 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1,g10.vault-documents-and-signing.SC-a2s,g10.vault-documents-and-signing.SC-8ct,g10.vault-documents-and-signing.SC-08p -->
 ### grade10-site-vault-e2e-US1-TC1-1: The sent reference is printed on the signed paper and finds the case
 
 **Classification:**
@@ -49,6 +49,7 @@ the counter's search finds,
 * Step 1 names `<reference_1>`.
 * Step 2's letter names `<reference_1>`.
 * Step 6's agreement names the case as `<reference_1>` in its facts and its footer, and prints the case id nowhere.
+* Step 6's sealed copy ends on a certificate reading `Case: <reference_1>`.
 * Step 7 returns `<case_1>` alone.
 * Step 8 opens `<case_1>`'s page, its address keyed by the case id.
 
