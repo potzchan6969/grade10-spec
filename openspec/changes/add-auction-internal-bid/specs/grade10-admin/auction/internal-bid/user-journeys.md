@@ -39,5 +39,5 @@
 ### grade10-admin-auction-internal-bid-US-07: Admin keeps protected lots secret from staff
 
 **As an** auction admin,
-**I want** operators without secret-floor access never to see an internal bid or learn that a lot has one,
-**so that** the house's floor stays known only to those allowed to set it.
+**I want** operators without secret-floor access never to see an internal bid's amount or time, or learn that an open lot has one,
+**so that** the house's floor stays known only to those allowed to set it while the lot is selling.

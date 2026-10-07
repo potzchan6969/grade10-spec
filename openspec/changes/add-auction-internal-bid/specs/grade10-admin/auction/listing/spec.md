@@ -3,7 +3,7 @@
 ## Feature set
 
 - Bought-in listings
-  - Bought in label: the Listings table reads Bought in for a lot the house won
+  - Bought in label: the Listings table reads Bought in for a lot the house won, with a Bought in filter
   - Relist: a bought-in lot offers Relist, and the new draft carries no internal bid
 
 ## MODIFIED Requirements

@@ -9,7 +9,9 @@ any collector's maximum - [Auction Management · Listings](/p/grade10-admin/auct
 ## Feature set
 
 - Setting an internal bid
-  - Amount and time: one house maximum per listing, with a required commit time from the start to the scheduled close
+  - Amount and time: one house maximum per Created or Published listing, with a required commit time from the start to the scheduled close
+  - Save limits: an amount above the ceiling or below the starting price, or a commit time already past, is refused at Save
+  - Window moves: a Created listing's window change that leaves the commit time outside it clears the internal bid, and the admin sees that
   - Before its time: amount and time change or are removed freely, and the house is not in the bidding
 - Committing at the set time
   - Commit: at its time Grade10 commits the amount as a maximum, resolved once like any commitment
@@ -21,7 +23,7 @@ any collector's maximum - [Auction Management · Listings](/p/grade10-admin/auct
 - Bought in
   - House win: a lot the house leads at the close closes Bought in, with no order, stock released and Relist offered
 - Access
-  - Secret floor: only `auction:reserve` sets, reads or learns of an internal bid, and the audit trail records that one was set, never its amount
+  - Secret floor: only `auction:reserve` sets or reads an internal bid; other operators see the house's bids under its pseudonym and learn of it only as Bought in after the close; the audit trail never records the amount or the time
 
 ## ADDED Requirements
 

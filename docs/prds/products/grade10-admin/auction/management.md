@@ -119,16 +119,19 @@ the card is in the winner's hands. The collector's half is
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
   and starts with untagged product media. Each selected source is copied into
   the listing gallery.
-- 🚧 **Internal bid** - an admin sets a house maximum and the time Grade10
-  commits it, from the start to the scheduled close. Until that time both can
+- 🚧 **Internal bid** - on a created or published listing, an admin sets a
+  house maximum and the time Grade10 commits it, from the start to the
+  scheduled close. Until that time both can
   change or be removed. After it, the time is fixed and the amount can go up
   until the close, or down only where the leader and the current bid stay as
   they are. A maximum already short of the next bid at its time is not placed,
-  and the admin sees that. Only operators who may see a secret floor see it,
-  and Relist does not carry it
+  and the admin sees that. Only operators who may see a secret floor see it;
+  other operators see the house's bids under its pseudonym, and Bought in
+  after the close. Relist does not carry it
 - 🚧 **Bought in** - a lot the internal bid wins closes with no order and no
   winner letters, releases its stock as an Unsold close does, offers Relist,
-  and reads Bought in in the Listings table. Collectors see it as sold
+  and reads Bought in in the Listings table, with a filter of its own.
+  Collectors see it as sold
 - 🚧 **Extended bidding** - a published lot past its scheduled close and still
   taking bids reads Extended in the Listings table; its status does not change
 - 🚧 **Open order** - a won lot's row opens its order in Orders

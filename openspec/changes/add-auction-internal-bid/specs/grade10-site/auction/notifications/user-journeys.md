@@ -1,5 +1,17 @@
 ## Context user journeys
 
+### grade10-site-auction-notifications-US-03: Collector raises after being outbid
+
+**As a** collector,
+**I want** to be emailed when I lose the lead on a lot I bid on,
+**so that** I can raise my maximum while the lot still takes bids.
+
+### grade10-site-auction-notifications-US-04: Collector hears a new bid on a lot they bid on
+
+**As a** collector,
+**I want** to be emailed when someone else bids on a lot I already bid on,
+**so that** I know the lot moved without being mailed on every increment.
+
 ### grade10-site-auction-notifications-US-06: Collector who lost hears the lot closed
 
 **As a** collector who bid on a lot,

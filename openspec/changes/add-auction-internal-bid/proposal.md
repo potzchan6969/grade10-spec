@@ -74,6 +74,11 @@ See [Non-Goals](decisions.md#non-goals).
 - **Public reads and letters** - the house's bids, standing and win read like
   a collector's under its pseudonym
 
+## Suite Impact
+
+- No product impact: the change touches one domain per product (auction); `grade10-admin/product-tcs.md` traces no capability this change touches, and grade10-site has no `product-tcs.md`
+- No platform impact: the store has no `platform-tcs.md`, and the admin-to-site path is walked by the `grade10-admin/auction` domain case
+
 ## Open Questions
 
 - ❓ **Legal** - may a house bid that collectors are not told about run on a
