@@ -234,10 +234,9 @@ The loyalty terminal is a Shopify POS UI extension.
 
 ### Member Name
 
-- **The member's name** — on the badge and in the modal, the name the site
-  shows: the name chosen for the shop, else the account name, else the address
-  before the `@`, sent whole for the till to lay out; 會員 for a member with
-  no name chosen for the shop while the account service cannot be reached
+- **The member's name** - on the badge and in the modal, the one the site
+  shows, sent whole; 會員 while the account service cannot name them -
+  [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card#on-the-pass)
 
 ### Session
 
