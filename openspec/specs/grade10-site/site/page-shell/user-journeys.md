@@ -12,7 +12,7 @@ shipped without it.
 
 **As a** collector,
 **I want** the header and the footer rendered before the session has resolved,
-with only the account entry updating once it does,
+with only the account entry and the cart count updating once it does,
 **so that** I can start navigating immediately without unrelated chrome
 shifting under me.
 
@@ -59,3 +59,9 @@ empty room, from any surface once Store answers the cart drawer.
 (after Store Locator when present, after Auction on auction-only),
 **so that** I can read help without losing the page I was on, whether I am on
 auction-only or full primary nav.
+
+### grade10-site-site-page-shell-US-08: Collector sees the cart count without opening the drawer
+
+**As a** signed-in collector,
+**I want** the header to show the same active-line count as my cart drawer as my cart changes,
+**so that** I can see how many active lines I hold from any surface without opening the drawer.
