@@ -170,7 +170,7 @@ bump lands with its typecheck fixes in one pull request.
       with in `packages/vault/backend/src/email/letters/format.ts`, so the
       vault test from task 3.1 passes; the vault has no snapshot to update.
       Covering `shared-dates-and-times-SC-35`.
-- [ ] 3.5 Verify: the application typecheck, the auction frontend and backend
+- [x] 3.5 Verify: the application typecheck, the auction frontend and backend
       unit lanes, the `apps/backend/grade10/auction` db lane that holds the
       mail specs, the grading and vault backend email tests, `pnpm run lint`,
       and the listing-page end-to-end smoke.
@@ -239,7 +239,7 @@ only their footer label moves, in groups 2 and 3.
       The page's sent day is a design note in the tech design (Decision 11), not
       a covered behaviour. Covering `shared-dates-and-times-SC-37`, for the
       payment deadline.
-- [ ] 4.6 Verify: the application typecheck, the auction frontend unit lane,
+- [x] 4.6 Verify: the application typecheck, the auction frontend unit lane,
       `pnpm run lint`, and the catalogue, My Auctions and invoice page
       end-to-end smoke.
 
