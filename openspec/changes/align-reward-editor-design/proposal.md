@@ -17,8 +17,8 @@ Money off, then Named variants, then picks one.
   and a stored reward of that shape opens as a free item
 - **Short choices** - discount, scope, channels, stock and window are
   segmented controls, on every admin page that lays a choice across the line
-- **Money fields** - the currency sits in front of the amount, on every admin
-  page
+- **Money fields** - the currency, `HKD`, sits in front of the amount, on
+  every admin page
 - **Grade10 admin theme** - the mock's type, heading sizes, corner radii and
   status tints, on every Grade10 admin page
 - **Preview rail** - the menu card with its points and Redeem pill, the coupon
@@ -110,12 +110,6 @@ The goals, the non-goals and the decisions behind them are in
 - No member spends points on a reward scoped to named products or a catalog
   filter without reading it as online only, and no till sale takes its coupon
 
-## Open Questions
-
-- ❓ **Currency mark** - the mock shows `HK$`; fields show the ISO code (`HKD`),
-  as console tables do, until @ecchochan decides otherwise (`decisions.md` Q5)
-- ❓ **Departures from the mock** - wait on the designer (`decisions.md` Q6)
-
 ## Follow-on Changes
 
 - **Choices announced as one** - a form's choices are announced as one
@@ -133,9 +127,6 @@ The goals, the non-goals and the decisions behind them are in
   draws the same
 - **Admin end-to-end pages on the page fixture** - so every admin spec keeps a
   capture per step
-- **The menu's one channel** - "The membership surface exports" reads
-  `RewardMenu` as stating the one channel a reward names; it becomes the one
-  channel the reward is good at, as this change feeds it
 - **Presenting only what the till takes** - the member's coupon list offers a
   counter only the coupons good in store; today it offers every coupon, and
   the till answers an online-only one with a bare refusal
@@ -157,8 +148,8 @@ Each is a `fix` commit through `/fix-bug`, not a change.
   `packages/loyalty/backend/src/services/rewards/catalog.ts:182`,
   `fulfiller.ts:46`, `:61-62`). The fix refuses a create with no coupon
   definition and refuses redeeming a stored manual handover until it is given
-  a coupon, with a regression test for each. A counter collection is not
-  affected, since its redemption mints a 100% coupon for its variant
+  a coupon definition, with a regression test for each. A counter collection
+  is not affected, since its redemption mints a 100% coupon for its variant
 
 ## Archive
 
@@ -170,4 +161,4 @@ Each is a `fix` commit through `/fix-bug`, not a change.
 - [Operator Console · Authoring a Reward](../../../docs/prds/products/grade10-site/loyalty/operator-console.md#authoring-a-reward)
 - [Coupons · Validity](../../../docs/prds/products/grade10-site/loyalty/coupons.md#validity)
 - [Rewards · Reward Shop](../../../docs/prds/products/grade10-site/loyalty/rewards.md#reward-shop)
-- [Coupons · Applying One](../../../docs/prds/products/grade10-site/loyalty/coupons.md#applying-one)
+- [Coupons · Refusals](../../../docs/prds/products/grade10-site/loyalty/coupons.md#refusals)
