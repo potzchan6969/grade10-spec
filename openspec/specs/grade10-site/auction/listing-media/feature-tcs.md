@@ -104,7 +104,7 @@ file, and the gallery stays within the cap admin-listing sets.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
@@ -416,7 +416,7 @@ file, and the gallery stays within the cap admin-listing sets.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
@@ -456,7 +456,7 @@ file, and the gallery stays within the cap admin-listing sets.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
@@ -496,7 +496,7 @@ file, and the gallery stays within the cap admin-listing sets.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
@@ -536,7 +536,7 @@ file, and the gallery stays within the cap admin-listing sets.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
