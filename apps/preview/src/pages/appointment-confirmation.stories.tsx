@@ -70,7 +70,7 @@ function AppointmentConfirmationPage() {
           record={VISIT_RECORD}
           manageHref={VAULT_MANAGE_VISIT_HREF}
           calendarHref="#calendar"
-          timeZoneLabel="Hong Kong time"
+          timeZoneLabel="Asia/Hong Kong time"
         />
 
         <section

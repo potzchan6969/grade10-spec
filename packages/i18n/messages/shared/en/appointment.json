@@ -47,8 +47,8 @@
     "nameMissing": "Tell us your name.",
     "emailMissing": "Tell us where to send the confirmation.",
     "emailInvalid": "That doesn’t look like an email address.",
-    "answerMissing": "Pick one to continue.",
-    "submit": "Book the visit"
+    "answerMissing": "This is needed to continue.",
+    "submit": "Confirm Appointment"
   },
   "summary": {
     "title": "Your Visit",

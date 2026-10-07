@@ -1,6 +1,6 @@
 import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
 import { BookingSlotPicker } from "./booking-slot-picker";
 import {
@@ -44,9 +44,23 @@ export const Default: Story = {
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
       "Sep",
     );
-    expect(canvas.getByRole("combobox", { name: /year/i })).toHaveTextContent(
-      "2026",
+    expect(canvas.queryByRole("combobox", { name: /year/i })).toBeNull();
+    expect(canvas.getByText("2026")).toBeVisible();
+    await userEvent.click(canvas.getByRole("combobox", { name: /month/i }));
+    const monthList = await within(canvasElement.ownerDocument.body).findByRole(
+      "listbox",
     );
+    expect(
+      within(monthList)
+        .getAllByRole("option")
+        .map((option) => option.textContent),
+    ).toEqual(["September", "October"]);
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => {
+      expect(
+        within(canvasElement.ownerDocument.body).queryByRole("listbox"),
+      ).toBeNull();
+    });
     expect(canvas.getByRole("grid")).toBeVisible();
 
     const sunday = canvas.getByRole("button", { name: /September 6th, 2026/ });
@@ -54,6 +68,9 @@ export const Default: Story = {
     expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
       "3",
     );
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "Sep 3, Thurs" }),
+    ).toBeVisible();
 
     expect(canvas.queryByRole("radio", { name: /^11:00/ })).toBeNull();
     await userEvent.click(canvas.getByRole("button", { name: "10:15" }));
@@ -83,6 +100,9 @@ export const LastMonth: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Next month" })).toBeDisabled();
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "Pick a time" }),
+    ).toBeVisible();
     expect(
       canvas.getByText("Pick a day to see its times."),
     ).toBeInTheDocument();

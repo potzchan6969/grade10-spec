@@ -8,6 +8,7 @@ import {
   formatActivityAt,
   formatCollectorDeadline,
   formatListingEnds,
+  formatCalendarDayLabel,
   formatLocalDay,
   formatLocalMoment,
   formatLocalTime,
@@ -121,6 +122,16 @@ describe("formatLocalDay and formatLocalTime", () => {
     expect(
       formatLocalTime(at, { locale: "en", timeZone: "Asia/Hong_Kong" }),
     ).toBe("17:15");
+  });
+});
+
+describe("formatCalendarDayLabel", () => {
+  it("renders month, day, and weekday for English", () => {
+    expect(formatCalendarDayLabel("2026-09-03")).toBe("Sep 3, Thurs");
+  });
+
+  it("refuses a malformed calendar day", () => {
+    expect(() => formatCalendarDayLabel("2026-09")).toThrow(/calendar day/);
   });
 });
 

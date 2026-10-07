@@ -614,6 +614,7 @@ export {
   formatListingClosed,
   formatListingEnds,
   formatListingOpens,
+  formatCalendarDayLabel,
   formatLocalDay,
   formatLocalMoment,
   formatLocalTime,
