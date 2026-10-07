@@ -38,6 +38,7 @@ it.
 - **Who reads it** - an operator holding the vault read grant SHALL read it;
   it SHALL need no money grant.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-syo rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-97 - A loan past its due date reads its days past due
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator opens a late loan and reads how late it is
 
@@ -46,6 +47,7 @@ it.
 - **THEN** the header reads `3 days past due` beside the status
 - **AND** no badge says the case is waiting on staff for being late
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-9xn rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-98 - The first day after the due date reads one day on the shop's calendar
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the shop's day, not the server's
 
@@ -53,6 +55,7 @@ it.
 - **WHEN** an operator opens the case
 - **THEN** the header reads `1 day past due`
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-jhz rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-99 - A loan inside its term reads no clock
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator is shown no clock on a loan that is not late
 
@@ -60,6 +63,7 @@ it.
 - **WHEN** an operator opens the case
 - **THEN** the header reads no clock beside the status
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-j1h rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-100 - A standing notice names the date to pay by instead of the count
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the date to pay by once a notice stands
 
@@ -67,6 +71,7 @@ it.
 - **WHEN** an operator opens the case
 - **THEN** the header reads `pay by 15 Dec 2026` beside the status, and no count of days
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-b6w rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-101 - The date to pay by stays once it has passed
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the same date the borrower was given after it passes
 
@@ -74,6 +79,7 @@ it.
 - **WHEN** an operator opens the case
 - **THEN** the header reads `pay by 15 Dec 2026`
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-6jj rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-102 - A case that owes no running loan reads no clock
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator is shown a clock only on a loan that runs
 
@@ -81,6 +87,7 @@ it.
 - **WHEN** an operator opens each case
 - **THEN** none of the three headers reads a clock
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-g7w rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-103 - The count does not take off the brand's grace
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads how late the loan is, not when late interest starts
 
@@ -88,6 +95,7 @@ it.
 - **WHEN** an operator opens the case
 - **THEN** the header reads `2 days past due`
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-fgo rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-104 - Staff without the money grant read the clock
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the clock without the money grant
 
@@ -101,24 +109,37 @@ Cancelling a case's visit from the console SHALL run in these steps:
 
 1. The operator presses Cancel visit.
 2. The console asks, from the case as it stands when the confirm opens, in
-   the default tone, naming the visit's day and time on the shop's clock, the
-   case's email address the collector is emailed at, and that the case keeps
-   its status. A case with no email address SHALL say that nobody is emailed.
+   the default tone, naming the visit's day and time on the clock of the shop
+   it is booked at, that shop's zone as the visit booker names it
+   (`On the shop's clock (<zone>)`), the case's email address the collector
+   is emailed at, and that the case keeps its status. It SHALL NOT read the
+   slot on the brand's zone. A case with no email address SHALL say that
+   nobody is emailed.
 3. Dismissing reads `Keep visit`. It SHALL send nothing, and the visit SHALL
    stay as it was.
 4. Confirming reads `Cancel visit`. The visit SHALL be cancelled, and the
    collector told, as `grade10-site/vault/visit-booking` states.
 5. A refusal SHALL be shown in the open confirm, which stays open.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-af3 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-105 - The confirm names the slot, the address and the status kept
 **Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the slot before the collector is told
 
-- **GIVEN** a case at `vaulted` holding a visit on 15 June 2026 at 10:00 Hong Kong time, 02:00 Coordinated Universal Time, and the address `collector@example.com`
+- **GIVEN** a case at `vaulted` holding a visit at a shop on `Asia/Hong_Kong`, on 15 June 2026 at 10:00 there, 02:00 Coordinated Universal Time, and the address `collector@example.com`
 - **WHEN** an operator presses Cancel visit
-- **THEN** a confirm in the default tone names 15 June 2026 at 10:00, says the collector is emailed at `collector@example.com`, and says the case keeps its status
+- **THEN** a confirm in the default tone names 15 June 2026 at 10:00 on the shop's clock, `Asia/Hong_Kong`, says the collector is emailed at `collector@example.com`, and says the case keeps its status
 - **AND** its two choices read `Keep visit` and `Cancel visit`
 - **AND** nothing has been sent
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4jw rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-105a - The slot reads on the booked shop's clock, not the brand's
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the hour the collector booked
+
+- **GIVEN** a brand on `Asia/Hong_Kong`, and a case holding a visit at a shop on `Asia/Tokyo`, on 15 June 2026 at 10:00 there, 09:00 Hong Kong time
+- **WHEN** an operator presses Cancel visit
+- **THEN** the confirm names 15 June 2026 at 10:00 on the shop's clock, `Asia/Tokyo`, and does not name 09:00
+
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-x20 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-106 - Keeping the visit sends nothing
 **Serves:** grade10-admin-vault-operator-queue-US-22 - a misplaced press tells the customer nothing
 
@@ -126,6 +147,7 @@ Cancelling a case's visit from the console SHALL run in these steps:
 - **WHEN** the operator presses `Keep visit`
 - **THEN** the confirm closes, the case still holds the visit, and no message is sent to the collector
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ilj rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-107 - Confirming cancels the visit and the collector is told
 **Serves:** grade10-admin-vault-operator-queue-US-22 - the operator cancels the visit knowing the collector hears
 
@@ -133,6 +155,7 @@ Cancelling a case's visit from the console SHALL run in these steps:
 - **WHEN** the operator presses `Cancel visit`
 - **THEN** the confirm closes, the case holds no visit and keeps its status, and the collector is told the visit was cancelled
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-u9b rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-108 - A case with no address says nobody is emailed
 **Serves:** grade10-admin-vault-operator-queue-US-22 - the operator learns nobody will hear before cancelling
 
@@ -140,6 +163,7 @@ Cancelling a case's visit from the console SHALL run in these steps:
 - **WHEN** an operator presses Cancel visit
 - **THEN** the confirm says that nobody is emailed, and names no address
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-jyk rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-109 - A refused cancel stays in the confirm
 **Serves:** grade10-admin-vault-operator-queue-US-22 - the operator reads why the cancel did not go where they pressed it
 
@@ -172,6 +196,7 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
   shop's day turns before the send, the notice SHALL name the date the worker
   reaches, one day later, and nothing SHALL ask again.
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-5hv rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-110 - The confirm names the address and the date to pay by
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the operator checks who will read the notice and the deadline it starts
 
@@ -180,6 +205,7 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 - **THEN** a confirm in the destructive tone names `collector@example.com` and 15 December 2026 as the date to pay by
 - **AND** nothing has been sent
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-wro rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-111 - Dismissing the notice sends nothing
 **Serves:** grade10-admin-vault-operator-queue-US-23 - a misplaced press starts no deadline
 
@@ -187,6 +213,7 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 - **WHEN** the operator dismisses it
 - **THEN** no notice is recorded on the case, no message is sent, and the custody tab still offers the notice beside the reason no written notice has been sent
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-1bh rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-112 - Confirming sends the notice naming the date shown
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the operator sends the notice they checked
 
@@ -195,6 +222,7 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 - **THEN** the confirm closes, the case carries a notice naming 15 December 2026 as the date to pay by, and the collector is sent the notice
 - **AND** the header reads `pay by 15 Dec 2026`
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-mu0 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-113 - A day that turns before the send names the later date
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the borrower is never given less time than the operator read
 
@@ -202,6 +230,7 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 - **WHEN** the operator confirms it at 00:01 on 2 December
 - **THEN** the notice names 16 December 2026 as the date to pay by, and no second confirm is asked
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-jnl rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-114 - A case with no address says nobody is emailed
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the operator learns nobody will read the notice before it goes
 
@@ -209,6 +238,7 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 - **WHEN** an operator presses Send forfeiture notice
 - **THEN** the confirm says that nobody is emailed, names no address, and names the date to pay by
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ekb rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-115 - With no notice period the confirm says so, and the refusal shows in it
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the operator reads in words why the notice cannot go
 

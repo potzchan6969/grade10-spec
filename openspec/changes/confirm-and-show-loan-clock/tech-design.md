@@ -13,6 +13,12 @@ The work is in `packages/vault/admin-frontend`, the vault console slice that
 - **The header** - `CaseDetailPanel.tsx` draws the status `Badge` beside the
   reference and already destructures `due` from the case read. Its `timeZone`
   prop is the brand's zone, which the console treats as the shop's clock.
+- **The booked shop's zone** - the case read carries `locationId`, and
+  `useLocations` gives each shop's `timeZone`, which `BookingRow`'s slot
+  picker already labels `On the shop's clock (<zone>)`. The header's visit
+  chip reads the brand's zone and the Visit block's `Booked for` line reads
+  none; `read-vault-console-on-shop-clock` moves both onto the booked shop's
+  zone, and this change leaves them to it.
 - **What the read carries** - `CaseDetail` has `asOf` (the worker's instant),
   `due.dueAt`, `notice` (`{ writtenAt, payBy }`, the newest notice) and
   `case.contact.email`. `admin.policy` (`vault:read`), read by
@@ -117,11 +123,18 @@ change for what one pure function gives.
 
 | Function | Input | Output |
 | --- | --- | --- |
-| `cancelVisitConfirm` | `{ appointmentAt: Date, email: string \| null, timeZone }` | `{ title, description }` naming the slot through `formatMoment(at, { timeZone })`, the address or that nobody is emailed, and that the case keeps its status |
+| `cancelVisitConfirm` | `{ appointmentAt: Date, email: string \| null, shopTimeZone }` | `{ title, description }` naming the slot through `formatMoment(at, { timeZone: shopTimeZone })` and `On the shop's clock (<shopTimeZone>)`, the address or that nobody is emailed, and that the case keeps its status |
 | `forfeitureNoticeConfirm` | `{ email: string \| null, payBy: Date \| null, timeZone }` | `{ title, description }` naming the address or nobody, and `formatDay(payBy, { timeZone })`, or that no date can be named while the brand has no notice period |
 
 The address is `case.contact.email`, the one every message to the collector
-goes to (Q12).
+goes to (Q12). `shopTimeZone` is the zone of the shop the fresh case names in
+`locationId`, from `useLocations`, never the panel's brand zone (Q17); a shop
+the lookup cannot find opens no confirm and shows the failure beside the
+button, as a failed read does. The notice confirm keeps the brand's zone,
+because the date it names is the worker's brand-zone day.
+
+Rejected: the panel's `timeZone` for the slot, which names another hour at a
+shop that keeps a zone of its own.
 
 ### 5. The clock is a pure derivation of the case read
 
@@ -157,9 +170,14 @@ missed a visit or asked for the item back.
   folds the same case through `loanClock` and `caseStanding` and asserts one
   count at three instants either side of the shop's midnight.
 - [A brand sets grace above zero, and the header's count runs ahead of the
-  Overdue view's, which shows `overdueDays` net of grace] -> both brands hold
-  zero grace today (`packages/app-env/src/lending.ts`); the divergence is
-  raised for the product owner rather than designed around.
+  Overdue view's, which shows `overdueDays` net of grace] -> Q18 keeps them
+  separate figures; both brands hold zero grace today
+  (`packages/app-env/src/lending.ts`), and the PRD's ❓ asks the product
+  owner whether they must agree once a brand sets grace.
+- [The header's visit chip reads the brand's zone while the confirm reads the
+  booked shop's] -> the chip is `read-vault-console-on-shop-clock`'s; the two
+  differ only at a shop whose zone is not its brand's, and group 4 starts from
+  that change's commit where it has landed.
 - [The shop's day turns between the confirm and the press] -> the instant is
   the worker's `asOf`, so the worker's date can only be later (Q13); the
   `noticePayBy` test pins that order.

@@ -1,10 +1,9 @@
 ## 1. The One Case page (grade10-spec)
 
-- [ ] 1.1 Read the three 🚧 lines under One case in
-      `docs/prds/products/grade10-site/vault/operator-console.md` against the
-      accepted requirements, and reword any line they now say otherwise -
-      **A loan's clock** says the count is the Overdue view's, which holds
-      only while the brand's grace is zero; then run `pnpm check:manual`.
+- [ ] 1.1 Read the three 🚧 lines and the ❓ on two late counts under One
+      case in `docs/prds/products/grade10-site/vault/operator-console.md`
+      against the accepted requirements, and reword any line they now say
+      otherwise; then run `pnpm check:manual`.
 - [ ] 1.2 Verify: `openspec validate confirm-and-show-loan-clock --strict` and
       `pnpm check:manual`.
 
@@ -60,16 +59,19 @@ and 5 cite the ones it serves.
 
 ## 4. Cancel visit asks first (grade10)
 
-Starts from the console zone fix's commit where that fix has landed, and takes
-its `timeZone` prop on `BookingRow` rather than adding a second.
+Starts from the console zone fix's commit and from
+`read-vault-console-on-shop-clock`'s where they have landed, and takes their
+zone on `BookingRow` rather than adding a second.
 
 - [ ] 4.1 Add the tests first, in their own commit: `cancelVisitConfirm` for a
-      case with and without an address at 10:00 Hong Kong time on 15 June 2026;
+      case with and without an address at 10:00 Hong Kong time on 15 June 2026,
+      and for a shop on `Asia/Tokyo` under a brand on `Asia/Hong_Kong`;
       then `BookingRow` under `ConfirmProvider` and `ConfirmDialog`, asking in
       the default tone with `Keep visit` and `Cancel visit`, sending nothing
       on `Keep visit`, cancelling on confirm, and keeping a refusal in the
       open confirm
       (`grade10-admin-vault-operator-queue-SC-105`,
+      `grade10-admin-vault-operator-queue-SC-105a`,
       `grade10-admin-vault-operator-queue-SC-106`,
       `grade10-admin-vault-operator-queue-SC-107`,
       `grade10-admin-vault-operator-queue-SC-108`,
@@ -79,8 +81,10 @@ its `timeZone` prop on `BookingRow` rather than adding a second.
       asked for it.
 - [ ] 4.3 Add `cases/domain/confirmWords.ts` with `cancelVisitConfirm`, and
       route Cancel visit through `useConfirm` on its own `useVisitMoves()`
-      instance after a fresh read, covering
+      instance after a fresh read, naming the slot on the zone `useLocations`
+      gives for the case's `locationId`, covering
       `grade10-admin-vault-operator-queue-SC-105`,
+      `grade10-admin-vault-operator-queue-SC-105a`,
       `grade10-admin-vault-operator-queue-SC-106`,
       `grade10-admin-vault-operator-queue-SC-107`,
       `grade10-admin-vault-operator-queue-SC-108` and

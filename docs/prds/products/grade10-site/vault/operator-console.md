@@ -130,15 +130,25 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
 - 🚧 **A loan's clock** - beside the status, a live loan past its due date
-  reads `N days past due`, counted as the Overdue view counts it; once a
-  forfeiture notice stands it reads `pay by <date>` on the shop's clock instead
-- 🚧 **Cancel visit asks first** - naming the slot on the shop's clock, that
-  the collector is emailed, and that the case keeps its status
+  reads `N days past due`, in calendar days on the shop's calendar as the
+  collector's Past due stage counts them; once a forfeiture notice stands it
+  reads `pay by <date>` on the shop's clock instead
+- 🚧 **Cancel visit asks first** - naming the slot on the clock of the shop
+  it is booked at, with that shop's zone, that the collector is emailed, and
+  that the case keeps its status
 - 🚧 **Send forfeiture notice asks first** - naming the address the notice
   goes to and the date to pay by it sets, in the destructive tone
 - ❓ **A notice to a case with no address** - whether a forfeiture notice is
   refused when the case holds no email address, rather than recorded with
   nobody told; Legal confirms
+- ❓ **Two late counts** - whether the header's days past due and the Overdue
+  view's days overdue, which is net of the brand's grace, must agree once a
+  brand sets grace; both brands hold zero grace today; the product owner
+  confirms
+- ❓ **A visit gone before the press** - what Cancel visit does when the
+  visit was cancelled or moved in another tab since the case was read:
+  whether it opens no confirm and redraws the case, or names the slot as it
+  now stands; the product owner confirms
 - **The item's facts** — the Case tab shows and edits the register's
   category, title, description, grader, grade and cert once it has the item,
   which it gets when the valuation starts, and says registration is pending
