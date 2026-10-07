@@ -232,16 +232,18 @@ describe("an id a record answers with nothing", () => {
   // One sentence for all three keys: a blank entry claims the id is answered
   // and answers it with nobody, which no rule downstream could tell from a
   // typo. Which line was owed is the rule's to say, not the reader's.
-  it.each(["hands: pm", "landed_by: decisions", "reviewed: specs"])(
-    "refuses `%s` written blank",
-    (entry) => {
-      const [key, id] = entry.split(": ");
+  it.each([
+    "hands: pm",
+    "landed_by: decisions",
+    "reviewed: specs",
+    "purpose_rewritten: shared/ui/store-cart",
+  ])("refuses `%s` written blank", (entry) => {
+    const [key, id] = entry.split(": ");
 
-      expect(refusalOf([`${key}:`, `  ${id}: ''`, ""].join("\n"))).toBe(
-        `\`${key}.${id}\` must be a line of text`,
-      );
-    },
-  );
+    expect(refusalOf([`${key}:`, `  ${id}: ''`, ""].join("\n"))).toBe(
+      `\`${key}.${id}\` must be a line of text`,
+    );
+  });
 });
 
 describe("who landed each artifact", () => {
@@ -287,6 +289,29 @@ describe("what was read again", () => {
   it("refuses a record whose read marks are not a mapping", () => {
     expect(refusalOf("reviewed: 1a2b3c4d\n")).toMatch(
       /`reviewed` must be a mapping/,
+    );
+  });
+});
+
+describe("a Purpose the change says no longer holds", () => {
+  it("reads one line per capability path", () => {
+    const { entry } = changeWith(
+      [
+        "purpose_rewritten:",
+        "  shared/ui/store-cart: the grid it names is removed",
+        "",
+      ].join("\n"),
+    );
+
+    expect(entry.error).toBeUndefined();
+    expect(entry.purposeRewritten).toEqual({
+      "shared/ui/store-cart": "the grid it names is removed",
+    });
+  });
+
+  it("refuses a record that waives it as a flag", () => {
+    expect(refusalOf("purpose_rewritten: true\n")).toMatch(
+      /`purpose_rewritten` must be a mapping/,
     );
   });
 });

@@ -282,6 +282,11 @@ function readChange(
       if (landedBy) entry.landedBy = landedBy;
       const reviewed = readIdMap("reviewed", fields.reviewed);
       if (reviewed) entry.reviewed = reviewed;
+      const rewritten = readIdMap(
+        "purpose_rewritten",
+        fields.purpose_rewritten,
+      );
+      if (rewritten) entry.purposeRewritten = rewritten;
       const skipped = skipSpecsOf(fields.skip_specs, fields.skip_specs_why);
       if (skipped !== undefined) entry.skipSpecs = skipped;
       const awaiting = readAwaiting(fields.awaiting);
@@ -572,7 +577,8 @@ export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
 
 /**
  * A record key that maps an id to one line — `hands:` against a role,
- * `landed_by:` and `reviewed:` against a schema artifact id.
+ * `landed_by:` and `reviewed:` against a schema artifact id,
+ * `purpose_rewritten:` against a capability path.
  *
  * The line is read as written, normalized only by `normalize`, and an entry
  * with no line is refused by `line` itself rather than read as absent: a blank

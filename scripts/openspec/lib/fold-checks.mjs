@@ -1,10 +1,12 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import YAML from "yaml";
 import { deltaSections } from "../../../tools/manual/src/store/read-changes.mts";
 
 const CASE_LINE = /^###\s+(\S+-TC\d+)-(\d+)\b[:\s-]*(.*)$/i;
 const CASE_MARKER = /<!--\s*trace:case id=(\S+)/;
 const SUITE_FILE = /-tcs\.md$/;
+const SPECS = "openspec/specs/";
 
 /** Each `<id>-TC<n>` a suite holds, whatever its revision, with the title it
  *  carries and the id of the trace marker directly above it. */
@@ -60,28 +62,51 @@ function suiteFindings(path, durable, folded) {
 /** A delta's `## Purpose` replaces the capability's whole Purpose. Widening it
  *  keeps the durable text and is a finding to read; anything that drops the
  *  durable text writes a change-scoped Purpose over what the capability is
- *  for, and fails. */
-function purposeFinding(path, durable, folded, deltaText) {
+ *  for, and fails, unless the change's record says why the durable Purpose
+ *  no longer holds under `purpose_rewritten.<capability>`. */
+function purposeFinding(path, durable, folded, deltaText, rewritten) {
   if (purposeOf(deltaText) === undefined) return [];
   const before = purposeOf(durable)?.trim();
   const after = purposeOf(folded)?.trim();
   if (!before || before === after) return [];
-  const widened = after?.includes(before);
-  return [
-    {
-      rule: "fold:purpose",
-      level: widened ? "warn" : "fail",
-      detail: widened
-        ? `${path}: the delta's Purpose extends the durable Purpose; read the folded text`
-        : `${path}: the delta's Purpose replaces the durable Purpose; keep the capability's Purpose and say what the change does in the proposal`,
-    },
+  const capability = path.slice(SPECS.length, -"/spec.md".length);
+  const why = lineOf(rewritten?.[capability]);
+  const finding = (level, detail) => [
+    { rule: "fold:purpose", level, detail: `${path}: ${detail}` },
   ];
+  if (after?.includes(before))
+    return finding(
+      "warn",
+      "the delta's Purpose extends the durable Purpose; read the folded text",
+    );
+  if (why)
+    return finding(
+      "warn",
+      `the delta's Purpose replaces the durable Purpose - purpose_rewritten: ${why}`,
+    );
+  return finding(
+    "fail",
+    `the delta's Purpose replaces the durable Purpose; keep the capability's Purpose and say what the change does in the proposal, or say why the durable Purpose no longer holds as \`purpose_rewritten.${capability}\` in the change's .openspec.yaml`,
+  );
 }
+
+const lineOf = (value) =>
+  typeof value === "string" && value.trim() !== "" ? value.trim() : undefined;
 
 /** The fold's own checks over what `prepareAcceptance` produced: a durable
  *  case lost or retitled under its id, and a Purpose the delta replaced. */
 export function foldChecks(prepared) {
   const findings = [];
+  const changeDir = join(
+    prepared.root,
+    "openspec",
+    "changes",
+    prepared.changeId,
+  );
+  const record = join(changeDir, ".openspec.yaml");
+  const rewritten = existsSync(record)
+    ? YAML.parse(readFileSync(record, "utf8"))?.purpose_rewritten
+    : undefined;
   for (const [path, folded] of prepared.outputs) {
     const durablePath = join(prepared.root, path);
     if (!existsSync(durablePath)) continue;
@@ -89,17 +114,16 @@ export function foldChecks(prepared) {
     if (SUITE_FILE.test(path))
       findings.push(...suiteFindings(path, durable, folded));
     else if (path.endsWith("/spec.md")) {
-      const delta = join(
-        prepared.root,
-        "openspec",
-        "changes",
-        prepared.changeId,
-        "specs",
-        path.slice("openspec/specs/".length),
-      );
+      const delta = join(changeDir, "specs", path.slice(SPECS.length));
       if (existsSync(delta))
         findings.push(
-          ...purposeFinding(path, durable, folded, readFileSync(delta, "utf8")),
+          ...purposeFinding(
+            path,
+            durable,
+            folded,
+            readFileSync(delta, "utf8"),
+            rewritten,
+          ),
         );
     }
   }

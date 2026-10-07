@@ -156,6 +156,40 @@ test("a delta Purpose that replaces the durable Purpose fails; one that extends 
   assert.deepEqual(rules(extended.warnings), ["fold:purpose"]);
 });
 
+test("a replaced Purpose the record says no longer holds warns with the reason, for that capability alone", () => {
+  const { root } = sandbox();
+  write(
+    root,
+    "openspec/specs/site/search/spec.md",
+    "# Search\n\n## Purpose\n\nReaders search the catalogue.\n\n## Requirements\n\n### Requirement: Existing\n\nThe system SHALL exist.\n",
+  );
+  const record = "openspec/changes/build-alpha/.openspec.yaml";
+  write(
+    root,
+    record,
+    "schema: grade10-planning\npurpose_rewritten:\n  site/browse: the catalogue is gone\n",
+  );
+  const elsewhere = preflightChange(root, CHANGE, passing);
+  assert.deepEqual(rules(elsewhere.failures), ["fold:purpose"]);
+  assert.match(
+    elsewhere.failures[0].detail,
+    /`purpose_rewritten\.site\/search`/,
+  );
+
+  write(
+    root,
+    record,
+    "schema: grade10-planning\npurpose_rewritten:\n  site/search: the catalogue is gone\n",
+  );
+  const waived = preflightChange(root, CHANGE, passing);
+  assert.deepEqual(waived.failures, []);
+  assert.deepEqual(rules(waived.warnings), ["fold:purpose"]);
+  assert.match(
+    waived.warnings[0].detail,
+    /replaces the durable Purpose - purpose_rewritten: the catalogue is gone/,
+  );
+});
+
 test("an untitled delta's Purpose that replaces the durable Purpose fails", () => {
   const { root } = sandbox();
   write(
