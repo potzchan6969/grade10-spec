@@ -24,8 +24,8 @@ item a collector can add.
   fill
 - **Sold out** — a sold-out product says so and cannot be added; its price
   remains visible
-- **Shipping and pickup** — static copy on every card: shipping calculated at
-  checkout, free pick-up at Hong Kong Grade10 Store
+- **Shipping and pickup** — the same copy on every card: shipping calculated
+  at checkout, free pick-up at Hong Kong Grade10 Store
 - **Shared link** — unfurls with the card's first picture, fitted whole into
   the wide box a preview fetcher lays out and padded white, and says it is the
   wide card; a card the catalogue pictures no way unfurls without a picture,
