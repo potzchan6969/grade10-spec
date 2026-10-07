@@ -517,7 +517,7 @@ sells.
 
 **Pre-conditions:**
 
-* The drawer opens on `<cart_6>`; opening it starts the status-and-price read.
+* The Unavailable Items Removed story holds `<cart_6>` behind its Open Cart button; opening the drawer starts the status-and-price read.
 * The read returns `<delisted line>` as no longer in the catalogue.
 
 **Test data:**
@@ -530,18 +530,16 @@ sells.
 
 **Steps:**
 
-1. Open the drawer on `<cart_6>`.
+1. Navigate to the Store Cart/CartDrawer Unavailable Items Removed story at `<shared ui storybook url>` and click Open Cart.
 2. Wait until the skeletons clear.
 3. Look at the drawer body.
 4. Look at the toasts.
-5. Look at the remove requests the drawer sent, in the story's Actions panel.
 
 **Expected Results:**
 
 * Step 3: `<delisted line>` does not show, not even sold out.
 * `<active line>` still shows.
 * Step 4: exactly one removal toast shows.
-* Step 5: one remove request, for `<delisted line>`.
 
 <!-- trace:case id=g10.shared-store-cart.TC-3oj rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-fy2,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs,g10.shared-store-cart.SC-psl -->
 ### shared-ui-store-cart-US6-TC2-1: No unavailable items means no removal toast
@@ -669,7 +667,7 @@ sells.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-06
 
 **Pre-conditions:**
@@ -762,6 +760,7 @@ sells.
 - **Rejected in part** - US3-TC3-1 expected the host's toast with Retry and no line named. No scenario of this capability states that toast; Cart Validation owns it (`docs/prds/products/grade10-site/store/cart-validation.md`), so the case keeps only what `shared-ui-store-cart-SC-48` states
 - **Corrected** - US3-TC1-2 walks the Loading With Lines story, which holds `loading` and applies a promo code, so every skeleton it expects is there to see; the timed Fetching On Open story ends its read before a tester can look, and applies no promo. US3-TC2-1 walks the Loading No Lines story and ends the read by setting `loading` to false in the Controls panel, for the same reason. US2-TC4-1, US2-TC5-1, US2-TC6-1, US6-TC4-1 and US6-TC6-1 walk the stories group 1 adds for their carts, and US2-TC1-2 and US2-TC7-1 walk `Default`, whose 2 lines are `shared-ui-store-cart-SC-23`'s own and whose stepper and remove control reach every row of US2-TC1-2, so a tester builds no cart by hand. `Default` copies its lines into its own state once, so the Background sends Controls panel steps only to stories that pass their args to the drawer
 - **Corrected, signed in** - US3-TC3-1 now walks a signed-in customer, as US3-TC4-1 does. A guest's cart is read from the browser, not the network (`packages/grade10-store/frontend/src/features/orders/cart/data/repositories/CartRepositoryImpl.ts:46-53` in the Grade10 repository), so failing the network cannot fail a guest's first read
+- **Corrected, reachable** - US6-TC1-1 walks the Unavailable Items Removed story, whose cart is its `<cart_6>`. It no longer reads the remove request in the Actions panel: the story handles `onRemoveItem` itself, so the panel records none, and the drawer hides an unavailable line whether or not it is removed (`shared-ui-store-cart-SC-49`). The Grade10 host test citing `shared-ui-store-cart-SC-10` proves the request (`apps/frontend/grade10/src/chrome/CartDrawer.test.tsx:811` in the Grade10 repository). US6-TC5-1's cart has no story and only a mocked read reaches it, so it plans `automation` alone, as US6-TC2-1 does
 - **Contradicted** - none
 - **Uncovered anchors** - none. US-02, US-03 and US-06 each have cases. The `Drawer export contract` group is served only by `shared-ui-store-cart-SC-01`, `shared-ui-store-cart-SC-22` and `shared-ui-store-cart-SC-43`, Out of suite and proven by the package's public-entry test and `pnpm run typecheck`. `shared-ui-store-cart-SC-13` stays walked by US6-TC3-1
 - **Revised in place** - US2-TC1, US2-TC2, US2-TC3 and US3-TC1 move to revision 2 and carry the durable `trace:case` markers, so the fold replaces the five-row cases. The five-row scenarios retire with their requirement, and no artifact of the change cites them in backticks, since the fold leaves them issued nowhere
@@ -770,4 +769,4 @@ sells.
 - **Reworded, count** - every case names the count as the page does, the count beside the drawer title, and looks at the drawer title for it, since `header` also names the site header's cart count (Q10). The badge requirement ties the badge to that name, so no case's meaning or revision moves
 - **Markers** - each case's `covers` names every scenario serving its `Trace` journey, in the folded spec's order, as `docs/governance/test-traceability.md` requires: `shared-ui-store-cart-SC-50` after `shared-ui-store-cart-SC-05` for US-02, `shared-ui-store-cart-SC-51` after `shared-ui-store-cart-SC-48` for US-03, and `shared-ui-store-cart-SC-49` after the status scenario for US-06. `shared-ui-store-cart-SC-08` and `shared-ui-store-cart-SC-01` move to revision 2, the second because the exports it imports change. `shared-ui-store-cart-SC-50`, `shared-ui-store-cart-SC-51`, US3-TC4-1 and US6-TC6-1 take numbers above every one the base branch and the active changes on the capability issue, the highest being scenario 39, which `add-store-cart-drawer-ui` issues
 
-**Run:** Blind feature pass (QA1) on 2026-10-06 for `cart-drawer-empty-state`, `shared/ui/store-cart`. Reconciled (QA2) on 2026-10-06 in a fresh context against the delta `spec.md`, `ui-design.md`, `tech-design.md`, `tasks.md`, `decisions.md`, the Cart Drawer page, the durable spec and suite, the active changes on the capability, the block and its stories at `packages/ui/src/blocks/store-cart/`, and the Grade10 host it cites.
+**Run:** Blind feature pass (QA1) on 2026-10-06 for `cart-drawer-empty-state`, `shared/ui/store-cart`. Reconciled (QA2) on 2026-10-06, and again on 2026-10-07, each in a fresh context against the delta `spec.md`, `ui-design.md`, `tech-design.md`, `tasks.md`, `decisions.md`, the Cart Drawer page, the durable spec and suite, the active changes on the capability, the block and its stories at `packages/ui/src/blocks/store-cart/`, and the Grade10 host it cites.
