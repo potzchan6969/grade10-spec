@@ -75,7 +75,10 @@ Given lines on the site sale and a refused code, the consumer SHALL supply
 prices, `subtotal` and `estimatedTotal` as before the attempt. The drawer
 SHALL keep each line on the site sale at its sale price with its list price
 struck through, SHALL render no discount row, and the promo sheet SHALL show
-the refusal message.
+the refusal message. Where the refused code is a held code the shopper picked
+from the ones that can apply, the consumer SHALL also supply that code as
+`applicable: false` with the refusal as its `inapplicableReason`, so the promo
+sheet lists it apart, muted, with no Apply control.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-8bx rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-28 - Refused code leaves sale lines and shows the refusal
@@ -88,6 +91,17 @@ the refusal message.
   list price, a line off the sale shows its price alone, the Subtotal and the
   estimated total do not change, the footer shows no discount row, and the
   promo sheet shows the refusal
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-9ie rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-54 - A picked held code the quote refuses moves apart with the refusal as its reason
+**Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the site sale
+
+- **GIVEN** a cart on the site sale and a held code listed among the ones that
+  can apply
+- **WHEN** the shopper picks that code and the quote refuses it
+- **THEN** the promo sheet shows the refusal, and the ticket is listed apart
+  from the codes that can apply, muted, with the refusal as its reason and no
+  Apply control
 
 ### Requirement: A held code that cannot apply is muted with its reason
 
