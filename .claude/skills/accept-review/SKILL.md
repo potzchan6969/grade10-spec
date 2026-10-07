@@ -127,7 +127,7 @@ One table, blockers first:
   [PRDs and OpenSpec](../../../docs/governance/prd-and-openspec.md)
 
 Under the table, list every blocker the owning hand cannot fix without a
-human's decision as a [Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
+human's decision as a [Clarification Request](../../../AGENTS.md#questions-and-blockers).
 A blocker with one obvious fix stays in the table alone.
 
 End with one verdict line: `Ready to accept`, or `Not ready - <n> blockers`.
