@@ -2010,3 +2010,39 @@ test("feature set fold permits a removal-only delta", () => {
     /Safe repetition and recovery|Reuse: one invoice/,
   );
 });
+
+const amendFeatures = (prior, durable, delta) =>
+  mergeFeatureSet(
+    featureSpec(durable),
+    `# Roles\n\n## Feature set\n\n${delta}\n## MODIFIED Requirements\n`,
+    "shared/auth/roles",
+    featureSpec(prior),
+  );
+
+test("an amendment folds its Feature set groups while others added groups and items after acceptance", () => {
+  const prior = "- Closed role set\n  - Named roles: user, admin\n";
+  const durable =
+    "- Closed role set\n  - Named roles: user, admin\n  - Unknown: dropped\n- Audit\n  - Trail: kept\n";
+  const merged = amendFeatures(
+    prior,
+    durable,
+    "- Closed role set\n  - Named roles: user, staff, admin\n",
+  );
+  assert.match(merged, /Named roles: user, staff, admin/);
+  assert.match(merged, /Unknown: dropped/);
+  assert.match(merged, /- Audit\n {2}- Trail: kept/);
+});
+
+test("an amendment still refuses a Feature set item another change edited after acceptance", () => {
+  const prior = "- Closed role set\n  - Named roles: user, admin\n";
+  const durable = "- Closed role set\n  - Named roles: user, admin, owner\n";
+  assert.throws(
+    () =>
+      amendFeatures(
+        prior,
+        durable,
+        "- Closed role set\n  - Named roles: user, staff, admin\n",
+      ),
+    /Feature set group "Closed role set" changed since this amendment began/,
+  );
+});
