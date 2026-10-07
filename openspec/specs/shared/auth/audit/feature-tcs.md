@@ -3,8 +3,6 @@
 **Status:** in-review
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
-**Out of suite:** shared-auth-audit-SC-30, shared-auth-audit-SC-31, shared-auth-audit-SC-33 — collector sign-in/out and trusted-product account reads stay off the trail; held by identityTrail.spec negatives in grade10
-
 ## shared-auth-audit-US1: Operator's identity action is recorded
 
 **As an** operator,
@@ -168,6 +166,93 @@
 
 * Step 4 lists no entry for the directory list.
 * Step 4 lists no entry for the session list.
+
+<!-- trace:case id=g10.shared-audit.TC-1g2 rev=1 covers=g10.shared-audit.SC-7ql,g10.shared-audit.SC-bks,g10.shared-audit.SC-hkt -->
+### shared-auth-audit-US1-TC5-1: Collector sign-in and sign-out write no trail entry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Recorded actions
+
+**Pre-conditions:**
+
+* customer is not signed in on <grade10 store url>.
+* An unused, unexpired sign-in link has been emailed to <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | An inbox the tester reads, with an account holding `user` only |
+| `<collector id>` | That account's user id |
+| `<start time>` | The time just before step 1 |
+
+**Steps:**
+
+1. Follow the sign-in link emailed to <collector email>.
+2. Sign out on <grade10 store url>.
+3. As admin(holds `audit:read`), open <grade10 admin audit url>.
+4. Filter by subject id <collector id>, from <start time>.
+5. Filter by actor id <collector id>, from <start time>.
+
+**Expected Results:**
+
+* Step 4 lists no entry for the sign-in or the sign-out.
+* Step 5 lists no entry for the sign-in or the sign-out.
+
+<!-- trace:case id=g10.shared-audit.TC-6ic rev=1 covers=g10.shared-audit.SC-7ql,g10.shared-audit.SC-bks,g10.shared-audit.SC-hkt -->
+### shared-auth-audit-US1-TC6-1: A trusted-product account or session read writes no trail entry
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Recorded actions
+
+**Pre-conditions:**
+
+* <subject account> exists and is signed in on one browser.
+
+**Test data:**
+
+| Read sent by a trusted product | Outcome |
+| --- | --- |
+| Whether an account exists for <subject email> | No trail entry |
+| The session of <subject account> | No trail entry |
+
+| Field | Value |
+| --- | --- |
+| `<subject account>` | An account holding `user` only |
+| `<subject email>` | That account's email |
+| `<start time>` | The time just before step 1 |
+
+**Steps:**
+
+1. Send the row's read as a trusted product.
+2. As admin(holds `audit:read`), open <grade10 admin audit url>.
+3. Filter to the identity product, from <start time>.
+
+**Expected Results:**
+
+* Step 3 lists as the row's outcome states.
 
 ---
 
