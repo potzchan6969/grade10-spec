@@ -233,7 +233,12 @@ export function formatCalendarDayLabel(
       .filter((part) => part.type !== "literal")
       .map((part) => [part.type, part.value]),
   ) as Record<string, string>;
-  return `${parts.month} ${parts.day}, ${parts.weekday}`;
+  // Month-only, as `monthName` reads it: a whole date hands Chinese the month
+  // as `9` and its `月` as a literal part, which is dropped above.
+  const month = new Intl.DateTimeFormat(intlLocale(locale), {
+    month: "short",
+  }).format(local);
+  return `${month} ${parts.day}, ${parts.weekday}`;
 }
 
 /** Collector local clock: `18:00`. */
