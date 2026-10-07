@@ -890,7 +890,7 @@ Runs once per row of **Test data**.
 * All nine fields render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-5sp rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC28-1: A personal address omits company name, address line 2 and state
+### shared-ui-invoice-and-receipt-pdf-US1-TC28-1: A personal address omits optional company, phone, address line 2 and state
 
 **Classification:**
 
@@ -907,7 +907,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `InvoicePdf` is rendered with a Ship To omitting company name, address line 2, and state.
+* `InvoicePdf` is rendered with a Ship To omitting company name, phone number, address line 2, and state.
 
 **Steps:**
 
@@ -916,8 +916,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No company name, address line 2, or state field renders.
-* Full name, address line 1, city, postal code, country, and phone number still render.
+* No company name, phone number, address line 2, or state field renders, and no blank line is reserved for them.
+* Full name, address line 1, city, postal code, and country still render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-l8y rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
 ### shared-ui-invoice-and-receipt-pdf-US1-TC29-1: A receipt's company address renders every field it is given
@@ -949,7 +949,7 @@ Runs once per row of **Test data**.
 * All nine fields render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-w85 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC30-1: A receipt's personal address omits company name, address line 2 and state
+### shared-ui-invoice-and-receipt-pdf-US1-TC30-1: A receipt's personal address omits optional company, phone, address line 2 and state
 
 **Classification:**
 
@@ -966,7 +966,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ReceiptPdf` is rendered with a Ship To omitting company name, address line 2, and state.
+* `ReceiptPdf` is rendered with a Ship To omitting company name, phone number, address line 2, and state.
 
 **Steps:**
 
@@ -975,8 +975,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No company name, address line 2, or state field renders.
-* Full name, address line 1, city, postal code, country, and phone number still render.
+* No company name, phone number, address line 2, or state field renders, and no blank line is reserved for them.
+* Full name, address line 1, city, postal code, and country still render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-nlq rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
 ### shared-ui-invoice-and-receipt-pdf-US1-TC31-1: Bank rails render below the order value, full width, not as a meta row
@@ -1423,8 +1423,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `InvoicePdf` is rendered with `bankRails` given (`swift`, `fps`,
-  `hkLocalTransfer`, and `reference` all supplied), alongside every other
+* `InvoicePdf` is rendered with `bankRails` given (`swift` and `reference`
+  supplied), alongside every other
   required prop.
 
 **Steps:**
@@ -1473,7 +1473,7 @@ Runs once per row of **Test data**.
 * Every other section of the invoice still renders.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-1qm rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC47-1: Bank details lists all three rails under their own headings
+### shared-ui-invoice-and-receipt-pdf-US1-TC47-1: Bank details lists only enabled rails under their own headings
 
 **Classification:**
 
@@ -1491,21 +1491,20 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `InvoicePdf` is rendered with `bankRails` given: `swift` (beneficiary,
-  SWIFT/BIC, account), `fps` (FPS ID, beneficiary), `hkLocalTransfer` (bank
-  & code, beneficiary, account no.).
+  SWIFT/BIC, account) and `fps` (FPS ID, beneficiary) enabled; no
+  `hkLocalTransfer` value is supplied.
 
 **Steps:**
 
 1. Render `InvoicePdf` with the supplied props.
-2. Inspect the three columns of the Bank details section.
+2. Inspect the enabled columns of the Bank details section.
 
 **Expected Results:**
 
 * The SWIFT column shows Beneficiary, SWIFT/BIC, and Account/IBAN as the
   values given.
 * The FPS column shows FPS ID and Beneficiary as the values given.
-* The HK local transfer column shows Bank & code, Beneficiary, and Account
-  no. as the values given.
+* No HK local transfer heading, details, or empty column appears.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-3uj rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
 ### shared-ui-invoice-and-receipt-pdf-US1-TC48-1: The bank reference note bolds only the reference value
@@ -1531,7 +1530,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Render `InvoicePdf` with the supplied props.
-2. Inspect the wrapped note line below the three columns' divider.
+2. Inspect the wrapped note line below the enabled rails' divider.
 
 **Expected Results:**
 
@@ -1717,9 +1716,9 @@ longer resolves to a live scenario, the same way `TC2`/`TC3`'s did once
 "Every invoice carries an invoice ID and a bank reference" requirement still
 requires the invoice PDF to name a replacement (`SC-98`, and a line of
 `SC-123`) — left untouched here, since that requirement already carries its
-own MODIFIED delta in the open `define-public-auction-identifiers` change;
-see `proposal.md`'s Open Questions for the reconciliation this leaves for
-whoever lands that change.
+own MODIFIED delta in the open `define-public-auction-identifiers` change.
+The later `replacesInvoice` amendment restores the predecessor reference in
+this renderer without reviving `replacedBy`.
 
 **Amendment, 2026-09-24 (`decisions.md` Q18-Q20):** the DOM component this
 capability specified is retired, replaced by the pdf-lib renderer `grade10`
@@ -1791,7 +1790,7 @@ or the existing suite.
 | --- | --- |
 | The section renders only when `bankRails` is given, mirroring `ReceiptPdf`'s transfer-reference precedent (scenario reading's `SC-47`/`SC-48`; suite reading's `TC45`/`TC46`) | Agreement on the presence/absence split. **Folded in:** `SC-47`, `TC45` (presence + position); `SC-48`, `TC46` (absence) |
 | No vertical space is reserved when the section is withheld (suite reading only — the scenario reading's `SC-48` claimed absence but not the gap) | Real gap the suite reading caught alone: a lazy implementation could still reserve the section's height even while skipping its content. **Folded in:** `SC-48`'s `Withheld` clause extended to require no reserved space, and its `THEN`/`AND` to name the issuer block sitting directly after the order-value summary; `TC46` extended the same way |
-| The three columns' content is its own concern, separate from presence (scenario reading's `SC-49`; suite reading folded this into `TC45` rather than splitting it) | Same substance, different granularity. **Folded in, scenario reading's split kept:** `SC-49`/`TC47`, matching this capability's established one-scenario-per-concern pattern rather than one broad case |
+| The enabled columns' content is its own concern, separate from presence (scenario reading's `SC-49`; suite reading folded this into `TC45` rather than splitting it) | Same substance, different granularity. **Folded in, scenario reading's split kept:** `SC-49`/`TC47`, matching this capability's established one-scenario-per-concern pattern rather than one broad case |
 | The reference note's bold interpolation is a distinct rendering mechanic (partial bold within a wrapped line), not covered by presence or column content alone (both readings independently proposed this) | Agreement. **Folded in:** `SC-50`/`TC48` |
 | A case per rail (SWIFT-only, FPS-only, …) | The clarified contract permits an enabled subset inside `bankRails`; the live suite covers all rails and a SWIFT/FPS subset without requiring an individual case for every combination |
 
@@ -1804,6 +1803,12 @@ ReceiptPdf while `issuerTaxDetails` remains retired; the proposal and
 technical design are updated to carry those decisions and the fixed GMT+8
 date contract; and this suite's live tax, replacement, bank-rail and date
 cases supersede the deprecated DOM-era readings above.
+
+**Clarification, 2026-10-06 (`decisions.md` Q27):** the planning owner declined
+the link from the replacement row to the retained prior PDF. The scenario and
+cases drafted for that link are not carried: `SC-51` still proves the row
+names the prior invoice, and `TC6` still covers it, so no live scenario lost
+its case.
 
 **Run:** QA2 re-run, 2026-10-06, for change `align-collector-times-to-local-zone`, in a fresh context, after the final accept-review's blocker was fixed in the `shared/dates-and-times` delta (a scenario narrowed, decisions Q20 and Q21, the tech design, the tasks and the PRD pages aligned with it) and after decisions Q28, which the planning owner settled by default and the human has not yet answered (a grading letter's shop-hours line keeps its own wording, a recorded non-goal). No new blind reading ran, and QA1 and Dev were not run again: no anchor changed after they read them, so both readings stand. It joined three readings on the anchors: QA1's blind cases from the first run, Dev's delta `spec.md`, `tech-design.md` and `tasks.md` as the editor revised them, and the human's answers (decisions Q5 to Q27, with the Q28 default) as the editor applied them to the proposal, the specs, the design, the tasks, the suites and the PRD pages. QA1, as its run recorded, read the rulebook, the `spec-to-tcs` skill, `writing.md`, `test-traceability.md` and `tcs-conventions.md`, and a bundle of the change's `proposal.md`, `decisions.md` with `## Raised`, `openspec/config.yaml`'s `context`, each capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, its PRD page and the durable suite with its `## Reconciliation` stripped; it was denied every `## Requirements` section and scenario, `tech-design.md`, `tasks.md`, every other suite, application code and every validator. Dev, as its run recorded, was denied every `feature-tcs.md`, every domain suite, every reconciliation and QA1's output. This pass was not blind and wrote no case. It read the planning skill and the rulebooks whole (`specs-to-test-cases.md`, `tcs-conventions.md`, `test-traceability.md`, `writing.md`, `task-ownership.md`), the change's artifacts, the durable spec and suite this change folds into, the touched PRD pages as a diff against `HEAD`, the store's `pdf-document.ts` and its tests and, read-only, the application's invoice page and date formatter. It re-derived the dates the cases state (the Hong Kong day, month and clock across the midnight rows) from Node's `Intl` and found them as written. It ran `pnpm run tcs:validate` on this scope, plain and with `--strict`, with no findings; `pnpm run trace validate` on the working tree and on a clean `git archive HEAD` export, where the only new issues are delta-against-durable duplicate-id pairs, none of them in this capability, and the six unresolved-reference issues the `HEAD` export reports against the durable cases of the date leaf are gone, since the delta carries the scenario id they cover; `openspec validate --strict`; `pnpm check:manual`, with no failures and no warning naming this change; `accept-preflight`; a fold of all three deltas in a scratch copy of the store, read against the durable files (every kept marker byte-identical but for revision 2 on `shared-dates-and-times-SC-11` to `shared-dates-and-times-SC-14`, every durable heading verbatim, `tcs:validate --require-suites` clean on the folded copy); and the store's node-lane tests for the formatter, PDF and `AuctionCard` files (39 pass) and the `@grade10/ui` type check. It ran none of the application's tests and did not run the story lane. It changed this line and no other in this file. No domain, product or platform suite sits above this capability (the proposal records no domain and no platform impact), so no scenario is covered at domain. It is a statement, not proof.
 
