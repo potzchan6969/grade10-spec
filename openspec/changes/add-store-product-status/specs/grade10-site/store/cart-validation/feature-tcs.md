@@ -777,7 +777,7 @@ resolve, not a dead end.
 * customer(member) is signed in and is on <grade10 store url>.
 * The cart holds 3 of <product_a>, for sale.
 * The store's checkout read counts <product_a> at 3, and every read after it counts 2.
-* The shop's checkout is mocked to accept only 2 of <product_a>, after the store's read passes.
+* The shop's checkout is mocked to fill only 2 of <product_a>, after the store's read passes.
 
 **Steps:**
 
@@ -848,6 +848,13 @@ Runs once per row of **Test data**.
 - A checkout the store's read or the shop refuses reads the cart again as opening it does, so a line the shop filled short then reads adjusted at the shop's live count.
 
 ## Reconciliation
+
+**Run:** Update on 2026-10-07, from the sixth acceptance review. The
+**Withdrawn** feature-set item now names a variant that no longer exists, as
+the requirement and SC-25 already did. SC-20 and SC-28 moved to rev 2: the
+shop would fill only 2 of the line at checkout, rather than accepts 2, since
+nothing is sold short. US3-TC2-1 mocks the shop to fill only 2; what it
+asserts is unchanged. QA2 reruns on this suite.
 
 **Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
 review's update and QA1's blind re-run. Read the anchors, these cases, the

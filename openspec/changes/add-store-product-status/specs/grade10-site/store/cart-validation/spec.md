@@ -24,8 +24,8 @@ cart is offered for checkout, where the shop becomes the authority.
     says so
   - Out of stock: a line the shop cannot fill stays, marked, for the collector
     to remove
-  - Withdrawn: a line whose product left the channel is removed and named,
-    apart from one that sold out
+  - Withdrawn: a line whose product left the channel, or whose variant no
+    longer exists, is removed and named, apart from one that sold out
   - Repriced: a line shows the current price, the change is disclosed once, and
     that price is the line's from then on
   - Never grown: a line keeps the quantity the collector asked for when more
@@ -128,13 +128,13 @@ yet read.
 - **WHEN** a collector opens a cart holding that variant
 - **THEN** the line is reported as out of stock
 
-<!-- trace:scenario id=g10.store-cart-validation.SC-6sg rev=1 -->
+<!-- trace:scenario id=g10.store-cart-validation.SC-6sg rev=2 -->
 #### Scenario: grade10-site-store-cart-validation-SC-28 - The cart is read again after a short fill
 **Serves:** grade10-site-store-cart-validation-US-03 - Collector meets the shop's own refusal
 
 - **GIVEN** a cart line requesting 3 of a variant the store's checkout read
   confirmed
-- **AND** the shop accepts 2 of it at checkout and now counts it at 2
+- **AND** the shop would fill only 2 of it at checkout, and now counts it at 2
 - **WHEN** the collector is returned to the cart
 - **THEN** every line is re-read as when the cart opens
 - **AND** the line's quantity becomes 2 and it is reported as adjusted
@@ -414,12 +414,12 @@ The lines it holds are treated as **In flight** requires.
 - **THEN** the collector is told which line was refused
 - **AND** the cart is theirs to resolve, with the other lines intact
 
-<!-- trace:scenario id=g10.store-cart-validation.SC-14e rev=1 -->
+<!-- trace:scenario id=g10.store-cart-validation.SC-14e rev=2 -->
 #### Scenario: grade10-site-store-cart-validation-SC-20 - The shop would fill a line short
 **Serves:** grade10-site-store-cart-validation-US-03 - Collector meets the shop's own refusal
 
 - **GIVEN** a cart line requesting 3 of a variant the store's read confirmed
-- **WHEN** the shop accepts 2 of it at checkout
+- **WHEN** the shop would fill only 2 of it at checkout
 - **THEN** no checkout order is created
 - **AND** the line is identified with 2 as the quantity the shop would fill
 
