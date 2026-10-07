@@ -583,13 +583,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on My Auctions with `<won_preparing_shipment>`.
+* customer(winner) is on My Auctions with <won_preparing_shipment>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| won_preparing_shipment | A won listing with invoice `paid` and fulfilment `unfulfilled` |
+| <won_preparing_shipment> | A won listing with invoice `paid` and fulfilment `unfulfilled` |
 
 **Steps:**
 
@@ -617,13 +617,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on My Auctions with `<won_shipped>`.
+* customer(winner) is on My Auctions with <won_shipped>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| won_shipped | A won listing with invoice `paid`, fulfilment `fulfilled`, and no delivery confirmation |
+| <won_shipped> | A won listing with invoice `paid`, fulfilment `fulfilled`, and no delivery confirmation |
 
 **Steps:**
 
@@ -1539,3 +1539,9 @@ Runs once per row of **Test data**.
 - **Raised** - none from this suite; Q15, a lost answer on a first bid showing no alerts toast, reaches `grade10-site-auction-account-record-US-06` and is recorded in the auction suite
 - **Contradicted** - none
 - **Uncovered anchors** - none. `grade10-site-auction-account-record-SC-14`, `grade10-site-auction-account-record-SC-15`, `grade10-site-auction-account-record-SC-64` and `grade10-site-auction-account-record-SC-65` stand by main's cases; `grade10-site-auction-account-record-SC-69` by main's `grade10-site-auction-account-record-US2-TC4-1`; `grade10-site-auction-account-record-SC-70` by main's `grade10-site-auction-account-record-US2-TC5-1` and `grade10-site-auction-account-record-US6-TC3-1`; the Feature set's card-not-charged leaf by main's `grade10-site-auction-account-record-US4-TC1-2`
+
+**Run:** 2026-10-07, QA2 for `clarify-auction-shipping-progress-copy`, appended to the durable reconciliation; earlier runs stand.
+
+- **Covered:** `grade10-site-auction-account-record-SC-20` ← `US3-TC20-1`.
+- **Covered:** `grade10-site-auction-account-record-SC-23` ← `US3-TC23-1`.
+- **Raised:** none.

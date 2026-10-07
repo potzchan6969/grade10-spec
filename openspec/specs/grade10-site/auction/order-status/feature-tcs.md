@@ -727,3 +727,8 @@ of any requirement, and a scenario draft written without sight of this suite.
 | What a reissue does to a stored `expired` | **Dropped.** Already settled by the durable Winner Order rules, and out of scope here |
 | How the suite groups status checks | **Settled.** The status readings and the refused winner write sit under `auction-status-US-05`, the winner's missed-deadline journey. The send and dispatch guards, the reopen and the operator's write sit under `auction-status-US-06`, the operator's resolution journey |
 | Where the expiry-write case sat | **Dropped.** `auction-status-US6-TC11-1` read the stored `expired` status under the operator's address journey, which it does not walk. Writing `expired` is the expired-invoice journey's, and the hold while a card payment started in time is proved in `grade10-admin/auction/post-sale` |
+
+**Run:** 2026-10-07, QA2 for `clarify-auction-shipping-progress-copy`, appended to the durable reconciliation; earlier runs stand.
+
+- **Covered:** `auction-status-SC-07` ← `US1-TC7-1`.
+- **Raised:** none.
