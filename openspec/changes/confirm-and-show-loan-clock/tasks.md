@@ -109,7 +109,7 @@ zone on `BookingRow` rather than adding a second.
 - [ ] 4.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
       and `pnpm run lint`.
 
-## 5. Send forfeiture notice asks first (grade10)
+## 5. Send forfeiture notice asks first (grade10) (owner: @ecchochan)
 
 Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
 `confirmWords.ts`.
