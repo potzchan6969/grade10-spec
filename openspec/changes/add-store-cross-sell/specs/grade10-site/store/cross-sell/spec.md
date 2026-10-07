@@ -199,7 +199,9 @@ card itself, SHALL be that card's picks.
 - **Their order** — the rail keeps the order the stock keeper chose, and never
   reorders the picks.
 - **Reaches the page** — a pick added, removed or reordered reaches the card's
-  page when the page's own reading does, within a minute.
+  page when the page's own reading does, within a minute; a pick the store's
+  copy of the catalogue does not hold yet joins the rail once the copy holds
+  it.
 - **Left out** — a pick the catalogue no longer holds is left out, and the rest
   of the rail stands.
 
@@ -211,12 +213,13 @@ card itself, SHALL be that card's picks.
 - **WHEN** a collector opens that card's page
 - **THEN** the rail's first three cards are those three, in the order the stock keeper chose them
 
-<!-- trace:scenario id=g10.store-cross-sell.SC-zts rev=1 -->
+<!-- trace:scenario id=g10.store-cross-sell.SC-zts rev=2 -->
 #### Scenario: grade10-site-store-cross-sell-SC-12 - A changed pick reaches the page
 **Serves:** grade10-site-store-cross-sell-US-03 - the stock keeper changes the cards and sees the change on the page
 
 - **GIVEN** a card whose page shows the picks the stock keeper chose
-- **WHEN** the stock keeper adds a card to them in Shopify
+- **AND** another card the store's copy of the catalogue holds
+- **WHEN** the stock keeper adds that card to them in Shopify
 - **THEN** reading the card's page afresh within a minute shows the added card among the picks, in the stock keeper's order
 
 <!-- trace:scenario id=g10.store-cross-sell.SC-64a rev=1 -->

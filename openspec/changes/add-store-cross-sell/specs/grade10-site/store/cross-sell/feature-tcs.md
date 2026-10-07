@@ -1196,7 +1196,7 @@ the card itself, and see them on its page,
 | Field | Value |
 | --- | --- |
 | `<card_25>` | A card for sale with two picks, `<pick_5>` then `<pick_6>` |
-| `<pick_5>`, `<pick_6>`, `<pick_7>` | Cards for sale sharing no world, language or type with `<card_25>`; `<pick_7>` not yet a pick |
+| `<pick_5>`, `<pick_6>`, `<pick_7>` | Cards for sale sharing no world, language or type with `<card_25>`, each held by the store's copy of the catalogue; `<pick_7>` not yet a pick |
 | `<page window>` | 1 minute |
 
 **Steps:**

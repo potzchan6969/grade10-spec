@@ -150,7 +150,7 @@ in `@grade10/ui`, with the formatter the listing already uses —
 - **A pick's tile and the similar set** — from the mirror's copy: within the
   mirror's own window on a report, 5 minutes at worst on the re-read, and the
   page's minute on top; a pick the mirror has not heard of yet is left out
-  until it has
+  until it has ([Q59](decisions.md#decisions))
 
 ### The rail has one off switch, in the brand's store config
 
