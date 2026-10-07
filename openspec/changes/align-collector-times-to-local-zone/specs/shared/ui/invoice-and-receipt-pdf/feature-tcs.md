@@ -25,9 +25,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Presentation-only contract
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-dates.test.ts`
 
 **Pre-conditions:**
 
