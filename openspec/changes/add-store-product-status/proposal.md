@@ -187,6 +187,10 @@ never after, because it names cart-validation's two reads where the durable
 checkout still names checkout open and Pay (decisions Q15). Its checkout suite
 takes its QA2 rerun first, then accepts with
 `--supersedes 137f9cec66da45e8975e44b4be5c14c272ad34df5ee7e37dca1b8061eb5e0d8c`.
+The four accept back to back in one push, in this order:
+`cart-drawer-empty-state`, `present-cart-site-sale-promo-outcomes`, which
+folds its own `shared/ui/store-cart` delta first, the
+`add-shopify-checkout-integration` amendment, then this change.
 
 ## References
 
