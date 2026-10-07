@@ -286,7 +286,7 @@ rejected, image decoding in a Worker for no gain. Check the picked file
 against the three types and 5 MB - rejected, it refuses phone photos the
 re-encoding would shrink.
 
-Makes pass: `grade10-site-store-account-profile-SC-41`.
+Makes pass: `grade10-site-store-account-profile-SC-41`, `grade10-site-store-account-profile-SC-43`.
 
 ### A refusal is a typed outcome, and the page words it
 

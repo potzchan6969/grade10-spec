@@ -330,6 +330,15 @@ it was rejected.
 - **THEN** the system refuses it, states the 5 MB limit, and the previous
   avatar is unchanged
 
+<!-- trace:scenario id=g10.store-account-profile.SC-vu5 rev=1 -->
+#### Scenario: grade10-site-store-account-profile-SC-43 - A file the browser cannot read is refused before it is sent
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
+
+- **WHEN** a collector chooses a file the browser cannot read as an image, and
+  saves
+- **THEN** the page refuses it as an unsupported type and sends nothing, and
+  the previous avatar is unchanged
+
 <!-- trace:scenario id=g10.store-account-profile.SC-xy9 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-23 - A new upload replaces the previous avatar
 **Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
