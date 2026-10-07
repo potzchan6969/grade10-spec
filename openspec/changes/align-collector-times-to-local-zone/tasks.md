@@ -18,7 +18,7 @@ group names to the tests that already prove them.
       `shared-ui-auction-listing-SC-55`. The booking summary gets a New York
       story too, for a shop in New York: the booking blocks are on the shop's
       clock (Q16, Q22), so it covers no scenario.
-- [ ] 1.5 Verify: `pnpm --filter @grade10/ui run typecheck`, the node and story
+- [x] 1.5 Verify: `pnpm --filter @grade10/ui run typecheck`, the node and story
       lanes for the formatter, tile, bid card and PDF files, `pnpm run lint`,
       `pnpm run validate:changes align-collector-times-to-local-zone` and
       `pnpm check:manual`.
