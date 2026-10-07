@@ -4,4 +4,4 @@ promoted_by: "@kinisworking"
 hands:
   dev: "@kinisworking"
 purpose_rewritten:
-  grade10-site/store/checkout: the durable Purpose names one hosted checkout per basket and a payment lifecycle Grade10 repairs, which the amendment withdraws for a fresh invoice on every Pay and unchanged backend settlement
+  grade10-site/store/checkout: the durable Purpose names one hosted checkout per basket and a payment lifecycle Grade10 repairs, which the amendment replaces with one cart per member and one invoice per cart; an edit discards the open invoice, and paying an invoice clears the cart it was made from unless the member has edited that cart since
