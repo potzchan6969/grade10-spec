@@ -570,6 +570,10 @@ export type ChangeEntry = {
    * `reviewed:` — a schema artifact id against the content id of what was
    * before it. Written by the round; read here. */
   reviewed?: Record<string, string>;
+  /** Why each capability's durable Purpose no longer holds, from
+   * `.openspec.yaml` `purpose_rewritten:` — a capability path against the
+   * line that lets the change's delta replace that Purpose at acceptance. */
+  purposeRewritten?: Record<string, string>;
   /** The change's Slack thread, from `.openspec.yaml` `thread:`, as
    * `<channel>/<ts>`. Written by the round; every message links it. */
   thread?: string;

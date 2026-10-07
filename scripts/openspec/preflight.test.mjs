@@ -1,5 +1,13 @@
 import assert from "node:assert/strict";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  renameSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { sandbox } from "./fixtures/accept-sandbox.mjs";
@@ -43,6 +51,31 @@ test("preflight passes a change that every gate accepts", () => {
   const result = preflightChange(root, CHANGE, passing);
   assert.deepEqual(result.failures, []);
   assert.match(formatPreflight([result]), /build-alpha is ready to fold/);
+});
+
+test("the folded store reads history in a submodule checkout whose .git is a relative gitdir file", () => {
+  const outer = mkdtempSync(join(tmpdir(), "superproject-"));
+  const root = join(outer, "external", "store");
+  mkdirSync(dirname(root), { recursive: true });
+  renameSync(sandbox().root, root);
+  const git = (...args) =>
+    execFileSync("git", args, { cwd: root, stdio: "pipe" });
+  git("init", "-q");
+  git("add", "-A");
+  git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "store");
+  mkdirSync(join(outer, ".git", "modules"), { recursive: true });
+  renameSync(join(root, ".git"), join(outer, ".git", "modules", "store"));
+  writeFileSync(join(root, ".git"), "gitdir: ../../.git/modules/store\n");
+  git("config", "core.worktree", "../../../external/store");
+  const result = preflightChange(root, CHANGE, (args) =>
+    args[1] === "check:manual"
+      ? spawnSync("git", ["rev-parse", "HEAD"], {
+          cwd: args[2],
+          encoding: "utf8",
+        })
+      : ok,
+  );
+  assert.deepEqual(result.failures, []);
 });
 
 function foldedWith(root, outputs) {
@@ -121,6 +154,56 @@ test("a delta Purpose that replaces the durable Purpose fails; one that extends 
   const extended = preflightChange(root, CHANGE, passing);
   assert.deepEqual(extended.failures, []);
   assert.deepEqual(rules(extended.warnings), ["fold:purpose"]);
+});
+
+test("a replaced Purpose the record says no longer holds warns with the reason, for that capability alone", () => {
+  const { root } = sandbox();
+  write(
+    root,
+    "openspec/specs/site/search/spec.md",
+    "# Search\n\n## Purpose\n\nReaders search the catalogue.\n\n## Requirements\n\n### Requirement: Existing\n\nThe system SHALL exist.\n",
+  );
+  const record = "openspec/changes/build-alpha/.openspec.yaml";
+  write(
+    root,
+    record,
+    "schema: grade10-planning\npurpose_rewritten:\n  site/browse: the catalogue is gone\n",
+  );
+  const elsewhere = preflightChange(root, CHANGE, passing);
+  assert.deepEqual(rules(elsewhere.failures), ["fold:purpose"]);
+  assert.match(
+    elsewhere.failures[0].detail,
+    /`purpose_rewritten\.site\/search`/,
+  );
+
+  write(
+    root,
+    record,
+    "schema: grade10-planning\npurpose_rewritten:\n  site/search: the catalogue is gone\n",
+  );
+  const waived = preflightChange(root, CHANGE, passing);
+  assert.deepEqual(waived.failures, []);
+  assert.deepEqual(rules(waived.warnings), ["fold:purpose"]);
+  assert.match(
+    waived.warnings[0].detail,
+    /replaces the durable Purpose - purpose_rewritten: the catalogue is gone/,
+  );
+});
+
+test("an untitled delta's Purpose that replaces the durable Purpose fails", () => {
+  const { root } = sandbox();
+  write(
+    root,
+    "openspec/specs/site/search/spec.md",
+    "# Search\n\n## Purpose\n\nReaders search the catalogue.\n\n## Requirements\n\n### Requirement: Existing\n\nThe system SHALL exist.\n",
+  );
+  const delta = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  writeFileSync(delta, readFileSync(delta, "utf8").replace("# Search\n\n", ""));
+  const replaced = preflightChange(root, CHANGE, passing);
+  assert.deepEqual(rules(replaced.failures), ["fold:purpose"]);
 });
 
 test("several changes print one summary row each and keep their own details", () => {

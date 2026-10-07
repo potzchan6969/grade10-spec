@@ -16,7 +16,8 @@ function sandbox() {
   const root = mkdtempSync(join(tmpdir(), "plan-preflight-"));
   const scripts = join(root, "scripts", "openspec");
   mkdirSync(scripts, { recursive: true });
-  for (const name of ["plan-preflight.mjs", "store-main.mjs"]) {
+  for (const name of ["plan-preflight.mjs", "store-main.mjs", "lib/args.mjs"]) {
+    mkdirSync(dirname(join(scripts, name)), { recursive: true });
     copyFileSync(join(SCRIPTS, name), join(scripts, name));
   }
   const tasks = join(root, "openspec", "changes", CHANGE, "tasks.md");

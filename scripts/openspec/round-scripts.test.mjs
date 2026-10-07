@@ -1553,3 +1553,26 @@ test("PLAN_LAND_RACE is refused unless --root was passed, before anything is rea
   assert.equal(result.status, 1);
   assert.match(result.stderr, /PLAN_LAND_RACE is a test seam and needs --root/);
 });
+
+test("an entry point skips the -- that pnpm run forwards", () => {
+  for (const script of [
+    "validate-test-cases.mjs",
+    "run-sheet.mjs",
+    "tcs-automated.mjs",
+    "plan-preflight.mjs",
+    "plan-land.mjs",
+    "round-thread.mjs",
+    "archive-preflight.mjs",
+    "../test-traceability/trace.mjs",
+  ]) {
+    const result = run(script, ["--", "--help"]);
+    assert.equal(result.status, 0, `${script}: ${result.stderr}`);
+  }
+});
+
+test("a strict entry point reads the option after the -- that pnpm run forwards", () => {
+  for (const script of ["digest.mjs", "changed-changes.mjs"]) {
+    const result = run(script, ["--", "--nope"]);
+    assert.match(result.stderr, /Unknown option '--nope'/, script);
+  }
+});

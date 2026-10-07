@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { cliArgs } from "./lib/args.mjs";
 import { changeClusters, formatClusters } from "./lib/clusters.mjs";
 import { formatPreflight, preflightChange } from "./lib/preflight.mjs";
 
 const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const args = process.argv.slice(2);
+const args = cliArgs();
 const take = (flag) => {
   const at = args.indexOf(flag);
   if (at < 0) return null;

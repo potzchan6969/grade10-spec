@@ -3,8 +3,9 @@
  * a durable id to something new replaces the durable entry without a word.
  * A changed title is that signal; a revision says so explicitly - a case
  * carries the durable case's `trace:case` marker, a story or journey sits
- * under `## MODIFIED User journeys` - or the durable title is the one this
- * change wrote itself at an earlier acceptance. */
+ * under `## MODIFIED User journeys`, a story takes the title of the journey
+ * the change restates - or the durable title is the one this change wrote
+ * itself at an earlier acceptance. */
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { walkFiles } from "./disk.mts";
@@ -119,8 +120,9 @@ function retitled(
 }
 
 /** The durable stories and cases a change's suite hands to something new.
- * `journeys` is the change's journeys file beside it, whose
- * `## MODIFIED User journeys` revises a story; `own` is the suite this change
+ * `journeys` is the change's journeys file beside it: a story titled as the
+ * journey it restates or revises there names that journey, so a durable story
+ * heading that lagged its journey may catch up; `own` is the suite this change
  * handed in at its previous acceptance, if any. */
 export function reusedSuiteIds(
   durable: string | null | undefined,
@@ -130,9 +132,10 @@ export function reusedSuiteIds(
   const held = suiteEntries(durable);
   const written = suiteEntries(delta);
   const prior = suiteEntries(own);
-  const modified = journeyEntries(
+  const named = journeyEntries(
     journeys,
-    (heading) => heading === "MODIFIED User journeys",
+    (heading) =>
+      DELTA_JOURNEYS.has(heading) || heading === "MODIFIED User journeys",
   );
   return [
     ...retitled(
@@ -140,7 +143,7 @@ export function reusedSuiteIds(
       held.stories,
       written.stories,
       prior.stories,
-      (key, entry) => modified.get(key)?.title === entry.title,
+      (key, entry) => named.get(key)?.title === entry.title,
     ),
     ...retitled(
       "case",

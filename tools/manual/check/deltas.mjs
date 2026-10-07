@@ -54,6 +54,10 @@ const ISSUED_ID = new RegExp(
   "g",
 );
 const LEADING_ID = new RegExp(`^(${SCENARIO_ID.source})\\b`);
+const MARKED_SCENARIO = new RegExp(
+  `<!--\\s*trace:scenario id=(\\S+)[^\\n]*\\n#### Scenario:\\s*(${SCENARIO_ID.source})\\b`,
+  "g",
+);
 const SCENARIO_HEADING = /^Scenario:\s*/i;
 const GWT = /^\s*(?:[-*]\s+)?\*\*(?:GIVEN|WHEN|THEN)\*\*/;
 const ARCHIVE_DATE = /^\d{4}-\d{2}-\d{2}-/;
@@ -72,7 +76,7 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   checkShape(files, ctx.add);
   checkFolded(ctx, files, shape);
   checkOverlap(files, ctx.add);
-  checkIssued(ctx, files);
+  checkIssued(ctx, files, shape);
   checkFuse(ctx, files, pages);
   checkAnchors(ctx, files);
   checkBlind(ctx, files, shape);
@@ -620,8 +624,10 @@ function checkOverlap(files, add) {
  * issued universe is the durable specs plus every delta in the store,
  * archived ones included — the fold destroys a delta's journeys, so an id an
  * archived change issued lives nowhere else, and reusing it rewrites history
- * silently. */
-function checkIssued(ctx, files) {
+ * silently. A MODIFIED scenario restating a durable id under another trace
+ * marker makes one readable id name two records; one restating it with no
+ * marker is RULE `restated`'s. */
+function checkIssued(ctx, files, shape) {
   const durable = new Map();
   for (const spec of ctx.specs.values()) {
     for (const requirement of spec.requirements) {
@@ -633,6 +639,7 @@ function checkIssued(ctx, files) {
     for (const test of spec.testCases ?? []) durable.set(test.id, spec.id);
   }
 
+  const markers = durableMarkers(ctx.roots.store, shape);
   const archived = archivedIds(ctx.roots.store);
   const issuers = new Map();
   const claim = (id, change) => {
@@ -665,17 +672,33 @@ function checkIssued(ctx, files) {
         `reuses \`${id}\`, which ${named} also issues — an id is issued once and never freed`,
       );
     }
-    // An accepted change's ADDED ids are the ones its acceptance published.
+    // An accepted change's scenarios are the ones its acceptance published.
     if (one.accepted) continue;
     for (const requirement of one.requirements) {
-      if (requirement.kind !== "added") continue;
+      if (requirement.kind === "added")
+        for (const scenario of scenarios(requirement.block.children)) {
+          const id = LEADING_ID.exec(scenario)?.[1];
+          if (id === undefined || !durable.has(id)) continue;
+          ctx.add(
+            "issued",
+            one.file,
+            `${label(requirement)} issues \`${id}\`, which \`${durable.get(id)}\` already issues — an id is issued once and never freed`,
+          );
+        }
+      if (requirement.kind !== "modified") continue;
+      const issued = markers(one.spec);
+      const restated = markersIn(requirement.block.raw);
       for (const scenario of scenarios(requirement.block.children)) {
         const id = LEADING_ID.exec(scenario)?.[1];
-        if (id === undefined || !durable.has(id)) continue;
+        const marker = issued.get(id);
+        if (marker === undefined || restated.get(id) === marker) continue;
+        const under = restated.has(id)
+          ? `under trace marker \`${restated.get(id)}\``
+          : "with no trace marker";
         ctx.add(
-          "issued",
+          restated.has(id) ? "issued" : "restated",
           one.file,
-          `${label(requirement)} issues \`${id}\`, which \`${durable.get(id)}\` already issues — an id is issued once and never freed`,
+          `${label(requirement)} restates \`${id}\` ${under}, which \`${one.spec}\` issues as \`${marker}\` — carry that marker, or give the scenario a new id`,
         );
       }
     }
@@ -734,6 +757,28 @@ function durableBlocks(root, shape) {
       : new Map();
     cache.set(id, blocks);
     return blocks;
+  };
+}
+
+/** Each scenario id a text holds under a trace marker, against the marker's
+ * id. */
+const markersIn = (text) =>
+  new Map(
+    [...text.matchAll(MARKED_SCENARIO)].map(([, marker, id]) => [id, marker]),
+  );
+
+/** `markersIn` over each capability's durable spec, read once. */
+function durableMarkers(root, shape) {
+  const cache = new Map();
+  return (id) => {
+    if (!cache.has(id)) {
+      const dir = shape.dirs.get(id);
+      cache.set(
+        id,
+        dir ? markersIn(readText(join(root, dir, "spec.md"))) : new Map(),
+      );
+    }
+    return cache.get(id);
   };
 }
 

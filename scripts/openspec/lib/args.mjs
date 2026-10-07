@@ -6,6 +6,12 @@
  * stop.
  */
 
+/** The script's own arguments: `pnpm run <script> -- <args>` forwards the
+ * `--`, which is not one of them. */
+export function cliArgs(argv = process.argv.slice(2)) {
+  return argv[0] === "--" ? argv.slice(1) : argv;
+}
+
 /**
  * `argv` parsed against `usage`'s own set: `keys` are options that take a
  * value (`--key value` or `--key=value`), `booleans` are options that do not.
@@ -16,7 +22,8 @@
  * `prefix` opens that refusal: `::error::` for a script whose refusals a
  * workflow log reads as an annotation, nothing for the rest.
  */
-export function parseArgs(argv, { keys = [], booleans = [], usage, prefix }) {
+export function parseArgs(raw, { keys = [], booleans = [], usage, prefix }) {
+  const argv = cliArgs(raw);
   const die = (message) => {
     console.error(`${prefix ?? ""}${message}`);
     process.exit(1);

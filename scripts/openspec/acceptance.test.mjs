@@ -144,6 +144,127 @@ The system SHALL return updated matching items.
   );
 });
 
+// The change template starts at `## Purpose`, so a delta written from it
+// carries no title: its top-level sections are its sections.
+const untitled = (files) =>
+  files["openspec/changes/build-alpha/specs/site/search/spec.md"].replace(
+    /^# Search\n\n/,
+    "",
+  );
+
+test("an untitled delta for a new capability takes its title from its path and claims what it moves", () => {
+  const { root, files } = sandbox();
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/specs/site/search/spec.md"),
+    untitled(files),
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(
+    folded,
+    /^# site\/search Specification\n\n## Purpose\n\nReaders find items\./,
+  );
+  assert.match(folded, /## Feature set\n\n### Search/);
+  assert.match(folded, /### Requirement: Search results/);
+  assert.deepEqual(
+    contractTargets(root, CHANGE).find(
+      (target) => target.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Purpose", "Requirement: Search results"],
+  );
+});
+
+// A delta's own title names the change, not the capability: every durable
+// spec, and the skeleton `openspec archive` writes, is titled from its path.
+test("a titled delta for a new capability takes its title from its path", () => {
+  const { root, files } = sandbox();
+  writeFileSync(
+    join(root, SEARCH_DELTA, "spec.md"),
+    `# Search — delta\n\n${untitled(files)}`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(folded, /^# site\/search Specification\n\n## Purpose\n/);
+  assert.doesNotMatch(folded, /Search — delta/);
+});
+
+test("an untitled delta folds its feature set and requirements under the durable title", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "spec.md",
+    `# Search
+
+## Purpose
+
+Readers find items.
+
+## Feature set
+
+- Current basket
+  - Review: live
+
+## Requirements
+
+### Requirement: Search results
+
+The system SHALL return matching items.
+`,
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "spec.md"),
+    `## Feature set
+
+- Saved searches
+  - Recall: one tap
+
+## ADDED Requirements
+
+### Requirement: Saved searches
+
+The system SHALL recall a saved search.
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(folded, /^# Search\n\n## Purpose\n\nReaders find items\./);
+  assert.match(folded, /- Current basket[\s\S]*- Saved searches/);
+  assert.match(
+    folded,
+    /Requirement: Search results[\s\S]*Requirement: Saved searches/,
+  );
+  assert.deepEqual(
+    contractTargets(root, CHANGE).find(
+      (target) => target.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Requirement: Saved searches"],
+  );
+});
+
+test("an untitled delta's uncommitted Purpose edit skips the drift check and says why", (t) => {
+  const { root, files } = sandbox();
+  const deltaPath = join(root, SEARCH_DELTA, "spec.md");
+  writeFileSync(deltaPath, untitled(files));
+  git(root, "init", "-q");
+  commitAll(root, "delta written");
+  writeFileSync(
+    deltaPath,
+    untitled(files).replace("Readers find items.", "Readers find more items."),
+  );
+  const warn = t.mock.method(console, "warn", () => {});
+  prepareAcceptance(root, CHANGE);
+  assert.match(
+    warn.mock.calls.map((call) => call.arguments.join(" ")).join("\n"),
+    /site\/search\/spec\.md: Purpose drift not checked - its Purpose has uncommitted edits/,
+  );
+});
+
 test("contract outputs reject a feature-group removal without a durable feature set", () => {
   const { root } = sandbox();
   const durablePath = join(root, "openspec/specs/site/search/spec.md");
@@ -283,25 +404,215 @@ The system SHALL let the member pay through the frontend.
   );
 });
 
+test("a group renamed through REMOVED keeps its place in the folded outline", () => {
+  const { root } = sandbox();
+  const durablePath = join(root, "openspec/specs/site/search/spec.md");
+  const deltaPath = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  mkdirSync(dirname(durablePath), { recursive: true });
+  writeFileSync(
+    durablePath,
+    `# Discounts
+
+## Purpose
+
+A discount reaches the order.
+
+## Feature set
+
+- One discount-code slot
+  - At most one applies per order
+- An ephemeral code, minted once
+  - Minted when an order claims it
+- Two channels
+  - The same mechanism online and at the till
+
+## Requirements
+
+### Requirement: Codes work
+
+The system SHALL mint codes.
+`,
+  );
+  writeFileSync(
+    deltaPath,
+    `# Discounts
+
+## Feature set
+
+- One discount code or coupon per order
+  - At most one applies per order
+- An ephemeral code, minted once
+  - Settled: a sale is settled against what it carried
+- A new group
+  - Listed after every group the durable spec holds
+
+## REMOVED Feature set
+
+- One discount-code slot
+
+## MODIFIED Requirements
+
+### Requirement: Codes work
+
+The system SHALL mint codes once.
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-06").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  const groups = folded.match(/^- .+$/gm);
+  assert.deepEqual(groups, [
+    "- One discount code or coupon per order",
+    "- An ephemeral code, minted once",
+    "- Two channels",
+    "- A new group",
+  ]);
+});
+
+/** Points the proposal at one section of a page with this body. */
+function linkSection(root, files, anchor, body) {
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/proposal.md"),
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "alpha.md#scope",
+      `alpha.md#${anchor}`,
+    ),
+  );
+  writeFileSync(
+    join(root, "docs/prds/products/site/alpha.md"),
+    `---\ntitle: Alpha\n---\n\n${body}`,
+  );
+}
+
 // A page link resolves on the id the manual renders the heading with, so a
 // link `pnpm check:manual` accepts is one acceptance can scope.
 test("a page anchor resolves on the manual's heading id", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "a-card-s-outcome",
+    "## A Card's Outcome\n\n❓ Whether a card is kept.\n",
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /alpha\.md#a-card-s-outcome still carries an unresolved TBC or ❓ decision/,
+  );
+});
+
+// A section reads as the manual draws it: the page's `Product decisions`
+// block is the page's own, and a flow's steps are the section's lines.
+test("a page's last section ends before its Product decisions block", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "cart",
+    `## Cart
+
+Members see the cart count.
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Help | ❓ Open | Where help sits. | Product |
+:::
+`,
+  );
+  const section = prepareAcceptance(root, CHANGE).snapshots.find(
+    (one) => one.path === "docs/prds/products/site/alpha.md#cart",
+  );
+  assert.match(section.content, /Members see the cart count/);
+  assert.doesNotMatch(section.content, /Where help sits/);
+});
+
+test("a section runs past the step headings of a flow it holds", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "the-wizard",
+    `## The Wizard
+
+:::flow{title="Planning a submission"}
+## The cards
+The collector picks the cards.
+:::
+
+❓ Whether the wizard has pages.
+
+## Fees
+
+Every plan shows its fee.
+`,
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /alpha\.md#the-wizard still carries an unresolved TBC or ❓ decision/,
+  );
+});
+
+// Acceptance reads the sections `pnpm check:manual` verifies: the proposal's
+// `## References`. A page cited anywhere else is prose, not scope.
+test("acceptance scopes only the page sections the proposal's References link", () => {
   const { root, files } = sandbox();
   const proposal = join(root, "openspec/changes/build-alpha/proposal.md");
   writeFileSync(
     proposal,
     files["openspec/changes/build-alpha/proposal.md"].replace(
-      "alpha.md#product-decisions",
-      "alpha.md#a-card-s-outcome",
+      "Let a reader search.",
+      "Let a reader search, as [Measurement](../../../docs/prds/products/site/alpha.md#product-decisions) counts it.",
     ),
   );
+  assert.deepEqual(acceptanceReadiness(root, CHANGE), []);
+  assert.deepEqual(
+    prepareAcceptance(root, CHANGE)
+      .snapshots.filter((one) => one.role === "prd-source")
+      .map((one) => one.path),
+    ["docs/prds/products/site/alpha.md#scope"],
+  );
+
+  writeFileSync(
+    proposal,
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "site/alpha.md#scope",
+      "site/gone.md#scope",
+    ),
+  );
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /docs\/prds\/products\/site\/gone\.md does not exist/,
+  );
+
+  writeFileSync(
+    proposal,
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "alpha.md#scope",
+      "alpha.md#nowhere",
+    ),
+  );
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /docs\/prds\/products\/site\/alpha\.md has no section matching #nowhere/,
+  );
+});
+
+test("a linked page that breaks the manual's grammar is one blocker among the rest", () => {
+  const { root } = sandbox();
   writeFileSync(
     join(root, "docs/prds/products/site/alpha.md"),
-    "# Alpha\n\n## A Card's Outcome\n\n❓ Whether a card is kept.\n",
+    "## Scope\n\nSearch results stay within the selected capability.\n",
   );
-  assert.throws(
-    () => prepareAcceptance(root, CHANGE),
-    /alpha\.md#a-card-s-outcome still carries an unresolved TBC or ❓ decision/,
+  rmSync(join(root, "openspec/changes/build-alpha/tasks.md"));
+  const errors = acceptanceReadiness(root, CHANGE).join("\n");
+  assert.match(errors, /required artifact is missing: .*tasks\.md/);
+  assert.match(
+    errors,
+    /docs\/prds\/products\/site\/alpha\.md: .*must start with `---` frontmatter/,
   );
 });
 
@@ -451,6 +762,80 @@ test("acceptance keeps the durable journeys of a file with no title", () => {
   );
 });
 
+const SPEC_TEMPLATE = new URL(
+  "../../openspec/schemas/grade10-planning/templates/spec.md",
+  import.meta.url,
+);
+const TEMPLATE_FILL = [
+  [
+    "One or two sentences",
+    "Readers find items. They search the catalogue by the words they type.",
+  ],
+  ["group name", "Search"],
+  ["Name: why this item exists", "Query: find an item by its words"],
+  ["requirement name", "Search results"],
+  ["requirement text", "The system SHALL return the items the query matches."],
+  ["scenario name", "Results match"],
+  ["<capability>-US-<n>", "Search"],
+  ["the walk this rule sits on", "a reader searches"],
+  ["condition", "a reader searches"],
+  ["expected outcome", "matching items appear"],
+];
+
+/** The spec template as it stands, each comment the fill knows filled and
+ * every other comment on a line of its own dropped; a comment inside a line
+ * is a placeholder, and one the fill does not know fails. */
+function deltaFromTemplate() {
+  return readFileSync(SPEC_TEMPLATE, "utf8")
+    .replace(/<!--([\s\S]*?)-->/g, (comment, inner, at, text) => {
+      const lead = inner.trim();
+      const fill = TEMPLATE_FILL.find(([key]) => lead.startsWith(key));
+      const before = text.slice(text.lastIndexOf("\n", at) + 1, at);
+      const after = text.slice(at + comment.length).split("\n", 1)[0];
+      const alone = before.trim() === "" && after.trim() === "";
+      assert.ok(fill || alone, `fill the template placeholder "${lead}"`);
+      return fill?.[1] ?? "";
+    })
+    .replaceAll("<capability>", "site-search");
+}
+
+test("a change written from the spec template folds into a new durable spec", () => {
+  const { root } = sandbox();
+  writeFileSync(join(root, SEARCH_DELTA, "spec.md"), deltaFromTemplate());
+  const prepared = prepareAcceptance(root, CHANGE);
+  const durable = prepared.outputs.get("openspec/specs/site/search/spec.md");
+  assert.match(durable, /^# site\/search Specification\n/);
+  assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
+  assert.match(durable, /## Feature set\n\n- Search\n {2}- Query: find/);
+  assert.match(durable, /### Requirement: Search results/);
+  assert.match(durable, /#### Scenario: site-search-SC-01 - Results match/);
+  assert.deepEqual(
+    prepared.contractTargets.find(
+      (one) => one.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Purpose", "Requirement: Search results"],
+  );
+});
+
+test("a change written from the spec template folds onto a durable spec", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "spec.md",
+    "# site/search Specification\n\n## Purpose\n\nReaders find items.\n\n## Feature set\n\n- Browse\n  - Shelf: see every item\n\n## Requirements\n\n### Requirement: Shelf\n\nThe system SHALL list every item.\n",
+  );
+  writeFileSync(join(root, SEARCH_DELTA, "spec.md"), deltaFromTemplate());
+  const durable = prepareAcceptance(root, CHANGE).outputs.get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(durable, /^# site\/search Specification\n/);
+  assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
+  assert.match(durable, /- Browse\n {2}- Shelf: see every item/);
+  assert.match(durable, /- Search\n {2}- Query: find an item by its words/);
+  assert.match(durable, /### Requirement: Shelf/);
+  assert.match(durable, /### Requirement: Search results/);
+});
+
 function writeDurable(root, name, content) {
   const target = join(root, "openspec/specs/site/search", name);
   mkdirSync(dirname(target), { recursive: true });
@@ -477,6 +862,82 @@ function commitAll(root, message) {
 
 const SEARCH_DELTA = "openspec/changes/build-alpha/specs/site/search";
 
+test("a delta's Walked by line replaces the durable one, reason and all", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n**Walked by:** nobody on their own - the old\nsurfaces compose it.\n\n## Retired\n\n- `site-search-US-01` - Retired by an earlier change.\n",
+  );
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## Retired\n\n- `site-search-US-01` - Retired by an earlier change.\n",
+  );
+});
+
+test("a delta that retires the last journeys may declare Walked by in their place", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n## User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "# Search journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## REMOVED User journeys\n\n### site-search-US-01: Reader opens search\n",
+  );
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## Retired\n\n- `site-search-US-01` - Retired by build-alpha.\n",
+  );
+});
+
+test("a Walked by line beside the journeys its own delta adds is refused, durable file or none", () => {
+  for (const durable of [
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the old reason.\n",
+    undefined,
+  ]) {
+    const { root } = sandbox();
+    if (durable) writeDurable(root, "user-journeys.md", durable);
+    writeFileSync(
+      join(root, SEARCH_DELTA, "user-journeys.md"),
+      "# Search journeys\n\n**Walked by:** nobody on their own - the new reason.\n\n## ADDED User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+    );
+    assert.throws(
+      () => contractOutputs(root, CHANGE, "2026-10-04"),
+      /site\/search: a Walked by line cannot stand beside the journeys this delta adds: site-search-US-01/,
+      String(durable),
+    );
+  }
+});
+
+test("a new capability walked by nobody folds to its title and the Walked by line", () => {
+  const { root } = sandbox();
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n",
+  );
+});
+
+test("a Walked by line over durable journeys is refused", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n## User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+  );
+  assert.throws(
+    () => contractOutputs(root, CHANGE, "2026-10-04"),
+    /site\/search: a Walked by line cannot stand beside the durable journeys site-search-US-01/,
+  );
+});
+
 test("an added journey that reuses a durable journey id is refused", () => {
   const { root } = sandbox();
   writeDurable(
@@ -492,6 +953,29 @@ test("an added journey that reuses a durable journey id is refused", () => {
     () => prepareAcceptance(root, CHANGE),
     /added journey site-search-US-02 already exists.*renumber/,
   );
+});
+
+test("a restated, modified or removed journey the baseline does not hold is refused, walked by nobody included", () => {
+  const { root } = sandbox();
+  const walkedByNobody =
+    "# Search journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n";
+  writeDurable(root, "user-journeys.md", walkedByNobody);
+  for (const [kind, verb] of [
+    ["Context user", "restated"],
+    ["MODIFIED User", "modified"],
+    ["REMOVED User", "removed"],
+  ]) {
+    writeFileSync(
+      join(root, SEARCH_DELTA, "user-journeys.md"),
+      `${walkedByNobody}\n## ${kind} journeys\n\n### site-search-US-01: Search contract\n`,
+    );
+    assert.throws(
+      () => prepareAcceptance(root, CHANGE),
+      new RegExp(
+        `${verb} journey site-search-US-01 is not in the accepted baseline`,
+      ),
+    );
+  }
 });
 
 test("a test case id already held by another durable journey is refused", () => {
@@ -573,6 +1057,25 @@ test("a case revised under its durable marker and a story under MODIFIED User jo
   assert.doesNotMatch(suite, /Reader uses search|Old case title/);
   assert.match(suite, /site-search-US2-TC1-2: New case title/);
   assert.match(suite, /site-search-US2-TC2-1: Kept case/);
+});
+
+test("a story heading that lagged its journey may take the journey's title the change restates", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "## User journeys\n\n### site-search-US-02: Reader searches and saves\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "## Context user journeys\n\n### site-search-US-02: Reader searches and saves\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "feature-tcs.md"),
+    "# Search cases\n\n## site-search-US2: Reader searches and saves\n\n### site-search-US2-TC3-1: Saved search reopens\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  assert.deepEqual(acceptanceReadiness(root, CHANGE), []);
 });
 
 test("a change may retitle a case it added at its previous acceptance", () => {
@@ -1425,18 +1928,28 @@ test("suite fold needs its date", () => {
   );
 });
 
-test("suite fold drops a None. placeholder once the other side lists items", () => {
-  const merged = merge(
-    suiteOf(
-      group(1, caseBlock("site-search-US1-TC1-1")),
-      "## Settled\n\n- Kept.",
-    ),
-    suiteOf(
-      group(2, caseBlock("site-search-US2-TC1-1")),
-      "## Settled\n\nNone.",
-    ),
-  );
-  assert.match(merged, /## Settled\n\n- Kept\.\n$/);
+test("suite fold drops a None placeholder, however worded, once the other side lists items", () => {
+  for (const placeholder of [
+    "None.",
+    "None yet.",
+    "None yet - the first blind pass on these two journeys.",
+    "*None yet — suite pending review.*",
+    "- None; this change introduces no unresolved product question.",
+    "- None for this slice.",
+    "- None — no earlier review decision is being carried into this change.",
+  ]) {
+    const merged = merge(
+      suiteOf(
+        group(1, caseBlock("site-search-US1-TC1-1")),
+        "## Settled\n\n- Kept.",
+      ),
+      suiteOf(
+        group(2, caseBlock("site-search-US2-TC1-1")),
+        `## Settled\n\n${placeholder}`,
+      ),
+    );
+    assert.match(merged, /## Settled\n\n- Kept\.\n$/, placeholder);
+  }
 });
 
 test("suite fold refuses a case older than the durable revision", () => {
@@ -1966,6 +2479,32 @@ test("feature set fold removes an explicitly retired root group", () => {
     merged,
     /Safe repetition and recovery|Reuse: one invoice/,
   );
+});
+
+test("feature set fold puts a renamed group where the group it replaces stood", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Alpha\n  - A: one\n- Beta\n  - B: two\n- Gamma\n  - C: three\n",
+    ),
+    `# Roles
+
+## Feature set
+
+- Beta prime
+  - B: two
+
+## REMOVED Feature set
+
+- Beta
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.deepEqual(merged.match(/^- .+$/gm), [
+    "- Alpha",
+    "- Beta prime",
+    "- Gamma",
+  ]);
 });
 
 test("feature set fold removes a labelled item without retiring its root group", () => {

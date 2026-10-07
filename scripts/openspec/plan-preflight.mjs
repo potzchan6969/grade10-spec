@@ -31,6 +31,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { cliArgs } from "./lib/args.mjs";
 import { git as gitIn, storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -185,7 +186,7 @@ function fail(...lines) {
 
 // No change id is not an error here: there is one command, so the help and the list
 // of changes in flight are what you wanted. Only a name that does not exist fails.
-const changeId = process.argv[2];
+const [changeId] = cliArgs();
 if (!changeId || changeId === "--help" || changeId === "-h") {
   help();
   process.exit();

@@ -5,6 +5,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
+import { cliArgs } from "../openspec/lib/args.mjs";
 
 const scriptRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const sourceExtensions = new Set([
@@ -218,6 +219,37 @@ function deprecatedCaseAt(lines, headingIndex) {
   return false;
 }
 
+/** The scenarios a case marker covers, read one way by `validate` and `fold`:
+ * `covers=none` stands only above a deprecated case, which covers nothing. */
+function caseMarkerCovers(rawCovers, lines, markerIndex, issue) {
+  const retired =
+    rawCovers === "none" && deprecatedCaseAt(lines, markerIndex + 1);
+  if (rawCovers === "none" && !retired)
+    issue(
+      "invalid-empty-coverage",
+      "covers=none is allowed only for a deprecated case",
+    );
+  const ids = retired ? [] : rawCovers.split(",");
+  if (ids.some((id) => !id))
+    issue(
+      "marker-shape",
+      "case marker covers must be non-empty comma-delimited scenario ids",
+    );
+  const covers = ids
+    .filter(Boolean)
+    .map((id) =>
+      canonicalMarkerReference(id, "SC", issue, "covered scenario id"),
+    );
+  if (new Set(covers).size !== covers.length)
+    issue("duplicate-cover", "case marker repeats a covered scenario id");
+  if (!/^\s*###\s+\S/.test(lines[markerIndex + 1] ?? ""))
+    issue(
+      "marker-adjacency",
+      "case marker must sit immediately above a case heading",
+    );
+  return covers;
+}
+
 function isSuiteFile(file) {
   return [
     "feature-tcs.md",
@@ -388,40 +420,12 @@ export function parseTraceGraph({
             );
           scenarios.push(record);
         } else {
-          const rawCovers = fields.covers ?? "";
-          const isDeprecated = deprecatedCaseAt(lines, index + 1);
-          const covers =
-            rawCovers === "none" && isDeprecated ? [] : rawCovers.split(",");
-          if (rawCovers === "none" && !isDeprecated)
-            issue(
-              "invalid-empty-coverage",
-              "covers=none is allowed only for a deprecated case",
-            );
-          if (rawCovers !== "none" && !covers.length)
-            issue(
-              "marker-shape",
-              "case marker must cover at least one scenario id",
-            );
-          if (covers.some((id) => !id))
-            issue(
-              "marker-shape",
-              "case marker covers must be non-empty comma-delimited scenario ids",
-            );
-          record.covers = covers
-            .filter(Boolean)
-            .map((id) =>
-              canonicalMarkerReference(id, "SC", issue, "covered scenario id"),
-            );
-          if (new Set(record.covers).size !== record.covers.length)
-            issue(
-              "duplicate-cover",
-              "case marker repeats a covered scenario id",
-            );
-          if (!/^\s*###\s+\S/.test(nextLine))
-            issue(
-              "marker-adjacency",
-              "case marker must sit immediately above a case heading",
-            );
+          record.covers = caseMarkerCovers(
+            fields.covers ?? "",
+            lines,
+            index,
+            issue,
+          );
           cases.push(record);
         }
         continue;
@@ -635,7 +639,6 @@ function readCaseMarkers(file, issues) {
     const issue = (code, message) => issues.push({ code, message, file, line });
     const fields = attributes(marker[2] ?? "", issue);
     checkFields(fields, ["id", "rev", "covers"], issue);
-    const parsedId = parseReference(fields.id ?? "");
     const id = canonicalMarkerReference(
       fields.id ?? "",
       "TC",
@@ -651,22 +654,10 @@ function readCaseMarkers(file, issues) {
       );
 
     const covers = fields.covers ?? "";
-    const coveredIds = covers.split(",");
-    if (!covers || !coveredIds.length)
-      issue("marker-shape", "case marker must cover at least one scenario id");
-    const canonicalCovers = coveredIds.map((coveredId) =>
-      canonicalMarkerReference(coveredId, "SC", issue, "covered scenario id"),
-    );
-    if (new Set(canonicalCovers).size !== canonicalCovers.length)
-      issue("duplicate-cover", "case marker repeats a covered scenario id");
-    if (!/^\s*###\s+\S/.test(lines[index + 1] ?? ""))
-      issue(
-        "marker-adjacency",
-        "case marker must sit immediately above a case heading",
-      );
+    const canonicalCovers = caseMarkerCovers(covers, lines, index, issue);
 
     records.push({
-      id: parsedId?.canonical ?? id,
+      id,
       fields: {
         id: fields.id ?? "",
         rev: revision,
@@ -1585,7 +1576,7 @@ function parseCommand(argv) {
 
 export function runCli(argv = process.argv.slice(2)) {
   try {
-    const parsed = parseCommand(argv);
+    const parsed = parseCommand(cliArgs(argv));
     if (parsed.command === "help") {
       console.log(usage);
       return 0;

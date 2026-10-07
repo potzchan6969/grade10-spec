@@ -204,6 +204,14 @@ export const RULES = [
   },
   { key: "issued", level: "fail", title: "Permanent ids issued twice" },
   {
+    // Acceptance refuses a fold that drops a durable scenario's marker; a
+    // `warn` here until the changes written before markers were carried are
+    // restated with them.
+    key: "restated",
+    level: "warn",
+    title: "MODIFIED scenarios restating a durable id with no trace marker",
+  },
+  {
     key: "marks",
     level: "fail",
     title: "🚧 lines no in-flight change delivers",

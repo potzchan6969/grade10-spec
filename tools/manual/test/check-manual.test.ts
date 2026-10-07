@@ -981,6 +981,73 @@ describe("permanent ids across the whole store", () => {
   });
 });
 
+/** A scenario's readable id and its trace marker name one record, so a
+ * MODIFIED block that restates a durable id restates its marker with it. */
+describe("a MODIFIED scenario restating a durable id", () => {
+  const marked = (id: string, marker?: string) => (lines: string[]) =>
+    marker === undefined
+      ? lines
+      : lines.flatMap((line) =>
+          line.startsWith(`#### Scenario: ${id} `)
+            ? [`<!-- trace:scenario id=${marker} rev=1 -->`, line]
+            : [line],
+        );
+  const DURABLE = {
+    "openspec/specs/demo-product/alpha/spec.md": spec(
+      "Alpha",
+      marked(
+        "alpha-SC-01",
+        "g10.demo-alpha.SC-a1b",
+      )(requirement("Alpha does things", "alpha-SC-01", "the thing")),
+      requirement("Alpha keeps a record", "alpha-SC-02", "write it down"),
+    ),
+  };
+  const modifying = (id: string, marker?: string) =>
+    changing(
+      "restating",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...marked(
+          id,
+          marker,
+        )(requirement("Alpha does things", id, "the thing better")),
+        "",
+      ].join("\n"),
+      DURABLE,
+    );
+
+  it("passes the durable id under its own marker, and a new id", async () => {
+    for (const root of [
+      modifying("alpha-SC-01", "g10.demo-alpha.SC-a1b"),
+      modifying("alpha-SC-03", "g10.demo-alpha.SC-c3d"),
+    ])
+      expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([]);
+  });
+
+  it("fails the durable id under another marker", async () => {
+    const result = await runChecks(
+      modifying("alpha-SC-01", "g10.demo-alpha.SC-zzz"),
+      NO_GIT,
+    );
+    expect(lines(result, "issued")).toEqual([
+      "openspec/changes/restating/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things` restates `alpha-SC-01` under trace marker `g10.demo-alpha.SC-zzz`, which `demo-product/alpha` issues as `g10.demo-alpha.SC-a1b` — carry that marker, or give the scenario a new id",
+    ]);
+    expect(lines(result, "restated")).toEqual([]);
+  });
+
+  it("warns on the durable id under no marker, naming the one to carry", async () => {
+    const result = await runChecks(modifying("alpha-SC-01"), NO_GIT);
+    expect(lines(result, "issued")).toEqual([]);
+    expect(lines(result, "restated")).toEqual([
+      "openspec/changes/restating/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things` restates `alpha-SC-01` with no trace marker, which `demo-product/alpha` issues as `g10.demo-alpha.SC-a1b` — carry that marker, or give the scenario a new id",
+    ]);
+    expect(result.findings.find((one) => one.rule === "restated")?.level).toBe(
+      "warn",
+    );
+  });
+});
+
 /** A rename or a removal archives green and turns `main` red: the page still
  * selects the old name, and `check:manual` gates the deploy. */
 describe("a page selecting a requirement a change is about to move", () => {

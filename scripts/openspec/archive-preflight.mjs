@@ -6,6 +6,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { contractTargetDiffs, verifyAcceptance } from "./lib/acceptance.mjs";
+import { cliArgs } from "./lib/args.mjs";
 import { git, storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -24,7 +25,7 @@ const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 // store it names the flag sits on. This store's own tests run the checkout's
 // script against a throwaway store this way, rather than a copy of the tree
 // it imports from.
-const argv = process.argv.slice(2);
+const argv = cliArgs();
 const rootIndex = argv.indexOf("--root");
 const ROOT = rootIndex === -1 ? HERE : (argv[rootIndex + 1] ?? HERE);
 if (rootIndex !== -1) argv.splice(rootIndex, 2);

@@ -242,6 +242,8 @@ function checkSuite(root, filePath, rulesRev) {
     }[level];
     err(1, missingScope);
   }
+  if (spec?.groupsError)
+    err(1, `the feature set does not fold: ${spec.groupsError}`);
 
   const cases = [];
   for (const j of suite.journeys) for (const tc of j.cases) cases.push(tc);
@@ -625,6 +627,7 @@ function checkSuite(root, filePath, rulesRev) {
 
   if (spec && level === "feature") {
     for (const [id] of spec.journeys) {
+      if (spec.context.has(id)) continue;
       const num = Number(id.match(/-US-(\d+)$/)?.[1]);
       if (!seenJourneys.has(num))
         warn(1, `spec journey \`${id}\` has no section in this suite`);

@@ -213,6 +213,7 @@ const RECORD_KEYS = [
   "hands:",
   "landed_by",
   "reviewed",
+  "purpose_rewritten",
   "thread:",
   "round_waived",
   "tasks_waived",

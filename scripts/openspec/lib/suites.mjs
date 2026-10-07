@@ -21,6 +21,7 @@ import { basename, dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCENARIO_ID } from "../../../tools/manual/src/store/markdown.mts";
 import { DECIDED_BY } from "./decided-by.mjs";
+import { foldedGroupNames } from "./feature-set.mjs";
 
 /** A scenario's heading, and a scenario listed on its own bullet. */
 const SCENARIO_HEADING = new RegExp(
@@ -249,20 +250,38 @@ export function readSpecIds(specPath) {
   const journeys = new Map();
   const scenarios = new Set();
   // A `## Feature set` root group is an anchor too, and the only kind a
-  // capability nobody walks has. Column-0 bullets only: an indented bullet is
-  // a leaf, and a leaf carries no id and anchors nothing.
-  const groups = new Set();
-  let inFeatureSet = false;
-  for (const line of text.split("\n")) {
-    if (/^##\s/.test(line)) inFeatureSet = /^##\s+Feature set\s*$/.test(line);
-    else if (inFeatureSet) {
-      const g = line.match(/^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/);
-      if (g) groups.add(g[1].replace(/:.*$/, "").trim());
-    }
+  // capability nobody walks has. A change's delta carries only the lines it
+  // changes, so its groups are those the fold leaves in the durable spec.
+  const durablePath = specPath.replace(
+    /([\\/])openspec\1changes\1[^\\/]+\1specs\1/,
+    "$1openspec$1specs$1",
+  );
+  const [durable, delta] =
+    durablePath === specPath
+      ? [text, ""]
+      : [
+          existsSync(durablePath) ? readFileSync(durablePath, "utf8") : "",
+          text,
+        ];
+  let groups = new Set();
+  let groupsError;
+  try {
+    groups = new Set(
+      foldedGroupNames(
+        durable,
+        delta,
+        dirname(specPath).replace(/^.*[\\/]specs[\\/]/, ""),
+      ),
+    );
+  } catch (error) {
+    groupsError = error.message;
   }
   // A retired journey still names the deprecated cases that walked it: a
   // change's REMOVED heading before the fold, a `## Retired` line after it.
   const retired = new Set();
+  // A change restates a journey under Context only so its scenarios can serve
+  // it; the change's suite owes a section to the journeys it adds or modifies.
+  const context = new Set();
   let section = "";
   for (const line of `${text}\n${stories}`.split("\n")) {
     const h = line.match(/^##\s+(.+?)\s*$/);
@@ -270,6 +289,7 @@ export function readSpecIds(specPath) {
     const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
     if (j && section === "REMOVED User journeys") retired.add(j[1]);
     else if (j) journeys.set(j[1], j[2]);
+    if (j && section === "Context user journeys") context.add(j[1]);
     const r = section === "Retired" && line.match(/^[-*]\s+`([\w-]+-US-\d+)`/);
     if (r) retired.add(r[1]);
     const s = line.match(SCENARIO_HEADING);
@@ -279,9 +299,11 @@ export function readSpecIds(specPath) {
   }
   return {
     journeys,
+    context,
     retired,
     scenarios,
     groups,
+    groupsError,
     // A capability nobody walks routes its anchors to the feature set. It is
     // not exempt from a suite: it carries one section, and its cases trace
     // groups rather than journeys.

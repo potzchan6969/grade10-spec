@@ -187,6 +187,14 @@ export function leadingTitle(sections: Section[]): string | undefined {
   return first?.level === 1 ? first.heading : undefined;
 }
 
+/** The `## ` sections of a delta file, with a `# ` title unwrapped — what
+ * `openspec archive` splits the file into. */
+export function deltaSections(text: string): Section[] {
+  return outline(text).flatMap((one) =>
+    one.level === 1 ? one.children : [one],
+  );
+}
+
 /** The rule under a table's header: every cell of it and nothing else. */
 const TABLE_RULE = /^-{2,}$/;
 

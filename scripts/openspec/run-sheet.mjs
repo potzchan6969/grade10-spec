@@ -30,6 +30,7 @@
 
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { cliArgs } from "./lib/args.mjs";
 import {
   BODY_FOREGROUND,
   COLUMN_WIDTHS,
@@ -779,7 +780,7 @@ function summaryDressing(sheetId, startRow, rows, runId) {
 
 // ---------------------------------------------------------------------------
 
-const args = parseArgs(process.argv.slice(2));
+const args = parseArgs(cliArgs());
 args.env = envOf(args.env);
 if (!args.env)
   die("--env is staging or production", "Omit it to default to staging.");
