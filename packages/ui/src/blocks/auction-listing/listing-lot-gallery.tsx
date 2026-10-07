@@ -4,13 +4,21 @@ import {
   CarouselProgressItem,
 } from "@grade10/design-system/components/display/carousel-progress";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { CaretLeft, CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
 import {
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -18,6 +26,8 @@ import { LISTING_LOT_GALLERY_CLASS } from "./listing-lot-layout";
 import type { ListingLotGalleryImage } from "./types";
 
 type ListingLotGalleryCopy = {
+  /** Accessible name for the selected image's zoom control and dialog. */
+  zoom: string;
   previous: string;
   next: string;
   /** Accessible name for the slide progress control. */
@@ -60,6 +70,9 @@ function ListingLotGallery({
   const [index, setIndex] = useState(0);
   const [dragPx, setDragPx] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [railVisible, setRailVisible] = useState(false);
+  const [zoomOpen, setZoomOpen] = useState(false);
+  const galleryRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLElement>(null);
   const dragRef = useRef<DragSession | null>(null);
   const reduceMotionRef = useRef(false);
@@ -67,10 +80,42 @@ function ListingLotGallery({
   const many = images.length > 1;
   const count = images.length;
   const safeIndex = count === 0 ? 0 : Math.min(Math.max(index, 0), count - 1);
+  const selectedImage = images[safeIndex];
+  const selectedImageKey = selectedImage
+    ? `${selectedImage.src}:${selectedImage.alt}`
+    : null;
   const atStart = safeIndex <= 0;
   const atEnd = count === 0 || safeIndex >= count - 1;
   const canPrev = many && !atStart;
   const canNext = many && !atEnd;
+
+  useLayoutEffect(() => {
+    const gallery = galleryRef.current;
+    if (!many || !gallery) {
+      setRailVisible(false);
+      return;
+    }
+    const thumbnailRail = gallery.querySelector<HTMLElement>("div.hidden");
+    if (!thumbnailRail) return;
+
+    const updateRailVisibility = () => {
+      const visible = getComputedStyle(thumbnailRail).display !== "none";
+      setRailVisible((current) => (current === visible ? current : visible));
+    };
+
+    updateRailVisibility();
+    const observer = new ResizeObserver(updateRailVisibility);
+    observer.observe(gallery);
+    return () => observer.disconnect();
+  }, [many]);
+
+  const previousSelectedImageKeyRef = useRef(selectedImageKey);
+  useLayoutEffect(() => {
+    if (previousSelectedImageKeyRef.current !== selectedImageKey) {
+      setZoomOpen(false);
+      previousSelectedImageKeyRef.current = selectedImageKey;
+    }
+  }, [selectedImageKey]);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -85,6 +130,7 @@ function ListingLotGallery({
   const goTo = useCallback(
     (next: number) => {
       if (count === 0) return;
+      setZoomOpen(false);
       setIndex(Math.min(Math.max(next, 0), count - 1));
       setDragPx(0);
     },
@@ -205,6 +251,7 @@ function ListingLotGallery({
     <div
       className={cn(LISTING_LOT_GALLERY_CLASS, "@container", className)}
       data-slot="listing-lot-gallery"
+      ref={galleryRef}
     >
       {/* Stage first. Thumb rail only when there is room for it on the left
           (~24rem); stacked layouts rely on chevrons and carousel progress. */}
@@ -310,6 +357,16 @@ function ListingLotGallery({
                 </Badge>
               </>
             ) : null}
+            {selectedImage ? (
+              <IconButton
+                aria-label={copy.zoom}
+                className="pointer-events-auto absolute top-4 right-4 z-20"
+                onClick={() => setZoomOpen(true)}
+                type="button"
+              >
+                <MagnifyingGlass aria-hidden size={12} weight="bold" />
+              </IconButton>
+            ) : null}
           </section>
 
           {many ? (
@@ -350,7 +407,9 @@ function ListingLotGallery({
                   <img
                     alt=""
                     className="size-full object-contain"
-                    src={thumb.src}
+                    src={
+                      railVisible ? (thumb.thumbSrc ?? thumb.src) : undefined
+                    }
                   />
                 </button>
               );
@@ -358,6 +417,22 @@ function ListingLotGallery({
           </div>
         ) : null}
       </div>
+      {selectedImage && zoomOpen ? (
+        <Dialog onOpenChange={setZoomOpen} open>
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{copy.zoom}</DialogTitle>
+            </DialogHeader>
+            <DialogBody tabIndex={0}>
+              <img
+                alt={selectedImage.alt}
+                className="w-full"
+                src={selectedImage.zoomSrc ?? selectedImage.src}
+              />
+            </DialogBody>
+          </DialogContent>
+        </Dialog>
+      ) : null}
     </div>
   );
 }
