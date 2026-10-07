@@ -1066,7 +1066,7 @@ finds it.
 
 * The catalogue publishes lots in every state — scheduled, live, ending soon, closed — across more than one category.
 * Among them, one lot has a single gallery image and one has none.
-* A user is signed in with <card> saved and is on <grade10 auction url>.
+* A user is signed in with `<card>` saved and is on `<grade10 auction url>`.
 
 **Steps:**
 
@@ -1156,25 +1156,25 @@ withdrawn.
 
 **Pre-conditions:**
 
-* <lot_1> was published and listed in the catalogue, then an operator called it off.
-* customer has <lot_1 address> saved from when <lot_1> was published.
+* `<lot_1>` was published and listed in the catalogue, then an operator called it off.
+* customer has `<lot_1 address>` saved from when `<lot_1>` was published.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot that was published, listed in the catalogue, then called off by an operator |
-| `<lot_1 address>` | The address of `<lot_1>` from when it was published |
+| lot_1 | A lot that was published, listed in the catalogue, then called off by an operator |
+| lot_1 address | The address of `<lot_1>` from when it was published |
 
 **Steps:**
 
-1. Navigate to <grade10 auction url>.
-2. Search the catalogue for the title of <lot_1>.
-3. Navigate to <lot_1 address>.
+1. Navigate to `<grade10 auction url>`.
+2. Search the catalogue for the title of `<lot_1>`.
+3. Navigate to `<lot_1 address>`.
 
 **Expected Results:**
 
-* Step 2: <lot_1> does not appear in the catalogue.
+* Step 2: `<lot_1>` does not appear in the catalogue.
 * Step 3: response status is 404 and the Page not found screen is on screen.
 
 <!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->

@@ -307,18 +307,18 @@ file, and the gallery stays within the cap admin-listing sets.
 **Pre-conditions:**
 
 * An admin holds the catalogue grant.
-* <listing_8> is a draft open in the admin media manager.
+* `<listing_8>` is a draft open in the admin media manager.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_8>` | A draft auction listing open in the media manager |
-| `<oversized_image>` | An image larger than 100 mebibytes |
+| listing_8 | A draft auction listing open in the media manager |
+| oversized_image | An image larger than 100 mebibytes |
 
 **Steps:**
 
-1. Upload <oversized_image>.
+1. Upload `<oversized_image>`.
 
 **Expected Results:**
 
@@ -1110,18 +1110,18 @@ details page.
 
 **Pre-conditions:**
 
-* A published gallery image on <listing_21> is available at `card`, `detail`, `thumb`, and `zoom`.
+* A published gallery image on `<listing_21>` is available at `card`, `detail`, `thumb`, and `zoom`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_21>` | A published auction listing with a gallery image |
-| `<unknown size>` | A size name other than `card`, `detail`, `thumb`, or `zoom` |
+| listing_21 | A published auction listing with a gallery image |
+| unknown size | A size name other than `card`, `detail`, `thumb`, or `zoom` |
 
 **Steps:**
 
-1. Request that image at <unknown size>.
+1. Request that image at `<unknown size>`.
 2. Request an image that does not exist.
 
 **Expected Results:**

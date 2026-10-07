@@ -65,11 +65,13 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - **Self-describing, in the store's words** — `<grade10 browse listing url>`, `<a collection with no artwork>`; never `<url1>`, `<TBD>`, or a bare `<store url>` where the store runs more than one brand
 - **For the value, not the thing** — where the spec names a control, name what the tester clicks
 - **Consistent within a suite** — one surface, one placeholder
-- **Never wrapped, never capitalised** — rewrite the sentence instead
+- **Never capitalised** — rewrite a sentence that would put a placeholder first
+- 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: Write a **Test data** field reference as an inline-code placeholder, such as `<lot_1>`, in pre-conditions, steps and expected results; use the same name throughout.
 
 ### Test data
 
 - **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
+- 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: In a `Field | Value` table, `Field` is a plain name such as `lot_1`. `Value` states the exact value or the conditions a fixture must meet. A test walk binds the name to a concrete value meeting that row, and expected results refer to the binding rather than pasting the row's description.
 - 2026-09-25, grade10-site/auction/domain-tcs.md: A value that is not a boundary states an assumption and the range the requirement accepts, for example `HKD 800.00 or JPY 8000 or USD 8.00 (any price > 500 minor units)`. A boundary keeps its exact number and adds a readable reading. An exact reading has no tilde: `1800s (30mins)`. Use `~` only when that reading has a remainder: `1024b (1KiB or ~1KB)`. The exact number stays, so the reading never moves the bound.
 - 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `grade10-site-auction-auction-US2-TC12-1` does. The expected result states the formula that equals it. A step does not state the outcome.
 - 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: Rows for a refusal take one value per distinct answer the provider gives, not several values that produce the same answer.
