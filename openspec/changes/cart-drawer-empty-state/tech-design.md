@@ -35,10 +35,12 @@ The work is tests, the re-cited host tests, that one host fix and the walk.
 - A host wiring change beyond the `loading` fix, a new prop, or a change to
   the block's look.
 - A Figma or design-sync change for `Cart Item Slot`; the designer owns R2.
+- A drawer state for a failed first read; the designer owns R7, and the host
+  fix stands under either answer.
 - Automating the failed first read in the walk: group 2's host tests prove
   `shared-ui-store-cart-SC-48` and `shared-ui-store-cart-SC-51`, and US3-TC3-1
-  and US3-TC4-1 stay unautomated Staging cases. A failed review over a read basket keeps the
-  state `add-store-cart-drawer-ui` gives it.
+  and US3-TC4-1 stay unautomated Staging cases. A failed review over a read
+  basket keeps the state `add-store-cart-drawer-ui` gives it.
 
 ## Decisions
 
