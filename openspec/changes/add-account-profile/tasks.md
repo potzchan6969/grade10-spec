@@ -6,8 +6,9 @@ in group 1 and can run beside it.
 
 ## 1. Shared profile components (grade10-spec)
 
-Lands only after the designer answers decisions Q5 and the person gives the
-Design Override yes for `packages/ui/src/blocks/store-profile` and, for 1.10,
+Built from the requirements with no frames, as decisions Q5 settles for this
+change. Lands only after the person gives the Design Override yes for
+`packages/ui/src/blocks/store-profile` and, for 1.10,
 `packages/design-system/src/components/display/avatar.tsx` and
 `packages/ui/src/blocks/site-chrome/site-header.tsx`.
 
@@ -47,7 +48,7 @@ Depends on the contract in group 2 and the columns in group 3.
 - [x] 4.1 Make `grade10-site-store-account-profile-SC-03`, `grade10-site-store-account-profile-SC-04`, `grade10-site-store-account-profile-SC-05` and `grade10-site-store-account-profile-SC-07` pass by composing the read from the row and the session, so `profile.get` never returns null
 - [x] 4.2 Make `grade10-site-store-account-profile-SC-04` pass: fill a display name the collector never wrote from the session on `profile.get` and `profile.update` — the session name, else the part of the session's email before the `@`, never a generated identifier
 - [ ] 4.3 Make `grade10-site-store-membership-SC-78`, `grade10-site-store-membership-SC-87`, `grade10-site-store-membership-SC-88`, `grade10-site-store-membership-SC-89`, `grade10-site-store-membership-SC-90`, `grade10-site-store-wallet-member-card-SC-13`, `grade10-site-store-wallet-member-card-SC-18`, `grade10-site-store-wallet-member-card-SC-59` and `grade10-site-store-wallet-member-card-SC-60` pass: every member name resolves through `memberName` — the shop name, else the account name, else the part of the email before the `@` — for the profile, the POS directory's `displayNames`, the customer-details badge and the wallet sweep, with a required `name` on auth's `AccountIdentity`, looked up in one uncached batch only for members with no shop name. Built in `ea91833d32`; this task cites the ids in its tests
-- [ ] 4.4 Make `grade10-site-store-account-profile-SC-08`, `grade10-site-store-account-profile-SC-09` and `grade10-site-store-account-profile-SC-10` pass by reading member-since from `first_saved_at` and never from `created_at`
+- [ ] 4.4 Make `grade10-site-store-account-profile-SC-08`, `grade10-site-store-account-profile-SC-09`, `grade10-site-store-account-profile-SC-10` and `grade10-site-store-account-profile-SC-40` pass by reading member-since from `first_saved_at` and never from `created_at`; a row saved before the column existed stays NULL until its next save, with no backfill (decisions Q11)
 - [ ] 4.5 Make `grade10-site-store-account-profile-SC-01` and `grade10-site-store-account-profile-SC-02` pass — the profile resolves from the session and from no input
 - [ ] 4.6 Make `grade10-site-store-account-profile-SC-12`, `grade10-site-store-account-profile-SC-13`, `grade10-site-store-account-profile-SC-14`, `grade10-site-store-account-profile-SC-15`, `grade10-site-store-account-profile-SC-16`, `grade10-site-store-account-profile-SC-17`, `grade10-site-store-account-profile-SC-18`, `grade10-site-store-account-profile-SC-19` and `grade10-site-store-account-profile-SC-29` pass on the update procedure, whose input refuses an excess key, writing the display name and bio together or not at all
 - [ ] 4.7 Bind an `AVATARS` R2 bucket per environment in both brands' store `wrangler.jsonc` through `createR2ObjectStorePort` from `@grade10/object-store`, which fails by binding name when it is absent, register the `avatars` storage area, and run `pnpm run cf-typegen`
@@ -67,16 +68,17 @@ Depends on the contract in group 2 and the columns in group 3.
 Depends on group 1 through the submodule, and on groups 2 and 4.
 
 - [ ] 5.1 Bump the `external/grade10-spec` submodule to the commit carrying group 1
-- [ ] 5.2 Make `grade10-site-store-account-profile-SC-25`, `grade10-site-store-account-profile-SC-26` and `grade10-site-store-account-profile-SC-36` pass by deriving the fallback in the profile feature from the display name it holds, with the design system's `avatarInitial`
-- [ ] 5.3 Add the avatar use cases and repository methods to `features/account/profile`, center-cropping and re-encoding to 512×512 in the browser before upload; decisions Q10 decides whether the feature also judges the picked file first
+- [ ] 5.2 Make `grade10-site-store-account-profile-SC-25`, `grade10-site-store-account-profile-SC-26`, `grade10-site-store-account-profile-SC-36` and `grade10-site-store-account-profile-SC-42` pass by deriving the fallback in the profile feature from the display name it holds, with the design system's `avatarInitial`, never from the account's own picture (decisions Q16)
+- [ ] 5.3 Make `grade10-site-store-account-profile-SC-41` pass: add the avatar use cases and repository methods to `features/account/profile`, center-cropping and re-encoding to 512×512 in the browser before upload, so any image the browser decodes is sent whatever its type or size; a file it cannot decode is refused as `avatarType` before anything is sent, and the feature judges the picked file by nothing else (decisions Q10)
 - [ ] 5.4 Make `grade10-site-store-account-profile-SC-14`, `grade10-site-store-account-profile-SC-15`, `grade10-site-store-account-profile-SC-18`, `grade10-site-store-account-profile-SC-27`, `grade10-site-store-account-profile-SC-28` and `grade10-site-store-account-profile-SC-32` pass in `ProfileView`, passing the two limits from `@grade10/store-contracts` to the form, wording each refusal reason, and a failed save as `saveFailed`, from the `profile` catalog through `error`, never the store's text, and sending the avatar outcome first and the text fields second
 - [ ] 5.5 Make `grade10-site-store-account-profile-SC-30` and `grade10-site-store-account-profile-SC-33` pass — each request reports its own outcome; an accepted avatar is not rolled back and the entered text survives for the retry; a refused avatar sends no text and keeps both the text and the chosen image
 - [ ] 5.6 Make `grade10-site-store-account-profile-SC-31` pass: the failed read says `loadFailed`, never the transport's message, and gives `ProfileCard`'s error state a `common.retry` action that refetches the read. The create-a-profile empty state and its copy are already gone
 - [ ] 5.7 Read the avatar's choose and remove labels, its accessible name and the refusal words from the `profile` catalog that 1.11 adds, and check the surface against the store demo's profile use case
 - [ ] 5.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`
 - [ ] 5.9 Make `grade10-site-store-account-profile-SC-03`, `grade10-site-store-account-profile-SC-11` and `grade10-site-store-account-profile-SC-19` pass on the page: `ProfileView` reads the email from the view and shows it in the read view and the form, both brands' `ProfilePage` stop passing it, and an empty bio shows the line that says what it is for
-- [ ] 5.10 The tests this group's scenarios name, in their own commit before its code, ticked last: the frontend lane for every id 5.2 to 5.11 names
+- [ ] 5.10 The tests this group's scenarios name, in their own commit before its code, ticked last: the frontend lane for every id 5.2 to 5.12 names
 - [ ] 5.11 Make `grade10-site-store-account-profile-SC-34` pass in both brands — the `profile` surface asks a signed-out visitor to sign in and shows their own profile after; grade10 already declares `signedOut: "ask"`, so verify rather than rebuild
+- [ ] 5.12 Make `grade10-site-store-account-profile-SC-39` pass: `ProfileView` sends the display name only when it differs from the one shown by default, so a save that leaves the default as shown stores no name (decisions Q12)
 
 ## 6. Delivery and review (grade10)
 
