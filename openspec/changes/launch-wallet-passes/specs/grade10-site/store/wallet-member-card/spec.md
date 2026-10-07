@@ -5,8 +5,8 @@
 A phone-wallet rendering of the loyalty member card `grade10-site/store/membership`
 carries on the site: Google Wallet and Apple Wallet each hold a pass that
 identifies the member at the counter, stays current one sweep behind the
-programme, and is discharged rather than deleted when a member, or an
-operator for them, ends it, or the member asks to be erased.
+programme, and is discharged rather than deleted when a member ends it or
+asks to be erased. An operator ends it for a member whose phone is gone.
 
 ## Feature set
 
