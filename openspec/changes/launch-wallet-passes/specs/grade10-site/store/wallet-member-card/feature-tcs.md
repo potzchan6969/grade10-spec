@@ -425,6 +425,43 @@ Runs once per row of **Test data**.
 * Step 2 is refused as forbidden.
 * Step 2 names no wallet.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-it3 rev=1 covers=g10.store-wallet-member-card.SC-p9m -->
+### grade10-site-store-wallet-member-card-US9-TC13-1: Ending ends a pass the member added after the record opened
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-wallet-member-card-US-09
+
+**Pre-conditions:**
+
+* admin(admin, holds store:write, reads the audit trail) is signed in to the admin console.
+* customer(member with a live Google Wallet pass) has it on a test phone the tester holds.
+* admin(shop staff) has the Grade10 extension open at the till.
+
+**Steps:**
+
+1. Open the member on <grade10 loyalty admin url>.
+2. As the member, navigate to <grade10 membership url>, end the Google Wallet pass, and add a new one.
+3. In the record opened at step 1, click the control that ends the member's Google Wallet pass.
+4. Confirm the ending.
+5. Scan the new Google Wallet pass at the till.
+6. On <grade10 admin audit url>, read the newest row for the member.
+
+**Expected Results:**
+
+* Step 1 names Google Wallet.
+* Step 5 identifies nobody.
+* Step 6 says a pass was ended.
+
 ## Settled
 
 - **An ending the audit trail fails to record** - the [Audit Trail](/p/grade10-admin/audit)'s rule for every elevated act: the act does not pass unrecorded. Its case is the platform's, not this suite's. The shipped ladder does not hold it yet: it appends after the act commits (`packages/worker/src/trpc.ts:429-444` in grade10), so a failed write fails the request with the pass already ended. That gap is in every elevated mutation, and is a grade10 bug for the bug rounds
@@ -435,7 +472,6 @@ Runs once per row of **Test data**.
 - **An ending on the operator's own record** - allowed, as on any other member's
 - **Confirming the ending** - the record asks, naming the wallet; declining ends nothing
 - **An ending that fails before the store answers** - the console's confirm stays open with the failure, and the record goes on naming the wallet; a retry after an ending that did land says no pass was held. Its case is the shared confirm's, not this suite's
-- **A pass added after the record opened** - the ending holds to the wallet, so it ends the pass the wallet holds when the operator confirms
 - **Proving a member saves a pass** - the save is US-06's, walked by `grade10-site-store-wallet-member-card-US6-TC1-1` on each wallet in staging
 
 ## Reconciliation
@@ -492,4 +528,5 @@ No case is decided by an automated test yet. The tests that prove part of each, 
 | `grade10-site-store-wallet-member-card-US9-TC9-1` | the store's suite for an ending on the operator's own record is task 2's; a person signs in as an operator who is also a member |
 | `grade10-site-store-wallet-member-card-US9-TC10-1` | a person signs in as shop staff; which roles hold `store:write` is the console's role table, which no test here reads |
 | `grade10-site-store-wallet-member-card-US9-TC11-1` | the store's suite for the nothing-held answer and its audit outcome is task 2's; flipped once task 2.5 links it |
+| `grade10-site-store-wallet-member-card-US9-TC13-1` | the store's suite for an ending after a new pass was added is task 2's; flipped once task 2.5 links it |
 | `grade10-site-store-wallet-member-card-US9-TC12-1` | the grant test, which fails until the read needs `store:write`, and the store's suite for a `support` operator's refused read are task 2's; flipped on the grant test once task 2.5 links it |
