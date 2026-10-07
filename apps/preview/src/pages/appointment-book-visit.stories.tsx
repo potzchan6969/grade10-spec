@@ -206,7 +206,7 @@ function BookVisitPage() {
                 ) : undefined
               }
               timeZone={VISIT_TIME_ZONE}
-              timeZoneLabel="Hong Kong time"
+              timeZoneLabel="Asia/Hong Kong time"
             />
           </aside>
 
@@ -226,7 +226,7 @@ function BookVisitPage() {
                 }}
                 selectedStart={selectedStart}
                 timeZone={VISIT_TIME_ZONE}
-                timeZoneLabel="Hong Kong time"
+                timeZoneLabel="Asia/Hong Kong time"
                 onMonthChange={handleMonthChange}
                 onSelectDay={(date) => {
                   setSelectedDate(date);

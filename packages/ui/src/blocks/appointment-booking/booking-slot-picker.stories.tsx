@@ -70,6 +70,9 @@ export const Default: Story = {
     expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
       "3",
     );
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "Sep 3, Thurs" }),
+    ).toBeVisible();
 
     expect(canvas.queryByRole("radio", { name: /^11:00/ })).toBeNull();
     await userEvent.click(canvas.getByRole("button", { name: "10:15" }));
@@ -99,6 +102,9 @@ export const LastMonth: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Next month" })).toBeDisabled();
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "Pick a time" }),
+    ).toBeVisible();
     expect(
       canvas.getByText("Pick a day to see its times."),
     ).toBeInTheDocument();

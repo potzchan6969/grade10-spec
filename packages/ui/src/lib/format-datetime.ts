@@ -194,6 +194,54 @@ export function formatLocalDay(
   return `${day} ${month} ${year}`;
 }
 
+const EN_WEEKDAY_SHORT = [
+  "Sun",
+  "Mon",
+  "Tues",
+  "Wed",
+  "Thurs",
+  "Fri",
+  "Sat",
+] as const;
+
+/** Shop calendar day label: `Sep 3, Thurs`. `date` is `YYYY-MM-DD`. */
+export function formatCalendarDayLabel(
+  date: string,
+  locale: ShippedLocale = "en",
+): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  if (!match) {
+    throw new RangeError(`Not a calendar day: ${date}`);
+  }
+  const year = Number(match[1]);
+  const monthIndex = Number(match[2]) - 1;
+  const day = Number(match[3]);
+  const local = new Date(year, monthIndex, day);
+  if (
+    local.getFullYear() !== year ||
+    local.getMonth() !== monthIndex ||
+    local.getDate() !== day
+  ) {
+    throw new RangeError(`Not a calendar day: ${date}`);
+  }
+
+  if (locale === "en") {
+    return `${UTC_MONTHS[monthIndex]} ${day}, ${EN_WEEKDAY_SHORT[local.getDay()]}`;
+  }
+
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat(intlLocale(locale), {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    })
+      .formatToParts(local)
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  ) as Record<string, string>;
+  return `${parts.month} ${parts.day}, ${parts.weekday}`;
+}
+
 /** Collector local clock: `18:00`. */
 export function formatLocalTime(
   at: Date | number,

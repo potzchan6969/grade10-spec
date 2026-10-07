@@ -81,7 +81,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
         <BookingManageCard
           copy={MANAGE_CARD_COPY}
           record={record}
-          timeZoneLabel="Hong Kong time"
+          timeZoneLabel="Asia/Hong Kong time"
           onMove={() => setMovingId(record.id)}
           onCancel={() => {
             updateRecord(record.id, { state: "cancelled" });
@@ -103,7 +103,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
             }}
             selectedStart={record.start}
             timeZone={VISIT_TIME_ZONE}
-            timeZoneLabel="Hong Kong time"
+            timeZoneLabel="Asia/Hong Kong time"
             onMonthChange={handleMonthChange}
             onSelectDay={setSelectedDate}
             onSelectSlot={(slot) => {

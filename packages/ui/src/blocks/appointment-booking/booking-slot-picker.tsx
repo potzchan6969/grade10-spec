@@ -3,7 +3,10 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { Calendar } from "@grade10/design-system/components/forms/calendar";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { formatLocalTime } from "../../lib/format-datetime";
+import {
+  formatCalendarDayLabel,
+  formatLocalTime,
+} from "../../lib/format-datetime";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
 import { type LocaleProps, zoneLabel } from "./booking-copy";
@@ -72,6 +75,11 @@ function BookingSlotPicker({
   onSelectSlot,
   className,
 }: BookingSlotPickerProps) {
+  const timeHeading =
+    selectedDate === undefined
+      ? copy.timeTitle
+      : formatCalendarDayLabel(selectedDate, locale);
+
   return (
     <div
       className={cn(
@@ -102,7 +110,7 @@ function BookingSlotPicker({
       </VStack>
       <VStack data-slot="booking-time-picker" gap="sm" hAlign="stretch">
         <Text as="h2" size="lg" weight="medium">
-          {copy.timeTitle}
+          {timeHeading}
         </Text>
         <Text as="span" data-slot="booking-zone" size="sm" tone="secondary">
           {copy.timesIn} {zoneLabel(timeZone, timeZoneLabel)}
@@ -120,7 +128,7 @@ function BookingSlotPicker({
                 </Text>
               ) : (
                 <div
-                  aria-label={copy.timeTitle}
+                  aria-label={timeHeading}
                   className="grid grid-cols-2 gap-2 sm:grid-cols-3"
                   role="group"
                 >
