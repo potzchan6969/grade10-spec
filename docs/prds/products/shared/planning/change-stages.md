@@ -30,10 +30,10 @@ A change is in exactly one planning or delivery stage, proven by a file on
 - 🚧 **One stage for what is wanted** — the product manager settles the proposal,
   the decisions and the journeys in one sitting; a decision still open holds
   acceptance
-- 🚧 **Independent planning readings** — QA1 writes the blind feature cases from
-  the frozen anchors, then Dev writes design, requirements, scenarios and tasks
-  without reading those cases; QA2 reconciles both before one human resolves
-  every raised question and accepts the plan
+- 🚧 **Independent planning readings** — QA1 writes blind cases from the frozen
+  anchors, then Dev writes design, requirements, scenarios and tasks without
+  reading them; QA2 reconciles both and closes each raised question the [held
+  test](agent-rounds#the-round) does not hold; one human resolves the rest
 - 🚧 **Implementation before human QA** — planning acceptance does not mark a
   suite approved or actual; human QA starts after implementation is complete
 - 🚧 **Accepted and verified records** — the acceptance fingerprint stays
@@ -204,7 +204,7 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | --- | --- | --- | --- |
 | Stage | Decided | Eight stages are derived from files on `main`; deployment availability comes from GitHub Deployments and never changes the stage. | Product |
 | Planning readings | Decided | QA1 writes isolated cases from the frozen anchors; Dev writes the delivery design and artifacts independently; QA2 reconciles both. | Product, QA, Engineering |
-| Human questions | Decided | One human resolves every raised question before accepting the plan. An unanswered question prevents acceptance. | Product |
+| 🚧 Human questions | Decided | One human resolves every question still open before accepting the plan; a raised question the held test does not hold closes as decided by the round. An open question prevents acceptance. | Product |
 | Human QA | Decided | QA does not review the planned suite as an execution verdict. Human QA happens after implementation, using a deployed environment when needed. | Product, QA |
 | Who drafts | Decided | The change's agent drafts artifacts; each hand lands its own artifacts. The landing records whose word it was. | Product, Engineering |
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |

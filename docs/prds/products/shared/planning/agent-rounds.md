@@ -27,12 +27,21 @@ One round per artifact, and one per task group while the change is building.
 
 - 🚧 **Your word lands it** — nothing reaches `main` without your word, and
   whose is recorded
-- 🚧 **A question, not a guess** — what moves scope, is costly to undo, needs a
-  fact only you have, or divides the options by more than a task group of work
-  is asked, never chosen: a numbered row in the change's decisions with the
-  agent's recommendation, or a `❓` line on the page; every other preference the
-  round decides on the best option, says so, and one reply from you overturns
-  it
+- 🚧 **A question, not a guess** — a question raised by a reading or met by
+  the round that moves scope, is costly to undo, needs a fact only you have, or
+  divides the options by more than a task group of work is asked, never chosen:
+  a numbered row in the change's decisions with the agent's recommendation, or
+  a `❓` line on the page; every other closes on its recommendation as decided
+  by the round, citing the page line where one settles it, and one reply from
+  you overturns it
+- 🚧 **A raised question comes with its recommendation** — the blind reading
+  still raises each point its input did not settle, with the options and the
+  one it recommends; a reading that raises nothing has failed
+- 🚧 **A question about a look never holds a feature** — the feature ships an
+  interim built from the store's existing blocks and tokens; a look that needs
+  a new variant, token or block ships without that look; the question waits on
+  the designer in one change per capability, listed under them on
+  [Pending](/pending)
 - 🚧 **One sentence plans the change** — the first message drafts every artifact
   of the chain, each from the one before it and each read by its perspectives,
   and lands nothing; you read the held questions, not seven documents
@@ -47,9 +56,9 @@ One round per artifact, and one per task group while the change is building.
   then independently writes the technical design, requirements, scenarios and
   tasks from the same anchors; QA2 reads both outputs and reconciles coverage,
   testability, task coverage and technical contradictions
-- 🚧 **One human resolves every question** — the same named human answers all
-  product questions QA2 raises before accepting the plan; a remaining question
-  holds acceptance
+- 🚧 **One human resolves what stays open** — a question stays open only when
+  the test in **A question, not a guess** holds it; the same named human
+  answers each before accepting the plan, and an open one holds acceptance
 - 🚧 **The engineer challenges the tech design** — there is no tech PIC: the
   engineer who will build the change challenges the proposed system, its data
   flow and its rejected options before the plan is accepted, and the human who
@@ -78,9 +87,9 @@ One round per artifact, and one per task group while the change is building.
   change's thread, and the change's stage decides whether it is extended, held
   for its product manager, or depended on by a new change
 - 🚧 **Every later hand answers in the thread** — the turn message points at it
-- 🚧 **The frames come from you** — a designer's ask carries the frame links; a
-  draft that needs a frame nobody drew writes a dated wait on the designer,
-  never a screen in prose
+- 🚧 **The frames come from you** — your ask carries the frame links; a look a
+  feature needs that no frame covers ships as the interim, and the frame waits
+  on you in your own change, never on the feature
 - 🚧 **Told once** — a draft ready for you is one reply, a landing one reply
 - 🚧 **The button says it for you** — a summary waiting on your word carries
   `Confirm <artifact>`; a press is that word, said by whoever pressed, and the
@@ -232,7 +241,8 @@ propose, and that every step passes through layers of checks. The brief is
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused from the change's first landing on, and on every change once the old skills go. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards each deployment and release. | QA, Engineering |
 | Runner | Decided | A custom Slack app, the relay in this repository and a hosted Routine; the relay checks the word before `main` moves and says when a run did not finish. | Operations, Engineering |
-| Who is asked, and when | Decided | Each hand reads a message that is theirs; one human resolves all planning questions before plan acceptance; QA performs human verification only after implementation is complete; the product manager answers any line a build round puts on their page. | Product, QA |
+| Who is asked, and when | Decided | Each hand reads a message that is theirs; the blind reading raises every unsettled point with a recommendation, and QA2 closes each one the held test does not hold; one human resolves every planning question still open before plan acceptance; QA performs human verification only after implementation is complete; the product manager answers any line a build round puts on their page. | Product, QA |
+| A question about a look | Decided | The feature ships an interim built from the store's existing blocks and tokens; the question waits on the designer in one change per capability and never holds a feature's acceptance. | Product, Design |
 | The interview's size | Decided | About three questions, none trivial, that change what is built, one whether to do it now; the rest listed as decided. | Product |
 | Verified together | Decided | One verifier over a round's readings; a round of one reader verifies itself. | Engineering |
 | The record's paths | Decided | A group's repository tag says where its paths live, and the landing resolves them in the application clone beside it, so every row lands through the command. | Engineering |
