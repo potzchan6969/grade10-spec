@@ -487,7 +487,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | 00:30 on `<day D>` | `<day D>` minus 1 | `<day D>` plus `<cure period>` |
 | 23:30 on `<day D>` | `<day D>` plus 1 | `<day D>` plus `<cure period>` |
-| 10:00 on `<day D>`, `<loan_2>` kept at a shop on `Asia/Tokyo` | `<day D>` | `<day D>` plus `<cure period>`, never one day later |
+| 23:30 on `<day D>`, 00:30 on `<day D>` plus 1 in Tokyo, `<loan_2>` kept at a shop on `Asia/Tokyo` | `<day D>` | `<day D>` plus `<cure period>`, never one day later |
 
 `<loan_2>` is a live loan 5 days past its due date with no forfeiture notice sent; `<cure period>` is 14 days, the brand's notice period; the brand's zone is `Asia/Hong_Kong`.
 
@@ -1095,26 +1095,26 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** QA2, 2026-10-07, a rerun after the feature set named the brand's calendar for a loan's dates. QA1 wrote 12 blind cases from the frozen outline, journeys US-08 and US-22 to US-24, the proposal, decisions Q1 to Q23 with the `## Raised` table, and the Operator Console page; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the archive. QA2 joined them with Dev's SC-97 to SC-125, the tech design and the tasks. No domain suite sits above the capability, and the product suite traces none of the four journeys.
+**Run:** QA2, 2026-10-07, a rerun after the feature set named the brand's calendar for a loan's dates. QA1 wrote 12 blind cases from the frozen outline, journeys US-08 and US-22 to US-24, the proposal, decisions Q1 to Q23 with the `## Raised` table, and the Operator Console page; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the archive. QA2 joined them with Dev's SC-97 to SC-121 and SC-142 to SC-145, the tech design and the tasks. No domain suite sits above the capability, and the product suite traces none of the four journeys.
 
 | Blind case or scenario | Disposition |
 | --- | --- |
 | `US8-TC6-1` | **Folded:** the durable SC-36 for the reason's cure date and the day the notice went; the same date as the confirm is SC-112's, walked under US-23 |
 | `US22-TC1-1` | **Folded:** SC-105 and SC-107; joined the address, the zone, the status kept and the `Keep visit` and `Cancel visit` choices; grant set to `vault:operate` |
-| `US22-TC2-1` | **Folded:** SC-122; the row for a shop "the admin works from" read a zone the console does not hold, and now reads a shop on `Asia/Tokyo` under a brand on `Asia/Hong_Kong` |
+| `US22-TC2-1` | **Folded:** SC-142; the row for a shop "the admin works from" read a zone the console does not hold, and now reads a shop on `Asia/Tokyo` under a brand on `Asia/Hong_Kong` |
 | `US22-TC3-1` | **Folded:** SC-106 |
 | `US23-TC1-1` | **Folded:** SC-110 and SC-112; joined the destructive tone; the control's label corrected to Send forfeiture notice and the address to the case's own (Q12) |
-| `US23-TC2-1` | **Folded:** SC-125; a row added for a case kept at a shop on `Asia/Tokyo` |
+| `US23-TC2-1` | **Folded:** SC-145; a row added for a case kept at a shop on `Asia/Tokyo` |
 | `US23-TC3-1` | **Folded:** SC-111 |
 | `US24-TC1-1` | **Folded:** SC-97 and SC-99; joined no waits-on-staff badge; grant set to `vault:read` |
 | `US24-TC2-1` | **Folded:** SC-100 |
 | `US24-TC3-1` | **Folded:** SC-104; the rows name the staff and treasurer roles and joined the Payouts tab |
-| `US24-TC4-1` | **Folded:** SC-98 and SC-123; a row added for a case kept at a shop on `Asia/Tokyo` |
+| `US24-TC4-1` | **Folded:** SC-98 and SC-143; a row added for a case kept at a shop on `Asia/Tokyo` |
 | `US24-TC5-1` | **Folded:** SC-102; rows added for a storage case and a forfeited case (Q10) |
 | SC-108, SC-109, SC-116, SC-117 | **Uncovered by QA1:** `US22-TC4-1`, `US22-TC5-1`, `US22-TC6-1` and `US22-TC7-1` added |
 | SC-118, SC-119 | **Uncovered by QA1:** `US22-TC8-1` added, a row each |
 | SC-113, SC-114, SC-115, SC-120, SC-121 | **Uncovered by QA1:** `US23-TC4-1` to `US23-TC8-1` added |
-| SC-101, SC-103, SC-124 | **Uncovered by QA1:** `US24-TC6-1`, `US24-TC7-1` and `US24-TC8-1` added |
+| SC-101, SC-103, SC-144 | **Uncovered by QA1:** `US24-TC6-1`, `US24-TC7-1` and `US24-TC8-1` added |
 | Rejected cases | none |
 | Contradicted readings | none |
 | Uncovered scenarios | none |
@@ -1126,5 +1126,5 @@ Runs once per row of **Test data**.
 - **A visit gone or moved, and a second press** - settled by Q19 and Q20: the press reads the case afresh, a visit gone or a notice standing opens no confirm; SC-116, SC-117 and SC-120. A visit whose slot has passed is cancelled or refused by `grade10-site/vault/visit-booking`, and a refusal shows in the open confirm, SC-109
 - **Resend** - settled by the non-goal and Q16: Send again asks nothing; a second notice from a stale page is Q20's
 - **A failure after confirming** - settled by the requirements' fifth step: the refusal shows in the open confirm, which stays open; SC-109 and SC-115. A failed fresh read is Q21's, SC-118 and SC-121
-- **The booked shop's zone** - settled by Q17; SC-122
+- **The booked shop's zone** - settled by Q17; SC-142
 - **The grant** - settled by the page's Permissions table: Cancel visit is `vault:operate`, the notice `vault:approve`, and the clock `vault:read` with no `vault:payout`

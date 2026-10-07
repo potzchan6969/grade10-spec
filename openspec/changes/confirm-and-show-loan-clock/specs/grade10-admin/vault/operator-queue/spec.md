@@ -104,7 +104,7 @@ it, never on the zone of the shop the case is kept at.
 - **THEN** the header reads `3 days past due`, and no Payouts tab is offered
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-4es rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-123 - The count turns at the brand's midnight, not the shop's
+#### Scenario: grade10-admin-vault-operator-queue-SC-143 - The count turns at the brand's midnight, not the shop's
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the brand's day at a shop on another zone
 
 - **GIVEN** a brand on `Asia/Hong_Kong`, and a live loan due on 30 November kept at a shop on `Asia/Tokyo`, read at 00:30 on 1 December Tokyo time, 23:30 on 30 November Hong Kong time
@@ -112,7 +112,7 @@ it, never on the zone of the shop the case is kept at.
 - **THEN** the header reads no clock beside the status
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-sn7 rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-124 - The date to pay by reads the brand's day at a shop on another zone
+#### Scenario: grade10-admin-vault-operator-queue-SC-144 - The date to pay by reads the brand's day at a shop on another zone
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the date the borrower was given
 
 - **GIVEN** a brand on `Asia/Hong_Kong`, and a live loan kept at a shop on `Asia/Tokyo` whose forfeiture notice named 15 December 2026, a day that ends at 00:59 on 16 December Tokyo time
@@ -159,7 +159,7 @@ Cancelling a case's visit from the console SHALL run in these steps:
 - **AND** nothing has been sent
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-4jw rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-122 - The slot reads on the booked shop's clock, not the brand's
+#### Scenario: grade10-admin-vault-operator-queue-SC-142 - The slot reads on the booked shop's clock, not the brand's
 **Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the hour the collector booked
 
 - **GIVEN** a brand on `Asia/Hong_Kong`, and a case holding a visit at a shop on `Asia/Tokyo`, on 15 June 2026 at 10:00 there, 09:00 Hong Kong time
@@ -247,8 +247,9 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 | What the confirm reads | When |
 | --- | --- |
 | The address and the date to pay by | the case holds an email address and the brand has set a notice period |
-| That nobody is emailed, and the date to pay by | the case holds no email address |
-| That no date to pay by can be named without a notice period | the brand has set no notice period |
+| That nobody is emailed, and the date to pay by | the case holds no email address and the brand has set a notice period |
+| That no date to pay by can be named without a notice period | the case holds an email address and the brand has set no notice period |
+| That nobody is emailed, and that no date to pay by can be named without a notice period | the case holds no email address and the brand has set no notice period |
 
 - **The date** - the date to pay by SHALL be the brand's notice period counted
   from the instant the confirm opens, named as a day on the brand's calendar,
@@ -332,9 +333,10 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 - **THEN** the failure is shown beside Send forfeiture notice, no confirm opens, and no notice is recorded
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-o3p rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-125 - The notice confirm names the brand's day at a shop on another zone
+#### Scenario: grade10-admin-vault-operator-queue-SC-145 - The notice confirm names the brand's day at a shop on another zone
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the operator checks the date the borrower will be given
 
 - **GIVEN** a brand on `Asia/Hong_Kong` with a 14-day notice period, and a live loan past its due date with no notice, kept at a shop on `Asia/Tokyo`
-- **WHEN** an operator presses Send forfeiture notice at 10:00 on 1 December Hong Kong time
-- **THEN** the confirm names 15 December 2026 as the date to pay by, and does not name 16 December
+- **WHEN** an operator presses Send forfeiture notice at 23:30 on 1 December 2026 Hong Kong time, 00:30 on 2 December in Tokyo
+- **THEN** the confirm names 15 December 2026, 14 days from 1 December on the brand's calendar, as the date to pay by
+- **AND** it does not name 16 December 2026, 14 days from 2 December on Tokyo's calendar
