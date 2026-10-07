@@ -1,105 +1,50 @@
 ---
 name: commit
-description: "Create git commit(s) from the working tree with this repo's type(domain) messages. Invoke with /commit. Chain /pr-push in the same message to publish after. No push, no PR on its own."
+description: "Create local git commits from scoped working-tree changes with this repo's type(domain) messages. Invoke with /commit; chain /pr-push to publish afterward."
 disable-model-invocation: true
 ---
 
 # Commit
 
-Local commits from the working tree. Runs when `/commit` is invoked, or
-when `/pr-push` follows this skill for dirty files that belong on the PR —
-not because the user said "save" or "ship" in passing.
+- **Scope** - Run when `/commit` is invoked or [pr-push](../pr-push/SKILL.md) delegates dirty files belonging to its PR. Accept the requested files or change scope; leave unrelated work uncommitted.
+- **Git Rules** - Follow [git-operations](../git-operations/SKILL.md) for inspection, validation, staged review and Git safety. Include untracked files when resolving the scope.
+- **Branch** - On `main` or detached HEAD, create a feature branch from the current revision before committing. Use git-operations' branch naming rule; keep an existing feature branch.
+- **Completion** - Stop when each scoped logical change is committed or there is nothing to commit. Report hashes, subjects, validation and excluded files. Publish only when `/pr-push` or equivalent explicit authorization accompanies the request.
 
-**Done when:** each logical change is committed with an explicit file list and
-a `type(domain):` message. **Stop when:** those changes are committed, or
-there is nothing to commit.
+## Grouping
 
-## Chain
-
-`/commit` may be chained with `/pr-push` in the same message. Finish this
-skill first, then run `/pr-push` on the new HEAD. Invoked alone, stop after
-the commit — do not push and do not open a PR. `/pr-push` follows this skill
-only for dirty files that belong on the PR; irrelevant dirty files
-stay uncommitted.
-
-## Gather
-
-Run each as its own command:
-
-- `git status`
-- `git diff HEAD`
-- `git branch --show-current`
-- `git log --oneline -10`
-
-Nothing staged, modified, or untracked → say so and stop. `git diff HEAD`
-alone misses untracked files.
-
-Treat the output as a snapshot. Re-read the branch and the staged set
-immediately before committing if anything may have changed.
-
-## Branch
-
-On `main` or a detached HEAD, create a feature branch from the change, then
-re-read the current branch. Already on a feature branch → stay there.
-
-## Group
-
-Prefer several small commits when files split into distinct concerns. One
-concern per commit: split unrelated implementation, documentation,
-refactoring, and generated output. Group at the file level (no `git add -p`).
-If the split is ambiguous, one commit.
+- **File Groups** - Split unrelated implementation, documentation, refactoring and generated output at file boundaries. Do not use partial staging. If a file-level split is ambiguous, use one commit.
+- **Domain** - Use the domain owning the outcome. Split independent domains where practical; never combine domain names in the subject.
 
 ## Message
 
-```
+```text
 type(domain): brief description
 
-Optional body when the why is not obvious from the subject.
+Optional body when the reason is not clear from the subject.
 ```
 
-- **Type:** `feat`, `fix`, `build`, `chore`, `refactor`, `docs`, `test`, or
-  `ci`.
-- **Domain is required.** Pick one:
-  - A **product** — `store`, `auction`, `auth`, `loyalty`, `shopify`,
-    `stripe`, `audit`, `email`, `mixpanel`, …
-  - A **tool** — app-agnostic developer tooling such as `openspec-viewer`,
-    `storybook`
-  - **`base`** — internal process: agent skills, parity, CI, deploy,
-    conventions, shared plumbing that is not a product or a tool
-- Subject is short, imperative, and names the outcome, not the file list.
-- No issue or PR prefixes (`[#I-2568]`, `[#1522]`) — tooling adds them.
-- `feat` is a new capability; `fix` remedies broken or missing behaviour.
+- **Type** - Use `feat`, `fix`, `build`, `chore`, `refactor`, `docs`, `test` or `ci`. `feat` adds a capability; `fix` remedies broken or missing behavior.
+- **Required Domain** - Use the affected product domain, an app-independent developer tool, or `base` for internal process and shared infrastructure. Brands and implementation roles are not domains.
+- **Subject** - Keep it short and imperative, naming the outcome. Omit issue and PR prefixes; repository tooling adds them.
 
-Bad: `Update checkout.ts` / `feat: add tests and fix stuff` /
-`feat(store,auction): …` / `chore(grade10): …`
+## Commit Each Group
 
-Good: `fix(store): reject double-submit on checkout`
+1. **Stage** - Name every file explicitly. Exclude files outside the authorized group, including unrelated files already staged.
 
-Good: `feat(auction): extend bidding when a snipe lands`
+   ```bash
+   git add -- <file1> <file2>
+   ```
 
-Good: `chore(openspec-viewer): pin the viewer build`
+2. **Review** - Inspect the staged changes under git-operations before committing. Recheck the branch and staged set if another action may have changed them.
+3. **Commit** - Pass the same explicit path list to keep unrelated staged work out. For a multiline message, write the exact text to a temporary file and pass its path.
 
-Good: `feat(base): add a commit skill`
+   ```bash
+   git commit -F <message-file> -- <file1> <file2>
+   ```
 
-A commit that touches two domains is two commits, or the domain that owns
-the outcome. Do not use a brand (`grade10`, `zzz`) or a role (`frontend`,
-`backend`) as the domain.
+4. **Verify** - Check the remaining working-tree state and report the created commits.
 
-## Stage and commit
-
-Stage **named files only** — never `git add -A` or `git add .`. Leave out
-files the user asked to exclude, and say so. Pass the same path list to
-`git commit` so already-staged work that is not in this group stays out:
-
-```bash
-git add file1 file2 file3 && git commit -m "$(cat <<'EOF'
-type(domain): subject line here
-
-Optional body when the why is not obvious from the subject.
-EOF
-)" -- file1 file2 file3
-```
-
-## Confirm
-
-`git status`. Report hash(es) and subject(s).
+   ```bash
+   git status --short
+   ```
