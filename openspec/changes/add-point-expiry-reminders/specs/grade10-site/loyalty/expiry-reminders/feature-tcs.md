@@ -312,8 +312,10 @@ Runs once per row of **Test data**.
 * Step 1: the programme starts.
 * Step 3's answer holds the reminders the row names, for 2027-01-03.
 
-<!-- trace:case id=g10.loyalty-expiry-reminders.TC-sbr rev=1 covers=g10.loyalty-expiry-reminders.SC-bhb -->
-### grade10-site-loyalty-expiry-reminders-US1-TC8-1: Grade10's programme raises reminders at its own lead times
+<!-- trace:case id=g10.loyalty-expiry-reminders.TC-sbr rev=2 covers=g10.loyalty-expiry-reminders.SC-aib -->
+### grade10-site-loyalty-expiry-reminders-US1-TC8-2: Grade10's programme owes one reminder 30 days ahead
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -328,20 +330,18 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** Raising a reminder
 
-**Blocked:** Product - which lead times Grade10's programme carries, decisions Q5.
-
 **Pre-conditions:**
 
-* The programme runs Grade10's own configuration, carrying `<Grade10's lead times>`.
+* The programme runs Grade10's own configuration.
 * The programme's clock reads 2027-01-03 10:00.
 * customer(member) `<member_1>` holds 500 points, lapsing at 18:00 on `<day>`.
 
 **Test data:**
 
-| Field | Value |
+| `<day>` | Outcome |
 | --- | --- |
-| `<Grade10's lead times>` | the set Grade10's programme carries; not yet decided, decisions Q5 |
-| `<day>` | 2027-01-03 plus the shortest lead in `<Grade10's lead times>`, less 1 day |
+| 2027-02-02, 30 days away | one reminder: `<member_1>`, 2027-02-02, 500 points, the 30-day lead |
+| 2027-02-03, 31 days away | no reminder for `<member_1>` |
 
 **Steps:**
 
@@ -349,8 +349,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The answer names one reminder for `<member_1>` per lead in `<Grade10's lead times>`.
-* Each names `<day>`, 500 points and its own lead.
+* The answer for `<member_1>` is the row's Outcome.
+* No reminder names any lead other than 30 days.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-iyo rev=1 covers=g10.loyalty-expiry-reminders.SC-9az -->
 ### grade10-site-loyalty-expiry-reminders-US1-TC9-1: The points stay current while the day stands
@@ -838,6 +838,7 @@ Runs once per row of **Test data**.
 
 - **The day exactly a lead time away** - owed, as the profile's 30-day warning counts it
 - **A lead time taken out of the setting** - owed nothing once the programme starts without it; a lead it still carries keeps the same reminder
+- **Grade10's lead times** - one lead of 30 days, Q5
 - **Points returned to the running day** - points a reversal gives back, or points paid at checkout that a refund or an operator returns, are owed the same reminder again, never a second one
 
 ## Reconciliation
@@ -856,6 +857,8 @@ Runs once per row of **Test data**.
 
 **Run:** QA2 rerun before accept-review round 4, 2026-10-06, in a fresh context. Joined the twenty cases and the delta's seventeen scenarios on the same four anchors; every scenario is reached and none contradicts a case. Read the delta `spec.md` whole, `tech-design.md`, `tasks.md`, `decisions.md`, the pages Expiry Reminders, Points, Operator Console and Rewards, and in grade10 the refund's claw-back reach and the return of points paid at checkout. Three cases sharpened: US1-TC1-1's lead no longer offers any lead from 1 to 364 days, which its 30- and 29-day rows would fail; US1-TC9-1's refund row names an order paid wholly in points, so it earned nothing to claw back; US1-TC17-2's refund rows say the correction already took the 20 points the order earned, so the refund claws back nothing and 100 points come back. No new raised question. The anchors are unchanged.
 
+**Run:** accept-review fix round 4, 2026-10-07. The product owner settled Q5 as one lead of 30 days: the delta's `Grade10's lead times` sub-bullet gains its requirement and `grade10-site-loyalty-expiry-reminders-SC-21`, and US1-TC8-2 revises the blocked case to it. The root groups and the journeys are unchanged.
+
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `grade10-site-loyalty-expiry-reminders-US1-TC1-1` | Reached, sharpened | `grade10-site-loyalty-expiry-reminders-SC-01`; the 30-days row is `grade10-site-loyalty-expiry-reminders-SC-14`, settled as owed by Q7; the 1-point row is `grade10-site-loyalty-expiry-reminders-SC-19`; the lead is 30 days alone, which every row is written to; the member named by user id alone is the programme's own rule that it holds no names or email addresses, so no scenario here restates it |
@@ -865,7 +868,7 @@ Runs once per row of **Test data**.
 | `grade10-site-loyalty-expiry-reminders-US1-TC5-1` | Reached | `grade10-site-loyalty-expiry-reminders-SC-01`, `grade10-site-loyalty-expiry-reminders-SC-02`, `grade10-site-loyalty-expiry-reminders-SC-03` and `grade10-site-loyalty-expiry-reminders-SC-19` in one answer |
 | `grade10-site-loyalty-expiry-reminders-US1-TC6-1` | Reached | `grade10-site-loyalty-expiry-reminders-SC-07` |
 | `grade10-site-loyalty-expiry-reminders-US1-TC7-1` | Reached, sharpened | `grade10-site-loyalty-expiry-reminders-SC-16`'s lead that starts; the twelve-month window the 364 row rests on is named in the pre-conditions |
-| `grade10-site-loyalty-expiry-reminders-US1-TC8-1` | Raised, blocked | `Grade10's lead times` has no requirement or scenario until Q5 is answered, as `tasks.md` group 3 says; the case is **Blocked** on Product and its trace covers `grade10-site-loyalty-expiry-reminders-SC-01` until that scenario is written |
+| `grade10-site-loyalty-expiry-reminders-US1-TC8-2` | Reached, revised | `grade10-site-loyalty-expiry-reminders-SC-21`, written from Q5's one lead of 30 days; revision 1 was blocked on Q5 and covered `grade10-site-loyalty-expiry-reminders-SC-01` meanwhile |
 | `grade10-site-loyalty-expiry-reminders-US1-TC9-1` | Reached, wider | `grade10-site-loyalty-expiry-reminders-SC-15` for the grant, correction and claw-back rows; the reversal, late-record and unpaid-checkout rows read the requirement's count as the balance stands, with no second reminder; the refund row names an order paid wholly in points, so nothing it earned is clawed back |
 | `grade10-site-loyalty-expiry-reminders-US1-TC10-1` | Reached | `grade10-site-loyalty-expiry-reminders-SC-08`, every activity that moves the day |
 | `grade10-site-loyalty-expiry-reminders-US1-TC11-1` | Reached | `grade10-site-loyalty-expiry-reminders-SC-09` |
@@ -880,7 +883,7 @@ Runs once per row of **Test data**.
 | `grade10-site-loyalty-expiry-reminders-US1-TC20-1` | Reached, wider | `grade10-site-loyalty-expiry-reminders-SC-09`, and the contrast to `grade10-site-loyalty-expiry-reminders-SC-17`: a grant or a correction onto a balance brought to nothing starts a window of its own, a year off, so the old day is owed nothing again |
 | `grade10-site-loyalty-expiry-reminders-SC-20` | Folded | Q8: a lead time the programme starts without is owed nothing; the delta's Gone at once requirement, its feature-set line and the page's Gone at once line gain it, and `tasks.md` 2.1 and 2.3 name it |
 
-- **Raised for the human** - Q5, Grade10's lead times, stays open for Product on the page's Values row; US1-TC8 is blocked on it
+- **Raised for the human** - none open: Q5 settles Grade10's lead times as one lead of 30 days
 - **Settled by QA2** - the three QA1 rows in `decisions.md` `## Raised` land as Q7, Q8 and Q9: the day exactly a lead time away is owed, as the profile's 30-day warning counts; a lead time taken out of the setting is owed nothing; points a reversal returns to the running day are owed the same reminder again. Each is a page line marked 🚧
 - **Folded** - `grade10-site-loyalty-expiry-reminders-SC-20`
 - **Rejected** - none
