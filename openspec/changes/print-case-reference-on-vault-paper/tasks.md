@@ -3,7 +3,7 @@
 - [ ] 1.1 Keep the 🚧 line that names the paper's case by its reference: **The case** under `## Document terms` in `docs/prds/products/grade10-site/vault/documents-and-signing.md`, naming the certificate beside the page, restating no requirement
 - [ ] 1.2 Verify: `pnpm check:manual`, `openspec validate print-case-reference-on-vault-paper --strict`
 
-## 2. The case reference on the paper (grade10)
+## 2. The case reference on the paper (grade10) (owner: @ecchochan)
 
 Nothing here waits on group 1: the work is in the vault and doc-sign backends.
 
