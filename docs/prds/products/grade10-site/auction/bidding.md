@@ -216,6 +216,10 @@ On the same card, locked by the first accepted bid.
   lower down, carries an Info tip in the amount tone: when maximums match,
   the earlier one leads — [Listing Page Blocks · Bid
   History](/p/shared/ui/auction-listing#bid-history)
+- 🚧 **Recent bids avatar** — each public Recent Bids row shows one avatar
+  letter from that bidder's email local part; the readable label stays
+  Bidder N; never the full email or a name — [Listing Page Blocks · Bid
+  History](/p/shared/ui/auction-listing#bid-history)
 - **Your bidding** — a signed-in bidder opens their own record for the lot
   beside the public recent bids — [Bidding
   History](/p/grade10-site/auction/bidding#auction-panel)
@@ -459,6 +463,7 @@ surface.
 | My Auctions price | Decided | A bidding row shows the auction's current or final price, as Bidding History does, and the standing after the close comes from the recorded result. The collector's own last bid was ruled out: a losing bidder misreads what the lot sold for. | Product |
 | Resolve | Decided | Second-highest maximum plus the listing increment, capped at the leader's maximum; equal maxima, the earlier leads; one resulting price, never intermediate bids. | Product |
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; every row tied on amount with a row above it shows an Info tip in the amount tone (when maximums match, the earlier one leads), at the current price and at any older tie lower down. Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
+| Public Recent bids avatar | 🚧 In flight | Each public Recent Bids avatar shows one letter from the bidder email local part (first A-Z or 0-9, uppercased; `B` when none or the email is erased). Readable label stays Bidder N. Full email and name stay private. Separate public field from the label. | Product (@mason5991) |
 | Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |
 | Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
 | Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 5,000,000,000. JPY came down from 150,000,000,000 so that every maximum the auction accepts can be typed in the custom maximum field, which takes up to 9,999,999,999. | Product |

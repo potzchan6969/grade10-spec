@@ -68,6 +68,7 @@ close extends and how a lot is settled stay `grade10-site/auction/auction`'s.
 - Recent bids outcome
   - Winner after close: a closed sold lot crowns its winning public row; a live lot crowns none
   - Equal-max tip: a public row tied on amount with a row above it carries the earlier-leads tip
+  - Avatar letter: each public Recent Bids avatar uses the email-derived letter from the public listing and live payloads; the readable label stays Bidder N
 - Public identifier
   - Code-backed address: the canonical address ends in the lower-case listing
     code, without exposing a separate listing-code field or a code-only route
@@ -729,3 +730,37 @@ the public page does not make the code a separate field or an alternate route.
 - **AND** the listing is absent from browse and search
 - **AND** substituting the listing code for the canonical address does not
   resolve the listing
+
+### Requirement: Recent bids avatars use the public email-derived letter
+
+The lot page SHALL map each public bid's avatar character from the Auction
+public listing and live ledger onto the Recent Bids row the shared bid-history
+list draws.
+
+- **Source** - `ListingBidHistoryRow.initials` SHALL be the bid's public
+  `avatarInitial`, not the listing pseudonym string.
+- **Label** - rival rows SHALL continue to be identified by listing pseudonym
+  rules already on the page; the viewer's own row SHALL still read as You.
+- **Live** - when a live update appends or refreshes a public bid on the
+  ledger, its Recent Bids avatar SHALL use that bid's `avatarInitial` without
+  a reload.
+- **Every row** - the mapping SHALL apply to every public Recent Bids row,
+  including the viewer's.
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-ava rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-52 - Recent Bids avatars follow email letters
+**Serves:** grade10-site-auction-listing-page-US-15 - Collector tells Recent Bids rivals apart by avatar letter
+
+- **GIVEN** a live lot whose public ledger has Bidder 1 from email `ada@example.com` and Bidder 2 from email `bob@example.com`
+- **WHEN** a collector reads Recent Bids on the lot page
+- **THEN** Bidder 1's avatar shows `A` and Bidder 2's avatar shows `B`
+- **AND** neither row shows an email or a personal name
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-avb rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-53 - A live bid keeps its avatar letter
+**Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
+
+- **GIVEN** a collector has the lot page open with a live line
+- **WHEN** another collector whose email local part begins with `m` places an accepted public bid
+- **THEN** the new Recent Bids row's avatar shows `M` without a reload
+- **AND** the row's readable standing label remains a listing pseudonym or You

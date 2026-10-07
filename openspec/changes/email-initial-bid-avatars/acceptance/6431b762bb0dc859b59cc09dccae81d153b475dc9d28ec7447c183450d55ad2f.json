@@ -1,0 +1,142 @@
+{
+  "version": 2,
+  "change": "email-initial-bid-avatars",
+  "baseline": "fe477ececb5fb41249296a136c77c43963eae3fbd29ecd2e0ddcf7cba5173c2b",
+  "fingerprint": "6431b762bb0dc859b59cc09dccae81d153b475dc9d28ec7447c183450d55ad2f",
+  "reviewedBy": "mason5991",
+  "acceptedAt": "2026-10-07T10:44:11.391Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/platform/auction-service.md#public-reads-and-cache",
+      "sha256": "e450bc359bfdcbc484ce317a8a5deebb31211bc888b443e444dbf3b70a1ccb99",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/bidding.md#auction-panel",
+      "sha256": "ac54d50694a59da446ff3789becfdf9bc20b84ac5f360478878ed361d5e5730b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/display.md#auction-details",
+      "sha256": "2ac5d8ce83c747e8692b2c791cae6c8ce1a2dacb7d4189f0a1b94aa055f1d40c",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/decisions.md",
+      "sha256": "ddb9a6fad1acce9e548de970851828d43c23618e67aa2d89df03fcad28be1b20",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/proposal.md",
+      "sha256": "a7cc80edda0ae78bb687f8c242dfa640966b5f9cb8773ed09ff7677c9b287f53",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+      "sha256": "dc79522ea92a73748563ccfa329915c3645d1673a149332984261340569bb8a2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/specs/grade10-site/auction/bidding-history/spec.md",
+      "sha256": "f8a8bc233af2e024b441b7334ae59f440e00a9b9b36dc667ed03dafa29fc6ce5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/specs/grade10-site/auction/bidding-history/user-journeys.md",
+      "sha256": "94fc84c0f584036e9c1236bc15410c8eda40474bed3a1ac7df4778769e31ec12",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "c0e6f6192f5b63fe8094ce8a9aa35386a6bac13eb181fc900ac32accbf98f358",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "53d99070e7249ca33189f2023077b089b292657cb81a3c776e7467a6bfe4d93d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "38d2f0150752d9811b9af1f023ffa7171cc629420445cdf525b69cfbfc82ffa6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/tech-design.md",
+      "sha256": "d8522d1f2d849d11491fc8bc7486b13a241c7dc218603e2c133b74d04deb0042",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/ui-design.md",
+      "sha256": "992cab02d4f95e98b37b86f247131899dba3ed1cce53811e7569868c550529db",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+      "sha256": "dc46d7731e446260563130ff362268764e139a08cf44528fe162333999ccd813",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/spec.md",
+      "sha256": "b3e605a11bf2cf09f124b7747e939a2bbd3658a62651206047e8c73f9fdc80c2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/user-journeys.md",
+      "sha256": "cc39a72b03643fda9de7d7321a3b6cbf4426790aece8099505d840f286337d74",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "716d3f64732629ea0277f617b06546fa8b2a78afcec8f2e33d26b8193602f9b3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "e9948edea456b9500a9a670ee2edb5bec8571285c1de966f7ffc755e20fad3df",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "401e87206110bdec150b875afb513c6e780330b841370d179ee58966f45d0857",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/email-initial-bid-avatars/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Private bidding history follows the storefront identity boundary",
+        "Requirement: Public bid rows expose one email-derived avatar character"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Recent bids avatars use the public email-derived letter"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
