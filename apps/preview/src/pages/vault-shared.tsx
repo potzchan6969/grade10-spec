@@ -80,7 +80,7 @@ function PageHeader({
           {title}
         </h1>
         {description ? (
-          <Text className="text-pretty" tone="secondary">
+          <Text className="text-pretty text-secondary-foreground">
             {description}
           </Text>
         ) : null}

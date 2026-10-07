@@ -277,7 +277,7 @@ export const Default: Story = {
     ).toBeVisible();
     expect(canvas.getByText("Grading Submission")).toBeVisible();
     expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
-    expect(canvas.getByText("Listing to Store/Auction")).toBeVisible();
+    expect(canvas.getByText("Store/Auction Listing")).toBeVisible();
     expect(
       canvas.getByText("13 Pak Sha Road, Causeway Bay, Hong Kong"),
     ).toBeVisible();
@@ -304,7 +304,7 @@ export const Default: Story = {
     for (const name of [
       /Grading Submission/,
       /Vault Drop-Off/,
-      /Listing to Store\/Auction/,
+      /Store\/Auction Listing/,
     ]) {
       expect(canvas.getByRole("radio", { name })).not.toBeChecked();
     }

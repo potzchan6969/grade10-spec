@@ -35,9 +35,9 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Grading Submission")).toBeVisible();
     expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
-    expect(canvas.getByText("Listing to Store/Auction")).toBeVisible();
+    expect(canvas.getByText("Store/Auction Listing")).toBeVisible();
     await userEvent.click(
-      canvas.getByRole("radio", { name: /Listing to Store\/Auction/ }),
+      canvas.getByRole("radio", { name: /Store\/Auction Listing/ }),
     );
     expect(args.onSelect).toHaveBeenCalledWith("svc_consultation");
   },

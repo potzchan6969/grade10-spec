@@ -77,7 +77,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
 
   function renderCard(record: BookingRecord) {
     return (
-      <VStack gap="lg" hAlign="stretch" key={record.id}>
+      <VStack gap="sm" hAlign="stretch" key={record.id}>
         <BookingManageCard
           copy={MANAGE_CARD_COPY}
           record={record}
@@ -129,7 +129,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
 
       <PageHeader
         title="Appointments"
-        description="Book a Visit bookings for this email. Move or cancel on the card."
+        description="Book a Visit bookings for this email."
         actions={
           records.length === 0 ? (
             <Button
@@ -155,7 +155,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
       ) : (
         <>
           {upcoming.length > 0 ? (
-            <VStack gap="md" hAlign="stretch">
+            <VStack gap="sm" hAlign="stretch">
               <Text as="h2" size="lg" weight="medium">
                 {APPOINTMENTS_COPY.upcomingHeading}
               </Text>
@@ -163,7 +163,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
             </VStack>
           ) : null}
           {past.length > 0 ? (
-            <VStack gap="md" hAlign="stretch">
+            <VStack gap="sm" hAlign="stretch">
               <Text as="h2" size="lg" weight="medium">
                 {APPOINTMENTS_COPY.pastHeading}
               </Text>
@@ -192,9 +192,17 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "Appointments" }),
     ).toBeVisible();
+    expect(
+      canvas.getByText("Book a Visit bookings for this email."),
+    ).toBeVisible();
+    expect(canvas.queryByText(/Move or cancel on the card/i)).toBeNull();
     expect(canvas.getByText("Upcoming")).toBeVisible();
+    expect(canvas.getByText("Past")).toBeVisible();
     expect(canvas.getAllByText("Vault Drop-Off").length).toBeGreaterThan(0);
     expect(canvas.getByText("Grading Submission")).toBeVisible();
+    expect(
+      canvasElement.querySelectorAll('[data-slot="booking-manage-card"]').length,
+    ).toBeGreaterThan(0);
     expect(
       canvas.queryByRole("button", { name: "Open" }),
     ).not.toBeInTheDocument();
@@ -203,6 +211,9 @@ export const Default: Story = {
     ).not.toBeInTheDocument();
     expect(
       canvas.getAllByRole("button", { name: "Move the visit" }).length,
+    ).toBeGreaterThan(0);
+    expect(
+      canvas.getAllByRole("button", { name: "Cancel the visit" }).length,
     ).toBeGreaterThan(0);
   },
 };
