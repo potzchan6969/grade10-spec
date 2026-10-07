@@ -26,6 +26,9 @@ zone of its own. What a person reads depends on the surface.
   local moment with no zone suffix
 - 🚧 **First paint** - until the browser reports its zone, a deadline may read
   UTC named GMT, then it switches to the viewer's zone
+- 🚧 **Auction order operators** - the Orders worklist, the order page with its
+  timeline and invoice log, and the send and reissue dialog's payment deadline
+  state Hong Kong time labelled GMT+8, not UTC; other operator tables stay UTC
 - **Shop's clock** - a page that books or confirms a visit, or a vault or
   signing page, keeps the shop's clock whatever zone the viewer is in; no rule
   here sets how it names that zone, and a collector's vault timeline stamps
@@ -70,7 +73,7 @@ A collector in Seoul and one in Hong Kong were reading different suffixes for
 the same instant - UTC on a tile, HKT on My Auctions - and a document, a mail
 and a grading letter each named Hong Kong time a different way.
 
-**Not in scope.** Operator UTC tables. Brand-day judgements (shop midnight).
+**Not in scope.** Operator UTC tables, except the auction order surfaces. Brand-day judgements (shop midnight).
 Relative countdowns. Moving a shop-clock page onto the viewer's zone. Naming
 the shop's zone on those pages. A document date's arrangement and month words.
 Naming a shop's own zone in a message for a shop outside Hong Kong: every
@@ -88,6 +91,7 @@ message states GMT+8.
 | The application's invoice page | Decided | Asia/Hong_Kong labelled GMT+8 like the PDF, not the viewer's zone | Product |
 | Every sent message | Decided | GMT+8, grading letters included; a day with no clock names no zone | Product |
 | A zone the platform does not recognise | Decided | The render stops and names it | Product |
+| Auction order operator surfaces | Decided | The Orders worklist, the order page with its timeline and invoice log, and the send and reissue dialog's payment deadline state Asia/Hong_Kong, labelled GMT+8 (Hong Kong time), not UTC; every other operator table stays UTC | Planning owner |
 | An admin surface on a shop's clock | Decided | The vault console and the appointments diary read on the shop's clock, because staff at a counter tell collectors times on it; every other admin surface states UTC | Product |
 | Records a machine reads | Decided | An export and the audit trail stay UTC whatever the surface they come from reads, so a record joins across shops on one zone | Product |
 | First paint | Decided | A deadline may read UTC named GMT until the browser's zone is known, then it switches | Product |

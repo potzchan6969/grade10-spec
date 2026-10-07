@@ -703,6 +703,40 @@ Runs once per row of **Test data**.
 * The stamp reads 01:30 on 7 Oct, in UTC.
 * The stamp does not read 09:30 (the shop's clock) or 21:30 (the viewer's zone).
 
+<!-- trace:case id=g10.shared-dates-and-times.TC-oss rev=1 covers=g10.shared-dates-and-times.SC-u8t -->
+### shared-dates-and-times-US1-TC22-1: An auction order operator surface states Hong Kong time
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Stated zones
+
+**Pre-conditions:**
+
+* An auction order was placed at 2026-10-07T01:30:00Z: 01:30 on 7 Oct in UTC, 09:30 on 7 Oct in Hong Kong, 21:30 on 6 Oct in New York.
+* admin(holds the auction orders grant) is on <grade10 admin auction orders url>, on a machine set to America/New_York.
+
+**Steps:**
+
+1. Find the order placed at 2026-10-07T01:30:00Z on the Orders worklist.
+2. Read its time.
+3. Open the order page and read the same time on its timeline and invoice log.
+4. Open the send dialog and read its payment deadline.
+
+**Expected Results:**
+
+* Steps 2 and 3: the time reads 09:30 on 7 Oct, labelled GMT+8.
+* Step 4: the payment deadline reads in Asia/Hong_Kong, labelled GMT+8.
+* No step reads 01:30 (UTC) or 21:30 (the machine's zone).
+
 ## Settled
 
 - Named deadlines is a leaf of the durable Feature set; a delta's Feature set lists only the leaves it adds or changes.
@@ -784,6 +818,7 @@ Runs once per row of **Test data**.
 | Accept-review: `shared-dates-and-times-US1-TC16-1` seeded a plan "kept until 2026-11-19T16:00:00Z" and expected `20 Nov 2026`, while the application derives the kept-until day from the plan's expiry less 1 ms | **Restated:** the pre-condition names 2026-11-19T16:00:00Z as the kept-until instant, the expiry less 1 ms, so the plan expires at 2026-11-19T16:00:00.001Z and the day still reads 20 Nov 2026, the Hong Kong day. Expected results, scenario, id and revision kept; task 3.1 carries the seed |
 | Raised: does a surface whose own spec already fixes its zone, such as the loyalty programme's expiry days, read a day-only collector deadline in the viewer's zone, or keep its own | **Landed:** decisions Q29: it keeps its own, and the viewer's day for a day-only collector deadline applies where no spec says otherwise. **Folded in:** a clause on the deadline requirement and on the zone requirement's sentence on a collector deadline's day, the dates PRD's `Viewer local` and `Other Surfaces` lines, the tech design's Decisions 4 and 11, the proposal's Impact and this suite's Settled. The loyalty programme keeps its expiry days on the programme's zone, as its durable spec and its profile page say; this change reads, edits and tests none of it. No scenario or case is added or changed: no case here reads a loyalty page. The human also confirmed decisions Q28, which the run line above records as settled by default; the Q28 row above stands. This row is the source for the acknowledgement of the changed sentences at archive |
 | Extension: the admin surface carve-out moved here from `read-vault-console-on-shop-clock` (decisions Q30) | **Folded:** `shared-dates-and-times-US1-TC19-1` traces `shared-dates-and-times-SC-39`'s operator-table half and `shared-dates-and-times-US1-TC20-1` traces `shared-dates-and-times-SC-40`'s collector half, with the trace ids that change's reconciliation gave them; the console halves are `grade10-admin-vault-operator-queue-US25-TC1-1` in that change. **Trimmed:** TC19's result that the entry names Coordinated Universal Time, because the audit trail prints its time with no zone after it |
+| Extension: the planning owner's decision that auction order operator surfaces state Asia/Hong_Kong (decisions Q31) | **Drafted:** `shared-dates-and-times-US1-TC22-1` traces `shared-dates-and-times-SC-41`, the Orders worklist, the order page with its timeline and invoice log, and the send dialog's payment deadline, on a machine set to New York; it is manual, to be walked with the surface built, and adds no blind reading |
 | Extension: that change's blind case `shared-dates-and-times-US1-TC21-1`, a collector's vault page keeping the shop's clock in any viewer zone | **Rejected:** the console carve-out does not move a collector's page, which is a non-goal there, and Settled says this change moves none of those pages |
 
 **Uncovered anchors:** Reading shapes, Format and language and Typed calendar days, and the brand's day leaf of Stated zones. This change does not touch them and this is the capability's first suite, so no case traces them and none is added here. They are left to a suite backfill: no change in the store lists this capability for one yet, and after the fold `pnpm check:manual` warns on `shared-dates-and-times-SC-01` to `shared-dates-and-times-SC-07`, `shared-dates-and-times-SC-17` to `shared-dates-and-times-SC-22` and `shared-dates-and-times-SC-24`. The brand's day scenarios, `shared-dates-and-times-SC-25` to `shared-dates-and-times-SC-28` (a loan term, a queue cut, an age, an expiry), sit in the covers of the Stated zones cases but no case here reads any of them, and this change moves none of them. TC1 and TC2 read the older and the recent halves of `shared-dates-and-times-SC-24` but trace Stated zones, which that scenario does not serve. The Documents as GMT+8 leaf's terms half has no case: no terms page shows a date with a clock today (decisions Q13); its invoice page is walked by `shared-dates-and-times-US1-TC17-1` and its invoice and receipt PDFs by the `shared/ui/invoice-and-receipt-pdf` suite.
