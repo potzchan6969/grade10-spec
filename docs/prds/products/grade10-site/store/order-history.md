@@ -13,25 +13,25 @@ order, or return to the Store when the account is empty.
 
 ## Orders
 
-🚧 **Private address** — a signed-in collector reaches their Store purchases at
+🚧 **Private address** - a signed-in collector reaches their Store purchases at
 `grade10.com/profile/orders`; sign-in keeps the collector at that address
 
-🚧 **Active and Past** — the page keeps orders needing attention above
-completed, canceled or refunded purchases, with the newest order first in each
-group
+🚧 **Active and Past** - the page keeps orders Shopify still holds open above
+orders Shopify has archived or canceled, with the newest order first in each
+group. The badge does not choose the group, so a partly refunded order still
+owed items stays above
 
-❓ **Refunded, still shipping** — whether a partly refunded order with items
-still to ship sits with past purchases, as its Refunded badge places it, or
-with the orders needing attention; the product manager confirms, with
+🚧 **Recorded orders** - a web checkout appears once the shop records the
+order; one that fails or expires before then never appears -
 [Order Status](/p/grade10-site/commerce/order-status)
 
-🚧 **Order actions** — a collector opens one order or follows a Store-supplied
+🚧 **Order actions** - a collector opens one order or follows a Store-supplied
 carrier address when it is safe to open
 
-🚧 **Read states** — loading stays distinct from empty, and a failed read offers
+🚧 **Read states** - loading stays distinct from empty, and a failed read offers
 localized Retry without replacing the address
 
-🚧 **Empty account** — a collector with no purchases gets a shopping path back
+🚧 **Empty account** - a collector with no purchases gets a shopping path back
 to the Store
 
 ## Designs

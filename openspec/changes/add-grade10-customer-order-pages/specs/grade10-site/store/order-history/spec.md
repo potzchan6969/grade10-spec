@@ -9,7 +9,7 @@ understand which still need attention, and open tracking or one order safely.
   - Signed-in route: Keep one private address for the collector's own orders.
   - Session recovery: Preserve the address while sign-in is completed.
 - Order review
-  - Active and past groups: Present newest orders in the group their customer status defines.
+  - Active and past groups: Present newest orders Shopify holds, grouped by whether Shopify still holds them open.
   - Order actions: Open one order or a safe carrier tracking page.
 - Page states
   - Loading and retry: Explain reads that have not completed or failed.
@@ -43,10 +43,11 @@ sign-in surface decides the session.
 
 ### Requirement: Your Orders presents newest active and past orders
 
-The page SHALL present orders newest first. It SHALL pass the customer-facing
-badge defined by `grade10-site/commerce/order-status` to every order summary. It
-SHALL classify `processing`, `shipped`, and `pickup` as Active, and `completed`,
-`canceled`, and `refunded` as Past.
+The page SHALL present orders newest first. It SHALL list a web order only
+once Shopify holds it. It SHALL pass the customer-facing badge defined by
+`grade10-site/commerce/order-status` to every order summary. It SHALL classify
+an order Shopify has archived or canceled as Past, and every other order as
+Active, whatever its badge.
 
 Each summary SHALL show the Store-supplied shop order number when it is present
 and non-empty, otherwise the Store order id. It SHALL also show the placed date,

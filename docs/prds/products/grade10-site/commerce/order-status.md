@@ -18,23 +18,23 @@ and nothing else.
 | --- | --- |
 | 🚧 Processing | Open and not yet fulfilled, or a combination nothing else claims |
 | 🚧 Shipped | Fulfilled in part, or fulfilled and not yet paid and archived |
-| 🚧 Completed | Fulfilled, paid and archived — not carrier-confirmed delivery |
+| 🚧 Completed | Fulfilled, paid and archived - not carrier-confirmed delivery |
 | 🚧 Canceled | The order was canceled, or its payment voided |
 | 🚧 Refunded | Money has moved back to the collector, and the order is not on hold or scheduled |
 
-- 🚧 **Order of rules** — a cancellation or a void always wins; a refund comes
+- 🚧 **Order of rules** - a cancellation or a void always wins; a refund comes
   next, ahead of fulfilment, so a partly refunded order never shows as Shipped
   or Completed
-- 🚧 **Never blank** — every combination Shopify can report reads as one of the
+- 🚧 **Never blank** - every combination Shopify can report reads as one of the
   five
-- 🚧 **Till sales** — a sale at the counter reads through the same rules as a
+- 🚧 **Till sales** - a sale at the counter reads through the same rules as a
   web order; where an order was sold never decides its badge
-- ❓ **Orders covered** — whether the badge covers only orders Shopify holds,
-  or also a web checkout Shopify never recorded (failed, expired or still
-  paying); the product manager confirms
-- ❓ **Refunded, still shipping** — whether a partly refunded order with items
-  still to ship sits with past purchases in Your Orders, which sorts by badge,
-  or with the orders needing attention; the product manager confirms
+- 🚧 **Orders covered** - orders Shopify holds. Your Orders lists a web
+  checkout once the shop records it
+- 🚧 **Refunded, still shipping** - a partly refunded order still owed items
+  reads Refunded and stays with the orders needing attention in
+  [Your Orders](/p/grade10-site/store/order-history), which groups by whether
+  Shopify still holds the order open
 
 ## Updates from Shopify
 
@@ -44,23 +44,17 @@ Orders shows the same badge as Order Details.
 | Change in Shopify | Reaches both pages |
 | --- | --- |
 | 🚧 Paid in full, refunded or canceled | Within 5 minutes |
-| 🚧 Any other change: fulfilled, archived, returned, or a payment voided or expired | Within the hour, for an order placed in the last 90 days |
+| 🚧 Any other change: fulfilled, archived, returned, or a payment voided or expired | Within the hour, for an order Shopify holds open placed in the last 90 days |
 
-- ❓ **Archived orders** — whether a change to an order Shopify already
-  archived, such as reopening it, reaches the badge within the hour or only
-  when Shopify next reports a payment or a shipment on it; the product manager
-  confirms
+- 🚧 **Archived orders** - an order Shopify has archived is read again when
+  Shopify reports a payment, refund, cancellation or shipment on it, so
+  reopening one reaches the badge only then
 
 ## Secondary Note
 
-- ❓ **Under the badge** — one note may sit under the badge: an order on hold,
-  a scheduled fulfilment, a partial refund already shipped. The product
-  manager confirms whether a surface shows it in this delivery; the designer
-  draws where it sits
-- ❓ **Words** — the message catalogs hold each note's words in every language;
-  the rule names only which note
-- ❓ **Confirmed only** — a note appears only for a combination the product has
-  confirmed; any other order shows its badge alone
+🚧 The rule also names one note for each combination the product has
+confirmed, such as an order on hold or a partial refund already shipped, and
+no note for any other. No surface shows the note in this delivery.
 
 ## Pickup
 
@@ -102,9 +96,9 @@ a carrier.
 | No generic note | Decided | An order no confirmed note fits shows its badge alone. A badge from the rule is a correct answer; reassurance nobody confirmed is not. | Product |
 | No notifications | Decided | This rule names no message. The notification centre owns its own rules. | Product |
 | One stored copy | Decided | Both pages read one stored copy of Shopify's facts. Not a Shopify read on every Your Orders load, one read per order listed. | Product |
-| Orders covered | ❓ Open | Only orders Shopify holds, or also web checkouts Shopify never recorded. | Product |
-| Note on surfaces | ❓ Open | Whether Your Orders and Order Details show the note in this delivery, and where it sits. | Product, Design |
-| Refunded, still shipping | ❓ Open | Past purchases by badge, or by whether Shopify still holds the order open. | Product |
-| Archived orders | ❓ Open | Whether a change to an order Shopify already archived reaches the badge within the hour, or only when Shopify next reports a payment or a shipment on it. | Product |
-| Source rows | ❓ Open | The owner's brief with the confirmed rows behind each note; whether a canceled order that took no money carries the awaiting-refund note; and which note a held order carrying a partial refund carries. | @jeffffej0909 |
+| Orders covered | Decided | Only orders Shopify holds. The rule reads Shopify's facts alone, so a checkout Shopify never recorded has nothing to read. | Product |
+| Note on surfaces | Decided | No surface shows the note in this delivery. No design has a place for it, and the rule still names it for the surface that adds one. | Product |
+| Refunded, still shipping | Decided | Your Orders groups by whether Shopify still holds the order open, not by badge, so an order still owed items never looks finished. | Product |
+| Archived orders | Decided | The hourly read covers orders Shopify holds open. Reopening is the only change that moves an archived order's badge, and reading every archived order each hour costs more reads than the hour allows. | Product |
+| Source rows | Decided | The owner's brief with the confirmed rows behind each note is filed with the references, and the rule is checked against every row. A canceled order carries the awaiting-refund note only when it took money and none has gone back, and a held order carrying a partial refund carries one note naming both. | @jeffffej0909 |
 :::

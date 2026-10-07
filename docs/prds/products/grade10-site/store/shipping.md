@@ -5,11 +5,11 @@ order: 22
 
 ## Today
 
-Shopify takes the address at checkout. Your Orders and Order Details show an
-order as Shipped once a parcel has left - [Order Status](/p/grade10-site/commerce/order-status) -
-and offer a Track link when the Store holds a carrier address that is safe to
-open - [Your Orders](/p/grade10-site/store/order-history). No badge says a
-parcel arrived.
+- **Address** - Shopify takes it at checkout
+- 🚧 **Order badge** - the one [Order Status](/p/grade10-site/commerce/order-status)
+  gives the order; no badge says a parcel arrived
+- **Tracking** - the carrier link on an order -
+  [Your Orders](/p/grade10-site/store/order-history)
 
 ## Intended shape
 

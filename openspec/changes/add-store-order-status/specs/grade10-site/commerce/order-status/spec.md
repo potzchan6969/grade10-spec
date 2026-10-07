@@ -19,7 +19,7 @@ the same answer from the same facts.
 - Surface consistency
   - One mapping: Every surface showing order status derives it here.
   - The note: Show only a note the mapping emitted.
-  - Freshness: Paid in full, refunded or canceled within 5 minutes; any other change within the hour.
+  - Freshness: Paid in full, refunded or canceled within 5 minutes; any other change to an open order within the hour.
 
 ## ADDED Requirements
 
@@ -240,7 +240,7 @@ rules in order, after the badge is known, and taking the first that matches:
 | # | Condition | Note identifier |
 | --- | --- | --- |
 | 1 | Badge `canceled`, order state not `canceled`, payment `voided` | `payment-voided` |
-| 2 | Badge `canceled`, payment `pending`, `authorized`, `partially_paid`, or `paid` | `awaiting-refund` |
+| 2 | Badge `canceled`, payment `partially_paid` or `paid` | `awaiting-refund` |
 | 3 | Badge `canceled`, fulfilment `partially_fulfilled` | `canceled-some-items-shipped` |
 | 4 | Badge `refunded`, return state `returned`, payment `partially_refunded` | `items-returned-partial-refund` |
 | 5 | Badge `refunded`, return state `returned` | `items-returned` |
@@ -402,8 +402,9 @@ surface SHALL NOT display a note the mapping did not emit for that order.
 **Freshness** - Every surface SHALL resolve an order's status from one stored
 copy of its Shopify facts. An order that Shopify reports paid in full,
 refunded or canceled SHALL reach that copy within 5 minutes. Any other change
-to an order placed in the last 90 days - its fulfilment, archive or return, or
-a payment voided or expired - SHALL reach it within an hour.
+to an order Shopify holds open and placed in the last 90 days - its
+fulfilment, archive or return, or a payment voided or expired - SHALL reach it
+within an hour.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-nwz rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-14 - Two surfaces report one order identically
