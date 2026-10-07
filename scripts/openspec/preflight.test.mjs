@@ -11,7 +11,12 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { sandbox } from "./fixtures/accept-sandbox.mjs";
-import { changeClusters, formatClusters } from "./lib/clusters.mjs";
+import {
+  changeClusters,
+  changeStacks,
+  formatClusters,
+  formatStacks,
+} from "./lib/clusters.mjs";
 import { foldChecks } from "./lib/fold-checks.mjs";
 import { formatPreflight, preflightChange } from "./lib/preflight.mjs";
 
@@ -255,6 +260,61 @@ test("clusters group changes that fold one requirement or depend on each other",
   assert.match(
     formatClusters(clusters),
     /Cluster 1: build-alpha -> build-beta\n {2}shared: site\/search \/ Search results \(build-alpha ADDED, build-beta MODIFIED\)/,
+  );
+});
+
+test("stacks join a batch on a shared capability or page section, and a lone change is a stack of one", () => {
+  const { root } = sandbox();
+  const add = (id, files) => {
+    write(
+      root,
+      `openspec/changes/${id}/.openspec.yaml`,
+      "schema: grade10-planning\n",
+    );
+    for (const [path, text] of Object.entries(files))
+      write(root, `openspec/changes/${id}/${path}`, text);
+  };
+  add("build-beta", {
+    "specs/site/search/spec.md":
+      "# Search\n\n## ADDED Requirements\n\n### Requirement: Search filters\n\nThe system SHALL filter items.\n\n#### Scenario: site-search-SC-07 - Filters narrow\n\n- **WHEN** a reader filters\n- **THEN** fewer items appear\n",
+  });
+  add("build-gamma", {
+    "proposal.md":
+      "# Build gamma\n\n## References\n\n- [Rules](../../../docs/prds/products/site/gamma.md#rules)\n",
+  });
+  add("build-delta", {
+    "proposal.md":
+      "# Build delta\n\n## References\n\n- [Rules](../../../docs/prds/products/site/gamma.md#rules)\n",
+  });
+  add("build-alone", {});
+  const stacks = changeStacks(root, [
+    "build-alpha",
+    "build-beta",
+    "build-gamma",
+    "build-delta",
+    "build-alone",
+  ]);
+  assert.deepEqual(
+    stacks.map((one) => one.changes),
+    [
+      ["build-alone"],
+      ["build-alpha", "build-beta"],
+      ["build-delta", "build-gamma"],
+    ],
+  );
+  assert.deepEqual(stacks[1].shared, []);
+  const text = formatStacks(stacks);
+  assert.match(
+    text,
+    /Stack 2: build-alpha -> build-beta\n {2}capability: site\/search \(build-alpha, build-beta\); issued through SC-7/,
+  );
+  assert.match(
+    text,
+    /Stack 3: build-delta -> build-gamma\n {2}section: docs\/prds\/products\/site\/gamma\.md#rules \(build-delta, build-gamma\)/,
+  );
+  assert.deepEqual(
+    changeStacks(root, ["build-beta"]).map((one) => one.changes),
+    [["build-beta"]],
   );
 });
 
