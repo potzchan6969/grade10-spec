@@ -19,10 +19,16 @@ the house itself. Motivation is in [proposal.md](proposal.md).
 - **Close** - `applyClose` moves the top bid to `won`, issues the winner order
   and its mail, then `markUnsoldStockDue` marks the release owed only when
   `isUnsoldForRelease()` holds (no `won` bid, no top bid)
-- **Window edits** - only `draft` and `created` listings change their window,
-  through `listings.save` (`services/listings/draft.ts`) and
-  `listings.updateSchedule` (`services/listings/schedule.ts`), both under the
-  listing lock and both open to `auction:operate`, which `staff` holds
+- **Listing edits** - only `draft` and `created` listings change their window,
+  starting price or currency, through `listings.save`
+  (`services/listings/draft.ts`, which refuses them as `FLOOR_LOCKED` once
+  published) and, for the window, `listings.updateSchedule`
+  (`services/listings/schedule.ts`), both under the listing lock and both open
+  to `auction:operate`, which `staff` holds. A currency change keeps the
+  starting price's count of minor units
+- **Publish** - a `created` listing with no publish at stays `created` past
+  its start until an operator publishes it; one with a publish at is
+  published by `settleIfDue` when that time arrives
 - **Operator reads** - `listings.bidHistory`, `listings.bidderSummaries` and
   `listings.stats` need `auction:read`; `listings.activity` needs
   `auction:operate`. The first two return each bidder's account (storefront,
@@ -45,8 +51,9 @@ the house itself. Motivation is in [proposal.md](proposal.md).
 - The house bids through the same resolution, history, extension and close
   code as a collector, so the two-maximum rule cannot drift between them
 - The internal bid's amount and time never reach a public read, a listing
-  version, or an operator read without `auction:reserve`; before the close
-  no such read says a bid is the house's
+  version, or an operator read without `auction:reserve`; no such read
+  shows that a lot has an internal bid before the house has bid, and
+  afterwards it shows the house's public bids as House and nothing more
 - The commit is deterministic: whichever writer reaches the lot first, the
   house's commitment lands at its set time, before anything accepted after it
 
@@ -61,7 +68,7 @@ The specs govern what the house may do and what each reader sees:
 [`grade10-site/auction/auto-bidding`](specs/grade10-site/auction/auto-bidding/spec.md)
 the bidding rules and the trace,
 [`grade10-admin/auction/internal-bid`](specs/grade10-admin/auction/internal-bid/spec.md)
-the admin flow, its states, the window clear and what each operator reads,
+the admin flow, its states, the listing-edit clear and what each operator reads,
 [`grade10-site/auction/auction`](specs/grade10-site/auction/auction/spec.md)
 the close,
 [`grade10-site/auction/notifications`](specs/grade10-site/auction/notifications/spec.md)
@@ -101,13 +108,18 @@ implementation choices.
    does.
 
 4. **Commit before judge.** `commitDueHouseMaximum(tx, listing, now)` runs at
-   the head of every writer that holds the listing lock and moves money state:
-   `placeBid`'s judgement, `settleIfDue` (start, extended-bidding entry,
-   close), the erasure re-stand, and the internal bid's own writers. It
-   commits a `scheduled` row whose `commit_at <= now`, with the house bid's
-   `created_at` set to `commit_at`. Because every later acceptance commits it
-   first, nothing is ever accepted between `commit_at` and the commit, so
-   ordering and ties are the same whoever triggered it.
+   the head of every writer that holds the listing lock and moves money or
+   lifecycle state: `placeBid`'s judgement, `settleIfDue` (publish at, start,
+   extended-bidding entry, close), the operator's publish, the listing edits
+   of Decision 8, the erasure re-stand, and the internal bid's own writers.
+   It commits a `scheduled` row whose `commit_at <= now`, with the house
+   bid's `created_at` set to `commit_at`, judging the listing as it stood at
+   `commit_at`: `settleIfDue` applies a publish at due at or before
+   `commit_at` first, and a listing still `created` at `commit_at` makes the
+   row `not_placed`. Because every later acceptance commits it first, nothing
+   is ever accepted between `commit_at` and the commit, so ordering and ties
+   are the same whoever triggered it, and a later publish finds the row
+   already decided.
    - Rejected: commit only from the room alarm. A collector bid landing in
      the alarm's latency would be judged without the house, and the result
      would depend on timing.
@@ -124,13 +136,15 @@ implementation choices.
      commit that may sit seconds before the scheduled close.
 
 6. **Not placed is decided once, at the commit.** The commit runs the
-   collector amount rules - the minimum next bid and the accepted-tie rule -
-   with the stored amount. A refusal writes no bid and sets the row to
-   `not_placed` with `resolved_at`. On a `not_placed` row, an amount at or
+   collector rules - the listing takes bids, the minimum next bid and the
+   accepted-tie rule - with the stored amount. A refusal, including a
+   listing still `created`, writes no bid and sets the row to `not_placed`
+   with `resolved_at`. On a `not_placed` row, a higher amount on a listing
+   that takes no bids is refused `NOT_BIDDABLE`; otherwise an amount at or
    above the minimum next bid is a fresh commit at `now` through the same
-   path; a lower amount, or a removal, only updates the row (no bid, no
-   relay, no letter); an amount between the stored one and the minimum next
-   bid is refused with `minimumNextAmount`.
+   path, and an amount between the stored one and the minimum next bid is
+   refused with `minimumNextAmount`. A lower amount, or a removal, only
+   updates the row (no bid, no relay, no letter).
 
 7. **A lower is a superseding commitment.** The service re-runs the
    two-maximum resolution in memory with the lower house maximum and the
@@ -144,17 +158,22 @@ implementation choices.
    - Rejected: updating `maximum` in place. The ledger would lose the
      previous maximum and its Accepted At.
 
-8. **A window edit clears in the same transaction.** `listings.save` and
-   `listings.updateSchedule` call `clearInternalBidOutsideWindow(tx, listing,
-   nextWindow, now)` after their own validation, inside the lock they already
-   hold. A `scheduled` row whose `commit_at` falls outside the new window
-   becomes `cleared` with `cleared_at`. The caller's answer and audit row are
+8. **A listing edit clears in the same transaction.** `listings.save` and
+   `listings.updateSchedule` call `clearInternalBidOutsideLimits(tx, listing,
+   next, now)` after their own validation, inside the lock they already hold,
+   with the window, starting price and currency the save leaves. A
+   `scheduled` or `not_placed` row on a `created` listing becomes `cleared`
+   with `cleared_at` when its `commit_at` falls outside the window, its
+   `maximum` is below the starting price, or its `maximum` is above
+   `bidCeiling` of the new currency; `maximum` keeps its count of minor
+   units, as the starting price does. The caller's answer and audit row are
    unchanged, so `staff` learn nothing; the reserve holder reads the
    `cleared` row through `listings.internalBid.get`. Grade10's own clear
-   writes no audit row of its own, since the operator's window save is
-   already audited.
-   - Rejected: refusing the window change. It tells staff the lot is
-     protected.
+   writes no audit row of its own, since the operator's save is already
+   audited.
+   - Rejected: refusing the edit. It tells staff the lot is protected.
+   - Rejected: judging the amount at the commit time. An over-ceiling
+     amount would stay stored and readable until then.
 
 9. **Bought in is derived, not stored.** A closed listing whose `won` bid is
    the house's is bought in. `applyClose` moves the house bid to `won` as for
@@ -170,8 +189,8 @@ implementation choices.
    `bought_in`.
    - Rejected: a `bought_in` listing status. It would fork every public
      reader that maps status to Ended and sold.
-   - Rejected: shipping `houseTop` on the admin listing item. A live lot
-     would tell staff the house leads.
+   - Rejected: shipping `houseTop` on the admin listing item. A live row
+     would say who leads, which the Listings table keeps off its rows.
 
 10. **The house is never a recipient.** Every mail and push claim joins
     `bidders` and excludes `storefront = 'house'` through one SQL fragment.
@@ -187,16 +206,22 @@ implementation choices.
     `raised`, `lowered` - never the amount or the time. Every operator read
     that lists bids or bidders - bid ledger, bidder summaries and lot
     activity - passes its rows through one `redactHouse(caller)` step in
-    `services/admin`:
+    `services/admin`. A house row carries `house: true` and no
+    `pseudonymSeq` for every caller, so the console labels it House:
 
-    | Caller | House rows | Internal-bid audit acts |
-    | --- | --- | --- |
-    | Holds `auction:reserve` | Account fields as the seeded bidder, `maximum` shown, `house: true` | Shown |
-    | Does not | `bidder: null`, `maximum: null`, `house: false`; pseudonym, amount, Accepted At, source and state kept | Dropped |
+    | Caller | House rows | Ledger counts | Internal-bid audit acts and private house actions |
+    | --- | --- | --- | --- |
+    | Holds `auction:reserve` | Every commitment, raise and lower, with `maximum` and the seeded bidder's account | As stored | Shown |
+    | Does not | Only house rows the public history records as a bid, with `bidder: null` and `maximum: null`; amount, Accepted At, source and state kept | `total` and `canceled` recounted without the dropped rows | Dropped |
 
-    Stats count every bidder and bid row as they do today, so the house
-    counts. The bidder moderation list and the Listings table's email search
-    exclude the house through the shared fragment, for every caller.
+    A listing with no house bid row returns exactly what it returns today,
+    whatever its internal bid's state, so a `scheduled`, `not_placed` or
+    `cleared` row leaves no trace. Stats count every bidder and public bid
+    as they do today, so the house counts once it has bid. The bidder
+    moderation list and the Listings table's email search exclude the house
+    through the shared fragment, for every caller.
+    - Rejected: a pseudonym with no account for staff, round 2's rendering.
+      A row with no account stands out anyway, and Q25 names it House.
     - Rejected: blanking the house's account fields to empty strings. A
       blank looks like an erased account, which is a different fact.
 
@@ -219,7 +244,7 @@ reason check), `auction.bids` (no column change).
 | `commit_at` | `timestamptz(3)` | No | - | The set time |
 | `state` | `text` | No | `'scheduled'` | `scheduled`, `placed`, `not_placed`, `cleared`, `dropped` |
 | `resolved_at` | `timestamptz(3)` | Yes | - | When the commit placed it or found it short |
-| `cleared_at` | `timestamptz(3)` | Yes | - | When a window change cleared it |
+| `cleared_at` | `timestamptz(3)` | Yes | - | When a listing edit cleared it |
 | `updated_by` | `text` | No | - | Operator user id of the last save |
 | `created_at` | `timestamptz(3)` | No | `now()` | |
 | `updated_at` | `timestamptz(3)` | No | `now()` | |
@@ -272,8 +297,8 @@ one transaction; a refusal returns before any write.
 | `removeInternalBid` | `{ listingId, actorId }` | `{ removed: true }` | `TIME_FIXED`, `NOT_FOUND` |
 | `readInternalBid` | `{ listingId }` | `{ maximumMinor, currency, commitAt, state, minimumNextMinor, clearedAt } \| null` | `LISTING_NOT_FOUND` |
 | `commitDueHouseMaximum` | `(tx, listing, now)` | `placed`, `not_placed` or `none` | Never refuses; throws on a broken invariant |
-| `clearInternalBidOutsideWindow` | `(tx, listing, window, now)` | `cleared` or `none` | Never refuses |
-| `raiseHouseMaximum` | `(tx, listing, row, maximumMinor, now)` | the resolution | `AMOUNT_TOO_LOW` with `minimumNextAmount`, `NOT_BIDDABLE` |
+| `clearInternalBidOutsideLimits` | `(tx, listing, { window, startingPriceMinor, currency }, now)` | `cleared` or `none` | Never refuses |
+| `raiseHouseMaximum` | `(tx, listing, row, maximumMinor, now)` | the resolution | `AMOUNT_TOO_LOW` with `minimumNextAmount`, `NOT_BIDDABLE` (also while `created`) |
 | `lowerHouseMaximum` | `(tx, listing, row, maximumMinor, now)` | `{ lowered: true }` | `MOVES_LEAD_OR_PRICE`, `BELOW_HOUSE_BID` with `floorMinor` |
 
 `saveInternalBid` calls `commitDueHouseMaximum` first, then routes by the
@@ -282,7 +307,7 @@ row's state:
 | State | Time changed | Higher amount | Lower amount |
 | --- | --- | --- | --- |
 | None, `scheduled` or `cleared` | Save checks, write `scheduled` | Save checks, write | Save checks, write |
-| `not_placed` | `TIME_FIXED` | `raiseHouseMaximum` at or above the minimum next bid, else `AMOUNT_TOO_LOW` | Amount checks, update the row |
+| `not_placed` | `TIME_FIXED` | `NOT_BIDDABLE` while the listing takes no bids; else `raiseHouseMaximum` at or above the minimum next bid, else `AMOUNT_TOO_LOW` | Amount checks, update the row |
 | `placed` | `TIME_FIXED` | `raiseHouseMaximum` | `lowerHouseMaximum` |
 
 `removeInternalBid` deletes a `scheduled` or `not_placed` row and refuses a
@@ -308,7 +333,7 @@ arrives at `10:00:04Z`:
 
 The collector's bid is then judged against a lot the house leads at 31000.
 
-**Mutation order for a window clear** - `staff` move a `created` listing's
+**Mutation order for a listing-edit clear** - `staff` move a `created` listing's
 close from `20:00Z` to `17:00Z`; its internal bid sits at `18:00Z`:
 
 | Row | Before | After |
@@ -332,8 +357,9 @@ a storefront; no storefront backend can name `storefront 'house'`, and
   `{ listingId, maximumMinor, commitAt }`, `listings.internalBid.remove`
   `{ listingId }`, all `auction:reserve`
 - **Operator bid reads** - `bidHistory` and `bidderSummaries` items and the
-  activity bidders: `bidder` and `maximum` become nullable, and `house:
-  boolean` is added, per Decision 11. Breaking for the admin frontend only
+  activity bidders: `bidder`, `maximum` and `pseudonymSeq` become nullable,
+  and `house: boolean` is added, true on every house row for every caller,
+  per Decision 11. Breaking for the admin frontend only
 - **Listings table** - `LISTING_VIEWS` and the admin outcome gain
   `bought_in`; the admin listing item gains `boughtIn: boolean`, true only
   once the lot has ended with the house's bid on top
@@ -357,15 +383,17 @@ a storefront; no storefront backend can name `storefront 'house'`, and
 - **[The commit time leaks through the room]** → `inspect` reports the
   clock deadline; the room relays only after a commit writes a bid, which is
   public anyway
-- **[Staff learn a lot is protected from operator reads]** → `redactHouse`
+- **[Staff learn a lot is protected before the house bids]** → `redactHouse`
   is the only path from bid rows to operator answers, and a test per read
-  calls it as `staff` on a protected open lot. A house row with no account
-  still differs from a collector's; whether that difference is acceptable
-  is raised with this draft
-- **[A window save tells staff the lot was protected]** → the clear runs
+  compares the `staff` answer on a lot with a `scheduled`, `not_placed` or
+  `cleared` internal bid against the same lot with none
+- **[Staff learn the house's maximum from its rows]** → only public house
+  rows reach `staff`, with ledger counts recounted, so a raise or a lower
+  adds nothing they can see
+- **[A listing edit tells staff the lot was protected]** → the clear runs
   after the caller's own validation and changes neither its answer nor its
-  audit row; a test compares the staff answer on a protected and an
-  unprotected listing
+  audit row; a test compares the staff answer for a window, a starting-price
+  and a currency edit on a protected and an unprotected listing
 - **[An audit row carries the amount]** → `auditDetails` declared on every
   internal-bid procedure, and the audit walker test refuses an
   `auction:reserve` procedure without it
@@ -377,7 +405,7 @@ a storefront; no storefront backend can name `storefront 'house'`, and
 1. Migration: create `auction_listing_internal_bids`, widen the stock
    release reason check, seed the house bidder. Additive; old code ignores
    all three
-2. Deploy the backend with the commit, close, mail, window clear and
+2. Deploy the backend with the commit, close, mail, listing-edit clear and
    redaction paths. No internal bid exists yet, so behaviour is unchanged
 3. Deploy the admin frontend section, the Bought in view and the auth
    description

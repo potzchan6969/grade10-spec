@@ -248,9 +248,11 @@ read **Bought in** in the Listings table, under its Closed status, where an
 Unsold listing reads Unsold. It SHALL NOT read Unsold and SHALL NOT be
 counted in the Unsold view, and it SHALL NOT be counted in the Won view or
 offer an order to open. The Listings table SHALL offer a **Bought in** view
-beside Unsold and Won, holding exactly the listings that closed bought in. Every operator who can read the Listings table SHALL
-see the label once the listing has closed; before its close, no row SHALL say
-that the house leads or that the listing has an internal bid.
+beside Unsold and Won, holding exactly the listings that closed bought in.
+Every operator who can read the Listings table SHALL see the label once the
+listing has closed. Before its close, a row SHALL read as any listing with
+its bids and SHALL NOT say that the listing has an internal bid; who leads is
+read in the listing's bids, per `grade10-admin/auction/internal-bid`.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-qgd rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-149 - A lot the house won reads Bought in
@@ -280,7 +282,7 @@ that the house leads or that the listing has an internal bid.
 - **AND** an operator whose roles are exactly `staff`
 - **WHEN** they open the Listings table
 - **THEN** its row reads as any published listing with a leading bid
-- **AND** nothing on the row says Bought in, the house or an internal bid
+- **AND** nothing on the row says Bought in, House or an internal bid
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-ls6 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-152 - The Bought in view holds only bought-in lots

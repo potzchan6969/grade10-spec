@@ -166,8 +166,8 @@ it has been beaten: the new current bid is that maximum plus one
 increment, unless the increment would pass the new leader's maximum. An
 operator SHALL see every committed maximum and its Accepted At, except the
 house maximum: only an operator holding `auction:reserve` SHALL see it, and
-every commitment, raise and lower of it with its Accepted At, per
-`grade10-admin/auction/internal-bid`.
+every commitment, raise and lower of it with its Accepted At. Every operator
+reads the house's bids as House, per `grade10-admin/auction/internal-bid`.
 
 | Field | Meaning |
 | --- | --- |
@@ -244,7 +244,8 @@ extended bidding.
 
 - **Pseudonym** - the house SHALL bid under a listing pseudonym given as a
   collector's is. No listing fact, bid history row, letter or page a collector
-  reads SHALL say or imply that a bid is the house's.
+  reads SHALL say or imply that a bid is the house's. Operator reads name it
+  House instead, per `grade10-admin/auction/internal-bid`.
 - **Checks** - Grade10 SHALL hold the house maximum to the ceiling and the
   minimum next bid as it holds a collector's. It SHALL NOT apply the card,
   bid-panel enrollment, verified-identity or suspension checks to it.
@@ -292,12 +293,14 @@ anyone has the listing open, as follows:
    before any commitment accepted after the set time, so a collector bid that
    arrives after the set time is judged against a listing the house is
    already in.
-2. When a collector's maximum of the same amount would be accepted at that
-   moment, Grade10 SHALL accept the house maximum and resolve it once, per
-   "Two-maximum rule".
+2. When the listing takes bids at that moment and a collector's maximum of
+   the same amount would be accepted then, Grade10 SHALL accept the house
+   maximum and resolve it once, per "Two-maximum rule".
 3. Otherwise the house maximum is **not placed**: Grade10 SHALL write no bid,
    and the listing's current bid, leader, bid count and history SHALL stay as
-   they were.
+   they were. A listing still `created` at the set time takes no bids, so its
+   house maximum is not placed, and publishing the listing later SHALL NOT
+   commit it.
 
 A house maximum committed at or before the scheduled close SHALL count toward
 extended bidding as any maximum committed before the close does.
@@ -345,6 +348,18 @@ extended bidding as any maximum committed before the close does.
 - **WHEN** the scheduled close arrives
 - **THEN** the house leads at the opening price
 - **AND** the listing enters extended bidding
+
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-dym rev=1 -->
+#### Scenario: grade10-site-auction-auto-bidding-SC-46 - A house maximum whose time comes before publishing is not placed
+**Serves:** House maximum - the house's time arrives while the lot is still unpublished
+
+- **GIVEN** a `created` `HKD` listing starting at 20000 HKD minor units, with
+  a house maximum of 50000 set for 18:00:00 UTC
+- **WHEN** 18:00:00 UTC passes, the listing is published at 18:30:00 UTC and
+  collector A commits a maximum of 30000 HKD minor units at 18:40:00 UTC
+- **THEN** A leads at 20000 HKD minor units
+- **AND** the bid count is 1, and the public history records no bid before
+  A's
 
 ### Requirement: A committed house maximum is raised or lowered
 
