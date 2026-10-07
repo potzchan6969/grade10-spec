@@ -44,7 +44,7 @@ deployment, and group 8 groups 1, 2 and 7.
 - [ ] 5.6 Engineering - Create the service account, grant it the wallet issuer scope, and take its key as unencrypted PKCS#8
 - [ ] 5.7 Engineering - Set `WALLET_GOOGLE_SERVICE_ACCOUNT_KEY` and `WALLET_PASS_KEY` with `pnpm run secrets`
 - [ ] 5.8 Engineering - Record the issuer, the class and the service account in `packages/app-env` for staging and production, in a commit after 5.7
-- [ ] 5.9 Design - Draw the save action as Google's own "Add to Google Wallet" button, which Google's brand guidelines expect; waits on confirm-loyalty-surface-looks, which draws it in `WalletPassLinks` (`decisions.md` Q12)
+- [ ] 5.9 Design - Draw the save action as Google's own "Add to Google Wallet" button, which Google's brand guidelines expect; waits on draw-wallet-save-artwork, which draws it in `WalletPassLinks` (`decisions.md` Q12)
 - [ ] 5.10 Verify: `pnpm run secrets --check` on staging and production names no wallet secret missing, and the staging membership page offers Google Wallet
 
 ## 6. Apple enrolment (grade10)
@@ -58,7 +58,7 @@ deployment, and group 8 groups 1, 2 and 7.
 - [ ] 6.7 Engineering - Create the APNs key for the same team, scoped to the pass type identifier, and record its key id
 - [ ] 6.8 Engineering - Set `WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_APPLE_APNS_KEY` and `WALLET_PASS_AUTH_KEY` with `pnpm run secrets`, and `WALLET_PASS_KEY` only where 5.7 has not already set it, never a new value once a pass exists; then, in a commit after them, record the pass type identifier, the team id, the APNs key id and the organisation name in `packages/app-env`
 - [ ] 6.9 Engineering - Name the enrolled iPhone's holder by role and where it lives, then push to it three ways - as shipped, with the push header omitted, and over the certificate - and record which produces a list request; where it is not the shipped default, change `applePush.ts` in a `fix` commit with its regression test
-- [ ] 6.10 Design - Draw the save action as Apple's own "Add to Apple Wallet" badge, downloaded from the developer site under the Wallet Marketing Agreement and licensed only while the organisation is an Apple Developer Program member; waits on confirm-loyalty-surface-looks, which draws it in `WalletPassLinks` (`decisions.md` Q12)
+- [ ] 6.10 Design - Draw the save action as Apple's own "Add to Apple Wallet" badge, downloaded from the developer site under the Wallet Marketing Agreement and licensed only while the organisation is an Apple Developer Program member; waits on draw-wallet-save-artwork, which draws it in `WalletPassLinks` (`decisions.md` Q12)
 - [ ] 6.11 Verify: `pnpm run secrets --check` on staging and production names no wallet secret or record missing, and the staging membership page offers Apple Wallet
 
 ## 7. Launch (grade10)

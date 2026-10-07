@@ -19,7 +19,7 @@ Metric: passes saved per week, per wallet, once that wallet is enrolled.
   the class a pass issues from.
 - **Apple enrolment** - the Developer Program enrolment, the pass type
   identifiers, the signing certificate, and the pass artwork. The save
-  action's own artwork is carried by confirm-loyalty-surface-looks
+  action's own artwork is carried by draw-wallet-save-artwork
   (`decisions.md` Q12).
 - **One real-device push test** - settling which credential a pass push takes
   and which push header is right, against one enrolled iPhone.
@@ -64,7 +64,7 @@ None.
   the page's two 🚧 Offered lines need no delta.
 - **Component exports** - no `@grade10/ui` export changes; the
   `WalletPassLinks` change that draws each wallet's artwork is
-  confirm-loyalty-surface-looks' (`decisions.md` Q12).
+  draw-wallet-save-artwork's (`decisions.md` Q12).
 - **Consumers** - the Grade10 admin console, the Grade10 and ZZZ store
   workers (`apps/backend/zzz/store/src/secrets.ts` spreads the wallet
   secrets), and the secrets tooling (`scripts/secrets`,

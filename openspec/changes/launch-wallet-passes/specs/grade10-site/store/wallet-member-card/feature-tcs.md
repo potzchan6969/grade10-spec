@@ -513,7 +513,7 @@ Runs once per row of **Test data**.
 - **Agreed, the member's path** - US9-TC13's member ends the pass before adding a new one. The member's page offers no save in a wallet already held (`apps/frontend/grade10/src/pages/membership/sections/MemberCardSection.tsx:95` in grade10), so ending first is how a member reaches the scenario's new pass
 - **Agreed, the anchors' wording** - the Purpose's operator sentence and the Launch check's "secret or record" move no case's covers: the record is the APNs key id, named by `grade10-site-store-wallet-member-card-SC-61`, out of suite with the Configuration group
 - **Ids** - `grade10-site-store-wallet-member-card-SC-75` sits above SC-60, the highest id add-account-profile issues for this capability, and above every id another branch in the stack issues for it. US-09 and its US9 cases are this change's alone. The trace ids `SC-p9m` and `TC-it3` are issued nowhere else
-- **Raised** - nothing new. R1 is handed to confirm-loyalty-surface-looks as Q12, and Q21, Product's, is deferred to the first change adding a second brand that issues a pass. No case changed
+- **Raised** - nothing new. R1 is handed to draw-wallet-save-artwork as Q12, and Q21, Product's, is deferred to the first change adding a second brand that issues a pass. No case changed
 
 ### Manual
 
