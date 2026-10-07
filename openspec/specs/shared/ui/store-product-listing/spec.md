@@ -16,6 +16,7 @@ more can be loaded are decided by the application.
   - Reusable parts: each part renders without `ProductBrowse`
 - Tile contract
   - Supplied facts: price, sold-out, cart action, and image are displayed as given
+  - Supplied address: a tile that opens is a link to the address it is given
 - Selling is opt-in
   - Supplied handler: the cart control is drawn where the consumer can act on a quantity, and nowhere else
   - No standing default: a control is never drawn over nothing, so a press cannot be swallowed
@@ -38,7 +39,9 @@ more can be loaded are decided by the application.
 - What is left, said
   - Supplied remaining count: the card displays how many are left, in the consumer's own words
   - Consumer decides when: the card shows what it is given and judges nothing about scarcity
+
 ## Requirements
+
 ### Requirement: The listing surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
@@ -791,3 +794,34 @@ nothing left to be running out of.
 - **THEN** no remaining count is displayed
 - **AND** the sold-out treatment and its supplied label are displayed
 
+### Requirement: A tile drawn without a cart control needs no cart words
+
+A tile's cart words SHALL be accepted absent where no cart control is drawn,
+so a surface that does not sell names no cart word.
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-rzq rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-92 - A tile drawn without a cart control needs no cart words
+**Serves:** Selling is opt-in - a surface that does not sell names no cart word
+
+- **WHEN** a tile renders with no cart quantity handler and copy carrying no cart words
+- **THEN** the tile renders its image, name and prices
+- **AND** no cart word is required of the consumer
+
+### Requirement: A tile given its product's address is a link to it
+
+A tile that opens SHALL be a link to its product's address where the consumer
+supplies one, its photo and its name alike, so its address can be copied and a
+press with a modifier key opens it where the browser puts it, a new tab or a
+new window, reporting nothing. A plain press SHALL still report the tile's
+activation where a handler is supplied, in place of the link's own
+navigation. A tile that does not open SHALL be no link, address or not.
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-iye rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-93 - A tile given its address is a link to it
+**Serves:** Tile contract - a tile opens its product the way any link opens
+
+- **GIVEN** a tile that opens, supplied with its product's address and a handler for its activation
+- **WHEN** it renders
+- **THEN** its photo and its name are links to that address
+- **AND** a plain press reports the activation once and does not follow the link
+- **AND** a press with a modifier key reports nothing and is left to the browser

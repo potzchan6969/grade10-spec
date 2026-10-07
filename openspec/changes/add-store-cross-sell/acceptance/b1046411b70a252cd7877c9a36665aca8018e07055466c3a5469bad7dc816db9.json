@@ -1,0 +1,207 @@
+{
+  "version": 2,
+  "change": "add-store-cross-sell",
+  "baseline": "5e8c8bb715b8a299fcf51b356d11c81f95412de0845a3688f192e88d5e73fd8e",
+  "fingerprint": "b1046411b70a252cd7877c9a36665aca8018e07055466c3a5469bad7dc816db9",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T12:00:23.954Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/cross-sell.md#picks",
+      "sha256": "5973e5f0030e9f30e7348961cccacd1b9a41a639cb88be663f6968f884651f18",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/cross-sell.md#rail",
+      "sha256": "c551849a889c97b3655c83e47849f18b8eaf1340634921a29f33263e0139ffed",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/cross-sell.md#similar-cards",
+      "sha256": "d9e7eb5bfddae6989d00db8dc62d7a33637250c8ffd6847a460cf1f972d759f9",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/product-page.md#you-may-also-like",
+      "sha256": "cea8650449e5a093794eab48d356ab438e9434bdddb461c27fde9efa9885bc9e",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-product-listing.md#product-tile",
+      "sha256": "da812b55f66e8ac5f97cb72b899a08138ae8ed0f93d26b359da1b3bd89c951e5",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/decisions.md",
+      "sha256": "89845eff78d218d322bef092a0b2055585fc571ec3da840d4350611d663f7f26",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/proposal.md",
+      "sha256": "5684d97b1b54816a16c105d90e9c56acc9f6273a619885326ee31d23bc5b25e4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/grade10-site/store/cross-sell/feature-tcs.md",
+      "sha256": "016a3e969d818e709ee2c3e664288e91ce520bb5d66ccab9b72db88400e9c880",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/grade10-site/store/cross-sell/spec.md",
+      "sha256": "083fab20972e5a3c652608b1e34ac97188adc0a0dfdca8135965d07298ad4417",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/grade10-site/store/cross-sell/user-journeys.md",
+      "sha256": "5818bcf7c1028350d13d913300b68b060415c5f6819a417f965b595f5d87649d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/shared/ui/store-home/feature-tcs.md",
+      "sha256": "9a894847a8d115008e62fe77196e8f5eba94784459bf65de72cc79b56d03eb5e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/shared/ui/store-home/spec.md",
+      "sha256": "d9858702f58cb56b901af1b1ef614893ec6ce4ea68c12d64c4baf0387f7f40fd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/shared/ui/store-home/user-journeys.md",
+      "sha256": "4c0b32e8eafa6b44b0ab18d488bd016934c0cac9a4cba873c8e1e4050218c150",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "3fe369884098d63ea250a36800db56c3f663e546c26912809d7c9d9a9bae1935",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "c0a213e7e3e984a436bdf9592a43197953a63c9c3e072edccdfd924fc9f21944",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/tech-design.md",
+      "sha256": "5e46ff6417c9aaabd4825ad5437c4de8b617fea3d988759aef25e828fe45427d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cross-sell/ui-design.md",
+      "sha256": "03ff308af273438feb26516b14918564749b1dcdbd191558412a9e0f50d36d00",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cross-sell/feature-tcs.md",
+      "sha256": "016a3e969d818e709ee2c3e664288e91ce520bb5d66ccab9b72db88400e9c880",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cross-sell/spec.md",
+      "sha256": "206cbc5dbe8b37431219bddac0696232c7fcb10095c90715e4184045c9bd19e6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cross-sell/user-journeys.md",
+      "sha256": "6e7354782a3d634b5ee381061518df18b89bda0f9271a1c86e3bf49b30b126ca",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-home/feature-tcs.md",
+      "sha256": "9a894847a8d115008e62fe77196e8f5eba94784459bf65de72cc79b56d03eb5e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-home/spec.md",
+      "sha256": "71c93479a51aa041053f9533ca4b7b51a0dd93ba513c3dbdc173fe321b59ce57",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-home/user-journeys.md",
+      "sha256": "4c0b32e8eafa6b44b0ab18d488bd016934c0cac9a4cba873c8e1e4050218c150",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "3fe369884098d63ea250a36800db56c3f663e546c26912809d7c9d9a9bae1935",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "3a209ba096b098dc509b1a03ede037f0d611ca44081636c3faff51d6e052ca55",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-store-cross-sell/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cross-sell/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cross-sell/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A card in the rail opens its own page and sells nothing",
+        "Requirement: A card with nothing to show has no rail",
+        "Requirement: A chosen pick nobody can buy stays in the rail",
+        "Requirement: Cards kept out of the similar cards",
+        "Requirement: Similar cards fill the rail by what they share",
+        "Requirement: Similar cards move with the store's copy of the catalogue",
+        "Requirement: The picks are the stock keeper's, chosen in Shopify",
+        "Requirement: The rail holds up to six cards, the picks first",
+        "Requirement: The rail sits under the card in the page's response",
+        "Requirement: The rail's exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cross-sell/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-home/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-home/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A heading with nothing to browse needs no browse label"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-home/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A tile drawn without a cart control needs no cart words",
+        "Requirement: A tile given its product's address is a link to it"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
