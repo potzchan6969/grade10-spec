@@ -1,0 +1,180 @@
+{
+  "version": 2,
+  "change": "omit-profile-account-menu",
+  "baseline": "6d9029222444ef654e0d34b23ff145ba8274560c17d1d56bf231d3d9994a7c17",
+  "fingerprint": "fc5a46a407945ad060dcfa9d6cdab29a46e82b5cd18660515c36035f5f4df345",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T11:58:15.083Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#my-auction-orders",
+      "sha256": "f518f2c0a4b5c53762016b1cae8061bc488b69b668fc821b9c6aaea0b5925236",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/site/page-shell.md#account-menu",
+      "sha256": "34d206debcf8fb2f30011f2cd5574c2ffcf2d1d5d5ff261eb10d1440ffd3a96c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/site-chrome.md#account-entry",
+      "sha256": "eb2a8bc49568fa9ae137f17b520cf0e33b73be4517e52130bf447b92b07fb245",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/decisions.md",
+      "sha256": "47e0d06aa6e518ac206be3f813dd95e561ea2746c7fed2960fa571d3aad66339",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/proposal.md",
+      "sha256": "8b6a46a310d693bc153ef22eb0e103c450d8c915140356fbf7d4a0ae7ce26069",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/grade10-site/auction/auction-orders/feature-tcs.md",
+      "sha256": "836ed510530e7e31cfa9a4b11c2b0805c54df329cde836315a0a8c350ea66f0e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/grade10-site/auction/auction-orders/spec.md",
+      "sha256": "e86d12aa43711deb728a4b591dbca7331e42839e46b2abb5af788fe74b4df352",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/grade10-site/auction/auction-orders/user-journeys.md",
+      "sha256": "4c808e4c3260fbbdd1f4e2e0a9b132891e510a50f7645ca9a56900cf1a374f09",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "07792532523405b1fdb0a98169c40f51e8aa0954d05d82ca0f5601a82459702d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "68934437ad998d42670d6d5a801823d7347329c5a243665b1354ccf967a3bb87",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "680e20b9c70107d34e7619e8a5d21fbbf54425144d8fdec96a9227152e612b47",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/shared/ui/site-chrome/feature-tcs.md",
+      "sha256": "146e13e6ba0168ec0f4c5b3a15e02675161821220d7498afa404af4920d1041b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/shared/ui/site-chrome/spec.md",
+      "sha256": "a4df936ac7ae186c4b38b711476af4fbdd3dfaefde26e7b12b26322e87e6ac93",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/specs/shared/ui/site-chrome/user-journeys.md",
+      "sha256": "f5ef5358d6ca68050415af451deb50bbfe269b2eb3022a52645dfef8e9685f20",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/omit-profile-account-menu/tech-design.md",
+      "sha256": "101ce9c793638530c12c2c853683400657c303c9267a2cc55d0b32273c700145",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/feature-tcs.md",
+      "sha256": "7523e10d20b33b2d431585001a79a69ad3d2492db5fb832b121a94fb58efaff4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/spec.md",
+      "sha256": "bdb1f1aaf54d536076890128d1994fbf81fae90845042976627508849f10f148",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/user-journeys.md",
+      "sha256": "f283b37d4b1b885a54ada8386a4a8ba666711a8ab51a6cd9f32e0134ffb1b780",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "bee53f413cd5e274027ef55fb60725f22003cd5c489414a219b9b7c956486749",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "9663355f18182e6a444617bab339ba690247ebb263dbae53618e66834bb0d190",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "b61f3ea9f9591f6f043f0438060f51f31f0b8c69977cbf106ff79bc3c2269be7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+      "sha256": "09599dca649cd542f196da5eb193d1259af4c86014fbdb06a2d79af8c7d2e115",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/spec.md",
+      "sha256": "363fe1eed5db9c9371c820bdaa6660f6f84f21bede19491fab413aae16f78a29",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/user-journeys.md",
+      "sha256": "f5ef5358d6ca68050415af451deb50bbfe269b2eb3022a52645dfef8e9685f20",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The list holds one row per won order"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Signed-in collectors open account destinations from the header menu",
+        "Requirement: Signed-in collectors open what the build carries from the account menu",
+        "Requirement: The account control leads where the collector can go",
+        "Requirement: The header marks the surface being viewed"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: SiteHeader composes Nav with session-aware account entry"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -9,7 +9,8 @@ have won, one row per order, with the one action each order needs next.
 - **Order list**
   - Rows: one per won order, with lot, auction, winning bid and order status.
   - Ordering: orders waiting on the winner first, then newest close.
-  - Entry points: the account menu and each Won row on My Auctions.
+  - Entry points: not the account menu; a Won row on My Auctions opens its
+    own order, not the list.
 - **Row actions**
   - View lot: opens the lot's listing page.
   - Next action: Complete Order Setup, Pay Invoice or View detail by order status.
@@ -18,6 +19,7 @@ have won, one row per order, with the one action each order needs next.
   - Empty and failed: an empty list points to My Auctions; a failed read retries.
 
 ## Requirements
+
 ### Requirement: The list holds one row per won order
 
 My Auction Orders SHALL list every auction order whose winner is the signed-in
@@ -34,8 +36,6 @@ any input that selects another collector's orders.
 Rows SHALL order in two bands: orders whose status is Awaiting Setup or
 Pending Payment first, then every other order. Within each band, the most
 recently closed lot SHALL come first.
-
-The account menu SHALL link to My Auction Orders beside My Auctions.
 
 <!-- trace:scenario id=g10.auction-auction-orders.SC-nv4 rev=1 -->
 #### Scenario: grade10-site-auction-auction-orders-SC-01 - Every won order is listed once
@@ -163,4 +163,3 @@ retried, and SHALL NOT be shown as an empty list.
 - **WHEN** they open My Auction Orders
 - **THEN** the page reports that the read failed and offers to retry
 - **AND** it does not show an empty list
-

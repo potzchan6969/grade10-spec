@@ -1,9 +1,9 @@
 # shared/ui/site-chrome Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-21, tcs-rules r3.0
+**Status:** in-review
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
-**Out of suite:** shared-ui-site-chrome-SC-17, shared-ui-site-chrome-SC-29, shared-ui-site-chrome-SC-34 — walked by `grade10-site/site/page-shell`'s suite (`TC7-1`, `TC6-1`, `TC9-1`)
+**Out of suite:** none.
 
 ## shared-ui-site-chrome-US1: Shared chrome contract
 
@@ -225,7 +225,7 @@ reimplementing its behavior.
 * No wishlist control appears.
 * The locale presents language options and no currency switch.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-aui rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
+<!-- trace:case id=g10.shared-site-chrome.TC-aui rev=1 covers=g10.shared-site-chrome.SC-7fd,g10.shared-site-chrome.SC-h0z -->
 ### shared-ui-site-chrome-US1-TC8-1: Signed-out chrome presents Sign In
 
 **Classification:**
@@ -235,34 +235,36 @@ reimplementing its behavior.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** Header controls
+* **Trace:** Chrome exports
 
 **Pre-conditions:**
 
 * `SiteHeader` receives a signed-out session and Sign In copy.
+* It also receives `onProfile`, `onMyOrders`, and `onMembership` with `copy.membership`.
 
 **Steps:**
 
 1. Render the header.
-2. Inspect the account entry.
+2. Read the account entry.
+3. Read the rest of the header.
 
 **Expected Results:**
 
-* A primary Sign In button appears.
-* No account icon control appears.
+* Step 2: a primary Sign In button, no account icon.
+* Step 3: no Profile, My Orders or Membership control.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-9d7 rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC9-1: Signed-in chrome presents the account menu
+<!-- trace:case id=g10.shared-site-chrome.TC-9d7 rev=2 covers=none -->
+### shared-ui-site-chrome-US1-TC9-2: Signed-in chrome presents the account menu
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -288,7 +290,7 @@ reimplementing its behavior.
 * The menu offers, in order, Profile, My Orders, My Auctions, and Sign out.
 * The menu does not offer KYC.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-0xk rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
+<!-- trace:case id=g10.shared-site-chrome.TC-0xk rev=1 covers=g10.shared-site-chrome.SC-xzm -->
 ### shared-ui-site-chrome-US1-TC12-1: Activating My Orders invokes its handler
 
 **Classification:**
@@ -306,22 +308,21 @@ reimplementing its behavior.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a signed-in session, account destinations, and a My
-  Orders handler.
+* `SiteHeader` receives a signed-in session and `onMyOrders`.
 
 **Steps:**
 
 1. Render the header.
-2. Activate the account control.
-3. Activate My Orders in the menu.
+2. Click the account control.
+3. Click My Orders in the account menu.
 
 **Expected Results:**
 
-* The supplied My Orders handler is invoked exactly once.
-* No other account-menu handler is invoked.
+* Step 3: the supplied `onMyOrders` handler is invoked exactly once.
+* Step 3: no other account-menu handler is invoked.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-lc0 rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC13-1: Account menu omits My Orders when its handler is not supplied
+<!-- trace:case id=g10.shared-site-chrome.TC-lc0 rev=2 covers=g10.shared-site-chrome.SC-xyv -->
+### shared-ui-site-chrome-US1-TC13-2: Account menu omits My Orders when its handler is not supplied
 
 **Classification:**
 
@@ -330,7 +331,7 @@ reimplementing its behavior.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** acceptance
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
@@ -338,18 +339,18 @@ reimplementing its behavior.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a signed-in session and no My Orders handler.
+* `SiteHeader` receives a signed-in session, `onProfile`, and no `onMyOrders`.
 
 **Steps:**
 
 1. Render the header.
-2. Activate the account control.
-3. Inspect the menu.
+2. Click the account control.
+3. Read the account menu's items.
 
 **Expected Results:**
 
-* The menu offers Profile, My Auctions, and Sign out.
-* The menu does not offer My Orders.
+* Step 3: the menu lists Profile, My Auctions, then Sign Out.
+* Step 3: no My Orders item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-psm rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
 ### shared-ui-site-chrome-US1-TC10-1: Compact chrome keeps account and reaches language
@@ -442,8 +443,8 @@ reimplementing its behavior.
 * The menu label shows `accountEmail` with its small (xs) initial avatar above the items.
 * The menu lists only My Auctions and Sign Out, in that order.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-rkf rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC15-1: Account menu orders Profile, My Orders, My Auctions, Membership, then Sign Out when every handler is supplied
+<!-- trace:case id=g10.shared-site-chrome.TC-rkf rev=2 covers=g10.shared-site-chrome.SC-yiu,g10.shared-site-chrome.SC-hhb,g10.shared-site-chrome.SC-cl2 -->
+### shared-ui-site-chrome-US1-TC15-2: Account menu orders Profile, My Orders, My Auctions, Membership, then Sign Out when every handler is supplied
 
 **Classification:**
 
@@ -452,7 +453,7 @@ reimplementing its behavior.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation
@@ -460,16 +461,20 @@ reimplementing its behavior.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a signed-in session and `onProfile`, `onMyOrders`, `onMembership` with `copy.membership`, and `onSignOut` handlers.
+* `SiteHeader` receives a signed-in session, `accountEmail`, `onProfile`, `onMyOrders`, `onMembership` with `copy.membership`, and `onSignOut`.
 
 **Steps:**
 
-1. Open the account menu.
+1. Render the header.
+2. Click the account control.
+3. Read the account menu.
 
 **Expected Results:**
 
-* The items appear in the order Profile, My Orders, My Auctions, Membership, Sign Out.
-* The last item reads "Sign Out" in Title Case.
+* Step 3: a small (`xs`) initial avatar above `accountEmail`, both above the items.
+* Step 3: the menu lists Profile, My Orders, My Auctions, Membership, then Sign Out, and nothing else.
+* Step 3: the last item reads "Sign Out".
+* Step 3: no KYC item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-mp4 rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
 ### shared-ui-site-chrome-US1-TC16-1: Membership joins after My Auctions even when My Orders is not supplied
@@ -500,8 +505,8 @@ reimplementing its behavior.
 * Membership appears immediately after My Auctions.
 * My Orders does not appear, and Sign Out is the last item.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-y33 rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC17-1: Account menu label falls back to the configured copy when no email is supplied
+<!-- trace:case id=g10.shared-site-chrome.TC-y33 rev=2 covers=g10.shared-site-chrome.SC-bzz -->
+### shared-ui-site-chrome-US1-TC17-2: Account menu shows the configured label and no avatar when no email is supplied
 
 **Classification:**
 
@@ -522,14 +527,17 @@ reimplementing its behavior.
 
 **Steps:**
 
-1. Open the account menu.
+1. Render the header.
+2. Click the account control.
+3. Read the top of the account menu.
 
 **Expected Results:**
 
-* The menu label shows `copy.accountMenuLabel` instead of an email.
+* Step 3: `copy.accountMenuLabel` shows above the items in place of an email.
+* Step 3: no avatar.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-tfo rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC18-1: Activating Membership invokes the supplied handler without a withheld route
+<!-- trace:case id=g10.shared-site-chrome.TC-tfo rev=2 covers=g10.shared-site-chrome.SC-oe5 -->
+### shared-ui-site-chrome-US1-TC18-2: Activating Membership invokes the supplied handler
 
 **Classification:**
 
@@ -550,13 +558,14 @@ reimplementing its behavior.
 
 **Steps:**
 
-1. Open the account menu.
-2. Activate Membership.
+1. Render the header.
+2. Click the account control.
+3. Click Membership in the account menu.
 
 **Expected Results:**
 
-* The supplied `onMembership` handler is invoked exactly once.
-* No navigation to a membership address occurs.
+* Step 3: the supplied `onMembership` handler is invoked exactly once.
+* Step 3: no other account-menu handler is invoked.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-isx rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
 ### shared-ui-site-chrome-US1-TC19-1: Membership is omitted without its handler
@@ -774,6 +783,99 @@ Runs once per row of **Test data**.
 * No Cart control appears, and no space is reserved for one.
 * No count indicator appears in the header.
 
+<!-- trace:case id=g10.shared-site-chrome.TC-thx rev=1 covers=g10.shared-site-chrome.SC-cp9 -->
+### shared-ui-site-chrome-US1-TC25-1: Profile is omitted when onProfile is not supplied
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session, `accountEmail`, `onMyOrders`, `onMembership` with `copy.membership`, and no `onProfile`.
+
+**Steps:**
+
+1. Render the header.
+2. Click the account control.
+3. Read the account menu's items.
+
+**Expected Results:**
+
+* Step 3: the menu lists My Orders, My Auctions, Membership, then Sign Out.
+* Step 3: no Profile item.
+
+<!-- trace:case id=g10.shared-site-chrome.TC-3cf rev=1 covers=g10.shared-site-chrome.SC-bjp -->
+### shared-ui-site-chrome-US1-TC26-1: Activating Profile invokes its handler
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session and `onProfile` with `copy.profile`.
+
+**Steps:**
+
+1. Render the header.
+2. Click the account control.
+3. Click Profile in the account menu.
+
+**Expected Results:**
+
+* Step 3: the supplied `onProfile` handler is invoked exactly once.
+* Step 3: no other account-menu handler is invoked.
+
+<!-- trace:case id=g10.shared-site-chrome.TC-hf6 rev=1 covers=g10.shared-site-chrome.SC-61e -->
+### shared-ui-site-chrome-US1-TC27-1: The header takes no second orders item
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Chrome exports
+
+**Pre-conditions:**
+
+* A consuming application renders `SiteHeader` with a signed-in session.
+
+**Steps:**
+
+1. Pass `onOrders` to `SiteHeader`.
+2. Add `orders` to its `copy`.
+3. Run the application's type check.
+
+**Expected Results:**
+
+* Step 3: `SiteHeaderProps` refuses `onOrders`.
+* Step 3: `SiteHeaderCopy` refuses `orders`.
+
 ## Raised
 
 * Should external links show a trailing external-link icon?
@@ -801,6 +903,13 @@ Runs once per row of **Test data**.
   raise, not this capability's.
 * The application supplies the header's cart count; the chrome shows it unchanged and never counts cart lines itself.
 * The count shows in full, never capped at `99+`.
+* `SiteHeader` takes no second orders item: `SiteHeaderProps` and
+  `SiteHeaderCopy` name only the account menu's five items.
+* Profile always has its label, because `SiteHeaderCopy` requires `profile`;
+  only Membership needs its copy as well as its handler.
+* The account entry renders only with its handler or its slot, and
+  `SiteHeader` always supplies one: `onSignIn` signed out, the account menu
+  signed in.
 
 ## Reconciliation
 
@@ -882,3 +991,46 @@ Runs once per row of **Test data**.
 | Handler-gated feature-set line | `omit-profile-account-menu` names both slots, as Q11 records | No case reads a feature-set line |
 | Uncovered anchors | Every scenario this change adds or modifies under `Header controls` is reached | None |
 | Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** QA1 blind pass, 2026-10-06, for `omit-profile-account-menu`, `shared/ui/site-chrome`. It wrote US1-TC25 and US1-TC26 and raised two questions, now rows of `decisions.md`'s `## Raised` table. It left no statement of what it read and was denied, so none is claimed here.
+
+**Run:** QA2 reconciliation, 2026-10-06. The blind cases were joined to the modified requirement's scenarios on `Header controls`. It moves `shared-ui-site-chrome-SC-39` and `shared-ui-site-chrome-SC-17`; the rest are carried word for word. `shared-ui-site-chrome-SC-17` and `shared-ui-site-chrome-SC-29` leave `**Out of suite:**`, because the page-shell cases that walked them changed.
+
+**Run:** QA2 reconciliation rerun, 2026-10-06. It joined the two cases the first QA2 run left out of the table, US1-TC8 and US1-TC27, and folded the second as a scenario.
+
+**Run:** QA2 reconciliation, third run, 2026-10-06, after US1-TC8's marker was narrowed to the two Chrome exports scenarios it walks. Every Header controls scenario the old marker named is still covered by a durable case under that group, US1-TC5 to US1-TC20, so nothing is left uncovered. No disposition moved.
+
+**Run:** QA2 reconciliation, fourth run, 2026-10-06, after the acceptance review's third round. The durable Settled line "`onOrders` ("My Auction Orders") keeps its existing export contract ..." is now false, and acceptance strikes it by hand, because the fold has no rule that removes one. `## Settled` records Q8, Q9 and Q11. No case or scenario moved.
+
+**Run:** QA2 reconciliation, fifth run, 2026-10-06, after the delta's feature set kept only the Handler-gated and Account menu lines (Q12). `Chrome exports` and `Header controls` still resolve from the durable feature set, so every case keeps its trace. `shared-ui-site-chrome-SC-17` and `shared-ui-site-chrome-SC-29` now serve `Header controls`, and no case moved.
+
+**Run:** QA2 reconciliation, sixth run, 2026-10-06, after the acceptance review's fourth round. The Handler-gated line names the cart slot beside the account slot, as `Nav` shows Cart for a supplied slot with no handler (Q12). `Header controls` did not move, and every case and scenario was joined again; no disposition moved.
+
+**Run:** QA2 reconciliation, seventh run, 2026-10-06, in a fresh context. It joined the durable cases of the modified requirement as well as this suite's. Two had drifted from it: `shared-ui-site-chrome-US1-TC9-1` still read "Sign out" and walked nothing the other cases do not, so it retires; `shared-ui-site-chrome-US1-TC12-1` walked the My Orders handler, which the requirement now states only as "each item", so it folds as `shared-ui-site-chrome-SC-43`. `shared-ui-site-chrome-SC-34` leaves `**Out of suite:**`. No anchor moved.
+
+**Run:** QA2 reconciliation, eighth run, 2026-10-07, after the acceptance review's fifth round. The durable Settled line "The small initial avatar sits above the account label, never beside it." now settles an avatar shown with `copy.accountMenuLabel`, the look Q6 holds open, so acceptance strikes it by hand and `## Settled` places the avatar above the sign-in email. No case or scenario moved.
+
+**Applied:** 2026-10-07, the interim answers to Q6 and the acceptance review's avatar finding; not a QA2 reading, which reruns on them. The requirement places the avatar above `accountEmail` and shows the label alone with no avatar when no email is supplied, so `shared-ui-site-chrome-SC-34` and `shared-ui-site-chrome-SC-35` move to revision 2, `shared-ui-site-chrome-US1-TC17-2` joins this suite, and `## Settled` drops its avatar line.
+
+**Run:** QA2 reconciliation, ninth run, 2026-10-07, in a fresh context, on the interim answer to Q6. Every scenario of the modified requirement was joined to this suite's cases and the durable `Chrome exports` and `Header controls` cases, and `SiteHeader` was read at `packages/ui/src/blocks/site-chrome/site-header.tsx:165-177`: the avatar sits above `accountEmail`, and with no email the label shows alone. No disposition moved.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `shared-ui-site-chrome-US1-TC25-1` | Reached | `shared-ui-site-chrome-SC-30`: no `onProfile`, the menu opens on My Orders; its Membership result agrees with `shared-ui-site-chrome-SC-38` |
+| `shared-ui-site-chrome-US1-TC26-1` | Reached | `shared-ui-site-chrome-SC-32` |
+| `shared-ui-site-chrome-US1-TC18-2` | Rewritten, bumped | `shared-ui-site-chrome-SC-39` dropped its withheld-address line: `SiteHeader` never routes, and **No application state** already says so. The case drops its no-navigation result and takes the scenario's "no other handler" result |
+| Raised: Profile without `copy.profile` | Landed as Q8, settled | `SiteHeaderCopy` requires `profile`, so Profile always has its label; only Membership's copy is optional, which is why only Membership names both |
+| Raised: the account entry in the handler-gated line | Landed as Q9, settled | `Nav` shows its account control only with a handler or an account slot, and `SiteHeader` always supplies one. The feature set keeps account in the line; the proposal's line now names it too |
+| `shared-ui-site-chrome-US1-TC13-2` | Rewritten, bumped | `shared-ui-site-chrome-SC-29` was out of suite, walked by page-shell `US3-TC6-1`, which now walks a menu with no Profile and so no longer proves it. The case supplies `onProfile`, as the scenario does, and now traces it |
+| `shared-ui-site-chrome-US1-TC15-2` | Rewritten, bumped | `shared-ui-site-chrome-SC-17` was out of suite, walked by page-shell `US3-TC7-1`, which this change rewrote without Profile or Membership. The case already supplied every handler; it adds `accountEmail` and the email, KYC and "no other item" results, and now traces it with `shared-ui-site-chrome-SC-37` |
+| `**Out of suite:**` | Emptied | `shared-ui-site-chrome-US1-TC15-2` asserts `accountEmail` with its `xs` avatar above the items, which is `shared-ui-site-chrome-SC-34`, so the scenario is walked in this suite and its marker names it. The line reads `none.` so the fold replaces the durable list of three, all now traced here |
+| `shared-ui-site-chrome-US1-TC8-1` | Reached, result joined | `shared-ui-site-chrome-SC-16` and `shared-ui-site-chrome-SC-33`: no case asserted that a signed-out header ignores the Profile, My Orders and Membership handlers, so the result joined this case on the same run and its version stands. It leaves the smoke suite, which `shared-ui-site-chrome-US1-TC15-2` holds for the journey. Both scenarios serve Chrome exports, so the case traces that group and its marker covers those two alone; every Header controls scenario its old marker named stays covered by its own cases |
+| `shared-ui-site-chrome-US1-TC27-1` | Case added, folded as a scenario | The requirement says `SiteHeaderProps` and `SiteHeaderCopy` take no second orders item, and no scenario stated it: `shared-ui-site-chrome-SC-17` proves the rendered menu, not the types. Folded as `shared-ui-site-chrome-SC-42`, which this case walks and task 1.1 tests |
+| `shared-ui-site-chrome-SC-17` | Bumped | It adds "and no other item": `SiteHeader` drops its second orders item, so the account menu's five items are the whole set |
+| `shared-ui-site-chrome-SC-17`, `shared-ui-site-chrome-SC-29` | Re-anchored to `Header controls` | Each served `grade10-site-site-page-shell-US-03`, the menu a collector meets on the site, which offers no Membership until a later change does (Q5). `shared-ui-site-chrome-SC-17` supplies every handler, Membership included, which no site supplies; `shared-ui-site-chrome-SC-29` shows Profile with no My Orders, which no lane reaches, since none carries the account page and withholds Store. Both are the header's fixed order, which `shared-ui-site-chrome-US1-TC15-2` and `shared-ui-site-chrome-US1-TC13-2` walk under `Header controls` |
+| `shared-ui-site-chrome-US1-TC9-2` | Retired, `deprecated`, bumped | A durable case of the modified requirement: it expects "Sign out", which `shared-ui-site-chrome-SC-37` refutes, and its menu is the fixed order with no Membership, walked by `shared-ui-site-chrome-US1-TC15-2` and `shared-ui-site-chrome-US1-TC19-1`. Its marker covers none. `shared-ui-site-chrome-US1-TC15-2` keeps the smoke suite |
+| `shared-ui-site-chrome-US1-TC12-1` | Folded as a scenario | The requirement dropped its sentence "Activating My Orders SHALL invoke its matching handler" for "Activating each item SHALL invoke the matching supplied handler", and no scenario stated the My Orders half, while Profile and Membership each have one. Folded as `shared-ui-site-chrome-SC-43`, which this case walks and task 1.1 tests; its precondition names `onMyOrders`, its version stands |
+| Settled: the avatar above the account label | Retracted, moved to the requirement | This change names `copy.accountMenuLabel` the account label (Q14), and with that label the menu shows no avatar (Q6), so the durable line "The small initial avatar sits above the account label, never beside it." is false. Acceptance strikes the line by hand, because the fold has no rule that removes a Settled line. The requirement and `shared-ui-site-chrome-SC-34` place the avatar above `accountEmail` |
+| `shared-ui-site-chrome-SC-34` | Bumped | It said the avatar sits with `accountEmail` above the items; it now says the avatar sits above `accountEmail`, as the page and `site-header.tsx:165-177` do. `shared-ui-site-chrome-US1-TC15-2` asserts that order |
+| `shared-ui-site-chrome-SC-35`, `shared-ui-site-chrome-US1-TC17-2` | Bumped; case carried from the durable suite | With no email the menu shows the label alone and no avatar (Q6). The durable `shared-ui-site-chrome-US1-TC17-1` asserted the label only, so it is carried here with the no-avatar result, and its marker narrows to the scenario it walks |
+| Contradictions | None | Where a case and a scenario state the same behaviour they agree |
