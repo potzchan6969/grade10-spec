@@ -105,9 +105,9 @@ opens by the tile's rule.
   product page's US2-TC1 and the domain suite's e2e US1-TC1 against this
   change's revision 2 (Q18)
 - **Overlap** - this change alone states that a sold-out tile opens where it
-  does not sell (Q9); `add-store-cross-sell` carries no requirement for it, and
-  its US1-TC1 walks `shared-ui-store-product-listing-SC-97`, which resolves
-  once this change folds
+  does not sell (Q9); `add-store-cross-sell` carries no requirement for it and
+  retired its US1-TC1 (its Q56), so this change's US1-TC10 alone walks
+  `shared-ui-store-product-listing-SC-97`
 
 ## Open questions
 
