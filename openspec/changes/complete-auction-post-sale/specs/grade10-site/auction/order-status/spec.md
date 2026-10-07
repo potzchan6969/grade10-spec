@@ -41,7 +41,10 @@ from the chain of invoices on the order.
 | `fulfilled` | The warehouse has dispatched the lot and a tracking number is attached |
 
 Grade10 SHALL write `expired` at the moment the payment deadline passes with
-the invoice still `pending`, and never on a `payment_verifying` invoice. An
+the invoice still `pending`, and never on a `payment_verifying` invoice. A card
+payment started before the deadline holds the invoice `pending` until it ends,
+per `grade10-site/auction/winner-order` "The payment deadline is fixed when the
+invoice is sent". An
 expired invoice SHALL NOT offer or start winner card payment, and SHALL NOT
 accept proof upload. An operator SHALL reissue it to `pending` with a new
 deadline, settle it manually to `paid`, or cancel it.
@@ -98,7 +101,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 | Invoice status | `payment_verifying` | `paid` | An operator confirms the proof |
 | Invoice status | `payment_verifying` | `pending` | An operator returns the proof; the deadline restarts with the time left |
 | Invoice status | `expired` | `paid` | An operator commits a manual settlement |
-| Invoice status | `expired` | `paid` | A card payment lands on it anyway, flagged Paid late; a payment started in time keeps the invoice `pending` instead |
+| Invoice status | `expired` | `paid` | A card payment lands on it anyway, flagged Paid late |
 | Invoice status | `expired` | `pending` | An operator reissues the invoice with a new deadline |
 | Invoice status | `expired` | `partially_paid` | An operator records a payment short of the order total on a bank transfer invoice |
 | Invoice status | `expired` | `cancelled` | An operator cancels the order. The listing stays Closed and its stock hold is released, so the item is back in stock. |

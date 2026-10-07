@@ -27,14 +27,14 @@ removed, per the amendment note above each one.
   - Lot and charges: a Description/Amount table headed by the lot title, the
     charges given, an optional supplied Tax line, and a boxed
     Subtotal/Payment Processing Fee/Order Total summary
-  - Replacement relationship: on a replacement invoice, the supplied prior
-    invoice ID appears as `Replaces invoice {id}`, plain text with no link to
-    the prior PDF
   - Bank details: every enabled SWIFT, FPS and HK local transfer rail plus the
     bank reference, a full-width section below the order-value summary, shown
     only on a bank-transfer invoice
   - Issuer block: the issuer's name and email, right-aligned at the foot of
     the sheet
+  - Replacement relationship: on a replacement invoice, the supplied prior
+    invoice ID appears as `Replaces invoice {id}`, plain text with no link to
+    the prior PDF
 - ReceiptPdf export
   - Title and issuer mark, matching InvoicePdf's
   - Meta rows: receipt number, the invoice number it pays, date paid,
@@ -62,6 +62,12 @@ removed, per the amendment note above each one.
   - Every label arrives through a `copy` argument; neither renderer imports
     `@grade10/i18n` or hardcodes a label
 - Reserved extension slots
+  - Retired (`decisions.md` Q19): the manually-settled mark and Superseded
+    invoice under InvoicePdf/ReceiptPdf export above — carried no further
+    until a concrete requirement resurfaces one. Bank rails, also retired
+    under Q19, resurfaced with a concrete requirement and rejoins
+    InvoicePdf export above (`decisions.md` Q22), structured rather than
+    restored to its pre-retirement opaque shape
   - Retired (`decisions.md` Q19): the manually-settled mark, Superseded
     invoice, and issuer tax details under InvoicePdf/ReceiptPdf export above
     — carried no further until a concrete requirement resurfaces one. Bank

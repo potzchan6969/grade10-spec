@@ -171,7 +171,7 @@
 * Grade10 refuses the confirmation.
 * The order holds no delivery address and no method.
 
-### winner-order-US1-TC53-1: With neither method the winner reads payment is not yet available, and Copy Message confirms in place
+### winner-order-US1-TC53-1: With neither method the winner reads payment is not yet available
 
 **Classification:**
 
@@ -190,83 +190,18 @@
 
 * Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
 * customer(winner) holds an auction order in USD in Awaiting Setup.
-* The browser may use the clipboard.
 
 **Steps:**
 
 1. Choose the home address and reach the payment method choice.
 2. Try to choose card, then bank transfer, then confirm.
-3. Choose Contact Us, then Copy Message.
-4. Watch the button and the page for a few seconds.
-5. Reload the order.
+3. Reload the order.
 
 **Expected Results:**
 
 * The page says payment is not yet available in USD and offers Contact Us.
 * Neither method can be chosen, and Grade10 refuses the confirmation.
-* After Copy Message the button reads Copied for a moment, then Copy Message again, and no toast appears.
 * The order is still Awaiting Setup, holding no delivery address and no method.
-
-### winner-order-US1-TC54-1: The setup deadline still runs where no method is offered
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
-* customer(winner) holds an auction order in USD in Awaiting Setup, whose lot closed 48 hours ago, with setup not confirmed.
-* admin(operator with payment processing).
-
-**Steps:**
-
-1. As the winner, open the order.
-2. As the operator, open the order and read what it offers.
-
-**Expected Results:**
-
-* The winner's order reads Setup Overdue.
-* The operator can reopen or record its setup.
-
-### winner-order-US1-TC55-1: Billing Add Address lists and filters the delivery Country/Region catalogue
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* customer(winner) is on billing Add Address of an auction order in Awaiting Setup, after unticking Same as delivery address.
-
-**Steps:**
-
-1. Open the Country/Region picker and read the list.
-2. Open delivery Add Address's picker and read its list.
-3. Back on billing, type `Jap`.
-
-**Expected Results:**
-
-* The billing list holds every country and region in A-Z order, the same list as delivery.
-* Typing leaves only the names that match `Jap`, Japan among them.
 
 ### winner-order-US1-TC56-1: A Traditional Chinese account reads and searches Country/Region in Traditional Chinese
 
@@ -297,7 +232,15 @@
 * The names read in Traditional Chinese.
 * The list narrows to `日本`.
 
-### winner-order-US1-TC57-1: Unsaved one-time delivery and billing addresses are there on return
+---
+
+## winner-order-US7: Winner misses the address deadline
+
+**As a** winner who did not confirm a delivery address within 48 hours of lot close,
+**I want** Winner Order to read Setup Overdue with Contact Us and no Confirm,
+**so that** I know self-service setup has stopped and how to reach Grade10.
+
+### winner-order-US7-TC5-1: The setup deadline still runs where no method is offered
 
 **Classification:**
 
@@ -309,29 +252,26 @@
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-01
+* **Testability:** automation
+* **Trace:** winner-order-US-07
 
 **Pre-conditions:**
 
-* customer(winner) holds an auction order in Awaiting Setup, its setup deadline not passed.
-* On it, they added a one-time delivery address without saving it, and, after unticking Same as delivery address, a one-time billing address without saving it, and have not confirmed.
+* Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
+* customer(winner) holds an auction order in USD in Awaiting Setup, whose lot closed 48 hours ago, with setup not confirmed.
+* admin(operator with payment processing).
 
 **Steps:**
 
-1. Leave the order for another page, then return to it.
-2. Read the delivery address picker and the billing addresses offered.
-3. Open the account address book.
-4. Back on the order, select the one-time delivery address, a payment method, and confirm.
+1. As the winner, open the order.
+2. As the operator, open the order and read what it offers.
 
 **Expected Results:**
 
-* The delivery picker lists the one-time address ahead of the saved addresses.
-* The one-time billing address is still offered for billing.
-* The address book holds neither one-time address.
-* The confirmation is accepted with the one-time delivery address.
+* The winner's order reads Setup Overdue.
+* The operator can reopen or record its setup.
 
-### winner-order-US1-TC58-1: The one-time address is gone once the setup deadline passes
+### winner-order-US7-TC6-1: The one-time address is gone once the setup deadline passes
 
 **Classification:**
 
@@ -344,7 +284,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** winner-order-US-01
+* **Trace:** winner-order-US-07
 
 **Pre-conditions:**
 
@@ -358,38 +298,6 @@
 **Expected Results:**
 
 * The picker does not offer the one-time address.
-
-<!-- trace:case id=g10.auction-winner-order.TC-nat rev=1 covers=g10.auction-winner-order.SC-i2y -->
-### winner-order-US1-TC59-1: Contact Us on an order with no method asks about setup
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
-* customer(winner) holds an auction order in USD in Awaiting Setup.
-
-**Steps:**
-
-1. Open the order and choose Contact Us.
-2. Read the Subject and the Message.
-3. Read the order status.
-
-**Expected Results:**
-
-* The Subject and Message are those of the `setup overdue` reason.
-* The order status still reads Awaiting Setup.
 
 ---
 
@@ -461,6 +369,188 @@
 * Bank transfer reads `Bank fee set on your invoice`, naming no amount.
 * Neither method is selected.
 
+---
+
+## winner-order-US11: Winner bills a won lot to a different address
+
+**As a** winner who pays from a different address than the one the lot ships to,
+**I want** to give that billing address when I confirm where to ship,
+**so that** my invoice and receipt show who is billed as well as where the lot goes.
+
+### winner-order-US11-TC5-1: Billing Add Address lists and filters the delivery Country/Region catalogue
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on billing Add Address of an auction order in Awaiting Setup, after unticking Same as delivery address.
+
+**Steps:**
+
+1. Open the Country/Region picker and read the list.
+2. Open delivery Add Address's picker and read its list.
+3. Back on billing, type `Jap`.
+
+**Expected Results:**
+
+* The billing list holds every country and region in A-Z order, the same list as delivery.
+* Typing leaves only the names that match `Jap`, Japan among them.
+
+### winner-order-US11-TC6-1: An unsaved one-time billing address is there on return
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) holds an auction order in Awaiting Setup, its setup deadline not passed.
+* On it, after unticking Same as delivery address, they added a one-time billing address without saving it, and have not confirmed.
+
+**Steps:**
+
+1. Leave the order for another page, then return to it.
+2. Read the billing addresses offered.
+3. Open the account address book.
+
+**Expected Results:**
+
+* The one-time billing address is still offered for billing.
+* The address book does not hold the one-time billing address.
+
+---
+
+## winner-order-US12: Winner confirms delivery when five addresses are already saved
+
+**As a** winner with five saved shipping addresses,
+**I want** to confirm a different address for this order without saving a sixth,
+**so that** a full address book does not block settlement before the address deadline.
+
+### winner-order-US12-TC12-1: An unsaved one-time delivery address is there on return
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner) holds an auction order in Awaiting Setup, its setup deadline not passed.
+* On it, they added a one-time delivery address without saving it, and have not confirmed.
+
+**Steps:**
+
+1. Leave the order for another page, then return to it.
+2. Read the delivery address picker.
+3. Open the account address book.
+4. Back on the order, select the one-time delivery address, a payment method, and confirm.
+
+**Expected Results:**
+
+* The delivery picker lists the one-time address ahead of the saved addresses.
+* The address book does not hold the one-time address.
+* The confirmation is accepted with the one-time delivery address.
+
+---
+
+## winner-order-US16: Winner emails Grade10 from a locked order
+
+**As a** winner whose payment access has closed,
+**I want** a ready email with this order's details that I can copy into any mail app,
+**so that** I can reach Grade10 without a system mail client, and support can find the order.
+
+<!-- trace:case id=g10.auction-winner-order.TC-nat rev=1 covers=g10.auction-winner-order.SC-i2y -->
+### winner-order-US16-TC15-1: Contact Us on an order with no method asks about setup
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-16
+
+**Pre-conditions:**
+
+* Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
+* customer(winner) holds an auction order in USD in Awaiting Setup.
+
+**Steps:**
+
+1. Open the order and choose Contact Us.
+2. Read the Subject and the Message.
+3. Read the order status.
+
+**Expected Results:**
+
+* The Subject and Message are those of the `setup overdue` reason.
+* The order status still reads Awaiting Setup.
+
+### winner-order-US16-TC16-1: Copy Message confirms through its own state on a locked order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-16
+
+**Pre-conditions:**
+
+* customer(winner) holds an auction order in Setup Overdue, whose payment access is closed.
+* The browser may use the clipboard.
+
+**Steps:**
+
+1. Open the order and choose Contact Us.
+2. Choose Copy Message.
+3. Watch the button and the page for a few seconds.
+
+**Expected Results:**
+
+* The button reads Copied for a moment, then Copy Message again.
+* No toast appears.
+* The To and Subject controls are unchanged.
+
 ## Settled
 
 - Bank details are held per currency on each lane: the sample account outside production, and none in production until Finance confirms Grade10's account.
@@ -480,8 +570,9 @@
 | `winner-order-SC-94` | Was uncovered; added `US1-TC51-1` |
 | `winner-order-SC-226` | Covered by `US1-TC48-1` |
 | `winner-order-SC-248` | Was uncovered; added `US1-TC52-1` |
-| `winner-order-SC-249`, `SC-250` | Were uncovered; added `US1-TC53-1` |
-| `winner-order-SC-257` | Was uncovered; added `US1-TC54-1` |
+| `winner-order-SC-249` | Was uncovered; added `US1-TC53-1` |
+| `winner-order-SC-250` | Was uncovered; added `US16-TC16-1` |
+| `winner-order-SC-257` | Was uncovered; added `US7-TC5-1` |
 | `winner-order-SC-49` | Covered by the durable `winner-order-US4-TC3-1` |
 | `winner-order-SC-50` | Covered by the durable `winner-order-US4-TC4-1` |
 | `winner-order-SC-51` | Covered by the durable `winner-order-US4-TC5-1` |
@@ -493,14 +584,17 @@
 | `winner-order-SC-167` | Covered by the durable `winner-order-US16-TC12-1` |
 | `winner-order-SC-15` | Covered by the durable `winner-order-US1-TC6-1` |
 | `winner-order-SC-35` | Covered by the durable `winner-order-US4-TC1-2` and `winner-order-US9-TC11-1` |
-| `winner-order-SC-259`, `SC-260` | Were uncovered; added `US1-TC55-1` |
+| `winner-order-SC-259`, `SC-260` | Were uncovered; added `US11-TC5-1` |
 | `winner-order-SC-261` | Was uncovered; added `US1-TC56-1` |
-| `winner-order-SC-254`, `SC-255` | Were uncovered; added `US1-TC57-1` |
-| `winner-order-SC-256` | Was uncovered; added `US1-TC58-1` |
+| `winner-order-SC-254` | Was uncovered; added `US12-TC12-1` |
+| `winner-order-SC-255` | Was uncovered; added `US11-TC6-1` |
+| `winner-order-SC-256` | Was uncovered; added `US7-TC6-1` |
+| `winner-order-SC-262` | Covered by `US16-TC15-1` |
 | Contradicted readings | None |
 
 - **Folded:** Q25 as `winner-order-SC-226`.
 - **Renumbered** - `winner-order-US1-TC43-1` became `US1-TC48-1`: the durable `winner-order-US1-TC43-1` is a Country/Region filter case, which the fold would have overwritten.
-- **Placed under US1** - the new cases for `SC-250` to `SC-252` and `SC-254` to `SC-257` sit under `winner-order-US1` and trace `winner-order-US-01`, the setup they walk, because their scenarios serve `winner-order-US-07`, `-US-11`, `-US-12` and `-US-16`, which this change's `user-journeys.md` does not carry as context journeys.
-- **Raised for the human** - add `winner-order-US-07`, `-US-11`, `-US-12` and `-US-16` to this change's `user-journeys.md` as context journeys, so those cases can sit under the journeys their scenarios serve; and `SC-250` places Copy Message on a locked order, while `US1-TC53-1` reaches it from an order with no method offered, the one route this change adds.
+- **Placed under their journeys** - this change's `user-journeys.md` carries `winner-order-US-07`, `-US-11`, `-US-12` and `-US-16` verbatim from the durable file as context journeys. The new cases sit under the journey their scenario serves: `US7-TC5-1` and `US7-TC6-1`, `US11-TC5-1` and `US11-TC6-1`, `US12-TC12-1`, `US16-TC15-1` and `US16-TC16-1`. `US1-TC52-1`, `US1-TC53-1` and `US1-TC56-1` stay under `winner-order-US1`, which their scenarios serve or which is the setup they walk.
+- **Split** - the one-time delivery and billing cases became `US12-TC12-1` and `US11-TC6-1`, and the Copy Message check left `US1-TC53-1` for `US16-TC16-1`, so each case walks one journey.
+- **Copy Message route** - `winner-order-SC-250` places Copy Message on a locked order, so `US16-TC16-1` starts from a Setup Overdue order. The route this change adds, an order with no method offered, is `US16-TC15-1`, which reads the `setup overdue` reason.
 - **Out of suite:** none.

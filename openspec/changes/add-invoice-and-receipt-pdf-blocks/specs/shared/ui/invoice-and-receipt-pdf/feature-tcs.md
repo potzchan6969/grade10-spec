@@ -1240,7 +1240,7 @@ Runs once per row of **Test data**.
 * No Payment section appears.
 * Every other meta row and party block still renders.
 
-<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-x92 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-43 -->
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-x92 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
 ### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders in Hong Kong as GMT+8
 
 **Classification:**
@@ -1258,18 +1258,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Issue, deadline and paid-at instants cross the Hong Kong calendar boundary; the machine clock is set to New York time.
+* A `Date` value, and a machine clock not set to Hong Kong time.
 
 **Steps:**
 
-1. Render InvoicePdf with the issue instant and deadline.
-2. Render ReceiptPdf with the paid-at instant.
-3. Inspect all three date rows.
+1. Render InvoicePdf with the pre-conditions.
+2. Inspect the sent-at meta row.
 
 **Expected Results:**
 
-* Each row shows its instant's Hong Kong calendar date and clock time.
-* Each row ends in `GMT+8`, independent of the machine clock.
+* The row shows that instant's Hong Kong calendar date and clock time.
+* The row ends in `GMT+8`.
+* The row does not contain `HKT`.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC42-1: Each renderer returns exactly one A4 page
 
@@ -1668,6 +1668,7 @@ date contract; and this suite's live tax, replacement, bank-rail and date
 cases supersede the deprecated DOM-era readings above.
 
 **Clarification, 2026-10-06 (`decisions.md` Q27):** the planning owner declined
-the link from the replacement row to the retained prior PDF. `SC-54` and
-`TC49`-`TC50` are removed: `SC-51` still proves the row names the prior
-invoice, and `TC6` still covers it, so no live scenario lost its case.
+the link from the replacement row to the retained prior PDF. The scenario and
+cases drafted for that link are not carried: `SC-51` still proves the row
+names the prior invoice, and `TC6` still covers it, so no live scenario lost
+its case.

@@ -82,7 +82,7 @@ LEFT JOIN auction_invoices i ON i.id = o.current_invoice_id
 - **Balance** - the sum of payment rows that count toward the current invoice: every row on it except one flagged `amount_mismatch`. Money on a replaced or cancelled invoice counts toward nothing
 - **Matrix test** - `packages/grade10-auction/backend/test/repositories/orderQueue.repo.test.ts` seeds every combination of invoice status, `cancelled_at`, `dispatched_at`, `delivered_at`, `delivery_address_confirmed_at` and deadline against `now`, and asserts the SQL status and since equal the TypeScript ones
 - **No sweep for setup** - Setup Overdue is time in the rule; the `setup_overdue` letter is queued at close. The `expiredInvoices` sweep keeps writing `expired` on the current invoice past its deadline and suspends the bidder in the same transaction; the `suspendedBidders` list goes. A cancelled order is skipped by the sweep
-- **A payment started in time counts** - the sweep leaves a `pending` invoice alone while its checkout session is open, which is at most 30 minutes past the deadline; `recordCheckoutClosed` writes `expired` at once when the deadline has passed, as `close-overdue-address-confirmation` asks
+- **A payment started in time counts** - the sweep leaves a `pending` invoice alone while its checkout session is open, which is at most 30 minutes past the deadline; `recordCheckoutClosed` writes `expired` at once when the deadline has passed; that expire-at-session-end rule is `close-overdue-address-confirmation`'s, which this change only calls
 
 ## Contracts
 
@@ -217,7 +217,7 @@ No input carries `actor` or `at`: identity is the session, time is the server cl
 | `ReviewProofInput` | `orderId`, `invoiceId`, `action: "confirm" \| "return"`, `externalReason?`, `internalNote?`, `idempotencyKey` |
 | `CancelOrderInput` | `orderId`, `category`, `note`, `idempotencyKey` |
 | `RecordRefundInput` | `orderId`, `amountMinor`, `method`, `destination`, `externalReference`, `refundedAt`, `reason` (fixed list), `note?`, `stockChoice`, `proofKeys`, `idempotencyKey` |
-| `RecordDispatchInput` | `orderId`, `carrier`, `trackingNumber`, `trackerUrl?`, `idempotencyKey` |
+| `RecordDispatchInput` | `orderId`, `carrier`, `trackingNumber`, `trackerUrl?`, `idempotencyKey`. `trackerUrl` is what Winner Order links the tracking number to; without it the number is plain text |
 | `ConfirmDeliveryInput` | `orderId`, `deliveredAt`, `proofKey?`, `idempotencyKey` |
 | `AddCommentInput` | `orderId`, `body` |
 | `ReopenSetupInput`, `ClearPaymentFlagInput` | `orderId`, `reason`, `idempotencyKey` (+ `paymentId` on the flag) |
@@ -368,7 +368,7 @@ Every post-sale mutation, setup confirm included, locks the order row and reads 
 Money that counts toward nothing never blocks a reissue or a cancel. Finance returns it outside Grade10, and an operator clears the flag with a reason. An expired or verifying invoice never starts a card payment; one that completes anyway lands by this table, and only `expired` moves, to `paid`, as the modified order-status transitions allow.
 
 5. A paid transition sets `paid_at`, writes the `paid` log row (brand, last four), sends `payment_received`, parks the reminders; a flag writes `payment_unexpected`
-6. `checkout.session.expired` and `async_payment_failed` run `recordCheckoutClosed(sessionId)`: clears the pointer only while it still names that session; log `payment_attempt_failed`
+6. `checkout.session.expired` and `async_payment_failed` run `recordCheckoutClosed(sessionId)`: clears the pointer only while it still names that session; log `payment_attempt_failed`; expiring the invoice when the deadline has passed is `close-overdue-address-confirmation`'s behaviour
 7. Return: the site's return page is unchanged, and the webhook alone records the payment
 
 ### Proof

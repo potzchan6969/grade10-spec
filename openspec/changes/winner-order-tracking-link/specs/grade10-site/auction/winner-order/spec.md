@@ -6,11 +6,6 @@ per lot, a delivery address, payment method and billing address they choose, an
 operator's invoice priced for both, payment by card or by a bank transfer they
 prove, and the receipt, tracker and delivery proof the order keeps afterwards.
 
-## Feature set
-
-- Order-progress tracking
-  - Tracking number: while fulfilment is `fulfilled` with a tracking number, Order Progress makes the number an external link to the carrier tracking page; no Track shipment control or carrier name appears in Order Progress; the link remains after delivery is confirmed
-
 ## ADDED Requirements
 
 ### Requirement: Winner Order makes the tracking number the carrier link
