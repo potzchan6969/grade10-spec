@@ -42,7 +42,8 @@ held by a look, from 20 questions to none.
 - **The blind reading still raises everything** - its method, its isolated
   input and the failure signal of an empty Raised table do not change.
 - **A closed row is settled for the next reading** - its answer goes to the
-  suite's `## Settled`, so the next blind pass does not raise it again.
+  suite's `## Settled`, so the next blind pass does not raise it again. Rows
+  one source settles share one `Q<n>`, which names that source.
 - **A question about a look waits on the designer** - the feature ships an
   interim built from the store's existing blocks and tokens, written as the
   shipped state in its `ui-design.md`; a look that needs a new variant, token
