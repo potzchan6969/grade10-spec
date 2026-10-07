@@ -25,7 +25,8 @@ Applicable story each show their outcome, and their play tests pass.
   - **Stacked** - the lines keep the sale; the summary shows only the code's
     discount
   - **Refused** - the lines and totals stay on the sale; the promo sheet names
-    the refusal
+    the refusal, and a held code the shopper picked moves apart, muted, with
+    the refusal as its reason and no Apply
   - **Replaced** - each line the code takes the sale from shows the list
     price with nothing struck through; the summary shows only the code's
     discount
@@ -80,18 +81,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## Open Questions
 
-- **R5, a picked code the quote refuses** - where its ticket sits after the
-  refusal. Owner: Designer -
-  [Cart Drawer · Site Sale and Promo Codes](../../../docs/prds/products/shared/ui/store-cart.md#site-sale-and-promo-codes),
-  A picked code the quote refuses
-- **R7, the struck price read aloud** - how a screen reader tells the struck
-  list price from the price charged. Owner: Designer -
-  [Cart Drawer · Site Sale and Promo Codes](../../../docs/prds/products/shared/ui/store-cart.md#site-sale-and-promo-codes),
-  The struck price read aloud
-
-R1, which price a Grade10 cart line strikes through when it is both repriced
-and on sale, belongs to the follow-on change -
-[decisions.md](decisions.md#decisions), Q6.
+None.
 
 ## Follow-on changes
 
@@ -99,8 +89,11 @@ and on sale, belongs to the follow-on change -
   decision, if the shop's sale is to be priced in that drawer; it settles
   the page's Struck price on a line row. It also routes a refused held pick
   to `PromoState` `expanded` with the refusal as its `error`, where Grade10
-  shows it as a toast today, and to `applicable: false` with
-  `inapplicableReason` if R5 lands as (b)
+  shows it as a toast today, and to `applicable: false` with the refusal as
+  its `inapplicableReason`, as `decisions.md` Q8 settles
+- A change that gives every struck price words a screen reader says, such as
+  Sale price and Was, supplied by the application as copy: the product tile,
+  the product page, the order line and the cart line - `decisions.md` Q9
 
 ## References
 
