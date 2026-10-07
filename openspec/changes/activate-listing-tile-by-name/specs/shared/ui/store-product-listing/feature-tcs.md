@@ -38,8 +38,8 @@ Runs once per row of **Test data**.
 
 | Product | Story | Cart handler | Cart control |
 | --- | --- | --- | --- |
-| `<product_1>` | Named Once | supplied — the tile sells | shows on the photo |
-| `<product_1>` | Named Once Not Selling | not supplied — the tile does not sell | none, on hover or on focus |
+| `<product_1>` | Named Once | supplied, so the tile sells | shows on the photo |
+| `<product_1>` | Named Once Not Selling | not supplied, so the tile does not sell | none, on hover or on focus |
 
 **Steps:**
 
@@ -395,6 +395,7 @@ Runs once per row of **Test data**.
 - **Overlap kept** - US1-TC10 and `add-store-cross-sell`'s blind US1-TC1 both walk `shared-ui-store-product-listing-SC-97`, a sold-out tile that opens where it does not sell; US1-TC10 also checks the name's underline and that Tab lands on the name, not the photo. `add-store-cross-sell` retraced its US1-TC1 here when its requirement for the rule left its delta (Q9)
 - **Carried, not this change's** - `shared-ui-store-product-listing-SC-04` to `shared-ui-store-product-listing-SC-09`, `shared-ui-store-product-listing-SC-46` to `shared-ui-store-product-listing-SC-50`, `shared-ui-store-product-listing-SC-52` to `shared-ui-store-product-listing-SC-54`, `shared-ui-store-product-listing-SC-65` and `shared-ui-store-product-listing-SC-66` are carried word for word; the capability's suite refresh owes them cases
 - **Uncovered** - none of this delta's scenarios
+- **QA2, 2026-10-07** - each case re-read against the scenarios its anchor holds once `add-store-cross-sell` and this change fold: every `covers` lists them in order, and nothing is contradicted, raised or uncovered; US1-TC4's Test data now joins its cells with a comma, not a dash
 - **Cases from QA2** - US1-TC11 and US1-TC12, and US1-TC10's underline and Tab results, were drafted by QA2 on 2026-10-06, which read the delta; they are not blind, and the one blind pass is the Run line below
 
 **Run:** Blind feature pass (QA1) on 2026-10-05 for `activate-listing-tile-by-name`, `shared/ui/store-product-listing`. Read the caller's isolated bundle only: the capability's Purpose and Feature set (outline), its `user-journeys.md`, the change's `proposal.md`, `decisions.md` with its Raised table, `ui-design.md` with scenario ids stripped, `openspec/config.yaml` context, the PRD pages `shared/ui/store-product-listing` and `grade10-site/store/product-listing`, and `add-store-cross-sell`'s in-flight suite for this capability with its Reconciliation stripped; plus `docs/governance/specs-to-test-cases.md` and `docs/governance/tcs-conventions.md`. Denied and not opened: every Requirements section, this change's delta `spec.md`, `openspec/specs/`, the rest of `openspec/changes/` and its archive, and `packages/` source.
