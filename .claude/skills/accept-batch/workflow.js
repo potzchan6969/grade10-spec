@@ -1,14 +1,10 @@
 export const meta = {
   name: "accept-batch",
   description:
-    "Take several active OpenSpec changes to Ready to accept together: scout, stock-take, or apply in stack order",
+    "Take several active OpenSpec changes to Ready to accept together: stock-take, or apply in stack order",
   whenToUse:
-    "The accept-batch skill's scout, stock-take and apply steps; args.step picks one",
+    "The accept-batch skill's stock-take and apply steps; args.step picks one",
   phases: [
-    {
-      title: "Scout",
-      detail: "one read-only reader per change: gates and ids",
-    },
     {
       title: "Stock-take",
       detail: "one cheap reader per change: every open item, classified",
@@ -16,35 +12,54 @@ export const meta = {
     {
       title: "Apply",
       detail:
-        "per stack: restack, apply the plan, gates, commit; QA where needed",
+        "per stack: restack, apply the plan, gates, commit; QA where the diff says",
     },
     {
       title: "Review",
-      detail: "one fresh accept-review per change, at most one fix",
+      detail: "one Cluster Mode accept-review per stack, at most one fix",
     },
+    { title: "Land", detail: "the tip of each ready stack, one at a time" },
     { title: "Design", detail: "design-phase changes for the designer asks" },
-    { title: "Overlap", detail: "one read across the stack tips" },
+    { title: "Overlap", detail: "one read across the stacks" },
   ],
 };
 
-const STEPS = ["scout", "stocktake", "apply"];
-if (!STEPS.includes(args?.step)) {
-  throw new Error(`args.step must be one of ${STEPS.join(", ")}`);
+const A = args ?? {};
+const REQUIRED = {
+  stocktake: ["repo", "changes", "gates"],
+  apply: ["repo", "root", "stacks", "plans", "date"],
+};
+if (!REQUIRED[A.step]) {
+  throw new Error(
+    `args.step must be one of ${Object.keys(REQUIRED).join(", ")}`,
+  );
 }
-const A = args;
+const missing = REQUIRED[A.step].filter((key) => A[key] == null);
+const designing = A.step === "apply" && Object.keys(A.design ?? {}).length > 0;
+if (designing && !(A.hands?.design && A.hands?.pm))
+  missing.push("hands.design", "hands.pm");
+if (A.step === "apply")
+  for (const stack of A.stacks ?? [])
+    if (stack.length > 1 && !A.sheets?.[stack[0]])
+      missing.push(`sheets.${stack[0]}`);
+if (missing.length) {
+  throw new Error(`args.${A.step} needs ${missing.join(", ")}`);
+}
+
 const BASE = A.base || "origin/main";
+const SKILL = `${A.repo}/.claude/skills/accept-batch/SKILL.md`;
+const PLANNING = `${A.repo}/.claude/skills/planning-dev/SKILL.md`;
 const branchOf = (c) => `docs/accept-${c}`;
 const wtOf = (c) => `${A.root}/${c}`;
 const gates = (c) =>
   `\`pnpm accept:preflight ${c}\`, \`pnpm run validate:changes ${c}\`, \`pnpm check:manual\`, \`pnpm run tcs:validate\`, \`pnpm run trace -- validate\``;
+const json = (value) => JSON.stringify(value ?? [], null, 1);
 
 const rules = `Ground rules:
 - Never run \`pnpm spec:accept\`, never pass --no-verify, never touch the tools/openspec-viewer pointer.${A.land ? "" : " Never push."}${A.app ? ` Read the application repo at ${A.app}; never edit it.` : ""}
 - The PRD pages under docs/prds are the source of truth.${A.app ? " Where a page line contradicts what the application builds, correct the page to the build and cite file and line." : ""}
 - A change branch never edits scripts/, tools/, packages/ or apps/. Report a tool bug as TOOL: <bug>; never patch it.
-- A carried MODIFIED scenario keeps its durable trace id. A new scenario, case or story id sits above every id the changes below in the stack issue for that capability.
-- Follow the store's skills: planning-dev, accept-review, writing-style before any prose, prd-authoring for page lines. Decided facts are flat and present-tense. ASCII hyphens only.
-- Commit with the /commit skill, one concern per commit, \`pnpm run lint\` first${A.session ? `, each message ending with the line \`${A.session}\`` : ""}.`;
+- Take the writing-style skill before any prose. Commit with the /commit skill, one concern per commit, \`pnpm run lint\` first${A.session ? `, each message ending with the line \`${A.session}\`` : ""}.`;
 
 const DEF = `Definitions:
 - **human**: a product preference between reasonable options, or an irreversible product choice.
@@ -60,42 +75,6 @@ const STEP = {
     report: { type: "string" },
   },
   required: ["ok", "sha", "report"],
-};
-const SCOUT = {
-  type: "object",
-  properties: {
-    gates: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          command: { type: "string" },
-          ok: { type: "boolean" },
-          refusals: { type: "array", items: { type: "string" } },
-        },
-        required: ["command", "ok", "refusals"],
-      },
-    },
-    capabilities: {
-      type: "array",
-      items: { type: "string" },
-      description: "durable capability paths the change has a delta for",
-    },
-    pages: {
-      type: "array",
-      items: { type: "string" },
-      description:
-        "PRD pages the proposal links or whose spec: names a capability above",
-    },
-    ids: {
-      type: "array",
-      items: { type: "string" },
-      description:
-        "per capability and kind, the highest scenario, case, story and trace id the change issues, e.g. 'grade10-site/store/cart SC-41'",
-    },
-    depends_on: { type: "array", items: { type: "string" } },
-  },
-  required: ["gates", "capabilities", "pages", "ids", "depends_on"],
 };
 const ITEM = {
   type: "object",
@@ -176,6 +155,20 @@ const APPLIED = {
       description: "one line per item: id - what changed",
     },
     rejected: { type: "array", items: { type: "string" } },
+    dropped: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: { sha: { type: "string" }, path: { type: "string" } },
+        required: ["sha", "path"],
+      },
+      description: "each tooling commit or hunk the restack dropped",
+    },
+    diff_files: {
+      type: "array",
+      items: { type: "string" },
+      description: "the name-only diff of the plan's commits",
+    },
     anchors_moved: { type: "boolean" },
     cases_or_scenarios_touched: { type: "boolean" },
     gates: { type: "string" },
@@ -186,6 +179,8 @@ const APPLIED = {
     "sha",
     "applied",
     "rejected",
+    "dropped",
+    "diff_files",
     "anchors_moved",
     "cases_or_scenarios_touched",
     "gates",
@@ -199,18 +194,33 @@ const FINDING = {
     where: { type: "string" },
     finding: { type: "string" },
     kind: { enum: ["ours", "human", "designer"] },
+    item: {
+      type: "string",
+      description: "the plan item id this blocker is, or empty",
+    },
     fix: { type: "string" },
   },
-  required: ["id", "where", "finding", "kind", "fix"],
+  required: ["id", "where", "finding", "kind", "item", "fix"],
 };
 const REVIEW = {
   type: "object",
   properties: {
-    verdict: { type: "string" },
-    blockers: { type: "array", items: FINDING },
+    changes: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          change: { type: "string" },
+          verdict: { type: "string" },
+          blockers: { type: "array", items: FINDING },
+        },
+        required: ["change", "verdict", "blockers"],
+      },
+    },
+    sha: { type: "string" },
     gates: { type: "string" },
   },
-  required: ["verdict", "blockers", "gates"],
+  required: ["changes", "sha", "gates"],
 };
 const OVERLAP = {
   type: "object",
@@ -236,61 +246,23 @@ const OVERLAP = {
   required: ["findings"],
 };
 
-const answered = (out) => {
-  const found = out.filter(Boolean);
-  const missing = A.changes.filter((c) => !found.some((r) => r.change === c));
-  if (missing.length) log(`no answer for ${missing.join(", ")}`);
-  return found;
-};
-
-const scout = async () => {
-  phase("Scout");
-  const out = await parallel(
-    A.changes.map(
-      (c) => () =>
-        agent(
-          `Read-only scout of change \`${c}\` in ${A.repo}, a clean checkout of the store's main. Edit nothing and judge nothing.
-Run ${gates(c)}; record each refusal verbatim. Then list the durable capabilities the change has a delta for, the PRD pages it touches, its depends_on, and per capability the highest scenario, case, story and trace id it issues.`,
-          {
-            label: `scout:${c}`,
-            phase: "Scout",
-            schema: SCOUT,
-            model: "sonnet",
-          },
-        ).then((r) => r && { change: c, ...r }),
-    ),
-  );
-  const found = answered(out);
-  const share = (key) => {
-    const by = {};
-    for (const r of found) {
-      for (const k of r[key]) by[k] = [...(by[k] || []), r.change];
-    }
-    return Object.fromEntries(
-      Object.entries(by).filter(([, cs]) => cs.length > 1),
-    );
-  };
-  return {
-    changes: found,
-    capabilities: share("capabilities"),
-    pages: share("pages"),
-  };
-};
-
 const stocktake = async () => {
   phase("Stock-take");
   const out = await parallel(
     A.changes.map(
       (c) => () =>
         agent(
-          `Read-only stock-take of change \`${c}\` in ${A.repo}, a clean checkout of the store's main. Edit nothing.
+          `Read-only stock-take of change \`${c}\` in ${A.repo}, a clean checkout of the store's main. Edit nothing and run no gate.
 List every item still holding the change from acceptance:
-1. Each refusal of ${gates(c)}; refusals of one cause are one item.
+1. Each refusal in the gate output below that names a path under openspec/changes/${c}/ or a page section its proposal links; refusals of one cause are one item.
 2. Every open row in openspec/changes/${c}/decisions.md \`## Raised\`, every decision row still marked ❓, every ❓ or TBC line on the page sections the proposal links, and every \`awaiting:\` in its .openspec.yaml.
 3. Every open finding in openspec/changes/${c}/accept-review.md, re-checked against the files; drop one that no longer holds.
 Merge duplicates into one item listing every row in where. Mark stale a row whose answer is written elsewhere or whose premise is gone. Classify each per the definitions, with the recommendation a careful product lead would pick.
 
-${DEF}`,
+${DEF}
+
+Gate output, run once on the store:
+${A.gates}`,
           {
             label: `stock:${c}`,
             phase: "Stock-take",
@@ -300,141 +272,200 @@ ${DEF}`,
         ).then((r) => r && { change: c, ...r }),
     ),
   );
-  return answered(out);
+  const found = out.filter(Boolean);
+  const silent = A.changes.filter((c) => !found.some((r) => r.change === c));
+  if (silent.length) log(`no answer for ${silent.join(", ")}`);
+  return found;
 };
 
-const ctx = (
-  c,
-  parent,
-  stack,
-) => `Change: \`${c}\`. Worktree: ${wtOf(c)} on branch ${branchOf(c)}; run every command there and edit no other worktree. Stack, in acceptance order: ${stack.join(" -> ")}. Parent: ${parent}. The changes below this one are settled: read them, never rewrite them.
+const ctx = (c, parent, stack) => `Change: \`${c}\`. Worktree: ${wtOf(c)} on branch ${branchOf(c)}; run every command there and edit no other worktree. Stack, in acceptance order: ${stack.join(" -> ")}. Parent: ${parent}. The changes below this one are settled: read them, never rewrite them.
 
 ${rules}`;
+
+const tipCtx = (stack) => {
+  const tip = stack[stack.length - 1];
+  return `Stack, in acceptance order: ${stack.join(" -> ")}. Worktree: ${wtOf(tip)} on branch ${branchOf(tip)}, which holds every change of the stack; run every command there and edit no other worktree.
+
+${rules}`;
+};
 
 const applyPrompt = (c, parent, stack) => `${ctx(c, parent, stack)}
 
 Bring this change to Ready to accept in one pass.
-1. **Restack** - \`git -C ${A.repo} fetch origin\`. If ${branchOf(c)} exists, move only its own commits onto ${parent}; otherwise \`git -C ${A.repo} worktree add -b ${branchOf(c)} ${wtOf(c)} ${parent}\`. Drop every commit or hunk under scripts/, tools/, packages/ or apps/. On a conflict keep the parent's side for what it moved and this change's side for its own content.
-2. **Apply the plan** below. Re-check each item against the files first and reject one that no longer holds, with the reason. Then follow its directive:
-   - **OURS** - fix it source first (page and decisions.md, then delta, ui and tech design, cases, tasks), and hunt its siblings
-   - **DECIDED** - record the answer as a settled decision row, close the Raised row, take the ❓ off the page line, and carry the answer through the delta, cases and tasks
-   - **DESIGNER** - ship the recommendation as this change's interim, or take the item out of scope where the recommendation says it belongs elsewhere; close the Raised row as handed to the design-phase change it names, in plain text
-   - **HOLD** - as its directive says; its refusals stay
-   - **STALE** - remove it, citing where it is answered
+1. **Restack** - If ${branchOf(c)} exists, move only its own commits onto ${parent}; otherwise \`git -C ${A.repo} worktree add -b ${branchOf(c)} ${wtOf(c)} ${parent}\`. Do not fetch: the run fetched once. Drop a commit or hunk under scripts/, tools/, packages/ or apps/ only when its content is already on ${BASE}, and list each in dropped. Where one is not on ${BASE}, stop with ok false and report it as \`TOOL: <sha> <path> - not on ${BASE}\`. On a conflict keep the parent's side for what it moved and this change's side for its own content. Note the sha after the restack as <start>.${A.sheets?.[c] ? `\n   Then write openspec/changes/${c}/reconciliation.md exactly as given below and commit it.` : ""}
+2. **Apply the plan** below. Re-check each item against the files first and reject one that no longer holds, with the reason. Then follow its directive as step 6 of ${SKILL} says.
 3. **Gates** - ${gates(c)}. Fix what is ours until they pass, except HOLD refusals.
-4. **Commit** - Do not run QA1, Dev or QA2. Report whether a frozen anchor (the journey set or a feature-set root group) moved, and whether cases or scenarios changed.
+4. **Commit, then read the diff** - Do not run QA1, Dev or QA2. Run \`git diff --name-only <start>..HEAD\` and return its lines as diff_files. For each spec.md it lists, run \`git diff <start>..HEAD -- <path>\`. anchors_moved is true when a user-journeys.md is listed or a hunk falls in a \`## Feature set\` section; cases_or_scenarios_touched is true when a feature-tcs.md is listed or a hunk falls in a \`#### Scenario:\` block.
 
 Plan:
-${JSON.stringify(A.plans?.[c] || [], null, 1)}`;
+${json(A.plans[c])}${A.sheets?.[c] ? `\n\nreconciliation.md:\n${A.sheets[c]}` : ""}`;
 
-const qa1 = (c, p, s) => `${ctx(c, p, s)}
+const reading = (step, name, c, p, s) => `${ctx(c, p, s)}
 
-QA1 of planning-dev, fresh context: run spec-to-tcs against only the frozen anchors and the domain suite above; never read requirements, scenarios, tech design, tasks or QA2 material. Blind draft cases. Commit.`;
-const dev = (c, p, s) => `${ctx(c, p, s)}
+Run ${name}, step ${step} of One Planning Run in ${PLANNING}, on this change in a fresh context, as that step says. Commit.`;
 
-Dev of planning-dev, fresh context, without reading feature-tcs.md: bring tech-design.md, the scenarios (each with **Serves:**) and tasks.md in line with the moved anchors, from the PRD, journeys and ui-design.md. Run \`pnpm plan:review-preflight ${c}\` until it passes. Commit.`;
-const qa2 = (c, p, s) => `${ctx(c, p, s)}
+const reviewPrompt = (stack) => `${tipCtx(stack)}
 
-QA2 of planning-dev, fresh context: reconcile each case and scenario against the anchors in every feature-tcs.md \`## Reconciliation\`; fix ids and trace markers the gates refuse. A question no page line, decision row or build answers goes to \`## Raised\`. Cases stay draft. Run \`pnpm run tcs:validate\` and \`pnpm run trace -- validate\`. Commit.`;
-const reviewPrompt = (c, p, s) => `${ctx(c, p, s)}
+Run accept-review in Cluster Mode over the stack, as if every change were accepted in stack order, reading openspec/changes/${stack[0]}/reconciliation.md first where it exists. Count only blockers: a finding that would make the engineer build the wrong thing, a gate refusal, or two artifacts stating one fact two ways. A HOLD item of a plan is expected: list it as human, with its plan item id. Every other blocker is ours, with its fix. Write each change's ledger and verdict as accept-review says, commit them, and edit nothing else.
 
-A fresh accept-review, as if every change below this one were accepted first. Count only blockers: a finding that would make the engineer build the wrong thing, a gate refusal, or two artifacts stating one fact two ways. A HOLD item of the plan is expected: list it as human. Every other blocker is ours, with its fix. Write and commit the ledger as accept-review says; edit nothing else.
+Plans:
+${json(Object.fromEntries(stack.map((c) => [c, A.plans[c]])))}`;
 
-Plan:
-${JSON.stringify(A.plans?.[c] || [], null, 1)}`;
-const fixPrompt = (c, p, s, blockers) => `${ctx(c, p, s)}
+const fixPrompt = (stack, blockers) => `${tipCtx(stack)}
 
-Fix these accept-review blockers source first, arguing each against the files and rejecting one that does not hold. If cases or scenarios change, reconcile them in feature-tcs.md \`## Reconciliation\` as QA2 would. Run ${gates(c)} until they pass, except HOLD refusals, mark each fixed in accept-review.md, and commit.
+Fix these accept-review blockers source first, arguing each against the files and rejecting one that does not hold. If cases or scenarios change, reconcile them in feature-tcs.md \`## Reconciliation\` as QA2 would. Run the gates of each change (${gates("<change>")}) until they pass, except HOLD refusals, mark each fixed in its accept-review.md, and commit.
 
-${JSON.stringify(blockers, null, 1)}`;
-const landPrompt = (c) => `${rules}
+${json(blockers)}`;
 
-In ${wtOf(c)}, land change \`${c}\` with the spec-push skill: \`pnpm push:main\`. Settle a conflict by reading the change; stop on one the change cannot decide. Return ok, the sha on main, and what happened.`;
+const landPrompt = (stack) => `${tipCtx(stack)}
 
-const runChange = async (c, parent, stack) => {
-  const at = (step, phaseName) => ({ label: `${step}:${c}`, phase: phaseName });
+Land the stack with the spec-push skill: \`pnpm push:main\` from the worktree. Settle a conflict by reading the change; stop on one the change cannot decide. Return ok, the sha on main, and what happened.`;
+
+let landing = Promise.resolve();
+const serially = (step) => {
+  const next = landing.then(step, step);
+  landing = next.catch(() => null);
+  return next;
+};
+
+const holds = (c) =>
+  new Set(
+    (A.plans[c] ?? [])
+      .filter((item) => item.directive === "HOLD")
+      .map((item) => item.id),
+  );
+const ready = (one) =>
+  one.verdict.startsWith("Ready to accept") ||
+  one.blockers.every((b) => b.kind === "human" && holds(one.change).has(b.item));
+
+const applyChange = async (c, parent, stack) => {
+  const at = (step) => ({ label: `${step}:${c}`, phase: "Apply" });
   const applied = await agent(applyPrompt(c, parent, stack), {
-    ...at("apply", "Apply"),
+    ...at("apply"),
     schema: APPLIED,
   });
-  if (!applied?.ok) return { change: c, applied };
-  if (applied.anchors_moved) {
-    await agent(qa1(c, parent, stack), at("qa1", "Apply"));
-    await agent(dev(c, parent, stack), at("dev", "Apply"));
+  if (!applied?.ok) return { change: c, ok: false, applied };
+  const files = applied.diff_files;
+  const moved =
+    applied.anchors_moved ||
+    files.some((f) => f.endsWith("/user-journeys.md"));
+  const touched =
+    moved ||
+    applied.cases_or_scenarios_touched ||
+    files.some((f) => f.endsWith("/feature-tcs.md"));
+  const readings = [
+    ...(moved ? [[1, "QA1"], [2, "Dev"]] : []),
+    ...(touched ? [[3, "QA2"]] : []),
+  ];
+  const ran = [];
+  for (const [step, name] of readings) {
+    const out = await agent(reading(step, name, c, parent, stack), at(name));
+    if (out == null) return { change: c, ok: false, applied, ran, stopped: name };
+    ran.push(name);
   }
-  if (applied.anchors_moved || applied.cases_or_scenarios_touched) {
-    await agent(qa2(c, parent, stack), at("qa2", "Apply"));
-  }
-  const review = await agent(reviewPrompt(c, parent, stack), {
-    ...at("review", "Review"),
-    schema: REVIEW,
-  });
-  const ours = (review?.blockers || []).filter((b) => b.kind === "ours");
-  const fixed = ours.length
-    ? await agent(fixPrompt(c, parent, stack, ours), {
-        ...at("fix", "Review"),
-        schema: STEP,
-      })
-    : null;
-  const landed = A.land
-    ? await agent(landPrompt(c), { ...at("land", "Review"), schema: STEP })
-    : null;
-  const ok =
-    Boolean(review) && (!ours.length || fixed?.ok) && (!A.land || landed?.ok);
-  return { change: c, ok, applied, review, fixed, landed };
+  return { change: c, ok: true, applied, ran };
 };
 
 const runStack = async (stack) => {
-  const out = [];
+  const changes = [];
   let parent = BASE;
   for (const c of stack) {
-    const r = await runChange(c, parent, stack);
-    out.push(r);
+    const r = await applyChange(c, parent, stack);
+    changes.push(r);
     if (!r.ok) {
       log(
         `stack ${stack[0]} stopped at ${c}; ${stack.slice(stack.indexOf(c) + 1).join(", ") || "nothing"} not run`,
       );
-      break;
+      return { stack, ok: false, changes };
     }
-    parent = A.land ? BASE : branchOf(c);
+    parent = branchOf(c);
   }
-  return out;
+  const at = (step) => ({ label: `${step}:${stack[0]}`, phase: "Review" });
+  const reviews = [
+    await agent(reviewPrompt(stack), { ...at("review"), schema: REVIEW }),
+  ];
+  const ours = (reviews[0]?.changes ?? []).flatMap((one) =>
+    one.blockers
+      .filter((b) => b.kind === "ours")
+      .map((b) => ({ change: one.change, ...b })),
+  );
+  const fixed = ours.length
+    ? await agent(fixPrompt(stack, ours), { ...at("fix"), schema: STEP })
+    : null;
+  if (fixed?.ok)
+    reviews.push(
+      await agent(reviewPrompt(stack), { ...at("re-review"), schema: REVIEW }),
+    );
+  const last = reviews[reviews.length - 1];
+  const ok =
+    Boolean(last) &&
+    (!ours.length || fixed?.ok === true) &&
+    stack.every((c) => {
+      const one = last.changes.find((r) => r.change === c);
+      return Boolean(one) && ready(one);
+    });
+  const landed =
+    ok && A.land
+      ? await serially(() =>
+          agent(landPrompt(stack), {
+            label: `land:${stack[0]}`,
+            phase: "Land",
+            schema: STEP,
+          }),
+        )
+      : null;
+  return {
+    stack,
+    ok: ok && (!A.land || landed?.ok === true),
+    changes,
+    reviews,
+    fixed,
+    landed,
+  };
 };
 
 const designPrompt = () => `${rules}
 
-Write one design-phase OpenSpec change per group below, so the designer finds each on the Pending page. Work in ${wtOf("_design")}: \`git -C ${A.repo} fetch origin && git -C ${A.repo} worktree add -b docs/accept-design ${wtOf("_design")} ${BASE}\`.
-Every ask has an interim the feature change ships; the designer confirms it as the agreed look or redraws it. Model each change on an active change whose .openspec.yaml awaits ui-design, and on docs/governance/prd-and-openspec.md "Waiting for an input":
-- **.openspec.yaml** - schema grade10-planning, created ${A.date}, hands design "${A.hands?.design}" and pm "${A.hands?.pm}", and awaiting \`ui-design: ${A.date}, <frames or states to confirm or draw> - ${A.hands?.design}\` and \`specs: ${A.date}, requirement deltas once the designer confirms or redraws\`
+Write one design-phase OpenSpec change per group below, so the designer finds each on the Pending page. Work in ${wtOf("_design")}: \`git -C ${A.repo} worktree add -b docs/accept-design ${wtOf("_design")} ${BASE}\`; do not fetch, the run fetched once.
+Every ask has an interim the feature change ships; the designer confirms it as the agreed look or redraws it. Model each change on docs/governance/prd-and-openspec.md "Waiting for an input":
+- **.openspec.yaml** - schema grade10-planning, created ${A.date}, hands design "${A.hands?.design}" and pm "${A.hands?.pm}", and awaiting \`ui-design: ${A.date}, <frames or states to confirm or draw> - ${A.hands?.design}\`. A group with \`looks: true\` also carries \`skip_specs: true\` and \`skip_specs_why: the designer confirms or redraws looks the feature change ships; no requirement moves\`. A group with \`looks: false\` instead awaits \`specs: ${A.date}, requirement deltas once the designer confirms or redraws\`
 - **proposal.md** - Why, What Changes (one bullet per ask, the surface first), Non-Goals, Capabilities by durable path, Impact
 - **decisions.md** - Goals, Non-Goals, and \`## Raised\` with one row per ask: the question, 2 to 4 options, the recommendation, owner Designer (${A.hands?.design}), and the feature change it came from in plain text
-- **Journeys** - as the schema and validate:changes require of a change waiting on specs
-Group the asks by screen. Put no ❓ on a page section a feature change links. Run \`pnpm run validate:changes <id>\` and \`pnpm check:manual\` until they pass; commit one change per commit.${A.land ? " Then land with `pnpm push:main`." : ""} Return ok, the tip sha and the changes with their asks.
+- **Journeys** - only for a group with \`looks: false\`, as the schema and validate:changes require of a change waiting on specs
+Put no ❓ on a page section a feature change links. Run \`pnpm run validate:changes <id>\` and \`pnpm check:manual\` until they pass; commit one change per commit.${A.land ? " Then land with `pnpm push:main`." : ""} Return ok, the tip sha and the changes with their asks.
 
-${JSON.stringify(A.design, null, 1)}`;
+${json(A.design)}`;
 
 const apply = async () => {
   phase("Apply");
+  const fetched = await agent(
+    `Run \`git -C ${A.repo} fetch origin\` once and return ok and the sha of ${BASE}.`,
+    { label: "fetch", phase: "Apply", schema: STEP, model: "sonnet" },
+  );
+  if (!fetched?.ok) throw new Error(`fetch failed: ${fetched?.report}`);
   const stacks = parallel(A.stacks.map((s) => () => runStack(s)));
-  const design =
-    A.design && Object.keys(A.design).length
-      ? agent(designPrompt(), {
-          label: "design",
-          phase: "Design",
-          schema: STEP,
-        })
-      : null;
+  const design = designing
+    ? serially(() =>
+        agent(designPrompt(), { label: "design", phase: "Design", schema: STEP }),
+      )
+    : null;
   const [results, designed] = await Promise.all([stacks, design]);
-  const tips = A.land
-    ? `main after the landing`
-    : A.stacks.map((s) => s.map(branchOf).join(" <- ")).join("; ");
+  const branches = A.stacks
+    .map((s) => branchOf(s[s.length - 1]))
+    .concat(designed ? ["docs/accept-design"] : []);
+  const unlanded = A.stacks
+    .filter((s, at) => !results[at]?.landed?.ok)
+    .map((s) => branchOf(s[s.length - 1]));
+  const read = A.land
+    ? `Run \`git -C ${A.repo} fetch origin\`, then read \`origin/main\` with \`git -C ${A.repo} show origin/main:<path>\`, never the working tree${unlanded.length ? `, and the unlanded branches ${unlanded.join(", ")}` : ""}.`
+    : `Read the branches ${branches.join(", ")}.`;
   const overlap = await agent(
     `${rules}
 
-Read-only, in ${A.repo}. Read the stacks (${tips})${designed ? " and docs/accept-design" : ""} as if every change accepted in stack order, the stacks in any order. Report: an id or trace marker issued twice for different things within one capability; a Feature set line, requirement or page line two changes state differently; any change branch still editing scripts/, tools/, packages/ or apps/. Name the change that yields and the exact fix.`,
+Read-only, in ${A.repo}. ${read} Read the changes as if every one accepted in stack order, the stacks in any order. Report a Feature set line, requirement or page line two changes state differently, and every path \`git -C ${A.repo} diff --name-only ${fetched.sha}...<branch> -- scripts tools packages apps\` lists for each of ${branches.join(", ")}. Name the change that yields and the exact fix.`,
     { label: "overlap", phase: "Overlap", schema: OVERLAP },
   );
   return { stacks: results, design: designed, overlap };
 };
 
-return await { scout, stocktake, apply }[A.step]();
+return await { stocktake, apply }[A.step]();
