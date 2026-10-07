@@ -8,14 +8,6 @@ header and the footer, at the width I browse at,
 **so that** I get the site around whatever I opened, and never a surface that
 shipped without it.
 
-### grade10-site-site-page-shell-US-02: Collector sees the chrome before the session resolves
-
-**As a** collector,
-**I want** the header and the footer rendered before the session has resolved,
-with only the account entry updating once it does,
-**so that** I can start navigating immediately without unrelated chrome
-shifting under me.
-
 ### grade10-site-site-page-shell-US-04: Collector follows only links the site answers
 
 **As a** collector,
