@@ -10,9 +10,11 @@
   (Q3).
 - Phone cart visibility and sort defaults.
 - Hover on a sold-out tile - `add-store-cross-sell` Q50.
-- Redrawing the Product Card Image Figma frame with a non-square photo - the
-  design hand redraws it in one pass with `drop-product-listing-photo-multiply`,
-  as that change's Q2 decides for both; acceptance does not wait on it.
+- Redrawing the Product Card Image Figma frame with a non-square photo. The
+  frame draws a square photo, which looks the same whole or cropped, so this
+  change needs no redraw and acceptance does not wait on it. The frame's redraw
+  is handed to the redraw-store-product-card-frames change by
+  `drop-product-listing-photo-multiply`, its Q2.
 - Re-capturing boneyard skeletons.
 
 ## Decisions

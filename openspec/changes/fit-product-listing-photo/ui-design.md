@@ -20,9 +20,10 @@ The four single-status stories keep their square photo, which fills the well;
 `Default`'s play test reads it at all four edges, its corners rounded with the
 well's. Only the Non Square Photo story shows the well filling the rest.
 
-The Figma frame still draws a square photo. The design hand redraws it with a
-non-square photo in the same pass as `drop-product-listing-photo-multiply` Q2;
-acceptance does not wait on it.
+The Figma frame draws a square photo, which looks the same whole or cropped,
+so this change needs no redraw and acceptance does not wait on it. The frame's
+redraw is handed to the redraw-store-product-card-frames change by
+`drop-product-listing-photo-multiply`, its Q2.
 
 Sold-out that still opens, including hover scale: `add-store-cross-sell` Q50,
 [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler). Not this change.
