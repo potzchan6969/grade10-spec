@@ -5,3 +5,4 @@ depends_on:
   - add-shipping-insurance-order-summary-tooltip
 hands:
   pm: "@jeffffej0909"
+  dev: "@htonyl"
