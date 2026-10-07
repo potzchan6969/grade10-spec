@@ -1,0 +1,8 @@
+schema: grade10-planning
+created: 2026-10-07
+depends_on:
+  - launch-wallet-passes
+  - add-account-profile
+awaiting:
+  ui-design: 2026-10-07, the Designer confirms or redraws each wallet's save action artwork (R1)
+  specs: 2026-10-07, the WalletPassLinks contract waits on the Designer's answer to R1
