@@ -2,7 +2,7 @@
 
 - Product detail context
   - Media gallery: lets a collector inspect every supplied product image without a lightbox.
-  - Purchase context: keeps current price, compare-at price, and inventory state together.
+  - Purchase context: keeps current price, compare-at price, and availability together.
   - Item facts: exposes optional product facets and SKU, with fulfilment guidance in which Shipping fee is text and the store name opens Store Locator, per Free pick-up opens Store Locator.
 - Product detail interaction
   - Description disclosure: lets a collector read the full description without losing their place.
