@@ -13,7 +13,7 @@ The data shape, pricing boundary and rollout order are in
 
 Needs `add-shipping-insurance-order-summary-tooltip`.
 
-- [ ] 1.1 Add contract and service tests for a taxed card invoice, an untaxed invoice, zero Tax refusal and a Tax-only reissue and a Tax removal (`post-sale-SC-155`, `post-sale-SC-156`, `post-sale-SC-157`, `post-sale-SC-158`, `post-sale-SC-210`, `winner-order-SC-216`, `winner-order-SC-04`)
+- [x] 1.1 Add contract and service tests for a taxed card invoice, an untaxed invoice, zero Tax refusal and a Tax-only reissue and a Tax removal (`post-sale-SC-155`, `post-sale-SC-156`, `post-sale-SC-157`, `post-sale-SC-158`, `post-sale-SC-210`, `winner-order-SC-216`, `winner-order-SC-04`)
 - [x] 1.2 Add nullable Tax minor units to the quote input, immutable invoice snapshot and the reissue's change detection; backfill existing invoices to no Tax
 - [x] 1.3 Extend the shared invoice pricing function so preview, send and reissue include present Tax in Subtotal before the existing card-fee gross-up, omit absent Tax and refuse zero, negative, fractional or unsafe values
 - [x] 1.4 Pass persisted Tax through the current-invoice read model and the existing invoice and receipt PDF `taxLine`, without deriving it from an address or adding a rate (`winner-order-SC-214`)
