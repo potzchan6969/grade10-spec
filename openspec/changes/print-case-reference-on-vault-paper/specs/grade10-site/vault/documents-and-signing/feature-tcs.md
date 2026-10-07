@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-10-07, tcs-rules r4
+**Out of suite:** grade10-site-vault-documents-and-signing-SC-42 - the behaviour suite `packages/vault/backend/src/testing/suites/registerPaper.ts` in the application repository; it serves US-04, the auditor's journey, which no customer or admin walks (tasks 2.1, 2.4)
 
 ## grade10-site-vault-documents-and-signing-US7: Collector recognises their case on the signed paper
 
@@ -11,7 +12,7 @@ type at my bank,
 **so that** I can tell which case a paper belongs to and quote it at the
 counter.
 
-<!-- trace:case id=g10.vault-documents-and-signing.TC-p63 rev=1 covers=g10.vault-documents-and-signing.SC-a2s,g10.vault-documents-and-signing.SC-keq,g10.vault-documents-and-signing.SC-8ct -->
+<!-- trace:case id=g10.vault-documents-and-signing.TC-p63 rev=1 covers=g10.vault-documents-and-signing.SC-a2s -->
 ### grade10-site-vault-documents-and-signing-US7-TC1-1: Each document in a prepared packet names the case by its reference alone
 
 Runs once per row of **Test data**.
@@ -56,7 +57,7 @@ Runs once per row of **Test data**.
 * Step 4 reads `<reference_1>` on each document.
 * No document prints `<case_1>`'s id.
 
-<!-- trace:case id=g10.vault-documents-and-signing.TC-5q0 rev=1 covers=g10.vault-documents-and-signing.SC-a2s,g10.vault-documents-and-signing.SC-keq,g10.vault-documents-and-signing.SC-8ct -->
+<!-- trace:case id=g10.vault-documents-and-signing.TC-5q0 rev=1 covers=g10.vault-documents-and-signing.SC-keq -->
 ### grade10-site-vault-documents-and-signing-US7-TC2-1: The release receipt names the case by its reference alone
 
 **Classification:**
@@ -90,7 +91,7 @@ Runs once per row of **Test data**.
 * Step 4 reads `<reference_5>`.
 * The receipt prints `<case_5>`'s id nowhere.
 
-<!-- trace:case id=g10.vault-documents-and-signing.TC-fzc rev=1 covers=g10.vault-documents-and-signing.SC-a2s,g10.vault-documents-and-signing.SC-keq,g10.vault-documents-and-signing.SC-8ct -->
+<!-- trace:case id=g10.vault-documents-and-signing.TC-fzc rev=1 covers=g10.vault-documents-and-signing.SC-8ct -->
 ### grade10-site-vault-documents-and-signing-US7-TC3-1: Every copy of a sealed agreement keeps the reference it was prepared with
 
 **Classification:**
@@ -124,9 +125,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Steps 4, 5 and 6 each name the case as `<reference_1>` in the facts and the footer.
+* Steps 4, 5 and 6 each end on a certificate that reads `Case: <reference_1>`.
 * None of the three copies prints `<case_1>`'s id.
 
-<!-- trace:case id=g10.vault-documents-and-signing.TC-y1m rev=1 covers=g10.vault-documents-and-signing.SC-a2s,g10.vault-documents-and-signing.SC-keq,g10.vault-documents-and-signing.SC-8ct -->
+<!-- trace:case id=g10.vault-documents-and-signing.TC-y1m rev=1 covers=g10.vault-documents-and-signing.SC-a2s -->
 ### grade10-site-vault-documents-and-signing-US7-TC4-1: Two cases of one collector each print their own reference
 
 **Classification:**
@@ -249,7 +251,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | `grade10-site-vault-documents-and-signing-US7-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-39` on the financed row; the storage row is the requirement's custody-agreement row, a value of the same rule |
 | `grade10-site-vault-documents-and-signing-US7-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-40` |
-| `grade10-site-vault-documents-and-signing-US7-TC3-1` | Raised, answered by the owner | Its "none of the three copies prints the id" reads the certificate page, which the requirement exempted and which printed the id; the two readings stated opposite things. Q8 holds the certificate to the rule, and the case is walked by `grade10-site-vault-documents-and-signing-SC-43` and `grade10-site-vault-documents-and-signing-SC-42` |
+| `grade10-site-vault-documents-and-signing-US7-TC3-1` | Raised, decided by the planning lead | Its "none of the three copies prints the id" reads the certificate page, which the requirement exempted and which printed the id; the two readings stated opposite things. Q8 holds the certificate to the rule; the case walks `grade10-site-vault-documents-and-signing-SC-43`, and the sealed-as-prepared rule behind it, `grade10-site-vault-documents-and-signing-SC-42`, is out of suite |
 | `grade10-site-vault-documents-and-signing-US7-TC4-1` | Covered | `grade10-site-vault-documents-and-signing-SC-39`: its GIVEN binds the case's own reference. The second case guards a render crossed between cases and adds no rule |
 | `grade10-site-vault-documents-and-signing-US8-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-41`; a release receipt and a collected case reach the same search, which matches a reference by prefix over every case |
 | `grade10-site-vault-documents-and-signing-US8-TC2-1` | Covered where it belongs | The durable `grade10-admin-vault-operator-queue-SC-26`, a reference nobody holds says so; kept here as US-08's refusal |
@@ -275,7 +277,7 @@ QA1's open points, closed:
 | Whether the case's address takes the reference | `grade10-site/vault/case-intake`'s *The id stays the key*: the address keeps the id |
 
 - **Folded** - none: the one new scenario came from Q8
-- **Raised, answered by the owner** - the certificate's case, landed as Q8: `grade10-site-vault-documents-and-signing-SC-43`, cited in tasks 2.1, 2.3 and 3.1
+- **Raised, decided by the planning lead** - on the product owner's delegation, the certificate's case, landed as Q8: `grade10-site-vault-documents-and-signing-SC-43`, cited in tasks 2.1, 2.3 and 3.1
 - **Rejected** - none
 - **Contradicted** - `grade10-site-vault-documents-and-signing-US7-TC3-1` against the requirement's certificate exemption, settled by Q8
 - **Uncovered anchors** - none: US-07 and US-08 each have cases, and SC-42's US-04 is verified out of suite
