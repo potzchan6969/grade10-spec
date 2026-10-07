@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "92dbad3775e96423710b828d65d796c6325bd1c582655111b2c666417f8c70f3"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "42e3e87a6bdc118700aa3f0569342f93f5beba20",
+    "capturedAt": "2026-10-07T04:08:43.538Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A late loan's clock reads beside the case's status",
+          "Requirement: Cancelling a visit asks first, naming the slot",
+          "Requirement: Sending the forfeiture notice asks first, naming the address and the date to pay by"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/vault/operator-queue/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

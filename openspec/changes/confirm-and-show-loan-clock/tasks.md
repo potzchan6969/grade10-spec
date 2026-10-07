@@ -1,4 +1,4 @@
-## 1. The One Case page (grade10-spec)
+## 1. The One Case page (grade10-spec) (owner: @ecchochan)
 
 - [ ] 1.1 Read the three 🚧 lines under One case in
       `docs/prds/products/grade10-site/vault/operator-console.md`
