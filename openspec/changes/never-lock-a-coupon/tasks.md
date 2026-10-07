@@ -31,7 +31,7 @@
 
 ## 5. Say the refusal (grade10, grade10-spec)
 
-- [x] 5.1 The refusal has a cause of its own, and copy in every language the store speaks
+- [x] 5.1 The till's refusal has a cause of its own and its own sentence; the online copy is group 11's
 
 ## 6. Prove it (grade10)
 
@@ -65,7 +65,7 @@
 - [ ] 9.4 A claim the programme answers `not_available` first runs the unsettled releases of this member's dead orders carrying that coupon, then asks once more
 - [ ] 9.5 Tests first: the cart drawer offers every coupon the member holds that is not spent, lapsed or void, among them one whose cancelled order has not yet given it back and one whose claim names an order never written, whatever that claim's age `grade10-site-loyalty-programme-SC-196`
 - [ ] 9.6 The drawer offers every reward coupon the wallet quote returns, as the till panel does, and reads no orders to decide it: `spendableRewards` and its read of open orders go (`services/orders/quote.ts:263-293`)
-- [ ] 9.7 Tests first, across both ledgers with the programme's own operation: a claim a checkout left when it stopped before its order was written is released and taken at the till and online once it is five minutes old, and a younger one is refused by name and not released `grade10-site-loyalty-programme-SC-241`, `grade10-site-loyalty-programme-SC-242`
+- [ ] 9.7 Tests first, across both ledgers with the programme's own operation: a claim a checkout left when it stopped before its order was written is released and taken at the till and online once it is five minutes old, and a younger one is refused by name and not released; a checkout that writes its order more than a minute after its claim is refused `grade10-site-loyalty-programme-SC-241`, `grade10-site-loyalty-programme-SC-242`, `grade10-site-loyalty-programme-SC-244`
 - [ ] 9.8 The programme's `releaseUnwrittenClaim` releases a coupon's pending claim for an order id only where it is older than five minutes, and answers `too_recent` otherwise; a claim the programme answers `not_available` calls it where the wallet's `reservedForOrderId` names no store row, then asks once more, and refuses by name on `too_recent`, as the supersede pass does for a checkout that will not close; the promise's row write refuses a claim it made more than a minute before
 
 ## 10. Let a sale go on without its reward (grade10)
@@ -74,8 +74,8 @@
 - [ ] 10.2 The plan refuses `coupon_off_sale` only when it names a reward, and the till's sentence names a reward rather than this coupon
 - [ ] 10.3 Tests first: a till sale a newer promise retired, and one that was paid, is refused on its next plan with a sentence that tells staff to ring the goods on a new sale, never to scan the card again `grade10-site-store-discounts-SC-24`, `grade10-site-store-discounts-SC-29`
 - [ ] 10.4 `sale_closed`'s till sentence names a new sale rather than a fresh scan, for every closed sale alike (`integrations/shopify-pos/grade10/src/till/sentences.ts:45`)
-- [ ] 10.5 Tests first: a fresh scan on a cart whose sale ran out its hour, or was retired, and still carries its reward code is refused with `sale_closed` and mints no code onto that cart `grade10-site-store-discounts-SC-27`
-- [ ] 10.6 `PosSalePlanInput` gains `cartOrderId`, which the extension reads off the cart before it writes its own; `planTillSale` refuses `sale_closed` when it names a row of this member's that this session did not write, that is no longer `pending`, and that carries a reward's code; a `pending` row waits on Raised R1
+- [ ] 10.5 Tests first: a fresh scan on a cart whose sale ran out its hour, or was retired, and still carries its reward code is refused with `sale_closed` and mints no code onto that cart; a fresh scan on the cart of the member's own open sale plans onto that sale and keeps its one code `grade10-site-store-discounts-SC-27`, `grade10-site-store-discounts-SC-30`
+- [ ] 10.6 `PosSalePlanInput` gains `cartOrderId`, which the extension reads off the cart before it writes its own; `planTillSale` refuses `sale_closed` when it names a row of this member's that this session did not write, that is no longer `pending`, and that carries a reward's code; a `pending` row of this member's it continues, planning onto that row and its code rather than retiring it
 
 ## 11. Word the refusals (grade10-spec)
 
@@ -101,7 +101,7 @@
 
 - [ ] 14.1 The tests behind groups 1 to 8 cite the scenarios they prove, and a missing one is written `grade10-site-loyalty-programme-SC-190`, `grade10-site-loyalty-programme-SC-191`, `grade10-site-loyalty-programme-SC-192`, `grade10-site-loyalty-programme-SC-193`, `grade10-site-loyalty-programme-SC-196`, `grade10-site-loyalty-programme-SC-197`, `grade10-site-loyalty-programme-SC-198`, `grade10-site-loyalty-programme-SC-199`, `grade10-site-loyalty-programme-SC-201`, `grade10-site-loyalty-programme-SC-202`, `grade10-site-loyalty-programme-SC-204`, `grade10-site-loyalty-programme-SC-205`, `grade10-site-loyalty-programme-SC-166`, `grade10-site-loyalty-programme-SC-172`, `grade10-site-loyalty-programme-SC-235`, `grade10-site-loyalty-programme-SC-236`, `grade10-site-loyalty-programme-SC-238`, `grade10-site-loyalty-programme-SC-239`, `grade10-site-loyalty-programme-SC-240`, `grade10-site-store-discounts-SC-19`, `grade10-site-store-discounts-SC-26`, `grade10-site-store-discounts-SC-28`
 - [ ] 14.2 The release outbox's give-up deadline outlasts the programme's sweep, held by the test that reads both clocks
-- [ ] 14.3 The tests behind the forfeit count and the member's coupon list cite the scenarios that now name the coupon rather than its code, and a missing one is written, among them a code that dies with its sale counting no forfeit `grade10-site-loyalty-programme-SC-120`, `grade10-site-loyalty-programme-SC-148`, `grade10-site-loyalty-programme-SC-233`
+- [ ] 14.3 The tests behind the forfeit count and the member's coupon list cite the scenarios that now name the coupon rather than its code, and a missing one is written, among them a code that dies with its sale counting no forfeit `grade10-site-loyalty-programme-SC-120`, `grade10-site-loyalty-programme-SC-148`, `grade10-site-loyalty-programme-SC-233`, `grade10-site-loyalty-programme-SC-243`
 
 ## 15. Count what the measures read (grade10)
 

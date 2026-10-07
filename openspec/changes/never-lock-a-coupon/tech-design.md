@@ -233,8 +233,9 @@ releases the pending claim only where it is older than five minutes. The store
 owns the fact that no row exists and the programme owns the claim's age, so
 neither decides on the other's data. Five minutes is past any checkout still
 running, and the promise's own row write refuses a claim it made more than a
-minute before, so a release never meets a row still being written. A younger
-claim may be a checkout still being promised, so the operation answers
+minute before, so a release never meets a row still being written
+(`SC-244`). A younger claim may be a checkout still being promised, so the
+operation answers
 `too_recent` and the claim is refused by name, as an earlier sale that stands
 (`SC-242`); the race retry above has already run by then. The sweep still
 releases one nobody claims again.
@@ -274,7 +275,7 @@ what refuses, once, and by name.
   whose coupon left before any code was minted carries no such record, and can
   claim again. Only an open sale reaches this check: one whose coupon was
   claimed elsewhere is already `expired`, and refused `sale_closed`.
-- **A fresh scan on a closed sale's cart is refused.** A till session lives
+- **A fresh scan reaches the sale its cart names.** A till session lives
   ten minutes from its scan (`pos/deps.ts:54`, `identity/sessions.ts:141`) and
   a sale's hour runs from its last plan, so a sale that ran out its hour, or a
   retired one whose session lapsed, never takes another plan from its own
@@ -285,11 +286,13 @@ what refuses, once, and by name.
   `PosSalePlanInput` gains `cartOrderId`, the attribute the cart carries before
   the plan writes its own; `planTillSale` refuses `sale_closed` when it names a
   row of this member's that this session did not write, that is no longer
-  `pending`, and that carries a reward's code (`SC-27`). One read by id; a
-  cart naming no order, this session's own, or a `pending` row plans as
-  today. What a fresh scan does on a cart whose sale is still `pending` is
-  open as Raised R1: refusing it adds `pending` to this check, and continuing
-  it plans onto that row and its code. The read serves either answer.
+  `pending`, and that carries a reward's code (`SC-27`). A `pending` row of
+  this member's is continued (Q27): the plan writes onto that row under its
+  own checkout reference, since the row is keyed on it
+  (`repositories/orders.ts:449-450`), and the mint reuses its code, so the
+  supersede pass names that row the survivor rather than retiring it
+  (`SC-30`). One read by id; a cart naming no order, this session's own, or
+  another member's row plans as today.
 - **A gift's line stays on a cart its sale has left.** Nothing of the store
   runs at the counter once staff walk away, so the hour and a newer promise
   take the claim off the row and leave the line on the shop's cart. The row
@@ -389,10 +392,6 @@ it for a cut nobody gave.
   deactivated its code. The
   coupon returns to the wallet spendable anywhere, but not back onto a counter
   sale whose code it left. The remedy the counter already names is a new sale.
-- **A fresh scan on a sale still open, while Raised R1 stands.** The plan
-  retires that sale and deactivates its code, which the shop still honours on
-  the cart, and a coupon chosen again mints a second code beside it. The
-  answer to R1 closes it, in the check above.
 - **Staff watch a cut leave a sale they are working.** The plan result now names
   the member's coupon so the extension can say so; a live push is its own
   change.
