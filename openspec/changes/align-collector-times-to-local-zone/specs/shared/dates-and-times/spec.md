@@ -1,7 +1,6 @@
 # shared/dates-and-times Specification
 
 ## Purpose
-
 How a stored instant becomes text a person reads, and how a calendar day a
 person types becomes an instant.
 
@@ -19,7 +18,9 @@ from the machine: an instant on a collector surface is stated in the viewer's
 local zone, and a deadline that shows a clock names it. A page that books or
 confirms a visit, or a vault or signing page, keeps the shop's clock instead and
 is outside that rule: how those pages name their zone is not set here, and a
-vault timeline stamp stays UTC. Operator tables and admin surfaces state UTC. A
+collector's vault timeline stamp stays UTC. Operator tables, admin surfaces and
+the records a machine reads state UTC, except an admin surface whose own spec
+keeps a shop's clock, as the vault console and the appointments diary do. A
 message, invoice (the application's invoice page included), receipt or terms
 page states the brand's zone as GMT+8. A calendar day the business judges is
 always judged on the brand's own zone, because a day is a fact about where the
