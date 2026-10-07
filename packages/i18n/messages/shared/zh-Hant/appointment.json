@@ -48,7 +48,16 @@
     "emailMissing": "請填寫接收確認的電郵。",
     "emailInvalid": "這看來不是有效的電郵地址。",
     "answerMissing": "請選擇一項以繼續。",
-    "submit": "確認預約"
+    "submit": "確認預約",
+    "choose": "請選擇",
+    "kinds": {
+      "short_text": "短文字",
+      "long_text": "長文字",
+      "number": "數字",
+      "select": "下拉選單",
+      "radio": "單選",
+      "checkboxes": "多選"
+    }
   },
   "summary": {
     "title": "你的預約",
@@ -63,7 +72,9 @@
     "location": "門市",
     "when": "時間",
     "manage": "更改或取消此預約",
-    "calendar": "加入行事曆"
+    "calendar": "加入行事曆",
+    "beforeYouCome": "到店前須知",
+    "answers": "你提供的資料"
   },
   "manage": {
     "title": "你的預約",
@@ -97,9 +108,10 @@
   },
   "state": {
     "booked": "已預約",
+    "checked_in": "已到店",
     "cancelled": "已取消",
-    "completed": "已完成",
-    "no_show": "未到"
+    "completed": "已到訪",
+    "no_show": "未到訪"
   },
   "errors": {
     "servicesUnavailable": "無法讀取服務。",
