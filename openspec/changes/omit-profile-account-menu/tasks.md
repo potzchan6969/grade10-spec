@@ -36,21 +36,24 @@ commit; each passes on arrival and fails if a handler leaves its gate. Every
 account-menu citation moves off the retired ids, per `tech-design.md` § The
 Menu Requirement Is Replaced.
 
-- [ ] 2.1 Rewrite the signed-in menu test in
-      `apps/frontend/grade10/src/chrome/SiteShell.test.tsx` to assert My
-      Orders immediately before My Auctions, Sign Out last and reading
-      "Sign Out", and no KYC or My Auction Orders; its Profile assertions
-      move to group 3
-      (`grade10-site-site-page-shell-SC-56`, `grade10-site-site-page-shell-SC-62`)
+- [ ] 2.1 Split the signed-in menu test in
+      `apps/frontend/grade10/src/chrome/SiteShell.test.tsx`: one test
+      asserts My Orders immediately before My Auctions, Sign Out last and
+      reading "Sign Out", and no KYC or My Auction Orders
+      (`grade10-site-site-page-shell-SC-56`, `grade10-site-site-page-shell-SC-62`);
+      with `profile` open, the other asserts Profile is the first item and
+      its click opens `ROUTES.profile`
+      (`grade10-site-site-page-shell-SC-66`, `grade10-site-site-page-shell-SC-67`)
 - [ ] 2.2 Add `membership` to the test's `gateState` and assert each
       withheld page: `store` shut gives no My Orders and Sign Out last;
       `profile` shut with `store` open opens on My Orders with no Profile;
       `membership` shut with `store` open gives no Membership; all three
       shut give exactly My Auctions then Sign Out. In
-      `src/store-shut.test.tsx`, drop the Profile assertion from the
-      no-My-Orders test
+      `src/store-shut.test.tsx`, where `profile` is open and `store` shut,
+      the no-My-Orders test asserts Profile, My Auctions, then Sign Out
       (`grade10-site-site-page-shell-SC-58`, `grade10-site-site-page-shell-SC-59`,
-      `grade10-site-site-page-shell-SC-63`, `grade10-site-site-page-shell-SC-60`)
+      `grade10-site-site-page-shell-SC-63`, `grade10-site-site-page-shell-SC-60`,
+      `grade10-site-site-page-shell-SC-66`)
 - [ ] 2.3 Destinations in `SiteShell.test.tsx`: cite the My Orders
       (`ROUTES.orderHistory`) and My Auctions (`ROUTES.auctionWatchlist`)
       tests and delete the duplicate My Orders test that cites a retired
@@ -67,32 +70,18 @@ Menu Requirement Is Replaced.
       (`grade10-site-site-page-shell-SC-08`)
 - [ ] 2.6 Verify: `pnpm --dir apps/frontend/grade10 run typecheck && pnpm --dir apps/frontend/grade10 run test`
 
-## 3. Profile where the account page is carried (grade10)
+## 3. The walk (grade10)
 
-`SiteShell.tsx:156-158` already supplies `onProfile` from the profile gate,
-so this group is its tests alone (`tech-design.md` § Profile Joins Where the
-Account Page Is Carried).
-
-- [ ] 3.1 In `SiteShell.test.tsx`, with `profile` open, assert Profile is
-      the first item and its click opens `ROUTES.profile`
-      (`grade10-site-site-page-shell-SC-66`, `grade10-site-site-page-shell-SC-67`);
-      in `src/store-shut.test.tsx`, with `profile` open and `store` shut,
-      assert Profile, My Auctions, then Sign Out
-      (`grade10-site-site-page-shell-SC-58`, `grade10-site-site-page-shell-SC-66`)
-- [ ] 3.2 Verify: `pnpm --dir apps/frontend/grade10 run typecheck && pnpm --dir apps/frontend/grade10 run test`
-
-## 4. The walk (grade10)
-
-Uses draft `feature-tcs.md` as its input once groups 1 to 3 have landed.
+Uses draft `feature-tcs.md` as its input once groups 1 and 2 have landed.
 Human QA reviews the cases after deployment with
 `/tcs-review omit-profile-account-menu`, and `/tcs-run-sheet` runs the
 manual ones. `grade10-site-auction-auction-orders-US-01` moves no behaviour
 here, so its walk stays with its own suite.
 
-- [ ] 4.1 Export the lane's deploy env from `apps/frontend/grade10/e2e/helpers/env.ts`
+- [ ] 3.1 Export the lane's deploy env from `apps/frontend/grade10/e2e/helpers/env.ts`
       beside the origins, set by `e2e/run.sh` and each hosted lane's env
       module, so a walk reads its gates from `gatesFor`
-- [ ] 4.2 Add `e2e/tests/auth/account-menu.spec.ts`, walking
+- [ ] 3.2 Add `e2e/tests/auth/account-menu.spec.ts`, walking
       `grade10-site-site-page-shell-US-03` on the lane's gates: signed out,
       Sign In leads to sign-in; signed in on a Store lane, My Orders comes
       immediately before My Auctions, Sign Out is last, no My Auction
@@ -102,10 +91,10 @@ here, so its walk stays with its own suite.
       withholding Store, the account page and the membership page, the menu
       is exactly My Auctions then Sign Out. Kept as the change's end-to-end
       suite
-- [ ] 4.3 Flip the cases the walk decides with
+- [ ] 3.3 Flip the cases the walk decides with
       `pnpm run tcs:automated <case…> --decided-by grade10:apps/frontend/grade10/e2e/tests/auth/account-menu.spec.ts`,
       in the walk's own commit; the ones that stay manual are named in the
       suite and in the walk's `rounds.md` row
-- [ ] 4.4 Verify: `pnpm --dir apps/frontend/grade10 run typecheck`,
+- [ ] 3.4 Verify: `pnpm --dir apps/frontend/grade10 run typecheck`,
       `pnpm --dir apps/frontend/grade10 run e2e` and
       `pnpm --dir apps/frontend/grade10 run e2e:uat` green

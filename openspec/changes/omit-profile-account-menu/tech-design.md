@@ -142,8 +142,9 @@ contract only.
 Q1 keeps the app as it is: `SiteShell.tsx:156-158` supplies `onProfile` from
 `config.gates.profile`. The menu requirement says so in **The menu** and
 **Each item**, proven by `grade10-site-site-page-shell-SC-66` and
-`grade10-site-site-page-shell-SC-67`; group 3 adds their tests with the
-`ROUTES.profile` destination assertion.
+`grade10-site-site-page-shell-SC-67`. The signed-in menu test already clicks
+Profile into `ROUTES.profile`, and the store-shut test already finds Profile,
+so task 2.1 and task 2.2 cite them in the group 2 commit.
 
 ## Risks / Trade-offs
 
