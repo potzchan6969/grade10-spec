@@ -18,6 +18,13 @@ unpaid, per week, are no higher after the title changes than before.
 - **A discount titled "Points" still counts as the member's points.** Carts,
   parked sales and unpaid drafts written before the switch carry it, and
   paid orders keep it forever; every reader accepts both titles.
+- **Every reader finds the points discount the same way.** At the till, only
+  the sale's one fixed custom order discount counts under either title, and
+  only on a sale carrying the store's order id; a points title staff keyed on
+  a sale without it leaves the panel with no points, no coupon and no Apply.
+  A paid order whose discounts carry neither title is debited the applied
+  total less every other instrument, never more than promised. A resumed
+  sale applied again takes "Deduction from Points".
 - **Every reader knows the new title before anything writes it.** The store
   and the till first accept both titles while still writing "Points"; both
   writers switch only once no till older than that runs at any location.
