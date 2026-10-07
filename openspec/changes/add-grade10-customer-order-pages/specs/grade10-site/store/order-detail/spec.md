@@ -144,6 +144,23 @@ another fact.
 - **AND** the Points label names the 100 points deducted
 - **AND** neither amount is folded into the other
 
+<!-- trace:scenario id=g10.store-order-detail.SC-usm rev=1 -->
+#### Scenario: grade10-site-store-order-detail-SC-18 - Points credit shows under either points title
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
+
+- **GIVEN** an owned order whose shop named its points discount "Points", for 10000 minor units `HKD` and 100 points
+- **WHEN** its money summary renders
+- **THEN** a Points row shows 10000 minor units `HKD`
+- **AND** its label names the 100 points deducted, as it does for "Deduction from Points"
+
+<!-- trace:scenario id=g10.store-order-detail.SC-ejb rev=1 -->
+#### Scenario: grade10-site-store-order-detail-SC-19 - No points credit where the shop named no points discount
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
+
+- **GIVEN** an owned order whose points were debited, and whose discounts carry neither points title or are not named at all
+- **WHEN** its money summary renders
+- **THEN** no Points row appears
+
 <!-- trace:scenario id=g10.store-order-detail.SC-7ci rev=1 -->
 #### Scenario: grade10-site-store-order-detail-SC-13 - Customer-facing identity does not replace the route id
 **Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
