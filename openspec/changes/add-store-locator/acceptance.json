@@ -1,0 +1,268 @@
+{
+  "version": 2,
+  "change": "add-store-locator",
+  "baseline": "9625708d9e2037c1c96535d851baa5cb0bda7465257a85ccf392118b5e788e9f",
+  "fingerprint": "ac171891197fde9b35a643856881799839b414677de83ca53f7f36a26dd704ba",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T11:59:09.540Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/site/carried-surfaces.md#what-each-lane-carries",
+      "sha256": "fbc38bf645a5f465fdeef98f277247e541d8c59f3fdc8b6a26855a724d494daa",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/product-page.md#free-pick-up",
+      "sha256": "b751e9098852bce5861c5dde444449aeac7061fdf3346cb8039f1065eeb2e27b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/store-locator.md#from-elsewhere",
+      "sha256": "81213224210c110a6b8d836473a3df541fddabbc3450c354a710fb1aa6eb8ae8",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/store-locator.md#shop",
+      "sha256": "db76842d64cb9f02467a3550100c20529b719e384640980e36ea5f497dedb1e5",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/store-locator.md#the-page",
+      "sha256": "43b9b563f4d13713e83ca8fa00f0915ea01835ec43eebc90f113b5d7d39a554d",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-locator.md#designs",
+      "sha256": "9574381607296d806e5e3fad26438eddfb69b2079be3aeff3b21d8313d0ac187",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/decisions.md",
+      "sha256": "89a3c139693a211db6634af11abd3bc5d92776916bd277a3e64d851a9e30d5c1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/proposal.md",
+      "sha256": "2f98ac7f75014bb71ee89d503a72877617856ee6f3a28d125a9ecb984131a149",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/site/carried-surfaces/feature-tcs.md",
+      "sha256": "3200e3f5b5a8ffbef821823f42584d59f53cf42ad1f3f93ba3ec7090d37776fd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/site/carried-surfaces/spec.md",
+      "sha256": "1891928ebc319d27a340c7c165a065355294820fab1fc279f933a13d7b6d4758",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/site/carried-surfaces/user-journeys.md",
+      "sha256": "13d4a8ed01fbf3bcc47342fc63f99625dfaf4322f0c1c61326893d2bbcd98925",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "75127c14a99f2fe9e97920848bae61f36a630d45564c9a2863d73b4e4b72ef8f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/store/product-page/feature-tcs.md",
+      "sha256": "4cf7f283032b98a561dff8f316442f30ff166b2431de1ea3e83740f0e581e45d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "b12b52d8a07bfde67b5f2524fb15861eb8b62e27e774b6a4ff771d38e5a6e78a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "4ba8c92088cf8435fa58cdedfe477d4944ca594992d68f7320d4f946cab1eeac",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/store/store-locator/feature-tcs.md",
+      "sha256": "7fa661e1a7844eef8c7d29766675d030674f0d58a67c51dc3979a311c4ba3c2d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/store/store-locator/spec.md",
+      "sha256": "b5a72d9b702826eefbedb604aef701ba43abb75d6417bde81023152f2a5978d2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/grade10-site/store/store-locator/user-journeys.md",
+      "sha256": "5fb6654a3c2669018e5327037e172edb40aa4a115990018317c5d0eb6b0349b8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/shared/ui/store-locator/feature-tcs.md",
+      "sha256": "c3a2390729c0f3ba20ee6296ecd269b730de7da3145fd2f87295e0b34d26af34",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/shared/ui/store-locator/spec.md",
+      "sha256": "059ad2914b1fecdfe87f826217d67b5c081807739dbfd0bfd3bbde49c5bb2c2f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/specs/shared/ui/store-locator/user-journeys.md",
+      "sha256": "05ad49a9b770965a4d05419308c56459be3b8cf8efcd8b008541f0437a3d8def",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/tech-design.md",
+      "sha256": "fc90496ce408bb2178068fcac9d3e668097d9941b1aca084c802e5e9b062e2e1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-locator/ui-design.md",
+      "sha256": "a7bad7f5d02c9bda42c56ffc2cdc8b0bd87342577ed7aab0fd4175b47fd71673",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/carried-surfaces/feature-tcs.md",
+      "sha256": "a5aaf9ea15134b1e940c8c8d72c010fd9926564d11dd28228f9b7f439aa8ef1d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/carried-surfaces/spec.md",
+      "sha256": "2112344f89b62515225d9aa85a522291adb6606f023a898f5676d75764ea01c8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/carried-surfaces/user-journeys.md",
+      "sha256": "c03d7fd2900e949db21fd2c94a1413cb73435181f68c0cc56806a2b7f412f829",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "43d58122e4d62fb28b0014e799c084997c21f0db06d226d97c7167c0909775f2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+      "sha256": "e7427f98c47f75eebb8ab253b0c4fe831d1ba6a46826d0b6de9d4e6814cd3e18",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "7c07c738f85a81d18fb485352c6f6d16184bd6846c768e905f28ce32b9acb127",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "b1467319208d3359791ba82a03c97bbac5d369c9118d6da113a41fcc1b53849b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/store-locator/feature-tcs.md",
+      "sha256": "7fa661e1a7844eef8c7d29766675d030674f0d58a67c51dc3979a311c4ba3c2d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/store-locator/spec.md",
+      "sha256": "8954943cffc929335eae61b3f855cbc2eaddd41d1d56208483e274b88ad14a83",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/store-locator/user-journeys.md",
+      "sha256": "5fb6654a3c2669018e5327037e172edb40aa4a115990018317c5d0eb6b0349b8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-locator/feature-tcs.md",
+      "sha256": "c3a2390729c0f3ba20ee6296ecd269b730de7da3145fd2f87295e0b34d26af34",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-locator/spec.md",
+      "sha256": "c3fc14ef5c56ed1dead4ca12b3ddff18bbef0023c01d4bdb5ebe84082ffd540b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-locator/user-journeys.md",
+      "sha256": "05ad49a9b770965a4d05419308c56459be3b8cf8efcd8b008541f0437a3d8def",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-store-locator/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/carried-surfaces/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/carried-surfaces/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Each waiting product waits for its own launch",
+        "Requirement: Nothing in a build names a surface it does not carry",
+        "Requirement: Where a product is carried it behaves as it is specified to"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/carried-surfaces/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Free pick-up opens Store Locator"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/store-locator/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/store-locator/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Chrome reaches Store Locator",
+        "Requirement: Store Locator answers with Location & Hours",
+        "Requirement: Store Locator stays usable at a narrow width",
+        "Requirement: The map opens Google Maps"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/store-locator/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-locator/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-locator/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: StoreLocator shows supplied Location & Hours",
+        "Requirement: The store locator surface exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-locator/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
