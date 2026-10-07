@@ -152,7 +152,7 @@ Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
 - [ ] 5.3 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
       and `pnpm run lint`.
 
-## 6. The walk (grade10)
+## 6. The walk (grade10) (owner: @ecchochan)
 
 Uses draft `feature-tcs.md` as its input; human QA reviews cases after
 deployment (`/tcs-review confirm-and-show-loan-clock`), and `/tcs-run-sheet`
