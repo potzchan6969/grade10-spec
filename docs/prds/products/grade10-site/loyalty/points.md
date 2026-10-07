@@ -369,8 +369,9 @@ lapsed.
 | 2026/06/01 | campaign grant · takes 2027/01/03 · date stays | +100 | 115 |
 | 2027/01/03 | lapse, all of it | −115 | 0 |
 
-A grant moves no date, and neither does an operator correction. Both take the
-date the balance already has, so the member reads one day for everything.
+On a balance with points still live, a grant moves no date, and neither does
+an operator correction. Both take the date the balance already has, so the
+member reads one day for everything.
 :::
 
 :::example{title="A grant to an empty balance moves the date out"}
@@ -393,7 +394,7 @@ the later of that and 2027/01/03.
 | 2027/06/01 | lapse, all of it | −115 | 0 |
 
 The restart moves the whole balance, the grant and the earn alike. Nothing
-else moves the date without the member buying or redeeming.
+else moves a live balance's date without the member buying or redeeming.
 :::
 
 :::example{title="A late record shortens nothing"}
@@ -435,7 +436,7 @@ spend rather than lose a balance that was about to lapse.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| What a grant's points live for | Decided | They take the date the balance already has, and push it no further. | Product |
+| What a grant's points live for | Decided | On a balance with points still live, they take its date and push it no further. | Product |
 | A balance with nothing live | Decided | A grant or a correction lapses on the later of twelve months from its own day and the day still running, and moves that day out, never back (grade10 `packages/loyalty/backend/src/services/ledger/expiry.ts:74-83`, `packages/loyalty/backend/src/repositories/members.ts:27-45`); points a reversal gives back, or points paid at checkout that a refund or an operator returns, go back to the day still running (grade10 `packages/loyalty/backend/src/services/ledger/lots.ts:42`, `packages/loyalty/backend/src/services/ledger/expiry.ts:140`). | Product |
 | Points that should outlive the balance | Decided | An operator restarts the window instead, on the record. | Product |
 | How long a restart runs | Decided | Twelve months from today, never a day the operator picks. | Product |
