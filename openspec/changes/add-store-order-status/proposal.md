@@ -40,8 +40,8 @@ their own segment.
   from this rule, which replaces the interim adapter
 - **One stored copy** - Your Orders and Order Details read one stored copy of
   Shopify's facts: an order paid in full, refunded or canceled reaches it
-  within 5 minutes, and any other change within the hour, for an order placed
-  in the last 90 days
+  within 5 minutes, and any other change to an order Shopify holds open,
+  placed in the last 90 days, within the hour (Q23, Q24)
 - **Your Orders** - lists a web checkout once the shop records it, and groups
   orders by whether Shopify still holds them open rather than by badge (Q15,
   Q16)
