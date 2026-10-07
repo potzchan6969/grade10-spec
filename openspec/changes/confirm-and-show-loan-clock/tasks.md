@@ -13,20 +13,20 @@ Moves the worker's cure-date arithmetic into `@grade10/vault-contracts` with
 no change in what the worker writes. No scenario turns on it alone; groups 4
 and 5 cite the ones it serves.
 
-- [ ] 2.1 Add the tests first, in their own commit: `noticePayBy` names the
+- [x] 2.1 Add the tests first, in their own commit: `noticePayBy` names the
       brand-zone day 14 days on at 10:00 and at 23:59 Hong Kong time, and a
       `sentAt` two minutes later across the brand's midnight names the next
       day, never an earlier one.
-- [ ] 2.2 Add `noticePayBy(sentAt, noticeDays, timeZone)` beside
+- [x] 2.2 Add `noticePayBy(sentAt, noticeDays, timeZone)` beside
       `forfeitHold` in `packages/vault/contracts/src`, and have
       `sendForfeitureNotice` in `packages/vault/backend/src/custody/forfeit.ts`
       call it, keeping its `LENDING_POLICY_UNSET` refusal.
-- [ ] 2.3 Verify: the contracts unit tests, `pnpm run test:backend` for the
+- [x] 2.3 Verify: the contracts unit tests, `pnpm run test:backend` for the
       vault worker's notice and forfeiture suites, and the typecheck.
 
 ## 3. The loan's clock in the case header (grade10) (owner: @ecchochan)
 
-- [ ] 3.1 Add the tests first, in their own commit: `loanClock` and
+- [x] 3.1 Add the tests first, in their own commit: `loanClock` and
       `loanClockWords` for each row of the requirement's table, the count
       folded beside `caseStanding` at 23:00 on the due date, 00:30 the day
       after and three days on, a 3-day grace that does not reduce the count,
@@ -45,7 +45,7 @@ and 5 cite the ones it serves.
       `grade10-admin-vault-operator-queue-SC-104`,
       `grade10-admin-vault-operator-queue-SC-143`,
       `grade10-admin-vault-operator-queue-SC-144`).
-- [ ] 3.2 Add `cases/domain/loanClock.ts`, and draw its words as an `info`
+- [x] 3.2 Add `cases/domain/loanClock.ts`, and draw its words as an `info`
       `Badge` beside the status badge in `CaseDetailPanel.tsx`, judged and
       formatted on the brand's zone, never the case's shop's, covering
       `grade10-admin-vault-operator-queue-SC-97`,
@@ -58,9 +58,9 @@ and 5 cite the ones it serves.
       `grade10-admin-vault-operator-queue-SC-104`,
       `grade10-admin-vault-operator-queue-SC-143` and
       `grade10-admin-vault-operator-queue-SC-144`.
-- [ ] 3.3 Add `CaseDetailPanel` stories for a loan past its due date and for
+- [x] 3.3 Add `CaseDetailPanel` stories for a loan past its due date and for
       one with a notice standing.
-- [ ] 3.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck,
+- [x] 3.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck,
       `pnpm run lint` and the Storybook lane for the two stories.
 
 ## 4. Cancel visit asks first (grade10) (owner: @ecchochan)
@@ -69,7 +69,7 @@ Starts from the console zone fix's commit and from
 `read-vault-console-on-shop-clock`'s where they have landed, and takes their
 zone on `BookingRow` rather than adding a second.
 
-- [ ] 4.1 Add the tests first, in their own commit: `cancelVisitConfirm` for a
+- [x] 4.1 Add the tests first, in their own commit: `cancelVisitConfirm` for a
       case with and without an address at 10:00 Hong Kong time on 15 June 2026,
       and for a shop on `Asia/Tokyo` under a brand on `Asia/Hong_Kong`;
       then `BookingRow` under `ConfirmProvider` and `ConfirmDialog`, asking in
@@ -88,11 +88,11 @@ zone on `BookingRow` rather than adding a second.
       `grade10-admin-vault-operator-queue-SC-117`,
       `grade10-admin-vault-operator-queue-SC-118`,
       `grade10-admin-vault-operator-queue-SC-119`).
-- [ ] 4.2 Add `useFreshCase` to the cases slice, reading the case's detail key
+- [x] 4.2 Add `useFreshCase` to the cases slice, reading the case's detail key
       with `staleTime: 0` and showing a failed read beside the button that
       asked for it, covering `grade10-admin-vault-operator-queue-SC-118` and
       `grade10-admin-vault-operator-queue-SC-121`.
-- [ ] 4.3 Add `cases/domain/confirmWords.ts` with `cancelVisitConfirm`, and
+- [x] 4.3 Add `cases/domain/confirmWords.ts` with `cancelVisitConfirm`, and
       route Cancel visit through `useConfirm` on its own `useVisitMoves()`
       instance after a fresh read, naming the slot on the zone `useLocations`
       gives for the case's `locationId`, opening none where the fresh read
@@ -106,7 +106,7 @@ zone on `BookingRow` rather than adding a second.
       `grade10-admin-vault-operator-queue-SC-116`,
       `grade10-admin-vault-operator-queue-SC-117` and
       `grade10-admin-vault-operator-queue-SC-119`.
-- [ ] 4.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
+- [x] 4.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
       and `pnpm run lint`.
 
 ## 5. Send forfeiture notice asks first (grade10) (owner: @ecchochan)
@@ -114,7 +114,7 @@ zone on `BookingRow` rather than adding a second.
 Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
 `confirmWords.ts`.
 
-- [ ] 5.1 Add the tests first, in their own commit:
+- [x] 5.1 Add the tests first, in their own commit:
       `forfeitureNoticeConfirm` for each row of the requirement's table, and
       for a case kept at a shop on `Asia/Tokyo` under a brand on
       `Asia/Hong_Kong` read at 23:30 on 1 December Hong Kong time, 00:30 on
@@ -134,7 +134,7 @@ Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
       `grade10-admin-vault-operator-queue-SC-120`,
       `grade10-admin-vault-operator-queue-SC-121`,
       `grade10-admin-vault-operator-queue-SC-145`).
-- [ ] 5.2 Add `forfeitureNoticeConfirm`, and route Send forfeiture notice
+- [x] 5.2 Add `forfeitureNoticeConfirm`, and route Send forfeiture notice
       through `useConfirm` after a fresh read of the case and of
       `admin.policy`, naming `noticePayBy` from the fresh `asOf` as a day on
       the brand's zone, and opening
@@ -149,7 +149,7 @@ Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
       `grade10-admin-vault-operator-queue-SC-120`,
       `grade10-admin-vault-operator-queue-SC-121` and
       `grade10-admin-vault-operator-queue-SC-145`.
-- [ ] 5.3 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
+- [x] 5.3 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
       and `pnpm run lint`.
 
 ## 6. The walk (grade10) (owner: @ecchochan)
