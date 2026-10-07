@@ -234,7 +234,10 @@ owns the fact that no row exists and the programme owns the claim's age, so
 neither decides on the other's data. Five minutes is past any checkout still
 running, and the promise's own row write refuses a claim it made more than a
 minute before, so a release never meets a row still being written
-(`SC-244`). A younger claim may be a checkout still being promised, so the
+(`SC-244`). That refusal leaves through the promise's guard, which gives the
+claim back as on every other exit, and reaches the checkout as a value; the
+sentence the member reads is raised in `decisions.md`, and its answer moves
+only the cause and its copy. A younger claim may be a checkout still being promised, so the
 operation answers
 `too_recent` and the claim is refused by name, as an earlier sale that stands
 (`SC-242`); the race retry above has already run by then. The sweep still
@@ -243,7 +246,9 @@ releases one nobody claims again.
 The member's coupon list already carries no code for a reward coupon: the
 block takes one only where its consumer passes it
 (`packages/ui/src/blocks/loyalty-membership/types.ts:35`), and the wallet
-passes none (`CouponListView.tsx:21-24`). The forfeit count already reads
+passes none (`CouponListView.tsx:21-24`). The wallet is the block's only
+consumer and lists the programme's coupons alone, so no store coupon's code
+reaches it today. The forfeit count already reads
 coupons past their validity, never a code
 (`packages/loyalty/backend/src/services/finance/forfeits.ts`). So none of the
 three requirements that now name the coupon, `The membership surface exports`
@@ -287,12 +292,24 @@ what refuses, once, and by name.
   the plan writes its own; `planTillSale` refuses `sale_closed` when it names a
   row of this member's that this session did not write, that is no longer
   `pending`, and that carries a reward's code (`SC-27`). A `pending` row of
-  this member's is continued (Q27): the plan writes onto that row under its
-  own checkout reference, since the row is keyed on it
-  (`repositories/orders.ts:449-450`), and the mint reuses its code, so the
-  supersede pass names that row the survivor rather than retiring it
-  (`SC-30`). One read by id; a cart naming no order, this session's own, or
-  another member's row plans as today.
+  this member's is continued (Q27): it becomes the row the plan stands on in
+  place of the session's own (`standingRow`, `services/pos/sale/sale.ts:131`),
+  so the `coupon_off_sale` and `coupon_locked` guards and the give-back read
+  it; the plan writes onto it under its own checkout reference, since the row
+  is keyed on it (`repositories/orders.ts:450`), and the mint reuses its code,
+  so the supersede pass names that row the survivor rather than retiring it
+  (`SC-30`). Confirming needs nothing new: it reads the row by id and member,
+  never by session (`sale.ts:372-376`). One read by id; a cart naming no
+  order, this session's own, or another member's row plans as today.
+- **What plans as today, as built.** A closed row of this member's carrying
+  no reward's code is not refused: the new session writes its own row, and
+  the extension writes that row's id over the cart's
+  (`acts/flow.ts:422-427`). Another member's record is stripped and the cart
+  unbound when the new session arrives (`acts/flow.ts:1199-1222`, `:680-688`),
+  so the plan usually reads no order id at all; where a points discount would
+  not come off, the id stays, and the plan still writes the new member's own
+  row. Both are raised in `decisions.md`; an answer that refuses either adds
+  one status or one member test to this check.
 - **A gift's line stays on a cart its sale has left.** Nothing of the store
   runs at the counter once staff walk away, so the hour and a newer promise
   take the claim off the row and leave the line on the shop's cart. The row
