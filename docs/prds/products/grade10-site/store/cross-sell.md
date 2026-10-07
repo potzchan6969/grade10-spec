@@ -40,7 +40,8 @@ store shows other cards the collector may also like.
 
 🚧 **Chosen in Shopify** — a stock keeper picks the cards shown with a card
 in the Shopify dashboard, on the card itself; a change reaches the card's page
-within a minute; a pick the catalogue no longer holds is left out
+within a minute, and a card the store has just taken in joins another card's
+picks once the store holds it; a pick the catalogue no longer holds is left out
 
 ## Similar Cards
 
