@@ -12,7 +12,10 @@ Delivery Notes.
   `deviceId`, instead of navigating to `ROUTES.checkout`. On success it
   shows the shared component's `checkoutRedirecting` state and hands off to
   the returned hosted URL; on failure it restores Checkout and shows
-  `checkoutFailed`, naming the affected line where the failure names one.
+  `checkoutFailed`, naming the affected line where the failure names one. A
+  store read that cannot complete (`catalog_unavailable`) restores nothing:
+  the lines read unchecked with Retry, as `add-store-product-status` task 4.3
+  builds for cart-validation.
   No second live re-read is added: the drawer's existing `useBasketQuote`
   (`staleTime: 0`) already gates `checkoutDisabled` on a current quote, and
   `createCheckout`'s own transactional recheck at order-write time remains

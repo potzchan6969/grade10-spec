@@ -192,7 +192,9 @@ hosted invoice. `grade10-site/store/checkout`'s existing transactional
 recheck at order-write time remains the read that gates this creation; the
 drawer adds no re-read of its own before creating the session. When that
 recheck or the shop refuses the checkout, the drawer reads the cart again as
-`grade10-site/store/cart-validation` requires.
+`grade10-site/store/cart-validation` requires. When the store's read itself
+cannot complete, the drawer SHALL follow `grade10-site/store/cart-validation`
+for a read that cannot complete rather than restore Checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-oqn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-13 - A line opens its product
@@ -224,11 +226,12 @@ recheck or the shop refuses the checkout, the drawer reads the cart again as
 - **AND** Checkout is offered again once the cart holds only lines the read
   confirmed, as `grade10-site/store/cart-validation` requires
 
-<!-- trace:scenario id=g10.store-cart-drawer.SC-t6r rev=1 -->
+<!-- trace:scenario id=g10.store-cart-drawer.SC-t6r rev=2 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-29 - A provider refusal offers retry with no order created
 **Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose checkout attempt fails for a reason no line names
 
-- **GIVEN** an open cart drawer whose Checkout action is creating a session
+- **GIVEN** an open cart drawer whose Checkout action is creating a session,
+  and whose store read for that checkout returned
 - **WHEN** the checkout provider refuses or fails to create the session for a reason no line names
 - **THEN** the drawer restores Checkout and shows a failed state naming that the attempt did not go through
 - **AND** no order is created

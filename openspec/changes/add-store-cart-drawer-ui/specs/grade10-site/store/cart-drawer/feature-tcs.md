@@ -1242,6 +1242,15 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
+**Run:** Update on 2026-10-07, from `add-store-product-status`'s sixth
+acceptance review. SC-29 moved to rev 2: it covers a provider that refuses or
+fails to create the session after the store's read returned. A store read that
+cannot complete follows `grade10-site/store/cart-validation`, which keeps
+checkout unavailable until a later read returns, as `Drawer actions continue
+to a product address or create checkout directly` now says. US06-TC06-1
+already starts from a reviewed drawer and a Shopify refusal, so no case
+changed. QA2 reruns on this suite.
+
 **Run:** Update on 2026-10-06, from `add-store-product-status`'s fifth
 acceptance review. `Drawer actions continue to a product address or create
 checkout directly` now says the drawer adds no re-read before creating the
