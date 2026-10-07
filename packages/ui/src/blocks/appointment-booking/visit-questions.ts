@@ -2,21 +2,21 @@ import type { BookingQuestion } from "./types";
 
 const GRADING_QUESTIONS: readonly BookingQuestion[] = [
   {
-    id: "quantity",
+    key: "quantity",
     label: "Estimated Quantity",
     kind: "select",
     options: ["1–5 cards", "6–20 cards", "21+ cards"],
     required: true,
   },
   {
-    id: "company",
+    key: "company",
     label: "Preferred Grading Company",
-    kind: "choice",
+    kind: "radio",
     options: ["PSA", "Beckett (BGS)", "CGC", "Undecided / Need Advice"],
     required: true,
   },
   {
-    id: "value",
+    key: "value",
     label: "Estimated Total Value (HKD)",
     kind: "number",
     required: false,
@@ -25,9 +25,9 @@ const GRADING_QUESTIONS: readonly BookingQuestion[] = [
     hint: "For insurance reference",
   },
   {
-    id: "notes",
+    key: "notes",
     label: "Additional Notes",
-    kind: "textarea",
+    kind: "long_text",
     required: false,
     placeholder:
       "Any specific cards or requests you’d like us to know in advance?",
@@ -36,9 +36,9 @@ const GRADING_QUESTIONS: readonly BookingQuestion[] = [
 
 const VAULT_DROP_OFF_QUESTIONS: readonly BookingQuestion[] = [
   {
-    id: "itemType",
+    key: "itemType",
     label: "Item Type",
-    kind: "choices",
+    kind: "checkboxes",
     options: [
       "Graded Slabs (PSA / BGS / CGC)",
       "Ungraded / Raw Cards",
@@ -48,14 +48,14 @@ const VAULT_DROP_OFF_QUESTIONS: readonly BookingQuestion[] = [
     required: true,
   },
   {
-    id: "count",
+    key: "count",
     label: "Estimated Item Count",
     kind: "select",
     options: ["1–5 items", "6–15 items", "16+ items"],
     required: true,
   },
   {
-    id: "value",
+    key: "value",
     label: "Estimated Total Vault Value (HKD)",
     kind: "number",
     required: true,
@@ -67,7 +67,7 @@ const VAULT_DROP_OFF_QUESTIONS: readonly BookingQuestion[] = [
 
 const CONSULTATION_QUESTIONS: readonly BookingQuestion[] = [
   {
-    id: "topic",
+    key: "topic",
     label: "Consultation Topic",
     kind: "select",
     options: [
@@ -79,9 +79,9 @@ const CONSULTATION_QUESTIONS: readonly BookingQuestion[] = [
     required: true,
   },
   {
-    id: "details",
+    key: "details",
     label: "Details of Your Collection / Inquiry",
-    kind: "textarea",
+    kind: "long_text",
     required: true,
     placeholder:
       "Briefly describe the key items you’d like to consult on (e.g., 1997 Pokémon Carddass PSA 10, looking to consignment).",

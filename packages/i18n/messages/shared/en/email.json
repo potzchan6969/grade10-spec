@@ -18,6 +18,8 @@
     "when": "When",
     "where": "Where",
     "manage": "Move or cancel this visit",
-    "calendar": "A calendar file is attached, so you can add the visit to your calendar."
+    "calendar": "A calendar file is attached, so you can add the visit to your calendar.",
+    "beforeYouCome": "Before you come",
+    "cancelledReason": "Reason"
   }
 }

@@ -81,6 +81,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
         <BookingManageCard
           copy={MANAGE_CARD_COPY}
           record={record}
+          now={VISIT_NOW_MS}
           timeZoneLabel="Asia/Hong Kong time"
           onMove={() => setMovingId(record.id)}
           onCancel={() => {
@@ -201,7 +202,8 @@ export const Default: Story = {
     expect(canvas.getAllByText("Vault Drop-Off").length).toBeGreaterThan(0);
     expect(canvas.getByText("Grading Submission")).toBeVisible();
     expect(
-      canvasElement.querySelectorAll('[data-slot="booking-manage-card"]').length,
+      canvasElement.querySelectorAll('[data-slot="booking-manage-card"]')
+        .length,
     ).toBeGreaterThan(0);
     expect(
       canvas.queryByRole("button", { name: "Open" }),

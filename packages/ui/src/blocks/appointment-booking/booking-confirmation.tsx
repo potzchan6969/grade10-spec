@@ -4,9 +4,10 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { MapPin } from "@phosphor-icons/react";
+import type { ReactNode } from "react";
 import type { LocaleProps } from "./booking-copy";
 import { formatBookingWhen } from "./booking-when";
-import type { BookingRecord } from "./types";
+import type { BookingAnswerLine, BookingRecord } from "./types";
 
 type BookingConfirmationCopy = {
   title: string;
@@ -14,6 +15,8 @@ type BookingConfirmationCopy = {
   service: string;
   location: string;
   when: string;
+  beforeYouCome: string;
+  answers: string;
   manage: string;
   calendar: string;
 };
@@ -21,6 +24,10 @@ type BookingConfirmationCopy = {
 type BookingConfirmationProps = LocaleProps & {
   copy: BookingConfirmationCopy;
   record: BookingRecord;
+  /** The service's description: what to know before coming. */
+  description?: ReactNode;
+  /** What the collector told the desk, under the labels it was asked by. */
+  answers?: readonly BookingAnswerLine[];
   /** The private link that manages the visit. */
   manageHref: string;
   /** The calendar file, when the consumer serves one. */
@@ -29,10 +36,13 @@ type BookingConfirmationProps = LocaleProps & {
   className?: string;
 };
 
-/** What was booked, where, when, and the link that manages it. */
+/** What was booked, where, when, what to know before coming, what the
+ * collector told us, and the link that manages it. */
 function BookingConfirmation({
   copy,
   record,
+  description,
+  answers = [],
   manageHref,
   calendarHref,
   timeZoneLabel,
@@ -83,6 +93,27 @@ function BookingConfirmation({
           locale,
         })}
       />
+      {description ? (
+        <Fact label={copy.beforeYouCome} value={description} />
+      ) : null}
+      {answers.length > 0 ? (
+        <VStack data-slot="booking-answers" gap="xs" hAlign="stretch">
+          <Text as="span" size="xs" tone="secondary">
+            {copy.answers}
+          </Text>
+          {answers.map((line) => (
+            <Fact
+              key={line.key}
+              label={line.label}
+              value={
+                typeof line.answer === "string"
+                  ? line.answer
+                  : line.answer.join(", ")
+              }
+            />
+          ))}
+        </VStack>
+      ) : null}
       <VStack gap="sm" hAlign="stretch">
         {calendarHref ? (
           <Link data-slot="booking-calendar-link" href={calendarHref}>
@@ -97,7 +128,7 @@ function BookingConfirmation({
   );
 }
 
-function Fact({ label, value }: { label: string; value: React.ReactNode }) {
+function Fact({ label, value }: { label: string; value: ReactNode }) {
   return (
     <VStack gap="none" hAlign="stretch">
       <Text as="span" size="xs" tone="secondary">
