@@ -59,17 +59,16 @@ See [Non-Goals](decisions.md#non-goals).
 
 - **A clock on queue rows** - the rule that a case runs a clock once terms are
   accepted sits on the queue row's requirement, and no row carries one today
-  outside the Overdue view. Whether the In custody view's rows carry the same
-  clock is the product owner's to settle; this change leaves rows as they are.
+  outside the Overdue view. The In custody view's rows carry none, since the
+  Overdue view already lists every late loan (Q24).
 - **A notice to a case with no address** - a message to a case with no
   address is counted rather than mailed, so a forfeiture notice starts its
   period with nobody told. Whether the notice is refused in that case is
-  Legal's to settle, outside this change, and asked on
-  [Loan and Money](../../../docs/prds/products/grade10-site/vault/loan-and-money.md#records);
+  Legal's to settle, outside this change, and asked on the Loan and Money
+  page's Records section;
   this change keeps the worker's rule and has the confirm say nobody is
   emailed (Q23).
 
 ## References
 
 - [Operator Console · One case](../../../docs/prds/products/grade10-site/vault/operator-console.md#one-case)
-- [Operator Console · Queue](../../../docs/prds/products/grade10-site/vault/operator-console.md#queue)

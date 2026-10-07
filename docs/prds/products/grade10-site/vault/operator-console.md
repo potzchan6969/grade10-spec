@@ -88,9 +88,6 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - **A slab the register knows** - at a walk-in, staff type the grader and
   cert and the case takes the item the register knows, its facts filled in -
   [Items](/p/grade10-admin/inventory/items#facts)
-- ❓ **A clock on queue rows** - whether a live loan's row in the In custody
-  view carries the days past due, as the case header does; the product owner
-  confirms
 
 ## One case
 
