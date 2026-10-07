@@ -1354,7 +1354,7 @@ Runs once per row of **Test data**.
 * Step 8 is not refused, and the checkout carries <coupon>'s cut.
 
 <!-- trace:case id=g10.loyalty-programme.TC-hfo rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC19-1: A checkout whose order is written over a minute after its claim is refused
+### grade10-site-loyalty-programme-US11-TC19-1: A sale whose order is written over a minute after its claim is refused
 
 Runs once per row of **Test data**.
 
@@ -1373,15 +1373,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(member holding <coupon>) is signed in on <grade10 store url>, with <line_1> in the cart.
-* The store's write of the checkout's order is held back <write delay> past the programme's claim on <coupon>.
+* customer(member holding <coupon>) is at the row's place, with <line_1> on the sale.
+* The store's write of the sale's order is held back the row's <write delay> past the programme's claim on <coupon>.
 
 **Test data:**
 
-| <write delay> | Step 3 answers |
-| --- | --- |
-| 50 seconds | Goes through, the checkout carrying <coupon>'s cut |
-| 70 seconds | Refused, and no order is written for the checkout |
+| Place | How <coupon> is chosen | <write delay> | Step 2 answers |
+| --- | --- | --- | --- |
+| Signed in on <grade10 store url> | The member chooses <coupon> in the cart drawer and submits the checkout | 50 seconds | Goes through, the checkout carrying <coupon>'s cut |
+| Signed in on <grade10 store url> | The member chooses <coupon> in the cart drawer and submits the checkout | 70 seconds | Refused: "This checkout took too long. Submit it again." |
+| A till session at <shop A>, admin(shop staff) serving | Staff choose <coupon> in the member's panel and apply the sale | 70 seconds | Refused: 此單處理時間過長，請再套用一次。 |
 
 | Field | Value |
 | --- | --- |
@@ -1390,17 +1391,17 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open the cart drawer.
-2. Choose <coupon>.
-3. Submit the checkout.
-4. Read the member's orders.
-5. Read <coupon> in the member's coupons on <grade10 loyalty url>.
+1. Choose <coupon> the row's way.
+2. Read the answer.
+3. Read the member's orders.
+4. Read <coupon> in the member's coupons on <grade10 loyalty url>.
 
 **Expected Results:**
 
-* Step 3 answers as the row's second column says.
-* Step 4 shows an order for the checkout only where step 3 went through.
-* Step 5 lists <coupon> as unused.
+* Step 2 answers as the row's last column says.
+* Step 2 does not say <coupon> is unavailable or that the rewards could not be read.
+* Step 3 shows an order for the sale only where step 2 went through.
+* Step 4 lists <coupon> as unused.
 
 ## Settled
 
@@ -1412,6 +1413,7 @@ Runs once per row of **Test data**.
 - Two sales claiming one coupon at once leave one live claim, and neither is told the coupon is unavailable
 - The cart drawer offers a coupon an ended order of the member's still claims, because the claim takes it back first, and one a checkout left when it stopped before its order was written; a claim on that coupon is refused by name while the claim is under five minutes old, since its sale may still be submitting
 - A reward's code dies with its sale and forfeits nothing: the coupon goes back to the wallet unused, and only a coupon passing its own validity is counted as forfeit
+- A sale, online or at the till, whose order is written more than a minute after its claim is refused with a cause of its own: the member reads that the checkout took too long and to submit it again, staff that the sale took too long and to apply it again (Q32)
 
 ## Reconciliation
 
@@ -1448,6 +1450,11 @@ Runs once per row of **Test data**.
 **Run:** QA2, 2026-10-07, tcs-rules r4, in a fresh context after QA1's update pass on the fresh scan, the late order write and the code-free coupon list. That pass left no run line, so whether it was blind is unrecorded. It read both suites, both deltas, `tech-design.md`, `tasks.md`, `decisions.md` with its Raised table, the Coupons, Profile and Discounts pages, and the application repository, and checked both suites with `tcs:validate` and `trace validate`. No anchor moved: US-04 joins the journeys file as context for `grade10-site-loyalty-programme-SC-243`, and the feature set's root groups are unchanged.
 
 - **The coupon list carries no reward code, agreed** - US4-TC8-1 walks `grade10-site-loyalty-programme-SC-243`'s reward coupon in the member's wallet. Its store-coupon half is `CouponList`'s contract alone: no consumer passes a code (Q29), so no member surface reaches it and no case here walks it
-- **A late order write is refused, agreed** - US11-TC19-1 walks `grade10-site-loyalty-programme-SC-244` either side of the minute. Step 3 reads the refusal and not its words, which wait on Raised R4
+- **A late order write is refused, agreed** - US11-TC19-1 walks `grade10-site-loyalty-programme-SC-244` either side of the minute
 - **Markers** - US4-TC8-1 takes `g10.loyalty-programme.TC-odc` and US11-TC19-1 `g10.loyalty-programme.TC-hfo`, each listing every scenario its journey's delta carries. US4-TC1-1, US4-TC3-1 and US4-TC4-1 are carried with their words, and lack **Suites** as the durable suite does
+- **Uncovered anchors** - none
+
+**Run:** QA2, 2026-10-07, tcs-rules r4, in a fresh context after accept-review settled Raised R4 as Q32. It read this suite, the delta, `tech-design.md`, `tasks.md`, `decisions.md` with its Raised table, the Coupons page and the application repository's till plan, and checked the suite with `validate:changes`, `tcs:validate` and `trace validate`. No anchor moved.
+
+- **A late order write is refused, rewritten to the spec** - the requirement and `grade10-site-loyalty-programme-SC-244` name a sale online or at the till and the words each reads, since the till plan writes its order through the same promise. US11-TC19-1 gains a till row and a place column, step 2 reads the words on each refused row, and its title names a sale. Its marker and covers list are unchanged
 - **Uncovered anchors** - none
