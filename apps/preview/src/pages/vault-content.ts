@@ -454,7 +454,7 @@ const VAULT_DROP_OFF_SERVICE: BookingService = {
 const CONSULTATION_VISIT_SERVICE: BookingService = {
   id: "svc_consultation",
   slug: "consultation",
-  name: "Collection Consultation",
+  name: "Listing to Store/Auction",
   description:
     "Let us know what you would like to discuss with our specialists.",
   durationLabel: "~60 min",

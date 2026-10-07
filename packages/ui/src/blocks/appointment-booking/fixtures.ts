@@ -55,7 +55,7 @@ const VAULTING_SERVICE: BookingService = {
 const CONSULTATION_SERVICE: BookingService = {
   id: "svc_consultation",
   slug: "consultation",
-  name: "Collection Consultation",
+  name: "Listing to Store/Auction",
   description:
     "Let us know what you would like to discuss with our specialists.",
   durationLabel: "60 min",
@@ -106,7 +106,7 @@ const LIVE_RECORD: BookingRecord = {
 const LATER_RECORD: BookingRecord = {
   ...LIVE_RECORD,
   id: "bk_later",
-  service: "Collection Consultation",
+  service: "Listing to Store/Auction",
   start: Date.UTC(2026, 8, 10, 6, 0),
   end: Date.UTC(2026, 8, 10, 7, 0),
 };
