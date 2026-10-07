@@ -149,7 +149,7 @@ lot before any script runs.
   collector
 - **Title on a small screen** — under the breadcrumb, the lot title uses the
   smaller title size; from tablet it uses the larger title size
-- 🚧 **Recent bids avatar** — the lot page feeds each public Recent Bids
+- **Recent bids avatar** — the lot page feeds each public Recent Bids
   avatar the one email-derived letter from the public listing read and live
   updates; the readable label stays Bidder N —
   [Bidding · Auction Panel](/p/grade10-site/auction/bidding#auction-panel)
