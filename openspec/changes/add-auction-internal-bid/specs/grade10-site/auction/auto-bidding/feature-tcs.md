@@ -202,7 +202,7 @@ Runs once per row of **Test data**.
 * Step 2 lists the house's `<raised maximum>` accepted at `<raise time>`, as a new commitment.
 * Step 2 lists the house's `<lowered maximum>` accepted at `<lower time>`.
 
-### grade10-site-auction-auto-bidding-US4-TC3-1: Staff without secret-floor access read no house maximum in the trace
+### grade10-site-auction-auto-bidding-US4-TC3-1: Staff without secret-floor access read House in the trace, never its maximum
 
 **Classification:**
 
@@ -220,7 +220,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer A committed `<customer A maximum>` on `<listing_6>`.
-* `<listing_6>`'s internal bid of `<house maximum>` was committed, and the house leads at `<current bid>`.
+* `<listing_6>`'s internal bid of `<house maximum>` was committed at `<commit time>`, and the house leads at `<current bid>`.
 * admin(staff, holds auction:operate, not auction:reserve) is on <grade10 auction admin listings url>.
 
 **Test data:**
@@ -231,14 +231,19 @@ Runs once per row of **Test data**.
 | `<customer A maximum>` | 500000 minor units (HK$5,000.00) |
 | `<house maximum>` | 612300 minor units (HK$6,123.00), an amount no bid reaches |
 | `<current bid>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
+| `<commit time>` | The internal bid's set time |
 
 **Steps:**
 
 1. Open `<listing_6>`'s bid history.
 2. Read each committed maximum and each bid.
+3. As customer B, open the lot page for `<listing_6>` and read Recent bids.
 
 **Expected Results:**
 
 * Step 2 lists customer A's commitment, with its Accepted At.
-* Step 2 shows `<house maximum>` nowhere, and no row names the house or an internal bid.
-* Step 2: the house's bid at `<current bid>` reads under its listing pseudonym, nothing naming the house.
+* Step 2: the house's bid at `<current bid>` reads House, with no account.
+* Step 2: no house row shows a maximum; `<house maximum>` shows nowhere.
+* Step 2: no house row shows when its maximum was accepted, or `<commit time>` as an internal bid's time.
+* Step 2: no row reads the house's listing pseudonym, or an internal bid.
+* Step 3: the house's bid reads under its listing pseudonym; nothing reads House.
