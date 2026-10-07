@@ -14,6 +14,6 @@
 - [x] 3.1 Run the auction-service and grade10-auction frontend tests touched by groups 1 and 2.
 - [x] 3.2 Manually open a lot with two bidders whose emails start with different letters and confirm Recent Bids avatars differ while labels stay Bidder N / You.
 
-## 4. The walk - Recent Bids avatar letters (grade10)
+## 4. The walk - Recent Bids avatar letters (grade10) (owner: @mason5991)
 
-- [ ] 4.1 `/tcs-review email-initial-bid-avatars` after the implementation is available for human case classification.
+- [x] 4.1 `/tcs-review email-initial-bid-avatars` after the implementation is available for human case classification.
