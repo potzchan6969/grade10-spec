@@ -220,6 +220,12 @@ finding out at the order.
 
 ## Reconciliation
 
+**Run:** QA2 on 2026-10-07, in a fresh context after the sixth acceptance
+review and QA1's blind re-run. Read the anchors, these cases, the durable US12
+scenarios, `decisions.md` and the Product Listing page. QA1 changed no case
+here and raised nothing; Q6 moves no case. Every live case folds, the tables
+of the earlier QA2 run stand, and no scenario is uncovered or contradicted.
+
 **Run:** Update on 2026-10-07, from the sixth acceptance review. Q6 is
 decided: the listing's order is a listing change of its own, and the page's
 Price order row states the order Grade10 runs. No case here depends on it,

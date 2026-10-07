@@ -481,8 +481,25 @@ Runs once per row of **Test data**.
 ## Settled
 
 - A sold-out item keeps its quantity stepper and a Sold out button, both disabled: nothing that adds it can be pressed.
+- A card's structured data carries one offer, for its one item, as the page shows it.
 
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-07, in a fresh context after the sixth acceptance
+review and QA1's blind re-run. Read the anchors, these cases, the delta's
+scenarios, `tech-design.md`, `ui-design.md`, `tasks.md`, `decisions.md`, the
+Product Details and Crawlable Pages pages and Grade10's structured data. QA1
+added a header read to US3-TC2-2: the cart in the site header counts the add,
+which SC-35 states, so the draft keeps rev 2. QA1's question on the card's
+structured data lands as Q24: one offer, for the one item, because Crawlable
+Pages restates only what the page shows. It is a Crawlable Pages line, which
+no requirement states, so no scenario is added; task 2.4 delivers it. Every
+live case folds, the tables of the earlier QA2 run stand, and no scenario is
+uncovered or contradicted.
+
+| Raised | Disposition |
+| --- | --- |
+| Does a card's structured data carry one offer for its one item, or one per variant? | Q24, decided: one offer, for the one item; Crawlable Pages carries it as a 🚧 line and task 2.4 fixes Grade10's offer per variant |
 
 **Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
 review's update and QA1's blind re-run. Read the anchors, these cases, the

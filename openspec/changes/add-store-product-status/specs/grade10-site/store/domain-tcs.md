@@ -157,7 +157,7 @@ when I open it,
 repaired cart sent on to Shopify's payment page,
 **so that** I pay only for a cart the shop can fill.
 
-<!-- trace:case id=g10.store-domain.TC-hkl rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18 -->
+<!-- trace:case id=g10.store-domain.TC-hkl rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d,g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18 -->
 ### grade10-site-store-e2e-US7-TC1-1: Line sold out at checkout is named, removed, then paid
 
 **Classification:**
@@ -205,6 +205,14 @@ repaired cart sent on to Shopify's payment page,
 * Step 7: the only line is <product_a> at <price_a>.
 
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-07, in a fresh context after the sixth acceptance
+review and QA1's blind re-run. Read this suite's story headers, its cases, the
+scenarios they cover at their current revisions, `decisions.md` and the
+Product Status, Product Details and Cart Validation pages. US7-TC1-1 now
+covers cart-validation SC-29, a variant deleted while the cart was open, which
+serves the checkout journey it walks. QA1 changed no case here and raised
+nothing; every live case folds.
 
 **Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
 review's update and QA1's blind re-run. Read this suite's story headers, its

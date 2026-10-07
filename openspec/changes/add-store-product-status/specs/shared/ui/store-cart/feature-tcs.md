@@ -263,4 +263,6 @@ sells.
 - **Contradicted** - none
 - **Uncovered anchors** - none. US-06 keeps every case; US6-TC3-1 walks `shared-ui-store-cart-SC-12`
 
+**Run:** QA2 on 2026-10-07, in a fresh context after QA1's blind re-run. Read the anchors, these cases, the delta's scenarios, `cart-drawer-empty-state`'s US-06 scenarios, `decisions.md` and the Store Cart and Cart Validation pages. QA1 widened the delisted line in US6-TC1-1 and US6-TC5-1 to a product that left the channel or a variant that no longer exists, which the restated status table and SC-10 state; what the stories show is unchanged, so the drafts keep rev 1, and the fold carries this change's wording over `cart-drawer-empty-state`'s. Every case folds, SC-12 is walked by US6-TC3-1, and nothing was raised.
+
 **Run:** Update on 2026-10-07, from `add-store-product-status`'s sixth acceptance review. QA2 reruns on this suite.

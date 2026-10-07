@@ -756,6 +756,15 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
+**Run:** QA2 on 2026-10-07, in a fresh context after the sixth acceptance
+review's update and QA1's blind re-run. Read the anchors, these cases, the
+scenarios at their current revisions, `tech-design.md`, `tasks.md`,
+`decisions.md`, the Product Status page and Grade10's line title. US1-TC12-1
+folds against SC-18 at rev 2: step 7 reads each line's variant name, which
+`lineTitle` gives a card listing more than one. QA1 changed no case here and
+raised nothing. Every live case folds, the tables of the earlier QA2 run
+stand, and no scenario is uncovered or contradicted.
+
 **Run:** Update on 2026-10-07, from the sixth acceptance review. The rule
 **One answer** is renamed **One item per card**, the name the page and the
 feature set give it, and now has a cart line name its variant where the card

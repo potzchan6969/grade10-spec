@@ -518,6 +518,39 @@ Runs once per row of **Test data**.
 * Step 6: the line reads 2, with no sold-out or adjusted marking.
 * Step 6: Proceed to Checkout can be pressed.
 
+<!-- trace:case id=g10.store-cart-validation.TC-k3r rev=1 covers=g10.store-cart-validation.SC-cl3,g10.store-cart-validation.SC-iwp,g10.store-cart-validation.SC-3ei,g10.store-cart-validation.SC-scy,g10.store-cart-validation.SC-3j7,g10.store-cart-validation.SC-cqz,g10.store-cart-validation.SC-hdi,g10.store-cart-validation.SC-c5i,g10.store-cart-validation.SC-gut,g10.store-cart-validation.SC-c5f,g10.store-cart-validation.SC-93m,g10.store-cart-validation.SC-it2,g10.store-cart-validation.SC-tuc,g10.store-cart-validation.SC-bi6,g10.store-cart-validation.SC-rsl,g10.store-cart-validation.SC-cj2,g10.store-cart-validation.SC-q4f -->
+### grade10-site-store-cart-validation-US1-TC14-1: Line that sold out and was repriced on one read says both
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-validation-US-01
+
+**Pre-conditions:**
+
+* customer(member) is signed in and is on <grade10 store url>, with no promo code or points on the cart.
+* The cart holds 1 of <product_a> at HKD 105.00 (10500 minor units) and 1 of <product_b>, both added while for sale.
+* Since then, <product_a> is sold out by the recipe "Sell a card out", and priced HKD 123.00 (12300 minor units) in the staging shop's admin.
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Read <product_a>'s line and Proceed to Checkout.
+
+**Expected Results:**
+
+* Step 2: the line is still in the cart, marked sold out.
+* Step 2: the line shows HKD 123.00 and says the price changed.
+* Step 2: Proceed to Checkout cannot be pressed.
+
 ---
 
 ## grade10-site-store-cart-validation-US2: Collector offers the cart for checkout
@@ -528,7 +561,7 @@ every line that moved,
 **so that** I reach the shop's payment page only with a cart it can fill, and
 when I cannot, I know exactly what to fix.
 
-<!-- trace:case id=g10.store-cart-validation.TC-nrx rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
+<!-- trace:case id=g10.store-cart-validation.TC-nrx rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d -->
 ### grade10-site-store-cart-validation-US2-TC1-1: Checkout reads every line again, then hands off to Shopify
 
 **Classification:**
@@ -563,7 +596,7 @@ when I cannot, I know exactly what to fix.
 * Step 4: a read of both lines goes out after step 3 and before the browser leaves Grade10.
 * Step 5: <product_a> and <product_b> at their current prices.
 
-<!-- trace:case id=g10.store-cart-validation.TC-ckp rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
+<!-- trace:case id=g10.store-cart-validation.TC-ckp rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d -->
 ### grade10-site-store-cart-validation-US2-TC2-1: Line sold out after the cart opened stops the handoff, named
 
 **Classification:**
@@ -598,7 +631,7 @@ when I cannot, I know exactly what to fix.
 * Step 4: <product_b> is named sold out.
 * Step 4: <product_a> and <product_c> are unchanged.
 
-<!-- trace:case id=g10.store-cart-validation.TC-pwd rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
+<!-- trace:case id=g10.store-cart-validation.TC-pwd rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d -->
 ### grade10-site-store-cart-validation-US2-TC3-1: Every line that moved at checkout is named together
 
 **Classification:**
@@ -675,7 +708,7 @@ stock, and the cart is not reopened.
 * No checkout order is created.
 * That line is identified as out of stock.
 
-<!-- trace:case id=g10.store-cart-validation.TC-1qb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
+<!-- trace:case id=g10.store-cart-validation.TC-1qb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d -->
 ### grade10-site-store-cart-validation-US2-TC5-1: Price the browser supplies decides nothing
 
 **Classification:**
@@ -714,7 +747,7 @@ stock, and the cart is not reopened.
 * Step 3: Shopify's checkout page prices <product_a> at <shop price>.
 * <supplied price> appears nowhere on the checkout.
 
-<!-- trace:case id=g10.store-cart-validation.TC-cxb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
+<!-- trace:case id=g10.store-cart-validation.TC-cxb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d -->
 ### grade10-site-store-cart-validation-US2-TC6-1: Line repriced or reduced at checkout is named, then goes as the shop answered
 
 Runs once per row of **Test data**.
@@ -761,7 +794,7 @@ Runs once per row of **Test data**.
 * Step 5 opens Shopify's checkout page without the lines being added again.
 * Step 6: <product_a> as the row says, and <product_b> at its current price.
 
-<!-- trace:case id=g10.store-cart-validation.TC-w6k rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed -->
+<!-- trace:case id=g10.store-cart-validation.TC-w6k rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d -->
 ### grade10-site-store-cart-validation-US2-TC7-1: Line reduced when the cart opened goes to checkout at what the shop can fill
 
 **Classification:**
@@ -941,8 +974,83 @@ Runs once per row of **Test data**.
 - This capability states what a read does to a moved line; `grade10-site/store/checkout` applies the same rule at the handoff.
 - A cart whose lines never loaded offers Retry, names no line and is never shown as empty; the drawer shows it as a cart not yet read.
 - A checkout the store's read or the shop refuses reads the cart again as opening it does, so a line the shop filled short then reads adjusted at the shop's live count.
+- A line's stepper stops at a count above zero the last read returned, and the line never says how many remain; a changed quantity is read again, and checkout waits for that read.
+- A line that sold out and was repriced on one read shows the new price and says it changed, as any repriced line does.
 
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-07, in a fresh context after the sixth acceptance
+review's update and QA1's blind re-run. Read the anchors, these cases, the
+scenarios at their current revisions, `tech-design.md`, `ui-design.md`,
+`tasks.md`, `decisions.md`, the Cart Validation, Product Status and Store Cart
+pages, and Grade10's line classification, cart model and drawer. QA1 added
+US1-TC13-1 and US2-TC7-1, and a deleted variant to US2-TC3-1. A deleted
+variant at checkout is withdrawn under **Unavailable at checkout**, but no
+scenario stated it, so QA2 folds it as SC-29 and every US2 case now covers it;
+US2-TC3-1 keeps rev 1, since it is still a draft. US2-TC7-1 folds against
+SC-05 and SC-17: the open read wrote the reduced quantity to the line, so the
+checkout read confirms it. QA1's two questions land as Q22 and Q23, both
+answered by the rules and what Grade10 builds. Q23 adds US1-TC14-1, a line
+sold out and repriced on one read; Q22 needs no scenario.
+
+| Case | Disposition | Scenarios |
+| --- | --- | --- |
+| `grade10-site-store-cart-validation-US1-TC1-1` | Folded | SC-01, SC-03 |
+| `grade10-site-store-cart-validation-US1-TC2-1` | Folded | SC-04 |
+| `grade10-site-store-cart-validation-US1-TC3-1` | Folded | SC-05 |
+| `grade10-site-store-cart-validation-US1-TC4-1` | Folded | SC-06, SC-26 |
+| `grade10-site-store-cart-validation-US1-TC5-1` | Folded | SC-07, SC-08 |
+| `grade10-site-store-cart-validation-US1-TC6-2` | Folded | SC-09, SC-10, SC-25 |
+| `grade10-site-store-cart-validation-US1-TC7-1` | Folded | SC-11, SC-12 |
+| `grade10-site-store-cart-validation-US1-TC8-1` | Folded | SC-13 |
+| `grade10-site-store-cart-validation-US1-TC9-1` | Folded | SC-22 |
+| `grade10-site-store-cart-validation-US1-TC10-2` | Folded | SC-23 |
+| `grade10-site-store-cart-validation-US1-TC11-1` | Folded | SC-05, SC-06, SC-08, SC-11 |
+| `grade10-site-store-cart-validation-US1-TC12-1` | Folded | SC-24 |
+| `grade10-site-store-cart-validation-US1-TC13-1` | Added by QA1, folded: a sold-out line the shop sells again is read afresh on the next open | SC-01, SC-06, SC-08, SC-26 |
+| `grade10-site-store-cart-validation-US1-TC14-1` | Added by QA2 for QA1's question on a line sold out and repriced (Q23) | SC-06, SC-11, SC-26 |
+| `grade10-site-store-cart-validation-US2-TC1-1` | Folded | SC-02 |
+| `grade10-site-store-cart-validation-US2-TC2-1` | Folded | SC-15, SC-18 |
+| `grade10-site-store-cart-validation-US2-TC3-1` | Folded; QA1's deleted variant is SC-29 | SC-16, SC-27, SC-29 |
+| `grade10-site-store-cart-validation-US2-TC4-1` | Deprecated: US2-TC2-1 walks the same open-then-checkout path | SC-18 |
+| `grade10-site-store-cart-validation-US2-TC5-1` | Folded | SC-14 |
+| `grade10-site-store-cart-validation-US2-TC6-1` | Folded | SC-13, SC-16, SC-17 |
+| `grade10-site-store-cart-validation-US2-TC7-1` | Added by QA1, folded: a line reduced on open goes at the reduced quantity | SC-02, SC-05, SC-17 |
+| `grade10-site-store-cart-validation-US3-TC1-1` | Folded | SC-17, SC-19 |
+| `grade10-site-store-cart-validation-US3-TC2-1` | Folded | SC-20, SC-28 |
+| `grade10-site-store-cart-validation-US3-TC3-2` | Folded | SC-21 |
+
+| Scenario | Cases |
+| --- | --- |
+| SC-01, SC-03 | US1-TC1, US1-TC13 |
+| SC-02 | US2-TC1, US2-TC7 |
+| SC-04 | US1-TC2 |
+| SC-05 | US1-TC3, US1-TC11, US2-TC7 |
+| SC-06 | US1-TC4, US1-TC11, US1-TC13, US1-TC14 |
+| SC-07, SC-08 | US1-TC5 |
+| SC-09, SC-10, SC-25 | US1-TC6 |
+| SC-11 | US1-TC7, US1-TC11, US1-TC14 |
+| SC-12 | US1-TC7 |
+| SC-13 | US1-TC8, US2-TC6 |
+| SC-14 | US2-TC5 |
+| SC-15, SC-18 | US2-TC2 |
+| SC-16 | US2-TC3, US2-TC6 |
+| SC-17 | US2-TC6, US2-TC7, US3-TC1 |
+| SC-19 | US3-TC1 |
+| SC-20, SC-28 | US3-TC2 |
+| SC-21 | US3-TC3 |
+| SC-22 | US1-TC9 |
+| SC-23 | US1-TC10 |
+| SC-24 | US1-TC12 |
+| SC-26 | US1-TC4, US1-TC13, US1-TC14 |
+| SC-27, SC-29 | US2-TC3 |
+| Uncovered | none |
+| Contradicted | none |
+
+| Raised | Disposition |
+| --- | --- |
+| Does a line's stepper stop at the count the open read returned, does the line say how many remain, and is a raised quantity read again at the edit? | Q22, decided from what Grade10 builds: the stepper stops at a count above zero, no count is said, and an edit is read again before checkout can go; Store Cart's supplied maximum and remaining count and **In flight** carry it, so no scenario is added |
+| Is a line that sold out and was repriced on one read told the new price? | Q23, decided: yes, **Repriced** names no status; US1-TC14 walks it |
 
 **Run:** Update on 2026-10-07, from the sixth acceptance review. The
 **Withdrawn** feature-set item now names a variant that no longer exists, as
