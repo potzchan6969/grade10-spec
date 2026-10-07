@@ -302,14 +302,15 @@ what refuses, once, and by name.
   never by session (`sale.ts:372-376`). One read by id; a cart naming no
   order, this session's own, or another member's row plans as today.
 - **What plans as today, as built.** A closed row of this member's carrying
-  no reward's code is not refused: the new session writes its own row, and
-  the extension writes that row's id over the cart's
-  (`acts/flow.ts:422-427`). Another member's record is stripped and the cart
-  unbound when the new session arrives (`acts/flow.ts:1199-1222`, `:680-688`),
-  so the plan usually reads no order id at all; where a points discount would
-  not come off, the id stays, and the plan still writes the new member's own
-  row. Both are raised in `decisions.md`; an answer that refuses either adds
-  one status or one member test to this check.
+  no reward's code is not refused (Q31): the apply first takes the closed
+  sale's gift lines and points discount off the cart, and stops without
+  planning where one will not come off (`acts/flow.ts:1085-1089`, `:646-651`);
+  the new session then writes its own row, and the extension writes that
+  row's id over the cart's (`acts/flow.ts:421-427`). Another member's record
+  is stripped and the cart unbound when the new session arrives
+  (`acts/flow.ts:1199-1222`, `:680-688`), so the plan usually reads no order
+  id at all; where a points discount would not come off, the id stays, and the
+  plan still writes the new member's own row (Q30).
 - **A gift's line stays on a cart its sale has left.** Nothing of the store
   runs at the counter once staff walk away, so the hour and a newer promise
   take the claim off the row and leave the line on the shop's cart. The row
