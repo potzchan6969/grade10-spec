@@ -522,7 +522,7 @@ Runs once per row of **Test data**.
 * The card's own name, price and add-to-cart control render as usual.
 
 <!-- trace:case id=g10.store-cross-sell.TC-b5g rev=1 covers=g10.store-cross-sell.SC-dar,g10.store-cross-sell.SC-4s1,g10.store-cross-sell.SC-jts,g10.store-cross-sell.SC-9zy,g10.store-cross-sell.SC-ieg,g10.store-cross-sell.SC-ufp,g10.store-cross-sell.SC-w8r,g10.store-cross-sell.SC-jox,g10.store-cross-sell.SC-cjl,g10.store-cross-sell.SC-oc0,g10.store-cross-sell.SC-aqd,g10.store-cross-sell.SC-abp,g10.store-cross-sell.SC-ntx,g10.store-cross-sell.SC-2qp,g10.store-cross-sell.SC-63s -->
-### grade10-site-store-cross-sell-US1-TC15-1: A rail the site cannot compose leaves the page whole
+### grade10-site-store-cross-sell-US1-TC15-1: A rail the store cannot compose leaves the page whole
 
 **Classification:**
 

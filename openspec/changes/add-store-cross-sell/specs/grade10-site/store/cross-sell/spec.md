@@ -154,9 +154,9 @@ SHALL leave no space for one.
 - **The heading goes with it** — no heading is drawn where no rail is.
 - **No space** — the page reads as a card with nothing under it, not as a card
   missing something.
-- **A rail the site cannot compose** - where the site cannot compose the rail,
-  the card's page answers whole and shows no rail for that minute, as with
-  nothing to show.
+- **A rail the store cannot compose** - where the store's copy of the
+  catalogue is not to hand, the card's page answers whole and shows no rail
+  for that minute, as with nothing to show.
 - **Switched off** — where the store has switched the rail off for its brand
   and environment, every card's page answers whole and shows no rail, as with
   nothing to show.
@@ -170,11 +170,12 @@ SHALL leave no space for one.
 - **THEN** no rail and no heading are under the card
 - **AND** no space is left where the rail would be
 
-<!-- trace:scenario id=g10.store-cross-sell.SC-aqd rev=1 -->
-#### Scenario: grade10-site-store-cross-sell-SC-10 - A rail the site cannot compose
+<!-- trace:scenario id=g10.store-cross-sell.SC-aqd rev=2 -->
+#### Scenario: grade10-site-store-cross-sell-SC-10 - A rail the store cannot compose
 **Serves:** grade10-site-store-cross-sell-US-01 - the collector still gets the card they asked for
 
-- **GIVEN** a card the site cannot compose a rail for
+- **GIVEN** a card with cards to show under it
+- **AND** the store's copy of the catalogue is not to hand
 - **WHEN** a collector opens its page
 - **THEN** the card's page answers whole
 - **AND** no rail, no heading and no space are under the card
@@ -252,7 +253,7 @@ is sold out, and still open its own page.
 
 ### Requirement: Similar cards fill the rail by what they share
 
-Where the picks do not fill the rail, the site SHALL fill it with other cards
+Where the picks do not fill the rail, the store SHALL fill it with other cards
 sharing this card's world, its language or its collectible type.
 
 - **Weighed in that order** — a card sharing a world comes before one sharing
@@ -371,7 +372,7 @@ sharing this card's world, its language or its collectible type.
 
 ### Requirement: Cards kept out of the similar cards
 
-The site SHALL keep out of the similar cards every card a collector cannot buy
+The store SHALL keep out of the similar cards every card a collector cannot buy
 and every card already in the rail as a pick.
 
 - **For sale only** — a card the catalogue lists with nothing for sale is never
