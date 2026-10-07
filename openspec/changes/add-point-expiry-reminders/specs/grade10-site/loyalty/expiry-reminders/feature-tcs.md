@@ -832,7 +832,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 names one reminder: `<member_1>`, 2027-01-13, 500 points, the 30-day lead.
-* Step 4 names no reminder for `<member_1>`: the grant moved the day out to 2028-01-03, so nothing is owed on 2027-01-13.
+* Step 4 names no reminder for `<member_1>`: `<credit>` moved the day out to 2028-01-03, so nothing is owed on 2027-01-13.
 
 ## Settled
 
@@ -859,6 +859,8 @@ Runs once per row of **Test data**.
 **Run:** QA2 rerun before accept-review round 4, 2026-10-06, in a fresh context. Joined the twenty cases and the delta's seventeen scenarios on the same four anchors; every scenario is reached and none contradicts a case. Read the delta `spec.md` whole, `tech-design.md`, `tasks.md`, `decisions.md`, the pages Expiry Reminders, Points, Operator Console and Rewards, and in grade10 the refund's claw-back reach and the return of points paid at checkout. Three cases sharpened: US1-TC1-1's lead no longer offers any lead from 1 to 364 days, which its 30- and 29-day rows would fail; US1-TC9-1's refund row names an order paid wholly in points, so it earned nothing to claw back; US1-TC17-2's refund rows say the correction already took the 20 points the order earned, so the refund claws back nothing and 100 points come back. No new raised question. The anchors are unchanged.
 
 **Run:** accept-review fix round 4, 2026-10-07. The product owner settled Q5 as one lead of 30 days: the delta's `Grade10's lead times` sub-bullet gains its requirement and `grade10-site-loyalty-expiry-reminders-SC-21`, and US1-TC8-2 revises the blocked case to it. Q11 states that a grant or a correction onto a balance brought to nothing moves the day still running out, as grade10 does; `grade10-site-loyalty-expiry-reminders-SC-08` names it at revision 2 and US1-TC20-1 now covers it. The root groups and the journeys are unchanged.
+
+**Run:** QA2 rerun after accept-review fix round 4, 2026-10-07, in a fresh context. Joined the twenty cases and the delta's eighteen scenarios on the same four anchors; every scenario is reached, and none contradicts a case. Read the delta `spec.md` whole, `decisions.md` with Q5 and Q11, the pages Expiry Reminders, Points and Operator Console, and in grade10 that a checkout reserves no points (`packages/loyalty/backend/src/services/ledger/payment.ts:35`), which US1-TC9-1's unpaid-checkout row rests on. US1-TC20-1's result now names its credit, since the correction row moves the day as the grant row does. No new raised question. The anchors are unchanged.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
