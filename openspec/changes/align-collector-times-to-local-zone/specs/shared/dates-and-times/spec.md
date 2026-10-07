@@ -18,14 +18,18 @@ from the machine: an instant on a collector surface is stated in the viewer's
 local zone, and a deadline that shows a clock names it. A page that books or
 confirms a visit, or a vault or signing page, keeps the shop's clock instead and
 is outside that rule: how those pages name their zone is not set here, and a
-collector's vault timeline stamp stays UTC. Operator tables, admin surfaces and
-the records a machine reads state UTC, except an admin surface whose own spec
-keeps a shop's clock, as the vault console and the appointments diary do. A
+vault timeline stamp stays UTC. Operator tables and admin surfaces state UTC. A
 message, invoice (the application's invoice page included), receipt or terms
 page states the brand's zone as GMT+8. A calendar day the business judges is
 always judged on the brand's own zone, because a day is a fact about where the
 business stands rather than about where its reader does. The day a collector
 deadline shows is not judged this way: it is the day in the viewer's zone.
+
+Admin surfaces state UTC with one exception: an admin surface whose own spec keeps
+a shop's clock, as the vault console and the appointments diary do, states that
+clock. The records a machine reads, an export or the audit trail, state UTC
+whatever surface they come from. The vault timeline stamp that stays UTC is the
+collector's; the vault console reads its own on the shop's clock.
 
 ## Feature set
 
