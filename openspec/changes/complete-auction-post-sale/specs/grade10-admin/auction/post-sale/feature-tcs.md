@@ -540,8 +540,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Both read the payment deadline as 2026-09-19 17:00 in Hong Kong time on the page and in the dialog.
-* Both read the sent entry as 2026-09-12 17:00 in Hong Kong time.
+* Both read the payment deadline as 2026-09-19 17:00, labelled GMT+8, on the page and in the dialog.
+* Both read the sent entry as 2026-09-12 17:00, labelled GMT+8.
 * Neither reads a time in their browser's zone or in UTC.
 
 ---

@@ -1359,7 +1359,8 @@ that keeps it.
 ### Requirement: Order dates and times read in Hong Kong time
 
 Every date and time the Orders workspace shows an operator SHALL read in Hong
-Kong time (Asia/Hong_Kong, GMT+8), whatever zone the operator's browser is in.
+Kong time (Asia/Hong_Kong), labelled `GMT+8`, whatever zone the operator's
+browser is in.
 Grade10 stores each in UTC. This is the exception to UTC on admin surfaces that
 `shared/dates-and-times` carries for Orders, per `align-collector-times-to-local-zone`.
 
@@ -1381,9 +1382,9 @@ and no zone.
   and whose invoice was sent at 2026-09-12T09:00:00Z
 - **WHEN** one operator whose browser is set to London and another whose
   browser is set to Tokyo read the order page and its timeline
-- **THEN** both read the payment deadline as 2026-09-19 17:00 in Hong Kong time
-- **AND** both read the sent entry's timestamp as 2026-09-12 17:00 in Hong Kong
-  time
+- **THEN** both read the payment deadline as 2026-09-19 17:00, labelled `GMT+8`
+- **AND** both read the sent entry's timestamp as 2026-09-12 17:00, labelled
+  `GMT+8`
 
 ### Requirement: An operator action sent twice happens once
 
