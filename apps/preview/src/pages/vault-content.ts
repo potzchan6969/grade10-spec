@@ -45,7 +45,7 @@ const VAULT_BOOK_VISIT_STORY_ID = "pages-appointment-book-visit--default";
 const VAULT_CONFIRMATION_STORY_ID = "pages-appointment-confirmation--default";
 const VAULT_MY_VISITS_STORY_ID = "pages-appointment-appointments--default";
 const VAULT_MANAGE_VISIT_STORY_ID = VAULT_MY_VISITS_STORY_ID;
-const VAULT_TRACKER_STORY_ID = "pages-vault-intake-tracker--registered";
+const INTAKE_TRACKER_STORY_ID = "pages-intake-tracker--in-progress";
 const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
 const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--in-vault";
 const VAULT_RETRIEVAL_STORY_ID = "pages-vault-request-retrieval--default";
@@ -61,7 +61,7 @@ const VAULT_BOOK_VISIT_HREF = storyHref(VAULT_BOOK_VISIT_STORY_ID);
 const VAULT_SUBMIT_HREF = VAULT_BOOK_VISIT_HREF;
 const VAULT_ITEM_DETAIL_HREF = storyHref(VAULT_ITEM_DETAIL_STORY_ID);
 const VAULT_RETRIEVAL_HREF = storyHref(VAULT_RETRIEVAL_STORY_ID);
-const VAULT_TRACKER_HREF = storyHref(VAULT_TRACKER_STORY_ID);
+const INTAKE_TRACKER_HREF = storyHref(INTAKE_TRACKER_STORY_ID);
 const VAULT_CONFIRMATION_HREF = storyHref(VAULT_CONFIRMATION_STORY_ID);
 const VAULT_MANAGE_VISIT_HREF = storyHref(VAULT_MANAGE_VISIT_STORY_ID);
 const VAULT_MY_VISITS_HREF = storyHref(VAULT_MY_VISITS_STORY_ID);
@@ -631,30 +631,6 @@ const VISIT_FIXTURE = {
   bringTips: VISIT_PREP_TIPS,
 };
 
-/** Items after counter registration — intake tracker fixtures. */
-const INTAKE_FIXTURE = {
-  caseId: "CASE-2026-09140",
-  shop: SHOP_NAME,
-  items: [
-    {
-      name: "1999 Charizard",
-      category: "Trading card",
-      condition: "Graded" as ItemCondition,
-      grade: "PSA 10",
-      cert: "51234567",
-      declaredHkd: 95000,
-    },
-    {
-      name: "1887 Victoria sovereign",
-      category: "Coin",
-      condition: "Raw" as ItemCondition,
-      grade: "Raw",
-      cert: null,
-      declaredHkd: 6200,
-    },
-  ],
-};
-
 function formatHkd(amount: number): string {
   return `HK$${amount.toLocaleString("en-HK")}`;
 }
@@ -706,7 +682,6 @@ export {
   formatHkd,
   GRADING_VISIT_RECORD,
   GRADING_VISIT_SERVICE,
-  INTAKE_FIXTURE,
   MANAGE_CARD_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
   PORTFOLIO_SUMMARY,
@@ -741,8 +716,8 @@ export {
   VAULT_SITE_HEADER,
   VAULT_SUBMIT_HREF,
   VAULT_SUBMIT_STORY_ID,
-  VAULT_TRACKER_HREF,
-  VAULT_TRACKER_STORY_ID,
+  INTAKE_TRACKER_HREF,
+  INTAKE_TRACKER_STORY_ID,
   VISIT_CONFIRMATION_COPY,
   VISIT_DAYS,
   VISIT_FIXTURE,

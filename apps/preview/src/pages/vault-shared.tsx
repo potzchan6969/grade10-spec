@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@grade10/design-system/components/display/card";
@@ -92,6 +91,41 @@ function PageHeader({
   );
 }
 
+function PageSection({
+  heading,
+  count,
+  children,
+  className,
+}: {
+  heading: string;
+  count?: number;
+  children: ReactNode;
+  className?: string;
+}) {
+  const headingId = heading;
+  return (
+    <section
+      aria-labelledby={headingId}
+      className={className ?? "flex flex-col gap-5"}
+    >
+      <div className="flex items-baseline justify-between gap-3 border-b border-border pb-3">
+        <h2
+          className="font-heading text-xl font-medium tracking-tight"
+          id={headingId}
+        >
+          {heading}
+        </h2>
+        {count !== undefined ? (
+          <Text className="text-secondary-foreground" size="sm">
+            {count} {count === 1 ? "item" : "items"}
+          </Text>
+        ) : null}
+      </div>
+      {children}
+    </section>
+  );
+}
+
 function SummaryStat({
   label,
   value,
@@ -102,19 +136,25 @@ function SummaryStat({
   hint?: ReactNode;
 }) {
   return (
-    <div className="flex min-w-0 flex-col gap-1.5 border-border py-1 not-last:border-b sm:border-b-0 sm:not-last:border-r sm:px-6 sm:first:pl-0 sm:last:pr-0 sm:not-last:border-border">
-      <Text size="sm" tone="secondary">
-        {label}
-      </Text>
-      <p className="font-heading text-2xl font-medium tracking-tight tabular-nums md:text-3xl">
-        {value}
-      </p>
+    <Card className="gap-0" data-slot="vault-summary-stat">
+      <CardHeader className="gap-1.5 pb-0">
+        <CardDescription className="text-secondary-foreground">
+          {label}
+        </CardDescription>
+        <CardTitle className="font-heading text-2xl font-medium tracking-tight tabular-nums md:text-3xl">
+          {value}
+        </CardTitle>
+      </CardHeader>
       {hint ? (
-        <Text size="xs" tone="secondary">
-          {hint}
-        </Text>
-      ) : null}
-    </div>
+        <CardContent className="pt-2">
+          <Text className="text-secondary-foreground" size="xs">
+            {hint}
+          </Text>
+        </CardContent>
+      ) : (
+        <div className="h-2" />
+      )}
+    </Card>
   );
 }
 
@@ -134,7 +174,7 @@ function PortfolioSummary({
   return (
     <section
       aria-label="Portfolio summary"
-      className="grid gap-4 rounded-(--radius-2xl) border border-border bg-card p-5 sm:grid-cols-3 sm:gap-0 sm:p-6"
+      className="grid gap-3 sm:grid-cols-3 sm:gap-4"
     >
       <SummaryStat label="Items in vault" value={itemCount} />
       <SummaryStat
@@ -147,82 +187,64 @@ function PortfolioSummary({
   );
 }
 
+/**
+ * Collectible tile — photo leads; title then estimate. Whole card opens detail
+ * (OpenSea / Origin grid pattern; no footer action row).
+ */
 function VaultAssetCard({
   asset,
   onOpen,
-  proposedListAction = false,
 }: {
   asset: VaultAsset;
   onOpen?: () => void;
+  /** @deprecated Kept for call-site compatibility; auction CTA lives on detail. */
   proposedListAction?: boolean;
 }) {
   return (
     <Card
-      className="group/vault-card overflow-hidden transition-[border-color] duration-150 ease-out hover:border-foreground/20 motion-reduce:transition-none"
+      className="group/vault-card gap-0 overflow-hidden py-0 transition-[border-color,transform] duration-200 ease-out hover:border-foreground/25 hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none"
       data-slot="vault-asset-card"
       padding={false}
     >
       <button
-        className="relative block w-full cursor-pointer text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="relative flex w-full cursor-pointer flex-col text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         type="button"
         onClick={onOpen}
       >
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
           <img
             alt={`${asset.name}, ${assetSubtitle(asset)}`}
-            className="size-full object-cover transition-transform duration-300 ease-out group-hover/vault-card:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover/vault-card:scale-100"
+            className="size-full object-cover transition-transform duration-300 ease-out group-hover/vault-card:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover/vault-card:scale-100"
             height={320}
             src={asset.imageSrc}
             width={240}
           />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-black/35 to-transparent" />
           <div className="absolute top-3 left-3">
             <Badge variant={statusBadgeVariant(asset.status)}>
               {asset.status}
             </Badge>
           </div>
         </div>
-        <CardHeader className="gap-1 px-4 pt-4">
-          <CardTitle className="line-clamp-2 text-base">{asset.name}</CardTitle>
-          <CardDescription>{assetSubtitle(asset)}</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-1 px-4 pb-4">
-          <p className="text-base font-medium tabular-nums">
-            {formatHkd(asset.estimateHkd)}
-          </p>
-          <Text size="xs" tone="secondary">
-            Source: {asset.valuationSource}
-          </Text>
-          {asset.vaultId ? (
-            <Text className="font-mono" size="xs" tone="secondary">
-              {asset.vaultId}
-            </Text>
-          ) : null}
-        </CardContent>
+        <div className="flex flex-col gap-2 px-4 pt-3 pb-4">
+          <div className="flex flex-col gap-0.5">
+            <span className="line-clamp-2 font-heading text-base leading-snug font-medium">
+              {asset.name}
+            </span>
+            <span className="line-clamp-1 text-sm text-secondary-foreground">
+              {assetSubtitle(asset)}
+            </span>
+          </div>
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="font-heading text-lg font-medium tracking-tight tabular-nums">
+              {formatHkd(asset.estimateHkd)}
+            </span>
+            <span className="shrink-0 text-xs text-secondary-foreground">
+              {asset.valuationSource}
+            </span>
+          </div>
+        </div>
       </button>
-      {(onOpen || proposedListAction) && (
-        <CardFooter className="flex flex-wrap gap-2 border-t border-border bg-background p-4">
-          {onOpen ? (
-            <Button
-              size="sm"
-              type="button"
-              variant="secondary"
-              onClick={onOpen}
-            >
-              View details
-            </Button>
-          ) : null}
-          {proposedListAction ? (
-            <Button
-              disabled
-              size="sm"
-              type="button"
-              title="Proposed — not day one"
-            >
-              List for Auction
-            </Button>
-          ) : null}
-        </CardFooter>
-      )}
     </Card>
   );
 }
@@ -272,6 +294,7 @@ function VaultEmptyState({
   );
 }
 
+/** Label left, value right — adidas / Glow metadata row. */
 function FactRow({
   label,
   value,
@@ -282,16 +305,23 @@ function FactRow({
   hint?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-1 border-b border-border py-3 last:border-b-0">
-      <Text size="sm" tone="secondary">
+    <div className="flex flex-col gap-1 border-b border-border py-3.5 last:border-b-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+      <Text
+        className="shrink-0 text-secondary-foreground sm:w-40"
+        size="sm"
+      >
         {label}
       </Text>
-      <div className="text-base font-medium tabular-nums">{value}</div>
-      {hint ? (
-        <Text size="xs" tone="secondary">
-          {hint}
-        </Text>
-      ) : null}
+      <div className="min-w-0 flex-1 sm:text-right">
+        <div className="text-base font-medium tabular-nums break-words">
+          {value}
+        </div>
+        {hint ? (
+          <Text className="mt-0.5 text-secondary-foreground sm:text-right" size="xs">
+            {hint}
+          </Text>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -300,6 +330,7 @@ export {
   AppointmentPageShell,
   FactRow,
   PageHeader,
+  PageSection,
   PortfolioSummary,
   ProposalBanner,
   SummaryStat,
