@@ -156,4 +156,4 @@ Runs once per row of **Test data**.
 - **Folded** - none: no case carries an outcome the scenarios do not state
 - **Rejected** - none
 - **Contradicted** - none: where a case and a scenario state the same behaviour they agree
-- **Automation** - `tasks.md` 1.1 flips US1-TC15 and US1-TC16 to `automated`, decided by `product-card-image.stories.tsx`; 3.1 flips US1-TC17, decided by the three application end-to-end tests
+- **Automation** - `tasks.md` 1.1 flips US1-TC15 and US1-TC16 to `automated`, decided by `product-card-image.stories.tsx`; 3.1 flips US1-TC17, decided by the application's `product-photo.spec.ts`, one test per surface
