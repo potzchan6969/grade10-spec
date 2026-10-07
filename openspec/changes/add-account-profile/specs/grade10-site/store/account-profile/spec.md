@@ -64,8 +64,10 @@ whether or not they have saved anything. Values the collector has not set SHALL
 be defaulted from their signed-in account — display name from the account
 name, or, when the account has no name, from the part of the signed-in address
 before the `@`; avatar as the display name's first letter. The display name SHALL be the one the till
-and the wallet pass show for the member. Reading a profile SHALL NOT create or
-modify stored data.
+and the wallet pass show for the member. A save whose display name is the one
+shown by default SHALL NOT store it as the collector's chosen name, so the
+display name keeps following the account name. Reading a profile SHALL NOT
+create or modify stored data.
 
 <!-- trace:scenario id=g10.store-account-profile.SC-xen rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-03 - A collector who has never saved sees a profile
@@ -117,14 +119,26 @@ modify stored data.
 - **THEN** the page shows their saved values, unchanged, and does not fall back
   to the account name
 
+<!-- trace:scenario id=g10.store-account-profile.SC-w9n rev=1 -->
+#### Scenario: grade10-site-store-account-profile-SC-39 - Saving the default name keeps it following the account name
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
+
+- **GIVEN** a collector who has never saved, shown their account name as the
+  display name
+- **WHEN** they save a bio and leave the display name as shown
+- **THEN** the bio is saved and no display name is stored as theirs
+- **AND** once their account name changes, the page shows the new account name
+  as the display name
+
 ### Requirement: A profile holds display name, bio, avatar, email, and member-since
 
 The account page SHALL present display name, bio, avatar, the email address of
 the signed-in session, and the date the collector first saved their profile.
 Member-since SHALL be the date of the collector's first save of any of their
 fields — display name, bio or avatar — and not the date some other part of the
-store created their record. Display name, bio, and avatar SHALL be editable by
-the collector; email SHALL NOT.
+store created their record. A collector who saved before member-since was
+recorded SHALL see none until their next save, which it then dates. Display
+name, bio, and avatar SHALL be editable by the collector; email SHALL NOT.
 
 <!-- trace:scenario id=g10.store-account-profile.SC-ul5 rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-08 - Every field is present
@@ -162,6 +176,18 @@ the collector; email SHALL NOT.
 - **WHEN** they save a new avatar and nothing else
 - **THEN** their account page shows the date of that save as member-since
 - **AND** a later save of their display name or bio leaves that date unchanged
+
+<!-- trace:scenario id=g10.store-account-profile.SC-z3y rev=1 -->
+#### Scenario: grade10-site-store-account-profile-SC-40 - A save made before member-since was recorded dates nothing
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
+
+- **GIVEN** a collector who saved their profile before member-since was
+  recorded
+- **WHEN** they open their account page
+- **THEN** no member-since date is shown, and its absence is not presented as
+  an error
+- **AND** once they save again, the page shows the date of that save as
+  member-since
 
 ### Requirement: Email is read-only
 
@@ -255,8 +281,11 @@ counted the same way, and SHALL let a collector clear it.
 
 ### Requirement: A collector uploads an avatar image
 
-The system SHALL store a collector's avatar square, at 512 by 512 pixels. An
-avatar upload SHALL carry a JPEG, PNG, or WebP image of at most 5 MB
+The system SHALL store a collector's avatar square, at 512 by 512 pixels. The
+account page SHALL take any image the browser can read, whatever its type or
+size, and SHALL send it square at 512 by 512 pixels; a file the browser cannot
+read as an image SHALL be refused as an unsupported type, and nothing is sent.
+An avatar upload SHALL carry a JPEG, PNG, or WebP image of at most 5 MB
 (5,242,880 bytes), and the system SHALL refuse any other upload, whoever sends
 it. An upload SHALL replace whatever avatar the collector had. Each profile's
 image SHALL have an address of its own, which changes whenever the image does.
@@ -274,6 +303,15 @@ it was rejected.
 - **WHEN** a collector chooses an image and saves
 - **THEN** the system stores it square at 512 by 512 pixels, and their account
   page shows it as their avatar on this and every later visit
+
+<!-- trace:scenario id=g10.store-account-profile.SC-8r3 rev=1 -->
+#### Scenario: grade10-site-store-account-profile-SC-41 - A large photo or another image type becomes the avatar
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
+
+- **WHEN** a collector chooses an image the browser can read that is larger
+  than 5 MB, or is not a JPEG, PNG, or WebP, and saves
+- **THEN** the system stores it square at 512 by 512 pixels, and their account
+  page shows it as their avatar
 
 <!-- trace:scenario id=g10.store-account-profile.SC-5wx rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-21 - An unsupported image type is refused
@@ -318,7 +356,8 @@ removed image as it treats a replaced one. Whenever no avatar is set, the
 system SHALL show the display name's first letter in its place: one character,
 the first letter or digit in any script, read from the whole display name and
 upper-cased, as the account menu draws it, and `?` for a display name with
-neither.
+neither. The picture the signed-in account already holds, such as one a Google
+sign-up brings, SHALL NOT stand in for the avatar.
 
 <!-- trace:scenario id=g10.store-account-profile.SC-f4k rev=1 -->
 #### Scenario: grade10-site-store-account-profile-SC-24 - Removing an avatar restores the letter
@@ -353,6 +392,15 @@ neither.
 - **GIVEN** a collector with no avatar
 - **WHEN** their display name is `陳大文`, `ångström`, `@kitlam` or `🃏🃏`
 - **THEN** the page shows `陳`, `Å`, `K` or `?` in the avatar's place
+
+<!-- trace:scenario id=g10.store-account-profile.SC-ykg rev=1 -->
+#### Scenario: grade10-site-store-account-profile-SC-42 - The account's own picture does not stand in
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
+
+- **GIVEN** a collector with no avatar, whose account holds a picture its
+  sign-up brought
+- **WHEN** they open their account page
+- **THEN** the page shows their display name's first letter, not that picture
 
 ### Requirement: Editing is explicit, and a save carrying no field is refused
 
