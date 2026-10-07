@@ -2,5 +2,5 @@ schema: grade10-planning
 created: 2026-10-07
 hands:
   pm: "@ecchochan"
-awaiting:
-  specs: "2026-10-07, the blind suite and the requirements for documents-and-signing and case-intake - /planning-dev"
+  dev: "@ecchochan"
+ui_waived: "no screen or state moves: the vault backend renders the paper as a PDF, not a store block, and only the value in its Case fact and footer changes"
