@@ -63,7 +63,10 @@ None.
 - `shared/dates-and-times` - collector local zone, every deadline named by its
   US English short name or an English offset, a shop-clock page kept on the
   shop's clock, unrecognised zones refused; messages and documents labelled
-  GMT+8, the invoice page and the grading and vault letters included.
+  GMT+8, the invoice page and the grading and vault letters included; admin
+  surfaces and the records a machine reads state UTC, except an admin surface
+  whose own spec keeps a shop's clock, as the vault console and the
+  appointments diary do (decisions Q30).
 - `shared/ui/invoice-and-receipt-pdf` - PDF dates end in GMT+8, in English
   under any copy language.
 - `shared/ui/auction-listing` - catalogue tile close lines and the bid card's
@@ -96,6 +99,9 @@ None.
 - Mail for a shop outside Hong Kong is not changed here: every message states
   Asia/Hong_Kong as GMT+8 (decisions Q24). `add-multi-store-appointments` owes
   a delta on the message requirement for such mail; it holds none yet.
+- The admin surface exception is carried here for
+  `read-vault-console-on-shop-clock`, which depends on it and builds the vault
+  console's clock; no task here moves an admin surface (decisions Q30).
 - No domain impact: the two `shared/ui` capabilities are component contracts
   that no journey walks, so no path crosses them.
 - No platform impact: no capability here is walked by a journey, so no path

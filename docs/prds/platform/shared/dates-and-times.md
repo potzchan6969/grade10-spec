@@ -28,7 +28,8 @@ zone of its own. What a person reads depends on the surface.
   UTC named GMT, then it switches to the viewer's zone
 - **Shop's clock** - a page that books or confirms a visit, or a vault or
   signing page, keeps the shop's clock whatever zone the viewer is in; no rule
-  here sets how it names that zone, and vault timeline stamps stay UTC
+  here sets how it names that zone, and a collector's vault timeline stamps
+  stay UTC
   ([Booking Blocks](/p/shared/ui/appointment-booking),
   [Collector Pages](/p/grade10-site/vault/collector-pages))
 
@@ -47,12 +48,14 @@ zone of its own. What a person reads depends on the surface.
 
 ## Other Surfaces
 
-Operator tables and admin surfaces state Coordinated Universal Time. A
-calendar day the business judges - a contract date, a due date, a "today"
-queue, an age, a document's expiry, a report's month - stays on the brand's
-zone for every reader. The day a collector page shows for a deadline is not
-judged this way: it reads in the viewer's zone, unless the surface's own spec
-fixes its zone, as the loyalty programme's expiry days do
+Operator tables, admin surfaces and the records a machine reads - an export,
+the audit trail - state Coordinated Universal Time, except an admin surface
+whose own spec keeps a shop's clock. A calendar day the business judges - a
+contract date, a due date, a "today" queue, an age, a document's expiry, a
+report's month - stays on the brand's zone for every reader. The day a
+collector page shows for a deadline is not judged this way: it reads in the
+viewer's zone, unless the surface's own spec fixes its zone, as the loyalty
+programme's expiry days do
 ([Profile](/p/grade10-site/loyalty/profile)). Ordering and punctuation are
 the platform's, not the browser's. A date that is not a valid instant, or a
 zone the platform does not recognise, stops the render.
@@ -85,5 +88,7 @@ message states GMT+8.
 | The application's invoice page | Decided | Asia/Hong_Kong labelled GMT+8 like the PDF, not the viewer's zone | Product |
 | Every sent message | Decided | GMT+8, grading letters included; a day with no clock names no zone | Product |
 | A zone the platform does not recognise | Decided | The render stops and names it | Product |
+| An admin surface on a shop's clock | Decided | The vault console and the appointments diary read on the shop's clock, because staff at a counter tell collectors times on it; every other admin surface states UTC | Product |
+| Records a machine reads | Decided | An export and the audit trail stay UTC whatever the surface they come from reads, so a record joins across shops on one zone | Product |
 | First paint | Decided | A deadline may read UTC named GMT until the browser's zone is known, then it switches | Product |
 :::
