@@ -9,7 +9,7 @@ historical reference for the drawer chrome and sale-price line only.
 | --- | --- | --- |
 | A line on the site sale (sale price and struck list price) | [`Store Cart/CartItem` → Sale Price](?path=/story/store-cart-cartitem--sale-price) | [Cart Item](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4761-1494&m=dev) |
 | A list price equal to the price, still struck through | [`Store Cart/CartItem` → Equal List Price](?path=/story/store-cart-cartitem--equal-list-price) | - |
-| Site sale alone (two sale lines, one holding two, one line off the sale, one sold-out line; no code; no Store sale row) | [`Store Cart/CartDrawer/Auto Discount` → On Sale](?path=/story/store-cart-cartdrawer-auto-discount--on-sale) | [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
+| Site sale alone (two sale lines, one holding two, one line off the sale, one sold-out line, and an unavailable line the drawer removes as it opens; no code; no Store sale row) | [`Store Cart/CartDrawer/Auto Discount` → On Sale](?path=/story/store-cart-cartdrawer-auto-discount--on-sale) | [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
 | Promo refused | [`Store Cart/CartDrawer/Auto Discount` → Refuse](?path=/story/store-cart-cartdrawer-auto-discount--refuse) | - |
 | Promo stacked | [`Store Cart/CartDrawer/Auto Discount` → Stack](?path=/story/store-cart-cartdrawer-auto-discount--stack) | - |
 | Promo replaces site sale | [`Store Cart/CartDrawer/Auto Discount` → Replace](?path=/story/store-cart-cartdrawer-auto-discount--replace) | - |

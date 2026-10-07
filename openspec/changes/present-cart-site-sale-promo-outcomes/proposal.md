@@ -41,7 +41,8 @@ Applicable story each show their outcome, and their play tests pass.
   equal to the price, still struck through
 - The story proofs under `Store Cart/CartDrawer/Auto Discount` assert each
   outcome; a new On Sale canvas shows two sale lines, one holding two,
-  beside a line off the sale and a sold-out line, with no code
+  beside a line off the sale, a sold-out line and an unavailable line the
+  drawer removes as it opens, with no code
 - Manual page [Cart Drawer](/p/shared/ui/store-cart) carries the 🚧 outcomes,
   the story cards and the product decisions
 
@@ -68,7 +69,7 @@ See [Non-Goals](decisions.md#non-goals).
 - Consuming apps supply each outcome as line `price` and `originalPrice`,
   `subtotal` and `PromoState`, and add no summary row for the site sale
 - The exports requirement is `cart-drawer-empty-state`'s: its MODIFIED block
-  is to name what `packages/ui/src/index.ts` exports for the cart, including
+  names what `packages/ui/src/index.ts` exports for the cart, including
   `CartPromoSheet`, `CartPromoSheetProps`, `PromoTicket`, `PromoTicketProps`,
   `HeldPromoCode`, `PointsState` and `PromoNotice`, which this change relies
   on. This change adds no exports delta, since two changes folding one
