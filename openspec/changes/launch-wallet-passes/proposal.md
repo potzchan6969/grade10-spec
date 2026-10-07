@@ -18,8 +18,9 @@ Metric: passes saved per week, per wallet, once that wallet is enrolled.
 - **Google issuer enrolment** - the issuer account, its publishing access, and
   the class a pass issues from.
 - **Apple enrolment** - the Developer Program enrolment, the pass type
-  identifiers, the signing certificate, and the pass artwork. Whether the save
-  action draws each wallet's own badge is Design's call (`decisions.md` Q12).
+  identifiers, the signing certificate, and the pass artwork. The save
+  action's own artwork is carried by confirm-loyalty-surface-looks
+  (`decisions.md` Q12).
 - **One real-device push test** - settling which credential a pass push takes
   and which push header is right, against one enrolled iPhone.
 - **The deployed secrets check** - each wallet secret is expected where
@@ -61,9 +62,9 @@ None.
   in Google Wallet' and 'A member carries their card in Apple Wallet' already
   offer a wallet only where its issuer is recorded; enrolment meets them, so
   the page's two 🚧 Offered lines need no delta.
-- **Component exports** - no `@grade10/ui` export changes, unless Design
-  takes Q12's option (a), which changes `WalletPassLinks` for the Grade10
-  site.
+- **Component exports** - no `@grade10/ui` export changes; the
+  `WalletPassLinks` change that draws each wallet's artwork is
+  confirm-loyalty-surface-looks' (`decisions.md` Q12).
 - **Consumers** - the Grade10 admin console, the Grade10 and ZZZ store
   workers (`apps/backend/zzz/store/src/secrets.ts` spreads the wallet
   secrets), and the secrets tooling (`scripts/secrets`,

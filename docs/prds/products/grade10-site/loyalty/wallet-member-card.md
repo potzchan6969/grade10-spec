@@ -56,10 +56,9 @@ Apple code identifies and moves nothing.
 - **Three states** — live, ended or erased; only a live pass identifies
   anybody
 - **From `/membership`** — the member adds a pass from their own page
-- ❓ **The save action's look** - each wallet's own artwork, Apple's "Add to
-  Apple Wallet" badge and Google's "Add to Google Wallet" button, or the
-  card's own text button. Both vendors' brand guidelines expect the artwork.
-  Design's call
+- 🚧 **The save action's look** - each wallet's own artwork: Apple's "Add to
+  Apple Wallet" badge and Google's "Add to Google Wallet" button, as both
+  vendors' brand guidelines expect
 - **One per wallet** — added and ended independently of the other
 - **A new pass replaces the old** — adding a second pass to a wallet already
   holding one ends the earlier pass first
@@ -129,8 +128,8 @@ In this order, because each step needs the one above it:
    every save link a member opens. Until the issuer and both secrets are set,
    no save action is drawn
 9. *Design* - **Draw the save action as Google's own "Add to Google Wallet"
-   button**, which Google's brand guidelines expect, where
-   [the save action's look](#adding-and-ending) takes each wallet's artwork
+   button**, which Google's brand guidelines expect -
+   [the save action's look](#adding-and-ending)
 
 ### Apple
 
@@ -182,10 +181,9 @@ seals both their secrets under the one key. In this order:
    certificate — and record which produces a list request, not which returns
    200
 10. *Design* - **Draw the save action as Apple's own "Add to Apple Wallet"
-    badge** where [the save action's look](#adding-and-ending) takes each
-    wallet's artwork. It is licensed only while the organisation is an Apple
-    Developer Program member, and downloaded from the developer site under the
-    Wallet Marketing Agreement
+    badge** - [the save action's look](#adding-and-ending). It is licensed
+    only while the organisation is an Apple Developer Program member, and
+    downloaded from the developer site under the Wallet Marketing Agreement
 
 ### Launch Check
 
