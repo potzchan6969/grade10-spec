@@ -75,7 +75,13 @@ See [Non-Goals](decisions.md#non-goals).
   it visible without scripts, and the fix in the shared module reaches every
   user: the order details, order history, auction record and winner order
   blocks, the preview's Store Locator page story, which imports it by relative
-  path, and the preview page stories that wait on the blocks' `data-revealed`
+  path, the preview page stories that wait on the blocks' `data-revealed`, and
+  five grade10 end-to-end specs that wait on the auction record's
+  `data-revealed` (`apps/frontend/grade10/e2e/tests/auction/lot-status.spec.ts:100`,
+  `my-auctions-evidence.spec.ts:167`, `account-record.spec.ts:204`,
+  `winner-order-partial-payment.spec.ts:167`, `listing-page.spec.ts:144`).
+  grade10's `AllAuctionsGrid` sets `data-revealed` from a prop of its own, not
+  from this module, and does not move
 - **`@grade10/design-system`** — primitives only (`VStack`, existing layout);
   no new primitive variants
 - **`@grade10/i18n`** — page copy and head title and description in the
@@ -84,7 +90,7 @@ See [Non-Goals](decisions.md#non-goals).
   Grade10 fact
 - **grade10 SPA** — the public route, the Store set entry in
   `apps/frontend/grade10/src/surfaces.ts`, the sitemap entry, `addressHead`
-  and the chrome destinations; the path is Q9
+  and the chrome destinations, at `/<lang>/store-locator` (Q9)
 - **grade10 chrome fix, before this change** — the footer's Store Locator
   link and the listing's utility row point at `#` on staging store builds
   (grade10 `apps/frontend/grade10/src/chrome/siteContent.ts:100-104`,

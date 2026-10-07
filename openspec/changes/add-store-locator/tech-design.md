@@ -63,7 +63,7 @@ and `grade10-site/site/crawlable-pages`. The implementation adds one row:
 
 ```ts
 storeLocator: {
-  address: "/store-locator", // Q9
+  address: "/store-locator",
   kind: "prerendered",
   gate: "store",
   e2e: { doSmoke: true, session: "anonymous" },
@@ -81,8 +81,8 @@ storeLocator: {
   `...at("storeLocator", MODULES.storeLocator)`, ranked with the other
   top-level surfaces; without it the English address falls to not-found
 - **Outside `/store`** — an address beneath `/store` sits inside the store's
-  pattern (`/store/*`) and `isWithin` would mark Store as current there too;
-  every option in Q9 is a top-level address
+  pattern (`/store/*`) and `isWithin` would mark Store as current there too,
+  so the address is top-level (Q9)
 - **Rejected** — a `storeLocator` gate of its own, which would open the page
   apart from the shop its footer column stands beside
 
@@ -107,24 +107,26 @@ storeLocator: {
   no loader
 - **Words** — a `storeLocator` namespace in the grade10 brand layer, in
   `en`, `zh-Hant` and `zh-Hans`: the heading, the hours heading, the map's
-  title and link name, the address lines, and the hours rows Q16 settles (a
-  day label and an hours text each; recommended seven, Monday first). Day
-  labels are catalog words, never `Intl` output, which can differ between
-  the Node prerender and the browser and break hydration. How the address
-  and hours read in Chinese is Q11
+  title and link name, and seven hours rows, Monday first (Q16), each a day
+  label and an hours text in that language's own format (Q11); `zh-Hant`
+  and `zh-Hans` also hold the translated address lines. Day labels are
+  catalog words, never `Intl` output, which can differ between the Node
+  prerender and the browser and break hydration
 - **Store name** — `product.hongKongGrade10Store` moves from `shared/` to the
   grade10 layer (a `product` file per language) and both surfaces read that
   key; Korean loses it, since ZZZ has no shop
-- **Head** — `head.storeLocator` with `title` and `description` in the three
-  grade10 head files (Q10)
-- **Maps** — `pages/store-locator/shop.ts` builds the Maps destination
+- **Head** — `head.storeLocator` in the three grade10 head files: in English,
+  title `Store Locator — Grade10` and description `Where to find the Grade10
+  shop in Causeway Bay, Hong Kong, and when it is open.` (Q10)
+- **Address** — `pages/store-locator/shop.ts` holds the English address
+  once and derives from it the English address lines, the Maps destination
   (`https://www.google.com/maps/search/?api=1&query=…`) and the embed source
-  (`https://www.google.com/maps?q=…&output=embed`) from one address query
-  string, so the link and the map cannot name two places. Neither is copy:
-  the address the query names does not change with the language
-- **Q12** — if Product and Operations choose the booking diary's main shop,
-  only the module that supplies the facts changes; the block and the route
-  do not
+  (`https://www.google.com/maps?q=…&output=embed`), so the address shown in
+  English, the link and the map cannot name three places. The query is not
+  copy: the place it names does not change with the language
+- **Where the facts live** — the brand's own copy (Q12). When the booking
+  diary's main shop takes over, only `shop.ts` and the catalogs change; the
+  block and the route do not
 
 ### StoreLocator draws the map as one link over an inert embed
 
@@ -136,7 +138,7 @@ implementation lives in `packages/ui/src/blocks/store-locator/store-locator.tsx`
 | `copy` | `StoreLocatorCopy` | `heading`, `hoursHeading`, `mapTitle`, `openMap` |
 | `name` | `string` | |
 | `addressLines` | `readonly string[]` | |
-| `hours` | `readonly StoreLocatorHoursRow[]` | `{ day, hours }` |
+| `hours` | `readonly [StoreLocatorHoursRow, ...StoreLocatorHoursRow[]]` | `{ day, hours }`; at least one row |
 | `mapEmbedSrc` | `string` | required |
 | `mapsHref` | `string` | required |
 
@@ -145,8 +147,9 @@ implementation lives in `packages/ui/src/blocks/store-locator/store-locator.tsx`
   covers it, named by `copy.openMap`. `tabIndex={-1}` alone, as the preview
   draws it, keeps the frame's own controls in the tab order in Chromium;
   `inert` removes the frame and its document
-- **Both map props required** — the type refuses a block with no
-  destination, so a map that leads nowhere is not a state the block has
+- **Map and hours required** — the type refuses a block with no destination
+  or no hours row, so a map that leads nowhere and a shop with no hours are
+  not states the block has (Q15)
 - **Layout** — the preview page's: a container grid, map first, one column
   below `@3xl`; the page story moves to compose the block
 - **Heading** — the block draws the page's `h1`, since it is the page's
@@ -167,7 +170,10 @@ classes and a delay helper, with no hook and no `revealed` state:
   preview's Store Locator page story moves to the classes; the blocks' stories
   and the preview's order history, order details, winner order and My Auctions
   page stories stop waiting on `data-revealed`. All of them move in one commit,
-  so no commit leaves an importer of the removed hook
+  so no commit leaves an importer of the removed hook. In grade10, the
+  submodule bump drops the five end-to-end waits on the auction record's
+  `data-revealed` the proposal names; `AllAuctionsGrid` sets its own from a
+  prop and stays
 - **Hydration** — hydration reuses the server's elements, so the entrance
   runs once on first paint and not again; a client navigation mounts new
   elements and runs it as today
@@ -179,8 +185,8 @@ classes and a delay helper, with no hook and no `revealed` state:
 ### Free pick-up links only where a page answers
 
 - **Block** — `StoreProductMetadata` drops both `#` defaults; a label with no
-  href is drawn as the line's own text. No consumer passes `shippingFeeHref`,
-  so Shipping fee is never a link
+  href is drawn as the line's own text, plain, with no underline (Q22). No
+  consumer passes `shippingFeeHref`, so Shipping fee is never a link
 - **Feature view** — `ProductView` gains an optional `pickupHref` and passes
   it through
 - **Preview** — the product detail passes the workbench's Store Locator story
@@ -195,16 +201,17 @@ classes and a delay helper, with no hook and no `revealed` state:
 
 - **[Risk] Google refuses the keyless embed** → the link over the map does
   not depend on the frame loading, so activating the map's place still opens
-  Google Maps; the box keeps its size and muted background until the designer
-  answers Q19
+  Google Maps; the box keeps its size and muted background, with no message
+  (Q19)
 - **[Risk] The reveal change moves four agreed blocks** → the motion values
   are unchanged and only the mechanism moves; the commit carries a
   `Design-Override:` trailer on the designer's yes, and each block's stories
   run in the same commit
-- **[Risk] The address is costly to change once crawled** → the row is not
-  merged before Q9 is answered; the change cannot be accepted with Q9 open
-- **[Trade-off] Shop facts in the catalogs** — a change of hours is a catalog
-  edit and a deploy; accepted until Q12 is answered
+- **[Risk] The address is costly to change once crawled** → Q9 settles
+  `/store-locator` before the row is merged
+- **[Trade-off] Shop facts as the brand's copy** — a change of hours is a
+  catalog edit and a deploy, until the booking diary's main shop takes over
+  (Q12)
 
 ## Migration Plan
 
@@ -218,7 +225,6 @@ classes and a delay helper, with no hook and no `revealed` state:
 
 ## Open Questions
 
-- **Agreed look** — Q14 to Q16 and Q19 are the designer's; none changes the
-  props, the route or the tasks, only the stories and the hours rows supplied
-- **Non-link label look** — Q22, whether a label with no page keeps the
-  underline the redesign draws; the designer's, and a class on one element
+None. The designer confirms or redraws Q14 to Q16, Q19 and Q22 in
+draw-store-locator-page; a redraw moves the stories, and for Q15 the hours
+type.
