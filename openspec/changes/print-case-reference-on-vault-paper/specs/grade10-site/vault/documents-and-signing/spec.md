@@ -61,14 +61,15 @@ SHALL stay as they are:
 | Loan agreement | `<reference>` | `<lender's trading name> financing · case <reference>` |
 | Release receipt | `<reference>` | `<custodian's trading name> release · case <reference>` |
 
-The certificate page the seal appends is not the document's own page and is
-not held to this.
+The certificate page the seal appends to each document SHALL name the case
+the same way, as `Case: <reference>`, so no page of a sealed copy prints the
+case's id.
 
 A packet SHALL be sealed with the bytes rendered when it was prepared, and a
 sealed document SHALL never be rendered again, so a document keeps the case
 handle it was prepared with: a packet prepared while the paper printed the
-case's id is sealed printing that id, and staff prepare again for one printing
-the reference.
+case's id is sealed printing that id, on its certificate as on its own page,
+and staff prepare again for one printing the reference.
 
 <!-- trace:scenario id=g10.vault-documents-and-signing.SC-a2s rev=1 -->
 #### Scenario: grade10-site-vault-documents-and-signing-SC-39 - A financed packet names the case by its reference
@@ -105,3 +106,12 @@ the reference.
 - **WHEN** the collector signs every document in it
 - **THEN** nothing is rendered again, and each sealed document's source digest is the one taken when the packet was prepared
 - **AND** verifying each sealed document's digest answers that the vault sealed it
+
+<!-- trace:scenario id=g10.vault-documents-and-signing.SC-8ct rev=1 -->
+#### Scenario: grade10-site-vault-documents-and-signing-SC-43 - The certificate names the case as its document does
+**Serves:** grade10-site-vault-documents-and-signing-US-07 - every page of the sealed copy the collector holds names the same six characters
+
+- **GIVEN** a financed case with reference `QC7PEQ` whose packet was prepared
+- **WHEN** the collector signs every document in it
+- **THEN** each sealed document's certificate reads `Case: QC7PEQ`
+- **AND** no page of either sealed copy prints the case's id

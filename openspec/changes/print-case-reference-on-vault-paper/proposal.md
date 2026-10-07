@@ -18,6 +18,8 @@ stops printing the id, against searches typed as a reference.
   reference alone, in the `Case` fact and in the footer, so a collector reads
   the same six characters their letters carry and staff search the console by
   what the paper prints
+- **The certificate follows the page** - the certificate the seal appends
+  names the case the same way as the document it seals
 - **The reference's list names the paper** - `case-intake`'s list of where
   the reference is read gains the paper, pointing at `documents-and-signing`,
   so the next surface that names a case starts from a complete list
@@ -37,7 +39,7 @@ None.
 ### Modified Capabilities
 
 - `grade10-site/vault/documents-and-signing`: each document names the case by
-  its reference, in its facts and its footer
+  its reference, in its facts, its footer and its certificate
 - `grade10-site/vault/case-intake`: the reference's "Where it is read" names
   the signed paper
 
@@ -49,8 +51,12 @@ None.
 - **Preparation** - `packages/vault/backend/src/documents/prepare.ts` hands
   the templates the case's reference; the reference never changes, so a
   re-prepare prints the same paper
-- **No migration** - every case already carries a reference, and no sealed
-  packet is touched
+- **Certificate** - grade10 `packages/doc-sign/backend`: a packet takes an
+  optional case label at preparation, and the certificate prints it in place
+  of the join key; vault passes the reference, grading passes none
+- **One column, no backfill** - a nullable `case_label` on vault's and
+  grading's `sign_packets`; every case already carries a reference, and no
+  sealed packet is touched
 - **No API change** - no route, response or search moves
 
 ## Open questions
@@ -65,3 +71,4 @@ None.
 ## Follow-on changes
 
 - A downloaded document's file name carries the case reference
+- Grading's certificate names the submission by its reference

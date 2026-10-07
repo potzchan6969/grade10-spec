@@ -68,8 +68,8 @@ again.
   misread, issued beside the id when the request is opened; in every email,
   spoken at the counter, typed as the transfer reference; the address keeps
   the id
-- 🚧 **Case reference on the paper** — the signed agreements and the release
-  receipt print it in place of the id —
+- 🚧 **Case reference on the paper** — the signed agreements, the release
+  receipt and the certificate on each print it in place of the id —
   [Documents and Signing](/p/grade10-site/vault/documents-and-signing#document-terms)
 - **The fact it meets** — the offer ran out, the offer was declined, a new
   offer replaced the last, the visit was closed as missed, the item was asked

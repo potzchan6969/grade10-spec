@@ -37,7 +37,8 @@ vendor is involved.
 
 - 🚧 **The case** — the custody agreement, the loan agreement and the release
   receipt name the case by its six-character reference alone, in the `Case`
-  fact and in the footer, as every letter and the counter's search do
+  fact, in the footer and on the certificate the seal appends, as every letter
+  and the counter's search do
 - **The register's item** — the custody agreement names the item by the
   register's category, title and description, and the loan agreement's
   collateral and the release receipt's item by its category and title, each
@@ -146,7 +147,7 @@ The requirements are its; this page holds the decision behind them.
 | Two entities on the paper | Decided | The custodian on custody and release, the lender on the loan, the licence on the lender's alone; the values are Legal's | Legal |
 | The particulars that are computable | Decided | The annualised simple rate, `Fees: None`, Hong Kong SAR governing law, the complaints contact and the early-repayment line print today; the exact wording a regime prescribes is Legal's | Legal |
 | Cooling-off | Decided | None: no cooling-off is recalled for a secured loan, and early repayment is open any day | Legal |
-| The case on the paper | Decided | The six-character reference alone, never the case id: it is what the collector and the counter speak, type and search, and it names one case for the brand forever; the document's digest, not a printed handle, proves the paper | Product |
+| The case on the paper | Decided | The six-character reference alone, never the case id, on the document and its certificate alike: it is what the collector and the counter speak, type and search, and it names one case for the brand forever; the document's digest, not a printed handle, proves the paper | Product |
 | Staff countersignature | Deferred | The borrower signs; the agreement states that the lender executes it on the advance, the certificate names the verifying staff member, and the payout row evidences execution. Reopens if counsel asks, or if the owner's "both sign" means countersign | Legal |
 | The terms are explained before the paper | Decided | A recorded event at the counter, an optional recording reference, a refusal to prepare the loan packet without it, and a line the borrower signs; telephony and its storage are a vendor's | Owner |
 | Every signer has a copy | Decided | Every case belongs to an account, so the sealed set reaches an address, the case's own read and the download alike | Engineering |
