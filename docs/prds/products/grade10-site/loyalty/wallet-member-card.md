@@ -224,7 +224,7 @@ seals both their secrets under the one key. In this order:
   parse, and stops there rather than taking the other wallet's lap down with it
 - **Renewal** — Engineering owns the calendar; renewing is the certificate, key
   and secrets steps run again against the same identifiers
-- ❓ **A second brand issuing** — its own pass type identifiers and
+- ❓ **A second brand issuing** - its own pass type identifiers and
   certificate, since a certificate is bound to its pass type identifier.
   Whether it enrols under the same Apple Developer team, and so shows the same
   organisation name, is Product's call
