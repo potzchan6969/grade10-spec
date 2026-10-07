@@ -187,6 +187,22 @@ An artifact is drawn from what is before it, the page's marks first.
   carries a case of the change ticking it that is still draft is refused; a
   draft another change left in the same file is that change's to sign
 
+## Ids
+
+A journey, a scenario and a case each keep one id for life, and no id is
+issued twice.
+
+- 🚧 **The next id** - the next one no durable spec, open change or archived
+  change on the capability holds, issued by a command, never counted by hand
+- 🚧 **Two branches at once** - the first to land keeps its ids; the second is
+  refused at its landing, naming each id `main` already holds and the one
+  command that moves its own above them, with their citations in the change
+- 🚧 **One record, one id** - a scenario or a case copied into a second change
+  keeps the trace id it already holds
+- 🚧 **The templates fold** - a change written from the templates is folded
+  through acceptance in CI, so a form the templates write that the fold
+  refuses fails there first
+
 ## Checks
 
 - 🚧 **A page first, for a new capability** — a page naming a capability an
@@ -236,5 +252,6 @@ propose, and that every step passes through layers of checks. The brief is
 | The interview's size | Decided | About three questions, none trivial, that change what is built, one whether to do it now; the rest listed as decided. | Product |
 | Verified together | Decided | One verifier over a round's readings; a round of one reader verifies itself. | Engineering |
 | The record's paths | Decided | A group's repository tag says where its paths live, and the landing resolves them in the application clone beside it, so every row lands through the command. | Engineering |
+| Ids | Decided | Read from the durable specs and every open and archived change on the capability; the branch that lands second moves its own; no reservation file and no id that carries its change. | Engineering |
 | A run-sheet failure | Decided | QA writes the sentence in the change's thread, naming the case id, and the sheet stays the record of the walk; no new sender. | QA, Product |
 :::
