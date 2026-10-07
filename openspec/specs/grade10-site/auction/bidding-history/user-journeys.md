@@ -52,3 +52,11 @@ maximums, open on **Bid placed** by default, and list that tab first,
 raised,
 **so that** the account chronology matches the lot wording without a new
 account tab.
+
+### grade10-site-auction-bidding-history-US-09: Collector sees public bid avatars without learning emails
+
+**As a** collector,
+**I want** each public bid avatar to show one letter from that bidder's email
+without learning their email or name,
+**so that** I can tell rivals apart on the public ledger while identity stays
+behind the listing pseudonym.

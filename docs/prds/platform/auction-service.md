@@ -93,6 +93,7 @@ One auction backend (`apps/backend/grade10/auction`) runs every auction for all 
 - Filters are orthogonal (sale, category, status) and paging is keyset: `ending_soon` and `newest`, with a cursor that names the row it stopped on. A cursor from another ordering is a named 400, never a silent empty page
 - Only taxonomies flagged `public` are listed, so a taxonomy an admin adds for their own bookkeeping is not a storefront filter until someone says it is
 - Displays show "Bidder N", never who — a zzz user's identity must not leak to grade10 viewers
+- 🚧 **Public bid avatar letter** — a public bid avatar may show one letter from the bidder email local part; never the full email or a name
 - A sandbox listing is refused outside development, by the same branch on every list as on the single-listing read, or it would be hidden on its own page and listed on the one in front of it
 
 ### Only listing media is cached

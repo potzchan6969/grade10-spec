@@ -88,3 +88,10 @@ disagrees with what the document carried.
 **As a** collector contacting support about a lot,
 **I want** support to quickly identify which lot I'm referring to,
 **so that** my inquiry is resolved faster without having to copy listing URLs or titles.
+
+### grade10-site-auction-listing-page-US-15: Collector tells Recent Bids rivals apart by avatar letter
+
+**As a** collector,
+**I want** each Recent Bids avatar on the lot to show that bidder's email
+initial while the label stays Bidder N,
+**so that** I can tell who bid what without reading a name or email.

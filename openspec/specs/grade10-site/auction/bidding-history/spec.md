@@ -26,6 +26,7 @@ standing without exposing private bidding facts.
 - Privacy boundary
   - **Owner only:** lot lists never expose a rival maximum or identity
   - **Public recent bids:** unchanged public price movements and listing pseudonyms
+  - **Public avatar letter:** one email-derived character on public bid rows; never the full email or a name
 
 ## Requirements
 
@@ -38,8 +39,10 @@ account id. A matching account id from another storefront SHALL NOT grant
 access.
 
 Anonymous Auction reads SHALL continue to expose only accepted public price
-movements and listing pseudonyms. They SHALL NOT expose automatic maximums,
-private event kinds, payment facts, or the identity behind a pseudonym.
+movements, listing pseudonyms, and one avatar character per public bid row
+derived from that bidder's email local part. They SHALL NOT expose automatic
+maximums, private event kinds, payment facts, the full email, a display name,
+or any other identity behind a pseudonym beyond that single avatar character.
 Reading history SHALL NOT place a bid or change any auction fact.
 
 <!-- trace:scenario id=g10.auction-bidding-history.SC-onh rev=1 -->
@@ -77,6 +80,15 @@ Reading history SHALL NOT place a bid or change any auction fact.
 - **GIVEN** any retained bidding history
 - **WHEN** an authorized collector reads or pages it
 - **THEN** no bid, maximum, listing standing, or auction close changes
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-avl rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-52 - An anonymous public ledger carries avatar letters without emails
+**Serves:** grade10-site-auction-bidding-history-US-09 - Collector sees public bid avatars without learning emails
+
+- **GIVEN** a published lot whose public ledger includes a bid from a bidder whose email local part begins with `a`
+- **WHEN** an anonymous client reads that lot's public listing or live ledger
+- **THEN** that bid's row carries listing pseudonym `Bidder N` and avatar character `A`
+- **AND** the response includes neither the email nor a display name
 
 ### Requirement: Grade10 presents bidding history at the account's bids address
 
@@ -600,3 +612,29 @@ NOT gain a screen from this requirement.
 - **WHEN** they expand that listing on `/bids`
 - **THEN** those events read as a maximum set and a maximum raised
 - **AND** no new account tab or maximums-only route is offered
+
+### Requirement: Public bid rows expose one email-derived avatar character
+
+Every public bid row on an anonymous Auction listing or live ledger SHALL
+carry one avatar character derived from that bidder's stored email snapshot,
+separate from the listing pseudonym.
+
+- **Derivation** - the character SHALL be the first `A-Z` or `0-9` in the
+  email's local part (before `@`), uppercased.
+- **Fallback** - when the email is missing, blank, erased, or has no such
+  character, the avatar character SHALL be `B`.
+- **Separation** - the listing pseudonym SHALL remain `Bidder N` (from the
+  listing-local sequence). The avatar character SHALL NOT be encoded into
+  that pseudonym string.
+- **Privacy** - the public payload SHALL NOT include the full email or a
+  display name for that purpose.
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-av2 rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-53 - Digits and missing email fall back correctly
+**Serves:** Privacy boundary - Public avatar letter
+
+- **GIVEN** a public bid from a bidder whose email local part begins with `7`, and a public bid whose bidder email was erased
+- **WHEN** an anonymous client reads the lot's public ledger
+- **THEN** the first bid's avatar character is `7`
+- **AND** the erased bidder's avatar character is `B`
+- **AND** both rows still show listing pseudonyms of the form `Bidder N`
