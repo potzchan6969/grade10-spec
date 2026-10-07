@@ -2,5 +2,15 @@
   "taxTooltip": "Set by Grade10 for where your order ships. Some orders have none.",
   "contactDialog": {
     "title": "Email Grade10"
+  },
+  "proofFeedback": {
+    "submitted": {
+      "title": "Proof submitted",
+      "description": "We'll verify your payment shortly."
+    },
+    "notSubmitted": {
+      "title": "Proof not submitted",
+      "description": "Nothing was saved. Try again."
+    }
   }
 }

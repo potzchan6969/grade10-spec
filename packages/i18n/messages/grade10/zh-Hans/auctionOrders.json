@@ -2,5 +2,15 @@
   "taxTooltip": "由 Grade10 按订单送达地点设定。部分订单不设税费。",
   "contactDialog": {
     "title": "给 Grade10 发邮件"
+  },
+  "proofFeedback": {
+    "submitted": {
+      "title": "付款凭证已提交",
+      "description": "我们会尽快核实你的付款。"
+    },
+    "notSubmitted": {
+      "title": "付款凭证未提交",
+      "description": "未保存任何内容。请重试。"
+    }
   }
 }

@@ -21,8 +21,9 @@ Winner Order surface. No group has an owner until an engineer claims it.
 ## 3. Consuming Winner Order integration (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Add failing consumer tests for successful proof acknowledgement, failed retry with draft retention, hidden payment entry points after Payment Verifying, and busy leave blocking (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
-- [ ] 3.2 Wire the existing consuming-app proof dialog and Winner Order page to the approved feedback contract and exact success and failure copy; keep the existing upload procedure and i18n boundary (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
-- [ ] 3.3 Verify the consuming-app typecheck, lint, focused Winner Order tests and the focused browser E2E journey (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
+- [ ] 3.2 Wire the existing consuming-app proof dialog and Winner Order page to the approved feedback contract and exact success and failure copy; keep the existing upload procedure (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
+- [ ] 3.3 Add localized `proofFeedback` entries to the Grade10 `auctionOrders` catalogs for English, Simplified Chinese and Traditional Chinese
+- [ ] 3.4 Verify the consuming-app typecheck, lint, focused Winner Order tests and the focused browser E2E journey (`winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219`)
 
 ## 4. The walk - Preview payment proof feedback (grade10-spec) (owner: @htonyl)
 
