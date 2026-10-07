@@ -10,7 +10,11 @@ shopper is buying and fades at the edge when there is more to scroll to.
 
 Opening it re-reads current status and price against the catalogue, because a
 cart is the one place a stale price is expensive; a cart with lines waits
-behind skeleton placeholders. Sold-out lines are marked. The drawer title's
+behind skeleton placeholders. Sold-out lines are marked. A line's status is
+the application's answer: adjusted when its quantity was cut to what the shop
+can fill, sold out when the shop no longer offers its variant, and unavailable
+when its product left the store or its variant no longer exists - for Grade10,
+as [Cart Validation](../../grade10-site/store/cart-validation.md) decides. The drawer title's
 count is one per line, whatever its quantity, and leaves out sold-out and
 unavailable lines. A line's stepper stops at a maximum the application
 supplies, beside a remaining count the application words; the drawer derives

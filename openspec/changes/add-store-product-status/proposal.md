@@ -88,11 +88,12 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   shows the cart as empty; it shows the cart as `shared/ui/store-cart` shows a
   cart not yet read.
 
-No component contract changes. `shared/ui/store-product-listing` takes
+No component export changes. `shared/ui/store-product-listing` takes
 availability as a supplied condition and forbids deriving one;
 `shared/ui/store-cart` carries `default`, `adjusted`, `soldOut` and
 `unavailable` and reads status and price when the drawer opens. This change
-states what the store puts into them.
+states what the store puts into them, and restates what each cart status means
+so Store Cart's table no longer defines them by stock.
 
 ## Non-Goals
 
@@ -139,6 +140,10 @@ states what the store puts into them.
   is retired and replaced by `A card's one item is added to the cart from its
   own page`, whose scenarios take new ids because the old ones add a chosen
   grade.
+- `shared/ui/store-cart`: `Cart item status includes unavailable` keeps its
+  four values and states each meaning as cart-validation answers it, rather
+  than by stock (decisions Q21). No export changes, and Grade10, its one
+  consumer, already assigns them so.
 
 ## Impact
 
@@ -153,7 +158,7 @@ marks affected lines unchecked, replaces their last availability and prices
 and the cart total with unchecked states, names them in a retryable notice, and
 withholds checkout.
 
-The change directory is named `add-store-product-status` and carries four
+The change directory is named `add-store-product-status` and carries five
 capabilities; the name is left alone so the open pull request keeps its
 history. Its standalone Storybook product-detail preview is updated to match
 the variant and availability behavior specified here.
@@ -192,4 +197,5 @@ takes its QA2 rerun first, then accepts with
 - [Product Listing](../../../docs/prds/products/grade10-site/store/product-listing.md)
 - [Product Details](../../../docs/prds/products/grade10-site/store/product-page.md)
 - [Cart Drawer](../../../docs/prds/products/grade10-site/store/cart.md)
+- [Store Cart](../../../docs/prds/products/shared/ui/store-cart.md)
 - [Checkout](../../../docs/prds/products/grade10-site/store/checkout.md)
