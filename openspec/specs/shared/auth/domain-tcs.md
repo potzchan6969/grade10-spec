@@ -320,7 +320,7 @@
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-audit-US-03, shared-auth-sessions-US-02, shared-auth-session-US-01
 
 **Pre-conditions:**
