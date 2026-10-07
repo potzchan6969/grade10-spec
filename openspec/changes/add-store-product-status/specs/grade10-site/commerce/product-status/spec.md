@@ -240,15 +240,17 @@ availability on that card's tile.
 Every surface uses one internal sale identity per card, and none of them
 hides a price or lets an out-of-stock variant be added.
 
-**One answer** - Each card SHALL have one internal Shopify sale identity: the
+**One item per card** - Each card SHALL have one internal Shopify sale identity: the
 first available variant in the product read's order, or the first listed
 variant when none is available. A listing tile SHALL show that identity's
 price; the card's page SHALL use it for its price, availability and cart add;
 a listing add and a page add SHALL both put it in the cart; and each cart line
 SHALL communicate the current availability of the sale identity it holds. A
 line SHALL keep that identity when the card's one item moves to another, and
-an add of the new item SHALL be a line of its own. The tile's own availability
-is its rollup. No surface SHALL derive availability from stock counts.
+an add of the new item SHALL be a line of its own. Where the card lists more
+than one variant, a cart line SHALL name the variant it holds, so two lines of
+one card read apart. The tile's own availability is its rollup. No surface
+SHALL derive availability from stock counts.
 
 **No variant choice** - The page SHALL NOT render or require the collector to
 choose among sizes, options, or variants, and SHALL NOT show the internal sale
@@ -279,7 +281,7 @@ is out of stock, and SHALL NOT offer anything that can be pressed to add it.
 - **THEN** the page keeps the item's price and says it is sold out
 - **AND** nothing that adds it can be pressed
 
-<!-- trace:scenario id=g10.commerce-product-status.SC-77x rev=1 -->
+<!-- trace:scenario id=g10.commerce-product-status.SC-77x rev=2 -->
 #### Scenario: grade10-site-commerce-product-status-SC-18 - A line keeps the item it holds
 **Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
@@ -290,6 +292,7 @@ is out of stock, and SHALL NOT offer anything that can be pressed to add it.
 - **THEN** the line still holds the second variant and reads Sold out
 - **AND** the page reads available at the first variant's price
 - **AND** the add puts the first variant in the cart on a line of its own
+- **AND** each of the two lines names the variant it holds
 
 ### Requirement: An unpublished product is absent from browsing rather than marked
 

@@ -25,9 +25,9 @@ The cart reads the identity on each line again when it reviews the cart.
   no choice between variants
 - **Priced either way** — an out-of-stock variant keeps its price, and
   nothing that adds it can be pressed
-- **A line keeps its item** — a cart line reads the variant it was added as;
-  once the card's one item moves to another variant, a page add puts that
-  variant on a line of its own
+- **A line keeps its item** — a cart line reads the variant it was added as
+  and names it, so two lines of one card read apart; once the card's one item
+  moves to another variant, a page add puts that variant on a line of its own
 
 ## Browsing Limits
 

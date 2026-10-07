@@ -522,6 +522,7 @@ Runs once per row of **Test data**.
 * Step 2: the line is still in the cart at <price_17b>, marked sold out.
 * Step 4: the page reads available, at <price_17a>, with no size, option or variant choice.
 * Step 7: two lines for <product_17>: the earlier line at <price_17b>, still marked sold out, and a new line of 1 at <price_17a>, with no marking.
+* Step 7: each line names the variant it holds, so the two read apart.
 
 ---
 
@@ -750,21 +751,28 @@ Runs once per row of **Test data**.
 - The front door's merchandised row reads a card's sold-out status as the listing tile does and offers no add, so the one-item add does not arise there.
 - A listing tile shows the price of the card's one item: the first variant for sale, or the first listed when none is.
 - A sold-out item keeps its price, its quantity stepper and a Sold out button, both disabled: nothing that adds it can be pressed.
-- A cart line keeps the variant it was added as; once the card's one item moves to another variant, a page add puts that variant on a line of its own.
+- A cart line keeps the variant it was added as and names it; once the card's one item moves to another variant, a page add puts that variant on a line of its own.
 - A request above a count above zero fills in part even when the shop sells the variant past zero.
 
 ## Reconciliation
+
+**Run:** Update on 2026-10-07, from the sixth acceptance review. The rule
+**One answer** is renamed **One item per card**, the name the page and the
+feature set give it, and now has a cart line name its variant where the card
+lists more than one (Q19). SC-18 moved to rev 2 to say each line names its
+variant, and US1-TC12-1 expects it at step 7; the draft, not yet accepted,
+keeps its revision. QA2 reruns on this suite.
 
 **Run:** QA2 on 2026-10-06, in a fresh context after QA1's blind re-run.
 Read the anchors, these cases, the scenarios at their current revisions,
 `tech-design.md`, `ui-design.md`, `tasks.md`, `decisions.md`, the Product
 Status page and Grade10's cart model and line classification. Every live case
 folds. QA1's two questions land as Q19 and Q20, decided by the round from the
-rules and what Grade10 builds. Q19 sharpens **One answer** and adds SC-18;
+rules and what Grade10 builds. Q19 sharpens **One item per card** and adds SC-18;
 QA2 adds US1-TC12-1 to walk it, and every US1 case now covers it. Q20 needs no
 scenario: **Count as bound** and **No second derivation** already fill the
 request at the count, and US2-TC2-2's third row walks it. US1-TC11-1 proves
-the **One answer** rule's order, the first listed rather than the cheapest,
+the **One item per card** rule's order, the first listed rather than the cheapest,
 which SC-12 and SC-14 state; US1-TC6, US1-TC7 and US1-TC10 now price the item
 the page skips below the one it shows, so the cheapest never passes by
 accident.
@@ -811,7 +819,7 @@ accident.
 
 | Raised | Disposition |
 | --- | --- |
-| Does a line keep its variant once the card's one item moves, and does a page add start a second line? | Q19, decided: yes to both, as Grade10 keys a line on its variant; **One answer** and SC-18 carry it, and US1-TC12 walks it |
+| Does a line keep its variant once the card's one item moves, and does a page add start a second line? | Q19, decided: yes to both, as Grade10 keys a line on its variant; **One item per card** and SC-18 carry it, and US1-TC12 walks it |
 | Is a request above a count filled in part when the shop sells past zero? | Q20, decided: yes, at the count, since the store never reads the inventory policy; US2-TC2's third row walks it |
 
 **Run:** Update on 2026-10-06, from the fifth acceptance review. The tile has
