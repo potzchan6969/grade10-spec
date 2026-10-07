@@ -4,12 +4,13 @@ The basic information a signed-in collector holds about themselves in the
 Grade10 and ZZZ stores — display name, bio, avatar, and the address they signed
 in with — and how they read and edit it on their own account page, which both
 brands render the same way. Owner-only: nobody but the collector sees their
-profile.
+profile, and only its avatar image opens for anyone holding its address.
 
 ## Feature set
 
 - Owner-only access
   - Session is the key: a signed-out request is refused; no input selects another collector
+  - Avatar image: opens with no session for anyone holding its address, which only the owner learns
 - Always a profile
   - Session defaults: a collector who has never saved still sees a complete page
 - Fields
@@ -27,8 +28,9 @@ profile.
 ### Requirement: Only the signed-in collector reads or edits their profile
 
 The system SHALL resolve a profile from the caller's session and no other
-input. A profile SHALL be readable and editable by its owner alone, and a
-request without a session SHALL be refused. A signed-out visit to the account
+input. A profile SHALL be readable and editable by its owner alone, except that its
+avatar image opens for anyone holding its address, and a request without a
+session SHALL be refused. A signed-out visit to the account
 page SHALL ask the visitor to sign in.
 
 <!-- trace:scenario id=g10.store-account-profile.SC-02h rev=1 -->
@@ -291,8 +293,7 @@ it. An upload SHALL replace whatever avatar the collector had. Each profile's
 image SHALL have an address of its own, which changes whenever the image does.
 An image SHALL answer at its address only while its profile holds it. The
 storage sweep SHALL delete an image its profile no longer holds once it is at
-least a day old, so an upload still in flight is never deleted. A copy already held in a cache outside the
-system MAY answer the replaced image's address until that cache expires. A
+least a day old, so an upload still in flight is never deleted. A copy already held in a cache, at the edge or beyond it, MAY answer the replaced image's address until that cache expires. A
 rejected upload SHALL leave the previous avatar in place and SHALL state why
 it was rejected.
 
@@ -357,6 +358,22 @@ it was rejected.
 - **WHEN** one of them removes theirs
 - **THEN** the two avatars had different addresses
 - **AND** the other collector's image still answers at its address
+
+### Requirement: An avatar image opens for anyone holding its address
+
+The system SHALL answer a request for an avatar image at its address with no
+session, so that a cache may hold it. An address SHALL NOT be one that can be
+worked out from the image, and the system SHALL return it only in its owner's
+own profile read. When an avatar is replaced or removed, the system SHALL ask
+the edge to clear the image's copy.
+
+<!-- trace:scenario id=g10.store-account-profile.SC-b6e rev=1 -->
+#### Scenario: grade10-site-store-account-profile-SC-44 - An image opens with no session at its address
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
+
+- **GIVEN** a collector with an avatar
+- **WHEN** a request carrying no session asks for the image at its address
+- **THEN** the system answers with the image, and a cache may hold it
 
 ### Requirement: A collector removes their avatar and falls back to the display name's first letter
 

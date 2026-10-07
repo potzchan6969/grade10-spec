@@ -24,10 +24,10 @@ own account page and shown to nobody else. Grade10 and ZZZ show the same page.
 - 🚧 **Avatar file** - any image the browser can read, whatever its type or
   size, is made square at **512 px** before it is sent; a file the browser
   cannot read is refused
-- ❓ **Avatar address** - Product (@tangconst) confirms who can open the
-  image: anyone holding its address, with no sign-in, so it can be cached; or
-  only the signed-in collector, on every view. The address is the profile's
-  own and cannot be worked out from the image
+- 🚧 **Avatar address** - anyone holding the image's address can open it,
+  with no sign-in, so it can be cached. The address is the profile's own,
+  changes with the image and cannot be worked out from it, so only the
+  collector learns it
 - 🚧 **Account picture** - the picture an account already has, such as a
   Google sign-up's, never stands in; the letter does
 - 🚧 **Earlier saves** - a profile saved before member-since was recorded
@@ -101,5 +101,6 @@ page is worth opening before they have saved anything.
 | --- | --- | --- | --- |
 | One name | Decided | The profile, the till and the wallet pass show one name: the name chosen for the shop, else the account name, else the address before the `@`; 會員 at the till, and a pass left as it was, when the account service cannot be reached for a member with no name chosen for the shop. Chosen over showing no name, and built in grade10 `packages/grade10-store/backend/src/services/memberName.ts:7-23` (`ea91833d32`). | Product |
 | Member since | Decided | The first save, never the date the store first wrote a record for the account, which can come from a webhook the collector never triggered. | Product |
+| Avatar address | Decided | Anyone holding the image's address opens it, with no sign-in, so the edge caches it; the edge copy is cleared when the avatar is replaced or removed. Chosen over showing it to the signed-in collector alone on every view, which no cache can absorb and a public profile would have to undo. | Product (@ecchochan) |
 | Mobile number | Decided | Not on this page: the change that verifies numbers brings it here, since the till's phone lookup waits on that verification. Rejected adding it here, which specifies number entry without verification. | Product (@tangconst) |
 :::

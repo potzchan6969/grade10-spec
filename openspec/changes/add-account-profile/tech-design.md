@@ -213,13 +213,12 @@ row per replaced object, claimed by a cron pass of its own — rejected, it
 rebuilds what the shared sweep already does, and still leaves the orphan of a
 failed row write.
 Authenticated streaming per render, like the auction's proof documents —
-rejected under decisions Q1's recommendation, which product has not yet
-answered: every render becomes a worker invocation no cache
+rejected under decisions Q1, which product answered as recommended: every render becomes a worker invocation no cache
 can absorb, and a public profile would undo it. Cloudflare Images — rejected,
 a new paid dependency for one square image.
 
 Makes pass: `grade10-site-store-account-profile-SC-20`, `grade10-site-store-account-profile-SC-23`, `grade10-site-store-account-profile-SC-24`,
-`grade10-site-store-account-profile-SC-38`.
+`grade10-site-store-account-profile-SC-38`, `grade10-site-store-account-profile-SC-44`.
 
 ### Byte routes go through a tRPC caller, and the transport learns one body type
 
@@ -399,10 +398,4 @@ reclaimed by the sweep only once a worker that runs it is back.
 
 ## Open Questions
 
-Decision Q1 is held for product: it decides who can open the avatar, which the
-account-profile delta does not yet state. Answered as recommended, the delta
-gains a requirement excepting the image from the owner-only rule, its clause on
-a replaced image lets a copy at the edge answer until it expires, since the
-purge is best effort, and the serving route above stands; answered otherwise,
-the avatar `GET` takes the session and streams the image on every view, with
-no edge cache or purge (task 4.9).
+None.
