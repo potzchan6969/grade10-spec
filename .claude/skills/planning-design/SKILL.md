@@ -6,9 +6,15 @@ description: Specify the user-facing design for an OpenSpec change, including it
 # Designer's Artifact
 
 - **Scope** - Own `ui-design.md` when a change has a user-facing surface. Follow the `grade10-planning` schema instructions for its sections and format.
-- **New change** - Start with `/workflow-plan`, which owns the proposal, decisions and journeys. Write `ui-design.md` on the same change and supply the design reference; do not write the spec outline, cases, scenarios or tasks.
+- **New change** - Start with `planning-pm`, which owns the proposal, decisions and journeys. Write `ui-design.md` on the same change and supply the design reference; do not write the spec outline, cases, scenarios or tasks.
 - **Existing change** - Add `ui-design.md` to the existing change. Read its proposal, decisions and journeys, plus the durable capability spec and PRD where present. Do not wait for the change's own `spec.md`; it is written after this file.
 - **No user-facing surface** - Omit `ui-design.md`; do not create an empty file. Record `ui_waived: <why>` in the change record.
+
+Read the enriched design instructions before drafting:
+
+```bash
+pnpm openspec instructions ui-design --change <change>
+```
 
 ## Design Reference
 
@@ -29,6 +35,6 @@ description: Specify the user-facing design for an OpenSpec change, including it
 
 ## Related
 
-- **Planning** - `planning-pm` owns the proposal, decisions and journeys; `/workflow-plan` opens and runs that round. `workflow-round` owns waits for missing frames and the landing sequence.
+- **Planning** - `planning-pm` owns the proposal, decisions and journeys. Record missing inputs using [Waiting for an input](../../../docs/governance/prd-and-openspec.md#waiting-for-an-input).
 - **Implementation planning** - `planning-dev` writes the technical design, requirements, cases and tasks.
 - **Design work** - `page-from-figma` converts a drafted screen; `design-system-primitives`, `design-tokens` and `design-sync-check` own the related design-system workflows.

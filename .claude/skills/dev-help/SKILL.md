@@ -6,10 +6,10 @@ disable-model-invocation: true
 
 # Dev help
 
-Kept until the team has adopted the line commands (`Q84` of
-`run-a-round-on-every-artifact`). The tables below are the pre-workflow
-line, printed as they stood; the line today is `/workflow-plan` to
-`/workflow-land`, tabled in `AGENTS.md`.
+The current planning flow is `planning-pm`, `planning-design` where needed,
+then `planning-dev`. `/workflow-plan` through `/workflow-land` are next-version
+wrappers, not prerequisites for the planning skills. Suggest them only when
+that next-version workflow is requested.
 
 Print both tables below as-is, then suggest the next skill from this session.
 Do **not** run, attach, or start the suggested skill. The contributor
@@ -29,8 +29,8 @@ sentence.
 | `/planning-design` | `ui-design.md`: screens to Figma frames, exports named exactly, states tied to scenarios. | Same. | "Write the UI design for the watchlist drawer." |
 | `/planning-dev` | One run: QA1 blind draft cases, Dev technical design and scenarios, QA2 reconciliation, human clarification, acceptance and publication before implementation. | Same. | "Plan and accept `auction-auto-bidding`; I am implementing it." |
 | `/accept-review` | After QA2, before `pnpm spec:accept`: the PRD pages, designs, deltas and durable specs must agree. Reports a verdict; edits nothing. `/planning-dev` runs it. | Same. | "Is `auction-auto-bidding` ready to accept?" |
-| `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. | `/workflow-build`. | "Implement the tasks in `auction-auto-bidding`." |
-| `/implement-then-review` | Same as `/implement`, then `/review-changes` when the last slice is green. | No equivalent; `/workflow-build`, then review by hand. | `/implement-then-review auction-auto-bidding` |
+| `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. | Next-version wrapper: `/workflow-build`. | "Implement the tasks in `auction-auto-bidding`." |
+| `/implement-then-review` | Same as `/implement`, then `/review-changes` when the last slice is green. | No current equivalent; `/workflow-build` belongs to the next-version workflow. | `/implement-then-review auction-auto-bidding` |
 | `/tdd` | The red → green loop. `/implement` already runs the work through it; invoke when you want the loop on its own. | Same. | "Build the bid-increment helper test-first." |
 | `/reconcile-figma-annotations` | Interactive, evidence-pinned review of spec-owned Figma annotation drift, selective acceptance, verification, and optional local commit. | Same. | "Review spec-owned Figma annotation drift." |
 | `/commit` | Local commits, `type(domain):`. Only when invoked. Chain `/pr-push` in the same message to publish. | Same. | `/commit` |

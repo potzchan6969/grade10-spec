@@ -74,16 +74,16 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 
 | # | Artifact | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
-| 1 | `proposal.md` | Product manager | `/workflow-plan`, `planning-pm` | Always |
-| 2 | `decisions.md` | Product manager | `/workflow-plan`, `planning-pm` | Always — goals, non-goals, what the interview settled |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/workflow-plan`, `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `ui-design.md` | Designer, or the PM with the design | `/workflow-design`, `planning-design` | Optional — from the journeys |
-| 5 | `tech-design.md` | Dev in the integrated planning run | `/planning-dev`, `planning-dev` | Every implementation change outside this store — or `design_waived: <why>` |
-| 6 | `specs/<capability>/spec.md` | QA1 outline, Dev scenarios | `/planning-dev`, `planning-dev` | Always — anchors first, scenarios after QA1 and tech design |
-| 7 | `specs/<capability>/feature-tcs.md` | QA1 cases, QA2 reconciliation | `/planning-dev`, `planning-dev` | Always — blind draft cases before scenarios |
-| 8 | `tasks.md` | Dev in the integrated planning run | `/planning-dev`, `planning-dev` | Before acceptance and implementation |
+| 1 | `proposal.md` | Product manager | `planning-pm` | Always |
+| 2 | `decisions.md` | Product manager | `planning-pm` | Always — goals, non-goals, what the interview settled |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
+| 4 | `ui-design.md` | Designer, or the PM with the design | `planning-design` | Optional — from the journeys |
+| 5 | `tech-design.md` | Dev in the integrated planning run | `planning-dev` | Every implementation change outside this store — or `design_waived: <why>` |
+| 6 | `specs/<capability>/spec.md` | QA1 outline, Dev scenarios | `planning-dev` | Always — anchors first, scenarios after QA1 and tech design |
+| 7 | `specs/<capability>/feature-tcs.md` | QA1 cases, QA2 reconciliation | `planning-dev` | Always — blind draft cases before scenarios |
+| 8 | `tasks.md` | Dev in the integrated planning run | `planning-dev` | Before acceptance and implementation |
 
-Each command names its artifact and follows the `workflow-round` skill, which reads its readers from the schema and dispatches them from `.claude/agents/`; `/workflow-build` takes a task group, `/workflow-land` one artifact.
+`planning-pm`, `planning-design` and `planning-dev` are current and independently usable. `workflow-*` are next-version wrappers: they may invoke planning skills and add instructions, but planning skills must not depend on them. Keep planning procedures in `planning-*` until adoption.
 
 The PM writes 1 to 3, and a designer adds 4 where needed. One `/planning-dev` invocation takes frozen anchors through fresh QA1 blind cases, independent Dev technical design, scenarios and tasks, then fresh QA2 reconciliation. The same human resolves requirement, design and plan questions. After a ready `accept-review` and a passing `pnpm accept:preflight <change>`, accept once with `pnpm spec:accept <change> --baseline <digest> --reviewed-by <human>`. Acceptance publishes requirements before implementation without marking cases approved or executed. An amendment names `--supersedes <old-fingerprint>` and preserves earlier snapshots. The first claim records its durable baseline; archive reconciles its target scope with the current contract, and semantic differences name evidence. Archive makes no second fold; deployment never waits for it. After deployment, human QA classifies cases with `/tcs-review` and uses `/tcs-run-sheet` for manual execution. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
