@@ -169,7 +169,7 @@ bump lands with its typecheck fixes in one pull request.
       unit lanes, the grading and vault backend email tests, `pnpm run lint`,
       and the listing-page end-to-end smoke.
 
-## 4. Move the collector pages onto the viewer's zone and the invoice page onto GMT+8 (grade10)
+## 4. Move the collector pages onto the viewer's zone and the invoice page onto GMT+8 (grade10) (owner: @seankcw)
 
 Needs group 3's bump landed. Shop-clock pages are not moved: a page that books
 or confirms a visit, or a vault or signing page, keeps the shop's clock, and how
