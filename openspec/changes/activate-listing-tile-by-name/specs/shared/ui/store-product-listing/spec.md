@@ -319,6 +319,7 @@ product card, the tile's requirement makes it a pointer target.
 - **THEN** no cart control is displayed at either moment
 - **AND** the product's own activation still reports
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-zkz rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-65 - Coarse pointer keeps the cart visible
 **Serves:** Responsive layout - coarse pointer keeps the cart visible
 
@@ -327,6 +328,7 @@ product card, the tile's requirement makes it a pointer target.
 - **THEN** the cart control is displayed without hover
 - **AND** it can be activated
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-y4d rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-66 - Narrow viewport keeps the cart visible
 **Serves:** Responsive layout - narrow viewport keeps the cart visible
 
