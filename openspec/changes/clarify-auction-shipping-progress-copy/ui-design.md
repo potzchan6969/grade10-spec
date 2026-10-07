@@ -17,7 +17,7 @@ Title badge uses design-system `Badge` `size="sm"`, same tones as My Auctions
 Order Progress: Address → Invoice → Payment → **Shipping** → Completed.
 While Preparing Shipment, Shipping is the **current** (progress / ping) step
 with subtext **Preparing to ship** — not incomplete/upcoming. While Shipped,
-Shipping stays current with the day-only ship date (and tracking when present).
+Shipping stays current with the day-only ship date (and the tracking number: a carrier link when a tracker link was recorded, plain text otherwise).
 
 ### My Auctions — Won Status
 
@@ -38,4 +38,4 @@ Shipment (`default`), not outline.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Preparing Shipment | Badge `default`; Shipping current + Preparing to ship | `winner-order-SC-55` |
-| Shipped | Badge `default`; Shipping current + date / tracking | `winner-order-SC-253` |
+| Shipped | Badge `default`; Shipping current + date / tracking (link only with a tracker link) | `winner-order-SC-253` |

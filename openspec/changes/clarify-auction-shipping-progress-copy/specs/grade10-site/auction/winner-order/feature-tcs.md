@@ -85,8 +85,43 @@
 * The tracking number is the external carrier link.
 * Order Progress adds no separate Track shipment control and no separate carrier name.
 
+### winner-order-US2-TC56-1: A shipped order with no tracker link shows the number as plain text
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_shipped_no_link>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_shipped_no_link> | A paid, fulfilled order with a ship date and a tracking number, and no recorded tracker link |
+
+**Steps:**
+
+1. Read Order Progress.
+
+**Expected result:**
+
+* Shipping is the current progress step with the day-only ship date.
+* The tracking number reads as plain text, not a link.
+* Order Progress shows no carrier name and no Track shipment control.
+
 ## Reconciliation
 
 - **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
-- **Covered:** `winner-order-SC-253` ← `US2-TC20-2`.
+- **Covered:** `winner-order-SC-253` ← `US2-TC20-2` (recorded tracker link) and `US2-TC56-1` (no tracker link).
 - **Raised:** none.
