@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "6431b762bb0dc859b59cc09dccae81d153b475dc9d28ec7447c183450d55ad2f"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "a0cd147ff3c02d7d5de41d5697b7a0ce5ea786e9",
+    "capturedAt": "2026-10-07T10:56:38.935Z",
+    "targets": [
+      {
+        "path": "openspec/changes/email-initial-bid-avatars/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Private bidding history follows the storefront identity boundary",
+          "Requirement: Public bid rows expose one email-derived avatar character"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Recent bids avatars use the public email-derived letter"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

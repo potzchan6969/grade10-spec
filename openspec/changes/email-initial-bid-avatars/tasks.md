@@ -1,4 +1,4 @@
-## 1. Public avatar initial on the wire (grade10)
+## 1. Public avatar initial on the wire (grade10) (owner: @mason5991)
 
 - [ ] 1.1 Add `avatarInitial` to `publicBidSchema` and project it in `publicBidOf` from the bidder email snapshot with the local-part letter rule and `B` fallback; extend the public ledger query to join email. `grade10-site-auction-bidding-history-SC-52`, `grade10-site-auction-bidding-history-SC-53`
 - [ ] 1.2 Cover derivation and erasure fallback in auction-service tests; prove the public payload never includes email. `grade10-site-auction-bidding-history-SC-52`, `grade10-site-auction-bidding-history-SC-53`
