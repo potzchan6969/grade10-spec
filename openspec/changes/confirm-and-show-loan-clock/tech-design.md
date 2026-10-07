@@ -12,7 +12,8 @@ The work is in `packages/vault/admin-frontend`, the vault console slice that
   takes a typed reason or note.
 - **The header** - `CaseDetailPanel.tsx` draws the status `Badge` beside the
   reference and already destructures `due` from the case read. Its `timeZone`
-  prop is the brand's zone, which the console treats as the shop's clock.
+  prop is the brand's zone, the calendar a loan's due date, days past due and
+  date to pay by are judged on.
 - **The booked shop's zone** - the case read carries `locationId`, and
   `useLocations` gives each shop's `timeZone`, which `BookingRow`'s slot
   picker already labels `On the shop's clock (<zone>)`. The header's visit
@@ -45,7 +46,7 @@ The work is in `packages/vault/admin-frontend`, the vault console slice that
 - The date the notice confirm names and the date the worker writes come from
   one function
 - The header clock is a pure derivation of the case read, tested at the
-  shop's midnight
+  brand's midnight
 
 **Non-Goals:**
 
@@ -87,12 +88,14 @@ the press:
    own detail key with `staleTime: 0`, which also refreshes the panel. The
    notice press reads `admin.policy` the same way, into the cache entry
    `useLendingPolicy` fills.
-2. Where the fresh read no longer allows the act - the visit is gone, or a
-   notice now stands - no confirm opens and the panel redraws from the cache.
+2. Where the fresh read no longer allows the act - the visit is gone (Q19),
+   or a notice now stands (Q20) - no confirm opens and the panel redraws from
+   the cache.
 3. Otherwise the words are built from the fresh detail, with its `asOf` as
-   the instant, and `confirm` is asked.
+   the instant, so a moved visit is named at its new slot (Q19), and
+   `confirm` is asked.
 4. A failed read shows its message beside the button, where the refusal
-   showed before, and opens nothing.
+   showed before, and opens nothing (Q21).
 
 One hook in the cases slice does step 1:
 `useFreshCase(): (caseId: string) => Promise<CaseDetail>`.
@@ -130,7 +133,7 @@ The address is `case.contact.email`, the one every message to the collector
 goes to (Q12). `shopTimeZone` is the zone of the shop the fresh case names in
 `locationId`, from `useLocations`, never the panel's brand zone (Q17); a shop
 the lookup cannot find opens no confirm and shows the failure beside the
-button, as a failed read does. The notice confirm keeps the brand's zone,
+button, as a failed read does (Q22). The notice confirm keeps the brand's zone,
 because the date it names is the worker's brand-zone day.
 
 Rejected: the panel's `timeZone` for the slot, which names another hour at a
@@ -168,17 +171,16 @@ missed a visit or asked for the item back.
 
 - [The clock's count and the collector's Past due count drift] -> a unit test
   folds the same case through `loanClock` and `caseStanding` and asserts one
-  count at three instants either side of the shop's midnight.
+  count at three instants either side of the brand's midnight.
 - [A brand sets grace above zero, and the header's count runs ahead of the
   Overdue view's, which shows `overdueDays` net of grace] -> Q18 keeps them
   separate figures; both brands hold zero grace today
-  (`packages/app-env/src/lending.ts`), and the PRD's ❓ asks the product
-  owner whether they must agree once a brand sets grace.
+  (`packages/app-env/src/lending.ts`).
 - [The header's visit chip reads the brand's zone while the confirm reads the
   booked shop's] -> the chip is `read-vault-console-on-shop-clock`'s; the two
   differ only at a shop whose zone is not its brand's, and group 4 starts from
   that change's commit where it has landed.
-- [The shop's day turns between the confirm and the press] -> the instant is
+- [The brand's day turns between the confirm opening and the send] -> the instant is
   the worker's `asOf`, so the worker's date can only be later (Q13); the
   `noticePayBy` test pins that order.
 - [A confirm opens on a slot or a hold another operator has since changed] ->
@@ -188,11 +190,11 @@ missed a visit or asked for the item back.
   reads the policy with `staleTime: 0` (Decision 2).
 - [Moving the cure date into the contracts changes the worker] -> the
   backend suites' notice and forfeiture cases run unchanged against it.
-- [A zoneless call reads a correct day on a test machine set to the shop's
+- [A zoneless call reads a correct day on a test machine set to the brand's
   zone] -> the package's vitest runs on `Asia/Hong_Kong`, and the formatters
   default to UTC, so each test picks an instant whose UTC day differs from the
-  shop's, such as 00:30 Hong Kong time.
-- [The zone bug fix also edits `BookingRow`] -> group 3 starts from that
+  brand's, such as 00:30 Hong Kong time.
+- [The zone bug fix also edits `BookingRow`] -> group 4 starts from that
   fix's commit where it has landed and takes its `timeZone` prop rather than
   adding a second.
 
@@ -205,7 +207,7 @@ same deploy; there is no data to move, and rollback is the previous deploy.
 
 | Lane | What it proves |
 | --- | --- |
-| Contracts unit | `noticePayBy` at the shop's midnight, and a later `sentAt` never naming an earlier day |
+| Contracts unit | `noticePayBy` at the brand's midnight, and a later `sentAt` never naming an earlier day |
 | Backend (`pnpm run test:backend`) | The notice and forfeiture suites, unchanged, against the moved function |
 | SPA unit, vault admin frontend | `loanClock` and `confirmWords`; the header in `CaseDetailPanel.test.tsx`; both confirms in `BookingRow.test.tsx` and `CustodyPanel.test.tsx`, rendered under `ConfirmProvider` and `ConfirmDialog` |
 | Storybook | `CaseDetailPanel` stories for a loan past due and one with a notice standing |

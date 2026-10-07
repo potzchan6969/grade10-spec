@@ -42,16 +42,16 @@ it.
 #### Scenario: grade10-admin-vault-operator-queue-SC-97 - A loan past its due date reads its days past due
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator opens a late loan and reads how late it is
 
-- **GIVEN** a live loan due on 30 November with no forfeiture notice, read on 3 December on the shop's calendar
+- **GIVEN** a live loan due on 30 November with no forfeiture notice, read on 3 December on the brand's calendar
 - **WHEN** an operator opens the case
 - **THEN** the header reads `3 days past due` beside the status
 - **AND** no badge says the case is waiting on staff for being late
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-9xn rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-98 - The first day after the due date reads one day on the shop's calendar
-**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the shop's day, not the server's
+#### Scenario: grade10-admin-vault-operator-queue-SC-98 - The first day after the due date reads one day on the brand's calendar
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the brand's day, not the server's
 
-- **GIVEN** a live loan due on 30 November, read at 00:30 on 1 December in Hong Kong, while it is still 30 November in Coordinated Universal Time
+- **GIVEN** a live loan due on 30 November, read at 00:30 on 1 December Hong Kong time, the brand's zone, while it is still 30 November in Coordinated Universal Time
 - **WHEN** an operator opens the case
 - **THEN** the header reads `1 day past due`
 
@@ -59,7 +59,7 @@ it.
 #### Scenario: grade10-admin-vault-operator-queue-SC-99 - A loan inside its term reads no clock
 **Serves:** grade10-admin-vault-operator-queue-US-24 - the operator is shown no clock on a loan that is not late
 
-- **GIVEN** a live loan due on 30 November, read at 23:00 on 30 November on the shop's calendar
+- **GIVEN** a live loan due on 30 November, read at 23:00 on 30 November on the brand's calendar
 - **WHEN** an operator opens the case
 - **THEN** the header reads no clock beside the status
 
@@ -108,8 +108,8 @@ it.
 Cancelling a case's visit from the console SHALL run in these steps:
 
 1. The operator presses Cancel visit.
-2. The console asks, from the case as it stands when the confirm opens, in
-   the default tone, naming the visit's day and time on the clock of the shop
+2. The console asks, from the case as the press reads it, in the default
+   tone, naming the visit's day and time on the clock of the shop
    it is booked at, that shop's zone as the visit booker names it
    (`On the shop's clock (<zone>)`), the case's email address the collector
    is emailed at, and that the case keeps its status. It SHALL NOT read the
@@ -120,6 +120,17 @@ Cancelling a case's visit from the console SHALL run in these steps:
 4. Confirming reads `Cancel visit`. The visit SHALL be cancelled, and the
    collector told, as `grade10-site/vault/visit-booking` states.
 5. A refusal SHALL be shown in the open confirm, which stays open.
+
+- **A fresh read** - the press SHALL read the case afresh before it asks, and
+  the confirm SHALL name the visit as that read holds it, so a visit moved
+  since the case was opened is named at its new slot.
+- **A visit already gone** - where the fresh read holds no visit, no confirm
+  SHALL open, nothing SHALL be sent, and the case SHALL redraw without the
+  visit.
+- **No confirm on a failure** - where the fresh read fails, or the shop the
+  visit is booked at cannot be found, the failure SHALL be shown beside the
+  button, and no confirm SHALL open. The slot SHALL NOT be named on the
+  brand's zone instead.
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-af3 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-105 - The confirm names the slot, the address and the status kept
@@ -171,13 +182,45 @@ Cancelling a case's visit from the console SHALL run in these steps:
 - **WHEN** the operator presses `Cancel visit`
 - **THEN** the worker's refusal is shown in the confirm, which stays open
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-91a rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-116 - A visit cancelled in another tab opens no confirm
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator is not asked to cancel a visit that is already gone
+
+- **GIVEN** a case opened while it held a visit, whose visit has since been cancelled in another tab
+- **WHEN** the operator presses Cancel visit
+- **THEN** no confirm opens, the case redraws holding no visit, and no message is sent to the collector
+
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-cqt rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-117 - A visit moved in another tab is named at its new slot
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the slot the visit holds now
+
+- **GIVEN** a case opened while it held a visit at a shop on `Asia/Hong_Kong` on 15 June 2026 at 10:00 there, since moved in another tab to 16 June 2026 at 14:00
+- **WHEN** the operator presses Cancel visit
+- **THEN** the confirm names 16 June 2026 at 14:00 on the shop's clock, `Asia/Hong_Kong`, and does not name 15 June
+
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-aaa rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-118 - A failed read opens no cancel confirm
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator is never asked from a read that may no longer hold
+
+- **GIVEN** a case holding a visit, and the console unable to read the case afresh
+- **WHEN** the operator presses Cancel visit
+- **THEN** the failure is shown beside Cancel visit, no confirm opens, the case still holds the visit, and no message is sent to the collector
+
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ydx rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-119 - A visit at a shop that cannot be found opens no confirm
+**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator is never shown the slot at another hour
+
+- **GIVEN** a case holding a visit at a shop the console's list of shops does not hold
+- **WHEN** the operator presses Cancel visit
+- **THEN** the failure is shown beside Cancel visit, no confirm opens, the slot is not named on the brand's zone, and no message is sent to the collector
+
 ### Requirement: Sending the forfeiture notice asks first, naming the address and the date to pay by
 
 Sending the forfeiture notice from the custody tab SHALL run in these steps:
 
 1. The operator presses Send forfeiture notice.
-2. The console asks, from the case and the brand's notice period as they
-   stand when the confirm opens, in the destructive tone, naming the case's
+2. The console asks, from the case and the brand's notice period as the press
+   reads them, in the destructive tone, naming the case's
    email address the notice goes to and the date to pay by the notice would
    name if sent as the confirm opens.
 3. Dismissing SHALL send nothing and record nothing.
@@ -193,15 +236,23 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 
 - **The date** - the date to pay by SHALL be the brand's notice period counted
   from the instant the confirm opens, on the brand's calendar. Where the
-  shop's day turns before the send, the notice SHALL name the date the worker
-  reaches, one day later, and nothing SHALL ask again.
+  brand's day turns between the confirm opening and the send, the notice SHALL
+  name the date the worker reaches at the send, one day later, and nothing
+  SHALL ask again.
+- **A fresh read** - the press SHALL read the case and the brand's notice
+  period afresh before it asks.
+- **A notice already standing** - where the fresh read holds a forfeiture
+  notice, no confirm SHALL open, no notice SHALL be sent, and the custody tab
+  SHALL redraw with the notice sent and the date to pay by it named.
+- **No confirm on a failure** - where either read fails, the failure SHALL be
+  shown beside the button, and no confirm SHALL open.
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-5hv rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-110 - The confirm names the address and the date to pay by
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the operator checks who will read the notice and the deadline it starts
 
 - **GIVEN** a brand with a 14-day notice period, and a live loan past its due date with no notice, holding the address `collector@example.com`
-- **WHEN** an operator presses Send forfeiture notice at 10:00 on 1 December on the shop's clock
+- **WHEN** an operator presses Send forfeiture notice at 10:00 on 1 December on the brand's clock
 - **THEN** a confirm in the destructive tone names `collector@example.com` and 15 December 2026 as the date to pay by
 - **AND** nothing has been sent
 
@@ -217,7 +268,7 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 #### Scenario: grade10-admin-vault-operator-queue-SC-112 - Confirming sends the notice naming the date shown
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the operator sends the notice they checked
 
-- **GIVEN** the Send forfeiture notice confirm open at 10:00 on 1 December, naming 15 December 2026
+- **GIVEN** the Send forfeiture notice confirm open at 10:00 on 1 December on the brand's clock, naming 15 December 2026
 - **WHEN** the operator confirms it
 - **THEN** the confirm closes, the case carries a notice naming 15 December 2026 as the date to pay by, and the collector is sent the notice
 - **AND** the header reads `pay by 15 Dec 2026`
@@ -226,7 +277,7 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 #### Scenario: grade10-admin-vault-operator-queue-SC-113 - A day that turns before the send names the later date
 **Serves:** grade10-admin-vault-operator-queue-US-23 - the borrower is never given less time than the operator read
 
-- **GIVEN** a brand with a 14-day notice period, and the Send forfeiture notice confirm opened at 23:59 on 1 December on the shop's clock, naming 15 December 2026
+- **GIVEN** a brand with a 14-day notice period, and the Send forfeiture notice confirm opened at 23:59 on 1 December on the brand's clock, naming 15 December 2026
 - **WHEN** the operator confirms it at 00:01 on 2 December
 - **THEN** the notice names 16 December 2026 as the date to pay by, and no second confirm is asked
 
@@ -246,3 +297,19 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 - **WHEN** an operator presses Send forfeiture notice, and confirms
 - **THEN** the confirm says that no date to pay by can be named without a notice period
 - **AND** on confirming, the worker's refusal is shown in the confirm, which stays open, and no notice is recorded
+
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-kbm rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-120 - A notice sent in another tab opens no confirm
+**Serves:** grade10-admin-vault-operator-queue-US-23 - a borrower is never sent a second notice by a press made on an old page
+
+- **GIVEN** a live loan past its due date, opened while it held no notice, and since sent a forfeiture notice in another tab naming 15 December 2026
+- **WHEN** the operator presses Send forfeiture notice
+- **THEN** no confirm opens, no second notice is recorded or sent, and the custody tab redraws with the notice sent naming 15 December 2026 and no longer offers the notice
+
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-rtl rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-121 - A failed read opens no notice confirm
+**Serves:** grade10-admin-vault-operator-queue-US-23 - the operator is never asked from a read that may no longer hold
+
+- **GIVEN** a live loan past its due date with no notice, and the console unable to read the case or the brand's notice period afresh
+- **WHEN** the operator presses Send forfeiture notice
+- **THEN** the failure is shown beside Send forfeiture notice, no confirm opens, and no notice is recorded

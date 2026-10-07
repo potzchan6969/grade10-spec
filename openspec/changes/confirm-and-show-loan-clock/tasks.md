@@ -1,7 +1,7 @@
 ## 1. The One Case page (grade10-spec)
 
-- [ ] 1.1 Read the three 🚧 lines and the ❓ on two late counts under One
-      case in `docs/prds/products/grade10-site/vault/operator-console.md`
+- [ ] 1.1 Read the three 🚧 lines under One case in
+      `docs/prds/products/grade10-site/vault/operator-console.md`
       against the accepted requirements, and reword any line they now say
       otherwise; then run `pnpm check:manual`.
 - [ ] 1.2 Verify: `openspec validate confirm-and-show-loan-clock --strict` and
@@ -15,7 +15,7 @@ and 5 cite the ones it serves.
 
 - [ ] 2.1 Add the tests first, in their own commit: `noticePayBy` names the
       brand-zone day 14 days on at 10:00 and at 23:59 Hong Kong time, and a
-      `sentAt` two minutes later across the shop's midnight names the next
+      `sentAt` two minutes later across the brand's midnight names the next
       day, never an earlier one.
 - [ ] 2.2 Add `noticePayBy(sentAt, noticeDays, timeZone)` beside
       `forfeitHold` in `packages/vault/contracts/src`, and have
@@ -32,7 +32,7 @@ and 5 cite the ones it serves.
       after and three days on, a 3-day grace that does not reduce the count,
       and a notice date kept after it passes; then `CaseDetailPanel` drawing
       the clock beside the status for an operator without the payout grant,
-      at instants whose UTC day differs from the shop's
+      at instants whose UTC day differs from the brand's
       (`grade10-admin-vault-operator-queue-SC-97`,
       `grade10-admin-vault-operator-queue-SC-98`,
       `grade10-admin-vault-operator-queue-SC-99`,
@@ -68,27 +68,38 @@ zone on `BookingRow` rather than adding a second.
       and for a shop on `Asia/Tokyo` under a brand on `Asia/Hong_Kong`;
       then `BookingRow` under `ConfirmProvider` and `ConfirmDialog`, asking in
       the default tone with `Keep visit` and `Cancel visit`, sending nothing
-      on `Keep visit`, cancelling on confirm, and keeping a refusal in the
-      open confirm
+      on `Keep visit`, cancelling on confirm, keeping a refusal in the open
+      confirm, opening no confirm on a visit cancelled since the case was
+      read, naming a visit moved since at its new slot, and opening none on a
+      failed read or a shop the lookup cannot find
       (`grade10-admin-vault-operator-queue-SC-105`,
       `grade10-admin-vault-operator-queue-SC-105a`,
       `grade10-admin-vault-operator-queue-SC-106`,
       `grade10-admin-vault-operator-queue-SC-107`,
       `grade10-admin-vault-operator-queue-SC-108`,
-      `grade10-admin-vault-operator-queue-SC-109`).
+      `grade10-admin-vault-operator-queue-SC-109`,
+      `grade10-admin-vault-operator-queue-SC-116`,
+      `grade10-admin-vault-operator-queue-SC-117`,
+      `grade10-admin-vault-operator-queue-SC-118`,
+      `grade10-admin-vault-operator-queue-SC-119`).
 - [ ] 4.2 Add `useFreshCase` to the cases slice, reading the case's detail key
       with `staleTime: 0` and showing a failed read beside the button that
-      asked for it.
+      asked for it, covering `grade10-admin-vault-operator-queue-SC-118` and
+      `grade10-admin-vault-operator-queue-SC-121`.
 - [ ] 4.3 Add `cases/domain/confirmWords.ts` with `cancelVisitConfirm`, and
       route Cancel visit through `useConfirm` on its own `useVisitMoves()`
       instance after a fresh read, naming the slot on the zone `useLocations`
-      gives for the case's `locationId`, covering
+      gives for the case's `locationId`, opening none where the fresh read
+      holds no visit or the shop is not found, covering
       `grade10-admin-vault-operator-queue-SC-105`,
       `grade10-admin-vault-operator-queue-SC-105a`,
       `grade10-admin-vault-operator-queue-SC-106`,
       `grade10-admin-vault-operator-queue-SC-107`,
-      `grade10-admin-vault-operator-queue-SC-108` and
-      `grade10-admin-vault-operator-queue-SC-109`.
+      `grade10-admin-vault-operator-queue-SC-108`,
+      `grade10-admin-vault-operator-queue-SC-109`,
+      `grade10-admin-vault-operator-queue-SC-116`,
+      `grade10-admin-vault-operator-queue-SC-117` and
+      `grade10-admin-vault-operator-queue-SC-119`.
 - [ ] 4.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
       and `pnpm run lint`.
 
@@ -103,23 +114,29 @@ Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
       the destructive tone with the address and 15 December 2026 for a
       14-day period read at 10:00 on 1 December, recording nothing on
       dismiss, sending on confirm, and keeping the worker's
-      `LENDING_POLICY_UNSET` refusal in the open confirm
+      `LENDING_POLICY_UNSET` refusal in the open confirm, and opening no
+      confirm on a notice sent since the case was read or on a failed read
       (`grade10-admin-vault-operator-queue-SC-110`,
       `grade10-admin-vault-operator-queue-SC-111`,
       `grade10-admin-vault-operator-queue-SC-112`,
       `grade10-admin-vault-operator-queue-SC-113`,
       `grade10-admin-vault-operator-queue-SC-114`,
-      `grade10-admin-vault-operator-queue-SC-115`).
+      `grade10-admin-vault-operator-queue-SC-115`,
+      `grade10-admin-vault-operator-queue-SC-120`,
+      `grade10-admin-vault-operator-queue-SC-121`).
 - [ ] 5.2 Add `forfeitureNoticeConfirm`, and route Send forfeiture notice
       through `useConfirm` after a fresh read of the case and of
-      `admin.policy`, naming `noticePayBy` from the fresh `asOf`; drop the
-      panel's inline notice refusal line, covering
+      `admin.policy`, naming `noticePayBy` from the fresh `asOf` and opening
+      none where the fresh read holds a notice; drop the panel's inline
+      notice refusal line, covering
       `grade10-admin-vault-operator-queue-SC-110`,
       `grade10-admin-vault-operator-queue-SC-111`,
       `grade10-admin-vault-operator-queue-SC-112`,
       `grade10-admin-vault-operator-queue-SC-113`,
-      `grade10-admin-vault-operator-queue-SC-114` and
-      `grade10-admin-vault-operator-queue-SC-115`.
+      `grade10-admin-vault-operator-queue-SC-114`,
+      `grade10-admin-vault-operator-queue-SC-115`,
+      `grade10-admin-vault-operator-queue-SC-120` and
+      `grade10-admin-vault-operator-queue-SC-121`.
 - [ ] 5.3 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
       and `pnpm run lint`.
 

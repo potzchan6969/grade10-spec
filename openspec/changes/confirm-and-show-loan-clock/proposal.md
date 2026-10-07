@@ -62,9 +62,12 @@ See [Non-Goals](decisions.md#non-goals).
   outside the Overdue view. Whether the In custody view's rows carry the same
   clock is the product owner's to settle; this change leaves rows as they are.
 - **A notice to a case with no address** - a message to a case with no
-  address is counted rather than mailed, so a forfeiture notice could start
-  its period with nobody told. Whether the notice is refused in that case is
-  Legal's to settle; this change has the confirm say nobody is emailed.
+  address is counted rather than mailed, so a forfeiture notice starts its
+  period with nobody told. Whether the notice is refused in that case is
+  Legal's to settle, outside this change, and asked on
+  [Loan and Money](../../../docs/prds/products/grade10-site/vault/loan-and-money.md#records);
+  this change keeps the worker's rule and has the confirm say nobody is
+  emailed (Q23).
 
 ## References
 
