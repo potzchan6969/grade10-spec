@@ -74,7 +74,7 @@ emails/
   grading/                 the collector's letters about a submission
     _components/           GradingLetter, SubmissionLine, CardLines,
                            PickupBlock, preview fixture
-                           the plan's three, the drop-off's six, checked in
+                           the plan's three, checked in
                            (with and without cover), the batch's two, the
                            grades' two, a card not returned / damaged /
                            withdrawn, ready (above and below the threshold),
@@ -82,9 +82,9 @@ emails/
   vault/                   the collector's letters about a case
     _components/           VaultLetter, CaseLine, HowToPay, NoticeClause,
                            ReminderSchedule, preview fixture
-                           the visit's four, the offer's two, custody's
-                           three, the loan's five, falling due's three, the
-                           end of a case's five, the paper, the identity
+                           the offer's two, custody's three, the loan's
+                           five, falling due's three, the end of a case's
+                           four, the paper, the identity
                            check
 ```
 

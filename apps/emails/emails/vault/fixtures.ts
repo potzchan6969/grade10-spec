@@ -1,8 +1,7 @@
 import type { CaseCancelledProps } from "@/emails/vault/case-cancelled";
 import type { CaseDeclinedProps } from "@/emails/vault/case-declined";
+import type { CaseExpiredProps } from "@/emails/vault/case-expired";
 import type { CaseExpiredDraftProps } from "@/emails/vault/case-expired-draft";
-import type { CaseExpiredUnbookedProps } from "@/emails/vault/case-expired-unbooked";
-import type { CaseNoShowProps } from "@/emails/vault/case-no-show";
 import type { CaseReleasedProps } from "@/emails/vault/case-released";
 import type { CaseVaultedProps } from "@/emails/vault/case-vaulted";
 import type { DocumentsSealedProps } from "@/emails/vault/documents-sealed";
@@ -18,10 +17,6 @@ import type { RepaymentDueSoonProps } from "@/emails/vault/repayment-due-soon";
 import type { RepaymentOverdueProps } from "@/emails/vault/repayment-overdue";
 import type { RepaymentRecordedProps } from "@/emails/vault/repayment-recorded";
 import type { RepaymentReversedProps } from "@/emails/vault/repayment-reversed";
-import type { VisitBookedProps } from "@/emails/vault/visit-booked";
-import type { VisitCancelledProps } from "@/emails/vault/visit-cancelled";
-import type { VisitMissedProps } from "@/emails/vault/visit-missed";
-import type { VisitRescheduledProps } from "@/emails/vault/visit-rescheduled";
 
 /**
  * The fixture every vault letter preview is written over: case `H7K4PQ`, a
@@ -36,9 +31,9 @@ import type { VisitRescheduledProps } from "@/emails/vault/visit-rescheduled";
  * through `external/grade10-spec` to render every kind and compare it
  * against this store's preview. The kinds are `openspec/changes/
  * complete-vault-collector-flow/specs/grade10-site/vault/
- * collector-notifications/spec.md`'s message table: the visit's four, the
- * offer's two, custody's three, the loan's five, falling due's three, the
- * end of a case's five, the paper, and the identity check.
+ * collector-notifications/spec.md`'s message table: the offer's
+ * two, custody's three, the loan's five, falling due's three, the end of a
+ * case's four, the paper, and the identity check.
  */
 
 const caseUrl = "https://grade10.com/vault/cases/vc_9f2a7c3d1e";
@@ -62,8 +57,6 @@ export const previewCase = {
   complaintsContact: "complaints@grade10.com",
 
   visitAt: "2026-09-16T05:30:00Z",
-  movedVisitAt: "2026-09-18T07:00:00Z",
-  visitMinutes: 20,
 
   offerValuedMinor: 9_500_000,
   offerPrincipalMinor: 3_800_000,
@@ -123,11 +116,8 @@ export const previewCase = {
   draftKeptUntil: "2026-09-13T03:00:00Z",
   draftExpiredAt: "2026-09-13T03:00:01Z",
 
-  unbookedSubmittedAt: "2026-08-10T03:00:00Z",
-  unbookedExpiredAt: "2026-09-09T03:00:00Z",
-
-  noShowVisitAt: "2026-09-16T05:30:00Z",
-  noShowExpiredAt: "2026-09-19T03:00:00Z",
+  expiredSubmittedAt: "2026-08-10T03:00:00Z",
+  expiredAt: "2026-09-09T03:00:00Z",
 
   packetId: "pk_4b7e1a90",
   documentsSealedAt: "2026-09-16T06:20:00Z",
@@ -182,18 +172,13 @@ export function footerLines(party: "lender" | "custodian"): string[] {
 /**
  * The kinds `NOTIFY_KINDS` names (`packages/vault/backend/src/notify/
  * vocabulary.ts`), one per row of the collector-notifications spec's message
- * table: the visit (booked, moved, cancelled, missed), the offer (made,
- * expired), custody (vaulted, released, forfeited), the loan (advance,
+ * table: the offer (made, expired), custody (vaulted, released, forfeited), the loan (advance,
  * repayment, two corrections, repaid), falling due (due soon, overdue,
- * notice), the end of a case (declined, cancelled, and the three expiries),
+ * notice), the end of a case (declined, cancelled, and the two expiries),
  * the paper, and the identity check.
  */
 export type NotifyKind =
   | "identity_check_invited"
-  | "visit_booked"
-  | "visit_rescheduled"
-  | "visit_cancelled"
-  | "visit_missed"
   | "offer_made"
   | "offer_expired"
   | "case_vaulted"
@@ -210,8 +195,7 @@ export type NotifyKind =
   | "case_declined"
   | "case_cancelled"
   | "case_expired_draft"
-  | "case_expired_unbooked"
-  | "case_no_show"
+  | "case_expired"
   | "documents_sealed";
 
 /**
@@ -222,10 +206,6 @@ export type NotifyKind =
  */
 export type LetterFacts = {
   identity_check_invited: Required<IdentityCheckInvitedProps>;
-  visit_booked: Required<VisitBookedProps>;
-  visit_rescheduled: Required<VisitRescheduledProps>;
-  visit_cancelled: Required<VisitCancelledProps>;
-  visit_missed: Required<VisitMissedProps>;
   offer_made: Required<OfferMadeProps>;
   offer_expired: Required<OfferExpiredProps>;
   case_vaulted: Required<CaseVaultedProps>;
@@ -242,8 +222,7 @@ export type LetterFacts = {
   case_declined: Required<CaseDeclinedProps>;
   case_cancelled: Required<CaseCancelledProps>;
   case_expired_draft: Required<CaseExpiredDraftProps>;
-  case_expired_unbooked: Required<CaseExpiredUnbookedProps>;
-  case_no_show: Required<CaseNoShowProps>;
+  case_expired: Required<CaseExpiredProps>;
   documents_sealed: Required<DocumentsSealedProps>;
 };
 
@@ -256,18 +235,6 @@ export const VAULT_FIXTURES: LetterFacts = {
   identity_check_invited: {
     visitAt: previewCase.visitAt,
     verifyUrl: previewCase.verifyUrl,
-  },
-  visit_booked: {
-    visitAt: previewCase.visitAt,
-    visitMinutes: previewCase.visitMinutes,
-  },
-  visit_rescheduled: {
-    visitAt: previewCase.movedVisitAt,
-  },
-  visit_cancelled: {},
-  visit_missed: {
-    visitAt: previewCase.visitAt,
-    itemWithYou: true,
   },
   offer_made: {
     valuedMinor: previewCase.offerValuedMinor,
@@ -338,11 +305,8 @@ export const VAULT_FIXTURES: LetterFacts = {
   case_expired_draft: {
     keptUntil: previewCase.draftKeptUntil,
   },
-  case_expired_unbooked: {
-    submittedAt: previewCase.unbookedSubmittedAt,
-  },
-  case_no_show: {
-    visitAt: previewCase.noShowVisitAt,
+  case_expired: {
+    submittedAt: previewCase.expiredSubmittedAt,
   },
   documents_sealed: {
     packetId: previewCase.packetId,
