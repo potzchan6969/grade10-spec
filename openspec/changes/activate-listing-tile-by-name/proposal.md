@@ -100,7 +100,10 @@ opens by the tile's rule.
   a tile given an address is a link to it defines the address this change's
   tile requirement names; the two land as a stack, that change first, and are
   accepted back to back from one tree, where `add-store-cross-sell`'s delta
-  carries no sold-out requirement or scenario of its own (Q9)
+  carries no sold-out requirement or scenario of its own (Q9); accepted
+  before `add-store-product-status`, which rewrites its copies of the
+  product page's US2-TC1 and the domain suite's e2e US1-TC1 against this
+  change's revision 2 (Q18)
 - **Overlap** - this change alone states that a sold-out tile opens where it
   does not sell (Q9); `add-store-cross-sell` carries no requirement for it, and
   its US1-TC1 walks `shared-ui-store-product-listing-SC-97`, which resolves
@@ -108,7 +111,7 @@ opens by the tile's rule.
 
 ## Open questions
 
-- none - Q1 to Q17 are in `decisions.md`
+- none - Q1 to Q18 are in `decisions.md`
 
 ## References
 
