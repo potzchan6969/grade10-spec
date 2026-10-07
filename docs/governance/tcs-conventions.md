@@ -74,6 +74,8 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `grade10-site-auction-auction-US2-TC12-1` does. The expected result states the formula that equals it. A step does not state the outcome.
 - 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: Rows for a refusal take one value per distinct answer the provider gives, not several values that produce the same answer.
 - 2026-10-06, shared/auth/users/feature-tcs.md: When a rule names a class of values, for example any role other than `user`, the test data takes two members of the class as rows; two are enough.
+- 2026-10-07, shared/auth/audit/feature-tcs.md: A case manual QA can run walks the product flow that reaches the write, such as a guest checkout for a trusted-product create, not the call behind it.
+- 2026-10-07, shared/auth/audit/feature-tcs.md: A case that needs a dependency mocked to refuse has Testability `automation` alone; nobody can make the refusal by hand.
 
 ### Actors
 
