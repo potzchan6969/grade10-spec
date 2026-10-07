@@ -168,7 +168,7 @@ executes manual cases when needed. Groups 2 to 5 landed first.
       count before the notice and its date after, as a staff operator
       (`grade10-admin-vault-operator-queue-US-24`). Keep the walks as the
       change's end-to-end suite.
-- [ ] 6.2 Flip the cases the walks decide with
+- [x] 6.2 Flip the cases the walks decide with
       `pnpm run tcs:automated <case...> --decided-by grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`,
       in the walks' own commit; the cases that stay manual remain draft and
       are named in the walk's `rounds.md` row.
