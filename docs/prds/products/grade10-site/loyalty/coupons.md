@@ -28,8 +28,7 @@ so redefining the reward never rewrites a coupon a member already holds —
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
-- **Expired is spent** — an unused coupon past its end returns nothing, and is
-  counted as breakage
+- **Expired is spent** — an unused coupon past its end returns nothing, and is counted as breakage
 - **Birthday month** `TBC` — a definition can hold a coupon to the month of
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
@@ -154,6 +153,7 @@ quietly lost a coupon.
 | Wrong channel | The definition does not name the channel it is being spent in |
 | Not eligible | The definition's eligibility is not met |
 | 🚧 An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
+| ❓ Written too late | A checkout whose order is written more than a minute after its claim; the coupon is back in the wallet, and the words the member reads are the product manager's to confirm |
 
 ### Basket
 
