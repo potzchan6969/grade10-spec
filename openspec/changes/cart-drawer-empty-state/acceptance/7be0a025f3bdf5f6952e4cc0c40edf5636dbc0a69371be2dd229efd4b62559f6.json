@@ -1,0 +1,92 @@
+{
+  "version": 2,
+  "change": "cart-drawer-empty-state",
+  "baseline": "51e9c912f6ef9f4d32f53dc05554752d3593cca882210b080e06eb1415a4ae3c",
+  "fingerprint": "7be0a025f3bdf5f6952e4cc0c40edf5636dbc0a69371be2dd229efd4b62559f6",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T12:07:09.719Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/shared/ui/store-cart.md#empty-cart",
+      "sha256": "0330efd5e065d716cda94c474270860df3ca81c884568919717bda1b91c852ba",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/cart-drawer-empty-state/decisions.md",
+      "sha256": "832bd3b0234cf4716c417566198b00059e5a4efaf90ec2f156fe26ebf21ca7b8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cart-drawer-empty-state/proposal.md",
+      "sha256": "8b9569a2ac6cf522ccd5f1bba8c1e00dca9e011abfc874a5762c41e20fcaaad9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cart-drawer-empty-state/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "a6cb244fe23482217c7cbe06d965b1dfcc4afb2d04e99ce986ccdea2fa67de4f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cart-drawer-empty-state/specs/shared/ui/store-cart/spec.md",
+      "sha256": "19b1e4fa95aa92b964fc2ad0f6c4c5d5371f60fd9094292b7d430c155f08e26d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cart-drawer-empty-state/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "8450124c377dbaecca015757872067dc3c920ede8f37c2475a3c2e3c243d2ec1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cart-drawer-empty-state/tech-design.md",
+      "sha256": "519c7d4913971ab5765cd23ecfa606023b20f4e21666d3e3ea1c50d684202b53",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cart-drawer-empty-state/ui-design.md",
+      "sha256": "8fd8a06561cf3ac134b638ad7be20c6fb1434e4c8c3bfa65b5f0d53954f9a691",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "9cd6107cf194647aec859392dab71bf8c47091004f8875e924f25f7c0957b8ec",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "sha256": "76f1546047f691d6c442d3990631450a20e3a6c42383df965db009a12ec85515",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "43c8d840a13801a4a96cd3e61d533cc6a7ffc830add21a161b4a4ef5a894f763",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/cart-drawer-empty-state/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: An empty cart shows the design-system empty state",
+        "Requirement: Fetching status and price info on open with Boneyard skeletons",
+        "Requirement: Item count badge excludes sold-out items",
+        "Requirement: The drawer displays a minimum 5-row baseline",
+        "Requirement: The drawer lists items without placeholder slots",
+        "Requirement: The store cart drawer exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
