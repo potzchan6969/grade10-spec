@@ -1,12 +1,5 @@
 # grade10-site/site/page-shell Specification
 
-## Purpose
-What every page of the grade10 site is wrapped in: the header a collector
-navigates from, the region a surface renders into, and the footer that closes
-the page. One shell for the marketing page, the store, the auction, the
-account page, sign-in, and not-found, so no surface can ship without the site
-around it.
-
 ## Feature set
 
 - Account control

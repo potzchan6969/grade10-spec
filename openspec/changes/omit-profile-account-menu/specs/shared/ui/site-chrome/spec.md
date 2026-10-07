@@ -27,7 +27,7 @@ entry.
 take all brand, navigation, locale, and destination content through props.
 
 **No application state** - It SHALL NOT fetch, route, or read application
-session stores itself — the application supplies `session` as `"signed-out"` or
+session stores itself - the application supplies `session` as `"signed-out"` or
 `"signed-in"`.
 
 **Signed out** - When `session` is `"signed-out"`, `SiteHeader` SHALL render a
