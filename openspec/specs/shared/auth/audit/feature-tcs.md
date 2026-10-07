@@ -530,6 +530,43 @@ Runs once per row of **Test data**.
 * Step 6 leaves <second unverified email> unverified.
 * Step 7 leaves <second account to delete> in place.
 
+<!-- trace:case id=g10.shared-audit.TC-wuf rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
+### shared-auth-audit-US4-TC4-1: Trusted-product verify of a new email is on the trail as created
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-audit-US-04
+
+**Pre-conditions:**
+
+* No account holds <new verified email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<new verified email>` | verified.buyer@example.com, any address no account holds |
+| `<start time>` | The time just before step 1 |
+
+**Steps:**
+
+1. Send the trusted-product verify call for <new verified email>.
+2. As admin(holds `audit:read`), open <grade10 admin audit url>.
+3. Filter to the identity product, from <start time>.
+
+**Expected Results:**
+
+* Step 3 lists the write for the new user id, with outcome `created`.
+
 ---
 
 ## shared-auth-audit-US5: Auditor traces a second-factor write
@@ -618,6 +655,50 @@ Runs once per row of **Test data**.
 * Step 1 does not succeed.
 * Step 2 shows the factor active.
 * Step 5 lists exactly one enable for that going live.
+
+<!-- trace:case id=g10.shared-audit.TC-g5c rev=1 covers=g10.shared-audit.SC-nte,g10.shared-audit.SC-h1r,g10.shared-audit.SC-0sh,g10.shared-audit.SC-bgp,g10.shared-audit.SC-nr9,g10.shared-audit.SC-tl6,g10.shared-audit.SC-ccw,g10.shared-audit.SC-yjy,g10.shared-audit.SC-gkn -->
+### shared-auth-audit-US5-TC3-1: An unrecorded regenerate or disable leaves the second factor as it was
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-audit-US-05
+
+**Pre-conditions:**
+
+* <subject account> has an active second factor and recovery codes <current codes>.
+* The identity trail is mocked to refuse a new entry.
+
+**Test data:**
+
+| Act | Outcome |
+| --- | --- |
+| Regenerate the recovery codes | The recovery codes are still <current codes> |
+| Remove the second factor | The second factor is still active |
+
+| Field | Value |
+| --- | --- |
+| `<subject account>` | An admin account with an active second factor |
+| `<current codes>` | The recovery codes on file before step 1 |
+
+**Steps:**
+
+1. Send the row's act for <subject account>.
+2. Read <subject account>'s second-factor state.
+
+**Expected Results:**
+
+* Step 2 answers as the row's outcome states.
 
 ## Reconciliation
 
