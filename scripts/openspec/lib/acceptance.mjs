@@ -587,8 +587,11 @@ const RUN_LINE = /^(\*\*Run\b|Run:)/;
 
 /** A run is its `Run` paragraph and what follows until the next one; text
  *  before the first is a run with no heading. A delta run whose heading the
- *  durable suite already holds, or the delta's own headless run, is that run
- *  grown since its last fold and replaces it; any other run is added. */
+ *  durable suite already holds is that run grown since its last fold: it
+ *  takes the run's place, and the durable paragraphs it does not carry stay
+ *  after it, since records appended later without a heading read as part of
+ *  it. A delta run with no heading adds the paragraphs the durable suite does
+ *  not hold, and any other run is added whole. */
 function mergeRuns(currentRuns, deltaRuns) {
   if (!deltaRuns || currentRuns.includes(deltaRuns)) return currentRuns;
   const runsOf = (text) =>
@@ -597,12 +600,17 @@ function mergeRuns(currentRuns, deltaRuns) {
       else runs.at(-1).push(one);
       return runs;
     }, []);
-  const keyOf = (run) => (RUN_LINE.test(run[0]) ? run[0] : "");
+  const headed = (run) => RUN_LINE.test(run[0]);
   const merged = runsOf(currentRuns);
   for (const run of runsOf(deltaRuns)) {
-    const at = merged.findIndex((one) => keyOf(one) === keyOf(run));
-    if (at < 0) merged.push(run);
-    else merged[at] = run;
+    const at = merged.findIndex((one) => headed(run) && one[0] === run[0]);
+    if (at >= 0)
+      merged[at] = [...run, ...merged[at].filter((one) => !run.includes(one))];
+    else if (headed(run)) merged.push(run);
+    else {
+      const missing = run.filter((one) => !merged.flat().includes(one));
+      if (missing.length) merged.push(missing);
+    }
   }
   return merged.map((run) => run.join("\n\n")).join("\n\n");
 }
