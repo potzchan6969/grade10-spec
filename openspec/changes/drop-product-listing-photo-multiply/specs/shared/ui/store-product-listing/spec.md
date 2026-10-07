@@ -14,7 +14,7 @@ tile status: available, on sale, in cart or sold out. A sold-out photo takes
 the sold-out treatment over that unblended photo.
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-ws9 rev=2 -->
-#### Scenario: shared-ui-store-product-listing-SC-64 - A photo that sells is drawn as supplied
+#### Scenario: shared-ui-store-product-listing-SC-64 - An available, on-sale or in-cart photo is drawn as supplied
 **Serves:** Tile contract - a tile's photo shows in its well as the shop supplied it
 
 - **GIVEN** a product with a supplied photo that is available, on sale or in the cart
