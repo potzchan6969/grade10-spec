@@ -95,42 +95,7 @@ their words.
   they lift it
 - **A fact the sentence states** — is recorded as the product manager's, never
   asked back
-- **How it is asked** — as a [Clarification Request](#clarification-request)
-
-## Clarification Request
-
-Every message that asks the human to decide — the interview, a held row,
-planning-dev's `Q<n>` stop, an accept-review blocker only a person can settle —
-takes this shape.
-
-- **A numbered list** — one item per blocker, the ones that change most what is
-  built first; the item opens with a short label in bold, a dash, and the
-  question in the reader's words: what the user sees or can do, never the
-  mechanism
-- **Lettered options** — `A`, `B`, and more where they exist, each one line on
-  what the user meets under it and what it costs; the recommended one first,
-  marked `Recommended`
-- **Why it matters** — what goes wrong for the user, or the operator, while
-  nobody answers
-- **Blocks** — the journeys, requirements, contracts and tests that wait on
-  the answer
-- **Quoted, with links** — a past decision or requirement the question turns
-  on is quoted and linked, never paraphrased: the PRD page on the manual, as
-  `https://spec.grade10-stg.com/p/grade10-site/auction/display`; the change,
-  as `https://spec.grade10-stg.com/openspec/#/change/define-public-auction-identifiers`,
-  naming its decision row; a requirement, as its page route plus
-  `#req-<requirement-slug>`
-- **Then the defaults** — what the round decided without asking, each with the
-  option it took, under the list
-
-```markdown
-1. **Partial payment state** - After a winner pays only part of an invoice, what should they see and be allowed to do?
-   - **A - Add a `partially_paid` invoice state - Recommended.** The winner sees Partially Paid and cannot pay again, reissue, cancel, submit proof or view bank details. An operator owns the balance and final settlement.
-   - **B - Keep the invoice Pending** and derive Partially Paid from recorded payments. No new state, but every payment, bank-transfer and cancellation control needs extra conditions so it does not contradict Pending.
-   - **Why it matters** - Without it, the app can show a partial balance while still offering actions that should be closed.
-   - **Blocks** - Partial payment, bank rails, order status, receipts and operator queue contracts.
-   - **Past decisions** - [<page title>](https://spec.grade10-stg.com/p/<product>/<capability>): "<the line, quoted>"; [<change-id>](https://spec.grade10-stg.com/openspec/#/change/<change-id>), row Q<n>: "<the row, quoted>".
-```
+- **How it is asked** — as a [Clarification Request](../../AGENTS.md#questions-and-blockers)
 
 ## Readers
 

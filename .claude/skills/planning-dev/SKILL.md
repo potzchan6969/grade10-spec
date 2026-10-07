@@ -39,8 +39,7 @@ Before Dev writes deltas, collect every open decision once:
 - each requirement more than one in-flight change edits, and the
   `depends_on` order: settled in step 5
 
-Ask the human once, as one numbered list with options and a recommendation
-each, as a [Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
+Ask the human once using the [Clarification Request](../../../AGENTS.md#questions-and-blockers) format.
 Record each answer on the page and in `decisions.md` before drafting. A
 decision that surfaces after this sweep is a gap in the sweep: say so.
 
@@ -72,7 +71,7 @@ decision that surfaces after this sweep is a gap in the sweep: say so.
    Put unresolved product questions in `decisions.md`'s `## Raised` table.
 4. **Resolve and check.** A question the readings cannot settle goes to the
    same human, as a numbered `Q<n>` row, and is put to them as a
-   [Clarification Request](../../../docs/governance/round-summary.md#clarification-request).
+   [Clarification Request](../../../AGENTS.md#questions-and-blockers).
    The same human resolves questions that affect behaviour, scope, design,
    architecture or tasks. Update the source first,
    then dependent artifacts. A changed anchor restarts QA1 and Dev; another
@@ -85,7 +84,7 @@ decision that surfaces after this sweep is a gap in the sweep: say so.
    does not hash it, like `accept-review.md`. It holds:
    - per shared requirement, the one change that owns the edit (the `overlap`
      rule of `check:manual`) and what the others say
-   - every open ❓ and conflicting statement, asked once as one numbered
+   - every open ❓ and conflicting statement, asked once as a
      Clarification Request; the human's decision log is authoritative
    - the acceptance order
 
