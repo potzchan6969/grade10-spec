@@ -142,8 +142,10 @@ so Store Cart's table no longer defines them by stock.
   grade.
 - `shared/ui/store-cart`: `Cart item status includes unavailable` keeps its
   four values and states each meaning as cart-validation answers it, rather
-  than by stock (decisions Q21). No export changes, and Grade10, its one
-  consumer, already assigns them so.
+  than by stock (decisions Q21); `Unavailable items are removed silently after
+  open loading` takes its meaning of `unavailable` from that table rather than
+  a second definition. No export changes, and Grade10, its one consumer,
+  already assigns them so.
 
 ## Impact
 
