@@ -540,6 +540,25 @@ test("only `actual` cases leave the store by default", () => {
   );
 });
 
+test("a durable suite wins when a change repeats the case id", () => {
+  const id = "demo-thing-widget-US1-TC1-1";
+  const base = candidates.find((one) => one.tc.id === id);
+  const change = {
+    ...base,
+    read: {
+      ...base.read,
+      rel: "openspec/changes/some-change/specs/demo/thing/widget/feature-tcs.md",
+    },
+    tc: { ...base.tc, title: "Change title" },
+  };
+  const { picked } = selectCases([change, base], {
+    ids: [id],
+    includeDraft: true,
+  });
+  assert.equal(picked[0].read.rel, base.read.rel);
+  assert.equal(picked[0].tc.title, base.tc.title);
+});
+
 test("shared-planning-agent-rounds-SC-61 - an automated case is left out by default, and reported", () => {
   const { picked, refused } = selectCases(candidates, {});
   assert.equal(
