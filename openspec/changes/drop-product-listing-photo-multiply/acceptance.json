@@ -1,0 +1,81 @@
+{
+  "version": 2,
+  "change": "drop-product-listing-photo-multiply",
+  "baseline": "403aceeaf343dd27e5d77115636746e6a90a04352704177e5e9bef8dc1480210",
+  "fingerprint": "6c7fa9620985e3a7df7f971fb7ea1986746105e7d8f5715599ebb80611c1ec58",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T12:01:14.136Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/shared/ui/store-product-listing.md#product-tile",
+      "sha256": "da812b55f66e8ac5f97cb72b899a08138ae8ed0f93d26b359da1b3bd89c951e5",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/drop-product-listing-photo-multiply/decisions.md",
+      "sha256": "c9822d6f0c8a19d85d64e665b338b22fdb1ede2acb9d66fda41bb65dc1ba7653",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/drop-product-listing-photo-multiply/proposal.md",
+      "sha256": "4bc47a0e92f78d0a8e560f1d53cc1db6d887fc51fc2ed03f9a7d43ad20825488",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/drop-product-listing-photo-multiply/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "ae15c907cdcfe20576fe44e6237c7a3afa8183c8b39afd07010f92d18e022a05",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/drop-product-listing-photo-multiply/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "94376740b53fa1fd370f4ee1b061d8ceb35e40b0958a13650dfd99d1d8fa3e64",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/drop-product-listing-photo-multiply/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/drop-product-listing-photo-multiply/ui-design.md",
+      "sha256": "973ce721f20a06512e73b2441d02d81c7a8a73c4fd9f7c3411635fe77daf08cf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "00b17d0a33ac5a5f665bd34ecb4414ff96e13cfb9aaf99760214514b64296348",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "ff38afdd85c701fc086d40c1b268f4042305a4e73ff802fdb5f15b29ad028b2d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/drop-product-listing-photo-multiply/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The product photo is drawn as supplied"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
