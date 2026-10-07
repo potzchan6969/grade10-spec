@@ -110,6 +110,9 @@ No platform impact: no cross-product path.
   the Hong Kong shop
 - GRADE as a chrome destination, if Product wants it beside Store Locator
 - Public phone and holiday hours once Operations names them (Q13)
+- The page's look drawn in Figma, in draw-store-locator-page: the designer
+  confirms or redraws this change's interim answers to Q14 to Q16, Q19 and
+  Q22
 - The lanes in `grade10-site/site/carried-surfaces`, as its own change: the
   requirement names no staging-2 or uat lane and no front door or grading
   gate, and carries the front door on every lane, while the site and the
@@ -123,17 +126,6 @@ No platform impact: no cross-product path.
 - The store-product blocks' export contract under `shared/ui`, so a later
   prop change to `StoreProductMetadata` and its siblings has a delta to land
   in; today only the site-level product page carries its behaviour
-
-## Open questions
-
-- **URL path** — Product; Q9
-- **Title and description strings** — Product; Q10
-- **Translated address and hours** — Product; Q11
-- **Where the shop facts are kept** — Product and Operations; Q12
-- **Phone and holiday hours** — Operations; Q13
-- **Agreed look, empty hours and hours rows** — the designer; Q14 to Q16
-- **The map's box when the embedded map does not load** — the designer; Q19
-- **Shipping fee's underline once it is not a link** — the designer; Q22
 
 ## References
 
