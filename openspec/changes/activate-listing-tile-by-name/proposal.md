@@ -80,8 +80,9 @@ name control, and drop-off after a name tap that previously did nothing.
 - **Order** — read after `add-store-cross-sell`, whose requirement that a
   tile given an address is a link to it says how the address this change's
   tile requirement names behaves
-- **Overlap** - `add-store-cross-sell` Q29 settled the sold-out rule this
-  change states; that change's SC-91 states it too, on the rail's tile
+- **Overlap** - this change alone states that a sold-out tile opens where it
+  does not sell (Q9); `add-store-cross-sell` carries no requirement for it, and
+  its US1-TC1 walks `shared-ui-store-product-listing-SC-97`
 
 ## Open questions
 
