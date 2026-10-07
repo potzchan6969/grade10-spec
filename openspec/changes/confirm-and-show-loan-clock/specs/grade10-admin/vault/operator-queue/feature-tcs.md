@@ -71,9 +71,11 @@ shop's clock and saying the collector is emailed,
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -163,9 +165,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -422,9 +426,11 @@ will read it.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -514,9 +520,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -785,9 +793,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -827,9 +837,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -871,9 +883,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
