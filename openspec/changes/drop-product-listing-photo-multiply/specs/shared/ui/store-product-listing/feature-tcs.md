@@ -144,6 +144,8 @@ Runs once per row of **Test data**.
 
 **Run:** 2026-10-06, QA2 reconciliation for `drop-product-listing-photo-multiply`, in a fresh context. Joined the three blind cases and the delta's two scenarios on `Tile contract` and its `Photo as supplied` part. Read the delta `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the page [Product Listing Blocks](../../../../../../../docs/prds/products/shared/ui/store-product-listing.md), `packages/ui/src/blocks/store-product-listing/product-card-image.tsx` and its stories, and the application's listing, home and You May Also Like surfaces and their end-to-end tests. No durable suite or `## Settled` exists for this capability, and no `domain-tcs.md` traces it.
 
+**Rerun:** 2026-10-07, fresh context, on the stack above `activate-listing-tile-by-name`. Every disposition below holds against the delta, `product-card-image.tsx` and its five stories. `shared-ui-store-product-listing-SC-64` is this change's own id, issued 2026-09-09 before the stack's `SC-92` to `SC-101`; `SC-64a` sits beside it, and the cases take `US1-TC15` to `US1-TC17`, above the stack's `US1-TC12`.
+
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `shared-ui-store-product-listing-US1-TC15-1` | Reached | `shared-ui-store-product-listing-SC-64` for available, on sale and in cart: the photo unblended, its white fill white in the grey well |
