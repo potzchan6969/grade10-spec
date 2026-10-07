@@ -157,7 +157,7 @@ when I open it,
 repaired cart sent on to Shopify's payment page,
 **so that** I pay only for a cart the shop can fill.
 
-<!-- trace:case id=g10.store-domain.TC-hkl rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d,g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-g07,g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18 -->
+<!-- trace:case id=g10.store-domain.TC-hkl rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d,g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-c03,g10.store-checkout.SC-d04,g10.store-checkout.SC-vsd,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-e05,g10.store-checkout.SC-g07,g10.store-checkout.SC-dwk,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7,g10.store-checkout.SC-8hm -->
 ### grade10-site-store-e2e-US7-TC1-1: Line sold out at checkout is named, removed, then paid
 
 **Classification:**
@@ -205,6 +205,17 @@ repaired cart sent on to Shopify's payment page,
 * Step 7: the only line is <product_a> at <price_a>.
 
 ## Reconciliation
+
+**Run:** QA2 on 2026-10-07, in a fresh context after an acceptance review
+folded the stack in its acceptance order. Read US7-TC1-1, its story header, and
+the checkout scenarios serving checkout US-01 and US-02 as the
+`add-shopify-checkout-integration` amendment folds them, ahead of this change.
+US7-TC1-1's `covers` was drawn from the checkout spec before that amendment: it
+drops checkout SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21, which the amendment
+retires, and adds SC-33, SC-34, SC-35, SC-37 and SC-38, which serve the two
+journeys after it. Its steps and results are unchanged: the press that finds
+the sold-out line stays on Grade10, and the press after the repair opens
+Shopify's checkout page. Nothing was raised.
 
 **Run:** QA2 on 2026-10-07, in a fresh context after the sixth acceptance
 review and QA1's blind re-run. Read this suite's story headers, its cases, the
