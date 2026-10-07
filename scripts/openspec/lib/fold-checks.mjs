@@ -41,11 +41,13 @@ function suiteFindings(path, durable, folded) {
         level: "fail",
         detail: `${path}: durable case ${number} is gone from the folded suite; carry it in the change's suite or retire it on purpose`,
       });
-    else if (
-      kept.title !== one.title &&
-      one.marker &&
-      kept.marker !== one.marker
-    )
+    else if (kept.title !== one.title && !one.marker)
+      findings.push({
+        rule: "fold:retitled-case",
+        level: "warn",
+        detail: `${path}: ${number} is retitled "${one.title}" -> "${kept.title}" and has no durable trace marker to show it is the same case; confirm it is, or give the new case the next unused TC number`,
+      });
+    else if (kept.title !== one.title && kept.marker !== one.marker)
       findings.push({
         rule: "fold:retitled-case",
         level: "fail",

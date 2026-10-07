@@ -1,10 +1,8 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { sandbox } from "./fixtures/accept-sandbox.mjs";
-import { prepareAcceptance } from "./lib/acceptance.mjs";
 import { changeClusters, formatClusters } from "./lib/clusters.mjs";
 import { foldChecks } from "./lib/fold-checks.mjs";
 import { formatPreflight, preflightChange } from "./lib/preflight.mjs";
@@ -79,6 +77,23 @@ test("a durable case retitled without its trace marker is a failure", () => {
   assert.deepEqual(rules(found), ["fold:retitled-case"]);
   const carried = suite(caseOf(1, "Another", "TC-a"));
   assert.deepEqual(foldChecks(foldedWith(root, { [path]: carried })), []);
+});
+
+test("a durable case with no trace marker retitled is a warning to read", () => {
+  const { root } = sandbox();
+  const path = "openspec/specs/site/search/feature-tcs.md";
+  write(root, path, suite(caseOf(1, "One")));
+  const found = foldChecks(
+    foldedWith(root, { [path]: suite(caseOf(1, "Another")) }),
+  );
+  assert.deepEqual(
+    found.map((one) => [one.rule, one.level]),
+    [["fold:retitled-case", "warn"]],
+  );
+  assert.deepEqual(
+    foldChecks(foldedWith(root, { [path]: suite(caseOf(1, "One")) })),
+    [],
+  );
 });
 
 test("a delta Purpose that replaces the durable Purpose fails; one that extends it warns", () => {
@@ -157,5 +172,27 @@ test("clusters group changes that fold one requirement or depend on each other",
   assert.match(
     formatClusters(clusters),
     /Cluster 1: build-alpha -> build-beta\n {2}shared: site\/search \/ Search results \(build-alpha ADDED, build-beta MODIFIED\)/,
+  );
+});
+
+test("a depends_on cycle is reported beside the cluster's order", () => {
+  const { root } = sandbox();
+  for (const [id, on] of [
+    ["build-one", "build-two"],
+    ["build-two", "build-one"],
+  ])
+    write(
+      root,
+      `openspec/changes/${id}/.openspec.yaml`,
+      `schema: grade10-planning\ndepends_on:\n  - ${on}\n`,
+    );
+  const [cluster] = changeClusters(root).filter((one) =>
+    one.changes.includes("build-one"),
+  );
+  assert.deepEqual(cluster.changes, ["build-two", "build-one"]);
+  assert.deepEqual(cluster.cycles, [["build-one", "build-two", "build-one"]]);
+  assert.match(
+    formatClusters([cluster]),
+    /cycle: build-one -> build-two -> build-one; this order is arbitrary/,
   );
 });
