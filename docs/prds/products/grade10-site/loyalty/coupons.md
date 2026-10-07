@@ -24,7 +24,7 @@ so redefining the reward never rewrites a coupon a member already holds —
 | What it takes off | What that definition says |
 | Uses | **One** |
 | Who | The member who redeemed it |
-| Channels | Only the selling channels the definition names; online alone for a scope the till cannot match — [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
+| Channels | The selling channels the definition names, or online alone for a scope the till cannot match, whatever channels it names - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
@@ -44,12 +44,6 @@ so redefining the reward never rewrites a coupon a member already holds —
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
-- **Online only at the till** — the member's panel marks a coupon scoped to
-  named products or a catalog filter online only, whatever channels it names,
-  and staff cannot apply it —
-  [Reward Types](/p/grade10-site/loyalty/rewards#reward-types)
-- 🚧 **Refused from the member's phone** — the till refuses such a coupon
-  when the member presents it from their own phone, whatever channels it names
 - 🚧 **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
@@ -146,8 +140,7 @@ They read that an earlier sale holds the cut, never that the coupon is unavailab
 
 ## Refusals
 
-The member is told which of these answered, and never left with a basket that
-quietly lost a coupon.
+The member reads which refusal answered; no basket quietly loses a coupon.
 
 ### Coupon
 
@@ -156,7 +149,8 @@ quietly lost a coupon.
 | Not held | Not a coupon this member holds; a code bound to another member is answered as one nobody minted |
 | Not standing | Already spent, or otherwise not available |
 | Expired | Its own validity passed |
-| Wrong channel | Not good in the channel it is being spent in — [Validity](#validity) |
+| Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; presented from the member's phone it reads `This coupon cannot be used on this sale.` |
+| 🚧 Online only by scope | A coupon scoped to named products or a catalog filter, presented at the till from the member's phone, whatever channels it names; it reads as Wrong channel does |
 | Not eligible | The definition's eligibility is not met |
 | 🚧 An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
 | 🚧 Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |

@@ -38,9 +38,8 @@ Both kinds state:
 | A free booster pack | 100% | The variant it names | — |
 | A free booster pack over $500 | A free line, the pack's own variant | — | $500 |
 
-**Online only by product or filter** — a product coupon scoped to named
-products or to a catalog filter is good online only, because a sale at the
-till names its goods by variant alone.
+**Online only by product or filter** - a till sale names its goods by
+variant alone, so a coupon scoped to named products or a filter is online only
 
 ## Ways to Get a Reward
 
@@ -56,16 +55,15 @@ till names its goods by variant alone.
 What a member can buy right now: in stock, inside its window, not archived.
 Stock reads as a yes or no, never a count.
 
-- **One debit** — a single debit of the balance, oldest points first
-- **All or nothing** — a balance short of the cost is refused whole, never
+- **One debit** - a single debit of the balance, oldest points first
+- **All or nothing** - a balance short of the cost is refused whole, never
   part paid
-- **Priced when taken** — the cost is copied onto the redemption, so
+- **Priced when taken** - the cost is copied onto the redemption, so
   repricing the catalog never rewrites what an earlier redemption cost
-- **Nothing is held** — points are spent at the moment of taking, not reserved
-- **What the coupon needs, before the points go** — the menu states the
-  basket it has to reach, and its one channel where it names only one, so
-  nobody spends points on a coupon no cart of theirs will take
-- 🚧 **Online only on the menu** — a reward scoped to named products or a
+- **Nothing is held** - points are spent at the moment of taking, not reserved
+- **What the coupon needs, before the points go** - the basket it has to
+  reach, and the one channel it is good at where there is only one
+- 🚧 **Online only on the menu** - a reward scoped to named products or a
   catalog filter reads online only, whatever channels it names
 
 :::example{title="Buying from the shop"}
@@ -127,16 +125,16 @@ Every reward the programme knows, on sale or not; the
 | --- | --- |
 | Slug and name | The id it is referred to by, and what the member reads |
 | Cost | Points per redemption, copied onto the redemption when it is made |
-| Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken — [Authoring a Reward](/p/grade10-site/loyalty/operator-console#authoring-a-reward) |
+| Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken - [Authoring a Reward](/p/grade10-site/loyalty/operator-console#authoring-a-reward) |
 | Stock | Optional; a stocked reward is never oversold |
 | Window | Optional; outside it the reward cannot be redeemed |
 | Archived | Retired, still readable in the member's own history |
 
-- **How it is obtained** `TBC` — no field carries it, so every live reward
+- **How it is obtained** `TBC` - no field carries it, so every live reward
   is on sale
-- **Units per redemption** `TBC` — a reward is taken one at a time until
+- **Units per redemption** `TBC` - a reward is taken one at a time until
   the per-redemption and per-day bounds are chosen
-- ❓ **The physical catalog** — which items, and their point prices; Product's
+- ❓ **The physical catalog** - which items, and their point prices; Product's
   call
 
 ## Cancelling a Redemption
