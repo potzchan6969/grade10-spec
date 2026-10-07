@@ -355,19 +355,6 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   if (!currentFeature) {
     return `${currentSpec.replace(/\n*$/, "\n\n")}## Feature set${deltaFeature.raw ? `\n\n${deltaFeature.raw}` : ""}\n`;
   }
-  if (priorText) {
-    const priorFeature = sectionByName(
-      rootSections(priorText).sections,
-      "Feature set",
-    );
-    if (
-      withoutTraceMarkers(currentFeature?.raw) !==
-      withoutTraceMarkers(priorFeature?.raw)
-    )
-      throw new Error(
-        `${capability}: accepted Feature set changed since this amendment began; rebase the delta before acceptance`,
-      );
-  }
   const textOf = (item) => item.map((line) => line.trim()).join(" ");
   const labelOf = (item) => {
     const text = item[0].trim().replace(/^-\s+/, "");
@@ -380,6 +367,49 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
     label
       ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
       : [];
+  if (priorText) {
+    const priorFeature = sectionByName(
+      rootSections(priorText).sections,
+      "Feature set",
+    );
+    const priorGroups = splitGroups(priorFeature?.raw ?? "");
+    const shape = (items) =>
+      withoutTraceMarkers((items ?? []).flat().join("\n"));
+    const itemShape = (items, label) =>
+      shape((items ?? []).filter((one) => labelOf(one) === label));
+    const touched = new Map();
+    const touch = (group, label) =>
+      touched.set(group, (touched.get(group) ?? new Set()).add(label));
+    for (const [group, items] of deltaGroups) {
+      const current = baseGroups.get(group) ?? [];
+      for (const item of items) {
+        const label = labelOf(item);
+        const same = (one) => shape([one]) === shape([item]);
+        const restated = label
+          ? holding(current, label).length === 1 &&
+            same(current[holding(current, label)[0]])
+          : current.some(same);
+        if (!restated) touch(group, label);
+      }
+    }
+    for (const [group, items] of removedGroups) {
+      if (items.length === 0) touch(group, null);
+      for (const item of items) touch(group, labelOf(item));
+    }
+    for (const [group, labels] of touched) {
+      const drifted = labels.has(null)
+        ? shape(baseGroups.get(group)) !== shape(priorGroups.get(group))
+        : [...labels].some(
+            (label) =>
+              itemShape(baseGroups.get(group), label) !==
+              itemShape(priorGroups.get(group), label),
+          );
+      if (drifted)
+        throw new Error(
+          `${capability}: accepted Feature set group "${group.replace(/^-\s+/, "")}" changed since this amendment began; rebase the delta before acceptance`,
+        );
+    }
+  }
   if (new Set(removedGroupNames).size !== removedGroupNames.length)
     throw new Error(
       `${capability}: REMOVED Feature set names a root group more than once`,
