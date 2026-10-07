@@ -28,7 +28,9 @@ the other wallet live. The record SHALL ask the operator to confirm, naming
 the wallet, and an ending the operator does not confirm SHALL end nothing.
 The ending SHALL take effect at once, as the member's own does: every code the
 ended pass can make identifies nobody, and the member can add a new pass
-afterwards. The member SHALL be sent no message. The audit trail SHALL record
+afterwards. The ending SHALL end the pass the wallet holds when the operator
+confirms, including one the member added after the record opened. The
+member SHALL be sent no message. The audit trail SHALL record
 each ending with the operator, the member, the wallet, the time and whether a
 pass was ended. The record SHALL show an operator holding `store:write` the
 wallets the member carries a live pass in, and SHALL offer an operator without
@@ -114,6 +116,16 @@ own member record as on any other.
 - **GIVEN** an operator holding `store:write` who carries a live pass in one wallet
 - **WHEN** they end that wallet's pass from their own member record
 - **THEN** a code the pass makes identifies nobody, as on any other member's record
+
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-p9m rev=1 -->
+#### Scenario: grade10-site-store-wallet-member-card-SC-75 - An operator's ending ends a pass the member added after the record opened
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
+
+- **GIVEN** an operator holding `store:write` has the record of a member carrying a live pass in one wallet open
+- **AND** the member then adds a new pass in that wallet
+- **WHEN** the operator ends that wallet's pass
+- **THEN** a code the new pass makes identifies nobody
+- **AND** the audit trail records that a pass was ended
 
 ## MODIFIED Requirements
 

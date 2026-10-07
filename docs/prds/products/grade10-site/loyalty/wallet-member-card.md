@@ -65,10 +65,12 @@ Apple code identifies and moves nothing.
 - **Ending** — immediate; the vendor's own copy is discharged by the sweep
 - **Removing it is not ending** — deleting the pass from the phone's wallet
   app changes nothing about the membership
-- 🚧 **Operator ending** — for a member whose phone is gone. An operator
+- 🚧 **Operator ending** - for a member whose phone is gone. An operator
   holding `store:write` ends one wallet's pass from the member's record, which
   names the wallets the member holds, and confirms the wallet first. It ends
-  at once, as the member's own does, and the member is sent no message. The
+  at once, as the member's own does, and the member is sent no message. It
+  ends the pass the wallet holds when the operator confirms, a pass the member
+  added after the record opened included. The
   audit trail records who ended which wallet and when. An ending that finds no
   live pass ends nothing, the record says no pass was held, and the audit
   trail records the attempt as ending nothing. Without `store:write` the record

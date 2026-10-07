@@ -26,7 +26,9 @@ shipped shape stays:
   calls `endLivePasses` with one platform; the ending and the held-wallets
   report are one transaction (`services/wallet/passes.ts:446`), and the
   sweep's expiry arm discharges the vendor's copy as it does for the member's
-  own ending. Nothing bars an operator's own record (Q17), and nothing writes
+  own ending. It ends whichever pass the wallet holds as it commits
+  (`passes.ts:473-498`), so a pass added since the record read is ended too
+  (Q24). Nothing bars an operator's own record (Q17), and nothing writes
   `member_notices`, the store's only outbox to a member (Q15)
 - **Audit** - the elevated ladder records the operator and the time. The
   procedure declares two selectors over the decoded input
