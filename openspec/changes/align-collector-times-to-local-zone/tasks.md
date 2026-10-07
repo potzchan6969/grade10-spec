@@ -201,9 +201,9 @@ only their footer label moves, in groups 2 and 3.
       page's payment deadline reads the Hong Kong clock and `GMT+8` for both
       viewers, never `UTC`, `HKT` or `EDT`
       (`shared-dates-and-times-US1-TC17-1`). Covering
-      `shared-dates-and-times-SC-12`, `shared-dates-and-times-SC-14`,
-      `shared-dates-and-times-SC-29`, `shared-dates-and-times-SC-37`,
-      `winner-order-SC-31` and `winner-order-SC-66`.
+      `shared-dates-and-times-SC-14`, `shared-dates-and-times-SC-29`,
+      `shared-dates-and-times-SC-37`, `winner-order-SC-31` and
+      `winner-order-SC-66`.
 - [ ] 4.2 Take the viewer's zone in the catalogue tile, `ListingCatalogueCard`,
       and name it through the store's formatter instead of the application's,
       which prints `GMT+8` for every viewer, covering
