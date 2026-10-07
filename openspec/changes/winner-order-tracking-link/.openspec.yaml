@@ -1,11 +1,16 @@
 schema: grade10-planning
 promoted_by: "@tangconst"
 created: 2026-09-29
-design_waived: "Preview composition of existing Link/Stepper; no application-repo task group and no new Figma-owned component"
+design_waived: "Preview composition of existing Link/Stepper; no
+  application-repo task group and no new Figma-owned component"
 hands:
   pm: "@tangconst"
   design: "@tangconst"
   tech: "@tangconst"
   qa: "@tangconst"
   dev: "@tangconst"
-decisions_carried: "Q1–Q5 on docs/prds/products/grade10-site/auction/post-bidding.md Shipment 🚧 line and Tracking link on Winner Order Product decisions row"
+decisions_carried: "Q1–Q5 on
+  docs/prds/products/grade10-site/auction/post-bidding.md Shipment 🚧 line and
+  Tracking link on Winner Order Product decisions row"
+reviewed:
+  user-journeys: 7e5e2246
