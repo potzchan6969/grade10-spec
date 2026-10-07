@@ -171,7 +171,8 @@ bump lands with its typecheck fixes in one pull request.
       vault test from task 3.1 passes; the vault has no snapshot to update.
       Covering `shared-dates-and-times-SC-35`.
 - [ ] 3.5 Verify: the application typecheck, the auction frontend and backend
-      unit lanes, the grading and vault backend email tests, `pnpm run lint`,
+      unit lanes, the `apps/backend/grade10/auction` db lane that holds the
+      mail specs, the grading and vault backend email tests, `pnpm run lint`,
       and the listing-page end-to-end smoke.
 
 ## 4. Move the collector pages onto the viewer's zone and the invoice page onto GMT+8 (grade10) (owner: @seankcw)
@@ -209,8 +210,7 @@ only their footer label moves, in groups 2 and 3.
       `shared-dates-and-times-SC-14` and `shared-dates-and-times-SC-29`.
 - [ ] 4.3 Take the viewer's zone in My Auctions, `AccountAuctionRecordPage`, for
       its watching and bidding rows, which read `GMT+8` and `UTC` today,
-      covering `shared-dates-and-times-SC-12` and
-      `shared-dates-and-times-SC-29`.
+      covering `shared-dates-and-times-SC-29`.
 - [ ] 4.4 Take the viewer's zone in Winner Order, `winnerOrderView.ts`, which
       reads `UTC` today because no call is given a zone. Four lines print a
       clock through `formatDeadline` and are deadlines, so each reads the

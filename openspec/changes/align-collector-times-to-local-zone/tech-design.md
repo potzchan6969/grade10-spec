@@ -168,8 +168,10 @@ typecheck all pass.
    calls in `emailPort.ts` for the order letters and three in `render.tsx` for
    the lot letters (`closesAt`, `scheduledClosesAt` and `startsAt`). The store's
    sample strings in `apps/emails` print `GMT+8`, the application's emails do
-   not. The fix is `timeZone: "Asia/Hong_Kong"` at each call, which the
-   date-fns `zzz` token prints as `GMT+8`. Rejected: a store-side email
+   not. Each call passes the brand zone, `Asia/Hong_Kong`, through one helper,
+   `mailTime(at)` in `mailZone.ts`, which also binds the mail's English, so a
+   mail date cannot print without a zone; the date-fns `zzz` token prints
+   `GMT+8`. Rejected: a store-side email
    formatter, because the sender is the application's backend and the templates
    take strings.
 
@@ -185,10 +187,13 @@ typecheck all pass.
    (`packages/grading/backend/src/email/messages.ts` and
    `packages/vault/backend/src/email/messages.ts`) read `Dates and times are in
    {zone}.`, filled with the long name `Hong Kong Standard Time` by `zoneName`
-   in each package's `letters/format.ts`. All four change to their one line; the
-   application fills the offset from the brand zone through `formatZone`, so a
-   footer cannot drift from the clock its dates are read on, and each render
-   test takes the new text. The grading test has a snapshot too. The vault's
+   in each package's `letters/format.ts`. All four change to their one line, and
+   `zoneName` goes. The application does not derive the offset: a letter has no
+   instant in scope and nothing below a service reads the clock, so the
+   catalogue holds the literal line and each render test holds the brand zone
+   to `GMT+8` through `formatZone`, in a winter and a summer instant, so a
+   footer cannot drift from the clock its dates are read on. Each render test
+   takes the new text. The grading test has a snapshot too. The vault's
    render test asserts no zone line today and the vault has no snapshot, so
    group 3 adds the assertion. The grading spec says the footer "says so" and
    the vault spec names the footer's party and complaints contact and no zone,
@@ -225,9 +230,10 @@ typecheck all pass.
 
 11. **Three application pages take the store's formatter; the invoice page
     states the brand zone.** The catalogue tile, My Auctions and Winner Order
-    pass the viewer's zone and name it through `formatCollectorDeadline` and the
-    `formatListing*` helpers, not `@grade10/utils/dates`, so one function owns
-    the rule and New York reads `EDT`, not `GMT-4` (Q7). A day with no clock on
+    pass the viewer's zone and name it through `formatZonedLocalMoment`, and a
+    day alone through `formatLocalDay`, each page resolving the shipped locale
+    once, not through `@grade10/utils/dates`, so one function owns the rule and
+    New York reads `EDT`, not `GMT-4` (Q7). A day with no clock on
     Winner Order is the viewer's day, as the durable spec reads its step
     subtext, and names no zone (Q20). A surface whose own spec fixes its zone
     keeps it (Q29). The invoice page is the invoice
