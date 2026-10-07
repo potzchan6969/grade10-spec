@@ -196,17 +196,17 @@ The catalogue publishes <a published lot>.
 
 **Pre-conditions:**
 
-* The catalogue published <called-off lot>, then an operator called it off.
+* The catalogue published `<called-off lot>`, then an operator called it off.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <called-off lot> | A lot that was published and then called off |
+| called-off lot | A lot that was published and then called off |
 
 **Steps:**
 
-1. Navigate to <called-off lot url>.
+1. Navigate to `<called-off lot url>`.
 2. Check the response status.
 3. Check the rendered page.
 
@@ -342,7 +342,7 @@ None.
 
 **Steps:**
 
-1. Fetch <grade10 sitemap url>.
+1. Fetch `<grade10 sitemap url>`.
 2. Check every sitemap entry.
 
 **Expected Results:**

@@ -653,13 +653,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_2 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
+| listing_2 | An open listing taking bids; this collector has no linked card |
 | Expiry, CVC, postal code | Any future expiry, such as 12/34, any CVC of the brand's length (4 digits for American Express, 3 otherwise), and any postal code |
 
 | `<the brand card>` | Card number |
@@ -672,7 +672,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click the primary bid action.
-2. Enter <the brand card> in the provider-hosted field.
+2. Enter `<the brand card>` in the provider-hosted field.
 3. Check age attestation.
 4. Click Link Card.
 5. Read the setup modal and the linked-card slot.

@@ -74,7 +74,7 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-An open USD listing has current public price <current public price>.
+An open USD listing has current public price `<current public price>`.
 The collector is enrolled and can bid.
 
 **Test data:**
@@ -88,11 +88,11 @@ The collector is enrolled and can bid.
 **Steps:**
 
 1. Open the listing bid panel.
-2. Place a bid of <current public price> plus <increment>.
+2. Place a bid of `<current public price>` plus `<increment>`.
 
 **Expected Results:**
 
-* The new public price is <minimum next amount>.
+* The new public price is `<minimum next amount>`.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-qui rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### grade10-site-auction-bid-increments-US1-TC3-1: Amount above the minimum is accepted
@@ -110,7 +110,7 @@ The collector is enrolled and can bid.
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
+The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
 
 **Test data:**
 
@@ -121,7 +121,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter <bid amount> as the bid amount.
+2. Enter `<bid amount>` as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
@@ -144,7 +144,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
+The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
 
 **Test data:**
 
@@ -155,13 +155,13 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter <bid amount> as the bid amount.
+2. Enter `<bid amount>` as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
 
 * The bid is refused.
-* The refusal names <minimum> as the minimum.
+* The refusal names `<minimum>` as the minimum.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### grade10-site-auction-bid-increments-US1-TC5-1: Listing publishes the next minimum
@@ -181,7 +181,7 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-An open listing is available in <listing currency>.
+An open listing is available in `<listing currency>`.
 
 **Test data:**
 
@@ -198,7 +198,7 @@ An open listing is available in <listing currency>.
 
 **Expected Results:**
 
-* The minimum next amount is shown in <listing currency>.
+* The minimum next amount is shown in `<listing currency>`.
 
 **Out of suite:**
 
@@ -363,7 +363,7 @@ Runs once per row of **Test data**.
 * **Trace:** grade10-site-auction-bid-increments-US-02
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
+The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
 
 **Test data:**
 
@@ -374,7 +374,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter <bid amount> as the bid amount.
+2. Enter `<bid amount>` as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
@@ -472,7 +472,7 @@ The collector is enrolled on an open HKD listing whose minimum bid is <minimum>.
 * **Trace:** grade10-site-auction-bid-increments-US-02
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose current bid is <ceiling>, held by another collector.
+The collector is enrolled on an open USD listing whose current bid is `<ceiling>`, held by another collector.
 
 **Test data:**
 
@@ -483,12 +483,12 @@ The collector is enrolled on an open USD listing whose current bid is <ceiling>,
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter <bid amount> as the bid amount.
+2. Enter `<bid amount>` as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
 
-* The bid is refused and the refusal names <ceiling> as the ceiling.
+* The bid is refused and the refusal names `<ceiling>` as the ceiling.
 
 ## Settled
 

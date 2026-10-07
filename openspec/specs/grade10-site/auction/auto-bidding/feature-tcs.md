@@ -40,7 +40,7 @@ An open listing with no bids, with the row's starting price.
 
 **Steps:**
 
-1. Navigate to <an open listing url> priced in the row's currency.
+1. Navigate to `<an open listing url>` priced in the row's currency.
 2. Enter the row's maximum.
 3. Confirm the commitment.
 
@@ -81,7 +81,7 @@ An open listing whose current bid and minimum increment match the row.
 
 **Steps:**
 
-1. Navigate to <an open listing url> priced in the row's currency.
+1. Navigate to `<an open listing url>` priced in the row's currency.
 2. Enter the row's attempted maximum.
 3. Confirm the commitment.
 4. Check the current bid and the leader.

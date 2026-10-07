@@ -185,15 +185,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <lot_2> ended with no winner, and a collector watches it.
-* <lot_3> was called off, and that collector watches it.
+* `<lot_2>` ended with no winner, and a collector watches it.
+* `<lot_3>` was called off, and that collector watches it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_2> | A watched lot whose bidding ended with no winner |
-| <lot_3> | A watched lot an operator called off |
+| lot_2 | A watched lot whose bidding ended with no winner |
+| lot_3 | A watched lot an operator called off |
 
 **Steps:**
 
@@ -201,8 +201,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* <lot_3> is not included.
-* <lot_2> is included, external lot status Ended.
+* `<lot_3>` is not included.
+* `<lot_2>` is included, external lot status Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=1 covers=g10.auction-lot-status.SC-w9d -->
 ### grade10-site-auction-lot-status-US2-TC4-1: A called-off lot stays reachable at its canonical address
