@@ -957,7 +957,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -997,7 +997,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1028,7 +1028,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1048,8 +1048,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The tab says it has no lots.
-* No error is reported.
+* The Upcoming tab shows its no-lots empty state.
 
 <!-- trace:case id=g10.auction-account-record.TC-tzc rev=1 covers=g10.auction-account-record.SC-11c,g10.auction-account-record.SC-slt,g10.auction-account-record.SC-evx,g10.auction-account-record.SC-vlf,g10.auction-account-record.SC-doc,g10.auction-account-record.SC-r26,g10.auction-account-record.SC-we1 -->
 ### grade10-site-auction-account-record-US7-TC4-1: Email alerts cannot be changed on an Ended row
@@ -1058,7 +1057,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1089,7 +1088,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
