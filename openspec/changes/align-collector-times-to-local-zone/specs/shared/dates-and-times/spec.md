@@ -134,9 +134,11 @@ spec fixes its zone, which it keeps.
 #### Scenario: shared-dates-and-times-SC-41 - An auction order operator surface states Hong Kong time
 **Serves:** `Stated zones` - one instant is walked through an auction order operator surface and another operator table
 
-- **GIVEN** an instant at 2026-10-07T06:00:00Z shown on the Orders worklist and on another operator table whose spec keeps no shop's clock
+- **GIVEN** an instant at 2026-10-07T06:00:00Z shown on the Orders worklist, on the order page's timeline and invoice log, as the send and reissue dialog's payment deadline, and on another operator table whose spec keeps no shop's clock
 - **WHEN** each is rendered for a reader whose machine is set to America/New_York
 - **THEN** the Orders worklist reads it at `14:00` in Asia/Hong_Kong, labelled `GMT+8`
+- **AND** the order page's timeline and invoice log read it at `14:00` in Asia/Hong_Kong, labelled `GMT+8`
+- **AND** the send and reissue dialog's payment deadline reads it at `14:00` in Asia/Hong_Kong, labelled `GMT+8`
 - **AND** the other operator table reads it at `06:00` in Coordinated Universal Time
 
 ### Requirement: A deadline names its time zone

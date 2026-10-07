@@ -26,9 +26,6 @@ zone of its own. What a person reads depends on the surface.
   local moment with no zone suffix
 - 🚧 **First paint** - until the browser reports its zone, a deadline may read
   UTC named GMT, then it switches to the viewer's zone
-- 🚧 **Auction order operators** - the Orders worklist, the order page with its
-  timeline and invoice log, and the send and reissue dialog's payment deadline
-  state Hong Kong time labelled GMT+8, not UTC; other operator tables stay UTC
 - **Shop's clock** - a page that books or confirms a visit, or a vault or
   signing page, keeps the shop's clock whatever zone the viewer is in; no rule
   here sets how it names that zone, and a collector's vault timeline stamps
@@ -53,7 +50,14 @@ zone of its own. What a person reads depends on the surface.
 
 Operator tables, admin surfaces and the records a machine reads - an export,
 the audit trail - state Coordinated Universal Time, except an admin surface
-whose own spec keeps a shop's clock. A calendar day the business judges - a
+whose own spec keeps a shop's clock.
+
+- 🚧 **Auction order operators** - the Orders worklist, the order page with its
+  timeline and invoice log, and the send and reissue dialog's payment deadline
+  state Hong Kong time labelled GMT+8, not UTC; other operator tables stay UTC.
+  The order timeline and invoice log are not the audit trail, which stays UTC
+
+A calendar day the business judges - a
 contract date, a due date, a "today" queue, an age, a document's expiry, a
 report's month - stays on the brand's zone for every reader. The day a
 collector page shows for a deadline is not judged this way: it reads in the

@@ -730,12 +730,14 @@ Runs once per row of **Test data**.
 2. Read its time.
 3. Open the order page and read the same time on its timeline and invoice log.
 4. Open the send dialog and read its payment deadline.
+5. Open another operator table that keeps no shop's clock and read the same instant.
 
 **Expected Results:**
 
-* Steps 2 and 3: the time reads 09:30 on 7 Oct, labelled GMT+8.
+* Steps 2 and 3: the time reads 09:30 on 7 Oct, labelled GMT+8, on the worklist, the timeline and the invoice log.
 * Step 4: the payment deadline reads in Asia/Hong_Kong, labelled GMT+8.
-* No step reads 01:30 (UTC) or 21:30 (the machine's zone).
+* Step 5: the other table reads 01:30 on 7 Oct in Coordinated Universal Time.
+* No step on an order surface reads 01:30 (UTC) or 21:30 (the machine's zone).
 
 ## Settled
 
