@@ -544,7 +544,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
@@ -3255,7 +3255,7 @@ document the unit I selected.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
 
@@ -3339,7 +3339,7 @@ document the unit I selected.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
 
@@ -3381,7 +3381,7 @@ selected unit's normal media.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
 
@@ -3423,7 +3423,7 @@ selected unit's normal media.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
 
@@ -3507,7 +3507,7 @@ copy's photographs apply.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-13
 
@@ -3557,7 +3557,7 @@ changes later.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
@@ -3638,7 +3638,7 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
@@ -3683,7 +3683,7 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
@@ -3724,7 +3724,7 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
@@ -3763,7 +3763,7 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
@@ -3806,7 +3806,7 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
@@ -3844,7 +3844,7 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
@@ -3922,7 +3922,7 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
