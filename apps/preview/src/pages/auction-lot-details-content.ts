@@ -216,6 +216,7 @@ export const AUCTION_LOT_DETAILS_COPY = {
     },
   },
   gallery: {
+    zoom: "Click to zoom",
     previous: "Previous image",
     next: "Next image",
     images: "Auction images",

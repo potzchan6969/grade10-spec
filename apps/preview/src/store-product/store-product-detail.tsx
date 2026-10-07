@@ -20,6 +20,7 @@ const CART_FETCH_MS = 400;
 const COPY = {
   description: { showLess: "Show less", showMore: "Show more" },
   gallery: {
+    zoom: "Click to zoom",
     previous: "Previous image",
     next: "Next image",
     images: "Product images",
