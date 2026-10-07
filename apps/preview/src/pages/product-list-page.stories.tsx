@@ -217,12 +217,6 @@ function ProductListPage() {
   }, [committedSearch, filterGroups, selection]);
 
   useEffect(() => {
-    void committedSearch;
-    void sort;
-    void selection;
-    setVisibleCount(PAGE_SIZE);
-    setLoadingMore(false);
-    setResultsStatus("loading");
     const timeout = setTimeout(
       () => setResultsStatus("ready"),
       RESULTS_LOAD_MS,
@@ -236,12 +230,16 @@ function ProductListPage() {
     selected: boolean,
   ) => {
     if (groupId === "search") {
-      if (!selected) {
+      if (!selected && committedSearch.length > 0) {
+        resetResults();
         setCommittedSearch("");
       }
       return;
     }
 
+    const current = selection[groupId] ?? [];
+    if (selected === current.includes(optionId)) return;
+    resetResults();
     setSelection((previous) => {
       const current = previous[groupId] ?? [];
       if (selected && current.includes(optionId)) {
@@ -254,6 +252,12 @@ function ProductListPage() {
           : current.filter((id) => id !== optionId),
       };
     });
+  };
+
+  const resetResults = () => {
+    setVisibleCount(PAGE_SIZE);
+    setLoadingMore(false);
+    setResultsStatus("loading");
   };
 
   const handleSearchSuggestionSelect = (
@@ -327,6 +331,12 @@ function ProductListPage() {
         hasMore={visibleCount < TOTAL_PRODUCTS}
         loadingMore={loadingMore}
         onClearFilters={() => {
+          if (
+            committedSearch.length > 0 ||
+            Object.values(selection).some((options) => options.length > 0)
+          ) {
+            resetResults();
+          }
           setSelection({});
           setCommittedSearch("");
         }}
@@ -356,11 +366,15 @@ function ProductListPage() {
         onSearchChange={setSearchDraft}
         onSearchClear={() => setSearchDraft("")}
         onSearchCommit={(value) => {
+          if (value !== committedSearch) resetResults();
           setCommittedSearch(value);
           setSearchDraft("");
         }}
         onSearchSuggestionSelect={handleSearchSuggestionSelect}
-        onSortChange={setSort}
+        onSortChange={(value) => {
+          if (value !== sort) resetResults();
+          setSort(value);
+        }}
         resultCount="100 Products"
         results={
           resultsStatus === "loading"

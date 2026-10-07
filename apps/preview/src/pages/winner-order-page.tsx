@@ -12,7 +12,7 @@ import {
   type OrderDetailsPaymentBrand,
   SiteHeader,
 } from "@grade10/ui";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { AUCTION_FOOTER } from "./store-content";
 import { WinnerOrderContactDialog } from "./winner-order-contact-dialog";
@@ -382,6 +382,25 @@ function WinnerOrderPage({
   lotHref = AUCTION_LOT_DETAILS_HREF,
   onLotClick,
 }: WinnerOrderPageProps) {
+  return (
+    <WinnerOrderPageState
+      key={statusProp}
+      content={contentProp}
+      lotHref={lotHref}
+      onLotClick={onLotClick}
+      onPrimaryAction={onPrimaryAction}
+      status={statusProp}
+    />
+  );
+}
+
+function WinnerOrderPageState({
+  status: statusProp = "awaiting_address",
+  content: contentProp,
+  onPrimaryAction,
+  lotHref,
+  onLotClick,
+}: WinnerOrderPageProps) {
   const [status, setStatus] = useState(statusProp);
   const [setupResult, setSetupResult] = useState<WinnerOrderSetupResult | null>(
     null,
@@ -392,13 +411,6 @@ function WinnerOrderPage({
   const [refundDialogOpen, setRefundDialogOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [cardCheckoutPending, setCardCheckoutPending] = useState(false);
-
-  useEffect(() => {
-    setStatus(statusProp);
-    if (statusProp !== "preparing_invoice") {
-      setSetupResult(null);
-    }
-  }, [statusProp]);
 
   const content = resolveContent(status, setupResult, contentProp, statusProp);
   const contactReason = contactReasonFor(content.status);
@@ -632,6 +644,7 @@ function WinnerOrderPage({
       ) : null}
       {contactMail ? (
         <WinnerOrderContactDialog
+          key={contactOpen ? contactMail.body : "closed"}
           mail={contactMail}
           onOpenChange={setContactOpen}
           open={contactOpen}

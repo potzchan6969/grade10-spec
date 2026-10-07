@@ -46,7 +46,8 @@ function BidPanelStateResponsePreview({
           }}
           onPaymentSetupDismissed={() => {
             setState((current) => {
-              const { paymentSetup: _paymentSetup, ...rest } = current;
+              const { paymentSetup, ...rest } = current;
+              void paymentSetup;
               return rest;
             });
           }}
@@ -114,4 +115,6 @@ function labelled(expected: string) {
 }
 
 export type { BidPanelStateResponseStory };
+// This module is both the Storybook component and its shared story factory.
+/* eslint-disable react-refresh/only-export-components */
 export { BidPanelStateResponsePreview, responseStory };

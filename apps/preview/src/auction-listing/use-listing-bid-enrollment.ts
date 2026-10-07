@@ -53,6 +53,7 @@ function useListingBidEnrollment(
   _listingId = "demo-lot",
   initialSession: Partial<ListingBidEnrollmentSession> = {},
 ) {
+  void _listingId;
   const [session, setSession] = useState<ListingBidEnrollmentSession>(() => ({
     ...INITIAL_SESSION,
     ...initialSession,

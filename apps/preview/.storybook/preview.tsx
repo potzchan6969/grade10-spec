@@ -11,6 +11,8 @@ HTMLElement.prototype.focus = function focus(options?: FocusOptions) {
   nativeFocus.call(this, { ...options, preventScroll: true });
 };
 
+// Storybook's preview module must export its configuration, not component APIs.
+/* eslint-disable react-refresh/only-export-components */
 function MotionBoundary({
   children,
   paused,

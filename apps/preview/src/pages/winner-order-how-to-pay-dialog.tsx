@@ -195,12 +195,8 @@ function WinnerOrderHowToPayDialog({
 }: WinnerOrderHowToPayDialogProps) {
   const [rail, setRail] = useState("fps");
   const tabScrollRef = useRef<HTMLDivElement>(null);
-  const animateSwap = useRef(false);
+  const [animateSwap, setAnimateSwap] = useState(false);
   const wideTrack = useWideTabTrack();
-
-  useLayoutEffect(() => {
-    animateSwap.current = true;
-  }, []);
 
   // Keep the active tab in view when the rail changes on a narrow scrollport.
   useLayoutEffect(() => {
@@ -249,7 +245,10 @@ function WinnerOrderHowToPayDialog({
           <Tabs
             className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-2 overflow-visible"
             onValueChange={(next) => {
-              if (next != null) setRail(next);
+              if (next != null) {
+                setAnimateSwap(true);
+                setRail(next);
+              }
             }}
             value={rail}
           >
@@ -298,7 +297,7 @@ function WinnerOrderHowToPayDialog({
               </div>
             </div>
 
-            <RailFrame animateContent={animateSwap.current} rail={rail}>
+            <RailFrame animateContent={animateSwap} rail={rail}>
               <TabsContent className={TAB_PANEL_CLASS} value="fps">
                 <RailPanel>
                   <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-5">

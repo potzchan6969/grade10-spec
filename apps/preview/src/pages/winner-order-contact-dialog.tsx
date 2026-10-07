@@ -75,14 +75,6 @@ function WinnerOrderContactDialog({
     return () => window.clearTimeout(timer);
   }, [copiedField]);
 
-  useEffect(() => {
-    if (!open) {
-      setCopiedField(null);
-      return;
-    }
-    setBody(mail.body);
-  }, [open, mail.body]);
-
   const mailtoHref = `mailto:${mail.to}?subject=${encodeURIComponent(mail.subject)}&body=${encodeURIComponent(body)}`;
   const fullEmail = `To: ${mail.to}\nSubject: ${mail.subject}\n\n${body}`;
 

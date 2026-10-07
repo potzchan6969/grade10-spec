@@ -11,7 +11,7 @@ import {
   SignInCard,
   SignInEmailForm,
 } from "@grade10/ui";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   type BiddingState,
   bidHistoryForState,
@@ -44,6 +44,26 @@ function resolveBidEnrollment(
   return "ready";
 }
 
+function SignInEmailPreview({
+  onSignInComplete,
+}: {
+  onSignInComplete?: () => void;
+}) {
+  const [email, setEmail] = useState("");
+
+  return (
+    <SignInEmailForm
+      copy={{
+        email: "Email",
+        submit: LISTING_BID_ENROLLMENT_DEMO_COPY.signInDemoSubmit,
+      }}
+      email={email}
+      onEmailChange={setEmail}
+      onSubmit={() => onSignInComplete?.()}
+    />
+  );
+}
+
 function ListingBidEnrollmentCardPreview({
   snapshot,
   overlayPresentation = "modal",
@@ -58,16 +78,8 @@ function ListingBidEnrollmentCardPreview({
   history: historyProp,
   historyResetKey = "enrollment-demo",
 }: ListingBidEnrollmentCardPreviewProps) {
-  const [signInEmail, setSignInEmail] = useState("");
-
   const signInOpen = signInOpenProp ?? snapshot.signInOpen ?? false;
   const bidEnrollment = resolveBidEnrollment(snapshot);
-
-  useEffect(() => {
-    if (!signInOpen) {
-      setSignInEmail("");
-    }
-  }, [signInOpen]);
 
   const fixtureState: BiddingState = snapshot.fixtureState ?? "live-no-bids";
   const baseView = buildListingAuctionBidView(fixtureState);
@@ -93,7 +105,7 @@ function ListingBidEnrollmentCardPreview({
       snapshot.submitUsesSignInLabel ? { ...row, isViewer: false } : row,
     );
 
-  function handleBidSubmit(_amountMinor?: number) {
+  function handleBidSubmit() {
     onBidSubmit?.();
   }
 
@@ -178,17 +190,7 @@ function ListingBidEnrollmentCardPreview({
       {signInOpen ? (
         overlayPresentation === "inline" ? (
           <InlineOverlayPreview label="Sign in to Grade10">
-            <SignInEmailForm
-              copy={{
-                email: "Email",
-                submit: LISTING_BID_ENROLLMENT_DEMO_COPY.signInDemoSubmit,
-              }}
-              email={signInEmail}
-              onEmailChange={setSignInEmail}
-              onSubmit={() => {
-                onSignInComplete?.();
-              }}
-            />
+            <SignInEmailPreview onSignInComplete={onSignInComplete} />
           </InlineOverlayPreview>
         ) : (
           <SignInCard
@@ -201,17 +203,7 @@ function ListingBidEnrollmentCardPreview({
             }}
             open
           >
-            <SignInEmailForm
-              copy={{
-                email: "Email",
-                submit: LISTING_BID_ENROLLMENT_DEMO_COPY.signInDemoSubmit,
-              }}
-              email={signInEmail}
-              onEmailChange={setSignInEmail}
-              onSubmit={() => {
-                onSignInComplete?.();
-              }}
-            />
+            <SignInEmailPreview onSignInComplete={onSignInComplete} />
           </SignInCard>
         )
       ) : null}

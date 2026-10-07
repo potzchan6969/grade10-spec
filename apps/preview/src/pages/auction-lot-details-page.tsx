@@ -62,6 +62,10 @@ function hasBidOnListing(view: {
 }
 
 function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
+  return <AuctionLotDetailsPageState key={state} state={state} />;
+}
+
+function AuctionLotDetailsPageState({ state }: AuctionLotDetailsPageProps) {
   const [watched, setWatched] = useState(false);
   const [paymentLinked, setPaymentLinked] = useState(false);
   const [setupOpen, setSetupOpen] = useState(false);
@@ -89,22 +93,6 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
   const watchLocked = hasBidOnListing(view);
 
   useEffect(() => {
-    setLiveSnapshot(
-      state.startsWith("live")
-        ? {
-            history: bidHistoryForState(state),
-            facts: initialLiveListingFacts(state),
-          }
-        : null,
-    );
-    if (state.startsWith("live")) {
-      setTiming(createLiveAuctionTiming());
-    }
-    setPaymentLinked(false);
-    setSetupOpen(false);
-  }, [state]);
-
-  useEffect(() => {
     if (!view.live) return;
 
     const timer = window.setInterval(() => {
@@ -122,7 +110,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
     return () => window.clearInterval(timer);
   }, [view.live, state]);
 
-  function requestBidAction(_amountMinor?: number) {
+  function requestBidAction() {
     if (hasBidOnListing(view)) return;
     if (!paymentLinked) {
       setSetupOpen(true);

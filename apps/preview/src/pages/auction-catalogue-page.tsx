@@ -7,7 +7,8 @@ import {
   type FeaturedAuctionsBannerSlide,
   SiteHeader,
 } from "@grade10/ui";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useReducedMotion } from "motion/react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { AuctionCatalogueAllAuctionsGrid } from "./auction-catalogue-all-auctions";
 import {
   AuctionCategoryButton,
@@ -85,10 +86,6 @@ function toFeaturedSlide(lot: CatalogueLot): FeaturedAuctionsBannerSlide {
   };
 }
 
-function prefersReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
 function rank(status: CatalogueStatus): number {
   if (status === "Active") return 0;
   if (status === "Upcoming") return 1;
@@ -148,7 +145,7 @@ function AuctionCataloguePage({
   const [pageRevealed, setPageRevealed] = useState(false);
   const [listRevealed, setListRevealed] = useState(false);
   const [skeletonCount, setSkeletonCount] = useState(DEFAULT_SKELETON_COUNT);
-  const filterBootstrapped = useRef(false);
+  const reduceMotion = useReducedMotion();
 
   const categories = useMemo(() => {
     const seen = new Map<
@@ -176,51 +173,23 @@ function AuctionCataloguePage({
     ? ordered.filter((lot) => lot.categoryId === selectedId)
     : ordered;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: the page's first load runs once, on mount.
   useEffect(() => {
-    setPageStatus("loading");
-    setPageRevealed(false);
-    setListRevealed(false);
-    setSkeletonCount(
-      Math.max(
-        ordered.filter((lot) => lot.status !== "Ended").length,
-        DEFAULT_SKELETON_COUNT,
-      ),
-    );
     const timeout = window.setTimeout(() => {
       setPageStatus("ready");
     }, FILTER_LOAD_MS);
     return () => window.clearTimeout(timeout);
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: a reload is keyed on the chosen category alone; the count is read at that moment.
   useEffect(() => {
-    if (!filterBootstrapped.current) {
-      filterBootstrapped.current = true;
-      return;
-    }
-
-    setSkeletonCount(Math.max(listed.length, DEFAULT_SKELETON_COUNT));
-    setFilterStatus("loading");
-    setListRevealed(false);
+    if (filterStatus !== "loading") return;
     const timeout = window.setTimeout(() => {
       setFilterStatus("ready");
     }, FILTER_LOAD_MS);
     return () => window.clearTimeout(timeout);
-  }, [selectedId]);
+  }, [filterStatus, selectedId]);
 
   useLayoutEffect(() => {
-    if (pageStatus !== "ready") {
-      setPageRevealed(false);
-      setListRevealed(false);
-      return;
-    }
-
-    if (prefersReducedMotion()) {
-      setPageRevealed(true);
-      setListRevealed(true);
-      return;
-    }
+    if (pageStatus !== "ready") return;
 
     let second = 0;
     const first = requestAnimationFrame(() => {
@@ -235,19 +204,8 @@ function AuctionCataloguePage({
     };
   }, [pageStatus]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: selectedId re-runs the reveal for each new category.
   useLayoutEffect(() => {
-    if (filterStatus !== "ready" || pageStatus !== "ready") {
-      if (filterStatus === "loading") setListRevealed(false);
-      return;
-    }
-
-    if (!filterBootstrapped.current) return;
-
-    if (prefersReducedMotion()) {
-      setListRevealed(true);
-      return;
-    }
+    if (filterStatus !== "ready" || pageStatus !== "ready") return;
 
     let second = 0;
     const first = requestAnimationFrame(() => {
@@ -257,7 +215,7 @@ function AuctionCataloguePage({
       cancelAnimationFrame(first);
       cancelAnimationFrame(second);
     };
-  }, [filterStatus, pageStatus, selectedId]);
+  }, [filterStatus, pageStatus]);
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -311,11 +269,23 @@ function AuctionCataloguePage({
   }
 
   function toggleCategory(id: string) {
-    setSelectedId((current) => (current === id ? null : id));
+    const nextId = selectedId === id ? null : id;
+    const nextLots = nextId
+      ? ordered.filter((lot) => lot.categoryId === nextId)
+      : ordered;
+    setSelectedId(nextId);
+    setSkeletonCount(Math.max(nextLots.length, DEFAULT_SKELETON_COUNT));
+    setFilterStatus("loading");
+    setListRevealed(false);
   }
 
   const pageLoading = pageStatus === "loading";
   const listLoading = pageLoading || filterStatus === "loading";
+  const pageIsRevealed =
+    pageRevealed || (pageStatus === "ready" && Boolean(reduceMotion));
+  const listIsRevealed =
+    listRevealed ||
+    (pageStatus === "ready" && filterStatus === "ready" && Boolean(reduceMotion));
 
   return (
     <div className="flex min-h-dvh w-full flex-col bg-background text-foreground">
@@ -348,7 +318,7 @@ function AuctionCataloguePage({
               loading={pageLoading}
               lots={featured}
               onToggle={toggleWatch}
-              revealed={pageRevealed}
+              revealed={pageIsRevealed}
               watched={watched}
             />
           )
@@ -360,7 +330,7 @@ function AuctionCataloguePage({
               className={cn(
                 "text-2xl font-semibold text-foreground",
                 "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:filter-none motion-reduce:transition-none",
-                pageRevealed && "translate-y-0 opacity-100 filter-none",
+                pageIsRevealed && "translate-y-0 opacity-100 filter-none",
               )}
               id="all-auctions"
             >
@@ -386,10 +356,10 @@ function AuctionCataloguePage({
                     className={cn(
                       "flex gap-2 overflow-x-auto overscroll-x-contain lg:grid lg:grid-cols-2 lg:gap-2 lg:overflow-visible lg:self-start",
                       "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:filter-none motion-reduce:transition-none",
-                      pageRevealed && "translate-y-0 opacity-100 filter-none",
+                      pageIsRevealed && "translate-y-0 opacity-100 filter-none",
                     )}
                     style={{
-                      transitionDelay: pageRevealed ? "40ms" : "0ms",
+                      transitionDelay: pageIsRevealed ? "40ms" : "0ms",
                     }}
                   >
                     {categories.map((category) => (
@@ -433,7 +403,7 @@ function AuctionCataloguePage({
                   <AuctionCatalogueAllAuctionsGrid
                     lots={listed}
                     onToggle={toggleWatch}
-                    revealed={listRevealed}
+                    revealed={listIsRevealed}
                     watched={watched}
                   />
                 )}
