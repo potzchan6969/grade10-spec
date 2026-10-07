@@ -4,7 +4,7 @@
 - [ ] 1.2 Cover derivation and erasure fallback in auction-service tests; prove the public payload never includes email. `grade10-site-auction-bidding-history-SC-52`, `grade10-site-auction-bidding-history-SC-53`
 - [ ] 1.3 Confirm live lot frames carry `avatarInitial` on each ledger row through the shared schema.
 
-## 2. Lot page Recent Bids mapping (grade10)
+## 2. Lot page Recent Bids mapping (grade10) (owner: @mason5991)
 
 - [ ] 2.1 Map `bid.avatarInitial` into `ListingBidHistoryRow.initials` in `listingBidHistory`; stop using `bid.pseudonym` for the avatar. `grade10-site-auction-listing-page-SC-52`, `grade10-site-auction-listing-page-SC-53`
 - [ ] 2.2 Add or update listing mapper / ListingView tests for rival letters, the viewer row, and live update paths. `grade10-site-auction-listing-page-SC-52`, `grade10-site-auction-listing-page-SC-53`
