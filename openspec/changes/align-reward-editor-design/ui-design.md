@@ -11,7 +11,7 @@ mock's own navigation and are not built.
 ### Edit Reward
 
 `/rewards/:slug` — the mock's **Edit an existing reward** tab. Duplicate and
-Archive stay beside the title, as staging has them.
+Archive sit under More beside the title, at every width.
 
 ### Rewards List
 
@@ -40,10 +40,10 @@ or `@grade10/ui` export, variant or token changes.
 | `CheckList` | `appearance`: `list` or `inline`, checks laid across the line | Combine checks |
 | `MoneyField`, `UnitField` | Currency in front of the amount; 260px; placeholder | Amount `Required`, maximum discount `None`, minimum spend |
 | `NumberField` | Units drawn as a mark after the input, 260px; `compact` is a 44px count with no clear button | Valid for, cost, stock; basket quantity |
-| `SearchPicker` | Picked list framed with dividers; optional words when nothing is picked | Products, variants, the item, the gift |
+| `SearchPicker` | Picked list framed with dividers; optional words when nothing is picked; a one-pick picker replaces its pick | Products, variants, the item, the gift |
 | `IconButton` | `size`: `sm` or `md` | Remove buttons in picked lists and basket lines |
 | `Badge` | `tone="outline"` | Redeem pill on the menu card |
-| `SectionHeader` | Page heading; small grey back link above the title, as wide as its words; description up to 64 characters wide; actions drop under the title on a phone | `← Rewards`; Duplicate and Archive under the reward's name on a phone |
+| `SectionHeader` | Page heading; small grey back link above the title, as wide as its words; description up to 64 characters wide; the section's acts under More beside the title, the same at every width | `← Rewards`; Duplicate and Archive under More |
 | `DateTimeField` | The time drops under the day when both do not fit | Auction listing times on a phone |
 | `Panel` | Section heading under the page's; can pin to the bottom, lifted when pinned; tells its contents they sit on a surface | Save bar pinned to the bottom |
 | `Table` | Framed in a white box, unless already inside a panel or dialog | Rewards list |
@@ -83,7 +83,7 @@ or `@grade10/ui` export, variant or token changes.
 | Free item card | One variant at nothing, once the member has it in the basket. |
 | Gift card | A free line for one variant, added once the basket reaches a minimum spend. |
 | Kind note, edit only | Changing the kind rewrites what the next redemption gets. Coupons already issued keep the terms they were bought under. |
-| Retired handover note, edit only | Stored as a manual handover, a handover the programme has retired. Choose Money off, Free item or Gift with a purchase to give it a coupon; until then the other fields save on their own and the handover stays. A counter collection reads `Stored as a counter collection` in its place |
+| Retired handover note, edit only | Stored as a manual handover, a handover the programme has retired. Choose Money off, Free item or Gift with a purchase to give it a coupon definition; until then the other fields save on their own and the handover stays. A counter collection reads `Stored as a counter collection` in its place |
 | List terms, retired handover | `Manual handover · retired`; `Collected at the counter: {name} · {days} days · retired` |
 | Free item picker | The item — One variant. Its coupon takes 100% off it. |
 | Gift picker hint | One variant, added to the order as a free line. |
@@ -93,7 +93,7 @@ or `@grade10/ui` export, variant or token changes.
 | Channel hint | Online only: the till cannot match a product or a catalog filter. |
 | Money placeholders | `None` where optional, `Required` where not |
 | Units | `days after redemption`, `points`; stock's unit field has a hidden label |
-| Window | Live window; one error, `Ends before it starts.`, on Live until |
+| Window | Live window; one error, `Ends before it starts.`, on Live until; a window from and until one day runs that whole day and saves |
 | Sentence | Staging's, ending "once the member has it in the basket" |
 | Till panel, online only | 此優惠只限網上訂單, the till's own words (grade10 `integrations/shopify-pos/grade10/src/acts/view.ts:279`) |
 | Reward menu, online only | `Online store only`, the menu's own words (`packages/i18n/messages/shared/en/membership.json`, `onlyOnline`) |
@@ -117,39 +117,44 @@ line to check.", and the Shopify footnote.
 
 ## Differences From the Mock
 
-- **The save bar spans the form and the rail** — it sits at the page's end,
+- **The save bar spans the form and the rail** - it sits at the page's end,
   so it stays on screen on a phone once the rail stacks under the form
-- **Hints sit above their control** — every admin field draws its hint
+- **Hints sit above their control** - every admin field draws its hint
   between label and control; moving them under would mean redrawing each
   field's description by hand
-- **Field refusals are a tinted strip under the control** — the mock's red
+- **Field refusals are a tinted strip under the control** - the mock's red
   hint text would mean redrawing each field's status
-- **Badge text stays dark** — the mock's status colour on its tint reads 3.2:1
+- **Badge text stays dark** - the mock's status colour on its tint reads 3.2:1
   for live and 2.4:1 for scheduled, under the 4.5:1 small text needs
-- **Segmented options keep a small gap** — flush options with 1px dividers
+- **Segmented options keep a small gap** - flush options with 1px dividers
   would mean reshaping the control's track
-- **One control height, 36px** — the mock draws inputs at 39px and nav rows
+- **One control height, 36px** - the mock draws inputs at 39px and nav rows
   at 31.5px
-- **Select values and menu items read 13px** — they share the label size
-- **Radio and checkbox labels read 14px** — the label sizes itself, out of the
+- **Select values and menu items read 13px** - they share the label size
+- **Radio and checkbox labels read 14px** - the label sizes itself, out of the
   theme's reach
-- **The neutral notice has no border** — the tinted box draws none
-- **Unit fields show a clear button** — without it an emptied cost or
+- **The neutral notice has no border** - the tinted box draws none
+- **Unit fields show a clear button** - without it an emptied cost or
   validity reverts when the field loses focus
-- **Rail labels sit 8px above their card** — the spacing scale has no 10px
-- **No thumbnails or variant counts in the picked list** — the catalogue
+- **Rail labels sit 8px above their card** - the spacing scale has no 10px
+- **No thumbnails or variant counts in the picked list** - the catalogue
   search carries neither
-- **Redeem is a 20px outline badge** — the mock's 30px button would be a
+- **Redeem is a 20px outline badge** - the mock's 30px button would be a
   control that does nothing
-- **The basket check folds with a chevron** — not the mock's + and –
-- **Edit keeps the new reward's subtitle** — "Changes reach the menu on save"
+- **The basket check folds with a chevron** - not the mock's + and –
+- **Edit keeps the new reward's subtitle** - "Changes reach the menu on save"
   is untrue for an archived or scheduled reward
-- **List terms keep staging's words** — the mock's "off order" and "Free off 1
+- **List terms keep staging's words** - the mock's "off order" and "Free off 1
   variant" name no item
-- **A retired handover's note** - the mock draws no reward stored as a
-  manual handover or a counter collection; the edit page shows a warning note
-  above the kind cards, with no card chosen and no fields for a kind
-- **Staging's extras stay** — searchable facet pickers in place of chips,
+- **A retired handover's note and rail** - the mock draws no reward stored
+  as a manual handover or a counter collection; the edit page shows a warning
+  note above the kind cards, with no card chosen and no fields for a kind, and
+  the rail shows the menu card as the member's menu does, the stored
+  handover's sentence and "Finish the coupon to check it."
+- **Duplicate and Archive sit under More** - the mock draws neither on the
+  edit page; every admin section header keeps its acts under More beside the
+  title, at every width
+- **Staging's extras stay** - searchable facet pickers in place of chips,
   Everything (free) on any scope, a basket line added by search and removed
   by a button, Duplicate and Archive
 
@@ -158,14 +163,17 @@ line to check.", and the Shopify footnote.
 | Screen | State | Spec scenario |
 | --- | --- | --- |
 | New Reward | A kind chosen, fields for that kind shown | `grade10-site-loyalty-programme-SC-158` |
-| New Reward | Free item chosen: one variant picker and minimum spend, no discount or scope | `grade10-site-loyalty-programme-SC-187` |
+| New Reward | Free item chosen: one variant picker and minimum spend, no discount or scope; the coupon terms and the menu entry as for any choice; a second pick replaces the first | `grade10-site-loyalty-programme-SC-187` |
+| New Reward | Free item with a variant picked, then Money off: an amount with none entered, named variants with none picked; back on Free item, no variant picked | `grade10-site-loyalty-programme-SC-253` |
 | Edit Reward | Stored 100% with no cap on one variant opens on the Free item card | `grade10-site-loyalty-programme-SC-188` |
 | Edit Reward | Stored 100% with a cap, or on two variants, or on one product, opens on Money off | `grade10-site-loyalty-programme-SC-189` |
-| New Reward | Money off scoped to named products or a catalog filter: the scope note shows, Online is chosen, In store and Both are unavailable | `grade10-site-loyalty-programme-SC-247` |
-| Edit Reward | Stored products reward naming the till opens on Online; moving its scope to named variants shows its stored channels again | `grade10-site-loyalty-programme-SC-248` |
-| Save bar | Each missing part named as a button that lands on its field; `Ends before it starts.` on Live until | `grade10-site-loyalty-programme-SC-249` |
-| Rail | Each row of Basket Verdicts, and staging's "Finish the coupon to check it." and "Add a line to check." | `grade10-site-loyalty-programme-SC-250` |
-| Edit Reward | Stored manual handover or counter collection: the retired handover note above the kind cards, no card chosen, no fields for a kind; the fields beside it save and the handover stays; choosing a card gives it a coupon; a duplicate opens on Money off | `grade10-site-loyalty-programme-SC-244` |
+| New Reward | Money off scoped to named products or a catalog filter: the scope note shows, Online is chosen, In store and Both are unavailable | `grade10-site-loyalty-programme-SC-249` |
+| Edit Reward | Stored products reward naming the till opens on Online; moving its scope to named variants shows its stored channels again | `grade10-site-loyalty-programme-SC-250` |
+| Save bar | Each missing part named as a button that lands on its field; `Ends before it starts.` on Live until | `grade10-site-loyalty-programme-SC-251` |
+| Rail | Each row of Basket Verdicts, and staging's "Finish the coupon to check it." and "Add a line to check." | `grade10-site-loyalty-programme-SC-252` |
+| Edit Reward | Stored manual handover or counter collection: the retired handover note above the kind cards, no card chosen, no fields for a kind; the fields beside it save and the handover stays; choosing a card gives it a coupon definition; a duplicate opens on Money off | `grade10-site-loyalty-programme-SC-246` |
+| Rail | Stored manual handover or counter collection, no card chosen: the menu card as the member's menu shows it, a counter collection's days to collect and nothing for a manual handover; the sentence reads the stored handover; the basket check reads "Finish the coupon to check it." | `grade10-site-loyalty-programme-SC-246` |
 | Rewards List | A retired handover's terms end `retired` | **Out of suite:** copy under the Reward form leaf, `rewardCopy.test.ts` in tasks 6.7 |
-| Till panel | A coupon scoped to named products or a catalog filter reads 此優惠只限網上訂單, whatever channels it names, and staff cannot tap it | `grade10-site-loyalty-programme-SC-246` |
-| Reward menu | A reward scoped to named products or a catalog filter reads `Online store only`, whatever channels it names | `grade10-site-loyalty-programme-SC-243` |
+| Till panel | A coupon scoped to named products or a catalog filter reads 此優惠只限網上訂單, whatever channels it names, and staff cannot tap it | `grade10-site-loyalty-programme-SC-248` |
+| Member's phone | Presenting a coupon scoped to named products or a catalog filter reads `This coupon cannot be used on this sale.`, whatever channels it names, and the sale is unchanged | `grade10-site-loyalty-programme-SC-248` |
+| Reward menu | A reward scoped to named products or a catalog filter reads `Online store only`, whatever channels it names | `grade10-site-loyalty-programme-SC-245` |
