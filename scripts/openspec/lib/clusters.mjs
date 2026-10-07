@@ -7,7 +7,8 @@ import { readChanges } from "../../../tools/manual/src/store/read-changes.mts";
 
 /** Groups of in-flight changes that edit one durable requirement or are
  *  linked by `depends_on`, with the requirements they share and an order that
- *  puts each change after what it depends on. Changes touching nothing in
+ *  puts each change after what it depends on. A `depends_on` cycle has no
+ *  such order, so it is reported beside the arbitrary one. Changes touching nothing in
  *  common stay out. */
 export function changeClusters(root) {
   const changes = readChanges(root, NO_GIT, null);
@@ -45,18 +46,28 @@ export function changeClusters(root) {
     .map((members) => {
       const ids = new Set(members.map((one) => one.id));
       const done = new Set();
+      const path = [];
       const order = [];
+      const cycles = [];
       const visit = (one) => {
+        const at = path.indexOf(one.id);
+        if (at >= 0) {
+          cycles.push([...path.slice(at), one.id]);
+          return;
+        }
         if (done.has(one.id)) return;
-        done.add(one.id);
+        path.push(one.id);
         for (const id of one.dependsOn ?? [])
           if (ids.has(id)) visit(members.find((m) => m.id === id));
+        path.pop();
+        done.add(one.id);
         order.push(one.id);
       };
       for (const one of [...members].sort((a, b) => a.id.localeCompare(b.id)))
         visit(one);
       return {
         changes: order,
+        cycles,
         dependsOn: members
           .filter((one) => (one.dependsOn ?? []).some((id) => ids.has(id)))
           .map((one) => ({
@@ -78,6 +89,10 @@ export function formatClusters(clusters) {
     .map((cluster, at) =>
       [
         `Cluster ${at + 1}: ${cluster.changes.join(" -> ")}`,
+        ...cluster.cycles.map(
+          (cycle) =>
+            `  cycle: ${cycle.join(" -> ")}; this order is arbitrary until depends_on is fixed`,
+        ),
         ...cluster.dependsOn.map(
           (one) => `  depends_on: ${one.change} after ${one.on.join(", ")}`,
         ),
