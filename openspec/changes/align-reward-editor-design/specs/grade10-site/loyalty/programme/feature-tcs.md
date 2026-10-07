@@ -422,7 +422,7 @@ Runs once per row of **Test data**.
 | `<choice>` | `<gap>` | Where the gap is named |
 | --- | --- | --- |
 | Free item | No item picked | The save bar names the missing item |
-| Money off | An amount, left empty | The save bar names the missing amount |
+| Money off, The whole order | An amount, left empty | The save bar names the missing amount |
 | Money off, an amount <amount>, Named products | No product picked | The save bar names the missing product |
 | Gift with a purchase | No gift picked | The save bar names the missing gift |
 | Gift with a purchase, <variant_1> picked | The minimum spend, left empty | The save bar names the missing minimum spend |
@@ -439,19 +439,20 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Click the card for <choice>.
-2. Enter <name> as the reward's name.
-3. Enter <cost> as its cost.
-4. Leave <gap> as the row states.
-5. Click Create reward.
-6. Click the gap's name in the save bar.
-7. Click ← Rewards.
+1. Click the card <choice> names.
+2. Fill in the rest of <choice>.
+3. Enter <name> as the reward's name.
+4. Enter <cost> as its cost.
+5. Leave <gap> as the row states.
+6. Click Create reward.
+7. Click the gap's name in the save bar.
+8. Click ← Rewards.
 
 **Expected Results:**
 
-* Step 5 names the gap where the row says.
-* Where the save bar names the gap, step 6 moves focus to its field.
-* Step 7 lists no reward named <name>.
+* Step 6 names the gap where the row says.
+* Where the save bar names the gap, step 7 moves focus to its field.
+* Step 8 lists no reward named <name>.
 
 <!-- trace:case id=g10.loyalty-programme.TC-z6o rev=1 covers=g10.loyalty-programme.SC-1bu,g10.loyalty-programme.SC-rwu,g10.loyalty-programme.SC-7w0,g10.loyalty-programme.SC-72a,g10.loyalty-programme.SC-2m8,g10.loyalty-programme.SC-zq0,g10.loyalty-programme.SC-jnr,g10.loyalty-programme.SC-ji6,g10.loyalty-programme.SC-h6j,g10.loyalty-programme.SC-fut -->
 ### grade10-site-loyalty-programme-US9-TC10-1: A free item's basket check takes the item off only when it is held
@@ -1439,3 +1440,14 @@ Runs once per row of **Test data**.
 - **Contradicted** - none in this change
 - **Uncovered** - none
 - **Waiting** - US7-TC7 against `grade10-site-loyalty-programme-SC-166` and `grade10-site-loyalty-programme-SC-172` until never-lock-a-coupon narrows their GIVEN, as before
+
+**Rerun:** 2026-10-07, QA2 in a fresh context: every case and every scenario of the delta, and the US-07 scenarios never-lock-a-coupon leaves, against the journey set and the feature-set root groups, which did not move; grade10 read where a case's outcome turns on what runs.
+
+- **Folded, corrected** - US9-TC9 (`grade10-site-loyalty-programme-SC-251`): no step filled in the amount and scope its rows name, so step 2 fills in the rest of `<choice>`, as US9-TC14 does. Its missing-amount row now scopes money off to the whole order, since a new Money off opens on named variants with none picked (grade10 `rewardCouponDraft.ts:94-98`), and that gap is the named-products row's to test
+- **Folded, as written** - US9-TC19 enters its amount with no card clicked, since a new reward opens on Money off (`rewardCouponDraft.ts:177-191`); US7-TC9's held-gift row, refused as `gift_in_basket` (`packages/coupons/contracts/src/evaluate.ts:203-209`); every other case, as the earlier runs record it
+- **Settled** - the wait on never-lock-a-coupon: it is accepted first with `grade10-site-loyalty-programme-SC-166` and `grade10-site-loyalty-programme-SC-172` naming any product coupon. This change's requirement takes a coupon scoped to named products or a catalog filter out of both ways into a counter sale, Q4 records it, and US7-TC7 and US7-TC10 walk both sides. Nothing is raised
+- **Ids** - `grade10-site-loyalty-programme-SC-187` to `grade10-site-loyalty-programme-SC-189` are this change's from main, where never-lock-a-coupon skips them; `grade10-site-loyalty-programme-SC-245` to `grade10-site-loyalty-programme-SC-253` sit above its 244, and US7-TC7 to US7-TC14 above its US7-TC6-1. Every case marker covers its journey's scenarios in source order
+- **Rejected** - none
+- **Contradicted** - none
+- **Uncovered** - none
+- **Waiting** - none
