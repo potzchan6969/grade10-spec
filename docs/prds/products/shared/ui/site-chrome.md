@@ -39,12 +39,12 @@ sign-in email, then My Auctions and Sign Out
 🚧 **No other item** - the menu offers nothing beyond these, KYC and a second
 orders item included
 
-❓ **Avatar without an email** - when `accountEmail` is not supplied, the menu
-shows `copy.accountMenuLabel` and no avatar; the designer (@tangconst)
-confirms that look
+**Avatar without an email** - when `accountEmail` is not supplied, the menu
+shows `copy.accountMenuLabel` and no avatar
 
-❓ **Account menu story** - which items the Auction & Store story shows once
-Profile and Membership are settled; the designer (@tangconst) confirms
+🚧 **Account menu stories** - on Auction & Store, `WithProfile` supplies every
+handler and shows all five items in order; `Open` supplies no Membership and
+shows My Orders, My Auctions and Sign Out
 
 **Compact menu** - below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same

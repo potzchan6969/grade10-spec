@@ -231,10 +231,41 @@ reimplementing its behavior.
 
 **Expected Results:**
 
-* Step 3: `accountEmail` shows with its small (`xs`) initial avatar above the items.
+* Step 3: a small (`xs`) initial avatar above `accountEmail`, both above the items.
 * Step 3: the menu lists Profile, My Orders, My Auctions, Membership, then Sign Out, and nothing else.
 * Step 3: the last item reads "Sign Out".
 * Step 3: no KYC item.
+
+<!-- trace:case id=g10.shared-site-chrome.TC-y33 rev=2 covers=g10.shared-site-chrome.SC-bzz -->
+### shared-ui-site-chrome-US1-TC17-2: Account menu shows the configured label and no avatar when no email is supplied
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session, no `accountEmail`, and `copy.accountMenuLabel`.
+
+**Steps:**
+
+1. Render the header.
+2. Click the account control.
+3. Read the top of the account menu.
+
+**Expected Results:**
+
+* Step 3: `copy.accountMenuLabel` shows above the items in place of an email.
+* Step 3: no avatar.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-aui rev=1 covers=g10.shared-site-chrome.SC-7fd,g10.shared-site-chrome.SC-h0z -->
 ### shared-ui-site-chrome-US1-TC8-1: Signed-out chrome presents Sign In
@@ -308,7 +339,6 @@ reimplementing its behavior.
 * The account entry renders only with its handler or its slot, and
   `SiteHeader` always supplies one: `onSignIn` signed out, the account menu
   signed in.
-* The small initial avatar sits above the sign-in email, never beside it.
 
 ## Reconciliation
 
@@ -330,6 +360,8 @@ reimplementing its behavior.
 
 **Run:** QA2 reconciliation, eighth run, 2026-10-07, after the acceptance review's fifth round. The durable Settled line "The small initial avatar sits above the account label, never beside it." now settles an avatar shown with `copy.accountMenuLabel`, the look Q6 holds open, so acceptance strikes it by hand and `## Settled` places the avatar above the sign-in email. No case or scenario moved.
 
+**Applied:** 2026-10-07, the interim answers to Q6 and the acceptance review's avatar finding; not a QA2 reading, which reruns on them. The requirement places the avatar above `accountEmail` and shows the label alone with no avatar when no email is supplied, so `shared-ui-site-chrome-SC-34` and `shared-ui-site-chrome-SC-35` move to revision 2, `shared-ui-site-chrome-US1-TC17-2` joins this suite, and `## Settled` drops its avatar line.
+
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `shared-ui-site-chrome-US1-TC25-1` | Reached | `shared-ui-site-chrome-SC-30`: no `onProfile`, the menu opens on My Orders; its Membership result agrees with `shared-ui-site-chrome-SC-38` |
@@ -343,9 +375,11 @@ reimplementing its behavior.
 | `shared-ui-site-chrome-US1-TC8-1` | Reached, result joined | `shared-ui-site-chrome-SC-16` and `shared-ui-site-chrome-SC-33`: no case asserted that a signed-out header ignores the Profile, My Orders and Membership handlers, so the result joined this case on the same run and its version stands. It leaves the smoke suite, which `shared-ui-site-chrome-US1-TC15-2` holds for the journey. Both scenarios serve Chrome exports, so the case traces that group and its marker covers those two alone; every Header controls scenario its old marker named stays covered by its own cases |
 | `shared-ui-site-chrome-US1-TC27-1` | Case added, folded as a scenario | The requirement says `SiteHeaderProps` and `SiteHeaderCopy` take no second orders item, and no scenario stated it: `shared-ui-site-chrome-SC-17` proves the rendered menu, not the types. Folded as `shared-ui-site-chrome-SC-42`, which this case walks and task 1.1 tests |
 | `shared-ui-site-chrome-SC-17` | Bumped | It adds "and no other item": `SiteHeader` drops its second orders item, so the account menu's five items are the whole set |
-| `shared-ui-site-chrome-SC-17`, `shared-ui-site-chrome-SC-29` | Re-anchored to `Header controls` | Each served `grade10-site-site-page-shell-US-03`, which names neither Profile nor Membership and holds both open (Q1, Q5). `shared-ui-site-chrome-SC-17` supplies every handler, Membership included, which no site supplies; `shared-ui-site-chrome-SC-29` shows Profile with no My Orders, which no lane reaches, since none carries the account page and withholds Store. Both are the header's fixed order, which `shared-ui-site-chrome-US1-TC15-2` and `shared-ui-site-chrome-US1-TC13-2` walk under `Header controls` |
+| `shared-ui-site-chrome-SC-17`, `shared-ui-site-chrome-SC-29` | Re-anchored to `Header controls` | Each served `grade10-site-site-page-shell-US-03`, the menu a collector meets on the site, which offers no Membership until a later change does (Q5). `shared-ui-site-chrome-SC-17` supplies every handler, Membership included, which no site supplies; `shared-ui-site-chrome-SC-29` shows Profile with no My Orders, which no lane reaches, since none carries the account page and withholds Store. Both are the header's fixed order, which `shared-ui-site-chrome-US1-TC15-2` and `shared-ui-site-chrome-US1-TC13-2` walk under `Header controls` |
 | `shared-ui-site-chrome-US1-TC9-2` | Retired, `deprecated`, bumped | A durable case of the modified requirement: it expects "Sign out", which `shared-ui-site-chrome-SC-37` refutes, and its menu is the fixed order with no Membership, walked by `shared-ui-site-chrome-US1-TC15-2` and `shared-ui-site-chrome-US1-TC19-1`. Its marker covers none. `shared-ui-site-chrome-US1-TC15-2` keeps the smoke suite |
 | `shared-ui-site-chrome-US1-TC12-1` | Folded as a scenario | The requirement dropped its sentence "Activating My Orders SHALL invoke its matching handler" for "Activating each item SHALL invoke the matching supplied handler", and no scenario stated the My Orders half, while Profile and Membership each have one. Folded as `shared-ui-site-chrome-SC-43`, which this case walks and task 1.1 tests; its precondition names `onMyOrders`, its version stands |
-| Settled: the avatar above the account label | Retracted, restated | This change names `copy.accountMenuLabel` the account label (Q14), so the durable line "The small initial avatar sits above the account label, never beside it." would settle an avatar shown with that label, the look Q6 holds open. Acceptance strikes the line by hand, because the fold has no rule that removes a Settled line, and `## Settled` places the avatar above the sign-in email |
+| Settled: the avatar above the account label | Retracted, moved to the requirement | This change names `copy.accountMenuLabel` the account label (Q14), and with that label the menu shows no avatar (Q6), so the durable line "The small initial avatar sits above the account label, never beside it." is false. Acceptance strikes the line by hand, because the fold has no rule that removes a Settled line. The requirement and `shared-ui-site-chrome-SC-34` place the avatar above `accountEmail` |
+| `shared-ui-site-chrome-SC-34` | Bumped | It said the avatar sits with `accountEmail` above the items; it now says the avatar sits above `accountEmail`, as the page and `site-header.tsx:165-177` do. `shared-ui-site-chrome-US1-TC15-2` asserts that order |
+| `shared-ui-site-chrome-SC-35`, `shared-ui-site-chrome-US1-TC17-2` | Bumped; case carried from the durable suite | With no email the menu shows the label alone and no avatar (Q6). The durable `shared-ui-site-chrome-US1-TC17-1` asserted the label only, so it is carried here with the no-avatar result, and its marker narrows to the scenario it walks |
 | Contradictions | None | Where a case and a scenario state the same behaviour they agree |
 

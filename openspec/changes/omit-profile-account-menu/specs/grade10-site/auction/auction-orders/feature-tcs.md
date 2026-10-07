@@ -23,5 +23,5 @@
 | --- | --- | --- |
 | `grade10-site-auction-auction-orders-US1-TC8-1` | Rejected, duplicate | A Won row on My Auctions opening its own order is `grade10-site/auction/account-record`'s rule, walked by `grade10-site-auction-account-record-US8-TC1-1`; no scenario here states it. Dropped before it was issued |
 | The account-menu link | Dropped, no case | No case asserted it and no scenario stated it. The menu's closed set is `grade10-site/site/page-shell`'s, where the auction-launch menu offers My Auctions and Sign Out and no other item |
-| Raised: what opens the list | Landed as Q13, open | With the menu entry gone and each Won row opening its own order, nothing in the site opens the list. Post-Bidding · My Auction Orders holds it open until Product answers |
+| Raised: what opens the list | Landed as Q13, settled | With the menu entry gone and each Won row opening its own order, nothing in the site opens the list. Product decided My Auctions links to it; a later change builds the link with its scenario and case, so no case here moves |
 | Contradictions | None | The durable cases walk the list from its address and agree with the carried scenarios |

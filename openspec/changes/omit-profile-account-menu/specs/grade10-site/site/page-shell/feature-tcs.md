@@ -8,8 +8,9 @@
 **As a** collector,
 **I want** Sign In when I am signed out, and when I am signed in an account
 menu that shows my sign-in email with its small initial avatar above My
-Auctions and Sign Out on auction launch, and My Orders, My Auctions, and Sign
-Out once Store answers, with no item whose page the site withholds,
+Auctions and Sign Out on auction launch, with Profile first wherever the
+account page is carried and My Orders ahead of My Auctions once Store
+answers, and no item whose page the site withholds,
 **so that** one place in the header takes me where I can go for this launch,
 without a second auction-orders link.
 
@@ -138,8 +139,8 @@ without a second auction-orders link.
 
 * Step 2 opens <grade10 site url><lang>/profile/orders.
 
-<!-- trace:case id=g10.site-page-shell.TC-5jl rev=2 covers=g10.site-page-shell.SC-u71 -->
-### grade10-site-site-page-shell-US3-TC5-2: Menu without Store omits My Orders and Profile where the account page is carried
+<!-- trace:case id=g10.site-page-shell.TC-5jl rev=3 covers=g10.site-page-shell.SC-u71,g10.site-page-shell.SC-79q -->
+### grade10-site-site-page-shell-US3-TC5-3: Menu without Store omits My Orders and opens on Profile where the account page is carried
 
 **Classification:**
 
@@ -154,8 +155,6 @@ without a second auction-orders link.
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
 
-**Blocked:** Product - Q1 decides whether Profile joins first wherever the account page is carried, or the menu never offers it.
-
 **Pre-conditions:**
 
 * The site shell renders for a signed-in collector on a build that carries the account page and withholds Store.
@@ -167,9 +166,8 @@ without a second auction-orders link.
 
 **Expected Results:**
 
-* Step 2: the menu lists My Auctions, then Sign Out, and nothing else.
+* Step 2: the menu lists Profile, My Auctions, then Sign Out, and nothing else.
 * Step 2: no My Orders item.
-* Step 2: no Profile item.
 
 <!-- trace:case id=g10.site-page-shell.TC-1su rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1 -->
 ### grade10-site-site-page-shell-US3-TC6-1: Auction-launch account menu shows email, avatar, and reduced items
@@ -336,8 +334,8 @@ Runs once per row of **Test data**.
 * The supplied Membership handler is invoked.
 * The browser does not navigate to `/membership`, `/join`, or any other membership address.
 
-<!-- trace:case id=g10.site-page-shell.TC-fa4 rev=2 covers=g10.site-page-shell.SC-y2l -->
-### grade10-site-site-page-shell-US3-TC11-2: Account menu offers no Profile where the account page is carried
+<!-- trace:case id=g10.site-page-shell.TC-fa4 rev=3 covers=g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-79q,g10.site-page-shell.SC-o1v -->
+### grade10-site-site-page-shell-US3-TC11-3: Account menu opens on Profile, which opens the account page
 
 **Classification:**
 
@@ -352,25 +350,23 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
 
-**Blocked:** Product - Q1 decides whether Profile joins first wherever the account page is carried, or the menu never offers it.
-
 **Pre-conditions:**
 
-* customer(signed in) is on `<grade10 site url>`.
+* customer(signed in) is on <grade10 site url>.
 * The site is staging, which carries the account page and answers Store.
 
 **Steps:**
 
-1. Navigate to `<grade10 site url><lang>/profile`.
-2. Click the account control in the header.
-3. Read the account menu's items.
+1. Click the account control in the header.
+2. Read the account menu's items.
+3. Click Profile in the account menu.
 
 **Expected Results:**
 
-* Step 1: the account page loads.
-* Step 3: no Profile item.
-* Step 3: My Orders comes before My Auctions.
-* Step 3: Sign Out is the last item.
+* Step 2: Profile is the first item.
+* Step 2: My Orders comes before My Auctions.
+* Step 2: Sign Out is the last item.
+* Step 3 opens the account page at <grade10 site url><lang>/profile.
 
 <!-- trace:case id=g10.site-page-shell.TC-kw9 rev=1 covers=g10.site-page-shell.SC-agf,g10.site-page-shell.SC-th1 -->
 ### grade10-site-site-page-shell-US3-TC12-1: Store menu leaves out the account and membership pages a build withholds
@@ -473,9 +469,12 @@ none marked when no item owns it,
 
 * Signed-in account entry opens a menu, the sign-in email with its small
   initial avatar above the items, offering My Auctions and Sign Out on auction
-  launch, and My Orders ahead of My Auctions once Store answers - not the
-  account page directly; Sign Out is offered from that menu and from the
-  account page wherever it is carried.
+  launch, Profile first wherever the account page is carried, and My Orders
+  ahead of My Auctions once Store answers - not the account page directly;
+  Sign Out is offered from that menu and from the account page wherever it is
+  carried.
+* Membership follows the membership page by the rule Profile follows, and a
+  later change offers it; until then the menu never offers it.
 * The menu offers no item whose page the site withholds: My Orders, Profile or
   Membership.
 * The account label in place of the sign-in email is `SiteHeader`'s alone: a
@@ -499,27 +498,29 @@ none marked when no item owns it,
 
 **Run:** QA2 reconciliation, seventh run, 2026-10-06, in a fresh context. Every case and scenario was joined again on `grade10-site-site-page-shell-US-03` and `grade10-site-site-page-shell-US-05`, and every lane and address a case names was checked against grade10 `src/surfaces.ts`. `grade10-site-site-page-shell-US5-TC2-2` walks the unlisted surface alone, so its marker drops `grade10-site-site-page-shell-SC-13`, which the durable `grade10-site-site-page-shell-US5-TC1-1` walks. No disposition moved.
 
+**Applied:** 2026-10-07, the product owner's answers to Q1, Q5 and Q13; not a QA2 reading, which reruns on them. Profile joins first wherever the account page is carried, so `grade10-site-site-page-shell-SC-66` and `grade10-site-site-page-shell-SC-67` are added, `grade10-site-site-page-shell-US3-TC5-3` and `grade10-site-site-page-shell-US3-TC11-3` are unblocked and rewritten, and the journey names Profile. Membership follows its page and a later change offers it, so `## Settled` says so.
+
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `grade10-site-site-page-shell-US3-TC1-1` | Reached | `grade10-site-site-page-shell-SC-07`; unchanged |
 | `grade10-site-site-page-shell-US3-TC2-2` | Retired, `deprecated`, bumped | It put Profile first, which the removed `grade10-site-site-page-shell-SC-17` stated; the Store menu is `grade10-site-site-page-shell-US3-TC7-2`. Its marker covers none, so a retired case never reads as coverage of `grade10-site-site-page-shell-SC-56` |
 | `grade10-site-site-page-shell-US3-TC3-2` | Reached, bumped | `grade10-site-site-page-shell-SC-08` and `grade10-site-site-page-shell-SC-57`. The account page offers Sign Out only on a build that carries it, so the case runs on staging |
 | `grade10-site-site-page-shell-US3-TC4-1` | Reached | `grade10-site-site-page-shell-SC-64`; unchanged |
-| `grade10-site-site-page-shell-US3-TC5-2` | Raised, blocked, moved to unit | Its no-My-Orders result is `grade10-site-site-page-shell-SC-58`. Its no-Profile result, with the account page carried and Store withheld, is the "never" answer to Q1, and task 3.1 tests that state in `store-shut.test.tsx`. No lane carries the account page and withholds Store (grade10 `src/surfaces.ts:343-399`), so the case runs on the rendered shell with the gates overridden. **Blocked:** Product |
+| `grade10-site-site-page-shell-US3-TC5-3` | Rewritten on Q1, moved to unit | Its no-My-Orders result is `grade10-site-site-page-shell-SC-58`. With the account page carried, Profile is first (`grade10-site-site-page-shell-SC-66`), so the no-Profile result became a Profile-first result, and task 3.1 tests that state in `store-shut.test.tsx`. No lane carries the account page and withholds Store (grade10 `src/surfaces.ts:343-399`), so the case runs on the rendered shell with the gates overridden |
 | `grade10-site-site-page-shell-US3-TC6-1` | Reached, lane corrected | `grade10-site-site-page-shell-SC-06`, `grade10-site-site-page-shell-SC-58`, `grade10-site-site-page-shell-SC-60` and `grade10-site-site-page-shell-SC-61` on the auction-launch lanes. "Preview" is no lane in the gate table; the rows are UAT, where the walk runs, and Production. Its no-Cart result left with the journey's Cart clause: `grade10-site-site-page-shell-US-04` and `grade10-site-site-page-shell-US-06` own Cart |
-| `grade10-site-site-page-shell-US3-TC7-2` | Reached, rewritten | The blind reading listed Membership after My Auctions, from the journey; the page holds Membership open (Q5) and no scenario places it, so the result is dropped. Its "no Profile" result needed a lane that answers Store and withholds the account page, which no lane is; it moved to `grade10-site-site-page-shell-US3-TC12-1`. The case runs on staging and walks `grade10-site-site-page-shell-SC-56` and `grade10-site-site-page-shell-SC-61`. Its Cart result left with the journey's Cart clause |
+| `grade10-site-site-page-shell-US3-TC7-2` | Reached, rewritten | The blind reading listed Membership after My Auctions, from the journey; Membership follows its own page and a later change offers it (Q5), and no scenario places it, so the result is dropped. Its "no Profile" result needed a lane that answers Store and withholds the account page, which no lane is; it moved to `grade10-site-site-page-shell-US3-TC12-1`. The case runs on staging and walks `grade10-site-site-page-shell-SC-56` and `grade10-site-site-page-shell-SC-61`. Its Cart result left with the journey's Cart clause |
 | `grade10-site-site-page-shell-US3-TC8-1` | Reached | `grade10-site-site-page-shell-SC-62`; unchanged |
 | `grade10-site-site-page-shell-US3-TC9-2` | Retired, `deprecated`, bumped | The label fallback left this capability with Q14: a signed-in session always carries an email, so the fallback is `SiteHeader`'s alone, walked by `shared-ui-site-chrome-US1-TC17-1`. Its marker covers none: the retired `grade10-site-site-page-shell-SC-31` leaves the spec at the fold |
-| `grade10-site-site-page-shell-US3-TC10-2` | Retired, `deprecated`, bumped | `grade10-site-site-page-shell-SC-34` is removed: the app never supplies Membership, and the page holds its place open (Q5). Q5's answer brings a case back. Its marker covers none, not `grade10-site-site-page-shell-SC-63`, the opposite outcome, which `grade10-site-site-page-shell-US3-TC12-1` walks |
-| `grade10-site-site-page-shell-US3-TC11-2` | Raised, blocked | No Profile where the account page is carried is the "never" answer to Q1; the rest of the case is `grade10-site-site-page-shell-SC-56`. **Blocked:** Product |
+| `grade10-site-site-page-shell-US3-TC10-2` | Retired, `deprecated`, bumped | `grade10-site-site-page-shell-SC-34` is removed: the app never supplies Membership, and a later change offers it (Q5) with its own case. Its marker covers none, not `grade10-site-site-page-shell-SC-63`, the opposite outcome, which `grade10-site-site-page-shell-US3-TC12-1` walks |
+| `grade10-site-site-page-shell-US3-TC11-3` | Rewritten on Q1 | On staging, which carries the account page, Profile is first and opens it (`grade10-site-site-page-shell-SC-66`, `grade10-site-site-page-shell-SC-67`); the rest of the case is `grade10-site-site-page-shell-SC-56` |
 | `grade10-site-site-page-shell-US3-TC12-1` | Case added | `grade10-site-site-page-shell-SC-59` and `grade10-site-site-page-shell-SC-63` had no case. No lane answers Store and withholds those pages, so the case runs on the rendered shell with the gates overridden, as task 2.2 does |
 | `grade10-site-site-page-shell-US3-TC13-1` | Case added | `grade10-site-site-page-shell-SC-65` had no case, before this change or after it |
-| Raised: Membership in the journey once Store answers | Landed as Q5, journey corrected | The journey named Membership once Store answers and "never a Profile item", while the page holds both open. Page Shell is the source, so the journey names neither until Q1 and Q5 are answered |
+| Raised: Membership in the journey once Store answers | Landed as Q5, journey corrected | The journey named Membership once Store answers and "never a Profile item". Page Shell is the source: the journey names Profile first wherever the account page is carried (Q1), and not Membership, which a later change offers (Q5) |
 | Raised: the label fallback without an email | Landed as Q14, settled | The site always has the email, so page-shell drops the fallback with its scenario and `grade10-site-site-page-shell-US3-TC9-2` retires |
-| Settled: the menu's Profile and Membership lines | Retracted | The durable suite settled Profile once carried and Membership once Store answers, in two lines, which Product holds open (Q1, Q5). The fold has no rule that removes a durable Settled line, so acceptance strikes both from the durable suite by hand: "Signed-in account entry opens a menu, the sign-in email with its small initial avatar ..." and "The account menu's item order under every combination of {Profile carried, Store answers} ...". `## Settled` states the menu this change settles, its withheld pages and the label fallback (Q14) |
+| Settled: the menu's Membership lines | Retracted | The durable suite settled Membership once Store answers, in two lines, while Membership follows its own page and a later change offers it (Q5). The fold has no rule that removes a durable Settled line, so acceptance strikes both from the durable suite by hand: the line that reads "plus Profile once carried, My Orders and Membership once Store answers", and the line that opens "The account menu's item order under every combination of {Profile carried, Store answers}". This suite's own menu line holds neither phrase. `## Settled` states the menu this change settles, its withheld pages, Membership and the label fallback (Q14) |
 | Journey: Cart in the bar | Dropped | No scenario serving `grade10-site-site-page-shell-US-03` states Cart; `grade10-site-site-page-shell-US-04` and `grade10-site-site-page-shell-US-06` own it, so the clause and the two Cart results left |
 | Context journeys | Dropped, one restated | No scenario or case of this change anchors on US-01, US-02, US-04, US-06 or US-07. `grade10-site-site-page-shell-SC-13` and `grade10-site-site-page-shell-SC-14` serve `grade10-site-site-page-shell-US-05`, so the journeys file restates it as context beside `grade10-site-site-page-shell-US-03`, which the change modifies |
 | `grade10-site-site-page-shell-US5-TC2-2` | Rewritten, bumped | `grade10-site-site-page-shell-SC-14` now reads "the account page". The case opens the account page on staging, which carries it, in place of `<grade10 profile url>`. It asserts no marked item and nothing about a listed surface, so its marker covers `grade10-site-site-page-shell-SC-14` alone |
-| Settled: Profile and Membership wait on Product | Dropped | A Settled line is read as answered by the next blind pass. The open half is `decisions.md` Q1 and Q5 and the open Profile and Membership lines on Page Shell · Account Menu |
-| Scenarios | All reached | Every scenario the delta carries has a case asserting its outcome: `grade10-site-site-page-shell-SC-06` to `grade10-site-site-page-shell-SC-08`, `grade10-site-site-page-shell-SC-13`, `grade10-site-site-page-shell-SC-14` and `grade10-site-site-page-shell-SC-56` to `grade10-site-site-page-shell-SC-65` |
-| Contradictions | None open | Where a case and a scenario state the same behaviour they agree; the two cases that disagree with the page are blocked on Q1 |
+| Settled: Profile and Membership wait on Product | Dropped, then restated | A Settled line is read as answered by the next blind pass, so an open question never sits there. Q1 and Q5 are now answered: `## Settled` places Profile in the menu line and states Membership's rule |
+| Scenarios | All reached | Every scenario the delta carries has a case asserting its outcome: `grade10-site-site-page-shell-SC-06` to `grade10-site-site-page-shell-SC-08`, `grade10-site-site-page-shell-SC-13`, `grade10-site-site-page-shell-SC-14` and `grade10-site-site-page-shell-SC-56` to `grade10-site-site-page-shell-SC-67` |
+| Contradictions | None | Where a case and a scenario state the same behaviour they agree |

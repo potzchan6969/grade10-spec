@@ -11,9 +11,10 @@ around it.
 
 - Account control
   - Account menu: signed in, the sign-in email with its initial avatar above
-    My Auctions and Sign Out; My Orders joins ahead of My Auctions once Store
-    answers; Sign Out stays last; KYC, My Auction Orders and any item whose
-    page the site withholds stay out
+    My Auctions and Sign Out; Profile joins first wherever the account page is
+    carried, and My Orders ahead of My Auctions once Store answers; Sign Out
+    stays last; KYC, My Auction Orders and any item whose page the site
+    withholds stay out
   - Account page sign-out: the account page offers Sign Out wherever it is
     carried
 
@@ -79,16 +80,16 @@ SHALL mark none when the current address belongs to no navigation item.
 
 ### Requirement: Signed-in collectors open account destinations from the header menu
 
-**Reason:** It required Membership once Store answers and Profile wherever the
-account page is carried, which Page Shell holds open (Q5, Q1), stated
-account-page sign-out a second time, and required a label fallback the site
-never shows: a signed-in collector always has an email.
+**Reason:** It required Membership once Store answers, where Membership
+follows its own page and a later change offers it (Q5), stated account-page
+sign-out a second time, and required a label fallback the site never shows: a
+signed-in collector always has an email.
 
 **Migration:** Replaced by "Signed-in collectors open what the build carries
 from the account menu", whose scenarios carry every settled outcome under new
-numbers; a carried scenario keeps its trace marker. Membership's place in the menu waits on Q5, account-page sign-out stays
-with the account control requirement, and the label fallback is `SiteHeader`'s
-alone, in `shared/ui/site-chrome`.
+numbers. Membership leaves the menu requirement until the change that offers
+it, account-page sign-out stays with the account control requirement, and the
+label fallback is `SiteHeader`'s alone, in `shared/ui/site-chrome`.
 
 ## ADDED Requirements
 
@@ -100,15 +101,18 @@ The account control of a signed-in collector opens a menu of destinations.
 control SHALL open a menu that shows the small initial avatar of their
 sign-in email, then the email, above the items. The menu SHALL offer My
 Auctions and Sign Out, with Sign Out last. Once Store answers, the menu SHALL
-also offer My Orders, immediately before My Auctions.
+also offer My Orders, immediately before My Auctions. Wherever the site
+carries the account page, the menu SHALL also offer Profile, as its first
+item.
 
 **Withheld pages** - The menu SHALL NOT offer an item whose page the site
 withholds: My Orders until Store answers, Profile where the account page is
 withheld, and Membership where the membership page is withheld.
 
-**Each item** - Activating My Orders SHALL take them to My Orders at
-`/profile/orders`. Activating My Auctions SHALL take them to My Auctions.
-Activating Sign Out SHALL start sign-out.
+**Each item** - Activating Profile SHALL take them to the account page.
+Activating My Orders SHALL take them to My Orders at `/profile/orders`.
+Activating My Auctions SHALL take them to My Auctions. Activating Sign Out
+SHALL start sign-out.
 
 **Sign Out label** - The menu's sign-out item SHALL read "Sign Out".
 
@@ -198,3 +202,19 @@ Activating Sign Out SHALL start sign-out.
 - **GIVEN** a signed-in collector with the account menu open
 - **WHEN** they activate My Auctions
 - **THEN** they arrive at My Auctions
+
+<!-- trace:scenario id=g10.site-page-shell.SC-79q rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-66 - Account menu opens on Profile where the account page is carried
+**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on a build with the account page
+
+- **GIVEN** a signed-in collector on a build that carries the account page
+- **WHEN** they activate the account control
+- **THEN** Profile is the first item
+
+<!-- trace:scenario id=g10.site-page-shell.SC-o1v rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-67 - Profile opens the account page
+**Serves:** grade10-site-site-page-shell-US-03 - reaching the account page from the header
+
+- **GIVEN** a signed-in collector on a build that carries the account page, with the account menu open
+- **WHEN** they activate Profile
+- **THEN** they arrive at the account page

@@ -36,7 +36,7 @@ scenarios this change rewrites.
 
 **Non-Goals:**
 
-- Wiring Membership - Q5 decides it, and a later change supplies
+- Wiring Membership - Q5 sets its rule, and a later change supplies
   `onMembership` from `config.gates.membership`
 - Any `SiteHeader` export but the second orders item: optional `onProfile`
   and required `copy.profile` stay
@@ -47,9 +47,9 @@ scenarios this change rewrites.
 
 [page-shell](specs/grade10-site/site/page-shell/spec.md) governs the menu's
 composition and [site-chrome](specs/shared/ui/site-chrome/spec.md) the
-header's gating. grade10 already meets both, so its settled work is tests
-that pass on arrival and guard the wiring from here on. Only Q1's answer can
-add a code line (below).
+header's gating. grade10 already meets both, Profile from the profile gate
+included, so its work is tests that pass on arrival and guard the wiring from
+here on.
 
 The current-surface requirement only names the account page in place of the
 profile: `grade10-site-site-page-shell-SC-14` moves to revision 2, and no
@@ -63,9 +63,9 @@ Three props with one ternary each say the same thing with no indirection.
 The app keeps one mechanism for My Orders, Profile and Membership: a handler
 is supplied only from its page's gate. `grade10-site-site-page-shell-SC-60`
 pins the auction-launch menu exactly, since there every one of those pages is
-withheld whatever Q1 and Q5 decide. On a Store build the scenarios assert
-order relative to My Auctions and Sign Out, never a full list, so neither
-open question moves them.
+withheld. On a Store build the scenarios assert order relative to My
+Auctions and Sign Out, never a full list, so the later change that offers
+Membership moves none of them.
 
 ### The Menu Requirement Is Replaced
 
@@ -85,8 +85,9 @@ table calls it unchanged. The app's citations move with them (task 2.1 to 2.4).
 | `grade10-site-site-page-shell-SC-29` | `grade10-site-site-page-shell-SC-60`, the exact auction-launch menu |
 | `grade10-site-site-page-shell-SC-30`, `grade10-site-site-page-shell-SC-33` | `grade10-site-site-page-shell-SC-61`, `grade10-site-site-page-shell-SC-62`, unchanged in meaning |
 | `grade10-site-site-page-shell-SC-31` | Nothing: the site always has the email (Context), so the label fallback is `SiteHeader`'s alone, held by `shared-ui-site-chrome-SC-35` |
-| `grade10-site-site-page-shell-SC-32`, `grade10-site-site-page-shell-SC-34` | Nothing: Membership's place is open (Q5) and the app never offered it; `grade10-site-site-page-shell-SC-63` keeps the settled half, no Membership where its page is withheld |
+| `grade10-site-site-page-shell-SC-32`, `grade10-site-site-page-shell-SC-34` | Nothing: a later change offers Membership (Q5) and the app never offered it; `grade10-site-site-page-shell-SC-63` keeps the settled half, no Membership where its page is withheld |
 | None | `grade10-site-site-page-shell-SC-64` and `grade10-site-site-page-shell-SC-65`, the My Orders and My Auctions destinations the old requirement stated without a scenario |
+| None | `grade10-site-site-page-shell-SC-66` and `grade10-site-site-page-shell-SC-67`, Profile first wherever the account page is carried and its destination (Q1) |
 
 Account-page Sign Out lives only in `The account control leads where the
 collector can go` (`grade10-site-site-page-shell-SC-08`); the new menu
@@ -100,6 +101,18 @@ with their render path and docstring, so the five items are the whole set
 (`shared-ui-site-chrome-SC-42`), so a later re-addition fails `typecheck`
 rather than waiting on a story. No consumer adapts: grade10 supplies
 neither, and zzz renders its own header.
+
+The **Signed in** clause places the avatar above `accountEmail` and shows
+`copy.accountMenuLabel` alone, with no avatar, when no email is supplied, as
+`site-header.tsx:165-177` renders; `shared-ui-site-chrome-SC-34` and
+`shared-ui-site-chrome-SC-35` move to revision 2 and pass on arrival. That
+look is the interim Q6 hands to draw-account-menu-and-profile.
+
+The Auction & Store account-menu stories follow Q7's interim (task 1.3):
+`WithProfile` returns with every handler and holds the full order, `Open`
+drops Membership, which no site supplies yet, and `WithoutEmail` holds the
+no-email look. Each play asserts its menu, so the stories are the header's
+tests.
 
 `shared-ui-site-chrome-SC-39` drops its withheld-address line: `SiteHeader`
 never routes, which **No application state** already requires. The
@@ -118,16 +131,13 @@ sentence from `The list holds one row per won order`; its four scenarios
 carry over with their trace markers. The app offers no such item, so this is
 contract only.
 
-### Profile Follows Q1
+### Profile Joins Where the Account Page Is Carried
 
-Q1's answer lands on Page Shell, `decisions.md` and the page-shell delta
-before acceptance: the planning rerun that writes it keeps the chosen row
-below, deletes the other, and leaves group 3 with that row's tasks.
-
-| Q1 answer | page-shell delta adds | grade10 |
-| --- | --- | --- |
-| **Wherever carried** | **The menu**: "Where the site carries the account page, Profile SHALL join first"; **Each item**: "Activating Profile SHALL take them to the account page"; a scenario for each | No code; tests assert Profile first with `profile` open and keep the `ROUTES.profile` destination assertion |
-| **Never** | **Withheld pages** becomes "The menu SHALL NOT offer Profile"; `grade10-site-site-page-shell-SC-59` widens to every build | Delete `onProfile` at `SiteShell.tsx:156-158`; tests assert no Profile with `profile` open |
+Q1 keeps the app as it is: `SiteShell.tsx:156-158` supplies `onProfile` from
+`config.gates.profile`. The menu requirement says so in **The menu** and
+**Each item**, proven by `grade10-site-site-page-shell-SC-66` and
+`grade10-site-site-page-shell-SC-67`; group 3 adds their tests with the
+`ROUTES.profile` destination assertion.
 
 ## Risks / Trade-offs
 
@@ -137,7 +147,7 @@ below, deletes the other, and leaves group 3 with that row's tasks.
 - **[Risk] A later change supplies `onMembership` on every build** →
   Mitigation: the `grade10-site-site-page-shell-SC-63` test runs with
   `membership` shut and `store` open
-- **[Risk] The walk breaks when Q5 adds Membership on a Store lane** →
+- **[Risk] The walk breaks when a later change adds Membership on a Store lane** →
   Mitigation: the walk reads the lane's gates from `gatesFor`, asserts order
   relative to My Auctions and Sign Out on a Store lane, and asserts the full
   list only where every account page is withheld
@@ -145,5 +155,4 @@ below, deletes the other, and leaves group 3 with that row's tasks.
 ## Migration Plan
 
 `packages/ui` loses the second orders item; grade10 takes it with its next
-submodule bump, in any order, because it supplies neither prop. Q1's "never"
-row is one deleted prop, rolled back by redeploying the previous build.
+submodule bump, in any order, because it supplies neither prop.

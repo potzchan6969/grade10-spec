@@ -13,11 +13,18 @@
       `shared-ui-site-chrome-SC-42`). The commit stops at the Design Override
       hook; it changes no drawn state, so show the person
       its lines and add the trailer only on their yes
-- [ ] 1.3 In the account-menu story Q7 names, with every handler supplied,
-      assert in its play that the menu lists Profile, My Orders, My
-      Auctions, Membership, then Sign Out, and nothing else
-      (`shared-ui-site-chrome-SC-17`). The planning rerun that writes Q7's
-      answer names the story here before acceptance
+- [ ] 1.3 In `site-header.auction-store.account.stories.tsx`, restore
+      `WithProfile` with every handler supplied and assert in its play that
+      the menu lists Profile, My Orders, My Auctions, Membership, then Sign
+      Out, and nothing else (`shared-ui-site-chrome-SC-17`), and take over
+      the Membership click from `Open` (`shared-ui-site-chrome-SC-39`); in
+      `Open`, supply no `onMembership` and assert My Orders, My Auctions,
+      then Sign Out, with the avatar before the email
+      (`shared-ui-site-chrome-SC-34`); add
+      `WithoutEmail`, with no `accountEmail`, asserting
+      `copy.accountMenuLabel` shows and no avatar does
+      (`shared-ui-site-chrome-SC-35`). The commit stops at the Design
+      Override hook like 1.2
 - [ ] 1.4 Verify: `pnpm --filter @grade10/ui run typecheck`,
       `pnpm --filter @grade10/ui exec vitest run --project storybook src/blocks/site-chrome`,
       `pnpm check:manual` and `pnpm run lint`
@@ -32,8 +39,8 @@ Menu Requirement Is Replaced.
 - [ ] 2.1 Rewrite the signed-in menu test in
       `apps/frontend/grade10/src/chrome/SiteShell.test.tsx` to assert My
       Orders immediately before My Auctions, Sign Out last and reading
-      "Sign Out", and no KYC or My Auction Orders, with no Profile
-      assertion; its Profile click moves to group 3
+      "Sign Out", and no KYC or My Auction Orders; its Profile assertions
+      move to group 3
       (`grade10-site-site-page-shell-SC-56`, `grade10-site-site-page-shell-SC-62`)
 - [ ] 2.2 Add `membership` to the test's `gateState` and assert each
       withheld page: `store` shut gives no My Orders and Sign Out last;
@@ -60,19 +67,19 @@ Menu Requirement Is Replaced.
       (`grade10-site-site-page-shell-SC-08`)
 - [ ] 2.6 Verify: `pnpm --dir apps/frontend/grade10 run typecheck && pnpm --dir apps/frontend/grade10 run test`
 
-## 3. Profile by Q1 (grade10)
+## 3. Profile where the account page is carried (grade10)
 
-`tech-design.md` § Profile Follows Q1 holds both rows. The planning rerun
-that writes Q1's answer keeps its row's tasks and deletes the other before
-acceptance.
+`SiteShell.tsx:156-158` already supplies `onProfile` from the profile gate,
+so this group is its tests alone (`tech-design.md` § Profile Joins Where the
+Account Page Is Carried).
 
-- [ ] 3.1 Tests first, in their own commit, citing the scenarios Q1's row
-      adds: on "wherever carried", Profile first with `profile` open and
-      its click opening `ROUTES.profile`; on "never", no Profile with
-      `profile` open, in `SiteShell.test.tsx` and `src/store-shut.test.tsx`
-- [ ] 3.2 On "never", delete the `onProfile` prop at
-      `src/chrome/SiteShell.tsx:156-158`; on "wherever carried", no code
-- [ ] 3.3 Verify: `pnpm --dir apps/frontend/grade10 run typecheck && pnpm --dir apps/frontend/grade10 run test`
+- [ ] 3.1 In `SiteShell.test.tsx`, with `profile` open, assert Profile is
+      the first item and its click opens `ROUTES.profile`
+      (`grade10-site-site-page-shell-SC-66`, `grade10-site-site-page-shell-SC-67`);
+      in `src/store-shut.test.tsx`, with `profile` open and `store` shut,
+      assert Profile, My Auctions, then Sign Out
+      (`grade10-site-site-page-shell-SC-58`, `grade10-site-site-page-shell-SC-66`)
+- [ ] 3.2 Verify: `pnpm --dir apps/frontend/grade10 run typecheck && pnpm --dir apps/frontend/grade10 run test`
 
 ## 4. The walk (grade10)
 
@@ -89,8 +96,9 @@ here, so its walk stays with its own suite.
       `grade10-site-site-page-shell-US-03` on the lane's gates: signed out,
       Sign In leads to sign-in; signed in on a Store lane, My Orders comes
       immediately before My Auctions, Sign Out is last, no My Auction
-      Orders item shows, My Orders opens `/profile/orders`, the account page
-      offers Sign Out, and Sign Out in the menu signs out; on a lane
+      Orders item shows, Profile is first and opens the account page where
+      the lane carries it, My Orders opens `/profile/orders`, the account
+      page offers Sign Out, and Sign Out in the menu signs out; on a lane
       withholding Store, the account page and the membership page, the menu
       is exactly My Auctions then Sign Out. Kept as the change's end-to-end
       suite

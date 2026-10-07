@@ -6,10 +6,11 @@
   - Handler-gated: search, account, cart, Profile, My Orders, and Membership
     render only when their handler is supplied, or, for account and cart,
     their slot; Membership also needs its copy
-  - Account menu: Sign In when signed out; signed in, the sign-in email with
-    its initial avatar above the items in one fixed order - Profile, My
-    Orders, My Auctions, Membership, Sign Out - each gated item omitted on its
-    own; no other item joins, KYC and a second orders item included
+  - Account menu: Sign In when signed out; signed in, an initial avatar above
+    the sign-in email, or the account label alone with no email, above the
+    items in one fixed order - Profile, My Orders, My Auctions, Membership,
+    Sign Out - each gated item omitted on its own; no other item joins, KYC
+    and a second orders item included
 
 ## MODIFIED Requirements
 
@@ -34,11 +35,12 @@ primary Sign In button (not the account icon) and SHALL invoke the supplied
 sign-in handler when that button is activated.
 
 **Signed in** - When `session` is `"signed-in"`, `SiteHeader` SHALL render the
-account icon and SHALL open a menu that shows `accountEmail` with a small
-(`xs`) initial avatar above the items, falling back to `copy.accountMenuLabel`
-when `accountEmail` is not supplied, followed at minimum by My Auctions and
-Sign Out. The menu SHALL NOT include KYC. Activating each item SHALL invoke
-the matching supplied handler.
+account icon and SHALL open a menu that shows a small (`xs`) initial avatar
+above `accountEmail`, both above the items. When `accountEmail` is not
+supplied, the menu SHALL show `copy.accountMenuLabel` in its place and no
+avatar. The items SHALL include at minimum My Auctions and Sign Out. The
+menu SHALL NOT include KYC. Activating each item SHALL invoke the matching
+supplied handler.
 
 **Sign Out label** - The account menu's sign-out item SHALL read "Sign Out".
 
@@ -78,7 +80,7 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
   `onProfile` handler is supplied, a My Orders handler is supplied, and
   `onMembership` with `copy.membership` are supplied
 - **WHEN** the collector activates the account control
-- **THEN** the menu shows `accountEmail` with its `xs` avatar above the items
+- **THEN** the menu shows the `xs` avatar above `accountEmail`, both above the items
 - **AND** the menu offers Profile, My Orders, My Auctions, Membership, and
   Sign Out, in that order, with Profile first, and no other item
 - **AND** the menu does not offer KYC
@@ -153,16 +155,16 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 - **AND** no account icon, Profile item, My Orders item, or Membership item
   appears
 
-<!-- trace:scenario id=g10.shared-site-chrome.SC-hhb rev=1 -->
+<!-- trace:scenario id=g10.shared-site-chrome.SC-hhb rev=2 -->
 #### Scenario: shared-ui-site-chrome-SC-34 - Account menu shows accountEmail with its avatar
 **Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
 
 - **GIVEN** `session` is `"signed-in"` and `accountEmail` is supplied
 - **WHEN** the collector activates the account control
-- **THEN** the menu shows `accountEmail` with a small (`xs`) initial avatar
-  above the items
+- **THEN** the menu shows a small (`xs`) initial avatar above `accountEmail`,
+  both above the items
 
-<!-- trace:scenario id=g10.shared-site-chrome.SC-bzz rev=1 -->
+<!-- trace:scenario id=g10.shared-site-chrome.SC-bzz rev=2 -->
 #### Scenario: shared-ui-site-chrome-SC-35 - Account menu falls back to copy.accountMenuLabel without accountEmail
 **Serves:** Header controls - the menu falls back to the supplied label when no email is available
 
@@ -171,6 +173,7 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 - **WHEN** the collector activates the account control
 - **THEN** the menu shows `copy.accountMenuLabel` above the items in place of
   an email
+- **AND** no avatar shows
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-agk rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-36 - Membership requires both its handler and its copy
