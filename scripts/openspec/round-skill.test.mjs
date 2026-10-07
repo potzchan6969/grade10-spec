@@ -255,7 +255,7 @@ test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is
 });
 
 // Proves part of shared-planning-agent-rounds-US14-TC1-1.
-test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on the governance page, and the plan's skills link it", () => {
+test("shared-planning-agent-rounds-SC-91 - the round interview lives on the governance page and its wrapper links it", () => {
   const conduct = claims("docs/governance/round-summary.md");
   assert.match(conduct, /## Interview/);
   assert.match(conduct, /about three questions/i);
@@ -271,10 +271,7 @@ test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on t
   assert.match(conduct, /asked that one question alone/i);
   assert.match(conduct, /each with the option it\s+took/i);
   assert.match(conduct, /`not now`/);
-  for (const path of [
-    ".claude/skills/workflow-plan/SKILL.md",
-    ".claude/skills/planning-pm/SKILL.md",
-  ]) {
+  for (const path of [".claude/skills/workflow-plan/SKILL.md"]) {
     const text = claims(path);
     assert.match(
       text,
@@ -935,4 +932,17 @@ test("every reader's stance names Nitpick, the store's own label", () => {
       `${path} labels its claim-not-a-preference bullet Nitpick, as docs/governance/system-design.md does`,
     );
   }
+});
+
+test("current planning skills do not depend on next-version workflow wrappers", () => {
+  for (const name of ["planning-pm", "planning-design", "planning-dev"]) {
+    assert.doesNotMatch(
+      claims(`.claude/skills/${name}/SKILL.md`),
+      /(?:`|\/)workflow-[a-z-]+/,
+    );
+  }
+  assert.match(
+    claims(".claude/skills/planning-design/SKILL.md"),
+    /Start with `planning-pm`/,
+  );
 });
