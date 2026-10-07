@@ -16,7 +16,7 @@
       "!tools/manual/public/fixture-changes.json",
       "!scripts/diagrams/vendor/archify",
       "!.claude/skills/*/workflow.js",
-      "!openspec/changes/**/mock.html",
+      "!openspec/changes/**/*.html",
       "!openspec/changes/**/implementation.json",
       "!openspec/changes/**/acceptance.json",
       "!openspec/changes/**/acceptance"
