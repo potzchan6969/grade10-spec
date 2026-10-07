@@ -102,7 +102,9 @@ reconciliation.
 - **Same cart** - an open (`pending`/`processing`) web order for the same
   `cart_id` and `cart_version` with a recorded ref and
   `payment_checkout_url` is answered as `created`, with no order written and
-  no provider call.
+  no provider call, when the request's `spendPoints`, `couponId` and
+  `couponCodes` equal the order's `discount_points`, `loyalty_coupon_id` and
+  riding codes. Any other request is a new checkout.
 - **Edit** - each cart procedure that writes (`setLine`, `merge`,
   `setTender`, `review`), once its write commits, lists the active cart's open
   orders with a recorded ref and a `cart_version` below the cart's. Any it
@@ -161,7 +163,7 @@ Existing interfaces are consumed without modification.
 | Creation data service | Existing `CreateCheckoutPayload` through injected `StoreProcedureClient` | Decoded `checkoutResultSchema` in the Effect success channel; `ApiError` in failure channel |
 | Domain resolution | Existing `CheckoutOutcome` | Redirect, settling, verification, cart amendment, retry/support, or existing compatibility outcome |
 | Order reads | Existing order id or list limit | Existing order/list response; polling follows existing open statuses |
-| Backend creation | The same `createCheckout` input | The cart's open invoice for an unchanged cart, else a new one with the cart's other open invoices retired |
+| Backend creation | The same `createCheckout` input | The cart's open invoice for an unchanged cart and the tender it carries, else a new one with the cart's other open invoices retired |
 | Backend cart procedures | The same `cart.*` inputs | The member's active cart; unchanged wire shapes |
 
 Capture immutable mutation variables and originating member scope before
