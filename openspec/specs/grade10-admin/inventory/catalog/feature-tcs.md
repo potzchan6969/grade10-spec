@@ -2833,9 +2833,11 @@ only the fields I choose.
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-70
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/catalog.spec.ts`
 
 **Pre-conditions:**
 
@@ -2869,9 +2871,11 @@ only the fields I choose.
 * **Type:** compatibility
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-70
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/catalog.spec.ts`
 
 **Pre-conditions:**
 
@@ -2913,9 +2917,11 @@ unit or only aggregate stock.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-71
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/catalog.spec.ts`
 
 **Pre-conditions:**
 
@@ -2947,9 +2953,11 @@ unit or only aggregate stock.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-71
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/catalog.spec.ts`
 
 **Pre-conditions:**
 
