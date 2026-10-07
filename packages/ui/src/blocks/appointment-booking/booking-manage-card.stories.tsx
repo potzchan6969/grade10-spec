@@ -23,6 +23,16 @@ type Story = StoryObj<typeof meta>;
 export const Live: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(
+      canvasElement.querySelector('[data-slot="booking-manage-card"]'),
+    ).not.toBeNull();
+    expect(canvas.getByText("Grading Submission")).toBeVisible();
+    expect(canvas.getByText("Hong Kong Grade10 Store")).toBeVisible();
+    expect(
+      canvas.getByText("13 Pak Sha Road, Causeway Bay, Hong Kong"),
+    ).toBeVisible();
+    expect(canvas.getByText(/3 Sep 2026/)).toBeVisible();
+
     await userEvent.click(
       canvas.getByRole("button", { name: "Move the visit" }),
     );
@@ -47,6 +57,9 @@ export const Closed: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Cancelled")).toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="card-footer"]'),
+    ).toBeNull();
     expect(canvas.queryByRole("button", { name: "Move the visit" })).toBeNull();
     expect(
       canvas.queryByRole("button", { name: "Cancel the visit" }),

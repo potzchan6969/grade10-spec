@@ -15,11 +15,13 @@ import {
   VAULT_ASSETS,
   VAULT_BOOK_VISIT_STORY_ID,
   VAULT_ITEM_DETAIL_STORY_ID,
+  VAULT_PORTFOLIO_HREF,
   type VaultAsset,
   type VaultAssetStatus,
 } from "./vault-content";
 import {
   PageHeader,
+  PageSection,
   PortfolioSummary,
   ProposalBanner,
   VaultAssetCard,
@@ -61,34 +63,23 @@ function groupAssets(assets: VaultAsset[]) {
 function AssetSection({
   heading,
   assets,
-  proposedList,
 }: {
   heading: string;
   assets: VaultAsset[];
-  proposedList?: boolean;
 }) {
   if (assets.length === 0) return null;
   return (
-    <section className="flex flex-col gap-4" aria-labelledby={heading}>
-      <div className="flex items-baseline justify-between gap-3">
-        <h2 className="font-heading text-xl font-medium" id={heading}>
-          {heading}
-        </h2>
-        <Text size="sm" tone="secondary">
-          {assets.length} {assets.length === 1 ? "item" : "items"}
-        </Text>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <PageSection count={assets.length} heading={heading}>
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
         {assets.map((asset) => (
           <VaultAssetCard
             key={asset.id}
             asset={asset}
-            proposedListAction={proposedList && asset.status === "In Vault"}
             onOpen={() => navigateToStory(VAULT_ITEM_DETAIL_STORY_ID)}
           />
         ))}
       </div>
-    </section>
+    </PageSection>
   );
 }
 
@@ -104,7 +95,7 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
   return (
     <VaultPageShell wide>
       <Breadcrumbs>
-        <BreadcrumbItem current>Vault</BreadcrumbItem>
+        <BreadcrumbItem href={VAULT_PORTFOLIO_HREF}>Vault</BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem current>Portfolio</BreadcrumbItem>
       </Breadcrumbs>
@@ -121,12 +112,6 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
           </Button>
         }
       />
-
-      <ProposalBanner title="Day-one scope">
-        List for Auction is Proposed. Live market feed is Proposed — values show
-        Declared or Intake estimate today. Incoming items do not block booking
-        another vault visit.
-      </ProposalBanner>
 
       <PortfolioSummary
         itemCount={empty ? 0 : PORTFOLIO_SUMMARY.itemCount}
@@ -146,38 +131,44 @@ function VaultPortfolioPage({ empty = false }: { empty?: boolean }) {
           onAction={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
         />
       ) : (
-        <>
-          <fieldset
-            className="m-0 flex min-w-0 flex-wrap gap-2 border-0 p-0"
-            aria-label="Filter holdings"
-          >
-            {FILTERS.map((f) => (
-              <FilterChip
-                key={f.key}
-                size="sm"
-                selected={filter === f.key}
-                type="button"
-                onClick={() => setFilter(f.key)}
-              >
-                {f.label}
-              </FilterChip>
-            ))}
-          </fieldset>
+        <div className="flex flex-col gap-8">
+          <div className="sticky top-0 z-10 -mx-4 border-b border-border bg-background/95 px-4 py-3 backdrop-blur-sm supports-backdrop-filter:bg-background/90 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8">
+            <fieldset
+              className="m-0 flex min-w-0 flex-wrap gap-2 border-0 p-0"
+              aria-label="Filter holdings"
+            >
+              {FILTERS.map((f) => (
+                <FilterChip
+                  key={f.key}
+                  size="sm"
+                  selected={filter === f.key}
+                  type="button"
+                  onClick={() => setFilter(f.key)}
+                >
+                  {f.label}
+                </FilterChip>
+              ))}
+            </fieldset>
+          </div>
 
           <div className="flex flex-col gap-10">
             <AssetSection heading="Incoming" assets={groups.incoming} />
-            <AssetSection
-              heading="In Vault"
-              assets={groups.vaulted}
-              proposedList
-            />
+            <AssetSection heading="In Vault" assets={groups.vaulted} />
             <AssetSection heading="Retrieval" assets={groups.retrieval} />
             {filtered.length === 0 ? (
-              <Text tone="secondary">No items match this filter.</Text>
+              <Text className="text-secondary-foreground">
+                No items match this filter.
+              </Text>
             ) : null}
           </div>
-        </>
+        </div>
       )}
+
+      <ProposalBanner title="Day-one scope">
+        List for Auction is Proposed. Live market feed is Proposed — values show
+        Declared or Intake estimate today. Incoming items do not block booking
+        another vault visit.
+      </ProposalBanner>
     </VaultPageShell>
   );
 }
@@ -200,8 +191,12 @@ export const Filled: Story = {
     ).toBeVisible();
     expect(canvas.getByText("Launch free")).toBeVisible();
     expect(
-      canvas.getAllByRole("button", { name: "View details" }).length,
+      canvasElement.querySelectorAll('[data-slot="vault-asset-card"]').length,
     ).toBeGreaterThan(0);
+    expect(
+      canvas.getByRole("button", { name: /1999 Charizard/i }),
+    ).toBeVisible();
+    expect(canvas.getByText("Day-one scope")).toBeVisible();
   },
 };
 
