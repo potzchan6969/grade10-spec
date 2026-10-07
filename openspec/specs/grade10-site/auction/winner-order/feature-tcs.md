@@ -6442,7 +6442,7 @@ that implementation works.
 
 | Finding | Disposition |
 | --- | --- |
-| `US2-TC2-1` is the durable retained-record case with carrier identity | **Preserved:** it keeps the carrier and tracking link for `winner-order-SC-20`; the new chrome case does not rewrite it |
+| `US2-TC2-1` is the durable retained-record case with carrier identity | **Dropped:** this suite no longer carries a copy of `TC-4zy`; `add-winner-order-tax-line` revises it to `US2-TC2-2` (tracking number as the carrier link, no separate carrier name), and `winner-order-SC-20` is reached there. This change's own requirement and cases require no carrier name |
 | `winner-order-SC-251` - fulfilled order shows and opens the tracking-number link | **Covered:** `winner-order-SC-251` ← `US2-TC13-1` |
 | `winner-order-SC-252` - link remains after delivery is confirmed | **Covered:** `winner-order-SC-252` ← `US2-TC12-2` |
 | The Raised questions about the Track shipment control and Delivered state | **Settled:** decisions Q1 and Q3; the shipped case checks no separate control, and the delivered case checks the link remains |
