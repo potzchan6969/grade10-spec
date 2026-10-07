@@ -23,8 +23,8 @@ this.
 does too, the same way the photo does; a sold-out tile’s name stays inert
 where the tile sells.
 
-🚧 **A link** — a tile given its product's page is a link to it: it can open
-in a new tab, and its address can be copied —
+🚧 **A link** - a tile that opens, given its product's page, is a link to
+it: it can open in a new tab, and its address can be copied -
 [You May Also Like](/p/grade10-site/store/cross-sell)'s tiles
 
 **Opens where it does not sell** - on a surface that draws no cart control,
