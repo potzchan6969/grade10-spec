@@ -1,44 +1,39 @@
 ---
 name: accept-review
-description: Review a planned OpenSpec change before `pnpm spec:accept` - the PRD pages, the decisions, the journeys, the designs, the deltas and the durable specs they fold into must agree. Reports findings and a verdict; edits nothing. Use after QA2 reconciliation and before acceptance, or when asked whether a change is ready to accept.
+description: Review a planned OpenSpec change before `pnpm spec:accept` - the PRD pages, the decisions, the journeys, the designs, the deltas and the durable specs they fold into must agree. Reports findings and a verdict in its review ledger; does not edit planning sources. Use after QA2 reconciliation and before acceptance, or when asked whether a change is ready to accept.
 ---
 
 # Review Before Acceptance
 
-Acceptance publishes the deltas into `openspec/specs/`, and implementation
-builds from that durable contract alone. A PRD line the spec contradicts, or a
-requirement no page line asked for, reaches the engineer as settled. This
-review catches that before `pnpm spec:accept`, not at archive.
-
-Run it in a fresh context that did not write the plan. It reads and reports;
-the owning hand fixes the source.
+- **Scope** - Review a change after QA2 reconciliation and before acceptance, in a fresh context that did not write its plan. Leave planning sources untouched; this skill writes only the review ledger.
+- **Completion** - Deliver source-linked findings and a verdict per change. [Planning-dev](../planning-dev/SKILL.md) owns source repairs, QA restarts, acceptance and publication.
 
 ## Flow
 
-1. **Fresh context** - one that did not write the plan.
-2. **Preflight once** - run `pnpm plan:review-preflight <change> --json`.
-   Its manifest lists the changed requirements, linked PRD lines, durable
-   targets and overlaps. If it is `blocked`, stop and report its blockers as
-   the one blocker; a review of content the gates reject is spent twice. Then
-   run `pnpm accept:preflight <change>` and `pnpm check:manual`; a refusal
-   from either stops the review the same way.
-3. **Ledger** - if `accept-review.md` exists, read it and review only
-   `git diff <reviewed>..HEAD` and what that diff touches. Otherwise review
-   in full.
-4. **Manifest first** - open the manifest's lines, then the full sources and
-   every affected durable file when `expandToFullSources` is true or an
-   overlap or disagreement appears. The manifest bounds the first read; it
-   never narrows a gate or a check below.
-5. **Cluster** - when the change belongs to a cluster, read its
-   reconciliation sheet and review the cluster as one (see Cluster Mode).
-6. **Ledger write** - write the report to the ledger.
+1. **Preflight** - Run the review preflight once. Its manifest lists changed requirements, linked PRD lines, durable targets and overlaps. If blocked, report its blockers and stop.
+
+   ```bash
+   pnpm plan:review-preflight <change> --json
+   ```
+
+   Then check acceptance and manual gates. A refusal from either stops the review.
+
+   ```bash
+   pnpm accept:preflight <change>
+   ```
+
+   ```bash
+   pnpm check:manual
+   ```
+
+2. **Prior review** - If the ledger exists, verify prior findings against their sources and review the diff since its `reviewed` revision plus affected context. Otherwise review in full.
+3. **Read sources** - Open the manifest's lines first. Expand to full sources and every affected durable file when `expandToFullSources` is true, or an overlap or disagreement appears. The manifest bounds the first read, not the checks below.
+4. **Review** - Apply the checks below, using Cluster Mode when changes share requirements or dependencies.
+5. **Record** - Write the findings, reviewed revision and verdict to each change's ledger.
 
 ## Ledger and Reruns
 
-The first run writes its report to `openspec/changes/<change>/accept-review.md`
-beside the change. No validator reads it: `check:manual` and
-`validate:changes` open named files only, and acceptance hashes the contract
-files, not the directory. The format is small:
+- **Location** - Write `openspec/changes/<change>/accept-review.md`. It is a review record outside the acceptance hash, not a contract artifact. Use this format:
 
 ```
 reviewed: <store commit sha>
@@ -47,23 +42,14 @@ verdict: <the verdict line>
 | # | Severity | Where | Finding | Owner | Fix in | Status |
 ```
 
-`Status` is `open`, or `fixed <sha>` once verified. A rerun is still a fresh
-context with a smaller input: verify each prior finding against its source,
-then review the diff since `reviewed` (flow step 3). Rewrite the ledger with
-the new sha.
-
-Only a blocker, or a fix that changes requirement text, calls for a rerun.
-`fix` and `note` findings land without one.
+- **Status** - Use `open`, or `fixed <sha>` after source verification. Rewrite the ledger with the reviewed SHA on a rerun.
+- **Reruns** - A blocker or a fix changing requirement text requires a fresh review. Other `fix` and `note` findings need no rerun.
 
 ## Cluster Mode
 
-Changes that share a requirement or are linked by `depends_on` are reviewed as
-one cluster, after `planning-dev` has reconciled it. Read the cluster's
-reconciliation sheet first: check each shared requirement has one owner, the
-owner's delta carries the edit, no other delta restates it, and the decision
-log and acceptance order agree with the deltas. Read each shared durable spec
-and page once, keep one table with a `Change` column, and end with a verdict
-per change. Each change keeps its own ledger and verdict.
+- **Entry** - Review changes sharing a requirement or linked by `depends_on` as one cluster after planning-dev reconciles it.
+- **Ownership** - Read the reconciliation sheet first. Each shared requirement has one owner whose delta carries the edit; no other delta restates it. Check the decision log and acceptance order agree with the deltas.
+- **Output** - Read shared sources once. Keep one findings table with a `Change` column, and a ledger and verdict for each change.
 
 ## Inputs
 
@@ -76,39 +62,37 @@ Read the store at its `main`, never the pinned copy:
   every page whose frontmatter `spec:` names a capability the change has a
   delta for
 - **The durable contract** - `openspec/specs/<capability>/spec.md` for each
-  delta, and the files `pnpm accept:preflight <change>` lists under
+  delta, and the files the acceptance preflight lists under
   `Durable files to write`
 - **Overlapping work** - every other active change with a delta on the same
   capability, accepted or not
 
 ## Checks
 
-1. **Machine gates** - the Flow's preflights passed and `pnpm check:manual`
-   is clean. A `spec ... changed meaning` warning on a page in scope is a
-   finding.
-2. **Page to delta** - every 🚧 line the change adds or keeps on a page is
+- **Warnings** - A `spec ... changed meaning` warning on a page in scope is a finding.
+- **Page to delta** - every 🚧 line the change adds or keeps on a page is
    served by at least one requirement in its delta. Every ADDED or MODIFIED
    requirement serves a 🚧 or unmarked line on a page. A requirement no line
    asks for is scope the PM never confirmed.
-3. **Same facts** - every value, set, name and outcome a page states matches
+- **Same facts** - every value, set, name and outcome a page states matches
    the requirement that carries it: the number, the unit, the clock, the cap,
    each member of a closed set, the reader's word for the thing. One fact
    stated two ways is a blocker, whichever side is right.
-4. **Nothing open** - no ❓ or `TBC` line in scope on a page, no open row in
+- **Nothing open** - no ❓ or `TBC` line in scope on a page, no open row in
    `decisions.md`'s `## Raised` table, no `awaiting:` entry. A decision row
    names the page line or requirement that carries it.
-5. **Folded result** - read the durable files after the fold, not only the
+- **Folded result** - read the durable files after the fold, not only the
    delta: a MODIFIED or REMOVED requirement names one that exists on `main`; no
    requirement left unchanged now contradicts a new one; an unmarked page line
    the change makes untrue is rewritten or marked 🚧; and the durable
    capability `Purpose` still carries its existing scope alongside the change.
-6. **Designs** - each `ui-design.md` state ties to an anchor and agrees with
+- **Designs** - each `ui-design.md` state ties to an anchor and agrees with
    the requirement for that state; `tech-design.md` delivers every requirement
    and adds no behaviour the spec and page do not state.
-7. **Journeys and cases** - every journey step and feature-set anchor is
+- **Journeys and cases** - every journey step and feature-set anchor is
    served by a scenario; every QA2 disposition is recorded; new cases stay
    `draft`.
-8. **Overlap** - no other change's delta on the same capability states the
+- **Overlap** - no other change's delta on the same capability states the
    same requirement differently. An accepted one means this acceptance is an
    amendment against its result.
 
@@ -126,16 +110,5 @@ One table, blockers first:
   `decisions.md`, then the delta, then cases and tasks, per
   [PRDs and OpenSpec](../../../docs/governance/prd-and-openspec.md)
 
-Under the table, list every blocker the owning hand cannot fix without a
-human's decision as a [Clarification Request](../../../AGENTS.md#questions-and-blockers).
-A blocker with one obvious fix stays in the table alone.
-
-End with one verdict line: `Ready to accept`, or `Not ready - <n> blockers`.
-A fix that moves a frozen anchor restarts QA1 and Dev; any other fix reruns QA2
-and then, for a blocker only, this review, per `planning-dev`.
-
-## Related
-
-- `planning-dev` - runs this review between QA2 and acceptance
-- `prd-authoring` - what a page line may say
-- `tcs-review` - the human suite review after implementation
+- **Human input** - List blockers requiring an unresolved human decision using [Clarification Request](../../../AGENTS.md#questions-and-blockers). A blocker with one clear source repair stays in the findings table.
+- **Verdict** - End with `Ready to accept`, or `Not ready - <n> blockers`. Pass findings to planning-dev for its source-repair and QA restart procedure; use the rerun rule above for this review.

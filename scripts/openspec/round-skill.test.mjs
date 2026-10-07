@@ -689,7 +689,7 @@ test("shared-planning-agent-rounds-SC-80 - a sentence overlapping a change in fl
   // the store already has, so the skill derives neither.
   assert.match(
     plan,
-    /`pnpm run spec:id <capability>`/,
+    /pnpm run spec:id <capability>/,
     "the skill names the command that prints which change carries a delta on the capability",
   );
   assert.match(

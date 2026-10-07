@@ -5,14 +5,11 @@ description: Route implementation planning to the integrated planning-dev invoca
 
 # Task Planning Route
 
-`/workflow-tasks <change>` routes to
-[`planning-dev`](../planning-dev/SKILL.md). Dev writes `tasks.md` after the
-technical design and scenarios, then QA2 checks it with the cases and scenario
-coverage before the human accepts the complete plan.
+- **Route** - `/workflow-tasks <change>` routes to [planning-dev](../planning-dev/SKILL.md). Pass the change and any task-planning input to its integrated planning run.
+- **Task Contract** - Read the repository's enriched task instructions below. The template is the example; `scripts/openspec/tasks-template.test.mjs` holds the contract.
 
-Do not start a separate task-planning round. Human QA review and execution
-follow implementation through [`tcs-review`](../tcs-review/SKILL.md).
+```bash
+openspec instructions tasks --change <change>
+```
 
-The plan's rules are the instruction's, printed by
-`openspec instructions tasks --change <change>` and held by
-`scripts/openspec/tasks-template.test.mjs`; the template is the example.
+- **Completion** - Return that run's accepted and published plan, including `tasks.md`, or its unresolved questions and blockers. Do not start a separate task-planning round.

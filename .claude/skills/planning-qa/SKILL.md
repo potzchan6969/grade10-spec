@@ -5,12 +5,6 @@ description: Retired alias for the integrated planning workflow. Use planning-de
 
 # Planning QA Route
 
-`planning-qa` no longer owns a separate planning pass. Use
-[`planning-dev`](../planning-dev/SKILL.md) for the single change-planning run:
-QA1 writes blind draft cases, Dev writes technical design and scenarios, and
-QA2 reconciles them before one human acceptance and publication.
-
-Use [`spec-to-tcs`](../spec-to-tcs/SKILL.md) only as the internal case generator
-called by planning-dev or when refreshing a suite. Use
-[`tcs-review`](../tcs-review/SKILL.md) for human QA review and execution after
-implementation.
+- **Planning** - `planning-qa` is a retired alias. Pass the change and any QA input to [planning-dev](../planning-dev/SKILL.md) for its integrated planning run; return its accepted and published contract with reconciled draft cases, or its unresolved questions and blockers.
+- **Suite Refresh** - Use [spec-to-tcs](../spec-to-tcs/SKILL.md) for a suite refresh or as planning-dev's internal case generator. Pass the affected capability or suite and return its draft cases.
+- **Human QA** - After deployment, use [tcs-review](../tcs-review/SKILL.md) to classify the suite and [tcs-run-sheet](../tcs-run-sheet/SKILL.md) to prepare manual execution.
