@@ -85,8 +85,9 @@ None.
   Reconciliation quotes its lines.
 - `nav-cart-count-badge`: accepted before this change (`depends_on`), so
   its 'A control renders only when it can act' carries the cart slot this
-  Handler-gated line names. Its deltas keep only the feature-set lines they
-  change (Q12), so neither fold puts back the other's old lines.
+  Handler-gated line names. Its own Handler-gated line names both slots, and
+  this change's folds over it; neither change restates the other's other
+  lines (Q12).
 
 ## Open questions
 
