@@ -454,6 +454,44 @@ The signed-in user owns an order with an order promo discount of 17700 minor uni
 * The Points label names the 100 points deducted.
 * Neither amount is folded into the other.
 
+<!-- trace:case id=g10.store-order-detail.TC-apn rev=1 covers=g10.store-order-detail.SC-usm,g10.store-order-detail.SC-ejb -->
+### grade10-site-store-order-detail-US1-TC15-1: Points credit shows only where the shop named the points discount
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-order-detail-US-01
+
+**Pre-conditions:**
+The signed-in user owns <order>, paid with 100 points.
+
+**Test data:**
+
+| <order> | Its discounts | Points row |
+| --- | --- | --- |
+| A | One titled "Points", 10000 minor units `HKD` | 10000 minor units `HKD`, 100 points |
+| B | One titled "Deduction from Points", 10000 minor units `HKD` | 10000 minor units `HKD`, 100 points |
+| C | One titled "Points off", 10000 minor units `HKD` | None |
+| D | None named | None |
+
+**Steps:**
+
+1. Open <order>'s detail.
+2. Check the money summary.
+
+**Expected Results:**
+
+* The Points row matches the row's Points row column.
+* Where a Points row shows, its label names the 100 points deducted.
+
 ---
 
 ## grade10-site-store-order-detail-US2: Collector signs in to the requested order
@@ -515,5 +553,6 @@ keeps customer-page behaviour and typed Store facts at the application boundary.
 | `grade10-site-store-order-detail-SC-15` | US1-TC12-1 |
 | `grade10-site-store-order-detail-SC-16` | US1-TC13-1 |
 | `grade10-site-store-order-detail-SC-17` | US1-TC14-1 |
+| `grade10-site-store-order-detail-SC-18`, `SC-19` | US1-TC15-1 |
 | Uncovered scenarios | none |
 | Contradicted readings | none |
