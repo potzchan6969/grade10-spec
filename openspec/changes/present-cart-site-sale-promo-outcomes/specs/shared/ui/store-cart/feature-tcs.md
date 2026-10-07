@@ -543,6 +543,8 @@ the site sale, put the sale back on the lines while the sale still runs,
 
 **Run:** QA2, 2026-10-07, in a fresh context, after that QA1 pass. Read the cases above, `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the Cart Drawer pages under `docs/prds/products/shared/ui/` and `docs/prds/products/grade10-site/store/`, `cart-drawer-empty-state`, and Grade10's cart in the application repository. Anchors: `shared-ui-store-cart-US-13` to `US-17` and the root group Site sale and promo outcomes, its Subtotal naming unavailable lines.
 
+**Run:** QA2 rerun, 2026-10-07, in a fresh context, on `cart-drawer-empty-state` as settled. Read the cases above, `spec.md`, `user-journeys.md`, `proposal.md`, `decisions.md`, `ui-design.md`, `tasks.md`, the Cart Drawer page, the block, stories and fixtures under `packages/ui/src/blocks/store-cart/`, the active changes on this capability, and Grade10's cart in the application repository. Anchors unchanged.
+
 | Reading | Anchor | Disposition |
 | --- | --- | --- |
 | `shared-ui-store-cart-US13-TC1-1` | US-13 | Covered by `shared-ui-store-cart-SC-26`: the sale price beside the struck list price, on the CartItem Sale Price story |
@@ -576,6 +578,10 @@ the site sale, put the sale back on the lines while the sale still runs,
 | `shared-ui-store-cart-US13-TC2-1`, the unavailable line | US-13 | Covered by `shared-ui-store-cart-SC-26`. Case repaired: the On Sale story now holds an `unavailable` line, as the scenario and task 1.1 do, so the case reads it gone from the lines and left out of the Subtotal. |
 | Every case's `<subtotal>` | US-13 to US-17 | Reworded to leave out sold-out and unavailable lines, as the Subtotal anchor does. Only On Sale holds an unavailable line, so no other case's value moves |
 | `shared-ui-store-cart-US13-TC2-1`, the line holding two | US-13 | Covered by `shared-ui-store-cart-SC-26`: the line shows quantity 2 and the price of one, as Q7 settles |
+| Feature set, Refused | US-15 | No anchor change: Refused names the refusal and Held, cannot apply names the muted ticket listed apart, so the picked ticket that moves apart is the two together, as the page's Refused line, Q8 and `shared-ui-store-cart-SC-54` say. Read by `US15-TC4-1` |
+| Every case's trace marker | US-13 to US-17 | Unchanged: each `covers` names the scenarios serving its Trace journey, in source order. `SC-26` to `SC-31` were issued with this change and collide with no id another active change or the durable spec holds; `SC-52` to `SC-54` sit above `SC-51`. No new id |
+| Every case's steps | US-13 to US-17 | Checked against the stories: Enter submits the promo field, Apply sits inside a held ticket, and Remove sits on the code's discount row. The On Sale and Equal List Price stories, and the Refuse story's held code that can apply, are task 1.1's |
+| Q4, Q7, the Subtotal row's citations | US-13 | Checked against the application repository: `Cart.ts:162` and `:165`, `useCartReview.ts:138` and `cartItem.ts:15-16` hold what they cite |
 
 - **Uncovered anchors** - none: every journey US-13 to US-17 is traced by a case, and each outcome under the root group by a scenario
 - **Handed to redraw-store-cart-frames** - Q8 and Q9, for the designer to confirm; neither blocks a case
