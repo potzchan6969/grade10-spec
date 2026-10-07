@@ -28,10 +28,11 @@ permissions:
   actions: read
   contents: read
   pull-requests: read
+  statuses: write
 
 concurrency:
-  group: ci-auto-fix-${{ github.event.pull_request.head.repo.full_name || github.event.workflow_run.head_repository.full_name }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
-  cancel-in-progress: true
+  group: ci-auto-fix-${{ github.event.pull_request.head.repo.full_name || github.event.workflow_run.head_repository.full_name }}-${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
 
 env:
   NODE_VERSION: 24.14.1
@@ -138,6 +139,13 @@ jobs:
           [ "$tip" = "$sha" ] || skip "$branch moved while CI was settling"
           failed_runs=$(jq -c '[.[] | select(.conclusion == "failure") | {id, name}]' <<< "$selected")
           [ "$failed_runs" != "[]" ] || skip "no failed jobs remain for $sha"
+          attempted=$(gh api "repos/$repo/commits/$sha/status" \
+            --jq '[.statuses[] | select(.context == "ci/auto-fix-attempt")] | length')
+          [ "$attempted" -eq 0 ] || skip "auto-fix already attempted for $sha"
+          gh api -X POST "repos/$repo/statuses/$sha" \
+            -f state=success \
+            -f context=ci/auto-fix-attempt \
+            -f description='Auto-fix attempt recorded for this commit' >/dev/null
           failed_workflows=$(jq -r '[.[].name] | unique | join(", ")' <<< "$failed_runs")
           emit "$mode" "$branch" "$sha" "$failed_runs" "$failed_workflows" "$pr_name" "$pr_url"
 
@@ -269,7 +277,7 @@ jobs:
         continue-on-error: true
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
-        run: CURSOR_CONFIG_DIR="$RUNNER_TEMP/ci-auto-fix/config" agent -p --force --model "$CURSOR_MODEL" --output-format json "$(<"$RUNNER_TEMP/ci-auto-fix/prompt.txt")" > "$RUNNER_TEMP/ci-auto-fix/cursor.json"
+        run: CURSOR_CONFIG_DIR="$RUNNER_TEMP/ci-auto-fix/config" agent -p --force --model "$CURSOR_MODEL" --output-format json "$(<"$RUNNER_TEMP/ci-auto-fix/prompt.txt")" > "$RUNNER_TEMP/ci-auto-fix/cursor.json" 2> "$RUNNER_TEMP/ci-auto-fix/cursor.stderr.log"
 
       - name: Validate repair boundaries 1
         id: boundaries-1
@@ -320,162 +328,24 @@ jobs:
         id: report-1
         if: always() && steps.target.outputs.repairable == 'true'
         run: |
-          if [ "${{ steps.typecheck-1.outcome }}" = success ] && [ "${{ steps.lint-1.outcome }}" = success ]; then echo state=fixed >> "$GITHUB_OUTPUT"; else echo state=retry >> "$GITHUB_OUTPUT"; fi
+          if [ "${{ steps.typecheck-1.outcome }}" = success ] && [ "${{ steps.lint-1.outcome }}" = success ]; then echo state=fixed >> "$GITHUB_OUTPUT"; else echo state=unresolved >> "$GITHUB_OUTPUT"; fi
           echo "Diagnosis: Cursor attempt 1: ${{ steps.cursor-1.outcome }}."
           echo "Solution: All applicable repository checks were ${{ steps.typecheck-1.outcome }}; lint was ${{ steps.lint-1.outcome }}."
           echo "Attempt 1: Cursor ${{ steps.cursor-1.outcome }}, boundaries ${{ steps.boundaries-1.outputs.allowed || 'not checked' }}, repository checks ${{ steps.typecheck-1.outcome }}, lint ${{ steps.lint-1.outcome }}." >> "$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
-
-      - name: Build repair prompt 2
-        if: steps.report-1.outputs.state == 'retry'
-        run: |
-          cp "$RUNNER_TEMP/ci-auto-fix/prompt.txt" "$RUNNER_TEMP/ci-auto-fix/prompt-2.txt"
-          {
-            echo
-            echo "--- Verification results from attempt 1 ---"
-            cat "$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
-            cat "$RUNNER_TEMP/ci-auto-fix/reports/lint.log"
-          } >> "$RUNNER_TEMP/ci-auto-fix/prompt-2.txt"
-
-      - name: Run Cursor repair 2
-        id: cursor-2
-        if: steps.report-1.outputs.state == 'retry'
-        continue-on-error: true
-        env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
-        run: CURSOR_CONFIG_DIR="$RUNNER_TEMP/ci-auto-fix/config" agent -p --force --model "$CURSOR_MODEL" --output-format json "$(<"$RUNNER_TEMP/ci-auto-fix/prompt-2.txt")" > "$RUNNER_TEMP/ci-auto-fix/cursor-2.json"
-
-      - name: Validate repair boundaries 2
-        id: boundaries-2
-        if: always() && steps.cursor-2.outcome == 'success'
-        run: |
-          changed=$({ git diff --name-only; git ls-files --others --exclude-standard; } | sort -u)
-          blocked=
-          while IFS= read -r path; do
-            case "$path" in
-              apps/*|packages/*|tools/*|scripts/*)
-                case "$path" in
-                  *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.mts|*.cts|*.css|*.scss|*.html) ;;
-                  *) blocked=1 ;;
-                esac
-                ;;
-              *) blocked=1 ;;
-            esac
-          done <<< "$changed"
-          if [ -z "$blocked" ] && [ -n "$changed" ]; then echo allowed=true >> "$GITHUB_OUTPUT"; else echo allowed=false >> "$GITHUB_OUTPUT"; fi
-
-      - name: Verify typecheck 2
-        id: typecheck-2
-        if: steps.cursor-2.outcome == 'success' && steps.boundaries-2.outputs.allowed == 'true'
-        continue-on-error: true
-        run: |
-          set -euo pipefail
-          report="$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
-          {
-            pnpm run setup:browsers
-            pnpm run typecheck
-            pnpm run test:stories
-            pnpm run test:walk
-            pnpm run test
-            pnpm run design-sync:check
-            pnpm run design-sync:audit --all-blocks --report "$RUNNER_TEMP/ci-auto-fix/design-sync-report.json"
-            pnpm run email:build
-            pnpm run manual:build
-            pnpm run storybook:build:workbench
-          } > "$report" 2>&1
-
-      - name: Verify lint 2
-        id: lint-2
-        if: always() && steps.cursor-2.outcome == 'success' && steps.boundaries-2.outputs.allowed == 'true'
-        continue-on-error: true
-        run: pnpm run lint > "$RUNNER_TEMP/ci-auto-fix/reports/lint.log" 2>&1
-
-      - name: Report repair attempt 2
-        id: report-2
-        if: always() && steps.report-1.outputs.state == 'retry'
-        run: |
-          if [ "${{ steps.typecheck-2.outcome }}" = success ] && [ "${{ steps.lint-2.outcome }}" = success ]; then echo state=fixed >> "$GITHUB_OUTPUT"; else echo state=retry >> "$GITHUB_OUTPUT"; fi
-          echo "Diagnosis: Cursor attempt 2: ${{ steps.cursor-2.outcome }}."
-          echo "Solution: Repository checks ${{ steps.typecheck-2.outcome }}; lint ${{ steps.lint-2.outcome }}."
-          echo "Attempt 2: Cursor ${{ steps.cursor-2.outcome }}, boundaries ${{ steps.boundaries-2.outputs.allowed || 'not checked' }}, repository checks ${{ steps.typecheck-2.outcome }}, lint ${{ steps.lint-2.outcome }}." >> "$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
-
-      - name: Build repair prompt 3
-        if: steps.report-2.outputs.state == 'retry'
-        run: |
-          cp "$RUNNER_TEMP/ci-auto-fix/prompt-2.txt" "$RUNNER_TEMP/ci-auto-fix/prompt-3.txt"
-          {
-            echo
-            echo "--- Verification results from attempt 2 ---"
-            cat "$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
-            cat "$RUNNER_TEMP/ci-auto-fix/reports/lint.log"
-          } >> "$RUNNER_TEMP/ci-auto-fix/prompt-3.txt"
-
-      - name: Run Cursor repair 3
-        id: cursor-3
-        if: steps.report-2.outputs.state == 'retry'
-        continue-on-error: true
-        env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
-        run: CURSOR_CONFIG_DIR="$RUNNER_TEMP/ci-auto-fix/config" agent -p --force --model "$CURSOR_MODEL" --output-format json "$(<"$RUNNER_TEMP/ci-auto-fix/prompt-3.txt")" > "$RUNNER_TEMP/ci-auto-fix/cursor-3.json"
-
-      - name: Validate repair boundaries 3
-        id: boundaries-3
-        if: always() && steps.cursor-3.outcome == 'success'
-        run: |
-          changed=$({ git diff --name-only; git ls-files --others --exclude-standard; } | sort -u)
-          blocked=
-          while IFS= read -r path; do
-            case "$path" in
-              apps/*|packages/*|tools/*|scripts/*)
-                case "$path" in
-                  *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.mts|*.cts|*.css|*.scss|*.html) ;;
-                  *) blocked=1 ;;
-                esac
-                ;;
-              *) blocked=1 ;;
-            esac
-          done <<< "$changed"
-          if [ -z "$blocked" ] && [ -n "$changed" ]; then echo allowed=true >> "$GITHUB_OUTPUT"; else echo allowed=false >> "$GITHUB_OUTPUT"; fi
-
-      - name: Verify typecheck 3
-        id: typecheck-3
-        if: steps.cursor-3.outcome == 'success' && steps.boundaries-3.outputs.allowed == 'true'
-        continue-on-error: true
-        run: |
-          set -euo pipefail
-          report="$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
-          {
-            pnpm run setup:browsers
-            pnpm run typecheck
-            pnpm run test:stories
-            pnpm run test:walk
-            pnpm run test
-            pnpm run design-sync:check
-            pnpm run design-sync:audit --all-blocks --report "$RUNNER_TEMP/ci-auto-fix/design-sync-report.json"
-            pnpm run email:build
-            pnpm run manual:build
-            pnpm run storybook:build:workbench
-          } > "$report" 2>&1
-
-      - name: Verify lint 3
-        id: lint-3
-        if: always() && steps.cursor-3.outcome == 'success' && steps.boundaries-3.outputs.allowed == 'true'
-        continue-on-error: true
-        run: pnpm run lint > "$RUNNER_TEMP/ci-auto-fix/reports/lint.log" 2>&1
-
-      - name: Report repair attempt 3
-        id: report-3
-        if: always() && steps.report-2.outputs.state == 'retry'
-        run: |
-          if [ "${{ steps.typecheck-3.outcome }}" = success ] && [ "${{ steps.lint-3.outcome }}" = success ]; then echo state=fixed >> "$GITHUB_OUTPUT"; else echo state=unresolved >> "$GITHUB_OUTPUT"; fi
-          echo "Diagnosis: Cursor attempt 3: ${{ steps.cursor-3.outcome }}."
-          echo "Solution: Repository checks ${{ steps.typecheck-3.outcome }}; lint ${{ steps.lint-3.outcome }}."
-          echo "Attempt 3: Cursor ${{ steps.cursor-3.outcome }}, boundaries ${{ steps.boundaries-3.outputs.allowed || 'not checked' }}, repository checks ${{ steps.typecheck-3.outcome }}, lint ${{ steps.lint-3.outcome }}." >> "$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
+          if [ "${{ steps.typecheck-1.outcome }}" = failure ]; then
+            echo 'Repository check failure:'
+            tail -n 100 "$RUNNER_TEMP/ci-auto-fix/reports/verify.log"
+          fi
+          if [ "${{ steps.lint-1.outcome }}" = failure ]; then
+            echo 'Lint failure:'
+            tail -n 100 "$RUNNER_TEMP/ci-auto-fix/reports/lint.log"
+          fi
 
       - name: Finalize repair result
         id: repair
         if: always() && steps.target.outputs.repairable == 'true'
         run: |
-          state='${{ steps.report-3.outputs.state || steps.report-2.outputs.state || steps.report-1.outputs.state }}'
+          state='${{ steps.report-1.outputs.state }}'
           changed=$({ git diff --name-only; git ls-files --others --exclude-standard; } | sort -u)
           has_changes=false
           [ -z "$changed" ] || has_changes=true
@@ -483,6 +353,19 @@ jobs:
           echo "result=$state" >> "$GITHUB_OUTPUT"
           echo "has-changes=$has_changes" >> "$GITHUB_OUTPUT"
           [ "$state" != unresolved ]
+
+      - name: Upload repair diagnostics
+        if: always() && steps.target.outputs.repairable == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-auto-fix-diagnostics-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/ci-auto-fix/cursor.json
+            ${{ runner.temp }}/ci-auto-fix/cursor.stderr.log
+            ${{ runner.temp }}/ci-auto-fix/reports/verify.log
+            ${{ runner.temp }}/ci-auto-fix/reports/lint.log
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Commit verified repair to pull request branch
         id: commit-repair

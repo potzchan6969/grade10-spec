@@ -28,7 +28,8 @@ removed, per the amendment note above each one.
     charges given, an optional supplied Tax line, and a boxed
     Subtotal/Payment Processing Fee/Order Total summary
   - Replacement relationship: on a replacement invoice, the supplied prior
-    invoice ID appears as `Replaces invoice {id}`
+    invoice ID appears as `Replaces invoice {id}`, plain text with no link to
+    the prior PDF
   - Bank details: every enabled SWIFT, FPS and HK local transfer rail plus the
     bank reference, a full-width section below the order-value summary, shown
     only on a bank-transfer invoice
@@ -139,19 +140,19 @@ it, never a block of blank lines.
 
 **Serves:** Party address fields - every address line renders when supplied
 
-- **GIVEN** a Bill To with a recipient, company, address line 1, address
-  line 2, city, region, postal code, and country
+- **GIVEN** a Bill To with a recipient, company, phone, address line 1,
+  address line 2, city, region, postal code, and country
 - **WHEN** InvoicePdf renders it
 - **THEN** every one of those lines is shown
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-1fi rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-32 - A personal address omits the company line
 
-**Serves:** Party address fields - company and address line 2 are the only optional lines
+**Serves:** Party address fields - omitted optional lines leave no blank rows
 
-- **GIVEN** a Ship To with no company and no address line 2
+- **GIVEN** a Ship To with no company, phone, or address line 2
 - **WHEN** InvoicePdf renders it
-- **THEN** no company line and no address-line-2 line appear
+- **THEN** no company, phone, or address-line-2 line appears
 - **AND** recipient, address line 1, the city/region/postal-code line, and
   country still render
 
@@ -168,10 +169,11 @@ it, never a block of blank lines.
 ### Requirement: InvoicePdf renders a supplied replacement relationship
 
 When an invoice replaces an earlier invoice, `InvoicePdfData` SHALL accept a
-`replacesInvoice` value containing the replaced invoice ID and an optional
-document link. InvoicePdf SHALL render `Replaces invoice {invoice ID}`. When
-the value is absent, it SHALL render no replacement row. The relationship does
-not make the replaced invoice the current payable invoice.
+`replacesInvoice` value containing the replaced invoice ID. InvoicePdf SHALL
+render `Replaces invoice {invoice ID}` as plain text, with no link to the
+replaced invoice's PDF. When the relationship is absent, InvoicePdf SHALL
+render no replacement row. The relationship does not make the replaced invoice
+the current payable invoice.
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-9et rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-51 - A replacement invoice names the invoice it replaces

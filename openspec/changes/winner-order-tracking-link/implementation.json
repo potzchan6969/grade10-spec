@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "d06cdc2bf644f7ba31ab12c55cbb7113afa4f91255710f6f00e752e49330ae7a"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "aadd3f6046c64b07a8fd418fc6e84312f9ed033a",
+    "capturedAt": "2026-10-06T17:19:55.361Z",
+    "targets": [
+      {
+        "path": "openspec/changes/winner-order-tracking-link/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Winner Order makes the tracking number the carrier link"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

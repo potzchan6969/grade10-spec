@@ -265,6 +265,21 @@ export const GoogleFrameStaysInsideTheClip: Story = {
 };
 
 /**
+ * `Login Dialog` is 448 wide, where the generic Dialog caps at 512. Google
+ * draws its button at 400, so a card left at 512 sets it in a 462 column and
+ * the button stops short of both edges. The cap is read from computed style,
+ * which holds at any viewport; a narrow one only shrinks the dialog below it.
+ */
+export const HoldsTheFrameWidth: Story = {
+  name: "Frame width",
+  play: async () => {
+    const dialog = await within(document.body).findByRole("dialog");
+
+    expect(getComputedStyle(dialog).maxWidth).toBe("448px");
+  },
+};
+
+/**
  * A widget a script fills in later — Google's own button — marks its own
  * container, and the divider waits for it. An "or" over blank space is what
  * a collector sees when that script never answers, so the pair hides until

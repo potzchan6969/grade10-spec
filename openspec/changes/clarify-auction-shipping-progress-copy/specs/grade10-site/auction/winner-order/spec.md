@@ -1,3 +1,12 @@
+# grade10-site/auction/winner-order Specification
+
+## Purpose
+
+What a winner is sent after a lot closes and what they do with it: one order
+per lot, a delivery address, payment method and billing address they choose, an
+operator's invoice priced for both, payment by card or by a bank transfer they
+prove, and the receipt, tracker and delivery proof the order keeps afterwards.
+
 ## Feature set
 
 - Settlement progress
@@ -25,7 +34,7 @@ vocabulary in `grade10-site/auction/order-status`.
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
 
-Step subtext SHALL use day-only dates in the viewer's local zone. While Address is
+Step subtext SHALL use day-only dates in the winner's zone. While Address is
 current and awaiting confirm, subtext SHALL read `Confirm by {date}`. While
 Payment is current and the invoice is `pending`, subtext SHALL read
 `Pay by {date}`. While the invoice is `payment_verifying`, Payment subtext
@@ -48,12 +57,28 @@ overflow.
 #### Scenario: winner-order-SC-55 - Processing maps under Shipped
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
+The scenario title is historical for its permanent trace identity. Its normative
+Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
+
 - **GIVEN** an auction order whose derived status is Preparing Shipment
 - **WHEN** the winner opens Winner Order
 - **THEN** the progress stepper marks Shipping as the current (progress) step
 - **AND** Shipping subtext reads Preparing to ship
+- **AND** the title badge uses Badge `default`
 - **AND** does not invent a Preparing Shipment step label
 - **AND** does not leave Shipping incomplete or upcoming while Payment is complete
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-lk0 rev=1 -->
+#### Scenario: winner-order-SC-253 - A shipped order keeps Shipping current
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order whose derived status is Shipped, with a day-only
+  ship date and a tracking number when one is known
+- **WHEN** the winner opens Winner Order
+- **THEN** the title badge uses Badge `default`
+- **AND** Shipping is the current progress step with the day-only ship date
+- **AND** a known tracking number is the external carrier link
+- **AND** Order Progress adds no separate Track shipment control and no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fm0 rev=1 -->
 #### Scenario: winner-order-SC-56 - Cancelled hides the stepper

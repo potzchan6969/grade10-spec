@@ -25,6 +25,7 @@
 | Q3 | How many steps? | Stay at five; Preparing Shipment and Shipped share Shipping | Split into Preparing + Shipped |
 | Q4 | Shipping indicator while Preparing Shipment? | **Current** (progress / ping) with Preparing to ship | Incomplete / upcoming Shipping after Payment |
 | Q5 | Shipped badge tone on Winner Order and My Auctions? | Badge `default` (muted fill), same as Preparing Shipment | Keep `outline` |
+| Q6 | Does Winner Order name the carrier anywhere? | No carrier name anywhere on Winner Order; the tracking number is the carrier link. `add-winner-order-tax-line` carries the edit to `Records the winner keeps` (its decision Q14), so this change does not modify that requirement | Keep a carrier name in the tracker; edit that requirement here |
 
 ## Raised
 
@@ -34,3 +35,4 @@
 | `grade10-site/auction/order-status` | Is Processing clear on My Auctions? | Q2 |
 | `grade10-site/auction/winner-order` | Current vs incomplete on Shipping while packing? | Q4 |
 | `grade10-site/auction/winner-order` | Should Shipped badge match Preparing Shipment? | Q5 |
+| `grade10-site/auction/winner-order` | Does the tracker still name the carrier? | Q6 |

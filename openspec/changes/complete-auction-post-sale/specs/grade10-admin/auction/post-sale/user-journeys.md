@@ -3,7 +3,7 @@
 ### post-sale-US-05: Operator quotes and sends a winner's invoice
 
 **As an** operator,
-**I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
+**I want** to price Shipping & Handling, and Insurance and Tax when the lot needs them, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
 ### post-sale-US-07: Operator resolves an unpaid order
@@ -24,6 +24,14 @@ payments that failed,
 **As an** operator with refund processing,
 **I want** to record the refund I sent in Stripe or by bank transfer on the order, with its amount, reason, reference and proof, and say whether the lot goes back to stock,
 **so that** a closing refund reads Refunded, an overpayment keeps the order's status, and the lot's stock matches where the card is.
+
+## ADDED User journeys
+
+### post-sale-US-18: Operator reopens the address form
+
+**As an** operator,
+**I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
+**so that** a winner who got in touch can finish the order without me cancelling the lot.
 
 ## MODIFIED User journeys
 

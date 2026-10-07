@@ -71,6 +71,7 @@
     "tcs:run-sheet": "node scripts/openspec/run-sheet.mjs",
     "tcs:automated": "node scripts/openspec/tcs-automated.mjs",
     "plan:preflight": "node scripts/openspec/plan-preflight.mjs",
+    "plan:review-preflight": "node scripts/openspec/plan-review-preflight.mjs",
     "plan:land": "node scripts/openspec/plan-land.mjs",
     "accept:preflight": "node scripts/openspec/accept-preflight.mjs",
     "spec:accept": "node scripts/openspec/spec-accept.mjs",

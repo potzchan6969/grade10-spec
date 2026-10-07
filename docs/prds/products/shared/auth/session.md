@@ -13,8 +13,18 @@ another are stored against it; an email is an attribute of the account, never
 the thing it is filed under. That is what makes changing an address a change of
 data rather than a migration.
 
-Signing in covers the brand. Every site of that brand sees the same person, and
-no site of another brand sees them at all.
+A session covers the surface it was made on and no other brand's, as
+[Sign-In](/p/shared/auth/sign-in) says.
+
+## Two Sessions
+
+🚧 **The console is its own sign-in** - signing in to the admin console does not sign the person in on the site, and signing in on the site does not open the console. A person holds one, the other, or both, and the two can be different accounts.
+
+🚧 **Each session ends on its own** - the site session lasting, expiring or ending says nothing about the console's, and the other way round.
+
+🚧 **Second factor and recent sign-in count on the console** - a sign-in on the site never counts as the recent sign-in an operator action asks for.
+
+🚧 **Release asks operators to sign in once more** - the console stops honouring the site's session at release. Customer sessions are untouched.
 
 Analytics follows the same key: a signed-in event names the person by user id,
 an anonymous one names the device, and signing in links that device to the
@@ -29,8 +39,8 @@ is that product's business.
 
 ## Open Tabs
 
-A session belongs to the browser, not to one tab. Every tab of this brand is
-reading the same one.
+A session belongs to the browser, not to one tab. Every tab of the same
+surface, site or console, is reading the same one.
 
 - **Signed in somewhere else** — a tab left open shows the person signed in,
   so a collector who followed the emailed link in a new tab does not have to
@@ -43,6 +53,6 @@ reading the same one.
   what it shows about them is theirs: their cart, their watchlist, their
   orders, never the last person's.
 - **When it keeps up** — no later than when the person comes back to the tab,
-  and promptly for a tab on the same site whether they left it or not.
+  and promptly for a tab on the same surface whether they left it or not.
 - **When it cannot tell** — a tab that cannot reach us goes on showing what
   it last knew and asks again later. Only a definite answer signs anyone out.

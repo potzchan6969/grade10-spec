@@ -14,7 +14,9 @@ import {
   dateFromDay,
   dateFromMonth,
   dayFromDate,
+  dayInstant,
   monthFromDate,
+  monthInstant,
 } from "./calendar";
 import type { BookingDay, BookingSlot } from "./types";
 
@@ -79,7 +81,13 @@ function BookingSlotPicker({
     selectedDate === undefined
       ? copy.timeTitle
       : formatCalendarDayLabel(selectedDate, locale);
-
+  // The name a reader sees is the one in force at the times shown: the picked
+  // slot, else the picked day, else the month being browsed.
+  const labelInstant =
+    selectedStart ??
+    (selectedDate !== undefined
+      ? dayInstant(selectedDate)
+      : monthInstant(month));
   return (
     <div
       className={cn(
@@ -113,7 +121,7 @@ function BookingSlotPicker({
           {timeHeading}
         </Text>
         <Text as="span" data-slot="booking-zone" size="sm" tone="secondary">
-          {copy.timesIn} {zoneLabel(timeZone, timeZoneLabel)}
+          {copy.timesIn} {zoneLabel(timeZone, labelInstant, timeZoneLabel)}
         </Text>
         {selectedDate === undefined ? (
           <Text as="span" size="sm" tone="muted">
@@ -127,10 +135,9 @@ function BookingSlotPicker({
                   {copy.noTimes}
                 </Text>
               ) : (
-                <div
+                <fieldset
                   aria-label={timeHeading}
-                  className="grid grid-cols-2 gap-2 sm:grid-cols-3"
-                  role="group"
+                  className="m-0 grid min-w-0 grid-cols-2 gap-2 border-0 p-0 sm:grid-cols-3"
                 >
                   {list.map((slot) => {
                     const startLabel = formatLocalTime(slot.start, {
@@ -152,7 +159,7 @@ function BookingSlotPicker({
                       </Button>
                     );
                   })}
-                </div>
+                </fieldset>
               )
             }
           </AsyncRegion>

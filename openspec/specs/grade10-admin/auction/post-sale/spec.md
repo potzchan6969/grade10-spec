@@ -13,16 +13,33 @@ before a winner's invoice is sent.
   - Extended bidding label: an operator sees which lots are still taking bids past their scheduled close, without a second outcome
   - Overdue outcomes: names setup and payment deadlines after self-service closes
   - Refunded outcome: lets finance find completed refunds
+  - Payment Verifying: a row waiting on proof shows the outcome and needs action
+  - Search: by listing code, invoice ID or bank reference, a replaced invoice's included
+  - Cancellation filters: groups cancelled orders by reason and flags late payment
 - Resolving an unpaid order
   - Reissue: a fresh invoice and a fresh deadline where non-payment was a genuine failure
   - Manual settlement: money taken outside the invoice flow, recorded against a confirmed address
   - Cancellation: the end of an order and the return of the lot
   - Refund: records money returned after full or partial collection
+  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance, tax and deadline, always with a reason and at least one change
+  - Card invoice paid by transfer: reissued as bank transfer, then settled
+  - Operator settlement: proof required, and straight to paid
+  - Cancellation record: captures a reason, consequences and the lot link before a terminal cancel
+  - Paid after cancel: catches each payment received after cancellation, as its own flag, until an operator clears it
+  - Partial collection: records more than one operator-entered payment against one invoice
+  - Closing tolerance: lets the operator close a near-settled invoice or keep its real balance open, and refuses a close below the tolerance
+  - Settling an expired invoice: the admin portal is the only place an expired invoice is paid; a reissue is the only way back to the winner's card
+  - Expired shortfall: a payment short of the balance keeps the invoice Partially Paid with its real balance and no new self-service deadline
+  - Winner cannot pay expired: a card payment Grade10 receives at or after the deadline is refused and not charged
+  - Started in time counts: a card payment received before the deadline completes after it, and one that fails, times out or is abandoned writes `expired` when its session ends
 - Audit trail
   - Invoice log: every log entry against the money, including the attempts that failed
   - Fulfilment log: every log entry against the goods, with the address as it stood at each one
   - Retention: append-only, kept for the life of the account
   - Refund record: keeps the amount, method, reason, proof and audit number
+  - What a reissue changed: the log names each changed part
+  - Internal audit number: on the order and in the log, for operators only
+  - Payment receipts: gives each recorded payment its own auditable receipt
 - Grants
   - Payment processing: recording money is a grant catalogue work does not carry
   - Shipment processing: recording dispatch is a separate grant again
@@ -35,9 +52,6 @@ before a winner's invoice is sent.
 - Phone-record parity
   - Recording an address by phone asks for billing too
   - Same as delivery address is selected by default
-- Queue
-  - Payment Verifying: a row waiting on proof shows the outcome and needs action
-  - Search: by listing code, invoice ID or bank reference, a replaced invoice's included
 - Quote and send
   - Payment method on the quote: the winner's choice decides how the fee is priced
   - Bank transfer fee: entered on every bank transfer invoice, zero or more, with no cap
@@ -45,14 +59,13 @@ before a winner's invoice is sent.
 - Checking proof
   - Confirm: settles the invoice with the winner's files, and the operator's own if added
   - Return to pending: an external and an internal reason, the time left shown, and not offered once expired
-- Resolving an unpaid order
-  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance and deadline, always with a reason and at least one change
-  - Card invoice paid by transfer: reissued as bank transfer, then settled
-  - Operator settlement: proof required, and straight to paid
-- Audit trail
-  - What a reissue changed: the log names each changed part
-  - Internal audit number: on the order and in the log, for operators only
+- Tax on the quote
+  - Optional amount: empty means no Tax; an added amount is above zero
+  - Send: Tax becomes an invoice line and part of the Subtotal
+  - Reissue: Tax can be added, changed, or removed with the other quoted amounts
+
 ## Requirements
+
 ### Requirement: Listing outcomes
 
 Each listing SHALL show exactly one outcome from this set. The queue
@@ -951,13 +964,15 @@ an auction order in Preparing Invoice:
    units of zero or more in the lot's currency.
 3. Optionally add Insurance for that address, an integer count of minor units
    greater than zero in the lot's currency.
-4. For bank transfer, enter the bank transfer fee: an integer count of minor
+4. Optionally add Tax for the order, an integer count of minor units greater
+   than zero in the lot's currency.
+5. For bank transfer, enter the bank transfer fee: an integer count of minor
    units of zero or more in the lot's currency, with no upper limit. A fee of
    zero reads Free to the winner.
-5. Read the subtotal, the payment processing fee, and the order total. For
+6. Read the subtotal, the payment processing fee, and the order total. For
    card, Grade10 computes the fee from the payment provider's current fees;
-   for bank transfer, the fee is the amount entered in step 4.
-6. Send the invoice.
+   for bank transfer, the fee is the amount entered in step 5.
+7. Send the invoice.
 
 On send Grade10 SHALL issue the invoice with invoice status `pending`, an
 invoice reference, and the payment method, record Sent at, set the payment
@@ -966,7 +981,7 @@ payment method, write a sent entry to the invoice log, and send the winner the
 invoice-sent letter, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL refuse to send an invoice when the winner has confirmed no
-delivery address, when Shipping & Handling is missing, when Insurance is
+delivery address, when Shipping & Handling is missing, when Insurance or Tax is
 added at zero, when a bank transfer invoice's fee is blank or is not an
 integer of zero or more, or when a card invoice's payment provider fees cannot
 be read. The refusal for unreadable fees SHALL say so, and SHALL name no stored
@@ -1073,6 +1088,35 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 - **AND** the payment provider's current fees cannot be read
 - **WHEN** an operator enters a bank transfer fee of 500000 minor units in HKD and sends
 - **THEN** the invoice is `pending` with an order total of 812000 minor units in HKD
+
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qv1 rev=1 -->
+#### Scenario: post-sale-SC-155 - An invoice sends with tax
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice for bank transfer with lines
+  totalling 312000 minor units in HKD before Tax
+- **WHEN** an operator adds Tax of 6000 and a bank transfer fee of 0 minor units
+  in HKD and sends
+- **THEN** the invoice is `pending` with a Subtotal and order total of 318000
+  minor units in HKD
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-36t rev=1 -->
+#### Scenario: post-sale-SC-156 - An invoice sends without tax
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice
+- **WHEN** an operator leaves Tax empty and sends an otherwise valid quote
+- **THEN** the invoice is sent without Tax
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-g1u rev=1 -->
+#### Scenario: post-sale-SC-157 - Tax added at zero is refused
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice
+- **WHEN** an operator adds Tax of 0 minor units and sends
+- **THEN** Grade10 refuses the send
+- **AND** no invoice is issued
 
 ### Requirement: Manual settlement records the method and its proof
 
@@ -1442,7 +1486,7 @@ whose invoice is `pending` or `expired`:
 
 1. Choose Reissue on the order.
 2. Change what the winner asked for or the operator decided: delivery address,
-   payment method, bank transfer fee, Shipping & Handling, Insurance. Each
+   payment method, bank transfer fee, Shipping & Handling, Insurance, Tax. Each
    starts from the current invoice.
 3. For bank transfer, read the bank transfer fee: prefilled from the current
    invoice when it was bank transfer, empty after a switch from card. It
@@ -1457,7 +1501,7 @@ whose invoice is `pending` or `expired`:
 
 **At least one change** - Grade10 SHALL refuse a reissue that changes none of
 the delivery address, payment method, bank transfer fee, Shipping & Handling,
-Insurance or deadline. A new reason alone is not a change; a fresh 7 days is.
+Insurance, Tax or deadline. A new reason alone is not a change; a fresh 7 days is.
 
 **On send** - On send Grade10 SHALL replace the current invoice with a new one
 carrying a new invoice ID, bank reference and internal audit number, per
@@ -1603,6 +1647,28 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **WHEN** an operator reissues it changing only the deadline to a fresh 7 days, and sends at 2026-09-15T10:00:00Z with a reason
 - **THEN** the new invoice is `pending` with a payment deadline of 2026-09-22T10:00:00Z
 - **AND** the reissued entry names the deadline as the only changed part
+
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qtj rev=1 -->
+#### Scenario: post-sale-SC-158 - A reissue changes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice has no Tax
+- **WHEN** an operator reissues it with Tax of 6000 minor units in HKD and a
+  reason, changing nothing else
+- **THEN** the new invoice includes Tax of 6000 minor units in HKD
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kdq rev=1 -->
+#### Scenario: post-sale-SC-210 - A reissue removes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice includes Tax of 6000
+  minor units in HKD
+- **WHEN** an operator reissues it removing Tax and giving a reason, changing
+  nothing else
+- **THEN** Grade10 accepts it as a change
+- **AND** the new invoice has no Tax line
+- **AND** its Subtotal is 6000 minor units lower than the replaced invoice's
 
 ### Requirement: An operator edits the address or method before send
 
@@ -1760,3 +1826,285 @@ for an operator to contact the winner or resolve the order.
 - **WHEN** an operator opens the queue row
 - **THEN** those facts remain visible
 - **AND** the row offers the existing contact or resolution path rather than a new self-service action
+
+### Requirement: Cancelling an unpaid auction order is explicit and terminal
+
+An operator SHALL choose exactly one category from Non-payment, Missed setup,
+Winner asked, Lot issue, and Other, and enter a note before
+confirming an unpaid auction-order cancellation. The category and note
+together are the mandatory reason that "An operator resolves an unpaid order"
+requires for a cancellation. The confirmation SHALL show
+that the lot returns to stock, no runner-up offer is made, the winner is
+emailed, the suspension is unchanged and the action cannot be undone. After
+confirmation, the queue SHALL filter by cancellation category and the order
+SHALL link to the lot while remaining terminal.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-6oq rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-230 - The cancellation dialog requires the reason and consequences
+**Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
+
+- **GIVEN** an unpaid auction order
+- **WHEN** the operator opens Cancel
+- **THEN** a category and note are required
+- **AND** the confirmation names return to stock, no runner-up, winner email, unchanged suspension and no undo
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-1qh rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-231 - Cancellation categories filter the queue
+**Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
+
+- **GIVEN** cancelled orders with different reason categories
+- **WHEN** the operator filters by one category
+- **THEN** only matching cancelled orders are returned
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kcq rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-234 - A cancelled order links to its returned lot
+**Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
+
+- **GIVEN** a cancelled auction order whose lot returned to stock
+- **WHEN** the operator opens the cancelled order
+- **THEN** the order links to that lot for manual relisting
+
+### Requirement: A late payment after cancellation is recorded without revival
+
+If a payment that counts toward the balance commits before cancellation
+commits, Grade10 SHALL refuse the cancellation. A payment that counts toward
+nothing SHALL NOT block it. If a card payment arrives after
+cancellation commits, Grade10 SHALL record it append-only, keep the order
+Cancelled, give that payment its own Paid after cancel flag, and expose the
+flag for Finance to return the money outside Grade10. Each late payment
+carries its own flag, and clearing one flag SHALL NOT clear another. Any
+operator holding `auction:payment` may clear a flag with a written reason and
+an optional return reference; the clear is the operator's word that the money
+is dealt with, not a record Grade10 checks. Grade10 SHALL record the actor and
+timestamp, and the invoice log SHALL record the late payment and each cleared
+flag with its reason, reference, actor and time.
+Clearing a flag SHALL NOT revive the order or change the lot's stock outcome.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-23g rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-232 - A late payment is flagged without reviving the order
+**Serves:** post-sale-US-14 - Operator returns money paid after a cancel
+
+- **GIVEN** a cancelled order
+- **WHEN** a card payment arrives after the cancellation
+- **THEN** the payment is recorded and the order remains Cancelled
+- **AND** the order is flagged Paid after cancel for an operator with `auction:payment`
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-18a rev=2 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-235 - Clearing a late-payment flag leaves the cancellation intact
+**Serves:** post-sale-US-14 - Operator returns money paid after a cancel
+
+- **GIVEN** a cancelled order with two late payments, each flagged Paid after cancel, and Finance returned the first
+- **WHEN** an operator holding `auction:payment` clears the first payment's flag with a written reason and no return reference
+- **THEN** Grade10 records the reason, actor and timestamp on that payment
+- **AND** that flag clears while the second payment stays flagged
+- **AND** the order stays Cancelled and the lot stays in stock
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-30g rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-233 - Money that counts toward the balance wins the cancellation race
+**Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
+
+- **GIVEN** an unpaid order whose card payment settles the invoice, counts toward the balance and commits before an operator's cancellation commits
+- **WHEN** the operator confirms cancellation
+- **THEN** Grade10 refuses cancellation with "This order has a recorded payment. Refund it instead of cancelling."
+- **AND** the order reads Paid and the lot stays with it
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-i4m rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-236 - Money that counts toward nothing does not block cancellation
+**Serves:** post-sale-US-13 - Operator cancels an order knowing what follows
+
+- **GIVEN** an unpaid order with a recorded payment that counts toward nothing
+- **WHEN** the operator confirms cancellation with a category and note
+- **THEN** Grade10 cancels the order and returns the lot to stock
+- **AND** the recorded payment remains available for Finance to return outside Grade10
+
+### Requirement: Operators can record an ordered partial-payment history
+
+An operator with `payment-processing` SHALL be able to record more than one
+operator-entered payment against one bank transfer invoice that is `pending`,
+`expired`, or `partially_paid`. Each payment SHALL include
+amount, method, reference and proof, receive its own receipt number, and be
+ordered oldest first. The cumulative amount SHALL determine the remaining
+balance. While money remains due, including after the payment deadline, the
+order outcome SHALL be Partially Paid. An exact cumulative match to the
+original invoice total SHALL mark the invoice Paid without a prompt.
+The payment that takes cumulative payments from below 90% to 90% or more of the
+original invoice total, counting that payment, SHALL require the operator to
+choose whether to close the invoice as Paid or keep collecting, and so SHALL
+every later payment that leaves money due.
+When a payment would exceed the original invoice total, Grade10 SHALL require
+the operator to confirm the overpayment before recording it and marking the
+invoice Paid. The payment record SHALL keep the full amount and be flagged
+Overpaid; the excess SHALL not become a separate adjustment line.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-fmz rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-140 - A partial payment starts collection
+**Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
+
+- **GIVEN** an unpaid invoice with a 100000 minor-unit HKD balance
+- **WHEN** the operator records a 40000 minor-unit payment with method, reference and proof
+- **THEN** the payment is accepted with its own receipt number
+- **AND** the order reads Partially Paid with 60000 minor units remaining
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-z26 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-141 - Repeated payments keep one order history
+**Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
+
+- **GIVEN** a Partially Paid invoice with one recorded payment
+- **WHEN** the operator records another payment smaller than the current balance
+- **THEN** both payments remain in oldest-first order
+- **AND** the order remains Partially Paid
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-u2w rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-143 - An overpayment needs confirmation before Paid
+**Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
+
+- **GIVEN** cumulative payments of 90000 minor units against a 100000 minor-unit invoice
+- **WHEN** the operator records a 15000 minor-unit payment
+- **THEN** Grade10 asks the operator to confirm the overpayment before recording it
+- **AND** after confirmation the full 15000-minor-unit payment is recorded and the invoice is Paid
+- **AND** the excess is not recorded as a separate adjustment line
+
+### Requirement: Closing tolerance is explicit and preserves payments
+
+An invoice SHALL close as Paid by the operator's choice only once cumulative
+payments, counting the payment being recorded, reach 90% of the original
+invoice total; below 90%, updating the invoice to Paid SHALL be refused and
+the invoice SHALL stay Partially Paid at the real remaining balance. The
+payment that takes cumulative payments from below 90% to 90% or more of the
+original invoice total, counting that payment, SHALL require the operator to
+choose whether to close the invoice as Paid or keep collecting, including when
+the invoice had expired, and the choice SHALL be asked again on every later
+payment while cumulative payments are still under 100%. Closing SHALL record no separate write-off entry; Remaining
+Balance Due SHALL read zero. Keeping it open SHALL retain the real balance and
+every payment. An exact balance payment SHALL close the invoice without a second
+tolerance prompt. A payment SHALL never be discarded or silently rounded.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-k4t rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-142 - The closing prompt does not discard the payment
+**Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
+
+- **GIVEN** cumulative payments of 90000 minor units against a 100000 minor-unit invoice
+- **WHEN** the operator records 5000 minor units and chooses to keep the invoice open
+- **THEN** the order remains Partially Paid with the real balance
+- **AND** recording the exact 5000-minor-unit balance closes it as Paid without another prompt
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-9nm rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-144 - Paid is refused below the closing tolerance
+**Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
+
+- **GIVEN** cumulative payments of 80000 minor units against a 100000 minor-unit invoice
+- **WHEN** the operator records 5000 minor units and tries to update the invoice to Paid
+- **THEN** the update is refused because 85000 minor units is below 90% of the invoice total
+- **AND** the payment is recorded and the order reads Partially Paid with its real 15000-minor-unit balance
+- **AND** a payment that brings the total to 90000 minor units or more offers the choice to close as Paid or keep collecting
+
+### Requirement: Reissue and Cancel are refused once a payment is recorded
+
+Once any payment is recorded against an invoice, Grade10 SHALL refuse Reissue
+and Cancel order on that order, so the invoice's address, method and total stay
+fixed against the money collected. Record payment SHALL stay available until
+the invoice is closed as Paid.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-pxo rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-217 - A recorded payment fixes the invoice
+**Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
+
+- **GIVEN** a Partially Paid order with one recorded 40000 minor-unit payment
+- **WHEN** the operator attempts Reissue or Cancel order
+- **THEN** Grade10 refuses both and the invoice is unchanged
+- **AND** Record payment is still offered
+
+### Requirement: Only an operator settles an expired invoice
+
+Once an invoice is `expired`, the admin portal SHALL be the only place it is
+paid. An operator holding payment-processing SHALL record it manually, per
+"Manual settlement records the method and its proof". A cumulative exact
+payment makes the invoice `paid` and the order derive as Preparing Shipment. A payment
+whose cumulative total remains below the invoice total keeps the invoice Partially Paid with its real balance,
+and updating it to Paid below 90% of the invoice total is refused, per
+"Closing tolerance is explicit and preserves payments"; from 90% the operator
+may close it as Paid or keep it Partially Paid. A payment starts no new
+self-service deadline and has no manual-settlement detour.
+In either case the winner's order shows no card Pay control.
+
+Grade10 SHALL offer the winner no way to pay an expired invoice. A card payment
+Grade10 receives from the winner at or after the payment deadline SHALL be
+refused, and the winner's card SHALL NOT be charged. A reissue SHALL be the only
+way back to the winner's card: it returns the invoice to `pending` with a fresh
+seven days, per "An operator resolves an unpaid order".
+
+A payment started in time SHALL count. When Grade10 received the winner's card
+payment before the deadline and its outcome arrives after it:
+
+| Outcome after the deadline | Behaviour |
+| --- | --- |
+| Succeeds | The invoice becomes `paid`. It is never written `expired` |
+| Fails, times out or is abandoned | Grade10 writes `expired` when the session ends, and everything that follows expiry follows from then |
+
+While the card session is open, Grade10 SHALL keep the invoice `pending`,
+SHALL NOT write `expired`, and SHALL NOT offer the winner Pay Now. A session
+that ends unpaid SHALL count as a failed outcome: the invoice SHALL NOT stay
+`pending` once the session is over, and Pay Now SHALL stay closed.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-b5v rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-85 - An operator fully settles an expired invoice
+**Serves:** Resolving an unpaid order - settling an expired invoice
+
+- **GIVEN** an auction order whose invoice is `expired`
+- **AND** an operator holding payment-processing
+- **WHEN** they record a bank transfer settlement with its reference and proof
+- **THEN** Grade10 accepts it
+- **AND** the invoice is `paid` and the order derives as Preparing Shipment
+- **AND** the winner's order shows nothing owed and no card Pay control
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-v9x rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-92 - An expired shortfall remains Partially Paid
+**Serves:** Resolving an unpaid order - expired shortfall
+
+- **GIVEN** an auction order whose invoice is `expired` with a 100000 minor-unit balance
+- **WHEN** an operator holding payment-processing records a 40000 minor-unit payment
+- **THEN** the invoice is Partially Paid with 60000 minor units remaining
+- **AND** no new self-service deadline or close-as-paid choice is created, because 40000 minor units is below the 90% closing tolerance
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-cdi rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-86 - A winner payment received at the deadline is refused
+**Serves:** Resolving an unpaid order - winner cannot pay expired
+
+- **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
+  and whose invoice has no card payment in progress
+- **WHEN** Grade10 receives the winner's card payment at 2026-09-19T09:00:00Z
+- **THEN** Grade10 refuses it
+- **AND** the winner's card is not charged
+- **AND** the invoice is `expired`
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-d1w rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-87 - A payment started in time completes after the deadline
+**Serves:** Resolving an unpaid order - started in time counts
+
+- **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
+- **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z
+- **WHEN** the payment succeeds at 2026-09-19T09:00:20Z
+- **THEN** the invoice is `paid` and the order derives as Preparing Shipment
+- **AND** the invoice was never `expired`
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-xct rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-88 - A payment started in time that fails expires the invoice then
+**Serves:** Resolving an unpaid order - started in time counts
+
+- **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
+- **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z
+- **WHEN** the payment is declined at 2026-09-19T09:00:20Z
+- **THEN** the invoice is `pending` until 2026-09-19T09:00:20Z
+- **AND** Grade10 writes `expired` at 2026-09-19T09:00:20Z
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-gof rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-93 - A card session that ends unpaid after the deadline expires the invoice then
+**Serves:** Resolving an unpaid order - started in time counts
+
+- **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
+- **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z
+- **WHEN** the card session times out at 2026-09-19T09:30:30Z
+- **THEN** the invoice is `pending` with no Pay Now offered until 2026-09-19T09:30:30Z
+- **AND** Grade10 writes `expired` at 2026-09-19T09:30:30Z
+- **AND** the order reads Payment Overdue with Contact Us and Pay Now stays closed
+- **AND** a session the winner abandons at that time reads the same

@@ -87,13 +87,6 @@ export async function loadFonts(
 /** Every document is issued from Hong Kong, whichever storefront it names. */
 const DOCUMENT_TIME_ZONE = "Asia/Hong_Kong";
 
-/**
- * Asia/Hong_Kong labelled GMT+8, matching emails and terms.
- */
-function documentZoneName(): string {
-  return "GMT+8";
-}
-
 /** `September 24, 2026, 12:30 GMT+8`. */
 export function formatDateTime(value: Date): string {
   const date = new Intl.DateTimeFormat("en-US", {
@@ -107,8 +100,10 @@ export function formatDateTime(value: Date): string {
     hour: "numeric",
     minute: "2-digit",
     hourCycle: "h23",
+    // The document zone's offset at the instant, `GMT+8`, matching emails and terms.
+    timeZoneName: "shortOffset",
   }).format(value);
-  return `${date}, ${time} ${documentZoneName()}`;
+  return `${date}, ${time}`;
 }
 
 export function addressLines(address: PdfPartyAddress): string[] {

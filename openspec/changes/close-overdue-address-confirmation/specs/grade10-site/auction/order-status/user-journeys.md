@@ -4,7 +4,7 @@
 
 **As a** winner whose address window has closed,
 **I want** to understand that Grade10 must reopen the form,
-**so that** I know why I cannot confirm or change the address myself.
+**so that** I know why I cannot confirm the address myself.
 
 The order reads Setup Overdue while no address is confirmed. It shows Contact
 Us and no Confirm delivery address control. When an operator reopens the form,

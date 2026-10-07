@@ -1,6 +1,6 @@
 ## 1. Product record (owner: @htonyl)
 
-- [x] 1.1 Update the auction payment, post-sale, order-status, account-record and Winner Order PRD pages with partial collection and the tolerance boundary (`grade10-admin-auction-post-sale-SC-140`, `auction-status-SC-49`, `winner-order-SC-156`).
+- [x] 1.1 Update the auction payment, post-sale, order-status, account-record and Winner Order PRD pages with partial collection and the closing tolerance (`grade10-admin-auction-post-sale-SC-140`, `auction-status-SC-49`, `winner-order-SC-156`).
 
 ## 2. Contracts and data (owner: @htonyl)
 
@@ -9,14 +9,16 @@
 
 ## 3. Backend (owner: @htonyl)
 
-- [x] 3.1 Implement idempotent operator payment recording, balance validation and the close-or-keep decision (`grade10-admin-auction-post-sale-SC-140`–`SC-142`).
+- [x] 3.1 Implement idempotent operator payment recording, balance validation, the 90% refusal below the tolerance and the close-or-keep decision (`grade10-admin-auction-post-sale-SC-140`–`SC-144`).
 - [x] 3.2 Derive Partially Paid and remove Pay, reissue, cancellation and the payment deadline after the first payment (`auction-status-SC-49`, `SC-50`).
 
 ## 4. Frontend (owner: @htonyl)
 
-- [x] 4.1 Render the operator payment history, remaining balance and tolerance prompt.
+- [x] 4.1 Render the operator payment history, remaining balance, tolerance prompt and overpayment confirmation.
 - [x] 4.2 Render the locked Partially Paid Winner Order and My Auctions row with every receipt (`winner-order-SC-156`, `grade10-site-auction-account-record-SC-62`).
 
 ## 5. Verification (owner: @htonyl)
 
 - [x] 5.1 Run the domain cases, contract tests, migration checks and the focused admin/site E2E journeys.
+
+Every task above was built before this change was accepted; each is re-verified against the accepted contract before it is read as done.

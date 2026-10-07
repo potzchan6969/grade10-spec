@@ -51,6 +51,13 @@ function monthInstant(month: string): number {
   return Date.UTC(year, monthIndex, 1);
 }
 
+/** Noon UTC on the date, for wording the name of the zone its times are in. */
+function dayInstant(date: string): number {
+  const match = DATE.exec(date);
+  if (!match) throw new Error(`Not a date: ${date}`);
+  return Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]), 12);
+}
+
 function dateFromMonth(month: string): Date {
   const { year, monthIndex } = parseMonth(month);
   return new Date(year, monthIndex, 1);
@@ -75,6 +82,7 @@ export {
   dateFromMonth,
   datesOf,
   dayFromDate,
+  dayInstant,
   dayOf,
   monthFromDate,
   monthInstant,

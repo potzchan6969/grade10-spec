@@ -19,7 +19,8 @@ application repositories own their page composition.
   outcomes into its existing Winner Order dialog and page. The feedback
   helper is preview-local and is not a new `@grade10/ui` export, so the
   consuming application carries the same small composition contract and
-  copies the approved catalog strings through its existing i18n path.
+  reads localized `proofFeedback` messages from the Grade10 `auctionOrders`
+  catalog for English, Simplified Chinese and Traditional Chinese.
 
 ## State and sequencing
 
@@ -43,10 +44,11 @@ released only when the conversion or upload settles. The ordinary dirty-leave
 - **Existing upload contract** - `complete-auction-post-sale` owns storage,
   invoice status, operator review and the proof endpoint. No backend, database,
   file validation or operator surface changes are needed here.
-- **Shared documents and tokens** - This planning change edits only its delta;
-  acceptance folds its Winner Order requirement into the durable spec. No
-  shared component, token, catalog package or PRD changes here. Existing
-  Dialog, FileDropzone, Toast and Alert blocks remain the design-system source.
+- **Catalog and design-system boundaries** - The approved toast copy lives in
+  the Grade10 `auctionOrders` catalog in all three supported locales. The
+  change updates that catalog, its PRD decision and the durable Winner Order
+  requirement. It adds no shared component or token. Existing Dialog,
+  FileDropzone, Toast and Alert blocks remain the design-system source.
 
 ## Risks and verification
 

@@ -10,25 +10,32 @@ derivation that resolves one status a buyer and an operator both read.
 - Writable primitives
   - Invoice status gains `payment_verifying`: the winner uploaded payment proof and an operator has not checked it
   - Stopped deadline: while proof is checked the deadline does not run, and the time left is kept
+  - Invoice status: the state of the money, written by payment and by an operator
+  - Fulfilment status: the state of the goods, written by dispatch alone
+  - Supplementary conditions: two facts read from data Grade10 already holds, so no third enum is needed
+  - Partial payment state: records that money has arrived while the invoice remains open
 - Derived order status
   - Refunded from partial collection: makes a refund terminal after any recorded payment
   - Deadline-derived outcomes: distinguishes an overdue setup from an overdue payment
   - Payment Verifying: its own name, read by the winner and the operator alike
   - Replaced invoices hold no status: the order's invoice status is always its current invoice's
-
-- Writable primitives
-  - Invoice status: the state of the money, written by payment and by an operator
-  - Fulfilment status: the state of the goods, written by dispatch alone
-  - Supplementary conditions: two facts read from data Grade10 already holds, so no third enum is needed
-- Derived order status
   - Ordered derivation: one rule chain whose first match wins, so precedence is explicit rather than emergent
   - Never written directly: the primitives are the only writable state, so a status cannot contradict them
+  - Preparing Shipment: display name for invoice `paid` and fulfilment `unfulfilled` (was Processing)
+  - Partially Paid: exposes an operator-collected balance that is not yet fully settled
+  - Setup Overdue past the address deadline: an unconfirmed order whose address deadline has passed reads Setup Overdue, and a confirmed one keeps Preparing Invoice
 - Guards
   - Refused combinations: a lot that must never dispatch before payment is stopped at write time
   - Permitted transitions: every other move between states is refused
+  - Self-service closure: stops winner payment, reissue and cancellation after money is recorded
+  - No winner address after the deadline: the winner's address write is refused until an operator reopens the form or records the address
 - Independence from the store
   - Separate derivation: an auction order and a store order share label names and share no meaning
+- Supplementary conditions
+  - Address window open: a write gate read from the persisted address deadline and the order's own facts, outside the status derivation and never a status
+
 ## Requirements
+
 ### Requirement: An auction order carries two writable status fields
 
 Each auction order SHALL carry exactly one invoice status and exactly one
@@ -112,7 +119,7 @@ the first match.
 | 2 | `cancelled` | any | — | **Cancelled** |
 | 3 | `paid` | `fulfilled` | `delivery_confirmed` is true | **Delivered** |
 | 4 | `paid` | `fulfilled` | `delivery_confirmed` is false | **Shipped** |
-| 5 | `paid` | `unfulfilled` | — | **Processing** |
+| 5 | `paid` | `unfulfilled` | — | **Preparing Shipment** |
 | 6 | `payment_verifying` | `unfulfilled` | — | **Payment Verifying** |
 | 7 | `expired` | `unfulfilled` | — | **Payment Overdue** |
 | 8 | `pending` | `unfulfilled` | — | **Pending Payment** |
@@ -152,12 +159,15 @@ Refunded.
 
 <!-- trace:scenario id=g10.auction-order-status.SC-aj3 rev=1 -->
 #### Scenario: auction-status-SC-07 - A paid, undispatched order is Processing
-**Serves:** Derived order status - a paid, undispatched order is Processing
+**Serves:** Derived order status - a paid, undispatched order is Preparing Shipment
+
+The scenario title is historical for its permanent trace identity. Its normative
+Given, When and Then use the current Preparing Shipment vocabulary.
 
 - **GIVEN** an auction order with invoice status `paid` and fulfilment status
   `unfulfilled`
 - **WHEN** its order status is read
-- **THEN** it is Processing
+- **THEN** it is Preparing Shipment
 
 <!-- trace:scenario id=g10.auction-order-status.SC-apb rev=1 -->
 #### Scenario: auction-status-SC-08 - Dispatch and delivery separate Shipped from Delivered
@@ -183,7 +193,7 @@ Refunded.
 **Serves:** Derived order status - order status refuses a direct write
 
 - **GIVEN** an auction order whose derived order status is Pending Payment
-- **WHEN** any caller attempts to set its order status to Processing
+- **WHEN** any caller attempts to set its order status to Preparing Shipment
 - **THEN** Grade10 refuses the write
 - **AND** the order status is still Pending Payment
 
@@ -404,7 +414,7 @@ imply shared meaning, and no surface SHALL derive one from the other.
 #### Scenario: auction-status-SC-15 - A shared label name carries no shared meaning
 **Serves:** Independence from the store - either derivation read on its own, with no path between them
 
-- **GIVEN** an auction order derived as Processing and a store order badged
+- **GIVEN** an auction order derived as Preparing Shipment and a store order badged
   `processing`
 - **WHEN** either is read
 - **THEN** each is resolved by its own capability's derivation
@@ -507,3 +517,125 @@ SHALL not be replaced by a later payment or shipment event.
 - **THEN** the derived status remains the status before the overpayment return
 - **AND** it is not Refunded
 
+### Requirement: Recorded money derives Partially Paid and closes self-service
+
+An auction order with at least one recorded payment and an unpaid balance
+SHALL derive Partially Paid. Partially Paid SHALL suppress the winner's
+self-service payment, invoice reissue and cancellation actions, and SHALL
+not carry a payment deadline. The status SHALL remain until the operator
+closes the invoice as Paid, including after confirming an overpayment, or
+records a refund.
+
+<!-- trace:scenario id=g10.auction-order-status.SC-4ke rev=1 -->
+#### Scenario: auction-status-SC-49 - A recorded payment derives Partially Paid
+**Serves:** Derived order status - a recorded payment derives Partially Paid
+
+- **GIVEN** an invoice with one recorded payment and money still due
+- **WHEN** an order-status surface reads it
+- **THEN** the derived status is Partially Paid
+
+<!-- trace:scenario id=g10.auction-order-status.SC-e1r rev=1 -->
+#### Scenario: auction-status-SC-50 - Partially Paid has no self-service deadline
+**Serves:** Guards - Partially Paid has no self-service deadline
+
+- **GIVEN** a Partially Paid order
+- **WHEN** the winner opens Winner Order
+- **THEN** Pay, invoice reissue and cancellation are unavailable
+- **AND** no payment deadline is shown
+
+### Requirement: The address deadline gates the winner's address write
+
+Grade10 SHALL persist the order's `address_deadline_at`. It is the authoritative
+address deadline `address_deadline_passed` is read from, per "Supplementary
+conditions qualify the primitives". Grade10 SHALL also derive one write gate,
+`address_window_open`, from that timestamp, the invoice status and those
+order facts, and SHALL NOT store it as a status enum.
+
+| Condition | Source |
+| --- | --- |
+| `address_window_open` | The persisted `address_deadline_at` is in the future, the invoice is still `not_issued`, no delivery address is confirmed, and the order is not cancelled and has no cancellation requested |
+
+`address_window_open` gates what the winner may write and SHALL NOT be a
+condition of the order-status derivation, which reads `address_deadline_passed`.
+While it is false Grade10 SHALL refuse a delivery-address write from the
+winner, per `grade10-site/auction/winner-order`. An unconfirmed `not_issued`
+order whose `address_deadline_passed` is true SHALL derive as Setup Overdue; a
+confirmed address SHALL derive as Preparing Invoice, per "Order status is
+derived, never written".
+
+An operator's reopen or recorded address, per "An operator reopens the address
+form" in `grade10-admin/auction/post-sale`, acts on these conditions only. A
+reopen SHALL make `address_window_open` true again. A recorded address SHALL set
+`address_confirmed` true and SHALL leave `address_window_open` false. Neither
+SHALL write a status; the derived order status SHALL be re-evaluated from the
+order's facts.
+
+`address_window_open` SHALL be read only while the invoice status is
+`not_issued`. Sending the invoice locks the delivery address, per
+`grade10-site/auction/winner-order`, and Grade10 SHALL NOT read the condition
+afterwards.
+
+<!-- trace:scenario id=g10.auction-order-status.SC-g4b rev=1 -->
+#### Scenario: auction-status-SC-30 - The address window is derived from its persisted deadline
+**Serves:** Supplementary conditions - address window open
+
+- **GIVEN** an auction order whose persisted `address_deadline_at` is
+  2026-09-14T09:00:00Z and whose address form has not been reopened
+- **WHEN** `address_window_open` is read at 2026-09-14T08:59:00Z and again at
+  2026-09-14T09:01:00Z
+- **THEN** it is true at the first reading and false at the second
+- **AND** no `address_window_open` status enum was written between the two readings
+
+<!-- trace:scenario id=g10.auction-order-status.SC-cgu rev=1 -->
+#### Scenario: auction-status-SC-31 - A passed address deadline derives Setup Overdue
+**Serves:** Derived order status - Setup Overdue past the address deadline
+
+- **GIVEN** an auction order with invoice status `not_issued`, fulfilment
+  status `unfulfilled`, `address_confirmed` false and `address_deadline_passed`
+  true
+- **WHEN** its order status is read
+- **THEN** it is Setup Overdue
+
+<!-- trace:scenario id=g10.auction-order-status.SC-nin rev=1 -->
+#### Scenario: auction-status-SC-32 - A passed address deadline keeps Preparing Invoice
+**Serves:** Derived order status - Setup Overdue past the address deadline
+
+- **GIVEN** an auction order with invoice status `not_issued`, fulfilment
+  status `unfulfilled`, `address_confirmed` true and `address_deadline_passed`
+  true
+- **WHEN** its order status is read
+- **THEN** it is Preparing Invoice
+
+<!-- trace:scenario id=g10.auction-order-status.SC-9bm rev=1 -->
+#### Scenario: auction-status-SC-33 - A passed address deadline refuses the winner's address write
+**Serves:** Guards - no winner address after the deadline
+
+- **GIVEN** an unconfirmed auction order in Setup Overdue with invoice status
+  `not_issued` whose `address_window_open` is false
+- **WHEN** the winner submits a delivery address for it
+- **THEN** Grade10 refuses the write
+- **AND** the order's `address_confirmed` and delivery address are unchanged
+- **AND** its derived order status is unchanged
+
+<!-- trace:scenario id=g10.auction-order-status.SC-soi rev=1 -->
+#### Scenario: auction-status-SC-34 - A reopened window accepts the write again
+**Serves:** Guards - no winner address after the deadline
+
+- **GIVEN** an unconfirmed auction order in Setup Overdue with invoice status
+  `not_issued` whose `address_window_open` is false
+- **WHEN** an operator reopens the address form and the winner then
+  submits a delivery address
+- **THEN** Grade10 accepts the write
+- **AND** `address_confirmed` is true
+- **AND** the order derives as Preparing Invoice
+
+<!-- trace:scenario id=g10.auction-order-status.SC-kki rev=1 -->
+#### Scenario: auction-status-SC-35 - A recorded address leaves the address window closed
+**Serves:** Supplementary conditions - address window open
+
+- **GIVEN** an unconfirmed auction order in Setup Overdue whose invoice status
+  is `not_issued` and whose `address_window_open` is false
+- **WHEN** an operator records a delivery address on it, per "An operator
+  reopens the address form" in `grade10-admin/auction/post-sale`
+- **THEN** `address_confirmed` is true and `address_window_open` is still false
+- **AND** the order derives as Preparing Invoice

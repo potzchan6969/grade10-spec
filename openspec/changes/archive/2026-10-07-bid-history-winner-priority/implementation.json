@@ -1,0 +1,56 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "bc8ee7737866ae4c7533377f797f9301015636e247f4298250a126fa6b3cadb8"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "7232ba80802186c1b92312a27d24522d1d28fb90",
+    "capturedAt": "2026-10-06T16:53:11.000Z",
+    "targets": [
+      {
+        "path": "openspec/changes/bid-history-winner-priority/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Recent bids crown the closed winner and explain a tied maximum"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Public bid history marks the closed winner and equal-max priority"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "e6aa5874e7d39ae56dba4e98c841d212764445ff",
+      "components": [
+        "grade10"
+      ]
+    }
+  ]
+}

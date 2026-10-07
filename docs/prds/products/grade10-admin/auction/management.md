@@ -192,7 +192,7 @@ order.
 | 🚧 Payment Overdue | Needs action | Reissue | The payment deadline |
 | 🚧 Payment Verifying | Needs action | Check proof | The winner's latest proof |
 | 🚧 Partially Paid | Waiting on winner | Record payment | The latest payment |
-| 🚧 Processing | Needs action | Dispatch | The payment that paid it |
+| 🚧 Preparing Shipment | Needs action | Dispatch | The payment that paid it |
 | 🚧 Shipped | In transit | Confirm delivery | The dispatch |
 | 🚧 Delivered · Cancelled · Refunded | Closed | None | The delivery, the cancel or the refund |
 
@@ -218,8 +218,8 @@ order.
 | 🚧 Reopen the address form, or record setup | Setup Overdue | Payment processing |
 | 🚧 Change setup | Preparing Invoice | Payment processing |
 | 🚧 Clear flag | Each flagged payment, with a reason | Payment processing |
-| Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
-| 🚧 Dispatch | Processing | Shipment processing |
+| 🚧 Refund | Preparing Shipment, Shipped, Delivered or Partially Paid, once | Refund processing |
+| 🚧 Dispatch | Preparing Shipment | Shipment processing |
 | 🚧 Confirm delivery | Shipped | Shipment processing |
 | 🚧 Comment | Any order the operator can open | Reading |
 
@@ -313,10 +313,11 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Partially Paid** — the deadline stops for good, and what will not be
   paid off is settled by hand outside Grade10
 
-| Payments so far | The next payment | What happens |
+| Total with this payment | The next payment | What happens |
 | --- | --- | --- |
-| 🚧 Any | Less than the balance | Recorded; the order reads Partially Paid at the real remaining balance |
-| 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
+| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid, and updating it to Paid is refused |
+| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; this payment brings the total to 90% or more, and every later payment under 100% asks again |
+| 🚧 Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
 ### Address Confirmation Window
@@ -330,6 +331,10 @@ on winner, In transit, Closed and All, opening on Needs action.
   the form closed. Both
   paths refuse once an address is confirmed, an invoice is sent, or cancellation
   is requested or complete
+- 🚧 **Recording a method** — recording setup refuses a payment method the
+  order's currency does not offer: card where Payment Settings holds no card
+  fee rule for it, bank transfer where Grade10 holds no bank details; a reopen
+  is still allowed when the currency offers neither
 
 ### Order Cancellation
 
@@ -374,19 +379,16 @@ on winner, In transit, Closed and All, opening on Needs action.
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
 - **Failed payments** - every failed payment attempt stays in the invoice log
-
-### Transfer Contact Policy
-
-- ❓ **Contact channel** — how an operator reaches a winner about a transfer
-  or a proof; WhatsApp is the working assumption, on the number from the
-  address form; Operations confirms
+- **Contact channel** — an operator reaches a winner about a transfer or a
+  proof on WhatsApp, at the phone number from the address form; Operations
+  confirmed it
 
 ## Fulfilment
 
 Shipment is its own grant, apart from payment: the person who may settle
 money is not necessarily the person who dispatches cards.
 
-- 🚧 **Dispatch** - from the page of a Processing order: the carrier, the
+- 🚧 **Dispatch** - from the page of a Preparing Shipment order: the carrier, the
   tracking number and the carrier's tracker link when there is one, with the
   address kept as it stood; the order reads Shipped and the winner gets the
   shipped letter. Recording an address never dispatches
@@ -418,8 +420,9 @@ it.
   invoice charges on a subtotal of 1,000 in its currency, grossed up so
   Grade10 keeps the whole subtotal once Stripe takes its fee from the whole
   charge
-- ❓ **USD and JPY** - no card fee until Finance sets one, so a card invoice
-  in them cannot be sent; Finance confirms the rates
+- 🚧 **USD and JPY** - no card rule at launch: until Finance saves one for a
+  currency, a winner in it is not offered card at order setup and reads that
+  card is not yet available there, and no card invoice in it can be sent
 
 | Subtotal | Stripe card fee | Card fee charged | Order total |
 | --- | --- | --- | --- |

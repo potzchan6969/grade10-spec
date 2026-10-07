@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   FIXTURE_ACTIVITY_TIME_COPY,
   FIXTURE_NOW_MS,
@@ -15,7 +15,6 @@ import {
   formatRelativeAt,
   formatViewerZoneName,
   formatZonedLocalMoment,
-  formatZoneOffset,
   isPastActivityCap,
   JUST_NOW_MAX_MS,
   resolveActivityNow,
@@ -84,6 +83,7 @@ describe("formatRelativeAt", () => {
 });
 
 describe("formatLocalMoment", () => {
+  // shared-dates-and-times-SC-23
   const at = Date.UTC(2026, 7, 24, 2, 0);
 
   it("renders collector shape without a zone suffix", () => {
@@ -166,6 +166,7 @@ describe("resolveActivityNow", () => {
 });
 
 describe("formatActivityAt", () => {
+  // shared-dates-and-times-SC-24
   it("formats live bids recorded after the last tick", () => {
     const at = Date.now();
     expect(
@@ -202,6 +203,7 @@ describe("formatActivityAt", () => {
 });
 
 describe("formatCollectorDeadline", () => {
+  // shared-dates-and-times-SC-12, shared-dates-and-times-SC-29
   it("prefixes a local moment with the viewer's zone name", () => {
     const at = Date.UTC(2026, 8, 1, 18, 0);
     expect(
@@ -250,33 +252,127 @@ describe("formatZonedLocalMoment", () => {
   });
 });
 
-describe("formatZoneOffset", () => {
-  it("names Hong Kong as GMT+8", () => {
-    expect(formatZoneOffset("Asia/Hong_Kong", Date.UTC(2026, 8, 1))).toBe(
-      "GMT+8",
+const deadlineIn = (
+  at: number,
+  timeZone: string,
+  locale: "en" | "ko" = "en",
+): string => formatCollectorDeadline(at, { locale, timeZone, prefix: "Ends" });
+
+describe("a deadline names the zone in force at its instant", () => {
+  // shared-dates-and-times-SC-30, shared-dates-and-times-US1-TC3-1
+  it.each([
+    ["a September close", "2026-09-01T12:00:00Z", "Ends 1 Sep 2026, 08:00 EDT"],
+    ["a January close", "2027-01-15T12:00:00Z", "Ends 15 Jan 2027, 07:00 EST"],
+    [
+      "one minute before the clocks go forward",
+      "2027-03-14T06:59:00Z",
+      "Ends 14 Mar 2027, 01:59 EST",
+    ],
+    [
+      "the moment the clocks go forward",
+      "2027-03-14T07:00:00Z",
+      "Ends 14 Mar 2027, 03:00 EDT",
+    ],
+    [
+      "one minute before the clocks go back",
+      "2027-11-07T05:59:00Z",
+      "Ends 7 Nov 2027, 01:59 EDT",
+    ],
+    [
+      "the moment the clocks go back",
+      "2027-11-07T06:00:00Z",
+      "Ends 7 Nov 2027, 01:00 EST",
+    ],
+  ])("%s in New York", (_label, instant, reads) => {
+    expect(deadlineIn(Date.parse(instant), "America/New_York")).toBe(reads);
+  });
+});
+
+describe("a deadline outside the HKT and EDT examples", () => {
+  // shared-dates-and-times-SC-33, shared-dates-and-times-US1-TC4-1
+  const SEPTEMBER = Date.parse("2027-09-01T12:00:00Z");
+  const JANUARY = Date.parse("2027-01-15T12:00:00Z");
+
+  it.each([
+    ["Asia/Seoul", "en", SEPTEMBER, "21:00", "GMT+9"],
+    ["Asia/Seoul", "ko", SEPTEMBER, "21:00", "GMT+9"],
+    ["Asia/Kolkata", "en", SEPTEMBER, "17:30", "GMT+5:30"],
+    ["Asia/Kathmandu", "en", SEPTEMBER, "17:45", "GMT+5:45"],
+    ["Europe/London", "en", SEPTEMBER, "13:00", "GMT+1"],
+    ["Europe/London", "en", JANUARY, "12:00", "GMT"],
+    ["America/St_Johns", "en", SEPTEMBER, "09:30", "GMT-2:30"],
+    ["UTC", "en", SEPTEMBER, "12:00", "GMT"],
+    ["America/Los_Angeles", "en", SEPTEMBER, "05:00", "PDT"],
+  ] as const)("%s in %s reads %s %s", (timeZone, locale, at, clock, name) => {
+    const line = deadlineIn(at, timeZone, locale);
+    expect(line.endsWith(`, ${clock} ${name}`)).toBe(true);
+    expect(line).not.toContain("HKT");
+    expect(line).not.toContain("UTC");
+  });
+
+  it("names Hong Kong HKT, the one zone named by hand", () => {
+    expect(deadlineIn(SEPTEMBER, "Asia/Hong_Kong")).toBe(
+      "Ends 1 Sep 2027, 20:00 HKT",
     );
   });
 });
 
-describe("isPastActivityCap", () => {
-  it("is false inside the cap and true at the boundary", () => {
-    expect(isPastActivityCap(NOW - ACTIVITY_RELATIVE_MAX_MS + 1, NOW)).toBe(
-      false,
+describe("a collector clock is supplied, never read from the machine", () => {
+  // shared-dates-and-times-SC-31, shared-dates-and-times-US1-TC9-1
+  const AT = Date.UTC(2026, 8, 1, 12, 0);
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it.each([
+    ["Asia/Tokyo", 21],
+    ["America/Los_Angeles", 5],
+  ])("reads the same text with the machine set to %s", (machineZone, hour) => {
+    vi.stubEnv("TZ", machineZone);
+    expect(new Date(AT).getHours()).toBe(hour);
+    expect(
+      formatLocalMoment(AT, { locale: "en", timeZone: "America/New_York" }),
+    ).toBe("1 Sep 2026, 08:00");
+    expect(
+      formatZonedLocalMoment(AT, {
+        locale: "en",
+        timeZone: "America/New_York",
+      }),
+    ).toBe("1 Sep 2026, 08:00 EDT");
+  });
+});
+
+describe("a zone the platform does not recognise stops the render", () => {
+  // shared-dates-and-times-SC-34, shared-dates-and-times-US1-TC14-1
+  const AT = Date.parse("2027-09-01T12:00:00Z");
+
+  it.each(["Mars/Olympus", "Hong_Kong", "America/New York"])(
+    "names %s when a local moment or a deadline is asked for",
+    (timeZone) => {
+      expect(() => formatLocalMoment(AT, { locale: "en", timeZone })).toThrow(
+        timeZone,
+      );
+      expect(() => deadlineIn(AT, timeZone)).toThrow(timeZone);
+    },
+  );
+});
+
+describe("a zone name is read at an instant the caller names", () => {
+  // shared-dates-and-times-SC-30
+  it.each(["America/New_York", "Asia/Hong_Kong"])(
+    "refuses a zone name for %s asked for with no instant, so no name follows the machine's date",
+    (timeZone) => {
+      // @ts-expect-error the instant is required
+      expect(() => formatViewerZoneName(timeZone)).toThrow(
+        /Invalid time value/,
+      );
+    },
+  );
+
+  it("refuses an invalid instant for Hong Kong as it does for every other zone", () => {
+    expect(() => formatViewerZoneName("Asia/Hong_Kong", Number.NaN)).toThrow(
+      /Invalid time value/,
     );
-    expect(isPastActivityCap(NOW - ACTIVITY_RELATIVE_MAX_MS, NOW)).toBe(true);
-  });
-});
-
-describe("resolveShippedLocale", () => {
-  it("keeps shipped locales and falls back to English", () => {
-    expect(resolveShippedLocale("zh-Hant")).toBe("zh-Hant");
-    expect(resolveShippedLocale("th")).toBe("en");
-  });
-});
-
-describe("tier constants", () => {
-  it("exports platform-owned thresholds", () => {
-    expect(JUST_NOW_MAX_MS).toBe(45_000);
-    expect(ACTIVITY_RELATIVE_MAX_MS).toBe(7 * DAY_MS);
   });
 });

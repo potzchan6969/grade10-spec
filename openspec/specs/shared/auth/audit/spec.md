@@ -191,18 +191,21 @@ sign-out, SHALL NOT write an entry.
 - **WHEN** the identity trail cannot accept an entry for regenerating recovery codes
 - **THEN** the recovery codes are unchanged
 
+<!-- trace:scenario id=g10.shared-audit.SC-7ql rev=1 -->
 #### Scenario: shared-auth-audit-SC-30 - Collector sign-in is not on the trail
 **Serves:** Recorded actions - collector sign-in is not on the trail
 
 - **WHEN** a collector completes sign-in
 - **THEN** no identity trail entry is written for that sign-in
 
+<!-- trace:scenario id=g10.shared-audit.SC-bks rev=1 -->
 #### Scenario: shared-auth-audit-SC-31 - A trusted-product account read is not on the trail
 **Serves:** Recorded actions - a trusted-product account read is not on the trail
 
 - **WHEN** a trusted product reads whether an account exists, or reads a session
 - **THEN** no identity trail entry is written for that read
 
+<!-- trace:scenario id=g10.shared-audit.SC-hkt rev=1 -->
 #### Scenario: shared-auth-audit-SC-33 - Collector sign-out is not on the trail
 **Serves:** Recorded actions - collector sign-out is not on the trail
 

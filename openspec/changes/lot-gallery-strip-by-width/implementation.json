@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "d079c5b9afa4e5a1b8ab7476cae36883a4bf70d24532e94a8c243e78684eda78"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "38b59c6f076ceded77884e26d366aeb8a5ff0a2c",
+    "capturedAt": "2026-10-06T17:04:43.600Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Each gallery image is published at named sizes",
+          "Requirement: The details page shows gallery images in order"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: ListingLotGallery shows a left rail only when wide enough"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

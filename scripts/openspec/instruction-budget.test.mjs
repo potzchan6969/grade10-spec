@@ -60,7 +60,8 @@ const SKILLS_BUDGET = {
   // shape instead of defining a competing one.
   "planning-design": 1879,
   // 1050 after the engineer lane gained its hand-off and archive guidance.
-  "planning-dev": 1050,
+  // 1170 after the sweep, review preflight and cluster reconciliation steps.
+  "planning-dev": 1170,
 };
 const RULES_BUDGET = {
   // 150 after the proposal lane gained its PRD and metric guardrails.

@@ -2,6 +2,9 @@ schema: grade10-planning
 created: 2026-09-28
 depends_on:
   - add-winner-order-tax-line
+  - refine-auction-order-cancellation
+  - add-winner-partial-payment
+  - clarify-auction-shipping-progress-copy
   - define-public-auction-identifiers
 hands:
   pm: "@ecchochan"

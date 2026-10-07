@@ -8,4 +8,9 @@ hands:
   qa: "@htonyl"
   dev: "@htonyl"
   release: "@htonyl"
-ui_waived: existing auction and inventory media dialogs already use the shared gallery; this change adds no new screen or design state
+ui_waived: existing auction and inventory media dialogs already use the shared
+  gallery; this change adds no new screen or design state
+reviewed:
+  decisions: 44d185d5
+  user-journeys: e3384397
+  tasks: e42c95f5

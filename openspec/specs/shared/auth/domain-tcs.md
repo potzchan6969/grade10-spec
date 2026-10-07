@@ -1,7 +1,7 @@
 # shared/auth Cross-Feature E2E Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-14, tcs-rules r3.0
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-e2e-US1: Collector signs in by link and every surface names them until they sign out
 
@@ -85,8 +85,10 @@
 ## shared-auth-e2e-US2: Collector's one sign-in covers this brand and goes nowhere else
 
 **As a** collector,
-**I want** one sign-in to carry across every site of this brand, not to another brand, and not to a location off the brand,
+**I want** one sign-in to carry across the brand's site I signed in on, not to another brand, and not to a location off the brand,
 **so that** I sign in once here and am never delivered somewhere I did not ask for.
+
+---
 
 <!-- trace:case id=g10.auth-domain.TC-64p rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq,g10.shared-session.SC-pre,g10.shared-session.SC-hvi -->
 ### shared-auth-e2e-US2-TC1-1: One sign-in covers the brand and not the other
@@ -138,24 +140,26 @@
 
 **Pre-conditions:**
 
-* A customer is not signed in on any brand.
-* A sign-in is started naming <off-brand location> as the place to return to.
+* customer is not signed in on any brand.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<off-brand location>` | A location that is not a site of this brand |
+| `<collector email>` | An inbox the tester reads, with an account |
+| `<off-brand location>` | `https://example.com/landing`, any location that is not a site of this brand |
 
 **Steps:**
 
-1. Complete the sign-in that names <off-brand location>.
-2. Read the signed-in state on the page it lands on.
+1. Start a sign-in on <grade10 store url> naming <off-brand location> as the return location.
+2. Ask for a sign-in link at <collector email>.
+3. Follow the link from that email.
+4. Read the signed-in state on the page step 3 lands on.
 
 **Expected Results:**
 
-* Step 1 lands on this brand and not on <off-brand location>.
-* Step 2 shows the signed-in person's name and email.
+* Step 3 lands on this brand, not on <off-brand location>.
+* Step 4 shows the collector's name and email.
 
 ---
 
@@ -183,27 +187,31 @@
 
 **Pre-conditions:**
 
-* admin(holds user:ban) is on <admin users directory url>.
-* <collector account> is not banned and has an unused, unexpired sign-in link.
+* admin(holds `user:ban` and `audit:read`) is on <grade10 admin users url>.
+* <collector account> is not banned.
+* An unused, unexpired sign-in link has been emailed to <collector email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | An unbanned account named by user id |
-| `<ban reason>` | Chargeback dispute open |
+| `<collector account>` | An unbanned account holding `user` only |
+| `<collector email>` | That account's email, an inbox the tester reads |
+| `<ban reason>` | Chargeback dispute open, any reason the operator states |
 
 **Steps:**
 
-1. Open <collector account> by user id.
-2. Ban it with <ban reason>.
-3. Follow the sign-in link as <collector account>.
+1. Paste <collector account>'s user id into the search.
+2. Choose Ban in the account's panel.
+3. Enter <ban reason> and confirm.
+4. In a separate browser, follow the link emailed to <collector email>.
+5. Open the audit trail from the account's panel.
 
 **Expected Results:**
 
-* Step 3 does not sign that person in.
-* The identity trail records the actor, <collector account>, and the ban, naming both by user id.
-* The trail entry keeps <ban reason>.
+* Step 4 does not sign that person in.
+* Step 5 shows the ban, naming the operator and <collector account> by user id.
+* The ban entry keeps <ban reason>.
 
 <!-- trace:case id=g10.auth-domain.TC-emm rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk,g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-e2e-US3-TC2-1: Unban lets the same person sign in again
@@ -223,19 +231,28 @@
 
 **Pre-conditions:**
 
-* admin(holds user:ban) is on <admin users directory url>.
-* <collector account> is banned and has an unused, unexpired sign-in link.
+* admin(holds `user:ban`) is on <grade10 admin users url>.
+* <collector account> is banned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector account>` | A banned account holding `user` only |
+| `<collector email>` | That account's email, an inbox the tester reads |
 
 **Steps:**
 
-1. Open <collector account> by user id.
-2. Unban it.
-3. Follow the sign-in link as <collector account>.
+1. Paste <collector account>'s user id into the search.
+2. Choose Unban in the account's panel and confirm.
+3. In a separate browser, ask for a sign-in link at <collector email> on <grade10 store url>.
+4. Follow the link from that email.
 
 **Expected Results:**
 
-* <collector account> is listed in the directory throughout.
-* Step 3 signs that person in.
+* Step 1 lists <collector account>.
+* Step 2 leaves <collector account> listed.
+* Step 4 signs that person in.
 
 ---
 
@@ -263,27 +280,32 @@
 
 **Pre-conditions:**
 
-* admin(holds session:list and session:revoke) is on <admin sessions url>.
-* <collector account> is signed in on <collector session>.
+* admin(holds `session:list`, `session:revoke` and `audit:read`) is on <grade10 admin users url>.
+* <collector account> is signed in on <grade10 store url> in one browser, <collector browser>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | An account signed in on one device |
-| `<collector session>` | That account's signed-in session |
+| `<collector account>` | An account signed in on one browser only |
+| `<collector browser>` | The browser holding that session |
 
 **Steps:**
 
-1. List <collector account>'s sessions by user id.
-2. Revoke <collector session>.
-3. Read the signed-in state on <collector session>.
+1. Paste <collector account>'s user id into the search.
+2. Read the sessions in the account's panel.
+3. Open the audit trail from the account's panel.
+4. Revoke the session in the account's panel.
+5. Wait 70 seconds.
+6. Reload <grade10 store url> in <collector browser>.
+7. Open the audit trail again.
 
 **Expected Results:**
 
-* Step 1 shows that account's sessions and no session secret, and writes no trail entry.
-* Step 3 shows nobody signed in.
-* The trail records the actor, <collector account>, and the revoke.
+* Step 2 lists that account's session, with no session secret shown.
+* Step 3 shows no entry for the listing.
+* Step 6 shows nobody signed in.
+* Step 7 shows the revoke, naming the operator and <collector account>.
 
 <!-- trace:case id=g10.auth-domain.TC-zsj rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1,g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots,g10.shared-sessions.SC-bui,g10.shared-session.SC-xll,g10.shared-session.SC-yja,g10.shared-session.SC-4uk,g10.shared-session.SC-ol8,g10.shared-session.SC-qd6 -->
 ### shared-auth-e2e-US4-TC2-1: Revoke that cannot be recorded leaves the session signed in
@@ -303,19 +325,28 @@
 
 **Pre-conditions:**
 
-* admin(holds session:revoke) is on <admin sessions url>.
-* <collector account> is signed in on <collector session>.
+* admin(holds `session:list` and `session:revoke`) is on <grade10 admin users url>.
+* <collector account> is signed in on <grade10 store url> in one browser, <collector browser>.
 * The identity trail is mocked to refuse a new entry.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector account>` | An account signed in on one browser only |
+| `<collector browser>` | The browser holding that session |
 
 **Steps:**
 
-1. Revoke <collector session>.
-2. Read the signed-in state on <collector session>.
+1. Paste <collector account>'s user id into the search.
+2. Revoke the session in the account's panel.
+3. Wait 70 seconds.
+4. Reload <grade10 store url> in <collector browser>.
 
 **Expected Results:**
 
-* Step 2 shows that person's name and email in the signed-in state.
-* <collector session> remains signed in.
+* Step 2 is refused and the panel still lists the session.
+* Step 4 shows that person's name and email.
 
 ---
 
@@ -393,8 +424,8 @@
 
 **Pre-conditions:**
 
-* admin(operator role is support) is on <admin users directory url>.
-* <admin account> holds `admin` and is signed in on one session.
+* admin(role `support`) is on <grade10 admin users url>.
+* <admin account> holds `admin`, is unbanned, and is signed in on one session.
 * <collector account> holds `user` only.
 
 **Test data:**
@@ -406,15 +437,19 @@
 
 **Steps:**
 
-1. Try to list <admin account>'s sessions.
-2. Try to ban <admin account>.
-3. Try to set <collector account>'s roles.
+1. Paste <admin account>'s user id into the search.
+2. Try to list <admin account>'s sessions.
+3. Try to ban <admin account>.
+4. Paste <collector account>'s user id into the search.
+5. Try to set <collector account>'s roles.
+6. As admin(holds `audit:read`), open the audit trail.
 
 **Expected Results:**
 
-* Each step is refused and returns no sessions.
-* <admin account> remains unbanned and <collector account>'s roles are unchanged.
-* The trail records the refused ban and records that it did not succeed.
+* Step 2 is refused and shows no session.
+* Step 3 is refused; <admin account> stays unbanned.
+* Step 5 is refused; <collector account>'s roles are unchanged.
+* Step 6 shows the refused ban, recorded as not succeeding.
 
 ---
 
@@ -442,24 +477,84 @@
 
 **Pre-conditions:**
 
-* A customer is not signed in, with tab A open on <listing> and tab C open on <grade10 store url>.
-* The customer was refused the add to the cart on <listing> in tab A and asked for a sign-in link at <collector email> there.
+* customer is not signed in, with tab A open on <listing> and tab C open on <grade10 store url>.
+* In tab A, the add to cart on <listing> was refused, and a sign-in link was asked for at <collector email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<listing>` | a card listing with an add-to-cart control |
+| `<collector email>` | An inbox the tester reads, with an account |
+| `<listing>` | A card listing with an add-to-cart control |
 
 **Steps:**
 
-1. Follow the unused, unexpired link from that email in tab B.
+1. Open tab B and follow the link emailed to <collector email>.
 2. Return to tab A.
-3. Open tab C.
+3. Switch to tab C without reloading it.
 
 **Expected Results:**
 
-* Tab A no longer shows the sign-in dialog and names the collector.
-* <listing> is in the collector's cart, without the add being activated a second time.
-* Tab C names the collector too, without being reloaded.
+* Step 2 shows no sign-in dialog and names the collector.
+* <listing> is in the collector's cart, without the add being clicked again.
+* Step 3 names the collector.
+
+---
+
+## shared-auth-e2e-US8: Operator holds a console session and a site session that each end on their own
+
+**As an** operator,
+**I want** my console session and my site session to start, show and end separately, and to end together only when an admin ends every session of my account,
+**so that** signing in or out on one never changes the other.
+
+### shared-auth-e2e-US8-TC1-1: Console and site sessions start, end and are listed separately
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-session-US-07, shared-auth-sign-in-US-12, shared-auth-sign-out-US-03, shared-auth-sessions-US-03, shared-auth-sessions-US-04
+
+**Pre-conditions:**
+
+* <operator account> holds console access and is signed out on <grade10 admin console url> and on <grade10 store url>.
+* admin is signed in on <grade10 admin console url> in another browser, able to end sessions.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<operator email>` | operator@example.com, the address of <operator account> |
+| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+
+**Steps:**
+
+1. Follow a sign-in link asked from <grade10 store url> for <operator email>.
+2. Navigate to <grade10 admin console url> and read the signed-in state.
+3. Follow a sign-in link asked from <grade10 admin console url> for <operator email>, then enter <operator TOTP code>.
+4. Open the session list for <operator account> as admin.
+5. Sign out on <grade10 store url>.
+6. Read the signed-in state on <grade10 admin console url>.
+7. As admin, end every session of <operator account>.
+8. Read the signed-in state on <grade10 admin console url> and on <grade10 store url>.
+
+**Expected Results:**
+
+* Step 1 signs <operator account> in on the site.
+* Step 2 shows nobody signed in on the console.
+* Step 3 opens the console as <operator account> and leaves the site signed in.
+* Step 4 lists one site session and one console session, each naming its surface.
+* Step 5 signs out the site only.
+* Step 6 still shows <operator account> signed in on the console.
+* Step 8 shows nobody signed in on either surface.
+
+## Settled
+
+None.

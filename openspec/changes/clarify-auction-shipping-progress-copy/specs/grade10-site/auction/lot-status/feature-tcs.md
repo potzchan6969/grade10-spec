@@ -40,5 +40,5 @@
 ## Reconciliation
 
 - **Covered:** mapping Preparing Shipment → Ended under
-  `grade10-site-auction-lot-status-SC-01`'s requirement ← `US1-TC1-1`.
+  `grade10-site-auction-lot-status-SC-04`'s requirement ← `US1-TC1-1`.
 - **Raised:** none.

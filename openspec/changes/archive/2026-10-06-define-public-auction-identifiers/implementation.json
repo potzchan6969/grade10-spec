@@ -1,0 +1,91 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "5ec80ee9219661875f43753b51fd37fca4febe87ea49e12a482163b3d83640df"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "b2cd2e424f57acb45aff94fd293987e341868ee7",
+    "capturedAt": "2026-10-06T08:42:28.244Z",
+    "targets": [
+      {
+        "path": "openspec/changes/define-public-auction-identifiers/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A saved draft receives an editable generated slug",
+          "Requirement: Listing code is allocated on first draft save and shown on the admin screen",
+          "Requirement: Operator may call off a listing that has not closed"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An address that names no lot is refused",
+          "Requirement: The listing code is only exposed through the canonical address"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/spec.md",
+        "anchors": [
+          "Requirement: Collectors never see hidden lots"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Every invoice carries an invoice ID and the order's payment reference",
+          "Requirement: Records the winner keeps"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "3fe9b63b52ed7865ef2c5c72017a724670d352ff",
+      "components": [
+        "admin",
+        "auction-service",
+        "web"
+      ]
+    }
+  ]
+}

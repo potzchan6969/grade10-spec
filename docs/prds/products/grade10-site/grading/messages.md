@@ -44,6 +44,9 @@ new event cannot ship silent:
 - 🚧 **The footer** — the submission id and its summary, the custodian's
   registered name trading as Grade10, the shop and its address, the complaints
   contact, and that dates and times are Hong Kong time
+- 🚧 **Hong Kong time named** - the footer's line reads "Dates and times are
+  Hong Kong time (GMT+8).", the label every other message the platform sends
+  carries ([Dates and Times](/p/platform/shared/dates-and-times))
 - 🚧 **A failed send is kept** — every message rides the vault's retry ladder
   and parks with its reason —
   [Collector Pages](/p/grade10-site/vault/collector-pages)

@@ -8,7 +8,7 @@ A paid, undispatched order badges **Processing** while Order Progress pings
 on **Shipped**. The ping marks the current phase; past-tense **Shipped**
 reads as already dispatched. Collectors cannot tell packing from transit.
 
-**Metric:** on Processing Winner Order and My Auctions stories, the badge
+**Metric:** on Preparing Shipment Winner Order and My Auctions stories, the badge
 reads Preparing Shipment and Order Progress pings on Shipping with
 Preparing to ship subtext (target: 100%).
 
@@ -20,7 +20,9 @@ Preparing to ship subtext (target: 100%).
   Shipment** on Winner Order, My Auctions, My Auction Orders, and admin
   queue outcomes that show the same derived name.
 - **Shipping subtext** — while Preparing Shipment, Shipping reads Preparing
-  to ship; while Shipped, day-only date and tracking stay as today.
+  to ship; while Shipped, the day-only date and tracking number remain. The
+  tracking number is the carrier link, with no separate button or carrier
+  name in the progress chrome, as the Post-Bidding product record requires.
 - **Derivation unchanged** — invoice `paid` + fulfilment `unfulfilled` still
   yields that status; only the display name moves.
 
@@ -55,7 +57,9 @@ payment-confirm copy are updated in `add-my-auction-orders`.
   follows with `complete-auction-post-sale`.
 - Store order status copy stays Processing (separate vocabulary).
 - PRD Progress Under Shipping line and Progress stepper decision carry 🚧
-  this change delivers.
+  this change delivers. Order Progress adds no separate carrier name. The
+  carrier-name row in `Records the winner keeps` is removed by
+  `add-winner-order-tax-line`, which carries that requirement.
 - Shipped badge tone matches Preparing Shipment (`default`) on Winner Order
   and My Auctions — see `ui-design.md`.
 
@@ -63,7 +67,7 @@ payment-confirm copy are updated in `add-my-auction-orders`.
 
 None.
 
-**Archive:** @tangconst after deploy.
+**Archive:** @tangconst after implementation verification.
 
 ## References
 

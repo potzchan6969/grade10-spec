@@ -32,11 +32,51 @@ const read = (path) => readFileSync(join(ROOT, path), "utf8");
 const WORKFLOWS = ".github/workflows";
 const NOTIFY = ".github/workflows/proposal-notify.yml";
 const DIGEST = ".github/workflows/digest.yml";
+const AUTO_FIX = ".github/workflows/auto-fix-ci.yml";
 
 const notifyText = read(NOTIFY);
 const digestText = read(DIGEST);
 const notify = YAML.parse(notifyText);
 const digest = YAML.parse(digestText);
+
+test("Auto-fix CI claims one attempt per target commit", () => {
+  const workflow = YAML.parse(read(AUTO_FIX));
+  const target = workflow.jobs.repair.steps.find(
+    (step) => step.name === "Resolve repair target",
+  );
+  const repairSteps = workflow.jobs.repair.steps.filter((step) =>
+    step.name?.startsWith("Run Cursor repair"),
+  );
+
+  assert.match(workflow.concurrency.group, /pull_request\.head\.sha/);
+  assert.match(workflow.concurrency.group, /workflow_run\.head_sha/);
+  assert.doesNotMatch(workflow.concurrency.group, /github\.run_id/);
+  assert.equal(workflow.concurrency["cancel-in-progress"], false);
+  assert.equal(workflow.permissions.statuses, "write");
+  assert.match(target.run, /commits\/\$sha\/status/);
+  assert.match(target.run, /ci\/auto-fix-attempt/);
+  assert.match(target.run, /\[ "\$attempted" -eq 0 \] \|\| skip/);
+  assert.match(target.run, /repos\/\$repo\/statuses\/\$sha/);
+  assert.equal(repairSteps.length, 1);
+
+  const diagnostics = workflow.jobs.repair.steps.find(
+    (step) => step.name === "Upload repair diagnostics",
+  );
+  assert.equal(
+    diagnostics.if,
+    "always() && steps.target.outputs.repairable == 'true'",
+  );
+  assert.equal(diagnostics.uses, "actions/upload-artifact@v4");
+  for (const file of [
+    "cursor.json",
+    "cursor.stderr.log",
+    "verify.log",
+    "lint.log",
+  ])
+    assert.ok(diagnostics.with.path.includes(file), file);
+  assert.equal(diagnostics.with["retention-days"], 7);
+  assert.match(repairSteps[0].run, /cursor\.stderr\.log/);
+});
 
 /** Every `actions/cache` step of one job, restore and save alike. */
 const cacheSteps = (job) =>
@@ -209,12 +249,12 @@ test("the notifier runs once the manual and the viewer deployed, and only then",
   assert.doesNotMatch(notifyText, /github\.sha\b|github\.event\.before/);
 });
 
-test("the notifier finds the last deployed head by each run's conclusion, never the API's status filter", () => {
-  // `status=success` answered a run two weeks old while one an hour old had
-  // succeeded, and the post that range made was too long for Slack.
+test("the notifier verifies the run listing before choosing the last deployed head", () => {
   const step = notify.jobs.notify.steps.find((one) => one.id === "range");
   assert.doesNotMatch(step.run, /status=success/);
-  assert.match(step.run, /\.conclusion == \\"success\\"/);
+  assert.equal(step.env.RUN_ID, "${{ github.event.workflow_run.id }}");
+  assert.match(step.run, /select-deployed-base\.mjs/);
+  assert.match(step.run, /"\$RUN_ID" "\$RUN_NUMBER" "\$HEAD_SHA"/);
   assert.match(step.run, /git merge-base --is-ancestor "\$base" "\$HEAD_SHA"/);
 });
 

@@ -137,10 +137,75 @@
 * The full 15000-minor-unit payment is recorded.
 * The invoice is Paid and the excess is not a separate adjustment line.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-mrv rev=1 covers=g10adm.auction-post-sale.SC-9nm,g10adm.auction-post-sale.SC-k4t -->
+### post-sale-US12-TC5-1: Paid is refused below the closing tolerance
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-12
+
+**Pre-conditions:**
+
+* `<partially-paid invoice>` has cumulative payments of 80000 minor units against an original total of 100000 minor units.
+* admin(holds payment-processing) is recording another payment.
+
+**Steps:**
+
+1. Record a payment of 5000 minor units and try to update the invoice to Paid.
+2. Record a further payment of 5000 minor units.
+
+**Expected Results:**
+
+* Step 1 is refused because 85000 minor units is below 90% of the original total; the payment is recorded and the order reads Partially Paid with the real 15000-minor-unit balance.
+* Step 2 brings the total to 90000 minor units and offers the choice to close as Paid or keep collecting.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-pfj rev=1 covers=g10adm.auction-post-sale.SC-pxo -->
+### post-sale-US12-TC6-1: A recorded payment fixes the invoice
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-12
+
+**Pre-conditions:**
+
+* `<partially-paid invoice>` has one recorded payment of 40000 minor units.
+* admin(holds payment-processing) is on the order detail.
+
+**Steps:**
+
+1. Try to reissue the invoice.
+2. Try to cancel the order.
+3. Open Record payment.
+
+**Expected Results:**
+
+* Steps 1 and 2 are refused and the invoice's address, method and total are unchanged.
+* Step 3 offers Record payment and the order remains Partially Paid.
+
 ## Settled
 
 ## Reconciliation
 
 | Finding | Disposition |
 | --- | --- |
-| Overpayment and close-or-keep boundary | **Folded in:** `grade10-admin-auction-post-sale-SC-140`–`SC-142` |
+| Overpayment, close-or-keep boundary and the refusal below the tolerance | **Folded in:** `grade10-admin-auction-post-sale-SC-140`–`SC-144` |
+| Reissue and Cancel refused once a payment is recorded | **Folded in:** `grade10-admin-auction-post-sale-SC-217` |
+| Partially Paid sits in Waiting on winner, not Needs action | **Deferred:** `complete-auction-post-sale` modifies "The queue shows one outcome per lot" and carries it; one in-flight change may edit a requirement at a time |

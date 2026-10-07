@@ -18,8 +18,8 @@ service, or shared component contract.
   and Delivered use the same presentation. Preserve their existing stepper
   positions: Shipping for Shipped and Completed for Delivered.
 - Remove the separate Track shipment control and carrier name from Order
-  Progress. Leave carrier identity and the tracker in retained records under
-  the existing `Records the winner keeps` requirement.
+  Progress. The shipped record's tracker contents are carried by
+  `add-winner-order-tax-line`, not here.
 
 ## Risks / Trade-offs
 

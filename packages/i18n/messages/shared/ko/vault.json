@@ -30,30 +30,46 @@
   "visit": {
     "title": "방문 예약",
     "at": "{location}, {when}",
-    "pick": "시간을 고르고 물품을 가져와 주세요. 고객님이 동의하기 전에는 아무것도 진행하지 않습니다.",
+    "book": "방문 예약하기",
+    "pick": "물품을 가지고 오세요. 고객님이 동의하기 전에는 물품에 아무것도 하지 않습니다.",
     "cancel": "이 방문 취소하기",
     "loadingLocations": "매장을 불러오는 중…",
     "where": "매장",
-    "nothingFree": "{location} 매장은 앞으로 {days}일 동안 빈 시간이 없습니다.",
+    "duration": "보관 방문은 약 {minutes, plural, other {#분}} 걸립니다",
+    "moreShops": "새 매장이 열리면 여기에 표시됩니다.",
+    "day": "날짜",
+    "nextDays": "{days, plural, other {앞으로 #일}}",
+    "earlierWeek": "이전 주",
+    "laterWeek": "다음 주",
+    "timeOn": "{day} 시간",
+    "bookAt": "{when} 예약하기",
+    "moveTo": "{when}(으)로 변경하기",
+    "nothingFree": "{location} 매장은 {first}부터 {last}까지 빈 시간이 없습니다.",
     "unavailable": "이 시간은 이미 예약되었습니다. 아래에서 다른 시간을 골라 주세요 — 목록은 방금 갱신되었습니다.",
     "booked": {
-      "title": "방문 예약 완료",
-      "emailLine": "확인 이메일을 보내드리고 있습니다.",
+      "title": "방문이 예약되었습니다",
+      "emailLine": "확인 이메일을 보내드리고 있습니다. 물품과 함께 보내시는 다른 물품도 가져오세요.",
       "calendar": "캘린더에 추가",
-      "move": "일정 변경",
+      "move": "변경",
       "cancel": "취소",
       "before": {
-        "verify": "지금 확인하기",
-        "verified": "신원 확인 완료 — 물품 외에는 준비하실 것이 없습니다.",
-        "bring": "물품을 가져와 주세요.",
-        "sign": "대출 및 보관 계약서에 서명해 주세요.",
-        "signStorage": "보관 계약서에 서명해 주세요.",
-        "moneyFollows": "서명 후 대출금이 지급됩니다.",
-        "inPerson": "또는 방문하실 때 현장에서 신원을 확인해 드립니다."
+        "title": "방문 전에",
+        "verifyTitle": "이 휴대폰으로 신원 확인하기",
+        "verifyBody": "신분증과 카메라로 몇 분이면 됩니다. 매장에서 여권을 다룰 필요가 없고, 서류가 만료되었는지 집에서 미리 알 수 있습니다.",
+        "verify": "지금 신원 확인하기",
+        "verified": "신원 확인 완료 — 물품만 가져오시면 됩니다.",
+        "inPerson": "직접 신분증을 보여 주시겠어요? 방문 시 가져오시면 직원이 카운터에서 1분 안에 확인합니다.",
+        "bringTitle": "물품 가져오기",
+        "bringItems": "{items}, 그리고 요청을 보내신 다른 물품도 함께 가져오세요.",
+        "bring": "이 물품, 그리고 요청을 보내신 다른 물품도 함께 가져오세요.",
+        "signTitle": "카운터에서 서명하기",
+        "sign": "iPad에 한 번 서명합니다: 보관 계약서, 그리고 제안을 수락하시면 대출 계약서. 돈을 받으시기 전까지는 갚을 것이 없습니다.",
+        "signStorage": "iPad에 한 번 서명합니다: 보관 계약서."
       }
     },
-    "rules": "예약 시간 전이라면 언제든 일정을 변경하거나 취소하실 수 있습니다. 시간을 놓치시면 이번 방문만 종료되며, 신청 건은 그대로 유지됩니다.",
-    "moved": "페이지를 열어 두신 동안 이 건의 상태가 바뀌었습니다. 처리된 것은 없습니다 — 이제 페이지에 현재 상태가 표시됩니다."
+    "rules": "방문이 시작되기 전에는 언제든 변경하거나 취소할 수 있습니다. 방문을 놓치면 방문만 종료되고 케이스는 그대로 남습니다.",
+    "rulesRequest": "방문이 시작되기 전에는 언제든 변경하거나 취소할 수 있습니다. 방문을 놓치면 방문만 종료되고 케이스는 그대로 남습니다 — 케이스가 아직 요청 단계라면 예외입니다.",
+    "moved": "페이지를 여신 동안 이 케이스가 변경되었습니다. 아무것도 처리되지 않았습니다 — 페이지에 현재 상태가 표시됩니다."
   },
   "ceremony": {
     "loading": "서류를 여는 중…",
@@ -108,7 +124,6 @@
     "postalAddressHint": "서면 통지를 보낼 때만 사용됩니다.",
     "submitLabel": "{title} 서명하기",
     "submittingLabel": "서명 중…",
-    "retryLabel": "다시 시도",
     "missingPages": "서명하기 전에 모든 쪽을 읽어 주세요.",
     "missingConsent": "읽으셨음을 확인하는 상자에 표시해 주세요.",
     "missingSignature": "위 상자에 서명해 주세요.",
@@ -127,6 +142,40 @@
     "sealedIntegrityWarning": "내려받은 사본이 서명하신 서류의 지문과 일치하지 않아 저장되지 않았습니다. 서명은 기록되어 있습니다 — 옆에 있는 직원에게 인쇄본을 요청해 주세요.",
     "signedTitle": "서명이 기록되었습니다",
     "signedMessage": "서류가 봉인되기 전에 다른 분들의 서명이 남아 있습니다.",
+    "disclosureTick": "위 내용을 읽었으며 전자 방식으로 검토하고 서명하는 데 동의합니다.",
+    "identityChecked": "신분증은 {day}에 확인되었습니다.",
+    "venueLine": "서명 장소: {venue}",
+    "caseLine": "보관 건 {reference} · {subject}",
+    "caseOnly": "보관 건 {reference}",
+    "linkClock": "링크 유효 시간 {remaining}",
+    "readToEndFirst": "먼저 끝까지 읽어 주세요",
+    "continueLabel": "서명하러 가기",
+    "comesNext": "{total}건 중 {position}번째 — 다음은 {next}입니다",
+    "comesLast": "{total}건 중 {position}번째 — 마지막 서류입니다",
+    "readAgainLabel": "다시 읽기",
+    "signSummary": "{title} — {pageCount}쪽 중 {viewed}쪽 읽음",
+    "nextUp": "다음: {title}",
+    "lastNote": {
+      "release": "봉인되면 물품을 돌려드립니다"
+    },
+    "sealedAt": "봉인 시각 {time}",
+    "sealedMessageMailed": "서명된 사본은 보관 건 페이지에 있으며 {email}(으)로 발송되고 있습니다. 아래 지문을 보관해 주세요 — 바로 이 서류 묶음을 식별하는 값입니다.",
+    "sealedDigest": "{digest} · {when} 봉인",
+    "nextStepsTitle": "이제 진행되는 일",
+    "nextSteps": {
+      "vaultTitle": "직원이 물품을 금고에 보관합니다",
+      "vaultDetail": "보관이 끝나면 이메일을 보내 드립니다. 오늘 방문은 이것으로 끝났습니다.",
+      "moneyTitle": "대출금은 계좌 이체로 보내 드립니다",
+      "moneyDetail": "물품이 금고에 들어간 뒤 {amount}을(를) 보내 드립니다. {days}일은 송금한 날부터 계산되며, 만기일은 이메일로 알려 드립니다.",
+      "repayTitle": "은행에서 상환하고 직접 찾아가세요",
+      "repayDetail": "보관 건 페이지에서 날짜별 상환액과 송금처를 확인할 수 있습니다.",
+      "collectTitle": "직접 찾아가세요",
+      "collectDetail": "오늘 보여 주신 신분증을 가져오시면 직원이 서명하실 반환 서류를 준비합니다.",
+      "handoverTitle": "직원이 물품을 돌려드립니다",
+      "handoverDetail": "떠나시기 전에 물품을 확인해 주세요. 이 보관 건에 남은 금액은 없습니다."
+    },
+    "nothingMore": "이 기기에서 더 하실 일은 없습니다.",
+    "doneLabel": "완료 — iPad를 돌려주세요",
     "refusal": {
       "TOKEN_INVALID": {
         "title": "이 서명 링크는 유효하지 않습니다",
@@ -137,8 +186,8 @@
         "message": "안전을 위해 서명 링크는 짧은 시간만 유효합니다. 새 링크를 요청해 주세요."
       },
       "TOKEN_CONSUMED": {
-        "title": "이 서명 절차는 끝났습니다",
-        "message": "방금 서명을 마치셨다면 더 하실 일은 없습니다 — 서명된 사본은 보관 건 페이지에 있고, 옆에 있는 직원이 출력해 드릴 수도 있습니다. 그렇지 않다면 이미 사용된 링크이니 새 링크를 요청해 주세요."
+        "title": "이 서명 링크는 새 링크로 바뀌었습니다",
+        "message": "이 서류에 새 링크가 발급되어 가장 최근 링크만 사용할 수 있습니다. 옆에 있는 직원에게 요청해 주세요."
       },
       "TOKEN_CONFLICT": {
         "title": "이 링크는 다른 기기에서 열렸습니다",
@@ -155,6 +204,10 @@
       "PACKET_COMPLETED": {
         "title": "이 서류는 이미 서명이 끝났습니다",
         "message": "서명하실 분이 모두 서명했습니다. 이 페이지를 닫으셔도 됩니다."
+      },
+      "PACKET_DECLINED": {
+        "title": "서명된 서류가 없습니다",
+        "message": "서류가 철회되었으며 서명 링크는 더 이상 유효하지 않습니다. 다음 절차는 옆에 있는 직원이 도와드립니다."
       },
       "DOCUMENT_UNKNOWN": {
         "title": "그 서류는 이번 서명에 포함되어 있지 않습니다",

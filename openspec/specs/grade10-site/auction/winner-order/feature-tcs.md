@@ -9,8 +9,8 @@
 **I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
 **so that** the lot I won becomes mine inside a deadline I can see, priced for where it is actually going.
 
-<!-- trace:case id=g10.auction-winner-order.TC-8q4 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### winner-order-US1-TC1-1: A lot closing with a winner opens one order with estimated charges
+<!-- trace:case id=g10.auction-winner-order.TC-8q4 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
+### winner-order-US1-TC1-2: A lot closing with a winner opens one order whose quoted charges read TBD
 
 **Classification:**
 
@@ -44,11 +44,11 @@
 **Expected Results:**
 
 * Step 2: one Winner Order exists for <lot_1>.
-* Step 3: shipping, insurance and any tax read as estimates.
-* Step 3: the order can be paid.
+* Step 3: Shipping & Handling, Insurance and Tax read TBD.
+* Step 3: no charge is marked as an estimate.
 
-<!-- trace:case id=g10.auction-winner-order.TC-qaq rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### winner-order-US1-TC2-1: With no delivery address the invoice cannot be paid
+<!-- trace:case id=g10.auction-winner-order.TC-qaq rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
+### winner-order-US1-TC2-2: With no delivery address the invoice cannot be paid
 
 **Classification:**
 
@@ -82,7 +82,7 @@
 **Expected Results:**
 
 * Step 2: the winning bid and buyer's premium show.
-* Step 2: shipping, insurance and any tax read as still to be calculated.
+* Step 2: Shipping & Handling, Insurance and Tax read TBD.
 * Step 3: payment is refused until a delivery address is given.
 
 <!-- trace:case id=g10.auction-winner-order.TC-shz rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
@@ -1638,6 +1638,133 @@
 * The open list includes names from the start of the A–Z range and from near the end.
 * The set is not limited to a short designated sample.
 
+<!-- trace:case id=g10.auction-winner-order.TC-ujy rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
+### winner-order-US1-TC30-1: Tax is pending before the invoice is sent
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) holds an auction order whose invoice has not been sent.
+
+**Steps:**
+
+1. Open Winner Order.
+2. Read Tax in Order Summary and open its info tip.
+
+**Expected Results:**
+
+* Tax reads TBD with the other fee rows.
+* No calculated Tax amount is shown.
+* The tip reads `Set by Grade10 for where your order ships. Some orders have none.`
+
+<!-- trace:case id=g10.auction-winner-order.TC-m21 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
+### winner-order-US1-TC31-1: Sent tax is itemised throughout the order record
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) holds a paid auction order whose invoice includes Tax of 6000 minor units in HKD.
+
+**Steps:**
+
+1. Open Winner Order and read Order Summary.
+2. Open the invoice PDF.
+3. Open the receipt PDF.
+
+**Expected Results:**
+
+* Order Summary shows Tax of 6000 minor units in HKD between Insurance and Payment Processing Fee.
+* Order Summary offers the Tax info tip with the stated copy.
+* The invoice PDF and the receipt PDF each show Tax of 6000 minor units in HKD between Insurance and Subtotal.
+* Each PDF's Subtotal includes the 6000 minor units in HKD.
+
+<!-- trace:case id=g10.auction-winner-order.TC-nvv rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
+### winner-order-US1-TC32-1: An untaxed invoice leaves Tax out
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) holds a paid auction order whose operator added no Tax.
+
+**Steps:**
+
+1. Open Winner Order and read Order Summary.
+2. Open the invoice PDF.
+3. Open the receipt PDF.
+
+**Expected Results:**
+
+* No surface shows a Tax line.
+* Order Summary offers no Tax info tip.
+
+<!-- trace:case id=g10.auction-winner-order.TC-dvc rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
+### winner-order-US1-TC33-1: Card fee is grossed up on tax
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* admin(operator with payment-processing) is on a card order in Preparing Invoice.
+* The order's lines before Tax total 312000 minor units in HKD.
+
+**Steps:**
+
+1. Add Tax of 6000 minor units in HKD.
+2. Send the invoice.
+3. Read its Subtotal and payment processing fee inputs.
+
+**Expected Results:**
+
+* The Subtotal is 318000 minor units in HKD.
+* Grade10 computes the payment processing fee from that Subtotal.
+
 ---
 
 ## winner-order-US2: Winner follows a settled lot to delivery
@@ -1647,8 +1774,8 @@
 is still owed, a tracker, and proof of what was handed over,
 **so that** I can account for a high-value purchase without asking Grade10 for records.
 
-<!-- trace:case id=g10.auction-winner-order.TC-h7f rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### winner-order-US2-TC1-1: The receipt itemises what was paid and sums to the total
+<!-- trace:case id=g10.auction-winner-order.TC-h7f rev=2 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
+### winner-order-US2-TC1-2: The receipt itemises what was paid and sums to the total
 
 **Classification:**
 
@@ -1681,7 +1808,7 @@ is still owed, a tracker, and proof of what was handed over,
 
 **Expected Results:**
 
-* Winning bid, buyer's premium, shipping, insurance, any tax and final amount show.
+* Winning bid, buyer's premium, shipping, insurance when added, Tax when added and final amount show.
 * The lines sum to <final amount>.
 * It names how it was paid.
 
@@ -1884,8 +2011,8 @@ is still owed, a tracker, and proof of what was handed over,
 * Each still shows its row's values.
 * No receipt was reissued.
 
-<!-- trace:case id=g10.auction-winner-order.TC-4zy rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### winner-order-US2-TC2-1: A dispatched lot shows the carrier and tracking link
+<!-- trace:case id=g10.auction-winner-order.TC-4zy rev=2 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
+### winner-order-US2-TC2-2: A dispatched lot shows the tracking number as the carrier link
 
 **Classification:**
 
@@ -1908,7 +2035,7 @@ is still owed, a tracker, and proof of what was handed over,
 
 | Field | Value |
 | --- | --- |
-| <order_shipped> | A paid order dispatched with <carrier> and <tracking number> |
+| <order_shipped> | A paid order dispatched with a carrier and <tracking number> |
 
 **Steps:**
 
@@ -1917,7 +2044,7 @@ is still owed, a tracker, and proof of what was handed over,
 
 **Expected Results:**
 
-* Step 1: <carrier> and <tracking number> show.
+* Step 1: <tracking number> shows as a link, with no separate carrier name.
 * Step 2: the carrier's tracking page opens.
 
 <!-- trace:case id=g10.auction-winner-order.TC-l8v rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
@@ -2149,6 +2276,82 @@ is still owed, a tracker, and proof of what was handed over,
 * Order Progress still shows <tracking number> as an external link with an arrow icon.
 * Order Progress shows no Track shipment button or carrier name.
 * Step 2 opens <carrier tracking URL> in a new tab.
+
+<!-- trace:case id=g10.auction-winner-order.TC-nmg rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
+### winner-order-US2-TC55-1: Preparing Shipment pings Shipping with Preparing to ship
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_preparing_shipment>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_preparing_shipment> | A paid order with fulfilment `unfulfilled` |
+
+**Steps:**
+
+1. Read the status badge.
+2. Read Order Progress.
+
+**Expected result:**
+
+* Badge reads Preparing Shipment.
+* Badge uses `default`.
+* Shipping is the current (progress) progress step — not incomplete.
+* Shipping subtext reads Preparing to ship.
+* No step is labelled Preparing Shipment.
+
+<!-- trace:case id=g10.auction-winner-order.TC-7j8 rev=1 covers=g10.auction-winner-order.SC-lk0 -->
+### winner-order-US2-TC20-1: Shipped keeps Shipping current
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_shipped>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_shipped> | A paid, fulfilled order with a ship date and tracking number |
+
+**Steps:**
+
+1. Read the status badge and Order Progress.
+
+**Expected result:**
+
+* Badge reads Shipped and uses `default`.
+* Shipping is the current progress step with the day-only ship date.
+* The tracking number is the external carrier link.
+* Order Progress adds no separate Track shipment control and no separate carrier name.
 
 ---
 
@@ -4569,6 +4772,45 @@ Runs once per row of **Test data**.
 
 ---
 
+## winner-order-US13: Winner learns their order was cancelled
+
+**As a** winner whose order an operator cancelled,
+**I want** Winner Order to say it was cancelled and when,
+**so that** I know the order is closed and how to contact Grade10.
+
+<!-- trace:case id=g10.auction-winner-order.TC-3x8 rev=2 covers=g10.auction-winner-order.SC-1fb -->
+### winner-order-US13-TC1-2: Cancelled keeps the lot and winning bid visible
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-13
+
+**Pre-conditions:**
+
+* customer(winner of `<cancelled order>`) is on Winner Order.
+
+**Steps:**
+
+1. Read the status, lot, winning bid and actions.
+
+**Expected Results:**
+
+* The page says Cancelled on the cancellation day, as a day-only date in the winner's local zone.
+* The lot and winning bid remain visible.
+* Contact Us is the only action.
+* No cancellation reason is shown.
+
+---
+
 ## winner-order-US14: Winner sees a refunded order as Refunded
 
 **As a** winner whose order Grade10 refunded because they were not happy with the item,
@@ -5159,6 +5401,45 @@ Runs once per row of **Test data**.
 * Subject reads `Auction order <current_invoice_id>: payment overdue`.
 * It does not name <replaced_invoice_id>.
 
+<!-- trace:case id=g10.auction-winner-order.TC-v40 rev=1 covers=g10.auction-winner-order.SC-e1w -->
+### winner-order-US16-TC14-1: Contact Us on a cancelled order reads order cancelled
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-16
+
+**Pre-conditions:**
+
+* customer(winner) is on <winner order url> for <order_cancelled>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_cancelled> | An order an operator cancelled, with a category and note |
+| <lot_title> | That order's lot title |
+| <invoice_id> | That order's invoice id |
+
+**Steps:**
+
+1. Click Contact Us.
+2. Read Subject and Message.
+
+**Expected Results:**
+
+* Subject reads `Auction lot <lot_title>: order cancelled`.
+* Message names <lot_title>, <invoice_id> and status Cancelled.
+* Neither names the operator's category or note.
+
 ---
 
 ## winner-order-US17: Winner matches a bank refund against their own statement
@@ -5377,6 +5658,45 @@ Runs once per row of **Test data**.
 * The address is refused.
 * An error shows on Town/City and on Postal Code.
 * The order status still reads Awaiting Setup.
+
+---
+
+## winner-order-US20: Winner waits out a partial payment an operator is collecting
+
+**As a** winner whose invoice an operator has started collecting in parts,
+**I want** a locked order with Contact Us and a receipt for every payment,
+**so that** I have proof of what I paid without tracking a running balance.
+
+<!-- trace:case id=g10.auction-winner-order.TC-sv8 rev=1 covers=g10.auction-winner-order.SC-34b -->
+### winner-order-US20-TC1-1: The partially paid order is locked
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-20
+
+**Pre-conditions:**
+
+* customer(winner of `<partially-paid order>`) is on Winner Order.
+
+**Steps:**
+
+1. Read the payment step, settlement alert and receipt area.
+
+**Expected Results:**
+
+* The page reads Partially Paid.
+* Pay, Submit Payment Proof, View Bank Details and a payment deadline are absent.
+* The page offers Contact Us, shows the full invoice amount and no remaining balance.
+* Each recorded payment has a separate receipt link, oldest first.
 
 ---
 
@@ -5667,6 +5987,365 @@ Runs once per row of **Test data**.
 
 ---
 
+## winner-order-US23: Winner gets the address form back
+
+**As a** winner who missed the 48-hour address deadline,
+**I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
+**so that** I can still settle the lot I won once I have told Grade10 where to ship it.
+
+<!-- trace:case id=g10.auction-winner-order.TC-9uu rev=1 covers=g10.auction-winner-order.SC-r6m -->
+### winner-order-US23-TC1-1: Address confirmed a minute inside the window is accepted
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Delivery address
+
+**Pre-conditions:**
+
+* `<lot_1>` closed at its recorded close and no delivery address is confirmed on its order.
+* customer(winner of `<lot_1>`) is on <the winner's auction order url> at `<one minute before close>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| Entrance closes | 2026-09-05T12:00:00Z |
+| `<one minute before close>` | 2026-09-05T11:59:00Z |
+
+**Steps:**
+
+1. Choose the account's saved home address.
+2. Confirm the delivery address.
+
+**Expected Results:**
+
+* The confirmation is accepted.
+* The order reads Preparing Invoice.
+* No invoice is issued by the confirmation itself.
+
+<!-- trace:case id=g10.auction-winner-order.TC-io3 rev=1 covers=g10.auction-winner-order.SC-kz8 -->
+### winner-order-US23-TC2-1: First confirmation is refused at the 48-hour mark
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-23
+
+**Pre-conditions:**
+
+* `<lot_1>` closed at its recorded close and no delivery address is confirmed on its order.
+* customer(winner of `<lot_1>`) is on <the winner's auction order url> at `<the address deadline>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| `<the address deadline>` | 2026-09-05T12:00:00Z |
+
+**Steps:**
+
+1. Attempt to confirm the account's saved home address.
+2. Read the order's delivery address.
+
+**Expected Results:**
+
+* The confirmation is refused.
+* The order holds no confirmed delivery address.
+* The order still reads Setup Overdue.
+
+<!-- trace:case id=g10.auction-winner-order.TC-w89 rev=1 covers=g10.auction-winner-order.SC-6ax -->
+### winner-order-US23-TC4-1: A reopened address form runs a fresh 48 hours from the reopen
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-23
+
+**Pre-conditions:**
+
+* `<lot_1>`'s order has no confirmed delivery address, derives as Setup Overdue,
+  has invoice status `not_issued`, and its address deadline passed on 2026-09-05T12:00:00Z.
+* An operator reopened the address form at `<the reopen>`.
+* customer(winner of `<lot_1>`) is on <the winner's auction order url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<the reopen>` | 2026-09-07T09:00:00Z |
+| New address deadline | 2026-09-09T09:00:00Z |
+
+**Steps:**
+
+1. Read the delivery address area.
+2. Confirm the account's saved home address.
+
+**Expected Results:**
+
+* The address deadline reads 2026-09-09T09:00:00Z, measured from the reopen.
+* The confirmation is accepted.
+* The order reads Preparing Invoice.
+
+<!-- trace:case id=g10.auction-winner-order.TC-bth rev=1 covers=g10.auction-winner-order.SC-6ax -->
+### winner-order-US23-TC5-1: Winner has no way to reopen the address form
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-23
+
+**Pre-conditions:**
+
+* `<lot_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
+* customer(winner of `<lot_1>`) is signed in.
+
+**Steps:**
+
+1. Read the delivery address area for a reopen or extend control.
+2. Submit a reopen of the address form as the winner.
+
+**Expected Results:**
+
+* No reopen or extend control is offered to the winner.
+* The reopen is refused.
+* The address deadline is unchanged.
+
+<!-- trace:case id=g10.auction-winner-order.TC-w21 rev=1 covers=g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-gqs -->
+### winner-order-US23-TC6-1: Three won lots open three orders with their own address deadlines
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Delivery address
+
+**Pre-conditions:**
+
+* customer(winner of `<lot_1>`, `<lot_3>` and `<lot_4>`) won three lots that closed at different datetimes.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| `<lot_3>` recorded close | 2026-09-03T18:30:00Z |
+| `<lot_4>` recorded close | 2026-09-04T09:15:00Z |
+
+**Steps:**
+
+1. Open each of the three auction orders.
+2. Read each order's address deadline.
+3. Confirm a different delivery address on each order.
+
+**Expected Results:**
+
+* Three separate orders exist, one per lot.
+* The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z.
+* Each order keeps the address confirmed on it and awaits its own invoice.
+
+<!-- trace:case id=g10.auction-winner-order.TC-aui rev=1 covers=g10.auction-winner-order.SC-js5,g10.auction-winner-order.SC-h7y -->
+### winner-order-US23-TC7-1: Sent invoice stops the winner changing the address
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Delivery address
+
+**Pre-conditions:**
+
+* `<sent-invoice order>` carries a confirmed delivery address and an invoice sent at 2026-09-05T09:00:00Z, inside the address window.
+* customer(winner of `<sent-invoice order>`) is on <the winner's auction order url>.
+
+**Steps:**
+
+1. Attempt to change the delivery address to the account's work address.
+2. Read the delivery address area.
+
+**Expected Results:**
+
+* The change is refused even though the 48 hours have not elapsed.
+* The order still shows the address the invoice was quoted for.
+* The area points the winner at Grade10 for a change.
+
+<!-- trace:case id=g10.auction-winner-order.TC-us7 rev=1 covers=g10.auction-winner-order.SC-h7y -->
+### winner-order-US23-TC8-1: Expired invoice does not reopen the address form
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Delivery address
+
+**Pre-conditions:**
+
+* `<expired-invoice order>`'s invoice is `expired` and its address was locked at send.
+* customer(winner of `<expired-invoice order>`) is on <the winner's auction order url>.
+
+**Steps:**
+
+1. Read the delivery address area.
+2. Attempt to change the delivery address to the account's work address.
+
+**Expected Results:**
+
+* No address form is offered.
+* The change is refused.
+* The overdue alert carries Contact Us and no card Pay control is shown.
+
+<!-- trace:case id=g10.auction-winner-order.TC-euy rev=1 covers=g10.auction-winner-order.SC-byg -->
+### winner-order-US23-TC9-1: A missed address deadline leaves the account address book alone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Delivery address
+
+**Pre-conditions:**
+
+* `<missed-deadline order>`'s address deadline has passed with no address confirmed.
+* customer(winner of `<missed-deadline order>`) is signed in.
+
+**Steps:**
+
+1. Open the account address book.
+2. Edit the saved home address and save a new work address.
+3. Return to <the winner's auction order url>.
+
+**Expected Results:**
+
+* Both address-book writes are accepted.
+* Neither reaches the auction order.
+* The order still has no confirmed delivery address and still offers no address form.
+
+<!-- trace:case id=g10.auction-winner-order.TC-yee rev=1 covers=g10.auction-winner-order.SC-90v -->
+### winner-order-US23-TC10-1: A reopen sends the winner no letter
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-23
+
+**Pre-conditions:**
+
+* `<missed-deadline order>`'s address deadline has passed.
+* An operator holds payment-processing.
+
+**Steps:**
+
+1. The operator reopens the address form with a reason.
+2. Read the winner's post-close letters for that lot.
+
+**Expected Results:**
+
+* The order offers the address form again.
+* No letter about the reopen reaches the winner.
+
+<!-- trace:case id=g10.auction-winner-order.TC-ron rev=1 covers=g10.auction-winner-order.SC-oos -->
+### winner-order-US23-TC11-1: The address deadline counts from the extended close
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-23
+
+**Pre-conditions:**
+
+* `<extended lot>` was scheduled to close at 2026-09-12T08:45:00Z, took a late bid, and closed at 2026-09-12T09:00:00Z after extended bidding.
+* customer(winner of `<extended lot>`) is on <the winner's auction order url>.
+
+**Steps:**
+
+1. Read the address deadline under Confirm delivery address.
+2. Confirm the account's saved home address at 2026-09-14T08:50:00Z, ten minutes before that deadline and after 48 hours from the scheduled close.
+
+**Expected Results:**
+
+* The deadline reads 2026-09-14T09:00:00Z, counted from the actual close.
+* The confirmation is accepted and the order reads Preparing Invoice.
+
+---
+
 ## Settled
 
 - `winner-order-US3-TC1` is held by `winner-order-US8-TC1`: the same premium claim, under the policy-premium journey.
@@ -5769,3 +6448,72 @@ that implementation works.
 | The Raised questions about the Track shipment control and Delivered state | **Settled:** decisions Q1 and Q3; the shipped case checks no separate control, and the delivered case checks the link remains |
 | Root group and journey coverage | **Covered:** both cases trace `winner-order-US-02`; neither case adds behavior outside `Order-progress tracking` |
 | Uncovered scenarios | **None.** Both delta scenarios have a case; the durable suite and auction domain suite add no other scenario for this change's frozen anchors |
+
+- **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
+- **Covered:** `winner-order-SC-253` ← `US2-TC20-1`.
+- **Raised:** none.
+
+**Run:** The blind pass read the Purpose, Feature set, `winner-order-US-01`, the proposal, decisions, UI design without scenario dispositions, and the linked PRD. It did not read durable or change requirements.
+
+**Run:** 2026-10-06, QA2 rerun after accept-review, not blind: the delta's requirements and scenarios, `ui-design.md`, the durable suite and the cases above. It split `winner-order-US1-TC31-1`'s expectations by surface, since the page places Tax before Payment Processing Fee and the PDFs before Subtotal. It revised the durable `winner-order-US1-TC1-1` and `winner-order-US1-TC2-1`, which still read Tax as an estimate. It also carries `winner-order-US2-TC1-1` and `winner-order-US2-TC2-1` revised, because this change owns every edit to `Records the winner keeps`.
+
+### Folded
+
+- `winner-order-US1-TC30-1`, Tax reads TBD with its tip before send -> `winner-order-SC-213`
+- `winner-order-US1-TC31-1`, sent Tax on the page with its tip and on both PDFs inside the Subtotal -> `winner-order-SC-217`, `winner-order-SC-214`, `winner-order-SC-04`
+- `winner-order-US1-TC32-1`, an untaxed invoice shows no Tax line and no tip anywhere -> `winner-order-SC-215`, `winner-order-SC-212`
+- `winner-order-US1-TC33-1`, the card fee priced from a Subtotal that includes Tax -> `winner-order-SC-216`
+
+### Revised
+
+- `winner-order-US1-TC1-2`, from `-TC1-1`: Shipping & Handling, Insurance and Tax read TBD before send and no charge is marked as an estimate, instead of reading as estimates; the payable-at-close result is dropped, since `winner-order-US1-TC3-1` refuses payment until the address is confirmed -> `winner-order-SC-04`, `winner-order-SC-213`
+- `winner-order-US1-TC2-2`, from `-TC2-1`: Shipping & Handling, Insurance and Tax read TBD, instead of still to be calculated -> `winner-order-SC-213`
+- `winner-order-US2-TC1-2`, from `-TC1-1`: the receipt lines read insurance when added and Tax when added, instead of any tax -> `winner-order-SC-18`
+- `winner-order-US2-TC2-2`, from `-TC2-1`: the tracker shows the tracking number as the carrier link and no separate carrier name, instead of the carrier and the tracking number -> `winner-order-SC-20`
+
+### Rejected
+
+- No blind case was dropped.
+
+### Escalated
+
+- None. The blind pass's itemisation reading matched `winner-order-SC-214`; it asked nothing the input left open.
+
+### Carried Unchanged
+
+- **Invoice fields** - `winner-order-SC-05`, `winner-order-SC-38`, `winner-order-SC-39`, `winner-order-SC-62`, `winner-order-SC-63`, `winner-order-SC-69`, `winner-order-SC-110`, `winner-order-SC-111` keep their meaning and their durable coverage. `winner-order-SC-04` changed meaning to a taxed total and is reached above by `winner-order-US1-TC31-1` and `winner-order-US1-TC1-2`
+- **Records the winner keeps** - `winner-order-SC-19`, `winner-order-SC-21`, `winner-order-SC-36`, `winner-order-SC-112`, `winner-order-SC-113`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-135`, `winner-order-SC-133`, `winner-order-SC-247`, `winner-order-SC-222`, `winner-order-SC-223`, `winner-order-SC-246` keep their meaning and their durable coverage. `winner-order-SC-18` and `winner-order-SC-20` changed and are reached above by `winner-order-US2-TC1-2` and `winner-order-US2-TC2-2`
+
+**Out of suite:** none of this change's scenarios.
+
+| Finding | Disposition |
+| --- | --- |
+| The winner sees retained facts without the internal reason | **Folded in:** `winner-order-SC-143` |
+| Contact Us on a cancelled order reads `order cancelled` | **Folded in:** `winner-order-SC-275` |
+
+| Finding | Disposition |
+| --- | --- |
+| The winner sees receipts without a second order or deadline | **Folded in:** `winner-order-SC-156` |
+
+Two independent readings of the same anchors: this suite, written without sight
+of any requirement, and a scenario draft written without sight of this suite.
+What they disagreed about is below.
+
+| Raised | Disposition |
+| --- | --- |
+| Which clock decides a confirmation sent at 47:59 and arriving at 48:01 | **Folded in.** Nobody had decided it. The requirement now judges a write by the moment Grade10 receives it, and `winner-order-SC-145` and `winner-order-SC-146` are phrased on receipt rather than on submission |
+| What the address deadline is measured from on an extended lot | **Folded in.** The scenario pass had already fixed it on the actual close; `winner-order-SC-144` proves it against a lot whose scheduled and actual closes differ |
+| Whether a winner may add an address to the account book while the address form is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-151` and `winner-order-US23-TC9-1` |
+| Whether a reopen after send does anything | **Already decided**, in `grade10-admin/auction/post-sale`: a reopen is refused once the invoice is sent. The suite could not see it |
+| Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-149` and `winner-order-US23-TC10-1` |
+| What a missed address deadline does to the reminder letters | **Dropped.** Address reminders belong to the durable Winner Order rules. Recorded here so the next blind pass does not raise it again |
+| Whether a winner may change a confirmed address after the deadline | **Dropped** after the planning owner decided that a confirmed address locks on confirm and this change adds no winner change control. The change scenario and its case are retired with their ids; the lock is the durable Winner Order rule |
+| Scenarios the payment-deadline requirement restates: `winner-order-SC-31`, `SC-33`, `SC-37` and `SC-107` | **Not this change's.** They are durable scenarios the modified requirement carries unchanged, and the durable suite covers them. This suite adds a case only for the scenarios this change writes |
+| What a card session that ends unpaid after the payment deadline does | **Folded in** after the planning owner decided it counts as a failed outcome: the invoice is written `expired` when the session ends and Pay Now stays closed. The requirement is the payment deadline's; `grade10-admin-auction-post-sale-SC-93` and `post-sale-US19-TC9-1` prove it |
+| Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-23`; the journeys those cases walk are durable and reach the suite at archive |
+| Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here but the payment deadline became ADDED after `check:manual` refused a draft that folded requirements the durable Winner Order rules also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |
+| Cases the address deadline on `main` now covers | **Dropped** after the durable Winner Order rules took on the 48-hour address deadline: Contact Us in place of the form, no suspension or cancellation, the displayed deadline, nothing to pay at close, and seven days from send. Its own suite walks them. The rest were renumbered under `winner-order-US23` |
+
+An operator may record a delivery address after the address deadline without
+reopening it. Neither reading proposed it; the action is
+`complete-auction-post-sale`'s.

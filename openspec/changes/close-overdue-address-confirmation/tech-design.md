@@ -3,8 +3,10 @@
 Persist `address_deadline_at` on the auction order when the order is created or
 reopened. Treat that timestamp as an order fact, not a live calculation, so
 configuration changes cannot move existing orders. Derive
-`address_window_open` at read/write time from the persisted timestamp, the
-invoice status and current order facts; never persist it as a status enum.
+`address_window_open` at read/write time from the persisted timestamp and the
+order's facts - the invoice is `not_issued`, no address is confirmed, and the
+order is neither cancelled nor has a cancellation requested; never persist it
+as a status enum.
 Address writes, operator actions and invoice send use the same order boundary
 and are judged by receipt time.
 
@@ -19,29 +21,34 @@ migration with a repair report rather than guessing a deadline.
   facts.
 - `packages/grade10-auction/backend/src/services/auctions/auctionOrders.ts`
   owns the persisted order facts and the address-window transition.
-- `packages/grade10-auction/backend/src/services/orderStatus.ts` derives
-  `address_window_open` and the order status from current facts; operator
+- `packages/grade10-auction/backend/src/services/orderStatus.ts` derives the
+  order status from current facts, reading `address_deadline_passed`, and
+  `address_window_open` as a write gate outside that derivation; operator
   actions never write a status directly.
 - `packages/grade10-auction/backend/src/rpc/AuctionService.ts` exposes the
   winner-facing deadline/refusal facts and applies receipt-time validation.
 - `packages/grade10-auction/backend/src/services/admin/postSale.ts`, its
-  repository and router own reopen, reasoned phone-address recording and
-  expired-invoice settlement.
+  repository and router own expired-invoice settlement. The operator's reopen
+  and reasoned phone-recorded setup are `complete-auction-post-sale`'s
+  `reopenSetup` and `recordSetup`, which this change's deadline serves.
 - `packages/grade10-auction/backend/src/services/auctions/winnerInvoice.ts`
-  retires the address window at invoice send and preserves payment-at-deadline
-  semantics.
+  retires the address window at invoice send. Refusing a payment received at or
+  after the deadline, holding the invoice `pending` while an in-time card
+  session is open, and writing `expired` when that session times out, is
+  abandoned or fails are new.
 - Order-status and Winner Order contracts expose the deadline, refusal and
   operator-contact facts; no winner-facing reopen mutation is added.
 
-Reopen requires the existing operator grant, a reason, an unconfirmed Setup
-Overdue order and no sent invoice; each reopen gets a fresh 48-hour deadline and
-an invoice-log entry carrying the named actor, timestamp and reason.
-Phone-recorded address changes get a matching address-recorded invoice-log entry
-with actor, timestamp and reason. The same transaction boundary prevents a late
-winner write, operator recording, reopen, or invoice send from racing into an
-inconsistent address snapshot.
+`complete-auction-post-sale` owns the operator actions: reopen requires the
+existing operator grant, a reason, an unconfirmed Setup Overdue order and no
+sent invoice, and each reopen gets a fresh 48-hour deadline and an invoice-log
+entry carrying the named actor, timestamp and reason. A phone-recorded setup
+gets a matching address-recorded entry. Here the reopen only resets the
+persisted `address_deadline_at`. Serializing a late winner write, operator
+recording, reopen and invoice send under the order boundary is
+`complete-auction-post-sale`'s (its `SC-90`).
 
-An unconfirmed order derives Setup Overdue from the elapsed deadline condition;
+An unconfirmed order derives Setup Overdue from `address_deadline_passed`;
 an operator reopen restores Awaiting Setup from its new deadline. Preparing
 Invoice never derives Setup Overdue. Its payment Overdue timer and deadline are
 created only when invoice send commits and the invoice is visible to the winner;

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
 import { BookingSummary } from "./booking-summary";
-import { FIXTURE_TIME_ZONE_LABEL, LIVE_RECORD, SUMMARY_COPY } from "./fixtures";
+import { LIVE_RECORD, SUMMARY_COPY } from "./fixtures";
 
 const meta = {
   title: "Appointment Booking/BookingSummary",
@@ -17,7 +17,6 @@ const meta = {
     start: LIVE_RECORD.start,
     end: LIVE_RECORD.end,
     timeZone: FIXTURE_TIME_ZONE,
-    timeZoneLabel: FIXTURE_TIME_ZONE_LABEL,
   },
 } satisfies Meta<typeof BookingSummary>;
 

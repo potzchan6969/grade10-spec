@@ -65,6 +65,7 @@ export const previewCase = {
   movedVisitAt: "2026-09-18T07:00:00Z",
   visitMinutes: 20,
 
+  offerValuedMinor: 9_500_000,
   offerPrincipalMinor: 3_800_000,
   offerTermDays: 90,
   offerInterestMinor: 95_000,
@@ -174,7 +175,7 @@ export function footerLines(party: "lender" | "custodian"): string[] {
     name,
     previewCase.shopAddress,
     `Complaints: ${previewCase.complaintsContact}.`,
-    "Dates and times are in Hong Kong Standard Time.",
+    "Dates and times are in Hong Kong time (GMT+8).",
   ];
 }
 
@@ -269,12 +270,14 @@ export const VAULT_FIXTURES: LetterFacts = {
     itemWithYou: true,
   },
   offer_made: {
+    valuedMinor: previewCase.offerValuedMinor,
     principalMinor: previewCase.offerPrincipalMinor,
     termDays: previewCase.offerTermDays,
     interestMinor: previewCase.offerInterestMinor,
     totalMinor: previewCase.offerTotalMinor,
     lateDayMinor: previewCase.offerLateDayMinor,
     expiresAt: previewCase.offerExpiresAt,
+    visitAt: previewCase.visitAt,
   },
   offer_expired: {
     expiresAt: previewCase.offerExpiresAt,

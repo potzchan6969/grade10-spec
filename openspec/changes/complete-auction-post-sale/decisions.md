@@ -14,13 +14,14 @@
 ## Non-Goals
 
 - Redesigning the winner's page: its layout, stepper and copy, a Next step
-  panel, a setup flow with a review step, and fee wording at the method choice.
-  Only the admin console is redesigned
+  panel, and a setup flow with a review step. Only the admin console is
+  redesigned; the winner's page takes the fee wording, card by card fee rule,
+  the Country/Region list, the kept one-time address and Copy Message's own
+  confirmation, per Q30 to Q36
 - Computing tax. The operator enters it, per `add-winner-order-tax-line`
 - Reading the payment provider's fees, or pricing each card's real fee for an
   international card or a currency conversion
-- Partial payments, cancellation reasons and reopening the address form. Each
-  is its own change
+- Partial payments and cancellation reasons. Each is its own change
 - Bank transfer outside HKD, and a second payment provider
 - Rewording the existing letters, and a requirement for the order link in
   letters or the old order address. The link and the address restore settled
@@ -64,6 +65,20 @@
 | Q27 | What does a returned proof tell the winner? | The reason the operator gives for the winner, never the internal note; the deadline resumes with the time that was left, and the Proof not accepted letter goes out - decided by the round | Returning it with no word, which leaves the winner waiting on a check that has ended |
 | Q28 | Which proof files does Grade10 take? | The winner's upload keeps its limits - 1 to 3 files of 5 MB each and 15 MB in all, PDF, PNG, JPEG, HEIC or HEIF - judged by the file's content, not its name; an operator attaches 1 to 5 JPEG, PNG or PDF files of 10 MB each - decided by the round | Trusting a file's name, which lets any file through as a JPEG |
 | Q29 | What does Grade10 keep of a refund's bank account? | The bank name, the channel (FPS, local or SWIFT) and the account or FPS phone masked to its last four digits, or an FPS email to its first letter and domain; the full number stays with the bank transfer itself - decided by the round | Keeping the full account number, which is personal data Grade10 never needs again once the refund is sent |
+| Q30 | How does an operator reach a winner about a transfer or a proof? | On WhatsApp, at the phone number from the address form, which the order page shows with the winner's name and email - Operations confirmed | Email alone, and email and WhatsApp both |
+| Q31 | What confirms Copy Message? | The button itself reads Copied for a moment, and no toast appears, so the dialog stays the only thing on screen. The To and Subject copy controls are not part of this decision - Product (@tangconst) | Keeping the toast, and no feedback at all |
+| Q32 | Is card offered in a currency with no card fee rule? | No. Card launches without a rule in USD and JPY: until Finance saves one for a currency, a winner in it is not offered card at order setup and reads that card is not yet available there, and no card invoice in it can be sent. This replaces card in every currency - Finance | Holding launch for Finance's rates, and charging no card fee |
+| Q33 | What does the winner read at the method choice? | Card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it - Product (@tangconst) | Showing no figure for either |
+| Q34 | Does billing Add Address use the delivery Country/Region list? | Yes: the same full A-Z list and searchable field, so a winner billed abroad finds their country the same way - Product (@tangconst) | A billing list of its own |
+| Q35 | Which language do Country/Region names read in? | The account's language, as the rest of the site does - Product (@tangconst) | The browser's locale, and fixed English |
+| Q36 | Does an unsaved one-time address survive leaving the order? | Yes. It stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it - Product (@tangconst) | Clearing it on leaving |
+| Q37 | What does a winner read where their currency offers neither method, and does the setup deadline run? | They read that payment is not yet available in that currency, with Contact Us, and cannot confirm. The 48-hour setup deadline keeps running, so the order can go Setup Overdue as usual; an operator reopens or records setup by hand - Product (@tangconst) | Pausing the deadline, which is more to build, and holding launch for Finance's USD and JPY rules |
+| Q39 | Which change owns the operator's reopen-setup and record-setup actions? | This one. `An operator reopens the address form` is added here with its scenarios, beside the Reopen setup primary action, the grant and the log entries this change already carries. Reopen gives a fresh 48 hours; recording gives the winner's whole setup, delivery address, billing address and payment method, without reopening; both need a reason and refuse after invoice send. `close-overdue-address-confirmation` depends on this change and keeps the persisted address deadline and `address_window_open` | Leaving the requirement in `close-overdue-address-confirmation`, which left the Reopen setup action on this page without its requirement |
+| Q38 | Which change writes the log rule for a reissue that changes Tax? | This change, in `Invoice log history`: a reissue that changes Tax names it with its value before and after, and no amount where the invoice carried none, per `grade10-admin-auction-post-sale-SC-204`. `add-winner-order-tax-line` no longer modifies that requirement and keeps the new invoice's Tax only - the planning owner's decision, so two in-flight changes never modify one requirement and Tax can be accepted now | `add-winner-order-tax-line` also modifying `Invoice log history`, which the overlap check refuses |
+| Q40 | Can an operator record a payment method the order's currency does not offer? | No. Record setup refuses card where Payment Settings holds no card fee rule for the currency, and bank transfer where Grade10 holds no bank details for it. A reopen in a currency that offers neither method is still allowed: the winner reads that payment is not yet available, with Contact Us, per Q37 - the planning owner. Carried by `An operator reopens the address form` and [Auction Management · Address Confirmation Window](../../../docs/prds/products/grade10-admin/auction/management.md#address-confirmation-window) | Recording a method the winner could never have chosen, which leaves an order that cannot be invoiced |
+| Q41 | In what order do the post-sale changes land? | This change is accepted only after `add-winner-order-tax-line`, `refine-auction-order-cancellation`, `add-winner-partial-payment` and `clarify-auction-shipping-progress-copy` are accepted and archived, so no two in-flight changes modify one requirement; `close-overdue-address-confirmation` follows this change. `depends_on` names the four - the planning owner | Accepting this change first, which the overlap check refuses |
+| Q42 | Who owns the rule for clearing a payment's flag? | `refine-auction-order-cancellation`, in `A late payment after cancellation is recorded without revival`: a reason, a return reference when available, the actor and the time. `Money that lands is always recorded` points at it by name and does not restate it - the planning owner | Restating the clearing detail in two requirements, which can drift apart |
+| Q43 | Which reason does Contact Us use where no method is offered? | The existing `setup overdue` reason, though the status reads Awaiting Setup, since the winner can only ask an operator to reopen or record setup. `Contact Us opens a copy-first ready email` widens to this route in this change, which already modifies it - the planning owner | A new reason, and offering Contact Us on no other route |
 
 ## Raised
 
@@ -85,3 +100,5 @@
 | grade10-admin/auction/payment-settings | What is the upper bound on a rule's percentage? | Q22 |
 | grade10-admin/auction/test-winners | How does a test winner sign in? | Q19 |
 | grade10-admin/auction/test-winners | What does Cancel do to the sandbox lot? | Q18 |
+| grade10-site/auction/winner-order | Where neither method is offered - USD or JPY with no card fee rule, and no bank details - setup cannot be confirmed: what is the winner told to do, and does the setup deadline still run to Setup Overdue and its consequences? | Q37 |
+| grade10-admin/auction/post-sale | Who owns the operator reopen-setup and record-setup actions | Q39 |

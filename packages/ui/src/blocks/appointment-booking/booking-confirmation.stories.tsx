@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { BookingConfirmation } from "./booking-confirmation";
-import {
-  CONFIRMATION_COPY,
-  FIXTURE_TIME_ZONE_LABEL,
-  LIVE_RECORD,
-} from "./fixtures";
+import { CONFIRMATION_COPY, LIVE_RECORD } from "./fixtures";
 
 const meta = {
   title: "Appointment Booking/BookingConfirmation",
@@ -17,7 +13,6 @@ const meta = {
     record: LIVE_RECORD,
     manageHref: "#/book/manage",
     calendarHref: "#/book/bk_live.ics",
-    timeZoneLabel: FIXTURE_TIME_ZONE_LABEL,
   },
 } satisfies Meta<typeof BookingConfirmation>;
 

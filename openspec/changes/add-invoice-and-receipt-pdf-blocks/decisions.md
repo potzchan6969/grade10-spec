@@ -11,10 +11,9 @@
 
 ## Non-Goals
 
-- Defining the tax line's rate, regime or shape, or reserving a slot for
-  either it or a formal tax receipt's company/tax-ID block. Retired with the
-  DOM contract (Q19) — nothing in production ever exercised either slot, and
-  a future change reserves one again if a real requirement resurfaces.
+- Defining the tax line's rate, regime or shape, or reserving a slot for a
+  formal tax receipt's company/tax-ID block. The optional `taxLine` stays as
+  a caller-supplied row for the separate tax change (Q19).
 - Carrying the manually-settled mark or Superseded invoice. Retired with the
   DOM contract (Q19). Bank rails were retired the same way but reopened,
   structured for the pdf-lib renderer, once a concrete requirement arrived
@@ -26,9 +25,11 @@
 - Resolving the invoice/receipt ID format disagreement
   (`docs/references/auction-invoice-and-receipt-contents.md#open-questions`).
   Out of scope, as it is everywhere else that has touched these documents.
-- Collecting or storing a winner-selected time zone for document dates.
+- Collecting or storing a winner-selected time zone for document dates (Q26).
 - Changing anything `winner-order/spec.md` already requires about either
   document's content, controls or visibility.
+- Inferring a winner's zone from their address, phone country or the PDF
+  reader's machine after issue.
 
 ## Decisions
 
@@ -60,8 +61,10 @@
 | Q24 | Which direction does the replacement relationship read on the PDF? | The new invoice names the prior invoice with `Replaces invoice {id}`; the prior invoice remains retained and the new invoice is the current payable record. The renderer exposes this as `replacesInvoice`, coordinated with `define-public-auction-identifiers` (author's clarification) | Keep the old `Replaced by` wording — rejected: it points from the prior invoice to the new one and conflicts with the requested document wording |
 | Q25 | Which zone should the documents use? | Superseded by Q26. The earlier accepted winner-zone decision remains in the immutable acceptance snapshot. | - |
 | Q26 | Does the accepted winner-zone addition still govern invoice and receipt dates after PR #921? | No. PR #921 sets both PDFs to `Asia/Hong_Kong` labelled `GMT+8`. The winner-zone setup, phone-entry, revision snapshot and renderer input are removed from this change. | Keep the previously accepted Q25 winner-zone contract, which conflicts with the later fixed-zone document requirement |
+| Q27 | Does `replacesInvoice.documentLink` change the PDF or only travel through the data contract? | Declined: the PDF offers no link to the replaced invoice. The replacement row names the prior invoice as plain text, and the data carries no `documentLink`. | Link the replaced invoice ID to the supplied PDF; or keep the link field without visible behavior, which a caller could supply with no contract to use. |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| `shared/ui/invoice-and-receipt-pdf` | Whether `replacesInvoice.documentLink` changes the PDF or only travels through the data contract | Q27 |

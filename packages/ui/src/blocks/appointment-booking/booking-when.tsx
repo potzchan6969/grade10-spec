@@ -17,7 +17,7 @@ function formatBookingWhen({
   locale = "en",
 }: BookingWhenProps): string {
   const options = { locale, timeZone };
-  return `${formatLocalDay(start, options)}, ${formatLocalTime(start, options)}–${formatLocalTime(end, options)} (${zoneLabel(timeZone, timeZoneLabel)})`;
+  return `${formatLocalDay(start, options)}, ${formatLocalTime(start, options)}–${formatLocalTime(end, options)} (${zoneLabel(timeZone, start, timeZoneLabel)})`;
 }
 
 export type { BookingWhenProps };

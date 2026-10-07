@@ -99,7 +99,6 @@ export type PdfLineItem = {
 
 export type InvoicePdfReplacement = {
   invoiceId: string;
-  documentUrl?: string;
 };
 
 export type PdfDocumentCopy = {
@@ -257,14 +256,24 @@ matching `receipt-pdf.ts`'s own document-specific sections
 (`drawPaymentSection`, `drawPaymentBreakdown`) rather than the shared
 `pdf-document.ts` — no other document draws it. `drawBankRails` draws
 `copy.bankDetailsHeading`
-then one column for each enabled rail — SWIFT, FPS, and HK local transfer —
-each with its own heading and stack of label/value lines, followed by a rule
-and one wrapped line of `copy.bankReferenceNoteLabel` ending in the bold
-`bankRails.reference`. Called only when `data.bankRails` is given;
-`invoice-pdf.ts` skips the call and the vertical space entirely on a card
-invoice. Each rail is optional so the snapshot can represent the enabled
-subset; every supplied field remains a plain string with no rail-specific
-formatting or validation.
+then one column for each enabled rail - SWIFT, FPS, and HK local transfer in
+that order when supplied. Each column has its own heading and stack of
+label/value lines; the enabled columns divide the content width equally.
+Disabled or retired rails have no column or reserved width. A rule follows
+the columns, then one wrapped line of
+`copy.bankReferenceNoteLabel` ending in the bold
+`bankRails.reference`. Called
+only when `data.bankRails` is given; `invoice-pdf.ts` skips the call and the
+vertical space entirely on a card invoice, the same `!== undefined` gate
+`OrderValueSection`'s summary rows already use. Every field arrives as a
+plain string - no rail-specific formatting or validation. The caller
+supplies at least one enabled rail when it supplies `bankRails`.
+
+**A replacement invoice names its predecessor.** `InvoicePdfData` accepts
+optional `replacesInvoice` with `invoiceId`. `drawMetaBlock` draws
+`copy.replacesInvoiceLabel` and the replaced ID as a plain-text row only when
+the relationship is present. The current invoice number remains the
+document's own number. The PDF carries no link to the replaced invoice.
 
 **`footer`/`drawFooter` removed from both renderers (`decisions.md`
 Q23).** Neither document draws a footer sentence any more; `InvoicePdfCopy`

@@ -57,7 +57,7 @@ type AuctionCardProps = {
   bidCountLabel?: string;
   /** Static close, open, or closed line. Omit it and no clock is shown. */
   when?: AuctionCardWhen;
-  locale?: ShippedLocale;
+  locale: ShippedLocale;
   timeZone: string;
   badges?: readonly AuctionCardBadge[];
   /**
@@ -119,7 +119,7 @@ function AuctionCard({
   priceLabel,
   bidCountLabel,
   when,
-  locale = "en",
+  locale,
   timeZone,
   badges = [],
   live,

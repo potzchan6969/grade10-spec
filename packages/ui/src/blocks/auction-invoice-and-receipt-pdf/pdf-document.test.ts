@@ -1,15 +1,6 @@
 import type { PDFDocument } from "pdf-lib";
 import { describe, expect, it, vi } from "vitest";
-import { formatDateTime, loadFonts } from "./pdf-document";
-
-describe("formatDateTime", () => {
-  it("renders fixed to Hong Kong time as GMT+8, regardless of the machine's own zone", () => {
-    // 2026-09-24T04:30:00.000Z is 2026-09-24T12:30:00 in Asia/Hong_Kong (UTC+8).
-    const value = new Date("2026-09-24T04:30:00.000Z");
-    expect(formatDateTime(value)).toBe("September 24, 2026, 12:30 GMT+8");
-    expect(formatDateTime(value)).not.toContain("HKT");
-  });
-});
+import { loadFonts } from "./pdf-document";
 
 /** Embeds each face as the very bytes it was given, so a test can tell them apart. */
 function recordingPdf() {

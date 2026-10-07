@@ -26,3 +26,12 @@ imports them and supplies the words, the diary's answers and the callbacks.
 ::story{id="appointment-booking-bookingmanagecard--live" title="A live visit"}
 
 ::story{id="appointment-booking-bookingmanagecard--closed" title="A closed visit"}
+
+## Time Zone
+
+- **The shop's clock** - the slot picker, the summary and the visit card show
+  the shop's times, whatever zone the collector is in; the visit is physical,
+  so the shop's clock is the one that matters
+  ([Dates and Times](/p/platform/shared/dates-and-times))
+- **The label** - no rule sets how the blocks name the zone; their default
+  label is HKT for Hong Kong, and a page may pass its own

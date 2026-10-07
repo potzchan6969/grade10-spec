@@ -30,29 +30,45 @@
   "visit": {
     "title": "Your Visit",
     "at": "{location}, {when}",
-    "pick": "Pick a time and bring the item with you. Nothing happens to it until you have agreed what should.",
+    "book": "Book a visit",
+    "pick": "Bring the item with you. Nothing happens to it until you have agreed what should.",
     "cancel": "Cancel this visit",
     "loadingLocations": "Loading our shops…",
     "where": "Where",
-    "nothingFree": "Nothing free at {location} in the next {days} days.",
+    "duration": "Vault visits take about {minutes, plural, one {# minute} other {# minutes}}",
+    "moreShops": "More shops appear here as they open.",
+    "day": "Day",
+    "nextDays": "{days, plural, one {Next # day} other {Next # days}}",
+    "earlierWeek": "Earlier week",
+    "laterWeek": "Later week",
+    "timeOn": "Time on {day}",
+    "bookAt": "Book {when}",
+    "moveTo": "Move to {when}",
+    "nothingFree": "Nothing free at {location} from {first} to {last}.",
     "unavailable": "That time is no longer free. Pick another one below — the list has just been refreshed.",
     "booked": {
-      "title": "Visit booked",
-      "emailLine": "A confirmation is on its way by email.",
+      "title": "Your visit is booked",
+      "emailLine": "A confirmation is on its way by email. Bring the item — and any others you are sending in.",
       "calendar": "Add to calendar",
       "move": "Move",
       "cancel": "Cancel",
       "before": {
+        "title": "Before you come",
+        "verifyTitle": "Verify your identity on this phone",
+        "verifyBody": "A couple of minutes with your ID document and the camera. It saves passport handling at the counter, and you find out at home if a document has lapsed.",
         "verify": "Verify now",
         "verified": "Verified — nothing to bring but the item.",
-        "bring": "Bring the item.",
-        "sign": "Sign the loan and custody agreements.",
-        "signStorage": "Sign the custody agreement.",
-        "moneyFollows": "The money follows once you have signed.",
-        "inPerson": "Or verify in person when you arrive."
+        "inPerson": "Rather show your ID in person? Bring it to the visit; staff check it at the counter in a minute.",
+        "bringTitle": "Bring the item",
+        "bringItems": "{items}, plus any other item you sent a request for.",
+        "bring": "The item, plus any other item you sent a request for.",
+        "signTitle": "Sign at the counter",
+        "sign": "One signature on our iPad: the custody agreement, and the loan agreement if you accept an offer. Nothing is owed until money reaches you.",
+        "signStorage": "One signature on our iPad: the custody agreement."
       }
     },
-    "rules": "Move or cancel any time before the slot. Miss it, and we close the visit — the case stays open.",
+    "rules": "You can move or cancel the visit any time before it starts. Miss it and we close the visit, not your case.",
+    "rulesRequest": "You can move or cancel the visit any time before it starts. Miss it and we close the visit, not your case — unless the case is still only a request.",
     "moved": "This case changed while you had it open. Nothing was done — the page now shows where it stands."
   },
   "ceremony": {
@@ -108,7 +124,6 @@
     "postalAddressHint": "Used only to send you written notice.",
     "submitLabel": "Sign the {title}",
     "submittingLabel": "Signing…",
-    "retryLabel": "Try again",
     "missingPages": "Please read every page before signing.",
     "missingConsent": "Please tick the box to confirm you have read it.",
     "missingSignature": "Please sign in the box above.",
@@ -127,6 +142,40 @@
     "sealedIntegrityWarning": "The copy that downloaded does not match the fingerprint of what you signed, so it has not been saved. Your signature is recorded — ask the member of staff with you for a printed copy.",
     "signedTitle": "Your signatures are recorded",
     "signedMessage": "Others still have to sign before these documents are sealed.",
+    "disclosureTick": "I have read this and agree to review and sign electronically.",
+    "identityChecked": "Your ID was checked on {day}.",
+    "venueLine": "Signing at {venue}",
+    "caseLine": "Case {reference} · {subject}",
+    "caseOnly": "Case {reference}",
+    "linkClock": "Link valid for {remaining}",
+    "readToEndFirst": "Read to the end first",
+    "continueLabel": "Continue to sign",
+    "comesNext": "{position} of {total} — the {next} comes next",
+    "comesLast": "{position} of {total} — the last one",
+    "readAgainLabel": "Read it again",
+    "signSummary": "{title} — read {viewed} of {pageCount} pages",
+    "nextUp": "Next: the {title}",
+    "lastNote": {
+      "release": "The item is handed over once this is sealed"
+    },
+    "sealedAt": "Sealed {time}",
+    "sealedMessageMailed": "Your signed copies are on your case page and on their way to {email}. Keep the fingerprint below — it identifies this exact set of documents.",
+    "sealedDigest": "{digest} · sealed {when}",
+    "nextStepsTitle": "What happens now",
+    "nextSteps": {
+      "vaultTitle": "Staff put the item in the vault",
+      "vaultDetail": "You get an email when it is in. Your visit is complete.",
+      "moneyTitle": "The money is sent by bank transfer",
+      "moneyDetail": "{amount}, after the item is in the vault. The {days} days run from the day it is sent, and we email you the due date.",
+      "repayTitle": "Repay at your bank, collect in person",
+      "repayDetail": "The case page states what is owed at any date and where to send it.",
+      "collectTitle": "Collect in person",
+      "collectDetail": "Bring the ID you showed today; staff prepare a release for you to sign.",
+      "handoverTitle": "Staff hand the item over",
+      "handoverDetail": "Check it before you leave. Nothing is outstanding on this case."
+    },
+    "nothingMore": "Nothing more is needed from you on this device.",
+    "doneLabel": "Done — hand the iPad back",
     "refusal": {
       "TOKEN_INVALID": {
         "title": "This signing link is not valid",
@@ -137,8 +186,8 @@
         "message": "Signing links last a short while for your safety. Ask for a new one."
       },
       "TOKEN_CONSUMED": {
-        "title": "This signing session is finished",
-        "message": "If you have just signed, nothing more is needed — your signed copies are on your case page and the member of staff with you can print them. Otherwise this link has been used already; ask for a new one."
+        "title": "This signing link was replaced",
+        "message": "A newer link was made for these documents, and only the newest one works. Ask the member of staff with you for it."
       },
       "TOKEN_CONFLICT": {
         "title": "This link was opened on another device",
@@ -155,6 +204,10 @@
       "PACKET_COMPLETED": {
         "title": "These documents are already signed",
         "message": "Everyone who had to sign has signed. You can close this page."
+      },
+      "PACKET_DECLINED": {
+        "title": "Nothing was signed",
+        "message": "The documents were withdrawn and your signing link is no longer valid. The member of staff with you can help with what happens next."
       },
       "DOCUMENT_UNKNOWN": {
         "title": "That document is not part of this signing",

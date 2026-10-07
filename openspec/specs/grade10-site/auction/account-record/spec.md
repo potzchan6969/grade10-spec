@@ -54,6 +54,10 @@ Owner-only — nobody but the collector sees their record.
 - **Row actions**
   - Ended alerts: Email alerts show disabled on a closed lot.
   - Won entry: a Won row opens its auction order.
+- Won Status
+  - Preparing Shipment: paid, undispatched auction order on My Auctions (was Processing)
+- After a close
+  - Partially Paid row: tells a winner that an operator is collecting the invoice
 
 ## Requirements
 
@@ -322,11 +326,13 @@ or shipment state.
 | Pending Payment | Invoice status is `pending` and the payment deadline has not passed |
 | Setup Overdue | The setup deadline has passed without a confirmed delivery address |
 | Payment Overdue | Invoice status is `expired` after the payment deadline |
-| Processing | Invoice status is `paid`, and fulfilment status is `unfulfilled` |
+| Preparing Shipment | Invoice status is `paid`, and fulfilment status is `unfulfilled` |
 | Shipped | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is not confirmed |
 | Delivered | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is confirmed |
 | Cancelled | Invoice status is `cancelled` |
 | Refunded | Invoice status is `refunded` |
+
+Preparing Shipment and Shipped SHALL use Badge `default` on a Won row.
 
 This surface SHALL remain read-only. It SHALL offer no control that records
 payment, uploads payment proof, requests a wire, records shipment, changes an
@@ -341,9 +347,8 @@ A Won listing SHALL NOT carry secondary helper detail lines under its standing
 How to reach Grade10 when the invoice is `expired` SHALL appear on Winner Order
 only.
 
-Didn’t win hold being-released and released copy remains governed by the durable
-hold requirements folded with `redesign-my-auctions-table`; this change does not
-remove them.
+A Didn’t win listing reads "Your card was not charged.", under "A losing bidder
+reads that their card was not charged".
 
 <!-- trace:scenario id=g10.auction-account-record.SC-1lv rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-20 - Card capture reads as Paid
@@ -351,7 +356,8 @@ remove them.
 
 - **GIVEN** a won listing whose invoice status is `paid` and whose fulfilment status is `unfulfilled`
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Processing
+- **THEN** that listing's state is Preparing Shipment
+- **AND** its status badge uses Badge `default`
 
 <!-- trace:scenario id=g10.auction-account-record.SC-pu6 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-21 - Manual collection reads as the same Paid
@@ -359,7 +365,7 @@ remove them.
 
 - **GIVEN** a won listing whose collection an operator recorded outside Stripe is `paid`, and which has not shipped
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Processing
+- **THEN** that listing's state is Preparing Shipment
 
 <!-- trace:scenario id=g10.auction-account-record.SC-m3u rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-22 - An expired payment reads Payment Overdue
@@ -378,6 +384,7 @@ remove them.
 - **GIVEN** one won listing whose paid order is fulfilled without delivery confirmation and one whose paid order has delivery confirmation
 - **WHEN** the winner opens their Bidding page
 - **THEN** the first listing's state is Shipped
+- **AND** its status badge uses Badge `default`
 - **AND** the second listing's state is Delivered
 
 <!-- trace:scenario id=g10.auction-account-record.SC-4sy rev=1 -->
@@ -461,7 +468,7 @@ remove them.
 - **GIVEN** one won listing whose proof an operator returned, and one whose proof an operator confirmed, neither shipped
 - **WHEN** the winner opens their Bidding page
 - **THEN** the first listing's state is Pending Payment
-- **AND** the second listing's state is Processing
+- **AND** the second listing's state is Preparing Shipment
 
 ### Requirement: The record belongs to its owner alone
 
@@ -876,3 +883,19 @@ remains published. A Won listing SHALL NOT carry it.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Didn't win
 - **AND** the row says their card was not charged
+
+### Requirement: My Auctions keeps a partially paid Won row linked to the order
+
+The My Auctions account record SHALL keep a partially paid auction in the Won
+list, label its order state Partially Paid, show the winning lot and amount,
+and open the same Winner Order when the winner selects View order. It SHALL
+not relabel the row as a new bid standing.
+
+<!-- trace:scenario id=g10.auction-account-record.SC-chv rev=1 -->
+#### Scenario: grade10-site-auction-account-record-SC-62 - A partially paid Won row opens Winner Order
+**Serves:** grade10-site-auction-account-record-US-08 - Winner revisits a partially paid order
+
+- **GIVEN** a winner whose auction order is Partially Paid
+- **WHEN** they open My Auctions and select the Won row
+- **THEN** the row is labelled Partially Paid
+- **AND** View order opens that order's Winner Order

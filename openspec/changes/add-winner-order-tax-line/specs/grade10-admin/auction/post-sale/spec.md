@@ -1,16 +1,13 @@
 # Post-Sale — delta
 
-## Purpose
-
-An operator states the Tax a winner owes when sending or reissuing an invoice.
-
 ## Feature set
 
 - Tax on the quote
   - Optional amount: empty means no Tax; an added amount is above zero
   - Send: Tax becomes an invoice line and part of the Subtotal
   - Reissue: Tax can be added, changed, or removed with the other quoted amounts
-  - Audit: a Tax change records its value before and after
+- Resolving an unpaid order
+  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance, tax and deadline, always with a reason and at least one change
 
 ## MODIFIED Requirements
 
@@ -357,12 +354,22 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-qtj rev=1 -->
-#### Scenario: post-sale-SC-158 - A reissue changes tax and logs the change
-**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+#### Scenario: post-sale-SC-158 - A reissue changes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment whose invoice has no Tax
 - **WHEN** an operator reissues it with Tax of 6000 minor units in HKD and a
   reason, changing nothing else
 - **THEN** the new invoice includes Tax of 6000 minor units in HKD
-- **AND** the reissued entry names Tax as the changed part, with no amount before
-  and 6000 minor units in HKD after
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kdq rev=1 -->
+#### Scenario: post-sale-SC-210 - A reissue removes tax
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice includes Tax of 6000
+  minor units in HKD
+- **WHEN** an operator reissues it removing Tax and giving a reason, changing
+  nothing else
+- **THEN** Grade10 accepts it as a change
+- **AND** the new invoice has no Tax line
+- **AND** its Subtotal is 6000 minor units lower than the replaced invoice's
