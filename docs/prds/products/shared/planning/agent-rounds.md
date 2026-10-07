@@ -196,6 +196,28 @@ An artifact is drawn from what is before it, the page's marks first.
   carries a case of the change ticking it that is still draft is refused; a
   draft another change left in the same file is that change's to sign
 
+## Ids
+
+A journey, a scenario and a case each keep one id for life once it lands on
+`main`, and no id is issued twice.
+
+- **Two branches at once** - the first to land keeps its ids; the second is
+  refused at its landing, naming each journey or scenario id another change
+  or `main` already holds
+- 🚧 **The next id** - issued by a command from the branch and the published
+  `main`, never counted by hand: a journey or scenario number within its
+  capability, a case number within its journey, or a letter beside a named id
+- 🚧 **Moving a branch's ids** - the refusal names the one command that moves
+  the branch's own ids above `main`'s, with every case id and citation built
+  from them in the change
+- 🚧 **Case numbers** - a case number another change or `main` holds is
+  refused the same way, at every suite level
+- 🚧 **Acceptance reads `main`** - an id `main` holds is refused before a
+  change is accepted; a change accepted on its branch and beaten to the
+  landing moves its ids and is accepted again
+- 🚧 **One record, one id** - a scenario or a case copied into a second change
+  keeps the trace id it already holds, however its title is reworded
+
 ## Checks
 
 - 🚧 **A page first, for a new capability** — a page naming a capability an
@@ -246,5 +268,6 @@ propose, and that every step passes through layers of checks. The brief is
 | The interview's size | Decided | About three questions, none trivial, that change what is built, one whether to do it now; the rest listed as decided. | Product |
 | Verified together | Decided | One verifier over a round's readings; a round of one reader verifies itself. | Engineering |
 | The record's paths | Decided | A group's repository tag says where its paths live, and the landing resolves them in the application clone beside it, so every row lands through the command. | Engineering |
+| Ids | Decided | Issued from the branch and the published `main`; the branch that lands second moves its own, and acceptance reads `main`; no reservation file and no id that carries its change. | Engineering |
 | A run-sheet failure | Decided | QA writes the sentence in the change's thread, naming the case id, and the sheet stays the record of the walk; no new sender. | QA, Product |
 :::

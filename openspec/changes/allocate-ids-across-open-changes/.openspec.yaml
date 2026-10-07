@@ -1,0 +1,11 @@
+schema: grade10-planning
+created: 2026-10-07
+depends_on:
+  - run-a-round-on-every-artifact
+hands:
+  pm: "@ecchochan"
+  dev: "@ecchochan"
+ui_waived: no surface a user meets; the refusal is a message in a terminal
+awaiting:
+  specs: "2026-10-07, the outline, the blind suite and the requirements for
+    shared/planning/agent-rounds - @ecchochan"
