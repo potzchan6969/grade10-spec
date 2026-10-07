@@ -135,7 +135,7 @@ A third row records a decision about the tile.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Responsive layout | Open | ❓ Product manager confirms. The list answers the width it is given. Recommended: its own part of the map, as the spec places it, because no other part means it. The other option is folding it into the tile contract. | Product |
-| Load more | Open | ❓ Product manager confirms. Reaching the end of the catalogue and waiting for the next products are reported like every other change. Recommended: its own part of the map, as the spec places it, because reaching the end is not a choice the shopper makes in the filters or the sort. The other option is folding it into Filters and sort. | Product |
+| Responsive layout | Decided | The list answers the width it is given. It is its own part of the map, as the spec places it, because no other part means it. Not folded into the tile contract. | Product |
+| Load more | Decided | Reaching the end of the catalogue and waiting for the next products are reported like every other change. It is its own part of the map, as the spec places it, because reaching the end is not a choice the shopper makes in the filters or the sort. Not folded into Filters and sort. | Product |
 | Tile as a link | Decided | A tile that opens a product is a link: it opens in a new tab and its address can be copied, like any other. The surface gives the tile its product's page; the listing gives its tiles theirs in its own round. | Product |
 :::
