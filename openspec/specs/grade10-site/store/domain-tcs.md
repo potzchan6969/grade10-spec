@@ -291,6 +291,61 @@ when I open it,
 * Step 3 applies the points.
 * The member's balance drops once, by <points>, when the sale is paid.
 
+---
+
+## grade10-site-store-e2e-US9: Member's saved name reaches the till and the pass
+
+**As a** member,
+**I want** the name I save on my profile to be the one staff see at the till and the one my wallet pass shows,
+**so that** the site, the counter and my phone name me the same way.
+
+<!-- trace:case id=g10.store-domain.TC-82a rev=1 covers=g10.store-account-profile.SC-zu6,g10.store-membership.SC-e9k,g10.store-wallet-member-card.SC-gvk -->
+### grade10-site-store-e2e-US9-TC1-1: A name saved on the profile shows at the till and on the pass
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-store-account-profile-US-02, grade10-site-store-membership-US-02, grade10-site-store-wallet-member-card-US-06
+
+**Pre-conditions:**
+
+* customer(member with a live Google Wallet pass, account named <account name>) is signed in as <signed-in address>, and the pass shows <account name>.
+* admin(shop staff) is on <shop_1>'s till.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <account name> | `Kit Lam` |
+| <grade10 profile url> | `https://grade10-stg.com/profile` |
+| <signed-in address> | `kit.lam@example.com` |
+| <new name> | `Kit Collector` |
+| <shop_1> | A physical store running the Grade10 till |
+
+**Steps:**
+
+1. Navigate to <grade10 profile url>.
+2. Click the edit control.
+3. Replace the display name with <new name>.
+4. Click the save button.
+5. Identify the member by typing <signed-in address> in the till's membership modal.
+6. Wait for the first sweep beginning after step 4.
+7. Open the pass in Google Wallet.
+
+**Expected Results:**
+
+* Step 4 shows <new name> on the profile.
+* Step 5 shows <new name> as the member's name in the modal.
+* Step 7 shows <new name> on the pass.
+
 ## Reconciliation
 
 **Run:** 2026-10-07 · carried US4-TC1-1 with its id, revision and words, so its marker names every scenario that serves `grade10-site-store-discounts-US-04` in this change; the path it walks is unchanged.

@@ -1074,6 +1074,188 @@ Runs once per row of **Test data**.
 * Step 8's balance is step 1's less <points ask_1>.
 * Activity lists one Points put toward a purchase entry.
 
+<!-- trace:case id=g10.store-membership.TC-23a rev=1 covers=g10.store-membership.SC-e9k,g10.store-membership.SC-y0k -->
+### grade10-site-store-membership-US2-TC17-1: Till names the member by the site's one rule
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-membership-US-02
+
+**Pre-conditions:**
+
+* admin(shop staff) is on <shop_1>'s till.
+* customer(member) is <member_1>, signed in to the account as <signed-in address>, in the <member state> of the row.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <member_1> | A member paired with a commerce customer |
+| <shop_1> | A physical store running the Grade10 till |
+| <signed-in address> | `kit.lam@example.com` |
+
+| <member state> | The name reads |
+| --- | --- |
+| Saved `Kit Collector` as the display name on the profile; the account is named `Kit Lam` | `Kit Collector` |
+| Never saved a profile; the account is named `Kit Lam` | `Kit Lam` |
+| Never saved a profile; the account holds no name | `kit.lam` |
+| Never saved a profile; the store's record holds the placeholder name older records carry; the account is named `Kit Lam` | `Kit Lam` |
+
+**Steps:**
+
+1. Identify <member_1> by typing <signed-in address> in the till's membership modal.
+2. Read the member's name in the modal.
+3. Find <member_1>'s customer in the shop's own customer search.
+4. Read the name on the customer details badge.
+
+**Expected Results:**
+
+* Step 2 reads the row's name.
+* Step 4 reads the same name.
+
+<!-- trace:case id=g10.store-membership.TC-zhi rev=1 covers=g10.store-membership.SC-a70,g10.store-membership.SC-y0k -->
+### grade10-site-store-membership-US2-TC18-1: Till shows 會員 for a member with no shop name while the account service cannot be reached
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-membership-US-02
+
+**Pre-conditions:**
+
+* admin(shop staff) is on <shop_1>'s till.
+* customer(member, never saved a profile, account named `Kit Lam`) is <member_1>, signed in to the account as <signed-in address>.
+* The account service's name lookup is mocked to fail.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <member_1> | A member paired with a commerce customer, holding a points balance and a tier |
+| <shop_1> | A physical store running the Grade10 till |
+| <signed-in address> | `kit.lam@example.com` |
+
+| <surface> | <route> |
+| --- | --- |
+| The till's membership modal | Identify <member_1> by typing <signed-in address> in the modal |
+| The customer details badge | Find <member_1>'s customer in the shop's own customer search |
+
+**Steps:**
+
+1. <route>.
+2. Read the name, tier and balance on <surface>.
+
+**Expected Results:**
+
+* Step 2 reads 會員 as the name.
+* Step 2 still shows <member_1>'s tier and balance.
+
+<!-- trace:case id=g10.store-membership.TC-g53 rev=1 covers=g10.store-membership.SC-jjw,g10.store-membership.SC-y0k -->
+### grade10-site-store-membership-US2-TC19-1: A name saved on the profile shows at the till through an account-service outage
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-membership-US-02
+
+**Pre-conditions:**
+
+* admin(shop staff) is on <shop_1>'s till.
+* customer(member, saved <saved name> as the display name on the profile, account named `Kit Lam`) is <member_1>, signed in to the account as <signed-in address>.
+* The account service's name lookup is mocked to fail.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <member_1> | A member paired with a commerce customer |
+| <shop_1> | A physical store running the Grade10 till |
+| <signed-in address> | `kit.lam@example.com` |
+| <saved name> | `Kit Collector` |
+
+**Steps:**
+
+1. Identify <member_1> by typing <signed-in address> in the till's membership modal.
+2. Read the member's name in the modal.
+3. Find <member_1>'s customer in the shop's own customer search.
+4. Read the name on the customer details badge.
+
+**Expected Results:**
+
+* Step 2 reads <saved name>, not 會員.
+* Step 4 reads <saved name>.
+
+<!-- trace:case id=g10.store-membership.TC-80o rev=1 covers=g10.store-membership.SC-ymg -->
+### grade10-site-store-membership-US2-TC20-1: Till is sent an 80-character name whole
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-membership-US-02
+
+**Pre-conditions:**
+
+* admin(shop staff) is on <shop_1>'s till.
+* customer(member, saved <long name> as the display name on the profile) is <member_1>, signed in to the account as <signed-in address>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <member_1> | A member paired with a commerce customer |
+| <shop_1> | A physical store running the Grade10 till |
+| <signed-in address> | `kit.lam@example.com` |
+| <long name> | 80 Latin characters, the display name's limit |
+
+**Steps:**
+
+1. Identify <member_1> by typing <signed-in address> in the till's membership modal.
+2. Read the API response that answers the modal.
+3. Find <member_1>'s customer in the shop's own customer search.
+4. Read the API response that answers the customer details badge.
+
+**Expected Results:**
+
+* Step 2 names the member <long name>, all 80 characters.
+* Step 4 names the member <long name>, all 80 characters.
+
 ---
 
 ## grade10-site-store-membership-US3: Member's in-store order earns through attribution
@@ -1625,6 +1807,8 @@ Runs once per row of **Test data**.
 - A discount staff keyed under a points title on a sale the till never marked refuses a coupon-only Apply as well as a points spend: the panel offers no points field, no coupons and no Apply, because the order id Apply writes would make it read as the member's
 - A paid order whose discounts carry neither points title is debited like one that names none, the applied total less every other instrument, never more than promised, because a shop can retitle the points discount and still take the money off
 - Order Details shows no Points row on an order whose shop named no points discount, even where its points were debited, because the debit worked out from the rest of the applied total can hold money staff took off by hand
+- A member with a name saved on the profile is named by it at the till through an account-service outage; only a member with none shows 會員.
+- The till and the badge are sent the member's name whole; the till lays it out.
 
 ## Reconciliation
 
@@ -1651,3 +1835,26 @@ Runs once per row of **Test data**.
 - **Cases added after the reconciliation** - US2-TC16, written from Q6 and `grade10-site-store-membership-SC-86`, so it is not blind
 
 **Run:** QA2 reconciliation on 2026-10-06 for `name-points-discount-deduction`, `grade10-site/store/membership`, run seven times. The seventh pass, on 2026-10-07 in a fresh context, re-read every case and scenario against US-02 and the Points discount group, every marker against the scenarios serving its journeys across the stack below this change, never-lock-a-coupon's store `domain-tcs.md` and discounts delta, and grade10 `services/coupons/money.ts` and `services/loyalty/pointsSpend.ts`. The sixth pass, in a fresh context, re-read every case and scenario against US-02 and the Points discount group, the change's `domain-tcs.md` covers against every scenario in the store serving its two journeys, and grade10 `services/coupons/money.ts`, `services/loyalty/pointsSpend.ts`, `services/orders/readOrder.ts`, `acts/spend.ts`, `acts/flow.ts`, `acts/view.ts` and `extensions/till/src/draw/benefits.ts`. The fifth pass, in a fresh context, re-read every case and scenario against US-02 and the Points discount group, with grade10 `acts/view.ts`, `extensions/till/src/draw/benefits.ts`, `services/coupons/money.ts`, `services/loyalty/pointsSpend.ts` and their tests, and every grade10 line the suite and `decisions.md` cite. The fourth pass, after the acceptance review's second round, re-read `grade10-site-store-membership-SC-82`, US2-TC10 and US2-TC11 against the requirement's case rule, now stated for every reader, and its till sentence, which now names a code beside an offer; neither case moves. The third pass, in a fresh context after the acceptance review's Q8, re-read every case and scenario against US-02 and the Points discount group, with grade10 `services/coupons/money.ts`, `services/loyalty/pointsSpend.ts`, `services/orders/readOrder.ts`, `acts/spend.ts` and their tests. The second pass, in a fresh context, re-read each case and scenario against US-02 and the feature set's Points discount group. Read this suite, the change's `domain-tcs.md`, the delta `spec.md` and `user-journeys.md`, the proposal, `decisions.md`, `tech-design.md`, `tasks.md`, the durable membership spec, suite and store `domain-tcs.md`, the PRD pages Paying with Points, Shopify Integration, Store Discounts and Order Details, and grade10 `packages/grade10-store/contracts/src/saleMarks.ts`, `integrations/shopify-pos/grade10/src/acts/spend.ts` and `flow.ts`. The blind pass left no Run line, so what it read is not recorded.
+
+**Run:** 2026-10-07, seventh QA2 reconciliation, in a fresh context, after product settled Q10, Q11, Q12 and Q16 on the profile: a default name the collector leaves as shown stays the account's, which the till's name order already reads, so no case moved. Before it, the sixth, over the same reading: no case moved. Before it, the fifth, after the third accept review: the requirement names the failure as an account service that cannot be reached or does not answer, where "gives no name" read as an account with no name, and `grade10-site-store-membership-SC-90` now states the placeholder. No case moved; US2-TC18's title takes the requirement's words. Before it, the fourth, in a fresh context, over the same reading: US2-TC17 gained a row. Before it, the third; after the second accept review the new scenarios and cases were renumbered above the ids concurrent changes claim, and no case moved. Read: this suite, the delta `spec.md` and `user-journeys.md`, the durable membership suite for the cases the carried scenarios already have, `proposal.md`, `decisions.md`, `tech-design.md`, `tasks.md`, the Shopify Integration and Member Card in a Wallet pages, and the application repository's `memberName` and POS directory. The blind pass recorded no Run line of its own, so its bundle is not stated here.
+
+- **Raised, settled by the round** - a saved name through an account-service outage (Q21): the till shows the saved name, `grade10-site-store-membership-SC-87`, walked by US2-TC19; the pass's half is settled in the wallet suite. A long name in the till's modal (Q22): the requirement sends it whole, and US2-TC20 asserted it with no scenario to reach; `grade10-site-store-membership-SC-89` now states it, as `grade10-site-store-wallet-member-card-SC-59` does for the pass
+- **Added to the spec** - US2-TC17's three rows assert the name order the requirement states at the till, and no scenario stated it: `grade10-site-store-membership-SC-88` only holds the badge to the till's name. `grade10-site-store-membership-SC-90` now states the order, and US2-TC17 and the domain walk trace it
+- **Rewritten to the page** - US2-TC17 gains a member whose record holds the placeholder name older records carry, read as the account name, since the Profile page's A name nobody chose line holds the till to the default too; `grade10-site-store-membership-SC-90` now states it, so the row asserts no more than its scenario
+- **Rejected** - none
+- **Contradicted** - none
+- **Cases added after the reconciliation** - US2-TC19 (`grade10-site-store-membership-SC-87`), US2-TC20 (`grade10-site-store-membership-SC-89`): written from the decisions the blind pass raised, so they are not blind
+- **Carried unchanged** - the modified requirement changes only the name clause; its other scenarios keep their durable cases. `grade10-site-store-membership-SC-77` now serves US-02, whose journey says staff spend points once, where the durable spec has it serve US-04; its outcome is word for word, and durable US4-TC2 still reaches it; `/tcs-review` moves that case under US2 when the change folds
+- **Left to the domain** - nothing: `grade10-site-store-e2e-US9-TC1-1` reads a saved name at the till, and US2-TC17 still asserts it with the badge
+- **Uncovered** - none
+
+| Scenario | Reached by |
+| --- | --- |
+| `grade10-site-store-membership-SC-75` | durable US4-TC1, US4-TC4 |
+| `grade10-site-store-membership-SC-76` | durable US4-TC3 |
+| `grade10-site-store-membership-SC-77` | durable US4-TC2 |
+| `grade10-site-store-membership-SC-78` | US2-TC18 |
+| `grade10-site-store-membership-SC-87` | US2-TC19 |
+| `grade10-site-store-membership-SC-88` | US2-TC17, US2-TC18, US2-TC19 |
+| `grade10-site-store-membership-SC-89` | US2-TC20 |
+| `grade10-site-store-membership-SC-90` | US2-TC17; at domain, `grade10-site-store-e2e-US9-TC1-1` |

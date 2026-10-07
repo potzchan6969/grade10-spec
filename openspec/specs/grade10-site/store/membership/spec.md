@@ -18,6 +18,7 @@ earning through attribution.
 - Spending
   - Staff session: a double tap spends once; points come off as one order-level discount, no code minted
   - Points discount: titled "Deduction from Points"; a "Points" discount still counts as the member's points, online and at the till
+  - Member's name: the name chosen for the shop, else the account name, else the address before the `@`, sent whole; 會員 for a member with no name chosen for the shop while the account service cannot be reached
 - Attribution
   - One recording: webhook and sweep converge; a wrong claim is one action to undo
 - Degradation
@@ -438,7 +439,7 @@ the rest later.
 
 ### Requirement: A till session spends for the member and notifies them once it lands
 
-Inside a till session, staff SHALL see the member's display name, tier,
+Inside a till session, staff SHALL see the member's name, tier,
 redeemable balance, qualifying-window progress, tier renewal and
 balance-lapse dates, recent activity, and open coupons — the store's own
 and the member's reward coupons alike — and SHALL be able to redeem points
@@ -449,6 +450,17 @@ stay an operator's action from the console, never the till. Spending SHALL
 present a read-back facing the member — points spent, money still due,
 balance after, points this sale will earn, computed by the platform —
 before it commits.
+
+The member's name SHALL be the one their profile, their pass and the
+membership surface show, resolved in this order: the name the member chose
+for the shop, else their account name, else the part of their email address
+before the `@`. A member with a name chosen for the shop SHALL be named without
+the account service. For a member with no name chosen for the shop, staff SHALL
+see 會員 in its place when the account service cannot be reached or does not
+answer for them. The
+customer-details badge SHALL show the member by the same name. The store SHALL
+send the till session and the badge the name whole, uncut; the till lays it
+out.
 
 Submitting the same spend twice SHALL cost once and answer the same both
 times. Every staff-assisted spend SHALL notify the member once the sale
@@ -462,7 +474,7 @@ notification SHALL never carry the code.
 
 <!-- trace:scenario id=g10.store-membership.SC-uae rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-77 - A double tap spends once
-**Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** staff submit the same spend twice in quick succession
 - **THEN** exactly one redemption is recorded
@@ -485,3 +497,49 @@ notification SHALL never carry the code.
   spend landed
 - **WHEN** the sale is later abandoned rather than paid
 - **THEN** the member receives a correction notice
+
+<!-- trace:scenario id=g10.store-membership.SC-e9k rev=1 -->
+#### Scenario: grade10-site-store-membership-SC-90 - The till names the member by the store's one rule
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
+
+- **WHEN** staff open a till session for a member
+- **THEN** staff see the name the member chose for the shop
+- **AND** for a member with none, their account name; with neither, the part
+  of their email address before the `@`
+- **AND** a member whose record holds the placeholder name older records carry
+  is named as one with no name chosen for the shop
+
+<!-- trace:scenario id=g10.store-membership.SC-a70 rev=1 -->
+#### Scenario: grade10-site-store-membership-SC-78 - An unreachable account service shows the member as 會員
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
+
+- **GIVEN** a member with no name chosen for the shop
+- **WHEN** staff open a till session for them while the account service cannot be reached
+- **THEN** staff see 會員 in place of the member's name
+
+<!-- trace:scenario id=g10.store-membership.SC-jjw rev=1 -->
+#### Scenario: grade10-site-store-membership-SC-87 - A name chosen for the shop needs no account service
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
+
+- **GIVEN** a member who has saved a name on their profile
+- **WHEN** staff open a till session for them while the account service cannot be reached
+- **THEN** staff see the name the member saved
+
+<!-- trace:scenario id=g10.store-membership.SC-y0k rev=1 -->
+#### Scenario: grade10-site-store-membership-SC-88 - The badge names the member as the till does
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
+
+- **GIVEN** a paired customer staff found in Shopify's own search
+- **WHEN** staff open the customer's details
+- **THEN** the badge shows the member by the name a till session shows for them,
+  and 會員 where the till would
+
+<!-- trace:scenario id=g10.store-membership.SC-ymg rev=1 -->
+#### Scenario: grade10-site-store-membership-SC-89 - A long name reaches the till whole
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
+
+- **GIVEN** a member whose name chosen for the shop is 80 characters long
+- **WHEN** staff open a till session for them, and when staff open their
+  customer's details
+- **THEN** the store sends the till session and the badge all 80 characters
+  of the name
