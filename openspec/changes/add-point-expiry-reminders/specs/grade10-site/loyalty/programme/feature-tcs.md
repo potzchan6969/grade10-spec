@@ -154,6 +154,8 @@ Runs once per row of **Test data**.
 
 **Run:** QA2 rerun before accept-review round 4, 2026-10-06, in a fresh context. Joined the three cases with `grade10-site-loyalty-programme-SC-232` and every scenario the copied expiry requirement carries, against the durable suite and the active changes on this capability. The three cases agree with the requirement and with grade10's refund claw-back and points return; no case moved. The anchors are unchanged.
 
+**Run:** accept-review fix round 4, 2026-10-07. Q11 corrects the operator credit onto a balance brought to nothing to the later of a window from its own day and the day still running; `grade10-site-loyalty-programme-SC-180`, `grade10-site-loyalty-programme-SC-98` and `grade10-site-loyalty-programme-SC-99` take revision 2. The durable US2-TC8-1 still reaches the lapsed balance; the running day moving out is reached by the expiry-reminders suite's US1-TC20-1. No case here moved, and the anchors are unchanged.
+
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `grade10-site-loyalty-programme-US3-TC5-2` | Reached, revised | `grade10-site-loyalty-programme-SC-171` and `grade10-site-loyalty-programme-SC-175`: the returned points keep their credits' own dates and count to the later of those and the day still running, which a reversal does not move, and an unlimited reward gets no stock back; revision 1 asserted the credits' dates alone, which on a balance whose day has moved on reads as the earlier day |

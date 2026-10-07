@@ -791,7 +791,7 @@ Runs once per row of **Test data**.
 * Step 3 names no reminder for `<member_1>` on 2027-01-13.
 * Step 3 names one reminder: `<member_1>`, 2027-01-20, 510 points, the 30-day lead.
 
-<!-- trace:case id=g10.loyalty-expiry-reminders.TC-5lh rev=1 covers=g10.loyalty-expiry-reminders.SC-4iv -->
+<!-- trace:case id=g10.loyalty-expiry-reminders.TC-5lh rev=1 covers=g10.loyalty-expiry-reminders.SC-4iv,g10.loyalty-expiry-reminders.SC-vup -->
 ### grade10-site-loyalty-expiry-reminders-US1-TC20-1: Points granted onto a balance brought to nothing owe no reminder for the old day
 
 Runs once per row of **Test data**.
@@ -832,13 +832,14 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 names one reminder: `<member_1>`, 2027-01-13, 500 points, the 30-day lead.
-* Step 4 names no reminder for `<member_1>`: the 50 points lapse on 2028-01-03.
+* Step 4 names no reminder for `<member_1>`: the grant moved the day out to 2028-01-03, so nothing is owed on 2027-01-13.
 
 ## Settled
 
 - **The day exactly a lead time away** - owed, as the profile's 30-day warning counts it
 - **A lead time taken out of the setting** - owed nothing once the programme starts without it; a lead it still carries keeps the same reminder
 - **Grade10's lead times** - one lead of 30 days, Q5
+- **A grant onto a balance brought to nothing** - moves the day still running out to a year from its own day, so the old day is owed nothing, Q11
 - **Points returned to the running day** - points a reversal gives back, or points paid at checkout that a refund or an operator returns, are owed the same reminder again, never a second one
 
 ## Reconciliation
@@ -857,7 +858,7 @@ Runs once per row of **Test data**.
 
 **Run:** QA2 rerun before accept-review round 4, 2026-10-06, in a fresh context. Joined the twenty cases and the delta's seventeen scenarios on the same four anchors; every scenario is reached and none contradicts a case. Read the delta `spec.md` whole, `tech-design.md`, `tasks.md`, `decisions.md`, the pages Expiry Reminders, Points, Operator Console and Rewards, and in grade10 the refund's claw-back reach and the return of points paid at checkout. Three cases sharpened: US1-TC1-1's lead no longer offers any lead from 1 to 364 days, which its 30- and 29-day rows would fail; US1-TC9-1's refund row names an order paid wholly in points, so it earned nothing to claw back; US1-TC17-2's refund rows say the correction already took the 20 points the order earned, so the refund claws back nothing and 100 points come back. No new raised question. The anchors are unchanged.
 
-**Run:** accept-review fix round 4, 2026-10-07. The product owner settled Q5 as one lead of 30 days: the delta's `Grade10's lead times` sub-bullet gains its requirement and `grade10-site-loyalty-expiry-reminders-SC-21`, and US1-TC8-2 revises the blocked case to it. The root groups and the journeys are unchanged.
+**Run:** accept-review fix round 4, 2026-10-07. The product owner settled Q5 as one lead of 30 days: the delta's `Grade10's lead times` sub-bullet gains its requirement and `grade10-site-loyalty-expiry-reminders-SC-21`, and US1-TC8-2 revises the blocked case to it. Q11 states that a grant or a correction onto a balance brought to nothing moves the day still running out, as grade10 does; `grade10-site-loyalty-expiry-reminders-SC-08` names it at revision 2 and US1-TC20-1 now covers it. The root groups and the journeys are unchanged.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
@@ -880,7 +881,7 @@ Runs once per row of **Test data**.
 | `grade10-site-loyalty-expiry-reminders-US1-TC17-2` | Added, widened | `grade10-site-loyalty-expiry-reminders-SC-17`, which no blind case reached; the same reminder owed again is Q9, and points paid at checkout coming back through a refund or an operator's return are its second and third rows, Q10; the order's own 20 earned points go with the correction, so the refund claws back nothing, as the programme's claw-back reaches only that order's unspent points (grade10 `packages/loyalty/backend/src/services/earning/refunds.ts:58`) |
 | `grade10-site-loyalty-expiry-reminders-US1-TC18-1` | Added | `grade10-site-loyalty-expiry-reminders-SC-20`, folded from Q8 |
 | `grade10-site-loyalty-expiry-reminders-US1-TC19-1` | Reached, wider | `grade10-site-loyalty-expiry-reminders-SC-08`'s second clause from the other side: a late record moves the day to one already inside the lead, so the old day's reminder is gone and the new day's is owed at once, holding every point |
-| `grade10-site-loyalty-expiry-reminders-US1-TC20-1` | Reached, wider | `grade10-site-loyalty-expiry-reminders-SC-09`, and the contrast to `grade10-site-loyalty-expiry-reminders-SC-17`: a grant or a correction onto a balance brought to nothing starts a window of its own, a year off, so the old day is owed nothing again |
+| `grade10-site-loyalty-expiry-reminders-US1-TC20-1` | Reached, wider | `grade10-site-loyalty-expiry-reminders-SC-09` and `grade10-site-loyalty-expiry-reminders-SC-08`, and the contrast to `grade10-site-loyalty-expiry-reminders-SC-17`: a grant or a correction onto a balance brought to nothing moves the day still running out to a year from its own day, Q11, so the old day is owed nothing again |
 | `grade10-site-loyalty-expiry-reminders-SC-20` | Folded | Q8: a lead time the programme starts without is owed nothing; the delta's Gone at once requirement, its feature-set line and the page's Gone at once line gain it, and `tasks.md` 2.1 and 2.3 name it |
 
 - **Raised for the human** - none open: Q5 settles Grade10's lead times as one lead of 30 days
