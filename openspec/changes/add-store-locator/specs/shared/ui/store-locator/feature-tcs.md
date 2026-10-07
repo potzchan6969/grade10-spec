@@ -137,53 +137,23 @@
 * Step 3 reads `<map name>`.
 * Step 4 opens the Maps destination in a new tab.
 
-<!-- trace:case id=g10.shared-store-locator.TC-3ab rev=1 covers=g10.shared-store-locator.SC-7zw,g10.shared-store-locator.SC-pyw,g10.shared-store-locator.SC-2cu,g10.shared-store-locator.SC-xyp -->
-### shared-ui-store-locator-US1-TC4-1: No hours rows leave the hours section out
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Location & Hours
-
-**Blocked:** The designer - what the block draws with no hours rows is Q15 in `decisions.md`.
-
-**Pre-conditions:**
-
-* The `StoreLocator` block's default story is open on <grade10 ui workbench url>.
-
-**Steps:**
-
-1. In the Controls panel, set the hours rows to an empty list.
-2. Read the block.
-
-**Expected Results:**
-
-* No hours title shows, and no empty hours list.
-* The map, store name and address lines still show.
-
 ## Settled
 
 - A block with no Maps destination is not a state: the map embed and the Maps destination are both required props.
+- A block with no hours rows is not a state: the hours are a non-empty list.
 
 ## Reconciliation
 
 **Run:** QA2 reconciliation, 2026-10-06, in a fresh context. Read: this suite, the delta `spec.md` with its scenarios, `tech-design.md`, `ui-design.md`, `decisions.md`, `tasks.md` and the Store Locator Block page. The blind pass recorded no Run line of its own; its question is the shared/ui row of `decisions.md`'s `## Raised`. A second QA2 run, 2026-10-06 in a fresh context after the accept review's edits, read the same set, and checked each disposition below against the current scenarios. A third QA2 run, 2026-10-06 in a fresh context, read the same set and rechecked every disposition. A fourth QA2 run, 2026-10-06 in a fresh context, read the same set and rechecked every disposition; nothing moved.
 
-- **Folded** — `shared-ui-store-locator-US1-TC1-1` to `shared-ui-store-locator-SC-01`, gaining the three named types and no other export for the block; `shared-ui-store-locator-US1-TC2-1` to `shared-ui-store-locator-SC-02`; `shared-ui-store-locator-US1-TC3-1` to `shared-ui-store-locator-SC-03` and `shared-ui-store-locator-SC-05`
-- **Folded into spec** — `shared-ui-store-locator-US1-TC1-1` reads the block for words and shop facts written in; the requirement's Props-only content said so and no scenario did, so `shared-ui-store-locator-SC-02` now asserts no word or fact the props did not supply
-- **Raised, answered** — a block with no Maps destination (Q21): not a state the block has. Both map props are required, and `shared-ui-store-locator-SC-06` holds a block missing either to a refused type check
-- **Blocked** — `shared-ui-store-locator-US1-TC4-1`, the block with no hours rows: the designer's Q15. Its expected results are the blind reading's guess, one of Q15's options and not its recommendation: the case stays draft and no requirement takes a side. When the answer lands, the case is rewritten to it with a scenario, or retired if the hours become a required non-empty list
-- **Contradicted** — none
-- **Uncovered anchors** — none: both root groups, Surface exports and Location & Hours, are reached
+- **Folded** - `shared-ui-store-locator-US1-TC1-1` to `shared-ui-store-locator-SC-01`, gaining the three named types and no other export for the block; `shared-ui-store-locator-US1-TC2-1` to `shared-ui-store-locator-SC-02`; `shared-ui-store-locator-US1-TC3-1` to `shared-ui-store-locator-SC-03` and `shared-ui-store-locator-SC-05`
+- **Folded into spec** - `shared-ui-store-locator-US1-TC1-1` reads the block for words and shop facts written in; the requirement's Props-only content said so and no scenario did, so `shared-ui-store-locator-SC-02` now asserts no word or fact the props did not supply
+- **Raised, answered** - a block with no Maps destination (Q21): not a state the block has. Both map props are required, and `shared-ui-store-locator-SC-06` holds a block missing either to a refused type check
+- **Retired** - `shared-ui-store-locator-US1-TC4-1`, the block with no hours rows: Q15 makes the hours a required non-empty list, so the state the case read does not exist; `shared-ui-store-locator-SC-07` holds a block with no hours rows to a refused type check
+- **Contradicted** - none
+- **Uncovered anchors** - none: both root groups, Surface exports and Location & Hours, are reached
 
 ### Out of suite
 
 * `shared-ui-store-locator-SC-06` - a block missing its map does not type-check: `packages/ui/src/blocks/store-locator/public-exports.test.ts` under `pnpm run typecheck`, in this store
+* `shared-ui-store-locator-SC-07` - a block with no hours rows does not type-check: the same test, under `pnpm run typecheck`, in this store
