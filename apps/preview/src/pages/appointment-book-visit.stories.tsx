@@ -31,6 +31,7 @@ import {
   CAUSEWAY_BAY,
   DETAILS_FORM_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
+  firstAvailableVisitDay,
   prepTipsForService,
   SERVICE_PICKER_COPY,
   SLOT_PICKER_COPY,
@@ -77,7 +78,7 @@ function BookVisitPage() {
 
   function handleMonthChange(month: string) {
     setSelectedMonth(month);
-    setSelectedDate(undefined);
+    setSelectedDate(firstAvailableVisitDay(month));
     setSelectedStart(undefined);
     setSelectedEnd(undefined);
   }
@@ -353,6 +354,13 @@ export const Slot: Story = {
     expect(canvas.getByText("2026")).toBeVisible();
     expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Oct",
+    );
+    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
+      "1",
+    );
+    expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
     await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
     expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
@@ -362,6 +370,10 @@ export const Slot: Story = {
     expect(
       canvas.getByRole("button", { name: /December 1st, 2026/ }),
     ).toBeEnabled();
+    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
+      "1",
+    );
+    expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
     expect(
       canvas.getByRole("button", { name: /December 2nd, 2026/ }),
     ).toBeDisabled();

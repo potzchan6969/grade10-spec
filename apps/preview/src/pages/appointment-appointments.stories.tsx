@@ -15,6 +15,7 @@ import { expect, within } from "storybook/test";
 import {
   APPOINTMENTS_COPY,
   COMPLETED_VISIT_RECORD,
+  firstAvailableVisitDay,
   GRADING_VISIT_RECORD,
   MANAGE_CARD_COPY,
   SLOT_PICKER_COPY,
@@ -55,7 +56,9 @@ function split(list: readonly BookingRecord[], now: number) {
 function AppointmentsPage({ empty = false }: { empty?: boolean }) {
   const [records, setRecords] = useState(() => seedRecords(empty));
   const [movingId, setMovingId] = useState<string | null>(null);
-  const [selectedDate, setSelectedDate] = useState("2026-09-03");
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(
+    "2026-09-03",
+  );
   const [selectedMonth, setSelectedMonth] = useState("2026-09");
   const { upcoming, past } = split(records, VISIT_NOW_MS);
 
@@ -69,7 +72,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
 
   function handleMonthChange(month: string) {
     setSelectedMonth(month);
-    setSelectedDate(undefined);
+    setSelectedDate(firstAvailableVisitDay(month));
   }
 
   function renderCard(record: BookingRecord) {

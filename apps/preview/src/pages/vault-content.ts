@@ -331,6 +331,13 @@ const VISIT_DAYS: readonly BookingDay[] = (() => {
 
 const NEXT_AVAILABLE_VISIT_DATE = VISIT_DAYS.find((day) => day.available)?.date;
 
+/** First pickable day in a `YYYY-MM` caption month, if any. */
+function firstAvailableVisitDay(month: string): string | undefined {
+  return VISIT_DAYS.find(
+    (day) => day.available && day.date.startsWith(`${month}-`),
+  )?.date;
+}
+
 function slotsForVisitDay(date: string): readonly BookingSlot[] {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
   if (!match) return [];
@@ -711,6 +718,7 @@ export {
   SHOP_NAME,
   SLOT_PICKER_COPY,
   SUMMARY_COPY,
+  firstAvailableVisitDay,
   slotsForVisitDay,
   statusBadgeVariant,
   VAULT_ASSETS,
