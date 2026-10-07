@@ -1,6 +1,6 @@
 # grade10-site/commerce/order-status Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-commerce-order-status-US1: Collector reads where an order stands
@@ -572,6 +572,36 @@ The order is not archived in any row.
 * Step 2: the badge reads the row's Badge.
 * Step 3: exactly one note identifier, the row's Note.
 * Step 3: the note is an identifier, carrying no display words.
+
+<!-- trace:case id=g10.commerce-order-status.TC-fur rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
+### grade10-site-commerce-order-status-US2-TC2-1: Every note has words in each catalog language
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-commerce-order-status-US-02
+
+**Pre-conditions:**
+
+* None.
+
+**Steps:**
+
+1. List every note identifier the order status rule can name.
+2. Read each identifier from the Grade10 message catalogs in every language Grade10 speaks.
+
+**Expected Results:**
+
+* Step 2: every identifier resolves to words in every language.
+* Step 2: no identifier resolves to its own key.
 
 <!-- trace:case id=g10.commerce-order-status.TC-dxg rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0,g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
 ### grade10-site-commerce-order-status-US2-TC3-1: Combination no confirmed note fits carries its badge alone
