@@ -26,6 +26,13 @@ always judged on the brand's own zone, because a day is a fact about where the
 business stands rather than about where its reader does. The day a collector
 deadline shows is not judged this way: it is the day in the viewer's zone.
 
+Admin surfaces state UTC with two exceptions: an admin surface whose own spec keeps
+a shop's clock, as the vault console and the appointments diary do, states that
+clock, and an auction order operator surface states Asia/Hong_Kong, labelled
+GMT+8 (Hong Kong time). The records a machine reads, an export or the audit trail, state UTC
+whatever surface they come from. The vault timeline stamp that stays UTC is the
+collector's; the vault console reads its own on the shop's clock.
+
 ## Feature set
 
 - Reading shapes
@@ -36,14 +43,14 @@ deadline shows is not judged this way: it is the day in the viewer's zone.
   - Platform format: ordering and punctuation are the platform's, not a browser's configuration
   - Named language: every rendering accepts the language its words are drawn from, English where none is named
 - Stated zones
-  - UTC for operators: operator tables and admin surfaces state Coordinated Universal Time
+  - UTC for operators: operator tables, admin surfaces and the records a machine reads, an export or the audit trail, state Coordinated Universal Time, except an admin surface whose own spec keeps a shop's clock, as the vault console and the appointments diary do, and an auction order operator surface, which states Asia/Hong_Kong as GMT+8
   - Reader zone for collectors: activity time and local moments use the viewer's local time zone
   - Documents as GMT+8: invoices, including the invoice page, receipts, terms and emails state Asia/Hong_Kong as GMT+8
   - The brand's day: a calendar judgement — a contract's date, a due date, a "today" queue, an age, a document's expiry, a report's month — is made on the brand's zone
   - Named deadlines: a collector deadline that shows a clock names the viewer's zone, a closed lot's close time included; a deadline that shows only a day reads that day in the viewer's zone and names none
   - Supplied, not read: a collector clock uses the zone it is given, so one instant reads the same text on any machine
   - Name by the instant: a deadline names the viewer's short zone as it stands at that instant, EDT in summer and EST in winter
-  - Shop's clock: a page that books or confirms a visit, or a vault or signing page, keeps the shop's clock and is outside the viewer-zone rule; how those pages name their zone is not set here, and vault timeline stamps stay UTC
+  - Shop's clock: a page that books or confirms a visit, or a vault or signing page, keeps the shop's clock and is outside the viewer-zone rule; how those pages name their zone is not set here, and a collector's vault timeline stamps stay UTC
   - Offset names: where US English has no short name for a zone, it reads as its offset in English, `GMT+9` for Seoul, in every language
 - Refusals
   - Unshipped language: a language the platform has no words for fails rather than degrading quietly
@@ -174,9 +181,14 @@ Collector-facing activity time, local moments, and collector deadlines SHALL
 use the viewer's local zone, supplied as `timeZone` (the zone the reader's
 environment is in), except on a document, which states Asia/Hong_Kong, and on a
 page that books or confirms a visit, or a vault or signing page, which keeps the
-shop's clock; a vault timeline stamp on those pages stays in Coordinated
-Universal Time. Operator tables and admin surfaces SHALL state Coordinated
-Universal Time. The invoice page, invoice and receipt PDFs, terms, and emails
+shop's clock; a collector's vault timeline stamp on those pages stays in
+Coordinated Universal Time. Operator tables, admin surfaces and the records a
+machine reads, an export or the audit trail, SHALL state Coordinated Universal
+Time, except an admin surface whose own spec keeps a shop's clock, as the vault
+console and the appointments diary do, and except an auction order operator
+surface (the Orders worklist, the order page, its timeline and invoice log, and
+the send and reissue dialog's payment deadline), which SHALL state
+Asia/Hong_Kong, labelled GMT+8 (Hong Kong time). The invoice page, invoice and receipt PDFs, terms, and emails
 are documents and SHALL state Asia/Hong_Kong. How a page that keeps the shop's
 clock names its zone is not set here.
 
@@ -223,6 +235,35 @@ spec fixes its zone, which it keeps.
 - **WHEN** an instant is rendered on it as a local moment or as a collector deadline
 - **THEN** the render fails with an error naming that zone
 - **AND** no time is shown in UTC or in the machine's zone instead
+
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-gkv rev=1 -->
+#### Scenario: shared-dates-and-times-SC-39 - An admin surface whose own spec keeps a shop's clock
+**Serves:** `Stated zones` - one instant is walked through an operator table and the vault console
+
+- **GIVEN** an instant at 2026-10-07T06:00:00Z on a vault case kept at a shop on `Asia/Hong_Kong`
+- **WHEN** it is rendered in an operator table whose spec keeps no shop's clock, and on that case's page in the vault console
+- **THEN** the operator table reads it at `06:00` in Coordinated Universal Time
+- **AND** the vault console reads it at `14:00` on the shop's clock
+
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-msf rev=1 -->
+#### Scenario: shared-dates-and-times-SC-40 - The collector's vault history stays in Coordinated Universal Time
+**Serves:** `Stated zones` - one timeline entry is walked through the collector's vault history and the vault console
+
+- **GIVEN** a timeline entry at 2026-10-07T06:00:14Z on a vault case kept at a shop on `Asia/Hong_Kong`
+- **WHEN** it is rendered on the collector's vault history and on the vault console's timeline
+- **THEN** the collector's vault history reads it at `06:00:14` in Coordinated Universal Time
+- **AND** the vault console reads it at `14:00:14`
+
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-u8t rev=1 -->
+#### Scenario: shared-dates-and-times-SC-41 - An auction order operator surface states Hong Kong time
+**Serves:** `Stated zones` - one instant is walked through an auction order operator surface and another operator table
+
+- **GIVEN** an instant at 2026-10-07T06:00:00Z shown on the Orders worklist, on the order page's timeline and invoice log, as the send and reissue dialog's payment deadline, and on another operator table whose spec keeps no shop's clock
+- **WHEN** each is rendered for a reader whose machine is set to America/New_York
+- **THEN** the Orders worklist reads it at `14:00` in Asia/Hong_Kong, labelled `GMT+8`
+- **AND** the order page's timeline and invoice log read it at `14:00` in Asia/Hong_Kong, labelled `GMT+8`
+- **AND** the send and reissue dialog's payment deadline reads it at `14:00` in Asia/Hong_Kong, labelled `GMT+8`
+- **AND** the other operator table reads it at `06:00` in Coordinated Universal Time
 
 ### Requirement: A brand judges a calendar day on its own zone
 
@@ -282,8 +323,8 @@ that shows only a day SHALL name none, because a zone belongs to a clock, and
 SHALL state that day in the viewer's zone, unless the surface's own spec fixes
 its zone, which it keeps. The name SHALL be that viewer's short name at that
 instant (`HKT`, `EDT`), and SHALL NOT pin `HKT` for every reader. A local moment
-and an older activity row are not deadlines and SHALL name none. A vault
-timeline stamp stays in Coordinated Universal Time, and how a page that keeps
+and an older activity row are not deadlines and SHALL name none. A
+collector's vault timeline stamp stays in Coordinated Universal Time, and how a page that keeps
 the shop's clock names its zone is not set here.
 
 A viewer's zone name SHALL be the zone's short name in US English, whatever
@@ -507,7 +548,9 @@ A **local moment** SHALL render an instant on collector-facing surfaces in the
 viewer's `timeZone` with shape `DD Mon YYYY, HH:MM`, month names from
 `locale`, and no `UTC` or `HKT` suffix.
 
-Operator tables and admin surfaces SHALL continue to use the UTC moment shape.
+Operator tables and admin surfaces SHALL continue to use the UTC moment shape,
+except an admin surface whose own spec keeps a shop's clock and an auction
+order operator surface, which states Asia/Hong_Kong as GMT+8.
 
 <!-- trace:scenario id=g10.shared-dates-and-times.SC-uu7 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-23 - Two zones read different clocks
