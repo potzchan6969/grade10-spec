@@ -19,6 +19,8 @@
 
 **Run:** QA2 reconciliation, fifth run, 2026-10-06, in a fresh context. The four carried scenarios and the seven durable cases were joined again; none names the account menu, so no case or scenario moved.
 
+**Run:** QA2 reconciliation, sixth run, 2026-10-07, in a fresh context, on Product's answer to Q13. The four carried scenarios and the seven durable cases were joined again; the link from My Auctions is a later change's, so no case or scenario moved.
+
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `grade10-site-auction-auction-orders-US1-TC8-1` | Rejected, duplicate | A Won row on My Auctions opening its own order is `grade10-site/auction/account-record`'s rule, walked by `grade10-site-auction-account-record-US8-TC1-1`; no scenario here states it. Dropped before it was issued |

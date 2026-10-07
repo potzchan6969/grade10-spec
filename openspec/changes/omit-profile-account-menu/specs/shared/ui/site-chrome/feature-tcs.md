@@ -362,6 +362,8 @@ reimplementing its behavior.
 
 **Applied:** 2026-10-07, the interim answers to Q6 and the acceptance review's avatar finding; not a QA2 reading, which reruns on them. The requirement places the avatar above `accountEmail` and shows the label alone with no avatar when no email is supplied, so `shared-ui-site-chrome-SC-34` and `shared-ui-site-chrome-SC-35` move to revision 2, `shared-ui-site-chrome-US1-TC17-2` joins this suite, and `## Settled` drops its avatar line.
 
+**Run:** QA2 reconciliation, ninth run, 2026-10-07, in a fresh context, on the interim answer to Q6. Every scenario of the modified requirement was joined to this suite's cases and the durable `Chrome exports` and `Header controls` cases, and `SiteHeader` was read at `packages/ui/src/blocks/site-chrome/site-header.tsx:165-177`: the avatar sits above `accountEmail`, and with no email the label shows alone. No disposition moved.
+
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `shared-ui-site-chrome-US1-TC25-1` | Reached | `shared-ui-site-chrome-SC-30`: no `onProfile`, the menu opens on My Orders; its Membership result agrees with `shared-ui-site-chrome-SC-38` |
