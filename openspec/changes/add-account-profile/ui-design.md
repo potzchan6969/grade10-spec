@@ -3,14 +3,14 @@
 ## Screens
 
 No Figma frame draws this surface: the `store-profile` block has no published
-frames and no `.figma.ts` mappings. Whether it is built from the requirements
-alone is the designer's answer to decisions Q5, and group 1 of the tasks lands
-only after it and the person's Design Override yes.
+frames and no `.figma.ts` mappings. It is built from the requirements alone,
+this change's interim (decisions Q5), and group 1 of the tasks lands only after
+the person's Design Override yes.
 
 | Screen | Frame | What is new on it |
 | --- | --- | --- |
-| Account profile — read view | *none; decisions Q5* | The avatar, the read-only email row, and the member-since line. |
-| Account profile — edit form | *none; decisions Q5* | The avatar control — choose a replacement, preview it, remove the current one — and the read-only email. |
+| Account profile - read view | *none; decisions Q5* | The avatar and the read-only email row; member-since now reads the first save. |
+| Account profile - edit form | *none; decisions Q5* | The avatar control - choose a replacement, preview it, remove the current one - and the read-only email. |
 
 Both brands render these screens through the same profile feature.
 
@@ -68,7 +68,7 @@ catalog owns the words.
 | Saving | The save button busy; it cannot be sent again | `shared-ui-store-profile-SC-21` |
 | Refused save | The application's reason; the entered values kept | `grade10-site-store-account-profile-SC-14` |
 | Failed save | That the save failed; the entered values kept | `grade10-site-store-account-profile-SC-32` |
-| Empty display name | Save enabled; on submit, the application's reason that a display name is required. The shipped form disables save instead; decisions Q5 | `shared-ui-store-profile-SC-19` |
+| Empty display name | Save enabled; on submit, the application's reason that a display name is required, where the shipped form disables save (decisions Q5) | `shared-ui-store-profile-SC-19` |
 | Avatar refused | The application's reason; the entered text and the chosen image kept | `grade10-site-store-account-profile-SC-33` |
 | Avatar kept, text refused | The new avatar, the reason the text was refused, the entered text kept | `grade10-site-store-account-profile-SC-30` |
 | Cancelled | The read view with the stored profile; the form offers cancel only when given its label and handler | `grade10-site-store-account-profile-SC-28`, `shared-ui-store-profile-SC-24` |

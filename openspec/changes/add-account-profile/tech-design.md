@@ -88,8 +88,10 @@ Makes pass: `grade10-site-store-account-profile-SC-03`, `grade10-site-store-acco
 
 A name the collector never chose has to be told apart from one they did
 (decisions Q2). The column is nullable and `ensureAccount` writes no name
-(`5b086132d1`); every surface fills a NULL name by `memberName`. Whether a save
-that leaves the prefilled name untouched stores it is decisions Q12.
+(`5b086132d1`); every surface fills a NULL name by `memberName`. `ProfileView`
+sends the display name only when it differs from the one shown by default, so
+a save that leaves the default as shown stores no name and the display name
+keeps following the account name (decisions Q12).
 
 The rows written before that commit are cleared by their own migration in
 each brand, `UPDATE store.account_profile SET display_name = NULL WHERE
@@ -104,7 +106,7 @@ fact the column already carries. Compare the placeholder at read time —
 rejected, it hides a collector who typed that string, and the comparison would
 live forever.
 
-Makes pass: `grade10-site-store-account-profile-SC-06`.
+Makes pass: `grade10-site-store-account-profile-SC-06`, `grade10-site-store-account-profile-SC-39`.
 
 ### One member name, resolved by one store rule
 
@@ -161,16 +163,15 @@ appear from a webhook the collector never triggered (decisions Q4). A nullable
 the collector makes to their profile — `profile.update` and both avatar routes,
 a save that repeats the stored values included — and by nothing else: `ensureAccount`, `setPhone` and joining at a counter
 leave it alone. The view reads it, and null means the page shows no date. Rows
-saved before the column existed are decisions Q11: answered (a), they stay
-NULL; answered (b), one backfill copies `created_at` where `display_name` is
-not NULL after the placeholder is cleared.
+saved before the column existed stay NULL until their next save dates them;
+nothing backfills them (decisions Q11).
 
 *Alternatives:* read `created_at` — rejected, it dates the store's bookkeeping
 rather than the collector. Infer the first save from `display_name IS NOT
 NULL` — rejected, it carries no date.
 
 Makes pass: `grade10-site-store-account-profile-SC-08`, `grade10-site-store-account-profile-SC-09`, `grade10-site-store-account-profile-SC-10`,
-`grade10-site-store-account-profile-SC-35`, `grade10-site-store-account-profile-SC-37`.
+`grade10-site-store-account-profile-SC-35`, `grade10-site-store-account-profile-SC-37`, `grade10-site-store-account-profile-SC-40`.
 
 ### Avatars are content-addressed objects reclaimed by the orphan sweep
 
@@ -275,13 +276,17 @@ Makes pass: `grade10-site-store-account-profile-SC-27`, `grade10-site-store-acco
 
 Before upload the SPA center-crops to a square and re-encodes at 512×512. The
 worker holds the three accepted types and `MAX_AVATAR_BYTES` for any caller.
-Whether the feature also judges the picked file before re-encoding it is
-decisions Q10; answered (a), the same constant and type list are checked on
-the picked file in the feature.
+The feature judges no picked file by type or size: any image the browser
+decodes is sent re-encoded, and a file it cannot decode is refused as
+`avatarType` before anything is sent (decisions Q10).
 
-*Alternatives:* an interactive cropper — deferred; center-crop plus
-`AvatarImage`'s `object-cover` is square either way. Resize in the worker —
-rejected, image decoding in a Worker for no gain.
+*Alternatives:* an interactive cropper - deferred; center-crop plus
+`AvatarImage`'s `object-cover` is square either way. Resize in the worker -
+rejected, image decoding in a Worker for no gain. Check the picked file
+against the three types and 5 MB - rejected, it refuses phone photos the
+re-encoding would shrink.
+
+Makes pass: `grade10-site-store-account-profile-SC-41`.
 
 ### A refusal is a typed outcome, and the page words it
 
@@ -343,12 +348,13 @@ and the site header passes the address before the `@`, the one caller that
 holds an email; the bid history's pseudonym and the profile's display name are
 labels. It upper-cases that code point only where the result stays one
 character, so `ß` stays `ß`, and answers `?` for a value with neither, as it
-does today.
+does today. The view carries no account picture, so auth's `users.image` never
+stands in (decisions Q16).
 
 *Alternatives:* a reading flag on the helper — rejected, one caller holds an
 email and slicing it there is one expression.
 
-Makes pass: `grade10-site-store-account-profile-SC-25`, `grade10-site-store-account-profile-SC-26`, `grade10-site-store-account-profile-SC-36`;
+Makes pass: `grade10-site-store-account-profile-SC-25`, `grade10-site-store-account-profile-SC-26`, `grade10-site-store-account-profile-SC-36`, `grade10-site-store-account-profile-SC-42`;
 `shared-ui-store-profile-SC-09`, `shared-ui-store-profile-SC-10`.
 
 ## Risks / Trade-offs
@@ -356,9 +362,10 @@ Makes pass: `grade10-site-store-account-profile-SC-25`, `grade10-site-store-acco
 - **The avatar URL is a bearer handle** → its key is the digest of the user
   id and a re-encoded image, and the route answers only while the profile's
   row holds it (decisions Q1).
-- **A replaced image outlives its replacement in browsers** → the edge copy is
-  purged by tag, but a browser that cached the old address keeps its copy until
-  its `max-age` runs out. The requirement is deletion from storage.
+- **A replaced image outlives its replacement in caches** → the edge copy is
+  purged by tag, best effort; a lost purge, or a browser that cached the old
+  address, keeps a copy until its `max-age` runs out. The requirement is
+  deletion from storage.
 - **`StoreProfile` changes shape, and both storefronts plus the store demo
   decode it** → the contract group lands first and the compiler names every
   consumer; `phone` stays on the view.
@@ -367,9 +374,9 @@ Makes pass: `grade10-site-store-account-profile-SC-25`, `grade10-site-store-acco
   read falls back only on NULL, so a miss shows a stale name rather than
   corrupting one.
 - **An account name longer than 80 characters** is shown whole as the default,
-  and the store refuses it if it is sent back → under decisions Q12 answered
-  (b), an untouched default is never sent; answered (a), the collector meets
-  the 80-character refusal on their first save.
+  and the store refuses it if it is sent back → an untouched default is never
+  sent (decisions Q12), so the collector meets the refusal only by typing a
+  name.
 
 ## Migration Plan
 
@@ -392,12 +399,10 @@ reclaimed by the sweep only once a worker that runs it is back.
 
 ## Open Questions
 
-Decisions Q1, Q5, Q9 to Q12, Q15 and Q16 are held for their owners. Four change this
-design. Q1 decides who can open the avatar, which the account-profile delta
-does not yet state: answered as recommended, the delta gains a requirement
-excepting the image from the owner-only rule, and the serving route above
-stands; answered otherwise, the avatar `GET` takes the session and streams the
-image on every view, with no edge cache or purge (task 4.9). Q10 answered (a) adds the type and size check on the picked file in
-the feature; Q11 answered (b) adds one backfill of `first_saved_at`; Q12
-answered (b), as recommended, makes `ProfileView` send the display name only
-when it differs from the one shown by default.
+Decision Q1 is held for product: it decides who can open the avatar, which the
+account-profile delta does not yet state. Answered as recommended, the delta
+gains a requirement excepting the image from the owner-only rule, its clause on
+a replaced image lets a copy at the edge answer until it expires, since the
+purge is best effort, and the serving route above stands; answered otherwise,
+the avatar `GET` takes the session and streams the image on every view, with
+no edge cache or purge (task 4.9).
