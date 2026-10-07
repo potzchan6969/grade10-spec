@@ -9,7 +9,7 @@
 **I want** staff to take my points and my product coupon off one sale,
 **so that** both settle once, when I pay.
 
-<!-- trace:case id=g10.store-domain.TC-gdu rev=2 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uaf,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5,g10.store-membership.SC-xhs,g10.store-membership.SC-if2,g10.store-membership.SC-8a9,g10.store-membership.SC-vo6,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9 -->
+<!-- trace:case id=g10.store-domain.TC-gdu rev=2 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc,g10.store-membership.SC-uae,g10.store-membership.SC-a70,g10.store-membership.SC-gga,g10.store-membership.SC-ke5,g10.store-membership.SC-xhs,g10.store-membership.SC-if2,g10.store-membership.SC-8a9,g10.store-membership.SC-vo6,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-it9 -->
 ### grade10-site-store-e2e-US4-TC1-2: Points and a product coupon settle together on one till sale
 
 **Classification:**
