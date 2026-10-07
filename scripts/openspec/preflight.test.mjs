@@ -1,5 +1,13 @@
 import assert from "node:assert/strict";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  renameSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { sandbox } from "./fixtures/accept-sandbox.mjs";
@@ -43,6 +51,31 @@ test("preflight passes a change that every gate accepts", () => {
   const result = preflightChange(root, CHANGE, passing);
   assert.deepEqual(result.failures, []);
   assert.match(formatPreflight([result]), /build-alpha is ready to fold/);
+});
+
+test("the folded store reads history in a submodule checkout whose .git is a relative gitdir file", () => {
+  const outer = mkdtempSync(join(tmpdir(), "superproject-"));
+  const root = join(outer, "external", "store");
+  mkdirSync(dirname(root), { recursive: true });
+  renameSync(sandbox().root, root);
+  const git = (...args) =>
+    execFileSync("git", args, { cwd: root, stdio: "pipe" });
+  git("init", "-q");
+  git("add", "-A");
+  git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "store");
+  mkdirSync(join(outer, ".git", "modules"), { recursive: true });
+  renameSync(join(root, ".git"), join(outer, ".git", "modules", "store"));
+  writeFileSync(join(root, ".git"), "gitdir: ../../.git/modules/store\n");
+  git("config", "core.worktree", "../../../external/store");
+  const result = preflightChange(root, CHANGE, (args) =>
+    args[1] === "check:manual"
+      ? spawnSync("git", ["rev-parse", "HEAD"], {
+          cwd: args[2],
+          encoding: "utf8",
+        })
+      : ok,
+  );
+  assert.deepEqual(result.failures, []);
 });
 
 function foldedWith(root, outputs) {

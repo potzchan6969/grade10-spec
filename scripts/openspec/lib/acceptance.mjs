@@ -1453,20 +1453,32 @@ export function prepareAcceptance(
 }
 
 /** A copy of the store that holds the fold, beside links to the rest of it,
- *  for the checks that read a whole store. The caller removes it. */
+ *  for the checks that read a whole store. Its `.git` names the store's git
+ *  directory by absolute path, since a submodule's relative `gitdir:` line
+ *  resolves nowhere from the copy. The caller removes it. */
 function foldedTree(prepared) {
+  const entries = readdirSync(prepared.root);
+  const gitFile =
+    entries.includes(".git") && `gitdir: ${gitDir(prepared.root)}\n`;
   const tree = mkdtempSync(join(tmpdir(), "folded-store-"));
-  for (const entry of readdirSync(prepared.root))
+  for (const entry of entries)
     if (entry === "openspec")
       cpSync(join(prepared.root, entry), join(tree, entry), {
         recursive: true,
       });
+    else if (entry === ".git") writeFileSync(join(tree, entry), gitFile);
     else symlinkSync(join(prepared.root, entry), join(tree, entry));
   for (const [path, content] of prepared.outputs) {
     mkdirSync(dirname(join(tree, path)), { recursive: true });
     writeFileSync(join(tree, path), content);
   }
   return tree;
+}
+
+function gitDir(root) {
+  const dir = git(root, ["rev-parse", "--absolute-git-dir"]);
+  if (!dir) throw new Error(`${root}: git cannot resolve its .git`);
+  return dir;
 }
 
 /** `pnpm run check:manual` prints a `FAIL  <rule title>` heading over each
