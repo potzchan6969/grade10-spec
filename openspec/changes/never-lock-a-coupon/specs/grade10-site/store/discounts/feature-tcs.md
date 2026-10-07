@@ -241,7 +241,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> |
 
@@ -361,7 +361,7 @@ Runs once per row of **Test data**.
 **I want** a member's reward coupon, a product coupon or a gift, to settle at the till as surely as it does online,
 **so that** I can ring it up with the same confidence either channel gives me.
 
-<!-- trace:case id=g10.store-discounts.TC-ye2 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-ye2 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC1-1: Till coupon settles by its own code
 
 **Classification:**
@@ -400,7 +400,7 @@ Runs once per row of **Test data**.
 * The paid order names <product coupon_1>'s own single-use code, with no welded line discount.
 * <product coupon_1> reads spent in the wallet.
 
-<!-- trace:case id=g10.store-discounts.TC-9h9 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-9h9 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC2-1: Re-planned sale keeps one code for its coupon
 
 **Classification:**
@@ -437,7 +437,7 @@ Runs once per row of **Test data**.
 
 * The sale carries exactly one code for <product coupon_1>.
 
-<!-- trace:case id=g10.store-discounts.TC-rf9 rev=2 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-rf9 rev=2 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC3-2: A sale a reward was cleared off takes points, and no reward
 
 Runs once per row of **Test data**.
@@ -471,8 +471,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <line_1> | One HK$780.00 product |
-| <product coupon_1> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1> |
-| <product coupon_2> | A second reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1> |
+| <product coupon_1> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1>'s own variant |
+| <product coupon_2> | A second reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1>'s own variant |
 | <points> | 100, worth HK$100.00 |
 
 **Steps:**
@@ -486,7 +486,7 @@ Runs once per row of **Test data**.
 * Step 2 answers as the row's second column says.
 * <product coupon_1> and <product coupon_2> stand live in the wallet.
 
-<!-- trace:case id=g10.store-discounts.TC-pic rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-pic rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC4-1: Code the paid sale does not name stops standing
 
 **Classification:**
@@ -525,7 +525,7 @@ Runs once per row of **Test data**.
 * The code no longer stands at the shop.
 * Nothing shows the member the code as money saved on the sale.
 
-<!-- trace:case id=g10.store-discounts.TC-w7h rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-w7h rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC5-1: A sale that collects a reward another sale claims is reported and spends nothing
 
 Runs once per row of **Test data**.
@@ -561,7 +561,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <gift> | A gift reward the member holds, unused, inside its validity, whose threshold <line_1> passes |
 | <line_1> | One HK$780.00 product |
 | <counter sale A> | A till sale at <shop A> holding <line_1>, planned with the row's reward before <later checkout> claimed it |
@@ -580,7 +580,7 @@ Runs once per row of **Test data**.
 * <counter sale A> spends no reward.
 * Step 4 shows an alert whose log line names <counter sale A>'s order.
 
-<!-- trace:case id=g10.store-discounts.TC-99b rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-99b rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC6-1: A sale paid with what it gave up spends the coupon nobody else claims
 
 Runs once per row of **Test data**.
@@ -614,7 +614,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1> |
+| <coupon> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1>'s own variant |
 | <gift> | A gift reward the member holds, unused, inside its validity |
 | <line_1> | One HK$780.00 product |
 | <counter sale A> | A till sale at <shop A> holding <line_1> |
@@ -630,7 +630,7 @@ Runs once per row of **Test data**.
 * The row's reward reads used once, by <counter sale A>.
 * Step 3 shows an alert whose log line names <counter sale A>'s order.
 
-<!-- trace:case id=g10.store-discounts.TC-ofg rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-ofg rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC7-1: A counter sale a newer promise retired takes no new plan
 
 Runs once per row of **Test data**.
@@ -663,8 +663,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
-| <other coupon> | A second reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
+| <other coupon> | A second reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <points> | 100, worth HK$100.00 |
 | <line_1> | One HK$780.00 product, on <counter sale A> |
 | <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> before <later checkout> claimed it |
@@ -683,7 +683,7 @@ Runs once per row of **Test data**.
 * <later checkout> still carries <coupon>'s cut.
 * <coupon> and <other coupon> read unused in the wallet.
 
-<!-- trace:case id=g10.store-discounts.TC-uwj rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-uwj rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC8-1: A counter sale that closed takes no new plan, nor does a fresh scan on its cart
 
 Runs once per row of **Test data**.
@@ -716,7 +716,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <points> | 100, worth HK$100.00 |
 | <line_1> | One HK$780.00 product, on <counter sale A> |
 | <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> |
@@ -734,7 +734,7 @@ Runs once per row of **Test data**.
 * Step 3 shows no code minted by step 2.
 * <counter sale A>'s order still holds <line_1> and is not rewritten.
 
-<!-- trace:case id=g10.store-discounts.TC-6h1 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-6h1 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC9-1: A gift at the till goes on as its own line and carries no code
 
 **Classification:**
@@ -777,7 +777,7 @@ Runs once per row of **Test data**.
 * Step 3 shows no discount code for <gift>.
 * Step 6 shows <gift> used once.
 
-<!-- trace:case id=g10.store-discounts.TC-8y2 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+<!-- trace:case id=g10.store-discounts.TC-8y2 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC10-1: A reward POS's own remove-all took off does not go back on the sale
 
 Runs once per row of **Test data**.
@@ -811,8 +811,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <line_1> | One HK$780.00 product |
-| <product coupon_1> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1> |
-| <product coupon_2> | A second reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1> |
+| <product coupon_1> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1>'s own variant |
+| <product coupon_2> | A second reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1>'s own variant |
 | <points> | 100, worth HK$100.00 |
 
 **Steps:**
@@ -826,23 +826,21 @@ Runs once per row of **Test data**.
 * Step 2 answers as the row's second column says.
 * <product coupon_1> and <product coupon_2> stand live in the wallet.
 
-<!-- trace:case id=g10.store-discounts.TC-hz8 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
-### grade10-site-store-discounts-US4-TC11-1: A fresh scan on an open sale's cart mints no second code
+<!-- trace:case id=g10.store-discounts.TC-hz8 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
+### grade10-site-store-discounts-US4-TC11-1: A fresh scan on an open sale's cart continues it with its one code
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04
-
-**Blocked:** The product manager - Raised R1 in `decisions.md`: whether a fresh scan of the same member on an open sale's cart continues that sale and its code, or is refused and asks for a new sale. Step 3 reads the refusal until it is answered.
 
 **Pre-conditions:**
 
@@ -854,7 +852,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <points> | 100, worth HK$100.00 |
 | <line_1> | One HK$780.00 product, on <counter sale A> |
 | <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> |
@@ -862,16 +860,16 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Scan the member's card on <counter sale A>'s cart.
-2. Choose <points> points in the member's panel.
+2. Choose <points> points in the member's panel, with <coupon> still on the sale.
 3. Apply the sale.
 4. Read the cart's discount codes in Shopify POS.
 5. Read <counter sale A>'s order.
 
 **Expected Results:**
 
-* Step 3 is refused, telling staff to ring the goods on a new sale.
+* Step 3 goes through, and the sale carries <points> points and <coupon>'s cut.
 * Step 4 shows only the code minted for <coupon> when <counter sale A> was planned.
-* <counter sale A>'s order still holds <line_1> and is not rewritten.
+* Step 3 planned <counter sale A>'s own order, which holds <line_1>, is not retired, and keeps that code live.
 
 ## Settled
 
@@ -879,7 +877,7 @@ Runs once per row of **Test data**.
 - A gift on a counter sale carries no code; when its claim leaves — at the hour, or claimed elsewhere — its line stays on the cart, and a sale paid showing that line is settled by it as by a code
 - A sale that collects a deactivated code is reported to an operator by the commerce monitors' alert, whose log line names the order
 - A counter sale a newer promise retired, one whose coupon was claimed elsewhere among them, takes no new plan, points included, and the till asks staff to ring the goods on a new sale; a sale a reward was cleared off still takes points, and no reward
-- A till session lives ten minutes and a sale's hour outlasts it, so a sale that ran out its hour is reached again only by a fresh scan, and that scan is refused as a closed sale. What a fresh scan does on a cart whose sale is still open is Raised R1
+- A till session lives ten minutes and a sale's hour outlasts it, so a sale that ran out its hour is reached again only by a fresh scan, and that scan is refused as a closed sale. A fresh scan on a cart whose sale of the same member is still open continues that sale and its code (Q27)
 - A reward taken off by POS's own 管理折扣 → 全部移除 is cleared off the sale the same as by 移除所有折扣
 
 ## Reconciliation

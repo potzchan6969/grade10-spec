@@ -3,6 +3,236 @@
 **Status:** in-review
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
+## grade10-site-loyalty-programme-US4: Member runs their membership from one surface
+
+**As a** member,
+**I want** my tier, balance, progress and expiring points on one surface, in
+the programme's own dates,
+**so that** I can join and read my own activity without being shown the
+operating record behind it.
+
+<!-- trace:case id=g10.loyalty-programme.TC-iye rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k,g10.loyalty-programme.SC-ipk -->
+### grade10-site-loyalty-programme-US4-TC1-1: Joining twice leaves the first join date
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+A member who can join.
+
+**Steps:**
+
+1. Join more than once.
+
+**Expected Results:**
+
+* The first join date stands and later attempts change nothing.
+
+<!-- trace:case id=g10.loyalty-programme.TC-irz rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k,g10.loyalty-programme.SC-ipk -->
+### grade10-site-loyalty-programme-US4-TC2-1: Never-joined member is invited and still sees points
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+A member with recorded activity but no join date.
+
+**Steps:**
+
+1. Navigate to <grade10 loyalty url>.
+2. Check the surface.
+
+**Expected Results:**
+
+* They are shown how to join, and their existing points.
+
+<!-- trace:case id=g10.loyalty-programme.TC-vex rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k,g10.loyalty-programme.SC-ipk -->
+### grade10-site-loyalty-programme-US4-TC3-1: Member activity hides operator reasons, retry keys and pricing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+An operator has corrected this member's balance with a written reason.
+
+**Steps:**
+
+1. Navigate to <grade10 loyalty url> as that member.
+2. Read activity, including an entry for a reward that has since been archived.
+
+**Expected Results:**
+
+* The operator's reason does not appear anywhere in what the member can read.
+* No entry carries a retry key, a request record, or the tier and money arithmetic the entry was priced from.
+* The archived-reward entry still names that reward.
+
+<!-- trace:case id=g10.loyalty-programme.TC-9v2 rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k,g10.loyalty-programme.SC-ipk -->
+### grade10-site-loyalty-programme-US4-TC4-1: Dates read in the programme's time zone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+A member whose browser is not in Asia/Hong_Kong.
+
+**Steps:**
+
+1. Navigate to <grade10 loyalty url>.
+2. Read a date the programme computed.
+
+**Expected Results:**
+
+* It reads the same wherever the member is, in the programme's time zone.
+
+---
+
+<!-- trace:case id=g10.loyalty-programme.TC-2dk rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k,g10.loyalty-programme.SC-ipk -->
+### grade10-site-loyalty-programme-US4-TC5-1: Membership summary names one expiry line
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(member holding <live balance>) whose whole balance expires on <balance expiry day>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <live balance> | 160 points |
+
+**Steps:**
+
+1. Navigate to <grade10 loyalty url>.
+2. Read the membership section.
+
+**Expected Results:**
+
+* One line names <live balance> and <balance expiry day>.
+* No second expiry figure sits beside it.
+
+<!-- trace:case id=g10.loyalty-programme.TC-9tr rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k,g10.loyalty-programme.SC-ipk -->
+### grade10-site-loyalty-programme-US4-TC6-1: Member holding no points is shown no expiry line
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(member holding no live points).
+
+**Steps:**
+
+1. Navigate to <grade10 loyalty url>.
+2. Read the membership section.
+
+**Expected Results:**
+
+* The membership section loads with nothing to spend.
+* No expiry line is shown.
+
+---
+
+<!-- trace:case id=g10.loyalty-programme.TC-6f6 rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k,g10.loyalty-programme.SC-ipk -->
+### grade10-site-loyalty-programme-US4-TC7-1: Expiry line warns inside the last 30 days
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(member holding points whose balance expires in `<days>`).
+
+**Steps:**
+
+1. Navigate to <grade10 loyalty url>.
+2. Read the membership section.
+
+**Expected Results:**
+
+* The expiry line is shown in the `<tone>` tone.
+* The line says what keeps the points when the tone is the warning one.
+
+**Test data:**
+
+| days | tone |
+| --- | --- |
+| 9 | warning |
+| 0 | warning |
+| 120 | plain |
+
+---
+
 ## grade10-site-loyalty-programme-US6: Operator reverses a redemption a member cannot be given
 
 **As an** operator,
@@ -43,7 +273,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member bought for <cost> points, unused, inside its validity |
+| <coupon> | A reward coupon the member bought for <cost> points, unused, inside its validity, scoped to the whole order |
 | <cost> | 500 |
 
 **Steps:**
@@ -93,8 +323,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member bought for <cost> points, unused, inside its validity |
-| <other coupon> | A second reward coupon the member holds, unused, inside its validity |
+| <coupon> | A reward coupon the member bought for <cost> points, unused, inside its validity, scoped to the whole order |
+| <other coupon> | A second reward coupon the member holds, unused, inside its validity, scoped to the whole order |
 | <cost> | 500 |
 | <sweep horizon> | 25 hours from the claim |
 
@@ -198,7 +428,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <product coupon> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1> |
+| <product coupon> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <points> | 100, worth HK$100.00, within the member's balance |
 
@@ -226,7 +456,7 @@ Runs once per row of **Test data**.
 **I want** every coupon I hold to be spendable on the sale in front of me, whatever checkout or counter sale I walked away from,
 **so that** changing my mind never costs me the coupon and never makes me wait.
 
-<!-- trace:case id=g10.loyalty-programme.TC-eg8 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-eg8 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC1-1: A new checkout takes the coupon off an unpaid online order
 
 Runs once per row of **Test data**.
@@ -281,7 +511,7 @@ Runs once per row of **Test data**.
 * The code minted for <earlier order> is no longer live.
 * Step 7 takes no payment.
 
-<!-- trace:case id=g10.loyalty-programme.TC-8x5 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-8x5 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC2-1: A counter sale keeps its cart and loses its claim
 
 Runs once per row of **Test data**.
@@ -315,8 +545,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
-| <other coupon> | A second reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
+| <other coupon> | A second reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <points> | 100, worth HK$100.00, within the member's balance |
 | <line_1> | One HK$780.00 product |
 | <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> |
@@ -336,7 +566,7 @@ Runs once per row of **Test data**.
 * <counter sale A> is not cancelled and still holds <line_1>.
 * Step 5 is refused, telling staff the sale has closed and to ring the goods on a new one.
 
-<!-- trace:case id=g10.loyalty-programme.TC-dcb rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-dcb rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC3-1: A till claims the coupon an open checkout holds
 
 Runs once per row of **Test data**.
@@ -368,7 +598,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <open checkout> | An online checkout the member submitted with <coupon> and left unpaid |
 
@@ -386,7 +616,7 @@ Runs once per row of **Test data**.
 * Step 4 puts <coupon>'s cut on the sale.
 * <open checkout> reads cancelled, and its code is no longer live.
 
-<!-- trace:case id=g10.loyalty-programme.TC-8wc rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-8wc rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC4-1: A plan at a second till retires the first till's sale
 
 Runs once per row of **Test data**.
@@ -419,8 +649,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> and <line_2> |
-| <other coupon> | A second reward coupon the member holds, unused, inside its validity, that applies to <line_2> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to the whole order |
+| <other coupon> | A second reward coupon the member holds, unused, inside its validity, scoped to <line_2>'s own variant |
 | <points> | 100, worth HK$100.00, within the member's balance |
 | <line_1> | One HK$780.00 product, on <counter sale A> |
 | <line_2> | One HK$780.00 product, at <shop B> |
@@ -441,7 +671,7 @@ Runs once per row of **Test data**.
 * <counter sale A> is not cancelled and still holds <line_1>.
 * Step 5 lists <coupon> as unused.
 
-<!-- trace:case id=g10.loyalty-programme.TC-i0e rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-i0e rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC5-1: A coupon an unpaid sale claims still reads spendable
 
 Runs once per row of **Test data**.
@@ -480,7 +710,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 
 **Steps:**
@@ -496,7 +726,7 @@ Runs once per row of **Test data**.
 * Step 2 lists <coupon> as unused.
 * Step 5 offers <coupon> as spendable.
 
-<!-- trace:case id=g10.loyalty-programme.TC-1q0 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-1q0 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC6-1: No member or till surface shows a coupon's claim, its sale or its code
 
 **Classification:**
@@ -522,7 +752,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <counter sale A> | A till sale at <shop A> holding the member's goods, planned with <coupon> |
 
@@ -543,7 +773,7 @@ Runs once per row of **Test data**.
 * None of them names <counter sale A>.
 * None of them shows the code minted for <coupon> on <counter sale A>.
 
-<!-- trace:case id=g10.loyalty-programme.TC-1jv rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-1jv rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC7-1: Two sales collect one coupon, which is spent once and reported
 
 **Classification:**
@@ -569,7 +799,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused and inside its validity |
+| <coupon> | A reward coupon the member holds, unused and inside its validity, scoped to the whole order |
 | <counter sale A> | A till sale at <shop A> whose code for <coupon> was deactivated before it collected |
 | <later sale> | The online order that claimed <coupon> away from <counter sale A> |
 
@@ -584,7 +814,7 @@ Runs once per row of **Test data**.
 * <coupon> reads used once, spent by <later sale>, the sale that settled first.
 * <counter sale A> is reported with the order on it, and spends <coupon> nowhere.
 
-<!-- trace:case id=g10.loyalty-programme.TC-y4l rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-y4l rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC8-1: A claim is refused where the earlier checkout cannot be closed
 
 Runs once per row of **Test data**.
@@ -617,7 +847,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <open checkout> | An online checkout the member submitted with <coupon> and left unpaid |
 
@@ -633,7 +863,7 @@ Runs once per row of **Test data**.
 * Step 2 does not say <coupon> is unavailable.
 * <open checkout> is not cancelled and still carries <coupon>'s cut.
 
-<!-- trace:case id=g10.loyalty-programme.TC-x5l rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-x5l rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC9-1: A coupon on a sale that took the money does not move
 
 Runs once per row of **Test data**.
@@ -665,7 +895,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member redeemed, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member redeemed, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <paid sale> | An online order carrying <coupon>'s cut, paid |
 
@@ -681,7 +911,7 @@ Runs once per row of **Test data**.
 * Step 2 does not say <coupon> is unavailable.
 * <paid sale> still carries <coupon>'s cut.
 
-<!-- trace:case id=g10.loyalty-programme.TC-bq5 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-bq5 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC10-1: A claim stands where the shop keeps the earlier code
 
 **Classification:**
@@ -707,7 +937,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <counter sale A> | A till sale at <shop A> holding the member's goods, planned with <coupon> |
 
@@ -724,7 +954,7 @@ Runs once per row of **Test data**.
 * Step 3 is not refused, and the checkout carries <coupon>'s cut.
 * After step 4, the code on <counter sale A> is no longer live.
 
-<!-- trace:case id=g10.loyalty-programme.TC-4wf rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-4wf rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC11-1: A sale that gave no cut hands the coupon back
 
 Runs once per row of **Test data**.
@@ -756,7 +986,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward product coupon the member holds, unused, inside its validity |
+| <coupon> | A reward product coupon the member holds, unused, inside its validity, scoped to the whole order |
 | <gift> | A gift reward the member holds, unused, inside its validity |
 | <counter sale A> | A till sale at <shop A> planned with the row's reward |
 
@@ -770,7 +1000,7 @@ Runs once per row of **Test data**.
 * The row's reward reads unused.
 * <counter sale A> records no use of the row's reward.
 
-<!-- trace:case id=g10.loyalty-programme.TC-flp rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-flp rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC12-1: A claim given back no longer answers its retry key
 
 Runs once per row of **Test data**.
@@ -803,7 +1033,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, inside its validity |
+| <coupon> | A reward coupon the member holds, inside its validity, scoped to the whole order |
 | <sale A> | A till sale at <shop A> planned with <coupon> |
 | <key A> | The retry key <sale A>'s claim was made under: its order id |
 
@@ -818,7 +1048,7 @@ Runs once per row of **Test data**.
 * Step 2 answers as the row's second column says.
 * <coupon> is used at most once.
 
-<!-- trace:case id=g10.loyalty-programme.TC-t7v rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-t7v rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC13-1: A till sale whose plan was refused claims the coupon on its next plan
 
 **Classification:**
@@ -844,7 +1074,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <sale A> | A till sale at <shop A> holding <line_1> |
 
@@ -859,7 +1089,7 @@ Runs once per row of **Test data**.
 * Step 2 puts <coupon>'s cut on <sale A>.
 * <sale A> carries exactly one code for <coupon>.
 
-<!-- trace:case id=g10.loyalty-programme.TC-msl rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-msl rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC14-1: A coupon a cancelled order has not yet given back is taken at the till
 
 **Classification:**
@@ -886,7 +1116,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <cancelled order> | An online order the member submitted with <coupon>, then cancelled |
 
@@ -901,7 +1131,7 @@ Runs once per row of **Test data**.
 * Step 2 puts <coupon>'s cut on the sale, and does not say <coupon> is unavailable.
 * Step 3 is refused, naming the till sale rather than <cancelled order>.
 
-<!-- trace:case id=g10.loyalty-programme.TC-kid rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-kid rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC15-1: A claim moves the coupon off a tendered counter sale whose order has not arrived
 
 **Classification:**
@@ -927,7 +1157,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> |
 
@@ -943,7 +1173,7 @@ Runs once per row of **Test data**.
 * Step 3 is not refused, and the checkout carries <coupon>'s cut.
 * The code on <counter sale A> is no longer live.
 
-<!-- trace:case id=g10.loyalty-programme.TC-wd1 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-wd1 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC16-1: Two sales claiming one coupon at once leave one live claim
 
 **Classification:**
@@ -968,7 +1198,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 
 **Steps:**
@@ -984,7 +1214,7 @@ Runs once per row of **Test data**.
 * Step 3 finds exactly one live code for <coupon>.
 * <coupon> reads unused.
 
-<!-- trace:case id=g10.loyalty-programme.TC-zip rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-zip rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC17-1: A claim a stopped checkout left is taken back once it is five minutes old
 
 Runs once per row of **Test data**.
@@ -1019,7 +1249,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, that applies to <line_1> |
+| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
 | <line_1> | One HK$780.00 product |
 | <stopped checkout> | A checkout the member started with <coupon>, stopped after the programme claimed <coupon> and before the store wrote its order |
 
@@ -1037,7 +1267,7 @@ Runs once per row of **Test data**.
 * Step 3 lists <coupon> as unused.
 * Step 4 names the order the row's last column says.
 
-<!-- trace:case id=g10.loyalty-programme.TC-ixy rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-5v5 -->
+<!-- trace:case id=g10.loyalty-programme.TC-ixy rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC18-1: A coupon outlives the code an expired order let die
 
 **Classification:**
