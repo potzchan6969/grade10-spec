@@ -127,14 +127,15 @@ change for what one pure function gives.
 | Function | Input | Output |
 | --- | --- | --- |
 | `cancelVisitConfirm` | `{ appointmentAt: Date, email: string \| null, shopTimeZone }` | `{ title, description }` naming the slot through `formatMoment(at, { timeZone: shopTimeZone })` and `On the shop's clock (<shopTimeZone>)`, the address or that nobody is emailed, and that the case keeps its status |
-| `forfeitureNoticeConfirm` | `{ email: string \| null, payBy: Date \| null, timeZone }` | `{ title, description }` naming the address or nobody, and `formatDay(payBy, { timeZone })`, or that no date can be named while the brand has no notice period |
+| `forfeitureNoticeConfirm` | `{ email: string \| null, payBy: Date \| null, brandTimeZone }` | `{ title, description }` naming the address or nobody, and `formatDay(payBy, { timeZone: brandTimeZone })`, or that no date can be named while the brand has no notice period |
 
 The address is `case.contact.email`, the one every message to the collector
 goes to (Q12). `shopTimeZone` is the zone of the shop the fresh case names in
 `locationId`, from `useLocations`, never the panel's brand zone (Q17); a shop
 the lookup cannot find opens no confirm and shows the failure beside the
 button, as a failed read does (Q22). The notice confirm keeps the brand's zone,
-because the date it names is the worker's brand-zone day.
+never the case's shop's, because the date it names is the worker's
+brand-zone day.
 
 Rejected: the panel's `timeZone` for the slot, which names another hour at a
 shop that keeps a zone of its own.
@@ -145,16 +146,19 @@ shop that keeps a zone of its own.
 
 ```ts
 type LoanClock = { kind: "pastDue"; days: number } | { kind: "payBy"; at: Date };
-function loanClock(detail: CaseDetail, timeZone: string): LoanClock | null;
-function loanClockWords(clock: LoanClock, timeZone: string): string;
+function loanClock(detail: CaseDetail, brandTimeZone: string): LoanClock | null;
+function loanClockWords(clock: LoanClock, brandTimeZone: string): string;
 ```
+
+Both take the brand's zone, the calendar the worker judges the due date and
+writes the date to pay by on, never the case's shop's zone.
 
 - **Null** - unless the case is on the financed lane, `active` and has a
   `due`: storage, repaid and ended cases carry none (Q10).
 - **`payBy`** - where `detail.notice` stands, its `payBy`, passed or not
   (Q7, Q11).
 - **`pastDue`** - otherwise
-  `calendarDaysBetween(due.dueAt, detail.asOf, timeZone)` when it is at
+  `calendarDaysBetween(due.dueAt, detail.asOf, brandTimeZone)` when it is at
   least 1, the count `caseStanding` gives the collector's Past due stage. It
   never reads `due.overdueDays`, which is net of grace (Q9).
 - **Words** - `1 day past due`, `N days past due`, `pay by <formatDay>`.
@@ -180,6 +184,11 @@ missed a visit or asked for the item back.
   booked shop's] -> the chip is `read-vault-console-on-shop-clock`'s; the two
   differ only at a shop whose zone is not its brand's, and group 4 starts from
   that change's commit where it has landed.
+- [`read-vault-console-on-shop-clock` hands the panel the case's shop's zone
+  for its times, and the clock or the notice confirm picks it up] -> both
+  take a parameter named `brandTimeZone`, fed from the console config's brand
+  zone, and their tests read a case kept at a shop on `Asia/Tokyo` under a
+  brand on `Asia/Hong_Kong`, where the two zones name different days.
 - [The brand's day turns between the confirm opening and the send] -> the instant is
   the worker's `asOf`, so the worker's date can only be later (Q13); the
   `noticePayBy` test pins that order.

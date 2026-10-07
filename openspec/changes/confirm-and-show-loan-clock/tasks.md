@@ -30,9 +30,11 @@ and 5 cite the ones it serves.
       `loanClockWords` for each row of the requirement's table, the count
       folded beside `caseStanding` at 23:00 on the due date, 00:30 the day
       after and three days on, a 3-day grace that does not reduce the count,
-      and a notice date kept after it passes; then `CaseDetailPanel` drawing
-      the clock beside the status for an operator without the payout grant,
-      at instants whose UTC day differs from the brand's
+      a notice date kept after it passes, and a case kept at a shop on
+      `Asia/Tokyo` under a brand on `Asia/Hong_Kong` reading the brand's day;
+      then `CaseDetailPanel` drawing the clock beside the status for an
+      operator without the payout grant, at instants whose UTC day differs
+      from the brand's
       (`grade10-admin-vault-operator-queue-SC-97`,
       `grade10-admin-vault-operator-queue-SC-98`,
       `grade10-admin-vault-operator-queue-SC-99`,
@@ -40,18 +42,22 @@ and 5 cite the ones it serves.
       `grade10-admin-vault-operator-queue-SC-101`,
       `grade10-admin-vault-operator-queue-SC-102`,
       `grade10-admin-vault-operator-queue-SC-103`,
-      `grade10-admin-vault-operator-queue-SC-104`).
+      `grade10-admin-vault-operator-queue-SC-104`,
+      `grade10-admin-vault-operator-queue-SC-123`,
+      `grade10-admin-vault-operator-queue-SC-124`).
 - [ ] 3.2 Add `cases/domain/loanClock.ts`, and draw its words as an `info`
-      `Badge` beside the status badge in `CaseDetailPanel.tsx`, formatted on
-      the panel's `timeZone`, covering
+      `Badge` beside the status badge in `CaseDetailPanel.tsx`, judged and
+      formatted on the brand's zone, never the case's shop's, covering
       `grade10-admin-vault-operator-queue-SC-97`,
       `grade10-admin-vault-operator-queue-SC-98`,
       `grade10-admin-vault-operator-queue-SC-99`,
       `grade10-admin-vault-operator-queue-SC-100`,
       `grade10-admin-vault-operator-queue-SC-101`,
       `grade10-admin-vault-operator-queue-SC-102`,
-      `grade10-admin-vault-operator-queue-SC-103` and
-      `grade10-admin-vault-operator-queue-SC-104`.
+      `grade10-admin-vault-operator-queue-SC-103`,
+      `grade10-admin-vault-operator-queue-SC-104`,
+      `grade10-admin-vault-operator-queue-SC-123` and
+      `grade10-admin-vault-operator-queue-SC-124`.
 - [ ] 3.3 Add `CaseDetailPanel` stories for a loan past its due date and for
       one with a notice standing.
 - [ ] 3.4 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck,
@@ -73,7 +79,7 @@ zone on `BookingRow` rather than adding a second.
       read, naming a visit moved since at its new slot, and opening none on a
       failed read or a shop the lookup cannot find
       (`grade10-admin-vault-operator-queue-SC-105`,
-      `grade10-admin-vault-operator-queue-SC-105a`,
+      `grade10-admin-vault-operator-queue-SC-122`,
       `grade10-admin-vault-operator-queue-SC-106`,
       `grade10-admin-vault-operator-queue-SC-107`,
       `grade10-admin-vault-operator-queue-SC-108`,
@@ -92,7 +98,7 @@ zone on `BookingRow` rather than adding a second.
       gives for the case's `locationId`, opening none where the fresh read
       holds no visit or the shop is not found, covering
       `grade10-admin-vault-operator-queue-SC-105`,
-      `grade10-admin-vault-operator-queue-SC-105a`,
+      `grade10-admin-vault-operator-queue-SC-122`,
       `grade10-admin-vault-operator-queue-SC-106`,
       `grade10-admin-vault-operator-queue-SC-107`,
       `grade10-admin-vault-operator-queue-SC-108`,
@@ -109,7 +115,9 @@ Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
 `confirmWords.ts`.
 
 - [ ] 5.1 Add the tests first, in their own commit:
-      `forfeitureNoticeConfirm` for each row of the requirement's table; then
+      `forfeitureNoticeConfirm` for each row of the requirement's table, and
+      for a case kept at a shop on `Asia/Tokyo` under a brand on
+      `Asia/Hong_Kong` naming the brand's day; then
       `CustodyPanel` under `ConfirmProvider` and `ConfirmDialog`, asking in
       the destructive tone with the address and 15 December 2026 for a
       14-day period read at 10:00 on 1 December, recording nothing on
@@ -123,10 +131,12 @@ Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
       `grade10-admin-vault-operator-queue-SC-114`,
       `grade10-admin-vault-operator-queue-SC-115`,
       `grade10-admin-vault-operator-queue-SC-120`,
-      `grade10-admin-vault-operator-queue-SC-121`).
+      `grade10-admin-vault-operator-queue-SC-121`,
+      `grade10-admin-vault-operator-queue-SC-125`).
 - [ ] 5.2 Add `forfeitureNoticeConfirm`, and route Send forfeiture notice
       through `useConfirm` after a fresh read of the case and of
-      `admin.policy`, naming `noticePayBy` from the fresh `asOf` and opening
+      `admin.policy`, naming `noticePayBy` from the fresh `asOf` as a day on
+      the brand's zone, and opening
       none where the fresh read holds a notice; drop the panel's inline
       notice refusal line, covering
       `grade10-admin-vault-operator-queue-SC-110`,
@@ -135,8 +145,9 @@ Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
       `grade10-admin-vault-operator-queue-SC-113`,
       `grade10-admin-vault-operator-queue-SC-114`,
       `grade10-admin-vault-operator-queue-SC-115`,
-      `grade10-admin-vault-operator-queue-SC-120` and
-      `grade10-admin-vault-operator-queue-SC-121`.
+      `grade10-admin-vault-operator-queue-SC-120`,
+      `grade10-admin-vault-operator-queue-SC-121` and
+      `grade10-admin-vault-operator-queue-SC-125`.
 - [ ] 5.3 Verify: `node scripts/test.mjs vault-admin-frontend`, the typecheck
       and `pnpm run lint`.
 

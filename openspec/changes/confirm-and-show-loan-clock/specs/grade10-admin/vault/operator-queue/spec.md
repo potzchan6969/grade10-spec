@@ -16,7 +16,7 @@
 
 The case header SHALL read a live loan's clock beside the status, from the
 case's own read, on the brand's own zone as `shared/dates-and-times` states
-it.
+it, never on the zone of the shop the case is kept at.
 
 | The case | The header reads |
 | --- | --- |
@@ -103,6 +103,22 @@ it.
 - **WHEN** they open the case
 - **THEN** the header reads `3 days past due`, and no Payouts tab is offered
 
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4es rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-123 - The count turns at the brand's midnight, not the shop's
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the brand's day at a shop on another zone
+
+- **GIVEN** a brand on `Asia/Hong_Kong`, and a live loan due on 30 November kept at a shop on `Asia/Tokyo`, read at 00:30 on 1 December Tokyo time, 23:30 on 30 November Hong Kong time
+- **WHEN** an operator opens the case
+- **THEN** the header reads no clock beside the status
+
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-sn7 rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-124 - The date to pay by reads the brand's day at a shop on another zone
+**Serves:** grade10-admin-vault-operator-queue-US-24 - the operator reads the date the borrower was given
+
+- **GIVEN** a brand on `Asia/Hong_Kong`, and a live loan kept at a shop on `Asia/Tokyo` whose forfeiture notice named 15 December 2026, a day that ends at 00:59 on 16 December Tokyo time
+- **WHEN** an operator opens the case on 5 December
+- **THEN** the header reads `pay by 15 Dec 2026`, and does not read 16 Dec
+
 ### Requirement: Cancelling a visit asks first, naming the slot
 
 Cancelling a case's visit from the console SHALL run in these steps:
@@ -143,7 +159,7 @@ Cancelling a case's visit from the console SHALL run in these steps:
 - **AND** nothing has been sent
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-4jw rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-105a - The slot reads on the booked shop's clock, not the brand's
+#### Scenario: grade10-admin-vault-operator-queue-SC-122 - The slot reads on the booked shop's clock, not the brand's
 **Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the hour the collector booked
 
 - **GIVEN** a brand on `Asia/Hong_Kong`, and a case holding a visit at a shop on `Asia/Tokyo`, on 15 June 2026 at 10:00 there, 09:00 Hong Kong time
@@ -235,7 +251,8 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 | That no date to pay by can be named without a notice period | the brand has set no notice period |
 
 - **The date** - the date to pay by SHALL be the brand's notice period counted
-  from the instant the confirm opens, on the brand's calendar. Where the
+  from the instant the confirm opens, named as a day on the brand's calendar,
+  never on the zone of the shop the case is kept at. Where the
   brand's day turns between the confirm opening and the send, the notice SHALL
   name the date the worker reaches at the send, one day later, and nothing
   SHALL ask again.
@@ -313,3 +330,11 @@ Sending the forfeiture notice from the custody tab SHALL run in these steps:
 - **GIVEN** a live loan past its due date with no notice, and the console unable to read the case or the brand's notice period afresh
 - **WHEN** the operator presses Send forfeiture notice
 - **THEN** the failure is shown beside Send forfeiture notice, no confirm opens, and no notice is recorded
+
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-o3p rev=1 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-125 - The notice confirm names the brand's day at a shop on another zone
+**Serves:** grade10-admin-vault-operator-queue-US-23 - the operator checks the date the borrower will be given
+
+- **GIVEN** a brand on `Asia/Hong_Kong` with a 14-day notice period, and a live loan past its due date with no notice, kept at a shop on `Asia/Tokyo`
+- **WHEN** an operator presses Send forfeiture notice at 10:00 on 1 December Hong Kong time
+- **THEN** the confirm names 15 December 2026 as the date to pay by, and does not name 16 December
