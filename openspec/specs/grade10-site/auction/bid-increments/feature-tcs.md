@@ -176,9 +176,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
 An open listing is available in `<listing currency>`.
@@ -467,9 +469,11 @@ The collector is enrolled on an open HKD listing whose minimum bid is <minimum>.
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
 The collector is enrolled on an open USD listing whose current bid is `<ceiling>`, held by another collector.
