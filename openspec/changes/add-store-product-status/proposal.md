@@ -166,7 +166,9 @@ identifier out of shopper-facing copy.
 `redesign-store-product-detail-page` also changes the product page. This change
 accepts first and carries the one-item add and sold-out requirements; the
 redesign rebases against the folded page (decisions Q5). The shared blocks'
-remaining-count element and stepper ceiling stay until the designer answers Q8.
+remaining-count element and stepper ceiling leave in a `shared/ui` change of
+their own, handed to redraw-store-product-card-frames (decisions Q8); this
+change's compositions supply none of them.
 
 This change depends on `cart-drawer-empty-state`: cart-validation's
 **In flight** names Store Cart's rule for a cart not yet read, which only that

@@ -61,7 +61,8 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
   `cart-test`); they are engineering instruments, not surfaces a collector
   browses
 - Removing the shared blocks' remaining-count element and stepper ceiling;
-  that is decisions Q8, the designer's
+  that is a `shared/ui` change of its own, handed to
+  redraw-store-product-card-frames (decisions Q8)
 
 ## Decisions
 
@@ -118,9 +119,9 @@ sequenceDiagram
 - [A query keeps its last data after a failed read] → displayed status,
   price and totals gate on `reviewUnchecked`, never on cached presence
 - [The shared blocks keep optional stock props] → the Grade10 compositions
-  omit them; `StoreProductHeaderCopy.onlyLeft` stays supplied until Q8,
-  because the block's copy type requires it, and renders nothing without
-  `availabilityCount`
+  omit them; `StoreProductHeaderCopy.onlyLeft` stays supplied until the
+  `shared/ui` change of decisions Q8 removes it, because the block's copy type
+  requires it, and renders nothing without `availabilityCount`
 - [Today a failed review over a basket never read ends `loading`, and the
   drawer shows the empty state] → `cart-drawer-empty-state` task 2.2 holds
   `loading` until the basket is read; group 5's walk of a cart that never

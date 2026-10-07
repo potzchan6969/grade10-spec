@@ -220,6 +220,11 @@ finding out at the order.
 
 ## Reconciliation
 
+**Run:** Update on 2026-10-07, from the sixth acceptance review. Q6 is
+decided: the listing's order is a listing change of its own, and the page's
+Price order row states the order Grade10 runs. No case here depends on it,
+and no case changed.
+
 **Run:** QA2 on 2026-10-06, in a fresh context after the fifth acceptance
 review's update and QA1's blind re-run. Read the anchors, these cases, the
 durable US12 scenarios, `decisions.md`, the Product Listing and Product Status
