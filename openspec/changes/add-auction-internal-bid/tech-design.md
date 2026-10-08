@@ -139,12 +139,12 @@ implementation choices.
    collector rules - the listing takes bids, the minimum next bid and the
    accepted-tie rule - with the stored amount. A refusal, including a
    listing still `created`, writes no bid and sets the row to `not_placed`
-   with `resolved_at`. On a `not_placed` row, a higher amount on a listing
-   that takes no bids is refused `NOT_BIDDABLE`; otherwise an amount at or
-   above the minimum next bid is a fresh commit at `now` through the same
-   path, and an amount between the stored one and the minimum next bid is
-   refused with `minimumNextAmount`. A lower amount, or a removal, only
-   updates the row (no bid, no relay, no letter).
+   with `resolved_at`. On a `not_placed` row, any save under the Save rules,
+   the same amount included, on a listing that takes no bids only updates
+   the row; on one that takes bids, an amount at or above the minimum next
+   bid is a fresh commit at `now` through the same path, and one below it is
+   refused with `minimumNextAmount`. A removal only updates the row (no bid,
+   no relay, no letter).
 
 7. **A lower is a superseding commitment.** The service re-runs the
    two-maximum resolution in memory with the lower house maximum and the
@@ -298,7 +298,7 @@ one transaction; a refusal returns before any write.
 | `readInternalBid` | `{ listingId }` | `{ maximumMinor, currency, commitAt, state, minimumNextMinor, clearedAt } \| null` | `LISTING_NOT_FOUND` |
 | `commitDueHouseMaximum` | `(tx, listing, now)` | `placed`, `not_placed` or `none` | Never refuses; throws on a broken invariant |
 | `clearInternalBidOutsideLimits` | `(tx, listing, { window, startingPriceMinor, currency }, now)` | `cleared` or `none` | Never refuses |
-| `raiseHouseMaximum` | `(tx, listing, row, maximumMinor, now)` | the resolution | `AMOUNT_TOO_LOW` with `minimumNextAmount`, `NOT_BIDDABLE` (also while `created`) |
+| `raiseHouseMaximum` | `(tx, listing, row, maximumMinor, now)` | the resolution | `AMOUNT_TOO_LOW` with `minimumNextAmount`, `NOT_BIDDABLE` |
 | `lowerHouseMaximum` | `(tx, listing, row, maximumMinor, now)` | `{ lowered: true }` | `MOVES_LEAD_OR_PRICE`, `BELOW_HOUSE_BID` with `floorMinor` |
 
 `saveInternalBid` calls `commitDueHouseMaximum` first, then routes by the
@@ -307,7 +307,7 @@ row's state:
 | State | Time changed | Higher amount | Lower amount |
 | --- | --- | --- | --- |
 | None, `scheduled` or `cleared` | Save checks, write `scheduled` | Save checks, write | Save checks, write |
-| `not_placed` | `TIME_FIXED` | `NOT_BIDDABLE` while the listing takes no bids; else `raiseHouseMaximum` at or above the minimum next bid, else `AMOUNT_TOO_LOW` | Amount checks, update the row |
+| `not_placed` | `TIME_FIXED` | Any amount, the same included: update the row while the listing takes no bids; else commit at `now` at or above the minimum next bid, else `AMOUNT_TOO_LOW` | Same as a higher amount |
 | `placed` | `TIME_FIXED` | `raiseHouseMaximum` | `lowerHouseMaximum` |
 
 `removeInternalBid` deletes a `scheduled` or `not_placed` row and refuses a
