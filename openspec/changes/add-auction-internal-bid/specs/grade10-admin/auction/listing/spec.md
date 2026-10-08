@@ -84,6 +84,14 @@ once the release has completed.
 - **WHEN** an operator opens the listing
 - **THEN** it says the stock was released, with the release date and time
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hfn rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-154 - A bought-in listing shows the release date
+**Serves:** grade10-admin-auction-listing-US-09 - the operator sees the stock of a bought-in lot is back
+
+- **GIVEN** a listing that closed Bought in and whose hold was released
+- **WHEN** an operator opens the listing
+- **THEN** it says the stock was released, with the release date and time
+
 ### Requirement: Relist opens a new draft from an Unsold listing
 
 The Listings table row of an Unsold or a Bought in listing SHALL offer

@@ -9,6 +9,7 @@
 **I want** the stock of a listing that closed with no winner, or that the house bought in, to come back on its own, and a Relist on that listing,
 **so that** a card nobody bought goes back on sale without me hunting for its stock.
 
+<!-- trace:case id=g10adm.auction-listing.TC-an7 rev=1 covers=g10adm.auction-listing.SC-02v,g10adm.auction-listing.SC-qgd,g10adm.auction-listing.SC-jqy -->
 ### grade10-admin-auction-listing-US9-TC10-1: Bought in reads apart from Unsold and from a sale
 
 Runs once per row of **Test data**.
@@ -58,6 +59,7 @@ Runs once per row of **Test data**.
 * Step 2 reads the row's Listings table status and Relist.
 * Step 3 reads the row's available count.
 
+<!-- trace:case id=g10adm.auction-listing.TC-3ts rev=1 covers=g10adm.auction-listing.SC-x1a,g10adm.auction-listing.SC-ls6 -->
 ### grade10-admin-auction-listing-US9-TC11-1: The Bought in filter lists bought-in lots only
 
 **Classification:**
@@ -100,6 +102,7 @@ Runs once per row of **Test data**.
 * Step 2 lists `<listing_3>`, not `<listing_2>`.
 * Step 3 lists `<listing_4>`, not `<listing_2>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-0ib rev=1 covers=g10adm.auction-listing.SC-jqy -->
 ### grade10-admin-auction-listing-US9-TC12-1: A bought-in lot follows Unsold's Relist exclusions
 
 Runs once per row of **Test data**.
@@ -140,3 +143,21 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: the row reads Bought in and offers no Relist.
+
+## Settled
+
+- A bought-in lot offers Relist under an Unsold lot's exclusions: in no campaign, not already relisted, its stock released (Q19)
+- Stats count the house as a bidder, and its bids in the bid count, matching the public count (Q20)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-08. QA1's round-3 blind pass, rerun after a discarded attempt broke isolation, read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised` table as it stood through Q25, the linked pages `bidding.md` and `management.md` under `docs/prds/`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-3 reading wrote the scenarios, `tech-design.md` and `tasks.md` without QA1's suites. Q26 to Q29 landed after both readings, and where a case contradicted them the decision won. QA2 read QA1's suites, the delta specs, `decisions.md` through Q29, `tech-design.md`, `tasks.md`, the durable specs and suites, and both PRD pages; not the archive. It is a statement, not proof.
+
+- **Folded in** - `grade10-admin-auction-listing-US9-TC10-1` by `grade10-admin-auction-listing-SC-147` and `grade10-admin-auction-listing-SC-149`, its House wins row the offered side of `grade10-admin-auction-listing-SC-153`; `grade10-admin-auction-listing-US9-TC11-1` by `grade10-admin-auction-listing-SC-150` and `grade10-admin-auction-listing-SC-152`; `grade10-admin-auction-listing-US9-TC12-1` by `grade10-admin-auction-listing-SC-153`, its Already relisted row the requirement's Relisted condition
+- **Scenarios added from cases** - `grade10-admin-auction-listing-SC-154`: a bought-in listing says its stock was released, from step 5 of `grade10-admin-auction-e2e-US4-TC1-1`; the modified requirement names bought-in lots and no scenario did
+- **Covered at domain** - `grade10-admin-auction-listing-SC-148` and `grade10-admin-auction-listing-SC-154` by `grade10-admin-auction-e2e-US4-TC1-1`, which relists a bought-in lot and reads its released note and the editor's empty Internal bid section
+- **Out of suite** - `grade10-admin-auction-listing-SC-151` by `grade10-admin-auction-internal-bid-US7-TC7-1`, which reads a protected lot's row before the close as staff; the Stock row of `grade10-admin-auction-listing-SC-153` for a bought-in lot by the backend tests of task 5.1, since a release that has not completed is reached only by a failed release; `grade10-admin-auction-listing-SC-130`, `grade10-admin-auction-listing-SC-132`, `grade10-admin-auction-listing-SC-133`, `grade10-admin-auction-listing-SC-134`, `grade10-admin-auction-listing-SC-135`, `grade10-admin-auction-listing-SC-136`, `grade10-admin-auction-listing-SC-137`, `grade10-admin-auction-listing-SC-138`, `grade10-admin-auction-listing-SC-141`, `grade10-admin-auction-listing-SC-142`, `grade10-admin-auction-listing-SC-143`, `grade10-admin-auction-listing-SC-144`, `grade10-admin-auction-listing-SC-145` and `grade10-admin-auction-listing-SC-146` restate Unsold behaviour unchanged by this change and stay with the durable suite's `grade10-admin-auction-listing-US9` cases
+- **Rejected** - none
+- **Raised** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none

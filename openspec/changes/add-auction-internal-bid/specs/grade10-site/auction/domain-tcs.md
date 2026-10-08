@@ -9,6 +9,7 @@
 **I want** a lot protected by a house maximum to bid, extend, close and mail me as any other lot does,
 **so that** what I read, and what I am told, is what the auction decided.
 
+<!-- trace:case id=g10.auction-domain.TC-88l rev=1 covers=g10.auction-auto-bidding.SC-99a,g10.auction-notifications.SC-kl5,g10.auction-auction.SC-a4f,g10.auction-notifications.SC-xy1,g10.auction-notifications.SC-14x -->
 ### grade10-site-auction-e2e-US13-TC01-1: The house outbids a collector and the lot closes sold under its pseudonym
 
 **Classification:**
@@ -62,6 +63,7 @@
 * Step 6's row reads Didn't win, with Current bid <final price> and "Your card was not charged."
 * Step 7: customer A gets one You did not win letter with Winning bid <final price>; customer D gets one Lot watched, sold letter with Sold for <final price>.
 
+<!-- trace:case id=g10.auction-domain.TC-su0 rev=1 covers=g10.auction-auction.SC-fec -->
 ### grade10-site-auction-e2e-US13-TC02-1: A collector beats the house in extended bidding and wins
 
 **Classification:**
@@ -110,3 +112,12 @@
 * Step 2: Time left reads <extension duration> from customer B's bid.
 * Step 4 reads Won, with Highest bid <final price>.
 * Step 5's row reads Won with View order, Current bid <final price>.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-08. QA1's levels pass composed these paths from every `user-journeys.md` in the domain and the domain's PRD pages, before the feature readings and without any `## Requirements` section, `tech-design.md` or the archive. QA2 joined each composed case to the scenarios its journeys accept, after Q26 to Q29 landed. It is a statement, not proof.
+
+- **Folded in** - `grade10-site-auction-e2e-US13-TC01-1` walks the house's commit, the outbid letter, extended bidding and the close, asserting `grade10-site-auction-auto-bidding-SC-33`, `grade10-site-auction-notifications-SC-49`, `grade10-site-auction-auction-SC-103`, `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-51`; `grade10-site-auction-e2e-US13-TC02-1` walks a collector beating the house in extended bidding, asserting `grade10-site-auction-auction-SC-02` and the durable extended-bidding rule
+- **Rejected** - none
+- **Raised** - none
+- **Uncovered anchors** - none

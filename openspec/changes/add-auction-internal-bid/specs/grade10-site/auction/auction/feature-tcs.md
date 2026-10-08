@@ -9,6 +9,7 @@
 **I want** a lot to stop taking bids at its close for everyone, and a bid to count when it is accepted before then,
 **so that** nobody wins with a bid that arrived after the close.
 
+<!-- trace:case id=g10.auction-auction.TC-itn rev=1 covers=g10.auction-auction.SC-fec,g10.auction-auction.SC-a4f -->
 ### grade10-site-auction-auction-US11-TC12-1: A lot the house leads at the close reads sold like any other
 
 Runs once per row of **Test data**.
@@ -58,6 +59,7 @@ Runs once per row of **Test data**.
 * Step 4's card reads Ended, as any sold lot's card does.
 * The House row and the Collector row read alike in every step, save the pseudonym.
 
+<!-- trace:case id=g10.auction-auction.TC-xcm rev=1 covers=g10.auction-auction.SC-cqt,g10.auction-auto-bidding.SC-szf -->
 ### grade10-site-auction-auction-US11-TC13-1: A lot whose only bid is the house's extends and closes sold at the starting price
 
 Runs once per row of **Test data**.
@@ -114,6 +116,7 @@ Runs once per row of **Test data**.
 **I want** extended bidding to restart only when a bid moves the lot's price,
 **so that** a leader cannot keep a lot open by raising their own maximum.
 
+<!-- trace:case id=g10.auction-auction.TC-2g4 rev=1 covers=g10.auction-auto-bidding.SC-pfm,g10.auction-auto-bidding.SC-ax3 -->
 ### grade10-site-auction-auction-US12-TC3-1: A house change restarts the timer only when it moves the price
 
 Runs once per row of **Test data**.
@@ -162,3 +165,20 @@ Runs once per row of **Test data**.
 
 * Step 1 is accepted.
 * Step 2 reads the row's Highest bid and Time left.
+
+## Settled
+
+- A lot only the house bid on, its commit at or before the scheduled close, enters extended bidding and closes sold at the opening price, as any lone bid does (Q21)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-08. QA1's round-3 blind pass, rerun after a discarded attempt broke isolation, read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised` table as it stood through Q25, the linked pages `bidding.md` and `management.md` under `docs/prds/`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-3 reading wrote the scenarios, `tech-design.md` and `tasks.md` without QA1's suites. Q26 to Q29 landed after both readings, and where a case contradicted them the decision won. QA2 read QA1's suites, the delta specs, `decisions.md` through Q29, `tech-design.md`, `tasks.md`, the durable specs and suites, and both PRD pages; not the archive. It is a statement, not proof.
+
+- **Folded in** - `grade10-site-auction-auction-US11-TC12-1` by `grade10-site-auction-auction-SC-103` and `grade10-site-auction-auction-SC-02`; `grade10-site-auction-auction-US11-TC13-1` by `grade10-site-auction-auction-SC-106` and `grade10-site-auction-auto-bidding-SC-39`, its At the scheduled close row by Q21 and the auto-bidding rule that a house maximum committed at the scheduled close counts toward extended bidding; `grade10-site-auction-auction-US12-TC3-1` by `grade10-site-auction-auto-bidding-SC-40` and `grade10-site-auction-auto-bidding-SC-41`, its Lower while leading row by the auto-bidding rule that an accepted lower does not move the close
+- **Anchors** - `grade10-site-auction-auction-SC-103` to `grade10-site-auction-auction-SC-106` serve the Feature set group `Closing a lot the house leads`, while the cases trace `grade10-site-auction-auction-US-11` and `grade10-site-auction-auction-US-12`, the journeys the house's close walks; joined on the behaviour
+- **Covered at domain** - `grade10-site-auction-auction-SC-103` is also walked by `grade10-site-auction-e2e-US13-TC01-1`; `grade10-site-auction-auction-SC-02` by `grade10-site-auction-e2e-US13-TC02-1`
+- **Out of suite** - `grade10-site-auction-auction-SC-104` by `grade10-admin-auction-internal-bid-US6-TC1-1`, which reads Orders after a house win; `grade10-site-auction-auction-SC-105` by the backend tests of task 4.1, since a person cannot make the timer and a read settle at one moment; `grade10-site-auction-auction-SC-01` and `grade10-site-auction-auction-SC-03` are unchanged and stay with the durable suite
+- **Rejected** - none
+- **Raised** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none

@@ -9,6 +9,7 @@
 **I want** a lot the house buys in to free its stock and offer Relist without the internal bid,
 **so that** the card goes back on sale behind a floor I choose again.
 
+<!-- trace:case id=g10adm.auction-domain.TC-98w rev=1 covers=g10adm.auction-internal-bid.SC-dq6,g10adm.auction-internal-bid.SC-glg,g10adm.auction-internal-bid.SC-hat,g10adm.auction-listing.SC-02v,g10adm.auction-listing.SC-khm,g10adm.auction-listing.SC-qgd,g10adm.auction-listing.SC-hfn -->
 ### grade10-admin-auction-e2e-US4-TC1-1: A bought-in lot releases its stock and relists with no internal bid
 
 **Classification:**
@@ -64,5 +65,15 @@
 * Step 5 says the stock was released on `<close date>`.
 * Step 6 reads `<available before>` plus `<held quantity>`.
 * Step 7 reads Did not win, the lot sold at `<final price>`.
-* Step 9 shows a new draft for `<product_4>`, quantity `<held quantity>`, starting price `<starting price>`.
+* Step 9 shows the editor filled in for `<product_4>`, quantity `<held quantity>`, starting price `<starting price>`, with no window.
 * Step 9: the Internal bid section holds no amount and no time.
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-08. QA1's levels pass composed these paths from every `user-journeys.md` in the domain and the domain's PRD pages, before the feature readings and without any `## Requirements` section, `tech-design.md` or the archive. QA2 joined each composed case to the scenarios its journeys accept, after Q26 to Q29 landed. It is a statement, not proof.
+
+- **Folded in** - `grade10-admin-auction-e2e-US4-TC1-1` walks `grade10-admin-auction-internal-bid-US-01`, `grade10-admin-auction-internal-bid-US-06` and `grade10-admin-auction-listing-US-09`, asserting `grade10-admin-auction-internal-bid-SC-01`, `grade10-admin-auction-internal-bid-SC-08`, `grade10-admin-auction-internal-bid-SC-17`, `grade10-admin-auction-listing-SC-147`, `grade10-admin-auction-listing-SC-148` and `grade10-admin-auction-listing-SC-149`; its step 5 asserted the released note for a bought-in lot, which no scenario stated, and became `grade10-admin-auction-listing-SC-154`
+- **Corrected** - step 9 read a new draft; Relist opens an unsaved editor, so it now reads the editor filled in, with no window
+- **Rejected** - none
+- **Raised** - none
+- **Uncovered anchors** - none

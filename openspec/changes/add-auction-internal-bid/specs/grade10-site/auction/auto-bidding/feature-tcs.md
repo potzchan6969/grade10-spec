@@ -10,6 +10,7 @@
 **so that** I take the lead only when my maximum is higher, and a tie stays
 with whoever committed first.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-m47 rev=1 covers=g10.auction-auto-bidding.SC-99a -->
 ### grade10-site-auction-auto-bidding-US3-TC7-1: A collector's maximum resolves against the house maximum like any other
 
 Runs once per row of **Test data**.
@@ -57,6 +58,7 @@ Runs once per row of **Test data**.
 * Step 2: the leader and Highest bid read the row's values; customer A reads Outbid or Leading to match.
 * Step 2: Recent bids lists customer A's bid and the house's bid that answers it, the house under its listing pseudonym.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-6gi rev=1 covers=g10.auction-auto-bidding.SC-gct -->
 ### grade10-site-auction-auto-bidding-US3-TC8-1: A tie with the house stays with whoever committed first
 
 Runs once per row of **Test data**.
@@ -103,6 +105,7 @@ Runs once per row of **Test data**.
 * Step 2: Highest bid reads `<equal maximum>`.
 * Step 2: Recent bids lists both bids at `<equal maximum>`, the earlier maximum's row first.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-19o rev=1 covers=g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-99a -->
 ### grade10-site-auction-auto-bidding-US3-TC9-1: A collector learns nothing of the house beyond a bidder's pseudonym
 
 **Classification:**
@@ -147,6 +150,55 @@ Runs once per row of **Test data**.
 * Step 2 reads like step 4, save the pseudonyms and times: no field names the house or holds `<house maximum>`.
 * Neither lot shows the leader's maximum.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-9jg rev=1 covers=g10.auction-auto-bidding.SC-jd3 -->
+### grade10-site-auction-auto-bidding-US3-TC10-1: A bid just after the house's time meets the house first
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-auto-bidding-US-03
+
+**Pre-conditions:**
+
+* `<listing_7>` is published and taking bids, led by customer A at `<starting price>` with maximum `<customer A maximum>`.
+* `<listing_7>` has an internal bid of `<house maximum>` at `<commit time>`, still ahead.
+* No page is open on `<listing_7>`, and nobody else will bid on it.
+* customer B(card linked) is signed in, on a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_7>` | A published HKD listing taking bids, starting price `<starting price>`, scheduled close a day away |
+| `<starting price>` | 400000 minor units (HK$4,000.00) |
+| `<customer A maximum>` | 450000 minor units (HK$4,500.00) |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<commit time>` | 5 minutes from now |
+| `<house first bid>` | 458000 minor units: `<customer A maximum>` plus its 8000 increment |
+| `<customer B maximum>` | 500000 minor units (HK$5,000.00), below `<house maximum>` |
+| `<price after>` | 508000 minor units: `<customer B maximum>` plus its 8000 increment |
+
+**Steps:**
+
+1. Wait until `<commit time>` passes, opening no page on `<listing_7>`.
+2. Within a minute, as customer B, open the lot page for `<listing_7>`.
+3. Enter `<customer B maximum>` in the custom maximum on the bid panel and confirm.
+4. Read the standing, Highest bid and Recent bids.
+
+**Expected Results:**
+
+* Step 3 is accepted.
+* Step 4: customer B reads Outbid; Highest bid reads `<price after>`, the leader under one listing pseudonym.
+* Step 4: Recent bids lists that pseudonym's bid at `<house first bid>`, timed at `<commit time>`, before customer B's bid at `<customer B maximum>`, then its answer at `<price after>`.
+
 ---
 
 ## grade10-site-auction-auto-bidding-US4: Operator traces every committed maximum
@@ -155,6 +207,7 @@ Runs once per row of **Test data**.
 **I want** to read every committed maximum and when it was accepted,
 **so that** I can answer a dispute about who committed what.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-63a rev=1 covers=g10.auction-auto-bidding.SC-j3t -->
 ### grade10-site-auction-auto-bidding-US4-TC2-1: The house's commitment, raise and lower are traced with when each was accepted
 
 **Classification:**
@@ -202,6 +255,7 @@ Runs once per row of **Test data**.
 * Step 2 lists the house's `<raised maximum>` accepted at `<raise time>`, as a new commitment.
 * Step 2 lists the house's `<lowered maximum>` accepted at `<lower time>`.
 
+<!-- trace:case id=g10.auction-auto-bidding.TC-vzk rev=1 covers=g10.auction-auto-bidding.SC-aqd,g10adm.auction-internal-bid.SC-ftu -->
 ### grade10-site-auction-auto-bidding-US4-TC3-1: Staff without secret-floor access read House in the trace, never its maximum
 
 **Classification:**
@@ -244,6 +298,26 @@ Runs once per row of **Test data**.
 * Step 2 lists customer A's commitment, with its Accepted At.
 * Step 2: the house's bid at `<current bid>` reads House, with no account.
 * Step 2: no house row shows a maximum; `<house maximum>` shows nowhere.
-* Step 2: no house row shows when its maximum was accepted, or `<commit time>` as an internal bid's time.
+* Step 2: the house's bid shows its own Accepted At, the time Recent bids shows for it; no house row shows when a maximum was accepted.
 * Step 2: no row reads the house's listing pseudonym, or an internal bid.
 * Step 3: the house's bid reads under its listing pseudonym; nothing reads House.
+
+## Settled
+
+- Operators read the house as House; only `auction:reserve` reads its maximum, and every commitment, raise and lower of it with its Accepted At (Q9, Q25)
+- A House bid shows any operator its own Accepted At, as the public history does, even where it equals the commit time (Q26)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-08. QA1's round-3 blind pass, rerun after a discarded attempt broke isolation, read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised` table as it stood through Q25, the linked pages `bidding.md` and `management.md` under `docs/prds/`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-3 reading wrote the scenarios, `tech-design.md` and `tasks.md` without QA1's suites. Q26 to Q29 landed after both readings, and where a case contradicted them the decision won. QA2 read QA1's suites, the delta specs, `decisions.md` through Q29, `tech-design.md`, `tasks.md`, the durable specs and suites, and both PRD pages; not the archive. It is a statement, not proof.
+
+- **Folded in** - `grade10-site-auction-auto-bidding-US3-TC7-1` by `grade10-site-auction-auto-bidding-SC-33`; `grade10-site-auction-auto-bidding-US3-TC8-1` by `grade10-site-auction-auto-bidding-SC-34`, its House earlier row the durable tie rule; `grade10-site-auction-auto-bidding-US3-TC9-1` by `grade10-site-auction-auto-bidding-SC-33` and `grade10-site-auction-auto-bidding-SC-07`; `grade10-site-auction-auto-bidding-US4-TC2-1` by `grade10-site-auction-auto-bidding-SC-45`; `grade10-site-auction-auto-bidding-US4-TC3-1` by `grade10-site-auction-auto-bidding-SC-08` and `grade10-admin-auction-internal-bid-SC-32`
+- **Added by QA2** - `grade10-site-auction-auto-bidding-US3-TC10-1`: a collector bid just after the house's time meets the house first, for `grade10-site-auction-auto-bidding-SC-37`, which no blind case reached
+- **Corrected to the decisions** - `grade10-site-auction-auto-bidding-US4-TC3-1` expected no time on a House row; Q26 shows a house bid's own Accepted At, so it now expects it and refuses only when a maximum was accepted
+- **Covered at domain** - `grade10-site-auction-auto-bidding-SC-33` is also walked by `grade10-site-auction-e2e-US13-TC01-1`
+- **Out of suite** - `grade10-site-auction-auto-bidding-SC-36` by `grade10-admin-auction-internal-bid-US1-TC4-1`; `grade10-site-auction-auto-bidding-SC-38` by `grade10-admin-auction-internal-bid-US5-TC1-1`; `grade10-site-auction-auto-bidding-SC-39` by `grade10-site-auction-auction-US11-TC13-1`; `grade10-site-auction-auto-bidding-SC-40` by `grade10-site-auction-auction-US12-TC3-1`; `grade10-site-auction-auto-bidding-SC-41` by `grade10-admin-auction-internal-bid-US3-TC2-1` and `grade10-site-auction-auction-US12-TC3-1`; `grade10-site-auction-auto-bidding-SC-42` and `grade10-site-auction-auto-bidding-SC-44` by `grade10-admin-auction-internal-bid-US4-TC4-1`; `grade10-site-auction-auto-bidding-SC-43` by `grade10-admin-auction-internal-bid-US4-TC2-1`; `grade10-site-auction-auto-bidding-SC-46` by `grade10-admin-auction-internal-bid-US5-TC7-1`; `grade10-site-auction-auto-bidding-SC-35` by the backend tests of tasks 3.1 and 3.2, since a person sees only that the house bids; `grade10-site-auction-auto-bidding-SC-01` to `grade10-site-auction-auto-bidding-SC-08`, `grade10-site-auction-auto-bidding-SC-22` to `grade10-site-auction-auto-bidding-SC-24` and `grade10-site-auction-auto-bidding-SC-25a` restate collector behaviour this change does not move, and stay with the durable suite's cases
+- **Anchors** - `grade10-site-auction-auto-bidding-SC-35`, `grade10-site-auction-auto-bidding-SC-38`, `grade10-site-auction-auto-bidding-SC-42`, `grade10-site-auction-auto-bidding-SC-43`, `grade10-site-auction-auto-bidding-SC-44` and `grade10-site-auction-auto-bidding-SC-46` serve the Feature set group `House maximum`; `grade10-site-auction-auto-bidding-SC-39` and `grade10-site-auction-auto-bidding-SC-40` serve the durable journey `grade10-site-auction-auto-bidding-US-05`, which this change's journeys file does not carry
+- **Rejected** - none
+- **Raised** - none
+- **Contradicted** - none
+- **Uncovered anchors** - none
