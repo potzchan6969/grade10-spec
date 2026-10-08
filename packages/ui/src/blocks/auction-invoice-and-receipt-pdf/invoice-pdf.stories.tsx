@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+import { expect, waitFor } from "storybook/test";
 import {
   BANK_TRANSFER_INVOICE,
   LONG_TABLE_INVOICE,
@@ -13,21 +14,8 @@ import { InvoicePdf } from "./invoice-pdf";
 import { PdfPreview } from "./pdf-preview";
 
 function InvoicePdfPreview({ data }: { data: InvoicePdfData }) {
-  const [bytes, setBytes] = useState<ArrayBuffer | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setBytes(null);
-    void InvoicePdf(data).then((rendered) => {
-      if (!cancelled) setBytes(rendered);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [data]);
-
-  if (!bytes) return <p>Generating...</p>;
-  return <PdfPreview bytes={bytes} />;
+  const pdf = useMemo(() => InvoicePdf(data), [data]);
+  return <PdfPreview pdf={pdf} />;
 }
 
 const meta = {
@@ -62,4 +50,14 @@ export const SeveralItems: Story = {
 
 export const LongTable: Story = {
   args: { data: LONG_TABLE_INVOICE },
+  play: async ({ canvasElement }) => {
+    await waitFor(
+      () =>
+        expect(
+          canvasElement.querySelectorAll('[data-slot="pdf-preview-canvas"]')
+            .length,
+        ).toBeGreaterThanOrEqual(2),
+      { timeout: 15_000 },
+    );
+  },
 };
