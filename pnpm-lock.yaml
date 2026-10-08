@@ -154,6 +154,25 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(@types/node@24.13.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(jsdom@24.1.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
 
+  packages/date:
+    dependencies:
+      '@date-fns/tz':
+        specifier: ^1.2.0
+        version: 1.5.0
+      date-fns:
+        specifier: ^4.0.0
+        version: 4.4.0
+    devDependencies:
+      '@grade10/i18n':
+        specifier: workspace:*
+        version: link:../i18n
+      typescript:
+        specifier: ~6.0.2
+        version: 6.0.3
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@types/node@24.13.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(jsdom@24.1.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+
   packages/design-system:
     dependencies:
       '@base-ui/react':
