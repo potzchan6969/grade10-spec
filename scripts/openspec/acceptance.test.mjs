@@ -2116,28 +2116,25 @@ const foldRuns = (current, delta) => {
   return merged.slice(merged.indexOf("## Reconciliation"));
 };
 
-for (const heading of [
-  "**Run:** first.",
-  "Run: first.",
-  "**Run** — first.",
-  "",
-]) {
-  test(`suite fold takes a reconciliation run the change grew, rather than repeating it (${heading || "no heading"})`, () => {
+for (const heading of ["**Run:** first.", "Run: first.", "**Run** — first."]) {
+  test(`suite fold takes a reconciliation run the change grew, rather than repeating it (${heading})`, () => {
+    const table = runOf("", "`site-search-US1-TC1-1`");
     assert.equal(
-      foldRuns(
-        [runOf(heading, "`site-search-US1-TC1-1`")],
-        [
-          runOf(
-            heading,
-            "`site-search-US1-TC1-1`, corrected",
-            "`site-search-US1-TC2-1`",
-          ),
-        ],
-      ),
-      `## Reconciliation\n\n${runOf(heading, "`site-search-US1-TC1-1`, corrected", "`site-search-US1-TC2-1`")}\n`,
+      foldRuns([heading, table], [heading, table, "- **Raised:** none."]),
+      `## Reconciliation\n\n${heading}\n\n${table}\n\n- **Raised:** none.\n`,
     );
   });
 }
+
+test("suite fold keeps a reworded reconciliation paragraph beside the old one", () => {
+  assert.equal(
+    foldRuns(
+      [runOf("**Run:** first.", "`site-search-US1-TC1-1`")],
+      [runOf("**Run:** first.", "`site-search-US1-TC1-1`, corrected")],
+    ),
+    `## Reconciliation\n\n${runOf("**Run:** first.", "`site-search-US1-TC1-1`, corrected")}\n\n${runOf("", "`site-search-US1-TC1-1`")}\n`,
+  );
+});
 
 test("suite fold takes a grown reconciliation run in place and adds a new one after it", () => {
   const first = (...rows) => runOf("**Run:** first.", ...rows);
@@ -2145,9 +2142,34 @@ test("suite fold takes a grown reconciliation run in place and adds a new one af
   assert.equal(
     foldRuns(
       [first("`site-search-US1-TC1-1`")],
-      [first("`site-search-US1-TC1-1`, corrected"), second],
+      [first("`site-search-US1-TC1-1`"), "- **Raised:** none.", second],
     ),
-    `## Reconciliation\n\n${first("`site-search-US1-TC1-1`, corrected")}\n\n${second}\n`,
+    `## Reconciliation\n\n${first("`site-search-US1-TC1-1`")}\n\n- **Raised:** none.\n\n${second}\n`,
+  );
+});
+
+test("suite fold keeps the headless records an earlier run absorbed when that run is folded again", () => {
+  const first = runOf("**Run:** first.", "`site-search-US1-TC1-1`");
+  const orphan = runOf("", "`site-search-US1-TC2-1`");
+  const later = runOf("**Run:** later.", "`site-search-US1-TC3-1`");
+  assert.equal(
+    foldRuns([first, orphan, later], [first, "- **Raised:** none."]),
+    `## Reconciliation\n\n${first}\n\n- **Raised:** none.\n\n${orphan}\n\n${later}\n`,
+  );
+});
+
+test("suite fold appends a headless delta reconciliation rather than replacing the durable one", () => {
+  const lead = runOf("", "`site-search-US1-TC1-1`");
+  const first = runOf("**Run:** first.", "`site-search-US1-TC2-1`");
+  const headless = runOf("", "`site-search-US1-TC3-1`");
+  const once = foldRuns([lead, first], [headless]);
+  assert.equal(
+    once,
+    `## Reconciliation\n\n${lead}\n\n${first}\n\n${headless}\n`,
+  );
+  assert.equal(
+    foldRuns([lead, first, headless], [headless, "- **Raised:** none."]),
+    `## Reconciliation\n\n${lead}\n\n${first}\n\n${headless}\n\n- **Raised:** none.\n`,
   );
 });
 
