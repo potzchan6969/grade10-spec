@@ -34,15 +34,18 @@
 **Steps:**
 
 1. Click the create-listing control in the Listings heading.
-2. Leave title, prices and window empty in the editor.
-3. Click Save.
-4. Reopen the saved draft from Listings.
-5. Open `<grade10 auction url>`.
+2. Leave title and prices empty.
+3. Clear the prefilled start time.
+4. Clear the prefilled scheduled close time.
+5. Click Save.
+6. Reopen the saved draft from Listings.
+7. Open `<grade10 auction url>`.
 
 **Expected Results:**
 
-* Step 4 shows a draft with those fields empty.
-* Step 5 does not list that listing.
+* Step 6 shows a draft with title and prices empty.
+* Step 6 shows both time fields empty.
+* Step 7 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-27b rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC2-1: Operator saves a partial draft
@@ -113,7 +116,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<listing_1>`.
-2. Enter the row's amount in the editor's starting-price field.
+2. Replace the starting-price text with the row's currency amount.
 3. Click Save.
 4. Reopen `<listing_1>`.
 5. Read its starting price and status.
@@ -121,7 +124,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3 refuses the save.
-* Step 5 reads 100000 minor units in the row's currency.
+* Step 5 reads the original price in the row's currency, not empty.
 * Step 5 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-09o rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
@@ -334,28 +337,39 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
+**Blocked:** Listing spec author — confirm an explicit playback assertion and its interaction. SC-48 states storage order; the gallery requirement states public display order. The listing-media spec assigns playback to admin-listing and preserves the original video path, but no current scenario states the play action or its outcome. The existing playback assertion remains unresolved, not approved.
+
 **Pre-conditions:**
 
 * admin(auction operator) is on `<grade10 auction admin listings url>`.
 * A saved draft has no media; every other create requirement is met.
 * Its selected inventory unit has the matching saved stock hold.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| gallery_jpeg | A nonempty JPEG, at most 104857600 bytes |
+| gallery_mp4 | A playable nonempty MP4, at most 104857600 bytes |
+| gallery_webp | A nonempty WebP, at most 104857600 bytes |
+
 **Steps:**
 
 1. Open that draft from Listings.
 2. Open its Media action.
-3. Choose a JPEG with the file picker.
-4. Choose an MP4 with the file picker.
-5. Choose a WebP with the file picker.
+3. Choose `<gallery_jpeg>` with the file picker.
+4. Choose `<gallery_mp4>` with the file picker.
+5. Choose `<gallery_webp>` with the file picker.
 6. Return to the listing editor and click Create.
 7. Publish the created listing.
 8. Open its public listing address as a collector.
+9. Select the gallery's second item and start playback.
 
 **Expected Results:**
 
 * Step 5 stores the JPEG, the MP4 and the WebP in that order.
 * Step 8 shows the collector the JPEG, the MP4 and the WebP in that order.
-* Step 8 plays the MP4 as video from the uploaded bytes.
+* Step 9 plays `<gallery_mp4>` from its uploaded bytes.
 
 <!-- trace:case id=g10adm.auction-listing.TC-fsq rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC4-1: Upload is stored without processing
@@ -1029,6 +1043,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
+**Blocked:** Listing spec author — reconcile SC-21 allowing canceled-slug reuse with the cancel requirement and SC-42 preserving the canonical slug permanently; identifier decision Q16 chooses preservation. Do not execute this contradictory expectation until its source scenario is reconciled.
+
 **Pre-conditions:**
 
 * admin(auction operator) is on `<grade10 auction admin listings url>`.
@@ -1243,8 +1259,8 @@ Runs once per row of **Test data**.
 * Step 1 refuses the write.
 * Step 2 reads the extension settings unchanged.
 
-<!-- trace:case id=g10adm.auction-listing.TC-o8h rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
-### grade10-admin-auction-listing-US3-TC19-1: Omitted extension duration defaults to 30 minutes
+<!-- trace:case id=g10adm.auction-listing.TC-o8h rev=2 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
+### grade10-admin-auction-listing-US3-TC19-2: Omitted extension duration defaults to 30 minutes
 
 **Classification:**
 
@@ -1254,32 +1270,33 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
 
 **Pre-conditions:**
 
-* admin(holds the grant to set an auction's prices and window) is on `<grade10 auction admin listings url>`.
-* `<listing_2>` is a draft with every required field set and no extension duration.
+* admin(holds the grant to set an auction's prices and window) has an API session.
+* `<extension_default_draft>` meets every create requirement, with a matching inventory-unit hold.
+* The draft has no extension duration supplied; it does not hold an explicit 0.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_2 | A draft listing with title, slug, prices, window and media set, extension duration empty |
+| extension_default_draft | A draft with every create requirement and matching inventory-unit hold, with extension duration unset |
+| extension duration | Field absent from the create request; neither an empty string, null nor 0 |
 
 **Steps:**
 
-1. Open `<listing_2>`.
-2. Create the listing.
-3. Read its extension duration.
+1. Send create for `<extension_default_draft>`, omitting extension duration.
+2. Read the API response for the listing's extension duration.
 
 **Expected Results:**
 
-* Step 2 shows the listing as created.
-* Step 3 reads 1800 seconds (30mins).
+* Step 1 creates the listing.
+* Step 2 reads 1800 seconds (30 minutes).
 
 <!-- trace:case id=g10adm.auction-listing.TC-h7v rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
 ### grade10-admin-auction-listing-US3-TC21-1: Create accepts a starting price of 0 in each currency
@@ -2278,8 +2295,8 @@ Runs once per row of **Test data**.
 * Step 2 refuses the cancel.
 * Step 3 still shows the listing as canceled.
 
-<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
-### grade10-admin-auction-listing-US5-TC7-1: Cancel rewrites the slug and frees the original
+<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=2 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
+### grade10-admin-auction-listing-US5-TC7-2: Cancel preserves the canonical slug and its public page
 
 **Classification:**
 
@@ -2296,28 +2313,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(auction operator) is on <grade10 auction admin listings url>.
-* A published listing has id auc_550e8400-e29b-41d4-a716-446655440000 and slug charizard-psa-9.
+* admin(holds the grant to call off listings) is on `<grade10 auction admin listings url>`.
+* `<cancel_slug_listing>` is published, has not closed, and holds `<reserved_slug>`.
+* `<reuse_slug_draft>` is a separate editable draft with a different saved slug.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Listing id | auc_550e8400-e29b-41d4-a716-446655440000 |
-| Slug | charizard-psa-9 |
+| cancel_slug_listing | A published listing that has not closed |
+| reserved_slug | The canonical slug already held by `<cancel_slug_listing>` |
+| reuse_slug_draft | A saved draft holding a different slug |
 
 **Steps:**
 
-1. Open that listing.
-2. Call it off.
-3. Read the stored slug.
-4. Open /auction/listings/charizard-psa-9.
+1. Open `<cancel_slug_listing>` and call it off.
+2. Reopen the listing and read its slug.
+3. Open `<grade10 auction url>/listings/<reserved_slug>`.
+4. Open `<reuse_slug_draft>` from Listings.
+5. Enter `<reserved_slug>` in its slug field and click Save.
 
 **Expected Results:**
 
-* Step 3 shows slug charizard-psa-9-cancelled-0e8400-e29b-41d4-a716-446655440000.
-* Step 4 does not return that listing.
-* A later listing may be created with slug charizard-psa-9.
+* Step 2 shows `<reserved_slug>` unchanged.
+* Step 3 still opens the called-off listing's public page.
+* Step 5 refuses reuse of `<reserved_slug>`.
 
 <!-- trace:case id=g10adm.auction-listing.TC-uyd rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC8-1: Cancel of a draft with no slug does not invent one
@@ -4590,3 +4610,13 @@ code (a display-mechanism detail, not a stated requirement); an operator-
 facing hard delete distinct from call off (no such action exists in this
 capability's feature set; `decisions.md` Q12's "deleted entirely" describes a
 record-retention case with no operator-facing control here).
+
+### Review Findings — 2026-10-08
+
+| Case | Specification basis | Disposition |
+| --- | --- | --- |
+| US1-TC1 | [Draft save and SC-01](spec.md#requirement-operator-saves-a-listing-as-a-draft): draft save does not require starts at or scheduled close at; saving without a window persists a draft off the catalogue. | Clear both time fields to reach the stated condition. Prefilled values are setup, not required behavior. |
+| US1-TC3 | [SC-03](spec.md#scenario-grade10-admin-auction-listing-sc-03---draft-rejects-a-malformed-price): refuse the write and leave the starting price unchanged. | Keep refusal and the original price; do not accept an empty stored price because the implementation currently sends null. |
+| US2-TC3 | [SC-48 and the gallery requirement](spec.md#requirement-listing-media-is-an-ordered-gallery-of-one-to-eight-uploads): store JPEG, MP4 and WebP in that order; deliver the public gallery in display order. [Listing media](../../../grade10-site/auction/listing-media/spec.md#requirement-the-details-page-shows-gallery-images-in-order) assigns playback to admin-listing but supplies no playback scenario. | Storage and display order are supported. The existing playback assertion and the added play step remain blocked on the listing spec author; an original public video path alone does not prove a player interaction. |
+| US3-TC13 and US5-TC7 | [SC-21](spec.md#scenario-grade10-admin-auction-listing-sc-21---create-can-reuse-a-canceled-listings-original-slug) permits reuse, while [the cancel requirement and SC-42 body](spec.md#requirement-operator-may-call-off-a-listing-that-has-not-closed) preserve the slug, its public page and its reservation. [Identifier decision Q16](../../../../changes/archive/2026-10-06-define-public-auction-identifiers/decisions.md#decisions) selects preservation. | US5-TC7 revision 2 follows SC-42's body. US3-TC13 stays blocked until the author reconciles SC-21 and the older slug requirement. |
+| US3-TC19 | [Prices and window, SC-27a](spec.md#requirement-prices-and-window-are-writable-before-publish): no extension duration supplied; create stores 1800 seconds. An explicit 0 disables extended bidding. | Revision 2 uses a draft with no duration supplied and an API create omitting the field. API is the chosen test mechanism, not a spec-mandated layer; it does not replace verification of the form's empty-field behavior. |
