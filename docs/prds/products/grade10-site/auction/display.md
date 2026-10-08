@@ -136,6 +136,11 @@ lot before any script runs.
 - **Hidden from browse/search** — a draft or called-off lot is absent from
   catalogue and search. A called-off lot remains directly accessible at its
   canonical address; a draft has no public address.
+- 🚧 **Restricted regions** — where auctions are not offered, a request from
+  that region sees no auction entry point anywhere on the site, and a direct
+  auction address — the catalogue or a lot — answers the restriction page
+  rather than the auction. The store and the rest of the site are unchanged —
+  `grade10-site/auction/availability`
 - **After scripts load** — nothing on screen is replaced by a placeholder,
   and a value that follows the clock continues from what was served
 - **Watching** — a signed-in collector watches or unwatches the lot from its
@@ -261,4 +266,5 @@ Active and Completed filters in bidding history.
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |
 | Watching while a bid stands | Decided | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |
+| Restriction page indexability | ❓ Open | Whether the restriction page emits `noindex` or stays indexable like the not-found surface; Product and SEO confirm. | Product |
 :::
