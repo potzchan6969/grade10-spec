@@ -1,9 +1,9 @@
 # grade10-site/auction/notifications-order Test Cases
 
-**Status:** pending-review · 0/14
-**Drafts styled:** 2026-09-18, tcs-rules r3.0
+**Status:** pending-review · 0/15
+**Drafts styled:** 2026-10-08, tcs-rules r4
 
-**Out of suite:** Proof-not-accepted and bank-transfer reminder holds —
+**Out of suite:** none of this change's scenarios; the scenarios it restates unchanged keep their durable cases.
 `add-winner-bank-transfer`. Receipt PDF on payment-received —
 `add-winner-bank-transfer`. Setup letter bullets (address, method, billing) —
 `add-winner-setup-overdue-mail` (`order-mail-SC-55`, `order-mail-SC-56`).
@@ -549,6 +549,49 @@ Runs once per row of **Test data**.
 * The mailto subject is `Auction order <invoice_id>: partial payment`.
 * The mailto body may list <receipt_ids> and does not name the remaining balance.
 
+<!-- trace:case id=g10.auction-notifications-order.TC-i2x rev=1 covers=g10.auction-notifications-order.SC-bgc -->
+### order-mail-US1-TC55-1: A shipped letter with no tracker link leads with the order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Post-close letters
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) has a registered email.
+* <lot_1>'s order reads Preparing Shipment.
+
+**Steps:**
+
+1. Dispatch <lot_1>'s order with a carrier and a tracking number, and no tracker link.
+2. Open the winner's inbox and read the shipped letter.
+
+**Expected Results:**
+
+* The primary action is View order, and it opens <lot_1>'s Winner Order.
+* The tracking number reads as plain text, not a link.
+* The letter offers no track-and-trace action.
+
+## Settled
+
+- Cancelled and delivered subject reason fragments are `cancelled` and `delivered`
+- Partial-payment letter Contact Us is in scope with the same ready mailto
+- Subject uses the order's current invoice id after a reissue
+- Delivered letter names the address and time recorded on the order at carrier confirmation
+- One payment reminder per reissue; a repeated confirmation of the same reissue sends nothing twice
+- Reissue parks superseded reminders and starts the day-3 / day-6 sequence for the new invoice — durable Reminder cadence; not restated as a new root here
+- Mute applies to listing alert mail in `notifications`, not to winner order letters
+- Contact Us uses the same ready email as Winner Order: letters prefill
+  `mailto:support@grade10.com` and name that address in the body
 
 ## Reconciliation
 
@@ -560,17 +603,11 @@ Runs once per row of **Test data**.
 - Delivered / cancelled CTA detail — **Out of suite:** `email-trigger-revision`
 - Proof-not-accepted — **Out of suite:** `add-winner-bank-transfer`
 
-## Settled
+**Run:** 2026-10-08, amendment for the shipped letter, not blind: the shipped row and paragraph of "Post-close letters", the durable suite and the case above. With no tracker link the shipped letter leads with View order and reads the tracking number as plain text, as Winner Order does (`decisions.md` Q48).
 
-- Cancelled and delivered subject reason fragments are `cancelled` and `delivered`
+| Spec scenario | Disposition |
+| --- | --- |
+| `order-mail-SC-62` | Was uncovered; added `order-mail-US1-TC55-1` |
+| `order-mail-SC-11` | Keeps its meaning and its durable coverage: it records a tracker link |
 
-- Partial-payment letter Contact Us is in scope with the same ready mailto
-
-- Subject uses the order's current invoice id after a reissue
-
-- Delivered letter names the address and time recorded on the order at carrier confirmation
-- One payment reminder per reissue; a repeated confirmation of the same reissue sends nothing twice
-- Reissue parks superseded reminders and starts the day-3 / day-6 sequence for the new invoice — durable Reminder cadence; not restated as a new root here
-- Mute applies to listing alert mail in `notifications`, not to winner order letters
-- Contact Us uses the same ready email as Winner Order: letters prefill
-  `mailto:support@grade10.com` and name that address in the body
+- **Carried unchanged** - every other scenario of "Post-close letters" keeps its meaning and its durable coverage
