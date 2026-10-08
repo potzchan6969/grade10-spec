@@ -612,10 +612,9 @@ function suiteStatus(roots: Section[]): TestSuiteStatus {
       "a test-case file needs a `# ` title before its `**Status:**`",
     );
   }
-  const found =
-    /^\*\*Status:\*\*\s*(\S+?)(?:\s*·\s*\d+\/\d+)?\s*$/m.exec(
-      head.body,
-    )?.[1];
+  const found = /^\*\*Status:\*\*\s*(\S+?)(?:\s*·\s*\d+\/\d+)?\s*$/m.exec(
+    head.body,
+  )?.[1];
   if (found === undefined) {
     throw new StoreFileError(
       head.line,

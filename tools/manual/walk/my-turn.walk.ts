@@ -105,7 +105,6 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
   await expect
     .element(later.getByRole("link", { name: "The Waiting overlay" }))
     .toBeVisible();
-
 });
 
 test("shared-planning-change-stages-SC-61 - nothing on the reader", async () => {

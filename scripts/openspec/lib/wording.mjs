@@ -119,7 +119,7 @@ export function yourTurnText(at, role, linked) {
  * Deployment availability has its own evidence path. This message is only
  * about the change's planning or implementation stage.
  */
-export function toldBodyOf(at, role, { linked, sheetUrl }) {
+export function toldBodyOf(at, role, { linked }) {
   const lines = [yourTurnText(at, role, linked)];
   return { kind: "your-turn", text: lines.join("\n") };
 }

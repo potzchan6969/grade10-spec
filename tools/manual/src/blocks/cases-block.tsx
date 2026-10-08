@@ -172,8 +172,7 @@ function OutOfSuite({ ids, spec }: { ids: string[]; spec: SpecEntry }) {
 }
 
 const SUITE_STATUS_TITLES: Record<TestSuiteStatus, string> = {
-  "pending-review":
-    "Review is incomplete; nothing in this file exports.",
+  "pending-review": "Review is incomplete; nothing in this file exports.",
   reopened:
     "The approved share fell, or has not recovered since it fell; nothing in this file exports.",
   approved: "A reviewer stands behind every case in this suite.",

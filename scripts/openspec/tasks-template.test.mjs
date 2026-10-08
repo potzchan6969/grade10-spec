@@ -122,7 +122,10 @@ test("shared-planning-agent-rounds-SC-90 - the walk group uses draft cases durin
   assert.doesNotMatch(walkText, /tcs-review|tcs-run-sheet/i);
   assert.match(instruction, /draft suite.*as its planning input/i);
   assert.match(instruction, /human QA after deployment/i);
-  assert.match(instruction, /never a task, walk input, acceptance gate or archive gate/i);
+  assert.match(
+    instruction,
+    /never a task, walk input, acceptance gate or archive gate/i,
+  );
   assert.doesNotMatch(walkText, /Needs `feature-tcs\.md` reviewed/);
 });
 

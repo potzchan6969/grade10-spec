@@ -859,10 +859,7 @@ export function reviewProgress(counts) {
  *  when it has recovered, and zero when the shares are equal. Cross
  *  multiplication keeps the comparison exact when the denominator changes. */
 export function compareReviewProgress(next, previous) {
-  return (
-    next.actual * previous.reviewable -
-    previous.actual * next.reviewable
-  );
+  return next.actual * previous.reviewable - previous.actual * next.reviewable;
 }
 
 /** The persistent status after one file edit. `reopened` records a progress

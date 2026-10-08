@@ -62,16 +62,16 @@ import {
   parseSuite,
   productPrefix,
   prop,
-  reviewProgress,
   readDomainIds,
   readPlatformIds,
   readProductIds,
   readSpecIds,
   revCmp,
-  snapshotStatuses,
+  reviewProgress,
   revText,
   ROOT as STORE_ROOT,
   SUITE_NAMES,
+  snapshotStatuses,
   statusCounts,
 } from "./lib/suites.mjs";
 
@@ -369,11 +369,7 @@ function checkSuite(root, filePath, rulesRev) {
       suite.reviewedLine ?? 1,
       "is approved again but its `**Reviewed:**` line still reads lapsed — write it fresh: `**Reviewed:** <today>, tcs-rules r<n>`",
     );
-  if (
-    suite.status !== "approved" &&
-    suite.reviewed &&
-    !suite.reviewedLapsed
-  )
+  if (suite.status !== "approved" && suite.reviewed && !suite.reviewedLapsed)
     err(
       suite.reviewedLine ?? 1,
       "carries a `**Reviewed:**` line but is not approved — a file that falls out of `approved` keeps the line and adds `, lapsed <YYYY-MM-DD>`",

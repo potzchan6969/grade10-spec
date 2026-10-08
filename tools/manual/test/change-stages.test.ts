@@ -711,9 +711,7 @@ describe("the five overlays beside the stage", () => {
     ]);
     expect(
       overlays(at("specified", { suites: [suite("pending-review")] })),
-    ).toEqual(
-      [{ kind: "suite", verdict: "draft" }],
-    );
+    ).toEqual([{ kind: "suite", verdict: "draft" }]);
     expect(
       overlays(
         at("specified", {

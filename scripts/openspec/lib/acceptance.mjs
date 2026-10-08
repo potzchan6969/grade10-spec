@@ -680,9 +680,7 @@ function withTransitionStatus(text, foldedOn, previousText = null) {
     cases.length,
   );
   const lapses =
-    suite.reviewed &&
-    !suite.reviewedLapsed &&
-    status !== "approved";
+    suite.reviewed && !suite.reviewedLapsed && status !== "approved";
   const reviewed = lapses
     ? text.replace(/^(\*\*Reviewed:\*\* .*?)[ \t]*$/m, `$1, lapsed ${foldedOn}`)
     : text;

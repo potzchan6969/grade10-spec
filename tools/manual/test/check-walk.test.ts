@@ -191,7 +191,12 @@ describe("a change with walks ends its plan on the walk", () => {
   it("takes the walk, split or not, behind its tags", async () => {
     for (const title of ["The walk", "The walk - the hand-back", "The Walk"]) {
       const files = owing(
-        [...BUILD, `## 2. ${title} (grade10) (owner: @tester)`, "", DRAFT_INPUT],
+        [
+          ...BUILD,
+          `## 2. ${title} (grade10) (owner: @tester)`,
+          "",
+          DRAFT_INPUT,
+        ],
         STORIES,
       );
       expect(await findingsOf(files, "walk_last")).toEqual([]);
