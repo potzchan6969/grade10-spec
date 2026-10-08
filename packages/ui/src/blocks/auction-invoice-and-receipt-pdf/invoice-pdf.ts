@@ -166,7 +166,7 @@ function drawWrappedRow(
   return y;
 }
 
-/** The reference note, its own quoted value bolded wherever the wrapped note text ends. */
+/** The reference note, wrapped as one mixed-font paragraph with its value bolded. */
 function drawBankReferenceNote(
   page: PDFPage,
   fonts: Fonts,
@@ -175,24 +175,50 @@ function drawBankReferenceNote(
   y: number,
 ): number {
   const width = A4_WIDTH - MARGIN * 2;
-  const lines = wrap(note, fonts.regular, SMALL_SIZE, width);
-  for (let index = 0; index < lines.length - 1; index += 1) {
-    drawText(page, fonts.regular, lines[index], MARGIN, y, SMALL_SIZE, INK);
+  const tokens = [
+    ...note
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((text) => ({ text, font: fonts.regular })),
+    { text: reference, font: fonts.bold },
+  ];
+  const lines: (typeof tokens)[] = [];
+  let line: typeof tokens = [];
+  let lineWidth = 0;
+  const spaceWidth = fonts.regular.widthOfTextAtSize(" ", SMALL_SIZE);
+  for (const token of tokens) {
+    const tokenWidth = token.font.widthOfTextAtSize(token.text, SMALL_SIZE);
+    const nextWidth = lineWidth + (line.length ? spaceWidth : 0) + tokenWidth;
+    if (line.length && nextWidth > width) {
+      lines.push(line);
+      line = [];
+      lineWidth = 0;
+    }
+    line.push(token);
+    lineWidth += (line.length > 1 ? spaceWidth : 0) + tokenWidth;
+  }
+  if (line.length) lines.push(line);
+
+  for (const lineTokens of lines) {
+    let x = MARGIN;
+    let segmentFont = lineTokens[0]?.font ?? fonts.regular;
+    let segmentText = lineTokens[0]?.text ?? "";
+    for (const token of lineTokens.slice(1)) {
+      if (token.font === segmentFont) {
+        segmentText += ` ${token.text}`;
+        continue;
+      }
+      const separatedText = `${segmentText} `;
+      drawText(page, segmentFont, separatedText, x, y, SMALL_SIZE, INK);
+      x += segmentFont.widthOfTextAtSize(separatedText, SMALL_SIZE);
+      segmentFont = token.font;
+      segmentText = token.text;
+    }
+    drawText(page, segmentFont, segmentText, x, y, SMALL_SIZE, INK);
     y -= LINE_HEIGHT;
   }
-  const lastLine = lines[lines.length - 1] ?? "";
-  drawText(page, fonts.regular, lastLine, MARGIN, y, SMALL_SIZE, INK);
-  const lastLineWidth = fonts.regular.widthOfTextAtSize(lastLine, SMALL_SIZE);
-  drawText(
-    page,
-    fonts.bold,
-    ` ${reference}`,
-    MARGIN + lastLineWidth,
-    y,
-    SMALL_SIZE,
-    INK,
-  );
-  return y - LINE_HEIGHT;
+  return y;
 }
 
 /**

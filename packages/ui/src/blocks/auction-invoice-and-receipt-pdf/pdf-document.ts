@@ -277,9 +277,6 @@ export function drawLineItems(
   if (taxLine) charges.push(taxLine);
   const summary = lineItems.filter((item) => item.key !== undefined);
 
-  drawText(page, fonts.bold, listingTitle, MARGIN, y, BODY_SIZE, INK);
-  y -= LINE_HEIGHT * 1.4;
-
   drawText(page, fonts.bold, copy.descriptionLabel, MARGIN, y, SMALL_SIZE, INK);
   drawTextRight(
     page,
@@ -295,6 +292,8 @@ export function drawLineItems(
     thickness: 0.8,
     gap: LINE_HEIGHT - 4,
   });
+  drawText(page, fonts.bold, listingTitle, MARGIN, y, BODY_SIZE, INK);
+  y -= LINE_HEIGHT * 1.4;
 
   for (const item of charges) {
     drawMoneyRow(page, fonts, item.label, item.amount, MARGIN, y);
@@ -303,6 +302,7 @@ export function drawLineItems(
   if (summary.length === 0) return y;
 
   y -= LINE_HEIGHT * 0.6;
+  const summaryTop = y;
   for (const item of summary) {
     const amount = item.amount;
     if (item.key !== "orderTotal") {
@@ -333,6 +333,15 @@ export function drawLineItems(
     );
     y -= LINE_HEIGHT;
   }
+  const summaryPadding = 8;
+  page.drawRectangle({
+    x: SUMMARY_LEFT - summaryPadding,
+    y: y - 5,
+    width: SUMMARY_WIDTH + summaryPadding * 2,
+    height: summaryTop - y + 13,
+    borderColor: RULE,
+    borderWidth: 0.8,
+  });
   return y;
 }
 
