@@ -1,5 +1,4 @@
 import type { PDFPage } from "pdf-lib";
-import { PDFDocument } from "pdf-lib";
 import type {
   Fonts,
   PdfBlock,
@@ -13,25 +12,17 @@ import type {
 import {
   addressLines,
   BODY_SIZE,
-  drawIssuer,
   drawMetaRow,
   drawMoneyRow,
-  drawParties,
   drawRuleSpan,
   drawText,
-  drawTitle,
   formatDateTime,
   LINE_HEIGHT,
-  loadFonts,
   MARGIN,
   measuredBlock,
-  measureItemTable,
-  place,
-  placeItemTable,
   RIGHT_EDGE,
-  requireItems,
+  renderDocument,
   SUMMARY_LEFT,
-  startSheet,
 } from "./pdf-document";
 
 /**
@@ -147,7 +138,7 @@ function drawMetaBlock(
 }
 
 /** The "Payment" heading and its transfer reference, drawn only when the payment carries one. */
-export function paymentSectionBlock(
+function paymentSectionBlock(
   fonts: Fonts,
   paymentReference: string,
   copy: ReceiptPdfCopy,
@@ -161,7 +152,7 @@ export function paymentSectionBlock(
 }
 
 /** The four immutable payment lines from `receiptBreakdown`, boxed and right-aligned. */
-export function paymentBreakdownBlock(
+function paymentBreakdownBlock(
   fonts: Fonts,
   data: Pick<ReceiptPdfData, "paymentBreakdown" | "copy">,
 ): PdfBlock {
@@ -189,42 +180,30 @@ export function paymentBreakdownBlock(
 }
 
 /** Render one deterministic receipt of A4 pages from immutable payment and invoice snapshots. */
-export async function ReceiptPdf(
+export function ReceiptPdf(
   data: ReceiptPdfData,
   options: ReceiptPdfRenderOptions = {},
 ): Promise<ArrayBuffer> {
-  requireItems(data.items);
-  const pdf = await PDFDocument.create();
-  pdf.setProducer("grade10 auction receipts");
-  pdf.setCreationDate(data.paidAt);
-  pdf.setModificationDate(data.paidAt);
-
-  const fonts = await loadFonts(pdf, options.fontBytes, options.boldFontBytes);
-  const table = measureItemTable(fonts, data);
-  const paymentSection = data.paymentReference
-    ? paymentSectionBlock(fonts, data.paymentReference, data.copy)
-    : null;
-  const paymentBreakdown = paymentBreakdownBlock(fonts, data);
-
-  const sheet = startSheet(pdf);
-  const { page } = sheet;
-  let y = drawTitle(
-    page,
-    fonts,
-    data.copy.documentTitle,
-    data.issuerName,
-    sheet.y,
-  );
-  y = drawMetaBlock(page, fonts, data, y);
-  y = drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, { gap: LINE_HEIGHT * 1.5 });
-  sheet.y = drawParties(page, fonts, data.billTo, data.shipTo, data.copy, y);
-  placeItemTable(sheet, table);
-  if (paymentSection) place(sheet, paymentSection);
-  place(sheet, paymentBreakdown);
-  drawIssuer(sheet.page, fonts, data.issuerName, data.issuerEmail);
-
-  const bytes = await pdf.save({ useObjectStreams: false });
-  const output = new Uint8Array(bytes.byteLength);
-  output.set(bytes);
-  return output.buffer;
+  const { paymentReference } = data;
+  return renderDocument({
+    producer: "grade10 auction receipts",
+    date: data.paidAt,
+    data,
+    options,
+    drawMeta: (page, fonts, y) => drawMetaBlock(page, fonts, data, y),
+    trailing: (fonts) => [
+      ...(paymentReference
+        ? [
+            {
+              what: "The Payment section",
+              block: paymentSectionBlock(fonts, paymentReference, data.copy),
+            },
+          ]
+        : []),
+      {
+        what: "The payment breakdown",
+        block: paymentBreakdownBlock(fonts, data),
+      },
+    ],
+  });
 }

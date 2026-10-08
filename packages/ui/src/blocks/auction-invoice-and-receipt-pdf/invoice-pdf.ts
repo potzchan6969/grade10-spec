@@ -1,5 +1,4 @@
 import type { PDFPage } from "pdf-lib";
-import { PDFDocument } from "pdf-lib";
 import type {
   Fonts,
   PdfBlock,
@@ -14,25 +13,17 @@ import {
   A4_WIDTH,
   addressLines,
   BODY_SIZE,
-  drawIssuer,
   drawMetaRow,
-  drawParties,
   drawRuleSpan,
   drawText,
-  drawTitle,
   formatDateTime,
   INK,
   LINE_HEIGHT,
-  loadFonts,
   MARGIN,
   measuredBlock,
-  measureItemTable,
-  place,
-  placeItemTable,
   RIGHT_EDGE,
-  requireItems,
+  renderDocument,
   SMALL_SIZE,
-  startSheet,
   wrap,
 } from "./pdf-document";
 
@@ -237,7 +228,7 @@ function drawBankReferenceNote(
  * a bank-transfer invoice: one equal-width column for each enabled rail, a
  * divider, then the reference note. It moves to the next page whole.
  */
-export function bankDetailsBlock(
+function bankDetailsBlock(
   fonts: Fonts,
   bankRails: InvoicePdfBankRails,
   copy: InvoicePdfCopy,
@@ -321,40 +312,25 @@ export function bankDetailsBlock(
 }
 
 /** Render one deterministic invoice of A4 pages from an immutable invoice snapshot. */
-export async function InvoicePdf(
+export function InvoicePdf(
   data: InvoicePdfData,
   options: InvoicePdfRenderOptions = {},
 ): Promise<ArrayBuffer> {
-  requireItems(data.items);
-  const pdf = await PDFDocument.create();
-  pdf.setProducer("grade10 auction invoices");
-  pdf.setCreationDate(data.sentAt);
-  pdf.setModificationDate(data.sentAt);
-
-  const fonts = await loadFonts(pdf, options.fontBytes, options.boldFontBytes);
-  const table = measureItemTable(fonts, data);
-  const bankDetails = data.bankRails
-    ? bankDetailsBlock(fonts, data.bankRails, data.copy)
-    : null;
-
-  const sheet = startSheet(pdf);
-  const { page } = sheet;
-  let y = drawTitle(
-    page,
-    fonts,
-    data.copy.documentTitle,
-    data.issuerName,
-    sheet.y,
-  );
-  y = drawMetaBlock(page, fonts, data, y);
-  y = drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, { gap: LINE_HEIGHT * 1.5 });
-  sheet.y = drawParties(page, fonts, data.billTo, data.shipTo, data.copy, y);
-  placeItemTable(sheet, table);
-  if (bankDetails) place(sheet, bankDetails);
-  drawIssuer(sheet.page, fonts, data.issuerName, data.issuerEmail);
-
-  const bytes = await pdf.save({ useObjectStreams: false });
-  const output = new Uint8Array(bytes.byteLength);
-  output.set(bytes);
-  return output.buffer;
+  const { bankRails } = data;
+  return renderDocument({
+    producer: "grade10 auction invoices",
+    date: data.sentAt,
+    data,
+    options,
+    drawMeta: (page, fonts, y) => drawMetaBlock(page, fonts, data, y),
+    trailing: (fonts) =>
+      bankRails
+        ? [
+            {
+              what: "Bank details",
+              block: bankDetailsBlock(fonts, bankRails, data.copy),
+            },
+          ]
+        : [],
+  });
 }
