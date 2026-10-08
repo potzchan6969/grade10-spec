@@ -81,6 +81,6 @@ held at zero; packets re-checked with no finding.
 | --- | --- | --- | --- |
 | A service of its own | Decided | doc-sign becomes the documents service, as the KYC service left the vault; this replaces the rule that a seal and its case event commit in one transaction with an act that asks whether the packet is executed - decided under the owner's delegation, 2026-10-08, on the owner's suggestion | Engineering |
 | One signing address | Decided | `grade10.com/sign`, so a signer meets one ceremony whatever they sign - decided under the owner's delegation, 2026-10-08 | Product |
-| Templates approved by Legal | Decided | Production refuses to seal an unapproved version, as grading refuses a placeholder - decided under the owner's delegation, 2026-10-08 | Legal |
+| Templates approved by Legal | Decided | Production refuses to seal an unapproved version, as grading refuses a placeholder - only Legal approves a version - decided by the owner, 2026-10-08 | Legal |
 | When the vault and grading move | ❓ Open | After consignment ships on the service | Engineering |
 :::

@@ -281,7 +281,7 @@ Receiving runs the same five steps whatever the channel:
 | Ending soon | **7** days before the term ends |
 
 - **One consignment** - one owner, one or more items, one channel per item,
-  the terms pinned at signing: commission, term, fees
+  the terms pinned when the agreement is prepared: commission, term, fees
 - **Price** - a list price and a floor, agreed at signing; staff change the
   price within the floor without asking, and below it only with the
   consignor's written yes
@@ -397,7 +397,7 @@ Receiving runs the same five steps whatever the channel:
 | `consignment:payout` | treasurer, admin | payouts, corrections and the book |
 | `consignment:display` | admin | name a consignor on the store and the lot, where they agreed |
 | `documents:read` | staff, admin | every packet |
-| `documents:templates` | admin | approve a template version |
+| `documents:templates` | Legal | approve a template version |
 
 ## Phases
 

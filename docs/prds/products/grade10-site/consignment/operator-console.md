@@ -33,7 +33,7 @@ the settings the schedule runs on.
 | --- | --- |
 | Header | the consignor, by name under the identity grant; the channel; the term's end; whether the consignor is named on the store |
 | Items | each item, its list price and floor, its listing in the shop or at auction, and a link to its item page |
-| Terms | the commission and fees pinned at signing, and the term |
+| Terms | the commission and fees pinned to the agreement, and the term |
 | Documents | the agreement, the receipt and each statement |
 | Money | the sale, commission, fees and the payout, each with who recorded it |
 | Timeline | every act and every message sent |
@@ -58,7 +58,7 @@ the settings the schedule runs on.
 ## Settings
 
 An admin changes every setting here; each starts on its default and is
-pinned to a consignment at signing.
+pinned to a consignment when its agreement is prepared.
 
 | Setting | Default | Choices |
 | --- | --- | --- |
@@ -72,7 +72,8 @@ pinned to a consignment at signing.
 | Identity before signing | always verified | above a sale price; never |
 | Ending soon | **7** days before the term ends | any number of days |
 
-- **Pinned at signing** - a change reaches only consignments not yet signed
+- **Pinned to the agreement** - a change reaches the next agreement
+  prepared; one waiting for a signature keeps the schedule it was prepared on
 - **Unset refuses** - an agreement is not prepared while a figure it prints
   is unset
 - **Who** - `consignment:settings`, held by admins; every change on the

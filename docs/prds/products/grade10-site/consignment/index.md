@@ -94,8 +94,9 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
 
 ## Commission and Payout
 
-- **Bound to the consignment** - the commission and fees in force at signing
-  are pinned to it; a later schedule never reaches a signed consignment
+- **Bound to the consignment** - the commission and fees in force when the
+  agreement is prepared are pinned to it; a later schedule reaches only the
+  next agreement prepared, never one waiting for a signature or signed
 - **Outside the schedule** - a commission a partner negotiates is set by
   someone who may approve it -
   [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
@@ -184,12 +185,12 @@ payouts made on their due day.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | One service, two channels | Decided | One consignment service serves the store and the auction; the consignor, the agreement, the commission and the payout are the same, and only the sale differs - decided under the owner's delegation, 2026-10-08 | Product |
-| Commission bound to the consignment | Decided | Pinned at signing, as grading pins its fee sheet; a schedule change reaches only consignments not yet signed - decided by the owner, 2026-10-08 | Product |
+| Commission bound to the consignment | Decided | Pinned when the agreement is prepared, as grading pins its fee sheet; an agreement waiting for a signature keeps its schedule, and a change reaches the next agreement prepared - decided by the owner, 2026-10-08 | Product |
 | The shop and online | Decided | One store product per consigned item sells in the shop and online; staff may limit it to the shop - decided under the owner's delegation, 2026-10-08 | Product |
 | List price and floor | Decided | Staff change the price within the floor; below it only on the consignor's written yes - decided under the owner's delegation, 2026-10-08 | Product |
 | Seller display | Decided | Optional and set by an admin - decided by the owner, 2026-10-08. Only where the consignor agreed, under their display name - decided under the owner's delegation, 2026-10-08 | Product |
 | Messages | Decided | The consignment service sends its own, by email, as the vault and grading do - decided under the owner's delegation, 2026-10-08 | Product |
-| Every figure is a setting | Decided | Commission, the minimum, fees, the term and the windows are settings admins change in the console, each pinned to a consignment at signing - decided by the owner, 2026-10-08 | Product |
+| Every figure is a setting | Decided | Commission, the minimum, fees, the term and the windows are settings admins change in the console, each pinned to a consignment when its agreement is prepared - decided by the owner, 2026-10-08 | Product |
 | Flexible, with a default | Decided | Identity, when a consignor is paid and a refund after payout are settings too; the recommendation is the default: always verified, paid after the return window, a refund set against the next payout - decided by the owner, 2026-10-08 | Product |
 | Nobody collects | ❓ Open | Reminders, then a written notice, as grading's ladder runs | Legal |
 :::
