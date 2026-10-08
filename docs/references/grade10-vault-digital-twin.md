@@ -17,7 +17,7 @@ requirements. Today's vault product is shop custody with an optional loan —
   - `Pages/Appointment/Confirmation`
   - `Pages/Appointment/Appointments`
   - `Pages/Submissions`
-  - `Pages/Submissions/Item Card`
+  - `Submissions/Item Card`
   - `Pages/Vault/Portfolio`
   - `Pages/Vault/Item Detail`
   - `Pages/Vault/Request Retrieval`

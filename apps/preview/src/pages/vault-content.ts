@@ -51,12 +51,11 @@ const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
 const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--graded";
 const VAULT_RETRIEVAL_STORY_ID = "vault-request-retrieval-dialog--default";
 /** Storybook ids for vault item-card assemblies (workbench deep links). */
-const VAULT_ITEM_CARD_IN_VAULT_STORY_ID =
-  "pages-vault-vault-item-card--in-vault";
+const VAULT_ITEM_CARD_IN_VAULT_STORY_ID = "vault-vault-item-card--in-vault";
 const VAULT_ITEM_CARD_RETRIEVAL_STORY_ID =
-  "pages-vault-vault-item-card--retrieval-pending";
+  "vault-vault-item-card--retrieval-pending";
 const ACTIVE_INTAKE_ALERT_STORY_ID =
-  "pages-vault-active-intake-alert--with-submissions";
+  "vault-active-intake-alert--with-submissions";
 
 const VAULT_SUBMIT_STORY_ID = VAULT_BOOK_VISIT_STORY_ID;
 
