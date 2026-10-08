@@ -11,6 +11,7 @@
 
 - [x] 3.1 Implement idempotent operator payment recording, balance validation, the 90% refusal below the tolerance and the close-or-keep decision (`grade10-admin-auction-post-sale-SC-140`–`SC-144`).
 - [x] 3.2 Derive Partially Paid and remove Pay, reissue, cancellation and the payment deadline after the first payment (`auction-status-SC-49`, `SC-50`).
+- [ ] 3.3 Count only a payment that counts toward the balance when refusing Reissue and Cancel and deriving Partially Paid; money that counts toward nothing blocks neither and moves no status (`grade10-admin-auction-post-sale-SC-242`, `auction-status-SC-49`, `SC-58`).
 
 ## 4. Frontend (owner: @htonyl)
 
@@ -20,5 +21,6 @@
 ## 5. Verification (owner: @htonyl)
 
 - [x] 5.1 Run the domain cases, contract tests, migration checks and the focused admin/site E2E journeys.
+- [ ] 5.2 Run `post-sale-US12-TC7-1` and `auction-status-US7-TC5-1` against money that counts toward nothing.
 
-Every task above was built before this change was accepted; each is re-verified against the accepted contract before it is read as done.
+Every checked task above was built before this change was accepted; each is re-verified against the accepted contract before it is read as done. Tasks 3.3 and 5.2 come from the amendment that carries the counts-toward-nothing rule (`decisions.md` Q21).

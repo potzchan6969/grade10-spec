@@ -21,6 +21,6 @@ This change draws their states on an order whose address deadline has passed.
 - **Reopen setup dialog** (anchor: `auction-status-US-06`) - Requires a reason before it commits.
 - **Record setup dialog** (anchor: `auction-status-US-06`) - Takes the winner's setup and requires a reason before it commits.
 - **After invoice send** (anchor: `auction-status-US-06`) - Both controls are disabled with the reason
-  stated: the delivery address locks at send.
+  stated: setup was confirmed before the send, and the confirmed address is locked.
 - **Audit** (anchor: `auction-status-US-06`) - Show the named operator, time and reason for every Reopen
   setup or Record setup in the existing invoice log.

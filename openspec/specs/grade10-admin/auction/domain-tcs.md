@@ -1,7 +1,8 @@
 # grade10-admin/auction Cross-Feature E2E Test Cases
 
-**Status:** approved · 4/4
-**Reviewed:** 2026-10-05, tcs-rules r4
+**Status:** reopened · 2/3
+**Reviewed:** 2026-10-05, tcs-rules r4, lapsed 2026-10-06
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-admin-auction-e2e-US1: Operator announces an event and puts a lot under it
 
@@ -124,62 +125,66 @@
 **I want** a published lot to close into a payment I can collect and ship,
 **so that** a won card leaves the sale without me leaving the admin.
 
-<!-- trace:case id=g10adm.auction-domain.TC-dly rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-fcs,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3,g10adm.auction-post-sale.SC-r6h,g10adm.auction-post-sale.SC-1yv,g10adm.auction-post-sale.SC-fxm,g10adm.auction-post-sale.SC-r3o,g10adm.auction-post-sale.SC-05a,g10adm.auction-post-sale.SC-71a,g10adm.auction-post-sale.SC-9oe,g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-cnh,g10adm.auction-post-sale.SC-8dq,g10adm.auction-post-sale.SC-w38,g10adm.auction-post-sale.SC-whp,g10adm.auction-post-sale.SC-iyb,g10adm.auction-post-sale.SC-kqf,g10adm.auction-post-sale.SC-8wv,g10adm.auction-post-sale.SC-d6e,g10adm.auction-post-sale.SC-ngp,g10adm.auction-post-sale.SC-0gj,g10adm.auction-post-sale.SC-nfo,g10adm.auction-post-sale.SC-15a,g10adm.auction-post-sale.SC-ydn,g10adm.auction-post-sale.SC-bcb,g10adm.auction-post-sale.SC-d8k,g10adm.auction-post-sale.SC-lc8,g10adm.auction-post-sale.SC-f7t,g10adm.auction-post-sale.SC-59i,g10adm.auction-post-sale.SC-r4l,g10adm.auction-post-sale.SC-uf1,g10adm.auction-post-sale.SC-3uf,g10adm.auction-post-sale.SC-n2q,g10adm.auction-post-sale.SC-7jf,g10adm.auction-post-sale.SC-3bt,g10adm.auction-post-sale.SC-en4,g10adm.auction-post-sale.SC-c66,g10adm.auction-post-sale.SC-ccp,g10adm.auction-post-sale.SC-btq,g10adm.auction-post-sale.SC-gmi,g10adm.auction-post-sale.SC-amp,g10adm.auction-post-sale.SC-10k,g10adm.auction-post-sale.SC-js8,g10adm.auction-post-sale.SC-tl1,g10adm.auction-post-sale.SC-0vy,g10adm.auction-post-sale.SC-usw,g10adm.auction-post-sale.SC-82s,g10adm.auction-post-sale.SC-7rg,g10adm.auction-post-sale.SC-b2b,g10adm.auction-post-sale.SC-0ln -->
-### grade10-admin-auction-e2e-US3-TC1-1: A published lot closes and is collected through to delivered
+<!-- trace:case id=g10adm.auction-domain.TC-dly rev=2 covers=g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-8wv,g10adm.auction-post-sale.SC-ydn,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-82s,g10adm.auction-post-sale.SC-7rg -->
+### grade10-admin-auction-e2e-US3-TC1-2: A published lot closes and is collected through to delivered
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** grade10-admin-auction-listing-US-04, post-sale-US-01, post-sale-US-02, post-sale-US-03, post-sale-US-04
+* **Trace:** grade10-admin-auction-listing-US-04, post-sale-US-01, post-sale-US-02, post-sale-US-03, post-sale-US-04, post-sale-US-05
 
 **Pre-conditions:**
 
 * <listing_5> was published with close <close>, customer A placed a bid, and that close has passed.
-* The outcome is Awaiting payment.
-* admin(holds payment-processing and shipment-processing) is on <grade10 auction admin post-sale url>.
+* customer A confirmed a delivery address and chose bank transfer for <listing_5>'s order, which reads Preparing Invoice.
+* admin(holds payment-processing and shipment-processing) is on <grade10 auction admin orders url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_5>` | A published listing that closed with a winner |
+| `<listing_5>` | A published listing that closed with a winner, in HKD |
 | `<close>` | 5 minutes after publish (any close after the start and after now) |
 | `<winner email>` | The winning bidder's contact address |
+| `<transfer reference>` | The bank's reference for the winner's transfer |
+| `<carrier>` and `<tracking number>` | A carrier name and its tracking number |
 
 **Steps:**
 
-1. Filter the queue to Awaiting payment.
-2. Open <listing_5>.
-3. Record payment collected.
-4. Record shipment started.
-5. Record shipment completed.
+1. Open Needs action on the Orders worklist and find <listing_5>'s order.
+2. Open the order from its row.
+3. Click Send invoice, enter Shipping & Handling and Insurance, and confirm.
+4. Click Record payment and record a bank transfer settlement with <transfer reference> and one proof file.
+5. Click Dispatch and record <carrier> with <tracking number>.
+6. Click Confirm delivery and attach the carrier's proof.
 
 **Expected Results:**
 
-* Step 2 shows winner, payment, shipment and trail.
-* Step 2 shows <winner email> on the winner block.
-* Step 2 shows no Stripe identifier.
-* Step 3 sets the outcome to Paid via Manual.
-* Step 4 sets the outcome to Shipped.
-* Step 5 sets the outcome to Delivered.
+* Step 1 lists the order under Needs action as Preparing Invoice, with Send invoice as its primary action.
+* Step 2 opens the order at its own address, leading with its status, the rule behind it and one primary action.
+* Step 2 shows <winner email> as the winner's contact and no Stripe identifier.
+* Step 3 shows the payment deadline the send sets, then the order reads Pending Payment.
+* Step 4 sets the order to Preparing Shipment.
+* Step 5 sets the order to Shipped.
+* Step 6 sets the order to Delivered.
 * The winner is unchanged.
 
-<!-- trace:case id=g10adm.auction-domain.TC-z12 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-fcs,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3,g10adm.auction-post-sale.SC-uf1,g10adm.auction-post-sale.SC-3uf,g10adm.auction-post-sale.SC-n2q,g10adm.auction-post-sale.SC-7jf,g10adm.auction-post-sale.SC-3bt,g10adm.auction-post-sale.SC-en4,g10adm.auction-post-sale.SC-c66,g10adm.auction-post-sale.SC-ccp,g10adm.auction-post-sale.SC-btq,g10adm.auction-post-sale.SC-gmi,g10adm.auction-post-sale.SC-amp -->
-### grade10-admin-auction-e2e-US3-TC2-1: A wire request on a closed lot releases the card hold
+<!-- trace:case id=g10adm.auction-domain.TC-z12 rev=2 covers=none -->
+### grade10-admin-auction-e2e-US3-TC2-2: A wire request on a closed lot releases the card hold
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression

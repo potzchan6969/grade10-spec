@@ -45,9 +45,10 @@ address stays locked, per "The delivery address locks when the invoice is
 sent". Grade10 SHALL send the winner no letter when the form is reopened; the
 operator tells them directly.
 
-Sending the invoice SHALL retire the address deadline. The delivery address
-locks at send, per "The delivery address locks when the invoice is sent", so
-Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
+Sending the invoice SHALL retire the address deadline. An invoice is sent only
+on a confirmed address, which locks on confirm, per "The delivery address
+locks when the invoice is sent", so Grade10 SHALL neither show the address
+deadline nor refuse on it afterwards.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-oos rev=1 -->
 #### Scenario: winner-order-SC-144 - The address deadline counts from the extended close

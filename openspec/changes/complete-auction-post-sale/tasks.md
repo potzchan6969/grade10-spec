@@ -70,6 +70,7 @@
 
 - [ ] 9.2 The Proof not accepted letter under `apps/emails/emails/auction/order/`; `pnpm --dir apps/emails run typecheck`
 - [ ] 9.3 The Contact Us preview `apps/preview/src/pages/winner-order-contact-dialog.tsx`: Copy Message reads Copied for a moment and fires no toast, as SC-250 states; the To and Subject controls are unchanged; `pnpm --dir apps/preview run lint`, `pnpm --dir apps/preview run build-storybook`
+- [ ] 9.4 The Shipped letter under `apps/emails/emails/auction/order/` takes the tracker link only when the operator recorded one: with none, its primary action is View order, opening Winner Order, and the tracking number reads as plain text (`order-mail-SC-62`, `order-mail-US1-TC55-1`); `pnpm --dir apps/emails run typecheck`
 
 ## 10. E2E and Docs (grade10)
 
@@ -80,23 +81,10 @@
 
 ## 11. Archive Gate (grade10-spec)
 
-- [ ] 11.1 Acceptance order: accept this change only after `add-winner-order-tax-line`, `refine-auction-order-cancellation`, `add-winner-partial-payment` and `clarify-auction-shipping-progress-copy` are accepted and archived, then `close-overdue-address-confirmation` after this one (`decisions.md` Q41)
-- [ ] 11.2 Archive gate: rebase the deltas onto each dependency's archived durable text before acceptance, then write the MODIFIED blocks each leaves behind. Do not write them now: two in-flight changes may not modify one requirement
-  - after `add-winner-order-tax-line` archives
-    - MODIFY post-sale "An operator quotes and sends the invoice": step 6 and the refusal paragraph take the card-rule fee, `CARD_FEE_UNSET` and `QUOTE_CHANGED`, and drop the provider-fee and unreadable-fee text; keep its Tax step 4
-    - MODIFY post-sale "An operator reissues a sent invoice": step 3 takes the same fee text; keep its Tax step 2
-    - MODIFY winner-order "Invoice fields": the card-pricing paragraph takes the card-rule fee; keep the Tax rows and their placement
-    - REMOVE post-sale SC-69 and SC-70; rewrite SC-119 and SC-126 and the provider-fee example; REMOVE winner-order SC-62 or rewrite it to the card-rule fee
-    - MODIFY post-sale "The payment processing fee follows the invoice's payment method" (ADDED by this change, not winner-order): delete the "in place of" sentence
-  - after `add-winner-partial-payment` archives
-    - MODIFY post-sale "Reissue and Cancel are refused once a payment is recorded" so it counts only payments that count toward the balance, as "Money that lands is always recorded" (SC-199) and cancellation's SC-236 say money counting toward nothing blocks neither
-    - MODIFY order-status "Recorded money derives Partially Paid and closes self-service" the same way
-    - accept-preflight stops on its restated post-sale-US-03 until it archives; rerun it then
-  - after `clarify-auction-shipping-progress-copy` archives
-    - keep post-sale SC-21's title, `Expired and Processing are highlighted as needing action`, and note that the title is historical; do not retitle it
-    - optionally carry post-sale SC-100 and order-status SC-47 so their bodies read Preparing Shipment
-  - after `refine-auction-order-cancellation` archives
-    - confirm the pointers to its requirements by name only; no body changes
-  - at archive, hand-merge payment-settings `## Purpose` and `## Feature set` into the durable spec: the Purpose reads that a payment-processing operator manages the minimum buyer premium and the Stripe card fee rule, and the Feature set gains `auction:payment` for read and write and the card rule, with card offered at setup only in a currency that has one
-  This change does not archive before these land; `pnpm check:manual`
+- [ ] 11.1 Acceptance order: this change is accepted without waiting for its dependencies to archive, and `close-overdue-address-confirmation` after this one; `add-winner-partial-payment` and `add-winner-order-tax-line` carry the edits the two would otherwise share (`decisions.md` Q41)
+- [ ] 11.2 Archive gate: what still waits on a dependency's archive
+  - after `clarify-auction-shipping-progress-copy` archives, optionally carry post-sale SC-100 and order-status SC-47 so their bodies read Preparing Shipment
+  - after `refine-auction-order-cancellation` archives, confirm the pointers to its requirements by name only; no body changes
+  - at archive, hand-merge payment-settings `## Purpose` into the durable spec (its Feature set and the notifications-order shipped leaf are already written by the fold): the Purpose reads that a payment-processing operator manages the minimum buyer premium and the Stripe card fee rule, and the Feature set gains `auction:payment` for read and write and the card rule, with card offered at setup only in a currency that has one; and hand-merge the notifications-order Feature set leaf for the shipped letter with no tracker link
+  `pnpm check:manual`
 - [ ] 11.3 Consistency check against `winner-order-tracking-link`, which carries the winner-side rule: its "Winner Order makes the tracking number the carrier link" (`SC-251`, `SC-276`) and this change's Dispatch paragraph and `SC-237`, `SC-238` in post-sale "Dispatch and delivery are recorded on the order" must agree that the link is the operator's tracker link and that a tracking number with none reads as plain text with no carrier name and no Track shipment control; confirm before accepting, with no wait on its archive

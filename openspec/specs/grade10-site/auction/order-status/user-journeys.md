@@ -9,7 +9,7 @@
 ### auction-status-US-02: Partially Paid status ends self-service Pay for good
 
 **As a** winner or operator,
-**I want** an invoice with any payment recorded against it to read Partially Paid, with no running deadline and no self-service Pay,
+**I want** an invoice with a payment recorded against it that counts toward the balance to read Partially Paid, with no running deadline and no self-service Pay,
 **so that** the status always says whether Grade10 is still owed money and who settles the rest.
 
 ### auction-status-US-03: Payment deadline past reads Payment Overdue
@@ -33,7 +33,7 @@
 ### auction-status-US-07: Partially Paid status ends self-service Pay for good
 
 **As a** winner or operator,
-**I want** an invoice with any payment recorded against it to read Partially Paid, with no running deadline and no self-service Pay,
+**I want** an invoice with a payment recorded against it that counts toward the balance to read Partially Paid, with no running deadline and no self-service Pay,
 **so that** the status always says whether Grade10 is still owed money and who settles the rest.
 
 ### auction-status-US-05: Winner misses the address deadline

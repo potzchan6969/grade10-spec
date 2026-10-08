@@ -13,21 +13,19 @@ lives.
   - Reissue is the payment reminder: an operator reissue sends the payment reminder for the new invoice; there is no separate reissued letter
   - Fulfilment and cancel: shipped, delivered, and order cancelled
   - Per order, never per winner: a winner of three lots is told about three orders separately
-- Reminder cadence
-  - Day 3, day 6, and final notice at payment deadline − 24h, measured from the current invoice
-  - Cancellation on payment: a winner who has paid never hears about a deadline again
-- Delivery discipline
-  - Idempotency: a retried webhook or a replayed event sends nothing twice
-  - Never the record: every fact a letter carries is visible on the auction order
-- Post-close letters
   - Setup letter copy: auction-won and setup-reminder name delivery address, payment method and billing address as bullets; setup overdue stays generic and never cancels on its own
-- Post-close letters
   - Proof not accepted: the operator's external reason and the time left to pay
   - No letter on upload: sending proof sends nothing
   - Receipt in the letter: the payment-received letter shows the receipt and attaches it as a PDF, so the winner keeps proof of payment outside Grade10
   - No invoice attachment: the payment-reminder letter attaches no PDF
+  - Shipped with no tracker link: the primary action is View order, opening Winner Order, and the tracking number reads as plain text; a tracker link still leads with the carrier's tracking
 - Reminder cadence
+  - Day 3, day 6, and final notice at payment deadline − 24h, measured from the current invoice
+  - Cancellation on payment: a winner who has paid never hears about a deadline again
   - Held while proof is checked: no reminder or final notice while the invoice is Payment Verifying; the sequence resumes if the proof is returned
+- Delivery discipline
+  - Idempotency: a retried webhook or a replayed event sends nothing twice
+  - Never the record: every fact a letter carries is visible on the auction order
 - Setup and payment journeys
   - The order-setup and payment letters describe the address, payment method, deadline, and settlement path for the winner's order
   - The payment-overdue letter explains that self-service payment has stopped and how to reach Grade10
@@ -59,7 +57,7 @@ template at `https://email.grade10-stg.com/preview/…` (same path as
 | Proof not accepted | An operator returns a `payment_verifying` invoice to `pending`. Names the operator's external reason and the new payment deadline in `Asia/Hong_Kong` as `GMT+8` | Email | — |
 | Payment received | The winner's card payment is confirmed, an operator confirms bank transfer proof, or an operator commits a manual settlement | Email | [payment-received.tsx](https://email.grade10-stg.com/preview/auction/order/payment-received) |
 | Partial payment received | An operator records a payment whose cumulative total remains below the invoice total. Names the current invoice and receipt IDs, attaches that receipt PDF, and uses the partial-payment Contact Us mailto without a remaining balance | Email | — |
-| Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached. Primary CTA is the carrier track-and-trace link; secondary CTA opens Winner Order | Email | [order-shipped.tsx](https://email.grade10-stg.com/preview/auction/order/order-shipped) |
+| Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached. With a tracker link, the primary CTA is the carrier track-and-trace link and the secondary CTA opens Winner Order; with none, the primary CTA is View order, opening Winner Order, and the tracking number reads as plain text | Email | [order-shipped.tsx](https://email.grade10-stg.com/preview/auction/order/order-shipped) |
 | Delivered | The carrier confirms delivery | Email | [order-delivered.tsx](https://email.grade10-stg.com/preview/auction/order/order-delivered) |
 | Order cancelled | An operator cancels the order | Email | [order-cancelled.tsx](https://email.grade10-stg.com/preview/auction/order/order-cancelled) |
 
@@ -85,9 +83,12 @@ Order. The payment-reminder letter SHALL NOT attach a PDF; the invoice PDF remai
 Winner Order. The payment-received letter SHALL attach the receipt PDF, per
 "The payment-received letter carries the receipt". The
 shipped letter SHALL name the confirmed delivery address, the carrier, and
-the tracking number with the shipped time, SHALL use the carrier
+the tracking number with the shipped time. Where the operator recorded a
+tracker link at dispatch, the shipped letter SHALL use that carrier
 track-and-trace URL as its primary action, and SHALL offer Winner Order as a
-secondary action on the same row.
+secondary action on the same row. Where no tracker link was recorded, its
+primary action SHALL be View order, opening Winner Order; the tracking number
+SHALL read as plain text, and the letter SHALL offer no track-and-trace action.
 
 <!-- trace:scenario id=g10.auction-notifications-order.SC-2d0 rev=1 -->
 #### Scenario: order-mail-SC-01 - Winning a lot is announced by email
@@ -227,6 +228,17 @@ secondary action on the same row.
 - **WHEN** an operator returns it again with the external reason "Reference missing"
 - **THEN** Grade10 sends a second proof-not-accepted letter
 - **AND** it names "Reference missing"
+
+<!-- trace:scenario id=g10.auction-notifications-order.SC-bgc rev=1 -->
+#### Scenario: order-mail-SC-62 - A shipped letter with no tracker link leads with the order
+**Serves:** Post-close letters - shipped with no tracker link
+
+- **GIVEN** an auction order whose fulfilment becomes `fulfilled` with a
+  tracking number and no tracker link recorded
+- **WHEN** Grade10 sends the shipped letter
+- **THEN** its primary action is View order, opening that lot's Winner Order
+- **AND** the tracking number reads as plain text, not a link
+- **AND** the letter offers no track-and-trace action
 
 ### Requirement: Setup reminder and setup overdue follow the setup window
 

@@ -44,18 +44,20 @@ The payment processing fee SHALL be priced by the invoice's payment method:
 
 | Method | Payment processing fee |
 | --- | --- |
-| Card | The amount that leaves the subtotal whole after the payment provider takes a fixed fee and a percentage of the whole charge, computed below |
+| Card | The amount that leaves the subtotal whole after the card rule's fixed amount and percentage of the whole charge, computed below |
 | Bank transfer | The amount the operator entered on the quote or the reissue. Zero or more |
 
-For card, Grade10 SHALL read both provider fees for the invoice's currency at
-the moment the invoice is sent, SHALL compute the order total as the subtotal
-plus the fixed fee divided by one less the percentage, SHALL round that total
+For card, Grade10 SHALL take the card rule for the invoice's currency from
+Payment Settings, per `grade10-admin/auction/payment-settings`, at the moment
+the invoice is sent, SHALL compute the order total as the subtotal plus the
+rule's fixed amount divided by one less its percentage, SHALL round that total
 up to the next minor unit, and SHALL take the fee as the difference between
-the order total and the subtotal.
+the order total and the subtotal. Grade10 SHALL NOT read the payment
+provider's fees.
 
-The fee SHALL be fixed on the invoice once sent. A later change in the
-provider's fees SHALL NOT move it; only a reissue SHALL price it again. No
-settlement SHALL drop or change it.
+The fee SHALL be fixed on the invoice once sent. A later change to the card
+rule SHALL NOT move it; only a reissue SHALL price it again. No settlement
+SHALL drop or change it.
 
 Wherever the winner reads the invoice's lines — the order, the receipt, and
 any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
@@ -103,12 +105,12 @@ an invoice amount before an operator has sent it.
 - **THEN** its total is the order total for that address
 - **AND** no component is marked as an estimate
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-awt rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-awt rev=2 -->
 #### Scenario: winner-order-SC-62 - The fee grosses the subtotal up
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent a card invoice whose subtotal is 312000 minor units in HKD
-- **AND** the payment provider's fees for HKD at that moment were 235 minor units and 3.4 per cent
+- **AND** the HKD card rule in Payment Settings when it was sent was 3.4 per cent and 235 minor units
 - **WHEN** the winner reads the invoice
 - **THEN** the payment processing fee is 11225 minor units in HKD
 - **AND** the order total is 323225 minor units in HKD

@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** pending-review · 0/65
+**Status:** pending-review · 0/64
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## post-sale-US1: Operator works the orders worklist by segment
@@ -1440,48 +1440,6 @@ Runs once per row of **Test data**.
 
 * The new invoice carries Payment Processing Fee <fee reads>.
 
-### post-sale-US7-TC25-2: The first bank transfer quote asks for the fee
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-07
-
-**Pre-conditions:**
-
-* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
-* <order_1> reads Preparing Invoice with bank transfer chosen by the winner.
-
-**Test data:**
-
-| <fee> | <outcome> |
-| --- | --- |
-| blank | The invoice is sent; its fee reads Free |
-| -100 | The send is refused; no invoice is issued |
-| 0 | The invoice is sent; its fee reads Free |
-| more than the Subtotal | The invoice is sent with that fee, not capped |
-
-**Steps:**
-
-1. Open the quote.
-2. Enter Shipping & Handling and <fee>.
-3. Send the invoice.
-
-**Expected Results:**
-
-* Step 1 names bank transfer and offers the bank transfer fee field empty.
-* <outcome>
-
 ### post-sale-US7-TC39-1: A reissue leaves the winner's suspension standing
 
 **Classification:**
@@ -1600,67 +1558,6 @@ Runs once per row of **Test data**.
 
 * Reissue and Record payment are offered.
 * Confirm and Return are not offered.
-
-### post-sale-US7-TC11-1: Switching to card prices the fee from the provider
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-07
-
-**Pre-conditions:**
-
-* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
-* <order_1> has a sent bank transfer invoice.
-
-**Steps:**
-
-1. Open Reissue.
-2. Choose card, add a reason, and reissue.
-
-**Expected Results:**
-
-* The fee is the gross-up read at reissue.
-* No fee is typed by the operator.
-
-### post-sale-US7-TC12-1: A card reissue is refused when provider fees cannot be read
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-07
-
-**Pre-conditions:**
-
-* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
-* <order_1> has a sent bank transfer invoice.
-* The payment provider's fees cannot be read.
-
-**Steps:**
-
-1. Open Reissue.
-2. Choose card, add a reason, and reissue.
-
-**Expected Results:**
-
-* The reissue is refused and says why.
-* The current invoice is unchanged.
 
 ### post-sale-US7-TC15-1: Settlement at an amount other than the Order Total is refused
 
@@ -2584,7 +2481,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The log names the operator, timestamp and reason.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-zl5 rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
-### post-sale-US18-TC11-1: Send locks the address and starts the seven days
+### post-sale-US18-TC11-1: Send keeps the confirmed address locked and starts the seven days
 
 **Classification:**
 
@@ -2622,7 +2519,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 * The invoice is issued and the order derives Pending Payment.
 * The payment deadline is 2026-09-12T09:00:00Z.
-* The delivery address is locked and the winner can no longer change it.
+* The delivery address stays as confirmed, locked since confirmation; the send changes nothing about it.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-84x rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
 ### post-sale-US18-TC12-1: Send is refused while no address is confirmed
@@ -2837,8 +2734,8 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 - **Renumbered** - `post-sale-US1-TC1-1` became `US1-TC9-1` and `post-sale-US3-TC3-1` became `US3-TC5-1`: each reused a durable id of another meaning, so the fold would have overwritten the durable case. `US1-TC8` is held by `clarify-auction-shipping-progress-copy`.
 - **Revised** - `US6-TC1-2` revises the durable `post-sale-US6-TC1-1`: the same three lots, with Extended read in the Listings table now that the queue is gone. `US16-TC1-2` revises the durable `post-sale-US16-TC1-1` to a bank refund that names where it went and is restated. Each carries the durable trace marker at `rev=2`; `US6-TC2-1` carries its durable marker unchanged.
-- **Revised against the fee by payment method** - the durable `post-sale-US7-TC9-1`, `-TC10-1` and `-TC25-1` read a blank bank transfer fee as refused, and `-TC25-1` read the provider's fees; a blank fee is now zero and no send needs the provider, so they are `US7-TC9-2`, `US7-TC10-2` and `US7-TC25-2`.
-- **Deprecated** - the listing queue and its listing-level payment states are removed, so the durable `post-sale-US1-TC1-1`, `-TC2-1`, `-TC3-1` and `-TC5-1` and `post-sale-US3-TC1-1`, `-TC2-1` and `-TC3-1` are deprecated; the worklist is walked by `US1-TC6-1`, `US1-TC7-1` and `US1-TC9-1`, and payment by `US3-TC4-1`, `US3-TC5-1`, `US7-TC34-1` and `US7-TC36-1`. The provider fee cases `post-sale-US7-TC11-1` and `-TC12-1` give way to `US7-TC32-1` and `US5-TC14-1`; `post-sale-US7-TC15-1`, which refused any amount but the order total, to `US7-TC34-1`; the queue search `post-sale-US7-TC22-1` to `US1-TC6-1`; and `post-sale-US7-TC31-1`, which expected the Overdue mark, to `US5-TC17-1`. `US6-TC2-1`: the worklist lists won lots only, so a lot still taking bids has no row to filter.
+- **Revised against the fee by payment method** - the durable `post-sale-US7-TC9-1` and `-TC10-1` read a blank bank transfer fee as refused; a blank fee is now zero, so they are `US7-TC9-2` and `US7-TC10-2`. `add-winner-order-tax-line`'s `post-sale-US7-TC25-2` still refuses a blank fee, so it is `US7-TC25-3` here, with a blank fee sent as Free.
+- **Deprecated** - the listing queue and its listing-level payment states are removed, so the durable `post-sale-US1-TC1-1`, `-TC2-1`, `-TC3-1` and `-TC5-1` and `post-sale-US3-TC1-1`, `-TC2-1` and `-TC3-1` are deprecated; the worklist is walked by `US1-TC6-1`, `US1-TC7-1` and `US1-TC9-1`, and payment by `US3-TC4-1`, `US3-TC5-1`, `US7-TC34-1` and `US7-TC36-1`. `post-sale-US7-TC15-1`, which refused any amount but the order total, gives way to `US7-TC34-1`; the queue search `post-sale-US7-TC22-1` to `US1-TC6-1`; and `post-sale-US7-TC31-1`, which expected the Overdue mark, to `US5-TC17-1`. `US6-TC2-1`: the worklist lists won lots only, so a lot still taking bids has no row to filter.
 - **Joined** - `US1-TC9-1` gained the Payment Verifying filter (`SC-116`), `US5-TC17-1` the absent dispatch (`SC-41`), `US7-TC34-1` two rows (`SC-58`, `SC-59`), and `US7-TC36-1` finance's disabled Dispatch (`SC-40`); each is a result on a run the case already walks, so no version moved.
 - **Traces** - `US2-TC8-1`, `US5-TC17-1`, `US7-TC34-1` and `US7-TC36-1` traced a feature set group; each now traces the journey of the section it sits in.
 - **Restyle owed** - durable cases the change does not move still name older words: `post-sale-US7-TC1-1` and `post-sale-US8-TC3-1` read Expired for Payment Overdue, `post-sale-US7-TC2-1`, `-TC13-1` and `post-sale-US10-TC1-1` read Processing for Preparing Shipment, and `post-sale-US15-TC1-1`, `-TC2-1` and `post-sale-US17-TC1-1` read the queue for the worklist. `/tcs-review` restyles them.
@@ -2846,3 +2743,9 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 - **Moved in** - `An operator reopens the address form`, with `SC-75` to `SC-84`, `SC-90` and `SC-91` under their existing ids, came from `close-overdue-address-confirmation` (`decisions.md` Q39), and its cases came with them under their existing trace markers: `post-sale-US18-TC1-1` to `TC7-1`, `TC16-2`, `TC25-1`, `TC26-1` and `TC27-1` for the reopen and record scenarios, and `TC8-1` to `TC14-1` and `TC24-1` for the queue outcomes, the send and the cancellation, which read scenarios this change owns. `post-sale-US18-TC15-1`, a cancelled order refuses a reopen, is not carried: `US2-TC9-1` walks the same steps for `SC-83`, so the suite holds one case for it. The moved cases keep the words of the suite they came from: the queue read as the worklist, Expired invoice as Payment Overdue and Processing as Preparing Shipment are owed to `/tcs-review`.
 - **Raised** - where a flagged order sits, where a reissue's fee starts, what replaces the 72-hour mark, and what Grade10 keeps of a refund's bank account landed as decisions Q16, Q14, Q26 and Q29.
 - **Domain suite** - `grade10-admin-auction-e2e-US3-TC1-1` walked the listing queue's Paid via Manual, which this change removes, so the proposal carries its rewrite for the Orders worklist and order page as `-US3-TC1-2`, back to draft; `-US3-TC2-1` read a wire request that releases the card hold, which no longer exists, so it is deprecated as `-US3-TC2-2`. The feature suite's two **Covered at domain** lines follow: the first names `-TC1-2`, and the second goes with the wire request.
+
+**Run:** 2026-10-08, amendment for acceptance ahead of the dependencies, not blind: the fee requirement, the durable suite, `add-winner-order-tax-line`'s and `add-winner-partial-payment`'s post-sale suites and the cases above. The card-rule fee on the quote and the reissue is now `add-winner-order-tax-line`'s (its Q17), and the guards that count only a payment toward the balance are `add-winner-partial-payment`'s (its Q21), so this suite stops carrying what those two prove.
+
+- **Handed over** - this suite's copies of `post-sale-US7-TC11-1` and `-TC12-1`, deprecated, are dropped: `add-winner-order-tax-line` deprecates them and replaces them with `post-sale-US7-TC47-1` and `-TC48-1`
+- **Carried by add-winner-order-tax-line** - the blank-is-zero bank transfer fee and `post-sale-US7-TC25-2` (its Q18), so this suite carries no copy of that case.
+- **Kept** - `grade10-admin-auction-post-sale-SC-167` and `SC-168` stay with `US5-TC14-1` and `US5-TC13-1`: `SC-167` is the USD launch case with no card rule and `SC-168` the read-only fee with its rule, which `SC-70` and `SC-69` do not state

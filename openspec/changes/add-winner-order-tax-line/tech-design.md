@@ -34,7 +34,7 @@ that Tax consumes.
    reissue call the same function.
    - Rejected: add Tax to Order Total after the processing fee is calculated.
      That would make preview and issued totals easy to diverge and would leave
-     Grade10 absorbing the provider fee on Tax.
+     Grade10 absorbing the card fee on Tax.
 
 3. **A reissue writes a fresh Tax snapshot.** The reissue command accepts the
    same nullable Tax input as the first quote. Its change detector compares

@@ -121,8 +121,8 @@ The title is historical: a lot still taking bids is not in the worklist.
 - **AND** it is the same value the winner reads on their own order
 
 Scenario `grade10-admin-auction-post-sale-SC-21` keeps its title with its id.
-The title is historical: an expired invoice's order reads Payment Overdue and
-sits under Needs action.
+The title is historical: an expired invoice's order reads Payment Overdue,
+Processing now reads Preparing Shipment, and both sit under Needs action.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-9oe rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-21 - Expired and Processing are highlighted as needing action
@@ -1209,10 +1209,7 @@ fix the stock choice, and refuse a second refund.
 ### Requirement: The payment processing fee follows the invoice's payment method
 
 The invoice's payment method decides where its payment processing fee comes
-from. This requirement governs the fee on the quote and on a reissue, in place
-of the fee steps of "An operator quotes and sends the invoice" and "An
-operator reissues a sent invoice", and of the fee's pricing in "Invoice
-fields" in `grade10-site/auction/winner-order`.
+from.
 
 **Card is computed** - A card invoice's fee SHALL be Grade10's own: the card
 rule for the order's currency, per `grade10-admin/auction/payment-settings`,
@@ -1222,9 +1219,8 @@ quote or a reissue is opened, and fix it at send or reissue. The quote SHALL
 show it read-only, with the rule it came from.
 
 **No card rule refuses** - Where Payment Settings holds no card rule for the
-order's currency, Grade10 SHALL refuse to send or reissue a card invoice,
-`CARD_FEE_UNSET`. The refusal SHALL say the card fee for that currency is not
-set and point to Payment Settings. Grade10 SHALL NOT guess a fee.
+order's currency, a card invoice is neither sent nor reissued, per "An operator
+quotes and sends the invoice". Grade10 SHALL NOT guess a fee.
 
 **Bank transfer is typed** - A bank transfer invoice's fee SHALL be the
 operator's own: an integer count of minor units of zero or more in the lot's
@@ -1239,8 +1235,6 @@ switch to bank transfer SHALL start it empty, which reads zero.
 **Never priced again** - A sent invoice SHALL keep its fee. A later change to
 the card rule or to the premium minimum SHALL change no sent invoice; only a
 reissue re-prices a card fee or lets the operator retype a bank transfer fee.
-
-**No provider** - No send or reissue SHALL need the payment provider.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-qvj rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-167 - No card rule refuses the send
@@ -1680,8 +1674,8 @@ one order's address form is reopened.
 
 Grade10 SHALL refuse a reopen when the reason is missing, when the order's
 address deadline has not passed, when the order already has a confirmed address,
-when the order's invoice has been sent, since the delivery address locks at send,
-and when the order's invoice status is `cancelled`, since cancellation has
+when the order's invoice has been sent, since setup was already confirmed
+before the send, and when the order's invoice status is `cancelled`, since cancellation has
 already returned the lot to available stock. An operator without
 payment-processing SHALL see the reopen control visible and disabled, and
 Grade10 SHALL refuse the same action on the server.
@@ -1821,7 +1815,7 @@ append-only and retained".
 #### Scenario: grade10-admin-auction-post-sale-SC-90 - Address write, reopen, record and send serialize
 **Serves:** Setup - reopen setup or record it
 
-- **GIVEN** an expired order with no confirmed address
+- **GIVEN** a Setup Overdue order, with invoice `not_issued` and no confirmed address
 - **WHEN** a winner address write, an operator reopen, an operator record of
   setup and an operator invoice send are submitted concurrently
 - **THEN** Grade10 serializes the operations under the order boundary

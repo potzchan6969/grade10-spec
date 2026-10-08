@@ -98,6 +98,9 @@ See [Non-Goals](decisions.md#non-goals).
   settlement as the grant.
 - `grade10-site/auction/order-status`: an expired or verifying invoice never
   starts a card payment, and one that completes anyway is recorded.
+- `grade10-site/auction/notifications-order`: a shipped letter with no
+  tracker link leads with View order and reads the tracking number as plain
+  text.
 - `grade10-admin/auction` domain suite (`domain-tcs.md`): the durable
   `grade10-admin-auction-e2e-US3-TC1-1`, a lot collected through to delivered,
   is rewritten as `-TC1-2` for the Orders worklist and order page - worklist,
@@ -121,10 +124,13 @@ See [Non-Goals](decisions.md#non-goals).
 ## Ordering and Dependencies
 
 - **After `add-winner-order-tax-line`**, declared in `.openspec.yaml`. That
-  change folds Invoice fields, the quote and the reissue with Tax; this change
-  builds its write side and never edits it. This change's fee, one Reissue and
-  what was seen is sent are new requirements; its blocks on those three
-  requirements are written after that change archives
+  change folds Invoice fields, the quote and the reissue with Tax and with the
+  card-rule fee this change decides; this change builds its write side and
+  never edits them. This change's fee, one Reissue and what was seen is sent
+  are new requirements (`add-winner-order-tax-line` decisions Q17)
+- **After `add-winner-partial-payment`**, declared. It carries the rule that
+  only a payment counting toward the balance refuses Reissue and Cancel and
+  derives Partially Paid (`add-winner-partial-payment` decisions Q21)
 - **After `define-public-auction-identifiers`**, declared. Its invoice IDs are
   what the worklist search matches, a replaced one included
 - **Beside `add-winner-how-to-pay-rails`.** Its bank transfer requirement is
