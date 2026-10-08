@@ -4,9 +4,9 @@
 
 No Figma frame draws these documents: the PDFs have never had one, and
 `decisions.md` Q35 decides none for the item table. The table is built from
-the requirements and previewed in Storybook. The first commit that changes the
-block, in group 7, 9 or 10, lands only after the person's Design Override yes,
-and each later commit the check stops carries its own `Design-Override:` line.
+the requirements and previewed in Storybook. The Design Override check reads
+class strings and style props, not pdf-lib's drawing, so it stops no change to
+these documents. The person's review of the rendered PDFs is the design check.
 
 The layout reference is a sample consolidated invoice the person supplied: the
 columns Item, Winning Bid, Buyer's Premium and Total, one row per item, a
