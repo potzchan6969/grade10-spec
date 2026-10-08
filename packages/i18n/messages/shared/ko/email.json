@@ -18,6 +18,8 @@
     "when": "일시",
     "where": "장소",
     "manage": "방문 옮기기 또는 취소",
-    "calendar": "캘린더 파일을 첨부했으니 방문 일정을 캘린더에 추가하세요."
+    "calendar": "캘린더 파일을 첨부했으니 방문 일정을 캘린더에 추가하세요.",
+    "beforeYouCome": "방문 전 안내",
+    "cancelledReason": "사유"
   }
 }

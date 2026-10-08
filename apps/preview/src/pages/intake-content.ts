@@ -247,8 +247,17 @@ const IN_PROGRESS_ITEMS: readonly IntakeItemRow[] = sortByHandInDesc([
 
 const COMPLETED_ITEMS: readonly IntakeItemRow[] = VAULT_COMPLETED_ITEMS;
 
+/** Distinct open submissions still in intake — drives the portfolio alert. */
+function activeIntakeSubmissionCount(
+  items: readonly IntakeItemRow[] = IN_PROGRESS_ITEMS,
+): number {
+  const open = items.filter((item) => !item.completed);
+  return new Set(open.map((item) => item.submissionId)).size;
+}
+
 export type { IntakeItemRow, IntakeListFilter, IntakeService };
 export {
+  activeIntakeSubmissionCount,
   COMPLETED_ITEMS,
   filterItems,
   formatHkd,

@@ -42,13 +42,24 @@
     "name": "Name",
     "email": "Email",
     "phone": "Phone",
+    "phoneIncomplete": "Enter the whole phone number.",
+    "phonePlaceholder": "+852 1234 5678",
     "notes": "Anything we should know?",
     "optional": "optional",
     "nameMissing": "Tell us your name.",
     "emailMissing": "Tell us where to send the confirmation.",
     "emailInvalid": "That doesn’t look like an email address.",
     "answerMissing": "This is needed to continue.",
-    "submit": "Confirm Appointment"
+    "submit": "Confirm Appointment",
+    "choose": "Choose",
+    "kinds": {
+      "short_text": "Short text",
+      "long_text": "Long text",
+      "number": "Number",
+      "select": "Dropdown",
+      "radio": "Single choice",
+      "checkboxes": "Multiple choice"
+    }
   },
   "summary": {
     "title": "Your Visit",
@@ -63,7 +74,9 @@
     "location": "Shop",
     "when": "When",
     "manage": "Move or cancel this visit",
-    "calendar": "Add to calendar"
+    "calendar": "Add to calendar",
+    "beforeYouCome": "Before you come",
+    "answers": "What you told us"
   },
   "manage": {
     "title": "Your Visit",
@@ -97,9 +110,10 @@
   },
   "state": {
     "booked": "Booked",
+    "checked_in": "Checked in",
     "cancelled": "Cancelled",
-    "completed": "Completed",
-    "no_show": "No show"
+    "completed": "Visited",
+    "no_show": "Missed"
   },
   "errors": {
     "servicesUnavailable": "The services could not be read.",

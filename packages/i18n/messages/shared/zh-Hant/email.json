@@ -18,6 +18,8 @@
     "when": "時間",
     "where": "地點",
     "manage": "更改或取消此預約",
-    "calendar": "已附上行事曆檔案，方便你將預約加入行事曆。"
+    "calendar": "已附上行事曆檔案，方便你將預約加入行事曆。",
+    "beforeYouCome": "到店前須知",
+    "cancelledReason": "原因"
   }
 }

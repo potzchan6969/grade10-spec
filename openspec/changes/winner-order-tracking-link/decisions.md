@@ -20,6 +20,7 @@
 | Q3 | Keep the link after Delivered? | Yes — while fulfilment stays `fulfilled` | Hide tracker once delivery is confirmed |
 | Q4 | OpenSpec vehicle? | New change `winner-order-tracking-link` | Fold into payment-proof feedback |
 | Q5 | Does the tracker revise the winner's retained records? | No - it is a separate live Winner Order presentation requirement; the shipped record's tracker contents are carried by `add-winner-order-tax-line` | Fold the tracker into Records the winner keeps |
+| Q6 | What does Winner Order show when the operator recorded no tracker link? | The planning owner (@htonyl): the carrier link comes only from the operator's tracker link; with none, the tracking number is plain text, no carrier name, no Track shipment control. Carried by `Winner Order makes the tracking number the carrier link` | Derive a link from the carrier name or tracking number |
 
 ## Raised
 

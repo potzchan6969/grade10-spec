@@ -7,8 +7,10 @@ import type { BookingServicePickerCopy } from "./booking-service-picker";
 import type { BookingSlotPickerCopy } from "./booking-slot-picker";
 import type { BookingSummaryCopy } from "./booking-summary";
 import type {
+  BookingAnswerLine,
   BookingDay,
   BookingLocation,
+  BookingQuestion,
   BookingRecord,
   BookingRecordState,
   BookingService,
@@ -27,10 +29,61 @@ const FIXTURE_BOOKING_NOW_MS = Date.UTC(2026, 8, 1, 4, 0);
 
 const STATE_LABELS: Record<BookingRecordState, string> = {
   booked: "Booked",
+  checked_in: "Checked in",
   cancelled: "Cancelled",
-  completed: "Completed",
-  no_show: "No show",
+  completed: "Visited",
+  no_show: "Missed",
 };
+
+/** One question of each kind, for the form that draws all six. */
+const ALL_KINDS_QUESTIONS: readonly BookingQuestion[] = [
+  {
+    key: "tag",
+    label: "Collector tag",
+    kind: "short_text",
+    required: false,
+    placeholder: "Collector tag",
+  },
+  {
+    key: "story",
+    label: "Story",
+    kind: "long_text",
+    required: false,
+    placeholder: "Tell us more",
+  },
+  {
+    key: "value",
+    label: "Value",
+    kind: "number",
+    required: false,
+    placeholder: "10,000",
+  },
+  {
+    key: "size",
+    label: "Size",
+    kind: "select",
+    options: ["small", "large"],
+    optionLabels: { small: "Small", large: "Large" },
+    required: false,
+    placeholder: "Pick a size",
+  },
+  {
+    key: "handover",
+    label: "Handover",
+    kind: "radio",
+    options: ["pickup", "dropoff"],
+    optionLabels: { pickup: "Pickup", dropoff: "Drop-off" },
+    required: false,
+  },
+  {
+    key: "bring",
+    label: "Bringing",
+    kind: "checkboxes",
+    options: ["sleeves", "binder", "id"],
+    optionLabels: { sleeves: "Sleeves", binder: "Binder", id: "Photo ID" },
+    required: false,
+  },
+];
 
 const GRADING_SERVICE: BookingService = {
   id: "svc_grading",
@@ -101,6 +154,18 @@ const LIVE_RECORD: BookingRecord = {
   state: "booked",
 };
 
+const CHECKED_IN_RECORD: BookingRecord = {
+  ...LIVE_RECORD,
+  id: "bk_checked_in",
+  state: "checked_in",
+};
+
+/** What the grading service's live booking was answered with. */
+const LIVE_ANSWERS: readonly BookingAnswerLine[] = [
+  { key: "company", label: "Preferred grading company", answer: "PSA" },
+  { key: "bring", label: "Bringing", answer: ["Sleeves", "Binder"] },
+];
+
 const LATER_RECORD: BookingRecord = {
   ...LIVE_RECORD,
   id: "bk_later",
@@ -158,6 +223,7 @@ const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
   emailInvalid: "That doesn’t look like an email address.",
   phoneMissing: "Enter a phone number.",
   answerMissing: "This is needed to continue.",
+  choose: "Choose",
   submit: "Confirm Appointment",
 };
 
@@ -174,6 +240,8 @@ const CONFIRMATION_COPY: BookingConfirmationCopy = {
   service: "Service",
   location: "Shop",
   when: "When",
+  beforeYouCome: "Before you come",
+  answers: "What you told us",
   manage: "Move or cancel this visit",
   calendar: "Add to calendar",
 };
@@ -192,8 +260,10 @@ const MANAGE_CARD_COPY: BookingManageCardCopy = {
 };
 
 export {
+  ALL_KINDS_QUESTIONS,
   CANCELLED_RECORD,
   CAUSEWAY_BAY,
+  CHECKED_IN_RECORD,
   COMPLETED_RECORD,
   CONFIRMATION_COPY,
   CONSULTATION_SERVICE,
@@ -202,6 +272,7 @@ export {
   FIXTURE_MONTH,
   GRADING_SERVICE,
   LATER_RECORD,
+  LIVE_ANSWERS,
   LIVE_RECORD,
   LOCATION_PICKER_COPY,
   MANAGE_CARD_COPY,

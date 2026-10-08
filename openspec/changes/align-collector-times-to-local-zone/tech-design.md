@@ -41,7 +41,10 @@ when no zone is given - three rules for one instant beside the store's `HKT` /
 
 **Non-Goals:**
 
-- Operator tables and admin forms (`Starts at (HKT)` in the admin listing
+- Operator tables and admin forms, except the auction order surfaces (the
+  Orders worklist, the order page with its timeline and invoice log, and the
+  send and reissue dialog's payment deadline), which state Asia/Hong_Kong as
+  `GMT+8` (Q31, Decision 13); `Starts at (HKT)` in the admin listing
   editor is an operator form, not a collector surface).
 - Calendar days a brand judges (programme dates, shop midnight). The day of a
   collector deadline is not one of them: it reads in the viewer's zone.
@@ -275,6 +278,17 @@ typecheck all pass.
     Cite each scenario id in the story name or the test title, and the case id
     where a manual row credits the test.
 
+13. **The zone reaches the auction order surfaces as an argument at each date
+    call.** The operator formatter reads UTC unless it is given a zone, so the
+    Orders worklist, the order page, its timeline and invoice log, and the send
+    and reissue dialog's payment deadline pass `Asia/Hong_Kong` and print
+    `GMT+8`, and no other operator table passes one, so each stays `UTC` (Q31,
+    task 6.1). The order timeline and invoice log are not the audit trail: the
+    audit trail is a record a machine reads and stays `UTC`. Rejected: a zone
+    set once for the whole admin app, which moves every operator table; a
+    setting the operator picks, which gives two operators two clocks for one
+    order and breaks `grade10-admin-auction-post-sale-SC-239`.
+
 ### Surfaces and who moves them
 
 Read in `grade10` at its current main.
@@ -290,6 +304,7 @@ Read in `grade10` at its current main.
 | Winner Order | `winnerOrderView.ts` | `UTC` | viewer zone, named on a clock (lines below) | group 4 |
 | Invoice page | `AuctionInvoicePage.tsx` | `UTC` | `Asia/Hong_Kong`, `GMT+8`, as the PDF, through the application's `formatDeadline` and `formatDay` given the brand zone | group 4 |
 | Appointment, drop-off, vault, signing pages | the shop's or brand zone | an unnamed Hong Kong clock on the drop-off cut-off lines, the joined-visit time and the vault visit time; the booking blocks' default label `HKT`, and the drop-off page's own label, `Hong Kong Standard Time` | the shop's clock; how the zone is named is left out (Q27) | none |
+| Auction order operator surfaces | the auction admin's Orders worklist, order page, timeline, invoice log and send and reissue dialog | `UTC` | `Asia/Hong_Kong`, `GMT+8`; every other operator table stays `UTC` | group 6 |
 | Vault letters | `packages/vault/backend/src/email/messages.ts`, `vault/fixtures.ts` | `Dates and times are in Hong Kong Standard Time.` | `Dates and times are in Hong Kong time (GMT+8).` | groups 2 and 3 |
 
 Shop-clock pages keep the shop's clock and name its zone no one way today: an

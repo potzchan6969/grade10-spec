@@ -38,11 +38,13 @@ export {
   type BookingSummaryProps,
 } from "./blocks/appointment-booking/booking-summary";
 export type {
+  BookingAnswerLine,
   BookingAnswers,
   BookingDay,
   BookingDetailsValues,
   BookingLocation,
   BookingQuestion,
+  BookingQuestionKind,
   BookingRecord,
   BookingRecordState,
   BookingService,

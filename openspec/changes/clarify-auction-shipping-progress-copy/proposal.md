@@ -21,7 +21,8 @@ Preparing to ship subtext (target: 100%).
   queue outcomes that show the same derived name.
 - **Shipping subtext** — while Preparing Shipment, Shipping reads Preparing
   to ship; while Shipped, the day-only date and tracking number remain. The
-  tracking number is the carrier link, with no separate button or carrier
+  tracking number is the carrier link when the operator recorded a tracker
+  link and plain text otherwise, with no separate button or carrier
   name in the progress chrome, as the Post-Bidding product record requires.
 - **Derivation unchanged** — invoice `paid` + fulfilment `unfulfilled` still
   yields that status; only the display name moves.

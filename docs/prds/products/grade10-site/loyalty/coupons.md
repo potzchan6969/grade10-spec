@@ -33,6 +33,9 @@ so redefining the reward never rewrites a coupon a member already holds —
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
 
+🚧 **The picture** - the coupon list shown here draws no code and no copy
+action, since a reward coupon carries none
+
 ::story{id="loyalty-membership-couponlist--default" title="The coupons a member holds"}
 
 ## Applying one

@@ -213,7 +213,7 @@ Runs once per row of **Test data**.
 
 | <action> | <outcome> | <flag> |
 | --- | --- | --- |
-| confirmed it | Processing | shown |
+| confirmed it | Preparing Shipment | shown |
 | returned it, deadline not passed | Pending Payment | not shown |
 
 **Steps:**
@@ -510,6 +510,40 @@ Runs once per row of **Test data**.
 * The reopen is accepted and the order derives as Awaiting Setup.
 * The winner reads that payment is not yet available in USD, with Contact Us, and cannot confirm.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-13a rev=1 covers=g10adm.auction-post-sale.SC-3j8 -->
+### post-sale-US2-TC12-1: Operators in different zones read the same Hong Kong time
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-02
+
+**Pre-conditions:**
+
+* A Pending Payment order whose invoice was sent at 2026-09-12T09:00:00Z with a payment deadline of 2026-09-19T09:00:00Z.
+* One admin(operator) whose browser is set to London and another whose browser is set to Tokyo.
+
+**Steps:**
+
+1. Each operator reads the order's row on the worklist.
+2. Each opens the order page and reads the payment deadline.
+3. Each reads the sent entry on the timeline.
+4. Each opens the Reissue dialog and reads the payment deadline it would keep.
+
+**Expected Results:**
+
+* Both read the payment deadline as 2026-09-19 17:00, labelled GMT+8, on the page and in the dialog.
+* Both read the sent entry as 2026-09-12 17:00, labelled GMT+8.
+* Neither reads a time in their browser's zone or in UTC.
+
 ---
 
 ## post-sale-US3: Operator collects payment
@@ -805,6 +839,40 @@ Runs once per row of **Test data**.
 
 * Each is refused.
 * Neither order's status moves.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-kcn rev=1 covers=g10adm.auction-post-sale.SC-9wm,g10adm.auction-post-sale.SC-pvi -->
+### post-sale-US4-TC3-1: The winner reads the tracking number as a link with a tracker link and as plain text without one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-04
+
+**Pre-conditions:**
+
+* Two Preparing Shipment orders, each won by a different winner.
+* admin(operator with shipment processing) opens each.
+
+**Steps:**
+
+1. Record dispatch on the first with carrier `SF Express`, tracking number `SF1234567890` and the carrier's tracker link.
+2. Record dispatch on the second with the same carrier and tracking number and no tracker link.
+3. Sign in as each winner and open their order.
+
+**Expected Results:**
+
+* The first winner reads `SF1234567890` as a link to the tracker link.
+* The second winner reads `SF1234567890` as plain text, not a link.
+* Neither winner reads a carrier name or sees a Track shipment control.
+* Both orders read Shipped.
 
 ---
 
@@ -1855,6 +1923,39 @@ payments that failed,
 * The entry names Tax as changed, with no amount before and 6000 minor units in HKD after.
 * It names no other part as changed.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-j9i rev=1 covers=g10adm.auction-post-sale.SC-lfk,g10adm.auction-post-sale.SC-98a -->
+### post-sale-US8-TC14-1: A repeated request happens once, and a request used for another action is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* An auction order in Preparing Invoice.
+* admin(operator with payment processing) opens it.
+
+**Steps:**
+
+1. Send the invoice, then submit the same request again.
+2. Make the same request to record a payment on the order.
+3. Read the order, its timeline and the winner's mail.
+
+**Expected Results:**
+
+* The repeat answers the outcome of the first send.
+* The order holds one invoice, one sent entry and one invoice letter.
+* The payment request is refused, the dialog tells the operator to open it again, and no payment or entry is added.
+
 ---
 
 ## post-sale-US16: Operator records a refund a winner asked Customer Service for
@@ -2419,7 +2520,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-kp5 rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC25-1: Concurrent address write and reopen serialize
+### post-sale-US18-TC25-1: Concurrent address write, reopen, record and send serialize
 
 **Classification:**
 
@@ -2437,17 +2538,18 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 **Pre-conditions:**
 
 * A Setup Overdue order has an expired address deadline and no confirmed address.
-* A winner address write and an operator reopen can be submitted concurrently.
+* A winner address write, an operator reopen, an operator record of setup and an operator invoice send can be submitted concurrently.
 
 **Steps:**
 
-1. Submit both operations concurrently.
+1. Submit the four operations concurrently.
 2. Read the final address snapshot, deadline and derived status.
 
 **Expected Results:**
 
 * The operations serialize under the order boundary.
 * The final snapshot and deadline match the last committed transition.
+* A send that commits carries the setup the transition before it left; one refused for lack of setup changes nothing.
 * The order is internally consistent and no partial address overwrite exists.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-20s rev=1 covers=g10adm.auction-post-sale.SC-fzv,g10adm.auction-post-sale.SC-blu,g10adm.auction-post-sale.SC-su0 -->
@@ -2684,6 +2786,9 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 | `grade10-admin-auction-post-sale-SC-201`, `SC-202` | Covered by `US3-TC4-1` |
 | `grade10-admin-auction-post-sale-SC-173`, `SC-174` | Covered by `US4-TC1-1` |
 | `grade10-admin-auction-post-sale-SC-175`, `SC-176` | Covered by `US4-TC2-1` |
+| `grade10-admin-auction-post-sale-SC-237`, `SC-238` | Were uncovered; added `US4-TC3-1` |
+| `grade10-admin-auction-post-sale-SC-239` | Were uncovered; added `US2-TC12-1` |
+| `grade10-admin-auction-post-sale-SC-240`, `SC-241` | Were uncovered; added `US8-TC14-1` |
 | `grade10-admin-auction-post-sale-SC-167` | Covered by `US5-TC14-1` |
 | `grade10-admin-auction-post-sale-SC-168`, `SC-169` | Covered by `US5-TC13-1` |
 | `grade10-admin-auction-post-sale-SC-170` | Covered by `US5-TC15-1` |

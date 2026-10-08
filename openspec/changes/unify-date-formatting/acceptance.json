@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "change": "unify-date-formatting",
+  "baseline": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+  "fingerprint": "624f98caa30bbb7b0b560a28ff74ae02088b9609a9fcedfc8e76062dc70ff170",
+  "reviewedBy": "@seankcw",
+  "acceptedAt": "2026-10-08T02:26:12.903Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/unify-date-formatting/decisions.md",
+      "sha256": "4647f7eb9c35adf42596b5644983078e53c35045bf4a12034e4bde1c04dd7227",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/unify-date-formatting/proposal.md",
+      "sha256": "46ea9cba54c3d9a1529d934b418a8d9f5bc710e57c136651393b7356f8b71f35",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/unify-date-formatting/tech-design.md",
+      "sha256": "69d00fd91835fadaa7ea63af15cfbffa4e67dc2133663ef4aca5f6b6f6285670",
+      "role": "change-input"
+    }
+  ],
+  "contractTargets": []
+}

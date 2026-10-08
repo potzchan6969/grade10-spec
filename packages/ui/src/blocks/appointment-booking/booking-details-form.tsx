@@ -54,6 +54,8 @@ type BookingDetailsFormCopy = {
   emailInvalid: string;
   phoneMissing: string;
   answerMissing: string;
+  /** Shown in a select before an option is picked. */
+  choose: string;
   submit: string;
 };
 
@@ -79,16 +81,16 @@ type FieldErrors = {
   answers: Readonly<Record<string, string>>;
 };
 
+type Answer = string | readonly string[];
+
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const NO_ERRORS: FieldErrors = { answers: {} };
 
-const CHOICE_JOIN = "\n";
-
 /**
  * Name, email, phone, the service's questions in order, and notes. Refuses to
  * report while a name, an address or a required answer is missing, naming
- * each; reports every text trimmed and answers keyed by question id.
+ * each; reports every text trimmed and answers keyed by question key.
  */
 function BookingDetailsForm({
   copy,
@@ -113,8 +115,8 @@ function BookingDetailsForm({
   );
   const [errors, setErrors] = useState<FieldErrors>(NO_ERRORS);
 
-  function answer(id: string, value: string) {
-    setAnswers((held) => ({ ...held, [id]: value }));
+  function answer(key: string, value: Answer) {
+    setAnswers((held) => ({ ...held, [key]: value }));
   }
 
   function handleSubmit(event: FormEvent) {
@@ -202,10 +204,11 @@ function BookingDetailsForm({
         />
         {questions.map((question) => (
           <QuestionField
-            answer={answers[question.id] ?? ""}
-            error={errors.answers[question.id]}
-            key={question.id}
-            onAnswer={(value) => answer(question.id, value)}
+            answer={answers[question.key]}
+            choose={copy.choose}
+            error={errors.answers[question.key]}
+            key={question.key}
+            onAnswer={(value) => answer(question.key, value)}
             optional={copy.optional}
             question={question}
           />
@@ -240,32 +243,35 @@ function BookingDetailsForm({
 
 function QuestionField({
   question,
-  answer,
+  answer = "",
+  choose,
   error,
   optional,
   onAnswer,
 }: {
   question: BookingQuestion;
-  answer: string;
+  answer?: Answer;
+  choose: string;
   error?: string;
   optional: string;
-  onAnswer: (value: string) => void;
+  onAnswer: (value: Answer) => void;
 }) {
   const selectId = useId();
+  const options = question.options ?? [];
   const label = questionLabel(question, optional);
   const fieldLabel = <QuestionLabel hint={question.hint} label={label} />;
-  if (question.kind === "choice") {
+  if (question.kind === "radio") {
     return (
       <VStack data-slot="booking-question" gap="xs" hAlign="stretch">
         <RadioList
           aria-invalid={error ? true : undefined}
           label={fieldLabel}
           onValueChange={(value) => onAnswer(String(value))}
-          value={answer}
+          value={String(answer)}
         >
-          {(question.options ?? []).map((option) => (
+          {options.map((option) => (
             <RadioListItem key={option} value={option}>
-              {option}
+              {optionText(question, option)}
             </RadioListItem>
           ))}
         </RadioList>
@@ -277,27 +283,20 @@ function QuestionField({
       </VStack>
     );
   }
-  if (question.kind === "choices") {
-    const selected = splitChoices(answer);
+  if (question.kind === "checkboxes") {
+    const selected = new Set(answer);
     return (
       <VStack data-slot="booking-question" gap="xs" hAlign="stretch">
         <CheckboxList label={fieldLabel}>
-          {(question.options ?? []).map((option) => (
+          {options.map((option) => (
             <CheckboxListInput
               checked={selected.has(option)}
               key={option}
               onCheckedChange={(checked) => {
-                onAnswer(
-                  joinChoices(
-                    question.options ?? [],
-                    selected,
-                    option,
-                    checked === true,
-                  ),
-                );
+                onAnswer(toggled(options, selected, option, checked === true));
               }}
             >
-              {option}
+              {optionText(question, option)}
             </CheckboxListInput>
           ))}
         </CheckboxList>
@@ -323,7 +322,7 @@ function QuestionField({
             onValueChange={(value) => {
               if (typeof value === "string") onAnswer(value);
             }}
-            value={answer === "" ? null : answer}
+            value={answer === "" ? null : String(answer)}
           >
             <SelectTrigger
               aria-invalid={error ? true : undefined}
@@ -331,15 +330,19 @@ function QuestionField({
               className="w-full"
               id={selectId}
             >
-              <SelectValue />
+              <SelectValue placeholder={question.placeholder ?? choose} />
             </SelectTrigger>
             <SelectContent
               alignItemWithTrigger={false}
               aria-label={question.label}
             >
-              {(question.options ?? []).map((option) => (
-                <SelectItem key={option} label={option} value={option}>
-                  {option}
+              {options.map((option) => (
+                <SelectItem
+                  key={option}
+                  label={optionText(question, option)}
+                  value={option}
+                >
+                  {optionText(question, option)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -353,17 +356,17 @@ function QuestionField({
       </VStack>
     );
   }
-  if (question.kind === "textarea") {
+  if (question.kind === "long_text") {
     return (
       <Textarea
         data-slot="booking-question"
         label={fieldLabel}
         message={error}
-        name={`question-${question.id}`}
+        name={`question-${question.key}`}
         onChange={(event) => onAnswer(event.target.value)}
         placeholder={question.placeholder}
         status={error ? "error" : "default"}
-        value={answer}
+        value={String(answer)}
       />
     );
   }
@@ -374,12 +377,12 @@ function QuestionField({
         label={fieldLabel}
         message={error}
         min={0}
-        name={`question-${question.id}`}
+        name={`question-${question.key}`}
         onChange={(event) => onAnswer(event.target.value)}
         placeholder={question.placeholder}
         prefix={question.prefix}
         status={error ? "error" : "default"}
-        value={answer}
+        value={String(answer)}
       />
     );
   }
@@ -388,11 +391,11 @@ function QuestionField({
       data-slot="booking-question"
       label={fieldLabel}
       message={error}
-      name={`question-${question.id}`}
+      name={`question-${question.key}`}
       onChange={(event) => onAnswer(event.target.value)}
       placeholder={question.placeholder}
       status={error ? "error" : "default"}
-      value={answer}
+      value={String(answer)}
     />
   );
 }
@@ -418,15 +421,16 @@ function QuestionLabel({ hint, label }: { hint?: string; label: string }) {
   );
 }
 
+function optionText(question: BookingQuestion, option: string) {
+  return question.optionLabels?.[option] ?? option;
+}
+
 function questionLabel(question: BookingQuestion, optional: string) {
   return question.required ? question.label : `${question.label} (${optional})`;
 }
 
-function splitChoices(answer: string) {
-  return new Set(answer === "" ? [] : answer.split(CHOICE_JOIN));
-}
-
-function joinChoices(
+/** The ticked options in the order the service lists them. */
+function toggled(
   options: readonly string[],
   selected: ReadonlySet<string>,
   option: string,
@@ -435,7 +439,11 @@ function joinChoices(
   const next = new Set(selected);
   if (on) next.add(option);
   else next.delete(option);
-  return options.filter((item) => next.has(item)).join(CHOICE_JOIN);
+  return options.filter((item) => next.has(item));
+}
+
+function isAnswered(answer: Answer | undefined): answer is Answer {
+  return answer !== undefined && answer.length > 0;
 }
 
 /** Trims every text and keeps only the answers the service asks for. */
@@ -443,10 +451,11 @@ function collect(
   raw: BookingDetailsValues,
   questions: readonly BookingQuestion[],
 ): BookingDetailsValues {
-  const answers: Record<string, string> = {};
+  const answers: Record<string, Answer> = {};
   for (const question of questions) {
-    const value = raw.answers[question.id]?.trim() ?? "";
-    if (value !== "") answers[question.id] = value;
+    const held = raw.answers[question.key];
+    const value = typeof held === "string" ? held.trim() : held;
+    if (isAnswered(value)) answers[question.key] = value;
   }
   return {
     name: raw.name.trim(),
@@ -465,8 +474,8 @@ function validate(
 ): FieldErrors {
   const answers: Record<string, string> = {};
   for (const question of questions) {
-    if (question.required && values.answers[question.id] === undefined) {
-      answers[question.id] = copy.answerMissing;
+    if (question.required && values.answers[question.key] === undefined) {
+      answers[question.key] = copy.answerMissing;
     }
   }
   const phoneCountry = values.phoneCountry
@@ -481,7 +490,7 @@ function validate(
         : EMAIL.test(values.email)
           ? undefined
           : copy.emailInvalid,
-    phone: !phoneReady ? copy.phoneMissing : undefined,
+    phone: values.phone === "" || phoneReady ? undefined : copy.phoneMissing,
     answers,
   };
 }

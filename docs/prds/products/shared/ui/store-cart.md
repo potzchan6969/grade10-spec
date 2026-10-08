@@ -68,6 +68,9 @@ replaces it; the drawer shows that outcome and works out no amount.
 struck through, even a list price equal to the sale price. The summary adds no
 Store sale row.
 
+🚧 **Which price is charged** - hidden words the application supplies, such
+as Sale price and Was, tell a screen reader which price is charged.
+
 🚧 **Subtotal** - the sum of each line's price times its quantity, leaving
 out sold-out and unavailable lines, as the drawer title's count does.
 
@@ -150,5 +153,5 @@ line: in every outcome here, the code's discount shows in the summary.
 | Combine rules | Decided | The drawer shows the outcome the quote returns. Whether a code stacks, is refused or replaces the sale, including a product sale that refuses every code, is the shop's pricing - [Discounts · One discount at a time](/p/grade10-site/store/discounts#one-discount-at-a-time). Chosen over encoding those rules in the drawer. | Product |
 | No sale row | Decided | A site sale shows only on the lines it cuts, so each cut appears once; the summary names no automatic cut. | Product |
 | Picked code refused | Decided | Its ticket moves apart, muted, with the refusal as its reason, so the shopper is never offered an Apply that fails again. Chosen over keeping it among the ones that can apply, or leaving it to each application. | Design |
-| Struck price read aloud | Decided | Hidden words the application supplies, such as Sale price and Was, read before each price, so a screen reader says which price is charged. Every struck price needs them - the product tile, the product page, the order line and the cart - so one change of its own adds them to all; until then the cart marks the list price by the strike alone. Chosen over a strike with no words, which some screen readers read as nothing. | Design |
+| Struck price read aloud | Decided | Hidden words the application supplies, such as Sale price and Was, read before each price, so a screen reader says which price is charged. Every struck price needs them - the product tile, the product page, the order line and the cart - so one change adds them to all. Chosen over a strike with no words, which some screen readers read as nothing. | Design |
 :::

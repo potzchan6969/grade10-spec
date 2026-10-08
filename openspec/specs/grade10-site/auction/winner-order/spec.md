@@ -78,7 +78,7 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Refunded order: shows the terminal outcome while retaining invoices and receipts
   - Refund details: Amount, Transfer to and Reason; Reference for a bank refund; Note only when the operator recorded one
   - Payment receipt: proof of what was paid, itemised, retrievable for the life of the account
-  - Shipping tracker: the tracking number is the link to the carrier tracking page, with no separate carrier name
+  - Shipping tracker: the tracking number is the link to the carrier tracking page when the operator recorded a tracker link, plain text otherwise, with no separate carrier name
   - Delivery proof: what the carrier recorded on handover, given what these lots are worth
   - Receipt identifier: a receipt for a finalized payment uses the invoice payload plus its unpadded per-invoice sequence; historic receipt IDs remain unchanged
   - Receipt: it itemises Tax when added
@@ -98,7 +98,7 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
 - Order-progress tracking
-  - Tracking number: while fulfilment is `fulfilled` with a tracking number, Order Progress makes the number an external link to the carrier tracking page; no Track shipment control or carrier name appears in Order Progress; the link remains after delivery is confirmed
+  - Tracking number: while fulfilment is `fulfilled` with a tracking number, Order Progress makes the number an external link to the carrier tracking page when the operator recorded a tracker link, and plain text otherwise; no Track shipment control or carrier name appears in Order Progress; the link remains after delivery is confirmed
 - Settlement progress
   - Five presentation steps: Address → Invoice → Payment → Shipping → Completed
   - Preparing Shipment and Shipped share the Shipping step as **current** (progress); Preparing Shipment subtext reads Preparing to ship
@@ -704,7 +704,7 @@ account SHALL NOT shorten the 7 years.
 | Record | When | Contents |
 | --- | --- | --- |
 | Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, Tax when added, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
-| Shipping tracker | Fulfilment status is `fulfilled` | The tracking number, as the link to the carrier tracking page. No separate carrier name |
+| Shipping tracker | Fulfilment status is `fulfilled` | The tracking number, as the link to the carrier tracking page when the operator recorded a tracker link, plain text otherwise. No separate carrier name |
 | Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided - handover timestamp, signature, proof-of-delivery image |
 
 Each receipt issued after this change SHALL carry a receipt ID, unique across
@@ -776,7 +776,7 @@ SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
 - **AND** it carries no settlement-origin badge
 - **AND** it shows no proof file
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=2 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=3 -->
 #### Scenario: winner-order-SC-20 - The tracker appears once the lot is dispatched
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
@@ -784,7 +784,7 @@ SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
   `fulfilled` with a tracking number attached
 - **WHEN** the winner opens the order
 - **THEN** it shows the tracking number as the link to the carrier tracking
-  page
+  page when the operator recorded a tracker link, and as plain text otherwise
 - **AND** it shows no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-8xb rev=1 -->
@@ -1222,7 +1222,7 @@ Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
 - **AND** does not invent a Preparing Shipment step label
 - **AND** does not leave Shipping incomplete or upcoming while Payment is complete
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-lk0 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-lk0 rev=2 -->
 #### Scenario: winner-order-SC-253 - A shipped order keeps Shipping current
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
@@ -1231,7 +1231,8 @@ Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
 - **WHEN** the winner opens Winner Order
 - **THEN** the title badge uses Badge `default`
 - **AND** Shipping is the current progress step with the day-only ship date
-- **AND** a known tracking number is the external carrier link
+- **AND** a tracking number is the external carrier link when the operator
+  recorded a tracker link, and plain text otherwise
 - **AND** Order Progress adds no separate Track shipment control and no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fm0 rev=1 -->
@@ -2740,19 +2741,21 @@ obtained, and SHALL NOT reach the winner on any surface.
 
 While an auction order's fulfilment is `fulfilled` and it has a tracking
 number, Winner Order SHALL show that number as the external link to the carrier
-tracking page in Order Progress. The link SHALL open in a new tab. Order
-Progress SHALL show no separate Track shipment control or carrier name. The
-link SHALL remain after `delivery_confirmed` is set while the fulfilment stays
-`fulfilled`.
+tracking page in Order Progress when the operator recorded a tracker link. The
+link SHALL open in a new tab. Order Progress SHALL show no separate Track
+shipment control or carrier name. The link SHALL remain after
+`delivery_confirmed` is set while the fulfilment stays `fulfilled`. When the
+operator recorded no tracker link, Winner Order SHALL show the tracking number
+as plain text, with no carrier name and no Track shipment control.
 
 This requirement governs the live Winner Order presentation only.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-h7d rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-h7d rev=2 -->
 #### Scenario: winner-order-SC-251 - A dispatched lot shows the tracking number as the carrier link
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose fulfilment status has just become
-  `fulfilled` with a tracking number attached
+  `fulfilled` with a tracking number and a tracker link attached
 - **WHEN** the winner opens the order
 - **THEN** Order Progress shows the tracking number as a link to the carrier
   tracking page
@@ -2760,15 +2763,25 @@ This requirement governs the live Winner Order presentation only.
 - **AND** it shows no separate Track shipment control and no carrier name in
   Order Progress
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-k4r rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-k4r rev=2 -->
 #### Scenario: winner-order-SC-252 - The tracker remains after delivery is confirmed
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
-- **GIVEN** an auction order that is `fulfilled` with a tracking number, and
-  `delivery_confirmed` is set
+- **GIVEN** an auction order that is `fulfilled` with a tracking number and a
+  tracker link, and `delivery_confirmed` is set
 - **WHEN** the winner opens the order
 - **THEN** Order Progress still shows the tracking number as a link to the
   carrier tracking page
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-tgb rev=1 -->
+#### Scenario: winner-order-SC-276 - Without a tracker link the tracking number is plain text
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order that is `fulfilled` with a tracking number and no
+  tracker link recorded by the operator
+- **WHEN** the winner opens the order
+- **THEN** Order Progress shows the tracking number as plain text, not a link
+- **AND** it shows no carrier name and no Track shipment control
 
 ### Requirement: Tax info tooltip
 

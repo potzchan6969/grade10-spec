@@ -1,5 +1,4 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
-import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Card,
   CardContent,
@@ -14,14 +13,7 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { SiteHeader } from "@grade10/ui";
 import { Package, Vault } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import {
-  assetSubtitle,
-  formatHkd,
-  statusBadgeVariant,
-  VAULT_FOOTER,
-  VAULT_SITE_HEADER,
-  type VaultAsset,
-} from "./vault-content";
+import { VAULT_FOOTER, VAULT_SITE_HEADER } from "./vault-content";
 
 function VaultPageShell({
   children,
@@ -176,76 +168,14 @@ function PortfolioSummary({
       aria-label="Portfolio summary"
       className="grid gap-3 sm:grid-cols-3 sm:gap-4"
     >
-      <SummaryStat label="Items in vault" value={itemCount} />
+      <SummaryStat label="Total Item Count" value={itemCount} />
       <SummaryStat
-        label="Portfolio estimate"
+        label="Total Estimated Value"
         value={estimate}
         hint={valuationHint}
       />
-      <SummaryStat label="Storage fees" value={feeLabel} hint={feeHint} />
+      <SummaryStat label="Storage Fees" value={feeLabel} hint={feeHint} />
     </section>
-  );
-}
-
-/**
- * Collectible tile — photo leads; title then estimate. Whole card opens detail
- * (OpenSea / Origin grid pattern; no footer action row).
- */
-function VaultAssetCard({
-  asset,
-  onOpen,
-}: {
-  asset: VaultAsset;
-  onOpen?: () => void;
-  /** @deprecated Kept for call-site compatibility; auction CTA lives on detail. */
-  proposedListAction?: boolean;
-}) {
-  return (
-    <Card
-      className="group/vault-card gap-0 overflow-hidden py-0 transition-[border-color,transform] duration-200 ease-out hover:border-foreground/25 hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none"
-      data-slot="vault-asset-card"
-      padding={false}
-    >
-      <button
-        className="relative flex w-full cursor-pointer flex-col text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-        type="button"
-        onClick={onOpen}
-      >
-        <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-          <img
-            alt={`${asset.name}, ${assetSubtitle(asset)}`}
-            className="size-full object-cover transition-transform duration-300 ease-out group-hover/vault-card:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover/vault-card:scale-100"
-            height={320}
-            src={asset.imageSrc}
-            width={240}
-          />
-          <div className="absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-black/35 to-transparent" />
-          <div className="absolute top-3 left-3">
-            <Badge variant={statusBadgeVariant(asset.status)}>
-              {asset.status}
-            </Badge>
-          </div>
-        </div>
-        <div className="flex flex-col gap-2 px-4 pt-3 pb-4">
-          <div className="flex flex-col gap-0.5">
-            <span className="line-clamp-2 font-heading text-base leading-snug font-medium">
-              {asset.name}
-            </span>
-            <span className="line-clamp-1 text-sm text-secondary-foreground">
-              {assetSubtitle(asset)}
-            </span>
-          </div>
-          <div className="flex items-baseline justify-between gap-2">
-            <span className="font-heading text-lg font-medium tracking-tight tabular-nums">
-              {formatHkd(asset.estimateHkd)}
-            </span>
-            <span className="shrink-0 text-xs text-secondary-foreground">
-              {asset.valuationSource}
-            </span>
-          </div>
-        </div>
-      </button>
-    </Card>
   );
 }
 
@@ -334,7 +264,6 @@ export {
   PortfolioSummary,
   ProposalBanner,
   SummaryStat,
-  VaultAssetCard,
   VaultEmptyState,
   VaultPageShell,
 };

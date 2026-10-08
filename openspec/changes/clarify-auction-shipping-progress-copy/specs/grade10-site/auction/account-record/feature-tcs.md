@@ -80,6 +80,8 @@
 
 ## Reconciliation
 
+**Run:** 2026-10-07, QA2 for `clarify-auction-shipping-progress-copy`, appended to the durable reconciliation; earlier runs stand.
+
 - **Covered:** `grade10-site-auction-account-record-SC-20` ← `US3-TC20-1`.
 - **Covered:** `grade10-site-auction-account-record-SC-23` ← `US3-TC23-1`.
 - **Raised:** none.

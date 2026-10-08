@@ -1,0 +1,23 @@
+{
+  "name": "@grade10/date",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@date-fns/tz": "^1.2.0",
+    "date-fns": "^4.0.0"
+  },
+  "devDependencies": {
+    "@grade10/i18n": "workspace:*",
+    "typescript": "~6.0.2",
+    "vitest": "^4.1.10"
+  }
+}

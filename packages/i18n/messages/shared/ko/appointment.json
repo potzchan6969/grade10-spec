@@ -42,13 +42,24 @@
     "name": "이름",
     "email": "이메일",
     "phone": "전화번호",
+    "phoneIncomplete": "전화번호를 모두 입력해 주세요.",
+    "phonePlaceholder": "+852 1234 5678",
     "notes": "미리 알려 주실 내용이 있나요?",
     "optional": "선택",
     "nameMissing": "이름을 입력해 주세요.",
     "emailMissing": "확인 메일을 받을 이메일을 입력해 주세요.",
     "emailInvalid": "올바른 이메일 주소가 아닌 것 같습니다.",
     "answerMissing": "하나를 골라야 계속할 수 있습니다.",
-    "submit": "방문 예약하기"
+    "submit": "방문 예약하기",
+    "choose": "선택하세요",
+    "kinds": {
+      "short_text": "짧은 글",
+      "long_text": "긴 글",
+      "number": "숫자",
+      "select": "드롭다운",
+      "radio": "단일 선택",
+      "checkboxes": "복수 선택"
+    }
   },
   "summary": {
     "title": "내 방문",
@@ -63,7 +74,9 @@
     "location": "매장",
     "when": "일시",
     "manage": "방문 옮기기 또는 취소",
-    "calendar": "캘린더에 추가"
+    "calendar": "캘린더에 추가",
+    "beforeYouCome": "방문 전 안내",
+    "answers": "알려주신 내용"
   },
   "manage": {
     "title": "내 방문",
@@ -97,8 +110,9 @@
   },
   "state": {
     "booked": "예약됨",
+    "checked_in": "체크인",
     "cancelled": "취소됨",
-    "completed": "완료",
+    "completed": "방문 완료",
     "no_show": "미방문"
   },
   "errors": {

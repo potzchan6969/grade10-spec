@@ -4,12 +4,6 @@ import type { CardNotBackProps } from "@/emails/grading/card-not-back";
 import type { CardWithdrawnProps } from "@/emails/grading/card-withdrawn";
 import type { CheckedInProps } from "@/emails/grading/checked-in";
 import type { CollectedProps } from "@/emails/grading/collected";
-import type { DropoffBookedProps } from "@/emails/grading/dropoff-booked";
-import type { DropoffCancelledProps } from "@/emails/grading/dropoff-cancelled";
-import type { DropoffDetachedProps } from "@/emails/grading/dropoff-detached";
-import type { DropoffMissedProps } from "@/emails/grading/dropoff-missed";
-import type { DropoffMovedProps } from "@/emails/grading/dropoff-moved";
-import type { DropoffReminderProps } from "@/emails/grading/dropoff-reminder";
 import type { GradesPostedProps } from "@/emails/grading/grades-posted";
 import type { NoticePostedProps } from "@/emails/grading/notice-posted";
 import type { PlanExpiredProps } from "@/emails/grading/plan-expired";
@@ -31,11 +25,11 @@ import type { UncollectedReminderProps } from "@/emails/grading/uncollected-remi
  * application repository's `email/letters/render.test.tsx` reads it back
  * through `external/grade10-spec` to render every kind and compare it
  * against this store's preview. The kinds are `ui-design.md`'s Letters
- * table: the plan's three, the drop-off's six, checked in, the batch's two,
+ * table: the plan's three, checked in, the batch's two,
  * the grades' two — posted, and a card not back with the box, held, not
  * returned or damaged all told in the one message — ready, the three rungs of
  * waiting to be collected (a reminder, storage and the notice), and the
- * counter's two hand-back receipts: twenty kinds, nineteen messages, the
+ * counter's two hand-back receipts: fourteen kinds, thirteen messages, the
  * hand-back receipt one message drawn as two kinds.
  */
 
@@ -66,9 +60,6 @@ export const previewSubmission = {
   keptUntil: "2026-11-23T03:00:00Z",
   nudgeDay: "2026-11-14T03:00:00Z",
 
-  visitAt: "2026-10-27T07:00:00Z",
-  movedVisitAt: "2026-10-29T09:30:00Z",
-  visitMinutes: 20,
   batchCutOff: "2026-10-29T11:00:00Z",
   batchShipDay: "2026-10-30T03:00:00Z",
   batchId: "B-2026-41",
@@ -199,12 +190,6 @@ export type NotifyKind =
   | "plan_saved"
   | "plan_nudged"
   | "plan_expired"
-  | "dropoff_booked"
-  | "dropoff_moved"
-  | "dropoff_cancelled"
-  | "dropoff_missed"
-  | "dropoff_reminder"
-  | "dropoff_detached"
   | "checked_in"
   | "batch_shipped"
   | "batch_reestimated"
@@ -227,12 +212,6 @@ export type GradingLetterFacts = {
   plan_saved: Required<PlanSavedProps>;
   plan_nudged: Required<PlanNudgedProps>;
   plan_expired: Required<PlanExpiredProps>;
-  dropoff_booked: Required<DropoffBookedProps>;
-  dropoff_moved: Required<DropoffMovedProps>;
-  dropoff_cancelled: Required<DropoffCancelledProps>;
-  dropoff_missed: Required<DropoffMissedProps>;
-  dropoff_reminder: Required<DropoffReminderProps>;
-  dropoff_detached: Required<DropoffDetachedProps>;
   checked_in: Required<CheckedInProps>;
   batch_shipped: Required<BatchShippedProps>;
   batch_reestimated: Required<BatchReestimatedProps>;
@@ -264,25 +243,6 @@ export const GRADING_FIXTURES: GradingLetterFacts = {
   plan_expired: {
     plannedAt: previewSubmission.plannedAt,
     keptDays: 30,
-  },
-  dropoff_booked: {
-    visitAt: previewSubmission.visitAt,
-  },
-  dropoff_moved: {
-    visitAt: previewSubmission.visitAt,
-    movedVisitAt: previewSubmission.movedVisitAt,
-  },
-  dropoff_cancelled: {
-    visitAt: previewSubmission.visitAt,
-  },
-  dropoff_missed: {
-    visitAt: previewSubmission.visitAt,
-  },
-  dropoff_reminder: {
-    visitAt: previewSubmission.visitAt,
-  },
-  dropoff_detached: {
-    visitAt: previewSubmission.visitAt,
   },
   checked_in: {
     paidAt: previewSubmission.paidAt,

@@ -50,7 +50,14 @@ zone of its own. What a person reads depends on the surface.
 
 Operator tables, admin surfaces and the records a machine reads - an export,
 the audit trail - state Coordinated Universal Time, except an admin surface
-whose own spec keeps a shop's clock. A calendar day the business judges - a
+whose own spec keeps a shop's clock.
+
+- 🚧 **Auction order operators** - the Orders worklist, the order page with its
+  timeline and invoice log, and the send and reissue dialog's payment deadline
+  state Hong Kong time labelled GMT+8, not UTC; other operator tables stay UTC.
+  The order timeline and invoice log are not the audit trail, which stays UTC
+
+A calendar day the business judges - a
 contract date, a due date, a "today" queue, an age, a document's expiry, a
 report's month - stays on the brand's zone for every reader. The day a
 collector page shows for a deadline is not judged this way: it reads in the
@@ -70,7 +77,7 @@ A collector in Seoul and one in Hong Kong were reading different suffixes for
 the same instant - UTC on a tile, HKT on My Auctions - and a document, a mail
 and a grading letter each named Hong Kong time a different way.
 
-**Not in scope.** Operator UTC tables. Brand-day judgements (shop midnight).
+**Not in scope.** Operator UTC tables, except the auction order surfaces. Brand-day judgements (shop midnight).
 Relative countdowns. Moving a shop-clock page onto the viewer's zone. Naming
 the shop's zone on those pages. A document date's arrangement and month words.
 Naming a shop's own zone in a message for a shop outside Hong Kong: every
@@ -88,7 +95,9 @@ message states GMT+8.
 | The application's invoice page | Decided | Asia/Hong_Kong labelled GMT+8 like the PDF, not the viewer's zone | Product |
 | Every sent message | Decided | GMT+8, grading letters included; a day with no clock names no zone | Product |
 | A zone the platform does not recognise | Decided | The render stops and names it | Product |
+| Auction order operator surfaces | Decided | The Orders worklist, the order page with its timeline and invoice log, and the send and reissue dialog's payment deadline state Asia/Hong_Kong, labelled GMT+8 (Hong Kong time), not UTC; every other operator table stays UTC | Planning owner |
 | An admin surface on a shop's clock | Decided | The vault console and the appointments diary read on the shop's clock, because staff at a counter tell collectors times on it; every other admin surface states UTC | Product |
 | Records a machine reads | Decided | An export and the audit trail stay UTC whatever the surface they come from reads, so a record joins across shops on one zone | Product |
 | First paint | Decided | A deadline may read UTC named GMT until the browser's zone is known, then it switches | Product |
+| Date formatters | Decided | One package, `@grade10/date`, writes every date for the store and the application and reads a typed day into instants. Countdowns, durations, the POS till's copy of Shopify's screens and the manual viewer are outside it | Engineering |
 :::

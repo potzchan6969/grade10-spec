@@ -18,7 +18,7 @@ Apple requirement names the configuration the page and the worker name.
 
 - **The save action's artwork** - `WalletPassLinks` draws Apple's "Add to
   Apple Wallet" badge and Google's "Add to Google Wallet" button in place of
-  the text button, as the Designer confirms or redraws them (R1).
+  the text button, as each vendor publishes them (Q3).
 - **The Apple offer's condition** - 'A member carries their card in Apple
   Wallet' withholds the pass wherever the pass type identifier, the
   certificate, the push credential or `WALLET_PASS_AUTH_KEY` is missing, as

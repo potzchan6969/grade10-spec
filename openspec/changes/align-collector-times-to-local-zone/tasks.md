@@ -292,3 +292,16 @@ deployment (`/tcs-review align-collector-times-to-local-zone`), and
       Tick this task before archive.
 - [ ] 5.4 Verify: the walks pass and `pnpm run tcs:validate` is clean in the
       store.
+
+## 6. Auction order operator surfaces on Hong Kong time (grade10) (owner: @tangconst)
+
+Added after acceptance: `implementation.json` was recorded before this
+amendment (decisions Q31), so groups 1 to 5 do not cover it and the claim is
+recorded again once this group is built.
+
+- [ ] 6.1 Render the auction admin's order operator surfaces, the Orders
+      worklist, the order page with its timeline and invoice log, and the send
+      and reissue dialog's payment deadline, in Asia/Hong_Kong labelled `GMT+8`,
+      by passing the brand zone at each date call, and leave every other
+      operator table on UTC, covering `shared-dates-and-times-SC-41`
+      (`shared-dates-and-times-US1-TC22-1`).

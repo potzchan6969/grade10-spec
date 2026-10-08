@@ -394,9 +394,11 @@ Runs once per row of **Test data**.
 * **Type:** compatibility
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Bid history
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-history-list.test.ts`
 
 **Pre-conditions:**
 
@@ -1171,9 +1173,11 @@ Runs once per row of **Test data**.
 * **Type:** compatibility
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Bid history
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/auction-card.test.ts`
 
 **Pre-conditions:**
 
@@ -1207,9 +1211,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Bid history
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx`
 
 **Pre-conditions:**
 

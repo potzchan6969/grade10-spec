@@ -63,7 +63,7 @@ Consuming applications add this repository as a Git submodule, pin a SHA, and im
 - Shared compound components receive all consumer-owned content, state, and behavior through props; callback props use `on<Event>` names.
 - Components may use internal presentation state; they must not acquire, persist, subscribe to, or orchestrate consumer-owned product state.
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand; edit `tokens.json` or `tokens.config.json` and run `pnpm run tokens:build`.
-- Do not add packages beyond `design-system`, `i18n`, and `ui` without a recorded product decision.
+- Do not add packages beyond `design-system`, `i18n`, `ui`, and `date` without a recorded product decision.
 - `@grade10/ui` composes design-system primitives and never imports message catalogs; all content reaches components through props.
 
 **Terminology:** "Stateless" in this repository means app-neutral (no external product-state integration), not free of React hooks or ephemeral UI state.

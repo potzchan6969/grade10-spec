@@ -12,7 +12,8 @@ service, or shared component contract.
 - Reuse the existing tracking URL supplied to the preview card. Render the
   tracking number itself as the external `Link` in Order Progress, with its
   existing external-arrow treatment and new-tab behavior. Do not derive a URL
-  from the carrier name or tracking number.
+  from the carrier name or tracking number. With no tracking URL, render the
+  number as plain text (`winner-order-SC-276`).
 - Keep the display conditional on a fulfilled order with a tracking number.
   The `delivery_confirmed` fact does not hide or replace the link, so Shipped
   and Delivered use the same presentation. Preserve their existing stepper

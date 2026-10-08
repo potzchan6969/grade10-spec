@@ -42,13 +42,24 @@
     "name": "姓名",
     "email": "邮箱",
     "phone": "电话",
+    "phoneIncomplete": "请输入完整的电话号码。",
+    "phonePlaceholder": "+852 1234 5678",
     "notes": "有什么需要我们知道？",
     "optional": "选填",
     "nameMissing": "请填写姓名。",
     "emailMissing": "请填写接收确认的邮箱。",
     "emailInvalid": "这看起来不是有效的邮箱地址。",
     "answerMissing": "请选择一项以继续。",
-    "submit": "确认预约"
+    "submit": "确认预约",
+    "choose": "请选择",
+    "kinds": {
+      "short_text": "短文本",
+      "long_text": "长文本",
+      "number": "数字",
+      "select": "下拉菜单",
+      "radio": "单选",
+      "checkboxes": "多选"
+    }
   },
   "summary": {
     "title": "你的预约",
@@ -63,7 +74,9 @@
     "location": "门店",
     "when": "时间",
     "manage": "更改或取消此预约",
-    "calendar": "加入日历"
+    "calendar": "加入日历",
+    "beforeYouCome": "到店前须知",
+    "answers": "你提供的信息"
   },
   "manage": {
     "title": "你的预约",
@@ -97,9 +110,10 @@
   },
   "state": {
     "booked": "已预约",
+    "checked_in": "已到店",
     "cancelled": "已取消",
-    "completed": "已完成",
-    "no_show": "未到"
+    "completed": "已到访",
+    "no_show": "未到访"
   },
   "errors": {
     "servicesUnavailable": "无法读取服务。",

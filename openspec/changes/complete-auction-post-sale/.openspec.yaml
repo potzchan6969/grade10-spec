@@ -4,6 +4,7 @@ depends_on:
   - add-winner-order-tax-line
   - refine-auction-order-cancellation
   - add-winner-partial-payment
+  - align-collector-times-to-local-zone
   - clarify-auction-shipping-progress-copy
   - define-public-auction-identifiers
 hands:

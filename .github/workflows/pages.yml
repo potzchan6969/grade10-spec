@@ -1,0 +1,105 @@
+name: Pages
+
+# A pull request that adds or changes an HTML page under openspec/changes
+# uploads each one to the e2e reports bucket, which grade10's
+# scripts/e2e/publish-report.sh also writes, and keeps one comment with the
+# links. The bucket expires everything under reports/ after 30 days, and its
+# Worker serves it behind the team's Cloudflare login.
+# `gh workflow run pages -f pr=<n>` publishes on demand.
+
+on:
+  pull_request:
+    paths:
+      - "openspec/changes/**/*.html"
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number whose pages to publish
+        required: true
+        type: number
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  BUCKET: acetrader-e2e-reports
+  HOST: https://e2e-reports.memeland-qa.9gaginc.com
+  ACCESS_LOGIN: https://memeland-qa.cloudflareaccess.com/cdn-cgi/access/login/e2e-reports.memeland-qa.9gaginc.com
+
+jobs:
+  publish:
+    name: Publish review pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.E2E_REPORTS_R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.E2E_REPORTS_R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ACCOUNT_ID: ${{ secrets.E2E_REPORTS_R2_ACCOUNT_ID }}
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ github.event.pull_request.number || inputs.pr }}
+    steps:
+      # The pull request's files are data: they sit in pr/ with no credentials.
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number || inputs.pr }}/head
+          path: pr
+          persist-credentials: false
+
+      - name: Require R2 keys
+        run: |
+          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$R2_ACCOUNT_ID" ]; then
+            echo "::error::The E2E_REPORTS_R2_* secrets are empty here. A pull request from a fork gets no secrets; publish it with workflow_dispatch from a branch of this repository."
+            exit 1
+          fi
+
+      # A page is private to the team. Uploading to a host that Access does
+      # not guard would publish it to anyone with the link.
+      - name: Require Cloudflare Access on the host
+        run: |
+          location=$(curl -sS -o /dev/null -w '%{redirect_url}' "$HOST/reports/grade10-spec/pr-$PR/")
+          case "$location" in
+            "$ACCESS_LOGIN"*) ;;
+            *) echo "::error::$HOST answered without the team's Cloudflare Access login."; exit 1 ;;
+          esac
+
+      # Only a regular file the pull request commits is a page: a symlink would
+      # upload whatever it points at.
+      - name: Upload
+        run: |
+          set -o pipefail
+          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --jq '.[] | select(.status != "removed") | .filename' \
+            | { grep -E '^openspec/changes/.+\.html$' || true; } > pages.txt
+          : > links.md
+          while read -r path; do
+            [ "$(git -C pr ls-files -s -- "$path" | cut -d' ' -f1)" = 100644 ] || { echo "::warning::$path is not a regular file; skipped."; continue; }
+            key="reports/grade10-spec/pr-$PR/$path"
+            aws s3 cp "pr/$path" "s3://$BUCKET/$key" --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" --content-type "text/html; charset=utf-8" --cache-control "no-store" --only-show-errors
+            echo "- [\`$path\`]($HOST/$(jq -rn --arg k "$key" '$k | split("/") | map(@uri) | join("/")'))" >> links.md
+          done < pages.txt
+          if [ ! -s links.md ]; then echo "No HTML page under openspec/changes in #$PR."; exit 0; fi
+          cat links.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment the links
+        run: |
+          [ -s links.md ] || exit 0
+          marker='<!-- pages-workflow -->'
+          {
+            echo "$marker"
+            echo "**Review pages** - behind the team's Cloudflare login, expire 30 days after this upload from \`$(git -C pr rev-parse --short=9 HEAD)\`:"
+            echo
+            cat links.md
+          } > comment.md
+          id=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id" | head -1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -F body=@comment.md >/dev/null
+          else
+            gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file comment.md
+          fi

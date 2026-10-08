@@ -85,5 +85,5 @@ where the money-off route takes four.
 | --- | --- | --- | --- |
 | Free item | Decided | Its own choice, saved as the coupon Money off saves, rather than `Everything (free)` under Money off, then Named variants, then a variant. | Product |
 | Currency mark | Decided | `HKD`, the code console tables use, rather than the mock's `HK$`. | Product |
-| Departures from the mock | Decided | The form keeps what runs where it departs from the approved mock; the designer confirms or redraws each in confirm-loyalty-surface-looks. | Design |
+| Departures from the mock | Decided | The form keeps what runs where it departs from the approved mock, and each departure is the agreed look. | Design |
 :::

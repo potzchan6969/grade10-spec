@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-10-08
+promoted_by: "@seankcw"
+ui_waived: "no screen or state changes; every printed string stays the same"
+skip_specs: true
+skip_specs_why: "a refactor - it moves date formatting into one package and changes no printed string, requirement or scenario; no durable spec names a formatter export"

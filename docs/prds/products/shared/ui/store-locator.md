@@ -14,5 +14,4 @@ one hours row; the block invents none of them
 
 ::story{id="pages-store-locator-page--default" title="Store Locator page - composes the block"}
 
-🚧 **Agreed look** - the Storybook assembly, until a Figma frame draws the
-page
+🚧 **Agreed look** - the Storybook assembly; no Figma frame is drawn

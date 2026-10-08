@@ -47,8 +47,15 @@ In Your Orders.
 
 ## Integration readiness
 
-🚧 **Checkout integration** - The drawer hands the member's cart to the
-checkout backend for hosted handoff and order return.
+🚧 **Checkout integration** - The drawer integrates the cart-header backend and the complete checkout contract; every required backend guarantee remains a dependency of delivery.
+
+🚧 **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload or a lost answer.
+
+🚧 **Changed purchase** - A changed basket or tender starts a new purchase and retires the older unpaid invoice through the store's recovery path.
+
+🚧 **Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
+
+🚧 **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice.
 
 🚧 **Return path** - Shopify's Thank You and Order status extension offers a
 Grade10 Your Orders link, and the staging walk proves the matching purchase
@@ -63,18 +70,10 @@ to navigate to.
   Proceed to Checkout with the verify message and an account link; no
   checkout session is created. A verified member, or a basket under the
   bar, proceeds. They verify on [their account](/p/grade10-site/account/kyc)
-- 🚧 **The cart** — one per member; kept while the collector is at Shopify,
-  and cleared with its code and points once its invoice is paid, however the
-  store learns of the payment
-- 🚧 **Another Pay** — on the same cart, unchanged, opens the same invoice;
-  after the cart changed, a new one is made
-- 🚧 **An edit after Pay** — discards the earlier invoice, so it can no longer
-  be paid; the edit never waits on Shopify. Only the collector's own edit
-  does this: the store's review of the cart, a line lowered to stock or a new
-  price, leaves the invoice for the next Pay to replace
-- **The invoice** — fixes the purchase; later cart edits do not change it
-- 🚧 **A late payment** — an invoice paid after the collector changed the cart
-  leaves the changed cart as it is
+- **The cart** - Kept while the collector is at Shopify
+
+- **The invoice** - Fixes the purchase; later cart edits do not change it
+- **Order labels** - Existing shared order-status labels remain in use; this change adds no new badge
 
 :::detail{title="Design record" for="engineer"}
 - **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
@@ -88,9 +87,11 @@ to navigate to.
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Checkout-open read | Decided | The read when the cart opens stands in for a separate checkout-open read, and the read at Proceed to Checkout prices the order, as [Cart Validation](/p/grade10-site/store/cart-validation) states; no client-side re-read is added before it. | Engineering |
+| Current decision | Decided | Cart open provides the early review; Pay makes its own current decision, including when it resumes an invoice. An earlier drawer quote never replaces that decision. | Product |
+| Cart-header integration | Decided | Integrate every backend cart-header change and retain the complete durable requirements. Missing backend guarantees remain delivery dependencies, not scope waivers. | @kinisworking |
+| Repeated purchase | Decided | The store owns invoice reuse and recovery; the frontend keeps the purchase identity across Pay and a same-session reload. | @kinisworking |
+| Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
+| Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |
 | Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
-| One cart per member | Decided | A member holds one cart, and a paid invoice clears the cart it was made from and nothing else, so a payment the store learns of late never empties a cart built afterwards. Chosen on 2026-10-06 over keeping lines per member. | Product |
-| One invoice per cart | Decided | Pay on an unchanged cart opens the invoice already made. The edit that changes the cart discards that invoice once the edit is saved, so an invoice for an earlier cart cannot be paid, and the next Pay makes a new one. Editing never waits on Shopify. Only the collector's own edit discards it, so opening the cart never discards an invoice the collector did not change. Chosen on 2026-10-07 over discarding at the next Pay; the collector's edit only, on 2026-10-08. | Product |
 :::
