@@ -142,7 +142,7 @@ card rule.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-0l6 rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-118 - A blank bank transfer fee refuses the send
-**Serves:** Quote and send - the bank transfer fee is required
+**Serves:** Quote and send - the bank transfer fee is zero or more, with no cap
 
 This scenario keeps its title with its id. The title is historical: a blank
 bank transfer fee is now zero and sends as Free; only a fee that is not an
