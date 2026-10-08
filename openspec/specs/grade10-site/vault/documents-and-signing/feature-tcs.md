@@ -95,7 +95,7 @@ sign each document once,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -128,7 +128,7 @@ sign each document once,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -218,7 +218,7 @@ sign each document once,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -249,7 +249,7 @@ sign each document once,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -280,7 +280,7 @@ sign each document once,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -374,7 +374,7 @@ sign each document once,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -413,7 +413,7 @@ naming the shop and the person we checked,
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -444,7 +444,7 @@ naming the shop and the person we checked,
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -478,7 +478,7 @@ naming the shop and the person we checked,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -511,7 +511,7 @@ naming the shop and the person we checked,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -542,7 +542,7 @@ naming the shop and the person we checked,
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -575,7 +575,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
