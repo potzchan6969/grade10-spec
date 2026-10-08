@@ -28,7 +28,9 @@ and three tabs with FPS selected by default. Each tab SHALL show that rail’s
 fields as labelled detail rows without copy controls, then the invoice's bank
 reference as a labelled detail row without a copy control, and a warning that
 the winner must enter the reference in the bank app's memo or remarks field.
-Live account details and the FPS QR come from Finance-owned configuration.
+At `sm` and wider, the three tabs SHALL share a full-width track. Below `sm`,
+the track SHALL hug its labels and scroll horizontally so all three names stay
+readable. Live account details and the FPS QR come from Finance-owned configuration.
 Grade10 snapshots those approved instructions on the issued bank-transfer
 invoice; the preview uses Grade10 Finance Limited and HSBC Hong Kong samples.
 
@@ -55,6 +57,7 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **WHEN** the winner opens View Bank Details
 - **THEN** FPS, Hong Kong local bank transfer and SWIFT details are available as tabs with the fields above
 - **AND** the bank reference is shown at the bottom of the selected tab
+- **AND** the tab track is full-width at `sm` and wider, and hugs the labels with horizontal scrolling below `sm`
 - **AND** no card Pay control is offered
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-dvp rev=1 -->

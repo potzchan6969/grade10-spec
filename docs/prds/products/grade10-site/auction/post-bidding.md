@@ -330,6 +330,9 @@ failure, and locks the form while work is in progress.
   name, bank address, SWIFT/BIC, full account or IBAN, then payment
   reference, then a note to choose OUR for transfer fees so Grade10
   receives the full order total
+- 🚧 **Rail tab width** — on small screens, the FPS, HK Local and
+  International tabs hug their labels and scroll horizontally so every name
+  stays readable; at wider sizes, the three tabs share the full-width track
 
 #### Bank Transfer Proof
 
