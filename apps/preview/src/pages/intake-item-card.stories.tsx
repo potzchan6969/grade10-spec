@@ -1,45 +1,21 @@
-import {
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-  Breadcrumbs,
-} from "@grade10/design-system/components/display/breadcrumbs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import {
   GRADING_IN_PROGRESS_ITEMS,
-  type IntakeItemRow,
   VAULT_COMPLETED_ITEMS,
   VAULT_IN_PROGRESS_ITEMS,
 } from "./intake-content";
 import { IntakeItemCard } from "./intake-item-card";
-import { INTAKE_TRACKER_HREF } from "./vault-content";
-import { PageHeader, VaultPageShell } from "./vault-shared";
-
-function IntakeItemCardPage({ item }: { item: IntakeItemRow }) {
-  return (
-    <VaultPageShell>
-      <Breadcrumbs>
-        <BreadcrumbItem href={INTAKE_TRACKER_HREF}>Submissions</BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem current>{item.name}</BreadcrumbItem>
-      </Breadcrumbs>
-
-      <PageHeader title={item.name} description={item.itemId} />
-
-      <IntakeItemCard item={item} />
-    </VaultPageShell>
-  );
-}
 
 const meta = {
   title: "Pages/Submissions/Item Card",
-  component: IntakeItemCardPage,
+  component: IntakeItemCard,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: { layout: "padded" },
   args: {
     item: VAULT_IN_PROGRESS_ITEMS[0],
   },
-} satisfies Meta<typeof IntakeItemCardPage>;
+} satisfies Meta<typeof IntakeItemCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -50,8 +26,7 @@ export const InScanning: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("link", { name: "Submissions" })).toBeVisible();
-    expect(canvas.getAllByText("ITM-99482-01")).toHaveLength(2);
+    expect(canvas.getByText("ITM-99482-01")).toBeVisible();
     expect(canvas.getByText("In Scanning")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Vault receipt" }),
@@ -79,7 +54,7 @@ export const GradingInTransit: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getAllByText("ITM-99110-01")).toHaveLength(2);
+    expect(canvas.getByText("ITM-99110-01")).toBeVisible();
     expect(canvas.getByText("In Transit")).toBeVisible();
     expect(canvas.queryByRole("button", { name: "Vault receipt" })).toBeNull();
   },
