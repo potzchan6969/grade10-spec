@@ -91,4 +91,5 @@ message states GMT+8.
 | An admin surface on a shop's clock | Decided | The vault console and the appointments diary read on the shop's clock, because staff at a counter tell collectors times on it; every other admin surface states UTC | Product |
 | Records a machine reads | Decided | An export and the audit trail stay UTC whatever the surface they come from reads, so a record joins across shops on one zone | Product |
 | First paint | Decided | A deadline may read UTC named GMT until the browser's zone is known, then it switches | Product |
+| Date formatters | Decided | One package, `@grade10/date`, formats every date for the store and the application, so no surface writes a date its own way | Engineering |
 :::
