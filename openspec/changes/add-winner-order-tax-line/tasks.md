@@ -41,10 +41,8 @@ Needs group 1.
 
 ## 4. The walk - the taxed and the untaxed invoice (grade10) (owner: @ecchochan)
 
-Needs groups 2 and 3. Walks the draft `feature-tcs.md` cases; human QA reviews them after deployment with `/tcs-review add-winner-order-tax-line`, and `/tcs-run-sheet` executes manual cases where needed.
+Needs groups 2 and 3. The staging walkthrough is waived in favor of the focused [E2E snapshots posted to PR #920](https://github.com/9gag/grade10/pull/920#issuecomment-6034475365). Human QA reviews the draft `feature-tcs.md` cases after deployment with `/tcs-review add-winner-order-tax-line`, and `/tcs-run-sheet` executes manual cases where needed.
 
-- [ ] 4.1 Walk `post-sale-US-05`, `post-sale-US-07` and `winner-order-US-01`: send one taxed card invoice, confirm its summary, invoice and fee; reissue it with changed Tax and confirm the new invoice carries it; pay it and confirm the receipt repeats the reissued Tax (`post-sale-SC-155`, `post-sale-SC-158`, `winner-order-SC-216`, `winner-order-SC-217`, `winner-order-SC-214`)
-- [ ] 4.2 Walk an untaxed invoice from quote through payment and confirm the summary, invoice and receipt omit Tax while pre-send still showed TBD and its tip (`post-sale-SC-156`, `winner-order-SC-215`, `winner-order-SC-212`, `winner-order-SC-213`)
 - [ ] 4.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and the focused admin and Winner Order E2E journeys
 
 ## 5. Records the winner keeps (owner: @htonyl)
