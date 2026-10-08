@@ -866,16 +866,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -947,16 +945,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -1137,6 +1133,7 @@ Runs once per row of **Test data**.
 
 ## Settled
 
+- The grading visit is no longer booked through grading: the booking is owned by the standalone appointments change (`add-multi-store-appointments`) and the product no longer books its own visits, so `grade10-site-grading-dropoff-booking-US5-TC1-1` and `grade10-site-grading-dropoff-booking-US5-TC3-1` are `deprecated` and their walk, `grading/dropoff.spec.ts`, is gone.
 - A walk-in booking refused on a blank name or email is not this capability's rule: the walk-in books on the diary's own booking-details form, and grading adds no field and no validation of its own, so the refusal belongs to `grade10-site/appointment/booking`
 
 ## Reconciliation

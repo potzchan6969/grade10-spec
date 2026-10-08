@@ -491,7 +491,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -530,7 +530,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -569,7 +569,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -599,7 +599,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -628,11 +628,9 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
 
 **Pre-conditions:**
 
@@ -720,7 +718,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -759,7 +757,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -790,7 +788,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -822,7 +820,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -852,7 +850,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -882,7 +880,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1371,7 +1369,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1403,7 +1401,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1433,7 +1431,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1464,7 +1462,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1494,7 +1492,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1770,7 +1768,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1800,7 +1798,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -4905,6 +4903,7 @@ Runs once per row of **Test data**.
 
 | Manual | Why |
 | --- | --- |
+| `grade10-admin-vault-operator-queue-US3-TC5-1` | No walk asks for the second factor: the sign-in walks run on the staging stack where it is optional, and production's requirement is read on a production sign-in by a person |
 | `grade10-admin-vault-operator-queue-US1-TC3-1` | The walk proves the lapsed-offer row alone; the stalled-valuation row needs the case's own clock moved seven days, and the parked-message and document-seen-before rows need a message the retry ladder has given up on and a document seen under another account — a person drives these |
 | `grade10-admin-vault-operator-queue-US9-TC1-1` | Only the provider puts a check into its own stages, so a person drives a sandbox check to stand a case at each of the six states and reads the panel against them |
 | `grade10-admin-vault-operator-queue-US9-TC4-1` | Only the provider sandbox puts a check into Refused; a person drives it there and records the override with its reason |

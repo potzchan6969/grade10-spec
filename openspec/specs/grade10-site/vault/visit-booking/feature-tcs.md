@@ -95,16 +95,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-visit-booking-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
 
 **Pre-conditions:**
 
@@ -166,11 +164,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-visit-booking-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
 
 **Pre-conditions:**
 
@@ -736,11 +732,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-visit-booking-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
 
 **Pre-conditions:**
 
@@ -859,6 +853,7 @@ Runs once per row of **Test data**.
 
 ## Settled
 
+- The console no longer books a visit for the collector: the booking is owned by the standalone appointments change (`add-multi-store-appointments`) and the product no longer books its own visits, so `grade10-site-vault-visit-booking-US1-TC3-1` is `deprecated` and its walk, `vault/visit.spec.ts`, is gone.
 - A case whose collector holds a live booking on another of their cases reads that visit, its shop and its slot, and offers no picker of its own.
 - A move opens the picker a first booking is taken from, so another shop is as open to it as another day and time.
 - **A case with no visit, or a cancelled one** - the calendar file is refused by name as not found for a case the diary never booked, and served as a cancellation for a called-off visit (Q23)

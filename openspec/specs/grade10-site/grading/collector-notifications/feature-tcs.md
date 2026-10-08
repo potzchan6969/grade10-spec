@@ -348,16 +348,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
 
 **Pre-conditions:**
 
@@ -910,6 +908,7 @@ Runs once per row of **Test data**.
 
 ## Settled
 
+- The drop-off reminder is not booked through grading: the booking is owned by the standalone appointments change (`add-multi-store-appointments`) and the product no longer books its own visits, so `grade10-site-grading-collector-notifications-US1-TC10-1` is `deprecated` and its walk, `grading/dropoff.spec.ts`, is gone.
 - A read-grant holder offered no Send again is not this capability's rule: it is `grade10-admin/grading/counter`'s grant rule (the console shows only what the operator may do), walked in the counter suite; this spec states only that the operate grant sends a parked message again
 - The on-their-way letter's courier, order number and estimate are not this capability's to state: they are `grade10-admin/grading/batches`' facts; this spec states only that a letter with no document attaches nothing
 
