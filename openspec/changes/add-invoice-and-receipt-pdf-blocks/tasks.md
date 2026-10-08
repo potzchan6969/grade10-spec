@@ -87,7 +87,7 @@ Uses draft `feature-tcs.md` as its planning input.
 
 - [ ] 7.4 Update the invoice samples and Grade10 backend caller to pass only enabled bank rails, `reference`, and the replacement relationship when one exists; run the focused renderer tests, Grade10 PDF service tests, Storybook preview, and typechecks.
 
-## 9. Item table in the shared renderer (grade10-spec)
+## 9. Item table in the shared renderer (grade10-spec) (owner: @seankcw)
 
 Amendment (`decisions.md` Q31-Q35, Q38, Q39). Replaces the lot title and the Description/Amount list with an item table, one page. The first commit that changes the block waits for the person's Design Override yes, whichever of groups 7, 9 and 10 it falls in (`ui-design.md`, `decisions.md` Q35). 9.3 is stopped for the spacing and rule lines of `drawLineItems`, and each later stopped commit carries its own `Design-Override:` line. Show the person the stop's lines; an agent never writes the line itself. Overlaps group 7's store tasks in `invoice-pdf.ts`; whichever lands second rebases. Group 9 needs this group landed.
 
