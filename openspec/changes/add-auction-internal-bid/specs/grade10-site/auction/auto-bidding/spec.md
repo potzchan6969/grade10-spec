@@ -369,15 +369,19 @@ listing's effective close:
 - **Raise** - Grade10 SHALL accept a higher house maximum at any time the
   listing takes a bid, as a new commitment of the same bidder: it resolves
   once, and a raise that moves the current bid moves the close as a manual bid
-  at that moment would, per `grade10-site/auction/auction`. A raise of a house
-  maximum that was not placed SHALL be judged as that bidder's first
-  commitment.
+  at that moment would, per `grade10-site/auction/auction`.
 - **Lower** - Grade10 SHALL resolve the two-maximum rule again with the lower
   house maximum, as a commitment accepted at that moment. It SHALL accept the
   lower amount only when that resolution leaves the same leader and the same
   current bid, and the amount is at least every bid already placed for the
   house on the listing. An accepted lower SHALL write no public bid record,
   SHALL NOT move the close and SHALL NOT change the bid count.
+
+A house maximum that was not placed SHALL be judged as that bidder's first
+commitment when it is saved at or above the minimum next bid, its own amount
+included. A lower of it below the minimum next bid SHALL write no bid and
+leave it not placed, and a raise still below the minimum next bid SHALL be
+refused, per `grade10-admin/auction/internal-bid`.
 
 A collector's committed maximum SHALL stay raise only.
 

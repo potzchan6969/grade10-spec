@@ -13,6 +13,12 @@ with whoever committed first.
 **I want** to read every committed maximum and when it was accepted,
 **so that** I can answer a dispute about who committed what.
 
+### grade10-site-auction-auto-bidding-US-05: Collector's auto-bid counts as a bid
+
+**As a** collector,
+**I want** every bid Grade10 places for me to count as a bid,
+**so that** my auto-bids keep a lot open during extended bidding as a manual bid would.
+
 ## ADDED User journeys
 
 ## MODIFIED User journeys

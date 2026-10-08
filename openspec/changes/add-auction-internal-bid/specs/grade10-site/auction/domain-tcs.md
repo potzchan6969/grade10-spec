@@ -6,7 +6,7 @@
 ## grade10-site-auction-e2e-US13: Collectors bid against a house maximum through the close
 
 **As a** collector,
-**I want** a lot protected by a house maximum to bid, extend, close and mail me as any other lot does,
+**I want** to compete for a lot to its close, with each bid, extension, result and letter decided by the auction rules,
 **so that** what I read, and what I am told, is what the auction decided.
 
 <!-- trace:case id=g10.auction-domain.TC-88l rev=1 covers=g10.auction-auto-bidding.SC-99a,g10.auction-notifications.SC-kl5,g10.auction-auction.SC-a4f,g10.auction-notifications.SC-xy1,g10.auction-notifications.SC-14x -->

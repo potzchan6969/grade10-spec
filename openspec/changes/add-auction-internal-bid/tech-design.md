@@ -102,9 +102,10 @@ implementation choices.
    `saveInternalBid` refuses a `draft`, `closed`, `settled` or `canceled`
    listing, an amount that is not whole in the currency
    (`currencyExponent` in `packages/utils/src/money.ts`, as the custom
-   maximum uses), below the starting price or above `bidCeiling`, and a time
-   outside `[starts_at, scheduled_ends_at]` (both included) or not after
-   now. It never reads the minimum next bid for a `scheduled` row; the commit
+   maximum uses), below the starting price or above `bidCeiling`, and a new
+   or changed time outside `[starts_at, scheduled_ends_at]` (both included)
+   or not after now; a `not_placed` row keeps its `commit_at`, so a re-save
+   is never refused for its time. It never reads the minimum next bid for a `scheduled` row; the commit
    does.
 
 4. **Commit before judge.** `commitDueHouseMaximum(tx, listing, now)` runs at
@@ -139,12 +140,14 @@ implementation choices.
    collector rules - the listing takes bids, the minimum next bid and the
    accepted-tie rule - with the stored amount. A refusal, including a
    listing still `created`, writes no bid and sets the row to `not_placed`
-   with `resolved_at`. On a `not_placed` row, any save under the Save rules,
-   the same amount included, on a listing that takes no bids only updates
-   the row; on one that takes bids, an amount at or above the minimum next
-   bid is a fresh commit at `now` through the same path, and one below it is
-   refused with `minimumNextAmount`. A removal only updates the row (no bid,
-   no relay, no letter).
+   with `resolved_at`. A save on a `not_placed` row keeps `commit_at` and
+   runs the Save amount rules. On a listing that takes no bids it only
+   updates the row. On one that takes bids, an amount at or above the
+   minimum next bid, the stored amount included, is a fresh commit at `now`
+   through the same path; below it, a lower (an amount below the stored
+   `maximum`) only updates the row, and a raise or the same amount is
+   refused with `AMOUNT_TOO_LOW` and `minimumNextAmount`. A removal deletes
+   the row (no bid, no relay, no letter).
 
 7. **A lower is a superseding commitment.** The service re-runs the
    two-maximum resolution in memory with the lower house maximum and the
@@ -164,9 +167,10 @@ implementation choices.
    with the window, starting price and currency the save leaves. A
    `scheduled` or `not_placed` row on a `created` listing becomes `cleared`
    with `cleared_at` when its `commit_at` falls outside the window, its
-   `maximum` is below the starting price, or its `maximum` is above
-   `bidCeiling` of the new currency; `maximum` keeps its count of minor
-   units, as the starting price does. The caller's answer and audit row are
+   `maximum` is below the starting price, its `maximum` is above
+   `bidCeiling` of the new currency, or its `maximum` is not a whole major
+   unit of the new currency (`currencyExponent`); `maximum` keeps its count
+   of minor units, as the starting price does. The caller's answer and audit row are
    unchanged, so `staff` learn nothing; the reserve holder reads the
    `cleared` row through `listings.internalBid.get`. Grade10's own clear
    writes no audit row of its own, since the operator's save is already
@@ -307,7 +311,7 @@ row's state:
 | State | Time changed | Higher amount | Lower amount |
 | --- | --- | --- | --- |
 | None, `scheduled` or `cleared` | Save checks, write `scheduled` | Save checks, write | Save checks, write |
-| `not_placed` | `TIME_FIXED` | Any amount, the same included: update the row while the listing takes no bids; else commit at `now` at or above the minimum next bid, else `AMOUNT_TOO_LOW` | Same as a higher amount |
+| `not_placed` | `TIME_FIXED` | The same amount included: update the row while the listing takes no bids; else commit at `now` at or above the minimum next bid, else `AMOUNT_TOO_LOW` with `minimumNextAmount` | Update the row while the listing takes no bids; else commit at `now` at or above the minimum next bid, else update the row, which stays `not_placed` |
 | `placed` | `TIME_FIXED` | `raiseHouseMaximum` | `lowerHouseMaximum` |
 
 `removeInternalBid` deletes a `scheduled` or `not_placed` row and refuses a

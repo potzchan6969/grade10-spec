@@ -25,8 +25,8 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
 - 🚧 **Before its time** - the amount and the time can change or be removed;
   the house is not in the bidding
 - 🚧 **At its time** - Grade10 commits it once; an amount short of the minimum
-  next bid, or a listing still created, leaves it Not placed, and saving it
-  again once the lot takes bids places it
+  next bid, or a listing still created, leaves it Not placed; once the lot
+  takes bids, saving it at or above the minimum next bid places it
 - 🚧 **After it bids** - the time is fixed; the amount goes up until the close,
   or down only where the leader and the current bid stay the same and never
   below a bid already placed for the house
@@ -38,8 +38,6 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
   [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
 - 🚧 **Audit** - each set, change and removal is recorded without the amount
   or the time
-- 🚧 **Release** - Legal confirms the auction terms wording before the internal
-  bid is released
 
 :::detail{title="Product decisions" for="pm"}
 The house protects a consigned card without a high starting price that puts

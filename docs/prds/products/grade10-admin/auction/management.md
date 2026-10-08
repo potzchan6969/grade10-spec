@@ -95,8 +95,9 @@ the card is in the winner's hands. The collector's half is
   and gallery. The draft takes its own stock hold on Save, gets its own slug
   and listing code, sets its own window, and carries no bids or history from
   the closed one. Campaign, reserve, extension, taxonomy and sandbox start as
-  on any new draft. Relist shows on an Unsold listing only, to an operator who
-  can operate auctions; nothing is stored until Save. It shows on the
+  on any new draft. Relist shows on an Unsold listing, never on one a
+  collector won, to an operator who can operate auctions; nothing is stored
+  until Save. It shows on the
   listing's row in the Listings table, once its stock was released, and not
   on a listing in a campaign or one already relisted. A consigned lot is
   relisted from its consignment, and reads Relist from consignment with its
@@ -129,8 +130,8 @@ the card is in the winner's hands. The collector's half is
   other operators see the house's bids labelled House, and Bought in after
   the close. Relist does not carry it
 - 🚧 **Bought in** - a lot the internal bid wins closes with no order and no
-  winner letters, releases its stock as an Unsold close does, offers Relist,
-  and reads Bought in in the Listings table, with a filter of its own.
+  winner letters, releases its stock as an Unsold close does, offers Relist
+  as an Unsold listing does, and reads Bought in in the Listings table, with a filter of its own.
   Collectors see it as sold
 - 🚧 **Extended bidding** - a published lot past its scheduled close and still
   taking bids reads Extended in the Listings table; its status does not change

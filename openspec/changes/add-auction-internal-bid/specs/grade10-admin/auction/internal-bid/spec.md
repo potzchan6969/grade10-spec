@@ -44,7 +44,7 @@ one SHALL change it and SHALL NOT add a second.
 | Field | Rule |
 | --- | --- |
 | Amount | Whole major units in the listing's currency, held as minor units; at least the listing's starting price, above 0, and at most the ceiling `grade10-site/auction/bid-increments` sets for that currency |
-| Time | Required. From the listing's scheduled start to its scheduled close, both included, and later than the moment of the save |
+| Time | Required. From the listing's scheduled start to its scheduled close, both included; a time being set or changed is later than the moment of the save. A Not placed internal bid keeps its time |
 
 Grade10 SHALL refuse a save that breaks a rule below, naming the rule, and
 SHALL store nothing:
@@ -56,8 +56,8 @@ SHALL store nothing:
 | The amount is not a whole number of major units | Whole amount |
 | The amount is below the starting price | Below the starting price, naming it |
 | The amount is above the ceiling | Above the ceiling, naming it |
-| The time is before the scheduled start or after the scheduled close | Outside the bidding window |
-| The time is at or before the moment of the save | Time has passed |
+| A time being set or changed is before the scheduled start or after the scheduled close | Outside the bidding window |
+| A time being set or changed is at or before the moment of the save | Time has passed |
 
 Grade10 SHALL NOT judge the amount against the listing's minimum next bid at
 Save; it judges it at the time, under "Internal bid states". An internal bid
@@ -221,7 +221,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-rzd rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-28 - A window change past the time clears the internal bid
-**Serves:** grade10-admin-auction-internal-bid-US-02 - the lot's window moves under a floor set before it was published
+**Serves:** Setting an internal bid - the lot's window moves under a floor set before it was published
 
 - **GIVEN** a `created` `HKD` listing closing 2026-11-02T20:00:00Z, with a
   Scheduled internal bid of 50000 HKD minor units at 2026-11-02T18:00:00Z
@@ -237,7 +237,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-bjb rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-29 - A window change that keeps the time keeps the internal bid
-**Serves:** grade10-admin-auction-internal-bid-US-02 - the lot's window moves around a floor that still fits
+**Serves:** Setting an internal bid - the lot's window moves around a floor that still fits
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-28` before
   the change
@@ -248,7 +248,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-36t rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-34 - A starting price raised over the internal bid clears it
-**Serves:** grade10-admin-auction-internal-bid-US-02 - the lot's opening price moves above a floor set before it was published
+**Serves:** Setting an internal bid - the lot's opening price moves above a floor set before it was published
 
 - **GIVEN** two `created` `HKD` listings with a starting price of 20000 HKD
   minor units, one with a Scheduled internal bid of 50000 HKD minor units and
@@ -261,7 +261,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-wib rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-35 - A currency change past the new ceiling clears the internal bid
-**Serves:** grade10-admin-auction-internal-bid-US-02 - the lot's currency moves under a floor its new ceiling cannot hold
+**Serves:** Setting an internal bid - the lot's currency moves under a floor its new ceiling cannot hold
 
 - **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
   units and a Scheduled internal bid of 6000000000 HKD minor units
@@ -273,7 +273,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-9xf rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-36 - A starting price that stays under the internal bid keeps it
-**Serves:** grade10-admin-auction-internal-bid-US-02 - the lot's opening price moves under a floor that still fits
+**Serves:** Setting an internal bid - the lot's opening price moves under a floor that still fits
 
 - **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
   units and a Scheduled internal bid of 50000 HKD minor units at
@@ -285,7 +285,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-qzx rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-42 - A currency change keeps the internal bid's minor units
-**Serves:** grade10-admin-auction-internal-bid-US-02 - the lot's currency moves under a floor that still fits
+**Serves:** Setting an internal bid - the lot's currency moves under a floor that still fits
 
 - **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
   units and a Scheduled internal bid of 50000 HKD minor units at
@@ -296,7 +296,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-ps0 rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-43 - A currency change that leaves the amount not whole clears the internal bid
-**Serves:** grade10-admin-auction-internal-bid-US-02 - the lot's currency moves to one where the floor is not a whole amount
+**Serves:** Setting an internal bid - the lot's currency moves to one where the floor is not a whole amount
 
 - **GIVEN** a `created` `JPY` listing with a starting price of 20000 JPY minor
   units and a Scheduled internal bid of 50050 JPY minor units
@@ -315,7 +315,7 @@ state on the listing beside its amount and time.
 | --- | --- | --- | --- | --- |
 | Scheduled | Its time has not arrived; the house is not in the bidding | Changes under the Save rules | Changes under the Save rules | Yes |
 | Placed | Grade10 committed it at its time | Raised, or lowered under "An admin changes a placed internal bid" | Fixed | No |
-| Not placed | At its time it was short of the minimum next bid, or the listing was still `created`; nothing was placed | Saved again under the Save rules; while the listing takes bids, a save at or above the minimum next bid, the same amount included, places it at once | Fixed | Yes |
+| Not placed | At its time it was short of the minimum next bid, or the listing was still `created`; nothing was placed | Saved again under the Save rules, its time kept, under "An admin learns an internal bid came too late": while the listing is `created` it stays Not placed; while the listing takes bids, a save at or above the minimum next bid, its own amount included, places it at once, a lower below it stays Not placed, and a raise below it is refused | Fixed | Yes |
 | Cleared | A listing edit left it outside its limits; Grade10 never commits it | - | - | Replaced by the next save |
 
 Grade10 SHALL move an internal bid from Scheduled to Placed or Not placed at
@@ -369,11 +369,14 @@ an internal bid was not placed. Until the listing's effective close the admin
 SHALL be able to:
 
 1. Save it again while the listing takes bids, at any amount the Save rules
-   allow, its own amount included. A save at or above the minimum next bid
-   places it at once; a save below it is refused, naming the minimum next
-   bid, and leaves it Not placed.
+   allow, its time kept. A save at or above the minimum next bid, its own
+   amount included, places it at once. Below the minimum next bid, a lower
+   (an amount below the stored amount) is accepted, stays Not placed and
+   changes nothing a collector reads; a raise, or the same amount, is refused,
+   naming the minimum next bid, and leaves it Not placed.
 2. Save it at any amount the Save rules allow while the listing is still
-   `created`. It stays Not placed and changes nothing a collector reads.
+   `created`, its time kept. It stays Not placed and changes nothing a
+   collector reads.
 3. Remove it. The listing then has no internal bid.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-11v rev=1 -->
