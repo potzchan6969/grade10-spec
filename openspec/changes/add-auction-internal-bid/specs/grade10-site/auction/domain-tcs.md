@@ -23,7 +23,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-notifications-US-03, grade10-site-auction-auction-US-11, grade10-site-auction-notifications-US-06, grade10-site-auction-notifications-US-07
+* **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-notifications-US-03, grade10-site-auction-auction-US-01, grade10-site-auction-auction-US-11, grade10-site-auction-notifications-US-06, grade10-site-auction-notifications-US-07
 
 **Pre-conditions:**
 
@@ -77,7 +77,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auction-US-12, grade10-site-auction-auction-US-11
+* **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auction-US-12, grade10-site-auction-auction-US-11, grade10-site-auction-auction-US-01
 
 **Pre-conditions:**
 
@@ -118,6 +118,7 @@
 **Run:** QA2, 2026-10-08. QA1's levels pass composed these paths from every `user-journeys.md` in the domain and the domain's PRD pages, before the feature readings and without any `## Requirements` section, `tech-design.md` or the archive. QA2 joined each composed case to the scenarios its journeys accept, after Q26 to Q29 landed. It is a statement, not proof.
 
 - **Folded in** - `grade10-site-auction-e2e-US13-TC01-1` walks the house's commit, the outbid letter, extended bidding and the close, asserting `grade10-site-auction-auto-bidding-SC-33`, `grade10-site-auction-notifications-SC-49`, `grade10-site-auction-auction-SC-103`, `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-51`; `grade10-site-auction-e2e-US13-TC02-1` walks a collector beating the house in extended bidding, asserting `grade10-site-auction-auction-SC-02` and the durable extended-bidding rule
+- **Anchors** - QA2 round 4: `grade10-site-auction-auction-SC-02` and `grade10-site-auction-auction-SC-103` now serve `grade10-site-auction-auction-US-01`, so both traces gain that journey; the paths and assertions are unchanged
 - **Rejected** - none
 - **Raised** - none
 - **Uncovered anchors** - none

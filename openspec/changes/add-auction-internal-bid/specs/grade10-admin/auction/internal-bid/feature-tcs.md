@@ -1,7 +1,7 @@
 # grade10-admin/auction/internal-bid Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-10-07, tcs-rules r4
+**Status:** in-review
+**Drafts styled:** 2026-10-08, tcs-rules r4
 
 ## Background
 
@@ -218,8 +218,8 @@ Runs once per row of **Test data**.
 * Step 3: Highest bid reads `<starting price>`, the first maximum on the starting price.
 * Step 3: Recent bids holds customer A's row only.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-x4y rev=1 covers=g10adm.auction-internal-bid.SC-urt -->
-### grade10-admin-auction-internal-bid-US1-TC5-1: An internal bid is refused on a draft, closed or called-off listing
+<!-- trace:case id=g10adm.auction-internal-bid.TC-x4y rev=1 covers=g10adm.auction-internal-bid.SC-urt,g10adm.auction-internal-bid.SC-fti -->
+### grade10-admin-auction-internal-bid-US1-TC5-1: An internal bid is refused on a listing it cannot be set on
 
 Runs once per row of **Test data**.
 
@@ -252,6 +252,7 @@ Runs once per row of **Test data**.
 | Draft | A draft holding a starting price, a start an hour away and a close a day later, never created |
 | Closed | Closed Unsold after its close |
 | Canceled | Called off before its close |
+| Past its close | Published, past its scheduled close and in extended bidding after customer A bid in its last minute |
 
 **Steps:**
 
@@ -261,7 +262,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 refuses the write.
+* Step 2 refuses the write as not editable.
 * Step 3: `<listing_5>` holds no internal bid.
 
 <!-- trace:case id=g10adm.auction-internal-bid.TC-88a rev=1 covers=g10adm.auction-internal-bid.SC-5x7 -->
@@ -443,7 +444,7 @@ Runs once per row of **Test data**.
 * Step 3 shows no internal bid.
 * Step 4: customer A still leads at `<starting price>`; Recent bids gains no row.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-dui rev=1 covers=g10adm.auction-internal-bid.SC-rzd,g10adm.auction-internal-bid.SC-bjb,g10adm.auction-internal-bid.SC-36t,g10adm.auction-internal-bid.SC-wib,g10adm.auction-internal-bid.SC-9xf,g10adm.auction-internal-bid.SC-qzx,g10adm.auction-internal-bid.SC-ps0 -->
+<!-- trace:case id=g10adm.auction-internal-bid.TC-dui rev=1 covers=none -->
 ### grade10-admin-auction-internal-bid-US1-TC10-1: A created listing's edit clears the internal bid only when it falls outside
 
 Runs once per row of **Test data**.
@@ -452,7 +453,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1044,8 +1045,8 @@ Runs once per row of **Test data**.
 * Step 3: Highest bid still reads `<current bid>`; customer A still reads Outbid; Recent bids gains no row.
 * Step 5 reads the row's outcome for customer B.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-cu7 rev=1 covers=g10adm.auction-internal-bid.SC-eng,g10.auction-auto-bidding.SC-q3t -->
-### grade10-admin-auction-internal-bid-US4-TC2-1: A lower that would move the lead or the price is refused
+<!-- trace:case id=g10adm.auction-internal-bid.TC-cu7 rev=2 covers=g10adm.auction-internal-bid.SC-eng,g10adm.auction-internal-bid.SC-16a,g10.auction-auto-bidding.SC-q3t -->
+### grade10-admin-auction-internal-bid-US4-TC2-2: A lower that would move the lead or the price is refused
 
 Runs once per row of **Test data**.
 
@@ -1075,11 +1076,11 @@ Runs once per row of **Test data**.
 | `<listing_16>` | A published HKD listing taking bids, scheduled close a day away |
 | `<house maximum>` | 700000 minor units (HK$7,000.00) |
 
-| Row | Bidding | `<current bid>` | `<lowered amount>` |
-| --- | --- | --- | --- |
-| House leads, one unit below the current bid | The house leads over customer A's maximum of 550000 | 558000 | 557900, one major unit below `<current bid>` |
-| House leads at its own maximum | The house leads over customer A's maximum of 695000, the price capped at `<house maximum>` | 700000 | 699900, one major unit below |
-| House second, setting the price | customer A leads with maximum 800000, committed after the house's first bid | 708000: `<house maximum>` plus its 8000 increment | 650000 |
+| Row | Bidding | `<current bid>` | `<house bid>`, the highest bid placed for the house | `<lowered amount>` |
+| --- | --- | --- | --- | --- |
+| House leads, one unit below the current bid | The house leads over customer A's maximum of 550000 | 558000 | 558000, `<current bid>` | 557900, one major unit below `<current bid>` |
+| House leads at its own maximum | The house leads over customer A's maximum of 695000, the price capped at `<house maximum>` | 700000 | 700000, `<current bid>` | 699900, one major unit below |
+| House second, setting the price | The house led alone at `<starting price>`, then customer A committed a maximum of 800000 | 708000: `<house maximum>` plus its 8000 increment | 400000, `<starting price>`; customer A's commitment placed no bid for the house | 650000, at or above `<house bid>` |
 
 **Steps:**
 
@@ -1090,7 +1091,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 is refused; in both House leads rows it says the amount is below the house's own bid and names `<current bid>`; in the House second row it says the lower would move the lead or the price.
+* Step 2 is refused in every row.
+* Step 2, in both House leads rows: it says the amount is below the house's own bid, names `<house bid>`, and does not say the lower would move the lead or the price.
+* Step 2, in the House second row: it says the lower would move the lead or the price.
 * Step 3 still shows `<house maximum>`.
 * Step 4: Highest bid still reads `<current bid>`; the leader and Recent bids are unchanged.
 
@@ -1420,8 +1423,10 @@ Runs once per row of **Test data**.
 * Step 3 shows no internal bid.
 * Step 4: customer A still leads at `<current bid>`; Recent bids gains no row.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-jzx rev=1 covers=g10adm.auction-internal-bid.SC-qom -->
-### grade10-admin-auction-internal-bid-US5-TC6-1: Raising a not-placed internal bid still short is refused
+<!-- trace:case id=g10adm.auction-internal-bid.TC-jzx rev=1 covers=g10adm.auction-internal-bid.SC-qom,g10adm.auction-internal-bid.SC-x95 -->
+### grade10-admin-auction-internal-bid-US5-TC6-1: A raise or re-save of a not-placed internal bid still short is refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1450,22 +1455,27 @@ Runs once per row of **Test data**.
 | `<customer A maximum>` | 700000 minor units (HK$7,000.00) |
 | `<current bid>` | 600000 minor units |
 | `<short amount>` | 550000 minor units, below `<current bid>` |
-| `<short raise>` | 607900 minor units (HK$6,079), one major unit below `<current bid>` plus its 8000 increment |
+| `<minimum next bid>` | 608000 minor units: `<current bid>` plus its 8000 increment |
+
+| Row | `<saved amount>` |
+| --- | --- |
+| Short raise | 607900 minor units (HK$6,079), one major unit below `<minimum next bid>` |
+| Same amount | `<short amount>`, saved unchanged |
 
 **Steps:**
 
-1. In the Internal bid section, change the amount to `<short raise>`.
+1. In the Internal bid section, set the amount to the row's `<saved amount>`.
 2. Click Save.
 3. Reload the editor and read the Internal bid section.
 4. As customer A, read Highest bid and Recent bids on the lot page for `<listing_33>`.
 
 **Expected Results:**
 
-* Step 2 is refused, and says the amount is short of the next minimum.
+* Step 2 is refused, and names `<minimum next bid>` as the next minimum.
 * Step 3 still shows `<short amount>`, not placed.
 * Step 4: customer A still leads at `<current bid>`; Recent bids gains no row.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-ipm rev=1 covers=g10adm.auction-internal-bid.SC-oml,g10adm.auction-internal-bid.SC-r5u,g10.auction-auto-bidding.SC-dym -->
+<!-- trace:case id=g10adm.auction-internal-bid.TC-ipm rev=1 covers=g10adm.auction-internal-bid.SC-oml,g10adm.auction-internal-bid.SC-r5u,g10adm.auction-internal-bid.SC-tbl,g10.auction-auto-bidding.SC-dym -->
 ### grade10-admin-auction-internal-bid-US5-TC7-1: An internal bid whose time passes while the listing is created is not placed
 
 Runs once per row of **Test data**.
@@ -1501,6 +1511,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | Same amount | 650000 minor units, `<created amount>` |
 | Raised | 700000 minor units (HK$7,000.00), above `<created amount>` |
+| Lowered, still at or above the minimum next bid | 500000 minor units (HK$5,000.00), below `<created amount>` and above `<starting price>` |
 
 **Steps:**
 
@@ -1521,6 +1532,54 @@ Runs once per row of **Test data**.
 * Step 6: the lot takes bids with No bids yet; Recent bids holds no row.
 * Step 8 is accepted, though `<commit time>` has passed; the section shows the internal bid placed.
 * Step 9: the house leads at `<starting price>`, one bid, under its listing pseudonym.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-54s rev=1 covers=g10adm.auction-internal-bid.SC-r5u -->
+### grade10-admin-auction-internal-bid-US5-TC8-1: While the listing is created a not-placed internal bid takes a raise or a lower and stays not placed
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Pre-conditions:**
+
+* `<listing_44>` is created, not yet published, and its internal bid of `<house maximum>` was not placed because `<commit time>` passed while it was created.
+* admin(holds auction:reserve) is on `<listing_44>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_44>` | A created HKD listing, its start and `<commit time>` already passed, scheduled close a day away |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<commit time>` | 10 minutes after the listing's start |
+
+| Row | `<saved amount>` |
+| --- | --- |
+| Raised | 700000 minor units (HK$7,000.00) |
+| Lowered | 500000 minor units (HK$5,000.00) |
+| Lowered to the starting price | 400000 minor units, `<starting price>` |
+
+**Steps:**
+
+1. In the Internal bid section, change the amount to the row's `<saved amount>`.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+
+**Expected Results:**
+
+* Step 2 is accepted.
+* Step 3 shows `<saved amount>`, not placed.
 
 ---
 
@@ -1576,6 +1635,99 @@ Runs once per row of **Test data**.
 
 * Step 2 reads the row's Orders outcome.
 * Step 3 reads the row's My Auctions outcome.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-17a rev=1 covers=g10adm.auction-internal-bid.SC-hat,g10adm.auction-listing.SC-qgd -->
+### grade10-admin-auction-internal-bid-US6-TC2-1: The listing's own page and its Listings row read Bought in once the lot closes
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Pre-conditions:**
+
+* `<listing_45>` is published in no campaign and is bid on as the row states, its close a few minutes away, no further bid coming.
+* admin(holds auction:reserve and auction:operate) is on <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_45>` | A published HKD listing in no campaign |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+
+| Row | Bidding | Wait | Listing page and Listings row |
+| --- | --- | --- | --- |
+| House wins | The house leads at 508000 under its committed internal bid of `<house maximum>`, over customer A's maximum of 500000 | Until the close passes | Both read Bought in |
+| House leads, not yet closed | As House wins | None; the lot is still taking bids | Neither reads Bought in |
+| Collector beats the house | customer A leads at 608000 with maximum 700000, over the house's committed internal bid of `<house maximum>` | Until the close passes | Neither reads Bought in |
+| Nobody bids | No bid and no internal bid | Until the close passes | Neither reads Bought in; the Listings row reads Unsold |
+
+**Steps:**
+
+1. Wait as the row states.
+2. Open `<listing_45>` and read its status.
+3. Return to the Listings table and read `<listing_45>`'s row.
+
+**Expected Results:**
+
+* Step 2 and step 3 read the row's outcome.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-vuc rev=1 covers=g10adm.auction-internal-bid.SC-80a,g10.auction-winner-order.SC-los -->
+### grade10-admin-auction-internal-bid-US6-TC3-1: A house win puts nothing in the post-sale queue and sends no order letter
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Pre-conditions:**
+
+* The house leads `<listing_46>` at `<final price>` under its committed internal bid, over customer A, its close a few minutes away, no further bid coming.
+* customer B leads `<listing_51>`, closing a minute before `<listing_46>`, no further bid coming.
+* No other lot closes before step 5.
+* admin(holds auction:reserve, auction:operate and auction:payment) is on <grade10 auction admin orders url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_46>` | A published HKD listing in no campaign, protected by a committed internal bid of 600000 minor units |
+| `<customer A maximum>` | 500000 minor units (HK$5,000.00) |
+| `<final price>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
+| `<listing_51>` | A published HKD listing in no campaign, no internal bid, led by customer B |
+
+**Steps:**
+
+1. Read the count on each Orders segment: Needs action, Waiting on winner, In transit, Closed and All.
+2. Wait until `<listing_46>`'s close passes.
+3. Reload Orders and read each segment's count, and the orders All adds.
+4. Open <grade10 auction admin listings url> and read `<listing_46>`'s row.
+5. Open <grade10 auction send log url>, filter by `<listing_46>` and read the rows from the close.
+
+**Expected Results:**
+
+* Step 3: All holds one order more than at step 1, customer B's for `<listing_51>`; no order is `<listing_46>`'s.
+* Step 4: the row offers no Open order.
+* Step 5 holds no auction-won letter and no other order letter, to anyone.
 
 ---
 
@@ -1739,7 +1891,7 @@ Runs once per row of **Test data**.
 * Step 3: no entry shows `<house maximum>` or `<changed maximum>` in any form, such as 612300 or 6,123.
 * Step 3: no entry shows `<commit time>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-rfj rev=1 covers=g10adm.auction-internal-bid.SC-ftu,g10adm.auction-listing.SC-qgd -->
+<!-- trace:case id=g10adm.auction-internal-bid.TC-rfj rev=1 covers=g10adm.auction-internal-bid.SC-ftu,g10adm.auction-listing.SC-qgd,g10adm.auction-listing.SC-l2y -->
 ### grade10-admin-auction-internal-bid-US7-TC4-1: After the close staff see Bought in, never the amount or time
 
 **Classification:**
@@ -1776,12 +1928,13 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: the row reads Bought in and offers Relist.
+* Step 2: the listing's page reads Closed and Bought in, with no order to open.
 * Step 2 shows no Internal bid section.
 * Step 2: the house's bids read House, each with its own Accepted At, as Recent bids shows it.
 * Step 2 shows `<house maximum>` nowhere, and no internal bid time or state.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-net rev=1 covers=g10adm.auction-internal-bid.SC-rzd,g10adm.auction-internal-bid.SC-36t,g10adm.auction-internal-bid.SC-wib -->
-### grade10-admin-auction-internal-bid-US7-TC5-1: A staff listing edit that clears the internal bid tells staff nothing
+<!-- trace:case id=g10adm.auction-internal-bid.TC-net rev=2 covers=g10adm.auction-internal-bid.SC-rzd,g10adm.auction-internal-bid.SC-36t,g10adm.auction-internal-bid.SC-wib,g10adm.auction-internal-bid.SC-n08 -->
+### grade10-admin-auction-internal-bid-US7-TC5-2: A staff listing edit that clears the internal bid tells staff nothing
 
 Runs once per row of **Test data**.
 
@@ -1824,12 +1977,13 @@ Runs once per row of **Test data**.
 2. Click Save.
 3. Open `<listing_36>` and make the row's listing edit.
 4. Click Save.
-5. As admin(holds auction:reserve), open `<listing_35>`'s editor and read the Internal bid section.
+5. Reopen `<listing_35>` and read it.
+6. Reopen `<listing_36>` and read it.
 
 **Expected Results:**
 
 * Step 2 and step 4 save alike, and neither mentions an internal bid.
-* Step 5 shows no internal bid, and says the listing edit cleared it.
+* Step 5 and step 6 read alike, save the listing's own details; neither shows an Internal bid section or says anything was cleared.
 
 <!-- trace:case id=g10adm.auction-internal-bid.TC-r33 rev=1 covers=g10adm.auction-internal-bid.SC-2l8 -->
 ### grade10-admin-auction-internal-bid-US7-TC6-1: Stats counts the house as a bidder, matching the public count
@@ -2022,6 +2176,256 @@ Runs once per row of **Test data**.
 * Step 5 lists one House bid, at `<current bid>`.
 * Step 5: no row shows `<house maximum>`, `<raised maximum>` or `<lowered maximum>`, a raise or a lower.
 
+---
+
+## grade10-admin-auction-internal-bid-US8: Admin learns a listing edit cleared the internal bid
+
+**As an** auction admin,
+**I want** to see that a change to a listing's window, starting price or currency cleared its internal bid,
+**so that** I can set a new one before the lot sells unprotected.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-bgs rev=1 covers=g10adm.auction-internal-bid.SC-rzd,g10adm.auction-internal-bid.SC-bjb -->
+### grade10-admin-auction-internal-bid-US8-TC1-1: A window change clears the internal bid only when its time falls outside
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Pre-conditions:**
+
+* `<listing_28>` is created, not yet published, with an internal bid of `<house maximum>` at `<commit time>`.
+* admin(holds auction:reserve and auction:operate) is on `<listing_28>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_28>` | A created HKD listing, start `<start>` a day away, scheduled close `<scheduled close>` two days away |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<commit time>` | 2 hours after `<start>` |
+
+| Row | Listing edit | Internal bid after Save |
+| --- | --- | --- |
+| Start past the time | Start moved to 1 minute after `<commit time>` | Cleared |
+| Close before the time | Scheduled close moved to 1 minute before `<commit time>` | Cleared |
+| Start on the time | Start moved to exactly `<commit time>` | Kept, `<house maximum>` at `<commit time>` |
+| Close on the time | Scheduled close moved to exactly `<commit time>` | Kept, `<house maximum>` at `<commit time>` |
+
+**Steps:**
+
+1. Make the row's listing edit in the listing form.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+
+**Expected Results:**
+
+* Step 2 saves the listing edit; no refusal.
+* Step 3 reads the row's internal bid.
+* Step 3: in a Cleared row, the section shows no internal bid and says the listing edit cleared it, with `<house maximum>` and `<commit time>`.
+* Step 3: in a Kept row, the section says nothing was cleared.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-96e rev=1 covers=g10adm.auction-internal-bid.SC-36t,g10adm.auction-internal-bid.SC-9xf -->
+### grade10-admin-auction-internal-bid-US8-TC2-1: A starting-price change clears the internal bid only when the price passes it
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Pre-conditions:**
+
+* `<listing_47>` is created, not yet published, with an internal bid of `<house maximum>` at `<commit time>`.
+* admin(holds auction:reserve and auction:operate) is on `<listing_47>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_47>` | A created HKD listing, start `<start>` a day away, scheduled close two days away |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<commit time>` | 2 hours after `<start>` |
+
+| Row | Starting price after the edit | Internal bid after Save |
+| --- | --- | --- |
+| At the amount | 600000 minor units, equal to `<house maximum>` | Kept, `<house maximum>` at `<commit time>` |
+| Above the amount | 600100 minor units (HK$6,001), one major unit above `<house maximum>` | Cleared |
+
+**Steps:**
+
+1. Change the starting price to the row's amount in the listing form.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+
+**Expected Results:**
+
+* Step 2 saves the listing edit; no refusal.
+* Step 3 reads the row's internal bid.
+* Step 3: in the Cleared row, the section shows no internal bid and says the listing edit cleared it, with `<house maximum>` and `<commit time>`.
+* Step 3: in the Kept row, the section says nothing was cleared.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-qxx rev=1 covers=g10adm.auction-internal-bid.SC-wib,g10adm.auction-internal-bid.SC-qzx,g10adm.auction-internal-bid.SC-ps0 -->
+### grade10-admin-auction-internal-bid-US8-TC3-1: A currency change keeps the minor units and clears an amount that no longer fits
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Pre-conditions:**
+
+* `<listing_48>` is created, not yet published, in the row's currency, with an internal bid of the row's amount at `<commit time>`.
+* admin(holds auction:reserve and auction:operate) is on `<listing_48>`'s editor from <grade10 auction admin listings url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_48>` | A created listing, start `<start>` a day away, scheduled close two days away |
+| `<commit time>` | 2 hours after `<start>` |
+| `<USD ceiling>` | 1000000000 minor units (USD 10,000,000.00), the USD ceiling |
+
+| Row | Internal bid before the edit | Currency change | Internal bid after Save |
+| --- | --- | --- | --- |
+| Carried over | 600000 minor units (HK$6,000.00) | HKD to USD | Kept, 600000 minor units (USD 6,000.00) at `<commit time>` |
+| At the new ceiling | 1000000000 minor units (HK$10,000,000.00) | HKD to USD | Kept, `<USD ceiling>` at `<commit time>` |
+| Above the new ceiling | 1000000100 minor units (HK$10,000,001.00), one major unit above `<USD ceiling>` once in USD | HKD to USD | Cleared |
+| Not whole in the new currency | 600050 minor units (JPY 600,050), which reads HK$6,000.50 once in HKD | JPY to HKD | Cleared |
+
+**Steps:**
+
+1. Change the currency as the row states in the listing form.
+2. Click Save.
+3. Reload the editor and read the Internal bid section.
+
+**Expected Results:**
+
+* Step 2 saves the listing edit; no refusal.
+* Step 3 reads the row's internal bid.
+* Step 3: in a Cleared row, the section shows no internal bid and says the listing edit cleared it, with the row's amount before the edit and `<commit time>`.
+* Step 3: in a Kept row, the section says nothing was cleared.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-o5e rev=1 covers=g10adm.auction-internal-bid.SC-rzd -->
+### grade10-admin-auction-internal-bid-US8-TC4-1: A reserve holder sees the clearing whoever made the edit
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Pre-conditions:**
+
+* `<listing_49>` is created, not yet published, with an internal bid of `<house maximum>` at `<commit time>`, set by the setter, admin(holds auction:reserve).
+* The row's editor moved `<listing_49>`'s start to 1 minute after `<commit time>` and saved.
+* A second admin(holds auction:reserve), who neither set the internal bid nor made the edit, is signed in to the admin on another session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_49>` | A created HKD listing, start `<start>` a day away, scheduled close two days away |
+| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<commit time>` | 2 hours after `<start>` |
+
+| Row | Editor |
+| --- | --- |
+| Reserve holder | The setter |
+| Staff | admin(staff, holds auction:write and auction:operate, not auction:reserve) |
+
+**Steps:**
+
+1. As the setter, open `<listing_49>`'s editor and read the Internal bid section.
+2. As the second admin, open `<listing_49>`'s editor and read the Internal bid section.
+
+**Expected Results:**
+
+* Step 1 and step 2 each show no internal bid, and say the listing edit cleared it, with `<house maximum>` and `<commit time>`.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-m9d rev=1 covers=g10adm.auction-internal-bid.SC-pzs -->
+### grade10-admin-auction-internal-bid-US8-TC5-1: After a clearing the admin sets a new internal bid and it commits
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Pre-conditions:**
+
+* `<listing_50>` is created, not yet published, and a starting-price change to `<new starting price>` cleared its internal bid.
+* admin(holds auction:reserve and auction:operate) is on `<listing_50>`'s editor from <grade10 auction admin listings url>, the section saying the listing edit cleared the internal bid.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_50>` | A created HKD listing, start `<start>` 10 minutes away, scheduled close a day later |
+| `<new starting price>` | 600100 minor units (HK$6,001.00) |
+| `<new maximum>` | 700000 minor units (HK$7,000.00), above `<new starting price>` |
+| `<commit time>` | 5 minutes after `<start>` |
+
+**Steps:**
+
+1. In the Internal bid section, enter `<new maximum>` and `<commit time>`.
+2. Click Save.
+3. Publish `<listing_50>` now.
+4. Wait until `<commit time>` passes, taking no action.
+5. Reload the editor and read the Internal bid section.
+6. As customer B, open the lot page for `<listing_50>` and read Highest bid and Recent bids.
+
+**Expected Results:**
+
+* Step 2 is accepted.
+* Step 5 shows `<new maximum>` committed at `<commit time>`, and no longer says a listing edit cleared it.
+* Step 6: the house leads at `<new starting price>`, one bid, under its listing pseudonym.
+
 ## Settled
 
 - An internal bid can be set on a Created or a Published listing, never on a Draft; a window change on a Created listing that leaves its time outside the window clears it, and only a reserve holder sees that (Q10)
@@ -2038,26 +2442,33 @@ Runs once per row of **Test data**.
 - Staff without `auction:reserve` read the house's bids as House, each with its own Accepted At even where it equals the commit time, and Bought in after the close; never the amount, the commit time, or that a lot has an internal bid before the house bids (Q9, Q25, Q26)
 - The audit trail records each set, change and removal without the amount or the time; an operator with audit access only may learn from it that a lot has an internal bid (Q6, Q29)
 
+- Once the lot takes bids, a re-save of a Not placed internal bid at its own amount, still below the minimum next bid, is refused naming the minimum next bid; only a lower is accepted below it (Q34)
+- A lower of a Not placed internal bid that still reaches the minimum next bid places it at once (Q35)
+- A bought-in listing's own page and its Listings table row read Bought in once the lot closes, for every operator (Q32)
+- The house is never a lot's winner for orders, order letters or post-sale work: a bought-in lot opens no order and enters no post-sale queue (Q33)
+
 ## Reconciliation
 
-**Run:** QA2, 2026-10-08. QA1's round-3 blind pass, rerun after a discarded attempt broke isolation, read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised` table as it stood through Q25, the linked pages `bidding.md` and `management.md` under `docs/prds/`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-3 reading wrote the scenarios, `tech-design.md` and `tasks.md` without QA1's suites. Q26 to Q29 landed after both readings, and where a case contradicted them the decision won. QA2 read QA1's suites, the delta specs, `decisions.md` through Q29, then Q30 and Q31 as they landed, `tech-design.md`, `tasks.md`, the durable specs and suites, and both PRD pages; not the archive. It is a statement, not proof.
+**Run:** QA2 round 4, 2026-10-08. QA1's round-4 blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md` with `grade10-admin-auction-internal-bid-US-08`, `proposal.md`, `decisions.md` with its `## Raised` table through Q35, the linked pages under `docs/prds/`, this suite with `## Reconciliation` stripped and its `## Settled`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-4 reading re-anchored the listing-edit scenarios to `grade10-admin-auction-internal-bid-US-08` and added `grade10-admin-auction-internal-bid-SC-48` and `grade10-admin-auction-internal-bid-SC-49` without QA1's revisions. QA2 read QA1's revisions, the delta specs, `decisions.md` through Q35, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. Earlier rounds' dispositions stand where not restated below. It is a statement, not proof.
 
-- **Folded in** - `grade10-admin-auction-internal-bid-US1-TC1-1` by `grade10-admin-auction-internal-bid-SC-01`, `grade10-admin-auction-internal-bid-SC-08` and `grade10-site-auction-auto-bidding-SC-33`; `grade10-admin-auction-internal-bid-US1-TC2-1` by `grade10-admin-auction-internal-bid-SC-22`, its At the start row the other end of the same window rule; `grade10-admin-auction-internal-bid-US1-TC3-1` by `grade10-admin-auction-internal-bid-SC-02`, `grade10-admin-auction-internal-bid-SC-04`, `grade10-admin-auction-internal-bid-SC-23`, `grade10-admin-auction-internal-bid-SC-24` and `grade10-admin-auction-internal-bid-SC-41`; `grade10-admin-auction-internal-bid-US1-TC4-1` by `grade10-admin-auction-internal-bid-SC-01` and `grade10-site-auction-auto-bidding-SC-36`; `grade10-admin-auction-internal-bid-US1-TC5-1` by `grade10-admin-auction-internal-bid-SC-25`, its Closed and Canceled rows the same Not editable refusal; `grade10-admin-auction-internal-bid-US1-TC6-1` by `grade10-admin-auction-internal-bid-SC-04`, the accepted side of the ceiling; `grade10-admin-auction-internal-bid-US1-TC7-1` by `grade10-admin-auction-internal-bid-SC-01` and the requirement's Amount rule; `grade10-admin-auction-internal-bid-US1-TC8-1` by `grade10-admin-auction-internal-bid-SC-26` and `grade10-admin-auction-internal-bid-SC-08`; `grade10-admin-auction-internal-bid-US1-TC9-1` by `grade10-admin-auction-internal-bid-SC-03`; `grade10-admin-auction-internal-bid-US1-TC10-1` by `grade10-admin-auction-internal-bid-SC-28`, `grade10-admin-auction-internal-bid-SC-29`, `grade10-admin-auction-internal-bid-SC-34`, `grade10-admin-auction-internal-bid-SC-35`, `grade10-admin-auction-internal-bid-SC-36`, `grade10-admin-auction-internal-bid-SC-42` and `grade10-admin-auction-internal-bid-SC-43`; `grade10-admin-auction-internal-bid-US1-TC11-1` by `grade10-admin-auction-internal-bid-SC-05`
-- **Folded in** - `grade10-admin-auction-internal-bid-US2-TC1-1` by `grade10-admin-auction-internal-bid-SC-06`; `grade10-admin-auction-internal-bid-US2-TC2-1` by `grade10-admin-auction-internal-bid-SC-07`; `grade10-admin-auction-internal-bid-US2-TC3-1` by `grade10-admin-auction-internal-bid-SC-02` and `grade10-admin-auction-internal-bid-SC-41`; `grade10-admin-auction-internal-bid-US2-TC4-1` by `grade10-admin-auction-internal-bid-SC-21`, which serves the Feature set group Setting an internal bid while the case traces `grade10-admin-auction-internal-bid-US-02`: joined on the behaviour
+- **Folded in** - `grade10-admin-auction-internal-bid-US1-TC1-1` by `grade10-admin-auction-internal-bid-SC-01`, `grade10-admin-auction-internal-bid-SC-08` and `grade10-site-auction-auto-bidding-SC-33`; `grade10-admin-auction-internal-bid-US1-TC2-1` by `grade10-admin-auction-internal-bid-SC-22`; `grade10-admin-auction-internal-bid-US1-TC3-1` by `grade10-admin-auction-internal-bid-SC-02`, `grade10-admin-auction-internal-bid-SC-04`, `grade10-admin-auction-internal-bid-SC-23`, `grade10-admin-auction-internal-bid-SC-24` and `grade10-admin-auction-internal-bid-SC-41`; `grade10-admin-auction-internal-bid-US1-TC4-1` by `grade10-admin-auction-internal-bid-SC-01` and `grade10-site-auction-auto-bidding-SC-36`; `grade10-admin-auction-internal-bid-US1-TC5-1` by `grade10-admin-auction-internal-bid-SC-25` and `grade10-admin-auction-internal-bid-SC-48`; `grade10-admin-auction-internal-bid-US1-TC6-1` by `grade10-admin-auction-internal-bid-SC-04`; `grade10-admin-auction-internal-bid-US1-TC7-1` by `grade10-admin-auction-internal-bid-SC-01`; `grade10-admin-auction-internal-bid-US1-TC8-1` by `grade10-admin-auction-internal-bid-SC-26` and `grade10-admin-auction-internal-bid-SC-08`; `grade10-admin-auction-internal-bid-US1-TC9-1` by `grade10-admin-auction-internal-bid-SC-03`; `grade10-admin-auction-internal-bid-US1-TC11-1` by `grade10-admin-auction-internal-bid-SC-05`
+- **Folded in** - `grade10-admin-auction-internal-bid-US2-TC1-1` by `grade10-admin-auction-internal-bid-SC-06`; `grade10-admin-auction-internal-bid-US2-TC2-1` by `grade10-admin-auction-internal-bid-SC-07`; `grade10-admin-auction-internal-bid-US2-TC3-1` by `grade10-admin-auction-internal-bid-SC-02` and `grade10-admin-auction-internal-bid-SC-41`; `grade10-admin-auction-internal-bid-US2-TC4-1` by `grade10-admin-auction-internal-bid-SC-21`
 - **Folded in** - `grade10-admin-auction-internal-bid-US3-TC1-1` by `grade10-admin-auction-internal-bid-SC-13`; `grade10-admin-auction-internal-bid-US3-TC2-1` by `grade10-site-auction-auto-bidding-SC-41`; `grade10-admin-auction-internal-bid-US3-TC3-1` by `grade10-admin-auction-internal-bid-SC-45`; `grade10-admin-auction-internal-bid-US3-TC4-1` by `grade10-admin-auction-internal-bid-SC-12`; `grade10-admin-auction-internal-bid-US3-TC5-1` by `grade10-admin-auction-internal-bid-SC-44`
-- **Folded in** - `grade10-admin-auction-internal-bid-US4-TC1-1` by `grade10-admin-auction-internal-bid-SC-47`; `grade10-admin-auction-internal-bid-US4-TC2-1` by `grade10-admin-auction-internal-bid-SC-15` and `grade10-site-auction-auto-bidding-SC-43`; `grade10-admin-auction-internal-bid-US4-TC3-1` by `grade10-admin-auction-internal-bid-SC-46`
-- **Folded in** - `grade10-admin-auction-internal-bid-US5-TC1-1` by `grade10-admin-auction-internal-bid-SC-09`, `grade10-admin-auction-internal-bid-SC-27` and `grade10-site-auction-auto-bidding-SC-38`; `grade10-admin-auction-internal-bid-US5-TC2-1` by `grade10-admin-auction-internal-bid-SC-10`; `grade10-admin-auction-internal-bid-US5-TC3-1` by `grade10-admin-auction-internal-bid-SC-09`, the lot then closing as any lot with a collector winner; `grade10-admin-auction-internal-bid-US5-TC4-1` by `grade10-admin-auction-internal-bid-SC-30`; `grade10-admin-auction-internal-bid-US5-TC5-1` by `grade10-admin-auction-internal-bid-SC-31`; `grade10-admin-auction-internal-bid-US5-TC6-1` by `grade10-admin-auction-internal-bid-SC-11`; `grade10-admin-auction-internal-bid-US5-TC7-1` by `grade10-admin-auction-internal-bid-SC-37`, `grade10-admin-auction-internal-bid-SC-38` and `grade10-site-auction-auto-bidding-SC-46`
-- **Folded in** - `grade10-admin-auction-internal-bid-US6-TC1-1` by `grade10-admin-auction-internal-bid-SC-17`, `grade10-site-auction-auction-SC-104` and `grade10-site-auction-auction-SC-106`
-- **Folded in** - `grade10-admin-auction-internal-bid-US7-TC1-1` by `grade10-admin-auction-internal-bid-SC-18` and `grade10-admin-auction-internal-bid-SC-39`; `grade10-admin-auction-internal-bid-US7-TC2-1` by `grade10-admin-auction-internal-bid-SC-19`; `grade10-admin-auction-internal-bid-US7-TC3-1` by `grade10-admin-auction-internal-bid-SC-20`; `grade10-admin-auction-internal-bid-US7-TC4-1` by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-listing-SC-149`; `grade10-admin-auction-internal-bid-US7-TC5-1` by `grade10-admin-auction-internal-bid-SC-28`, `grade10-admin-auction-internal-bid-SC-34` and `grade10-admin-auction-internal-bid-SC-35`; `grade10-admin-auction-internal-bid-US7-TC6-1` by `grade10-admin-auction-internal-bid-SC-33`; `grade10-admin-auction-internal-bid-US7-TC7-1` by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-listing-SC-151`; `grade10-admin-auction-internal-bid-US7-TC8-1` by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-internal-bid-SC-39`
-- **Scenarios added from cases** - `grade10-admin-auction-internal-bid-SC-41` and a Required row in the Save refusals, from the No time rows of `grade10-admin-auction-internal-bid-US1-TC3-1` and `grade10-admin-auction-internal-bid-US2-TC3-1` (Q4: the time is required); `grade10-admin-auction-internal-bid-SC-42` from the kept currency row of `grade10-admin-auction-internal-bid-US1-TC10-1` (Q27); `grade10-admin-auction-internal-bid-SC-43` from Q27's not-whole clear, a row QA2 added to `grade10-admin-auction-internal-bid-US1-TC10-1`; `grade10-admin-auction-internal-bid-SC-44` and a minimum next bid row in the Placed refusals, from `grade10-admin-auction-internal-bid-US3-TC5-1` (Q11); `grade10-admin-auction-internal-bid-SC-45` from `grade10-admin-auction-internal-bid-US3-TC3-1` and `grade10-admin-auction-internal-bid-SC-46` from `grade10-admin-auction-internal-bid-US4-TC3-1`, the requirement's Not taking bids refusal; `grade10-admin-auction-internal-bid-SC-47` from `grade10-admin-auction-internal-bid-US4-TC1-1`, a lower while the house leads (Q3)
-- **Added by QA2** - `grade10-admin-auction-internal-bid-US4-TC4-1`: an accepted lower behind another's lead, then one refused below the house's own bid, for `grade10-admin-auction-internal-bid-SC-14`, `grade10-admin-auction-internal-bid-SC-16`, `grade10-site-auction-auto-bidding-SC-42` and `grade10-site-auction-auto-bidding-SC-44`, which no blind case reached once the House third row was rejected; `grade10-admin-auction-internal-bid-US7-TC9-1`: no staff row for a house raise or lower, for `grade10-admin-auction-internal-bid-SC-40`
-- **Joined to the run they share** - `grade10-admin-auction-internal-bid-US3-TC4-1` gains the refused removal of `grade10-admin-auction-internal-bid-SC-12`; `grade10-admin-auction-internal-bid-US5-TC1-1` now saves the internal bid in the editor, so its short amount accepted at Save proves `grade10-admin-auction-internal-bid-SC-27`; `grade10-admin-auction-internal-bid-US7-TC1-1` gains Stats for `grade10-admin-auction-internal-bid-SC-39`; `grade10-admin-auction-internal-bid-US7-TC7-1` gains the Listings table row before the close for `grade10-admin-auction-listing-SC-151`
-- **Corrected to the decisions** - `grade10-admin-auction-internal-bid-US7-TC4-1`, `grade10-admin-auction-internal-bid-US7-TC7-1` and `grade10-admin-auction-internal-bid-US7-TC8-1` expected no time on a House row; Q26 shows a house bid's own Accepted At, so they now expect it and refuse only the commit time and state; `grade10-admin-auction-internal-bid-US7-TC3-1` reads the audit trail as an operator with audit access and no `auction:reserve` (Q29); `grade10-admin-auction-internal-bid-US5-TC7-1` takes Q28: a save while Created stays Not placed, and once open a save at the same amount or a raise places it; `grade10-admin-auction-internal-bid-US1-TC10-1` gains Q27's not-whole row; `grade10-admin-auction-internal-bid-US3-TC4-1` names the Time is fixed refusal
-- **Rejected** - the House third row of `grade10-admin-auction-internal-bid-US4-TC2-1` expected a lower that kept the leader and the current bid to be refused; Q3 accepts it unless it falls below a bid already placed for the house, as `grade10-admin-auction-internal-bid-SC-14` states. The row is removed and `grade10-admin-auction-internal-bid-US4-TC4-1` walks the accepted lower
-- **Settled by the artifacts** - the House leads rows of `grade10-admin-auction-internal-bid-US4-TC2-1` lower below the current bid, which is also below the house's own bid there; the requirement refuses both and names no order, so Q30 orders them: those rows name the house's own bid, and only the House second row names the lead or the price
-- **Anchors** - `grade10-admin-auction-internal-bid-SC-28`, `grade10-admin-auction-internal-bid-SC-29`, `grade10-admin-auction-internal-bid-SC-34`, `grade10-admin-auction-internal-bid-SC-35`, `grade10-admin-auction-internal-bid-SC-36`, `grade10-admin-auction-internal-bid-SC-42` and `grade10-admin-auction-internal-bid-SC-43` serve the Feature set group `Setting an internal bid`, not `grade10-admin-auction-internal-bid-US-02`: another operator edits the listing and the admin only reads the clear afterwards. Their cases `grade10-admin-auction-internal-bid-US1-TC10-1` and `grade10-admin-auction-internal-bid-US7-TC5-1` keep their traces, joined on the behaviour as `grade10-admin-auction-internal-bid-SC-21` is
+- **Folded in** - `grade10-admin-auction-internal-bid-US4-TC1-1` by `grade10-admin-auction-internal-bid-SC-47`; `grade10-admin-auction-internal-bid-US4-TC2-2` by `grade10-admin-auction-internal-bid-SC-15`, `grade10-admin-auction-internal-bid-SC-50` and `grade10-site-auction-auto-bidding-SC-43`; `grade10-admin-auction-internal-bid-US4-TC3-1` by `grade10-admin-auction-internal-bid-SC-46`; `grade10-admin-auction-internal-bid-US4-TC4-1` by `grade10-admin-auction-internal-bid-SC-14`, `grade10-admin-auction-internal-bid-SC-16`, `grade10-site-auction-auto-bidding-SC-42` and `grade10-site-auction-auto-bidding-SC-44`
+- **Folded in** - `grade10-admin-auction-internal-bid-US5-TC1-1` by `grade10-admin-auction-internal-bid-SC-09`, `grade10-admin-auction-internal-bid-SC-27` and `grade10-site-auction-auto-bidding-SC-38`; `grade10-admin-auction-internal-bid-US5-TC2-1` by `grade10-admin-auction-internal-bid-SC-10`; `grade10-admin-auction-internal-bid-US5-TC3-1` by `grade10-admin-auction-internal-bid-SC-09`; `grade10-admin-auction-internal-bid-US5-TC4-1` by `grade10-admin-auction-internal-bid-SC-30`; `grade10-admin-auction-internal-bid-US5-TC5-1` by `grade10-admin-auction-internal-bid-SC-31`; `grade10-admin-auction-internal-bid-US5-TC6-1` by `grade10-admin-auction-internal-bid-SC-11` and `grade10-admin-auction-internal-bid-SC-52`; `grade10-admin-auction-internal-bid-US5-TC7-1` by `grade10-admin-auction-internal-bid-SC-37`, `grade10-admin-auction-internal-bid-SC-38`, `grade10-admin-auction-internal-bid-SC-53` and `grade10-site-auction-auto-bidding-SC-46`; `grade10-admin-auction-internal-bid-US5-TC8-1` (new, Q28) by `grade10-admin-auction-internal-bid-SC-38`, its Lowered rows further members of the class the requirement's item 2 states
+- **Folded in** - `grade10-admin-auction-internal-bid-US6-TC1-1` by `grade10-admin-auction-internal-bid-SC-17`, `grade10-site-auction-auction-SC-104` and `grade10-site-auction-auction-SC-106`; `grade10-admin-auction-internal-bid-US6-TC2-1` (new, Q32) by `grade10-admin-auction-internal-bid-SC-17`, `grade10-admin-auction-listing-SC-149` and `grade10-admin-auction-listing-SC-155`; `grade10-admin-auction-internal-bid-US6-TC3-1` (new, Q33) by `grade10-admin-auction-internal-bid-SC-49` and `winner-order-SC-277`
+- **Folded in** - `grade10-admin-auction-internal-bid-US7-TC1-1` by `grade10-admin-auction-internal-bid-SC-18` and `grade10-admin-auction-internal-bid-SC-39`; `grade10-admin-auction-internal-bid-US7-TC2-1` by `grade10-admin-auction-internal-bid-SC-19`; `grade10-admin-auction-internal-bid-US7-TC3-1` by `grade10-admin-auction-internal-bid-SC-20`; `grade10-admin-auction-internal-bid-US7-TC4-1` by `grade10-admin-auction-internal-bid-SC-32`, `grade10-admin-auction-listing-SC-149` and `grade10-admin-auction-listing-SC-155`, its new result that the listing's page reads Bought in joined to the same run (Q32), version kept; `grade10-admin-auction-internal-bid-US7-TC5-2` by `grade10-admin-auction-internal-bid-SC-18`, `grade10-admin-auction-internal-bid-SC-28`, `grade10-admin-auction-internal-bid-SC-34` and `grade10-admin-auction-internal-bid-SC-35`; `grade10-admin-auction-internal-bid-US7-TC6-1` by `grade10-admin-auction-internal-bid-SC-33`; `grade10-admin-auction-internal-bid-US7-TC7-1` by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-listing-SC-151`; `grade10-admin-auction-internal-bid-US7-TC8-1` by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-internal-bid-SC-39`; `grade10-admin-auction-internal-bid-US7-TC9-1` by `grade10-admin-auction-internal-bid-SC-40`
+- **Folded in** - `grade10-admin-auction-internal-bid-US8-TC1-1` by `grade10-admin-auction-internal-bid-SC-28` and `grade10-admin-auction-internal-bid-SC-29`; `grade10-admin-auction-internal-bid-US8-TC2-1` by `grade10-admin-auction-internal-bid-SC-34` and `grade10-admin-auction-internal-bid-SC-36`; `grade10-admin-auction-internal-bid-US8-TC3-1` by `grade10-admin-auction-internal-bid-SC-35`, `grade10-admin-auction-internal-bid-SC-42` and `grade10-admin-auction-internal-bid-SC-43`; `grade10-admin-auction-internal-bid-US8-TC4-1` by `grade10-admin-auction-internal-bid-SC-28`, a clear read by a reserve holder other than the editor; `grade10-admin-auction-internal-bid-US8-TC5-1` by `grade10-admin-auction-internal-bid-SC-51`
+- **Deprecated** - `grade10-admin-auction-internal-bid-US1-TC10-1`: QA1 moved its rows to `grade10-admin-auction-internal-bid-US8-TC1-1`, `grade10-admin-auction-internal-bid-US8-TC2-1` and `grade10-admin-auction-internal-bid-US8-TC3-1` once `grade10-admin-auction-internal-bid-SC-28` to `grade10-admin-auction-internal-bid-SC-43` served `grade10-admin-auction-internal-bid-US-08`. It was never accepted, but its id was issued in this change, so it is kept `deprecated` with `covers=none` rather than deleted, and `TC10` is not reissued under US1
+- **Revised** - `grade10-admin-auction-internal-bid-US4-TC2-1` to `grade10-admin-auction-internal-bid-US4-TC2-2` (Q30): both House leads rows now also refuse naming the lead or the price; `grade10-admin-auction-internal-bid-US7-TC5-1` to `grade10-admin-auction-internal-bid-US7-TC5-2`: the reserve holder's cleared notice moved to `grade10-admin-auction-internal-bid-US8-TC4-1`, and staff re-open both listings instead
+- **Scenarios added from cases** - `grade10-admin-auction-internal-bid-SC-50` from the House leads rows of `grade10-admin-auction-internal-bid-US4-TC2-2`: the requirement names only the house's bid when a lower both moves the price and falls below it (Q30), and no scenario stated it; `grade10-admin-auction-internal-bid-SC-51` from `grade10-admin-auction-internal-bid-US8-TC5-1`: a new save replaces a cleared internal bid and ends the cleared notice, which the states table and the clear requirement state and no scenario did
+- **Settled questions applied** - Q34 and Q35, raised by earlier blind passes, landed with no scenario stating either; QA2 added `grade10-admin-auction-internal-bid-SC-52` (a re-save at the same short amount is refused) with a Same amount row on `grade10-admin-auction-internal-bid-US5-TC6-1`, and `grade10-admin-auction-internal-bid-SC-53` (a lower still at or above the minimum next bid places it) with a Lowered row on `grade10-admin-auction-internal-bid-US5-TC7-1`; both cases keep their version as drafts
+- **Added by QA2** - a Past its close row on `grade10-admin-auction-internal-bid-US1-TC5-1`, with the refusal named Not editable, for `grade10-admin-auction-internal-bid-SC-48`, which no blind case reached
+- **Joined to the run they share** - `grade10-admin-auction-internal-bid-US6-TC3-1` gains a collector-won lot whose order does show, and the bought-in row's missing Open order, so it asserts every THEN of `grade10-admin-auction-internal-bid-SC-49`; `grade10-admin-auction-internal-bid-US7-TC4-1` reads Closed and Bought in with no order to open, as `grade10-admin-auction-listing-SC-155` states; `grade10-admin-auction-internal-bid-US8-TC1-1` to `grade10-admin-auction-internal-bid-US8-TC4-1` read the cleared amount and time beside the notice, and `grade10-admin-auction-internal-bid-US8-TC5-1` reads the notice gone, as `grade10-admin-auction-internal-bid-SC-28` and the clear requirement state
+- **Rejected** - the House second row of QA1's `grade10-admin-auction-internal-bid-US4-TC2-2` took `<house maximum>` as a bid placed for the house when customer A outbid it, and so expected the refusal to name the house's bid. The durable two-maximum record rule records only the challenger's bid when it passes the leader's maximum, and the auto-bidding worked example keeps the house's bid at its first amount after step 2. The row now leads with the house's first bid at `<starting price>` and expects the lead-or-price refusal, which `grade10-admin-auction-internal-bid-SC-15` and `grade10-site-auction-auto-bidding-SC-43` state
+- **Anchors** - `grade10-admin-auction-internal-bid-SC-21` serves `grade10-admin/auction/listing#grade10-admin-auction-listing-US-05`, and `grade10-admin-auction-internal-bid-US2-TC4-1` keeps its trace to `grade10-admin-auction-internal-bid-US-02`; `grade10-admin-auction-internal-bid-US7-TC5-2` traces `grade10-admin-auction-internal-bid-US-07` and covers `grade10-admin-auction-internal-bid-SC-28`, `grade10-admin-auction-internal-bid-SC-34` and `grade10-admin-auction-internal-bid-SC-35` for the staff answer they state, beside `grade10-admin-auction-internal-bid-SC-18`; cases covering auto-bidding, auction, listing and winner-order scenarios keep their own journey's trace. Joined on the behaviour
 - **Covered at domain** - `grade10-admin-auction-e2e-US4-TC1-1` also walks `grade10-admin-auction-internal-bid-SC-01`, `grade10-admin-auction-internal-bid-SC-08` and `grade10-admin-auction-internal-bid-SC-17` into Relist; the feature cases above stay, since that path asserts none of the refusals
 - **Out of suite** - none
-- **Raised** - none; which refusal a lower names when it both moves the price and falls below the house's own bid landed in Q30, applied under Settled by the artifacts. Q31 changes no case
+- **Raised** - none. Q31 changes no case
 - **Contradicted** - none
 - **Uncovered anchors** - none
