@@ -127,18 +127,45 @@ manual execution uses `/tcs-run-sheet`. Cases remain draft during planning.
 
 ## 7. Contract and compatibility tests (grade10)
 
+- [ ] 7.4 Add failing zero-inclusive v2 and legacy omission contract tests before extending the wire in 7.2; cover required points and per-line seen-price fields, integer bounds and successful no-points checkout: `grade10-site-store-checkout-SC-61`, `grade10-site-store-checkout-SC-39`.
+
+The versioned points field is required and zero-inclusive, using the existing
+cart tender bounds (0..10,000,000). Legacy omission means zero. Tests in 7.1
+include zero, the maximum, missing v2 input, fractions, negatives and overflow:
+`grade10-site-store-checkout-SC-61`. Implement this wire distinction in 7.2.
+
 - [ ] 7.1 Add failing shared codec, datasource, resolver and fixture tests for v2 context/Pay, canonical alias identity, settling/terminal/conflict/recovery, strict cart/tender preconditions and unsupported-protocol refusal; cover old codecs, Grade10/ZZZ and existing operator adapters before implementation: `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-38`, `grade10-site-store-checkout-SC-41`, `grade10-site-store-checkout-SC-44`, `grade10-site-store-checkout-SC-46`, `grade10-site-store-checkout-SC-48`.
 - [ ] 7.2 Implement shared schemas and canonical client/fixture/domain mapping, retaining legacy response shapes and authenticated/environment gates. Add no second quote/order client: `grade10-site-store-checkout-SC-44`, `grade10-site-store-checkout-SC-46`, `grade10-site-store-checkout-SC-48`.
 - [ ] 7.3 Verify targeted contract/frontend suites and type checks; record the exact compatible old/new wire matrix. Group 8 depends on these shared shapes; Group 11 does not ship before Groups 8-10 pass.
 
 ## 8. Durable purchase identity and current decision (grade10)
 
+**Observed Core** - Cart headers, saved tender comparison and member-edit
+conversion are already merged: core `5b434c7a7d8f8e236754c27c41cdb9121982658e`,
+application merge `665aaa9eee2fcd5aa552c9978ec6a099fc1d3e43`. Tracked Grade10
+and ZZZ migration `0050_cart_header.sql` resets carts without backfill.
+These facts do not complete the new tasks or prove dispatch/recovery safety.
+
+**Race Tests** - Before 8.3, 8.1 delays both first callers around live reads,
+purchase persistence, provider dispatch and URL binding. Assert one canonical
+row and provider call, rechecked account/cart facts, and no canceled loser URL.
+Exercise saved reuse with repriced, withdrawn, sold-out and quantity-reduced
+lines, mismatched acknowledged prices/tender, and unchanged accepted facts.
+Refusals create no order/invoice; successful reuse creates no new reservation:
+`grade10-site-store-checkout-SC-39`, `grade10-site-store-checkout-SC-40`.
+
 - [ ] 8.1 Add failing repository/real-Postgres race and service tests for repeat, terminal replay, distinct-key concurrent first creates, exact cart/tender conflict, current live decision on reuse, fresh authentication and transactional order binding; use provider call counters and assert persisted rows, not fixture outcomes: `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`, `grade10-site-store-checkout-SC-05`, `grade10-site-store-checkout-SC-06`, `grade10-site-store-checkout-SC-08`, `grade10-site-store-checkout-SC-09`, `grade10-site-store-checkout-SC-11`, `grade10-site-store-checkout-SC-19`, `grade10-site-store-checkout-SC-39`, `grade10-site-store-checkout-SC-40`, `grade10-site-store-checkout-SC-41`, `grade10-site-store-checkout-SC-43`; `grade10-site-store-checkout-SC-54`, `grade10-site-store-checkout-SC-55`, `grade10-site-store-checkout-SC-57`.
-- [ ] 8.2 Integrate the final reviewed revision of `feature/g10-cart-header-v1` and record its commits. Generate supported additive schema/migrations for Grade10 and ZZZ; add uniqueness, immutable fingerprint, dispatch/retirement state and due indexes. Verify fresh install, legacy null rows and upgrade without losing completed history.
+- [ ] 8.2 Verify the already merged core and migration 0050 provenance above. Generate supported additive schema/migrations for Grade10 and ZZZ; add uniqueness, immutable fingerprint, dispatch/retirement state and due indexes. Verify fresh install, legacy null rows and upgrade without losing completed history. Keep the reset/no-backfill release prerequisite explicit.
 - [ ] 8.3 Implement context read, current live decision, account/cart-version serialization, canonical purchase identity, terminal replay and exact tender checks, preserving order/line atomicity and outside-transaction provider calls: `grade10-site-store-checkout-SC-08`, `grade10-site-store-checkout-SC-09`, `grade10-site-store-checkout-SC-11`, `grade10-site-store-checkout-SC-19`, `grade10-site-store-checkout-SC-39`, `grade10-site-store-checkout-SC-40`, `grade10-site-store-checkout-SC-41`, `grade10-site-store-checkout-SC-43`.
 - [ ] 8.4 Verify focused backend and real Postgres race suites plus affected package checks; record migration-generated files and actual provider call counts. No migration executes on staging/production here.
 
 ## 9. Dispatch recovery and retirement (grade10)
+
+**Dispatch Order** - Group 8's canonical purchase is persisted uniquely before
+9.2 claims dispatch in a committed transition preceding network creation.
+Cached legacy callers use that same decision and claim; supersession never
+returns the canceled caller's request-local URL. Recovery, terminal replay and
+durable retirement remain unchecked implementation prerequisites.
 
 - [ ] 9.1 Add failing worker/service/DB tests for pre-dispatch crash, lost response after provider creation, missing/duplicate/wrong-owner search results, deadline blockade, durable edit retirement, edit/payment races and old-client engine safety: `grade10-site-store-checkout-SC-10`, `grade10-site-store-checkout-SC-20`, `grade10-site-store-checkout-SC-21`, `grade10-site-store-checkout-SC-38`, `grade10-site-store-checkout-SC-42`, `grade10-site-store-checkout-SC-43`, `grade10-site-store-checkout-SC-44`.
 - [ ] 9.2 Implement persisted dispatch claim, exact Shopify shop/order/member/fingerprint correlation and paginated lookup, bind-once recovery and audited elevated bind/cancel resolution; dispatched attempts never mint replacement invoices: `grade10-site-store-checkout-SC-10`, `grade10-site-store-checkout-SC-20`, `grade10-site-store-checkout-SC-21`, `grade10-site-store-checkout-SC-38`.
@@ -148,12 +175,25 @@ manual execution uses `/tcs-run-sheet`. Cases remain draft during planning.
 
 ## 10. Settlement, conversion and carrier evidence (grade10)
 
+**Conversion Tests** - Before 10.2, 10.1 proves conversion against the order's
+saved member-edit counter. Later member line/tender edits and rebuilt carts
+survive. Shop review-only stock changes move general revision but allow paid
+conversion; general revision still protects Pay, invoice reuse and frontend
+stale answers: `grade10-site-store-checkout-SC-62`.
+
 - [ ] 10.1 Add failing tests for duplicate/cross-shop events, reconcile/order-read repair, matching active-cart conversion, later version/rebuilt cart protection, and token-gated served/unsupported carrier parity: `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-14`, `grade10-site-store-checkout-SC-16`, `grade10-site-store-checkout-SC-17`, `grade10-site-store-checkout-SC-18`, `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-45`, `grade10-site-store-checkout-SC-47`; `grade10-site-store-checkout-SC-56`, `grade10-site-store-checkout-SC-59`; include an authenticated other-member detail request at `packages/grade10-store/backend/test/trpc/routers/orders.test.ts` and assert no returned purchase facts or cart/order writes.
-- [ ] 10.2 Integrate branch guarded conversion and settlement through the existing once-only transition; re-read cart/tender without variant deletion, retain provider paid totals and repair missing events: `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-14`, `grade10-site-store-checkout-SC-16`, `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-45`, `grade10-site-store-checkout-SC-47`.
+- [ ] 10.5 Add focused regression coverage before 10.2 for shop stock review changing only general revision after Pay; verify paid conversion clears bought lines/tender while member edits preserve them: `grade10-site-store-checkout-SC-62`.
+- [ ] 10.2 Verify the merged member-edit conversion guard through the existing once-only transition and repair only demonstrated gaps; re-read cart/tender without variant deletion, retain provider paid totals and repair missing events: `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-14`, `grade10-site-store-checkout-SC-16`, `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-45`, `grade10-site-store-checkout-SC-47`, `grade10-site-store-checkout-SC-62`.
 - [ ] 10.3 Verify existing carrier implementation against token gate and exact preview rate/currency with no order/cart mutation; fix only in-scope failures required by the durable contract: `grade10-site-store-checkout-SC-17`, `grade10-site-store-checkout-SC-18`; `grade10-site-store-checkout-SC-56`.
 - [ ] 10.4 Verify backend/real-Postgres suites, affected checks and provider-fact fixtures; retain Carrier rates in the final contract and readiness record.
 
 ## 11. Frontend cart-header integration (grade10)
+
+- [ ] 11.5 Add failing zero-points handoff, required per-line price acknowledgement and review-only paid-refresh tests before 11.3; submit the persisted zero choice and immutable reviewed prices, and observe authoritative conversion through existing clients: `grade10-site-store-checkout-SC-61`, `grade10-site-store-checkout-SC-39`, `grade10-site-store-checkout-SC-62`.
+
+Groups 7-10 pass before this group's implementation begins. Add zero-points
+handoff and review-only paid-cart refresh to 11.1 before wiring them in 11.3:
+`grade10-site-store-checkout-SC-61`, `grade10-site-store-checkout-SC-62`.
 
 - [ ] 11.1 Add failing hook, canonical-port, drawer and order tests for all new behavior before implementation: same-session identity, persistence gating, delayed sign-out/member/edit responses, open-invoice current decision, tender refusal, conflict refresh, recovery blockade, terminal mapping, retired order visibility and authoritative conversion: `grade10-site-store-checkout-SC-02`, `grade10-site-store-checkout-SC-07`, `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-38`, `grade10-site-store-checkout-SC-41`, `grade10-site-store-checkout-SC-42`, `grade10-site-store-checkout-SC-46`, `grade10-site-store-checkout-SC-47`, `grade10-site-store-checkout-SC-48`; `grade10-site-store-checkout-SC-49`, `grade10-site-store-checkout-SC-50`, `grade10-site-store-checkout-SC-51`, `grade10-site-store-checkout-SC-52`, `grade10-site-store-checkout-SC-53`, `grade10-site-store-checkout-SC-54`, `grade10-site-store-checkout-SC-55`, `grade10-site-store-checkout-SC-57`, `grade10-site-store-checkout-SC-58`, `grade10-site-store-checkout-SC-59`, `grade10-site-store-checkout-SC-60`.
 - [ ] 11.2 Extend cart/checkout slices and drawer host with session-scoped submitted identity, server context, persisted cart/tender readiness and immutable request guards; update existing clients/fixtures without invoice authority or duplicate fetching: `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-38`, `grade10-site-store-checkout-SC-41`, `grade10-site-store-checkout-SC-46`.

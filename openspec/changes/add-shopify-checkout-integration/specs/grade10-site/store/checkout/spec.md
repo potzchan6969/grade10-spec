@@ -43,7 +43,9 @@ Shopify after the buyer supplies an address.
 order and no Shopify checkout. The collector SHALL be able to retry or fix the
 named line.
 
-**Cart Context** - Pay SHALL wait for acknowledged member-cart and tender writes. The server SHALL verify the submitted active cart id/version, exact lines and accepted tender before new or reused handoff. A saved invoice SHALL never bypass the live payment decision or silently substitute its older tender.
+**Cart Context** - Pay SHALL wait for acknowledged member-cart and tender writes. The server SHALL verify the submitted active cart id/version, exact lines and accepted tender before new or reused handoff. It SHALL compare current live quantities, availability and prices with submitted price acknowledgements and saved purchase facts before reuse, then recheck account eligibility and cart context after the live read. A saved invoice SHALL never bypass this decision or silently substitute older tender. Reuse SHALL retain existing reservation facts without another reservation.
+
+**No Points** - The versioned payment request SHALL require an integer points choice from 0 through 10,000,000 inclusive. Zero SHALL represent no points spent. An omitted points choice from a legacy request SHALL mean zero and pass through the same tender validation.
 
 <!-- trace:scenario id=g10.store-checkout.SC-a01 rev=3 -->
 #### Scenario: grade10-site-store-checkout-SC-01 - A member sees a current basket before Pay
@@ -83,15 +85,26 @@ named line.
 - **AND** Pay is unavailable
 - **AND** a retry is offered without creating an order
 
-<!-- trace:scenario id=g10.store-checkout.SC-4av rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-4av rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-39 - Pay reviews an existing invoice against current facts
 **Serves:** `grade10-site-store-checkout-US-01`, `grade10-site-store-checkout-US-02` - Pay reviews an existing invoice against current facts
 
-- **GIVEN** an open invoice exists and a shop line has changed since it was created
+- **GIVEN** an open invoice exists and a shop line's price, stock or available quantity has changed since it was created
 - **WHEN** the collector presses Pay for the same purchase
 - **THEN** the server makes a fresh live decision and names the changed line
 - **AND** the old payable URL is not handed off as the current basket
 - **AND** no replacement order or invoice is created by the failed decision
+- **AND** submitted prices and tender are compared with live facts and the saved purchase before any invoice reuse
+
+<!-- trace:scenario id=g10.store-checkout.SC-gem rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-61 - Zero points is a valid payment choice
+**Serves:** grade10-site-store-checkout-US-01 - The collector pays without spending points
+
+- **GIVEN** a ready reviewed member basket has persisted zero points and no coupon
+- **WHEN** the collector submits the versioned payment request with zero points
+- **THEN** the server accepts the points choice and returns one hosted invoice or its existing purchase state
+- **AND** a legacy request omitting points uses the same zero-points decision
+- **AND** a missing versioned choice, a negative, fractional or above-limit choice is refused before order or invoice creation
 
 <!-- trace:scenario id=g10.store-checkout.SC-xy2 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-49 - An empty reviewed basket cannot start hosted payment
@@ -316,7 +329,7 @@ has been recorded.
 - **AND** no replacement Shopify invoice is created
 - **AND** the member cannot start a new purchase until an operator binds or cancels the provider draft
 
-<!-- trace:scenario id=g10.store-checkout.SC-g88 rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-g88 rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-40 - Concurrent first requests share one purchase
 **Serves:** grade10-site-store-checkout-US-05 - Concurrent first requests share one purchase
 
@@ -325,6 +338,8 @@ has been recorded.
 - **THEN** they converge on one Grade10 order and canonical intent
 - **AND** at most one Shopify invoice is created
 - **AND** the second request receives the saved invoice or settling state
+- **AND** all handed-off URLs belong to that canonical persisted payable purchase
+- **AND** no caller receives a canceled or superseded losing invoice URL
 
 <!-- trace:scenario id=g10.store-checkout.SC-5ie rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-41 - Stale cart or tender cannot become an unrelated checkout
@@ -383,8 +398,8 @@ after settlement.
 
 **Cart release** - The member cart SHALL remain while the collector is at
 Shopify and SHALL release the paid lines only after the order is `paid`.
-Release SHALL convert only the still-active cart id and version bought by the
-order. An edited or rebuilt cart and its tender SHALL survive payment of an
+Release SHALL convert only the still-active cart id whose member-edit counter matches the purchase.
+Shop review changes alone SHALL not prevent conversion. A cart with later member line or tender edits, or a rebuilt cart and its tender, SHALL survive payment of an
 older order. Unchanged conversion SHALL leave no active purchased lines or
 tender; the next cart starts with default tender.
 
@@ -533,13 +548,13 @@ The frontend SHALL preserve an opaque member/brand-scoped purchase identity acro
 - **AND** the stale response cannot redirect or overwrite newer cart/tender state
 - **AND** a later Pay uses the persisted new context after current review
 
-<!-- trace:scenario id=g10.store-checkout.SC-2n2 rev=2 -->
+<!-- trace:scenario id=g10.store-checkout.SC-2n2 rev=3 -->
 #### Scenario: grade10-site-store-checkout-SC-36 - Paid refresh preserves later choices
 **Serves:** grade10-site-store-checkout-US-06 - Paid refresh preserves later choices
 
 - **GIVEN** a member increases a line quantity or changes tender during hosted payment
 - **WHEN** the older order becomes paid
-- **THEN** backend cart-version guards preserve later lines and tender
+- **THEN** the backend's member-edit guard preserves later lines and tender
 - **AND** the frontend re-reads current cart/tender and makes no variant-based deletion
 
 <!-- trace:scenario id=g10.store-checkout.SC-vsd rev=2 -->
@@ -571,14 +586,24 @@ The frontend SHALL preserve an opaque member/brand-scoped purchase identity acro
 - **THEN** existing localized failure/support feedback is shown
 - **AND** no fallback legacy creation request is sent
 
-<!-- trace:scenario id=g10.store-checkout.SC-5sl rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-5sl rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-47 - Unchanged paid conversion refreshes an empty cart
 **Serves:** grade10-site-store-checkout-US-03 - Unchanged paid conversion refreshes an empty cart
 
-- **GIVEN** the active cart id/version and tender still match the paid purchase
+- **GIVEN** the active cart id and member-edit counter still match the paid purchase
 - **WHEN** payment settles and the frontend refreshes cart/tender
 - **THEN** the authoritative cart has no active purchased lines and default tender
 - **AND** the frontend observes conversion without local cleanup
+
+<!-- trace:scenario id=g10.store-checkout.SC-jab rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-62 - Shop review changes do not retain a paid basket
+**Serves:** grade10-site-store-checkout-US-03 - The collector sees the bought cart clear after a shop review
+
+- **GIVEN** the member has not edited the purchased cart or tender after Pay and a shop stock review changed only its general revision
+- **WHEN** the purchase settles and the authoritative cart is read
+- **THEN** the same active cart is converted and has no active bought lines or tender
+- **AND** a later member quantity or tender edit prevents that conversion
+- **AND** the general revision still guards stale Pay requests, invoice association and frontend answers
 
 <!-- trace:scenario id=g10.store-checkout.SC-v95 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-48 - Recovery and terminal answers use existing order surfaces

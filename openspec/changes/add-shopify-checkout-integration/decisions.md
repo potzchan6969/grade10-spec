@@ -23,7 +23,7 @@
 | Q5 | Who owns orders and money? | Backend owns creation, provider correlation and lifecycle | Browser-owned payment state |
 | Q6 | What happens on repeated Pay? | One purchase identity, order and payable invoice; server reuse or settling | Duplicate orders/invoices |
 | Q7 | Who settles payment? | Verified webhooks, reconciliation and order reads use guarded backend transition | Frontend settlement |
-| Q8 | What happens to the cart? | Convert only the active cart/version bought; re-read and preserve a later cart | Matching-variant deletion or quantity subtraction |
+| Q8 | What happens to the cart? | Convert the active cart bought only when its member-edit counter matches; shop review changes alone allow conversion. Re-read and preserve later member edits or a rebuilt cart | General-version conversion, matching-variant deletion or quantity subtraction |
 | Q9 | Who owns carrier rates? | Preserve and verify token-gated carrier rule and preview parity | Dropping carrier requirements |
 | Q10 | Where does confirmation return? | Static Grade10 Your Orders link on both Shopify confirmation surfaces | Purchase-specific link or native Continue shopping dependency |
 | Q11 | Does reload reuse a purchase? | Preserve one identity through same-session reload; backend decides invoice/state | New invoice after reload |
@@ -37,6 +37,7 @@
 | Q19 | Does verification add a shared slot? | Existing drawer-host account feedback and profile action | New verification export |
 | Q20 | Are backend limitations scope waivers? | No; the 2026-10-07 instruction retains every spec requirement and delivery waits for evidence | Incomplete guarantees becoming product contract |
 | Q21 | Does this add Awaiting payment? | Follow existing spec status labels; add no new shared badge in this amendment | Speculative status-set migration |
+| Q22 | How are the 2026-10-08 review findings addressed? | One canonical persisted purchase and dispatch claim; live validation before invoice reuse; no canceled invoice handoff; distinguish member edits from shop review; v2 explicitly accepts zero points | Returning a superseded URL, validation bypass, general-version cleanup or rejecting ordinary no-points checkout |
 
 ## Raised
 
@@ -49,4 +50,5 @@
 
 - **Instruction** - On 2026-10-07, @kinisworking said: "the frontend should be integrated all changes from the backend and the requirements from the specs".
 - **Supersession** - Earlier frontend-only decisions remain in acceptance history; they do not constrain this amendment.
+- **Follow-up** - On 2026-10-08, the owner authorized updating this amendment to follow the merged backend and address the readiness findings. Q8 and Q22 clarify existing journeys and feature roots; their frozen anchors are unchanged.
 - **Acceptance** - Scope clarification settles planning inputs; the complete plan receives human acceptance after QA2 and fresh acceptance review.

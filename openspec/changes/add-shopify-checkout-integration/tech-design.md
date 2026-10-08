@@ -2,25 +2,26 @@
 
 | Source | Finding |
 | --- | --- |
-| Durable checkout at `b1564948` | Current payment decision, one intent through terminal replay, recovery-only dispatch, guarded settlement and carrier parity remain required. |
-| Backend `bd04abc5` | Cart headers and guarded conversion exist. `cartCheckoutFor` matches variant/quantity; saved open checkout reuse precedes live pricing. It does not compare submitted tender or serialize first creates. |
+| Durable checkout at published store `b0bc23de57201d3cbcdf8a5b671b0869b9ba7ecb` | Current payment decision, one intent through terminal replay, recovery-only dispatch, guarded settlement and carrier parity remain required. |
+| Backend core `5b434c7a7d8f8e236754c27c41cdb9121982658e`, merged at `665aaa9eee2fcd5aa552c9978ec6a099fc1d3e43` | Cart headers, tender comparison and member-edit conversion guards exist. Saved open checkout reuse still precedes full live price validation; first creates are not serialized. |
 | Backend cart router | Retirement is deferred best effort after edits. A successful edit is not proof that a provider invoice closed. |
 | Backend result mapper | Existing created/refusal/failure/identity outcomes are emitted. Frontend compatible settling/terminal/conflict/recovery branches are not an implemented backend protocol. |
 | Existing frontend | Extend the canonical store procedure port, codecs, cart/checkout slices, fixtures and `resolveCheckout`; drawer and order pages retain existing shared blocks and labels. |
 
 ## Reviewed Backend Sources
 
-The five cart-header commits at `bd04abc5d91b51e5b99ccd31e21424039ed8f80e` change backend code and architecture documentation, with no frontend or public checkout schema changes. That revision is not an ancestor of the reviewed frontend at `788efad654e14843c6295948afade5b4b064c99f`; task8.2 records the final integrated revision.
+The reviewed cart-header core is `5b434c7a7d8f8e236754c27c41cdb9121982658e`, already merged into the application at `665aaa9eee2fcd5aa552c9978ec6a099fc1d3e43`. Its cart/tender matching and separate member-edit counter are observed implementation facts. They do not implement the remaining intent, dispatch, recovery and retirement prerequisites below.
 
 | Branch Behavior | Owning Application Source |
 | --- | --- |
 | One active member cart; tender belongs to its header | `packages/grade10-store/backend/src/db/schema/carts.ts`, `packages/grade10-store/backend/src/services/cart/tender.ts` |
-| Actual line, review or tender changes increment version; identical writes preserve it | `packages/grade10-store/backend/src/repositories/carts.ts`, `packages/grade10-store/backend/src/repositories/cartLines.ts` |
-| Cart association requires exact variant IDs and quantities | `packages/grade10-store/backend/src/services/cart/cart.ts:cartCheckoutFor` |
+| Actual line, review or tender changes increment `version`; only member edits increment `editedVersion`; identical writes preserve both | `packages/grade10-store/backend/src/repositories/carts.ts`, `packages/grade10-store/backend/src/repositories/cartLines.ts` |
+| Cart association requires exact variant IDs and quantities; saved invoice reuse also compares requested tender with order facts | `packages/grade10-store/backend/src/services/cart/cart.ts:cartCheckoutFor`, `packages/grade10-store/backend/src/services/checkout.ts:reusedCheckout` |
 | Open cart/version order with saved provider refs and URL is reused; the public mapper omits the service's `reused` flag | `packages/grade10-store/backend/src/services/checkout.ts`, `packages/grade10-store/backend/src/repositories/orders.ts:findOpenCartCheckout` |
 | Edits defer retirement; later Pay also supersedes older invoices | `packages/grade10-store/backend/src/trpc/routers/cart.ts`, `packages/grade10-store/backend/src/services/orders/retire.ts` |
-| Payment converts only the still-active cart ID/version bought | `packages/grade10-store/backend/src/services/orders/transitions.ts`, `packages/grade10-store/backend/src/repositories/carts.ts:convertCart` |
-| Migration 0049 drops existing lines and tender | `apps/backend/grade10/store/src/db/migrations/0049_cart_header.sql`, `apps/backend/zzz/store/src/db/migrations/0049_cart_header.sql` |
+| Payment converts only the still-active cart ID/member-edit counter bought; shop review write-backs do not preserve bought lines | `packages/grade10-store/backend/src/services/orders/transitions.ts`, `packages/grade10-store/backend/src/repositories/carts.ts:convertCart` |
+| Post-create supersession may cancel the caller's losing order, while its created response still returns that invoice URL | `packages/grade10-store/backend/src/services/checkout.ts:556-569` |
+| Tracked migration 0050 resets existing lines and tender, with no cart backfill | `apps/backend/grade10/store/src/db/migrations/0050_cart_header.sql`, `apps/backend/zzz/store/src/db/migrations/0050_cart_header.sql` |
 
 The service's sequential reuse behavior does not provide the concurrency, recovery, current-decision or legacy-invoice guarantees required below. The migration's cart reset remains an explicit release prerequisite.
 
@@ -33,14 +34,15 @@ The service's sequential reuse behavior does not provide the concurrency, recove
 
 - **Identity** - The server binds each authenticated request to one persisted intent and canonical reviewed lines/tender. The browser holds only an opaque intent key and submitted context in member/brand-scoped session storage; it never stores invoice authority. Concurrent tabs with different keys converge through a unique cart-version binding.
 - **Review** - Keep the drawer's open review. The server prices every Pay, including open-invoice reuse, and compares live facts, submitted acknowledgement and stored order facts before returning a payable URL. Existing reservation/coupon facts are read from the order on reuse rather than reserved again.
-- **Concurrency** - Use the existing account/cart row lock, an immutable intent binding and a database dispatch claim. Do not hold a transaction across catalog or provider calls. Recheck the cart version after the external live read and before committing the purchase.
+- **Concurrency** - Use the existing account/cart row lock, an immutable intent binding and a database dispatch claim. Do not hold a transaction across catalog or provider calls. Recheck account eligibility and cart version/tender after the external live read and before committing the purchase. Return only the canonical persisted order's current payable URL; never return a URL from a canceled losing request.
+- **Counters** - General `version` guards Pay, invoice association and stale frontend answers. Store `cartEditedVersion` with the order and compare active cart `editedVersion` for paid conversion. Member line/tender edits advance both counters; shop review changes advance only general version. A review-only change after Pay still allows conversion.
 - **Retirement** - An edit commits its cart revision and durable retirement due work together. Retire outside the transaction with retryable persisted work; retain the provider-aware recovery ladder. A dispatched ambiguous purchase blocks replacement until bind/cancel resolves it. A definitive provider refusal may close it without another payable invoice.
 - **Frontend** - Pay waits for acknowledged cart/tender writes and ready review/quote. Capture member, cart id/version, intent key, tender and request generation before dispatch. Ignore navigation and cache writes from responses whose context changed; invalidate and re-read authoritative cart/order state instead.
 - **Compatibility** - Add a versioned authenticated procedure and context read. Keep legacy procedure names and response union intact; route their member-cart purchases through the same safety engine. Never fall back from an unsupported v2 call to unsafe creation.
 
 ## Database Schema
 
-The cart header and order `cart_id`/`cart_version` from the branch remain authoritative. Extend the existing order rather than duplicating its purchase facts.
+The merged cart header and order `cart_id`/`cart_version`/`cart_edited_version` remain authoritative. Extend the existing order rather than duplicating its purchase facts.
 
 | Owning Table | Proposed Column | Type / Nullability / Default |
 | --- | --- | --- |
@@ -73,11 +75,11 @@ erDiagram
 | claimProviderDispatch | order id | claimed immutable request or existing state | Conditional `ready -> dispatched` commit before provider network call |
 | recoverProviderDispatch | order id | bound draft, settling, or manual review | Provider read by stored correlation; never create from dispatched state |
 | retireCheckout | due order id | retired, paid, retry due, or recovery | Provider-aware discard outside transaction; record facts and reservation release atomically through guarded transitions |
-| settleOrder | verified provider facts + existing order | paid once + converted/not-converted cart | Lock current header; convert only matching active id/version; provider event and paid transition commit once |
+| settleOrder | verified provider facts + existing order | paid once + converted/not-converted cart | Lock current header; convert only matching active id/member-edit counter; provider event and paid transition commit once |
 
-- **Mutation order** - First decision reads live facts, then locks account/cart, validates revision/tender, resolves current intent, writes order and lines/reservations, stamps prior retirement due, and commits. Minting and provider dispatch follow existing order machinery with persisted retries. A reuse reads order reservations rather than minting again.
+- **Mutation order** - Every open decision, including saved-URL reuse, reads full live lines, availability, quantities and prices before taking account/cart locks. Recheck account eligibility, submitted revision and tender, compare submitted price acknowledgements and saved order facts, then resolve the canonical purchase. The price-only goods gate is not full acknowledgement validation. A refused read creates no order or invoice and returns no saved payable URL. A successful first decision writes order and lines/reservations, stamps prior retirement due, and commits. Uniqueness resolves concurrent first callers before the single dispatch claim is committed. Reuse reads existing reservation and coupon facts; it never reserves again. Handoff rechecks persisted canonical order/provider state, rather than returning a request-local URL after supersession.
 - **Dispatch** - Tag Shopify draft creation with Grade10 order/intent correlation and canonical fingerprint. Mark dispatched before sending. Recovery scopes every query to the configured shop, checks the exact order correlation, member/customer ownership where bound, variant/quantity/currency/tender fingerprint and provider payable/paid state, and pages through every candidate. A name, email or newest timestamp alone is not identity. Zero or multiple verified candidates never justify replacement; a unique verified candidate binds references before URL return. Query failure is recoverable failure, never absence. Deadline expiry writes manual review; operator bind/cancel uses existing elevated/environment gates and audited transitions.
-- **Example** - Member `m1`, cart `c1` version 7, one variant `v1` quantity 2, points 100, intent `i1` produces order `o1`, fixed order items, fingerprint `f1`, dispatch ready. Two concurrent keys for this same cart version return canonical `i1/o1`. Editing to version 8 leaves `o1` fixed and stamps its retirement due. A paid event for `o1` preserves version 8 and its tender; paying unchanged version 7 converts `c1` and its lines/tender cease to be active.
+- **Example** - Member `m1`, cart `c1` version 7/member-edit counter 3, one variant `v1` quantity 2, points 100, intent `i1` produces order `o1`, fixed order items, fingerprint `f1`, dispatch ready. Two concurrent keys converge on `i1/o1` before one provider dispatch. A member edit to version 8/counter 4 preserves the later cart when `o1` is paid. A shop stock review to version 8/counter 3 still permits conversion of `c1`; bought lines and tender cease to be active.
 - **Terminal** - Exact-key replay returns recorded terminal state without requiring the now-converted cart to exist. Reusing that key with changed submitted acknowledgement returns conflict. Open URL reuse additionally requires a current live decision and same active cart/tender. Missing active cart is never permission to recreate a terminal intent.
 
 ## API Contracts
@@ -87,7 +89,7 @@ These are proposed contracts for implementation, not claims about branch emissio
 | Procedure | Input | Output |
 | --- | --- | --- |
 | `checkout.context` | no input, authenticated | `{ protocol: 2, cart: { cartId: UUID|null, version: integer, lines: existing cart lines, tender: existing tender }, purchase: { intentKey: UUID, orderId: UUID, state: "open"|"terminal"|"recoveryRequired" }|null }` |
-| `checkout.payV2` | `{ intentKey: UUID, cartId: UUID, cartVersion: nonnegative integer, items: existing checkout items, spendPoints: existing points schema, couponCodes?: existing code schema, couponId?: existing id, deviceId?: existing device schema }` | `{ protocol: 2, intentKey: UUID, cartId: UUID, cartVersion: integer, result: PayResult }` |
+| `checkout.payV2` | `{ intentKey: UUID, cartId: UUID, cartVersion: nonnegative integer, items: existing checkout items refined to require seenUnitPriceMinor with existing nonnegative integer bounds, spendPoints: required integer 0..MAX_SPEND_POINTS (10_000_000), couponCodes?: existing code schema, couponId?: existing id, deviceId?: existing device schema }` | `{ protocol: 2, intentKey: UUID, cartId: UUID, cartVersion: integer, result: PayResult }` |
 
 `PayResult` is the existing checkout-result union plus the following exact alternatives:
 
@@ -98,6 +100,8 @@ These are proposed contracts for implementation, not claims about branch emissio
 
 - **Created** - Existing created fields and URL shape remain; saved invoice reuse returns created without requiring a new public `reused` badge. `clientSecret` is null for Shopify. Both new and reused handoffs use one resolver path.
 - **Preconditions** - Authentication proves member; supplied cart id/version must belong to that member. Duplicate variants, mismatched quantities/tender or stale versions refuse before order/provider writes. Client amounts acknowledge a seen price; the server owns actual money and canonical fingerprint.
+- **Points wire** - Reuse the zero-inclusive `cartTenderSchema.spendPoints` bounds for required v2 input. Do not use the existing positive-only `spendPointsSchema`; zero is an ordinary no-points purchase. Legacy omission normalizes to zero before the same engine validates authoritative tender.
+- **Price wire** - V2 requires each line's `seenUnitPriceMinor` acknowledgement; the existing optional checkout-item field is not sufficient. Legacy adapters derive missing acknowledgement only from the exact authoritative member cart review, validate it against live and saved purchase facts, and refuse unsafe association through existing vocabulary.
 - **Lost answer** - Persist the submitted key before the call. Retry that key and immutable context, or read context/order; never rotate on transport/decode error. Canonical returned key replaces an alias only when the submitted context still matches.
 - **Older clients** - Legacy member calls derive the current canonical cart intent only after exact authoritative lines/tender comparison and live review; a mismatch returns existing contradicted/rejected vocabulary without unassociated creation. Existing created, failed and identity responses remain decodable. Settling/recovery/terminal adapt to existing created-null-URL or failed-with-known-order vocabulary and prohibit dispatch in the engine. Test old codecs and ZZZ/operator fixtures. Operator baskets not associated with member carts retain existing permissions and their established behavior; they must not bypass a member recovery blockade.
 - **Availability** - Backend and codecs land before frontend. If context/v2 is missing or malformed, retain support/retry feedback and disable handoff; do not invoke legacy creation as fallback. Cached older tabs are protected by the legacy adapter, not by browser upgrade timing.

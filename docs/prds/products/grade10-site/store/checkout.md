@@ -53,7 +53,7 @@ In Your Orders.
 
 🚧 **Changed purchase** - A changed basket or tender starts a new purchase and retires the older unpaid invoice through the store's recovery path.
 
-🚧 **Later cart** - Payment clears the cart it bought only while that cart is unchanged; a cart edited or rebuilt afterwards stays with its tender.
+🚧 **Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
 
 🚧 **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice.
 
@@ -90,6 +90,7 @@ to navigate to.
 | Current decision | Decided | Cart open provides the early review; Pay makes its own current decision, including when it resumes an invoice. An earlier drawer quote never replaces that decision. | Product |
 | Cart-header integration | Decided | Integrate every backend cart-header change and retain the complete durable requirements. Missing backend guarantees remain delivery dependencies, not scope waivers. | @kinisworking |
 | Repeated purchase | Decided | The store owns invoice reuse and recovery; the frontend keeps the purchase identity across Pay and a same-session reload. | @kinisworking |
+| Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |
 | Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
