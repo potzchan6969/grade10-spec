@@ -31,7 +31,7 @@
 - [ ] 4.5 `fulfilment.ts` writes `dispatched_at`, `trackerUrl` and `delivered_at` with their log rows and letters, and the winner reads the number as the tracker link or as plain text (SC-237, SC-238); `comments.addComment`; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts`
 - [ ] 4.6 `quote.reissueInvoice`: one Reissue on `pending` or `expired` with no payment that counts toward the balance, a reason and at least one change (`NO_CHANGE`), the deadline kept or restarted, the setup snapshots moved and the open checkout session expired; `setup.ts`: `confirmSetup` behind `confirmWinnerAddress`, once, with `METHOD_UNAVAILABLE`, `reopenSetup`, `recordSetup`; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts`
 
-## 5. Operator Surface (grade10)
+## 5. Operator Surface (grade10) (owner: @htonyl)
 
 - [ ] 5.1 `trpc/routers/orders.ts` with the grant per procedure, `auditDetails` on each and a cap on the audit row; `router.spec.ts` pins the grants to `OPERATOR_ACTION_PERMISSIONS`; `apps/backend/grade10/auction/test/db/trpc/router.spec.ts`, `apps/backend/grade10/auction/test/db/trpc/auditTrail.spec.ts`, `apps/backend/grade10/auction/test/db/trpc/refusals.spec.ts`; no input carries `actor` or `at`, the service takes them from the session and `ctx.clock()` after the lock (SC-166); a repeated request answers the recorded outcome and a reused key is refused, writing nothing (SC-240, SC-241)
 - [ ] 5.2 The winner entrypoint exposes the winner methods under their current names and its prototype equals the allowlist; the store router forwards them unchanged and ignores a client-sent `userId`; `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts`, `apps/backend/grade10/store/test/db/auctionRouter.spec.ts`
