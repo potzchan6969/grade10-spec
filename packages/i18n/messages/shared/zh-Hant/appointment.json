@@ -42,6 +42,8 @@
     "name": "姓名",
     "email": "電郵",
     "phone": "電話",
+    "phoneIncomplete": "請輸入完整的電話號碼。",
+    "phonePlaceholder": "+852 1234 5678",
     "notes": "有什麼需要我們知道？",
     "optional": "選填",
     "nameMissing": "請填寫姓名。",

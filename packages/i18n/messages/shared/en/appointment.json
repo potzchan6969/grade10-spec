@@ -42,6 +42,8 @@
     "name": "Name",
     "email": "Email",
     "phone": "Phone",
+    "phoneIncomplete": "Enter the whole phone number.",
+    "phonePlaceholder": "+852 1234 5678",
     "notes": "Anything we should know?",
     "optional": "optional",
     "nameMissing": "Tell us your name.",

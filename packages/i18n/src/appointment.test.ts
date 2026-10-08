@@ -12,6 +12,8 @@ const KINDS = [
 
 const APPOINTMENT_KEYS = [
   "details.choose",
+  "details.phoneIncomplete",
+  "details.phonePlaceholder",
   ...KINDS.map((kind) => `details.kinds.${kind}`),
   "confirmation.beforeYouCome",
   "confirmation.answers",
