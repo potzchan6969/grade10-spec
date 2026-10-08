@@ -1,3 +1,4 @@
+import { formatMediumMoment } from "@grade10/date";
 import { formatHkd, SCAN_IMAGE, SHOP_NAME } from "./vault-content";
 
 type IntakeService = "vault" | "grading" | "auction-listing" | "store-listing";
@@ -63,12 +64,10 @@ const SUBMISSION_B = "SUB-2026-99110";
 const HANDED_IN_A = Date.UTC(2026, 8, 14, 4, 30);
 const HANDED_IN_B = Date.UTC(2026, 8, 10, 6, 0);
 
+const HAND_IN_CLOCK = { locale: "en-HK", timeZone: "Asia/Hong_Kong" };
+
 function handInLine(item: IntakeItemRow): string {
-  const when = new Intl.DateTimeFormat("en-HK", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Asia/Hong_Kong",
-  }).format(new Date(item.handedInAt));
+  const when = formatMediumMoment(item.handedInAt, HAND_IN_CLOCK);
   return `${HAND_IN_METHOD_SHORT} · ${item.shop} · ${when}`;
 }
 

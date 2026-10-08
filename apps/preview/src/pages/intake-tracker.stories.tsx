@@ -1,3 +1,4 @@
+import { formatMediumDay } from "@grade10/date";
 import {
   Tabs,
   TabsContent,
@@ -25,11 +26,10 @@ import { navigateToStory } from "./workbench-story-nav";
 
 const FILTERS: IntakeListFilter[] = ["in-progress", "completed", "all"];
 
+const HAND_IN_CLOCK = { locale: "en-HK", timeZone: "Asia/Hong_Kong" };
+
 function formatHandInDate(ms: number): string {
-  return new Intl.DateTimeFormat("en-HK", {
-    dateStyle: "medium",
-    timeZone: "Asia/Hong_Kong",
-  }).format(new Date(ms));
+  return formatMediumDay(ms, HAND_IN_CLOCK);
 }
 
 function BatchDivider({
