@@ -66,7 +66,7 @@
 - [ ] 8.5 Tests first for SC-254 and SC-255 in `apps/frontend/grade10/src/pages/auctions/AuctionWinnerOrderPage.test.tsx`: applying an unsaved one-time address calls `saveWinnerSetupDraft`, and a reload restores it ahead of the saved addresses for delivery and for billing; then the page wiring; `node scripts/test.mjs apps/frontend/grade10`
 - [ ] 8.6 Tests first for SC-250 in `apps/frontend/grade10/src/pages/auctions/WinnerOrderContactDialog.test.tsx`: Copy Message reads Copied, then Copy Message, and calls no toast; the To and Subject controls are unchanged; then drop `toast.success` from the Copy Message path in `WinnerOrderContactDialog.tsx`; `node scripts/test.mjs apps/frontend/grade10`
 
-## 9. Letter Template (grade10-spec)
+## 9. Letter Template (grade10-spec) (owner: @htonyl)
 
 - [ ] 9.2 The Proof not accepted letter under `apps/emails/emails/auction/order/`; `pnpm --dir apps/emails run typecheck`
 - [ ] 9.3 The Contact Us preview `apps/preview/src/pages/winner-order-contact-dialog.tsx`: Copy Message reads Copied for a moment and fires no toast, as SC-250 states; the To and Subject controls are unchanged; `pnpm --dir apps/preview run lint`, `pnpm --dir apps/preview run build-storybook`
