@@ -12,6 +12,7 @@ import {
 import {
   drawnHorizontalLines,
   drawnRectangles,
+  drawnRow,
   drawnStrings,
   drawnText,
 } from "./pdf-test-helpers";
@@ -83,12 +84,6 @@ const SUMMARY_LINE_ITEMS = [
   },
   { key: "orderTotal" as const, label: "Order Total", amount: "HKD 205.00" },
 ];
-
-function textRow(rows: Awaited<ReturnType<typeof drawnText>>, text: string) {
-  const row = rows.find((candidate) => candidate.text === text);
-  expect(row, `expected rendered text ${text}`).toBeDefined();
-  return row as (typeof rows)[number];
-}
 
 describe("receipt PDF renderer", () => {
   it("keeps the four immutable payment lines in order", () => {
@@ -172,12 +167,12 @@ describe("receipt PDF renderer", () => {
     const withPhoneRows = await drawnText(withPhone);
     const withoutPhoneRows = await drawnText(withoutPhone);
     expect(
-      textRow(withoutPhoneRows, "North Point, 999077").y -
-        textRow(withPhoneRows, "North Point, 999077").y,
+      drawnRow(withoutPhoneRows, "North Point, 999077").y -
+        drawnRow(withPhoneRows, "North Point, 999077").y,
     ).toBeCloseTo(LINE_HEIGHT);
     expect(
-      textRow(withoutPhoneRows, "Hong Kong SAR").y -
-        textRow(withPhoneRows, "Hong Kong SAR").y,
+      drawnRow(withoutPhoneRows, "Hong Kong SAR").y -
+        drawnRow(withPhoneRows, "Hong Kong SAR").y,
     ).toBeCloseTo(LINE_HEIGHT);
 
     const personal = await ReceiptPdf({
@@ -236,7 +231,7 @@ describe("receipt PDF renderer", () => {
       "Previous Payments",
       "Current Payment Received",
       "Remaining Balance Due",
-    ].map((text) => textRow(rows, text));
+    ].map((text) => drawnRow(rows, text));
     for (const [index, row] of order.entries()) {
       if (index > 0) expect(row.y).toBeLessThan(order[index - 1]?.y ?? 0);
     }
@@ -288,11 +283,11 @@ describe("receipt PDF renderer", () => {
     expect((await drawnStrings(nullTax)).join(" ")).not.toContain("Tax");
     const omittedRows = await drawnText(withoutTax);
     const nullRows = await drawnText(nullTax);
-    expect(textRow(omittedRows, "Subtotal").y).toBeCloseTo(
-      textRow(nullRows, "Subtotal").y,
+    expect(drawnRow(omittedRows, "Subtotal").y).toBeCloseTo(
+      drawnRow(nullRows, "Subtotal").y,
     );
-    expect(textRow(omittedRows, "Payment Processing Fee").y).toBeCloseTo(
-      textRow(nullRows, "Payment Processing Fee").y,
+    expect(drawnRow(omittedRows, "Payment Processing Fee").y).toBeCloseTo(
+      drawnRow(nullRows, "Payment Processing Fee").y,
     );
   });
 });

@@ -9,24 +9,11 @@ import {
 } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/fixtures";
 import { PdfPreview } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 function ReceiptPdfPreview({ data }: { data: ReceiptPdfData }) {
-  const [bytes, setBytes] = useState<ArrayBuffer | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setBytes(null);
-    void ReceiptPdf(data).then((rendered) => {
-      if (!cancelled) setBytes(rendered);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [data]);
-
-  if (!bytes) return <p>Generating...</p>;
-  return <PdfPreview bytes={bytes} />;
+  const pdf = useMemo(() => ReceiptPdf(data), [data]);
+  return <PdfPreview pdf={pdf} />;
 }
 
 const meta = {

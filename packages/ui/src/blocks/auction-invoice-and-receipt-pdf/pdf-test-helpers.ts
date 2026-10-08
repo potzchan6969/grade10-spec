@@ -1,4 +1,3 @@
-import type { PDFPage } from "pdf-lib";
 import {
   decodePDFRawStream,
   PDFArray,
@@ -6,7 +5,7 @@ import {
   PDFRawStream,
   StandardFonts,
 } from "pdf-lib";
-import type { PdfBlock } from "./pdf-document";
+import { expect } from "vitest";
 
 function contentStreams(
   pdf: Awaited<ReturnType<typeof PDFDocument.load>>,
@@ -174,20 +173,9 @@ export async function textRight(): Promise<(row: DrawnText) => number> {
     );
 }
 
-/** Draws a block at `y` on a page that only records the lowest y it is asked to draw at. */
-export function lowestDrawn(block: PdfBlock, y: number): number {
-  const reached: number[] = [];
-  const page = {
-    drawText: (_text: string, options: { y: number }) => {
-      reached.push(options.y);
-    },
-    drawLine: (options: { start: { y: number }; end: { y: number } }) => {
-      reached.push(options.start.y, options.end.y);
-    },
-    drawRectangle: (options: { y: number }) => {
-      reached.push(options.y);
-    },
-  } as unknown as PDFPage;
-  block.draw(page, y);
-  return Math.min(...reached);
+/** The first row drawing exactly `text`, failing the test when none does. */
+export function drawnRow(rows: readonly DrawnText[], text: string): DrawnText {
+  const row = rows.find((candidate) => candidate.text === text);
+  expect(row, `expected rendered text ${text}`).toBeDefined();
+  return row as DrawnText;
 }

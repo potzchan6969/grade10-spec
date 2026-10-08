@@ -154,6 +154,22 @@ export const SAMPLE_INVOICE: InvoicePdfData = {
   copy: INVOICE_COPY,
 };
 
+/** Every rail enabled, with values a test can find on the page. */
+export const ALL_BANK_RAILS: InvoicePdfBankRails = {
+  swift: {
+    beneficiary: "Grade10 HK Ltd.",
+    swiftBic: "GRADE10HKXXX",
+    account: "HK0000000000000000000",
+  },
+  fps: { fpsId: "165123456", beneficiary: "Grade10 HK Ltd." },
+  hkLocalTransfer: {
+    bankAndCode: "Example Bank (003)",
+    beneficiary: "Grade10 HK Ltd.",
+    accountNo: "003-456-123456-001",
+  },
+  reference: "LK7P2Q01",
+};
+
 export const BANK_TRANSFER_RAILS: InvoicePdfBankRails = {
   swift: {
     beneficiary: "Grade10 HK Ltd.",
@@ -251,36 +267,47 @@ export const WITH_TAX_RECEIPT: ReceiptPdfData = {
   },
 };
 
-/** An invoice for `items`, its charges and summary adding up the way a caller's would. */
-function invoiceFor(items: readonly PdfItemRow[]): InvoicePdfData {
+/** The item table, charges and summary a caller would supply for `items`, and the Order Total they come to. */
+function orderValueOf(items: readonly PdfItemRow[]): {
+  table: Pick<InvoicePdfData, "items" | "itemTotal" | "lineItems">;
+  orderTotal: string;
+} {
   const itemTotal = itemTotalOf(items);
-  const subtotal = centsOf(itemTotal.total) + 8_000 + 4_000;
+  const charges = INVOICE_CHARGES.slice(0, 2);
+  const subtotal = charges.reduce(
+    (cents, charge) => cents + centsOf(charge.amount),
+    centsOf(itemTotal.total),
+  );
   const fee = Math.round(subtotal * 0.036);
+  const orderTotal = hkd(subtotal + fee);
   return {
-    ...SAMPLE_INVOICE,
-    items,
-    itemTotal,
-    lineItems: [
-      ...INVOICE_CHARGES.slice(0, 2),
-      { key: "subtotal", label: "Subtotal", amount: hkd(subtotal) },
-      {
-        key: "paymentProcessingFee",
-        label: "Payment Processing Fee",
-        amount: hkd(fee),
-      },
-      { key: "orderTotal", label: "Order Total", amount: hkd(subtotal + fee) },
-    ],
+    table: {
+      items,
+      itemTotal,
+      lineItems: [
+        ...charges,
+        { key: "subtotal", label: "Subtotal", amount: hkd(subtotal) },
+        {
+          key: "paymentProcessingFee",
+          label: "Payment Processing Fee",
+          amount: hkd(fee),
+        },
+        { key: "orderTotal", label: "Order Total", amount: orderTotal },
+      ],
+    },
+    orderTotal,
   };
 }
 
+function invoiceFor(items: readonly PdfItemRow[]): InvoicePdfData {
+  return { ...SAMPLE_INVOICE, ...orderValueOf(items).table };
+}
+
 function receiptFor(items: readonly PdfItemRow[]): ReceiptPdfData {
-  const invoice = invoiceFor(items);
-  const orderTotal = invoice.lineItems.at(-1)?.amount ?? "";
+  const { table, orderTotal } = orderValueOf(items);
   return {
     ...SAMPLE_RECEIPT,
-    items: invoice.items,
-    itemTotal: invoice.itemTotal,
-    lineItems: invoice.lineItems,
+    ...table,
     paymentBreakdown: {
       originalInvoiceTotal: orderTotal,
       previousPayments: "HKD 0.00",

@@ -1,13 +1,13 @@
 import fontkit from "@pdf-lib/fontkit";
-import type { PDFDocument, PDFFont, PDFPage } from "pdf-lib";
-import { rgb, StandardFonts } from "pdf-lib";
+import type { PDFFont, PDFPage } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
 /**
- * The A4 layout and drawing primitives shared by every document this
- * capability renders with pdf-lib - `ReceiptPdf` and `InvoicePdf` are the
- * two documents; this is the one sheet they are both drawn on. Not
- * published as its own subpath: a caller wants a document, never a bare
- * `drawText`.
+ * The A4 layout, the measured blocks and the pages every document this
+ * capability renders with pdf-lib is drawn on - `ReceiptPdf` and
+ * `InvoicePdf` are the two documents. `../../index` is the contract: a
+ * caller wants a document, never a bare `drawText`, though the block's
+ * `*` subpath can still reach this file directly.
  */
 
 export const A4_WIDTH = 595.28;
@@ -330,25 +330,29 @@ export function measuredBlock(layout: PdfLayout): PdfBlock {
   };
 }
 
-/** An invoice or receipt with nothing to bill is a fault in the caller, refused before a page exists. */
-export function requireItems(items: readonly PdfItemRow[]): void {
-  if (items.length === 0) {
-    throw new RangeError(
-      "No items were given: an invoice or receipt lists at least one item.",
-    );
-  }
-}
-
 type AmountKey = keyof PdfItemTotal;
 
-const AMOUNT_COLUMNS: readonly {
-  key: AmountKey;
-  label: "winningBidLabel" | "buyersPremiumLabel" | "totalLabel";
-}[] = [
-  { key: "winningBid", label: "winningBidLabel" },
-  { key: "buyersPremium", label: "buyersPremiumLabel" },
-  { key: "total", label: "totalLabel" },
+const AMOUNT_KEYS: readonly AmountKey[] = [
+  "winningBid",
+  "buyersPremium",
+  "total",
 ];
+
+const AMOUNT_LABEL: Record<
+  AmountKey,
+  "winningBidLabel" | "buyersPremiumLabel" | "totalLabel"
+> = {
+  winningBid: "winningBidLabel",
+  buyersPremium: "buyersPremiumLabel",
+  total: "totalLabel",
+};
+
+/** How one kind of table line is set; the column widths and the draws read the same one. */
+type Cell = { font: keyof Fonts; size: number };
+
+const HEADER_CELL: Cell = { font: "bold", size: SMALL_SIZE };
+const ROW_CELL: Cell = { font: "regular", size: BODY_SIZE };
+const TOTAL_CELL: Cell = { font: "bold", size: BODY_SIZE };
 
 /** Where each amount column right-aligns, and how wide that leaves the Item column. */
 type Columns = { titleWidth: number; right: Record<AmountKey, number> };
@@ -365,44 +369,72 @@ export type PdfItemTableData = {
 /** The table's blocks: the column header, one row per item, and the tail from the Item Total row to the boxed summary. */
 export type PdfItemTable = {
   header: PdfBlock;
-  rows: PdfBlock[];
+  rows: readonly [PdfBlock, ...PdfBlock[]];
   tail: PdfBlock;
 };
 
 /** Each amount column is as wide as its widest heading or amount, so no amount wraps, shrinks or overflows. */
 function measureColumns(fonts: Fonts, data: PdfItemTableData): Columns {
-  const right = {} as Record<AmountKey, number>;
-  let edge = RIGHT_EDGE;
-  for (const { key, label } of [...AMOUNT_COLUMNS].reverse()) {
-    right[key] = edge;
-    const width = Math.max(
+  const width = (cell: Cell, text: string) =>
+    fonts[cell.font].widthOfTextAtSize(text, cell.size);
+  const columnWidth = (key: AmountKey) =>
+    Math.max(
       MIN_AMOUNT_COLUMN,
-      fonts.bold.widthOfTextAtSize(data.copy[label], SMALL_SIZE),
-      fonts.bold.widthOfTextAtSize(data.itemTotal[key], BODY_SIZE),
-      ...data.items.map((item) =>
-        fonts.regular.widthOfTextAtSize(item[key], BODY_SIZE),
-      ),
+      width(HEADER_CELL, data.copy[AMOUNT_LABEL[key]]),
+      width(TOTAL_CELL, data.itemTotal[key]),
+      ...data.items.map((item) => width(ROW_CELL, item[key])),
     );
-    edge -= width + COLUMN_GAP;
-  }
-  const titleWidth = edge - MARGIN;
+  const total = RIGHT_EDGE;
+  const buyersPremium = total - columnWidth("total") - COLUMN_GAP;
+  const winningBid = buyersPremium - columnWidth("buyersPremium") - COLUMN_GAP;
+  const titleWidth =
+    winningBid - columnWidth("winningBid") - COLUMN_GAP - MARGIN;
   if (titleWidth < MIN_TITLE_COLUMN) {
     throw new RangeError(
       `The amounts do not fit: the three amount columns leave the Item column ${Math.round(titleWidth)}pt wide, under the ${MIN_TITLE_COLUMN}pt a title needs.`,
     );
   }
-  return { titleWidth, right };
+  return { titleWidth, right: { winningBid, buyersPremium, total } };
 }
 
 function drawAmounts(
   page: PDFPage,
-  font: PDFFont,
+  fonts: Fonts,
+  cell: Cell,
   columns: Columns,
   amounts: PdfItemTotal,
   y: number,
 ): void {
-  for (const { key } of AMOUNT_COLUMNS) {
-    drawTextRight(page, font, amounts[key], columns.right[key], y);
+  for (const key of AMOUNT_KEYS) {
+    drawTextRight(
+      page,
+      fonts[cell.font],
+      amounts[key],
+      columns.right[key],
+      y,
+      cell.size,
+    );
+  }
+}
+
+/** The room a fresh page gives a block below `continuation`, when one repeats there, and above `BODY_BOTTOM`. */
+function pageRoom(continuation?: PdfBlock): number {
+  const repeated = continuation ? continuation.height + continuation.after : 0;
+  return PAGE_TOP - repeated - BODY_BOTTOM;
+}
+
+/** Refuses, before any page is drawn, a block that a fresh page could not hold whole. */
+export function requireFits(
+  block: PdfBlock,
+  what: string,
+  continuation?: PdfBlock,
+  subject = "it",
+): void {
+  const room = pageRoom(continuation);
+  if (block.height > room) {
+    throw new RangeError(
+      `${what} does not fit: ${subject} is ${Math.round(block.height)}pt tall and a page holds ${Math.round(room)}pt.`,
+    );
   }
 }
 
@@ -466,28 +498,40 @@ function drawSummary(
 
 /**
  * Measures the whole table before any page is drawn, so every page lines up
- * and a table that cannot be drawn whole is refused rather than cut: amounts
- * too wide for the Item column, or an item row or the tail taller than a
- * page holds under the column header.
+ * and a table that cannot be drawn whole is refused rather than cut: no
+ * items at all, amounts too wide for the Item column, or an item row or the
+ * tail taller than a page holds under the column header.
  */
 export function measureItemTable(
   fonts: Fonts,
   data: PdfItemTableData,
 ): PdfItemTable {
+  const [firstItem, ...otherItems] = data.items;
+  if (!firstItem) {
+    throw new RangeError(
+      "No items were given: an invoice or receipt lists at least one item.",
+    );
+  }
   const { copy } = data;
   const columns = measureColumns(fonts, data);
 
   const header = measuredBlock((page, y) => {
-    drawText(page, fonts.bold, copy.itemLabel, MARGIN, y, SMALL_SIZE, INK);
-    for (const { key, label } of AMOUNT_COLUMNS) {
+    drawText(
+      page,
+      fonts[HEADER_CELL.font],
+      copy.itemLabel,
+      MARGIN,
+      y,
+      HEADER_CELL.size,
+    );
+    for (const key of AMOUNT_KEYS) {
       drawTextRight(
         page,
-        fonts.bold,
-        copy[label],
+        fonts[HEADER_CELL.font],
+        copy[AMOUNT_LABEL[key]],
         columns.right[key],
         y,
-        SMALL_SIZE,
-        INK,
+        HEADER_CELL.size,
       );
     }
     return drawRuleSpan(page, MARGIN, RIGHT_EDGE, y - 4, {
@@ -496,31 +540,37 @@ export function measureItemTable(
       gap: 0,
     });
   });
-  const room = PAGE_TOP - header.height - header.after - BODY_BOTTOM;
 
-  const rows = data.items.map((item, index) => {
+  const rowOf = (item: PdfItemRow, index: number) => {
     const lines = wrap(
       item.title,
-      fonts.regular,
-      BODY_SIZE,
+      fonts[ROW_CELL.font],
+      ROW_CELL.size,
       columns.titleWidth,
     );
     const row = measuredBlock((page, y) => {
       const first = y - ROW_LEAD;
       for (const [line, text] of lines.entries()) {
-        drawText(page, fonts.regular, text, MARGIN, first - line * LINE_HEIGHT);
+        drawText(
+          page,
+          fonts[ROW_CELL.font],
+          text,
+          MARGIN,
+          first - line * LINE_HEIGHT,
+          ROW_CELL.size,
+        );
       }
-      drawAmounts(page, fonts.regular, columns, item, first);
+      drawAmounts(page, fonts, ROW_CELL, columns, item, first);
       const last = first - (Math.max(lines.length, 1) - 1) * LINE_HEIGHT;
       return last - LINE_HEIGHT - ROW_PADDING + ROW_LEAD;
     });
-    if (row.height > room) {
-      throw new RangeError(
-        `The item row does not fit: item ${index + 1} is ${Math.round(row.height)}pt tall and a page holds ${Math.round(room)}pt.`,
-      );
-    }
+    requireFits(row, "The item row", header, `item ${index + 1}`);
     return row;
-  });
+  };
+  const rows: [PdfBlock, ...PdfBlock[]] = [
+    rowOf(firstItem, 0),
+    ...otherItems.map((item, index) => rowOf(item, index + 1)),
+  ];
 
   const charges = data.lineItems.filter((item) => item.key === undefined);
   if (data.taxLine) charges.push(data.taxLine);
@@ -531,8 +581,15 @@ export function measureItemTable(
       thickness: 0.8,
     });
     let line = y - ROW_LEAD;
-    drawText(page, fonts.bold, copy.itemTotalLabel, MARGIN, line);
-    drawAmounts(page, fonts.bold, columns, data.itemTotal, line);
+    drawText(
+      page,
+      fonts[TOTAL_CELL.font],
+      copy.itemTotalLabel,
+      MARGIN,
+      line,
+      TOTAL_CELL.size,
+    );
+    drawAmounts(page, fonts, TOTAL_CELL, columns, data.itemTotal, line);
     line -= LINE_HEIGHT * 1.4;
     for (const charge of charges) {
       drawMoneyRow(page, fonts, charge.label, charge.amount, MARGIN, line);
@@ -543,11 +600,7 @@ export function measureItemTable(
     }
     return line - LINE_HEIGHT;
   });
-  if (tail.height > room) {
-    throw new RangeError(
-      `The Item Total row with its charges does not fit: it is ${Math.round(tail.height)}pt tall and a page holds ${Math.round(room)}pt.`,
-    );
-  }
+  requireFits(tail, "The Item Total row with its charges", header);
 
   return { header, rows, tail };
 }
@@ -603,9 +656,73 @@ function together(first: PdfBlock, second: PdfBlock): PdfBlock {
  */
 export function placeItemTable(sheet: Sheet, table: PdfItemTable): void {
   const [first, ...rest] = table.rows;
-  place(sheet, first ? together(table.header, first) : table.header);
+  place(sheet, together(table.header, first));
   for (const row of rest) place(sheet, row, table.header);
   place(sheet, table.tail, table.header);
+}
+
+/** A section after the table, named for the refusal when a page cannot hold it. */
+export type PdfTrailingBlock = { what: string; block: PdfBlock };
+
+/** What both documents draw the same way: the table, the parties, the issuer and the document's own date. */
+export type PdfDocumentData = PdfItemTableData & {
+  billTo: PdfPartyAddress;
+  shipTo: PdfPartyAddress;
+  issuerName: string;
+  issuerEmail: string;
+  copy: PdfDocumentCopy & { documentTitle: string };
+};
+
+/**
+ * Renders one document of A4 pages. Every block is measured, and refused if
+ * a page could not hold it, before the first page exists. The head sits on
+ * page 1 only, the table and the trailing blocks follow it whole, and the
+ * issuer block goes on the last page. The document's own date stamps it and
+ * the clock is read nowhere, so the same data renders to the same bytes.
+ */
+export async function renderDocument(document: {
+  producer: string;
+  date: Date;
+  data: PdfDocumentData;
+  options: PdfRenderOptions;
+  drawMeta: (page: PDFPage, fonts: Fonts, y: number) => number;
+  trailing: (fonts: Fonts) => readonly PdfTrailingBlock[];
+}): Promise<ArrayBuffer> {
+  const { data } = document;
+  const pdf = await PDFDocument.create();
+  pdf.setProducer(document.producer);
+  pdf.setCreationDate(document.date);
+  pdf.setModificationDate(document.date);
+
+  const fonts = await loadFonts(
+    pdf,
+    document.options.fontBytes,
+    document.options.boldFontBytes,
+  );
+  const table = measureItemTable(fonts, data);
+  const trailing = document.trailing(fonts);
+  for (const { what, block } of trailing) requireFits(block, what);
+
+  const sheet = startSheet(pdf);
+  const { page } = sheet;
+  let y = drawTitle(
+    page,
+    fonts,
+    data.copy.documentTitle,
+    data.issuerName,
+    sheet.y,
+  );
+  y = document.drawMeta(page, fonts, y);
+  y = drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, { gap: LINE_HEIGHT * 1.5 });
+  sheet.y = drawParties(page, fonts, data.billTo, data.shipTo, data.copy, y);
+  placeItemTable(sheet, table);
+  for (const { block } of trailing) place(sheet, block);
+  drawIssuer(sheet.page, fonts, data.issuerName, data.issuerEmail);
+
+  const bytes = await pdf.save({ useObjectStreams: false });
+  const output = new Uint8Array(bytes.byteLength);
+  output.set(bytes);
+  return output.buffer;
 }
 
 /**
