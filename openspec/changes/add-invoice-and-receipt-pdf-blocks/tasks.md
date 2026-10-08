@@ -118,7 +118,7 @@ Amendment (`decisions.md` Q30, Q31-Q35, Q37). Needs groups 9 and 10 landed on th
 - [ ] 11.4 Move `apps/frontend/grade10/src/pages/demo/pdf/invoiceSample.ts` and `receiptSample.ts` to the new fields, add a several-item and a 30-item invoice sample and a 30-item receipt sample, and give `PdfLabPage.tsx` a button for each; update `PdfLabPage.test.tsx`
 - [ ] 11.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10`
 
-## 12. The walk - the item table on the invoice and receipt PDFs (grade10)
+## 12. The walk - the item table on the invoice and receipt PDFs (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review add-invoice-and-receipt-pdf-blocks`), and `/tcs-run-sheet` executes manual cases when needed. Needs group 11 landed. Group 6's walk reads the same two documents, so one pass can serve both.
 
