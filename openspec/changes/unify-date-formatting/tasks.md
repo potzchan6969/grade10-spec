@@ -1,4 +1,4 @@
-## 1. Add the date package (grade10-spec)
+## 1. Add the date package (grade10-spec) (owner: @seankcw)
 
 - [ ] 1.1 Tests first, in their own commit: the application's date suite and the store's `format-datetime` suite, ported to `packages/date` with `TZ` pinned off UTC, plus a parity test that walks every shape across `en`, `zh-Hant`, `zh-Hans`, `ko` and the zones the callers use
 - [ ] 1.2 Create `packages/date`: `package.json`, `tsconfig.json`, a node `vitest.config.ts` modelled on `packages/i18n`, and the modules `shapes`, `local`, `calendar-day`, `zone-names` and `relative` behind one barrel
