@@ -1,8 +1,8 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** reopened · 13/25
+**Status:** reopened · 12/25
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
-**Drafts styled:** 2026-10-02, tcs-rules r4
+**Drafts styled:** 2026-10-08, tcs-rules r4
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 
@@ -106,7 +106,7 @@ page,
 **so that** the card I chose, its images, and where its bidding stands are what
 I read.
 
-<!-- trace:case id=g10.auction-domain.TC-23e rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-fl9,g10.auction-listing-page.SC-aga,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
+<!-- trace:case id=g10.auction-domain.TC-23e rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-fl9,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
 ### grade10-site-auction-e2e-US02-TC01-1: Catalogue card opens its own lot page
 
 **Classification:**
@@ -184,8 +184,8 @@ I read.
 * <listing_4>'s name, description, sale and current standing are in the response HTML.
 * Money reads as minor units with its currency code, and no reserve or Buy Now price appears.
 
-<!-- trace:case id=g10.auction-domain.TC-qvl rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-mda,g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
-### grade10-site-auction-e2e-US02-TC03-1: Each auction surface names itself and is discoverable
+<!-- trace:case id=g10.auction-domain.TC-qvl rev=2 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-mda,g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13,g10.auction-listing-page.SC-aga -->
+### grade10-site-auction-e2e-US02-TC03-2: Each auction surface names itself and is discoverable
 
 Runs once per row of **Test data**.
 
@@ -193,14 +193,14 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-02, grade10-site-auction-listing-page-US-03
+* **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-02, grade10-site-auction-listing-page-US-03, grade10-site-auction-listing-page-US-05
 
 **Pre-conditions:**
 
@@ -227,7 +227,8 @@ Runs once per row of **Test data**.
 
 * The head names <identity>, and names no other auction surface in its place.
 * The response status is <status>.
-* No sitemap entry is a lot address, and none carries an unfilled parameter in place of one.
+* Every lot the catalogue holds is listed as an absolute URL of the serving environment.
+* No sitemap entry carries an unfilled parameter in place of a lot.
 
 ---
 
@@ -540,7 +541,7 @@ from my card until I win.
 * User A reads Outbid, with Your maximum still <user A maximum> and Highest bid at <user A maximum> plus <increment>.
 * <listing_6> appears once under Active with outbid standing, its price and currency code, and its latest activity time.
 
-<!-- trace:case id=g10.auction-domain.TC-57p rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj,g10.auction-listing-page.SC-fl9,g10.auction-listing-page.SC-aga -->
+<!-- trace:case id=g10.auction-domain.TC-57p rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj,g10.auction-listing-page.SC-fl9 -->
 ### grade10-site-auction-e2e-US05-TC02-1: Outbid summary opens its explanation and its lot
 
 **Classification:**
@@ -1303,3 +1304,5 @@ finds it.
 - **Deprecated** - `grade10-site-auction-e2e-US09-TC02-1`, a bid failing on an unavailable card capability, and `grade10-site-auction-e2e-US09-TC03-1`, a repeated card authorization event: no bid asks the card
 - **Trace changed** - `grade10-site-auction-e2e-US04-TC01-1` traces `grade10-site-auction-auction-US-02` in place of the retired grade10-site-auction-auction-US-03; its steps, results and status are unchanged
 - **Contradicted** - none
+
+**Run:** 2026-10-08, listing-page sitemap aligned to `grade10-site/site/crawlable-pages`. `grade10-site-auction-e2e-US02-TC03-1` retargeted as `US02-TC03-2` / `TC-qvl@2`: the sitemap lists every lot the catalogue holds.
