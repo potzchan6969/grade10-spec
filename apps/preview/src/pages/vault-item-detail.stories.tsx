@@ -9,22 +9,23 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { LISTING_LOT_SIDEBAR_CLASS, ListingLotGallery } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, within } from "storybook/test";
 import {
   formatHkd,
   statusBadgeVariant,
   VAULT_ASSETS,
   VAULT_PORTFOLIO_HREF,
-  VAULT_RETRIEVAL_STORY_ID,
 } from "./vault-content";
+import { VaultRequestRetrievalDialog } from "./vault-request-retrieval-dialog";
 import { VaultItemDetailPageShell } from "./vault-shared";
-import { navigateToStory } from "./workbench-story-nav";
 
 function VaultItemDetailPage({
   asset,
 }: {
   asset: (typeof VAULT_ASSETS)[number];
 }) {
+  const [retrievalOpen, setRetrievalOpen] = useState(false);
   const galleryImages = [
     {
       src: asset.imageSrc,
@@ -129,9 +130,9 @@ function VaultItemDetailPage({
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button
               className="w-full sm:w-auto"
+              onClick={() => setRetrievalOpen(true)}
               size="md"
               type="button"
-              onClick={() => navigateToStory(VAULT_RETRIEVAL_STORY_ID)}
             >
               Request Retrieval
             </Button>
@@ -159,6 +160,11 @@ function VaultItemDetailPage({
           </div>
         </VStack>
       </VStack>
+      <VaultRequestRetrievalDialog
+        asset={asset}
+        onOpenChange={setRetrievalOpen}
+        open={retrievalOpen}
+      />
     </VaultItemDetailPageShell>
   );
 }
@@ -193,6 +199,11 @@ export const Graded: Story = {
       canvas.getByRole("button", { name: "List for Auction" }),
     ).toBeDisabled();
     expect(canvas.getByText("Grade")).toBeVisible();
+    expect(
+      within(canvasElement.ownerDocument.body).queryByRole("dialog", {
+        name: "Request Retrieval",
+      }),
+    ).not.toBeInTheDocument();
   },
 };
 

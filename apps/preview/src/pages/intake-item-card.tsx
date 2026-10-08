@@ -1,9 +1,11 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Card,
+  CardAction,
   CardContent,
+  CardFooter,
+  CardHeader,
 } from "@grade10/design-system/components/display/card";
-import { Separator } from "@grade10/design-system/components/display/separator";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
@@ -17,6 +19,7 @@ import {
 import { FilePdf } from "@phosphor-icons/react";
 import { useState } from "react";
 import {
+  formatHkd,
   type IntakeItemRow,
   intakeItemCardStoryId,
   isVaulted,
@@ -119,10 +122,10 @@ function ScanThumbs({ item }: { item: IntakeItemRow }) {
 }
 
 /**
- * Typeset: status badge and name anchor top row as primary info; item ID sits
- * quietly beside name for reference; scan thumbnail pairs with grade as visual
- * anchor; service and date group as secondary metadata; note stays contextual.
- * Actions sit under a rule.
+ * Typeset: the header pairs the name link with the status badge through the
+ * card's action slot; the body sets grade and declared value as labelled
+ * fields beside the scan; service and hand-in stay quiet metadata; actions
+ * live in the card footer.
  */
 function IntakeItemCard({
   item,
@@ -135,142 +138,130 @@ function IntakeItemCard({
   const isVault = item.service === "vault";
   const vaulted = isVaulted(item);
 
+  const identity = (
+    <>
+      <Text
+        as="h2"
+        className="font-heading text-pretty tracking-tight"
+        size="lg"
+        weight="medium"
+      >
+        {item.name}
+      </Text>
+      <Text className="text-secondary-foreground" face="mono" size="xs">
+        {item.itemId}
+      </Text>
+    </>
+  );
+
   return (
-    <Card
-      className="gap-0 overflow-hidden border-border py-0 shadow-none"
-      padding={false}
-    >
-      <CardContent className="flex flex-col gap-0 p-0">
-        <div className="flex flex-col gap-4 px-4 pt-4 pb-4 sm:px-5 sm:pt-5">
-          <div className="flex items-start justify-between gap-3">
-            {onOpen ? (
-              <a
-                className="flex min-w-0 flex-1 flex-col gap-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                href={storyHref(intakeItemCardStoryId(item))}
-                onClick={(event) => {
-                  event.preventDefault();
-                  onOpen();
-                }}
-              >
-                <Text
-                  as="h2"
-                  className="font-heading text-pretty tracking-tight"
-                  size="lg"
-                  weight="medium"
-                >
-                  {item.name}
-                </Text>
-                <Text
-                  className="text-secondary-foreground"
-                  face="mono"
-                  size="xs"
-                >
-                  {item.itemId}
-                </Text>
-              </a>
-            ) : (
-              <div className="flex min-w-0 flex-1 flex-col gap-1">
-                <Text
-                  as="h2"
-                  className="font-heading text-pretty tracking-tight"
-                  size="lg"
-                  weight="medium"
-                >
-                  {item.name}
-                </Text>
-                <Text
-                  className="text-secondary-foreground"
-                  face="mono"
-                  size="xs"
-                >
-                  {item.itemId}
-                </Text>
-              </div>
-            )}
-            <Badge variant={itemBadgeVariant(item.status)}>{item.status}</Badge>
-          </div>
-
-          <HStack className="min-w-0" gap="md" vAlign="start">
-            <ScanThumbs item={item} />
-            <div className="flex min-w-0 flex-1 flex-col gap-2.5">
-              <Text className="text-secondary-foreground" size="sm">
-                {item.gradeLabel}
-              </Text>
-
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                <Text className="text-secondary-foreground" size="xs">
-                  {SERVICE_LABELS[item.service]}
-                </Text>
-                <Text
-                  className="text-secondary-foreground"
-                  size="xs"
-                  aria-hidden
-                >
-                  ·
-                </Text>
-                <Text className="text-secondary-foreground" size="xs">
-                  Handed in {formatHandInDate(item.handedInAt)}
-                </Text>
-              </div>
-
-              {item.note ? (
-                <Text
-                  className="text-pretty text-secondary-foreground"
-                  size="xs"
-                >
-                  {item.note}
-                </Text>
-              ) : null}
-            </div>
-          </HStack>
-        </div>
-        <Separator />
-        <div
-          className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3 sm:px-5"
-          data-slot="intake-item-actions"
-        >
-          <Button
-            leading={<FilePdf aria-hidden size={16} weight="regular" />}
-            size="sm"
-            title="Preview fixture — signed at hand-in"
-            type="button"
-            variant="ghost"
+    <Card className="overflow-hidden shadow-none">
+      <CardHeader className="gap-x-3">
+        {onOpen ? (
+          <a
+            className="flex min-w-0 flex-col gap-1 rounded-(--radius-sm) outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            href={storyHref(intakeItemCardStoryId(item))}
+            onClick={(event) => {
+              event.preventDefault();
+              onOpen();
+            }}
           >
-            Custody agreement · PDF
-          </Button>
-          {isVault ? (
-            <HStack className="flex-wrap" gap="sm" vAlign="center">
-              <Button
-                disabled={!vaulted}
-                size="sm"
-                title={
-                  vaulted
-                    ? "Preview fixture"
-                    : "Receipt available once the item is vaulted"
-                }
-                type="button"
-                variant="outline"
-              >
-                Vault receipt
-              </Button>
-              <Button
-                disabled={!vaulted}
-                size="sm"
-                title={
-                  vaulted
-                    ? "View in vault portfolio"
-                    : "Portfolio available once the item is vaulted"
-                }
-                type="button"
-                variant={vaulted ? "default" : "outline"}
-                onClick={() => navigateToStory(VAULT_PORTFOLIO_STORY_ID)}
-              >
-                View in vault portfolio
-              </Button>
-            </HStack>
-          ) : null}
-        </div>
+            {identity}
+          </a>
+        ) : (
+          <div className="flex min-w-0 flex-col gap-1">{identity}</div>
+        )}
+        <CardAction>
+          <Badge variant={itemBadgeVariant(item.status)}>{item.status}</Badge>
+        </CardAction>
+      </CardHeader>
+
+      <CardContent>
+        <HStack className="min-w-0" gap="md" vAlign="start">
+          <ScanThumbs item={item} />
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4">
+              <div className="flex min-w-0 flex-col gap-0.5">
+                <Text className="text-secondary-foreground" size="xs">
+                  Grade
+                </Text>
+                <Text className="text-pretty" size="sm" weight="medium">
+                  {item.gradeLabel}
+                </Text>
+              </div>
+              <div className="flex flex-col gap-0.5 text-right">
+                <Text className="text-secondary-foreground" size="xs">
+                  Declared value
+                </Text>
+                <Text className="tabular-nums" size="sm" weight="medium">
+                  {formatHkd(item.declaredHkd)}
+                </Text>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <Text className="text-secondary-foreground" size="xs">
+                {SERVICE_LABELS[item.service]}
+              </Text>
+              <Text aria-hidden className="text-secondary-foreground" size="xs">
+                ·
+              </Text>
+              <Text className="text-secondary-foreground" size="xs">
+                Handed in {formatHandInDate(item.handedInAt)}
+              </Text>
+            </div>
+
+            {item.note ? (
+              <Text className="text-pretty text-secondary-foreground" size="xs">
+                {item.note}
+              </Text>
+            ) : null}
+          </div>
+        </HStack>
       </CardContent>
+
+      <CardFooter className="flex-col items-stretch gap-2 border-border sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3">
+        <Button
+          leading={<FilePdf aria-hidden size={16} weight="regular" />}
+          size="sm"
+          title="Preview fixture — signed at hand-in"
+          type="button"
+          variant="ghost"
+        >
+          Custody agreement · PDF
+        </Button>
+        {isVault ? (
+          <HStack className="flex-wrap" gap="sm" vAlign="center">
+            <Button
+              disabled={!vaulted}
+              size="sm"
+              title={
+                vaulted
+                  ? "Preview fixture"
+                  : "Receipt available once the item is vaulted"
+              }
+              type="button"
+              variant="outline"
+            >
+              Vault receipt
+            </Button>
+            <Button
+              disabled={!vaulted}
+              size="sm"
+              title={
+                vaulted
+                  ? "View in vault portfolio"
+                  : "Portfolio available once the item is vaulted"
+              }
+              type="button"
+              variant={vaulted ? "default" : "outline"}
+              onClick={() => navigateToStory(VAULT_PORTFOLIO_STORY_ID)}
+            >
+              View in vault portfolio
+            </Button>
+          </HStack>
+        ) : null}
+      </CardFooter>
     </Card>
   );
 }

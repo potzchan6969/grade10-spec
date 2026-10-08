@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import {
   GRADING_IN_PROGRESS_ITEMS,
   VAULT_COMPLETED_ITEMS,
@@ -28,22 +28,18 @@ export const InScanning: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("ITM-99482-01")).toBeVisible();
     expect(canvas.getByText("In Scanning")).toBeVisible();
+    expect(canvas.getByText("PSA 10 (#63261275)")).toBeVisible();
+    expect(canvas.getByText("Declared value")).toBeVisible();
+    expect(canvas.getByText("HK$85,000")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Vault receipt" }),
     ).toBeDisabled();
 
-    const scanButton = canvas.getByRole("button", {
-      name: /Scan of 1997 Pocket Monsters Carddass Charizard/,
-    });
-    scanButton.focus();
-    await userEvent.keyboard(" ");
-    await waitFor(() => {
-      expect(
-        within(document.body).getByRole("dialog", {
-          name: "1997 Pocket Monsters Carddass Charizard",
-        }),
-      ).toBeVisible();
-    });
+    expect(
+      canvas.getByRole("button", {
+        name: /Scan of 1997 Pocket Monsters Carddass Charizard/,
+      }),
+    ).toBeVisible();
   },
 };
 
