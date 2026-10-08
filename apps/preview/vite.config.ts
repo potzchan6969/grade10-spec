@@ -27,6 +27,7 @@ export default defineConfig({
       {
         test: {
           name: "unit",
+          sequence: { groupOrder: 0 },
           environment: "node",
           include: ["src/**/*.test.ts"],
         },
@@ -42,6 +43,7 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          sequence: { groupOrder: 1 },
           fileParallelism: false,
           // One frame for every file: a frame per file raced its own swap, cutting
           // off the next file's import so its iframe could not connect.

@@ -180,6 +180,7 @@ function AuctionCataloguePage({
     return () => window.clearTimeout(timeout);
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Restart the loading delay when the selected category changes during loading.
   useEffect(() => {
     if (filterStatus !== "loading") return;
     const timeout = window.setTimeout(() => {
@@ -285,7 +286,9 @@ function AuctionCataloguePage({
     pageRevealed || (pageStatus === "ready" && Boolean(reduceMotion));
   const listIsRevealed =
     listRevealed ||
-    (pageStatus === "ready" && filterStatus === "ready" && Boolean(reduceMotion));
+    (pageStatus === "ready" &&
+      filterStatus === "ready" &&
+      Boolean(reduceMotion));
 
   return (
     <div className="flex min-h-dvh w-full flex-col bg-background text-foreground">

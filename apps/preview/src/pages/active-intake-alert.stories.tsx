@@ -60,18 +60,12 @@ export const WithSubmissions: Story = {
   render: () => <LinkedAlert submissionCount={2} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("2 submissions currently in intake"),
-    ).toBeVisible();
+    expect(canvas.getByText("2 submissions currently in intake")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Track Progress" }),
     ).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: "Vault Portfolio" }),
-    ).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: "Intake Tracker" }),
-    ).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Vault Portfolio" })).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Intake Tracker" })).toBeVisible();
   },
 };
 
@@ -84,9 +78,7 @@ export const SingleSubmission: Story = {
   render: () => <LinkedAlert submissionCount={1} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("1 submission currently in intake"),
-    ).toBeVisible();
+    expect(canvas.getByText("1 submission currently in intake")).toBeVisible();
   },
 };
 

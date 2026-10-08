@@ -58,6 +58,7 @@ function AuctionCatalogueAllAuctionsGrid({
   const sentinelRef = useRef<HTMLDivElement>(null);
   const requestedAtCountRef = useRef<number | null>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: A new lot set permits a fresh load-more request at the same visible count.
   useEffect(() => {
     requestedAtCountRef.current = null;
   }, [lotsKey]);

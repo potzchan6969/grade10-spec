@@ -216,6 +216,7 @@ function ProductListPage() {
     ];
   }, [committedSearch, filterGroups, selection]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Each committed search, sort, or filter change restarts the fixture loading delay.
   useEffect(() => {
     const timeout = setTimeout(
       () => setResultsStatus("ready"),

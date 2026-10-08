@@ -91,7 +91,7 @@ type AuctionWinnerOrderProps = {
       AuctionWinnerOrderStep,
       { label: string; description?: string }
     >;
-    tracking?: { code: string; href: string };
+    tracking?: { code: string; href?: string };
   } | null;
   /** The one alert under progress on a phone and under the lot from `lg`. */
   note?: { title: string; icon?: "hourglass" };

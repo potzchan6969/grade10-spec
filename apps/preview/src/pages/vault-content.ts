@@ -68,7 +68,9 @@ const VAULT_BOOK_VISIT_HREF = storyHref(VAULT_BOOK_VISIT_STORY_ID);
 const VAULT_SUBMIT_HREF = VAULT_BOOK_VISIT_HREF;
 const VAULT_ITEM_DETAIL_HREF = storyHref(VAULT_ITEM_DETAIL_STORY_ID);
 const VAULT_RETRIEVAL_HREF = storyHref(VAULT_RETRIEVAL_STORY_ID);
-const VAULT_ITEM_CARD_IN_VAULT_HREF = storyHref(VAULT_ITEM_CARD_IN_VAULT_STORY_ID);
+const VAULT_ITEM_CARD_IN_VAULT_HREF = storyHref(
+  VAULT_ITEM_CARD_IN_VAULT_STORY_ID,
+);
 const VAULT_ITEM_CARD_RETRIEVAL_HREF = storyHref(
   VAULT_ITEM_CARD_RETRIEVAL_STORY_ID,
 );
@@ -185,10 +187,7 @@ const PORTFOLIO_ASSETS = VAULT_ASSETS.filter(isPortfolioHolding);
 
 const PORTFOLIO_SUMMARY = {
   itemCount: PORTFOLIO_ASSETS.length,
-  totalEstimateHkd: PORTFOLIO_ASSETS.reduce(
-    (sum, a) => sum + a.estimateHkd,
-    0,
-  ),
+  totalEstimateHkd: PORTFOLIO_ASSETS.reduce((sum, a) => sum + a.estimateHkd, 0),
   valuationNote: "Estimates use intake when set; otherwise declared value",
   feeStatus: "Launch offer — storage free until 2026-12-31",
 };
@@ -690,6 +689,8 @@ export type {
 };
 export {
   ACCOUNT_EMAIL,
+  ACTIVE_INTAKE_ALERT_HREF,
+  ACTIVE_INTAKE_ALERT_STORY_ID,
   APPOINTMENTS_COPY,
   assetSubtitle,
   BOOK_VISIT_NAV_COPY,
@@ -704,11 +705,9 @@ export {
   GRADING_VISIT_SERVICE,
   INTAKE_TRACKER_HREF,
   INTAKE_TRACKER_STORY_ID,
+  isPortfolioHolding,
   MANAGE_CARD_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
-  ACTIVE_INTAKE_ALERT_HREF,
-  ACTIVE_INTAKE_ALERT_STORY_ID,
-  isPortfolioHolding,
   PORTFOLIO_ASSETS,
   PORTFOLIO_HOLDING_STATUSES,
   PORTFOLIO_SUMMARY,
@@ -743,8 +742,6 @@ export {
   VAULT_PORTFOLIO_STORY_ID,
   VAULT_RETRIEVAL_HREF,
   VAULT_RETRIEVAL_STORY_ID,
-  vaultItemCardStoryId,
-  vaultItemRelatedStoryId,
   VAULT_SITE_HEADER,
   VAULT_SUBMIT_HREF,
   VAULT_SUBMIT_STORY_ID,
@@ -759,4 +756,6 @@ export {
   VISIT_SLOTS,
   VISIT_TIME_ZONE,
   VISIT_TODAY_DATE,
+  vaultItemCardStoryId,
+  vaultItemRelatedStoryId,
 };

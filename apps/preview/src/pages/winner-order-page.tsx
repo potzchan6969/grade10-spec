@@ -247,10 +247,9 @@ function progressFor(
       },
       completed: { label: "Completed", description: dates?.completed },
     },
-    tracking:
-      content.trackingCode && content.trackingHref
-        ? { code: content.trackingCode, href: content.trackingHref }
-        : undefined,
+    tracking: content.trackingCode
+      ? { code: content.trackingCode, href: content.trackingHref }
+      : undefined,
   };
 }
 

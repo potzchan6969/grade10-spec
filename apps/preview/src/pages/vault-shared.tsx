@@ -236,10 +236,7 @@ function FactRow({
 }) {
   return (
     <div className="flex flex-col gap-1 border-b border-border py-3.5 last:border-b-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-      <Text
-        className="shrink-0 text-secondary-foreground sm:w-40"
-        size="sm"
-      >
+      <Text className="shrink-0 text-secondary-foreground sm:w-40" size="sm">
         {label}
       </Text>
       <div className="min-w-0 flex-1 sm:text-right">
@@ -247,7 +244,10 @@ function FactRow({
           {value}
         </div>
         {hint ? (
-          <Text className="mt-0.5 text-secondary-foreground sm:text-right" size="xs">
+          <Text
+            className="mt-0.5 text-secondary-foreground sm:text-right"
+            size="xs"
+          >
             {hint}
           </Text>
         ) : null}

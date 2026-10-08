@@ -118,7 +118,7 @@ test("every group heading of the tasks template carries its repository tag", () 
 test("shared-planning-agent-rounds-SC-90 - the walk group uses draft cases during planning and defers human QA until deployment", () => {
   const template = read(`${SCHEMA}/templates/${artifact.template}`);
   const walkText = template.slice(template.indexOf("## 3. The walk"));
-  assert.match(walkText, /Uses draft `feature-tcs\.md` as its input/i);
+  assert.match(walkText, /Uses draft `feature-tcs\.md` as its planning input/i);
   assert.doesNotMatch(walkText, /tcs-review|tcs-run-sheet/i);
   assert.match(instruction, /draft suite.*as its planning input/i);
   assert.match(instruction, /human QA after deployment/i);

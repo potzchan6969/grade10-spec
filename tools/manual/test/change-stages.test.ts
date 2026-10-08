@@ -435,8 +435,8 @@ describe("the roles a change has not yet reached, for My turn's later list", () 
   const later = (rung: Stage, extra: Partial<ChangeEntry> = {}) =>
     laterRolesOf(at(rung, extra), rung, artifacts());
 
-  it("says the engineer is later while the change is still specified, and QA is on it now", () => {
-    expect(later("specified")).toEqual(["dev", "release"]);
+  it("says QA, the engineer and the release hand are later while the change is still specified", () => {
+    expect(later("specified")).toEqual(["qa", "dev", "release"]);
   });
 
   it("says nothing once that hand's own turn has come", () => {

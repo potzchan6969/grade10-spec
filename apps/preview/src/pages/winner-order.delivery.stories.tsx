@@ -156,13 +156,49 @@ export const Shipped: Story = {
       "https://www.sf-express.com/us/en/dynamic_function/waybill/#search/bill-number/SF1234567890",
     );
     expect(trackingLink).toHaveAttribute("target", "_blank");
-    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Shipped", { exact: true })).toHaveClass(
+      "bg-muted",
+    );
     expect(canvas.getByText("Shipping")).toBeVisible();
+    expect(
+      canvas.getByText("Shipping").closest('[data-slot="step"]'),
+    ).toHaveAttribute("data-state", "progress");
     expect(canvas.getByText("26 Sep 2026")).toBeVisible();
     expect(canvas.queryByRole("button", { name: "Track shipment" })).toBeNull();
     expect(canvas.queryByText("SF Express", { exact: true })).toBeNull();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+  },
+};
+
+/** Dispatched with a tracking number, but no carrier tracking URL recorded. */
+export const ShippedWithoutTrackerLink: Story = {
+  name: "Shipped without tracker link",
+  args: {
+    status: "shipped",
+    content: {
+      ...WINNER_ORDER_CONTENTS.shipped,
+      trackingHref: undefined,
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
+    expect(canvas.getByText("Order Progress")).toBeVisible();
+    expect(canvas.getByText("Shipped", { exact: true })).toHaveClass(
+      "bg-muted",
+    );
+    expect(canvas.getByText("Shipping")).toBeVisible();
+    expect(
+      canvas.getByText("Shipping").closest('[data-slot="step"]'),
+    ).toHaveAttribute("data-state", "progress");
+    expect(canvas.getByText("26 Sep 2026")).toBeVisible();
+    expect(canvas.getByText("SF1234567890", { exact: true })).toBeVisible();
+    expect(
+      canvas.queryByRole("link", { name: "SF1234567890" }),
+    ).not.toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: "Track shipment" })).toBeNull();
+    expect(canvas.queryByText("SF Express", { exact: true })).toBeNull();
   },
 };
 

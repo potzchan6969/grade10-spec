@@ -1,6 +1,6 @@
 # grade10-site/vault/visit-booking Test Cases
 
-**Status:** pending-review · 0/23
+**Status:** pending-review · 0/22
 **Drafts styled:** 2026-10-02, tcs-rules r4
 **Out of suite:** `grade10-site-vault-visit-booking-SC-23` — the owner guard on the visit's calendar file, walked in the vault backend's own route test; a case here traces a journey, and nobody walks a stranger's fetch.
 

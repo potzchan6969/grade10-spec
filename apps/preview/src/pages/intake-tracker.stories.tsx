@@ -86,9 +86,7 @@ function IntakeItemList({ items }: { items: readonly IntakeItemRow[] }) {
               <li key={item.itemId}>
                 <IntakeItemCard
                   item={item}
-                  onOpen={() =>
-                    navigateToStory(intakeItemCardStoryId(item))
-                  }
+                  onOpen={() => navigateToStory(intakeItemCardStoryId(item))}
                 />
               </li>
             ))}
@@ -189,7 +187,9 @@ export const InProgress: Story = {
     expect(
       canvas.getAllByRole("button", { name: "View in vault portfolio" }).length,
     ).toBeGreaterThan(0);
-    expect(canvas.getAllByRole("button", { name: "Vault receipt" })[0]).toBeDisabled();
+    expect(
+      canvas.getAllByRole("button", { name: "Vault receipt" })[0],
+    ).toBeDisabled();
   },
 };
 
@@ -206,7 +206,9 @@ export const Completed: Story = {
     );
     expect(canvas.getByText("ITM-99482-01")).toBeVisible();
     expect(canvas.getAllByText("Vaulted").length).toBeGreaterThan(0);
-    expect(canvas.getAllByRole("button", { name: "Vault receipt" })[0]).toBeEnabled();
+    expect(
+      canvas.getAllByRole("button", { name: "Vault receipt" })[0],
+    ).toBeEnabled();
   },
 };
 
