@@ -1,4 +1,4 @@
-## 1. Fee and Tax (grade10)
+## 1. Fee and Tax (grade10) (owner: @htonyl)
 
 - [ ] 1.1 Add `invoicePricing.ts` to `packages/grade10-auction/contracts` with `buyerPremiumMinor`, `priceInvoice`, `suggestProcessingFee` and `maskAccount`, folding `buyerCharges.ts` into it; `packages/grade10-auction/contracts/test/invoicePricing.test.ts`
 - [ ] 1.2 The fee migration adds the card fee columns with their pair and range checks to `auction_payment_settings`; `paymentSettings.get` and `save` move from `auction:settle` to `auction:payment`; the settings service and router save and read the card rule, zero allowed, half a pair refused; `pnpm run check:migrations`, `apps/backend/grade10/auction/test/db/trpc/paymentSettings.spec.ts`
