@@ -8,16 +8,27 @@ the shop or at auction, for a commission bound to the consignment.
 
 ## Values
 
-| Rule | Value |
+Every figure is a setting an admin changes in the console, never a constant;
+the value below is the default it starts on -
+[Consignment Console](/p/grade10-site/consignment/operator-console#settings).
+
+| Setting | Default |
 | --- | --- |
 | Channels | the store, in the shop and online; the auction |
-| Store commission | ❓ Commercial: a share of the sale price, by price band |
-| Auction commission | ❓ Commercial: a share of the hammer price; the buyer's premium stays the house's |
-| Minimum commission | ❓ Commercial: per item |
-| Term on sale | ❓ Commercial: **90** days proposed |
-| Payout | ❓ Commercial: **14** days after a store sale, **7** days after an auction lot is delivered or kept in the vault, proposed |
+| Store commission | a share of the sale price, by price band; unset until an admin sets it |
+| Auction commission | a share of the hammer price, unset until an admin sets it; the buyer's premium stays the house's |
+| Minimum commission | per item; none |
+| Fees | listing, return and early take-back; none |
+| Term on sale | **90** days |
+| Return window | **14** days after a store sale; **7** days after an auction lot is delivered or kept in the vault |
+| When a consignor is paid | after the return window |
+| A refund after payout | set against the consignor's next payout |
+| Identity before signing | always verified |
 | Ending soon | **7** days before the term ends |
 | Currency | the brand's; HKD for Grade10 |
+
+- **Unset refuses** - an agreement is not prepared while a figure it prints
+  is unset
 
 ## One Consignment
 
@@ -93,10 +104,13 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
   house's
 - **How** - a bank transfer a treasurer records with its reference; a
   correction takes a second holder of the payout grant
+- **When** - after the return window by default; an admin may switch a
+  channel to paying at the sale, the refund then set against later payouts,
+  or to one monthly statement
 - **A refund before payout** - reverses the sale; an item that comes back
   goes on sale for the rest of its term
-- ❓ Commercial - **A refund after payout** - set against the consignor's
-  next payout is proposed
+- **A refund after payout** - set against the consignor's next payout, by
+  default
 
 ## Seller Display
 
@@ -129,16 +143,19 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
   the other channel, the vault, or collect or ship it back
 - **Unsold at auction** - relist, the store, the vault, or collect or ship it
   back
-- **Taken back early** - the consignor may take an item back before it sells
-- ❓ Commercial - **A fee for taking it back** - whether one applies
+- **Taken back early** - the consignor may take an item back before it
+  sells, for the early take-back fee where an admin set one
 - ❓ Legal - **Nobody collects** - reminders, then a written notice and what
   follows it, as grading's ladder runs, is proposed
 
 ## Identity
 
-- ❓ Legal - **Verified before signing** - the identity check the vault
+- **Verified before signing** - by default the identity check the vault
   binds, so the agreement names a verified person and the payout goes to
-  them, is recommended
+  them
+- **Other choices** - an admin may ask for the check only above a sale
+  price, or not at all; a payout always goes to an account in the
+  consignor's name
 
 :::detail{title="Product decisions" for="pm"}
 A collector who wants to sell a card through Grade10 has no way to: the
@@ -172,8 +189,7 @@ payouts made on their due day.
 | List price and floor | Decided | Staff change the price within the floor; below it only on the consignor's written yes - decided under the owner's delegation, 2026-10-08 | Product |
 | Seller display | Decided | Optional and set by an admin - decided by the owner, 2026-10-08. Only where the consignor agreed, under their display name - decided under the owner's delegation, 2026-10-08 | Product |
 | Messages | Decided | The consignment service sends its own, by email, as the vault and grading do - decided under the owner's delegation, 2026-10-08 | Product |
-| Verified identity before signing | ❓ Open | Recommended | Legal |
-| When a consignor is paid | ❓ Open | After the return window, by bank transfer a treasurer records | Commercial |
-| The figures | ❓ Open | Commission for each channel, the minimum, the term and fees | Commercial |
+| Every figure is a setting | Decided | Commission, the minimum, fees, the term and the windows are settings admins change in the console, each pinned to a consignment at signing - decided by the owner, 2026-10-08 | Product |
+| Flexible, with a default | Decided | Identity, when a consignor is paid and a refund after payout are settings too; the recommendation is the default: always verified, paid after the return window, a refund set against the next payout - decided by the owner, 2026-10-08 | Product |
 | Nobody collects | ❓ Open | Reminders, then a written notice, as grading's ladder runs | Legal |
 :::

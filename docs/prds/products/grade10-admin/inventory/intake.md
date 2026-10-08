@@ -64,8 +64,8 @@ A scan of a storage unit, refused past the unit's cap - [Locations](/p/grade10-a
   grade in bulk
 - **Received against the list** - items arrive at a shop or on a shipment,
   and the deal shows what has arrived and what has not
-- ❓ Commercial - **Settling a deal** - one monthly statement in place of a
-  payout for each item is proposed
+- **Settling a deal** - one monthly statement by default; an admin may set
+  a deal to a payout for each item
 
 ## Release
 
@@ -105,6 +105,6 @@ waiting unmatched; days from arrival to put-away.
 | Paper before custody | Decided | No item is taken in for someone else without the service's agreement signed - decided under the owner's delegation, 2026-10-08 | Legal |
 | Partners own their items | Decided | A partner is an organisation an admin registers, so a deal's items belong to the company rather than to the person who signed - decided under the owner's delegation, 2026-10-08 | Product |
 | Risk on the way in | ❓ Open | The collector's until the parcel is received | Legal |
-| Settling a partner deal | ❓ Open | One monthly statement | Commercial |
+| Settling a partner deal | Decided | A setting on each deal, one monthly statement by default - decided by the owner, 2026-10-08 | Commercial |
 | Shipping home | ❓ Open | Waits on transit cover, as grading's slabs do | Commercial, Legal |
 :::

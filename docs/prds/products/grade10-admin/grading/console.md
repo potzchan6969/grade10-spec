@@ -253,5 +253,5 @@ so a seeded default waits for its owner:
 | Cards are items | Decided | Each card becomes an item at hand-in, raw, and receiving writes its grader, grade and cert onto the same item - [Items](/p/grade10-admin/inventory/items) - decided under the owner's delegation, 2026-10-08 | Product |
 | A batch ships on inventory's shipments | Decided | The batch keeps the grader's order and manifest; its parcels are inventory's shipments - [Transit](/p/grade10-admin/inventory/transit) - decided under the owner's delegation, 2026-10-08 | Operations |
 | Hand-offs at hand-back | Decided | A slab goes straight to the vault or to consignment on its own item, in place of a typed case reference - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs) - decided under the owner's delegation, 2026-10-08 | Product |
-| A cap for each shop's safe | ❓ Open | Each shop's safe carries its own cap in inventory's locations, in place of one cap across every shop; cover decides | Commercial, Legal |
+| A cap for each shop's safe | Decided | By default each shop's safe carries its own cap in inventory's locations; an admin may keep one cap across every shop - [Locations](/p/grade10-admin/inventory/locations#caps) - decided by the owner, 2026-10-08 | Commercial |
 :::

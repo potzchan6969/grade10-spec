@@ -84,6 +84,23 @@ that receive, move and count.
   state, the packing list and the shipment's timeline -
   [Transit](/p/grade10-admin/inventory/transit)
 
+## Settings
+
+An admin changes every setting here; each starts on its default.
+
+| Setting | Default | Choices |
+| --- | --- | --- |
+| Cover values on the register | on | off; caps then count only what each service checks |
+| Cover value of a consigned item | the floor price | the list price; the market reference |
+| Cover value of house stock | the cost | the market reference |
+| A cap per shop's safe | each shop's safe its own cap | one cap across every shop |
+| How often a unit is counted | each safe weekly, each locker monthly | any number of days, per unit |
+| Missing until lost | **30** days | any number of days |
+| Sell from the vault | on, storage lane only | off |
+| A live loan and a sale | no sale until repaid | the proceeds repay the loan first |
+
+- **On the audit chain** - every change, with the old and new value
+
 ## Grants
 
 | Grant | Roles | Opens |
@@ -92,6 +109,7 @@ that receive, move and count.
 | `inventory:move` | staff, admin | receive, put away, move, pack, send, receive a shipment, count |
 | `inventory:locations` | admin | add or retire a site, a unit or an outside place, and set a cap |
 | `inventory:deals` | admin | partners and partner deals |
+| `inventory:settings` | admin | change a setting |
 
 - **The register's grants stand** - `inventory:write`, `inventory:transfer`
   and `kyc:read` open what they open today -

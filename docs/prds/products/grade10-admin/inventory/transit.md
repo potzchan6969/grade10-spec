@@ -10,7 +10,7 @@ order: 4
 | Shipment states | Preparing · Sent · Arrived · Cancelled |
 | Late | past its expected arrival and not arrived; read, never stored |
 | Insured value | at most the carrier's cover a parcel; more ships split |
-| Lost | ❓ Operations: how many days an item stays missing before it is lost |
+| Lost | missing for **30** days by default, a setting an admin changes |
 
 ## Moves Within a Site
 
@@ -99,5 +99,5 @@ arrival; items declared lost.
 | Late is read | Decided | Past the expected arrival and not arrived, never a status - decided under the owner's delegation, 2026-10-08 | Engineering |
 | Cover per parcel | Decided | Grading's rule for every shipment: the insured value stays within the carrier's cover, and more ships split - decided under the owner's delegation, 2026-10-08 | Operations |
 | Tracking by hand | Decided | Staff type the courier and the number, as grading and the auction do today; reading a courier's tracking is a later change | Product |
-| When a missing item is lost | ❓ Open | A number of days after arrival | Operations |
+| When a missing item is lost | Decided | A setting, **30** days missing by default - decided by the owner, 2026-10-08 | Operations |
 :::

@@ -139,9 +139,8 @@ grading submission, a consignment, an auction lot, a store listing.
   names the rule and the mark in the way
 - **What it does under its mark is mirrored** - inventory records what a
   service did and never refuses it, as the register does for the vault today
-- ❓ Owner, Legal - **A live loan and a sale** - an item securing a live
-  loan takes no sale until the loan is repaid; whether a sale may repay it
-  first is open
+- **A live loan and a sale** - no sale until the loan is repaid, by
+  default; a setting lets the proceeds repay it first
 
 ## Hand-offs
 
@@ -226,23 +225,24 @@ Receiving runs the same five steps whatever the channel:
 - **Cover value** - what the house would pay if the item were lost, as its
   agreement names it: a grading card's declared value, a vault case's
   valuation
-- ❓ Commercial - **Cover value of a consigned item and of house stock** -
-  the floor price and the cost are proposed
+- **Cover value of a consigned item and of house stock** - the floor
+  price and the cost by default, as settings
 - **Caps** - a unit or a site may cap the cover value it holds; a put-away or
   a move past it is refused, naming the cap
-- ❓ Commercial, Legal - **Each shop's safe** - grading's safe cap becomes a
-  cap on each shop's safe rather than one across every shop, as proposed
-- ❓ Product, Legal - **What the register holds** - a place, the
-  photographs staff take as received and one cover value for caps; the
-  valuation, loan terms and amounts stay in the vault, and the item page
-  reads them from it. The register's own decision asks for this revisit
-  before it stores a value, a photograph or a location
+- **Each shop's safe** - its own cap by default; a setting keeps one cap
+  across every shop
+- **What the register holds** - a place, the photographs staff take as
+  received and one cover value for caps, by default; the valuation, loan
+  terms and amounts stay in the vault, and the item page reads them from
+  it. A setting turns cover values off. This is the revisit the register's
+  own decision asks for before it stores a value, a photograph or a
+  location
 - **Labels** - a short code per item from the alphabet the case reference
   uses, printed with its QR code and title; reprinted any time, never changed
 - **Counts** - staff scan a unit; the count names what is missing and what is
   unexpected, and each is resolved as moved, found elsewhere or missing
-- ❓ Operations - **How often a unit is counted** - each safe weekly and each
-  locker monthly are proposed
+- **How often a unit is counted** - each safe weekly and each locker
+  monthly by default, a setting per unit
 
 ## Transit
 
@@ -263,7 +263,8 @@ Receiving runs the same five steps whatever the channel:
 - **Each item on arrival** - received, missing or damaged with photographs
 - **Lost** - a missing item declared lost; the owner's service pays out under
   its agreement, and the item retires as lost
-- ❓ Operations - **When a missing item is lost** - how many days missing
+- **When a missing item is lost** - after **30** days missing by default,
+  a setting
 - **Who asks** - grading for a batch and its box back, the auction for a
   winner's order, consignment for a return, a transfer between sites, and
   a mail-in expected in
@@ -272,11 +273,11 @@ Receiving runs the same five steps whatever the channel:
 
 | Rule | Value |
 | --- | --- |
-| Store commission | ❓ Commercial: a share of the sale price, by price band |
-| Auction commission | ❓ Commercial: a share of the hammer price; the buyer's premium stays the house's |
-| Minimum commission | ❓ Commercial: per item |
-| Term on sale | ❓ Commercial: **90** days proposed |
-| Payout | ❓ Commercial: after the return window, **14** days after a store sale or **7** days after an auction lot is delivered or kept in the vault, as proposed |
+| Store commission | a share of the sale price, by price band; set by admins |
+| Auction commission | a share of the hammer price, set by admins; the buyer's premium stays the house's |
+| Minimum commission | per item, set by admins; none by default |
+| Term on sale | **90** days by default |
+| Payout | after the return window by default: **14** days after a store sale, **7** days after an auction lot is delivered or kept in the vault |
 | Ending soon | **7** days before the term ends |
 
 - **One consignment** - one owner, one or more items, one channel per item,
@@ -302,11 +303,11 @@ Receiving runs the same five steps whatever the channel:
   vault, or collect or ship back
 - ❓ Legal - **Nobody collects** - reminders, then a written notice and what
   follows it, as grading's ladder runs, is proposed
-- ❓ Legal - **Identity** - a verified identity before signing, the check
-  the vault binds, is recommended
+- **Identity** - always verified before signing by default, the check the
+  vault binds; a setting asks only above a sale price, or never
 - **Partners** - consign in bulk under a deal
-- ❓ Commercial - **A partner's statement** - one monthly statement in place
-  of a payout for each item is proposed
+- **A partner's statement** - one monthly statement by default; a setting
+  on the deal pays for each item
 
 | The consignor hears | When |
 | --- | --- |
@@ -410,25 +411,35 @@ Receiving runs the same five steps whatever the channel:
 | 6 | Shipments, the receiving desk, mail-in, ship-home, counts | Items by post, and a count that reconciles |
 | 7 | Partners and partner deals | Dealers consigning in bulk |
 
+## Settings With Defaults
+
+The owner's rule, 2026-10-08: every figure is a setting admins change in the
+console, and every question above stays flexible, with the recommendation as
+its default.
+
+| Setting | Default | Choices |
+| --- | --- | --- |
+| Cover values on the register | on | off; caps then count only what each service checks |
+| Cover value of a consigned item | the floor price | the list price; the market reference |
+| A cap per shop's safe | each shop's safe its own cap | one cap across every shop |
+| How often a unit is counted | each safe weekly, each locker monthly | any number of days |
+| Missing until lost | **30** days | any number of days |
+| Sell from the vault | on, storage lane only | off |
+| A live loan and a sale | no sale until repaid | the proceeds repay the loan first |
+| Consignment commission, minimum and fees | unset; an agreement waits until set | any figure, per channel and price band |
+| Consignment term | **90** days | any number of days |
+| Return window | **14** days after a store sale, **7** after an auction lot is delivered | any number of days |
+| When a consignor is paid | after the return window | at the sale; one monthly statement |
+| A refund after payout | set against the next payout | asked back from the consignor |
+| Consignor identity | always verified | above a sale price; never |
+| Settling a partner deal | one monthly statement | a payout for each item |
+
 ## Open Questions
 
-- ❓ Product, Legal - **What the register holds** - a place, staff
-  photographs and one cover value beside the owner map; recommended, with
-  valuations and loans kept in the vault
-- ❓ Legal - **Consignor identity** - a verified identity before a consignor
-  signs; recommended
-- ❓ Commercial - **When a consignor is paid** - after the return window, by
-  bank transfer; recommended
-- ❓ Owner, Legal - **Selling from the vault** - a storage-lane item sells
-  from the vault; a financed one only once repaid; recommended
-- ❓ Commercial - **The figures** - store and auction commission, the minimum,
-  the term, fees, and the cover value of a consigned item and of house stock
-- ❓ Legal - **Uncollected consignments** - the notice and what follows it
+- ❓ Legal - **Risk on the way in** - the owner's until a parcel is received
+- ❓ Legal - **Uncollected consignments** - the notice's wording and what
+  follows it
 - ❓ Legal - **Forfeited items for sale** - who sells an item the lender owns
-- ❓ Commercial, Legal - **A cap for each shop's safe** - in place of one cap
-  across every shop
-- ❓ Operations - **How often units are counted** and how many days missing
-  makes an item lost
 - ❓ Engineering - **When the vault and grading move to the documents service**
 
 ## Decisions Taken Under Delegation

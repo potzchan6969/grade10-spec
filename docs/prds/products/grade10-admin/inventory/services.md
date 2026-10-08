@@ -21,15 +21,17 @@ other mark stands alone.
 - **A consignment with its sale** - a consignment and its auction lot, or a
   consignment and its store listing
 - **The vault under an auction** - a storage-lane vault case stays while the
-  item is consigned to auction, so it sells from the vault
+  item is consigned to auction, so it sells from the vault; on by default,
+  and an admin may turn it off, so the case is released first
 - **One sale at a time** - an auction lot or a store listing, never both
 - **Someone else's item sells under a consignment** - an auction lot or a
   store listing on an item the house does not own needs the owner's live
   consignment
 - **Standing alone** - a card at grading takes no other mark; any other pair
   waits for one mark to close, or passes the item by a hand-off
-- ❓ Owner, Legal - **A live loan** - an item securing a live loan takes no
-  sale until the loan is repaid; whether a sale may repay it first is open
+- **A live loan** - an item securing a live loan takes no sale until the
+  loan is repaid, by default; an admin may let a sale repay the loan first
+  from the proceeds
 
 ## Applying an Item
 
@@ -103,7 +105,7 @@ zero; marks refused by name; hand-offs completed in one visit.
 | Which marks share an item | Decided | A consignment with its sale, and a storage-lane vault case under an auction; one sale at a time - decided under the owner's delegation, 2026-10-08 | Product |
 | A hand-off is one act | Decided | Paper first, the owner decides, and the item never leaves custody - decided under the owner's delegation, 2026-10-08 | Product |
 | A sale settles itself | Decided | The selling service moves the owner and closes its mark; nobody records a sale by hand - decided under the owner's delegation, 2026-10-08 | Product |
-| Selling from the vault | ❓ Open | A storage-lane item sells from the vault and its vault case passes to the buyer; this replaces the register's refusal of a vaulted item changing owner | Owner |
-| A live loan and a sale | ❓ Open | No sale until the loan is repaid is proposed | Owner, Legal |
+| Selling from the vault | Decided | A setting, on by default: a storage-lane item sells from the vault and its vault case passes to the buyer; this replaces the register's refusal of a vaulted item changing owner - decided by the owner, 2026-10-08 | Product |
+| A live loan and a sale | Decided | A setting, by default no sale until the loan is repaid; the other choice lets the proceeds repay it first - decided by the owner, 2026-10-08 | Product |
 | A forfeited item for sale | ❓ Open | Who sells an item the lender owns | Legal |
 :::

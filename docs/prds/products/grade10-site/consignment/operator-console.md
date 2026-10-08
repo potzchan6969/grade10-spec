@@ -57,17 +57,26 @@ the settings the schedule runs on.
 
 ## Settings
 
-| Setting | Confirms |
-| --- | --- |
-| The commission schedule, for each channel and price band | Commercial |
-| The minimum commission | Commercial |
-| The term on sale | Commercial |
-| The return window for each channel | Commercial |
-| Fees | Commercial |
+An admin changes every setting here; each starts on its default and is
+pinned to a consignment at signing.
+
+| Setting | Default | Choices |
+| --- | --- | --- |
+| Commission, for each channel and price band | unset | a share of the price |
+| Minimum commission | none | an amount per item |
+| Fees: listing, return, early take-back | none | an amount each |
+| Term on sale | **90** days | any number of days |
+| Return window | **14** days after a store sale; **7** after an auction lot is delivered or kept in the vault | any number of days, per channel |
+| When a consignor is paid | after the return window | at the sale; one monthly statement |
+| A refund after payout | set against the next payout | asked back from the consignor |
+| Identity before signing | always verified | above a sale price; never |
+| Ending soon | **7** days before the term ends | any number of days |
 
 - **Pinned at signing** - a change reaches only consignments not yet signed
-- **Unset refuses** - in production an agreement is not prepared while a
-  figure it prints is unset
+- **Unset refuses** - an agreement is not prepared while a figure it prints
+  is unset
+- **Who** - `consignment:settings`, held by admins; every change on the
+  audit chain with the old and new value
 
 ## Grants
 
@@ -78,6 +87,7 @@ the settings the schedule runs on.
 | `consignment:approve` | staff, admin | a commission outside the schedule; a price below the floor on the consignor's yes |
 | `consignment:payout` | treasurer, admin | record a payout, correct one, the due list and the export |
 | `consignment:display` | admin | name a consignor on the store and the lot, where they agreed |
+| `consignment:settings` | admin | change a setting |
 
 - **Two people for money** - staff and treasurer share no money grant; the
   person who set a commission outside the schedule does not pay it out
@@ -92,5 +102,5 @@ the settings the schedule runs on.
 | Queue by wait | Decided | A shop asks what a consignment waits for, as it does of a vault case and a grading submission - decided under the owner's delegation, 2026-10-08 | Product |
 | Payouts on the vault's rule | Decided | Recorded after the bank transfer by a treasurer; a correction takes a second holder of the grant - decided under the owner's delegation, 2026-10-08 | Finance |
 | Seller display is an admin act | Decided | The owner names the admin as the one who sets it - decided by the owner, 2026-10-08 | Product |
-| Every figure a setting | Decided | The schedule, the term, the windows and fees are settings Commercial confirms, never constants - decided under the owner's delegation, 2026-10-08 | Commercial |
+| Every figure a setting | Decided | The schedule, the term, the windows, fees, identity and when a consignor is paid are settings admins change in the console, each starting on the recommended default - decided by the owner, 2026-10-08 | Product |
 :::

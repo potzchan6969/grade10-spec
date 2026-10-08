@@ -41,13 +41,13 @@ order: 3
 - **Cover value** - what the house would pay out if the item were lost, as
   its agreement names it: a grading card's declared value, a vault case's
   valuation
-- ❓ Commercial - **Cover value of a consigned item and of house stock** -
-  the floor price and the cost are proposed
+- **A consigned item and house stock** - the floor price and the cost, by
+  default; an admin may pick the list price or the market reference
 - **A cap refuses** - a put-away or a move that would carry a unit or a site
   past its cap is refused, naming the cap
-- ❓ Commercial, Legal - **Each shop's safe** - grading's safe cap becomes
-  the cap on each shop's safe, in place of one cap across every shop, as
-  proposed - [Grading Console](/p/grade10-admin/grading/console#hand-in)
+- **Each shop's safe** - grading's safe cap becomes the cap on each shop's
+  safe by default, and an admin may keep one cap across every shop -
+  [Grading Console](/p/grade10-admin/grading/console#hand-in)
 - **Room left** - the receiving desk shows what a cap leaves before the first
   item is checked
 
@@ -66,8 +66,8 @@ order: 3
 - **Resolve each** - moved, found elsewhere, or missing; a missing item stays
   missing until it is found or written off -
   [Transit](/p/grade10-admin/inventory/transit#exceptions)
-- ❓ Operations - **How often** - each safe weekly and each locker monthly
-  are proposed
+- **How often** - a setting per unit: each safe weekly and each locker
+  monthly by default; a unit past its count is badged
 
 :::detail{title="Product decisions" for="pm"}
 Nothing records where an item is. The vault writes the shop and a free-text
@@ -91,6 +91,5 @@ close with nothing missing; put-aways refused at a cap.
 | Where an item is | Decided | Read from its last movement and written nowhere else, so two records can never disagree - decided under the owner's delegation, 2026-10-08 | Engineering |
 | The house's own label | Decided | Every item gets one, since a raw card carries no barcode; a grader's barcode is a second way to find a slab - decided under the owner's delegation, 2026-10-08 | Product |
 | What a cap counts | Decided | The cover value, what the house would pay out, rather than what the item might sell for - decided under the owner's delegation, 2026-10-08 | Commercial |
-| Cover value of a consigned item | ❓ Open | The floor price is proposed | Commercial |
-| How often units are counted | ❓ Open | Each safe weekly and each locker monthly are proposed | Operations |
+| Settings with defaults | Decided | The cover value of a consigned item and of house stock, a cap per shop's safe and how often a unit is counted are settings an admin changes; each starts on the recommendation - decided by the owner, 2026-10-08 | Product |
 :::
