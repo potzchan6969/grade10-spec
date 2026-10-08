@@ -93,9 +93,7 @@ listed apart from the ones that can, muted with its reason and no Apply.
 
 ::story{id="store-cart-cartitem--sale-price" title="A line on the site sale"}
 
-::story{id="store-cart-cartitem--equal-list-price" title="A list price equal to the price, still struck through"}
-
-::story{id="store-cart-cartdrawer-auto-discount--on-sale" title="The site sale beside a line off it and a sold-out line"}
+::story{id="store-cart-cartitem--product-coupon" title="A product coupon on the line"}
 
 ::story{id="store-cart-cartdrawer-auto-discount--refuse" title="A refused promo on the site sale"}
 
@@ -141,7 +139,7 @@ line: in every outcome here, the code's discount shows in the summary.
 | Signal | Definition | Owner |
 | --- | --- | --- |
 | Empty cart | The CartDrawer Empty State, Empty State Without Description, Loading No Lines, Only Delisted Lines and Only Sold Out Lines stories and the CartDrawerBody Empty story each show their state, and their play tests pass. | Engineering |
-| Outcome stories | The CartItem Sale Price and Equal List Price stories, the five Auto Discount stories and the PromoTicket Not Applicable story each show their outcome, and their play tests pass. | Engineering |
+| Outcome stories | The CartItem Sale Price and Product Coupon stories, the four Auto Discount stories and the PromoTicket Not Applicable story each show their outcome, and their play tests pass. | Engineering |
 
 **Decisions.**
 
