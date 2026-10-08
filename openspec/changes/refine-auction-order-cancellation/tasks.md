@@ -30,6 +30,7 @@ ahead of acceptance; they are re-verified against the accepted contract.
 - [ ] 5.2 Run the cancellation-race, returned-lot link and optional-reference cases added for this refinement.
 - [ ] 5.3 Run the `order cancelled` Contact Us case (`winner-order-US16-TC14-1`).
 
-## 6. Dependencies
+## 6. Dependencies (owner: @htonyl)
 
-- [ ] 6.1 The durable "Invoice log history" closed type list lacks the late-payment and flag-cleared types this change records; `complete-auction-post-sale` adds them, so this change's invoice-log entries depend on it landing.
+- [ ] 6.1 Decision handoff to @htonyl: resolve the cancellation invoice-log dependency cycle. The durable "Invoice log history" closed type list lacks the late-payment and flag-cleared types required by SC-232 and SC-235; `complete-auction-post-sale` adds them but its task 11.1 waits for this change to archive. Moving only these 2 log types into this change lets cancellation finish first; retaining the dependency blocks its invoice-log verification and archive until the other change's acceptance order is revised. Close when the owner selects the owning change and publication order, the durable list and both dependency records agree, and the selected contract is published on main. Other cancellation work can continue.
+- [ ] 6.2 Decision handoff to @htonyl: reconcile the admin localization instruction in this change's UI design with the application's decided English-only admin convention (`docs/conventions/code-layout.md`, "The admin panels are outside the localization scope"). Clarifying the UI design to existing English admin copy preserves the current console behavior; expanding localization requires an admin catalog/provider and a broader accepted scope. This blocks final UI-design conformance, not independent cancellation behavior or winner localization. Close when the owner selects the policy and its authoritative design or scope is published on main.
