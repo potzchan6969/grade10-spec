@@ -9,13 +9,13 @@ import {
   previewCaseLine,
 } from "@/emails/vault/fixtures";
 
-export type CaseExpiredUnbookedProps = {
+export type CaseExpiredProps = {
   submittedAt?: string;
 };
 
-export default function CaseExpiredUnbookedEmail({
-  submittedAt = previewCase.unbookedSubmittedAt,
-}: CaseExpiredUnbookedProps) {
+export default function CaseExpiredEmail({
+  submittedAt = previewCase.expiredSubmittedAt,
+}: CaseExpiredProps) {
   const { itemTitle } = previewCase;
 
   return (
@@ -27,8 +27,8 @@ export default function CaseExpiredUnbookedEmail({
         whyYouGotThis: "Your vault request has expired.",
       }}
       heading="This request timed out"
-      lead={`Your request for ${itemTitle} expired because no visit was ever booked for it. Start a new one whenever you like — nothing was signed and nothing is owed.`}
-      preheader="No visit was ever booked, so your request expired. Nothing is owed."
+      lead={`Your request for ${itemTitle} expired because it was not taken further within 30 days of being sent in. Start a new one whenever you like — nothing was signed and nothing is owed.`}
+      preheader="Your request was not taken further in time, so it expired. Nothing is owed."
     >
       <FactsGroup
         facts={[{ label: "Sent in on", value: hkDate(submittedAt) }]}
@@ -37,6 +37,6 @@ export default function CaseExpiredUnbookedEmail({
   );
 }
 
-CaseExpiredUnbookedEmail.PreviewProps = {
-  submittedAt: previewCase.unbookedSubmittedAt,
-} satisfies CaseExpiredUnbookedProps;
+CaseExpiredEmail.PreviewProps = {
+  submittedAt: previewCase.expiredSubmittedAt,
+} satisfies CaseExpiredProps;
