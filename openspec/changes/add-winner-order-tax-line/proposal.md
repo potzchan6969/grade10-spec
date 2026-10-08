@@ -71,9 +71,16 @@ See [Non-Goals](decisions.md#non-goals).
   before send, its absence when none, its presence in the Subtotal, and its
   place on the invoice and the receipt. `Records the winner keeps` is modified
   here for the receipt's Tax wording and the tracker's carrier link, since one
-  change may edit a requirement at a time
+  change may edit a requirement at a time. `Invoice fields` prices a card
+  invoice's fee from the Payment Settings card rule instead of the payment
+  provider's fees, carried here for `complete-auction-post-sale` per
+  [Q17](decisions.md#decisions)
 - `grade10-admin/auction/post-sale`: the quote takes an optional Tax amount,
-  refuses it at zero, and carries it through a reissue
+  refuses it at zero, and carries it through a reissue. The quote and the
+  reissue price a card fee from the Payment Settings card rule, refuse
+  `CARD_FEE_UNSET` without one and `QUOTE_CHANGED` on a total the operator did
+  not read, and read no provider fees, carried here for
+  `complete-auction-post-sale` per [Q17](decisions.md#decisions)
 
 ## Impact
 

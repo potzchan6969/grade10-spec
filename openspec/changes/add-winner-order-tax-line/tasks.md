@@ -51,3 +51,12 @@ Needs groups 2 and 3. The staging walkthrough is waived in favor of the focused 
 
 - [x] 5.1 Add the receipt's "Tax when added" wording and the tracker's carrier-link row to `Records the winner keeps`: the receipt lists Tax, and the tracker shows the tracking number as the link when the operator recorded a tracker link, plain text otherwise, with no separate carrier name (`winner-order-SC-18`, `winner-order-SC-20`; `clarify-auction-shipping-progress-copy` Q6, Q7)
 - [x] 5.2 Verify the Winner Order receipt and tracker against `winner-order-US2-TC1-2` and `winner-order-US2-TC2-3`
+
+## 6. Card fee from the card rule (grade10) (owner: @htonyl)
+
+Needs group 1. The card rule itself is `complete-auction-post-sale`'s Payment Settings requirement; this group prices the quote, the reissue and the invoice from it ([Q17](decisions.md#decisions)).
+
+- [ ] 6.1 Add service and admin frontend tests for a card quote priced from the card rule, `CARD_FEE_UNSET` on a send and a reissue with no rule for the currency, `QUOTE_CHANGED` on a stale total, and a bank transfer send that reads no provider fees (`grade10-admin-auction-post-sale-SC-69`, `-SC-70`, `-SC-117`, `-SC-119`, `-SC-125`, `-SC-126`, `winner-order-SC-62`; `post-sale-US5-TC18-1`, `-TC19-1`, `post-sale-US7-TC47-1`, `-TC48-1`, `-TC25-2`)
+- [ ] 6.2 Price the card fee in preview, send and reissue from the card rule for the order's currency; refuse `CARD_FEE_UNSET` with no rule and name the currency; read no provider fees
+- [ ] 6.3 Carry the order total the operator read on send and reissue, price again on receipt and refuse `QUOTE_CHANGED` when it differs
+- [ ] 6.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`

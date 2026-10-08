@@ -362,3 +362,7 @@ What they disagreed about is below.
 An operator may record a delivery address after the address deadline without
 reopening it. Neither reading proposed it; the action is
 `complete-auction-post-sale`'s.
+
+**Run:** 2026-10-08, amendment for the card fee, not blind: `Invoice fields`' card pricing, the durable suite and the cases above. The card fee is computed from the Payment Settings card rule instead of the payment provider's fees (decisions Q17).
+
+- **No longer carried unchanged** - `winner-order-SC-62`, listed as unchanged by the run above, now reads the card rule in Payment Settings. It keeps its numbers, and no case read where the fee came from, so no case moves
