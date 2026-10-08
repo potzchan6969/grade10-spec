@@ -1,12 +1,12 @@
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it, vi } from "vitest";
-import { SAMPLE_INVOICE, SAMPLE_RECEIPT, TABLE_LABELS } from "./fixtures";
+import { SAMPLE_INVOICE, SAMPLE_RECEIPT } from "./fixtures";
 import type { InvoicePdfData } from "./invoice-pdf";
 import { InvoicePdf } from "./invoice-pdf";
 import type { PdfItemRow } from "./pdf-document";
-import { BODY_SIZE, loadFonts, measureItemTable, wrap } from "./pdf-document";
+import { BODY_SIZE, loadFonts, wrap } from "./pdf-document";
 import type { DrawnText } from "./pdf-test-helpers";
-import { drawnText, lowestDrawn, textRight } from "./pdf-test-helpers";
+import { drawnRow, drawnText, textRight } from "./pdf-test-helpers";
 import { ReceiptPdf } from "./receipt-pdf";
 
 /** Embeds each face as the very bytes it was given, so a test can tell them apart. */
@@ -71,27 +71,6 @@ describe("wrap", () => {
   });
 });
 
-describe("the measured item table", () => {
-  it("draws each block exactly as deep as it measured", async () => {
-    const fonts = await standardFonts();
-    const table = measureItemTable(fonts, {
-      items: [
-        { ...lot("A"), title: "A title long enough to wrap ".repeat(8) },
-        lot("B"),
-      ],
-      itemTotal: SAMPLE_INVOICE.itemTotal,
-      lineItems: SAMPLE_INVOICE.lineItems,
-      taxLine: { label: "Tax", amount: "HKD 12.00" },
-      copy: SAMPLE_INVOICE.copy,
-    });
-    const blocks = [table.header, ...table.rows, table.tail];
-    for (const block of blocks) {
-      expect(lowestDrawn(block, 500)).toBeCloseTo(500 - block.height);
-    }
-    expect(table.rows[0]?.height).toBeGreaterThan(table.rows[1]?.height ?? 0);
-  });
-});
-
 function lot(name: string, amounts = [100, 20, 120]): PdfItemRow {
   const [winningBid, buyersPremium, total] = amounts.map(
     (amount) => `HKD ${amount.toFixed(2)}`,
@@ -111,29 +90,13 @@ type TableData = Partial<
 const DOCUMENTS = [
   [
     "InvoicePdf",
-    (table: TableData) =>
-      InvoicePdf({
-        ...SAMPLE_INVOICE,
-        copy: { ...SAMPLE_INVOICE.copy, ...TABLE_LABELS },
-        ...table,
-      }),
+    (table: TableData) => InvoicePdf({ ...SAMPLE_INVOICE, ...table }),
   ],
   [
     "ReceiptPdf",
-    (table: TableData) =>
-      ReceiptPdf({
-        ...SAMPLE_RECEIPT,
-        copy: { ...SAMPLE_RECEIPT.copy, ...TABLE_LABELS },
-        ...table,
-      }),
+    (table: TableData) => ReceiptPdf({ ...SAMPLE_RECEIPT, ...table }),
   ],
 ] as const;
-
-const row = (rows: DrawnText[], text: string) => {
-  const found = rows.find((candidate) => candidate.text === text);
-  expect(found, `expected rendered text ${text}`).toBeDefined();
-  return found as DrawnText;
-};
 
 describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
   // shared-ui-invoice-and-receipt-pdf-SC-57
@@ -153,7 +116,7 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
         },
       }),
     );
-    const titles = items.map((item) => row(rows, item.title));
+    const titles = items.map((item) => drawnRow(rows, item.title));
     expect(titles[0]?.y).toBeGreaterThan(titles[1]?.y ?? 0);
     expect(titles[1]?.y).toBeGreaterThan(titles[2]?.y ?? 0);
     for (const [index, item] of items.entries()) {
@@ -168,7 +131,7 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
         ).toBe(true);
       }
     }
-    const itemTotal = row(rows, "Item Total");
+    const itemTotal = drawnRow(rows, "Item Total");
     expect(itemTotal.y).toBeLessThan(titles[2]?.y ?? 0);
     for (const amount of ["HKD 600.00", "HKD 120.00", "HKD 720.00"]) {
       expect(
@@ -204,7 +167,7 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
     ]) {
       expect(strings).toContain(amount);
     }
-    const itemTotal = row(rows, "Item Total");
+    const itemTotal = drawnRow(rows, "Item Total");
     expect(
       rows
         .filter((drawn) => Math.abs(drawn.y - itemTotal.y) < 0.01)
@@ -242,7 +205,7 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
         itemTotal.total,
       ],
     ].map((texts) => {
-      const title = row(rows, texts[0] ?? "");
+      const title = drawnRow(rows, texts[0] ?? "");
       return texts.map(
         (text) =>
           rows.find(
@@ -251,11 +214,10 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
           ) as DrawnText,
       );
     });
+    const lotBSize = tableRows[1]?.[1]?.size;
     for (const cells of tableRows) {
       for (const cell of cells) expect(cell).toBeDefined();
-      for (const amount of cells.slice(1)) {
-        expect(amount.size).toBe(cells[1]?.size);
-      }
+      for (const amount of cells.slice(1)) expect(amount.size).toBe(lotBSize);
       for (let index = 1; index < cells.length; index += 1) {
         expect(rightOf(cells[index - 1] as DrawnText)).toBeLessThan(
           cells[index]?.x ?? 0,
@@ -306,10 +268,13 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
     [
       "the Item Total row with its charges",
       {
-        lineItems: Array.from({ length: 120 }, (_, index) => ({
-          label: `Charge ${index + 1}`,
-          amount: "HKD 1.00",
-        })),
+        lineItems: [
+          ...Array.from({ length: 120 }, (_, index) => ({
+            label: `Charge ${index + 1}`,
+            amount: "HKD 1.00",
+          })),
+          ...SAMPLE_INVOICE.lineItems.filter((item) => item.key !== undefined),
+        ],
       },
       /Item Total row with its charges does not fit/,
     ],

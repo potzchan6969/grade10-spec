@@ -1,8 +1,7 @@
 import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
-import { TABLE_LABELS } from "./fixtures";
-import type { InvoicePdfBankRails } from "./invoice-pdf";
+import { ALL_BANK_RAILS, TABLE_LABELS } from "./fixtures";
 import { InvoicePdf } from "./invoice-pdf";
 import {
   A4_WIDTH,
@@ -17,6 +16,7 @@ import {
   drawnContent,
   drawnHorizontalLines,
   drawnRectangles,
+  drawnRow,
   drawnStrings,
   drawnText,
   textRight,
@@ -31,20 +31,7 @@ const COPY = {
   replacesInvoiceLabel: "Remplace la facture",
 } as const;
 
-const BANK_RAILS: InvoicePdfBankRails = {
-  swift: {
-    beneficiary: "Grade10 HK Ltd.",
-    swiftBic: "GRADE10HKXXX",
-    account: "HK0000000000000000000",
-  },
-  fps: { fpsId: "165123456", beneficiary: "Grade10 HK Ltd." },
-  hkLocalTransfer: {
-    bankAndCode: "Example Bank (003)",
-    beneficiary: "Grade10 HK Ltd.",
-    accountNo: "003-456-123456-001",
-  },
-  reference: "LK7P2Q01",
-};
+const BANK_RAILS = ALL_BANK_RAILS;
 
 const ENABLED_BANK_RAILS = {
   swift: BANK_RAILS.swift,
@@ -109,12 +96,6 @@ const SHIPPING = { label: "Shipping & Handling", amount: "HKD 80.00" };
 const INSURANCE = { label: "Insurance", amount: "HKD 40.00" };
 
 const SUMMARY_LINE_ITEMS = [SHIPPING, ...SUMMARY];
-
-function textRow(rows: DrawnText[], text: string) {
-  const row = rows.find((candidate) => candidate.text === text);
-  expect(row, `expected rendered text ${text}`).toBeDefined();
-  return row as DrawnText;
-}
 
 /** The lines drawn in the Item column from `top` (inclusive) down to `bottom` (exclusive). */
 function titleLines(rows: DrawnText[], top: number, bottom: number) {
@@ -255,9 +236,9 @@ describe("invoice PDF renderer", () => {
       content.slice(Math.max(0, referenceOffset - 120), referenceOffset),
     ).toMatch(/\/Helvetica-Bold-\d+\s+9\s+Tf/);
     const rows = await drawnText(bytes);
-    const swiftHeading = textRow(rows, "SWIFT");
-    const fpsHeading = textRow(rows, "FPS");
-    const bankHeading = textRow(rows, "Bank details");
+    const swiftHeading = drawnRow(rows, "SWIFT");
+    const fpsHeading = drawnRow(rows, "FPS");
+    const bankHeading = drawnRow(rows, "Bank details");
     expect(bankHeading.y).toBeGreaterThan(swiftHeading.y);
     expect(swiftHeading.y).toBeCloseTo(fpsHeading.y);
     expect(fpsHeading.x).toBeCloseTo(MARGIN + (A4_WIDTH - MARGIN * 2) / 2);
@@ -270,7 +251,7 @@ describe("invoice PDF renderer", () => {
       rows.filter((row) => row.text.includes("Grade10 HK Ltd.")).length,
     ).toBe(2);
     const note = rows.find((row) => row.text.startsWith("Enter"));
-    const reference = textRow(rows, BANK_RAILS.reference);
+    const reference = drawnRow(rows, BANK_RAILS.reference);
     expect(note?.font).toMatch(/Helvetica-(?!Bold)/);
     expect(reference.font).toMatch(/Helvetica-Bold/);
   });
@@ -324,7 +305,7 @@ describe("invoice PDF renderer", () => {
     const rows = await drawnText(bytes);
     const rightOf = await textRight();
     const header = ["Item", "Winning Bid", "Buyer's Premium", "Total"].map(
-      (label) => textRow(rows, label),
+      (label) => drawnRow(rows, label),
     );
     for (const [index, label] of header.entries()) {
       expect(label.y).toBeCloseTo(header[0].y);
@@ -340,7 +321,7 @@ describe("invoice PDF renderer", () => {
     );
     expect(divider).toBeDefined();
 
-    const itemTotal = textRow(rows, "Item Total");
+    const itemTotal = drawnRow(rows, "Item Total");
     const lines = titleLines(rows, divider?.y ?? 0, itemTotal.y);
     expect(lines.map((line) => line.text).join(" ")).toBe(title);
     const titleRow = lines[0] as DrawnText;
@@ -356,6 +337,11 @@ describe("invoice PDF renderer", () => {
       }
     }
     for (const line of lines) expect(line.font).not.toMatch(/Bold/);
+    const aboveHeader = rows
+      .filter((row) => row.y > header[0].y)
+      .map((row) => row.text);
+    expect(aboveHeader).not.toContain(title);
+    for (const line of lines) expect(aboveHeader).not.toContain(line.text);
     const strings = rows.map((row) => row.text);
     expect(strings).not.toContain("Description");
     expect(strings).not.toContain("Amount");
@@ -372,8 +358,8 @@ describe("invoice PDF renderer", () => {
     });
     const rows = await drawnText(bytes);
     const rightOf = await textRight();
-    const header = textRow(rows, "Item");
-    const lotBRow = textRow(rows, "Lot B");
+    const header = drawnRow(rows, "Item");
+    const lotBRow = drawnRow(rows, "Lot B");
     const lines = titleLines(rows, header.y - 1, lotBRow.y);
     expect(lines.length).toBeGreaterThan(1);
     expect(lines.map((line) => line.text).join(" ")).toBe(long);
@@ -412,12 +398,12 @@ describe("invoice PDF renderer", () => {
     });
     const rows = await drawnText(bytes);
     const rightOf = await textRight();
-    const header = textRow(rows, "Item");
-    const itemTotal = textRow(rows, "Item Total");
+    const header = drawnRow(rows, "Item");
+    const itemTotal = drawnRow(rows, "Item Total");
     const winningBids = rows.filter((row) => row.text === LOT_A.winningBid);
     const [firstRow, secondRow] = winningBids;
     const winningBidLeft = Math.min(
-      textRow(rows, "Winning Bid").x,
+      drawnRow(rows, "Winning Bid").x,
       ...winningBids.map((row) => row.x),
     );
     const first = titleLines(rows, header.y - 1, secondRow?.y ?? 0);
@@ -450,9 +436,9 @@ describe("invoice PDF renderer", () => {
       ],
     });
     const rows = await drawnText(bytes);
-    textRow(rows, "Subtotal");
-    const itemTotal = textRow(rows, "Item Total");
-    const header = textRow(rows, "Item");
+    drawnRow(rows, "Subtotal");
+    const itemTotal = drawnRow(rows, "Item Total");
+    const header = drawnRow(rows, "Item");
     for (const amount of [LOT_A.winningBid, LOT_A.buyersPremium, LOT_A.total]) {
       const drawn = rows.filter((row) => row.text === amount);
       expect(drawn).toHaveLength(2);
@@ -486,7 +472,7 @@ describe("invoice PDF renderer", () => {
         lineItems: [...charges, ...SUMMARY],
       });
       const rows = await drawnText(bytes);
-      const itemTotal = textRow(rows, "Item Total");
+      const itemTotal = drawnRow(rows, "Item Total");
       const drawnCharges = rows.filter(
         (row) => row.text === "Shipping & Handling" || row.text === "Insurance",
       );
@@ -494,9 +480,9 @@ describe("invoice PDF renderer", () => {
       for (const charge of drawnCharges) {
         expect(charge.y).toBeLessThan(itemTotal.y);
       }
-      const subtotal = textRow(rows, "Subtotal");
-      const fee = textRow(rows, "Payment Processing Fee");
-      const total = textRow(rows, "Order Total");
+      const subtotal = drawnRow(rows, "Subtotal");
+      const fee = drawnRow(rows, "Payment Processing Fee");
+      const total = drawnRow(rows, "Order Total");
       const lastCharge = drawnCharges[drawnCharges.length - 1] as DrawnText;
       expect(subtotal.y).toBeLessThan(lastCharge.y);
       expect(fee.y).toBeLessThan(subtotal.y);
@@ -523,6 +509,26 @@ describe("invoice PDF renderer", () => {
       ).toBe(true);
     },
   );
+
+  // shared-ui-invoice-and-receipt-pdf-SC-16
+  it("draws Order Total exactly as given, not the sum of Subtotal and the fee", async () => {
+    const strings = await drawnStrings(
+      await InvoicePdf({
+        ...DATA,
+        lineItems: [
+          { key: "subtotal", label: "Subtotal", amount: "HKD 100.00" },
+          {
+            key: "paymentProcessingFee",
+            label: "Payment Processing Fee",
+            amount: "HKD 5.00",
+          },
+          { key: "orderTotal", label: "Order Total", amount: "HKD 999.00" },
+        ],
+      }),
+    );
+    expect(strings).toContain("HKD 999.00");
+    expect(strings).not.toContain("HKD 105.00");
+  });
 
   // shared-ui-invoice-and-receipt-pdf-SC-51, shared-ui-invoice-and-receipt-pdf-US1-TC6-1
   it("renders a replacement row with a distinct prior invoice ID only when supplied", async () => {
@@ -557,12 +563,12 @@ describe("invoice PDF renderer", () => {
     const withPhoneRows = await drawnText(withPhone);
     const withoutPhoneRows = await drawnText(withoutPhone);
     expect(
-      textRow(withoutPhoneRows, "North Point, 999077").y -
-        textRow(withPhoneRows, "North Point, 999077").y,
+      drawnRow(withoutPhoneRows, "North Point, 999077").y -
+        drawnRow(withPhoneRows, "North Point, 999077").y,
     ).toBeCloseTo(LINE_HEIGHT);
     expect(
-      textRow(withoutPhoneRows, "Hong Kong SAR").y -
-        textRow(withPhoneRows, "Hong Kong SAR").y,
+      drawnRow(withoutPhoneRows, "Hong Kong SAR").y -
+        drawnRow(withPhoneRows, "Hong Kong SAR").y,
     ).toBeCloseTo(LINE_HEIGHT);
 
     const personal = await InvoicePdf({
@@ -627,11 +633,11 @@ describe("invoice PDF renderer", () => {
     expect((await drawnStrings(omittedTax)).join(" ")).not.toContain("Tax");
     const nullRows = await drawnText(withoutTax);
     const omittedRows = await drawnText(omittedTax);
-    expect(textRow(nullRows, "Subtotal").y).toBeCloseTo(
-      textRow(omittedRows, "Subtotal").y,
+    expect(drawnRow(nullRows, "Subtotal").y).toBeCloseTo(
+      drawnRow(omittedRows, "Subtotal").y,
     );
-    expect(textRow(nullRows, "Payment Processing Fee").y).toBeCloseTo(
-      textRow(omittedRows, "Payment Processing Fee").y,
+    expect(drawnRow(nullRows, "Payment Processing Fee").y).toBeCloseTo(
+      drawnRow(omittedRows, "Payment Processing Fee").y,
     );
   });
 });

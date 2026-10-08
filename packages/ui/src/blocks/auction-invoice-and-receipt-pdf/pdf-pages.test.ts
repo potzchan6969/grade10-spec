@@ -1,17 +1,18 @@
 import { PDFDocument } from "pdf-lib";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  ALL_BANK_RAILS,
   itemTotalOf,
   SAMPLE_INVOICE,
   SAMPLE_RECEIPT,
   sampleItems,
 } from "./fixtures";
-import type { InvoicePdfBankRails, InvoicePdfData } from "./invoice-pdf";
-import { bankDetailsBlock, InvoicePdf } from "./invoice-pdf";
+import type { InvoicePdfData } from "./invoice-pdf";
+import { InvoicePdf } from "./invoice-pdf";
 import type { PdfItemRow } from "./pdf-document";
 import {
+  BODY_BOTTOM,
   LINE_HEIGHT,
-  loadFonts,
   MARGIN,
   RIGHT_EDGE,
   SUMMARY_WIDTH,
@@ -22,15 +23,11 @@ import {
   drawnHorizontalLines,
   drawnPages,
   drawnRectangles,
-  lowestDrawn,
+  drawnRow,
   textRight,
 } from "./pdf-test-helpers";
 import type { ReceiptPdfData } from "./receipt-pdf";
-import {
-  paymentBreakdownBlock,
-  paymentSectionBlock,
-  ReceiptPdf,
-} from "./receipt-pdf";
+import { ReceiptPdf } from "./receipt-pdf";
 
 const HEADER = ["Item", "Winning Bid", "Buyer's Premium", "Total"];
 const BREAKDOWN = [
@@ -40,21 +37,6 @@ const BREAKDOWN = [
   "Remaining Balance Due",
 ];
 const WORDMARK = /254\.177 -0\.0000249207 m/;
-
-const BANK_RAILS: InvoicePdfBankRails = {
-  swift: {
-    beneficiary: "Grade10 HK Ltd.",
-    swiftBic: "GRADE10HKXXX",
-    account: "HK0000000000000000000",
-  },
-  fps: { fpsId: "165123456", beneficiary: "Grade10 HK Ltd." },
-  hkLocalTransfer: {
-    bankAndCode: "Example Bank (003)",
-    beneficiary: "Grade10 HK Ltd.",
-    accountNo: "003-456-123456-001",
-  },
-  reference: "LK7P2Q01",
-};
 
 const COUNTS = (to: number) => Array.from({ length: to }, (_, i) => i + 1);
 
@@ -89,10 +71,37 @@ function pageOf(pages: DrawnText[][], text: string): number {
   return pages.findIndex((page) => page.some((row) => row.text === text));
 }
 
-function on(page: DrawnText[] | undefined, text: string): DrawnText {
-  const row = page?.find((candidate) => candidate.text === text);
-  expect(row, `expected ${text} on the page`).toBeDefined();
-  return row as DrawnText;
+/**
+ * Every line, rule and box a body block draws sits at or above `BODY_BOTTOM`
+ * on every page; only the issuer block's two lines reach below it, on the
+ * last page.
+ */
+async function expectBodyAboveBottom(bytes: ArrayBuffer) {
+  const pages = await drawnPages(bytes);
+  for (const [index, page] of pages.entries()) {
+    const last = index === pages.length - 1;
+    for (const row of page) {
+      const issuerLine =
+        last &&
+        (Math.abs(row.y - MARGIN) < 0.01 ||
+          Math.abs(row.y - MARGIN - LINE_HEIGHT) < 0.01);
+      if (!issuerLine) {
+        expect(row.y, `page ${index + 1}: ${row.text}`).toBeGreaterThanOrEqual(
+          BODY_BOTTOM,
+        );
+      }
+    }
+    for (const rule of await drawnHorizontalLines(bytes, index)) {
+      expect(rule.y, `page ${index + 1} rule`).toBeGreaterThanOrEqual(
+        BODY_BOTTOM,
+      );
+    }
+    for (const box of await drawnRectangles(bytes, index)) {
+      expect(box.y, `page ${index + 1} box`).toBeGreaterThanOrEqual(
+        BODY_BOTTOM,
+      );
+    }
+  }
 }
 
 /** A page's text from the top down, left to right along a line. */
@@ -143,7 +152,9 @@ describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
     let ranOn = false;
     for (const count of COUNTS(20)) {
       const items = wrapped(count);
-      const pages = await drawnPages(await render(count, withItems(items)));
+      const bytes = await render(count, withItems(items));
+      await expectBodyAboveBottom(bytes);
+      const pages = await drawnPages(bytes);
       if (pages.length > 1) ranOn = true;
       const seen: string[] = [];
       for (const page of pages) {
@@ -196,6 +207,7 @@ describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
       const bytes = await render(count, {
         taxLine: { label: "Tax", amount: "HKD 12.00" },
       });
+      await expectBodyAboveBottom(bytes);
       const pages = await drawnPages(bytes);
       const page = pageOf(pages, "Item Total");
       for (const text of [
@@ -223,7 +235,8 @@ describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
     expect(movedAlone).toBe(true);
   });
 
-  // shared-ui-invoice-and-receipt-pdf-SC-66
+  // shared-ui-invoice-and-receipt-pdf-SC-66, shared-ui-invoice-and-receipt-pdf-SC-39,
+  // shared-ui-invoice-and-receipt-pdf-SC-40
   it("draws the issuer block on the last page only, where a one-item document draws it", async () => {
     const issuer = {
       issuerName: "Issuer Co",
@@ -234,16 +247,17 @@ describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
     const long = await drawnPages(await render(30, issuer));
     expect(long.length).toBeGreaterThan(1);
     const last = long.at(-1);
-    const email = on(last, "support@grade10.com");
+    const email = drawnRow(last ?? [], "support@grade10.com");
     const nameAbove = (row: DrawnText, under: DrawnText) =>
       row.text === "Issuer Co" &&
       Math.abs(row.y - under.y - LINE_HEIGHT) < 0.01;
     const name = (last ?? []).find((row) => nameAbove(row, email)) as DrawnText;
     expect(name).toBeDefined();
+    expect(email.y).toBeCloseTo(MARGIN);
     expect(name.y - email.y).toBeCloseTo(LINE_HEIGHT);
     expect(rightOf(email)).toBeCloseTo(RIGHT_EDGE);
     expect(rightOf(name)).toBeCloseTo(RIGHT_EDGE);
-    const oneEmail = on(one[0], "support@grade10.com");
+    const oneEmail = drawnRow(one[0] ?? [], "support@grade10.com");
     expect([email.x, email.y]).toEqual([oneEmail.x, oneEmail.y]);
     const oneName = (one[0] ?? []).find((row) => nameAbove(row, oneEmail));
     expect([name.x, name.y]).toEqual([oneName?.x, oneName?.y]);
@@ -297,7 +311,7 @@ describe.each([
       expect(pages[0]?.map((row) => row.text)).toContain(number);
       for (const index of [1, 2]) {
         const page = pages[index] ?? [];
-        const header = on(page, "Item");
+        const header = drawnRow(page, "Item");
         expect(Math.max(...page.map((row) => row.y))).toBeCloseTo(header.y);
         expect(page.some(isLot)).toBe(true);
         const strings = page.map((row) => row.text);
@@ -315,10 +329,20 @@ describe.each([
           wordmark && index === 0,
         );
       }
-      for (const row of pages.flat()) {
-        expect(row.text).not.toMatch(
-          /\bpage\b|continued|^\d+\s*(\/|of)\s*\d+$/i,
-        );
+      const items = sampleItems(100);
+      const rowsAndHeader = new Set([
+        ...HEADER,
+        ...items.flatMap((item) => [
+          item.title,
+          item.winningBid,
+          item.buyersPremium,
+          item.total,
+        ]),
+      ]);
+      for (const index of [1, 2]) {
+        for (const row of pages[index] ?? []) {
+          expect(rowsAndHeader.has(row.text), row.text).toBe(true);
+        }
       }
     },
   );
@@ -329,9 +353,9 @@ describe("an invoice's pages", () => {
   it("moves Bank details to the next page whole", async () => {
     let moved = false;
     for (const count of COUNTS(40)) {
-      const pages = await drawnPages(
-        await invoice(count, { bankRails: BANK_RAILS }),
-      );
+      const bytes = await invoice(count, { bankRails: ALL_BANK_RAILS });
+      await expectBodyAboveBottom(bytes);
+      const pages = await drawnPages(bytes);
       const page = pageOf(pages, "Bank details");
       for (const text of ["SWIFT", "FPS", "HK local transfer", "LK7P2Q01"]) {
         expect(pageOf(pages, text), `${count} items: ${text}`).toBe(page);
@@ -349,6 +373,7 @@ describe("an invoice's pages", () => {
     let ranOn = false;
     for (const count of COUNTS(40)) {
       const bytes = await invoice(count);
+      await expectBodyAboveBottom(bytes);
       const pages = await drawnPages(bytes);
       if (pages.length > 1) ranOn = true;
       const page = pageOf(pages, "support@grade10.com");
@@ -369,9 +394,9 @@ describe("a receipt's pages", () => {
   it("moves the Payment section to the next page whole", async () => {
     let moved = false;
     for (const count of COUNTS(40)) {
-      const pages = await drawnPages(
-        await receipt(count, { paymentReference: "TRF-7731" }),
-      );
+      const bytes = await receipt(count, { paymentReference: "TRF-7731" });
+      await expectBodyAboveBottom(bytes);
+      const pages = await drawnPages(bytes);
       const page = pageOf(pages, "Payment");
       expect(pageOf(pages, "Transfer reference")).toBe(page);
       expect(pageOf(pages, "TRF-7731")).toBe(page);
@@ -384,9 +409,11 @@ describe("a receipt's pages", () => {
   it("moves the four payment breakdown lines to the next page together", async () => {
     let moved = false;
     for (const count of COUNTS(40)) {
-      const pages = await drawnPages(await receipt(count));
+      const bytes = await receipt(count);
+      await expectBodyAboveBottom(bytes);
+      const pages = await drawnPages(bytes);
       const page = pageOf(pages, BREAKDOWN[0] ?? "");
-      const lines = BREAKDOWN.map((text) => on(pages[page], text));
+      const lines = BREAKDOWN.map((text) => drawnRow(pages[page] ?? [], text));
       for (const [index, line] of lines.entries()) {
         if (index > 0) expect(line.y).toBeLessThan(lines[index - 1]?.y ?? 0);
       }
@@ -399,7 +426,9 @@ describe("a receipt's pages", () => {
   it("keeps the issuer block on the page that ends with the payment breakdown", async () => {
     let ranOn = false;
     for (const count of COUNTS(40)) {
-      const pages = await drawnPages(await receipt(count));
+      const bytes = await receipt(count);
+      await expectBodyAboveBottom(bytes);
+      const pages = await drawnPages(bytes);
       if (pages.length > 1) ranOn = true;
       const page = pageOf(pages, "support@grade10.com");
       for (const text of BREAKDOWN) expect(pageOf(pages, text)).toBe(page);
@@ -411,7 +440,7 @@ describe("a receipt's pages", () => {
 
 /** Nothing but the issuer block is drawn at or below the issuer's name line. */
 function expectIssuerBandClear(page: DrawnText[]) {
-  const email = on(page, "support@grade10.com");
+  const email = drawnRow(page, "support@grade10.com");
   const name = topDown(page).find(
     (row) => row.y > email.y && Math.abs(row.y - email.y - LINE_HEIGHT) < 0.01,
   ) as DrawnText;
@@ -421,17 +450,3 @@ function expectIssuerBandClear(page: DrawnText[]) {
     expect(row.y, row.text).toBeGreaterThan(name.y);
   }
 }
-
-describe("the blocks after the table", () => {
-  it("draw exactly as deep as they measured", async () => {
-    const fonts = await loadFonts(await PDFDocument.create());
-    const blocks = [
-      bankDetailsBlock(fonts, BANK_RAILS, SAMPLE_INVOICE.copy),
-      paymentSectionBlock(fonts, "TRF-7731", SAMPLE_RECEIPT.copy),
-      paymentBreakdownBlock(fonts, SAMPLE_RECEIPT),
-    ];
-    for (const block of blocks) {
-      expect(lowestDrawn(block, 500)).toBeCloseTo(500 - block.height);
-    }
-  });
-});
