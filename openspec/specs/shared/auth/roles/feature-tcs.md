@@ -526,7 +526,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -606,7 +606,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke
@@ -665,7 +665,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <vault case A> | A vault case in progress with no cost agreed |
+| <vault case A> | A financed vault case in progress with no cost agreed |
 | <vault case B> | A vault case whose cost is agreed and not yet paid out |
 | <vault case C> | A financed vault case, paid out, with a repayment due |
 | <auction order> | An auction order with an unpaid invoice |
@@ -673,15 +673,16 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open <vault case A> from the Queue tab and click `Start the valuation` on its Case tab.
-2. Click `Make an offer` on <vault case A>'s Case tab and send the offer.
-3. Open <vault case B> and look for its Payouts tab.
-4. Open <vault case C> and look for its Payouts tab.
-5. On <grade10 admin vault url>, look for the Money tab.
-6. On <grade10 admin auction url>, open the Orders tab, open <auction order> and look at `Record payment`.
+2. Click `Record a valuation` and record one.
+3. Click `Make an offer` on <vault case A>'s Case tab and send the offer.
+4. Open <vault case B> and look for its Payouts tab.
+5. Open <vault case C> and look for its Payouts tab.
+6. On <grade10 admin vault url>, look for the Money tab.
+7. On <grade10 admin auction url>, open the Orders tab, open <auction order> and look at `Record payment`.
 
 **Expected Results:**
 
-* Steps 1 and 2 are allowed; <vault case A> shows the valuation started and the offer made.
+* Steps 1 to 3 are allowed; <vault case A> shows the valuation started and the offer made.
 * <vault case B> and <vault case C> show no Payouts tab, the vault shows no Money tab, and `Record payment` is disabled with "Needs payment processing".
 * <vault case B> shows no payout, <vault case C> no repayment, <auction order> no payment.
 
