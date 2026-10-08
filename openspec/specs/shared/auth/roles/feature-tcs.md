@@ -705,14 +705,16 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(only operator role is `treasurer`) is on <grade10 admin vault url>.
-* <vault case A> is awaiting an agreed cost.
+* <vault case A> is not yet under valuation.
+* <vault case D> is financed, has a recorded valuation and no offer.
 * <vault case B> has an agreed cost, is awaiting payout, and holds a customer's identity document.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <vault case A> | A vault case in progress with no cost agreed |
+| <vault case A> | A vault case not yet under valuation |
+| <vault case D> | A financed vault case with a recorded valuation and no offer |
 | <vault case B> | A vault case whose cost is agreed, not yet paid out, with an identity document submitted |
 
 **Steps:**
@@ -720,14 +722,14 @@ Runs once per row of **Test data**.
 1. On the Queue tab, open <vault case B>.
 2. On its Payouts tab, click `Record the payout` and record it.
 3. Open <vault case A> and look for `Start the valuation` on its Case tab.
-4. Look for `Make an offer` on the same tab.
+4. Open <vault case D> and look for `Make an offer` on its Case tab.
 5. Open <vault case B>'s Documents tab and look for `View photograph` on the identity record.
 
 **Expected Results:**
 
 * Step 1 shows the case; step 2 records the payout and <vault case B> shows it.
-* <vault case A>'s Case tab offers no `Start the valuation` and no `Make an offer`, and <vault case B>'s Documents tab offers no `View photograph`.
-* <vault case A> shows no valuation started and no offer made, and no identity document shows.
+* <vault case A>'s Case tab offers no `Start the valuation`, <vault case D>'s no `Make an offer`, and <vault case B>'s Documents tab offers no `View photograph`.
+* <vault case A> shows no valuation started and <vault case D> no offer made, and no identity document shows.
 
 <!-- trace:case id=g10.shared-roles.TC-zgr rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC4-1: Reading a case does not open the person's identity documents
@@ -736,7 +738,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
