@@ -73,9 +73,14 @@ Uses draft `feature-tcs.md` as its planning input.
 - [ ] 6.3 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walks and groups 3-4's stories together decide to automated with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name any that stay manual in the suite and the walk's `rounds.md` row
 - [ ] 6.4 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there)
 
-## 7. Reconcile invoice rendering with the accepted PDF contract (owner: @htonyl)
+## 7. Reconcile invoice rendering with the accepted PDF contract (grade10-spec) (owner: @htonyl)
 
 - [ ] 7.1 Update `InvoicePdfBankRails` and `drawBankRails` so only supplied enabled rails receive columns, and use `bankRails.reference` in the note; cover two enabled rails and an absent third (`SC-49`, `SC-50`).
 - [ ] 7.2 Add optional `replacesInvoice` to `InvoicePdfData`, render the replaced invoice ID in its own plain-text row (`SC-51`). Cover presence and absence. Keep the document's own invoice number distinct.
 - [ ] 7.3 Verify the existing `addressLines` renderer and tests show phone when supplied and leave no line when absent for both documents (`SC-31`, `SC-32`).
+- [ ] 7.5 Add the accepted optional `taxLine` to both renderers, before Subtotal when supplied and omitted without a reserved row when null or absent; cover both documents (`shared-ui-invoice-and-receipt-pdf-SC-52`, `shared-ui-invoice-and-receipt-pdf-SC-53`).
+- [ ] 7.6 Verify the focused renderer suites, public exports, shared sample fixtures, Storybook previews, and typechecks.
+
+## 8. Integrate the reconciled PDF contract (grade10)
+
 - [ ] 7.4 Update the invoice samples and Grade10 backend caller to pass only enabled bank rails, `reference`, and the replacement relationship when one exists; run the focused renderer tests, Grade10 PDF service tests, Storybook preview, and typechecks.
