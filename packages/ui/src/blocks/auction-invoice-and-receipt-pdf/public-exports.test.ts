@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type {
+  InvoicePdfBankRails,
   InvoicePdfCopy,
   InvoicePdfData,
   InvoicePdfLineItem,
   InvoicePdfRenderOptions,
+  InvoicePdfReplacement,
   PdfDocumentCopy,
   PdfLineItem,
   PdfPartyAddress,
@@ -21,9 +23,11 @@ import {
 } from "../../index";
 
 type PublicInvoiceAndReceiptPdfTypes = [
+  InvoicePdfBankRails,
   InvoicePdfCopy,
   InvoicePdfData,
   InvoicePdfLineItem,
+  InvoicePdfReplacement,
   InvoicePdfRenderOptions,
   PdfDocumentCopy,
   PdfLineItem,

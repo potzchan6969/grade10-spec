@@ -1,12 +1,7 @@
 import { getMessages } from "@grade10/i18n";
-import {
-  decodePDFRawStream,
-  PDFArray,
-  PDFDocument,
-  PDFRawStream,
-} from "pdf-lib";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { InvoicePdf } from "./invoice-pdf";
+import { drawnStrings } from "./pdf-test-helpers";
 import { ReceiptPdf } from "./receipt-pdf";
 
 const { auctionInvoicePdf } = getMessages("grade10", "en");
@@ -14,6 +9,7 @@ const { auctionInvoicePdf } = getMessages("grade10", "en");
 const INVOICE_COPY = {
   ...auctionInvoicePdf.document,
   ...auctionInvoicePdf.invoice,
+  replacesInvoiceLabel: "Replaces invoice",
 } as const;
 const RECEIPT_COPY = {
   ...auctionInvoicePdf.document,
@@ -57,32 +53,6 @@ const RECEIPT = {
   issuerEmail: "support@grade10.com",
   copy: RECEIPT_COPY,
 } as const;
-
-/**
- * The strings the first page draws, read back from its content stream. The
- * Latin fallback face writes each string as hex-coded WinAnsi bytes.
- */
-async function drawnStrings(
-  bytes: ArrayBuffer | Uint8Array,
-): Promise<string[]> {
-  const pdf = await PDFDocument.load(bytes);
-  const contents = pdf.getPage(0).node.Contents();
-  const streams =
-    contents instanceof PDFArray
-      ? contents.asArray().map((ref) => pdf.context.lookup(ref))
-      : [contents];
-  const strings: string[] = [];
-  for (const stream of streams) {
-    if (!(stream instanceof PDFRawStream)) continue;
-    const text = Buffer.from(decodePDFRawStream(stream).decode()).toString(
-      "latin1",
-    );
-    for (const [, hex] of text.matchAll(/<([0-9A-Fa-f]+)>\s*Tj/g)) {
-      strings.push(Buffer.from(hex ?? "", "hex").toString("latin1"));
-    }
-  }
-  return strings;
-}
 
 const gmtRows = (strings: string[]) =>
   strings.filter((line) => line.endsWith("GMT+8"));

@@ -111,6 +111,7 @@ export function addressLines(address: PdfPartyAddress): string[] {
   return [
     address.recipient,
     address.company,
+    address.phone,
     address.line1,
     address.line2,
     [address.city, address.region, address.postalCode]
@@ -268,10 +269,12 @@ export function drawLineItems(
   fonts: Fonts,
   listingTitle: string,
   lineItems: readonly PdfLineItem[],
+  taxLine: PdfLineItem | null | undefined,
   copy: Pick<PdfDocumentCopy, "descriptionLabel" | "amountLabel">,
   y: number,
 ): number {
   const charges = lineItems.filter((item) => item.key === undefined);
+  if (taxLine) charges.push(taxLine);
   const summary = lineItems.filter((item) => item.key !== undefined);
 
   drawText(page, fonts.bold, listingTitle, MARGIN, y, BODY_SIZE, INK);
