@@ -1104,9 +1104,11 @@ details page.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-media-US-05
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/worker/routes.spec.ts`
 
 **Pre-conditions:**
 

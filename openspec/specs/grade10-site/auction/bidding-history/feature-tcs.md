@@ -847,9 +847,11 @@ Grade10 and ZZZ each have an account with the same account id. Grade10 holds pri
 * **Behaviour:** negative
 * **Type:** security
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-04
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/publicState.spec.ts`, `grade10:packages/grade10-store/backend/src/testing/suites/auctionRouter.ts`
 
 **Pre-conditions:**
 No storefront session.
