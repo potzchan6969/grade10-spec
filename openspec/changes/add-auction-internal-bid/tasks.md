@@ -7,7 +7,7 @@ fixtures. The design is in [`tech-design.md`](tech-design.md).
 
 ## 1. Manual pages (grade10-spec)
 
-- [ ] 1.1 Update `docs/prds/products/grade10-site/auction/bidding.md` (Auction Logic) and `docs/prds/products/grade10-admin/auction/management.md` (Listings, Grants) so the internal bid on created and published listings, its Save limits, the listing-edit clear, Not placed before publishing, House in operator reads, Bought in and its view, and `auction:reserve` read as the accepted specs state them, and give `grade10-admin/auction/internal-bid` its page under the Auction Management section
+- [ ] 1.1 Update `docs/prds/products/grade10-site/auction/bidding.md` (Auction Logic) and `docs/prds/products/grade10-admin/auction/management.md` (Listings, Grants) so the internal bid on created and published listings, its Save limits, the listing-edit clear, Not placed before publishing, House in operator reads, Bought in and its view, and `auction:reserve` read as the accepted specs state them and its page `docs/prds/products/grade10-admin/auction/internal-bid.md` read as the accepted specs state them, with a Test cases detail embedding `::cases{id="grade10-admin/auction/internal-bid"}` now that the durable spec exists
 - [ ] 1.2 Verify: `pnpm check:manual` and `openspec validate add-auction-internal-bid --strict`
 
 ## 2. Internal bid table, house bidder and contracts (grade10)

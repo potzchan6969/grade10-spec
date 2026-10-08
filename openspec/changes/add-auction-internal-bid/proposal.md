@@ -79,14 +79,16 @@ See [Non-Goals](decisions.md#non-goals).
 - No product impact: the change touches one domain per product (auction); `grade10-admin/product-tcs.md` traces no capability this change touches, and grade10-site has no `product-tcs.md`
 - No platform impact: the store has no `platform-tcs.md`, and the admin-to-site path is walked by the `grade10-admin/auction` domain case
 
-## Open Questions
+## Release Gate
 
-- ❓ **Legal** - may a house bid that collectors are not told about run on a
-  lot the terms call an absolute sale, and what must the auction terms say
-  before it ships? The author held "undisclosed" against the interview's
-  recommendation to disclose (decisions.md Q1). Release waits on this answer
+- **Legal** - confirms the auction terms wording for an undisclosed house bid
+  before release. The author held "undisclosed" against the interview's
+  recommendation to disclose (decisions.md Q1, Q31). Planning and the build
+  go ahead; release waits on Legal, and a disclosure ruling is a follow-up
+  change
 
 ## References
 
 - [Bidding · Auction Logic](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-logic)
 - [Auction Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)
+- [Internal Bid · Internal Bid](../../../docs/prds/products/grade10-admin/auction/internal-bid.md#internal-bid)

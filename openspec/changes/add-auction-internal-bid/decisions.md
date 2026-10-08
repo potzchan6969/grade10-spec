@@ -54,6 +54,7 @@
 | Q28 | What the admin may do with a Not placed internal bid, and what places it | Save it at any amount the Save rules allow, before or after publishing; while the listing takes bids, a save at or above the minimum next bid, the same amount included, places it at once. Agent default, taken as recommended; open to override | Raise only, after opening, which makes the admin add a unit to an amount that was never short |
 | Q29 | May an operator with audit access only learn from the audit trail that a lot has an internal bid before the house bids? | Yes, a stated exception; never the amount or the time (Q6). Agent default, taken as recommended; open to override | Hiding internal-bid acts from audit readers without `auction:reserve`, which weakens the audit trail |
 | Q30 | A lower both moves the current bid and falls below a bid already placed for the house: which refusal is named? | Below the house's bid, naming that bid, which tells the admin the lowest amount a lower can take. Agent default, taken as QA2 recommended; open to override | Naming the lead or price move, which tells the admin less; and naming both, which puts two reasons in one refusal |
+| Q31 | Legal has not confirmed an undisclosed house bid; accept the plan now or wait? | Accept now: undisclosed stands, held by @htonyl, and Legal confirms the auction terms wording before release. A disclosure ruling is a follow-up change before release | Waiting for Legal before accepting, which holds the build; and switching to disclosed, which reopens Q1, Q2 and Q25 |
 
 ## Raised
 

@@ -18,9 +18,8 @@ from collectors, that Grade10 commits at a set time and then bids like any
 other maximum. A lot the house wins reads sold to collectors and closes
 bought in for operators - [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
 
-❓ Legal - whether a house bid that collectors are not told about may run on a
-lot the terms call an absolute sale, and what the auction terms must say
-before it ships
+🚧 Legal confirms the auction terms wording for a house bid collectors are
+not told about before the internal bid is released
 
 | Rule | Value |
 | --- | --- |
