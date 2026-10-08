@@ -13,6 +13,6 @@ decisions_carried: "Q1–Q6 on
   docs/prds/products/grade10-site/auction/post-bidding.md Shipment 🚧 line and
   Tracking link on Winner Order Product decisions row"
 reviewed:
-  user-journeys: 7e5e2246
+  user-journeys: 8128ff67
   ui-design: 39670c05
   tasks: d9e640c7
