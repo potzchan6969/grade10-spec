@@ -1150,9 +1150,11 @@ finds it.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-02, grade10-site-auction-listing-page-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
