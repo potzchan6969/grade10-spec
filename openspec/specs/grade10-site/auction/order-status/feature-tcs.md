@@ -1104,3 +1104,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 - **Restored** - the durable `auction-status-US1-TC13-1` to `-TC15-1`, archived with `2026-09-18-add-winner-bank-transfer` and left behind by its fold, are back in the durable suite as drafts.
 - **Raised for the human** - the same archive's `auction-status-US1-TC4-1` to `-TC12-1` were lost too, but `close-overdue-address-confirmation` has since issued those ids with other meanings, so the validator reads them as live. Their scenarios are covered above; the ids need a decision in that change.
 - **Out of suite:** none.
+
+**Run:** 2026-10-08, amendment for the address lock, not blind: the closing paragraph of the address-window conditions, the durable suite and the cases above. The address locks on confirm, not at send, so the paragraph says an invoice is sent only on a confirmed address.
+
+- **Carried unchanged** - every scenario keeps its meaning and its case; `address_window_open` is still read only while the invoice is `not_issued`

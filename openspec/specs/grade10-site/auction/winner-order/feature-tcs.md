@@ -6817,7 +6817,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<expired-invoice order>`'s invoice is `expired` and its address was locked at send.
+* `<expired-invoice order>`'s invoice is `expired` and its address was confirmed and is locked.
 * customer(winner of `<expired-invoice order>`) is on <the winner's auction order url>.
 
 **Steps:**
@@ -7153,3 +7153,7 @@ reopening it. Neither reading proposed it; the action is
 - **Split** - the one-time delivery and billing cases became `US12-TC12-1` and `US11-TC6-1`, and the Copy Message check left `US1-TC53-1` for `US16-TC16-1`, so each case walks one journey.
 - **Copy Message route** - `winner-order-SC-250` places Copy Message on a locked order, so `US16-TC16-1` starts from a Setup Overdue order. The route this change adds, an order with no method offered, is `US16-TC15-1`, which reads the `setup overdue` reason.
 - **Out of suite:** none.
+
+**Run:** 2026-10-08, amendment for the address lock, not blind: the closing paragraph of "A missed address deadline closes the address form", the durable suite and the cases above. The address locks on confirm, not at send, so the paragraph that retires the deadline at send no longer says the address locks there.
+
+- **Carried unchanged** - `winner-order-SC-150` keeps its meaning and its case: the send still retires the deadline. `winner-order-US23-TC8-1`'s pre-condition that read the lock at send now reads a confirmed, locked address, with no change of meaning
