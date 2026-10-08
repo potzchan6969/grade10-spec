@@ -64,7 +64,7 @@ Needs groups 3-4 landed on `main` and the submodule bumped first.
 - [x] 5.7 Amendment: needs 1.12 landed and the submodule re-bumped. Pass `bankRails` at `invoicePdf.ts`'s call site on a bank-transfer invoice, sourced from Grade10's own SWIFT/FPS/HK local transfer details and the order's bank reference; omit it entirely on a card invoice (`decisions.md` Q22) — landed via `bankRailsFor`, backed by the new shared `GRADE10_BANK_RAIL_DETAILS` constant; `PdfLabPage`'s lab now previews both a card and a bank-transfer invoice sample
 - [x] 5.8 Amendment: needs 1.13 landed and the submodule re-bumped. Remove `footer` from `INVOICE_COPY`/`RECEIPT_COPY` at `invoicePdf.ts`'s and `receiptPdf.ts`'s call sites, and from the `PdfLabPage` demo's sample copy (`decisions.md` Q23) — confirmed no `footer` field remains in either call site's copy or the demo's sample copy
 
-## 6. The walk - Winner Order's invoice and receipt PDFs (grade10)
+## 6. The walk - Winner Order's invoice and receipt PDFs (grade10) (owner: @htonyl)
 
 Uses draft `feature-tcs.md` as its planning input.
 
