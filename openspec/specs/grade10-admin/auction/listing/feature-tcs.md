@@ -29,7 +29,7 @@
 
 **Pre-conditions:**
 
-* admin(auction operator) is on <grade10 auction admin listings url>.
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
 
 **Steps:**
 
@@ -94,8 +94,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* <listing_1> is a draft in the row's currency with starting price 100000 minor units.
+* admin(holds the grant to set an auction's prices and window) is on `<grade10 auction admin listings url>`.
+* `<listing_1>` is a draft in the row's currency with starting price 100000 minor units.
 
 **Test data:**
 
@@ -109,10 +109,10 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open <listing_1>.
+1. Open `<listing_1>`.
 2. Enter the row's starting price.
 3. Save the draft.
-4. Reopen <listing_1>.
+4. Reopen `<listing_1>`.
 5. Read its starting price and status.
 
 **Expected Results:**
@@ -179,7 +179,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(may not set an auction's prices and window) is on <grade10 auction admin listings url>.
+* admin(may not set an auction's prices and window) is on `<grade10 auction admin listings url>`.
 
 **Steps:**
 
@@ -333,7 +333,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(auction operator) is on <grade10 auction admin listings url>.
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
 * A draft listing has no media.
 
 **Steps:**
@@ -442,7 +442,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(auction operator) is on <grade10 auction admin listings url>.
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
 * A draft listing is saved.
 
 **Test data:**
@@ -842,7 +842,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(auction operator) is on <grade10 auction admin listings url>.
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
 * One taxonomy has categories Pokémon and Sport.
 * A listing can take a category write.
 
@@ -875,7 +875,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(auction operator) is on <grade10 auction admin listings url>.
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
 * A sale is canceled.
 * A draft listing is saved.
 
@@ -1023,7 +1023,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(auction operator) is on <grade10 auction admin listings url>.
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
 * A canceled listing previously used slug charizard-psa-9.
 * A draft has every required field set, including slug charizard-psa-9.
 
@@ -1181,7 +1181,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(auction operator) is on <grade10 auction admin listings url>.
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
 * A created listing was drafted as sandbox.
 
 **Steps:**
@@ -1216,7 +1216,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) holds an API session.
-* <listing_1> is a created listing.
+* `<listing_1>` is a created listing.
 
 **Test data:**
 
@@ -1227,7 +1227,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Write the row's setting at the row's value on <listing_1>.
+1. Write the row's setting at the row's value on `<listing_1>`.
 2. Read the API response for its extension settings.
 
 **Expected Results:**
@@ -1253,18 +1253,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* <listing_2> is a draft with every required field set and no extension duration.
+* admin(holds the grant to set an auction's prices and window) is on `<grade10 auction admin listings url>`.
+* `<listing_2>` is a draft with every required field set and no extension duration.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | A draft listing with title, slug, prices, window and media set, extension duration empty |
+| listing_2 | A draft listing with title, slug, prices, window and media set, extension duration empty |
 
 **Steps:**
 
-1. Open <listing_2>.
+1. Open `<listing_2>`.
 2. Create the listing.
 3. Read its extension duration.
 
@@ -1342,7 +1342,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) holds an API session.
-* <listing_5> is a draft in the row's currency with every create requirement set and starting price 0 minor units.
+* `<listing_5>` is a draft in the row's currency with every create requirement set and starting price 0 minor units.
 
 **Test data:**
 
@@ -1356,8 +1356,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Send create for <listing_5> with the row's starting price.
-2. Read the API response for <listing_5>.
+1. Send create for `<listing_5>` with the row's starting price.
+2. Read the API response for `<listing_5>`.
 
 **Expected Results:**
 
@@ -1386,7 +1386,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) holds an API session.
-* <listing_6> is a draft in USD with every create requirement set except the starting price, which is empty.
+* `<listing_6>` is a draft in USD with every create requirement set except the starting price, which is empty.
 
 **Test data:**
 
@@ -1398,8 +1398,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Send create for <listing_6> with the row's starting price.
-2. Read the API response for <listing_6>.
+1. Send create for `<listing_6>` with the row's starting price.
+2. Read the API response for `<listing_6>`.
 
 **Expected Results:**
 
@@ -1470,19 +1470,19 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) holds an API session.
-* <listing_10> is a draft with every create requirement set except the starting price, and no currency chosen.
+* `<listing_10>` is a draft with every create requirement set except the starting price, and no currency chosen.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_10> | A draft, currency not chosen, starting price empty, every other create requirement set |
+| listing_10 | A draft, currency not chosen, starting price empty, every other create requirement set |
 | Starting price | 0 minor units |
 
 **Steps:**
 
-1. Send create for <listing_10> with starting price 0 and no currency.
-2. Read the API response for <listing_10>.
+1. Send create for `<listing_10>` with starting price 0 and no currency.
+2. Read the API response for `<listing_10>`.
 
 **Expected Results:**
 
