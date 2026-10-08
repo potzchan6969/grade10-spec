@@ -81,6 +81,9 @@ function workspaceSource(root, specifier) {
   if (specifier === "@grade10/design-system") {
     return join(root, "packages/design-system/src/index.ts");
   }
+  if (specifier === "@grade10/date") {
+    return join(root, "packages/date/src/index.ts");
+  }
 
   const match = /^@grade10\/(ui|design-system)\/(.+)$/.exec(specifier);
   if (!match) return null;
