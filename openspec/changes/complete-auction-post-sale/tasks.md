@@ -72,7 +72,7 @@
 - [ ] 9.3 The Contact Us preview `apps/preview/src/pages/winner-order-contact-dialog.tsx`: Copy Message reads Copied for a moment and fires no toast, as SC-250 states; the To and Subject controls are unchanged; `pnpm --dir apps/preview run lint`, `pnpm --dir apps/preview run build-storybook`
 - [ ] 9.4 The Shipped letter under `apps/emails/emails/auction/order/` takes the tracker link only when the operator recorded one: with none, its primary action is View order, opening Winner Order, and the tracking number reads as plain text (`order-mail-SC-62`, `order-mail-US1-TC55-1`); `pnpm --dir apps/emails run typecheck`
 
-## 10. E2E and Docs (grade10)
+## 10. E2E and Docs (grade10) (owner: @htonyl)
 
 - [ ] 10.1 `post-sale-journey.spec.ts` with the card, bank and operator journeys, seeded through `testWinners.create` and signed in from `AuthDoor.readOutbox`; `pnpm run test:e2e`
 - [ ] 10.2 The winner-order, partial-payment, refund, account-record and suspension specs and their helpers read `Awaiting Setup`; `pnpm run test:e2e`
