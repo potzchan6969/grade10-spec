@@ -24,11 +24,11 @@ type IntakeItemRow = {
 
 /** Storybook ids for intake item-card assemblies (workbench deep links). */
 const INTAKE_ITEM_CARD_IN_SCANNING_STORY_ID =
-  "pages-intake-tracker-item-card--in-scanning";
+  "pages-submissions-item-card--in-scanning";
 const INTAKE_ITEM_CARD_VAULTED_STORY_ID =
-  "pages-intake-tracker-item-card--vaulted";
+  "pages-submissions-item-card--vaulted";
 const INTAKE_ITEM_CARD_GRADING_STORY_ID =
-  "pages-intake-tracker-item-card--grading-in-transit";
+  "pages-submissions-item-card--grading-in-transit";
 
 function intakeItemCardStoryId(item: IntakeItemRow): string {
   if (item.service === "grading") return INTAKE_ITEM_CARD_GRADING_STORY_ID;

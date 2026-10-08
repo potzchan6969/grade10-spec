@@ -13,7 +13,7 @@ import { navigateToStory } from "./workbench-story-nav";
 
 /**
  * One collectible tile on the Vault Portfolio grid. Only vaulted holdings —
- * intake and pre-check stay on the intake tracker. Click opens item detail,
+ * intake and pre-check stay on Submissions. Click opens item detail,
  * or retrieval when pickup is pending.
  */
 const meta = {

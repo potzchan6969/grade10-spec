@@ -16,8 +16,8 @@ requirements. Today's vault product is shop custody with an optional loan —
   - `Pages/Appointment/Book Visit`
   - `Pages/Appointment/Confirmation`
   - `Pages/Appointment/Appointments`
-  - `Pages/Intake Tracker`
-  - `Pages/Intake Tracker/Item Card`
+  - `Pages/Submissions`
+  - `Pages/Submissions/Item Card`
   - `Pages/Vault/Portfolio`
   - `Pages/Vault/Item Detail`
   - `Pages/Vault/Request Retrieval`
@@ -39,7 +39,7 @@ requirements. Today's vault product is shop custody with an optional loan —
 | Intake vs a new booking | Intake does not block booking. After the visit is used or cancelled, another drop-off can be booked while earlier items are still incoming |
 | Walk-in | Allowed; the visitor may not have a Grade10 account yet |
 | Intake start | When staff registers the item at the counter (booked or walk-in) |
-| Intake tracker | Collector **item list** after registration — status and vault actions on each row; hand-in / submission id is meta on the item, not a submission detail page |
+| Submissions | Collector **item list** after registration — status and vault actions on each row; hand-in / submission id is meta on the item, not a submission detail page |
 | Custody consent | Sign at the visit to put the collectible in the vault |
 | Drop-off and retrieval | The Hong Kong Grade10 Store, Causeway Bay only; no shipping on day one |
 | Fees | Fee-based storage; limited free launch offer on day one |

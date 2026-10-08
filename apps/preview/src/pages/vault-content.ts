@@ -45,7 +45,7 @@ const VAULT_BOOK_VISIT_STORY_ID = "pages-appointment-book-visit--default";
 const VAULT_CONFIRMATION_STORY_ID = "pages-appointment-confirmation--default";
 const VAULT_MY_VISITS_STORY_ID = "pages-appointment-appointments--default";
 const VAULT_MANAGE_VISIT_STORY_ID = VAULT_MY_VISITS_STORY_ID;
-const INTAKE_TRACKER_STORY_ID = "pages-intake-tracker--in-progress";
+const INTAKE_TRACKER_STORY_ID = "pages-submissions--in-progress";
 const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
 const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--in-vault";
 const VAULT_RETRIEVAL_STORY_ID = "pages-vault-request-retrieval--default";
@@ -125,7 +125,7 @@ type VaultAsset = {
 
 /**
  * Holdings the portfolio may show — vaulted and verified only. Intake stages
- * (registered, pre-check, signing, imaging) stay on the intake tracker until
+ * (registered, pre-check, signing, imaging) stay on Submissions until
  * the item is in the vault; collectors expect auction and retrieval from here.
  */
 const PORTFOLIO_HOLDING_STATUSES: readonly VaultAssetStatus[] = [

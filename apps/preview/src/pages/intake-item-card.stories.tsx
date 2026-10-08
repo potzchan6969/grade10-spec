@@ -20,7 +20,7 @@ function IntakeItemCardPage({ item }: { item: IntakeItemRow }) {
     <VaultPageShell>
       <Breadcrumbs>
         <BreadcrumbItem href={INTAKE_TRACKER_HREF}>
-          Intake tracker
+          Submissions
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem current>{item.name}</BreadcrumbItem>
@@ -34,7 +34,7 @@ function IntakeItemCardPage({ item }: { item: IntakeItemRow }) {
 }
 
 const meta = {
-  title: "Pages/Intake Tracker/Item Card",
+  title: "Pages/Submissions/Item Card",
   component: IntakeItemCardPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -52,7 +52,7 @@ export const InScanning: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("link", { name: "Intake tracker" })).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Submissions" })).toBeVisible();
     expect(canvas.getAllByText("ITM-99482-01")).toHaveLength(2);
     expect(canvas.getByText("In Scanning")).toBeVisible();
     expect(

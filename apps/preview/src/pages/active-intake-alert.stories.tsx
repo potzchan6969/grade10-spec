@@ -12,7 +12,7 @@ import { navigateToStory } from "./workbench-story-nav";
 
 /**
  * Banner beneath portfolio summary stats when intake still has open
- * submissions. Track Progress opens the intake tracker.
+ * submissions. Track Progress opens Submissions.
  */
 const meta = {
   title: "Pages/Vault/Active Intake Alert",
@@ -44,7 +44,7 @@ function LinkedAlert({ submissionCount }: { submissionCount: number }) {
         </Link>
         {" · "}
         <Link href={INTAKE_TRACKER_HREF} size="xs">
-          Intake Tracker
+          Submissions
         </Link>
       </Text>
     </>
@@ -65,7 +65,7 @@ export const WithSubmissions: Story = {
       canvas.getByRole("button", { name: "Track Progress" }),
     ).toBeVisible();
     expect(canvas.getByRole("link", { name: "Vault Portfolio" })).toBeVisible();
-    expect(canvas.getByRole("link", { name: "Intake Tracker" })).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Submissions" })).toBeVisible();
   },
 };
 
