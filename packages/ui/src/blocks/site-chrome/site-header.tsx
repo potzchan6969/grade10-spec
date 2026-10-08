@@ -77,7 +77,7 @@ type SiteHeaderProps = {
   accountEmail?: string;
   onProfile?: () => void;
   onMyOrders?: () => void;
-  onMyAuctions: () => void;
+  onMyAuctions?: () => void;
   /** Opens Submissions. Omitted unless this handler is supplied. */
   onSubmissions?: () => void;
   /** Store-launch membership item. TBC — omitted unless this handler is supplied. */
@@ -98,10 +98,11 @@ type SiteHeaderProps = {
  *
  * Signed out shows a primary Sign In button. Signed in shows the account icon
  * and a menu with the email's initial avatar above the sign-in email, then
- * My Auctions, then Sign Out (destructive, separated). Cart, search, Profile, My Orders,
+ * the supplied items, then Sign Out (destructive, separated). Cart, search,
+ * Profile, My Orders, My Auctions,
  * Submissions, Membership, and Orders stay optional via handlers — Profile joins first
  * once its handler is supplied, My Orders joins ahead of My Auctions once
- * Store answers, Submissions joins after My Auctions once its copy and handler
+ * Store answers, My Auctions joins once its handler is supplied, Submissions joins after My Auctions once its copy and handler
  * are supplied, Membership joins after that once its copy and handler are
  * supplied, and Orders joins after that once both its copy and handler are
  * supplied. When cart is present,
@@ -191,9 +192,11 @@ function SiteHeader({
                 {myOrders}
               </DropdownMenuItem>
             ) : null}
-            <DropdownMenuItem onClick={onMyAuctions}>
-              {myAuctions}
-            </DropdownMenuItem>
+            {onMyAuctions != null ? (
+              <DropdownMenuItem onClick={onMyAuctions}>
+                {myAuctions}
+              </DropdownMenuItem>
+            ) : null}
             {submissions && onSubmissions ? (
               <DropdownMenuItem onClick={onSubmissions}>
                 {submissions}
