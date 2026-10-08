@@ -47,20 +47,19 @@ pnpm push:main
 ```
 
 It fetches, rebases onto `origin/main`, runs the fast checks the paths owe
-(`scripts/push-main/paths.mjs`), and pushes. Planning text — `openspec/changes`,
-`openspec/specs` and `docs/` — lands on `main`; anything else goes to a pull
-request that merges itself once its checks pass. `main`
-moving under the push is a rebase and a gate again, three times at most.
-`--dry-run` rebases and gates and pushes nothing; `--pr` sends anything through
-a pull request, when the author wants someone to read it first.
+(`scripts/push-main/paths.mjs`), and pushes to `main`. Every path lands there,
+shared or not. `main` moving under the push is a rebase and a gate again, three
+times at most. `--dry-run` rebases and gates and pushes nothing; `--pr` sends
+the push through a pull request that merges itself once its checks pass, when
+the author wants someone to read it first.
 
 - **Exit 1, a check failed** — fix it in a new commit and run it again.
 - **Exit 2, a conflict** — the rebase was aborted and nothing moved; the next
   section.
 - **Exit 3, lost the race three times** — run it again.
 
-The hook `pnpm install` sets runs the same gate on any other push to `main`,
-and refuses a shared surface there. Never pass `--no-verify`.
+The hook `pnpm install` sets runs the same gate on any other push to `main`.
+Never pass `--no-verify`.
 
 ## Resolve by reading the change
 
@@ -112,8 +111,8 @@ pnpm push:main
 
 ## Beyond the gate
 
-The gate is what every push owes. The pull request's CI runs the rest for a
-shared surface; for planning text, these are still yours:
+The gate is what every push owes. CI runs the rest on `main` after the push, so
+these are still yours before it:
 
 **A delta with journeys and no suite does not push**, and that now includes a
 capability whose journeys say `**Walked by:** nobody` — it is anchored on its
