@@ -32,7 +32,13 @@ export {
   formatEvent,
   formatEventTime,
   formatMoment,
+  formatMonth,
+  formatMonthAlone,
+  formatMonthName,
+  formatMonthNameAlone,
+  formatShortDay,
   formatTimeOfDay,
+  formatWeekdayDay,
   formatWeekdayMoment,
   formatZone,
 } from "./shapes.ts";

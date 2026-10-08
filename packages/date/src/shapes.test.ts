@@ -6,7 +6,13 @@ import {
   formatEvent,
   formatEventTime,
   formatMoment,
+  formatMonth,
+  formatMonthAlone,
+  formatMonthName,
+  formatMonthNameAlone,
+  formatShortDay,
   formatTimeOfDay,
+  formatWeekdayDay,
   formatWeekdayMoment,
   formatZone,
 } from "./shapes.ts";
@@ -51,6 +57,19 @@ describe("the shapes", () => {
     expect(formatEventTime(INSTANT, { timeZone: "Asia/Hong_Kong" })).toBe(
       "22:00:14",
     );
+  });
+
+  it("writes a day, a month and a heading's day on the clock handed", () => {
+    // 22:00 in Hong Kong on 31 Aug is already 1 Sep there.
+    const late = new Date("2026-08-31T16:30:00Z");
+    const hk = { timeZone: "Asia/Hong_Kong" };
+    expect(formatShortDay(late)).toBe("31 Aug");
+    expect(formatShortDay(late, hk)).toBe("1 Sep");
+    expect(formatMonth(late, hk)).toBe("Sep 2026");
+    expect(formatMonthName(late, hk)).toBe("September 2026");
+    expect(formatMonthAlone(late, hk)).toBe("Sep");
+    expect(formatMonthNameAlone(late, hk)).toBe("September");
+    expect(formatWeekdayDay(late, hk)).toBe("Tuesday 1 Sep 2026");
   });
 
   it("orders two events a few seconds apart", () => {
