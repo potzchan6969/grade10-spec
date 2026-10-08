@@ -91,5 +91,5 @@ message states GMT+8.
 | An admin surface on a shop's clock | Decided | The vault console and the appointments diary read on the shop's clock, because staff at a counter tell collectors times on it; every other admin surface states UTC | Product |
 | Records a machine reads | Decided | An export and the audit trail stay UTC whatever the surface they come from reads, so a record joins across shops on one zone | Product |
 | First paint | Decided | A deadline may read UTC named GMT until the browser's zone is known, then it switches | Product |
-| Date formatters | Decided | One package, `@grade10/date`, writes every date for the store and the application and reads a typed day into instants. Countdowns, durations and the POS till's copy of Shopify's screens are outside it | Engineering |
+| Date formatters | Decided | One package, `@grade10/date`, writes every date for the store and the application and reads a typed day into instants. Countdowns, durations, the POS till's copy of Shopify's screens and the manual viewer are outside it | Engineering |
 :::
