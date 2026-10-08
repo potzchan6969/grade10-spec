@@ -22,11 +22,9 @@ buttons follow is `grade10-site/vault/case-lifecycle`; one collector's page is
     person
   - Keyset paging: a page, a backlog count and a control that says whether
     there is more
-  - Today, cut where the rows are: the brand's own zone decides it, in the
-    read rather than in the browser
   - A count on every cut: each view says how many it holds before it is
     opened
-  - The landing view is the Today cut: today's visits in slot order, from
+  - The landing view is Needs staff: the cases that are ours to work, from
     that cut's own query rather than a second one
   - The collector's word: a row prints the word the collector reads for the
     status, never the raw one
@@ -49,8 +47,8 @@ buttons follow is `grade10-site/vault/case-lifecycle`; one collector's page is
   - Tabs by job: the case, the documents, the custody, the money
   - Buttons follow the machine: an act shows only where its move may run, and
     the worker refuses independently
-  - The visit in order: the counter's steps for today's visit, ticked as
-    each act lands
+  - The counter's case in order: the steps for a case opened at the counter,
+    ticked as each act lands
   - Why an act is not offered: a withheld act says what it is waiting for in
     words, the forfeiture's cure date among them
   - The identity in six words: what the record says, never the provider's
@@ -64,9 +62,8 @@ buttons follow is `grade10-site/vault/case-lifecycle`; one collector's page is
   - A loan's clock: past its due date the header counts the days past due,
     and once a forfeiture notice stands it names the date to pay by instead,
     both on the brand's calendar
-  - Asked before the collector is emailed: cancelling the visit and sending
-    the forfeiture notice each ask first, naming the slot on the booked shop's
-    clock, or the address and the date to pay by
+  - Asked before the collector is emailed: sending the forfeiture notice asks
+    first, naming the address and the date to pay by
 - Who may act
   - Four grants: read, operate, approve, payout — and the identity read
     beside them, which also opens collector names and emails
@@ -80,7 +77,7 @@ buttons follow is `grade10-site/vault/case-lifecycle`; one collector's page is
   - Movements: in at vaulting, moved on a move, out at every exit
   - What is held: everything in a locker, with its shop, oldest first
   - Counted at a glance: how much is held, per shop, how much carries a live
-    loan and how much waits on a pickup
+    loan
 - No intake of its own
   - Every case is the collector's: the console sends none, a walk-in waits as
     a draft for the customer to send, and no identity is keyed to a case
@@ -117,12 +114,7 @@ one of the first five:
 | In custody | `vaulted`, `active`, `repaid` |
 | Closed | `released`, `declined`, `cancelled`, `expired`, `forfeited` |
 | Drafts | `draft` |
-| Today | every case that has not ended whose visit falls on the calendar day the brand's own zone puts it in |
 | Overdue | every live loan past its due date, longest overdue first |
-
-The Today cut SHALL be made where the rows are read, on the brand's own zone
-as `shared/dates-and-times` states it, so that the view and the badge beside it
-cannot disagree across a midnight.
 
 Every view SHALL say how many cases it holds before it is opened, counted
 behind that view's own filter rather than over the page in hand, at the
@@ -130,18 +122,18 @@ instant and on the zone the rows are read. A view holding nothing SHALL say
 so rather than leaving its count unwritten, and the page SHALL say how many of
 that number it is showing.
 
-The queue SHALL open on the Today cut, read from that cut's own query rather
-than from a second one, ordered by the visit's slot time earliest first. Where
-the cut holds nothing, the landing view SHALL say no visit is booked for
-today.
+The queue SHALL open on Needs staff, read from that cut's own query rather
+than from a second one. A view holding no case SHALL say so, and its count
+SHALL read none. The queue offers no Today view: the diary owns the day's
+visits.
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-77a rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-01 - Today is the shop's day
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-77a rev=2 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-01 - The queue offers no Today view
 **Serves:** grade10-admin-vault-operator-queue-US-01 - Operator opens the shop and sees what is waiting
 
-- **GIVEN** a visit booked for later today at the shop, read early in the morning there while the date in Coordinated Universal Time is still yesterday's
-- **WHEN** the Today view is read
-- **THEN** the visit's case is in it
+- **GIVEN** a case opened at the counter from a visit the diary transferred for today
+- **WHEN** the queue's views are read
+- **THEN** none of them is Today, and the case sits in the view its status belongs to
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-90m rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-02 - Every status has exactly one home
@@ -159,27 +151,26 @@ today.
 - **THEN** the cut for cases waiting on staff says it holds 60, and the one for cases agreeing says it holds none
 - **AND** the page in hand says how many of the 60 it is showing
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-2bi rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-22 - The console opens on today's visits in slot order
-**Serves:** grade10-admin-vault-operator-queue-US-06 - the operator starts the shift on the day's visits
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-2bi rev=2 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-22 - The console opens on the cases that are ours to work
+**Serves:** grade10-admin-vault-operator-queue-US-06 - the operator starts the shift on what waits for staff
 
-- **GIVEN** visits booked at the shop today for 10:00, 11:30 and 15:00
+- **GIVEN** cases `submitted` and `under_valuation`, and one `accepted`
 - **WHEN** an operator opens the vault section
-- **THEN** the view it opens on is the Today cut, holding those three cases in that order, with its count beside it
-- **AND** reading the Today cut straight after answers those same three cases
+- **THEN** the view it opens on is Needs staff, holding the first two and not the third, with its count beside it
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-q25 rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-23 - A day with no visit says so
-**Serves:** grade10-admin-vault-operator-queue-US-06 - the operator learns there is nothing booked before working the rest of the queue
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-q25 rev=2 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-23 - A view with no case says so
+**Serves:** grade10-admin-vault-operator-queue-US-06 - the operator learns a view is empty before working the rest of the queue
 
-- **GIVEN** no visit booked at the shop for today
+- **GIVEN** no case waiting on staff
 - **WHEN** an operator opens the vault section
-- **THEN** the view it opens on says no visit is booked for today, and its count reads none
+- **THEN** the view it opens on says it holds no case, and its count reads none
 
 ### Requirement: A row says why its case is waiting on a person
 
 Each row SHALL carry the case id, the item's name, the status, the lane, the
-amount asked for, the visit it holds, when it was last touched, and every
+amount asked for, when it was last touched, and every
 reason it is waiting on a person:
 
 | Badge | Raised when |
@@ -190,7 +181,6 @@ reason it is waiting on a person:
 | Offer lapsed | the case's offer ran out of window |
 | Message parked | a message to the collector ran out of attempts |
 | Document seen before | the identity document is on file under another account |
-| Visit today | the case's visit falls on the shop's own day |
 
 The badges SHALL be derived at the read, never stored, and the console and the
 worker SHALL derive them the same way.
@@ -334,7 +324,7 @@ A case SHALL open into a header and four tabs:
 
 | Surface | What an operator does there |
 | --- | --- |
-| Header | see the contact, open a chat link, set or change the contact, book, move or cancel the visit, read the badges, hand a parked message back to the queue |
+| Header | see the contact, open a chat link, set or change the contact, read the badges, hand a parked message back to the queue |
 | Case | start the valuation, record a valuation, make or counter an offer, withdraw it, record the collector's acceptance at the counter, agree custody terms, decline, cancel, and read the case's timeline |
 | Documents | record or reuse the identity check, record that the terms were explained, prepare documents, prepare the release, hand over the link and QR code, re-check a packet, download the identity photograph |
 | Custody | confirm vaulted with its shop and locker, move the item, release, unwind, send the forfeiture notice, forfeit |
@@ -366,7 +356,7 @@ Each act SHALL require exactly one named grant:
 | Grant | Held by | What it opens |
 | --- | --- | --- |
 | Vault read | staff, treasurer, admin | cases, the contact, items, documents, what one case owes, held items, the arrears, search, narrowing by collector, the collector page |
-| Vault operate | staff, admin | open a walk-in, start valuation, accept at the counter, record or reuse an identity check, record terms explained, prepare, hand over, vault, move, release, unwind, cancel, the visit, hand a parked message back |
+| Vault operate | staff, admin | open a walk-in, start valuation, accept at the counter, record or reuse an identity check, record terms explained, prepare, hand over, vault, move, release, unwind, cancel, hand a parked message back |
 | Vault approve | staff, admin | record a valuation, make or withdraw an offer, decline, send the forfeiture notice, forfeit |
 | Vault payout | treasurer, admin | the advance, a repayment, taking a money record back, the ledger and the position |
 | Identity read | staff, admin | the identity photograph, the collector's name on the queue and the held items, and the collector's name and email on the collector page |
@@ -401,7 +391,7 @@ read that declares nothing SHALL leave no entry. An act or declaring read with
 nowhere to write its entry SHALL be refused rather than performed unrecorded.
 
 Nothing SHALL be emailed or pushed to staff: the queue, its badges and the
-Today and Overdue views are the signal.
+Needs staff and Overdue views are the signal.
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-p2u rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-16 - One case's trail is one query
@@ -476,8 +466,8 @@ window SHALL ask for another.
 Every console surface that names a case shows the handle the collector can
 read out and the word the collector reads for where the case stands.
 
-- **The reference** - a queue row, a row of the Today cut, a held-item row and
-  a case's own header SHALL each show that case's six-character reference.
+- **The reference** - a queue row, a held-item row and a
+  case's own header SHALL each show that case's six-character reference.
 - **The word** - a status SHALL be shown as the word the collector reads for
   it, and no console surface SHALL print the stored status name.
 - **One vocabulary** - the word the console shows for a status SHALL be the
@@ -510,10 +500,10 @@ read out and the word the collector reads for where the case stands.
 - **WHEN** the queue is read
 - **THEN** its row says the case is waiting on the collector
 
-### Requirement: The case opens on today's visit, step by step
+### Requirement: A case opened at the counter opens step by step
 
-A case with a visit at the shop today opens on the steps the counter works for
-that visit, in the order they are worked.
+A case staff opened at the counter, and not yet in custody, opens on the steps
+the counter works for it, in the order they are worked.
 
 - **The steps** - the checklist SHALL hold these steps, in this order:
 
@@ -534,48 +524,48 @@ that visit, in the order they are worked.
 - **A step not yet offered** - a step whose act the case does not yet allow
   SHALL say what it is waiting for, in words, rather than offering an act the
   worker will refuse.
-- **No visit today** - a case with no visit at the shop today SHALL show no
+- **Opened online** - a case the collector opened online SHALL show no
   checklist.
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-i5p rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-30 - The counter reads the visit's steps in order
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-i5p rev=2 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-30 - The counter reads the case's steps in order
 **Serves:** grade10-admin-vault-operator-queue-US-07 - a shop of three runs the counter from the screen
 
-- **GIVEN** a financed case with a visit at the shop today, its identity check recorded and nothing valued yet
+- **GIVEN** a financed case opened at the counter, its identity check recorded and nothing valued yet
 - **WHEN** staff open the case
-- **THEN** it opens on the visit's seven steps in order, with the identity step ticked
+- **THEN** it opens on its seven steps in order, with the identity step ticked
 - **AND** the step that inspects and values carries the act that lands it
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-on2 rev=1 -->
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-on2 rev=2 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-31 - A step the case does not allow yet says what it is waiting for
 **Serves:** grade10-admin-vault-operator-queue-US-07 - the counter learns what is missing without sending an act that will be refused
 
-- **GIVEN** a financed case with a visit today whose packet is not signed
+- **GIVEN** a financed case opened at the counter whose packet is not signed
 - **WHEN** staff read the step that puts the item in the vault
 - **THEN** the step offers no act and says it is waiting for the packet to be signed
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-a0m rev=1 -->
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-a0m rev=2 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-32 - A case that borrows nothing walks the custody terms
-**Serves:** grade10-admin-vault-operator-queue-US-07 - the counter works a storage visit from the same screen
+**Serves:** grade10-admin-vault-operator-queue-US-07 - the counter works a storage case from the same screen
 
-- **GIVEN** a case that borrows nothing, with a visit at the shop today
+- **GIVEN** a case that borrows nothing, opened at the counter
 - **WHEN** staff open the case
 - **THEN** its terms step reads the custody terms, and no step asks for the loan agreement's key terms
 - **AND** its checklist walks six steps rather than seven
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-fzi rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-33 - A case with no visit today shows no checklist
-**Serves:** grade10-admin-vault-operator-queue-US-07 - the counter is not walked through a visit nobody is coming to
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-fzi rev=2 -->
+#### Scenario: grade10-admin-vault-operator-queue-SC-33 - A case the customer opened online shows no checklist
+**Serves:** grade10-admin-vault-operator-queue-US-07 - the counter is not walked through a case nobody opened there
 
-- **GIVEN** a case whose visit is booked for tomorrow
+- **GIVEN** a case the collector sent online
 - **WHEN** staff open it
-- **THEN** no visit checklist is shown
+- **THEN** no checklist is shown
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ffw rev=1 -->
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ffw rev=2 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-50 - An act lands its step and hands the next one on
 **Serves:** grade10-admin-vault-operator-queue-US-07 - the counter works down the list without looking up what comes next
 
-- **GIVEN** a case with a visit at the shop today, read at the step in hand
+- **GIVEN** a case opened at the counter, read at the step in hand
 - **WHEN** an operator sends that step's act
 - **THEN** the step is ticked, and the step after it carries the act that lands it
 
@@ -653,7 +643,7 @@ for instead of leaving the operator to send it and be refused.
 ### Requirement: The identity panel reads the six states the record holds
 
 The console says where a collector's identity stands in six words, so an
-operator arranging a visit knows whether to send the check again, wait, or
+operator working a case knows whether to send the check again, wait, or
 take it at the counter.
 
 - **The six** - the panel SHALL show exactly one of the six states
@@ -724,26 +714,24 @@ take it at the counter.
 The held list answers how much the shops are holding before an operator reads
 a single row.
 
-- **The figures** - the list SHALL carry three figures: how much is held, how
-  much carries a live loan, and how much waits on a booked pickup. The first
-  SHALL break down by shop; there is no fourth figure counting shops.
+- **The figures** - the list SHALL carry two figures: how much is held and how
+  much carries a live loan. The first SHALL break down by shop; there is no fourth figure counting shops.
 - **Counted behind the filter** - each figure SHALL count everything the
   filter in force holds, never the page in hand.
 - **The row** - a row SHALL carry the case reference, the item's name, the
   shop, the locker, the day it was taken in, how many days it has been held,
-  the status in the collector's word, what is outstanding on it, and whether a
-  pickup is booked.
+  the status in the collector's word, and what is outstanding on it.
 - **One shop or all** - the list SHALL be narrowable to one shop.
 - **Nothing held** - a list holding nothing SHALL say so, with its figures at
   none.
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4c4 rev=1 -->
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4c4 rev=2 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-43 - The figures count what is held, not the page
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator says how much the shops are holding without paging the list
 
-- **GIVEN** 60 items held across two shops, more than one page of them, 25 of them carrying a live loan and 4 waiting on a booked pickup
+- **GIVEN** 60 items held across two shops, more than one page of them, 25 of them carrying a live loan
 - **WHEN** the held list is read
-- **THEN** its figures read 60 held, 25 carrying a live loan and 4 waiting on a pickup, and name how many of the 60 are held at each of the two shops
+- **THEN** its figures read 60 held and 25 carrying a live loan, and name how many of the 60 are held at each of the two shops
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-1ij rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-44 - One shop narrows the rows and the figures with them
@@ -753,13 +741,13 @@ a single row.
 - **WHEN** the list is narrowed to one of them
 - **THEN** only that shop's items are listed, and the figures count that shop's items alone
 
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4h9 rev=1 -->
+<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4h9 rev=2 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-45 - A row says what the item is carrying
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator answers for one item without opening its case
 
-- **GIVEN** an item held under a live loan and another whose pickup is booked
+- **GIVEN** an item held under a live loan and another repaid
 - **WHEN** the held list is read
-- **THEN** each row names the case reference, the item, the shop, the locker, the day it was taken in, the days it has been held, the status in the collector's word, what is outstanding, and whether a pickup is booked
+- **THEN** each row names the case reference, the item, the shop, the locker, the day it was taken in, the days it has been held, the status in the collector's word, and what is outstanding
 
 <!-- trace:scenario id=g10adm.vault-operator-queue.SC-j43 rev=1 -->
 #### Scenario: grade10-admin-vault-operator-queue-SC-46 - A shop holding nothing says so
@@ -993,7 +981,7 @@ the name it has.
 
 ### Requirement: A row names whose case it is
 
-A queue row, in every status view and the Today cut, and a held-item row
+A queue row, in every status view, and a held-item row
 SHALL name the case's collector for an operator holding the identity read
 grant.
 
@@ -1055,8 +1043,7 @@ grant.
 
 ### Requirement: A collector's name narrows the queue and the held items
 
-A click on a collector's name SHALL narrow the queue's status views, the Today
-cut and the held items to that collector's cases.
+A click on a collector's name SHALL narrow the queue's status views and the held items to that collector's cases.
 
 - **In the address** — the collector SHALL be carried in the address, so a
   reload or a link keeps the narrowing; there SHALL be no field to type a
@@ -1389,117 +1376,6 @@ it, never on the zone of the shop the case is kept at.
 - **GIVEN** a brand on `Asia/Hong_Kong`, and a live loan kept at a shop on `Asia/Tokyo` whose forfeiture notice named 15 December 2026, a day that ends at 00:59 on 16 December Tokyo time
 - **WHEN** an operator opens the case on 5 December
 - **THEN** the header reads `pay by 15 Dec 2026`, and does not read 16 Dec
-
-### Requirement: Cancelling a visit asks first, naming the slot
-
-Cancelling a case's visit from the console SHALL run in these steps:
-
-1. The operator presses Cancel visit.
-2. The console asks, from the case as the press reads it, in the default
-   tone, naming the visit's day and time on the clock of the shop
-   it is booked at, that shop's zone as the visit booker names it
-   (`On the shop's clock (<zone>)`), the case's email address the collector
-   is emailed at, and that the case keeps its status. It SHALL NOT read the
-   slot on the brand's zone. A case with no email address SHALL say that
-   nobody is emailed.
-3. Dismissing reads `Keep visit`. It SHALL send nothing, and the visit SHALL
-   stay as it was.
-4. Confirming reads `Cancel visit`. The visit SHALL be cancelled, and the
-   collector told, as `grade10-site/vault/visit-booking` states.
-5. A refusal SHALL be shown in the open confirm, which stays open.
-
-- **A fresh read** - the press SHALL read the case afresh before it asks, and
-  the confirm SHALL name the visit as that read holds it, so a visit moved
-  since the case was opened is named at its new slot.
-- **A visit already gone** - where the fresh read holds no visit, no confirm
-  SHALL open, nothing SHALL be sent, and the case SHALL redraw without the
-  visit.
-- **No confirm on a failure** - where the fresh read fails, or the shop the
-  visit is booked at cannot be found, the failure SHALL be shown beside the
-  button, and no confirm SHALL open. The slot SHALL NOT be named on the
-  brand's zone instead.
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-af3 rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-105 - The confirm names the slot, the address and the status kept
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the slot before the collector is told
-
-- **GIVEN** a case at `vaulted` holding a visit at a shop on `Asia/Hong_Kong`, on 15 June 2026 at 10:00 there, 02:00 Coordinated Universal Time, and the address `collector@example.com`
-- **WHEN** an operator presses Cancel visit
-- **THEN** a confirm in the default tone names 15 June 2026 at 10:00 on the shop's clock, `Asia/Hong_Kong`, says the collector is emailed at `collector@example.com`, and says the case keeps its status
-- **AND** its two choices read `Keep visit` and `Cancel visit`
-- **AND** nothing has been sent
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-4jw rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-142 - The slot reads on the booked shop's clock, not the brand's
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the hour the collector booked
-
-- **GIVEN** a brand on `Asia/Hong_Kong`, and a case holding a visit at a shop on `Asia/Tokyo`, on 15 June 2026 at 10:00 there, 09:00 Hong Kong time
-- **WHEN** an operator presses Cancel visit
-- **THEN** the confirm names 15 June 2026 at 10:00 on the shop's clock, `Asia/Tokyo`, and does not name 09:00
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-x20 rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-106 - Keeping the visit sends nothing
-**Serves:** grade10-admin-vault-operator-queue-US-22 - a misplaced press tells the customer nothing
-
-- **GIVEN** the Cancel visit confirm open on a case holding a visit
-- **WHEN** the operator presses `Keep visit`
-- **THEN** the confirm closes, the case still holds the visit, and no message is sent to the collector
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ilj rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-107 - Confirming cancels the visit and the collector is told
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator cancels the visit knowing the collector hears
-
-- **GIVEN** the Cancel visit confirm open on a case holding a visit and an address
-- **WHEN** the operator presses `Cancel visit`
-- **THEN** the confirm closes, the case holds no visit and keeps its status, and the collector is told the visit was cancelled
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-u9b rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-108 - A case with no address says nobody is emailed
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator learns nobody will hear before cancelling
-
-- **GIVEN** a case holding a visit and no email address
-- **WHEN** an operator presses Cancel visit
-- **THEN** the confirm says that nobody is emailed, and names no address
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-jyk rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-109 - A refused cancel stays in the confirm
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator reads why the cancel did not go where they pressed it
-
-- **GIVEN** the Cancel visit confirm open on a case that has ended since it opened
-- **WHEN** the operator presses `Cancel visit`
-- **THEN** the worker's refusal is shown in the confirm, which stays open
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-91a rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-116 - A visit cancelled in another tab opens no confirm
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator is not asked to cancel a visit that is already gone
-
-- **GIVEN** a case opened while it held a visit, whose visit has since been cancelled in another tab
-- **WHEN** the operator presses Cancel visit
-- **THEN** no confirm opens, the case redraws holding no visit, and no message is sent to the collector
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-cqt rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-117 - A visit moved in another tab is named at its new slot
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator checks the slot the visit holds now
-
-- **GIVEN** a case opened while it held a visit at a shop on `Asia/Hong_Kong` on 15 June 2026 at 10:00 there, since moved in another tab to 16 June 2026 at 14:00
-- **WHEN** the operator presses Cancel visit
-- **THEN** the confirm names 16 June 2026 at 14:00 on the shop's clock, `Asia/Hong_Kong`, and does not name 15 June
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-aaa rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-118 - A failed read opens no cancel confirm
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator is never asked from a read that may no longer hold
-
-- **GIVEN** a case holding a visit, and the console unable to read the case afresh
-- **WHEN** the operator presses Cancel visit
-- **THEN** the failure is shown beside Cancel visit, no confirm opens, the case still holds the visit, and no message is sent to the collector
-
-<!-- trace:scenario id=g10adm.vault-operator-queue.SC-ydx rev=1 -->
-#### Scenario: grade10-admin-vault-operator-queue-SC-119 - A visit at a shop that cannot be found opens no confirm
-**Serves:** grade10-admin-vault-operator-queue-US-22 - the operator is never shown the slot at another hour
-
-- **GIVEN** a case holding a visit at a shop the console's list of shops does not hold
-- **WHEN** the operator presses Cancel visit
-- **THEN** the failure is shown beside Cancel visit, no confirm opens, the slot is not named on the brand's zone, and no message is sent to the collector
 
 ### Requirement: Sending the forfeiture notice asks first, naming the address and the date to pay by
 
