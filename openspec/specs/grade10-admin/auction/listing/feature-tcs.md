@@ -457,7 +457,7 @@ Runs once per row of **Test data**.
 * **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
 **Pre-conditions:**
