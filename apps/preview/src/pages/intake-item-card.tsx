@@ -119,8 +119,9 @@ function ScanThumbs({ item }: { item: IntakeItemRow }) {
 }
 
 /**
- * Typeset: name leads; status is a badge; declared value is a labeled figure;
- * note and ids stay quiet. Actions sit under a rule.
+ * Typeset: status badge and name anchor top row as primary info; scan thumbnail
+ * sits left with grade; declared value is a clear field; service and date group
+ * as secondary metadata; note and ID stay quiet. Actions sit under a rule.
  */
 function IntakeItemCard({
   item,
@@ -160,35 +161,24 @@ function IntakeItemCard({
               : undefined
           }
         >
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+          <div className="flex items-start justify-between gap-3">
+            <Text
+              as="h2"
+              className="font-heading text-pretty tracking-tight"
+              size="lg"
+              weight="medium"
+            >
+              {item.name}
+            </Text>
             <Badge variant={itemBadgeVariant(item.status)}>{item.status}</Badge>
-            <Text className="text-secondary-foreground" size="xs">
-              {SERVICE_LABELS[item.service]}
-            </Text>
-            <Text className="text-secondary-foreground" size="xs" aria-hidden>
-              ·
-            </Text>
-            <Text className="text-secondary-foreground" size="xs">
-              Handed in {formatHandInDate(item.handedInAt)}
-            </Text>
           </div>
 
           <HStack className="min-w-0" gap="md" vAlign="start">
             <ScanThumbs item={item} />
             <div className="flex min-w-0 flex-1 flex-col gap-3">
-              <div className="flex min-w-0 flex-col gap-1">
-                <Text
-                  as="h2"
-                  className="font-heading text-pretty tracking-tight"
-                  size="base"
-                  weight="medium"
-                >
-                  {item.name}
-                </Text>
-                <Text className="text-secondary-foreground" size="sm">
-                  {item.gradeLabel}
-                </Text>
-              </div>
+              <Text className="text-secondary-foreground" size="sm">
+                {item.gradeLabel}
+              </Text>
 
               <div className="flex flex-col gap-0.5">
                 <Text className="text-secondary-foreground" size="xs">
@@ -200,6 +190,22 @@ function IntakeItemCard({
                   weight="medium"
                 >
                   {formatHkd(item.declaredHkd)}
+                </Text>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                <Text className="text-secondary-foreground" size="xs">
+                  {SERVICE_LABELS[item.service]}
+                </Text>
+                <Text
+                  className="text-secondary-foreground"
+                  size="xs"
+                  aria-hidden
+                >
+                  ·
+                </Text>
+                <Text className="text-secondary-foreground" size="xs">
+                  Handed in {formatHandInDate(item.handedInAt)}
                 </Text>
               </div>
 
@@ -248,7 +254,13 @@ function IntakeItemCard({
                 Vault receipt
               </Button>
               <Button
+                disabled={!vaulted}
                 size="sm"
+                title={
+                  vaulted
+                    ? "View in vault portfolio"
+                    : "Portfolio available once the item is vaulted"
+                }
                 type="button"
                 variant={vaulted ? "default" : "outline"}
                 onClick={() => navigateToStory(VAULT_PORTFOLIO_STORY_ID)}
