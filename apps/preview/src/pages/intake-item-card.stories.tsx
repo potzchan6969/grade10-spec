@@ -19,9 +19,7 @@ function IntakeItemCardPage({ item }: { item: IntakeItemRow }) {
   return (
     <VaultPageShell>
       <Breadcrumbs>
-        <BreadcrumbItem href={INTAKE_TRACKER_HREF}>
-          Submissions
-        </BreadcrumbItem>
+        <BreadcrumbItem href={INTAKE_TRACKER_HREF}>Submissions</BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem current>{item.name}</BreadcrumbItem>
       </Breadcrumbs>
