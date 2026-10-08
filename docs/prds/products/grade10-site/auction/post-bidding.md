@@ -12,6 +12,9 @@ order — set up, invoiced, paid, shipped — and the letters that carry it.
 
 Bidding stops, the result is fixed at once, and only the winner gets an order.
 
+🚧 A lot the house's internal bid wins gets no order: collectors read it as
+sold, and operators read it as Bought in - [Internal Bid](/p/grade10-admin/auction/internal-bid)
+
 - **Every lot reads Ended** — with or without a winner, whatever happens to
   the order afterwards — [Lot
   Status](/p/grade10-site/auction/display#auction-details)

@@ -420,7 +420,7 @@ units.
 
 <!-- trace:scenario id=g10.auction-auto-bidding.SC-ajh rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-42 - A lower that leaves the lot as it was is accepted
-**Serves:** House maximum - the house's maximum goes down behind a lead it does not hold
+**Serves:** grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04 - the admin lowers the house's maximum behind a lead it does not hold
 
 - **GIVEN** the listing of the worked example after step 4
 - **WHEN** the house maximum is lowered to 21000 HKD minor units
@@ -430,7 +430,7 @@ units.
 
 <!-- trace:scenario id=g10.auction-auto-bidding.SC-q3t rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-43 - A lower that would move the current bid is refused
-**Serves:** House maximum - the house's maximum is what prices the leader
+**Serves:** grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04 - the admin lowers the house's maximum that prices the leader
 
 - **GIVEN** the listing of the worked example after step 2
 - **WHEN** the house maximum is lowered to 24000 HKD minor units
@@ -439,7 +439,7 @@ units.
 
 <!-- trace:scenario id=g10.auction-auto-bidding.SC-ldk rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-44 - A lower below the house's own bid is refused
-**Serves:** House maximum - a bid already placed for the house sets the floor
+**Serves:** grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04 - the admin lowers under a bid already placed for the house
 
 - **GIVEN** the listing of the worked example after step 5
 - **WHEN** the house maximum is lowered to 19000 HKD minor units

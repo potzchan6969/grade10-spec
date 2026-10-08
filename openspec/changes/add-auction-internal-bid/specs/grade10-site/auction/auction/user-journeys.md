@@ -1,5 +1,11 @@
 ## Context user journeys
 
+### grade10-site-auction-auction-US-01: Collector browses Auction listings
+
+**As a** collector,
+**I want** the catalogue to show Auction listings with money in minor units,
+**so that** I am not offered Buy Now and a close with bids is absolute.
+
 ### grade10-site-auction-auction-US-11: Bidder is held to the close with everyone else
 
 **As a** bidder,

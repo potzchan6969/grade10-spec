@@ -99,8 +99,11 @@ implementation choices.
      on remembering to strip three columns everywhere.
 
 3. **Save checks what is known at Save; the commit checks the price.**
-   `saveInternalBid` refuses a `draft`, `closed`, `settled` or `canceled`
-   listing, an amount that is not whole in the currency
+   `saveInternalBid` refuses as `NOT_EDITABLE` a `draft`, `closed`, `settled`
+   or `canceled` listing, and one whose `scheduled_ends_at` has passed with no
+   `placed` or `not_placed` row (none, or `cleared`), checked after
+   `commitDueHouseMaximum`, so a lot in extended bidding takes no new internal
+   bid while a placed or not-placed one is still saved. It refuses an amount that is not whole in the currency
    (`currencyExponent` in `packages/utils/src/money.ts`, as the custom
    maximum uses), below the starting price or above `bidCeiling`, and a new
    or changed time outside `[starts_at, scheduled_ends_at]` (both included)
@@ -189,8 +192,11 @@ implementation choices.
    campaign, relisted and release checks. `LISTING_VIEWS` gains `bought_in`;
    `listingViewOf` and `listingViewSql` take a server-side `houseTop` input
    and return `bought_in` only for an ended lot whose top bid is the house's,
-   so `won` and `unsold` never hold one. The admin outcome gains
-   `bought_in`.
+   so `won` and `unsold` never hold one. The admin listing item and the
+   listing's own read carry `boughtIn`, so the row and the page both read
+   Bought in. No order row is written, so every order-driven read - the
+   post-sale queue, Open order, order letters - holds nothing for the lot;
+   the unused `adminListingOutcomeSchema` gains no value.
    - Rejected: a `bought_in` listing status. It would fork every public
      reader that maps status to Ended and sold.
    - Rejected: shipping `houseTop` on the admin listing item. A live row
@@ -310,6 +316,7 @@ row's state:
 
 | State | Time changed | Higher amount | Lower amount |
 | --- | --- | --- | --- |
+| None or `cleared`, past `scheduled_ends_at` | `NOT_EDITABLE` | `NOT_EDITABLE` | `NOT_EDITABLE` |
 | None, `scheduled` or `cleared` | Save checks, write `scheduled` | Save checks, write | Save checks, write |
 | `not_placed` | `TIME_FIXED` | The same amount included: update the row while the listing takes no bids; else commit at `now` at or above the minimum next bid, else `AMOUNT_TOO_LOW` with `minimumNextAmount` | Update the row while the listing takes no bids; else commit at `now` at or above the minimum next bid, else update the row, which stays `not_placed` |
 | `placed` | `TIME_FIXED` | `raiseHouseMaximum` | `lowerHouseMaximum` |
@@ -364,9 +371,9 @@ a storefront; no storefront backend can name `storefront 'house'`, and
   activity bidders: `bidder`, `maximum` and `pseudonymSeq` become nullable,
   and `house: boolean` is added, true on every house row for every caller,
   per Decision 11. Breaking for the admin frontend only
-- **Listings table** - `LISTING_VIEWS` and the admin outcome gain
-  `bought_in`; the admin listing item gains `boughtIn: boolean`, true only
-  once the lot has ended with the house's bid on top
+- **Listings table and listing page** - `LISTING_VIEWS` gains `bought_in`;
+  the admin listing item and the admin listing read gain `boughtIn: boolean`,
+  true only once the lot has ended with the house's bid on top
 - **Auth contracts** - `auction:reserve`'s description becomes "Set and read
   a listing's internal bid." No grant moves
 - **Public contracts** - unchanged; the house's bids and win read as a

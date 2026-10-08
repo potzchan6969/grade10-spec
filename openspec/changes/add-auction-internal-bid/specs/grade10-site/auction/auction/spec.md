@@ -72,7 +72,7 @@ changing nothing. The letters the close owes are
 
 <!-- trace:scenario id=g10.auction-auction.SC-a4f rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-103 - A lot the house wins reads sold
-**Serves:** `Closing a lot the house leads` - a collector reads a closed lot the house won
+**Serves:** grade10-site-auction-auction-US-01 - a collector reads a closed lot the house won as any absolute close
 
 - **GIVEN** an `HKD` listing where the house, shown as Bidder 2, leads at
   31000 HKD minor units over collector A, shown as Bidder 1
@@ -100,7 +100,7 @@ changing nothing. The letters the close owes are
 
 <!-- trace:scenario id=g10.auction-auction.SC-cqt rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-106 - A lot only the house bid on closes sold at the opening price
-**Serves:** `Closing a lot the house leads` - the house's lone bid ends a lot as any lone bid does
+**Serves:** grade10-site-auction-auction-US-01 - a collector reads a lot only the house bid on as any lone-bid close
 
 - **GIVEN** an open `HKD` listing with extended bidding on, a starting price
   of 20000 HKD minor units, and one bid: the house's at 20000, committed

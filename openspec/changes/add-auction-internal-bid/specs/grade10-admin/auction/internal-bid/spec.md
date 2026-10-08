@@ -199,6 +199,18 @@ SHALL change no listing fact a collector reads until Grade10 commits it, per
 - **THEN** Grade10 refuses it, asking for the time
 - **AND** the listing has no internal bid
 
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-fti rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-48 - A lot past its scheduled close takes no new internal bid
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin tries to protect a lot already in extended bidding
+
+- **GIVEN** a published `HKD` listing whose scheduled close of
+  2026-11-02T20:00:00Z has passed and which is in extended bidding until
+  2026-11-02T20:03:00Z, with no internal bid, at 2026-11-02T20:01:00Z
+- **WHEN** an admin holding `auction:reserve` saves an internal bid of 50000
+  HKD minor units at 2026-11-02T20:02:00Z
+- **THEN** Grade10 refuses it as not editable
+- **AND** the listing has no internal bid
+
 ### Requirement: A listing edit clears an internal bid it leaves outside its limits
 
 When an operator saves a change to a `created` listing that leaves its
@@ -223,7 +235,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-rzd rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-28 - A window change past the time clears the internal bid
-**Serves:** Setting an internal bid - the lot's window moves under a floor set before it was published
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's window moves under a floor set before it was published
 
 - **GIVEN** a `created` `HKD` listing closing 2026-11-02T20:00:00Z, with a
   Scheduled internal bid of 50000 HKD minor units at 2026-11-02T18:00:00Z
@@ -239,7 +251,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-bjb rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-29 - A window change that keeps the time keeps the internal bid
-**Serves:** Setting an internal bid - the lot's window moves around a floor that still fits
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's window moves around a floor that still fits
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-28` before
   the change
@@ -250,7 +262,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-36t rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-34 - A starting price raised over the internal bid clears it
-**Serves:** Setting an internal bid - the lot's opening price moves above a floor set before it was published
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's opening price moves above a floor set before it was published
 
 - **GIVEN** two `created` `HKD` listings with a starting price of 20000 HKD
   minor units, one with a Scheduled internal bid of 50000 HKD minor units and
@@ -263,7 +275,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-wib rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-35 - A currency change past the new ceiling clears the internal bid
-**Serves:** Setting an internal bid - the lot's currency moves under a floor its new ceiling cannot hold
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's currency moves under a floor its new ceiling cannot hold
 
 - **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
   units and a Scheduled internal bid of 6000000000 HKD minor units
@@ -275,7 +287,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-9xf rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-36 - A starting price that stays under the internal bid keeps it
-**Serves:** Setting an internal bid - the lot's opening price moves under a floor that still fits
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's opening price moves under a floor that still fits
 
 - **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
   units and a Scheduled internal bid of 50000 HKD minor units at
@@ -287,7 +299,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-qzx rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-42 - A currency change keeps the internal bid's minor units
-**Serves:** Setting an internal bid - the lot's currency moves under a floor that still fits
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's currency moves under a floor that still fits
 
 - **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
   units and a Scheduled internal bid of 50000 HKD minor units at
@@ -298,7 +310,7 @@ the internal bid unchanged.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-ps0 rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-43 - A currency change that leaves the amount not whole clears the internal bid
-**Serves:** Setting an internal bid - the lot's currency moves to one where the floor is not a whole amount
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's currency moves to one where the floor is not a whole amount
 
 - **GIVEN** a `created` `JPY` listing with a starting price of 20000 JPY minor
   units and a Scheduled internal bid of 50050 JPY minor units
@@ -374,8 +386,9 @@ SHALL be able to:
    allow, its time kept. A save at or above the minimum next bid, its own
    amount included, places it at once. Below the minimum next bid, a lower
    (an amount below the stored amount) is accepted, stays Not placed and
-   changes nothing a collector reads; a raise, or the same amount, is refused,
-   naming the minimum next bid, and leaves it Not placed.
+   changes nothing a collector reads; any other save below it, a raise or the
+   same amount, is refused, naming the minimum next bid, and leaves it Not
+   placed.
 2. Save it at any amount the Save rules allow while the listing is still
    `created`, its time kept. It stays Not placed and changes nothing a
    collector reads.
@@ -599,6 +612,17 @@ released as at an Unsold close, and it SHALL offer Relist, per
 `grade10-admin/auction/listing`. The close itself is
 `grade10-site/auction/auction`'s.
 
+The house SHALL never be a lot's winner for the rules of
+`grade10-site/auction/winner-order`, `grade10-site/auction/notifications-order`
+and `grade10-admin/auction/post-sale`, though collectors read it as the
+winning bidder. For a bought-in lot Grade10 SHALL:
+
+| Capability | What a bought-in lot gets |
+| --- | --- |
+| `grade10-site/auction/winner-order` | No auction order and no invoice |
+| `grade10-site/auction/notifications-order` | No won, address or other order letter, to anyone |
+| `grade10-admin/auction/post-sale` | No row or outcome in the post-sale queue, and no Open order on its Listings row |
+
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-hat rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-17 - A house win reads Bought in with no order
 **Serves:** grade10-admin-auction-internal-bid-US-06 - the admin tells a bought-in lot from a sale
@@ -610,13 +634,28 @@ released as at an Unsold close, and it SHALL offer Relist, per
   units
 - **AND** no order exists for it, and its stock is released
 
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-80a rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-49 - A bought-in lot reaches no order, order letter or post-sale queue
+**Serves:** grade10-admin-auction-internal-bid-US-06 - the admin finds no order work for a lot the house won
+
+- **GIVEN** an `HKD` listing that closed with the house leading at 31000 HKD
+  minor units, and a second listing that closed with collector A winning
+- **WHEN** an admin holding `auction:reserve` opens the post-sale queue and
+  the Listings table
+- **THEN** the post-sale queue holds the collector's lot and no row for the
+  house's lot
+- **AND** the house's Listings row offers no Open order
+- **AND** Grade10 sent no won or address letter for the house's lot
+
 ### Requirement: Only secret-floor access reaches an internal bid
 
 Only an operator holding `auction:reserve` SHALL set, change, remove or read
 an internal bid: its amount, its time and its state. For any other operator:
 
-- The listing editor SHALL show no internal bid section and nothing that
-  says a listing has, had or may have one.
+- The listing editor SHALL show no internal bid section. Until the listing
+  closes it SHALL show nothing that says the listing has, had or may have
+  one; once a lot closes bought in, it reads Bought in, per
+  `grade10-admin/auction/listing`, and still shows no amount, time or state.
 - Grade10 SHALL refuse a set, change, remove or read of an internal bid and
   change nothing.
 - No operator read SHALL show that a listing has an internal bid before a bid
@@ -675,7 +714,7 @@ without `auction:reserve`:
 | Bid ledger and listing activity | Each bid placed for the house that the public history records, as House, with its amount, its Accepted At and that Grade10 placed it; no account, email, name or maximum, and no row for a raise or a lower that records no public bid |
 | Bidder summaries | House and its bid count; no account, email, name or maximum |
 | Stats | The house counted in the bidder count, and its bids in the bid count |
-| Listings table | The listing as any listing with its bids until the close, then Bought in, per `grade10-admin/auction/listing` |
+| Listings table and the listing's own page | The listing as any listing with its bids until the close, then Bought in, per `grade10-admin/auction/listing` |
 
 No read open to them SHALL show the house's maximum, any commitment, raise or
 lower of it, or the internal bid's time before the house bids. A house bid's
@@ -742,7 +781,7 @@ draft opened by Relist SHALL carry no internal bid, per
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-p8p rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-21 - A called-off listing never commits its internal bid
-**Serves:** Setting an internal bid - an operator calls off a protected lot before its time
+**Serves:** grade10-admin/auction/listing#grade10-admin-auction-listing-US-05 - an operator calls off a protected lot before its time
 
 - **GIVEN** a published listing with a Scheduled internal bid at
   2026-11-02T18:00:00Z

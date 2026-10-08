@@ -96,4 +96,5 @@ See [Non-Goals](decisions.md#non-goals).
 
 - [Bidding · Auction Logic](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-logic)
 - [Auction Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)
+- [Post-Bidding · The Close](../../../docs/prds/products/grade10-site/auction/post-bidding.md#the-close)
 - [Internal Bid · Internal Bid](../../../docs/prds/products/grade10-admin/auction/internal-bid.md#internal-bid)

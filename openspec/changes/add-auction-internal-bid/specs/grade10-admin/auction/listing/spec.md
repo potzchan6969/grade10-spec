@@ -249,18 +249,25 @@ quantity, SHALL apply as well.
 
 ## ADDED Requirements
 
-### Requirement: The Listings table reads Bought in
+### Requirement: A bought-in listing reads Bought in
 
 A listing that closed bought in under `grade10-site/auction/auction` SHALL
-read **Bought in** in the Listings table, under its Closed status, where an
-Unsold listing reads Unsold. It SHALL NOT read Unsold and SHALL NOT be
-counted in the Unsold view, and it SHALL NOT be counted in the Won view or
-offer an order to open. The Listings table SHALL offer a **Bought in** view
-beside Unsold and Won, holding exactly the listings that closed bought in.
-Every operator who can read the Listings table SHALL see the label once the
-listing has closed. Before its close, a row SHALL read as any listing with
-its bids and SHALL NOT say that the listing has an internal bid; who leads is
-read in the listing's bids, per `grade10-admin/auction/internal-bid`.
+read **Bought in** under its Closed status, where an Unsold listing reads
+Unsold, in both places an operator reads its outcome:
+
+| Where | What it reads |
+| --- | --- |
+| Its Listings table row | Closed and Bought in, with no order to open |
+| Its own admin page | Closed and Bought in, with no order to open, beside its stock release |
+
+It SHALL NOT read Unsold and SHALL NOT be counted in the Unsold view, and it
+SHALL NOT be counted in the Won view. The Listings table SHALL offer a
+**Bought in** view beside Unsold and Won, holding exactly the listings that
+closed bought in. Every operator who can read the listing SHALL see Bought in
+once it has closed, whether or not they hold `auction:reserve`. Before its
+close, its row and its page SHALL read as any listing with its bids and SHALL
+NOT say that the listing has an internal bid; who leads is read in the
+listing's bids, per `grade10-admin/auction/internal-bid`.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-qgd rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-149 - A lot the house won reads Bought in
@@ -284,7 +291,7 @@ read in the listing's bids, per `grade10-admin/auction/internal-bid`.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-cvx rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-151 - A protected lot reads as any live lot before its close
-**Serves:** Bought-in listings - a live lot the house leads shows no sign of it before its close
+**Serves:** grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-07 - a live lot the house leads shows staff no sign of it before its close
 
 - **GIVEN** a published listing still taking bids, where the house leads
 - **AND** an operator whose roles are exactly `staff`
@@ -299,3 +306,13 @@ read in the listing's bids, per `grade10-admin/auction/internal-bid`.
 - **GIVEN** the listings of `grade10-admin-auction-listing-SC-149`
 - **WHEN** an operator filters the Listings table to Bought in
 - **THEN** it holds the house's listing alone
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-l2y rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-155 - A bought-in listing's own page reads Bought in
+**Serves:** grade10-admin-auction-listing-US-09 - the operator opens a lot the house bought in and sees why it has no order
+
+- **GIVEN** the house's listing of `grade10-admin-auction-listing-SC-149`
+- **AND** an operator whose roles are exactly `staff`
+- **WHEN** they open the listing
+- **THEN** it reads Closed and Bought in, with no order to open
+- **AND** it shows no internal bid amount, time or state

@@ -57,6 +57,8 @@
 | Q31 | Legal has not confirmed an undisclosed house bid; accept the plan now or wait? | Accept now: undisclosed stands, held by @htonyl, and Legal confirms the auction terms wording before release. A disclosure ruling is a follow-up change before release | Waiting for Legal before accepting, which holds the build; and switching to disclosed, which reopens Q1, Q2 and Q25 |
 | Q32 | Does a bought-in listing's own admin page read Bought in, or only its Listings table row? | Both, once the lot closes, for every operator, following Q5 and Q9. Taken as recommended when the author asked to carry on; open to override | Table only, which leaves an operator who opens the lot unable to tell why it has no order |
 | Q33 | The house is the public winner (Q2); is it a winner for orders, order letters and post-sale work? | Never: a lot the house leads at the close opens no order and enters no post-sale queue, following Q5. Raised by the accept review as one fact stated two ways | Leaving winner-order's close rule unqualified, which tells an engineer to create an order for the house |
+| Q34 | Once the lot takes bids, is a re-save of a Not placed bid at its own amount, still below the minimum next bid, accepted? | Refused, naming the minimum next bid; only a lower is accepted below it (Q28). Agent default, open to override | Accepting it unchanged, which records a save that does nothing |
+| Q35 | A lower of a Not placed bid that still reaches the minimum next bid: placed, or left Not placed? | Placed at once: a save at or above the minimum next bid places it, a lower included (Q28). Agent default, open to override | Leaving every lower Not placed, which keeps the house out of a lot its amount still protects |
 
 ## Raised
 
@@ -83,3 +85,6 @@
 | grade10-admin/auction/internal-bid | A House bid row shows the time it was placed; the first equals the commit time. Is it shown to staff? | Q26 |
 | grade10-admin/auction/internal-bid | On a Created listing whose internal bid went Not placed, can the admin raise, lower or remove it before publishing? | Q28 |
 | grade10-admin/auction/internal-bid | After a currency change that keeps the internal bid, does it hold the same minor units or major units? | Q27 |
+| grade10-admin/auction/internal-bid | Once the lot takes bids, is re-saving a Not placed bid's own amount, still below the minimum next bid, accepted or refused? | Q34 |
+| grade10-admin/auction/internal-bid | A lower of a Not placed bid that still reaches the minimum next bid: placed, or a lower that stays Not placed? | Q35 |
+| grade10-admin/auction/internal-bid | After Q30, can the lead-or-price refusal ever show on its own? | Q30 |
