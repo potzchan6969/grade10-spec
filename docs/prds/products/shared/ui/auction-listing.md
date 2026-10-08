@@ -136,7 +136,7 @@ cancelled.
 
 ::story{id="auction-listing-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}
 
-::story{id="auction-listing-listing-product--default" title="The details section"}
+::story{id="auction-listing-listinglotmeta--default" title="The details section"}
 
 :::detail{title="Code map" for="engineer"}
 - **Blocks** — `ListingLotHeader`, `ListingGallery`, `ListingAuctionBidCard`,
