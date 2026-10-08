@@ -434,7 +434,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -494,14 +494,14 @@
 **Pre-conditions:**
 
 * admin(only operator role is `staff`) is signed in on <grade10 admin url>.
-* <grading request> was raised by another staff member and awaits approval.
+* <grading request> was asked for by another staff member and awaits approval.
 * <booking> and <stock item> exist.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <grading request> | A grading request another staff member raised, awaiting a second approver |
+| <grading request> | A settings or fee-sheet change another staff member asked for, awaiting approval |
 | <booking> | A booked appointment |
 | <stock item> | An inventory item with stock on hand |
 
