@@ -269,7 +269,7 @@ has been recorded.
 
 **Concurrent Purchase** - Concurrent first requests for the same member cart/version and fingerprint SHALL converge on one order and payable invoice, including requests with different browser keys. A stale or mismatched cart/tender SHALL return conflict without unassociated creation. An unresolved provider-dispatched purchase SHALL block another purchase until the existing recovery path permits continuation.
 
-**Retirement** - A line or tender edit SHALL record recoverable retirement work with its cart revision. Successful edits SHALL not imply cancellation; older orders SHALL be shown canceled only after authoritative provider-aware order state reports it.
+**Retirement** - A member line or tender edit SHALL record recoverable retirement work with its cart revision. A shop review change alone SHALL record none; the next Pay SHALL supersede that invoice. Successful edits SHALL not imply cancellation; older orders SHALL be shown canceled only after authoritative provider-aware order state reports it.
 
 <!-- trace:scenario id=g10.store-checkout.SC-i09 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-09 - A repeated Pay uses one checkout

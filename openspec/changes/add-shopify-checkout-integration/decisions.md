@@ -38,6 +38,7 @@
 | Q20 | Are backend limitations scope waivers? | No; the 2026-10-07 instruction retains every spec requirement and delivery waits for evidence | Incomplete guarantees becoming product contract |
 | Q21 | Does this add Awaiting payment? | Follow existing spec status labels; add no new shared badge in this amendment | Speculative status-set migration |
 | Q22 | How are the 2026-10-08 review findings addressed? | One canonical persisted purchase and dispatch claim; live validation before invoice reuse; no canceled invoice handoff; distinguish member edits from shop review; v2 explicitly accepts zero points | Returning a superseded URL, validation bypass, general-version cleanup or rejecting ordinary no-points checkout |
+| Q23 | Does the shop's review of the cart retire an open invoice? | No. Only a member line or tender edit records retirement; a shop stock or price review leaves the invoice for the next Pay, which supersedes it. Decided 2026-10-08 | Retiring on every general-version change |
 
 ## Raised
 
@@ -45,6 +46,7 @@
 | --- | --- | --- |
 | `grade10-site/store/checkout` | Retain every durable safety requirement despite branch gaps? | Q20 |
 | `grade10-site/store/checkout` | Introduce a new unpaid badge? | Q21 |
+| `grade10-site/store/checkout` | Does the shop's review of the cart retire an open invoice? | Q23 |
 
 ## Product Authority
 
