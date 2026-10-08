@@ -1,6 +1,6 @@
 # grade10-admin/auction/internal-bid Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/48
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
 ## Background

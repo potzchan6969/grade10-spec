@@ -1,6 +1,6 @@
 # grade10-site/auction/auto-bidding Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/6
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-site-auction-auto-bidding-US3: Collector competes through two maxima

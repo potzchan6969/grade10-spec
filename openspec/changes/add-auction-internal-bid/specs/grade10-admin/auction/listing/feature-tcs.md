@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-admin-auction-listing-US9: Operator lists an unsold lot again

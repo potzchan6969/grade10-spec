@@ -1,6 +1,6 @@
 # grade10-admin/auction Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-admin-auction-e2e-US4: Admin protects a lot, the house buys it in, and the card goes back on sale

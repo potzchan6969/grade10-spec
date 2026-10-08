@@ -1,6 +1,6 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
 ## grade10-site-auction-auction-US1: Collector browses Auction listings

@@ -1,6 +1,6 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/2
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-site-auction-e2e-US13: Collectors bid against a house maximum through the close

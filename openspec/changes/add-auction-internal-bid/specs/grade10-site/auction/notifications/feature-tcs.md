@@ -1,6 +1,6 @@
 # grade10-site/auction/notifications Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-site-auction-notifications-US3: Collector raises after being outbid
