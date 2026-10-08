@@ -123,7 +123,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 ## Design system package
 
-`packages/design-system` (`@grade10/design-system`) holds the theme tokens and shadcn primitives. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. `packages/date` (`@grade10/date`) holds the date formatters, React-free. These are the only packages; do not add another without a recorded product decision.
+`packages/design-system` (`@grade10/design-system`) holds the theme tokens and shadcn primitives. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. `packages/date` (`@grade10/date`) holds the date formatters and the typed-day bridge, React-free. Add no other package without a recorded product decision.
 
 Use the `design-system-primitives` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
