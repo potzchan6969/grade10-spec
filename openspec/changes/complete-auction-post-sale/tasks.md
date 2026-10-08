@@ -44,7 +44,7 @@
 - [ ] 6.2 `services/orders/testWinners.ts`: `createTestWinner` (plus-tag rule, `createUnverifiedAccount`, `ACCOUNT_EXISTS`, `ensureTestBidder`, `insertClosedSandboxLot`, `closeOne`, replay by account) and `listTestWinners`; `trpc/routers/testWinners.ts` on the `testBids` middleware; `apps/backend/grade10/auction/test/db/trpc/testWinners.spec.ts`
 - [ ] 6.3 `seedDevWinnerFixture` builds its lot with `insertClosedSandboxLot` and the real close and reaches each status through the order services; `packages/grade10-auction/backend/test/devFixtures/seedDevWinnerFixture.test.ts`
 
-## 7. Admin Workspace (grade10)
+## 7. Admin Workspace (grade10) (owner: @htonyl)
 
 - [ ] 7.1 Console: `ActionMenu` with keyboard-reachable disabled items, `FormDialog.dismissLabel`, `CursorPager.labels`, `Notice.actions`, `PromptDialog` moved in from the vault slice; `node scripts/test.mjs packages/frontend-console`
 - [ ] 7.2 `features/operations/orders` slice: models, repository, API service with the proof urls, `refusalCopy` over every operator code, the three hooks; `TrpcAuctionAdminProcedureClient` gains `orders` and `testWinners`; `node scripts/test.mjs packages/grade10-auction/admin-frontend`
