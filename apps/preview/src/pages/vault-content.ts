@@ -49,6 +49,13 @@ const INTAKE_TRACKER_STORY_ID = "pages-intake-tracker--in-progress";
 const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
 const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--in-vault";
 const VAULT_RETRIEVAL_STORY_ID = "pages-vault-request-retrieval--default";
+/** Storybook ids for vault item-card assemblies (workbench deep links). */
+const VAULT_ITEM_CARD_IN_VAULT_STORY_ID =
+  "pages-vault-vault-item-card--in-vault";
+const VAULT_ITEM_CARD_RETRIEVAL_STORY_ID =
+  "pages-vault-vault-item-card--retrieval-pending";
+const ACTIVE_INTAKE_ALERT_STORY_ID =
+  "pages-vault-active-intake-alert--with-submissions";
 
 const VAULT_SUBMIT_STORY_ID = VAULT_BOOK_VISIT_STORY_ID;
 
@@ -61,6 +68,11 @@ const VAULT_BOOK_VISIT_HREF = storyHref(VAULT_BOOK_VISIT_STORY_ID);
 const VAULT_SUBMIT_HREF = VAULT_BOOK_VISIT_HREF;
 const VAULT_ITEM_DETAIL_HREF = storyHref(VAULT_ITEM_DETAIL_STORY_ID);
 const VAULT_RETRIEVAL_HREF = storyHref(VAULT_RETRIEVAL_STORY_ID);
+const VAULT_ITEM_CARD_IN_VAULT_HREF = storyHref(VAULT_ITEM_CARD_IN_VAULT_STORY_ID);
+const VAULT_ITEM_CARD_RETRIEVAL_HREF = storyHref(
+  VAULT_ITEM_CARD_RETRIEVAL_STORY_ID,
+);
+const ACTIVE_INTAKE_ALERT_HREF = storyHref(ACTIVE_INTAKE_ALERT_STORY_ID);
 const INTAKE_TRACKER_HREF = storyHref(INTAKE_TRACKER_STORY_ID);
 const VAULT_CONFIRMATION_HREF = storyHref(VAULT_CONFIRMATION_STORY_ID);
 const VAULT_MANAGE_VISIT_HREF = storyHref(VAULT_MANAGE_VISIT_STORY_ID);
@@ -109,6 +121,21 @@ type VaultAsset = {
   imageSrc: string;
 };
 
+/**
+ * Holdings the portfolio may show — vaulted and verified only. Intake stages
+ * (registered, pre-check, signing, imaging) stay on the intake tracker until
+ * the item is in the vault; collectors expect auction and retrieval from here.
+ */
+const PORTFOLIO_HOLDING_STATUSES: readonly VaultAssetStatus[] = [
+  "In Vault",
+  "Retrieval pending",
+  "Listed on Auction",
+];
+
+function isPortfolioHolding(asset: VaultAsset): boolean {
+  return PORTFOLIO_HOLDING_STATUSES.includes(asset.status);
+}
+
 const VAULT_ASSETS: VaultAsset[] = [
   {
     id: "va-001",
@@ -140,51 +167,25 @@ const VAULT_ASSETS: VaultAsset[] = [
   },
   {
     id: "va-003",
-    name: "Amazing Spider-Man #300",
-    category: "comic",
-    categoryLabel: "Comic · CGC 9.8",
-    condition: "Graded",
-    grade: "CGC 9.8",
-    cert: "44129001",
-    vaultId: null,
-    status: "Imaging",
-    estimateHkd: 18500,
-    valuationSource: "Declared",
-    imageSrc: SCAN_IMAGE,
-  },
-  {
-    id: "va-004",
-    name: "1887 Victoria sovereign",
-    category: "coin",
-    categoryLabel: "Coin · Gold",
-    condition: "Raw",
-    grade: "Raw",
-    cert: null,
-    vaultId: null,
-    status: "Registered",
-    estimateHkd: 6200,
-    valuationSource: "Declared",
-    imageSrc: SCAN_IMAGE,
-  },
-  {
-    id: "va-005",
-    name: "2023 Pikachu SAR",
+    name: "1986 Fleer Michael Jordan",
     category: "trading-card",
-    categoryLabel: "Trading card · SV 151",
+    categoryLabel: "Trading card · Rookie",
     condition: "Graded",
-    grade: "PSA 10",
-    cert: "81220991",
-    vaultId: null,
-    status: "Pre-check",
-    estimateHkd: 42000,
-    valuationSource: "Declared",
+    grade: "PSA 9",
+    cert: "27710412",
+    vaultId: "G10-VLT-004755",
+    status: "Retrieval pending",
+    estimateHkd: 156000,
+    valuationSource: "Intake estimate",
     imageSrc: SCAN_IMAGE,
   },
 ];
 
+const PORTFOLIO_ASSETS = VAULT_ASSETS.filter(isPortfolioHolding);
+
 const PORTFOLIO_SUMMARY = {
-  itemCount: VAULT_ASSETS.filter((a) => a.status === "In Vault").length,
-  totalEstimateHkd: VAULT_ASSETS.filter((a) => a.status === "In Vault").reduce(
+  itemCount: PORTFOLIO_ASSETS.length,
+  totalEstimateHkd: PORTFOLIO_ASSETS.reduce(
     (sum, a) => sum + a.estimateHkd,
     0,
   ),
@@ -662,6 +663,20 @@ function statusBadgeVariant(
   }
 }
 
+/** Item-card story for this portfolio holding (grid → card assembly). */
+function vaultItemCardStoryId(asset: VaultAsset): string {
+  if (asset.status === "Retrieval pending") {
+    return VAULT_ITEM_CARD_RETRIEVAL_STORY_ID;
+  }
+  return VAULT_ITEM_CARD_IN_VAULT_STORY_ID;
+}
+
+/** Page the card opens — detail, or retrieval when pickup is pending. */
+function vaultItemRelatedStoryId(asset: VaultAsset): string {
+  if (asset.status === "Retrieval pending") return VAULT_RETRIEVAL_STORY_ID;
+  return VAULT_ITEM_DETAIL_STORY_ID;
+}
+
 export type {
   ItemCondition,
   RegisterCategory,
@@ -684,6 +699,11 @@ export {
   GRADING_VISIT_SERVICE,
   MANAGE_CARD_COPY,
   NEXT_AVAILABLE_VISIT_DATE,
+  ACTIVE_INTAKE_ALERT_HREF,
+  ACTIVE_INTAKE_ALERT_STORY_ID,
+  isPortfolioHolding,
+  PORTFOLIO_ASSETS,
+  PORTFOLIO_HOLDING_STATUSES,
   PORTFOLIO_SUMMARY,
   prepTipsForService,
   REGISTER_CATEGORIES,
@@ -703,6 +723,10 @@ export {
   VAULT_CONFIRMATION_STORY_ID,
   VAULT_DROP_OFF_SERVICE,
   VAULT_FOOTER,
+  VAULT_ITEM_CARD_IN_VAULT_HREF,
+  VAULT_ITEM_CARD_IN_VAULT_STORY_ID,
+  VAULT_ITEM_CARD_RETRIEVAL_HREF,
+  VAULT_ITEM_CARD_RETRIEVAL_STORY_ID,
   VAULT_ITEM_DETAIL_HREF,
   VAULT_ITEM_DETAIL_STORY_ID,
   VAULT_MANAGE_VISIT_HREF,
@@ -713,6 +737,8 @@ export {
   VAULT_PORTFOLIO_STORY_ID,
   VAULT_RETRIEVAL_HREF,
   VAULT_RETRIEVAL_STORY_ID,
+  vaultItemCardStoryId,
+  vaultItemRelatedStoryId,
   VAULT_SITE_HEADER,
   VAULT_SUBMIT_HREF,
   VAULT_SUBMIT_STORY_ID,
