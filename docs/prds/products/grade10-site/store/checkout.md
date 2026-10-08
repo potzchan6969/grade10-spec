@@ -51,7 +51,7 @@ In Your Orders.
 
 🚧 **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload or a lost answer.
 
-🚧 **Changed purchase** - A changed basket or tender starts a new purchase and retires the older unpaid invoice through the store's recovery path.
+🚧 **Changed purchase** - A changed basket or tender starts a new purchase and retires the older unpaid invoice through the store's recovery path. Only the member's own edit retires it; the shop's stock or price review leaves it for the next Pay to replace.
 
 🚧 **Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
 
@@ -91,6 +91,7 @@ to navigate to.
 | Cart-header integration | Decided | Integrate every backend cart-header change and retain the complete durable requirements. Missing backend guarantees remain delivery dependencies, not scope waivers. | @kinisworking |
 | Repeated purchase | Decided | The store owns invoice reuse and recovery; the frontend keeps the purchase identity across Pay and a same-session reload. | @kinisworking |
 | Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
+| Invoice retirement | Decided | Only the member's own line or tender edit retires an open invoice. The shop's stock or price review leaves it for the next Pay to replace. Decided 2026-10-08. | Product |
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |
 | Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
