@@ -17,7 +17,7 @@ The bump in 2.1 takes the store's booking block change too, so it waits for the 
 - [ ] 2.6 Rewrite the date section of `docs/conventions/code-layout.md` and the utils lines of `docs/conventions/packages.md`
 - [ ] 2.7 Verify: `pnpm run typecheck`, every test lane, `pnpm run check:libs`, the email render and document template tests, the auction e2e walks that assert `HKT`
 
-## 3. Move the store onto the package (grade10-spec)
+## 3. Move the store onto the package (grade10-spec) (owner: @seankcw)
 
 - [ ] 3.1 Rewrite the `@grade10/ui` blocks, `apps/preview`, `apps/emails`, the invoice PDF and the design-system calendar to format through `@grade10/date`, the calendar mapping react-day-picker's locale codes to a platform language first and getting its short month and two-letter weekday words from new package exports, with tests; type the blocks' `locale` props as `string` and their `activityTimeCopy` as `ActivityTimeCopy` from `@grade10/date`, and add the dependency to `@grade10/ui`; move `formatListing*` into the auction-card block
 - [ ] 3.2 Add `packages/date/**` to the `storybook.yml` and `manual.yml` path filters and teach `scripts/storybook/changed-page-links.mjs` to follow `@grade10/date`, with its test
