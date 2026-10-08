@@ -1,10 +1,12 @@
+import { formatLocalDay } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   winnerOrderMeta,
   winnerOrderSettled,
 } from "./winner-order.story-shared";
-import type { WinnerOrderPage } from "./winner-order-page";
+import { winnerOrderContactMail } from "./winner-order-contact-mail";
+import { CANCELLED_AT_MS, type WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
   ...winnerOrderMeta(),
@@ -24,7 +26,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Operator cancelled an unpaid invoice — lot returned to available. */
+/** Operator cancelled an unpaid order - retained facts stay visible. */
 export const Cancelled: Story = {
   name: "Cancelled",
   args: { status: "cancelled" },
@@ -44,13 +46,53 @@ export const Cancelled: Story = {
     ).not.toBeInTheDocument();
     const lot = canvasElement.querySelector('[data-slot="winner-order-lot"]');
     expect(lot).not.toBeNull();
-    const alert = canvas.getByText(
-      "Order cancelled. The lot returned to available stock.",
-    );
+    expect(
+      canvas.getByText("1999 Pokémon Base Set Charizard PSA 9"),
+    ).toBeVisible();
+    expect(canvasElement.textContent).toContain("12,800");
+    const cancelledOn = formatLocalDay(CANCELLED_AT_MS, {
+      locale: "en",
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    });
+    const alert = canvas.getByText(`Cancelled on ${cancelledOn}`);
     expect(alert).toBeVisible();
     expect(lot?.compareDocumentPosition(alert)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     );
+    expect(canvas.getByRole("button", { name: "Contact Us" })).toBeVisible();
+    expect(
+      canvas.queryByRole("button", { name: /Pay/ }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Contact Us" }));
+    const dialog = await waitFor(() => {
+      const found = within(canvasElement.ownerDocument.body).getByRole(
+        "dialog",
+        { name: "Email Grade10" },
+      );
+      expect(found).toBeVisible();
+      return found;
+    });
+    const modal = within(dialog);
+    expect(
+      modal.getByText(
+        "Auction lot 1999 Pokémon Base Set Charizard PSA 9: order cancelled",
+      ),
+    ).toBeVisible();
+    const message = modal.getByLabelText("Message") as HTMLTextAreaElement;
+    expect(message.value).toContain("Status: Cancelled");
+    expect(message.value).not.toContain("Non-payment");
+
+    const invoicedMail = winnerOrderContactMail({
+      reason: "cancelled",
+      lotTitle: "1999 Pokémon Base Set Charizard PSA 9",
+      invoiceId: "IN-LK7P2Q01",
+    });
+    expect(invoicedMail.subject).toBe(
+      "Auction lot 1999 Pokémon Base Set Charizard PSA 9: order cancelled",
+    );
+    expect(invoicedMail.body).toContain("Invoice: IN-LK7P2Q01");
+    expect(invoicedMail.body).toContain("Status: Cancelled");
   },
 };
 

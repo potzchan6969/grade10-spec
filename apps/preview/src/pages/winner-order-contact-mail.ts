@@ -30,7 +30,7 @@ const SUBJECT_REASON: Record<WinnerOrderContactReason, string> = {
   setup_overdue: "setup overdue",
   payment_overdue: "payment overdue",
   partial_payment: "partial payment",
-  cancelled: "cancelled",
+  cancelled: "order cancelled",
   delivered: "delivered",
 };
 
@@ -65,7 +65,7 @@ export function winnerOrderContactMail({
   receiptIds?: string[];
 }): WinnerOrderContactMail {
   const subject =
-    reason === "setup_overdue" || !invoiceId
+    reason === "setup_overdue" || reason === "cancelled" || !invoiceId
       ? `Auction lot ${lotTitle}: ${SUBJECT_REASON[reason]}`
       : `Auction order ${invoiceId}: ${SUBJECT_REASON[reason]}`;
 

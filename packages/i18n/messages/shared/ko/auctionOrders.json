@@ -13,6 +13,7 @@
   "payInvoice": "청구서 결제",
   "viewDetail": "상세 보기",
   "contactUs": "문의하기",
+  "cancelledOn": "{date}에 취소됨",
   "insuranceTooltip": "운송 중 주문 금액의 0.9%입니다.",
   "taxLabel": "세금",
   "taxTooltip": "배송 지역에 따라 Grade10이 정하며, 주문에 따라 세금이 없을 수 있습니다.",
@@ -22,6 +23,7 @@
   "contactDialog": {
     "to": "받는 사람",
     "subject": "제목",
+    "cancelledSubject": "경매품 {lotTitle}: 주문 취소됨",
     "message": "메시지",
     "copyAddress": "주소 복사",
     "addressCopied": "주소를 복사했습니다",
