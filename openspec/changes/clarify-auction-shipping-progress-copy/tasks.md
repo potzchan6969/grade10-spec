@@ -3,7 +3,7 @@
 One group, in this store: preview and catalogs are the surfaces; `design_waived`
 records that no application-repository group is owed beyond a submodule bump.
 
-## 1. Shipping / Preparing Shipment copy (grade10-spec)
+## 1. Shipping / Preparing Shipment copy (grade10-spec) (owner: @htonyl)
 
 - [x] 1.1 Make `winner-order-SC-55` pass: Preparing Shipment marks Shipping current with Preparing to ship subtext, and does not invent a Preparing Shipment step label.
 - [x] 1.2 Make `auction-status-SC-07` pass: paid + unfulfilled derives Preparing Shipment.
