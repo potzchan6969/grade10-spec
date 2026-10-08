@@ -4,7 +4,7 @@
 
 Lets an auction admin protect a lot's final price with a house maximum that
 collectors cannot see, committed at a time the admin chooses and then bid like
-any collector's maximum - [Auction Management · Listings](/p/grade10-admin/auction/management#listings).
+any collector's maximum - [Internal Bid](/p/grade10-admin/auction/internal-bid).
 
 ## Feature set
 
@@ -23,6 +23,8 @@ any collector's maximum - [Auction Management · Listings](/p/grade10-admin/auct
   - Fixed time: the commit time no longer changes
 - Bought in
   - House win: a lot the house leads at the close closes Bought in, with no order, stock released and Relist offered
+  - Never a winner: the house is never the winner of a lot for orders, order letters or post-sale work
+  - Read after the close: the listing's own page and its Listings table row read Bought in
 - Access
   - Secret floor: only `auction:reserve` sets or reads an internal bid; other operators see the house's bids labelled House, and Bought in after the close; the audit trail never records the amount or the time
 

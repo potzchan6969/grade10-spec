@@ -62,6 +62,8 @@ See [Non-Goals](decisions.md#non-goals).
 - `grade10-site/auction/notifications`: a house win sends the ordinary lost
   and watched-sold letters and no winner letter, and the house is never
   mailed
+- `grade10-site/auction/winner-order`: a close with the house leading opens no
+  order, because the house is never the winner of a lot
 - `grade10-admin/auction/listing`: the Listings table reads Bought in, and
   Relist is offered on a bought-in lot and never carries the internal bid
 

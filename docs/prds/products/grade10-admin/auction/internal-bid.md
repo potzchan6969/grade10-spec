@@ -18,7 +18,7 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
 | Commit time | Required; from the start to the scheduled close, both included |
 | Who | `auction:reserve` only |
 | Collectors see | A listing pseudonym, as for any bidder |
-| Other operators see | Its bids as **House** once it has bid; never its amount or time |
+| Other operators see | Its bids as **House** once it has bid, each with its own time; never its amount or its commit time before it bids |
 
 ## Internal Bid
 

@@ -41,3 +41,9 @@
 **As an** auction admin,
 **I want** operators without secret-floor access never to see an internal bid's amount or time, or learn that a lot has one before the house bids,
 **so that** the house's floor stays known only to those allowed to set it.
+
+### grade10-admin-auction-internal-bid-US-08: Admin learns a listing edit cleared the internal bid
+
+**As an** auction admin,
+**I want** to see that a change to a listing's window, starting price or currency cleared its internal bid,
+**so that** I can set a new one before the lot sells unprotected.

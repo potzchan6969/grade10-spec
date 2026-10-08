@@ -131,7 +131,9 @@ the card is in the winner's hands. The collector's half is
   the close. Relist does not carry it
 - 🚧 **Bought in** - a lot the internal bid wins closes with no order and no
   winner letters, releases its stock as an Unsold close does, offers Relist
-  as an Unsold listing does, and reads Bought in in the Listings table, with a filter of its own.
+  as an Unsold listing does, and reads Bought in on its own page and in the
+  Listings table, with a filter of its own. The house is never a winner, so
+  the lot enters no order queue.
   Collectors see it as sold
 - 🚧 **Extended bidding** - a published lot past its scheduled close and still
   taking bids reads Extended in the Listings table; its status does not change
