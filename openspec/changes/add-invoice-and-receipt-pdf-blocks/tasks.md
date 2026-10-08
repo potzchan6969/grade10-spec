@@ -38,7 +38,7 @@ Amendment (`decisions.md` Q18-Q20). Needs this change's rewritten `spec.md`/`fea
 - [x] 3.6 Delete the retired DOM component: `pdf-document.tsx`, `invoice-pdf.tsx`, `receipt-pdf.tsx`, `types.ts`, and their `fixtures.ts`; fix `packages/ui/src/index.ts`'s exports to the new file names — also widened `package.json`'s `"./blocks/*"` export to resolve `.ts` alongside `.tsx`, since these two entry files carry no JSX (`tech-design.md` "Also edits")
 - [x] 3.7 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test`
 
-## 4. Preview the renderer in Storybook and apps/preview (grade10-spec)
+## 4. Preview the renderer in Storybook and apps/preview (grade10-spec) (owner: @htonyl)
 
 Needs group 3 landed.
 
