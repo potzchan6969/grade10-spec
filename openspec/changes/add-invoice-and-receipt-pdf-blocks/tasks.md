@@ -81,6 +81,6 @@ Uses draft `feature-tcs.md` as its planning input.
 - [ ] 7.5 Add the accepted optional `taxLine` to both renderers, before Subtotal when supplied and omitted without a reserved row when null or absent; cover both documents (`shared-ui-invoice-and-receipt-pdf-SC-52`, `shared-ui-invoice-and-receipt-pdf-SC-53`).
 - [ ] 7.6 Verify the focused renderer suites, public exports, shared sample fixtures, Storybook previews, and typechecks.
 
-## 8. Integrate the reconciled PDF contract (grade10)
+## 8. Integrate the reconciled PDF contract (grade10) (owner: @htonyl)
 
 - [ ] 7.4 Update the invoice samples and Grade10 backend caller to pass only enabled bank rails, `reference`, and the replacement relationship when one exists; run the focused renderer tests, Grade10 PDF service tests, Storybook preview, and typechecks.
