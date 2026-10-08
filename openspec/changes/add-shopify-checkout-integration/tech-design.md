@@ -108,13 +108,15 @@ reconciliation.
   no provider call, when the request's `spendPoints`, `couponId` and
   `couponCodes` equal the order's `discount_points`, `loyalty_coupon_id` and
   riding codes. Any other request is a new checkout.
-- **Edit** - each cart procedure that writes (`setLine`, `merge`,
-  `setTender`, `review`), once its write commits, lists the active cart's open
-  orders with a recorded ref and a `cart_version` below the cart's. Any it
-  finds are retired past the response with `defer`: the draft is deleted at
-  Shopify, then the order is `canceled`. Best effort, so a lost or refused
-  retire leaves the order to the next Pay or the reconcile give-up; a cart
-  with no such order makes no Shopify call.
+- **Edit** - each member write (`setLine`, `merge`, `setTender`), once it
+  commits, lists the active cart's open orders with a recorded ref and a
+  `cart_edited_version` below the cart's `edited_version`. Any it finds are
+  retired past the response with `defer`: the draft is deleted at Shopify,
+  then the order is `canceled`. Best effort, so a lost or refused retire
+  leaves the order to the next Pay or the reconcile give-up; a cart with no
+  such order makes no Shopify call. `review` lists nothing: its write-back
+  moves only `version`, so the invoice stands until the next Pay, whose
+  changed-cart supersede retires it.
 - **Changed cart** - the existing supersede pass, run before the new order and
   again after its refs, also lists every other open order with this
   `cart_id`: the draft is retired at Shopify, then the order is `canceled`; a

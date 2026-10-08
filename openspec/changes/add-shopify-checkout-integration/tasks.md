@@ -130,7 +130,8 @@ Tests land before their code and the test checkbox is ticked last.
 - [ ] 7.1 Add failing backend tests for a paid invoice clearing its cart, a
   basket that is not the cart, Pay twice on the unchanged cart, Pay after an
   edit, an edit discarding the invoice once and never again, an edit kept when
-  Shopify refuses the discard, an invoice paid before its discard lands, and a
+  Shopify refuses the discard, a review write-back leaving the invoice open,
+  an invoice paid before its discard lands, and a
   late payment after an edit or a rebuild, through the webhook and the
   reconcile pass, with an edit racing the payment on real Postgres:
   `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-33`,
@@ -141,7 +142,7 @@ Tests land before their code and the test checkbox is ticked last.
   `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-36`.
 - [ ] 7.3 Link a checkout whose lines are the cart to it, answer the unchanged
   cart's open invoice, retire the cart's other open invoices, and discard the
-  cart's older invoice after an edit commits:
+  cart's older invoice after a member edit commits:
   `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-35`.
 - [ ] 7.4 Convert the cart in the paid transition only while it holds the
   order's version, and delete every cart on erasure:

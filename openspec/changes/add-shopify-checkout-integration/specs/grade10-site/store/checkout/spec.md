@@ -118,9 +118,12 @@ whose lines are exactly the member's cart SHALL be that cart's checkout: while
 the cart is unchanged since an open invoice was created for it, creation asking
 for the points and coupon that invoice carries SHALL return that invoice, and
 creation asking for any other SHALL be a new checkout where a named coupon
-rides or refuses. A change to the cart's lines or tender SHALL discard the
-cart's earlier invoice so it can no longer be paid, and the next creation SHALL
-create another.
+rides or refuses. The member's change to the cart's lines or tender SHALL
+discard the cart's earlier invoice so it can no longer be paid, and the next
+creation SHALL create another. The store's own review of the cart, a line
+lowered to stock or a new price, SHALL not discard the invoice; the next
+creation on the reviewed cart SHALL create another and discard the earlier
+one.
 
 **Handoff** - The frontend SHALL open the hosted URL returned by the existing
 backend. Shopify owns address, shipping, tax and payment. The frontend SHALL

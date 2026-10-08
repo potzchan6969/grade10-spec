@@ -69,7 +69,9 @@ to navigate to.
 - 🚧 **Another Pay** — on the same cart, unchanged, opens the same invoice;
   after the cart changed, a new one is made
 - 🚧 **An edit after Pay** — discards the earlier invoice, so it can no longer
-  be paid; the edit never waits on Shopify
+  be paid; the edit never waits on Shopify. Only the collector's own edit
+  does this: the store's review of the cart, a line lowered to stock or a new
+  price, leaves the invoice for the next Pay to replace
 - **The invoice** — fixes the purchase; later cart edits do not change it
 - 🚧 **A late payment** — an invoice paid after the collector changed the cart
   leaves the changed cart as it is
@@ -90,5 +92,5 @@ to navigate to.
 | Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
 | One cart per member | Decided | A member holds one cart, and a paid invoice clears the cart it was made from and nothing else, so a payment the store learns of late never empties a cart built afterwards. Chosen on 2026-10-06 over keeping lines per member. | Product |
-| One invoice per cart | Decided | Pay on an unchanged cart opens the invoice already made. The edit that changes the cart discards that invoice once the edit is saved, so an invoice for an earlier cart cannot be paid, and the next Pay makes a new one. Editing never waits on Shopify. Chosen on 2026-10-07 over discarding at the next Pay. | Product |
+| One invoice per cart | Decided | Pay on an unchanged cart opens the invoice already made. The edit that changes the cart discards that invoice once the edit is saved, so an invoice for an earlier cart cannot be paid, and the next Pay makes a new one. Editing never waits on Shopify. Only the collector's own edit discards it, so opening the cart never discards an invoice the collector did not change. Chosen on 2026-10-07 over discarding at the next Pay; the collector's edit only, on 2026-10-08. | Product |
 :::
