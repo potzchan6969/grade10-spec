@@ -7,24 +7,25 @@
 - Derived order status
   - Partially Paid: exposes an operator-collected balance that is not yet fully settled
 - Guards
-  - Self-service closure: stops winner payment, reissue and cancellation after money is recorded
+  - Self-service closure: stops winner payment, reissue and cancellation after money that counts toward the balance is recorded
 
 ## ADDED Requirements
 
 ### Requirement: Recorded money derives Partially Paid and closes self-service
 
-An auction order with at least one recorded payment and an unpaid balance
-SHALL derive Partially Paid. Partially Paid SHALL suppress the winner's
-self-service payment, invoice reissue and cancellation actions, and SHALL
-not carry a payment deadline. The status SHALL remain until the operator
+An auction order with at least one recorded payment that counts toward the
+balance, and an unpaid balance, SHALL derive Partially Paid. A payment that
+counts toward nothing SHALL move no status. Partially Paid SHALL suppress the
+winner's self-service payment, invoice reissue and cancellation actions, and
+SHALL not carry a payment deadline. The status SHALL remain until the operator
 closes the invoice as Paid, including after confirming an overpayment, or
 records a refund.
 
-<!-- trace:scenario id=g10.auction-order-status.SC-4ke rev=1 -->
+<!-- trace:scenario id=g10.auction-order-status.SC-4ke rev=2 -->
 #### Scenario: auction-status-SC-49 - A recorded payment derives Partially Paid
 **Serves:** Derived order status - a recorded payment derives Partially Paid
 
-- **GIVEN** an invoice with one recorded payment and money still due
+- **GIVEN** an invoice with one recorded payment that counts toward the balance, and money still due
 - **WHEN** an order-status surface reads it
 - **THEN** the derived status is Partially Paid
 
@@ -36,3 +37,11 @@ records a refund.
 - **WHEN** the winner opens Winner Order
 - **THEN** Pay, invoice reissue and cancellation are unavailable
 - **AND** no payment deadline is shown
+
+<!-- trace:scenario id=g10.auction-order-status.SC-3ko rev=1 -->
+#### Scenario: auction-status-SC-58 - Money that counts toward nothing moves no status
+**Serves:** Derived order status - a payment that counts toward nothing moves no status
+
+- **GIVEN** an order in Pending Payment whose only recorded payment counts toward nothing
+- **WHEN** an order-status surface reads it
+- **THEN** the derived status is Pending Payment, not Partially Paid

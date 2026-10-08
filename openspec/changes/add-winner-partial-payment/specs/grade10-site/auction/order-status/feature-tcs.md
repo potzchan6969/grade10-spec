@@ -67,6 +67,35 @@
 * Winner Pay, reissue and cancellation are refused.
 * The order remains Partially Paid.
 
+<!-- trace:case id=g10.auction-order-status.TC-zxi rev=1 covers=g10.auction-order-status.SC-3ko -->
+### auction-status-US7-TC5-1: Money that counts toward nothing moves no status
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Derived order status
+
+**Pre-conditions:**
+
+* An auction order is in Pending Payment, and its only recorded payment counts toward nothing.
+
+**Steps:**
+
+1. Read the derived order status.
+
+**Expected Results:**
+
+* The derived status is Pending Payment.
+* The derived status is not Partially Paid.
+
 ## Settled
 
 ## Reconciliation
@@ -74,3 +103,4 @@
 | Finding | Disposition |
 | --- | --- |
 | Partially Paid is derived and removes self-service | **Folded in:** `auction-status-SC-49` and `auction-status-SC-50` |
+| Money that counts toward nothing moves no status | **Folded in:** `auction-status-SC-49` and `auction-status-SC-58`; carried here for `complete-auction-post-sale`, since one in-flight change edits a requirement at a time |

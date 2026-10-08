@@ -1,11 +1,5 @@
 ## Context user journeys
 
-### post-sale-US-03: Operator collects payment
-
-**As a** payment operator,
-**I want** a wire to release the card hold, a capture to mark Paid via Stripe, and a manual record to mark Paid via Manual,
-**so that** a second paid attempt is refused and staff without the grant cannot collect.
-
 ### post-sale-US-07: Operator resolves an unpaid order
 
 **As an** operator,

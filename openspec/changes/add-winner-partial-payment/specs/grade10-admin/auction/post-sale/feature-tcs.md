@@ -200,6 +200,38 @@
 * Steps 1 and 2 are refused and the invoice's address, method and total are unchanged.
 * Step 3 offers Record payment and the order remains Partially Paid.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-dwh rev=1 covers=g10adm.auction-post-sale.SC-mhe -->
+### post-sale-US12-TC7-1: Money that counts toward nothing leaves Reissue and Cancel open
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-12
+
+**Pre-conditions:**
+
+* `<first order>` and `<second order>` are in Pending Payment, and each one's only recorded payment counts toward nothing.
+* admin(holds payment-processing) is on the order detail.
+
+**Steps:**
+
+1. Reissue `<first order>`'s invoice with a reason.
+2. Cancel `<second order>` with a reason.
+
+**Expected Results:**
+
+* Step 1 is accepted and `<first order>` reads Pending Payment on a new invoice.
+* Step 2 is accepted and `<second order>` reads Cancelled.
+* Each payment is still recorded on its order.
+
 ## Settled
 
 ## Reconciliation
@@ -208,4 +240,5 @@
 | --- | --- |
 | Overpayment, close-or-keep boundary and the refusal below the tolerance | **Folded in:** `grade10-admin-auction-post-sale-SC-140`–`SC-144` |
 | Reissue and Cancel refused once a payment is recorded | **Folded in:** `grade10-admin-auction-post-sale-SC-217` |
+| Money that counts toward nothing blocks neither Reissue nor Cancel | **Folded in:** `grade10-admin-auction-post-sale-SC-242`; carried here for `complete-auction-post-sale`, since one in-flight change edits a requirement at a time |
 | Partially Paid sits in Waiting on winner, not Needs action | **Deferred:** `complete-auction-post-sale` modifies "The queue shows one outcome per lot" and carries it; one in-flight change may edit a requirement at a time |

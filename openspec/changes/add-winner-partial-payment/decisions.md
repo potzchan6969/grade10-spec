@@ -14,8 +14,8 @@
 - A shortfall write-off or overpayment line item recorded separately from the
   payment ledger itself
 - Automatic matching of a bank statement to an invoice
-- Reissuing or cancelling an invoice once any payment has been recorded
-  against it
+- Reissuing or cancelling an invoice once a payment that counts toward the
+  balance has been recorded against it
 - A live running balance shown to the winner, on Winner Order or in
   suspension copy
 
@@ -42,6 +42,7 @@
 | Q18 | Does a partial payment produce a winner notification letter? | Yes — `add-winner-contact-email` extends this change with an append-only `payment_received_partial` letter, carrying the current invoice and receipt ids and using the same ready Contact Us mailto rules | The earlier non-goal that left partial-payment receipts without a new letter kind |
 | Q19 | Does the durable winner-order receipt rule keep its tolerance-close wording? | Yes. The planning owner keeps the agreed closing tolerance, so the durable receipt rule, `winner-order-SC-206` and case `US2-TC6-1` stay as they are and this change does not edit them. The receipt wording in `Records the winner keeps` is carried by `add-winner-order-tax-line` | Retiring the tolerance-close wording here, which would reverse the planning owner's decision |
 | Q20 | What is the closing-payment tolerance, and who decided it? | The planning owner's logged decision: an operator may record any number of payments to an invoice; the first payment makes it `Partially Paid`; Winner Order always shows the full invoice amount, never a remaining due balance; every payment recorded generates a receipt; updating the invoice to `Paid` is refused while cumulative payments are below 90% of the original invoice total (a $1000 invoice must collect at least $900 before it can be closed as Paid); the payment that takes cumulative payments from below 90% to 90% or more (that payment included) offers a close, Paid with no separate write-off entry, or keep Partially Paid at the real balance, and every later payment under 100% offers it again; an exact match closes on its own and an overpayment needs confirmation; Reissue and Cancel are refused once any payment is recorded. Restores Q2/Q3, Q8, Q9, Q16 and Q17, which a reconciliation had reworded to drop the tolerance | Closing as Paid at any amount below the total, or removing the 90% rule |
+| Q21 | Does a payment that counts toward nothing refuse Reissue and Cancel, or derive Partially Paid? | No. Only a payment that counts toward the balance refuses Reissue and Cancel and derives Partially Paid; money that counts toward nothing, as `complete-auction-post-sale` records it, blocks neither and moves no status, which Q12 and Q20 now read as. This change carries the edit for `complete-auction-post-sale` because one in-flight change edits a requirement at a time - the planning owner (@htonyl) | Leaving the rules on any recorded payment for `complete-auction-post-sale` to modify after this change archives |
 
 ## Raised
 

@@ -39,7 +39,8 @@ zero — no invoice can record a partial payment at all.
   the original invoice total is accepted only after a confirmation dialog
   before the invoice is marked Paid; the full payment remains recorded and the
   excess is identifiable for a later refund.
-- **Reissue and Cancel are refused once any payment is recorded.** The
+- **Reissue and Cancel are refused once a payment that counts toward the
+  balance is recorded.** Money that counts toward nothing blocks neither. The
   invoice's address, method and total stay fixed once real money has moved
   against them; an operator resolves anything that will not be paid off by
   hand, outside the system.
@@ -75,7 +76,8 @@ None.
 - `grade10-site/auction/order-status`: Partially Paid added to both status
   vocabularies; its moves in and out.
 - `grade10-admin/auction/post-sale`: recording a partial payment on the manual-settlement form;
-  Reissue and Cancel refused once a payment is recorded. Partially Paid in the
+  Reissue and Cancel refused once a payment that counts toward the balance is
+  recorded. Partially Paid in the
   queue's Waiting on winner segment, not Needs action, is carried by
   `complete-auction-post-sale`.
 - `grade10-site/auction/account-record`: the winner's row shows Partially
@@ -86,7 +88,7 @@ None.
 | Consumer | Change |
 | --- | --- |
 | `apps/frontend/grade10` | Winner Order reads Partially Paid as a locked state with Contact Us and no balance figure; the Receipt PDF row lists one entry per payment; My Auctions shows Partially Paid. |
-| `apps/admin/grade10` | The manual-settlement form accepts an amount smaller than the balance owed, repeatable; the queue's Partially Paid outcome and filter; Reissue and Cancel disabled once a payment exists. |
+| `apps/admin/grade10` | The manual-settlement form accepts an amount smaller than the balance owed, repeatable; the queue's Partially Paid outcome and filter; Reissue and Cancel disabled once a payment that counts toward the balance exists. |
 | Auction service | A payment ledger per invoice (amount, method, reference, proof, operator, timestamp); the 90% closing-tolerance check; the Partially Paid state and its refusal of Reissue and Cancel; a receipt generated per payment, numbered `-P1`, `-P2`, … |
 | Notification service | The landed `add-winner-contact-email` change sends an append-only `payment_received_partial` letter for each partial payment with the current invoice and receipt IDs. Payment reminders still stop once the invoice leaves `pending`; the durable notification contract owns the ready-email subject, body and Contact Us mailto. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New copy is catalog work for the engineer. |
