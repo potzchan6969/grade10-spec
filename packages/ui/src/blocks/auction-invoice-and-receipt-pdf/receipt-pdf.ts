@@ -71,6 +71,7 @@ export type ReceiptPdfData = {
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
   lineItems: readonly ReceiptPdfLineItem[];
+  taxLine?: ReceiptPdfLineItem | null;
   paymentBreakdown: ReceiptPaymentBreakdown;
   paymentMethod: string;
   paymentReference: string | null;
@@ -213,6 +214,7 @@ export async function ReceiptPdf(
     fonts,
     data.listingTitle,
     data.lineItems,
+    data.taxLine,
     data.copy,
     y,
   );

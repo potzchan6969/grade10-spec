@@ -53,10 +53,12 @@ export type {
 // shared/ui/invoice-and-receipt-pdf
 export {
   InvoicePdf,
+  type InvoicePdfBankRails,
   type InvoicePdfCopy,
   type InvoicePdfData,
   type InvoicePdfLineItem,
   type InvoicePdfRenderOptions,
+  type InvoicePdfReplacement,
 } from "./blocks/auction-invoice-and-receipt-pdf/invoice-pdf";
 export type {
   PdfDocumentCopy,

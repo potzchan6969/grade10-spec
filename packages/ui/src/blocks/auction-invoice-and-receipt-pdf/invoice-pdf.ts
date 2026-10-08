@@ -45,6 +45,7 @@ export type InvoicePdfCopy = PdfDocumentCopy & {
   sentAtLabel: string;
   paymentDeadlineLabel: string;
   paymentMethodLabel: string;
+  replacesInvoiceLabel: string;
   bankDetailsHeading: string;
   swiftLabel: string;
   fpsLabel: string;
@@ -58,16 +59,20 @@ export type InvoicePdfCopy = PdfDocumentCopy & {
   bankReferenceNoteLabel: string;
 };
 
-/** SWIFT, FPS and HK local transfer, each a self-contained rail - a caller supplies all three or none. */
+/** SWIFT, FPS and HK local transfer, each a self-contained optional rail. */
 export type InvoicePdfBankRails = {
-  swift: { beneficiary: string; swiftBic: string; account: string };
-  fps: { fpsId: string; beneficiary: string };
-  hkLocalTransfer: {
+  swift?: { beneficiary: string; swiftBic: string; account: string };
+  fps?: { fpsId: string; beneficiary: string };
+  hkLocalTransfer?: {
     bankAndCode: string;
     beneficiary: string;
     accountNo: string;
   };
   reference: string;
+};
+
+export type InvoicePdfReplacement = {
+  invoiceId: string;
 };
 
 /** The only values an invoice renderer is allowed to consume. */
@@ -82,6 +87,8 @@ export type InvoicePdfData = {
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
   lineItems: readonly InvoicePdfLineItem[];
+  taxLine?: InvoicePdfLineItem | null;
+  replacesInvoice?: InvoicePdfReplacement | null;
   /** Given only on a bank-transfer invoice; omitted renders no Bank details section at all. */
   bankRails?: InvoicePdfBankRails;
   issuerName: string;
@@ -99,7 +106,12 @@ function drawMetaBlock(
   fonts: Fonts,
   data: Pick<
     InvoicePdfData,
-    "invoiceNumber" | "sentAt" | "paymentDeadline" | "paymentMethod" | "copy"
+    | "invoiceNumber"
+    | "sentAt"
+    | "paymentDeadline"
+    | "paymentMethod"
+    | "copy"
+    | "replacesInvoice"
   >,
   y: number,
 ): number {
@@ -122,6 +134,17 @@ function drawMetaBlock(
   );
   y -= LINE_HEIGHT;
   drawMetaRow(page, fonts, data.copy.paymentMethodLabel, data.paymentMethod, y);
+  y -= LINE_HEIGHT;
+  if (data.replacesInvoice) {
+    drawMetaRow(
+      page,
+      fonts,
+      data.copy.replacesInvoiceLabel,
+      data.replacesInvoice.invoiceId,
+      y,
+    );
+    y -= LINE_HEIGHT;
+  }
   return y - LINE_HEIGHT * 2;
 }
 
@@ -143,7 +166,7 @@ function drawWrappedRow(
   return y;
 }
 
-/** The reference note, its own quoted value bolded wherever the wrapped note text ends. */
+/** The reference note, wrapped as one mixed-font paragraph with its value bolded. */
 function drawBankReferenceNote(
   page: PDFPage,
   fonts: Fonts,
@@ -152,30 +175,56 @@ function drawBankReferenceNote(
   y: number,
 ): number {
   const width = A4_WIDTH - MARGIN * 2;
-  const lines = wrap(note, fonts.regular, SMALL_SIZE, width);
-  for (let index = 0; index < lines.length - 1; index += 1) {
-    drawText(page, fonts.regular, lines[index], MARGIN, y, SMALL_SIZE, INK);
+  const tokens = [
+    ...note
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((text) => ({ text, font: fonts.regular })),
+    { text: reference, font: fonts.bold },
+  ];
+  const lines: (typeof tokens)[] = [];
+  let line: typeof tokens = [];
+  let lineWidth = 0;
+  const spaceWidth = fonts.regular.widthOfTextAtSize(" ", SMALL_SIZE);
+  for (const token of tokens) {
+    const tokenWidth = token.font.widthOfTextAtSize(token.text, SMALL_SIZE);
+    const nextWidth = lineWidth + (line.length ? spaceWidth : 0) + tokenWidth;
+    if (line.length && nextWidth > width) {
+      lines.push(line);
+      line = [];
+      lineWidth = 0;
+    }
+    line.push(token);
+    lineWidth += (line.length > 1 ? spaceWidth : 0) + tokenWidth;
+  }
+  if (line.length) lines.push(line);
+
+  for (const lineTokens of lines) {
+    let x = MARGIN;
+    let segmentFont = lineTokens[0]?.font ?? fonts.regular;
+    let segmentText = lineTokens[0]?.text ?? "";
+    for (const token of lineTokens.slice(1)) {
+      if (token.font === segmentFont) {
+        segmentText += ` ${token.text}`;
+        continue;
+      }
+      const separatedText = `${segmentText} `;
+      drawText(page, segmentFont, separatedText, x, y, SMALL_SIZE, INK);
+      x += segmentFont.widthOfTextAtSize(separatedText, SMALL_SIZE);
+      segmentFont = token.font;
+      segmentText = token.text;
+    }
+    drawText(page, segmentFont, segmentText, x, y, SMALL_SIZE, INK);
     y -= LINE_HEIGHT;
   }
-  const lastLine = lines[lines.length - 1] ?? "";
-  drawText(page, fonts.regular, lastLine, MARGIN, y, SMALL_SIZE, INK);
-  const lastLineWidth = fonts.regular.widthOfTextAtSize(lastLine, SMALL_SIZE);
-  drawText(
-    page,
-    fonts.bold,
-    ` ${reference}`,
-    MARGIN + lastLineWidth,
-    y,
-    SMALL_SIZE,
-    INK,
-  );
-  return y - LINE_HEIGHT;
+  return y;
 }
 
 /**
  * A full-width "Bank details" section below the order value, given only on
- * a bank-transfer invoice: three equal columns (SWIFT, FPS, HK local
- * transfer), a divider, then the reference note. Omitted entirely -
+ * a bank-transfer invoice: one equal-width column for each enabled rail, a
+ * divider, then the reference note. Omitted entirely -
  * heading, columns and note - when `bankRails` is not given.
  */
 function drawBankRails(
@@ -198,49 +247,46 @@ function drawBankRails(
   );
   y -= LINE_HEIGHT * 1.6;
 
-  const columnWidth = (A4_WIDTH - MARGIN * 2) / 3;
-  const columns: { x: number; heading: string; rows: [string, string][] }[] = [
-    {
-      x: MARGIN,
+  const columns: { heading: string; rows: [string, string][] }[] = [];
+  if (bankRails.swift) {
+    columns.push({
       heading: copy.swiftLabel,
       rows: [
         [copy.beneficiaryLabel, bankRails.swift.beneficiary],
         [copy.swiftBicLabel, bankRails.swift.swiftBic],
         [copy.accountIbanLabel, bankRails.swift.account],
       ],
-    },
-    {
-      x: MARGIN + columnWidth,
+    });
+  }
+  if (bankRails.fps) {
+    columns.push({
       heading: copy.fpsLabel,
       rows: [
         [copy.fpsIdLabel, bankRails.fps.fpsId],
         [copy.beneficiaryLabel, bankRails.fps.beneficiary],
       ],
-    },
-    {
-      x: MARGIN + columnWidth * 2,
+    });
+  }
+  if (bankRails.hkLocalTransfer) {
+    columns.push({
       heading: copy.hkLocalTransferLabel,
       rows: [
         [copy.bankAndCodeLabel, bankRails.hkLocalTransfer.bankAndCode],
         [copy.beneficiaryLabel, bankRails.hkLocalTransfer.beneficiary],
         [copy.accountNoLabel, bankRails.hkLocalTransfer.accountNo],
       ],
-    },
-  ];
+    });
+  }
+  if (columns.length === 0) return y;
+
+  const columnWidth = (A4_WIDTH - MARGIN * 2) / columns.length;
 
   const columnTop = y;
   let bottom = columnTop;
-  for (const column of columns) {
+  for (const [index, column] of columns.entries()) {
     let columnY = columnTop;
-    drawText(
-      page,
-      fonts.bold,
-      column.heading,
-      column.x,
-      columnY,
-      SMALL_SIZE,
-      INK,
-    );
+    const x = MARGIN + columnWidth * index;
+    drawText(page, fonts.bold, column.heading, x, columnY, SMALL_SIZE, INK);
     columnY -= LINE_HEIGHT;
     for (const [label, value] of column.rows) {
       columnY = drawWrappedRow(
@@ -248,7 +294,7 @@ function drawBankRails(
         fonts,
         label,
         value,
-        column.x,
+        x,
         columnWidth - LINE_HEIGHT,
         columnY,
       );
@@ -290,6 +336,7 @@ export async function InvoicePdf(
     fonts,
     data.listingTitle,
     data.lineItems,
+    data.taxLine,
     data.copy,
     y,
   );
