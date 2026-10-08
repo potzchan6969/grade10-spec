@@ -1,10 +1,6 @@
-import { SCAN_IMAGE, SHOP_NAME, formatHkd } from "./vault-content";
+import { formatHkd, SCAN_IMAGE, SHOP_NAME } from "./vault-content";
 
-type IntakeService =
-  | "vault"
-  | "grading"
-  | "auction-listing"
-  | "store-listing";
+type IntakeService = "vault" | "grading" | "auction-listing" | "store-listing";
 
 /** Collector-facing list filter buckets. */
 type IntakeListFilter = "in-progress" | "completed" | "all";

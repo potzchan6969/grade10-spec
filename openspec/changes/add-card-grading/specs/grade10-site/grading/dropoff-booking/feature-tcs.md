@@ -1,6 +1,6 @@
 # grade10-site/grading/dropoff-booking Test Cases
 
-**Status:** reopened · 0/28
+**Status:** reopened · 0/26
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-09-30
 **Drafts styled:** 2026-09-30, tcs-rules r4
 

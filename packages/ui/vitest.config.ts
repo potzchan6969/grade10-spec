@@ -29,6 +29,7 @@ export default defineConfig({
         // strings, and it fails when an edit lets the two diverge.
         test: {
           name: "audit",
+          sequence: { groupOrder: 0 },
           environment: "node",
           include: ["src/**/*.test.ts"],
         },
@@ -40,6 +41,7 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          sequence: { groupOrder: 1 },
           // Storybook's generated project-annotations module is shared by all
           // browser files and is not safe to transform concurrently.
           fileParallelism: false,

@@ -52,10 +52,8 @@ export const InScanning: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("link", { name: "Intake tracker" }),
-    ).toBeVisible();
-    expect(canvas.getByText("ITM-99482-01")).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Intake tracker" })).toBeVisible();
+    expect(canvas.getAllByText("ITM-99482-01")).toHaveLength(2);
     expect(canvas.getByText("In Scanning")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Vault receipt" }),
@@ -70,9 +68,7 @@ export const Vaulted: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Vaulted")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Vault receipt" }),
-    ).toBeEnabled();
+    expect(canvas.getByRole("button", { name: "Vault receipt" })).toBeEnabled();
     expect(
       canvas.getByRole("button", { name: "View in vault portfolio" }),
     ).toBeVisible();
@@ -85,7 +81,7 @@ export const GradingInTransit: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("ITM-99110-01")).toBeVisible();
+    expect(canvas.getAllByText("ITM-99110-01")).toHaveLength(2);
     expect(canvas.getByText("In Transit")).toBeVisible();
     expect(canvas.queryByRole("button", { name: "Vault receipt" })).toBeNull();
   },

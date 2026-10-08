@@ -73,9 +73,7 @@ export const InVault: Story = {
       canvas.getByText("1997 Pocket Monsters Checklist Carddass"),
     ).toBeVisible();
     expect(canvas.getByText("Intake estimate")).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: "Vault Portfolio" }),
-    ).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Vault Portfolio" })).toBeVisible();
   },
 };
 

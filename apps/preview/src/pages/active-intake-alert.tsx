@@ -20,7 +20,12 @@ function ActiveIntakeAlert({
   return (
     <Alert
       actions={
-        <Button size="sm" type="button" variant="outline" onClick={onTrackProgress}>
+        <Button
+          size="sm"
+          type="button"
+          variant="outline"
+          onClick={onTrackProgress}
+        >
           Track Progress
         </Button>
       }

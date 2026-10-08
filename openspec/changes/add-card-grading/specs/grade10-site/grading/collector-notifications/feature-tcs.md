@@ -1,6 +1,6 @@
 # grade10-site/grading/collector-notifications Test Cases
 
-**Status:** reopened · 0/22
+**Status:** reopened · 0/21
 **Drafts styled:** 2026-10-01, tcs-rules r4
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-01
 

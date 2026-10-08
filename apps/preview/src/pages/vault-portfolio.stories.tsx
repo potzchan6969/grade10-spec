@@ -213,9 +213,7 @@ export const Filled: Story = {
     expect(canvas.getByText("Total Estimated Value")).toBeVisible();
     expect(canvas.getByText("Storage Fees")).toBeVisible();
     expect(canvas.getByText("Launch free")).toBeVisible();
-    expect(
-      canvas.getByText("2 submissions currently in intake"),
-    ).toBeVisible();
+    expect(canvas.getByText("2 submissions currently in intake")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Track Progress" }),
     ).toBeVisible();
@@ -243,8 +241,6 @@ export const EmptyWithIntake: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("No vaulted items yet")).toBeVisible();
-    expect(
-      canvas.getByText("2 submissions currently in intake"),
-    ).toBeVisible();
+    expect(canvas.getByText("2 submissions currently in intake")).toBeVisible();
   },
 };

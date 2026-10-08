@@ -89,6 +89,7 @@ function ScanThumbs({ item }: { item: IntakeItemRow }) {
                   <HStack className="flex-wrap" gap="sm" vAlign="center">
                     {item.scanSrcs.map((src, index) => (
                       <button
+                        // biome-ignore lint/suspicious/noArrayIndexKey: Front and back occupy fixed slots and may use the same preview image.
                         key={`${item.itemId}-dlg-${index}`}
                         className="size-14 cursor-pointer overflow-hidden rounded-(--radius-lg) border border-border bg-muted p-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 data-[active=true]:ring-2 data-[active=true]:ring-ring"
                         data-active={src === openSrc}
@@ -138,6 +139,7 @@ function IntakeItemCard({
       padding={false}
     >
       <CardContent className="flex flex-col gap-0 p-0">
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: The card header has a link role and keyboard handling only when onOpen is supplied. */}
         <div
           className={
             onOpen
@@ -176,7 +178,7 @@ function IntakeItemCard({
             <div className="flex min-w-0 flex-1 flex-col gap-3">
               <div className="flex min-w-0 flex-col gap-1">
                 <Text
-                  as="h3"
+                  as="h2"
                   className="font-heading text-pretty tracking-tight"
                   size="base"
                   weight="medium"
@@ -202,7 +204,10 @@ function IntakeItemCard({
               </div>
 
               {item.note ? (
-                <Text className="text-pretty text-secondary-foreground" size="xs">
+                <Text
+                  className="text-pretty text-secondary-foreground"
+                  size="xs"
+                >
                   {item.note}
                 </Text>
               ) : null}
@@ -213,13 +218,10 @@ function IntakeItemCard({
             </div>
           </HStack>
         </div>
-
         <Separator />
-
         <div
           className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3 sm:px-5"
-          onClick={(event) => event.stopPropagation()}
-          onKeyDown={(event) => event.stopPropagation()}
+          data-slot="intake-item-actions"
         >
           <Button
             leading={<FilePdf aria-hidden size={16} weight="regular" />}
