@@ -135,15 +135,15 @@ function VaultPortfolioPage({
       />
 
       <div className="flex flex-col gap-4">
-        <PortfolioSummary
-          itemCount={empty ? 0 : PORTFOLIO_SUMMARY.itemCount}
-          estimate={
-            empty ? formatHkd(0) : formatHkd(PORTFOLIO_SUMMARY.totalEstimateHkd)
-          }
-          feeLabel="Launch free"
-          feeHint={PORTFOLIO_SUMMARY.feeStatus}
-          valuationHint={PORTFOLIO_SUMMARY.valuationNote}
-        />
+        {!empty && (
+          <PortfolioSummary
+            itemCount={PORTFOLIO_SUMMARY.itemCount}
+            estimate={formatHkd(PORTFOLIO_SUMMARY.totalEstimateHkd)}
+            feeLabel="Launch free"
+            feeHint={PORTFOLIO_SUMMARY.feeStatus}
+            valuationHint={PORTFOLIO_SUMMARY.valuationNote}
+          />
+        )}
 
         <ActiveIntakeAlert
           submissionCount={intakeSubmissionCount}
@@ -152,8 +152,8 @@ function VaultPortfolioPage({
 
         {empty ? (
           <VaultEmptyState
-            title="No vaulted items yet"
-            description="Book a store visit to vault collectibles. Items appear here after staff verify and store them."
+            title="No items in your vault"
+            description="Book a store visit to vault your collectibles. Your items will appear here once verified and stored."
             actionLabel="Vault Collectibles"
             onAction={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
           />
@@ -230,8 +230,11 @@ export const Empty: Story = {
   args: { empty: true, intakeSubmissionCount: 0 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("No vaulted items yet")).toBeVisible();
+    expect(canvas.getByText("No items in your vault")).toBeVisible();
     expect(canvas.queryByText(/currently in intake/)).toBeNull();
+    expect(canvas.queryByText("Total Item Count")).toBeNull();
+    expect(canvas.queryByText("Total Estimated Value")).toBeNull();
+    expect(canvas.queryByText("Storage Fees")).toBeNull();
   },
 };
 
@@ -240,7 +243,10 @@ export const EmptyWithIntake: Story = {
   args: { empty: true, intakeSubmissionCount: 2 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("No vaulted items yet")).toBeVisible();
+    expect(canvas.getByText("No items in your vault")).toBeVisible();
     expect(canvas.getByText("2 submissions currently in intake")).toBeVisible();
+    expect(canvas.queryByText("Total Item Count")).toBeNull();
+    expect(canvas.queryByText("Total Estimated Value")).toBeNull();
+    expect(canvas.queryByText("Storage Fees")).toBeNull();
   },
 };
