@@ -325,7 +325,7 @@ Runs once per row of **Test data**.
 
 | <fee> | <outcome> |
 | --- | --- |
-| blank | The send is refused; no invoice is issued |
+| blank | The invoice is sent; its fee reads Free |
 | -100 | The send is refused; no invoice is issued |
 | 0 | The invoice is sent; its fee reads Free |
 | more than the Subtotal | The invoice is sent with that fee, not capped |

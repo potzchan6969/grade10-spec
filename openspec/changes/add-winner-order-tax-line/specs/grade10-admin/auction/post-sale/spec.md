@@ -25,8 +25,8 @@ an auction order in Preparing Invoice:
 4. Optionally add Tax for the order, an integer count of minor units greater
    than zero in the lot's currency.
 5. For bank transfer, enter the bank transfer fee: an integer count of minor
-   units of zero or more in the lot's currency, with no upper limit. A fee of
-   zero reads Free to the winner.
+   units of zero or more in the lot's currency, with no upper limit. An empty
+   field is zero, and a fee of zero reads Free to the winner.
 6. Read the subtotal, the payment processing fee, and the order total. For
    card, Grade10 computes the fee from the card rule for the order's currency
    in Payment Settings, per `grade10-admin/auction/payment-settings`, and the
@@ -42,7 +42,7 @@ invoice-sent letter, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL refuse to send an invoice when the winner has confirmed no
 delivery address, when Shipping & Handling is missing, when Insurance or Tax is
-added at zero, when a bank transfer invoice's fee is blank or is not an
+added at zero, when a bank transfer invoice's fee is not an
 integer of zero or more, when Payment Settings holds no card rule for a card
 invoice's currency (`CARD_FEE_UNSET`), or when the order total the send
 carries differs from the one Grade10 prices on receipt (`QUOTE_CHANGED`). The
@@ -140,12 +140,16 @@ card rule.
 - **AND** asks for a bank transfer fee instead of showing a fee computed from
   the card rule
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-0l6 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-0l6 rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-118 - A blank bank transfer fee refuses the send
 **Serves:** Quote and send - the bank transfer fee is required
 
+This scenario keeps its title with its id. The title is historical: a blank
+bank transfer fee is now zero and sends as Free; only a fee that is not an
+integer of zero or more refuses the send.
+
 - **GIVEN** an auction order in Preparing Invoice for bank transfer
-- **WHEN** an operator leaves the bank transfer fee blank, or enters -100 minor units, and sends
+- **WHEN** an operator enters a bank transfer fee of -100 minor units and sends
 - **THEN** Grade10 refuses the send
 - **AND** no invoice is issued
 
