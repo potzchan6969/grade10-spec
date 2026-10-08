@@ -53,6 +53,9 @@ A sale made as a guest is not lost: it earns once it has an owner.
 - **By an operator** — a sale with no customer, or the wrong one, is
   attributed by hand with the evidence recorded; one claim lives at a time,
   and a wrong one is revoked and re-attributed
+- **Walk-in** — a paid till sale with no member and no customer on it is
+  marked a walk-in by an operator, and stops asking for a link; a member who
+  shows the receipt later can still be linked, and the link clears the mark
 - **Earns as if theirs** — the earning is priced as it was when the money
   landed, and any refund since is replayed in order —
   [Points](/p/grade10-site/loyalty/points)
