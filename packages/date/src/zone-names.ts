@@ -1,5 +1,18 @@
 import { assertZone, type Instant, toInstant } from "./instant.ts";
 import { PLATFORM_LOCALE, PLATFORM_ZONE } from "./platform.ts";
+import { render } from "./render.ts";
+
+/**
+ * A month's short name, `0` January through `11` December, in a language the
+ * platform ships: `Sep`, `9月`, `9월`. A month is a calendar fact, worded on no
+ * zone.
+ */
+export function shortMonthName(monthIndex: number, locale: string): string {
+  return render(new Date(Date.UTC(2020, monthIndex, 1)), "MMM", {
+    locale,
+    timeZone: PLATFORM_ZONE,
+  });
+}
 
 /** A zone's plain name - `Hong Kong Standard Time` - or the id when it has none. */
 export function zoneName(timeZone: string, locale = PLATFORM_LOCALE): string {
