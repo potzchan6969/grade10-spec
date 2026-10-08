@@ -10,7 +10,7 @@
 The bump in 2.1 takes the store's booking block change too, so it waits for the application side of `add-multi-store-appointments` (its task 13.1); typecheck reports 9 errors in `packages/appointment/frontend`, `packages/vault/frontend` and `packages/grading/frontend` on a bump alone.
 
 - [ ] 2.1 Bump `external/grade10-spec` to the commit that adds the package
-- [ ] 2.2 Rewrite imports of `@grade10/utils/dates` formatters and of `@grade10/ui`'s date formatters to `@grade10/date`, with `formatLocalDay`, `formatLocalMoment` and `formatLocalTime` now `formatDay`, `formatMoment` and `formatTimeOfDay`; add the dependency to each package that imports it; move `resolveShippedLocale` into `@grade10/frontend-intl` and take `ShippedLocale` from `@grade10/i18n`
+- [ ] 2.2 Rewrite imports of `@grade10/utils/dates` formatters and typed-day functions and of `@grade10/ui`'s date formatters to `@grade10/date`, with `formatLocalDay`, `formatLocalMoment` and `formatLocalTime` now `formatDay`, `formatMoment` and `formatTimeOfDay`; add the dependency to each package that imports it; narrow a page's locale with `shippedLocale` in `@grade10/frontend-intl` and take `ShippedLocale` from `@grade10/i18n`
 - [ ] 2.3 Delete the text half of `packages/utils/src/dates.ts` and its tests; keep the arithmetic, importing `PLATFORM_ZONE` from the package
 - [ ] 2.4 Delete the exact duplicates: grading's `calendarDays.ts` `formatCalendarDay` and grading's `printedDay`
 - [ ] 2.5 Repoint `check-dates.mjs` and `check-lanes.mjs` at `@grade10/date`, keeping the `TZ` pin rule on every suite that reaches it
@@ -19,10 +19,10 @@ The bump in 2.1 takes the store's booking block change too, so it waits for the 
 
 ## 3. Move the store onto the package (grade10-spec)
 
-- [ ] 3.1 Rewrite the `@grade10/ui` blocks, `apps/preview`, `apps/emails`, the invoice PDF and the design-system calendar to format through `@grade10/date`; move `formatListing*` into the auction-card block
+- [ ] 3.1 Rewrite the `@grade10/ui` blocks, `apps/preview`, `apps/emails`, the invoice PDF and the design-system calendar to format through `@grade10/date`, the calendar mapping react-day-picker's locale codes to a platform language first; move `formatListing*` into the auction-card block
 - [ ] 3.2 Add `packages/date/**` to the `storybook.yml` and `manual.yml` path filters and teach `scripts/storybook/changed-page-links.mjs` to follow `@grade10/date`, with its test
 - [ ] 3.3 Delete `packages/ui/src/lib/format-datetime.ts`, its test and its exports from `packages/ui/src/index.ts`; keep `datetime-fixtures.ts` importing the package
-- [ ] 3.4 Add the store's date check and its test, and run it in CI
+- [ ] 3.4 Add the store's date check and its test, and run it in CI: over `packages/` and `apps/`, matching `Intl.DateTimeFormat`, `toLocaleDateString`, `toLocaleTimeString` and a date-fns import, and not number formatting
 - [ ] 3.5 Verify: `pnpm run test:stories`, `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run check:manual`
 
 ## 4. Take the final bump (grade10)

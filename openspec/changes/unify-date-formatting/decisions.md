@@ -12,15 +12,16 @@
 - The date arithmetic Workers use (`addDays`, `startOfDayAfter`, `calendarDaysBetween`) and the wall-clock maths in `utils/zone.ts`
 - The POS shell's copy of Shopify's till screens, which keeps its exemption from the check
 - Archiving `align-collector-times-to-local-zone`
+- The manual viewer under `tools/`, which shows no collector or operator a date
 
 ## Decisions
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | Where do the formatters live? | A standalone `packages/date` in this store, as @seankcw asked - decided by the round | A subpath of `@grade10/i18n`: no new package, but the catalog package would carry date-fns |
-| Q2 | Does the package also turn a typed calendar day into instants? | Yes: `startOfDay`, `endOfDay`, `dayValue` and `isCalendarDay` move with the formatters - decided by the round | Formatters only: the package would need a private copy of the parse. All date code: loan and reminder rules would live in this store |
-| Q3 | Do shapes no platform rule names change in this move? | No: they move as they print today - decided by the round | Align them now: printed invoices would change inside a refactor |
-| Q4 | Do countdowns and durations join? | No: a follow-on change - decided by the round | Include now: the change roughly doubles, and each new shape needs its own decision |
+| Q1 | Where do the formatters live? | A standalone `packages/date` in this store, as @seankcw asked - decided by @seankcw | A subpath of `@grade10/i18n`: no new package, but the catalog package would carry date-fns |
+| Q2 | Does the package also turn a typed calendar day into instants? | Yes: `startOfDay`, `endOfDay`, `dayValue` and `isCalendarDay` move with the formatters - decided by @seankcw | Formatters only: the package would need a private copy of the parse. All date code: loan and reminder rules would live in this store |
+| Q3 | Do shapes no platform rule names change in this move? | No: they move as they print today - decided by @seankcw | Align them now: printed invoices would change inside a refactor |
+| Q4 | Do countdowns and durations join? | No: a follow-on change - decided by @seankcw | Include now: the change roughly doubles, and each new shape needs its own decision |
 
 ## Raised
 
