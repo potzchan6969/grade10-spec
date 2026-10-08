@@ -125,16 +125,16 @@ Uses the draft feature suite as planning input after frontend delivery. Cases re
 
 ## 7. Contract and compatibility tests (grade10) (owner: @kinisworking)
 
-- [ ] 7.4 Add failing zero-inclusive v2 and legacy omission contract tests before extending the wire in 7.2; cover required points and per-line seen-price fields, integer bounds and successful no-points checkout: `grade10-site-store-checkout-SC-61`, `grade10-site-store-checkout-SC-39`.
+- [x] 7.4 Add failing zero-inclusive v2 and legacy omission contract tests before extending the wire in 7.2; cover required points and per-line seen-price fields, integer bounds and successful no-points checkout: `grade10-site-store-checkout-SC-61`, `grade10-site-store-checkout-SC-39`.
 
 The versioned points field is required and zero-inclusive, using the existing
 cart tender bounds (0..10,000,000). Legacy omission means zero. Tests in 7.1
 include zero, the maximum, missing v2 input, fractions, negatives and overflow:
 `grade10-site-store-checkout-SC-61`. Implement this wire distinction in 7.2.
 
-- [ ] 7.1 Add failing shared codec, datasource, resolver and fixture tests for v2 context/Pay, canonical alias identity, settling/terminal/conflict/recovery, strict cart/tender preconditions and unsupported-protocol refusal; cover old codecs, Grade10/ZZZ and existing operator adapters before implementation: `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-38`, `grade10-site-store-checkout-SC-41`, `grade10-site-store-checkout-SC-44`, `grade10-site-store-checkout-SC-46`, `grade10-site-store-checkout-SC-48`.
-- [ ] 7.2 Implement shared schemas and canonical client/fixture/domain mapping, retaining legacy response shapes and authenticated/environment gates. Add no second quote/order client: `grade10-site-store-checkout-SC-44`, `grade10-site-store-checkout-SC-46`, `grade10-site-store-checkout-SC-48`.
-- [ ] 7.3 Verify targeted contract/frontend suites and type checks; record the exact compatible old/new wire matrix. Group 8 depends on these shared shapes; Group 11 does not ship before Groups 8-10 pass.
+- [x] 7.1 Add failing shared codec, datasource, resolver and fixture tests for v2 context/Pay, canonical alias identity, settling/terminal/conflict/recovery, strict cart/tender preconditions and unsupported-protocol refusal; cover old codecs, Grade10/ZZZ and existing operator adapters before implementation: `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-38`, `grade10-site-store-checkout-SC-41`, `grade10-site-store-checkout-SC-44`, `grade10-site-store-checkout-SC-46`, `grade10-site-store-checkout-SC-48`.
+- [x] 7.2 Implement shared schemas and canonical client/fixture/domain mapping, retaining legacy response shapes and authenticated/environment gates. Add no second quote/order client: `grade10-site-store-checkout-SC-44`, `grade10-site-store-checkout-SC-46`, `grade10-site-store-checkout-SC-48`.
+- [x] 7.3 Verify targeted contract/frontend suites and type checks; record the exact compatible old/new wire matrix. Group 8 depends on these shared shapes; Group 11 does not ship before Groups 8-10 pass.
 
 ## 8. Durable purchase identity and current decision (grade10)
 
