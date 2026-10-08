@@ -30,9 +30,6 @@ export const Default: Story = {
         name: AUCTION_RESTRICTED_COPY.title,
       }),
     ).toBeVisible();
-    expect(
-      canvas.getByText(AUCTION_RESTRICTED_COPY.description),
-    ).toBeVisible();
     const browseStore = canvas.getByRole("button", {
       name: AUCTION_RESTRICTED_COPY.browseStore,
     });

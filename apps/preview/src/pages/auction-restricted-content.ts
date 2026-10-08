@@ -4,7 +4,6 @@
  */
 const AUCTION_RESTRICTED_COPY = {
   title: "Auctions aren't available in your region",
-  description: "You can still browse and buy in the store.",
   browseStore: "Browse the Store",
 } as const;
 

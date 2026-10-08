@@ -22,8 +22,8 @@ composition and this file draws nothing further.
   centered column, as `NotFoundPage` composes it.
 - **New message keys** — `@grade10/i18n` answers the page's words in every
   language of its layer. Proposed namespace `shared/<locale>/auctionAvailability.json`
-  carrying `title`, `description`, `browseStore` — the layer is settled in
-  `tech-design.md`; the keys are work in this repo.
+  carrying `title` and `browseStore` — the layer is settled in `tech-design.md`;
+  the keys are work in this repo.
 - **No new block** — the page is an application assembly like
   `NotFoundPage`, not a `packages/ui` export.
 
