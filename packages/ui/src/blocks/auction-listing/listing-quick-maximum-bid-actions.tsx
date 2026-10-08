@@ -133,7 +133,7 @@ function ListingQuickMaximumBidActions({
 
   const presets = useMemo((): MaximumPreset[] => {
     const formatDelta = (deltaMinor: number) =>
-      `$${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
+      `${formatMoneyPrefix(view.currency, { locale })}${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
     const raiseDeltaTemplate = isLeadingWithMaximum
       ? copy.amountAboveMaximum
       : copy.amountAboveCurrent;

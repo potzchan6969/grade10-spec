@@ -28,10 +28,10 @@ const STEPS: NonNullable<AuctionWinnerOrderProps["progress"]>["steps"] = {
 };
 
 const INVOICE_LINES = [
-  { label: "Winning Bid", value: "$12,800.00" },
-  { label: "Buyer’s Premium", value: "$2,560.00" },
-  { label: "Shipping & Handling", value: "$180.00" },
-  { label: "Payment Processing Fee", value: "$545.00" },
+  { label: "Winning Bid", value: "HK$12,800.00" },
+  { label: "Buyer’s Premium", value: "HK$2,560.00" },
+  { label: "Shipping & Handling", value: "HK$180.00" },
+  { label: "Payment Processing Fee", value: "HK$545.00" },
 ];
 
 const DELIVERY = {
@@ -121,7 +121,7 @@ export const AwaitingSetup: Story = {
     },
     summary: {
       lines: [
-        { label: "Winning Bid", value: "$12,800.00" },
+        { label: "Winning Bid", value: "HK$12,800.00" },
         { label: "Shipping & Handling", value: "TBD", muted: true },
       ],
       total: { label: "Order Total", value: "TBD", muted: true },
@@ -263,7 +263,7 @@ export const SetupOverdue: Story = {
       },
     },
     summary: {
-      lines: [{ label: "Winning Bid", value: "$12,800.00" }],
+      lines: [{ label: "Winning Bid", value: "HK$12,800.00" }],
       total: { label: "Order Total", value: "TBD", muted: true },
     },
     paymentMethod: undefined,
@@ -348,7 +348,7 @@ export const Cancelled: Story = {
       },
     ],
     summary: {
-      lines: [{ label: "Winning Bid", value: "$12,800.00" }],
+      lines: [{ label: "Winning Bid", value: "HK$12,800.00" }],
       total: { label: "Order Total", value: "—" },
     },
     paymentMethod: undefined,
