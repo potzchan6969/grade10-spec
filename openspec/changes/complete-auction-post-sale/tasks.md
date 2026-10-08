@@ -22,7 +22,7 @@
 - [ ] 3.5 `stripeConfig` in mode `test` accepts only test keys; `createCheckoutSession` takes `expiresAt` and `paymentMethodTypes`; `retrieveCheckoutSession` and `expireCheckoutSession` on the port; the E2E fake session completes and expires; `packages/grade10-auction/backend/test/stripe/config.test.ts`, `apps/backend/grade10/auction/test/helpers/fakeStripe.ts`
 - [ ] 3.6 `orderProofReferences` feeds the orphan sweep; `repositories/orderComments.ts`; `packages/grade10-auction/backend/test/repositories/orderProofs.repo.test.ts`, `apps/backend/grade10/auction/test/db/sweeps/orphanedObjects.spec.ts`
 
-## 4. Money In and Proofs (grade10)
+## 4. Money In and Proofs (grade10) (owner: @htonyl)
 
 - [ ] 4.1 `cardPayments.ts`: `prepareCheckout` with a fresh session per click, attempt-keyed idempotency and the compare-and-set; `recordCheckoutPaid` writes money on every invoice state and flags per the table; `recordCheckoutClosed`, all behind `payWinnerInvoice` and the webhook; the webhook handler routes the four session events; `apps/backend/grade10/auction/test/db/webhooks/handleEvent.spec.ts`, `apps/backend/grade10/auction/test/db/webhooks/webhooks.spec.ts`
 - [ ] 4.2 `proofs.ts`: behind `uploadWinnerPaymentProof`, each file is sniffed by its bytes, stored under a content-addressed key and the deadline frozen; `reviewProof` returns with both reasons and the Proof not accepted letter, or confirms into `paid`; `readOrderProof`; `apps/backend/grade10/auction/test/db/admin/proofs.spec.ts`
