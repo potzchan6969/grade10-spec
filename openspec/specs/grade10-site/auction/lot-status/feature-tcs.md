@@ -1,6 +1,6 @@
 # grade10-site/auction/lot-status Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 3/7
 **Drafts styled:** 2026-09-30, tcs-rules r3.0
 
 ## grade10-site-auction-lot-status-US1: Collector sees whether a lot can still be bid on

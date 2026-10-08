@@ -1,6 +1,6 @@
 # shared/ui/site-chrome Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/9
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 **Out of suite:** none.
@@ -384,4 +384,3 @@ reimplementing its behavior.
 | `shared-ui-site-chrome-SC-34` | Bumped | It said the avatar sits with `accountEmail` above the items; it now says the avatar sits above `accountEmail`, as the page and `site-header.tsx:165-177` do. `shared-ui-site-chrome-US1-TC15-2` asserts that order |
 | `shared-ui-site-chrome-SC-35`, `shared-ui-site-chrome-US1-TC17-2` | Bumped; case carried from the durable suite | With no email the menu shows the label alone and no avatar (Q6). The durable `shared-ui-site-chrome-US1-TC17-1` asserted the label only, so it is carried here with the no-avatar result, and its marker narrows to the scenario it walks |
 | Contradictions | None | Where a case and a scenario state the same behaviour they agree |
-

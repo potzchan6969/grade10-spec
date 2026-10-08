@@ -1,6 +1,6 @@
 # grade10-site/auction/notifications Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/24
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## grade10-site-auction-notifications-US1: Collector hears a watched lot is opening

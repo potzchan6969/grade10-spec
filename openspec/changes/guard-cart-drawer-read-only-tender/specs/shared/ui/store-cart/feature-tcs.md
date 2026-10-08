@@ -1,6 +1,6 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/4
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
 ## shared-ui-store-cart-US9: Shopper reads tender options without applying them

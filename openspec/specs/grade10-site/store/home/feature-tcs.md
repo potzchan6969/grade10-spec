@@ -1,6 +1,6 @@
 # grade10-site/store/home Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 19/22
 **Drafts styled:** 2026-09-08, tcs-rules r2
 
 ## grade10-site-store-home-US1: Collector arrives at the store front door

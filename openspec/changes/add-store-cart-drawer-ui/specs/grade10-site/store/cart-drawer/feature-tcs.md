@@ -1,6 +1,6 @@
 # grade10-site/store/cart-drawer Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/33
 **Drafts styled:** 2026-09-29, tcs-rules r3.0
 
 ## grade10-site-store-cart-drawer-US01: Signed-in collector opens the current cart over the page

@@ -1,6 +1,6 @@
 # grade10-site/commerce/order-status Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/19
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-commerce-order-status-US1: Collector reads where an order stands

@@ -1,6 +1,6 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/28
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-sign-in-US8: Collector follows the link and the tab that asked carries on

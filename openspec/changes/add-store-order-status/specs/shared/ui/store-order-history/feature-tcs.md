@@ -1,6 +1,6 @@
 # shared/ui/store-order-history Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/2
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-ui-store-order-history-US1: Collector reviews active and past orders

@@ -1,6 +1,6 @@
 # grade10-site/site/navigation Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/22
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-site-navigation-US1: Collector reaches the surface an address names

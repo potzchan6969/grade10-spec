@@ -1,6 +1,6 @@
 # grade10-admin/console/user-directory Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/13
 **Drafts styled:** 2026-09-11, tcs-rules r3.0
 
 ## grade10-admin-console-user-directory-US1: Admin reviews who holds elevated grants

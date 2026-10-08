@@ -1,6 +1,6 @@
 # shared/ui/auction-record Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
 ## shared-ui-auction-record-US1: Content ownership

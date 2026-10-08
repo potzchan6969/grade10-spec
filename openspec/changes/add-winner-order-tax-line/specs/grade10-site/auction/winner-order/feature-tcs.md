@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-09-25, tcs-rules r4
 
 ## winner-order-US1: Winner settles a won lot

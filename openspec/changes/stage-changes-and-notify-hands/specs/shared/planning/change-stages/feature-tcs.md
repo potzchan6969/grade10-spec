@@ -1,6 +1,6 @@
 # shared/planning/change-stages Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/64
 **Drafts styled:** 2026-09-25, tcs-rules r3.0
 
 **Out of suite:**

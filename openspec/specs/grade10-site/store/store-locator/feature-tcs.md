@@ -1,6 +1,6 @@
 # grade10-site/store/store-locator Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-store-locator-US1: Collector finds the Hong Kong shop from chrome

@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-payment-method Test Cases
 
-**Status:** approved
+**Status:** approved · 9/9
 **Reviewed:** 2026-10-05, tcs-rules r4
 
 ## grade10-site-auction-bid-payment-method-US1: Collector bids on the card already linked

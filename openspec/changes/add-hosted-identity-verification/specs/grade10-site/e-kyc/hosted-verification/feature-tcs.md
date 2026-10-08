@@ -1,6 +1,6 @@
 # grade10-site/e-kyc/hosted-verification Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/25
 **Drafts styled:** 2026-09-04, tcs-rules r2
 
 ## grade10-site-e-kyc-hosted-verification-US1: Collector verifies their identity before travelling to the store

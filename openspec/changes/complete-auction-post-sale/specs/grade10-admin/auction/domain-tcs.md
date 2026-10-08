@@ -1,6 +1,6 @@
 # grade10-admin/auction Cross-Feature E2E Test Cases
 
-**Status:** reopened
+**Status:** reopened · 2/3
 **Reviewed:** 2026-10-05, tcs-rules r4, lapsed 2026-10-06
 **Drafts styled:** 2026-10-06, tcs-rules r4
 

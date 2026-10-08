@@ -1,6 +1,6 @@
 # shared/auth/sessions Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-sessions-US2: Operator ends a session

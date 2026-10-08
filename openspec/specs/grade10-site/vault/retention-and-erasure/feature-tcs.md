@@ -1,6 +1,6 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/35
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## Background

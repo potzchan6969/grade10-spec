@@ -1,6 +1,6 @@
 # grade10-site/store Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-09-28, tcs-rules r4
 
 ## grade10-site-store-e2e-US6: Collector opens an owned order from Your Orders

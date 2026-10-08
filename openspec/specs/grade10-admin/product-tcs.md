@@ -1,6 +1,6 @@
 # grade10-admin Cross-Domain E2E Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/2
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-e2e-US1: Operator starts a listing with its Cert's source media

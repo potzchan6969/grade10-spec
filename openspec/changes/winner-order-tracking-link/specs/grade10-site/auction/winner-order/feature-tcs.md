@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## winner-order-US2: Winner follows a settled lot to delivery

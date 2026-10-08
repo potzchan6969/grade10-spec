@@ -1,6 +1,6 @@
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/4
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-product-listing-US16: Collector opens a card from the listing

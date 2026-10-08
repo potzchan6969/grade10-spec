@@ -1,6 +1,6 @@
 # grade10-site/commerce/product-status Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/16
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-commerce-product-status-US1: Collector sees whether a card can be bought

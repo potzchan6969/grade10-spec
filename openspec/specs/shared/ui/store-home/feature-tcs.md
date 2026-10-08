@@ -1,6 +1,6 @@
 # shared/ui/store-home Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## shared-ui-store-home-US1: What the store home blocks hold

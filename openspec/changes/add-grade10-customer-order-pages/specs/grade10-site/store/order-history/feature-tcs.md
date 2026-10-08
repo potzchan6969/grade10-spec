@@ -1,6 +1,6 @@
 # grade10-site/store/order-history Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/9
 **Drafts styled:** 2026-09-08, tcs-rules r2
 
 ## grade10-site-store-order-history-US1: Collector reviews active and past orders

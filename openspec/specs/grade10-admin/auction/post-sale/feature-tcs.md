@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/91
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## post-sale-US1: Operator works the listing queue by outcome

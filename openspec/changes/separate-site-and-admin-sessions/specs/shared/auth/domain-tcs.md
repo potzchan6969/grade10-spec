@@ -1,6 +1,6 @@
 # shared/auth Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-e2e-US2: Collector's one sign-in covers this brand and goes nowhere else

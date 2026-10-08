@@ -1,6 +1,6 @@
 # grade10-site/store/wallet-member-card Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/43
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Out of suite:** grade10-site-store-wallet-member-card-SC-61, grade10-site-store-wallet-member-card-SC-68, grade10-site-store-wallet-member-card-SC-69, grade10-site-store-wallet-member-card-SC-70, grade10-site-store-wallet-member-card-SC-72, grade10-site-store-wallet-member-card-SC-73, grade10-site-store-wallet-member-card-SC-74
 

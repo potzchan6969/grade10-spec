@@ -1,6 +1,6 @@
 # shared/ui/site-chrome Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/4
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## shared-ui-site-chrome-US1: Shared chrome contract

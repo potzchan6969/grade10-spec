@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/16
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:** none.

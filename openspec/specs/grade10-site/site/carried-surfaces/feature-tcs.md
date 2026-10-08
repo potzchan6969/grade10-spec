@@ -1,6 +1,6 @@
 # grade10-site/site/carried-surfaces Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/53
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-site-carried-surfaces-US1: Collector reads a site whose shop has not opened

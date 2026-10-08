@@ -1,6 +1,6 @@
 # grade10-site/store Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-e2e-US1: Collector enters a collection and opens a product

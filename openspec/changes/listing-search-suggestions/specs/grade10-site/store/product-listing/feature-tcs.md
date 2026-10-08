@@ -1,6 +1,6 @@
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-09-11, tcs-rules r3.0
 
 ## grade10-site-store-product-listing-US10: Collector finds a card by typing in search

@@ -1,6 +1,6 @@
 # grade10-site/loyalty/programme Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/30
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-loyalty-programme-US4: Member runs their membership from one surface

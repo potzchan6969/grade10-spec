@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-panel-enrollment Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 13/20
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-auction-bid-panel-enrollment-US1: Collector signs in to bid on a lot

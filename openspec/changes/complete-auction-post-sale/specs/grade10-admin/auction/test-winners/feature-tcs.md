@@ -1,6 +1,6 @@
 # grade10-admin/auction/test-winners Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:** grade10-admin-auction-test-winners-SC-13 — held by the admin console's bundle check, which fails a production build that carries the Test tab's code

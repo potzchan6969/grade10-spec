@@ -1,6 +1,6 @@
 # grade10-site/auction/account-record Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 7/35
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-auction-account-record-US1: Mark a listing now and find it again later

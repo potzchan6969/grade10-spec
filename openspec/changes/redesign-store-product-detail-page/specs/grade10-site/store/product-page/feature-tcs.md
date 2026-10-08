@@ -1,6 +1,6 @@
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/6
 **Drafts styled:** 2026-09-10, tcs-rules r3.0
 
 ## grade10-site-store-product-page-US6: Collector reviews a product's catalogue context

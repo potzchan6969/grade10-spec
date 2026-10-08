@@ -1,6 +1,6 @@
 # grade10-site/loyalty/programme Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/99
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-site-loyalty-programme-US1: Member earns points on qualifying spend

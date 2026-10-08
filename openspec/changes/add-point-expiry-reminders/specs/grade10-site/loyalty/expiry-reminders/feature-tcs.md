@@ -1,6 +1,6 @@
 # grade10-site/loyalty/expiry-reminders Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/20
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## Background

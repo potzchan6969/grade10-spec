@@ -1,6 +1,6 @@
 # grade10-admin/vault/operator-queue Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 26/124
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-admin-vault-operator-queue-US1: Operator opens the shop and sees what is waiting

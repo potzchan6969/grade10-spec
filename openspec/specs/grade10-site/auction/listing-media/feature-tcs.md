@@ -1,6 +1,6 @@
 # grade10-site/auction/listing-media Test Cases
 
-**Status:** reopened
+**Status:** reopened · 21/32
 **Reviewed:** 2026-09-07, lapsed 2026-10-05
 **Drafts styled:** 2026-10-06, tcs-rules r4
 

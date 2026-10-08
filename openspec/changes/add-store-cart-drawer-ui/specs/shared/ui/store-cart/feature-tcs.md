@@ -1,6 +1,6 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## shared-ui-store-cart-US18: Shopper waits for an accepted tender choice

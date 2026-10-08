@@ -1,6 +1,6 @@
 # grade10-admin/auction/featured Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/12
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-featured-US1: Operator fills a Featured slot

@@ -1,6 +1,6 @@
 # grade10-site/auction/listing-media Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/5
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-auction-listing-media-US5: Collector views a listing's gallery images

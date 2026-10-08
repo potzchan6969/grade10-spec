@@ -1,6 +1,6 @@
 # shared/ui/invoice-and-receipt-pdf Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/42
 **Drafts styled:** 2026-09-23, tcs-rules r3
 
 ## shared-ui-invoice-and-receipt-pdf-US1: Invoice and Receipt PDF component contract

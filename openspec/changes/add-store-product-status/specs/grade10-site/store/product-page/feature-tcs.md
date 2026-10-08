@@ -1,6 +1,6 @@
 # grade10-site/store/product-page Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-product-page-US1: Collector reads a card at its own address

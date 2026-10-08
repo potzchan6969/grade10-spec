@@ -1,6 +1,6 @@
 # grade10-site/auction/auto-bidding Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 4/24
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-auction-auto-bidding-US1: Collector commits a maximum on an open listing

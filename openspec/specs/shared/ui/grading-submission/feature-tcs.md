@@ -1,6 +1,6 @@
 # shared/ui/grading-submission Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## Background

@@ -1,6 +1,6 @@
 # shared/auth/users Test Cases
 
-**Status:** approved
+**Status:** approved · 44/44
 **Reviewed:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-users-US1: Operator lists people in the identity directory

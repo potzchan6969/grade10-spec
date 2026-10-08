@@ -1,6 +1,6 @@
 # grade10-site/auction/notifications-order Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/14
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
 **Out of suite:** Proof-not-accepted and bank-transfer reminder holds —

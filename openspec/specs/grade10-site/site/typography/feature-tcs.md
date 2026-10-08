@@ -1,6 +1,6 @@
 # grade10-site/site/typography Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/5
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## grade10-site-site-typography-US1: Every surface answers the brand-sans contract

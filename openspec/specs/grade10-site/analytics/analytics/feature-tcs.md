@@ -1,6 +1,6 @@
 # grade10-site/analytics Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 12/29
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 **Out of suite:** none — every Feature set root group this change introduces

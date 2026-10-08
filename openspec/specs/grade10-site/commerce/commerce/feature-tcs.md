@@ -1,6 +1,6 @@
 # grade10-site/commerce/commerce Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/4
 **Drafts styled:** 2026-09-05, tcs-rules r2
 
 ## grade10-site-commerce-commerce-US6: Shopper meets the identity bar at checkout

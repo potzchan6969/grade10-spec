@@ -1,6 +1,6 @@
 # grade10-site/vault/identity-check Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/16
 **Drafts styled:** 2026-09-04, tcs-rules r2
 
 ## grade10-site-vault-identity-check-US1: Operator opens a case for a collector who verified before arriving

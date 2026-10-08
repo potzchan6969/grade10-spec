@@ -1,6 +1,6 @@
 # grade10-site/store/membership Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-membership-US2: Member identifies and spends at the till

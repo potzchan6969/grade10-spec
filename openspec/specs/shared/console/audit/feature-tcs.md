@@ -1,6 +1,6 @@
 # shared/console/audit Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/5
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## shared-console-audit-US1: Auditor isolates writes on the merged trail

@@ -1,6 +1,6 @@
 # grade10-site/auction/account-record Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
 ## grade10-site-auction-account-record-US8: Winner revisits a partially paid order

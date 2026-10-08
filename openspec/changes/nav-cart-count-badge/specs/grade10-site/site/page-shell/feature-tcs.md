@@ -1,6 +1,6 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/17
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## grade10-site-site-page-shell-US2: Collector sees the chrome before the session resolves

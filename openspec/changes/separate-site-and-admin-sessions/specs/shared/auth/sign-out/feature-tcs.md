@@ -1,6 +1,6 @@
 # shared/auth/sign-out Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-sign-out-US1: Collector or operator signs out and lands signed out

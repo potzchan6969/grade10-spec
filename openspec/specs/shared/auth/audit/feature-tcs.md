@@ -1,6 +1,6 @@
 # shared/auth/audit Test Cases
 
-**Status:** approved
+**Status:** approved · 22/22
 **Reviewed:** 2026-10-07, tcs-rules r4
 
 ## shared-auth-audit-US1: Operator's identity action is recorded

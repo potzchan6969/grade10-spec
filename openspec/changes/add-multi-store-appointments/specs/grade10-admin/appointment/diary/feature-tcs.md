@@ -1,6 +1,6 @@
 # grade10-admin/appointment/diary Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/26
 **Drafts styled:** 2026-09-05, tcs-rules r2
 
 ## grade10-admin-appointment-diary-US1: Operator opens a shop for bookings
