@@ -206,13 +206,10 @@ function SlotCalendar({
         labelNext: () => copy.nextMonth,
       }}
       mode="single"
+      required
       month={dateFromMonth(month)}
       onMonthChange={(date) => onMonthChange(monthFromDate(date))}
-      onSelect={(date) => {
-        if (date) {
-          onSelectDay(dayFromDate(date));
-        }
-      }}
+      onSelect={(date) => onSelectDay(dayFromDate(date))}
       selected={selectedDate ? dateFromDay(selectedDate) : undefined}
       startMonth={minMonth ? dateFromMonth(minMonth) : undefined}
       today={today}

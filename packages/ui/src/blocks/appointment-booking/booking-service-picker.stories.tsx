@@ -56,6 +56,25 @@ export const Selected: Story = {
   },
 };
 
+/** A fresh pick reports once; picking the ticked service again reports again,
+ * so Back then Continue is never stuck. */
+export const Repick: Story = {
+  args: { selectedId: "svc_grading" },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Vault Drop-Off/ }),
+    );
+    expect(args.onSelect).toHaveBeenCalledTimes(1);
+    expect(args.onSelect).toHaveBeenLastCalledWith("svc_vault_drop_off");
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    );
+    expect(args.onSelect).toHaveBeenCalledTimes(2);
+    expect(args.onSelect).toHaveBeenLastCalledWith("svc_grading");
+  },
+};
+
 export const Loading: Story = {
   args: { services: { status: "loading" } },
 };

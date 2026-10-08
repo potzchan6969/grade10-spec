@@ -46,6 +46,9 @@ function BookingServicePicker({
                 className="h-full items-stretch"
                 description={service.durationLabel}
                 key={service.id}
+                onClick={() => {
+                  if (service.id === selectedId) onSelect(service.id);
+                }}
                 title={service.name}
                 value={service.id}
               />
