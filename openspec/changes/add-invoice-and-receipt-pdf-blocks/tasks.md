@@ -97,7 +97,7 @@ Amendment (`decisions.md` Q31-Q35, Q38, Q39). Replaces the lot title and the Des
 - [ ] 9.4 Move every in-store consumer to the new fields so the store compiles after this group alone: the three existing test fixtures, the block's `invoice-pdf.stories.tsx` and `receipt-pdf.stories.tsx`, and `apps/preview`'s `winner-order.invoice-pdf.stories.tsx` and `winner-order.receipt-pdf.stories.tsx`. Each sample becomes one item, with Winning Bid and Buyer's Premium out of `lineItems`, and the two `WithTax` stories supply Tax as `taxLine` and not as a `lineItems` entry; the story titles stay
 - [ ] 9.5 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test && pnpm --filter @grade10/ui run test:stories && pnpm run typecheck && pnpm run lint`
 
-## 10. Pages for a long item table (grade10-spec)
+## 10. Pages for a long item table (grade10-spec) (owner: @seankcw)
 
 Amendment (`decisions.md` Q34, Q36, Q38, Q39). Needs group 9 landed. Q36 is decided: the issuer block sits on the last page only, with no page numbers or continuation notes. 10.2 rewrites the spacing lines of Bank details, the Payment section and the Payment breakdown, so the Design Override check stops it too and its commit carries its own `Design-Override:` line, which the person confirms.
 
