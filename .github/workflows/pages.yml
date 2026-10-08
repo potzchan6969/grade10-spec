@@ -1,8 +1,10 @@
 name: Pages
 
 # A pull request that adds or changes an HTML page under openspec/changes
-# uploads each one to the CI artifacts bucket, served behind the company's
-# Cloudflare login, and keeps one comment with the links.
+# uploads each one to the e2e reports bucket, which grade10's
+# scripts/e2e/publish-report.sh also writes, and keeps one comment with the
+# links. The bucket expires everything under reports/ after 30 days, and its
+# Worker serves it behind the team's Cloudflare login.
 # `gh workflow run pages -f pr=<n>` publishes on demand.
 
 on:
@@ -24,9 +26,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  BUCKET: 9gag-ci-artifacts
-  HOST: https://ci-artifacts.9gaginc.com/s3
-  ACCESS_LOGIN: https://9gaginc.cloudflareaccess.com/cdn-cgi/access/login/ci-artifacts.9gaginc.com
+  BUCKET: acetrader-e2e-reports
+  HOST: https://e2e-reports.memeland-qa.9gaginc.com
+  ACCESS_LOGIN: https://memeland-qa.cloudflareaccess.com/cdn-cgi/access/login/e2e-reports.memeland-qa.9gaginc.com
 
 jobs:
   publish:
@@ -37,9 +39,10 @@ jobs:
       contents: read
       pull-requests: write
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: ${{ secrets.E2E_REPORTS_R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.E2E_REPORTS_R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ACCOUNT_ID: ${{ secrets.E2E_REPORTS_R2_ACCOUNT_ID }}
       GH_TOKEN: ${{ github.token }}
       PR: ${{ github.event.pull_request.number || inputs.pr }}
     steps:
@@ -50,21 +53,21 @@ jobs:
           path: pr
           persist-credentials: false
 
-      - name: Require AWS keys
+      - name: Require R2 keys
         run: |
-          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
-            echo "::error::The AWS keys are empty here. A pull request from a fork gets no secrets; publish it with workflow_dispatch from a branch of this repository."
+          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$R2_ACCOUNT_ID" ]; then
+            echo "::error::The E2E_REPORTS_R2_* secrets are empty here. A pull request from a fork gets no secrets; publish it with workflow_dispatch from a branch of this repository."
             exit 1
           fi
 
-      # A page is private to the company. Uploading to a host that Access does
+      # A page is private to the team. Uploading to a host that Access does
       # not guard would publish it to anyone with the link.
       - name: Require Cloudflare Access on the host
         run: |
-          location=$(curl -sS -o /dev/null -w '%{redirect_url}' "$HOST/grade10-spec/pr-$PR/")
+          location=$(curl -sS -o /dev/null -w '%{redirect_url}' "$HOST/reports/grade10-spec/pr-$PR/")
           case "$location" in
             "$ACCESS_LOGIN"*) ;;
-            *) echo "::error::$HOST answered without the company's Cloudflare Access login."; exit 1 ;;
+            *) echo "::error::$HOST answered without the team's Cloudflare Access login."; exit 1 ;;
           esac
 
       # Only a regular file the pull request commits is a page: a symlink would
@@ -77,8 +80,8 @@ jobs:
           : > links.md
           while read -r path; do
             [ "$(git -C pr ls-files -s -- "$path" | cut -d' ' -f1)" = 100644 ] || { echo "::warning::$path is not a regular file; skipped."; continue; }
-            key="grade10-spec/pr-$PR/$path"
-            aws s3 cp "pr/$path" "s3://$BUCKET/$key" --content-type "text/html; charset=utf-8" --cache-control "no-store" --only-show-errors
+            key="reports/grade10-spec/pr-$PR/$path"
+            aws s3 cp "pr/$path" "s3://$BUCKET/$key" --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" --content-type "text/html; charset=utf-8" --cache-control "no-store" --only-show-errors
             echo "- [\`$path\`]($HOST/$(jq -rn --arg k "$key" '$k | split("/") | map(@uri) | join("/")'))" >> links.md
           done < pages.txt
           if [ ! -s links.md ]; then echo "No HTML page under openspec/changes in #$PR."; exit 0; fi
@@ -90,7 +93,7 @@ jobs:
           marker='<!-- pages-workflow -->'
           {
             echo "$marker"
-            echo "**Review pages** - behind the company's Cloudflare login, uploaded from \`$(git -C pr rev-parse --short=9 HEAD)\`:"
+            echo "**Review pages** - behind the team's Cloudflare login, expire 30 days after this upload from \`$(git -C pr rev-parse --short=9 HEAD)\`:"
             echo
             cat links.md
           } > comment.md
