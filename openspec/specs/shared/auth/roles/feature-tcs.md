@@ -693,7 +693,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -789,13 +789,13 @@ Runs once per row of **Test data**.
 
 * admin(holds `staff` and `treasurer`) is on <grade10 admin vault url>.
 * <second operator> holds `treasurer` only.
-* <vault case> is awaiting an agreed cost.
+* <vault case> is financed, has a recorded valuation and no offer.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <vault case> | A vault case in progress with no cost agreed |
+| <vault case> | A financed vault case with a recorded valuation and no offer |
 | <second operator> | Another operator, holding `treasurer` only |
 
 **Steps:**
@@ -807,7 +807,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The offer is made.
-* Step 2 is refused and <vault case> shows no payout.
+* Step 2's dialog reads "Two people" as unmet, naming the admin as the one who priced it; confirming is refused and <vault case> shows no payout.
+* In step 3, the dialog reads "Two people" as met.
 * Step 3 is allowed and <vault case> shows the payout.
 
 ## Settled
