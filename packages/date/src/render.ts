@@ -45,6 +45,18 @@ export const PATTERNS = {
   weekday: "EEE d MMM",
   /** A slot near enough that its weekday is what the reader goes by. */
   weekdayMoment: "EEE d MMM, HH:mm",
+  /** A day within the reader's current year, which goes unsaid. */
+  shortDay: "d MMM",
+  /** A month a report or a chart's tick is cut to. */
+  month: "MMM yyyy",
+  /** A month named in full, heading a calendar or a statement. */
+  monthName: "MMMM yyyy",
+  /** A month under a heading that states its year: a chart's tick. */
+  monthAlone: "MMM",
+  /** A month named in full under a heading that states its year. */
+  monthNameAlone: "MMMM",
+  /** A day named in full, heading a page about that day. */
+  weekdayDay: "EEEE d MMM yyyy",
 } as const;
 
 /**

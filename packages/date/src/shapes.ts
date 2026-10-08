@@ -69,3 +69,36 @@ export function formatWeekdayMoment(
 ): string {
   return render(at, PATTERNS.weekdayMoment, opts);
 }
+
+/** A day in the reader's current year, the year unsaid: `9 Oct`. */
+export function formatShortDay(at: Instant, opts: DateFormat = {}): string {
+  return render(at, PATTERNS.shortDay, opts);
+}
+
+/** The month an instant falls in: `Oct 2026`. */
+export function formatMonth(at: Instant, opts: DateFormat = {}): string {
+  return render(at, PATTERNS.month, opts);
+}
+
+/** The month an instant falls in, named in full: `October 2026`. */
+export function formatMonthName(at: Instant, opts: DateFormat = {}): string {
+  return render(at, PATTERNS.monthName, opts);
+}
+
+/** The month alone, under a heading that states the year: `Oct`. */
+export function formatMonthAlone(at: Instant, opts: DateFormat = {}): string {
+  return render(at, PATTERNS.monthAlone, opts);
+}
+
+/** The month alone, named in full: `October`. */
+export function formatMonthNameAlone(
+  at: Instant,
+  opts: DateFormat = {},
+): string {
+  return render(at, PATTERNS.monthNameAlone, opts);
+}
+
+/** The day an instant falls on, named in full: `Thursday 15 Oct 2026`. */
+export function formatWeekdayDay(at: Instant, opts: DateFormat = {}): string {
+  return render(at, PATTERNS.weekdayDay, opts);
+}
