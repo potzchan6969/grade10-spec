@@ -2020,10 +2020,11 @@ tolerance prompt. A payment SHALL never be discarded or silently rounded.
 
 ### Requirement: Reissue and Cancel are refused once a payment is recorded
 
-Once any payment is recorded against an invoice, Grade10 SHALL refuse Reissue
-and Cancel order on that order, so the invoice's address, method and total stay
-fixed against the money collected. Record payment SHALL stay available until
-the invoice is closed as Paid.
+Once a payment that counts toward the balance is recorded against an invoice,
+Grade10 SHALL refuse Reissue and Cancel order on that order, so the invoice's
+address, method and total stay fixed against the money collected. A payment
+that counts toward nothing SHALL block neither. Record payment SHALL stay
+available until the invoice is closed as Paid.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-pxo rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-217 - A recorded payment fixes the invoice
@@ -2033,6 +2034,15 @@ the invoice is closed as Paid.
 - **WHEN** the operator attempts Reissue or Cancel order
 - **THEN** Grade10 refuses both and the invoice is unchanged
 - **AND** Record payment is still offered
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-mhe rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-242 - Money that counts toward nothing leaves Reissue and Cancel open
+**Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
+
+- **GIVEN** two orders in Pending Payment, each whose only recorded payment counts toward nothing
+- **WHEN** the operator reissues the first and cancels the second, each with a reason
+- **THEN** the first reads Pending Payment on a new invoice, and the second reads Cancelled
+- **AND** each payment is still recorded
 
 ### Requirement: Only an operator settles an expired invoice
 

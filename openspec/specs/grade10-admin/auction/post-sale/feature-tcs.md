@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** pending-review · 0/93
+**Status:** pending-review · 0/94
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## post-sale-US1: Operator works the listing queue by outcome
@@ -2631,6 +2631,38 @@ Runs once per row of **Test data**.
 * Steps 1 and 2 are refused and the invoice's address, method and total are unchanged.
 * Step 3 offers Record payment and the order remains Partially Paid.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-dwh rev=1 covers=g10adm.auction-post-sale.SC-mhe -->
+### post-sale-US12-TC7-1: Money that counts toward nothing leaves Reissue and Cancel open
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-12
+
+**Pre-conditions:**
+
+* `<first order>` and `<second order>` are in Pending Payment, and each one's only recorded payment counts toward nothing.
+* admin(holds payment-processing) is on the order detail.
+
+**Steps:**
+
+1. Reissue `<first order>`'s invoice with a reason.
+2. Cancel `<second order>` with a reason.
+
+**Expected Results:**
+
+* Step 1 is accepted and `<first order>` reads Pending Payment on a new invoice.
+* Step 2 is accepted and `<second order>` reads Cancelled.
+* Each payment is still recorded on its order.
+
 ---
 
 ## post-sale-US13: Operator cancels an order knowing what follows
@@ -3445,3 +3477,10 @@ of any requirement, and a scenario draft written without sight of this suite.
 - **Revised** - `post-sale-US7-TC25-2`, from `-TC25-1`: the bank transfer quote no longer sets the provider's fees as unreadable, since no send reads them -> `grade10-admin-auction-post-sale-SC-117`, `SC-118`, `SC-119`
 - **Deprecated** - `post-sale-US7-TC11-1` and `-TC12-1` read the provider's fees. `post-sale-US7-TC47-1` replaces the first: switching to card prices the fee from the card rule -> `grade10-admin-auction-post-sale-SC-125`. `post-sale-US7-TC48-1` replaces the second: a card reissue is refused with `CARD_FEE_UNSET` when the currency has no card rule -> `grade10-admin-auction-post-sale-SC-126`
 - **No longer carried unchanged** - `grade10-admin-auction-post-sale-SC-69`, `SC-70`, `SC-117`, `SC-119`, `SC-125` and `SC-126`, listed as unchanged by the run above, now read the card rule and are reached by the cases in this run. They keep their ids and titles: `validate:changes` refuses a MODIFIED block that drops or retitles a durable scenario, so `SC-70` and `SC-126` carry a note that their titles are historical, and none is removed
+
+| Finding | Disposition |
+| --- | --- |
+| Overpayment, close-or-keep boundary and the refusal below the tolerance | **Folded in:** `grade10-admin-auction-post-sale-SC-140`–`SC-144` |
+| Reissue and Cancel refused once a payment is recorded | **Folded in:** `grade10-admin-auction-post-sale-SC-217` |
+| Money that counts toward nothing blocks neither Reissue nor Cancel | **Folded in:** `grade10-admin-auction-post-sale-SC-242`; carried here for `complete-auction-post-sale`, since one in-flight change edits a requirement at a time |
+| Partially Paid sits in Waiting on winner, not Needs action | **Deferred:** `complete-auction-post-sale` modifies "The queue shows one outcome per lot" and carries it; one in-flight change may edit a requirement at a time |
