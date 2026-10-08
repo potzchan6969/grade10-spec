@@ -1,6 +1,6 @@
 # grade10-site/auction/order-status Test Cases
 
-**Status:** pending-review · 0/2
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
 ## auction-status-US7: Partially Paid status ends self-service Pay for good

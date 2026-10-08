@@ -1,6 +1,6 @@
 # grade10-site/auction/notifications-order Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
 **Out of suite:** none of this change's scenarios; the scenarios it restates unchanged keep their durable cases.
