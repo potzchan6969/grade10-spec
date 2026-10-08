@@ -19,11 +19,12 @@ import { useState } from "react";
 import {
   formatHkd,
   type IntakeItemRow,
+  intakeItemCardStoryId,
   isVaulted,
   SERVICE_LABELS,
 } from "./intake-content";
 import { VAULT_PORTFOLIO_STORY_ID } from "./vault-content";
-import { navigateToStory } from "./workbench-story-nav";
+import { navigateToStory, storyHref } from "./workbench-story-nav";
 
 function itemBadgeVariant(
   status: string,
@@ -41,9 +42,10 @@ function formatHandInDate(ms: number): string {
 }
 
 function ScanThumbs({ item }: { item: IntakeItemRow }) {
-  const [openSrc, setOpenSrc] = useState<string | null>(null);
+  const [openScanId, setOpenScanId] = useState<string | null>(null);
   const primary = item.scanSrcs[0];
   const extra = item.scanSrcs.length - 1;
+  const openScan = item.scanSrcs.find((scan) => scan.id === openScanId);
 
   if (!primary) return null;
 
@@ -54,14 +56,14 @@ function ScanThumbs({ item }: { item: IntakeItemRow }) {
         type="button"
         onClick={(event) => {
           event.stopPropagation();
-          setOpenSrc(primary);
+          setOpenScanId(primary.id);
         }}
       >
         <img
           alt={`Scan of ${item.name}`}
           className="size-full object-contain p-1.5"
           height={96}
-          src={primary}
+          src={primary.src}
           width={96}
         />
         {extra > 0 ? (
@@ -70,8 +72,8 @@ function ScanThumbs({ item }: { item: IntakeItemRow }) {
           </span>
         ) : null}
       </button>
-      {openSrc ? (
-        <Dialog onOpenChange={(open) => !open && setOpenSrc(null)} open>
+      {openScan ? (
+        <Dialog onOpenChange={(open) => !open && setOpenScanId(null)} open>
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle>{item.name}</DialogTitle>
@@ -82,24 +84,23 @@ function ScanThumbs({ item }: { item: IntakeItemRow }) {
                   <img
                     alt={`Enlarged scan of ${item.name}`}
                     className="max-h-[60vh] w-full object-contain"
-                    src={openSrc}
+                    src={openScan.src}
                   />
                 </div>
                 {item.scanSrcs.length > 1 ? (
                   <HStack className="flex-wrap" gap="sm" vAlign="center">
-                    {item.scanSrcs.map((src, index) => (
+                    {item.scanSrcs.map((scan, index) => (
                       <button
-                        // biome-ignore lint/suspicious/noArrayIndexKey: Front and back occupy fixed slots and may use the same preview image.
-                        key={`${item.itemId}-dlg-${index}`}
+                        key={scan.id}
                         className="size-14 cursor-pointer overflow-hidden rounded-(--radius-lg) border border-border bg-muted p-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 data-[active=true]:ring-2 data-[active=true]:ring-ring"
-                        data-active={src === openSrc}
+                        data-active={scan.id === openScanId}
                         type="button"
-                        onClick={() => setOpenSrc(src)}
+                        onClick={() => setOpenScanId(scan.id)}
                       >
                         <img
                           alt={`Scan ${index + 1}`}
                           className="size-full object-contain"
-                          src={src}
+                          src={scan.src}
                         />
                       </button>
                     ))}
@@ -140,36 +141,36 @@ function IntakeItemCard({
       padding={false}
     >
       <CardContent className="flex flex-col gap-0 p-0">
-        {/* biome-ignore lint/a11y/noStaticElementInteractions: The card header has a link role and keyboard handling only when onOpen is supplied. */}
-        <div
-          className={
-            onOpen
-              ? "flex cursor-pointer flex-col gap-4 px-4 pt-4 pb-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:px-5 sm:pt-5"
-              : "flex flex-col gap-4 px-4 pt-4 pb-4 sm:px-5 sm:pt-5"
-          }
-          role={onOpen ? "link" : undefined}
-          tabIndex={onOpen ? 0 : undefined}
-          onClick={onOpen}
-          onKeyDown={
-            onOpen
-              ? (event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    onOpen();
-                  }
-                }
-              : undefined
-          }
-        >
+        <div className="flex flex-col gap-4 px-4 pt-4 pb-4 sm:px-5 sm:pt-5">
           <div className="flex items-start justify-between gap-3">
-            <Text
-              as="h2"
-              className="font-heading text-pretty tracking-tight"
-              size="lg"
-              weight="medium"
-            >
-              {item.name}
-            </Text>
+            {onOpen ? (
+              <a
+                className="min-w-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                href={storyHref(intakeItemCardStoryId(item))}
+                onClick={(event) => {
+                  event.preventDefault();
+                  onOpen();
+                }}
+              >
+                <Text
+                  as="h2"
+                  className="font-heading text-pretty tracking-tight"
+                  size="lg"
+                  weight="medium"
+                >
+                  {item.name}
+                </Text>
+              </a>
+            ) : (
+              <Text
+                as="h2"
+                className="font-heading text-pretty tracking-tight"
+                size="lg"
+                weight="medium"
+              >
+                {item.name}
+              </Text>
+            )}
             <Badge variant={itemBadgeVariant(item.status)}>{item.status}</Badge>
           </div>
 

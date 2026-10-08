@@ -13,7 +13,7 @@ import {
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { createElement, useEffect, useMemo, useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
@@ -134,9 +134,8 @@ function ProductListPage() {
   const [promoState, setPromoState] = useState<PromoState>({
     status: "collapsed",
   });
-  const [resultsStatus, setResultsStatus] = useState<"loading" | "ready">(
-    "loading",
-  );
+  const [requestGeneration, setRequestGeneration] = useState(0);
+  const [completedGeneration, setCompletedGeneration] = useState(-1);
 
   const productCatalog = useMemo(
     () =>
@@ -219,11 +218,11 @@ function ProductListPage() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: Each committed search, sort, or filter change restarts the fixture loading delay.
   useEffect(() => {
     const timeout = setTimeout(
-      () => setResultsStatus("ready"),
+      () => setCompletedGeneration(requestGeneration),
       RESULTS_LOAD_MS,
     );
     return () => clearTimeout(timeout);
-  }, [committedSearch, sort, selection]);
+  }, [requestGeneration]);
 
   const handleFilterChange = (
     groupId: string,
@@ -258,7 +257,7 @@ function ProductListPage() {
   const resetResults = () => {
     setVisibleCount(PAGE_SIZE);
     setLoadingMore(false);
-    setResultsStatus("loading");
+    setRequestGeneration((generation) => generation + 1);
   };
 
   const handleSearchSuggestionSelect = (
@@ -378,7 +377,7 @@ function ProductListPage() {
         }}
         resultCount="100 Products"
         results={
-          resultsStatus === "loading"
+          completedGeneration !== requestGeneration
             ? { status: "loading" }
             : { status: "ready", data: productData }
         }
@@ -449,6 +448,36 @@ export const Default: Story = {
     expect(
       canvas.getByRole("button", { name: 'Search: "abyss"' }),
     ).toBeInTheDocument();
+  },
+};
+
+/** A second query change while loading restarts the simulated results request. */
+export const RapidChangesRestartResults: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    const results = canvas.getByRole("region", { name: "Products" });
+    const field = canvas.getByRole("combobox", { name: "Search products" });
+
+    await user.type(field, "abyss");
+    await user.keyboard("{Enter}");
+    expect(results).toHaveAttribute("aria-busy", "true");
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    await user.click(
+      canvas.getByRole("button", { name: "Sort by latest product" }),
+    );
+    const menu = await within(document.body).findByRole("menu");
+    await user.click(
+      within(menu).getByRole("menuitem", { name: "Lowest price" }),
+    );
+
+    expect(results).toHaveAttribute("aria-busy", "true");
+    await new Promise((resolve) => setTimeout(resolve, RESULTS_LOAD_MS - 100));
+    expect(results).toHaveAttribute("aria-busy", "true");
+    await waitFor(() =>
+      expect(results).not.toHaveAttribute("aria-busy", "true"),
+    );
   },
 };
 
