@@ -1440,49 +1440,6 @@ Runs once per row of **Test data**.
 
 * The new invoice carries Payment Processing Fee <fee reads>.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-jn5 rev=3 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
-### post-sale-US7-TC25-3: The first bank transfer quote asks for the fee
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Quote and send
-
-**Pre-conditions:**
-
-* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
-* <order_1> reads Preparing Invoice with bank transfer chosen by the winner.
-
-**Test data:**
-
-| <fee> | <outcome> |
-| --- | --- |
-| blank | The invoice is sent; its fee reads Free |
-| -100 | The send is refused; no invoice is issued |
-| 0 | The invoice is sent; its fee reads Free |
-| more than the Subtotal | The invoice is sent with that fee, not capped |
-
-**Steps:**
-
-1. Open the quote.
-2. Enter Shipping & Handling and <fee>.
-3. Send the invoice.
-
-**Expected Results:**
-
-* Step 1 names bank transfer and asks for a bank transfer fee, its field empty.
-* <outcome>
-
 ### post-sale-US7-TC39-1: A reissue leaves the winner's suspension standing
 
 **Classification:**
@@ -2790,5 +2747,5 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 **Run:** 2026-10-08, amendment for acceptance ahead of the dependencies, not blind: the fee requirement, the durable suite, `add-winner-order-tax-line`'s and `add-winner-partial-payment`'s post-sale suites and the cases above. The card-rule fee on the quote and the reissue is now `add-winner-order-tax-line`'s (its Q17), and the guards that count only a payment toward the balance are `add-winner-partial-payment`'s (its Q21), so this suite stops carrying what those two prove.
 
 - **Handed over** - this suite's copies of `post-sale-US7-TC11-1` and `-TC12-1`, deprecated, are dropped: `add-winner-order-tax-line` deprecates them and replaces them with `post-sale-US7-TC47-1` and `-TC48-1`
-- **Revised** - `post-sale-US7-TC25-3`, from `add-winner-order-tax-line`'s `-TC25-2`: a blank bank transfer fee is sent as Free, since a blank fee is zero under "The payment processing fee follows the invoice's payment method" -> `grade10-admin-auction-post-sale-SC-117`, `SC-119`. `add-winner-order-tax-line`'s `SC-118` and its quote still refuse a blank fee; that disagreement is raised for the planning owner
+- **Carried by add-winner-order-tax-line** - the blank-is-zero bank transfer fee and `post-sale-US7-TC25-2` (its Q18), so this suite carries no copy of that case.
 - **Kept** - `grade10-admin-auction-post-sale-SC-167` and `SC-168` stay with `US5-TC14-1` and `US5-TC13-1`: `SC-167` is the USD launch case with no card rule and `SC-168` the read-only fee with its rule, which `SC-70` and `SC-69` do not state
