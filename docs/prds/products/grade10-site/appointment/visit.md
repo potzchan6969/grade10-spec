@@ -14,7 +14,7 @@ The manage link opens one page per visit, and the page follows the visit from th
 | Completed | Book again | 已完成 |
 | With grading | Your cards are with grading; grading's own mail follows | 卡牌已轉交評級 |
 | With the vault | Your item is with the vault; the vault's own mail follows | 物品已轉交保險庫 |
-| Time passed | the time held until, walk in and wait, or book another time | 時間已過 |
+| Time passed | the time held until, Change time and Cancel until the slot ends, walk in and wait, or book another time | 時間已過 |
 | Missed | Book again | 已錯過 |
 | Cancelled | who cancelled and the shop's reason, Book again | 你已取消, 門市已取消 |
 | Shop closed | the closure's reason, Pick another time | 門市今天休息 |
@@ -31,7 +31,7 @@ The manage link opens one page per visit, and the page follows the visit from th
 
 - **Until the end of the slot** - Change time and Cancel; Cancel asks a reason the collector may skip
 - **Until the end of the hold** - Running late: the collector says about when they will arrive, and the desk sees the new time
-- **After the hold** - Time passed: walk in and wait, or book another time; the visit stops counting as the live visit for its service
+- **After the hold** - Time passed: Change time and Cancel stay until the slot ends; after that, walk in and wait, or book another time. The visit stops counting as the live visit for its service
 - **Typhoon** - Today and the day-before message say "Signal 8 or black rain: we close while it's up and email you."
 
 ## Walk-in Ticket
