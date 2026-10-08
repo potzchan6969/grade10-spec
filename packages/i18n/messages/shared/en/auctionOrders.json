@@ -13,6 +13,7 @@
   "payInvoice": "Pay invoice",
   "viewDetail": "View detail",
   "contactUs": "Contact Us",
+  "cancelledOn": "Cancelled on {date}",
   "insuranceTooltip": "0.9% of the order value during transit.",
   "taxLabel": "Tax",
   "buyersPremiumTooltip": "20% of your winning bid, or the currency minimum if that is higher.",
@@ -21,6 +22,7 @@
   "contactDialog": {
     "to": "To",
     "subject": "Subject",
+    "cancelledSubject": "Auction lot {lotTitle}: order cancelled",
     "message": "Message",
     "copyAddress": "Copy address",
     "addressCopied": "Address copied",

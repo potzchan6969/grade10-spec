@@ -2,6 +2,11 @@ import { formatHkd, SCAN_IMAGE, SHOP_NAME } from "./vault-content";
 
 type IntakeService = "vault" | "grading" | "auction-listing" | "store-listing";
 
+type IntakeScan = {
+  id: string;
+  src: string;
+};
+
 /** Collector-facing list filter buckets. */
 type IntakeListFilter = "in-progress" | "completed" | "all";
 
@@ -12,7 +17,7 @@ type IntakeItemRow = {
   declaredHkd: number;
   status: string;
   note: string;
-  scanSrcs: readonly string[];
+  scanSrcs: readonly IntakeScan[];
   submissionId: string;
   service: IntakeService;
   intakeMethod: "In-Person Drop-off";
@@ -123,7 +128,7 @@ type ItemSeed = {
   declaredHkd: number;
   status: string;
   note: string;
-  scanSrcs: readonly string[];
+  scanSrcs: readonly IntakeScan[];
   completed: boolean;
 };
 
@@ -166,7 +171,10 @@ const VAULT_IN_PROGRESS_ITEMS: readonly IntakeItemRow[] = [
       declaredHkd: 85_000,
       status: "In Scanning",
       note: "Slab case in pristine condition. No scratches.",
-      scanSrcs: [SCAN_IMAGE, SCAN_IMAGE],
+      scanSrcs: [
+        { id: "front", src: SCAN_IMAGE },
+        { id: "back", src: SCAN_IMAGE },
+      ],
       completed: false,
     },
     VAULT_BATCH,
@@ -179,7 +187,7 @@ const VAULT_IN_PROGRESS_ITEMS: readonly IntakeItemRow[] = [
       declaredHkd: 6_200,
       status: "In Scanning",
       note: "Coin in original capsule. Surface marks noted on reverse.",
-      scanSrcs: [SCAN_IMAGE],
+      scanSrcs: [{ id: "front", src: SCAN_IMAGE }],
       completed: false,
     },
     VAULT_BATCH,
@@ -192,7 +200,10 @@ const VAULT_IN_PROGRESS_ITEMS: readonly IntakeItemRow[] = [
       declaredHkd: 18_500,
       status: "Received",
       note: "Inner well clean. Outer label slightly yellowed.",
-      scanSrcs: [SCAN_IMAGE, SCAN_IMAGE],
+      scanSrcs: [
+        { id: "front", src: SCAN_IMAGE },
+        { id: "back", src: SCAN_IMAGE },
+      ],
       completed: false,
     },
     VAULT_BATCH,
@@ -215,7 +226,10 @@ const GRADING_IN_PROGRESS_ITEMS: readonly IntakeItemRow[] = [
       declaredHkd: 85_000,
       status: "In Transit",
       note: "Batch sealed for PSA Regular. No surface issues on intake.",
-      scanSrcs: [SCAN_IMAGE, SCAN_IMAGE],
+      scanSrcs: [
+        { id: "front", src: SCAN_IMAGE },
+        { id: "back", src: SCAN_IMAGE },
+      ],
       completed: false,
     },
     GRADING_BATCH,
@@ -228,7 +242,7 @@ const GRADING_IN_PROGRESS_ITEMS: readonly IntakeItemRow[] = [
       declaredHkd: 42_000,
       status: "In Transit",
       note: "Corners sharp. Sleeve intact at hand-in.",
-      scanSrcs: [SCAN_IMAGE],
+      scanSrcs: [{ id: "front", src: SCAN_IMAGE }],
       completed: false,
     },
     GRADING_BATCH,

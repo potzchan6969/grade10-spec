@@ -9,6 +9,7 @@ import {
   AuctionWinnerOrder,
   type AuctionWinnerOrderProps,
   type AuctionWinnerOrderStep,
+  formatLocalDay,
   type OrderDetailsPaymentBrand,
   SiteHeader,
 } from "@grade10/ui";
@@ -46,6 +47,9 @@ const PAYMENT_RECEIVED_TOAST = {
 
 /** Preview-only beat while returning from a simulated card host. */
 const CARD_CHECKOUT_SIMULATE_MS = 700;
+
+/** Same recorded cancellation instant as the auction email preview fixture. */
+const CANCELLED_AT_MS = Date.UTC(2026, 8, 25, 2, 15);
 
 const SETUP_CONFIRMED_TOAST = {
   title: "Order setup complete",
@@ -413,6 +417,13 @@ function WinnerOrderPageState({
 
   const content = resolveContent(status, setupResult, contentProp, statusProp);
   const contactReason = contactReasonFor(content.status);
+  const cancelledOn =
+    content.status === "cancelled"
+      ? formatLocalDay(CANCELLED_AT_MS, {
+          locale: "en",
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        })
+      : null;
   const contactMail = contactReason
     ? winnerOrderContactMail({
         reason: contactReason,
@@ -429,6 +440,17 @@ function WinnerOrderPageState({
       if (contactMail) setContactOpen(true);
     },
   };
+
+  const outcomeAlert =
+    content.status === "cancelled" && cancelledOn
+      ? {
+          title: `Cancelled on ${cancelledOn}`,
+          status: "warning" as const,
+          action: contactAction,
+        }
+      : content.outcomeAlert
+        ? { ...content.outcomeAlert }
+        : null;
 
   const payCta =
     content.status === "pending_payment" && !content.overdue
@@ -500,11 +522,12 @@ function WinnerOrderPageState({
 
         <AuctionWinnerOrder
           alerts={
-            content.outcomeAlert
+            outcomeAlert
               ? [
                   {
-                    title: content.outcomeAlert.title,
-                    status: content.outcomeAlert.status,
+                    title: outcomeAlert.title,
+                    status: outcomeAlert.status,
+                    action: outcomeAlert.action,
                   },
                 ]
               : []
@@ -654,4 +677,4 @@ function WinnerOrderPageState({
 }
 
 export type { WinnerOrderPageProps };
-export { WinnerOrderPage };
+export { CANCELLED_AT_MS, WinnerOrderPage };

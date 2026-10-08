@@ -13,6 +13,7 @@
   "payInvoice": "支付發票",
   "viewDetail": "查看詳情",
   "contactUs": "聯絡我們",
+  "cancelledOn": "已於 {date} 取消",
   "insuranceTooltip": "運輸途中按訂單金額的 0.9% 計算。",
   "taxLabel": "稅項",
   "buyersPremiumTooltip": "成交價的 20%，或該貨幣的最低額（取較高者）。",
@@ -21,6 +22,7 @@
   "contactDialog": {
     "to": "收件人",
     "subject": "主旨",
+    "cancelledSubject": "拍品 {lotTitle}：訂單已取消",
     "message": "訊息",
     "copyAddress": "複製地址",
     "addressCopied": "已複製地址",
