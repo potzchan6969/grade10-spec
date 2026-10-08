@@ -185,7 +185,7 @@ stale answers: `grade10-site-store-checkout-SC-62`.
 - [ ] 10.3 Verify existing carrier implementation against token gate and exact preview rate/currency with no order/cart mutation; fix only in-scope failures required by the durable contract: `grade10-site-store-checkout-SC-17`, `grade10-site-store-checkout-SC-18`; `grade10-site-store-checkout-SC-56`.
 - [ ] 10.4 Verify backend/real-Postgres suites, affected checks and provider-fact fixtures; retain Carrier rates in the final contract and readiness record.
 
-## 11. Frontend cart-header integration (grade10)
+## 11. Frontend cart-header integration (grade10) (owner: @kinisworking)
 
 - [ ] 11.5 Add failing zero-points handoff, required per-line price acknowledgement and review-only paid-refresh tests before 11.3; submit the persisted zero choice and immutable reviewed prices, and observe authoritative conversion through existing clients: `grade10-site-store-checkout-SC-61`, `grade10-site-store-checkout-SC-39`, `grade10-site-store-checkout-SC-62`.
 
