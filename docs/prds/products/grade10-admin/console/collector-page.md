@@ -40,4 +40,5 @@ collector, drawn by the designer, with a first version built before it.
 | A first version on console blocks | Decided | The designer draws the page; a first version composed of the console's own blocks ships before it and is replaced by it | Owner |
 | Sections stand alone | Decided | Each section reads on its own grant and fails on its own, so a fault in one product never blanks the page | Product |
 | Where it sits in the nav | Decided | Under Vault, at `/vault/collectors/<user id>`: the console marks every page under a nav entry, and the vault's queue already finds a collector by exact email, phone or reference | Engineering |
+| Every service on one page | Decided | Grading submissions, consignments, auction orders and consignment payouts join vault cases and items, each a section that stands alone - [Inventory Console](/p/grade10-admin/inventory/console) - decided under the owner's delegation, 2026-10-08 | Product |
 :::
