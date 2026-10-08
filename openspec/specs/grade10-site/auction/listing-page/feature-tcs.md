@@ -196,17 +196,18 @@ The catalogue publishes <a published lot>.
 
 **Pre-conditions:**
 
-* The catalogue published `<called-off lot>`, then an operator called it off.
+* `<draft lot>` is a draft that is not published.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| called-off lot | A lot that was published and then called off |
+| draft lot | A draft lot that is not published |
+| draft lot url | That lot's canonical address |
 
 **Steps:**
 
-1. Navigate to `<called-off lot url>`.
+1. Navigate to `<draft lot url>`.
 2. Check the response status.
 3. Check the rendered page.
 
