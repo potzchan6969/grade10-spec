@@ -7,11 +7,13 @@
 
 ## 2. Move the application onto the package (grade10)
 
+The bump in 2.1 takes the store's booking block change too, so it waits for the application side of `add-multi-store-appointments` (its task 13.1); typecheck reports 9 errors in `packages/appointment/frontend`, `packages/vault/frontend` and `packages/grading/frontend` on a bump alone.
+
 - [ ] 2.1 Bump `external/grade10-spec` to the commit that adds the package
-- [ ] 2.2 Rewrite imports of `@grade10/utils/dates` formatters and of `@grade10/ui`'s date formatters to `@grade10/date`; add the dependency to each package that imports it
+- [ ] 2.2 Rewrite imports of `@grade10/utils/dates` formatters and of `@grade10/ui`'s date formatters to `@grade10/date`, with `formatLocalDay`, `formatLocalMoment` and `formatLocalTime` now `formatDay`, `formatMoment` and `formatTimeOfDay`; add the dependency to each package that imports it; move `resolveShippedLocale` into `@grade10/frontend-intl` and take `ShippedLocale` from `@grade10/i18n`
 - [ ] 2.3 Delete the text half of `packages/utils/src/dates.ts` and its tests; keep the arithmetic, importing `PLATFORM_ZONE` from the package
-- [ ] 2.4 Delete the exact duplicates: grading's `calendarDays.ts` `formatCalendarDay`, vault admin's `identity.ts` `formatCalendarDay`, the inline copy in `ProfilePage.tsx`, and grading's `printedDay`
-- [ ] 2.5 Repoint `check-dates.mjs` `OWNER` and its messages and `check-lanes.mjs` `DATES_IMPORT`; pin `TZ` in `packages/storybook`
+- [ ] 2.4 Delete the exact duplicates: grading's `calendarDays.ts` `formatCalendarDay` and grading's `printedDay`
+- [ ] 2.5 Repoint `check-dates.mjs` and `check-lanes.mjs` at `@grade10/date`, keeping the `TZ` pin rule on every suite that reaches it
 - [ ] 2.6 Rewrite the date section of `docs/conventions/code-layout.md` and the utils lines of `docs/conventions/packages.md`
 - [ ] 2.7 Verify: `pnpm run typecheck`, every test lane, `pnpm run check:libs`, the email render and document template tests, the auction e2e walks that assert `HKT`
 
