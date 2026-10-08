@@ -2,50 +2,53 @@
 
 ## Goals
 
-- Send the current member basket and accepted tender from the drawer to hosted payment.
-- Handle the existing checkout responses and show the order after return.
-- Integrate the frontend without changing the backend.
+- **Integration** - Consume all cart-header backend behavior through existing frontend boundaries.
+- **Complete contract** - Retain published checkout requirements for review, hosted handoff, safe repetition/recovery, settlement/return and carrier rates.
+- **Cart protection** - Reflect authoritative conversion and preserve later edited or rebuilt carts with their tender.
 
-## Non-goals
+## Non-Goals
 
-Backend or schema work, new APIs, provider recovery, request idempotency,
-duplicate-invoice prevention, old-invoice cancellation and cart-edit reconciliation.
-Public guest checkout, an embedded card form and a separate checkout page.
+- **Operations** - No migration execution, deployment, provider setup, production write or real payment in this planning run.
+- **Product additions** - No guest storefront checkout, new badge, standalone checkout page, embedded payment or new Shopify return destination.
+- **Local workarounds** - No browser-owned invoice authority, local cart deletion, new dependency or duplicate data client.
 
 ## Decisions
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | When is the basket read? | At the two moments `grade10-site/store/cart-validation` states: when the cart opens, and at Pay, the drawer's Proceed to Checkout, where the existing server validation prices the order; the tender quote is the drawer's | A separate checkout page or a new backend validation flow |
-| Q2 | Which Shopify flow is used? | Call the existing Draft Order hosted-invoice creation flow for each new Pay submission | An embedded form or a new provider flow |
-| Q3 | Who uses public checkout? | The public frontend requires a signed-in member and uses authenticated checkout; existing operator surfaces and backend permissions remain unchanged | A public guest or typed-email frontend |
-| Q4 | Where are shipping and tax calculated? | Shopify calculates them; the drawer shows an estimate | Presenting the drawer estimate as the final charge |
-| Q5 | Who creates and binds the order? | The existing backend owns order creation and provider references without changes in this plan | New persistence or transaction work |
-| Q6 | What happens on another Pay? | A new submission calls the existing creation flow and may produce another invoice; disable the control while the current frontend request is pending | Reusing an invoice by intent or promising server deduplication |
-| Q7 | Who settles payment? | Existing webhook, reconciliation and order-read behavior remains unchanged; the frontend reads its results | A new backend settlement path |
-| Q8 | What happens to the cart? | Keep existing paid-transition cleanup: remove whole matching variant lines and clear cart tender; frontend refreshes the resulting cart | Quantity subtraction or reconciliation of edits made during payment |
-| Q9 | Who owns carrier rates? | Existing carrier configuration and behavior remain unchanged | Carrier implementation work in this change |
-| Q10 | Where does confirmation return? | A static Grade10 Your Orders link on Shopify Thank You and Order status; reuse existing order surfaces | A purchase-specific link or a new checkout page |
-| Q11 | Does reload reuse an intent? | No frontend intent persistence or replay is required; a later Pay is a new submission | A same-session purchase recovery contract |
-| Q12 | What happens on refusal? | Present the existing named-line refusal or error and allow a fresh submission when the basket is ready | New backend refusal recovery |
-| Q13 | What happens on response loss? | Show the existing failure or settling outcome; do not claim the frontend recovers the prior invoice or prevents duplicates | Provider lookup or dispatch recovery work |
-| Q14 | What happens on a worker crash? | Keep the current backend behavior; no dispatch state, deadline or operator recovery flow is added | A new state machine |
-| Q15 | What happens to an earlier payable invoice? | Ignore it for this integration. Each new Pay uses the existing creation flow; no cancellation or retirement is added | Waiting for the earlier invoice to close |
-| Q16 | What happens to edits during payment? | The invoice fixes the purchase; edits during payment are ignored and existing cart cleanup is unchanged | Repricing the invoice or preserving added quantity through new backend logic |
-| Q17 | What is the delivery scope? | Frontend integration only. Logic absent from the existing backend is not added now | The previous backend intent/replay/recovery plan |
-| Q18 | What if no matching order is returned? | Keep the existing order list, loading, error/Retry and empty/Shop now states; do not invent an order or add purchase recovery | A new return-specific missing-order flow |
-| Q19 | Does verification add a shared drawer slot? | Reuse the existing drawer-host threshold message and account action; this integration adds no shared UI export or slot | A new inline drawer contract |
+| Q1 | When is the basket read? | Preserve the durable contract: review on open and make a current decision at Pay, including reuse | Earlier drawer quote replacing Pay's decision |
+| Q2 | Which Shopify flow is used? | Shopify Draft Order hosted invoice; the same purchase reuses its saved invoice | Embedded payment or fresh creation on repeat |
+| Q3 | Who uses public checkout? | Fresh signed-in member session; operator/typed-email adapters retain established gates | Public guest checkout |
+| Q4 | Where are shipping and tax calculated? | Shopify owns final shipping, tax and payment; drawer shows an estimate | Drawer shown as final charge |
+| Q5 | Who owns orders and money? | Backend owns creation, provider correlation and lifecycle | Browser-owned payment state |
+| Q6 | What happens on repeated Pay? | One purchase identity, order and payable invoice; server reuse or settling | Duplicate orders/invoices |
+| Q7 | Who settles payment? | Verified webhooks, reconciliation and order reads use guarded backend transition | Frontend settlement |
+| Q8 | What happens to the cart? | Convert the active cart bought only when its member-edit counter matches; shop review changes alone allow conversion. Re-read and preserve later member edits or a rebuilt cart | General-version conversion, matching-variant deletion or quantity subtraction |
+| Q9 | Who owns carrier rates? | Preserve and verify token-gated carrier rule and preview parity | Dropping carrier requirements |
+| Q10 | Where does confirmation return? | Static Grade10 Your Orders link on both Shopify confirmation surfaces | Purchase-specific link or native Continue shopping dependency |
+| Q11 | Does reload reuse a purchase? | Preserve one identity through same-session reload; backend decides invoice/state | New invoice after reload |
+| Q12 | What happens on refusal? | Name changed lines, block stale handoff and permit repair; retain tender refusal honesty | Stale basket or silently dropped tender |
+| Q13 | What happens on response loss? | Recover existing purchase without another invoice | Transport error treated as proof nothing was created |
+| Q14 | What happens on a worker crash? | Safe pre-dispatch retry; ambiguous dispatched purchase is recovery-only | Dispatching again without evidence |
+| Q15 | What happens to older invoices after edits? | Provider-aware retirement/recovery; cancellation rendered only from backend facts | Ignoring payable invoices or edit success proving cancellation |
+| Q16 | What happens to edits during payment? | Invoice fixes submitted purchase; later edits survive settlement and stale responses cannot redirect | Rewriting invoice or deleting later intent |
+| Q17 | What is delivery scope? | All cart-header changes and durable requirements; uncovered backend guarantees are delivery prerequisites | Narrow frontend-only amendment |
+| Q18 | What if no matching order is returned? | Existing loading, error/Retry and empty/Shop now states; recovery invents no order | Local purchase invention |
+| Q19 | Does verification add a shared slot? | Existing drawer-host account feedback and profile action | New verification export |
+| Q20 | Are backend limitations scope waivers? | No; the 2026-10-07 instruction retains every spec requirement and delivery waits for evidence | Incomplete guarantees becoming product contract |
+| Q21 | Does this add Awaiting payment? | Follow existing spec status labels; add no new shared badge in this amendment | Speculative status-set migration |
+| Q22 | How are the 2026-10-08 review findings addressed? | One canonical persisted purchase and dispatch claim; live validation before invoice reuse; no canceled invoice handoff; distinguish member edits from shop review; v2 explicitly accepts zero points | Returning a superseded URL, validation bypass, general-version cleanup or rejecting ordinary no-points checkout |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-site/store/checkout` | Is same-session intent reuse required? | Q11 |
-| `grade10-site/store/checkout` | Is new refusal recovery required? | Q12 |
-| `grade10-site/store/checkout` | Is provider-response recovery required? | Q13 |
-| `grade10-site/store/checkout` | Is worker-crash recovery required? | Q14 |
-| `grade10-site/store/checkout` | Must an earlier payable invoice close before another Pay? | Q15 |
-| `grade10-site/store/checkout` | Do edits made during payment change the purchase or cart-release policy? | Q16 |
-| `grade10-site/store/checkout` | Does this change add missing backend logic? | Q17 |
-| `grade10-site/store/checkout` | Which state appears if Your Orders has no matching purchase? | Q18 |
-| `grade10-site/store/checkout` | Does verification add a shared drawer slot? | Q19 |
+| `grade10-site/store/checkout` | Retain every durable safety requirement despite branch gaps? | Q20 |
+| `grade10-site/store/checkout` | Introduce a new unpaid badge? | Q21 |
+
+## Product Authority
+
+- **Instruction** - On 2026-10-07, @kinisworking said: "the frontend should be integrated all changes from the backend and the requirements from the specs".
+- **Supersession** - Earlier frontend-only decisions remain in acceptance history; they do not constrain this amendment.
+- **Follow-up** - On 2026-10-08, the owner authorized updating this amendment to follow the merged backend and address the readiness findings. Q8 and Q22 clarify existing journeys and feature roots; their frozen anchors are unchanged.
+- **Acceptance** - Scope clarification settles planning inputs; the complete plan receives human acceptance after QA2 and fresh acceptance review.
