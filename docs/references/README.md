@@ -29,6 +29,13 @@ Causeway Bay, in-store registration, digitization, and a collector
 portfolio (Storybook `Pages/Appointment *` + `Pages/Vault *` + flow canvas);
 no change carries it yet.
 
+[`inventory-and-services-design.md`](inventory-and-services-design.md) is
+the design behind the owner's inventory brief: one item per physical object,
+the places it sits, how it moves, the marks and hand-offs between the vault,
+grading, the auction and consignment, store and auction consignment, a
+documents service, and the admin console; the inventory pages, Consignment
+and the Documents Service page carry it, and no change does yet.
+
 The `shopify-*` set is the working notes behind the
 `add-shopify-membership-pos` change: the umbrella plan, the checkout identity
 flow, the POS extension, and the resilience test plan. Application code and

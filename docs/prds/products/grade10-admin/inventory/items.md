@@ -147,9 +147,8 @@ move it to a new owner with a trace.
 register; their vault case and their grading submission stay their pages.
 
 **Not in scope.** Values, photographs or locations on an item; the
-catalogue's attributes on an item; an item the auction or grading marks;
-moving a vaulted item to a new owner; telling either owner of a move; search
-by name; merging two items; linking an item to catalogue stock.
+catalogue's attributes on an item; moving a vaulted item to a new owner;
+telling either owner of a move; search by name; merging two items.
 
 **Measurement.** Items in custody with no record, held at zero; moves
 recorded with who and why; marks closed by hand, expected near zero.
@@ -166,4 +165,9 @@ recorded with who and why; marks closed by hand, expected near zero.
 | Search by name | Decided | None; exact email, cert, title or description, item id or a click on a name | Product |
 | Grading's slab and the catalogue | Decided | A collector's slab never enters the catalogue; the vault values it from this register - [The Submission](/p/grade10-site/grading/submission#the-record-after-collection) | Product |
 | Owner of a bought or gifted item | Decided | The custodian; the lender only through a forfeit; Legal confirms | Legal |
+| Every service marks | Decided | Grading, consignment, the auction and the store mark the items they act on, as the vault does, under the rules on [Services and Hand-offs](/p/grade10-admin/inventory/services) - decided under the owner's delegation, 2026-10-08 | Product |
+| An item names its product | Decided | A Cert record links to the item the custodian owns, and any item may name the catalogue product it is an instance of without counting as stock - [Inventory](/p/grade10-admin/inventory) - decided under the owner's delegation, 2026-10-08 | Product |
+| A partner owns its items | Decided | An organisation an admin registers owns the items it sends under a deal - [Intake and Release](/p/grade10-admin/inventory/intake#partner-deals) - decided under the owner's delegation, 2026-10-08 | Product |
+| What the register holds | ❓ Open | A place on every item, which the owner's brief asks for, with the photographs staff take as received and one cover value for caps; valuations, loan terms and amounts stay in the vault, and the item page reads them from it. This is the revisit the row on who owns what outside the vault asks for - [Locations](/p/grade10-admin/inventory/locations) | Product, Legal |
+| Selling from the vault | ❓ Open | A storage-lane item sells from the vault and its owner moves to the buyer, in place of refusing a vaulted item a new owner - [Services and Hand-offs](/p/grade10-admin/inventory/services) | Owner |
 :::
