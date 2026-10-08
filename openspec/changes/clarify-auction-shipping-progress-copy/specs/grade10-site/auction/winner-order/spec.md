@@ -68,7 +68,7 @@ Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
 - **AND** does not invent a Preparing Shipment step label
 - **AND** does not leave Shipping incomplete or upcoming while Payment is complete
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-lk0 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-lk0 rev=2 -->
 #### Scenario: winner-order-SC-253 - A shipped order keeps Shipping current
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
@@ -77,7 +77,8 @@ Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
 - **WHEN** the winner opens Winner Order
 - **THEN** the title badge uses Badge `default`
 - **AND** Shipping is the current progress step with the day-only ship date
-- **AND** a known tracking number is the external carrier link
+- **AND** a tracking number is the external carrier link when the operator
+  recorded a tracker link, and plain text otherwise
 - **AND** Order Progress adds no separate Track shipment control and no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fm0 rev=1 -->

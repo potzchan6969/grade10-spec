@@ -39,5 +39,7 @@
 
 ## Reconciliation
 
+**Run:** 2026-10-07, QA2 for `clarify-auction-shipping-progress-copy`, appended to the durable reconciliation; earlier runs stand.
+
 - **Covered:** `auction-status-SC-07` ← `US1-TC7-1`.
 - **Raised:** none.

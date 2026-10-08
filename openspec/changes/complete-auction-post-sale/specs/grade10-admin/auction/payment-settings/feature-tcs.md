@@ -208,6 +208,7 @@ premium for each auction currency,
 * Both are refused.
 * The stored rules are unchanged.
 
+<!-- trace:case id=g10adm.auction-payment-settings.TC-6it rev=1 covers=g10adm.auction-payment-settings.SC-qak -->
 ### grade10-admin-auction-payment-settings-US2-TC5-1: Saving a card rule offers card in that currency
 
 **Classification:**

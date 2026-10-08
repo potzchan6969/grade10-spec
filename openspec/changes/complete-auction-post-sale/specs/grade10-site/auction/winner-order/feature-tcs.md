@@ -203,6 +203,7 @@
 * Neither method can be chosen, and Grade10 refuses the confirmation.
 * The order is still Awaiting Setup, holding no delivery address and no method.
 
+<!-- trace:case id=g10.auction-winner-order.TC-97r rev=1 covers=g10.auction-winner-order.SC-05o -->
 ### winner-order-US1-TC56-1: A Traditional Chinese account reads and searches Country/Region in Traditional Chinese
 
 **Classification:**
@@ -271,6 +272,7 @@
 * The winner's order reads Setup Overdue.
 * The operator can reopen or record its setup.
 
+<!-- trace:case id=g10.auction-winner-order.TC-zwj rev=1 covers=g10.auction-winner-order.SC-m55 -->
 ### winner-order-US7-TC6-1: The one-time address is gone once the setup deadline passes
 
 **Classification:**
@@ -377,6 +379,7 @@
 **I want** to give that billing address when I confirm where to ship,
 **so that** my invoice and receipt show who is billed as well as where the lot goes.
 
+<!-- trace:case id=g10.auction-winner-order.TC-v3x rev=1 covers=g10.auction-winner-order.SC-rlh,g10.auction-winner-order.SC-1i2 -->
 ### winner-order-US11-TC5-1: Billing Add Address lists and filters the delivery Country/Region catalogue
 
 **Classification:**
@@ -407,6 +410,7 @@
 * The billing list holds every country and region in A-Z order, the same list as delivery.
 * Typing leaves only the names that match `Jap`, Japan among them.
 
+<!-- trace:case id=g10.auction-winner-order.TC-bwi rev=1 covers=g10.auction-winner-order.SC-z4a -->
 ### winner-order-US11-TC6-1: An unsaved one-time billing address is there on return
 
 **Classification:**
@@ -446,6 +450,7 @@
 **I want** to confirm a different address for this order without saving a sixth,
 **so that** a full address book does not block settlement before the address deadline.
 
+<!-- trace:case id=g10.auction-winner-order.TC-kp5 rev=1 covers=g10.auction-winner-order.SC-zyl -->
 ### winner-order-US12-TC12-1: An unsaved one-time delivery address is there on return
 
 **Classification:**

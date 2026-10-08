@@ -291,3 +291,9 @@ Runs once per row of **Test data**.
 - **Covered:** mapping Preparing Shipment → Ended under
   `grade10-site-auction-lot-status-SC-04`'s requirement ← `US1-TC1-1`.
 - **Raised:** none.
+
+**Run:** 2026-10-07, QA2 for `clarify-auction-shipping-progress-copy`, appended to the durable reconciliation; earlier runs stand.
+
+- **Covered:** mapping Preparing Shipment → Ended under
+  `grade10-site-auction-lot-status-SC-04`'s requirement ← `US1-TC1-1`.
+- **Raised:** none.

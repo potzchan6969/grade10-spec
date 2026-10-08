@@ -66,7 +66,8 @@ None.
   GMT+8, the invoice page and the grading and vault letters included; admin
   surfaces and the records a machine reads state UTC, except an admin surface
   whose own spec keeps a shop's clock, as the vault console and the
-  appointments diary do (decisions Q30).
+  appointments diary do (decisions Q30), and the auction order operator
+  surfaces, which state Asia/Hong_Kong as GMT+8 (decisions Q31).
 - `shared/ui/invoice-and-receipt-pdf` - PDF dates end in GMT+8, in English
   under any copy language.
 - `shared/ui/auction-listing` - catalogue tile close lines and the bid card's

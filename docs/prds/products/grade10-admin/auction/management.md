@@ -204,6 +204,9 @@ order.
   identifier, beside the deadline, the reissue count and the suspension state
 - 🚧 **One timeline** - the invoice log, the fulfilment log and comments,
   oldest first; a comment is 1 to 2,000 characters, never edited or deleted
+- 🚧 **Hong Kong time** - every date and time on the worklist, the order page,
+  the timeline and the send and reissue dialog's deadline reads in Hong Kong
+  time (GMT+8), whatever zone the operator's browser is in
 - 🚧 **Each action is a dialog** - it restates what will happen, a refusal
   reads as a sentence with the dialog kept open, and money is typed as the
   winner reads it, `50.00` for HK$50.00
@@ -329,8 +332,8 @@ on winner, In transit, Closed and All, opening on Needs action.
   is unconfirmed Setup Overdue and its invoice is `not_issued`, the operator
   records an address by phone, leaving
   the form closed. Both
-  paths refuse once an address is confirmed, an invoice is sent, or cancellation
-  is requested or complete
+  paths refuse once an address is confirmed, an invoice is sent or the order is
+  cancelled
 - 🚧 **Recording a method** — recording setup refuses a payment method the
   order's currency does not offer: card where Payment Settings holds no card
   fee rule for it, bank transfer where Grade10 holds no bank details; a reopen

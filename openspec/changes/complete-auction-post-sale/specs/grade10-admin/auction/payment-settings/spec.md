@@ -184,6 +184,7 @@ SHALL open or save Payment Settings.
 - **THEN** beside the rule the page shows a fee of 3763 on a subtotal of 100000
   minor units in HKD, read as HKD 37.63 on HKD 1,000.00
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-qak rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-12 - Saving a card rule offers card in that currency
 **Serves:** grade10-admin-auction-payment-settings-US-02 - Finance keeps the Stripe card fee rule
 
