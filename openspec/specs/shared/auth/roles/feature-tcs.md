@@ -556,7 +556,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The proof downloads.
-* `<item_1>` reads the custodian as owner, with the move at the top of the Moves panel.
+* `<item_1>` reads the custodian as owner, and a new move to the custodian sits above the one whose proof step 2 opened.
 
 <!-- trace:case id=g10.shared-roles.TC-gu0 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC16-1: Treasurer holds no inventory grant
@@ -565,7 +565,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
