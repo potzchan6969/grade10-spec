@@ -1,6 +1,6 @@
 # grade10-site/auction/order-status Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
 ## auction-status-US5: Winner misses the address deadline

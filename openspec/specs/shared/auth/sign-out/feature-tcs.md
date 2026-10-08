@@ -1,6 +1,6 @@
 # shared/auth/sign-out Test Cases
 
-**Status:** reopened
+**Status:** reopened · 5/8
 **Reviewed:** 2026-09-23, tcs-rules r3.0, lapsed 2026-10-06
 **Drafts styled:** 2026-10-06, tcs-rules r4
 

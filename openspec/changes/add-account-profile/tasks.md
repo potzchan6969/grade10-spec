@@ -91,7 +91,7 @@ The `profile` gate stays shut in this change; it opens by its own reviewed line 
 
 ## 7. The walk (grade10)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review add-account-profile`), and `/tcs-run-sheet` executes manual cases when needed.
+Uses draft `feature-tcs.md` as its planning input.
 
 - [ ] 7.1 One walk per journey, end to end through the account page, the till and the wallet pass, kept as the change's end-to-end suite: `grade10-site-store-account-profile-US-01` to `grade10-site-store-account-profile-US-05`, `grade10-site-store-membership-US-02`, `grade10-site-store-wallet-member-card-US-06`
 - [ ] 7.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, a walk in grade10 named `grade10:<path>`, in the walks' own commit; the ones that stay manual are named in the suite and in the walk's `rounds.md` row

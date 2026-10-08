@@ -21,7 +21,7 @@ Needs group 1 on the store's `main`: its first commit bumps `external/grade10-sp
 
 ## 3. The walk (grade10) (owner: @ecchochan)
 
-Needs `feature-tcs.md` reviewed (`/tcs-review guard-agreed-ui-design`) as its input, and groups 1 and 2 landed.
+Uses draft `feature-tcs.md` as its planning input, with groups 1 and 2 landed.
 
 - [x] 3.1 One walk of `shared-design-sync-design-override-US1` through git in a terminal: throwaway copies of the store and the application, hooks set by their own `prepare`, every row of the suite's cases committed and pushed to a local remote, kept as the change's end-to-end suite
 - [ ] 3.2 Flip the cases the walk decides with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walk's own commit; the agent waiting for its person and the comments on GitHub stay manual, named in the suite and in the walk's `rounds.md` row

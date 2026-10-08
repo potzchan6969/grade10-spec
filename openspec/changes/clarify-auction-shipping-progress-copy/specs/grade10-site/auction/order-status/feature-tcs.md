@@ -1,6 +1,6 @@
 # grade10-site/auction/order-status Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-09-30, tcs-rules r3.0
 
 ## auction-status-US8: Expired invoice keeps Pending Payment without winner card pay

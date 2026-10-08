@@ -1,6 +1,6 @@
 # grade10-admin/vault/money-book Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/34
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## grade10-admin-vault-money-book-US1: Controller ties a month's money to the bank statement

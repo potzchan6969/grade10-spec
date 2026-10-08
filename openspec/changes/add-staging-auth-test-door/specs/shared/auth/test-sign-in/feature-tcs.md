@@ -1,6 +1,6 @@
 # shared/auth/test-sign-in Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/29
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## shared-auth-test-sign-in-US1: The locked staging door for sign-in tests

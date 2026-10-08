@@ -1,6 +1,6 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** reopened
+**Status:** reopened · 15/58
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 **Drafts styled:** 2026-10-02, tcs-rules r4
 **Out of suite:** `grade10-site-auction-watchlist-SC-04` — signed-out watch from catalogue cards

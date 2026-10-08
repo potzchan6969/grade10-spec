@@ -1,6 +1,6 @@
 # shared/dates-and-times Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/18
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-dates-and-times-US1: The zone a date is stated in

@@ -1,6 +1,6 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-ui-store-cart-US13: Shopper reads a site sale on the cart lines

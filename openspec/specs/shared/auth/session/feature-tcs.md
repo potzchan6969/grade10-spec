@@ -1,6 +1,6 @@
 # shared/auth/session Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 9/49
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## Background

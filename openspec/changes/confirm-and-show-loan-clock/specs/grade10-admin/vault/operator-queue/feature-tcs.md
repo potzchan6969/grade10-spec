@@ -1,6 +1,6 @@
 # grade10-admin/vault/operator-queue Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/25
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-admin-vault-operator-queue-US8: Operator reads why a late loan cannot be forfeited yet

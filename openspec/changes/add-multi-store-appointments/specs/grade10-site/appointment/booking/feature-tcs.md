@@ -1,6 +1,6 @@
 # grade10-site/appointment/booking Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/22
 **Drafts styled:** 2026-09-05, tcs-rules r2
 
 ## grade10-site-appointment-booking-US1: Collector books a grading visit without an account

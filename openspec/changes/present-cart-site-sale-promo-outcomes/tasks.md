@@ -6,7 +6,7 @@
 
 ## 2. The walk (grade10-spec)
 
-Uses draft `feature-tcs.md` as its input, after group 1 lands; human QA reviews the cases after deployment (`/tcs-review present-cart-site-sale-promo-outcomes`), and `/tcs-run-sheet` executes manual cases when needed.
+Uses draft `feature-tcs.md` as its planning input after group 1 lands.
 
 - [ ] 2.1 Walk each journey end to end through the composed drawer as the shopper drives it, starting from the cart on the site sale: open the drawer, open the promo sheet, apply by typing and from a held ticket, read the lines and the footer, and remove the code. Keep the walks in `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx` as the change's end-to-end suite; a journey whose canvas story starts mid-way, Replace or Fallback after remove, walks in a story of its own (`shared-ui-store-cart-US-13`, `shared-ui-store-cart-US-14`, `shared-ui-store-cart-US-15`, `shared-ui-store-cart-US-16`, `shared-ui-store-cart-US-17`)
 - [ ] 2.2 In the walks' commit, flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`; the cases that stay manual stay draft and are named in the walk's `rounds.md` row

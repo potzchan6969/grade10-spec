@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** reopened
+**Status:** reopened · 7/12
 **Reviewed:** 2026-09-22, tcs-rules r3.0, lapsed 2026-10-02
 **Drafts styled:** 2026-10-05, tcs-rules r4
 

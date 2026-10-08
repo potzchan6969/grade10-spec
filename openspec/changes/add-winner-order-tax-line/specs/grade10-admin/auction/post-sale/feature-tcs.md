@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/5
 **Drafts styled:** 2026-09-25, tcs-rules r4
 
 ## post-sale-US5: Operator quotes and sends a winner's invoice

@@ -251,9 +251,7 @@ only their footer label moves, in groups 2 and 3.
 
 ## 5. The walk (grade10) (owner: @seankcw)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after
-deployment (`/tcs-review align-collector-times-to-local-zone`), and
-`/tcs-run-sheet` executes manual cases when needed. Groups 1 to 4 landed first.
+Uses draft `feature-tcs.md` as its planning input. Groups 1 to 4 landed first.
 
 - [ ] 5.1 Walk the changed cases through the interface each reader uses: the
       Storybook deadline, tile, bid card and PDF stories for Hong Kong, New

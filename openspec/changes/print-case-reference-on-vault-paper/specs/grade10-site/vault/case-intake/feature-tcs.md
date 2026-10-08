@@ -1,6 +1,6 @@
 # grade10-site/vault/case-intake Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-site-vault-case-intake-US5: Collector gets a reference they can say and type

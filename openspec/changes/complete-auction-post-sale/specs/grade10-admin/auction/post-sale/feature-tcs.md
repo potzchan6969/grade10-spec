@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/65
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## post-sale-US1: Operator works the orders worklist by segment

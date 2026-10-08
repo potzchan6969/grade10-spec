@@ -58,7 +58,7 @@ const testCase = (
 describe("a suite in the governance format", () => {
   const parsed = readTestCases(
     suite(
-      "in-review",
+      "pending-review · 1/2",
       testCase("alpha-US1-TC1-1", "Reader asks and it happens", "draft"),
       testCase("alpha-US1-TC2-1", "Reader asks again", "actual"),
       testCase("alpha-US1-TC3-2", "Reader asks the old way", "deprecated"),
@@ -66,7 +66,7 @@ describe("a suite in the governance format", () => {
   );
 
   it("takes the file's own status", () => {
-    expect(parsed.status).toBe("in-review");
+    expect(parsed.status).toBe("pending-review");
   });
 
   it("reads each journey-scoped case, its status and the journey it traces", () => {
@@ -163,7 +163,7 @@ describe("a case that also carries a `**Decided by:**` line", () => {
       "**Pre-conditions:**",
       "**Decided by:** scripts/openspec/round-scripts.test.mjs\n\n**Pre-conditions:**",
     );
-    const parsed = readTestCases(suite("in-review", withDecidedBy));
+    const parsed = readTestCases(suite("approved · 1/1", withDecidedBy));
     expect(parsed.cases).toEqual([
       {
         id: "alpha-US1-TC1-1",
@@ -305,7 +305,7 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite("draft", testCase("alpha-US1-TC1-1", "It happens", "draft")),
       ),
-    ).toThrow(/is not pending-review, in-review, reopened or approved/);
+    ).toThrow(/is not pending-review, reopened, approved or retired/);
   });
 
   it("refuses a case with no `**Status:**`", () => {

@@ -1,6 +1,6 @@
 # grade10-site/auction/bidding-history Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 16/41
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-site-auction-bidding-history-US1: Collector reads their bidding index

@@ -1,6 +1,6 @@
 # grade10-site/store/discounts Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/27
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 **Out of suite:** grade10-site-store-discounts-SC-16

@@ -1,6 +1,6 @@
 # shared/ui/auction-order Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/22
 **Drafts styled:** 2026-09-22, tcs-rules r3
 
 ## shared-ui-auction-order-US1: Address form component contract

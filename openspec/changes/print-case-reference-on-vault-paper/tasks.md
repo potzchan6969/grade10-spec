@@ -15,7 +15,7 @@ Nothing here waits on group 1: the work is in the vault and doc-sign backends.
 
 ## 3. The walk (grade10)
 
-Uses draft `feature-tcs.md` as its input. Human QA reviews cases after deployment (`/tcs-review print-case-reference-on-vault-paper`), and `/tcs-run-sheet` executes manual cases when needed. Needs group 2 landed.
+Uses draft `feature-tcs.md` as its planning input. Needs group 2 landed.
 
 The vault's e2e files run on the isolated stack and are skipped on staging, so
 3.1 is the guardrail and 3.3 is a walk by hand on staging.

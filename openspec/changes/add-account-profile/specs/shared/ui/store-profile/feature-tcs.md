@@ -1,6 +1,6 @@
 # shared/ui/store-profile Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/14
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-ui-store-profile-US1: The profile card, read view and form contract

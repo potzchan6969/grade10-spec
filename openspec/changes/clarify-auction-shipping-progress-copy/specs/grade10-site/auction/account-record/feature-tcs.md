@@ -1,6 +1,6 @@
 # grade10-site/auction/account-record Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/2
 **Drafts styled:** 2026-09-30, tcs-rules r3.0
 
 ## grade10-site-auction-account-record-US3: Follow a listing I won through to delivery

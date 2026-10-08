@@ -39,7 +39,13 @@ import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
 import { foldGroups, holding, labelOf, splitGroups } from "./feature-set.mjs";
 import { foldChecks, purposeOf } from "./fold-checks.mjs";
-import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
+import {
+  formatSuiteStatus,
+  parseSuite,
+  reviewProgress,
+  statusCounts,
+  transitionStatus,
+} from "./suites.mjs";
 
 const TRACE_MARKER_LINE =
   /^[ \t]*<!--\s*trace:(?:scenario|case)\b[^\n]*-->[ \t]*\n?/gm;
@@ -651,25 +657,37 @@ function suiteHeader(currentHeader, deltaHeader) {
   return lines.join("\n");
 }
 
-/** The header a fold leaves: a file that was approved and now holds a draft
- *  lapses its `**Reviewed:**` line on the fold's date, so it reads `reopened`. */
-function withDerivedStatus(text, foldedOn) {
+/** The header a fold leaves. Status is a transition from the durable suite's
+ *  approved share to the folded result: a lower share reopens it, an equal
+ *  share keeps an existing reopen, and a recovery returns it to pending until
+ *  every active case is actual. */
+function withTransitionStatus(text, foldedOn, previousText = null) {
   const suite = parseSuite(text);
   const cases = suite.journeys.flatMap((journey) => journey.cases);
   const counts = statusCounts(cases);
-  const lapses =
-    suite.reviewed &&
-    !suite.reviewedLapsed &&
-    deriveStatus(counts, cases.length) !== "approved";
-  const status = deriveStatus(
+  const progress = reviewProgress(counts);
+  const previous = previousText ? parseSuite(previousText) : null;
+  const previousCases = previous
+    ? previous.journeys.flatMap((journey) => journey.cases)
+    : [];
+  const previousProgress = previous
+    ? reviewProgress(statusCounts(previousCases))
+    : null;
+  const status = transitionStatus(
+    previous?.status,
+    previousProgress,
     counts,
     cases.length,
-    Boolean(suite.reviewedLapsed) || lapses,
   );
+  const lapses =
+    suite.reviewed && !suite.reviewedLapsed && status !== "approved";
   const reviewed = lapses
     ? text.replace(/^(\*\*Reviewed:\*\* .*?)[ \t]*$/m, `$1, lapsed ${foldedOn}`)
     : text;
-  return reviewed.replace(/^\*\*Status:\*\* .*$/m, `**Status:** ${status}`);
+  return reviewed.replace(
+    /^\*\*Status:\*\* .*$/m,
+    formatSuiteStatus(status, progress),
+  );
 }
 
 const CASE_HEADING = /(\S+-TC\d+)-(\d+)\b/i;
@@ -745,11 +763,13 @@ function refuseRepeatedCases(text, capability, where, remedy) {
 function mergeSuite(currentText, deltaText, capability, foldedOn) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(foldedOn ?? ""))
     throw new Error(`${capability}: a suite fold needs its date, YYYY-MM-DD`);
-  if (currentText === null || currentText === undefined) return deltaText;
+  if (currentText === null || currentText === undefined)
+    return withTransitionStatus(deltaText, foldedOn);
   const texts = [currentText, deltaText].map((text) =>
     text.replace(/\r\n/g, "\n"),
   );
-  if (texts[0] === texts[1]) return texts[0];
+  if (texts[0] === texts[1])
+    return withTransitionStatus(texts[0], foldedOn, texts[0]);
   const docs = texts.map((text) => {
     const sections = deltaSections(text);
     const headerEnd = Math.min(
@@ -858,7 +878,11 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
     named(delta, "Out of suite"),
   );
   if (outOfSuite) parts.push(`## Out of suite\n\n${outOfSuite}`);
-  const merged = withDerivedStatus(`${parts.join("\n\n")}\n`, foldedOn);
+  const merged = withTransitionStatus(
+    `${parts.join("\n\n")}\n`,
+    foldedOn,
+    texts[0],
+  );
   refuseRepeatedCases(
     merged,
     capability,

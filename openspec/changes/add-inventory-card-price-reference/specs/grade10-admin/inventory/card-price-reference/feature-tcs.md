@@ -1,6 +1,6 @@
 # grade10-admin/inventory/card-price-reference Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/13
 **Drafts styled:** 2026-09-03, tcs-rules r1
 
 ## grade10-admin-inventory-card-price-reference-US1: Inventory admin classifies a card product

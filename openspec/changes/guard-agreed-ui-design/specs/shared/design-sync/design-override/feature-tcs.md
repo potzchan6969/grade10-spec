@@ -1,6 +1,6 @@
 # shared/design-sync/design-override Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/19
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:** shared-design-sync-design-override-SC-11, shared-design-sync-design-override-SC-12, shared-design-sync-design-override-SC-27, shared-design-sync-design-override-SC-32, shared-design-sync-design-override-SC-36, shared-design-sync-design-override-SC-39, shared-design-sync-design-override-SC-44, shared-design-sync-design-override-SC-45, shared-design-sync-design-override-SC-49

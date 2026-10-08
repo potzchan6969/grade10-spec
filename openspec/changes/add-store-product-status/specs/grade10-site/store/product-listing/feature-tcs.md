@@ -1,6 +1,6 @@
 # grade10-site/store/product-listing Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-product-listing-US6: Collector takes the last of a card from the listing

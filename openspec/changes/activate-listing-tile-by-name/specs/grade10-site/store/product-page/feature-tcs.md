@@ -1,6 +1,6 @@
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-product-page-US2: Collector opens a card from the storefront

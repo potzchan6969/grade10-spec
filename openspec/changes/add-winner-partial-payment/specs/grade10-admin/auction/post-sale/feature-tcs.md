@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/6
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
 ## post-sale-US12: Operator collects a lot's price across more than one payment

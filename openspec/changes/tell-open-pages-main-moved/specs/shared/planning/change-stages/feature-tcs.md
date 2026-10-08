@@ -1,6 +1,6 @@
 # shared/planning/change-stages Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## shared-planning-change-stages-US10: Teammate with a page open learns that `main` moved

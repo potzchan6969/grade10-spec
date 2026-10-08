@@ -1,6 +1,6 @@
 # shared/auth/session Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/13
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-session-US2: Collector stays signed in across the brand

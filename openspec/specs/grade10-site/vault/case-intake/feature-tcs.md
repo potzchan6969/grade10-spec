@@ -1,6 +1,6 @@
 # grade10-site/vault/case-intake Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/43
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## Background

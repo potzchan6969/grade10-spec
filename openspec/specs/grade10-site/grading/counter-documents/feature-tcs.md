@@ -1,6 +1,6 @@
 # grade10-site/grading/counter-documents Test Cases
 
-**Status:** reopened
+**Status:** reopened · 0/34
 **Drafts styled:** 2026-09-29, tcs-rules r4
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 

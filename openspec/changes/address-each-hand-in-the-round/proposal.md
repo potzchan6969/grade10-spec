@@ -21,8 +21,8 @@ and a model outage killed ten dispatches and three verdicts came from a
 fallback model the row could not name.
 
 Success is a hand who reads one message that is theirs, answers it in a
-sentence, and never opens a file to check a count; a suite QA is asked to
-review the day it lands; a row that lands through the command whichever
+sentence, and never opens a file to check a count; a suite human QA can review
+after deployment without holding delivery; a row that lands through the command whichever
 repository its tests are in; and a round whose cost is the readings that
 disagree, not the ones that repeat. The number to move: the minutes a hand
 spends per read, from 20 to 30 in the walkthrough to under 10.
@@ -35,9 +35,9 @@ spends per read, from 20 to 30 in the walkthrough to under 10.
   with the row, the page sentence and the decision rows it touches quoted; a
   product detail a build round lands on a page reaches the product manager as
   ❓ with the line quoted before and after, never as decided by the round.
-- **QA is a hand of Specified** — the landing that puts the suite up for
-  review is a move to QA, told by the message every hand gets, and the walk
-  group names the review as its input.
+- **QA review stays downstream** — Specified stays with the product manager.
+  Human QA discovers suites for review after deployment; no task, walk,
+  acceptance, fold or archive gate depends on `/tcs-review`.
 - **The interview asks about three questions** — none trivial; a further
   choice the held test holds is held, never a default; the defaults the round
   applies are listed as such, the questions asked are the ones that change
@@ -78,9 +78,8 @@ See [Non-Goals](decisions.md#non-goals).
   readers, the `when` table — are moved in that delta by this change's round,
   recorded as its round 43, since a MODIFIED block can name only a durable
   requirement.
-- `shared/planning/change-stages` — the Hands table of
-  `stage-changes-and-notify-hands`'s delta gains QA at Specified, moved in that
-  delta by this change's round, recorded as its round 27; no new message kind.
+- `shared/planning/change-stages` — Specified stays with the product manager;
+  suite review creates no stage hand or message kind.
 
 ## Impact
 
@@ -97,8 +96,7 @@ See [Non-Goals](decisions.md#non-goals).
   capabilities among the changing; `record.mjs` no longer refuses a wait on a
   written artifact; `deltas.mjs` names two in-flight deltas on one requirement
   however each is headed.
-- `tools/manual/src/` — the hands of Specified include QA, so the existing
-  turn message reaches them.
+- `tools/manual/src/` — Specified names the product manager alone.
 - `.claude/skills/` and `.claude/agents/` — the round's summary, the held
   row's reply, the interview's shape, one verifier per round, the fallback and
   the killed dispatch.

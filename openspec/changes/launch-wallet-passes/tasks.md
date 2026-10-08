@@ -68,7 +68,7 @@ deployment, and group 8 groups 1, 2 and 7.
 
 ## 8. The walk (grade10)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review launch-wallet-passes`), and `/tcs-run-sheet` executes manual cases when needed.
+Uses draft `feature-tcs.md` as its planning input.
 
 - [ ] 8.1 Add `POST /dev/wallet-pass` behind `devOnly`, issuing one live pass for `{ userId, platform }` through `issuePass` with the worker's own POS deps, with its route test; lend the store worker a fresh `WALLET_PASS_KEY` in `scripts/e2e/start-isolated.sh` with `lend_var`
 - [ ] 8.2 Walk US-09 in `apps/frontend/grade10/e2e/tests/admin/wallet-pass-ending.spec.ts` on the local stack: a member with a pass in each wallet, an admin declines one ending and the wallet stays, then ends it and confirms, that wallet leaves the list and the other stays, the store's audit chain the Audit console reads names the operator, the member, the wallet, the time and that a pass was ended (`grade10-site-store-wallet-member-card-US-09`)

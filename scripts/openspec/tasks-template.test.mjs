@@ -119,17 +119,13 @@ test("shared-planning-agent-rounds-SC-90 - the walk group uses draft cases durin
   const template = read(`${SCHEMA}/templates/${artifact.template}`);
   const walkText = template.slice(template.indexOf("## 3. The walk"));
   assert.match(walkText, /Uses draft `feature-tcs\.md` as its input/i);
-  assert.match(walkText, /human QA reviews cases after deployment/i);
-  assert.match(walkText, /`\/tcs-run-sheet` executes manual cases/i);
-  // `check:manual`'s `walk` rule refuses a walk group that names no
-  // `/tcs-review` of its change, so the template names the placeholder for it.
-  assert.match(walkText, /`\/tcs-review <change>`/);
-  assert.match(
-    instruction,
-    /preamble names that review \(`\/tcs-review <change>`\)/,
-  );
+  assert.doesNotMatch(walkText, /tcs-review|tcs-run-sheet/i);
   assert.match(instruction, /draft suite.*as its planning input/i);
   assert.match(instruction, /human QA after deployment/i);
+  assert.match(
+    instruction,
+    /never a task, walk input, acceptance gate or archive gate/i,
+  );
   assert.doesNotMatch(walkText, /Needs `feature-tcs\.md` reviewed/);
 });
 

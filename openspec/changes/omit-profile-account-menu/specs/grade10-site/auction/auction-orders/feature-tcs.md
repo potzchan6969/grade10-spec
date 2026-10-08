@@ -1,6 +1,6 @@
 # grade10-site/auction/auction-orders Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/0
 
 ## Settled
 

@@ -1,6 +1,6 @@
 # grade10-site/store/cross-sell Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/29
 **Drafts styled:** 2026-09-28, tcs-rules r4
 **Out of suite:** grade10-site-store-cross-sell-SC-25, grade10-site-store-cross-sell-SC-26, grade10-site-store-cross-sell-SC-34
 

@@ -1,6 +1,6 @@
 # grade10-site/vault Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-site-vault-e2e-US1: Collector's case is known by one reference from the send to the counter

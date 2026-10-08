@@ -1,6 +1,6 @@
 # grade10-site/loyalty/programme Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/26
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-site-loyalty-programme-US9: Operator authors a reward's full definition from the console

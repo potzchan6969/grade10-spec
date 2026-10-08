@@ -1,6 +1,6 @@
 # shared/ui/auction-listing Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/4
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-ui-auction-listing-US1: The listing surface's rendering contract

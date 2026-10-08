@@ -1,6 +1,6 @@
 # zzz-site/site/navigation Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/21
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
 ## zzz-site-site-navigation-US1: Collector opens a ZZZ address directly

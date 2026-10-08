@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
 ## post-sale-US19: Operator settles an expired invoice

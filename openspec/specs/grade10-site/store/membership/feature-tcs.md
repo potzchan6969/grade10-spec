@@ -1,6 +1,6 @@
 # grade10-site/store/membership Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/41
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-membership-US1: Collector becomes a member without waiting on commerce

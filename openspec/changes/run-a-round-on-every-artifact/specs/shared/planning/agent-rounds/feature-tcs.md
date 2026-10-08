@@ -1,6 +1,6 @@
 # shared/planning/agent-rounds Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/79
 **Drafts styled:** 2026-09-20, tcs-rules r3.0
 **Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-25, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-109, shared-planning-agent-rounds-SC-110, shared-planning-agent-rounds-SC-111, shared-planning-agent-rounds-SC-112, shared-planning-agent-rounds-SC-113, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-67
 

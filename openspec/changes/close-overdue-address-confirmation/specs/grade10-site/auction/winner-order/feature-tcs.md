@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
 ## winner-order-US23: Winner gets the address form back

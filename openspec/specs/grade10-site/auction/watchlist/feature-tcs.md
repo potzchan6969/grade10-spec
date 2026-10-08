@@ -1,6 +1,6 @@
 # grade10-site/auction/watchlist Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/12
 **Drafts styled:** 2026-09-17, tcs-rules r3.0
 
 ## grade10-site-auction-watchlist-US1: Collector watches a listing to come back to it

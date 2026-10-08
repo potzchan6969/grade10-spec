@@ -41,9 +41,9 @@ export const GOVERNANCE = join(
 
 export const FILE_STATUSES = [
   "pending-review",
-  "in-review",
   "reopened",
   "approved",
+  "retired",
 ];
 export const CASE_STATUSES = ["draft", "actual", "deprecated"];
 /** Values that were `Type` before tcs-rules r2 and are `Suites` now. */
@@ -524,6 +524,8 @@ export function parseSuite(text) {
   const suite = {
     title: null,
     status: null,
+    statusLine: null,
+    reviewProgress: null,
     draftsStyled: null,
     reviewed: null,
     reviewedLapsed: null,
@@ -574,9 +576,16 @@ export function parseSuite(text) {
     }
 
     if (tc === null && journey === null) {
-      const st = line.match(/^\*\*Status:\*\*\s*(\S+)\s*$/);
+      const st = line.match(
+        /^\*\*Status:\*\*\s*(\S+?)(?:\s*·\s*(\d+)\/(\d+))?\s*$/,
+      );
       if (st) {
         suite.status = st[1].toLowerCase();
+        suite.statusLine = i + 1;
+        suite.reviewProgress =
+          st[2] === undefined
+            ? null
+            : { actual: Number(st[2]), reviewable: Number(st[3]) };
         continue;
       }
       const ds = line.match(
@@ -836,17 +845,66 @@ export function statusCounts(cases) {
   return counts;
 }
 
-/** The file status its cases imply. Derived, never chosen: a reviewer approves
- *  cases one at a time and the file follows. A file that was approved once and
- *  holds a draft again carries a lapsed `**Reviewed:**` line, and is
- *  `reopened` rather than `in-review`. */
-export function deriveStatus(counts, caseCount, lapsed = false) {
-  if (caseCount === 0) return "pending-review";
-  if (counts.draft === 0) return "approved";
-  if (lapsed) return "reopened";
-  return counts.actual + counts.deprecated === 0
-    ? "pending-review"
-    : "in-review";
+/** Cases a reviewer may approve: deprecated cases are history, so they count
+ *  in neither side of compact `actual / (total - deprecated)` progress. An
+ *  unknown case still counts in the denominator until validation fixes it. */
+export function reviewProgress(counts) {
+  return {
+    actual: counts.actual,
+    reviewable: counts.actual + counts.draft + counts.unknown,
+  };
+}
+
+/** Negative when `next` has a lower approved share than `previous`, positive
+ *  when it has recovered, and zero when the shares are equal. Cross
+ *  multiplication keeps the comparison exact when the denominator changes. */
+export function compareReviewProgress(next, previous) {
+  return next.actual * previous.reviewable - previous.actual * next.reviewable;
+}
+
+/** The persistent status after one file edit. `reopened` records a progress
+ *  regression: another regression or equal progress keeps it; any recovery
+ *  returns it to `pending-review` until the file reaches `approved`. */
+export function transitionStatus(
+  previousStatus,
+  previousProgress,
+  counts,
+  caseCount,
+) {
+  const next = reviewProgress(counts);
+  if (next.reviewable === 0)
+    return caseCount > 0 && counts.deprecated === caseCount
+      ? "retired"
+      : "pending-review";
+  if (next.actual === next.reviewable) return "approved";
+  if (!previousProgress || previousProgress.reviewable === 0)
+    return "pending-review";
+  const movement = compareReviewProgress(next, previousProgress);
+  if (movement < 0 || (movement === 0 && previousStatus === "reopened"))
+    return "reopened";
+  return "pending-review";
+}
+
+/** Statuses a snapshot may truthfully carry without its prior version. The
+ *  validator checks the stored transition result within this structural set;
+ *  the writer that made the edit owns the comparison with the prior file. */
+export function snapshotStatuses(counts, caseCount) {
+  const progress = reviewProgress(counts);
+  if (progress.reviewable === 0)
+    return [
+      caseCount > 0 && counts.deprecated === caseCount
+        ? "retired"
+        : "pending-review",
+    ];
+  if (progress.actual === progress.reviewable) return ["approved"];
+  return ["pending-review", "reopened"];
+}
+
+/** The exact compact header line. A retired suite has no active denominator. */
+export function formatSuiteStatus(status, progress) {
+  return status === "retired"
+    ? "**Status:** retired"
+    : `**Status:** ${status} · ${progress.actual}/${progress.reviewable}`;
 }
 
 /** A case's property, trimmed, or the empty string. */
@@ -878,6 +936,7 @@ export function readSuite(root, filePath) {
   for (const j of suite.journeys)
     for (const tc of j.cases) cases.push({ ...tc, journey: j });
   const counts = statusCounts(cases);
+  const progress = reviewProgress(counts);
   return {
     path: filePath,
     rel: relative(root, filePath),
@@ -889,7 +948,8 @@ export function readSuite(root, filePath) {
     suite,
     cases,
     counts,
-    derived: deriveStatus(counts, cases.length, Boolean(suite.reviewedLapsed)),
+    progress,
+    status: suite.status,
   };
 }
 

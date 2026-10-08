@@ -1,6 +1,6 @@
 # shared/ui/store-product-listing Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/2
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## shared-ui-store-product-listing-US1: What the listing surface holds

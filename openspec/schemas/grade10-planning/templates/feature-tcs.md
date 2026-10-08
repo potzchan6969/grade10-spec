@@ -23,7 +23,7 @@
 
 # <product>/<domain>/<capability> Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/<number of draft cases>
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
 
 ## <capability>-US<n>: <!-- journey title, copied from user-journeys.md -->

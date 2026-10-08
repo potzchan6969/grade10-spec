@@ -1,6 +1,6 @@
 # grade10-site/auction/listing-media Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/6
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-auction-listing-media-US1: Operator attaches an image to a listing gallery

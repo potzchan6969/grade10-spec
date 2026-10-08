@@ -1,6 +1,6 @@
 # shared/ui/store-order-detail Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/12
 **Drafts styled:** 2026-09-28, tcs-rules r4
 
 ## shared-ui-store-order-detail-US1: Shared Order Details component contract

@@ -1,6 +1,6 @@
 # grade10-site/auction/listing-page Test Cases
 
-**Status:** reopened
+**Status:** reopened · 16/55
 **Drafts styled:** 2026-10-07, tcs-rules r4
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 

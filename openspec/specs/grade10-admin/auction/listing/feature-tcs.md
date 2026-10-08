@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/117
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 **Out of suite:** grade10-admin-auction-listing-SC-64, grade10-admin-auction-listing-SC-65, grade10-admin-auction-listing-SC-66, grade10-admin-auction-listing-SC-67
@@ -1514,6 +1514,54 @@ Runs once per row of **Test data**.
 * Step 1 is accepted.
 * Step 2 reads the listing as created.
 * Step 2 reads starting price 0 minor units HKD.
+
+<!-- trace:case id=g10adm.auction-listing.TC-m53 rev=1 covers=g10adm.auction-listing.SC-mmr -->
+### grade10-admin-auction-listing-US3-TC26-1: Currency change reformats the same minor-unit price
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
+* `<listing_13>` is a draft with every create requirement set except the starting price and currency.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_13 | A draft with every create requirement set except starting price and currency |
+| Starting price | 20 minor units |
+| First currency | JPY |
+| Changed currency | HKD |
+
+**Steps:**
+
+1. Open `<listing_13>`.
+2. Select JPY.
+3. Enter a starting price of 20.
+4. Read the formatted starting price.
+5. Select HKD.
+6. Read the formatted starting price.
+7. Create the listing.
+8. Reopen `<listing_13>`.
+
+**Expected Results:**
+
+* Step 4 reads JPY 20.
+* Step 6 reads HKD 0.20.
+* Step 7 shows the listing as created.
+* Step 8 reads a starting price of 20 minor units HKD.
 
 ---
 

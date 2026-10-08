@@ -823,7 +823,7 @@ describe("implementation verification", () => {
         suites: [
           {
             spec: SPEC,
-            status: "in-review",
+            status: "pending-review",
             cases: {
               draft: 1,
               actual: 2,

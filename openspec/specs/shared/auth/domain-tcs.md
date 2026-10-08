@@ -1,6 +1,6 @@
 # shared/auth Cross-Feature E2E Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 3/12
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-e2e-US1: Collector signs in by link and every surface names them until they sign out

@@ -1,6 +1,6 @@
 # grade10-admin/auction Cross-Feature E2E Test Cases
 
-**Status:** approved
+**Status:** approved · 4/4
 **Reviewed:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-e2e-US1: Operator announces an event and puts a lot under it

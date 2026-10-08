@@ -108,15 +108,15 @@ export type TestCase = {
   automationStatus: AutomationStatus;
 };
 
-/** The suite file's own status — derived from its cases, never chosen:
- * `pending-review` while every case is a draft, `in-review` from the first
- * verdict, `approved` once no draft is left, and `reopened` when a file that
- * was approved holds a draft again. */
+/** The suite file's persistent review state. Incomplete progress is pending;
+ * a lower approved share reopens it, equal progress keeps a reopen, recovery
+ * returns it to pending, and no active cases retires it. Active review work is
+ * an open `tcs-review/*` branch or pull request, not a file value. */
 export type TestSuiteStatus =
   | "pending-review"
-  | "in-review"
   | "reopened"
-  | "approved";
+  | "approved"
+  | "retired";
 
 export type SpecEntry = {
   /** `product/capability`, or a bare topic id. */

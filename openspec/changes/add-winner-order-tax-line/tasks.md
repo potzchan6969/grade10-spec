@@ -41,7 +41,7 @@ Needs group 1.
 
 ## 4. The walk - the taxed and the untaxed invoice (grade10) (owner: @ecchochan)
 
-Needs groups 2 and 3. The staging walkthrough is waived in favor of the focused [E2E snapshots posted to PR #920](https://github.com/9gag/grade10/pull/920#issuecomment-6034475365). Human QA reviews the draft `feature-tcs.md` cases after deployment with `/tcs-review add-winner-order-tax-line`, and `/tcs-run-sheet` executes manual cases where needed.
+Needs groups 2 and 3. The staging walkthrough is waived in favor of the focused [E2E snapshots posted to PR #920](https://github.com/9gag/grade10/pull/920#issuecomment-6034475365). Uses draft `feature-tcs.md` as its planning input.
 
 - [ ] 4.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, and the focused admin and Winner Order E2E journeys
 

@@ -1,6 +1,6 @@
 # grade10-site/store/cart-validation Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/23
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-cart-validation-US1: Collector opens the cart and learns what moved

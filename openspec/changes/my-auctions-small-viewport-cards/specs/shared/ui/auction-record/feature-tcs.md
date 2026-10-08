@@ -1,6 +1,6 @@
 # shared/ui/auction-record Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-09-30, tcs-rules r4
 
 ## shared-ui-auction-record-US1: The record surface exports

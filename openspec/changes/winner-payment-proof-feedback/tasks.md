@@ -29,10 +29,8 @@ Winner Order surface. No group has an owner until an engineer claims it.
 
 - [x] 4.1 Walk the standalone success, failure and busy stories, then the page flow from pending bank-transfer invoice through success and Payment Verifying; cover `winner-order-SC-102`, `winner-order-SC-119`, `winner-order-SC-218`, `winner-order-SC-219` and `winner-order-SC-220`
 - [x] 4.2 Run the focused preview checks after the walk and record any implementation defect against the owning group
-- [ ] 4.3 After deployment, run `/tcs-review winner-payment-proof-feedback` and review the draft cases before any manual execution
 
 ## 5. The walk - Consuming Winner Order feedback (grade10) (owner: @htonyl)
 
 - [x] 5.1 Walk the consuming Winner Order from a pending bank-transfer invoice through successful proof submit and Payment Verifying; cover `winner-order-SC-119`, `winner-order-SC-218` and `winner-order-SC-219`
 - [x] 5.2 Run the final focused consuming-app checks after the walk and record any implementation defect against the owning group
-- [ ] 5.3 After deployment, run `/tcs-review winner-payment-proof-feedback` and review the draft cases before any manual execution

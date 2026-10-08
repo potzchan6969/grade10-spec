@@ -34,7 +34,7 @@ Needs group 2.
 
 ## 5. The walk (grade10) (owner: @ecchochan)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review align-reward-editor-design`), and `/tcs-run-sheet` executes manual cases when needed, and groups 3 and 4 landed.
+Uses draft `feature-tcs.md` as its planning input, with groups 3 and 4 landed.
 
 - [x] 5.1 `rewards.spec.ts` creates a free item and reopens it, and opens and duplicates a free item stored through the admin API; at 1280px, with the basket verdict shown, the rail and the save button stay in view while the form scrolls, and at 400px the rail sits under the form, a wrapped strip fills its rows and the rewards list's title keeps its width; each width's last frame attaches to the report
 - [x] 5.2 One before and after capture pass at 1280px and 400px, through `e2e-snapshot-verification`, of the reward editor (new and edit), the rewards list, the users directory with an account panel open, the diary services panel, the booking dialog with an error, product schemas, the auction listing editor, the checkout test coupon bench, and one shared console page in the ZZZ admin
@@ -64,7 +64,7 @@ its fix lands in this group.
 
 ## 7. The walk - online only by product or filter (grade10)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review align-reward-editor-design`), and `/tcs-run-sheet` executes manual cases when needed, and group 6 landed.
+Uses draft `feature-tcs.md` as its planning input, with group 6 landed.
 
 - [ ] 7.1 `rewards.spec.ts` creates a reward scoped to named products with Both chosen first: the form shows online only, and the reopened reward and the rewards list read online only
 - [ ] 7.2 `rewards.spec.ts` opens a reward stored through the admin API, scoped to named products for both channels, saves it unchanged, and reopens it online only

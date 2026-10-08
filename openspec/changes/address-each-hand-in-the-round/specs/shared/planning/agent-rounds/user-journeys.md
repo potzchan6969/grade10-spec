@@ -6,11 +6,11 @@
 **I want** a line a build round puts on my page to reach me as a question with the line quoted, in a message that is mine,
 **so that** my page says what I decided and I never learn of an edit from a diff.
 
-### shared-planning-agent-rounds-US-11: QA is asked when the suite lands
+### shared-planning-agent-rounds-US-11: QA reviews after deployment
 
-**As a** QA engineer,
-**I want** to be asked to review the suite on the landing that puts it up for review, and to know the walk names my review as its input,
-**so that** the review is on time and no walk carries an id I have not signed.
+**As a** product manager,
+**I want** human QA to review suites after deployment without a review task blocking delivery,
+**so that** requirements can fold and implementation can ship while case classification remains explicit downstream work.
 
 ### shared-planning-agent-rounds-US-12: Engineer lands an application group's row
 

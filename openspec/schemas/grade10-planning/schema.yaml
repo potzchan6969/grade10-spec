@@ -1048,7 +1048,8 @@ artifacts:
       --decided-by <walk path>`, a walk in grade10 named `grade10:<path>`;
       the cases that stay manual remain draft for human QA after deployment
       makes implementation available and are named in the walk's `rounds.md`
-      row. Its preamble names that review (`/tcs-review <change>`).
+      row. Human review is downstream work discovered from the suite; it is
+      never a task, walk input, acceptance gate or archive gate.
 
       - An `automated` case this change joined a result to - its `<v>` bumped,
       back to `draft` - owes a task in the group that builds the behaviour:

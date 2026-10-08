@@ -1,6 +1,6 @@
 # shared/ui/site-chrome Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/26
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 **Out of suite:** none.

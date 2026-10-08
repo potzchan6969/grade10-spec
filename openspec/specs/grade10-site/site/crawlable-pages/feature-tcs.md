@@ -1,6 +1,6 @@
 # grade10-site/site/crawlable-pages Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/14
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
 ## grade10-site-site-crawlable-pages-US1: Collector reads a public surface before scripts run

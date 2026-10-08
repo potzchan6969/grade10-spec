@@ -164,7 +164,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 - **Automatic, top down** — once the proposal, journeys and outline are written, `/planning-dev` runs on the frozen anchors in a fresh QA1 context, levels first: **When a Change Touches a Suite Above It** is checked, a domain or product hit runs `/spec-to-tcs <level> <target>` into the change's tree, a platform hit is an edit to `platform-tcs.md`, and a hit that needs no case is its `No <level> impact: <why>` line; then `/spec-to-tcs <change>` writes the feature suites, each reading the domain draft above it. New cases are `draft`, ahead of the scenarios. QA2 reconciles the cases and Dev scenarios before one human accepts the complete plan; human review is `/tcs-review` after deployment makes implementation available
 - **Both files publish together** — `pnpm spec:accept` publishes accepted requirements and `feature-tcs.md` with their content fingerprint, so durable requirements and their blind suite stay paired; CI's `pnpm run tcs:validate --require-suites` warns on a capability that still has journeys and no suite
-- **The fold holds each case once** - a change's case replaces the durable case with the same `TC<m>`. It is the same revision restyled, or a higher one the change rewrote; a revised case without its own `trace:case` marker takes the durable one, moved to the new `rev`. An older revision is refused. When the fold adds a `draft` to an `approved` file, it lapses the `**Reviewed:**` line on that day. Before anything is written, `accept:preflight` and `spec:accept` run `tcs:validate --require-suites` on a copy of the store that holds the fold, and check that every trace marker in a folded file sits directly above its heading. Either failure refuses acceptance. A journey child the fold cannot place, or a durable suite that already repeats a TC number, is refused too
+- **The fold holds each case once** - a change's case replaces the durable case with the same `TC<m>`. It is the same revision restyled, or a higher one the change rewrote; a revised case without its own `trace:case` marker takes the durable one, moved to the new `rev`. An older revision is refused. The fold compares the durable file's approved share with the folded result and writes the status transition; when an `approved` file falls below 100%, it also lapses the `**Reviewed:**` line on that day. Draft cases and their file status never block the fold. Before anything is written, `accept:preflight` and `spec:accept` run `tcs:validate --require-suites` on a copy of the store that holds the fold, and check that every trace marker in a folded file sits directly above its heading. Either failure refuses acceptance. A journey child the fold cannot place, or a durable suite that already repeats a TC number, is refused too
 - **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
 
@@ -204,7 +204,7 @@ The house style — titles, step and result shape, pre-condition and placeholder
 
 | | |
 | --- | --- |
-| Branch | `tcs-review/<level>-<target>`, off `main`, before the first verdict; a second reviewer on the same suite appends `-US<n>-<m>` |
+| Branch | `tcs-review/<level>-<target>`, off `main`, pushed before the first verdict; the remote branch or its open pull request is the `in-review` signal. A second reviewer on the same suite appends `-US<n>-<m>` |
 | Commits | preparation first, each part its own commit: `test(<domain>): regenerate <target> test cases under tcs-rules r<n>` or `test(<domain>): restyle <target> test cases`, `test(<domain>): cover <target> scenarios`, `test(<domain>): fill in how to run <target> test cases`, `test(<domain>): add test data to <target> test cases`. Then `test(<domain>): approve <target> US<n> test cases`, one per journey that changed, made on moving to the next journey. Then the follow-ups — `docs(governance): conventions from the <target> review` and `test(<domain>): apply conventions from the <target> review` — batched by purpose |
 | Pushes | once when preparation is done, before the reviewer sees a case; once when the process ends; and once if the reviewer leaves midway. Never between journeys |
 | PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — the journeys the branch carries |
@@ -219,7 +219,7 @@ The house style — titles, step and result shape, pre-condition and placeholder
 - **A flow that disagrees is classified, not fixed** — where the spec's flow, `ui-design.md` or the PRD disagrees with a case, the PRD, the Feature set, `decisions.md`, `## Reconciliation` and `## Settled` are read first: already settled → follow it; the case misread → a proposed change; the spec wrong or silent → a gap for its author; undecidable → both sides shown to the reviewer
 - **Journeys are the author's** — a doubt about a journey itself (two with one purpose, one too wide, a wrong actor) is a finding for the spec's author, landed on the PRD as a ❓ or in the next change's `decisions.md`; a review never edits `user-journeys.md`
 - **Teach at the end** — the writing rules the reviewer's edits suggest are offered back as candidate lines for [`tcs-conventions.md`](tcs-conventions.md), one at a time; an edit that states a fact about one case — where a value is read, how a state is reached — stays in the case and is not offered; a confirmed line applies everywhere unless it is worded in one domain's vocabulary, and only then is its scope asked; refused ones land under `## Refused`. A confirmed line is applied at once, as that file's **A confirmed line applies at once** says
-- **Finding suites** — any file holding a `draft`: none → say so and name where suites live; one → review it; more → list `reopened` first, then `in-review`, then `pending-review`, with pending counts, and ask
+- **Finding suites** — any file holding a `draft`: none → say so and name where suites live; one → review it; more → list `reopened` first, then `pending-review`, with approved/active progress, and ask. A matching remote `tcs-review/*` branch or open pull request overlays `in-review`; it is not written into the suite
 - **Top down** — platform, product, domain, then feature; when a domain's last feature suite is approved, offer its `domain-tcs.md`, then `platform-tcs.md`
 - **Two reviewers is allowed** — open PRs on the file are reported as information; the file is re-read from disk before each verdict is written
 - **Leaving midway still lands** — a reviewer who stops mid-review gets what is done committed, pushed and opened as the pull request
@@ -239,7 +239,7 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 
 ## Rules Revisions
 
-`tcs_rules_rev` is one integer, bumped by hand when the contract changes: a property, a vocabulary value, an id form, a file name, a level, or a rule about what a case may claim. Run the store against the new rules; a valid file now rejected is a bump, a typo is not. How a case *reads* is not a revision: it lives in `docs/governance/tcs-conventions.md` and moves without one. A stamp written before the revision was one integer (`r3.0`) reads as its first number.
+`tcs_rules_rev` is one integer, bumped by hand when the case contract changes: a property, a vocabulary value, an id form, a file name, a level, or a rule about what a case may claim. Run the store against the new rules; a valid case body now rejected is a bump, a derived header migration or a typo is not. How a case *reads* is not a revision: it lives in `docs/governance/tcs-conventions.md` and moves without one. A stamp written before the revision was one integer (`r3.0`) reads as its first number.
 
 | Case | The sweep does |
 | --- | --- |
@@ -255,6 +255,7 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 - **A reviewed claim does not move silently** — `pnpm run tcs:validate --capture-baseline=<file>` before and `--swept=<file>` after prove every `actual` and `deprecated` case kept its id, trace and status
 - **The sweep lands in its own commits** — separate from any review verdict, pushed before review starts, so the review's diff holds only the reviewer's decisions
 - **A bump does not sweep** — the bump is its own commit and touches no suite. A suite below it is regenerated when `/tcs-review` next prepares it, or when someone runs `/spec-to-tcs` on it from `pnpm run tcs:stale`; a bulk sweep is a separate run somebody chooses, never part of the bump
+- **A derived header change does not bump** — migrate the header across live suites; their case bodies and `**Drafts styled:**` stamps stay as they are
 - **What each revision changed** — r4: the revision became one integer and how a case reads moved to `tcs-conventions.md`; a sweep regenerates drafts; the `reopened` status and the lapsed `**Reviewed:**` line; **Executable without asking**, **A result may sharpen, never move**, **A value is the rule, or stands for it** and **Rows may add what the rule implies**
 
 ## Step 1: Digest the Capability
@@ -388,20 +389,23 @@ Ten properties, in this order, on every case. Where a value usually starts is **
 
 ## The File Header
 
-At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>`, `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>[, lapsed <YYYY-MM-DD>]` — every one computed, never chosen.
+At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>`, `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>[, lapsed <YYYY-MM-DD>]` — every one computed, never chosen. The status line is compact: `**Status:** <status> · <actual>/<total - deprecated>`. Deprecated cases are history and count in neither side. A `retired` suite has no active denominator and writes only `**Status:** retired`.
 
-| Cases in the file | `**Status:**` |
+| Transition from the current file | Next `**Status:**` |
 | --- | --- |
-| every case `draft`, or none yet | `pending-review` |
-| an `actual` or `deprecated`, and a `draft` left | `in-review` |
-| a `draft` in a file that was `approved` — its `**Reviewed:**` lapsed | `reopened` |
-| no `draft` left | `approved` |
+| all cases are `deprecated` | `retired` |
+| every active case is `actual` | `approved · <n>/<n>` |
+| approved share falls — `9/10 → 8/10`, `9/10 → 9/12` | `reopened · <actual>/<active>` |
+| a `reopened` file keeps the same approved share | stays `reopened` |
+| approved share rises but remains below 100% | `pending-review · <actual>/<active>` |
+| a new file, or an incomplete file whose share does not fall | `pending-review · <actual>/<active>` |
 
-- **Derived, never claimed** — `/spec-to-tcs` and `/tcs-review` recompute it after every write; `pnpm run tcs:validate` fails a header that disagrees with its cases. `in-review` reserves nothing, and a new `draft` drops `approved` to `reopened` on its own
+- **A transition, never a claim** — the writer compares the current and next approved shares by exact cross multiplication, then writes the table above. `/spec-to-tcs`, `/tcs-review` and the fold do this after every write. `pnpm run tcs:validate` verifies the stored ratio and the statuses the snapshot can carry; the prior file is what proves whether incomplete progress is `pending-review` or `reopened`
+- **Activity lives in Git** — `in-review` is not a file status. A remote `tcs-review/*` branch or its open pull request means review work is in flight; closing or merging it ends that activity. A partially reviewed file at rest remains `pending-review` or `reopened`
 - **Only `approved` exports** — and only its `actual` cases, only when someone runs an export
 - **`**Drafts styled:**`** — the revision of this document the file's `draft` cases were last written against, and when; present exactly while the file holds a `draft`. `actual` cases carry no revision: a reviewer's yes is the convention
-- **`**Reviewed:**`** — the date the file reached `approved` and the revision, written by `/tcs-review` on that transition; no reviewer name, git records who. When the file falls out of `approved` the line stays and gains `, lapsed <YYYY-MM-DD>`, written by whichever run added the draft, so the file reads `reopened` — a quick re-review of what is new, not a first review — and a new approval writes the line fresh
-- **`reopened` sorts first** — `/tcs-review` lists `reopened` suites ahead of `in-review` and `pending-review` ones, with the drafts added since the lapse
+- **`**Reviewed:**`** — the date the file reached `approved` and the revision, written by `/tcs-review` on that transition; no reviewer name, git records who. When the file falls out of `approved` the line stays and gains `, lapsed <YYYY-MM-DD>`, written by whichever run added the draft. A new approval writes the line fresh
+- **`reopened` sorts first** — `/tcs-review` lists regressed suites ahead of `pending-review` ones
 - **`**Out of suite:**`** — scenario ids the suite leaves uncovered on purpose, under the header (`openspec/config.yaml`, `rules.user-journeys`); `pnpm check:manual` counts them as covered and refuses one a living case traces
 - **`tcs_rules_rev`** — this document's frontmatter, one integer, bumped by hand
 
@@ -410,7 +414,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 ````markdown
 # <product>/<domain>/<capability> Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/<number of draft cases>
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
 
 ## <capability>-US<n>: <journey title, copied from the spec heading>

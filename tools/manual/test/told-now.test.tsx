@@ -122,7 +122,7 @@ describe("the stage that names the design pair", () => {
 });
 
 describe("the stages that say something else", () => {
-  it("shared-planning-agent-rounds-SC-89 - tells QA at Specified the suite's path, its case count and the review", () => {
+  it("shared-planning-agent-rounds-SC-89 - keeps Specified with the product manager and creates no QA review task", () => {
     const html = render(
       gift({
         suites: [
@@ -143,12 +143,10 @@ describe("the stages that say something else", () => {
       "specified",
     );
 
-    expect(html).toContain("@sam");
-    expect(html).toContain("/tcs-review gift-cards");
-    expect(html).toContain(
-      "openspec/changes/gift-cards/specs/demo/store/rail/feature-tcs.md",
-    );
-    expect(html).toContain("3 cases; the walk needs it reviewed as its input");
+    expect(html).toContain("@robin");
+    expect(html).toContain("/workflow-specify gift-cards");
+    expect(html).not.toContain("@sam");
+    expect(html).not.toContain("/tcs-review");
   });
 
   it("records implementation completion without scheduling the later QA walk", () => {

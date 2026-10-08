@@ -117,9 +117,7 @@ These retired addresses are not completed tasks and are never reused.
 
 ## 6. The walk (grade10)
 
-Uses the draft feature suite as input after frontend delivery. Human QA reviews
-deployed implementation with `/tcs-review add-shopify-checkout-integration`;
-manual execution uses `/tcs-run-sheet`. Cases remain draft during planning.
+Uses the draft feature suite as planning input after frontend delivery. Cases remain draft during planning.
 
 - [ ] 6.1 Retain the historical walks and extend through Group 13 for all six frozen checkout journeys, including safe reuse/recovery and later-cart protection; separate fixture and authorized staging observations.
 - [ ] 6.2 In each walks' commit, mark only cases actually decided by them with `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>`; name manual cases in the suite and rounds row.
@@ -210,7 +208,7 @@ handoff and review-only paid-cart refresh to 11.1 before wiring them in 11.3:
 
 ## 13. The walk (grade10)
 
-Uses draft feature cases after Groups 7-12 land. Human QA reviews deployed implementation with `/tcs-review add-shopify-checkout-integration`; manual execution uses `/tcs-run-sheet`. Planning marks no case approved or actual.
+Uses draft feature cases as planning input after Groups 7-12 land. Planning marks no case approved or actual.
 
 - [ ] 13.1 Keep one end-to-end actor walk for each frozen journey through its real interface: `grade10-site-store-checkout-US-01`, `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`, `grade10-site-store-checkout-US-04`, `grade10-site-store-checkout-US-05`, `grade10-site-store-checkout-US-06`.
 - [ ] 13.2 In the walks' own commit, use `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>` only for cases the walks decide. Name remaining manual provider cases in the suite and rounds row.

@@ -1,6 +1,6 @@
 # grade10-site/auction/bidder-suspension Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
 ## suspension-US1: Collector who misses a deadline loses their auction standing

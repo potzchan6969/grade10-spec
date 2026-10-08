@@ -1,6 +1,6 @@
 # grade10-admin/auction/payment-settings Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/4
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-payment-settings-US1: Operator maintains the auction premium minimums

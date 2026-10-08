@@ -738,7 +738,7 @@ const SUITE = [
 ].join("\n");
 
 // Proves part of shared-planning-agent-rounds-US11-TC1-1.
-test("shared-planning-agent-rounds-SC-89 - --stages tells QA at Specified the suite's path, its case count and the review command, once per push", () => {
+test("shared-planning-agent-rounds-SC-89 - --stages keeps Specified with the product manager and creates no QA review turn", () => {
   const { root, write, commit } = sandbox();
   const designed = throughSpecs();
   delete designed[`${DIR}/spec.md`];
@@ -775,16 +775,12 @@ test("shared-planning-agent-rounds-SC-89 - --stages tells QA at Specified the su
   const { messages, stages: reached } = first.read();
 
   assert.equal(reached[CHANGE], "specified", first.stderr);
-  const qa = textOf(messages, "probe:specified:qa");
-  assert.match(qa, /\*Your turn\*/);
-  assert.match(qa, /Review: `\/tcs-review probe`/);
-  assert.match(
-    qa,
-    /Suite: `openspec\/changes\/probe\/specs\/demo\/store\/rail\/feature-tcs\.md`, 1 case; the walk needs it reviewed as its input/,
-  );
-  // The product manager's own turn message carries no suite line.
-  assert.doesNotMatch(textOf(messages, "probe:specified:pm"), /Suite:/);
-  // Sent once: a re-run of the same push tells QA nothing again.
+  const pm = textOf(messages, "probe:specified:pm");
+  assert.match(pm, /\*Your turn\*/);
+  assert.match(pm, /\/workflow-specify probe/);
+  assert.equal(textOf(messages, "probe:specified:qa"), "");
+  assert.doesNotMatch(pm, /\/tcs-review|Suite:/);
+  // Sent once: a re-run of the same push tells nobody again.
   assert.deepEqual(stages(root, args).read().messages, []);
 });
 

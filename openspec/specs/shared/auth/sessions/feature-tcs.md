@@ -1,6 +1,6 @@
 # shared/auth/sessions Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 1/16
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-sessions-US1: Operator lists a person's sessions

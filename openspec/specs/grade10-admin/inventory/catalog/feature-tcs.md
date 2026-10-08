@@ -1,6 +1,6 @@
 # grade10-admin/inventory/catalog Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/73
 **Drafts styled:** 2026-10-05, tcs-rules r4
 **Out of suite:**
 

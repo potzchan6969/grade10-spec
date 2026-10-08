@@ -1,6 +1,6 @@
 # shared/planning/agent-rounds Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/40
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## shared-planning-agent-rounds-US10: Product manager keeps their page through the build
@@ -236,14 +236,14 @@
 
 ---
 
-## shared-planning-agent-rounds-US11: QA is asked when the suite lands
+## shared-planning-agent-rounds-US11: QA reviews after deployment
 
-**As a** QA engineer,
-**I want** to be asked to review the suite on the landing that puts it up for review, and to know the walk names my review as its input,
-**so that** the review is on time and no walk carries an id I have not signed.
+**As a** product manager,
+**I want** human QA to review suites after deployment without a review task blocking delivery,
+**so that** requirements can fold and implementation can ship while case classification remains explicit downstream work.
 
 <!-- trace:case id=g10.shared-agent-rounds.TC-ruo rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
-### shared-planning-agent-rounds-US11-TC1-1: The requirements' landing tells QA the suite is up for review
+### shared-planning-agent-rounds-US11-TC1-1: The requirements' landing leaves suite review downstream
 
 **Classification:**
 
@@ -263,21 +263,21 @@
 
 * <change>'s `spec.md` and `feature-tcs.md` are drafted on its branch, the suite `pending-review`.
 * admin(product manager of <change>) is in <change thread>.
-* admin(qa of <change>) is in <change thread>.
 
 **Steps:**
 
 1. Say land for the requirements in <change thread>, as the product manager.
-2. Read the messages addressed to QA.
+2. Read the change's current hand and messages.
 3. Check `main`.
 
 **Expected Results:**
 
-* QA receives a message that is theirs, in the same landing, naming the suite and that it is up for review.
+* The change stays with the product manager at Specified.
+* QA receives no review task or turn message from the landing.
 * `spec.md` and `feature-tcs.md` are on `main` together.
 
 <!-- trace:case id=g10.shared-agent-rounds.TC-i5v rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
-### shared-planning-agent-rounds-US11-TC2-1: The walk group names QA's review as its input
+### shared-planning-agent-rounds-US11-TC2-1: The walk uses the draft suite without a review dependency
 
 **Classification:**
 
@@ -296,7 +296,6 @@
 **Pre-conditions:**
 
 * <change>'s `tasks.md` is drafted on its branch, and its `feature-tcs.md` is `pending-review` on `main`.
-* admin(qa of <change>) is in <change thread>.
 
 **Steps:**
 
@@ -305,8 +304,8 @@
 
 **Expected Results:**
 
-* The walk group names the review of `feature-tcs.md` as its input.
-* No other group names the review.
+* The walk group names the draft `feature-tcs.md` as planning input.
+* No task or group requires `/tcs-review` before acceptance, the fold, implementation, the walk or archive.
 
 <!-- trace:case id=g10.shared-agent-rounds.TC-fs6 rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
 ### shared-planning-agent-rounds-US11-TC3-1: A walk citing a draft case id is refused in the application repository
@@ -1418,8 +1417,8 @@ case, in these words, and what a person walks beyond it:
 | `shared-planning-agent-rounds-US10-TC4-1` | a person runs a round touching no product line, reads the product manager's thread for silence, and reads the engineer's summary for no page question |
 | `shared-planning-agent-rounds-US10-TC5-1` | a person answers another hand's page question, opens the page to confirm the line is unchanged and still ❓, and reads the refusal keeping the question open on the product manager, as `run-a-round-on-every-artifact`'s Told once has it |
 | `shared-planning-agent-rounds-US10-TC6-1` | the skill's tests hold the rule that a landing holds nothing on a page question; a person lands the group, reads the line's mark and reads `decisions.md` for no record of the round deciding it |
-| `shared-planning-agent-rounds-US11-TC1-1` | the push's tests prove the landing tells QA once, naming the suite's path, its case count and the review. The words' tests prove the message itself, and the manual's walk proves QA's turn on My turn and on the change page. A person says `land`, reads the thread and checks `main` for `spec.md` and `feature-tcs.md` landed together |
-| `shared-planning-agent-rounds-US11-TC2-1` | the template's tests and the walk rule's tests prove the walk group names the review, in the template and in a plan; a person reads the plan's other groups and confirms none of them names the review |
+| `shared-planning-agent-rounds-US11-TC1-1` | the push's tests prove the landing keeps Specified with the product manager and creates no QA turn. A person says `land`, reads the thread and checks `main` for `spec.md` and `feature-tcs.md` landed together |
+| `shared-planning-agent-rounds-US11-TC2-1` | the template's tests and the walk rule's tests prove the walk group uses the draft suite without a review dependency; a person reads the plan's groups and confirms none requires review before delivery |
 | `shared-planning-agent-rounds-US11-TC3-1` | the tick's tests decide the refusal of a draft id over a fixture store; a person runs `pnpm plan done` on a walk group whose spec cites one |
 | `shared-planning-agent-rounds-US11-TC4-1` | the tick's tests decide the pass once the case is `actual`; a person signs the case with `/tcs-review` and runs the tick again |
 | `shared-planning-agent-rounds-US11-TC5-1` | the tick's tests decide one draft id among signed ones; a person reads the refusal naming that id alone |

@@ -66,7 +66,7 @@ Needs groups 3-4 landed on `main` and the submodule bumped first.
 
 ## 6. The walk - Winner Order's invoice and receipt PDFs (grade10)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review add-invoice-and-receipt-pdf-blocks`), and `/tcs-run-sheet` executes manual cases when needed.
+Uses draft `feature-tcs.md` as its planning input.
 
 - [ ] 6.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, a cancelled order, and a replacement invoice (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`, `winner-order-SC-98`). Confirm the replacement document names the replaced invoice, as this change's `SC-51` requires.
 - [ ] 6.2 Walk `winner-order-US-02` opening the receipt PDF once paid and before payment (`winner-order-SC-67`, `winner-order-SC-68`) — `winner-order-SC-18`/`SC-19`'s manually-settled distinction is not a claim this contract makes any more (`decisions.md` Q19); walk it against whatever `winner-order/spec.md` still requires there, not against a mark this renderer does not draw

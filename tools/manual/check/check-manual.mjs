@@ -75,7 +75,7 @@ import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
 import { checkMarkInProse, checkMarks } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
-import { checkPlanned, checkWalkGroup, checkWalkLast } from "./planned.mjs";
+import { checkPlanned, checkWalkLast } from "./planned.mjs";
 import { checkAcceptance } from "./qa.mjs";
 import {
   checkArchived,
@@ -229,7 +229,6 @@ export async function runChecks(
     checkPlanned(ctx, changes);
     checkRounds(ctx, changes, roundsSince);
     checkAwaiting(ctx, changes);
-    checkWalkGroup(ctx, changes);
     checkWalkLast(ctx, changes);
     checkHands(ctx, changes);
     checkLandedBy(ctx, changes);

@@ -1,6 +1,6 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/44
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-site-page-shell-US1: Collector opens any surface inside the site shell

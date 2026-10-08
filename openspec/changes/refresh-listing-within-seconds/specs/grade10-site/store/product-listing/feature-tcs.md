@@ -1,6 +1,6 @@
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/6
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
 **Out of suite:**

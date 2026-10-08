@@ -1,6 +1,6 @@
 # shared/ui/vault-case Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## Background

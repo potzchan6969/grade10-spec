@@ -1,6 +1,6 @@
 # grade10-site/store/wallet-member-card Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/5
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-wallet-member-card-US6: Member carries their card in a phone wallet

@@ -1,6 +1,6 @@
 # grade10-site/grading/submission-lifecycle Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/65
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**

@@ -76,15 +76,14 @@ const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
  * canonical `-US-<n>` form. A scenario id is the older shape, and still
  * resolves — the suite beside a spec that predates journeys traces those. */
 const TRACE_ID = /[a-z0-9][a-z0-9-]*-(?:US|SC)-\d+/g;
-/** Derived from the cases, never chosen: every case `draft` is
- * `pending-review`, a first verdict makes it `in-review`, no `draft` left
- * makes it `approved`, and a draft in a file that was approved makes it
- * `reopened`. */
+/** Persistent file statuses. Historical archives may still say `in-review`;
+ * the reader normalizes that old partial-review meaning to `pending-review`.
+ */
 const SUITE_STATUSES: ReadonlySet<TestSuiteStatus> = new Set([
   "pending-review",
-  "in-review",
   "reopened",
   "approved",
+  "retired",
 ]);
 const CASE_STATUSES: ReadonlySet<TestCaseStatus> = new Set([
   "draft",
@@ -613,7 +612,23 @@ function suiteStatus(roots: Section[]): TestSuiteStatus {
       "a test-case file needs a `# ` title before its `**Status:**`",
     );
   }
-  return enumProp(head, "Status", SUITE_STATUSES);
+  const found = /^\*\*Status:\*\*\s*(\S+?)(?:\s*·\s*\d+\/\d+)?\s*$/m.exec(
+    head.body,
+  )?.[1];
+  if (found === undefined) {
+    throw new StoreFileError(
+      head.line,
+      `\`${head.heading}\` has no \`**Status:**\``,
+    );
+  }
+  if (found === "in-review") return "pending-review";
+  if (!SUITE_STATUSES.has(found as TestSuiteStatus)) {
+    throw new StoreFileError(
+      head.line,
+      `\`${head.heading}\` is \`**Status:** ${found}\`, which is not ${orList(SUITE_STATUSES)}`,
+    );
+  }
+  return found as TestSuiteStatus;
 }
 
 function caseStatus(section: Section): TestCaseStatus {

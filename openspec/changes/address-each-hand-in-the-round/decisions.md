@@ -2,8 +2,8 @@
 
 - A hand reads one message that is theirs and answers it in a sentence, with
   every fact the answer needs quoted in it.
-- QA is asked to review the suite the day it lands, and the walk names that
-  review as its input.
+- Human QA reviews the suite after deployment; the review is not a planning,
+  fold, build, walk or archive dependency.
 - A row lands through the command whichever repository its tests are in, and
   a cited test carries the id it is credited for.
 - A round's cost is the readings that disagree: readings verified together,
@@ -30,7 +30,7 @@
 | --- | --- | --- | --- |
 | Q1 | Where does a held row addressed to another hand go? | As the round's own reply in the change's thread, mentioning that hand, keyed on the change, the round and the row so a re-run posts it once; it carries the row, the sentence it would put on the page and the decision rows it touches, quoted - the owner's word (2026-09-22) on the shape, the round's word on the carrier, taking `stage-changes-and-notify-hands`' Q31 recommendation that the round's replies are this capability's; the owner's answer to Q31 governs | A seventh message kind on `change-stages`; one summary addressed to every hand |
 | Q2 | When a build round lands a product line on a page, does it reach the product manager as decided or as ❓? | As ❓, with the page's line quoted before and after; a line added quotes nothing before, a line removed quotes nothing after; the routing to a ❓ line is already `run-a-round-on-every-artifact`'s, and what this change adds is the quoting - the owner's word | Decided by the round with an Instead of the product manager may overturn |
-| Q3 | Who asks QA to review the suite, and when? | QA is a hand of Specified: the landing of the requirements is a move to QA, told by the turn message every hand gets, naming the suite, its case count and `/tcs-review`; the walk group names the review as its input - the owner's word on the timing, the round's word on the shape, extended in `stage-changes-and-notify-hands`' Hands table, no new kind | QA asked when a build reader trips on a rule; a `review` message kind |
+| Q3 | Who asks QA to review the suite, and when? | Superseded 2026-10-08: nobody creates a review task or makes it a delivery dependency. Human QA discovers `pending-review` and `reopened` suites after deployment and starts `/tcs-review`; Specified stays with the product manager - the owner's word | QA as a hand of Specified; the walk group naming review as an input; a `review` message kind |
 | Q4 | How many questions does the interview ask? | About three, none trivial, each changing what is built and one of them whether to do it now; the defaults the round applies are listed as decided by the round - the owner's word | The whole frontier in one round; a fixed two or three |
 | Q5 | Which readers read a task group that lands prose? | The reader of words, QA and the simpler thing; the `apply` block carries `when:` triggers like an artifact's list - the build's four readings on `code`, a changed line in any file that is neither markdown nor a message catalog, the reader of words on `copy`, a catalog's line among them, QA and the simpler thing always - and `code` joins the `when` table and the manual's trigger list - the owner's word | Six readers, four of them code readings, briefed into prose by hand; a `page` trigger beside `copy` |
 | Q6 | One verifier per group of findings, or one over the round's readings? | One over the round's readings, so one finding filed by several readers is verified once and no two verdicts disagree unseen; a round of one reader still verifies itself; the three statements in `run-a-round-on-every-artifact`'s delta are moved there, not contradicted beside it - the owner's word | A cross-group dedupe before verify, keeping one verifier per group |
@@ -48,7 +48,7 @@
 | Q18 | Whose is a page a round edits? | The change's product manager, whatever product the page belongs to - the round's word | The page's product's manager, looked up |
 | Q19 | Does a task group land while a ❓ the round put on the page is open? | Yes: a page question holds nothing; the line stays ❓ until its product manager answers - the round's word | Held like a decisions row |
 | Q20 | What mark does an answered page line carry? | 🚧 until the change that delivers it archives, whose fold takes the mark off - the round's word | None; ❓ kept |
-| Q21 | Whom does the requirements' landing address when the record names no QA? | The QA channel, as the turn message already does for an unnamed hand; the walk group names the review as its input still - the round's word | Nobody |
+| Q21 | Whom does the requirements' landing address when the record names no QA? | Superseded by Q3: nobody. Suite review starts after deployment and is not a requirements-landing move - the owner's word | The QA channel |
 | Q22 | Which walk ids does the tick refuse? | The ticking change's own whose case is not `actual`: draft, deprecated, or an older revision of a case its suite holds; and any id no live suite issues under any revision; an id another change issued is that change's to sign - the round's word, narrowed to the change's own cases on the owner's word (2026-10-02) | Draft alone; every id in the walk's files, whichever change issued it |
 | Q23 | What does a conditional Manual row read, and who rewrites it? | `to be walked in <test>`, in the row's own words; the run that ran the lane rewrites the rows to what the walk reached; the validator reads the rows as prose in both states - the round's word | A key on the row |
 | Q24 | Is a hand with no move in a round told the round happened? | No - the round's word, as Told once already says | A message saying nothing is theirs |

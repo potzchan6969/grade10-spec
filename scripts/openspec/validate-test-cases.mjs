@@ -50,7 +50,6 @@ import {
   commaList,
   currentRulesRev,
   decisionsBeside,
-  deriveStatus,
   dirsHolding,
   domainPrefix,
   FILE_STATUSES,
@@ -68,9 +67,11 @@ import {
   readProductIds,
   readSpecIds,
   revCmp,
+  reviewProgress,
   revText,
   ROOT as STORE_ROOT,
   SUITE_NAMES,
+  snapshotStatuses,
   statusCounts,
 } from "./lib/suites.mjs";
 
@@ -257,21 +258,41 @@ function checkSuite(root, filePath, rulesRev) {
     );
 
   const counts = statusCounts(cases);
-  const derived = deriveStatus(
-    counts,
-    cases.length,
-    Boolean(suite.reviewedLapsed),
-  );
+  const progress = reviewProgress(counts);
+  const allowed = snapshotStatuses(counts, cases.length);
   if (
     suite.status &&
     FILE_STATUSES.includes(suite.status) &&
-    suite.status !== derived
+    !allowed.includes(suite.status)
   )
     err(
-      1,
-      `file status is \`${suite.status}\` but its cases imply \`${derived}\` ` +
+      suite.statusLine ?? 1,
+      `file status is \`${suite.status}\` but this snapshot allows ${allowed.map((one) => `\`${one}\``).join(" or ")} ` +
         `(${counts.draft} draft, ${counts.actual} actual, ${counts.deprecated} deprecated) — ` +
-        "the file status is derived, never chosen",
+        "the writer preserves whether incomplete review progress regressed",
+    );
+  if (suite.status === "retired" && suite.reviewProgress)
+    err(
+      suite.statusLine ?? 1,
+      "a `retired` suite carries no active-case ratio — write `**Status:** retired`",
+    );
+  if (
+    suite.status &&
+    suite.status !== "retired" &&
+    suite.reviewProgress === null
+  )
+    err(
+      suite.statusLine ?? 1,
+      "status is missing its compact `actual/(total - deprecated)` progress, for example `**Status:** pending-review · 3/10`",
+    );
+  if (
+    suite.reviewProgress &&
+    (suite.reviewProgress.actual !== progress.actual ||
+      suite.reviewProgress.reviewable !== progress.reviewable)
+  )
+    err(
+      suite.statusLine ?? 1,
+      `status says ${suite.reviewProgress.actual}/${suite.reviewProgress.reviewable}, but its cases are ${progress.actual}/${progress.reviewable} actual/(total - deprecated)`,
     );
 
   // --- the blind reading's own output ------------------------------------
@@ -318,12 +339,16 @@ function checkSuite(root, filePath, rulesRev) {
       suite.draftsStyled.line,
       `claims tcs-rules ${revText(suite.draftsStyled.rev)}, but the store is at ${revText(rulesRev)}`,
     );
-  if (derived === "approved" && !suite.reviewed)
+  if (suite.status === "approved" && !suite.reviewed)
     err(
       1,
       "is approved but carries no `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>` line",
     );
-  if (derived === "approved" && suite.reviewed && suite.reviewedRev === null)
+  if (
+    suite.status === "approved" &&
+    suite.reviewed &&
+    suite.reviewedRev === null
+  )
     warn(
       suite.reviewedLine ?? 1,
       "was approved before the rules revision was recorded — its cases keep their wording, " +
@@ -339,12 +364,12 @@ function checkSuite(root, filePath, rulesRev) {
       suite.reviewedLine ?? 1,
       `claims it was approved under tcs-rules ${revText(suite.reviewedRev)}, but the store is at ${revText(rulesRev)}`,
     );
-  if (derived === "approved" && suite.reviewedLapsed)
+  if (suite.status === "approved" && suite.reviewedLapsed)
     err(
       suite.reviewedLine ?? 1,
       "is approved again but its `**Reviewed:**` line still reads lapsed — write it fresh: `**Reviewed:** <today>, tcs-rules r<n>`",
     );
-  if (derived !== "approved" && suite.reviewed && !suite.reviewedLapsed)
+  if (suite.status !== "approved" && suite.reviewed && !suite.reviewedLapsed)
     err(
       suite.reviewedLine ?? 1,
       "carries a `**Reviewed:**` line but is not approved — a file that falls out of `approved` keeps the line and adds `, lapsed <YYYY-MM-DD>`",
@@ -636,7 +661,7 @@ function checkSuite(root, filePath, rulesRev) {
 
   checkManualRows(root, text, cases, err);
 
-  return { rel, suite, counts, derived, cases: cases.length };
+  return { rel, suite, counts, progress, cases: cases.length };
 }
 
 // ---------------------------------------------------------------------------
@@ -1108,7 +1133,7 @@ const w = Math.max(...summaries.map((s) => s.rel.length));
 for (const s of summaries) {
   const tally = `${s.counts.draft} draft, ${s.counts.actual} actual, ${s.counts.deprecated} deprecated`;
   console.log(
-    `  ${s.rel.padEnd(w + 2)}${cyan(s.derived.padEnd(15))}${dim(tally)}`,
+    `  ${s.rel.padEnd(w + 2)}${cyan((s.suite.status ?? "missing").padEnd(17))}${dim(`${s.progress.actual}/${s.progress.reviewable} approved; ${tally}`)}`,
   );
 }
 

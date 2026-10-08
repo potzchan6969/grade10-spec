@@ -1,6 +1,6 @@
 # grade10-site/store/order-detail Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/16
 **Drafts styled:** 2026-09-08, tcs-rules r2
 
 ## grade10-site-store-order-detail-US1: Collector inspects one owned order

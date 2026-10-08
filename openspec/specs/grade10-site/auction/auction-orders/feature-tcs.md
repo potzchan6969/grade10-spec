@@ -1,6 +1,6 @@
 # grade10-site/auction/auction-orders Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-09-15, tcs-rules r3.0
 
 ## grade10-site-auction-auction-orders-US1: Winner finds what each won order needs next

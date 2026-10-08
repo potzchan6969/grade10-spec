@@ -1,6 +1,6 @@
 # grade10-admin/console/collector-page Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 12/19
 **Drafts styled:** 2026-10-02, tcs-rules r4
 **Out of suite:** `grade10-admin-console-collector-page-SC-07` — the vault worker's test of `admin.collectorCases` with the audit write failing; `grade10-admin-console-collector-page-SC-17` — the `CollectorPage` story with the header held pending, and its colocated test.
 

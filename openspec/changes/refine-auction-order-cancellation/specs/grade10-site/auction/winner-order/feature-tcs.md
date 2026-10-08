@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/2
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
 ## winner-order-US13: Winner learns their order was cancelled

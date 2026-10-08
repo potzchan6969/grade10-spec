@@ -37,7 +37,6 @@ import {
   DECISION_ROW,
   decisionRows,
   isWalkGroup,
-  taskGroupHeading,
 } from "../src/store/read-changes.mts";
 import { readJourneys, walkedByNobody } from "../src/store/read-specs.mts";
 
@@ -46,41 +45,6 @@ const DEFERRED = "❓";
 /** A scenario id, which is what closes a design state that became one. */
 const SCENARIO = new RegExp(`\`${SCENARIO_ID.source}\``);
 const OUT_OF_SUITE = "**Out of suite:**";
-
-/**
- * RULE `walk`: the plan's walk group names the suite's review. The walk takes
- * the draft suite as its input and human QA reviews it after deployment, so a
- * walk group that names no `/tcs-review` of this change is refused
- * (`shared-planning-agent-rounds-SC-90`). Whether a plan owes a walk group is
- * `walk_last`'s. The groups are read through `outline`, so a `##` quoted in a
- * fence is no group.
- */
-export function checkWalkGroup(ctx, changes) {
-  for (const change of changes) {
-    if (change.status !== "in-flight") continue;
-    const file = `${change.dir}/tasks.md`;
-    const text = readTextIfExists(join(ctx.roots.store, file));
-    if (text === undefined) continue;
-    for (const walk of walkGroupsOf(outline(text))) {
-      if (walk.raw.includes(`/tcs-review ${change.id}`)) continue;
-      ctx.add(
-        "walk",
-        file,
-        `group \`${walk.heading}\` names no review of the suite - name the one human QA runs after deployment (\`/tcs-review ${change.id}\`)`,
-      );
-    }
-  }
-}
-
-/** Every walk group, wherever the outline nests it: a plan may split the walk. */
-function walkGroupsOf(sections) {
-  return sections.flatMap((one) => {
-    const group = taskGroupHeading(one.heading);
-    return group && isWalkGroup(group.title)
-      ? [one]
-      : walkGroupsOf(one.children);
-  });
-}
 
 /** The day after the walk's title became a rule. A plan opened before it was
  * written when nothing read the title, and a register of plans that could not
