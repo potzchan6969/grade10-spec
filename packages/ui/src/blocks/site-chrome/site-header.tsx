@@ -39,6 +39,8 @@ type SiteHeaderCopy = NavCopy & {
   profile: string;
   myOrders: string;
   myAuctions: string;
+  /** Vault submissions list. Shown only with `onSubmissions`. */
+  submissions?: string;
   /** Store-launch membership destination. TBC — shown only with `onMembership`. */
   membership?: string;
   /** Optional authenticated orders destination label. */
@@ -76,6 +78,8 @@ type SiteHeaderProps = {
   onProfile?: () => void;
   onMyOrders?: () => void;
   onMyAuctions: () => void;
+  /** Opens Submissions. Omitted unless this handler is supplied. */
+  onSubmissions?: () => void;
   /** Store-launch membership item. TBC — omitted unless this handler is supplied. */
   onMembership?: () => void;
   /** Opens the consumer-owned authenticated orders destination. */
@@ -95,11 +99,12 @@ type SiteHeaderProps = {
  * Signed out shows a primary Sign In button. Signed in shows the account icon
  * and a menu with the email's initial avatar above the sign-in email, then
  * My Auctions, then Sign Out (destructive, separated). Cart, search, Profile, My Orders,
- * Membership, and Orders stay optional via handlers — Profile joins first
+ * Submissions, Membership, and Orders stay optional via handlers — Profile joins first
  * once its handler is supplied, My Orders joins ahead of My Auctions once
- * Store answers, Membership joins after My Auctions once its copy and
- * handler are supplied, and Orders joins after that once both its copy and
- * handler are supplied. When cart is present,
+ * Store answers, Submissions joins after My Auctions once its copy and handler
+ * are supplied, Membership joins after that once its copy and handler are
+ * supplied, and Orders joins after that once both its copy and handler are
+ * supplied. When cart is present,
  * `SiteHeader` owns the active-line count badge on the cart icon
  * (`cartItemCount`), matching the cart drawer title. On compact viewports,
  * `Nav` moves primary nav, utilities, search, and language into the left menu
@@ -128,6 +133,7 @@ function SiteHeader({
   onProfile,
   onMyOrders,
   onMyAuctions,
+  onSubmissions,
   onMembership,
   onOrders,
   onSignOut,
@@ -139,6 +145,7 @@ function SiteHeader({
     profile,
     myOrders,
     myAuctions,
+    submissions,
     membership,
     orders,
     signOut,
@@ -187,6 +194,11 @@ function SiteHeader({
             <DropdownMenuItem onClick={onMyAuctions}>
               {myAuctions}
             </DropdownMenuItem>
+            {submissions && onSubmissions ? (
+              <DropdownMenuItem onClick={onSubmissions}>
+                {submissions}
+              </DropdownMenuItem>
+            ) : null}
             {membership && onMembership ? (
               <DropdownMenuItem onClick={onMembership}>
                 {membership}

@@ -4,7 +4,7 @@ import { Hourglass } from "@phosphor-icons/react";
 
 /**
  * Portfolio banner when collectibles are still in intake. Track Progress opens
- * the intake tracker — vaulted holdings stay on the portfolio.
+ * Submissions — vaulted holdings stay on the portfolio.
  */
 function ActiveIntakeAlert({
   submissionCount,

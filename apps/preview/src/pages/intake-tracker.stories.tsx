@@ -1,8 +1,4 @@
 import {
-  BreadcrumbItem,
-  Breadcrumbs,
-} from "@grade10/design-system/components/display/breadcrumbs";
-import {
   Tabs,
   TabsContent,
   TabsList,
@@ -108,12 +104,8 @@ function IntakeTrackerPage({
 
   return (
     <VaultPageShell>
-      <Breadcrumbs>
-        <BreadcrumbItem current>Intake tracker</BreadcrumbItem>
-      </Breadcrumbs>
-
       <PageHeader
-        title="Intake tracker"
+        title="Submissions"
         description="Items from counter hand-in through vaulting or the next service."
       />
 
@@ -151,7 +143,7 @@ function IntakeTrackerPage({
 }
 
 const meta = {
-  title: "Pages/Intake Tracker",
+  title: "Pages/Submissions",
   component: IntakeTrackerPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -172,7 +164,7 @@ export const InProgress: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Intake tracker" }),
+      canvas.getByRole("heading", { level: 1, name: "Submissions" }),
     ).toBeVisible();
     expect(canvas.getByRole("tab", { name: "In progress" })).toHaveAttribute(
       "aria-selected",
