@@ -76,6 +76,9 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - 2026-10-06, shared/auth/users/feature-tcs.md: When a rule names a class of values, for example any role other than `user`, the test data takes two members of the class as rows; two are enough.
 - 2026-10-07, shared/auth/audit/feature-tcs.md: A case manual QA can run walks the product flow that reaches the write, such as a guest checkout for a trusted-product create, not the call behind it.
 - 2026-10-07, shared/auth/audit/feature-tcs.md: A case that needs a dependency mocked to refuse has Testability `automation` alone; nobody can make the refusal by hand.
+- 2026-10-08, shared/auth/roles/feature-tcs.md: A case's pre-condition puts each record in the state where the control the case uses, or looks for, would otherwise show.
+- 2026-10-08, shared/auth/roles/feature-tcs.md: Where the screen states the rule before the act, the expected result reads what it states, met or unmet, beside the act's outcome.
+- 2026-10-08, shared/auth/roles/feature-tcs.md: When a case reads one record and later creates another of the same kind, the expected result names which one it means.
 
 ### Actors
 
