@@ -1815,7 +1815,7 @@ append-only and retained".
 #### Scenario: grade10-admin-auction-post-sale-SC-90 - Address write, reopen, record and send serialize
 **Serves:** Setup - reopen setup or record it
 
-- **GIVEN** an expired order with no confirmed address
+- **GIVEN** a Setup Overdue order, with invoice `not_issued` and no confirmed address
 - **WHEN** a winner address write, an operator reopen, an operator record of
   setup and an operator invoice send are submitted concurrently
 - **THEN** Grade10 serializes the operations under the order boundary

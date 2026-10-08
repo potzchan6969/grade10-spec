@@ -2481,7 +2481,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The log names the operator, timestamp and reason.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-zl5 rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
-### post-sale-US18-TC11-1: Send locks the address and starts the seven days
+### post-sale-US18-TC11-1: Send keeps the confirmed address locked and starts the seven days
 
 **Classification:**
 
@@ -2519,7 +2519,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 
 * The invoice is issued and the order derives Pending Payment.
 * The payment deadline is 2026-09-12T09:00:00Z.
-* The delivery address is locked and the winner can no longer change it.
+* The delivery address stays as confirmed, locked since confirmation; the send changes nothing about it.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-84x rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
 ### post-sale-US18-TC12-1: Send is refused while no address is confirmed
