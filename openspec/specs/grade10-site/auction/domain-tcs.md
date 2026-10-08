@@ -1134,12 +1134,11 @@ finds it.
 ## grade10-site-auction-e2e-US11: Collector follows an old link to a hidden lot
 
 **As a** collector,
-**I want** a called-off lot to be gone everywhere,
-**so that** a saved link or an old search never shows me a lot that was
-withdrawn.
+**I want** a called-off lot gone from browse and search,
+**so that** a saved address still opens it.
 
-<!-- trace:case id=g10.auction-domain.TC-dw9 rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw,g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
-### grade10-site-auction-e2e-US11-TC01-1: Called-off lot is removed from the catalogue and its link
+<!-- trace:case id=g10.auction-domain.TC-dw9 rev=2 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw,g10.auction-listing-page.SC-ajz -->
+### grade10-site-auction-e2e-US11-TC01-2: Called-off lot leaves the catalogue and keeps its address
 
 **Classification:**
 
@@ -1175,7 +1174,7 @@ withdrawn.
 **Expected Results:**
 
 * Step 2: `<lot_1>` does not appear in the catalogue.
-* Step 3: response status is 404 and the Page not found screen is on screen.
+* Step 3: response status is 200 and `<lot_1>`'s public listing page is on screen.
 
 <!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->
 
