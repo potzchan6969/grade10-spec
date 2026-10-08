@@ -112,12 +112,12 @@ None.
 ## Ordering and dependencies
 
 - **Builds on the durable address deadline, `not_issued` invoice state and
-  address lock at send, and on `complete-auction-post-sale`**, declared in
+  address lock on confirm, and on `complete-auction-post-sale`**, declared in
   `.openspec.yaml`. That change owns the operator's reopen-setup and
   record-setup actions and their requirement; this change owns the persisted
   address deadline and `address_window_open` they act on.
-- **Accepted after `complete-auction-post-sale`**, which waits for its own
-  dependencies to archive first.
+- **Accepted after `complete-auction-post-sale`**, which is accepted without
+  waiting for its own dependencies to archive.
 - **Owns the persisted deadline, the derived write gate and the race behavior.**
   It does not reopen the winner-facing deadline wording.
 - **Feature sets carry this change's own items only.** The fold merges them by

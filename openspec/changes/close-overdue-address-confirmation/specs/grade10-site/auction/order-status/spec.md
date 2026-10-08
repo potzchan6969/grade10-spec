@@ -39,9 +39,9 @@ SHALL write a status; the derived order status SHALL be re-evaluated from the
 order's facts.
 
 `address_window_open` SHALL be read only while the invoice status is
-`not_issued`. Sending the invoice locks the delivery address, per
-`grade10-site/auction/winner-order`, and Grade10 SHALL NOT read the condition
-afterwards.
+`not_issued`. An invoice is sent only on a confirmed address, which locks on
+confirm, per `grade10-site/auction/winner-order`, and Grade10 SHALL NOT read
+the condition after the send.
 
 <!-- trace:scenario id=g10.auction-order-status.SC-g4b rev=1 -->
 #### Scenario: auction-status-SC-30 - The address window is derived from its persisted deadline

@@ -251,7 +251,7 @@
 
 **Pre-conditions:**
 
-* `<expired-invoice order>`'s invoice is `expired` and its address was locked at send.
+* `<expired-invoice order>`'s invoice is `expired` and its address was confirmed and is locked.
 * customer(winner of `<expired-invoice order>`) is on <the winner's auction order url>.
 
 **Steps:**
@@ -384,3 +384,7 @@ What they disagreed about is below.
 An operator may record a delivery address after the address deadline without
 reopening it. Neither reading proposed it; the action is
 `complete-auction-post-sale`'s.
+
+**Run:** 2026-10-08, amendment for the address lock, not blind: the closing paragraph of "A missed address deadline closes the address form", the durable suite and the cases above. The address locks on confirm, not at send, so the paragraph that retires the deadline at send no longer says the address locks there.
+
+- **Carried unchanged** - `winner-order-SC-150` keeps its meaning and its case: the send still retires the deadline. `winner-order-US23-TC8-1`'s pre-condition that read the lock at send now reads a confirmed, locked address, with no change of meaning

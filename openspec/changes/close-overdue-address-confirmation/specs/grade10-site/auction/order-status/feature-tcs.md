@@ -293,3 +293,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 | What a reissue does to a stored `expired` | **Dropped.** Already settled by the durable Winner Order rules, and out of scope here |
 | How the suite groups status checks | **Settled.** The status readings and the refused winner write sit under `auction-status-US-05`, the winner's missed-deadline journey. The send and dispatch guards, the reopen and the operator's write sit under `auction-status-US-06`, the operator's resolution journey |
 | Where the expiry-write case sat | **Dropped.** `auction-status-US6-TC11-1` read the stored `expired` status under the operator's address journey, which it does not walk. Writing `expired` is the expired-invoice journey's, and the hold while a card payment started in time is proved in `grade10-admin/auction/post-sale` |
+
+**Run:** 2026-10-08, amendment for the address lock, not blind: the closing paragraph of the address-window conditions, the durable suite and the cases above. The address locks on confirm, not at send, so the paragraph says an invoice is sent only on a confirmed address.
+
+- **Carried unchanged** - every scenario keeps its meaning and its case; `address_window_open` is still read only while the invoice is `not_issued`
