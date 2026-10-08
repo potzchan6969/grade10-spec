@@ -123,7 +123,7 @@ Uses the draft feature suite as planning input after frontend delivery. Cases re
 - [ ] 6.2 In each walks' commit, mark only cases actually decided by them with `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>`; name manual cases in the suite and rounds row.
 - [ ] 6.3 Verify existing and expanded Playwright flows, retaining completed evidence and naming every unrun gate. Full duplicate-invoice, recovery, carrier and conditional conversion evidence is required by Groups 7-13; production enablement requires separate authorization.
 
-## 7. Contract and compatibility tests (grade10)
+## 7. Contract and compatibility tests (grade10) (owner: @kinisworking)
 
 - [ ] 7.4 Add failing zero-inclusive v2 and legacy omission contract tests before extending the wire in 7.2; cover required points and per-line seen-price fields, integer bounds and successful no-points checkout: `grade10-site-store-checkout-SC-61`, `grade10-site-store-checkout-SC-39`.
 
