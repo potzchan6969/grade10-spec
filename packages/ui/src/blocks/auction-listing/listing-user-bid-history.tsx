@@ -1,3 +1,9 @@
+import type { ActivityTimeCopy } from "@grade10/date";
+import {
+  formatActivityAt,
+  isPastActivityCap,
+  resolveActivityNow,
+} from "@grade10/date";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import {
   Table,
@@ -25,13 +31,6 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { Gavel } from "@phosphor-icons/react";
 import { useMemo, useState } from "react";
-import {
-  type ActivityTimeCopy,
-  formatActivityAt,
-  isPastActivityCap,
-  resolveActivityNow,
-  type ShippedLocale,
-} from "../../lib/format-datetime";
 import { useClockNow } from "./listing-clock";
 import type {
   ListingUserBidHistoryRow,
@@ -58,7 +57,7 @@ type ListingUserBidHistoryProps = {
   copy: ListingUserBidHistoryCopy;
   maximumRows: readonly ListingUserMaximumHistoryRow[];
   bidRows: readonly ListingUserBidHistoryRow[];
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
 };

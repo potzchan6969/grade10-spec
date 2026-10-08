@@ -2,7 +2,7 @@ import { getMessages } from "@grade10/i18n";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ListingBidHistoryRow, ShippedLocale } from "../../index";
+import type { ListingBidHistoryRow } from "../../index";
 import { ListingBidHistoryList } from "../../index";
 
 /** The clock, thirty days after the older rows, so they read as a local moment. */
@@ -32,7 +32,7 @@ function row(id: string, acceptedAtMs: number): ListingBidHistoryRow {
 /** The text of every node the list draws, in order. */
 function drawn(
   rows: ListingBidHistoryRow[],
-  locale: ShippedLocale,
+  locale: string,
   timeZone: string,
 ): string[] {
   const markup = renderToStaticMarkup(

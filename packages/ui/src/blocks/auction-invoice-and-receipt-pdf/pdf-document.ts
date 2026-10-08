@@ -1,3 +1,4 @@
+import { formatDocumentMoment } from "@grade10/date";
 import fontkit from "@pdf-lib/fontkit";
 import type { PDFFont, PDFPage } from "pdf-lib";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
@@ -119,21 +120,7 @@ const DOCUMENT_TIME_ZONE = "Asia/Hong_Kong";
 
 /** `September 24, 2026, 12:30 GMT+8`. */
 export function formatDateTime(value: Date): string {
-  const date = new Intl.DateTimeFormat("en-US", {
-    timeZone: DOCUMENT_TIME_ZONE,
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }).format(value);
-  const time = new Intl.DateTimeFormat("en-US", {
-    timeZone: DOCUMENT_TIME_ZONE,
-    hour: "numeric",
-    minute: "2-digit",
-    hourCycle: "h23",
-    // The document zone's offset at the instant, `GMT+8`, matching emails and terms.
-    timeZoneName: "shortOffset",
-  }).format(value);
-  return `${date}, ${time}`;
+  return formatDocumentMoment(value, DOCUMENT_TIME_ZONE);
 }
 
 export function addressLines(address: PdfPartyAddress): string[] {
