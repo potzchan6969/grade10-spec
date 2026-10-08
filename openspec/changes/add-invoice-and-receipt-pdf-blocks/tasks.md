@@ -108,7 +108,7 @@ Amendment (`decisions.md` Q34, Q36, Q38, Q39). Needs group 9 landed. Q36 is deci
 - [ ] 10.5 Update `docs/prds/products/shared/ui/invoice-and-receipt-pdf.md`: its two block bullets still read "lot and charges", which the item table replaced. The 🚧 marks stay until the walk verifies the work
 - [ ] 10.6 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test && pnpm --filter @grade10/ui run test:stories && pnpm run typecheck && pnpm run lint && pnpm --dir apps/preview exec storybook build`
 
-## 11. Wire grade10 onto the item table (grade10)
+## 11. Wire grade10 onto the item table (grade10) (owner: @seankcw)
 
 Amendment (`decisions.md` Q30, Q31-Q35, Q37). Needs groups 9 and 10 landed on the store's `main`, because `check:submodules` refuses a pin that is not there. The bump and the mapping are one commit in one pull request: either half alone fails typecheck. Group 8's `grade10` task (still numbered 7.4) edits the same `invoiceDataFrom` function, so land both on one branch with one bump. Documents already archived in object storage keep their stored layout, and the archive is not purged (Q37).
 
