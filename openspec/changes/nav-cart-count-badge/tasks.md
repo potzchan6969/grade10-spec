@@ -37,4 +37,3 @@ Depends on Group 4, and on the Cart-on-Auction bug fix: a `fix` commit, run thro
 ## 6. The walk (grade10)
 
 - [ ] 6.1 On the deployed site, signed in as one member: add two lines on Store with the drawer closed and read the header, open the drawer and compare its title, move to Auction and read the header, read it again in a 375px-wide window, change the cart from a second browser and open the drawer, then sign out and sign in as another member. Record each count against the header and the drawer title.
-- [ ] 6.2 Run `/tcs-review nav-cart-count-badge` against the deployed grade10 header and cart drawer.

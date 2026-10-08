@@ -1,6 +1,6 @@
 # Demo topic test cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 
 ## demo-topic-US1: The topic holds across products
 

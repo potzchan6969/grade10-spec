@@ -1985,7 +1985,7 @@ test("suite fold lapses the Reviewed line of an approved suite it adds a draft t
     reviewed(suiteOf(group(1, caseBlock("site-search-US1-TC1-1", "actual")))),
     suiteOf(group(2, caseBlock("site-search-US2-TC1-1"))),
   );
-  assert.match(merged, /^\*\*Status:\*\* reopened$/m);
+  assert.match(merged, /^\*\*Status:\*\* reopened · 1\/2$/m);
   assert.match(
     merged,
     /^\*\*Reviewed:\*\* 2026-09-29, tcs-rules r4, lapsed 2026-10-02$/m,
@@ -2001,7 +2001,7 @@ test("suite fold keeps the Reviewed line of a suite that stays approved", () => 
     reviewed(suiteOf(group(1, caseBlock("site-search-US1-TC1-1", "actual")))),
     suiteOf(group(2, caseBlock("site-search-US2-TC1-1", "actual"))),
   );
-  assert.match(merged, /^\*\*Status:\*\* approved$/m);
+  assert.match(merged, /^\*\*Status:\*\* approved · 2\/2$/m);
   assert.match(merged, /^\*\*Reviewed:\*\* 2026-09-29, tcs-rules r4$/m);
 });
 
@@ -2029,7 +2029,7 @@ test("suite fold renders the delta's Background before the first journey", () =>
   );
   assert.match(
     merged,
-    /\*\*Status:\*\* pending-review\n\n## Background\n\nEvery case signs in\.\n\n## site-search-US1/,
+    /\*\*Status:\*\* pending-review · 0\/2\n\n## Background\n\nEvery case signs in\.\n\n## site-search-US1/,
   );
 });
 
@@ -2223,7 +2223,7 @@ test("suite fold derives the file Status from the merged cases", () => {
       "approved",
     ),
   );
-  assert.match(merged, /^\*\*Status:\*\* in-review$/m);
+  assert.match(merged, /^\*\*Status:\*\* pending-review · 1\/2$/m);
 });
 
 test("suite fold keeps the later dated header line and the rule closing the journeys", () => {
@@ -2360,7 +2360,7 @@ test("suite fold of the vault erasure suite with grading's delta keeps every sec
   );
   assert.ok(
     merged.startsWith(
-      "# grade10-site/vault/retention-and-erasure Test Cases\n\n**Status:** in-review\n**Drafts styled:** 2026-09-29, tcs-rules r4\n\n## Background",
+      "# grade10-site/vault/retention-and-erasure Test Cases\n\n**Status:** pending-review · 10/41\n**Drafts styled:** 2026-09-29, tcs-rules r4\n\n## Background",
     ),
   );
   assert.deepEqual(headings, [
@@ -2373,7 +2373,7 @@ test("suite fold of the vault erasure suite with grading's delta keeps every sec
     "Settled",
     "Reconciliation",
   ]);
-  assert.match(merged, /^\*\*Status:\*\* in-review$/m);
+  assert.match(merged, /^\*\*Status:\*\* pending-review · 10\/41$/m);
   assert.doesNotMatch(merged, /None yet/);
   assert.equal(merged.match(/^Run: 2026-09-22/gm).length, 2);
   assert.match(merged, /walked here and given cases\.\n\n\| Case or scenario/);

@@ -33,7 +33,6 @@
 
 ## 6. The walk (grade10)
 
-- [ ] 6.1 After group 3 reaches staging, review the feature suite (`/tcs-review name-points-discount-deduction`) as input to the walk
 - [ ] 6.2 Walk US-02 end to end in the counter journey (`apps/backend/grade10/store/test/db/counterJourney.spec.ts`): a till sale promised, sold and paid under "Deduction from Points" debits the balance once, and a sale written as "Points" before the switch settles the same way (`grade10-site-store-membership-SC-81`, `grade10-site-store-membership-SC-83`)
 - [ ] 6.3 In the walk's commit, mark only the cases the walk decides to automate with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name manual cases, the printed receipt among them, in the suite and in the change's `rounds.md` row
 - [ ] 6.4 Verify: the store database lane, `pnpm run tcs:validate` and `pnpm run validate:changes name-points-discount-deduction`

@@ -75,7 +75,7 @@ The relay supersedes what 5.1 and 5.4 built: 5.5 to 5.11 replace the session in 
 
 ## 7. The walk (grade10-spec)
 
-Needs `feature-tcs.md` reviewed (`/tcs-review run-a-round-on-every-artifact`) as its input.
+Uses draft `feature-tcs.md` as its planning input.
 
 This group is its own test task: the walks are what prove the change. The job that runs them on every push to `main` is `stage-changes-and-notify-hands`' 8.4; the smoke cases on a staging deploy and a release cut are the release line's change (`Q35`).
 

@@ -35,9 +35,7 @@
 
 ## 3. The walk (grade10)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after
-deployment (`/tcs-review listing-media-upload-on-drop`), and
-`/tcs-run-sheet` executes manual cases when needed.
+Uses draft `feature-tcs.md` as its planning input.
 
 - [ ] 3.1 Walk the changed listing-media cases for single upload, multi-file
       upload, replacement, refusal reasons and order persistence:

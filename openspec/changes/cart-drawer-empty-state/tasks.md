@@ -25,9 +25,7 @@ never read (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx:593`,
 
 ## 3. The walk (grade10)
 
-Uses draft `feature-tcs.md` as its input, after groups 1 and 2 land; human QA
-reviews cases after deployment (`/tcs-review cart-drawer-empty-state`), and
-`/tcs-run-sheet` executes manual cases when needed. It walks the journeys this
+Uses draft `feature-tcs.md` as its planning input after groups 1 and 2 land. It walks the journeys this
 change's scenarios serve; the drawer's other journeys keep their own walks.
 
 - [ ] 3.1 In `apps/frontend/grade10/e2e/tests/store/cart-drawer.spec.ts`, walk as a signed-in shopper on the Store: open an empty cart and meet the empty state with no action, no count beside the drawer title and no footer; add one product and meet only its line; open a cart and meet skeletons before current prices; open a cart whose only line the review answers `unavailable`, using a response fixture as `cart-count.spec.ts` does, and meet one toast and the empty state with no count beside the drawer title. Kept as the change's end-to-end suite (`shared-ui-store-cart-US-02`, `shared-ui-store-cart-US-03`, `shared-ui-store-cart-US-06`)

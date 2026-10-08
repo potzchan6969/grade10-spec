@@ -54,9 +54,8 @@ is rebuilding, so this group follows that change's page work.
 
 ## 6. The walk (grade10)
 
-The walk names the suite's case ids while every case is `draft`; QA reviews
-the suite with `/tcs-review add-store-cross-sell` after deployment, and the
-ids stay whatever the verdict (Q60).
+The walk names the suite's case ids while every case is `draft`; the ids stay
+whatever a later human verdict records (Q60).
 
 Needs groups 1 to 4, 7, 8 and 9 landed. The walks live in
 `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` and run on the

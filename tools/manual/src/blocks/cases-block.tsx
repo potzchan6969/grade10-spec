@@ -3,7 +3,12 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { useState } from "react";
 import { caseAnchor } from "../api/anchors";
 import { tracedBy } from "../api/derive";
-import type { SpecEntry, TestCaseStatus, TestSuiteStatus } from "../api/types";
+import type {
+  SpecEntry,
+  TestCase,
+  TestCaseStatus,
+  TestSuiteStatus,
+} from "../api/types";
 import type { CasesBlock } from "../content/grammar";
 import { AnchorLink } from "./anchor";
 import { useBlockScope } from "./block-scope";
@@ -74,7 +79,7 @@ export function SuiteView({ spec }: { spec: SpecEntry }) {
         <Text as="span" size="sm" weight="bold">
           Test cases
         </Text>
-        <SuiteStatus status={spec.testCasesStatus} />
+        <SuiteStatus status={spec.testCasesStatus} cases={cases} />
         <Text as="span" size="xs" tone="secondary">
           {cases.length} cases · {covered.size} scenarios traced
           {uncovered > 0 ? ` · ${uncovered} untraced` : ""}
@@ -168,26 +173,35 @@ function OutOfSuite({ ids, spec }: { ids: string[]; spec: SpecEntry }) {
 
 const SUITE_STATUS_TITLES: Record<TestSuiteStatus, string> = {
   "pending-review":
-    "Every case here is still a draft; nothing in this file exports.",
-  "in-review":
-    "A reviewer has started, and at least one case is still a draft; nothing in this file exports.",
+    "Review is incomplete; nothing in this file exports.",
   reopened:
-    "This suite was approved, and a draft has been added since; nothing in this file exports until it is reviewed.",
+    "The approved share fell, or has not recovered since it fell; nothing in this file exports.",
   approved: "A reviewer stands behind every case in this suite.",
+  retired: "Every case in this suite is retired.",
 };
 
 /** The file's own review state, beside the suite it belongs to. Only
  * `approved` wears the approved colour — carrying the status is pointless if
  * a suite still holding a draft can read as signed off. */
-function SuiteStatus({ status }: { status?: TestSuiteStatus }) {
+function SuiteStatus({
+  status,
+  cases,
+}: {
+  status?: TestSuiteStatus;
+  cases: TestCase[];
+}) {
   if (!status) return null;
+  const actual = cases.filter((one) => one.status === "actual").length;
+  const reviewable = cases.filter((one) => one.status !== "deprecated").length;
+  const label =
+    status === "retired" ? status : `${status} · ${actual}/${reviewable}`;
   return (
     <Badge
       size="sm"
       title={SUITE_STATUS_TITLES[status]}
       variant={status === "approved" ? "success" : "warning"}
     >
-      {status}
+      {label}
     </Badge>
   );
 }

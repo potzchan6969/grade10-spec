@@ -16,8 +16,7 @@ holds it; the `<img>` does not change
 
 ## 3. The walk (grade10)
 
-Needs `feature-tcs.md` reviewed (`/tcs-review fit-product-listing-photo`) as
-its input, and group 1 landed. The application's pin already carries the code,
+Uses draft `feature-tcs.md` as its planning input, with group 1 landed. The application's pin already carries the code,
 so the walk needs no bump and no application change. The isolated stack's
 fixture catalogue names its photos on `cdn.shop.test`, which resolves nowhere;
 the walk answers every request to it with one portrait or one landscape image

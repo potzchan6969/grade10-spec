@@ -13,7 +13,7 @@ through.
   - Own moves: a summary shows the hand of the stage the moves that are theirs
   - Held row as a reply: a held row for another hand is the round's own reply in the thread, mentioning that hand, posted once, with the row, the page sentence and the decision rows it touches quoted
   - Page line as a question: a line a build round puts on a page reaches the product manager as ❓, the line quoted before and after
-  - Review asked: the requirements' landing is a move to QA, and the walk group names the review as its input
+  - Review downstream: human QA reviews after deployment, without a review task or delivery gate
   - One reply, several moves: a reply carries one answer and remarks; a remark comes back before anything lands
 - Sized
   - Short interview: about three questions, one whether to do it now, a choice the held test holds held, the defaults listed as decided
@@ -69,26 +69,27 @@ A product detail a build round lands on a page — from a fix pass, a decided ro
 - **AND** the product manager's reply quotes the section's lines before and after
 - **AND** the group's landing is not held on the line
 
-### Requirement: QA is a hand of Specified
+### Requirement: QA review stays downstream of delivery
 
-The landing of `spec.md` and `feature-tcs.md` SHALL be a move to the `qa` hand: the turn message every hand gets SHALL reach them naming the suite's path, its case count and `/tcs-review <change>`, the role's channel where the record names no QA; and the plan's walk group SHALL name the suite's review as an input beside the groups it needs.
+Specified SHALL keep the product manager as its only hand. A plan SHALL NOT create a `/tcs-review` task or name review as an input to a delivery or walk group. Human QA SHALL discover and review `pending-review` and `reopened` suites after deployment, independently of acceptance, the fold, implementation and archive.
 
 <!-- trace:scenario id=g10.shared-agent-rounds.SC-rad rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-89 - The suite's landing tells QA
-**Serves:** shared-planning-agent-rounds-US-11 - QA is asked the day the suite lands
+#### Scenario: shared-planning-agent-rounds-SC-89 - The suite's landing does not create a QA turn
+**Serves:** shared-planning-agent-rounds-US-11 - QA reviews after deployment
 
 - **GIVEN** the product manager says `land` on the requirements
 - **WHEN** the landing runs
-- **THEN** QA receives one turn message naming the suite's path, its case count and the review command
-- **AND** a second push leaving the change in Specified sends it no second time
+- **THEN** the change remains with the product manager at Specified
+- **AND** QA receives no review task or turn message from that landing
 
 <!-- trace:scenario id=g10.shared-agent-rounds.SC-xw0 rev=1 -->
-#### Scenario: shared-planning-agent-rounds-SC-90 - The walk names the review
-**Serves:** shared-planning-agent-rounds-US-11 - the walk names QA's review as its input
+#### Scenario: shared-planning-agent-rounds-SC-90 - Delivery does not wait for suite review
+**Serves:** shared-planning-agent-rounds-US-11 - QA reviews after deployment
 
 - **GIVEN** the plan's walk group
 - **WHEN** the plan is validated
-- **THEN** the group's preamble names the suite's review as an input, and a plan whose walk group names none is refused
+- **THEN** the group uses the draft suite as planning input and names no review dependency
+- **AND** acceptance, the fold, implementation and archive do not inspect whether human QA has reviewed the suite
 
 ### Requirement: The interview asks what changes what is built
 

@@ -35,8 +35,7 @@ Needs group 2's row.
 
 ## 5. The walk (grade10)
 
-Needs `feature-tcs.md` reviewed (`/tcs-review add-store-locator`) as its
-input, and groups 1 to 3 landed. The walks live in
+Uses draft `feature-tcs.md` as its planning input, with groups 1 to 3 landed. The walks live in
 `apps/frontend/grade10/e2e/tests/store/store-locator.spec.ts`; the isolated
 stack carries the store, and the uat lane walks the same file against a build
 that withholds it, asserting only what `grade10-site-site-carried-surfaces-SC-41`

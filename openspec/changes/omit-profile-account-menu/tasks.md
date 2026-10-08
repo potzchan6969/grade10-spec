@@ -73,9 +73,7 @@ Menu Requirement Is Replaced.
 ## 3. The walk (grade10)
 
 Uses draft `feature-tcs.md` as its input once groups 1 and 2 have landed.
-Human QA reviews the cases after deployment with
-`/tcs-review omit-profile-account-menu`, and `/tcs-run-sheet` runs the
-manual ones. `grade10-site-auction-auction-orders-US-01` moves no behaviour
+`grade10-site-auction-auction-orders-US-01` moves no behaviour
 here, so its walk stays with its own suite.
 
 - [ ] 3.1 Export the lane's deploy env from `apps/frontend/grade10/e2e/helpers/env.ts`

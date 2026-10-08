@@ -18,4 +18,4 @@
 
 ## 4. The walk (grade10)
 
-- [ ] 4.1 Run `/tcs-review lot-gallery-strip-by-width` after deployment and walk a collector through a wide and stacked multi-image details gallery, then the one-image and empty states
+- [ ] 4.1 Walk a collector through a wide and stacked multi-image details gallery, then the one-image and empty states

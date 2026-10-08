@@ -121,18 +121,6 @@ export function yourTurnText(at, role, linked) {
  */
 export function toldBodyOf(at, role, { linked, sheetUrl }) {
   const lines = [yourTurnText(at, role, linked)];
-  // QA at Specified is asked to review the suite: the message names each
-  // suite's path and case count, and says the walk needs it reviewed
-  // (`shared-planning-agent-rounds-SC-89`).
-  if (at.stage === "specified" && role === "qa") {
-    for (const suite of (at.suites ?? []).filter(
-      (one) => !one.error && one.status !== "approved",
-    )) {
-      lines.push(
-        `Suite: \`${suite.path}\`, ${suite.cases.total} ${suite.cases.total === 1 ? "case" : "cases"}; the walk needs it reviewed as its input`,
-      );
-    }
-  }
   return { kind: "your-turn", text: lines.join("\n") };
 }
 

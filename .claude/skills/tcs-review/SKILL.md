@@ -31,7 +31,9 @@ execution; a review classification is not a pass or fail result.
    **The Review Lane**: `git switch -c tcs-review/<level>-<target>` from
    `main` whatever the suite holds, `<level>` one of `feature`, `domain`,
    `product`, `platform`; commits, pushes and the one pull request as that
-   table says, label `documentation`. Never write verdicts on `main`.
+   table says, label `documentation`. Push the branch before the first verdict:
+   the remote branch or its open pull request is the `in-review` signal. Never
+   write `in-review` into the file, and never write verdicts on `main`.
 
 2. **Find the suites awaiting review.** Search `openspec/specs/**/feature-tcs.md`,
    `openspec/specs/**/domain-tcs.md`, `openspec/specs/*/product-tcs.md` and
@@ -66,9 +68,9 @@ execution; a review classification is not a pass or fail result.
 
 4. **Pick one suite.** None: say so, name where suites live, offer
    `/spec-to-tcs <capability-or-change>`. One: say which and start, no menu.
-   More: list `reopened` suites first — with the drafts added since the lapse —
-   then `in-review`, then `pending-review`: capability or change, path, file
-   status and `draft` count out of the total, then ask. One suite per run
+   More: list `reopened` suites first, then `pending-review`: capability or
+   change, path, file status and `actual/(total - deprecated)` progress, then ask.
+   Overlay `in-review` when step 2 found its remote branch or pull request. One suite per run
    unless the reviewer asks to continue.
 
 5. **Prepare before you present anything,** as `## Preparing the Suite` below
@@ -130,8 +132,12 @@ execution; a review classification is not a pass or fail result.
    | Defer | Leave `**Status:** draft` and note what they want resolved |
    | Retire | `**Status:** deprecated`, only when the spec no longer states the behaviour; never delete or renumber |
 
-   Then recompute the header as **The File Header** says: `**Status:**` from
-   the cases; `**Reviewed:** <today>, tcs-rules r<n>` written fresh when the
+   Then recompute the header as **The File Header** says, comparing the file
+   read before the verdict with the result: a lower approved share writes
+   `reopened`; an equal share keeps `reopened`; a higher incomplete share writes
+   `pending-review`; 100% writes `approved`; no active cases writes `retired`.
+   Write the compact `actual/(total - deprecated)` ratio except on `retired`.
+   `**Reviewed:** <today>, tcs-rules r<n>` is written fresh when the
    file reaches `approved`, and marked `, lapsed <today>` if it falls back; `**Drafts
    styled:**` dropped once no draft is left. Never type the status.
 
@@ -141,8 +147,9 @@ execution; a review classification is not a pass or fail result.
    open the one pull request (`/pr-push`), titled with the range that has
    verdicts — `test(<domain>): approve <target> US<n>–<m> test cases` — its
    description listing every case the follow-ups changed, file by file. The
-   file lands as `in-review`, `reopened` when it was approved before, or
-   `approved`. Say which journeys still hold drafts; when the file is
+   file lands with the state transition and compact progress that step 10
+   computed. The branch or pull request, not the file, is `in-review`.
+   Say which journeys still hold drafts; when the file is
    `approved`, say the suite is ready to hand on. Report cases approved,
    edited, deferred and retired, the conventions confirmed and refused, the
    gaps and journey findings for the spec's author, and any other suite still

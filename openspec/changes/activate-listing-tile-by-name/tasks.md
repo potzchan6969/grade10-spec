@@ -22,8 +22,7 @@ into [one function](tech-design.md#one-function-decides-when-a-product-opens).
 
 ## 3. The walk (grade10)
 
-Needs `feature-tcs.md` reviewed (`/tcs-review activate-listing-tile-by-name`)
-as its input, and group 1 landed. The `external/grade10-spec` bump lands with
+Uses draft `feature-tcs.md` as its planning input, with group 1 landed. The `external/grade10-spec` bump lands with
 3.2 in one commit, since the photo leaving the accessibility tree breaks every
 test that finds it by role. No listing walk presses a product's name today:
 `catalog.spec.ts` only sees the fixture tiles, and `store/home.spec.ts` opens

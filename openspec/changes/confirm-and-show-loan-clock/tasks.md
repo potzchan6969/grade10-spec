@@ -154,9 +154,7 @@ Needs group 2 for `noticePayBy`, and group 4 for `useFreshCase` and
 
 ## 6. The walk (grade10) (owner: @ecchochan)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after
-deployment (`/tcs-review confirm-and-show-loan-clock`), and `/tcs-run-sheet`
-executes manual cases when needed. Groups 2 to 5 landed first.
+Uses draft `feature-tcs.md` as its planning input. Groups 2 to 5 landed first.
 
 - [x] 6.1 Walk the three journeys through the console in
       `apps/frontend/grade10/e2e/tests/vault/console.spec.ts`, with a payout

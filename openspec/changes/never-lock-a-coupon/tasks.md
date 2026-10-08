@@ -114,4 +114,4 @@
 
 ## 16. The walk (grade10)
 
-- [ ] 16.1 On staging, a member leaves an online checkout and a counter sale each holding a coupon, spends both coupons elsewhere, lets a counter sale run out its hour and pays it with its old code, and is refused by name where an earlier checkout will not close; then `/tcs-review never-lock-a-coupon`
+- [ ] 16.1 On staging, a member leaves an online checkout and a counter sale each holding a coupon, spends both coupons elsewhere, lets a counter sale run out its hour and pays it with its old code, and is refused by name where an earlier checkout will not close

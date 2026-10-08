@@ -55,7 +55,7 @@ import { isAutomated, parseSuite } from "./lib/suites.mjs";
 
 const SUITE = `# demo/thing/widget Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 1/1
 
 ## demo-thing-widget-US1: Somebody does a thing
 
@@ -219,7 +219,7 @@ test("a Field | Value table is one table, header apart from its row", () => {
 
 const PER_ROW = `# demo/thing/widget Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 1/1
 
 ## demo-thing-widget-US2: Rows open rows
 

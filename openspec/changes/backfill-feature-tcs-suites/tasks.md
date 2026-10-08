@@ -3,8 +3,8 @@
 Each task is one `/spec-to-tcs feature <capability>` run and its own commit,
 `test(<domain>): derive test cases for <capability>`. Derive only - a suite
 that disagrees with its spec is regenerated, never argued with, and a spec
-that turns out to be wrong is its own change. Review is `/tcs-review`, later
-and separately.
+that turns out to be wrong is its own change. Human review remains downstream
+of delivery.
 
 ## 1. Vault (grade10-spec)
 

@@ -54,7 +54,7 @@ const SUITE = (manual) =>
   [
     "# demo/alpha Test Cases",
     "",
-    "**Status:** pending-review",
+    "**Status:** pending-review · 0/3",
     "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
     "",
     "## demo-alpha-US1: Collector does the thing",
@@ -133,7 +133,7 @@ test("product and platform suites validate their scoped journeys and id prefixes
     [
       `# ${title} Test Cases`,
       "",
-      "**Status:** pending-review",
+      "**Status:** pending-review · 0/1",
       "**Drafts styled:** 2026-09-24, tcs-rules r3.0",
       "",
       `## ${prefix}-US1: Admin completes a cross-domain path`,
@@ -227,7 +227,7 @@ test("shared-planning-agent-rounds-SC-103 - a Manual table under a journey, on a
   const suite = [
     "# demo/alpha Test Cases",
     "",
-    "**Status:** pending-review",
+    "**Status:** pending-review · 0/1",
     "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
     "",
     "## demo-alpha-US1: Collector does the thing",
@@ -353,8 +353,8 @@ test("an approved file with a new draft reads reopened through its lapsed Review
     );
   const header = (status, reviewed) =>
     approvedOnce.replace(
-      "**Status:** pending-review\n**Drafts styled:** 2026-09-01, tcs-rules r3.0",
-      `**Status:** ${status}\n**Drafts styled:** 2026-09-01, tcs-rules r3\n${reviewed}`,
+      "**Status:** pending-review · 0/3\n**Drafts styled:** 2026-09-01, tcs-rules r3.0",
+      `**Status:** ${status} · 2/3\n**Drafts styled:** 2026-09-01, tcs-rules r3\n${reviewed}`,
     );
 
   writeFileSync(
@@ -370,18 +370,18 @@ test("an approved file with a new draft reads reopened through its lapsed Review
   writeFileSync(
     suite,
     header(
-      "in-review",
+      "approved",
       "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20",
     ),
   );
   assert.match(
     run(root).stdout,
-    /file status is `in-review` but its cases imply `reopened`/,
+    /file status is `approved` but this snapshot allows `pending-review` or `reopened`/,
   );
 
   writeFileSync(
     suite,
-    header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3"),
+    header("pending-review", "**Reviewed:** 2026-09-10, tcs-rules r3"),
   );
   assert.match(
     run(root).stdout,
@@ -520,7 +520,7 @@ test("a retired journey holds only deprecated cases, which may still trace it", 
     [
       "# demo/alpha Test Cases",
       "",
-      "**Status:** in-review",
+      `**Status:** pending-review · 0/${status === "deprecated" ? 1 : 2}`,
       "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
       "",
       "## demo-alpha-US1: Collector does the thing",

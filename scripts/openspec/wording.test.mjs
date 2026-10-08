@@ -78,7 +78,7 @@ test("toldBodyOf gives QA at another stage the ordinary Your turn", () => {
 });
 
 // Proves part of shared-planning-agent-rounds-US11-TC1-1.
-test("shared-planning-agent-rounds-SC-89 - QA's turn at Specified names the suite, its case count and the review command", () => {
+test("shared-planning-agent-rounds-SC-89 - a direct QA body at Specified carries no review task", () => {
   const at = {
     id: "probe",
     stage: "specified",
@@ -90,17 +90,13 @@ test("shared-planning-agent-rounds-SC-89 - QA's turn at Specified names the suit
       },
     ],
   };
-  assert.deepEqual(toldBodyOf(at, "qa", { linked: LINKED }), {
-    kind: "your-turn",
-    text: [
-      `*Your turn* — ${LINKED} is at *Specified*.`,
-      "Review: `/tcs-review probe`",
-      "Suite: `openspec/changes/probe/specs/shared/planning/agent-rounds/feature-tcs.md`, 35 cases; the walk needs it reviewed as its input",
-    ].join("\n"),
-  });
+  const body = toldBodyOf(at, "qa", { linked: LINKED });
+  assert.equal(body.kind, "your-turn");
+  assert.equal(body.text, `*Your turn* — ${LINKED} is at *Specified*.`);
+  assert.doesNotMatch(body.text, /tcs-review|Suite:/);
 });
 
-test("shared-planning-agent-rounds-SC-89 - QA's turn names no suite already approved or unreadable", () => {
+test("shared-planning-agent-rounds-SC-89 - QA's ordinary body names no suite", () => {
   const cases = { draft: 0, actual: 3, deprecated: 0, total: 3, automated: 0 };
   const at = {
     id: "probe",

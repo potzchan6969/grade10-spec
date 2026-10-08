@@ -17,9 +17,7 @@ block, story or Code Connect template in the store blends a photo.
 
 ## 3. The walk (grade10)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment
-(`/tcs-review drop-product-listing-photo-multiply`), and `/tcs-run-sheet` executes
-manual cases when needed. The pin already holds the code, so the group needs
+Uses draft `feature-tcs.md` as its planning input. The pin already holds the code, so the group needs
 no bump. The three surfaces draw the tile through `@grade10/ui` and add no
 class of their own; the guard catches one that wraps or restyles it later.
 

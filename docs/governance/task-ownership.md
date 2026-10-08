@@ -27,7 +27,7 @@ A group is a level-two heading numbered with a single integer. Its tasks are che
 | Element | Form | Notes |
 | --- | --- | --- |
 | Group heading | `## <n>. <title>` | `<n>` is one integer. `##` exactly — `###` is not a group. |
-| Walk group | `## <n>. The walk (<repository>)`, or `The walk - <what it walks>` | Matched by title, in any case. A change opened from 2026-10-03 that specifies a capability somebody walks ends its plan on one, and every one names `/tcs-review <change>`; `pnpm check:manual` holds both. |
+| Walk group | `## <n>. The walk (<repository>)`, or `The walk - <what it walks>` | Matched by title, in any case. A change opened from 2026-10-03 that specifies a capability somebody walks ends its plan on one. Human TCS review happens after deployment and is not a task or walk dependency. |
 | Owner tag | `(owner: @<handle>)` | Optional, and **last on the line**. The `@` is optional; handles may hold letters, digits, `.`, `-`, `_`, and match case-insensitively. |
 | No owner | Omit the tag, or write `(owner: unassigned)` | The two are equivalent everywhere. |
 | Task | `- [ ] <id> <text>` | `- [x]` or `- [X]` when done. `<id>` is the first whitespace-delimited token; `<text>` is required. |

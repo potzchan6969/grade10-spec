@@ -73,7 +73,7 @@ Needs groups 3 and 4 landed.
 
 ## 8. The walk (grade10)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review separate-site-and-admin-sessions`), and `/tcs-run-sheet` executes manual cases when needed. Needs groups 3 to 6 landed.
+Uses draft `feature-tcs.md` as its planning input. Needs groups 3 to 6 landed.
 
 - [ ] 8.1 Walk each journey of the five capabilities end to end through the interface its actor uses, on the isolated stack with one browser context holding both cookies, and keep the walks as the change's end-to-end suite (`shared-auth-session-US-07`, `shared-auth-session-US-08`, `shared-auth-session-US-02`, with `shared-auth-session-SC-39`, `shared-auth-session-SC-40` and `shared-auth-session-SC-41` walked among them, `shared-auth-sign-in-US-12`, `shared-auth-sign-out-US-03`, `shared-auth-sessions-US-03`, `shared-auth-sessions-US-04`, `shared-console-user-directory-US-02`)
 - [ ] 8.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`, in the walks' own commit; the cases that stay manual are named in the suite and in the walk's `rounds.md` row

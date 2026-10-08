@@ -12,11 +12,11 @@ import { openManual } from "./setup";
  * `tester` carries two open questions (`demo-building`'s and
  * `demo-specified`'s `## Decisions` rows, each `❓ tester - …`), is the `dev`
  * hand of `demo-building` at its current stage (Building, whose `HANDS_AT`
- * names `dev`) and is the `qa` and `dev` hand of `demo-specified`, whose
- * Specified stage is QA's turn for the suite's review
+ * names `dev`), and the design hand of `demo-waiting`, the one Yours later
+ * lists. `demo-specified` contributes an open question, but Specified stays
+ * with the product manager and creates no QA review turn
  * (`shared-planning-agent-rounds-SC-89`; proves part of
- * `shared-planning-agent-rounds-US11-TC1-1`), and the design hand of
- * `demo-waiting`, the one Yours later lists. `other` is left
+ * `shared-planning-agent-rounds-US11-TC1-1`). `other` is left
  * exactly as the store already has it: no question, no hand, no wait, which
  * is what SC-61 needs and no fixture edit has to manufacture.
  *
@@ -94,46 +94,18 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
   await expect
     .element(now.getByRole("link", { name: "The Building stage" }))
     .toBeVisible();
-  // QA's turn at Specified is on them now (`shared-planning-agent-rounds-SC-89`).
   await expect
     .element(now.getByRole("link", { name: "The Specified stage" }))
-    .toBeVisible();
+    .not.toBeInTheDocument();
   await expect
     .element(now.getByText("/tcs-review demo-specified", { exact: true }))
-    .toBeVisible();
+    .not.toBeInTheDocument();
 
   const later = page.elementLocator(sectionFor("Yours later"));
   await expect
     .element(later.getByRole("link", { name: "The Waiting overlay" }))
     .toBeVisible();
 
-  // Through the page's own link, since one file opens one address: the
-  // change page's Your turn card quotes the message QA is told now - the
-  // review command, the suite, its case count, and that the walk needs it
-  // reviewed as its input.
-  await now.getByRole("link", { name: "The Specified stage" }).click();
-  await expect
-    .element(
-      page.getByRole("heading", { level: 1, name: "The Specified stage" }),
-    )
-    .toBeVisible();
-  const cardEl = document.querySelector('[data-slot="card"]');
-  if (!cardEl) throw new Error("no Your turn card");
-  const review = Array.from(cardEl.querySelectorAll("blockquote")).find((one) =>
-    (one.textContent ?? "").includes("/tcs-review demo-specified"),
-  );
-  if (!review) throw new Error("no message to QA in Told now");
-  const told = page.elementLocator(review);
-  await expect
-    .element(told.getByText("Your turn", { exact: true }))
-    .toBeVisible();
-  await expect
-    .element(
-      told.getByText(
-        /Suite: .*feature-tcs\.md, \d+ cases?; the walk needs it reviewed as its input/,
-      ),
-    )
-    .toBeVisible();
 });
 
 test("shared-planning-change-stages-SC-61 - nothing on the reader", async () => {

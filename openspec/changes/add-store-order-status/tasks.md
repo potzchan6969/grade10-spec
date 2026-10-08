@@ -38,7 +38,7 @@ Needs group 3 deployed and, in the target environment, every order the backfill 
 
 ## 6. The walk - Your Orders and Order Details agree (grade10)
 
-Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review add-store-order-status`), and `/tcs-run-sheet` executes manual cases when needed.
+Uses draft `feature-tcs.md` as its planning input.
 
 - [ ] 6.1 Seed one signed-in collector's Shopify-held orders, each with its facts stamped as just read so no refresh replaces them: canceled, voided, partly refunded and shipped, held with a partial refund, scheduled and refunded, fulfilled and open, fulfilled paid and archived, and a till sale paid and archived (`grade10-site-commerce-order-status-SC-02`, `grade10-site-commerce-order-status-SC-03`, `grade10-site-commerce-order-status-SC-04`, `grade10-site-commerce-order-status-SC-05`, `grade10-site-commerce-order-status-SC-06`, `grade10-site-commerce-order-status-SC-19`, `grade10-site-commerce-order-status-SC-20`, `grade10-site-commerce-order-status-SC-23`)
 - [ ] 6.2 Walk `grade10-site-commerce-order-status-US-01`, `grade10-site-commerce-order-status-US-02` and `grade10-site-commerce-order-status-US-03` in the e2e lane: each card on Your Orders shows the badge `ORDER_STATUS_CASES` names for its facts, the partly refunded order reads Refunded and the held and scheduled ones Processing, and its Order Details shows the same one, with no note on either page (`grade10-site-commerce-order-status-SC-14`)
