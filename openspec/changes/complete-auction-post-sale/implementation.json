@@ -1,0 +1,147 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "2617613598e0d5cb306203567db6665450e377d783ca07f7634b1dcec87ce7c5"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "5e81c99640a29ec0167180dd51d028c06f623bff",
+    "capturedAt": "2026-10-08T18:00:44.403Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Operators manage auction currency premium minimums",
+          "Requirement: Operators manage the Stripe card fee rule"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A queue row shows when its lot is in extended bidding",
+          "Requirement: A send or reissue carries the total the operator read",
+          "Requirement: An operator action sent twice happens once",
+          "Requirement: An operator edits the address or method before send",
+          "Requirement: An operator reopens the address form",
+          "Requirement: An operator resolves an unpaid order",
+          "Requirement: Delivery address",
+          "Requirement: Dispatch and delivery are recorded on the order",
+          "Requirement: Fulfilment log history",
+          "Requirement: History is append-only and retained",
+          "Requirement: Invoice log history",
+          "Requirement: Listing outcomes",
+          "Requirement: Manual settlement records the method and its proof",
+          "Requirement: Money that lands is always recorded",
+          "Requirement: Operators can record one bounded refund and its stock outcome",
+          "Requirement: Operators work each listing from the queue through delivered",
+          "Requirement: Order dates and times read in Hong Kong time",
+          "Requirement: Payment and shipment are separate grants",
+          "Requirement: Payment states",
+          "Requirement: Shipment states",
+          "Requirement: The Listings table shows extended bidding and a won lot's order",
+          "Requirement: The order detail explains its status",
+          "Requirement: The order detail shows how long an order has waited",
+          "Requirement: The payment processing fee follows the invoice's payment method",
+          "Requirement: The queue shows one outcome per lot",
+          "Requirement: Trail fields",
+          "Requirement: Winner contact fields",
+          "Requirement: Winner fields"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A test winner signs in with the ordinary link",
+          "Requirement: An operator makes a test winner in one step",
+          "Requirement: The Test tab lists test winners"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Post-close letters"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An auction order carries two writable status fields",
+          "Requirement: Permitted transitions"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An unfinished card payment leaves the invoice payable",
+          "Requirement: An unsaved one-time address stays on the order until setup ends",
+          "Requirement: Billing Add Address uses the delivery Country/Region picker",
+          "Requirement: Contact Us opens a copy-first ready email",
+          "Requirement: Country/Region names follow the account's language",
+          "Requirement: The bid-time hold is released, never captured",
+          "Requirement: The winner chooses a payment method with the address",
+          "Requirement: The winner pays a sent invoice by the method it was sent for"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
