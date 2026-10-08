@@ -17,7 +17,6 @@ import {
 import { FilePdf } from "@phosphor-icons/react";
 import { useState } from "react";
 import {
-  formatHkd,
   type IntakeItemRow,
   intakeItemCardStoryId,
   isVaulted,
@@ -120,9 +119,10 @@ function ScanThumbs({ item }: { item: IntakeItemRow }) {
 }
 
 /**
- * Typeset: status badge and name anchor top row as primary info; scan thumbnail
- * sits left with grade; declared value is a clear field; service and date group
- * as secondary metadata; note and ID stay quiet. Actions sit under a rule.
+ * Typeset: status badge and name anchor top row as primary info; item ID sits
+ * quietly beside name for reference; scan thumbnail pairs with grade as visual
+ * anchor; service and date group as secondary metadata; note stays contextual.
+ * Actions sit under a rule.
  */
 function IntakeItemCard({
   item,
@@ -145,7 +145,7 @@ function IntakeItemCard({
           <div className="flex items-start justify-between gap-3">
             {onOpen ? (
               <a
-                className="min-w-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="flex min-w-0 flex-1 flex-col gap-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
                 href={storyHref(intakeItemCardStoryId(item))}
                 onClick={(event) => {
                   event.preventDefault();
@@ -160,39 +160,42 @@ function IntakeItemCard({
                 >
                   {item.name}
                 </Text>
+                <Text
+                  className="text-secondary-foreground"
+                  face="mono"
+                  size="xs"
+                >
+                  {item.itemId}
+                </Text>
               </a>
             ) : (
-              <Text
-                as="h2"
-                className="font-heading text-pretty tracking-tight"
-                size="lg"
-                weight="medium"
-              >
-                {item.name}
-              </Text>
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
+                <Text
+                  as="h2"
+                  className="font-heading text-pretty tracking-tight"
+                  size="lg"
+                  weight="medium"
+                >
+                  {item.name}
+                </Text>
+                <Text
+                  className="text-secondary-foreground"
+                  face="mono"
+                  size="xs"
+                >
+                  {item.itemId}
+                </Text>
+              </div>
             )}
             <Badge variant={itemBadgeVariant(item.status)}>{item.status}</Badge>
           </div>
 
           <HStack className="min-w-0" gap="md" vAlign="start">
             <ScanThumbs item={item} />
-            <div className="flex min-w-0 flex-1 flex-col gap-3">
+            <div className="flex min-w-0 flex-1 flex-col gap-2.5">
               <Text className="text-secondary-foreground" size="sm">
                 {item.gradeLabel}
               </Text>
-
-              <div className="flex flex-col gap-0.5">
-                <Text className="text-secondary-foreground" size="xs">
-                  Declared value
-                </Text>
-                <Text
-                  className="font-heading tracking-tight tabular-nums"
-                  size="base"
-                  weight="medium"
-                >
-                  {formatHkd(item.declaredHkd)}
-                </Text>
-              </div>
 
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <Text className="text-secondary-foreground" size="xs">
@@ -218,10 +221,6 @@ function IntakeItemCard({
                   {item.note}
                 </Text>
               ) : null}
-
-              <Text className="text-secondary-foreground" face="mono" size="xs">
-                {item.itemId}
-              </Text>
             </div>
           </HStack>
         </div>
