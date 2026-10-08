@@ -129,8 +129,8 @@ lot before any script runs.
   what a collector sees
 - **One lot per address** — a shared link unfurls as that lot, with its own
   title, description and canonical address, never the catalogue's
-- **Not in the sitemap** — which lots are published is unknown when the site
-  is built — [Crawlable Pages](/p/grade10-site/site/crawlable-pages)
+- **In the sitemap** — every lot the catalogue holds is listed when the
+  sitemap is fetched — [Crawlable Pages](/p/grade10-site/site/crawlable-pages)
 - **Not found** — an address naming no lot answers an honest 404 with the
   site's not-found surface, never an empty lot page
 - **Hidden from browse/search** — a draft or called-off lot is absent from
