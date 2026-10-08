@@ -144,7 +144,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
 
       <ProposalBanner title="One upcoming visit per service">
         A second upcoming booking of the same service under this email is
-        refused. Incoming items in the portfolio do not count as a visit.
+        refused. Items still in intake do not count as a visit.
       </ProposalBanner>
 
       {records.length === 0 ? (
