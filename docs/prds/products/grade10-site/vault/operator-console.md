@@ -244,7 +244,7 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
 | Grader, grade and cert on a valuation | Decided | Read from the item register beside the amount and the note — [Items](/p/grade10-admin/inventory/items#facts) | Owner |
 | Valuation record | Deferred | A second valuer, a condition report and counter photographs | Product |
-| Locker registry and stock-take | Deferred | Lockers per shop with capacity, a stock-take against the shelf, damage and loss. Reopens when a shop outgrows free-text lockers | Owner |
+| Locker registry and stock-take | Decided | Shops and lockers become sites and storage units in inventory's locations, with caps and counts, and a move between shops ships as a transfer - [Locations](/p/grade10-admin/inventory/locations) - decided under the owner's delegation, 2026-10-08. Damage and loss stay deferred | Owner |
 | Forfeited stock | Decided | A forfeited item leaves custody, written `out`, and is held as the shop's stock; the chain keeps the figure it settled and the rest is inventory's. It is not sold before Legal names the lending regime — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness) | Owner |
 | Staff notifications | Decided | The queue is the inbox: badges, counts, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |
 | A case nobody is valuing | Decided | `under_valuation` badges after **7 days** untouched, derived where every other badge is | Product |
