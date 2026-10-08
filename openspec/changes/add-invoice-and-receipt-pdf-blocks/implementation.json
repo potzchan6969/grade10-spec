@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "55816e0023469e7eeeea5ce46bf344404ea7c62421a9b7f917925b448af4d408"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "42228c872978702826fb1f4eac8068b78a63e25e",
+    "capturedAt": "2026-10-08T06:08:28.531Z",
+    "targets": [
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Bill To and Ship To render as an address, or \"Not recorded\" when withheld",
+          "Requirement: Each renderer produces one A4 document",
+          "Requirement: InvoicePdf and ReceiptPdf render an optional supplied tax line",
+          "Requirement: InvoicePdf and ReceiptPdf render only what they are given",
+          "Requirement: InvoicePdf and ReceiptPdf render the issuer block at the foot of the sheet, right-aligned",
+          "Requirement: InvoicePdf and ReceiptPdf render their charges in the order given, ending in a boxed summary",
+          "Requirement: InvoicePdf renders a supplied replacement relationship",
+          "Requirement: InvoicePdf renders bank details only on a bank-transfer invoice",
+          "Requirement: InvoicePdf renders its meta rows and party blocks",
+          "Requirement: InvoicePdf's bank details section names every enabled transfer rail and the bank reference",
+          "Requirement: ReceiptPdf renders a recorded provider-reference line only when the payment carries one",
+          "Requirement: ReceiptPdf renders its meta rows and party blocks",
+          "Requirement: ReceiptPdf renders the payment breakdown in a fixed order",
+          "Requirement: The lot and charges carry a Description/Amount header"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
