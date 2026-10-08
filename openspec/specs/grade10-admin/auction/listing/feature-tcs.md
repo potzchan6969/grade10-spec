@@ -33,13 +33,16 @@
 
 **Steps:**
 
-1. Save a new listing with title, prices and window empty.
-2. Open the public catalogue.
+1. Click the create-listing control in the Listings heading.
+2. Leave title, prices and window empty in the editor.
+3. Click Save.
+4. Reopen the saved draft from Listings.
+5. Open `<grade10 auction url>`.
 
 **Expected Results:**
 
-* Step 1 saves a draft with those fields empty.
-* Step 2 does not list that listing.
+* Step 4 shows a draft with those fields empty.
+* Step 5 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-27b rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC2-1: Operator saves a partial draft
@@ -110,8 +113,8 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<listing_1>`.
-2. Enter the row's starting price.
-3. Save the draft.
+2. Enter the row's amount in the editor's starting-price field.
+3. Click Save.
 4. Reopen `<listing_1>`.
 5. Read its starting price and status.
 
@@ -334,22 +337,25 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(auction operator) is on `<grade10 auction admin listings url>`.
-* A draft listing has no media.
+* A saved draft has no media; every other create requirement is met.
+* Its selected inventory unit has the matching saved stock hold.
 
 **Steps:**
 
-1. Open that draft.
-2. Upload a JPEG.
-3. Upload an MP4.
-4. Upload a WebP.
-5. Publish the listing.
-6. Open the published listing as a collector.
+1. Open that draft from Listings.
+2. Open its Media action.
+3. Choose a JPEG with the file picker.
+4. Choose an MP4 with the file picker.
+5. Choose a WebP with the file picker.
+6. Return to the listing editor and click Create.
+7. Publish the created listing.
+8. Open its public listing address as a collector.
 
 **Expected Results:**
 
-* Step 4 stores the JPEG, the MP4 and the WebP in that order.
-* Step 6 shows the collector the JPEG, the MP4 and the WebP in that order.
-* Step 6 plays the MP4 as video from the uploaded bytes.
+* Step 5 stores the JPEG, the MP4 and the WebP in that order.
+* Step 8 shows the collector the JPEG, the MP4 and the WebP in that order.
+* Step 8 plays the MP4 as video from the uploaded bytes.
 
 <!-- trace:case id=g10adm.auction-listing.TC-fsq rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC4-1: Upload is stored without processing
@@ -453,13 +459,14 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open that draft.
-2. Upload a file larger than 104857600 bytes.
+1. Open that draft from Listings.
+2. Open its Media action.
+3. Choose a file larger than 104857600 bytes.
 
 **Expected Results:**
 
-* Step 2 refuses the upload.
-* Step 2 leaves the gallery unchanged.
+* Step 3 refuses the upload.
+* Step 3 leaves the gallery unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-2rk rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC7-1: Operator reorders and removes media
@@ -848,14 +855,15 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open that listing.
-2. Assign Pokémon and Sport to it.
-3. Read its categories.
+1. Open that listing from Listings.
+2. Select Pokémon and Sport in its categories control.
+3. Click Save.
+4. Reopen the listing and read its categories.
 
 **Expected Results:**
 
-* Step 2 refuses the write.
-* Step 3 shows the categories unchanged.
+* Step 3 refuses the write.
+* Step 4 shows the categories unchanged.
 
 <!-- trace:case id=g10adm.auction-listing.TC-wcd rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC9-1: Canceled sale cannot receive a listing
