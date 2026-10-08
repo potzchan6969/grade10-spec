@@ -6600,3 +6600,7 @@ reopening it. Neither reading proposed it; the action is
 - **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
 - **Covered:** `winner-order-SC-253` ← `US2-TC20-2` (recorded tracker link) and `US2-TC56-1` (no tracker link).
 - **Raised:** none.
+
+**Run:** 2026-10-08, amendment for the card fee, not blind: `Invoice fields`' card pricing, the durable suite and the cases above. The card fee is computed from the Payment Settings card rule instead of the payment provider's fees (decisions Q17).
+
+- **No longer carried unchanged** - `winner-order-SC-62`, listed as unchanged by the run above, now reads the card rule in Payment Settings. It keeps its numbers, and no case read where the fee came from, so no case moves
