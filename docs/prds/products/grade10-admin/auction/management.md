@@ -210,6 +210,9 @@ order.
 - 🚧 **Each action is a dialog** - it restates what will happen, a refusal
   reads as a sentence with the dialog kept open, and money is typed as the
   winner reads it, `50.00` for HK$50.00
+- 🚧 **An action sent twice happens once** - a double click or a retry after a
+  lost reply does the action once and answers what the first did; a request
+  reused for another action is refused
 
 | Action | On | Access |
 | --- | --- | --- |
