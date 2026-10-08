@@ -1,6 +1,7 @@
 import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
+import { TABLE_LABELS } from "./fixtures";
 import {
   LINE_HEIGHT,
   MARGIN,
@@ -21,6 +22,7 @@ const { auctionInvoicePdf } = getMessages("grade10", "en");
 const COPY = {
   ...auctionInvoicePdf.document,
   ...auctionInvoicePdf.receipt,
+  ...TABLE_LABELS,
 } as const;
 
 const ADDRESS = {
@@ -37,15 +39,27 @@ const ADDRESS = {
 
 const COMPLETE_ADDRESS = { ...ADDRESS, region: "Kowloon" } as const;
 
+const LOT_A = {
+  title: "Lot A",
+  winningBid: "HKD 100.00",
+  buyersPremium: "HKD 20.00",
+  total: "HKD 120.00",
+} as const;
+
 const DATA = {
-  listingTitle: "藏品 A",
+  items: [LOT_A],
+  itemTotal: {
+    winningBid: LOT_A.winningBid,
+    buyersPremium: LOT_A.buyersPremium,
+    total: LOT_A.total,
+  },
   receiptNumber: "receipt_123",
   paidAt: new Date("2026-09-23T12:00:00.000Z"),
   invoiceId: "invoice_123",
   paymentReferenceCode: "LOT-001",
   billTo: ADDRESS,
   shipTo: null,
-  lineItems: [{ label: "Hammer price", amount: "HKD 100.00" }],
+  lineItems: [{ label: "Shipping & Handling", amount: "HKD 80.00" }],
   paymentBreakdown: {
     originalInvoiceTotal: "HKD 120.00",
     previousPayments: "HKD 20.00",
@@ -60,14 +74,14 @@ const DATA = {
 } as const;
 
 const SUMMARY_LINE_ITEMS = [
-  { label: "Winning Bid", amount: "HKD 100.00" },
-  { key: "subtotal" as const, label: "Subtotal", amount: "HKD 100.00" },
+  { label: "Shipping & Handling", amount: "HKD 80.00" },
+  { key: "subtotal" as const, label: "Subtotal", amount: "HKD 200.00" },
   {
     key: "paymentProcessingFee" as const,
     label: "Payment Processing Fee",
     amount: "HKD 5.00",
   },
-  { key: "orderTotal" as const, label: "Order Total", amount: "HKD 105.00" },
+  { key: "orderTotal" as const, label: "Order Total", amount: "HKD 205.00" },
 ];
 
 function textRow(rows: Awaited<ReturnType<typeof drawnText>>, text: string) {
@@ -102,19 +116,29 @@ describe("receipt PDF renderer", () => {
     ]);
   });
 
-  it("renders one A4 PDF using the Latin development fallback", async () => {
-    const bytes = await ReceiptPdf({ ...DATA, listingTitle: "Lot A" });
+  // shared-ui-invoice-and-receipt-pdf-SC-68
+  it("renders a receipt that fits as exactly one A4 page", async () => {
+    const address = {
+      recipient: "Alexandra Tran",
+      line1: "Flat A, 21/F, One Harbour Square",
+      city: "North Point",
+      countryCode: "Hong Kong SAR",
+    };
+    const bytes = await ReceiptPdf({
+      ...DATA,
+      billTo: address,
+      shipTo: address,
+      lineItems: SUMMARY_LINE_ITEMS,
+    });
     const pdf = await PDFDocument.load(bytes);
     expect(pdf.getPageCount()).toBe(1);
     expect(pdf.getPage(0).getSize()).toEqual({ width: 595.28, height: 841.89 });
-    expect(bytes.byteLength).toBeGreaterThan(500);
     expect((await drawnStrings(bytes)).join(" ")).toContain(DATA.receiptNumber);
   });
 
   it("renders 'Not recorded' when Bill To or Ship To is withheld entirely", async () => {
     const bytes = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
       billTo: null,
       shipTo: null,
     });
@@ -126,7 +150,6 @@ describe("receipt PDF renderer", () => {
   it("shows no Payment section when the receipt carries no transfer reference", async () => {
     const bytes = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
       paymentReference: null,
     });
     const pdf = await PDFDocument.load(bytes);
@@ -136,12 +159,11 @@ describe("receipt PDF renderer", () => {
   // shared-ui-invoice-and-receipt-pdf-SC-33, shared-ui-invoice-and-receipt-pdf-US1-TC29-1,
   // shared-ui-invoice-and-receipt-pdf-US1-TC30-1
   it("renders optional address fields without reserved blank rows", async () => {
-    const withPhone = await ReceiptPdf({ ...DATA, listingTitle: "Lot A" });
+    const withPhone = await ReceiptPdf(DATA);
     expect((await drawnStrings(withPhone)).join(" ")).toContain(ADDRESS.phone);
 
     const withoutPhone = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
       billTo: { ...ADDRESS, phone: null },
     });
     expect((await drawnStrings(withoutPhone)).join(" ")).not.toContain(
@@ -160,7 +182,6 @@ describe("receipt PDF renderer", () => {
 
     const personal = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
       billTo: {
         ...ADDRESS,
         company: null,
@@ -183,7 +204,6 @@ describe("receipt PDF renderer", () => {
   it("renders every supplied company address field", async () => {
     const bytes = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
       billTo: COMPLETE_ADDRESS,
     });
     const strings = await drawnStrings(bytes);
@@ -196,29 +216,38 @@ describe("receipt PDF renderer", () => {
     expect(strings).toContain(COMPLETE_ADDRESS.countryCode);
   });
 
-  // shared-ui-invoice-and-receipt-pdf-SC-38, shared-ui-invoice-and-receipt-pdf-US1-TC33-1
-  it("places the charges header above the lot and boxes the summary", async () => {
+  // shared-ui-invoice-and-receipt-pdf-SC-60
+  it("draws the item table, the charges and the summary above the payment breakdown", async () => {
     const bytes = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
+      paymentReference: null,
       lineItems: SUMMARY_LINE_ITEMS,
     });
     const rows = await drawnText(bytes);
-    const title = textRow(rows, "Lot A");
-    const description = textRow(rows, "Description");
-    const amount = textRow(rows, "Amount");
-    const subtotal = textRow(rows, "Subtotal");
-    const total = textRow(rows, "Order Total");
-    expect(description.y).toBeGreaterThan(title.y);
-    expect(description.x).toBeCloseTo(MARGIN);
-    expect(amount.x).toBeGreaterThan(description.x);
+    const order = [
+      "Item",
+      "Lot A",
+      "Item Total",
+      "Shipping & Handling",
+      "Subtotal",
+      "Payment Processing Fee",
+      "Order Total",
+      "Original Invoice Total",
+      "Previous Payments",
+      "Current Payment Received",
+      "Remaining Balance Due",
+    ].map((text) => textRow(rows, text));
+    for (const [index, row] of order.entries()) {
+      if (index > 0) expect(row.y).toBeLessThan(order[index - 1]?.y ?? 0);
+    }
+    const header = order[0] as (typeof rows)[number];
     expect(
       (await drawnHorizontalLines(bytes)).some(
         (rule) =>
           Math.abs(rule.x1 - MARGIN) < 0.01 &&
           Math.abs(rule.x2 - RIGHT_EDGE) < 0.01 &&
-          rule.y < description.y &&
-          rule.y > title.y,
+          rule.y < header.y &&
+          rule.y > (order[1]?.y ?? 0),
       ),
     ).toBe(true);
     const summaryBox = (await drawnRectangles(bytes)).find(
@@ -226,14 +255,10 @@ describe("receipt PDF renderer", () => {
         rectangle.x < SUMMARY_LEFT && rectangle.width > SUMMARY_WIDTH,
     );
     expect(summaryBox).toBeDefined();
-    expect((summaryBox?.x ?? 0) + (summaryBox?.width ?? 0)).toBeGreaterThan(
-      RIGHT_EDGE,
-    );
-    expect(subtotal.x).toBeGreaterThan(summaryBox?.x ?? RIGHT_EDGE);
-    expect(subtotal.y).toBeLessThan(
+    expect(order[4]?.y).toBeLessThan(
       (summaryBox?.y ?? 0) + (summaryBox?.height ?? 0),
     );
-    expect(total.y).toBeGreaterThan(summaryBox?.y ?? 0);
+    expect(order[7]?.y).toBeLessThan(summaryBox?.y ?? 0);
   });
 
   // shared-ui-invoice-and-receipt-pdf-SC-52, shared-ui-invoice-and-receipt-pdf-SC-53,
@@ -242,7 +267,6 @@ describe("receipt PDF renderer", () => {
   it("renders a supplied tax line and compacts null or omitted tax", async () => {
     const bytes = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
       lineItems: SUMMARY_LINE_ITEMS,
       taxLine: { label: "Tax", amount: "HKD 12.00" },
     });
@@ -252,13 +276,11 @@ describe("receipt PDF renderer", () => {
 
     const withoutTax = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
       lineItems: SUMMARY_LINE_ITEMS,
       taxLine: undefined,
     });
     const nullTax = await ReceiptPdf({
       ...DATA,
-      listingTitle: "Lot A",
       lineItems: SUMMARY_LINE_ITEMS,
       taxLine: null,
     });

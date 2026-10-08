@@ -2,7 +2,9 @@ import type { ReceiptPdfData } from "@grade10/ui";
 import { ReceiptPdf } from "@grade10/ui";
 import {
   BANK_TRANSFER_RECEIPT,
+  LONG_TABLE_RECEIPT,
   SAMPLE_RECEIPT,
+  SEVERAL_ITEMS_RECEIPT,
   WITH_TAX_RECEIPT,
 } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/fixtures";
 import { PdfPreview } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview";
@@ -47,4 +49,12 @@ export const BankTransfer: Story = {
 
 export const WithTax: Story = {
   args: { data: WITH_TAX_RECEIPT },
+};
+
+export const SeveralItems: Story = {
+  args: { data: SEVERAL_ITEMS_RECEIPT },
+};
+
+export const LongTable: Story = {
+  args: { data: LONG_TABLE_RECEIPT },
 };

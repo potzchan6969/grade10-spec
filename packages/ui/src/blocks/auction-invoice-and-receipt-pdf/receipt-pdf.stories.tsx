@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import {
   BANK_TRANSFER_RECEIPT,
+  LONG_TABLE_RECEIPT,
   SAMPLE_RECEIPT,
+  SEVERAL_ITEMS_RECEIPT,
   WITH_TAX_RECEIPT,
 } from "./fixtures";
 import { PdfPreview } from "./pdf-preview";
@@ -47,4 +49,12 @@ export const BankTransfer: Story = {
 
 export const WithTax: Story = {
   args: { data: WITH_TAX_RECEIPT },
+};
+
+export const SeveralItems: Story = {
+  args: { data: SEVERAL_ITEMS_RECEIPT },
+};
+
+export const LongTable: Story = {
+  args: { data: LONG_TABLE_RECEIPT },
 };

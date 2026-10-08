@@ -62,6 +62,8 @@ export {
 } from "./blocks/auction-invoice-and-receipt-pdf/invoice-pdf";
 export type {
   PdfDocumentCopy,
+  PdfItemRow,
+  PdfItemTotal,
   PdfLineItem,
   PdfPartyAddress,
 } from "./blocks/auction-invoice-and-receipt-pdf/pdf-document";

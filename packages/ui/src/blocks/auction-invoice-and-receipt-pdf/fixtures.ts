@@ -3,14 +3,58 @@ import type {
   InvoicePdfCopy,
   InvoicePdfData,
 } from "./invoice-pdf";
+import type { PdfItemRow, PdfItemTotal } from "./pdf-document";
 import type { ReceiptPdfCopy, ReceiptPdfData } from "./receipt-pdf";
+
+/** The item table's five labels, which the shared catalog does not carry yet. */
+export const TABLE_LABELS = {
+  itemLabel: "Item",
+  winningBidLabel: "Winning Bid",
+  buyersPremiumLabel: "Buyer's Premium",
+  totalLabel: "Total",
+  itemTotalLabel: "Item Total",
+} as const;
+
+const HKD = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+const hkd = (cents: number) => `HKD ${HKD.format(cents / 100)}`;
+
+const centsOf = (amount: string) =>
+  Math.round(Number(amount.replace(/[^\d.]/g, "")) * 100);
+
+/** `count` items titled `Lot 01`, `Lot 02`, ..., item n bidding n × HKD 100.00 with a 20% premium. */
+export function sampleItems(count: number): PdfItemRow[] {
+  const digits = Math.max(2, String(count).length);
+  return Array.from({ length: count }, (_, index) => {
+    const n = index + 1;
+    return {
+      title: `Lot ${String(n).padStart(digits, "0")}`,
+      winningBid: hkd(n * 10_000),
+      buyersPremium: hkd(n * 2_000),
+      total: hkd(n * 12_000),
+    };
+  });
+}
+
+/** The Item Total a caller would supply for `items`: each column summed. */
+export function itemTotalOf(items: readonly PdfItemRow[]): PdfItemTotal {
+  const sum = (key: keyof PdfItemTotal) =>
+    hkd(items.reduce((cents, item) => cents + centsOf(item[key]), 0));
+  return {
+    winningBid: sum("winningBid"),
+    buyersPremium: sum("buyersPremium"),
+    total: sum("total"),
+  };
+}
 
 const INVOICE_COPY: InvoicePdfCopy = {
   documentTitle: "Invoice",
   billToHeading: "Bill To",
   shipToHeading: "Ship To",
-  descriptionLabel: "Description",
-  amountLabel: "Amount",
+  ...TABLE_LABELS,
   invoiceNumberLabel: "Invoice number",
   sentAtLabel: "Date of issue",
   paymentDeadlineLabel: "Date due",
@@ -34,8 +78,7 @@ const RECEIPT_COPY: ReceiptPdfCopy = {
   documentTitle: "Receipt",
   billToHeading: "Bill To",
   shipToHeading: "Ship To",
-  descriptionLabel: "Description",
-  amountLabel: "Amount",
+  ...TABLE_LABELS,
   receiptNumberLabel: "Receipt number",
   invoiceNumberLabel: "Invoice number",
   datePaidLabel: "Date paid",
@@ -69,9 +112,16 @@ const SHIP_TO = {
   line2: null,
 } as const;
 
+const ITEMS: readonly PdfItemRow[] = [
+  {
+    title: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
+    winningBid: "HKD 2,500.00",
+    buyersPremium: "HKD 500.00",
+    total: "HKD 3,000.00",
+  },
+];
+
 const INVOICE_CHARGES = [
-  { label: "Winning Bid", amount: "HKD 2,500.00" },
-  { label: "Buyer's Premium", amount: "HKD 500.00" },
   { label: "Shipping & Handling", amount: "HKD 80.00" },
   { label: "Insurance", amount: "HKD 40.00" },
   { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,120.00" },
@@ -90,7 +140,8 @@ const INVOICE_CHARGES = [
 const RECEIPT_CHARGES = INVOICE_CHARGES.map((item) => ({ ...item }));
 
 export const SAMPLE_INVOICE: InvoicePdfData = {
-  listingTitle: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
+  items: ITEMS,
+  itemTotal: itemTotalOf(ITEMS),
   invoiceNumber: "INV-202609-LK7P2Q-01",
   sentAt: new Date("2026-09-15T11:04:00.000Z"),
   paymentDeadline: new Date("2026-09-22T11:04:00.000Z"),
@@ -117,7 +168,7 @@ export const BANK_TRANSFER_INVOICE: InvoicePdfData = {
   ...SAMPLE_INVOICE,
   paymentMethod: "Bank transfer",
   lineItems: [
-    ...INVOICE_CHARGES.slice(0, 4),
+    ...INVOICE_CHARGES.slice(0, 2),
     { key: "subtotal", label: "Subtotal", amount: "HKD 3,120.00" },
     {
       key: "paymentProcessingFee",
@@ -138,7 +189,7 @@ export const REPLACEMENT_INVOICE: InvoicePdfData = {
 export const WITH_TAX_INVOICE: InvoicePdfData = {
   ...SAMPLE_INVOICE,
   lineItems: [
-    ...INVOICE_CHARGES.slice(0, 4),
+    ...INVOICE_CHARGES.slice(0, 2),
     { key: "subtotal", label: "Subtotal", amount: "HKD 3,276.00" },
     {
       key: "paymentProcessingFee",
@@ -151,7 +202,8 @@ export const WITH_TAX_INVOICE: InvoicePdfData = {
 };
 
 export const SAMPLE_RECEIPT: ReceiptPdfData = {
-  listingTitle: SAMPLE_INVOICE.listingTitle,
+  items: SAMPLE_INVOICE.items,
+  itemTotal: SAMPLE_INVOICE.itemTotal,
   receiptNumber: "REC-202609-LK7P2Q-01-P1",
   paidAt: SAMPLE_INVOICE.sentAt,
   invoiceId: SAMPLE_INVOICE.invoiceNumber,
@@ -181,7 +233,7 @@ export const BANK_TRANSFER_RECEIPT: ReceiptPdfData = {
 export const WITH_TAX_RECEIPT: ReceiptPdfData = {
   ...SAMPLE_RECEIPT,
   lineItems: [
-    ...INVOICE_CHARGES.slice(0, 4),
+    ...INVOICE_CHARGES.slice(0, 2),
     { key: "subtotal", label: "Subtotal", amount: "HKD 3,276.00" },
     {
       key: "paymentProcessingFee",
@@ -198,3 +250,47 @@ export const WITH_TAX_RECEIPT: ReceiptPdfData = {
     remainingBalanceDue: "HKD 0.00",
   },
 };
+
+/** An invoice for `items`, its charges and summary adding up the way a caller's would. */
+function invoiceFor(items: readonly PdfItemRow[]): InvoicePdfData {
+  const itemTotal = itemTotalOf(items);
+  const subtotal = centsOf(itemTotal.total) + 8_000 + 4_000;
+  const fee = Math.round(subtotal * 0.036);
+  return {
+    ...SAMPLE_INVOICE,
+    items,
+    itemTotal,
+    lineItems: [
+      ...INVOICE_CHARGES.slice(0, 2),
+      { key: "subtotal", label: "Subtotal", amount: hkd(subtotal) },
+      {
+        key: "paymentProcessingFee",
+        label: "Payment Processing Fee",
+        amount: hkd(fee),
+      },
+      { key: "orderTotal", label: "Order Total", amount: hkd(subtotal + fee) },
+    ],
+  };
+}
+
+function receiptFor(items: readonly PdfItemRow[]): ReceiptPdfData {
+  const invoice = invoiceFor(items);
+  const orderTotal = invoice.lineItems.at(-1)?.amount ?? "";
+  return {
+    ...SAMPLE_RECEIPT,
+    items: invoice.items,
+    itemTotal: invoice.itemTotal,
+    lineItems: invoice.lineItems,
+    paymentBreakdown: {
+      originalInvoiceTotal: orderTotal,
+      previousPayments: "HKD 0.00",
+      currentPaymentReceived: orderTotal,
+      remainingBalanceDue: "HKD 0.00",
+    },
+  };
+}
+
+export const SEVERAL_ITEMS_INVOICE = invoiceFor(sampleItems(3));
+export const LONG_TABLE_INVOICE = invoiceFor(sampleItems(30));
+export const SEVERAL_ITEMS_RECEIPT = receiptFor(sampleItems(3));
+export const LONG_TABLE_RECEIPT = receiptFor(sampleItems(30));

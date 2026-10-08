@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import {
   BANK_TRANSFER_INVOICE,
+  LONG_TABLE_INVOICE,
   REPLACEMENT_INVOICE,
   SAMPLE_INVOICE,
+  SEVERAL_ITEMS_INVOICE,
   WITH_TAX_INVOICE,
 } from "./fixtures";
 import type { InvoicePdfData } from "./invoice-pdf";
@@ -52,4 +54,12 @@ export const Replacement: Story = {
 
 export const WithTax: Story = {
   args: { data: WITH_TAX_INVOICE },
+};
+
+export const SeveralItems: Story = {
+  args: { data: SEVERAL_ITEMS_INVOICE },
+};
+
+export const LongTable: Story = {
+  args: { data: LONG_TABLE_INVOICE },
 };

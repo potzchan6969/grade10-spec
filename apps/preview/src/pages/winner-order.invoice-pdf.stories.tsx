@@ -2,8 +2,10 @@ import type { InvoicePdfData } from "@grade10/ui";
 import { InvoicePdf } from "@grade10/ui";
 import {
   BANK_TRANSFER_INVOICE,
+  LONG_TABLE_INVOICE,
   REPLACEMENT_INVOICE,
   SAMPLE_INVOICE,
+  SEVERAL_ITEMS_INVOICE,
   WITH_TAX_INVOICE,
 } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/fixtures";
 import { PdfPreview } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview";
@@ -52,4 +54,12 @@ export const Replacement: Story = {
 
 export const WithTax: Story = {
   args: { data: WITH_TAX_INVOICE },
+};
+
+export const SeveralItems: Story = {
+  args: { data: SEVERAL_ITEMS_INVOICE },
+};
+
+export const LongTable: Story = {
+  args: { data: LONG_TABLE_INVOICE },
 };

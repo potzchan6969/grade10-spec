@@ -29,6 +29,19 @@ export const META_VALUE_LEFT = MARGIN + 160;
 /** A boxed summary: right-aligned, narrower than the sheet. */
 export const SUMMARY_WIDTH = 220;
 export const SUMMARY_LEFT = RIGHT_EDGE - SUMMARY_WIDTH;
+/** The lowest y any body block reaches on any page, keeping the issuer band clear. */
+export const BODY_BOTTOM = MARGIN + 3 * LINE_HEIGHT;
+/** Where a continuation page's first line sits. */
+export const PAGE_TOP = A4_HEIGHT - MARGIN - SMALL_SIZE;
+/** Space under an item row's last line. */
+export const ROW_PADDING = 6;
+/** Between the Item column and the first amount column, and between amount columns. */
+export const COLUMN_GAP = 12;
+export const MIN_AMOUNT_COLUMN = 72;
+/** Below this the Item column cannot hold a title, and the document is refused. */
+export const MIN_TITLE_COLUMN = 120;
+/** From a table rule down to the baseline of the row under it. */
+const ROW_LEAD = 14;
 
 /** Same shape as the `AddressSnapshot` jsonb column, without importing the schema that types it. */
 export type PdfPartyAddress = Record<string, string | null> | null;
@@ -42,12 +55,30 @@ export type PdfLineItem = {
   amount: string;
 };
 
+/** One item of the table. Every amount arrives formatted; the block adds none of them up. */
+export type PdfItemRow = {
+  title: string;
+  winningBid: string;
+  buyersPremium: string;
+  total: string;
+};
+
+/** The Item Total row's three amounts, supplied rather than summed. */
+export type PdfItemTotal = {
+  winningBid: string;
+  buyersPremium: string;
+  total: string;
+};
+
 /** Every label `pdf-document.ts` itself draws, supplied by the caller so no text is hardcoded in this package. */
 export type PdfDocumentCopy = {
   billToHeading: string;
   shipToHeading: string;
-  descriptionLabel: string;
-  amountLabel: string;
+  itemLabel: string;
+  winningBidLabel: string;
+  buyersPremiumLabel: string;
+  totalLabel: string;
+  itemTotalLabel: string;
 };
 
 /**
@@ -121,22 +152,29 @@ export function addressLines(address: PdfPartyAddress): string[] {
   ].filter((line): line is string => Boolean(line));
 }
 
+/** Lines of `text` no wider than `width`, breaking inside a word only when the word alone is wider. */
 export function wrap(
   text: string,
   font: PDFFont,
   size: number,
   width: number,
 ): string[] {
-  const words = text.split(/\s+/).filter(Boolean);
   const lines: string[] = [];
   let line = "";
-  for (const word of words) {
+  for (const word of text.split(/\s+/).filter(Boolean)) {
     const candidate = line ? `${line} ${word}` : word;
-    if (line && font.widthOfTextAtSize(candidate, size) > width) {
-      lines.push(line);
-      line = word;
-    } else {
+    if (font.widthOfTextAtSize(candidate, size) <= width) {
       line = candidate;
+      continue;
+    }
+    if (line) lines.push(line);
+    line = "";
+    for (const character of word) {
+      if (line && font.widthOfTextAtSize(line + character, size) > width) {
+        lines.push(line);
+        line = "";
+      }
+      line += character;
     }
   }
   if (line) lines.push(line);
@@ -254,6 +292,123 @@ export function drawParties(
 }
 
 /**
+ * A section drawn from `y` down, returning the y the section after it starts
+ * at. Drawing it on a page that only records coordinates is how it is
+ * measured, so its measured height and what it draws are one computation.
+ */
+export type PdfLayout = (page: PDFPage, y: number) => number;
+
+/** A section measured before anything is drawn. */
+export type PdfBlock = {
+  /** From the y it is drawn at down to the lowest y it draws at. */
+  height: number;
+  /** From that lowest y down to the y the next block starts at. */
+  after: number;
+  draw: (page: PDFPage, y: number) => void;
+};
+
+export function measuredBlock(layout: PdfLayout): PdfBlock {
+  let lowest = 0;
+  const reach = (y: number) => {
+    lowest = Math.min(lowest, y);
+  };
+  const measuring = {
+    drawText: (_text: string, options: { y: number }) => reach(options.y),
+    drawLine: (options: { start: { y: number }; end: { y: number } }) => {
+      reach(options.start.y);
+      reach(options.end.y);
+    },
+    drawRectangle: (options: { y: number }) => reach(options.y),
+  } as unknown as PDFPage;
+  const next = layout(measuring, 0);
+  return {
+    height: -lowest,
+    after: lowest - next,
+    draw: (page, y) => {
+      layout(page, y);
+    },
+  };
+}
+
+/** An invoice or receipt with nothing to bill is a fault in the caller, refused before a page exists. */
+export function requireItems(items: readonly PdfItemRow[]): void {
+  if (items.length === 0) {
+    throw new RangeError(
+      "No items were given: an invoice or receipt lists at least one item.",
+    );
+  }
+}
+
+type AmountKey = keyof PdfItemTotal;
+
+const AMOUNT_COLUMNS: readonly {
+  key: AmountKey;
+  label: "winningBidLabel" | "buyersPremiumLabel" | "totalLabel";
+}[] = [
+  { key: "winningBid", label: "winningBidLabel" },
+  { key: "buyersPremium", label: "buyersPremiumLabel" },
+  { key: "total", label: "totalLabel" },
+];
+
+/** Where each amount column right-aligns, and how wide that leaves the Item column. */
+type Columns = { titleWidth: number; right: Record<AmountKey, number> };
+
+export type PdfItemTableData = {
+  items: readonly PdfItemRow[];
+  itemTotal: PdfItemTotal;
+  /** The charges under the table and the keyed summary rows, never the items or Tax. */
+  lineItems: readonly PdfLineItem[];
+  taxLine?: PdfLineItem | null;
+  copy: PdfDocumentCopy;
+};
+
+/** The table's blocks: the column header, one row per item, and the tail from the Item Total row to the boxed summary. */
+export type PdfItemTable = {
+  header: PdfBlock;
+  rows: PdfBlock[];
+  tail: PdfBlock;
+};
+
+/** Each amount column is as wide as its widest heading or amount, so no amount wraps, shrinks or overflows. */
+function measureColumns(fonts: Fonts, data: PdfItemTableData): Columns {
+  const right = {} as Record<AmountKey, number>;
+  let edge = RIGHT_EDGE;
+  for (const { key, label } of [...AMOUNT_COLUMNS].reverse()) {
+    right[key] = edge;
+    const width = Math.max(
+      MIN_AMOUNT_COLUMN,
+      fonts.bold.widthOfTextAtSize(data.copy[label], SMALL_SIZE),
+      fonts.bold.widthOfTextAtSize(data.itemTotal[key], BODY_SIZE),
+      ...data.items.map((item) =>
+        fonts.regular.widthOfTextAtSize(item[key], BODY_SIZE),
+      ),
+    );
+    edge -= width + COLUMN_GAP;
+  }
+  const titleWidth = edge - MARGIN;
+  if (titleWidth < MIN_TITLE_COLUMN) {
+    throw new RangeError(
+      `The amounts do not fit: the three amount columns leave the Item column ${Math.round(titleWidth)}pt wide, under the ${MIN_TITLE_COLUMN}pt a title needs.`,
+    );
+  }
+  return { titleWidth, right };
+}
+
+function drawAmounts(
+  page: PDFPage,
+  font: PDFFont,
+  columns: Columns,
+  amounts: PdfItemTotal,
+  y: number,
+): void {
+  for (const { key } of AMOUNT_COLUMNS) {
+    drawTextRight(page, font, amounts[key], columns.right[key], y);
+  }
+}
+
+const ORDER_TOTAL_SIZE = 13;
+
+/**
  * The three lines every order value ends in - never a charge of their own,
  * always the arithmetic over the charges above them. Pulled out of the flat
  * charge list into their own boxed, right-aligned summary, Order Total
@@ -261,52 +416,16 @@ export function drawParties(
  * Grouped by `PdfLineItem.key`, not `label` text - a translated label must
  * still route into the summary.
  */
-const ORDER_TOTAL_SIZE = 13;
-
-/** The lot heading, a Description/Amount table of charges, and the order-value summary beneath. */
-export function drawLineItems(
+function drawSummary(
   page: PDFPage,
   fonts: Fonts,
-  listingTitle: string,
-  lineItems: readonly PdfLineItem[],
-  taxLine: PdfLineItem | null | undefined,
-  copy: Pick<PdfDocumentCopy, "descriptionLabel" | "amountLabel">,
+  summary: readonly PdfLineItem[],
   y: number,
 ): number {
-  const charges = lineItems.filter((item) => item.key === undefined);
-  if (taxLine) charges.push(taxLine);
-  const summary = lineItems.filter((item) => item.key !== undefined);
-
-  drawText(page, fonts.bold, copy.descriptionLabel, MARGIN, y, SMALL_SIZE, INK);
-  drawTextRight(
-    page,
-    fonts.bold,
-    copy.amountLabel,
-    RIGHT_EDGE,
-    y,
-    SMALL_SIZE,
-    INK,
-  );
-  y = drawRuleSpan(page, MARGIN, RIGHT_EDGE, y - 4, {
-    color: RULE_STRONG,
-    thickness: 0.8,
-    gap: LINE_HEIGHT - 4,
-  });
-  drawText(page, fonts.bold, listingTitle, MARGIN, y, BODY_SIZE, INK);
-  y -= LINE_HEIGHT * 1.4;
-
-  for (const item of charges) {
-    drawMoneyRow(page, fonts, item.label, item.amount, MARGIN, y);
-    y -= LINE_HEIGHT;
-  }
-  if (summary.length === 0) return y;
-
-  y -= LINE_HEIGHT * 0.6;
   const summaryTop = y;
   for (const item of summary) {
-    const amount = item.amount;
     if (item.key !== "orderTotal") {
-      drawMoneyRow(page, fonts, item.label, amount, SUMMARY_LEFT, y);
+      drawMoneyRow(page, fonts, item.label, item.amount, SUMMARY_LEFT, y);
       y -= LINE_HEIGHT;
       continue;
     }
@@ -325,7 +444,7 @@ export function drawLineItems(
     drawTextRight(
       page,
       fonts.bold,
-      amount,
+      item.amount,
       RIGHT_EDGE,
       y,
       ORDER_TOTAL_SIZE,
@@ -343,6 +462,150 @@ export function drawLineItems(
     borderWidth: 0.8,
   });
   return y;
+}
+
+/**
+ * Measures the whole table before any page is drawn, so every page lines up
+ * and a table that cannot be drawn whole is refused rather than cut: amounts
+ * too wide for the Item column, or an item row or the tail taller than a
+ * page holds under the column header.
+ */
+export function measureItemTable(
+  fonts: Fonts,
+  data: PdfItemTableData,
+): PdfItemTable {
+  const { copy } = data;
+  const columns = measureColumns(fonts, data);
+
+  const header = measuredBlock((page, y) => {
+    drawText(page, fonts.bold, copy.itemLabel, MARGIN, y, SMALL_SIZE, INK);
+    for (const { key, label } of AMOUNT_COLUMNS) {
+      drawTextRight(
+        page,
+        fonts.bold,
+        copy[label],
+        columns.right[key],
+        y,
+        SMALL_SIZE,
+        INK,
+      );
+    }
+    return drawRuleSpan(page, MARGIN, RIGHT_EDGE, y - 4, {
+      color: RULE_STRONG,
+      thickness: 0.8,
+      gap: 0,
+    });
+  });
+  const room = PAGE_TOP - header.height - header.after - BODY_BOTTOM;
+
+  const rows = data.items.map((item, index) => {
+    const lines = wrap(
+      item.title,
+      fonts.regular,
+      BODY_SIZE,
+      columns.titleWidth,
+    );
+    const row = measuredBlock((page, y) => {
+      const first = y - ROW_LEAD;
+      for (const [line, text] of lines.entries()) {
+        drawText(page, fonts.regular, text, MARGIN, first - line * LINE_HEIGHT);
+      }
+      drawAmounts(page, fonts.regular, columns, item, first);
+      const last = first - (Math.max(lines.length, 1) - 1) * LINE_HEIGHT;
+      return last - LINE_HEIGHT - ROW_PADDING + ROW_LEAD;
+    });
+    if (row.height > room) {
+      throw new RangeError(
+        `The item row does not fit: item ${index + 1} is ${Math.round(row.height)}pt tall and a page holds ${Math.round(room)}pt.`,
+      );
+    }
+    return row;
+  });
+
+  const charges = data.lineItems.filter((item) => item.key === undefined);
+  if (data.taxLine) charges.push(data.taxLine);
+  const summary = data.lineItems.filter((item) => item.key !== undefined);
+  const tail = measuredBlock((page, y) => {
+    drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, {
+      color: RULE_STRONG,
+      thickness: 0.8,
+    });
+    let line = y - ROW_LEAD;
+    drawText(page, fonts.bold, copy.itemTotalLabel, MARGIN, line);
+    drawAmounts(page, fonts.bold, columns, data.itemTotal, line);
+    line -= LINE_HEIGHT * 1.4;
+    for (const charge of charges) {
+      drawMoneyRow(page, fonts, charge.label, charge.amount, MARGIN, line);
+      line -= LINE_HEIGHT;
+    }
+    if (summary.length > 0) {
+      line = drawSummary(page, fonts, summary, line - LINE_HEIGHT * 0.6);
+    }
+    return line - LINE_HEIGHT;
+  });
+  if (tail.height > room) {
+    throw new RangeError(
+      `The Item Total row with its charges does not fit: it is ${Math.round(tail.height)}pt tall and a page holds ${Math.round(room)}pt.`,
+    );
+  }
+
+  return { header, rows, tail };
+}
+
+/** The document being drawn, its current page and the y the next block starts at. */
+export type Sheet = { pdf: PDFDocument; page: PDFPage; y: number };
+
+export function startSheet(pdf: PDFDocument): Sheet {
+  const page = pdf.addPage([A4_WIDTH, A4_HEIGHT]);
+  return { pdf, page, y: A4_HEIGHT - MARGIN };
+}
+
+function drawOn(sheet: Sheet, block: PdfBlock): void {
+  block.draw(sheet.page, sheet.y);
+  sheet.y -= block.height + block.after;
+}
+
+/**
+ * Draws a block whole: on the current page when it stays above
+ * `BODY_BOTTOM`, otherwise on a new page, under `continuation` when given.
+ * A page is added only when a block needs it, so a document that fits is
+ * one page.
+ */
+export function place(
+  sheet: Sheet,
+  block: PdfBlock,
+  continuation?: PdfBlock,
+): void {
+  if (sheet.y - block.height < BODY_BOTTOM) {
+    sheet.page = sheet.pdf.addPage([A4_WIDTH, A4_HEIGHT]);
+    sheet.y = PAGE_TOP;
+    if (continuation) drawOn(sheet, continuation);
+  }
+  drawOn(sheet, block);
+}
+
+/** Two blocks that move as one, the second under the first. */
+function together(first: PdfBlock, second: PdfBlock): PdfBlock {
+  return {
+    height: first.height + first.after + second.height,
+    after: second.after,
+    draw: (page, y) => {
+      first.draw(page, y);
+      second.draw(page, y - first.height - first.after);
+    },
+  };
+}
+
+/**
+ * The column header with the first row, so the header never ends a page
+ * alone, then each further row, then the tail. A page the table continues
+ * on opens with the header, and nothing else of the page head.
+ */
+export function placeItemTable(sheet: Sheet, table: PdfItemTable): void {
+  const [first, ...rest] = table.rows;
+  place(sheet, first ? together(table.header, first) : table.header);
+  for (const row of rest) place(sheet, row, table.header);
+  place(sheet, table.tail, table.header);
 }
 
 /**
@@ -395,7 +658,7 @@ export function drawTitle(
   return y - TITLE_SIZE - LINE_HEIGHT * 2;
 }
 
-/** Pinned to the bottom-right corner, independent of how far the sections above ran. */
+/** Pinned to the bottom-right corner of the page it is drawn on - the last - independent of how far the sections above ran. */
 export function drawIssuer(
   page: PDFPage,
   fonts: Fonts,
