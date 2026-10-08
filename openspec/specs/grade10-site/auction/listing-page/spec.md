@@ -720,6 +720,7 @@ the public page does not make the code a separate field or an alternate route.
 - **AND** neither the response, its share preview, nor any client-fetched
   data carries a labelled listing-code or payment-reference field
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-ajz rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-28 - A called-off listing keeps its canonical address
 **Serves:** Public identifier - the canonical address remains usable after the lot leaves browse and search
 
