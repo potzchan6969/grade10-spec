@@ -1,3 +1,4 @@
+import { formatDay } from "@grade10/date";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
@@ -9,7 +10,6 @@ import {
   AuctionWinnerOrder,
   type AuctionWinnerOrderProps,
   type AuctionWinnerOrderStep,
-  formatLocalDay,
   type OrderDetailsPaymentBrand,
   SiteHeader,
 } from "@grade10/ui";
@@ -50,6 +50,8 @@ const CARD_CHECKOUT_SIMULATE_MS = 700;
 
 /** Same recorded cancellation instant as the auction email preview fixture. */
 const CANCELLED_AT_MS = Date.UTC(2026, 8, 25, 2, 15);
+/** The clock the sample cancellation is worded on, so the day reads the same on every machine. */
+const CANCELLED_ZONE = "Asia/Hong_Kong";
 
 const SETUP_CONFIRMED_TOAST = {
   title: "Order setup complete",
@@ -419,10 +421,7 @@ function WinnerOrderPageState({
   const contactReason = contactReasonFor(content.status);
   const cancelledOn =
     content.status === "cancelled"
-      ? formatLocalDay(CANCELLED_AT_MS, {
-          locale: "en",
-          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        })
+      ? formatDay(CANCELLED_AT_MS, { locale: "en", timeZone: CANCELLED_ZONE })
       : null;
   const contactMail = contactReason
     ? winnerOrderContactMail({
@@ -677,4 +676,4 @@ function WinnerOrderPageState({
 }
 
 export type { WinnerOrderPageProps };
-export { CANCELLED_AT_MS, WinnerOrderPage };
+export { CANCELLED_AT_MS, CANCELLED_ZONE, WinnerOrderPage };
