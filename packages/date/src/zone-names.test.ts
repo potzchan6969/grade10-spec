@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatTimeRange,
   formatViewerZoneName,
+  shortMonthName,
   weekdayName,
   weekdayRangeName,
   zoneName,
@@ -82,5 +83,32 @@ describe("formatViewerZoneName", () => {
     expect(() => formatViewerZoneName("Mars/Olympus", 0)).toThrow(
       "Mars/Olympus",
     );
+  });
+});
+
+describe("shortMonthName", () => {
+  const MONTHS = Array.from({ length: 12 }, (_, month) => month);
+
+  it.each([
+    ["en", "en"],
+    ["zh-Hant", "zh-HK"],
+    ["zh-Hans", "zh-CN"],
+    ["ko", "ko"],
+  ])("words every month in %s as the runtime does", (locale, tag) => {
+    for (const month of MONTHS) {
+      expect(shortMonthName(month, locale)).toBe(
+        new Date(2020, month, 1).toLocaleDateString(tag, { month: "short" }),
+      );
+    }
+  });
+
+  it("keeps a Chinese or Korean month's unit", () => {
+    expect(shortMonthName(8, "zh-Hant")).toBe("9月");
+    expect(shortMonthName(8, "ko")).toBe("9월");
+    expect(shortMonthName(8, "en")).toBe("Sep");
+  });
+
+  it("stops on a language the platform has no words for", () => {
+    expect(() => shortMonthName(0, "fr")).toThrow(/"fr"/);
   });
 });
