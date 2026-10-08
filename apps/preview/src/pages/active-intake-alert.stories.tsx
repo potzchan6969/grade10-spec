@@ -15,7 +15,7 @@ import { navigateToStory } from "./workbench-story-nav";
  * submissions. Track Progress opens Submissions.
  */
 const meta = {
-  title: "Pages/Vault/Active Intake Alert",
+  title: "Vault/Active Intake Alert",
   component: ActiveIntakeAlert,
   parameters: { layout: "padded" },
   decorators: [

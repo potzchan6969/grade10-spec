@@ -17,7 +17,7 @@ import { navigateToStory } from "./workbench-story-nav";
  * or retrieval when pickup is pending.
  */
 const meta = {
-  title: "Pages/Vault/Vault Item Card",
+  title: "Vault/Vault Item Card",
   component: VaultItemCard,
   parameters: { layout: "padded" },
   decorators: [
