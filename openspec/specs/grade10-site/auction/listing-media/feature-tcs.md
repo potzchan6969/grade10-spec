@@ -301,7 +301,7 @@ file, and the gallery stays within the cap admin-listing sets.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** grade10-site-auction-listing-media-US-01
 
 **Pre-conditions:**
