@@ -1,7 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Static publish of the workbench Storybook (preview pages + UI + design-
-  // system stories) to the staging Cloudflare account.
+  // Workbench assets and the authenticated R2 archive share this origin.
   // URL: https://storybook.grade10-stg.com
   "name": "grade10-storybook",
   "main": "./worker/index.mjs",

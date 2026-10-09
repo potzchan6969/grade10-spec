@@ -602,6 +602,106 @@ test("the central workbench connects on cold load and reviews story history by c
   await page.close();
 });
 
+test("a story switch does not carry the prior case mapping while preparation is pending", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-race-"));
+  let server;
+  let browser;
+  let releaseBreadcrumbs;
+  let breadcrumbsReleased = false;
+  t.after(async () => {
+    releaseBreadcrumbs?.();
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "preparation-race-not-found-0001",
+    createdAt: "2026-10-08T10:01:00.000Z",
+    storyId: STORY_ID,
+  });
+  await publishReferenceStoryRun(archive, browser);
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByText(`Mapped case: ${CASE_ID}`, { exact: true }).waitFor();
+
+  let markBreadcrumbsRequested;
+  const breadcrumbsRequested = new Promise((resolveRequested) => {
+    markBreadcrumbsRequested = resolveRequested;
+  });
+  const allowBreadcrumbs = new Promise((resolveAllowed) => {
+    releaseBreadcrumbs = resolveAllowed;
+  });
+  await page.route("**/assets/breadcrumbs.stories-*.js", async (route) => {
+    markBreadcrumbsRequested();
+    await allowBreadcrumbs;
+    await route.continue();
+  });
+
+  const componentSearch = page.getByPlaceholder("Find components");
+  await componentSearch.fill("Breadcrumbs Default");
+  await page
+    .locator('.search-result-item[data-id="components-breadcrumbs--default"]')
+    .click();
+  await breadcrumbsRequested;
+  const currentStoryHeading = page.getByRole("heading", {
+    name: "Current Storybook story",
+  });
+  const currentStoryId = currentStoryHeading.locator(
+    "xpath=following-sibling::p[1]",
+  );
+  await page.waitForFunction(() => {
+    const heading = [...document.querySelectorAll("h3")].find(
+      (candidate) =>
+        candidate.textContent?.trim() === "Current Storybook story",
+    );
+    return (
+      heading?.nextElementSibling?.textContent?.trim() ===
+      "components-breadcrumbs--default"
+    );
+  });
+  assert.equal(
+    await currentStoryId.textContent(),
+    "components-breadcrumbs--default",
+  );
+  assert.equal(
+    breadcrumbsReleased,
+    false,
+    "the Breadcrumbs module is still blocked",
+  );
+
+  assert.equal(
+    await page.getByText(`Mapped case: ${CASE_ID}`, { exact: true }).count(),
+    0,
+    "the previous story's case must not remain attached while the new story prepares",
+  );
+
+  breadcrumbsReleased = true;
+  releaseBreadcrumbs();
+  await page
+    .getByText(
+      "Archived entries match this story ID or its reference story ID.",
+      { exact: true },
+    )
+    .waitFor();
+  assert.match(
+    await page
+      .getByRole("combobox", { name: "Verification target" })
+      .inputValue(),
+    /^vc_breadcrumbs_history::/,
+  );
+  await page.close();
+});
+
 test("a shared story without a verification parameter finds its reference case after paging past unrelated runs", {
   timeout: 180_000,
 }, async (t) => {

@@ -8,7 +8,7 @@ import type {
 import type { FormEvent } from "react";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { useParameter, useStorybookState } from "storybook/manager-api";
+import { useStorybookApi, useStorybookState } from "storybook/manager-api";
 import type { ArchiveRecord, VerificationIdentity } from "./archive-client";
 import {
   createReview,
@@ -502,9 +502,12 @@ function ImageEvidence({
 }
 
 export function VerificationPanel({ active }: { active: boolean }) {
+  const managerApi = useStorybookApi();
   const managerState = useStorybookState();
   const currentStoryId = managerState.storyId;
-  const verificationParameter = useParameter<unknown>("verification");
+  const verificationParameter = currentStoryId
+    ? managerApi.getParameters(currentStoryId, "verification")
+    : undefined;
   const caseIdHint = caseIdOf(verificationParameter);
   const exactIdentityHint = useMemo(
     () => verificationIdentity(verificationParameter),
