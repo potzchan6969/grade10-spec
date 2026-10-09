@@ -46,42 +46,6 @@
 * The drawer sends one checkout request.
 * The supplied hosted invoice opens.
 
-<!-- trace:case id=g10.store-checkout.TC-a8o rev=1 covers=g10.store-checkout.SC-i09 -->
-### grade10-site-store-checkout-US5-TC2-1: Repeated Pay resumes the saved invoice after current review
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
-
-**Pre-conditions:**
-
-* customer(member) is on `<grade10 store url>`.
-* An unpaid invoice exists for the unchanged purchase.
-* The current basket and tender still pass review.
-
-**Steps:**
-
-1. Open the cart drawer.
-2. Click Proceed to Checkout.
-3. Read the opened invoice.
-4. Read the member's orders.
-
-**Expected Results:**
-
-* Pay makes a fresh payment decision.
-* The saved invoice opens for the same purchase.
-* Exactly one matching order and payable invoice exist.
-
-**Deprecated:** Q24 moves invoice reuse on repeated Pay to add-checkout-purchase-safety.
 
 <!-- trace:case id=g10.store-checkout.TC-fnc rev=1 covers=none -->
 ### grade10-site-store-checkout-US5-TC3-1: Same-session reload retains the existing purchase
@@ -204,55 +168,6 @@ Runs once per row of **Test data**.
 * Pending order reads continue until paid is read.
 * After the paid read, the drawer shows freshly read cart and tender.
 
-<!-- trace:case id=g10.store-checkout.TC-cvz rev=1 covers=g10.store-checkout.SC-s19 -->
-### grade10-site-store-checkout-US5-TC6-1: Terminal replay retains the existing purchase outcome
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
-
-**Pre-conditions:**
-
-* customer(member) is on `<grade10 store url>`.
-* The same purchase has `<terminal outcome>`.
-* The terminal order is returned by the payment decision.
-* The test harness retains the submitted intent key and immutable acknowledged context, including when payment already converted the cart.
-
-**Test data:**
-
-| terminal outcome |
-| --- |
-| Paid |
-| Refunded |
-| Failed |
-| Canceled |
-| Expired |
-
-**Steps:**
-
-1. Replay the saved purchase through the signed-in checkout API harness using its original key and acknowledged context.
-2. Deliver that authoritative answer through the mounted checkout result handler; use the harness when an empty converted cart has no Pay control.
-3. Read the existing order.
-4. Observe subsequent order reads.
-
-**Expected Results:**
-
-* The existing order shows its truthful terminal outcome.
-* No new payable invoice or replacement order is created.
-* Terminal orders are not polled as open purchases.
-
-**Deprecated:** Q24 moves terminal replay to add-checkout-purchase-safety.
 
 <!-- trace:case id=g10.store-checkout.TC-zhh rev=1 covers=none -->
 ### grade10-site-store-checkout-US5-TC7-1: Concurrent tabs converge on one purchase and invoice
@@ -297,113 +212,6 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Q29 moves concurrent tabs converging on one purchase to add-checkout-purchase-safety.
 
-<!-- trace:case id=g10.store-checkout.TC-q5v rev=1 covers=g10.store-checkout.SC-t20 -->
-### grade10-site-store-checkout-US5-TC8-1: Interruption before payment dispatch permits safe recovery
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
-
-**Pre-conditions:**
-
-* customer(member) has one prepared purchase.
-* The checkout service stops before any invoice request is sent.
-
-**Steps:**
-
-1. Retry Pay for the unchanged purchase.
-2. Read the API response.
-3. Read the order and invoice records.
-
-**Expected Results:**
-
-* Recovery returns the same purchase.
-* Only one order and payable invoice are created.
-
-**Deprecated:** Q24 moves dispatch recovery to add-checkout-purchase-safety.
-
-<!-- trace:case id=g10.store-checkout.TC-8c2 rev=1 covers=g10.store-checkout.SC-u21 -->
-### grade10-site-store-checkout-US5-TC9-1: Ambiguous dispatch blocks another invoice until recovery
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
-
-**Pre-conditions:**
-
-* customer(member) is on `<grade10 store url>`.
-* Payment dispatch may have created an invoice.
-* Recovery cannot determine whether that invoice exists.
-* The backend returns recovery-required for the known purchase.
-
-**Steps:**
-
-1. Open the cart drawer.
-2. Click Proceed to Checkout.
-3. Read the recovery feedback.
-4. Open the known order through the offered action.
-5. Try Pay again.
-
-**Expected Results:**
-
-* Existing failure/support feedback names the unresolved purchase.
-* The known purchase remains visible and recoverable.
-* Repeated Pay cannot dispatch another payable invoice.
-
-**Deprecated:** Q24 moves ambiguous dispatch recovery to add-checkout-purchase-safety.
-
-<!-- trace:case id=g10.store-checkout.TC-gtu rev=1 covers=g10.store-checkout.SC-j10 -->
-### grade10-site-store-checkout-US5-TC10-1: Response loss at Shopify recovers one existing invoice
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
-
-**Pre-conditions:**
-
-* customer(member) owns a purchase.
-* Shopify creates its invoice but the store loses Shopify's answer.
-
-**Steps:**
-
-1. Retry Pay for the unchanged purchase.
-2. Read the API response.
-3. Read the order and invoice records.
-
-**Expected Results:**
-
-* The existing purchase is recovered or remains settling.
-* The existing invoice is retained.
-* No replacement order or payable invoice is created.
-
-**Deprecated:** Q24 moves recovery of a lost Shopify answer to add-checkout-purchase-safety.
 
 <!-- trace:case id=g10.store-checkout.TC-nxk rev=1 covers=none -->
 ### grade10-site-store-checkout-US5-TC11-1: Conflict refreshes current intent without automatic payment
@@ -545,57 +353,6 @@ Runs once per row of **Test data**.
 **I want** my later cart and choices kept when the earlier payment settles,
 **so that** a delayed purchase cannot remove my later choices.
 
-<!-- trace:case id=g10.store-checkout.TC-ec6 rev=1 covers=g10.store-checkout.SC-k11 -->
-### grade10-site-store-checkout-US6-TC1-1: Persisted edits retire the older unpaid invoice
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-06
-
-**Pre-conditions:**
-
-* customer(member) is on `<grade10 store url>`.
-* An unpaid invoice fixes the earlier basket and tender.
-* The current drawer holds that basket and accepted tender.
-
-**Test data:**
-
-| cart edit |
-| --- |
-| Increase variant A from quantity 1 to 2 |
-| Add available variant B to variant A |
-| Remove variant B from a two-line basket |
-| Replace the accepted code with another fitting code |
-| Change accepted points from 10 to 20, both valid |
-
-**Steps:**
-
-1. Open the cart drawer.
-2. Make `<cart edit>`.
-3. Wait for the accepted write and current review.
-4. Click Proceed to Checkout.
-5. Read the new invoice.
-6. Read the older order.
-
-**Expected Results:**
-
-* Pay uses the persisted changed basket and accepted tender.
-* The new invoice fixes the changed purchase.
-* Retirement prevents two payable invoices.
-* Only backend order facts show the older order canceled.
-
-**Deprecated:** Q24 moves retiring the older unpaid invoice to add-checkout-purchase-safety; the edited request is `grade10-site-store-checkout-US1-TC35-1`.
 
 <!-- trace:case id=g10.store-checkout.TC-0a2 rev=1 covers=none -->
 ### grade10-site-store-checkout-US6-TC2-1: Retirement uncertainty preserves edits and truthful order state
@@ -917,122 +674,6 @@ Runs once per row of **Test data**.
 * The estimate is goods minus code minus accepted points.
 * Shopify calculates final shipping, tax and payable amount.
 
-<!-- trace:case id=g10.store-checkout.TC-jze rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC3-1: Concurrent Pay requests retain one payable invoice
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member) has an unchanged reviewed checkout intent.
-* The first Pay response is delayed.
-
-**Steps:**
-
-1. Submit Pay for the reviewed intent.
-2. Submit Pay again before the first response.
-3. Read both responses.
-
-**Expected Results:**
-
-* Both responses identify the same Grade10 order.
-* The repeat returns the existing invoice or settling state.
-* Only one Shopify invoice is payable.
-
-**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
-
-<!-- trace:case id=g10.store-checkout.TC-1yv rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC4-1: A lost provider response recovers the same invoice
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member) has a checkout intent.
-* Shopify creates its invoice, but its response is lost.
-
-**Steps:**
-
-1. Retry Pay with the unchanged intent.
-2. Read the checkout response.
-
-**Expected Results:**
-
-* The existing invoice is recovered by provider read or reference.
-* The response returns that invoice or its settling state.
-* No replacement Shopify invoice is created.
-
-**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
-
-<!-- trace:case id=g10.store-checkout.TC-gwn rev=2 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC5-2: Edited basket and tender reach a fresh submission
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member) is on <grade10 store url>.
-* An earlier hosted invoice remains payable.
-* The drawer holds <changed basket> and <changed tender>.
-* The current basket review and accepted tender are ready.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <changed basket> | Earlier quantity 1 is now 2; an available second variant is added |
-| <changed tender> | Earlier code removed; a different accepted points choice |
-
-**Steps:**
-
-1. Open the cart drawer.
-2. Read the current basket and accepted tender.
-3. Click Proceed to Checkout in the drawer.
-4. Read the returned hosted invoice.
-
-**Expected Results:**
-
-* The submission carries the current basket and accepted tender.
-* Existing creation is called again.
-* The returned hosted URL opens.
-* The earlier invoice is ignored, without cancellation or reuse.
-
-**Deprecated:** Q15/Q16 supersede ignoring older invoices after edits.
-
-**Replaced by:** `grade10-site-store-checkout-US6-TC1-1`.
 
 <!-- trace:case id=g10.store-checkout.TC-ldd rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC6-1: A served destination receives the store preview rate
@@ -1113,156 +754,6 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
-<!-- trace:case id=g10.store-checkout.TC-w18 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC8-1: Terminal intent replay retains its existing outcome
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member) has an unchanged checkout intent.
-* Its order has <terminal status>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <terminal status> | paid |
-| <terminal status> | refunded |
-| <terminal status> | failed |
-| <terminal status> | canceled |
-| <terminal status> | expired |
-
-**Steps:**
-
-1. Submit Pay with the unchanged intent.
-2. Read the checkout response.
-
-**Expected Results:**
-
-* The response identifies the existing order and terminal outcome.
-* No second Grade10 order or Shopify invoice is created.
-
-**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
-
-<!-- trace:case id=g10.store-checkout.TC-3dr rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC9-1: A worker stop before dispatch permits safe recovery
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member) has a checkout order ready for provider dispatch.
-* The worker is stopped before sending any Shopify request.
-
-**Steps:**
-
-1. Retry the unchanged checkout intent.
-2. Read the checkout response.
-
-**Expected Results:**
-
-* The ready request can be claimed again.
-* The retry identifies the same Grade10 order.
-* Only one Shopify invoice is created.
-
-**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
-
-<!-- trace:case id=g10.store-checkout.TC-jje rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC10-1: An unresolved dispatch requires operator recovery
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member) has a dispatched checkout with no provider reference.
-* Provider reads find no unique matching draft.
-
-**Steps:**
-
-1. Run recovery through the configured deadline.
-2. Retry Pay with the unchanged intent.
-3. Read the checkout response.
-
-**Expected Results:**
-
-* The order enters manual_review with recovery required.
-* No replacement Shopify invoice is created.
-* The member cannot start a new purchase until an operator binds or cancels the draft.
-
-**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
-
-<!-- trace:case id=g10.store-checkout.TC-s9e rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
-### grade10-site-store-checkout-US1-TC11-1: Same-session reload retains the reviewed checkout intent
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member) has an open unchanged checkout intent.
-* customer(member) is on <grade10 store url> in its active session.
-
-**Steps:**
-
-1. Reload the Grade10 page in the same session.
-2. Open the cart drawer.
-3. Wait for the live review.
-4. Click Pay in the drawer.
-5. Read the checkout response.
-
-**Expected Results:**
-
-* The active checkout retains its intent and reviewed fingerprint.
-* Pay returns the existing order and invoice or settling state.
-* No second Grade10 order or Shopify invoice is created.
-
-**Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
 <!-- trace:case id=g10.store-checkout.TC-t16 rev=2 covers=g10.store-checkout.SC-ecp -->
 ### grade10-site-store-checkout-US1-TC12-2: Unverified goods below the limit reach hosted payment
@@ -3692,7 +3183,7 @@ Runs once per row of **Test data**.
 
 - **Run** - QA1 read the frozen outline, six journeys, proposal, decisions with Q24-Q34, undispositioned UI states, linked PRDs and the prior suite with its reconciliation stripped; requirements, technical design and coverage metadata were denied. Dev rewrote the delta, technical design and tasks for the frontend scope. QA2 read both beside the current delta and the unchanged durable requirements, and reconciled every case, scenario, task and UI state below.
 - **Anchors** - The six journeys and five feature roots are unchanged. No domain case is credited; no product or platform path changes.
-- **Durable-only rule** - Active cases in this change's suite cover only scenarios in this change's delta. The durable "A checkout intent is safe to repeat" scenarios SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 are not this change's (Q24): no active case here covers them, and `add-checkout-purchase-safety` owes their cases back as draft in its own suite. A deprecated case keeps a covered id only while that scenario still resolves; a dropped id is removed, and a case left with none reads `covers=none`.
+- **Durable safety coverage** - The six scenario-specific cases for SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 move to `add-checkout-purchase-safety` as active drafts with their case IDs, revisions and traces unchanged. This delta omits the safety deprecation overrides, so acceptance keeps the published US1-TC3, TC4, TC5, TC8, TC9 and TC10 assertions active. Delivery remains outside this frontend change.
 - **Deprecated** - QA1's twelve deprecations (US5 TC2-TC4, TC6-TC12; US6 TC1, TC2) are confirmed with their Q24, Q25, Q27, Q29 and Q34 reasons. QA2 deprecates QA1's new US6-TC6-1: Q32 keeps a canceled older order out of this suite. No case is deleted or renumbered.
 - **Folded** - QA1's US5-TC13-1 (lost answer, SC-38) and US1-TC35-1 (edited request, SC-05 and SC-63) are folded as drafts with trace-CLI markers. Two draft cases verified behaviour the ADDED requirement states but no scenario of their journey did: QA2 folds SC-64 (settling answer, US-05, for US5-TC5-1) and SC-65 (failed answer, US-02, for US2-TC8-1) from its Answers paragraph.
 - **Re-pointed** - US1-TC1-2 takes SC-63 for dropped SC-61; US2-TC11-1 takes SC-03 for dropped SC-39; US6-TC4-1 drops SC-62, which serves US-03 only. Revisions are unchanged: only coverage moved.
@@ -3705,7 +3196,7 @@ Runs once per row of **Test data**.
   - **Verification (B1, F4)** - US1-TC13-2 becomes US1-TC13-3: the gate now answers a click on Proceed to Checkout, with the profile page enabled. US1-TC26-1 becomes US1-TC26-2, with rows for the profile page enabled and disabled; the account action appears only where it is enabled (SC-37 rev 3, SC-57 rev 2). Each marker `rev` moves with its case
   - **Pay naming (F5)** - E2e steps and results name the control Proceed to Checkout, and say "checkout request" for what it sends; api cases US1-TC33-1 and US1-TC34-1 send the checkout request. US1-TC12-2 now reads "No verification feedback appears". Revisions are unchanged: wording only
   - **SC-63 rev 2** - No case asserted the removed purchase key, cart id and version line, so no case changes
-  - **Durable-only scenarios (F2)** - SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 serve US-01, and `check:manual` joins a case to every scenario serving the journey it traces, skipping deprecated cases. After the fold, the active US-01 cases reach them, so they are not left untraced. Listing them `**Out of suite:**` would be refused because a living case traces them. No active case asserts their THEN; `add-checkout-purchase-safety` owes their cases in its Owed Cases section
+  - **Durable-only scenarios (F2)** - The 2026-10-10 handoff below replaces the journey-only coverage claim. Acceptance retains active durable cases that assert each outcome; the safety change owns the moved draft cases.
   - **Feature set (F1, N4)** - The roots are unchanged. The fold merges the Feature set by label, so the durable leaves for provider binding, intent, recovery and changed intent stay without being restated in the delta. SC-08 stays Out of suite with task 11.10; the durable-only scenarios are owed as above. No case traces a feature set group
   - **Records (F9)** - Tasks 11.6 and 11.7 now name SC-64 and SC-65, and the Task Dispositions table says so
   - **SC-07** - A check of the folded store shows the same anchor join reaches SC-07 through the active US-02 cases, so it leaves the `**Out of suite:**` header. Its verifier stays tasks 11.6 and 11.7. SC-08 serves a feature set group, which no case traces, and stays Out of suite with task 11.10
@@ -3850,12 +3341,12 @@ Runs once per row of **Test data**.
 | `grade10-site-store-checkout-SC-36` | Covered by active cases | `grade10-site-store-checkout-US6-TC4-1` |
 | `grade10-site-store-checkout-SC-47` | Covered by active cases | `grade10-site-store-checkout-US3-TC2-3` |
 | `grade10-site-store-checkout-SC-60` | Covered by active cases | `grade10-site-store-checkout-US6-TC5-2` |
-| `grade10-site-store-checkout-SC-09` | Not in this delta: durable only (Q24). Not listed Out of suite: after the fold `check:manual` reaches it through the active US-01 cases, and listing it would be refused. No active case asserts its THEN; add-checkout-purchase-safety's Owed Cases section owes one | None |
-| `grade10-site-store-checkout-SC-10` | Not in this delta: durable only (Q24). Not listed Out of suite: after the fold `check:manual` reaches it through the active US-01 cases, and listing it would be refused. No active case asserts its THEN; add-checkout-purchase-safety's Owed Cases section owes one | None |
-| `grade10-site-store-checkout-SC-11` | Not in this delta: durable only (Q24). Not listed Out of suite: after the fold `check:manual` reaches it through the active US-01 cases, and listing it would be refused. No active case asserts its THEN; add-checkout-purchase-safety's Owed Cases section owes one | None |
-| `grade10-site-store-checkout-SC-19` | Not in this delta: durable only (Q24). Not listed Out of suite: after the fold `check:manual` reaches it through the active US-01 cases, and listing it would be refused. No active case asserts its THEN; add-checkout-purchase-safety's Owed Cases section owes one | None |
-| `grade10-site-store-checkout-SC-20` | Not in this delta: durable only (Q24). Not listed Out of suite: after the fold `check:manual` reaches it through the active US-01 cases, and listing it would be refused. No active case asserts its THEN; add-checkout-purchase-safety's Owed Cases section owes one | None |
-| `grade10-site-store-checkout-SC-21` | Not in this delta: durable only (Q24). Not listed Out of suite: after the fold `check:manual` reaches it through the active US-01 cases, and listing it would be refused. No active case asserts its THEN; add-checkout-purchase-safety's Owed Cases section owes one | None |
+| `grade10-site-store-checkout-SC-09` | Durable requirement unchanged (Q24). Active draft moved to add-checkout-purchase-safety; acceptance keeps its existing durable assertion | None |
+| `grade10-site-store-checkout-SC-10` | Durable requirement unchanged (Q24). Active draft moved to add-checkout-purchase-safety; acceptance keeps its existing durable assertion | None |
+| `grade10-site-store-checkout-SC-11` | Durable requirement unchanged (Q24). Active draft moved to add-checkout-purchase-safety; acceptance keeps its existing durable assertion | None |
+| `grade10-site-store-checkout-SC-19` | Durable requirement unchanged (Q24). Active draft moved to add-checkout-purchase-safety; acceptance keeps its existing durable assertion | None |
+| `grade10-site-store-checkout-SC-20` | Durable requirement unchanged (Q24). Active draft moved to add-checkout-purchase-safety; acceptance keeps its existing durable assertion | None |
+| `grade10-site-store-checkout-SC-21` | Durable requirement unchanged (Q24). Active draft moved to add-checkout-purchase-safety; acceptance keeps its existing durable assertion | None |
 | SC-33 (dropped) | Dropped by Dev (Q24/Q25/Q29/Q34); no active case covers it | None |
 | SC-39 (dropped) | Dropped by Dev (Q24/Q25/Q29/Q34); no active case covers it | None |
 | SC-40 (dropped) | Dropped by Dev (Q24/Q25/Q29/Q34); no active case covers it | None |
@@ -4163,6 +3654,12 @@ Runs once per row of **Test data**.
 | Signed out | US4 TC1/TC2/TC7; no public creation |
 | Shopify confirmation | US3 TC4; Thank You and Order status, static Your Orders |
 | Loading/error/empty orders | Existing OrderHistoryPage test verifier; US3 TC11 preserved; no invented order |
+
+### Purchase Safety Case Handoff - 2026-10-10
+
+- **Moved drafts** - Seven legacy backend cases (US1-TC3, TC4, TC5, TC8, TC9, TC10 and TC11) move as active drafts with retained IDs and traces. TC5 uses the published revision 1; its unaccepted revision 2 ignores an older invoice and is not restored. US5-TC2-1, US5-TC6-1, US5-TC8-1, US5-TC9-1, US5-TC10-1 and US6-TC1-1 live in `add-checkout-purchase-safety/specs/grade10-site/store/checkout/feature-tcs.md`. Their permanent IDs, revisions, coverage markers and journey traces are unchanged.
+- **Acceptance** - Published US1-TC3, TC4, TC5, TC8, TC9 and TC10 remain active in the durable suite through the existing case merge. No deprecated override replaces them. The follow-up suite is not required to be accepted first.
+- **History** - Earlier deprecation and journey-only coverage dispositions below are superseded by this handoff. Cases whose removed v2 behavior no longer exists remain deprecated.
 
 ### Manual
 

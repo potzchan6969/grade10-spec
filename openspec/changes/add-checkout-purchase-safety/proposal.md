@@ -16,9 +16,10 @@ The published checkout requirement "A checkout intent is safe to repeat" says on
 - **Dispatch recovery** - A lost provider answer or worker stop recovers the existing invoice; an unclear one waits for an operator.
 - **Durable retirement** - A member's line or tender edit records retirement work that survives a crash. A shop review alone records none.
 
-## Owed Cases
+## Purchase Safety Cases
 
-- **Durable scenarios** - `grade10-site-store-checkout-SC-09`, `-SC-10`, `-SC-11`, `-SC-19`, `-SC-20` and `-SC-21` have no active case after `add-shopify-checkout-integration` folds; this change owes their cases as draft in its own suite.
+- **Active drafts** - [The safety suite](specs/grade10-site/store/checkout/feature-tcs.md) holds 13 moved backend drafts, including the six scenario-specific cases for SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 with their IDs, revisions and traces preserved.
+- **Acceptance coverage** - Frontend acceptance retains the existing durable safety cases by omitting their deprecation overrides. Later safety acceptance merges the moved drafts into that suite. Backend design and implementation remain pending.
 
 ## Non-Goals
 

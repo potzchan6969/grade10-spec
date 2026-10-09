@@ -1,5 +1,14 @@
 reviewed: f748677272ca9732883cafdff3ae5d0ea2228516
-verdict: Not ready - 1 blocker
+verdict: Not ready - external blocker; fresh acceptance review pending
+
+## Case Handoff Verification - 2026-10-10
+
+This section supersedes the earlier F2 disposition and readiness conclusion. It verifies the owner-requested case transfer, not a fresh acceptance review of the complete plan.
+
+- **Active drafts** - The safety suite holds 13 backend drafts: six scenario-specific cases and seven legacy entries. IDs, revisions and traces are retained. US1-TC5-1 is carried verbatim from the published suite; the unaccepted TC5-2 rewrite that ignores an earlier invoice is not restored.
+- **Coverage** - The supported `prepareAcceptance` dry fold preserves the published US1-TC3, TC4, TC5, TC8, TC9 and TC10 as active drafts with their complete bodies unchanged. They assert SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21. The published safe-repeat requirement is unchanged. Journey-only reachability is not the proof.
+- **Checks** - Both scoped suites pass `tcs:validate --strict`. The identity and fold check passes for the moved drafts and retained durable assertions. Acceptance preflight still refuses only the external site-chrome overlap. No acceptance is published.
+- **Next review** - The changed suite and handoff records require fresh acceptance review before publishing an amended fingerprint. Earlier review evidence below remains historical.
 
 ## Review Scope
 
@@ -31,7 +40,7 @@ Blockers first. X1 is outside this change; this change has no blocker of its own
 | B1 | blocker | [checkout.md:70-73](../../../docs/prds/products/grade10-site/store/checkout.md) "The bar" vs delta **Answers**, SC-37, SC-57 | Verified on the previous run; the cart.md decision row closed with B3 | @kinisworking | - | fixed 43a88fa4 |
 | B2 | blocker | SC-60; [ui-design.md](ui-design.md) "Changed cart during Pay"; US6-TC5-2 | Verified on the previous run; unchanged since | @kinisworking | - | fixed bea3f808 |
 | F1 | fix | Delta `## Feature set`; [planning-run.md](planning-run.md) | Premise withdrawn on the previous run: the fold merges by label and never dropped the durable leaves | Checkout planning owner | - | fixed 43a88fa4 |
-| F2 | fix | Durable SC-09, SC-10, SC-11, SC-19, SC-20, SC-21 | Premise withdrawn on the previous run: the folded suite reaches all six through the active US-01 cases | Checkout QA owner | - | fixed 43a88fa4 |
+| F2 | fix | Durable SC-09, SC-10, SC-11, SC-19, SC-20, SC-21 | The journey-only argument is withdrawn. The 2026-10-10 dry fold retains all six published safety cases with their assertions unchanged; the moved backend cases are active drafts in the safety change | Checkout QA owner | Case Handoff Verification above | repaired; fresh acceptance review pending |
 | F3 | fix | [decisions.md](decisions.md) Q30; [tech-design.md](tech-design.md) Context; `add-checkout-purchase-safety` proposal | Verified on the previous run; unchanged since | @kinisworking | - | fixed 43a88fa4 |
 | F4 | fix | SC-37, SC-57, **Answers**; US1-TC13-3, US1-TC26-2 | Verified on the previous run; unchanged since | Checkout planning owner | - | fixed bea3f808 |
 | F5 | fix | [checkout.md:69](../../../docs/prds/products/grade10-site/store/checkout.md) vs checkout.md:22, 50-52, 92 | Verified: the unmarked item "**Pay** - the drawer's Proceed to Checkout button" joins the two names on the page, as delta **Pay** (spec.md:360) does. A page reader can now tell that "One Pay at a time" is about that button | Checkout page owner | - | fixed f7486772 |
