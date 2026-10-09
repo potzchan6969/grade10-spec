@@ -173,8 +173,11 @@ done, so the verdict commits hold only the reviewer's decisions.
    CLI or a validated batch manifest; preserve its current `Trace` journey and
    resolve `covers` from existing scenario markers, never from title similarity.
    If its coverage cannot be resolved, record the case as a preparation
-   blocker for the suite owner rather than inventing a marker. Migration is a
-   separate preparation commit and does not change a case's purpose or `rev`.
+   blocker for the suite owner rather than inventing a marker. After migration,
+   within every journey group, including groups under `## Ungrouped`, preserve
+   the order of non-deprecated cases and move every `deprecated` case to the
+   bottom. This is a presentation-only reorder: it changes no purpose, status,
+   id or `rev`. Migration and ordering are one preparation commit.
 
 2. **Regenerate or restyle.** A suite whose `**Drafts styled:**` sits below
    `tcs_rules_rev` has its drafts regenerated, as **Rules Revisions** says,
