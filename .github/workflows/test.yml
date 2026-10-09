@@ -109,6 +109,12 @@ jobs:
       - name: Run tests
         run: pnpm run test:stories
 
+      - name: Build the verification workbench
+        run: pnpm run storybook:build:workbench
+
+      - name: Verify historical comparisons in the workbench
+        run: pnpm --dir apps/preview run test:verification
+
   # The manual's own pages in a browser: a pull request that moves none of
   # what they read has nothing to walk.
   walk:

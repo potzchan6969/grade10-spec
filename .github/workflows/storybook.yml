@@ -21,6 +21,7 @@ on:
       - "packages/date/**"
       - "packages/design-system/**"
       - "packages/ui/**"
+      - "packages/ui-verification/**"
       - ".github/workflows/storybook.yml"
       - "package.json"
   workflow_dispatch:

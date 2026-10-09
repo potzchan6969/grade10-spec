@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import previewWorker from "../../../apps/preview/worker/index.mjs";
+import previewWorker from "../../worker/index.mjs";
 
 const PUBLISHER_TOKEN = "test-publisher-token";
 

@@ -11,7 +11,10 @@ const meta = {
   title: "Site/Navigation/Screens/Not Found",
   component: NotFoundPage,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    verification: { caseId: "vc_c00fc18c-bacf-4e88-931c-85d550dc4c2b" },
+  },
   args: {
     onBackToHome: fn(),
   },

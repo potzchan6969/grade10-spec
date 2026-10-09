@@ -1762,6 +1762,7 @@ export function createHttpArchive(
     }
     const response = await fetcher(new URL(path, baseUrl), {
       ...options,
+      redirect: "error",
       headers,
     });
     if (!response.ok) {

@@ -70,6 +70,24 @@ test("HTTP archive requires both Access service token values", () => {
   );
 });
 
+test("HTTP archive tells fetch to reject redirects that could forward Access credentials", async () => {
+  let requestOptions;
+  const archive = createHttpArchive("https://archive.example.test", {
+    accessClientId: "access-client-id",
+    accessClientSecret: "access-client-secret",
+    fetcher: async (_url, options) => {
+      requestOptions = options;
+      return new Response(JSON.stringify({ runs: [] }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+  });
+
+  await archive.listRuns();
+
+  assert.equal(requestOptions.redirect, "error");
+});
+
 test("HTTP archive does not log Access credentials when the service rejects a request", async () => {
   const accessClientId = "access-client-id";
   const accessClientSecret = "access-client-secret";
