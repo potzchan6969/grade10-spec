@@ -543,7 +543,8 @@ test("the central workbench connects on cold load and reviews story history by c
   await targetSelect.selectOption(
     `${DECLARATIONS[0].caseId}::${DECLARATIONS[0].targetId}::${DECLARATIONS[0].capturePointId}`,
   );
-  assert.equal(await targetSelect.locator("option").count(), 2);
+  assert.equal(await targetSelect.locator('option[value=""]').count(), 1);
+  assert.equal(await targetSelect.locator('option:not([value=""])').count(), 2);
 
   const runSelect = page.getByRole("combobox", { name: "Archived run" });
   await runSelect.waitFor({ state: "visible" });
