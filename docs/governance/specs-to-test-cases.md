@@ -1,5 +1,5 @@
 ---
-tcs_rules_rev: 6
+tcs_rules_rev: 5
 ---
 
 # Specs to Test Cases
