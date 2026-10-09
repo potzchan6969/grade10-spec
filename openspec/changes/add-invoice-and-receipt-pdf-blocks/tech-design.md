@@ -26,7 +26,7 @@ contract").
 - Move `grade10`'s renderer verbatim in behaviour — same layout, same
   `pdf-lib` calls, same tested output — changing only what this move and
   `decisions.md` Q20 require: every hardcoded label routed through a `copy`
-  argument, and the boxed-summary grouping keyed on something other than an
+  argument, and the summary grouping keyed on something other than an
   English label string (see "The summary grouping can no longer match on
   label text" below).
 - `packages/ui`'s `public-exports.test.ts` convention and a consuming app's
@@ -124,7 +124,7 @@ draw directly.
 ```ts
 export type PdfLineItem = {
   /** Recognized regardless of `label`'s text, so a translated label still
-   * routes into the boxed summary. Absent on an ordinary charge. */
+   * routes into the summary. Absent on an ordinary charge. */
   key?: "subtotal" | "paymentProcessingFee" | "orderTotal";
   label: string;
   amount: string;
@@ -248,7 +248,7 @@ export type ReceiptPdfData = {
 ```
 
 **The summary grouping can no longer match on label text (`decisions.md`
-Q20).** `grade10`'s `drawLineItems` currently sorts a charge into the boxed
+Q20).** `grade10`'s `drawLineItems` currently sorts a charge into the
 summary by `SUMMARY_LABELS.has(item.label)` — a `Set` of the literal English
 strings `"Subtotal"`, `"Payment Processing Fee"`, `"Order Total"`. That only
 ever worked because `grade10`'s backend happens to hardcode those same
@@ -359,7 +359,7 @@ Total amounts are whatever strings arrive.
 | `InvoicePdf`, `ReceiptPdf`, `receiptBreakdown`, `addressLines`, `PdfPartyAddress`, `ReceiptPaymentBreakdown`, `InvoicePdfRenderOptions`, `ReceiptPdfRenderOptions` | Unchanged. |
 
 **The keyed summary rows stay in `lineItems`.** `key` still routes Subtotal,
-Payment Processing Fee and Order Total into the boxed summary, and the charges
+Payment Processing Fee and Order Total into the summary, and the charges
 are the rows with no `key`. A caller that still lists Winning Bid, Buyer's
 Premium or Tax there gets them drawn again as charges, Tax once more beside
 `taxLine`. The renderer cannot tell them from other charges without matching
@@ -387,7 +387,7 @@ because widths and wrapped lines come from the whole table.
 - **Amount columns** - Winning Bid, Buyer's Premium and Total, right-aligned,
   each as wide as its widest header, row amount or Item Total amount, with a
   floor of `MIN_AMOUNT_COLUMN`. The Total column ends at `RIGHT_EDGE`, so the
-  charges and the boxed summary under the table keep their right edge. An amount
+  charges and the summary under the table keep their right edge. An amount
   is never wrapped, drawn smaller or allowed to overflow (Q38,
   `shared-ui-invoice-and-receipt-pdf-SC-72`).
 - **Item column** - the content width left after the amount columns and one
@@ -429,7 +429,7 @@ added only when a block needs it, so a document that fits is exactly one page.
 | --- | --- | --- |
 | Column header | The four labels and the rule under them | Never alone at a page foot. Placed with the row after it, and drawn again at the top of every continuation page, with nothing else of the page head |
 | Item row | The wrapped title lines and the three amounts on the first line | Never inside a row. A row that does not fit moves whole |
-| Tail | The Item Total row, the charges, the optional Tax line and the boxed summary | Never inside the tail. It moves whole, under a repeated header, with no item row moved over |
+| Tail | The Item Total row, the charges, the optional Tax line and the summary | Never inside the tail. It moves whole, under a repeated header, with no item row moved over |
 | Bank details (invoice) | Heading, rail columns, rule and reference note | Moves whole, and is not tied to the summary above it |
 | Payment section (receipt) | The "Payment" heading and the transfer reference, only when one is given | Moves whole, and is not tied to the summary above it |
 | Payment breakdown (receipt) | Its heading and the four lines | Moves whole |
@@ -531,7 +531,7 @@ the item exists.
 | `items[0].total` | `formatMoney(hammerAmount + buyerPremiumAmount, currency)`. `grade10` adds the two integers of minor units. The block adds nothing |
 | `itemTotal` | The same three strings, since the one item is the whole table |
 | `lineItems` | Shipping & Handling, Insurance, then the three keyed summary rows, each omitted when its amount is null, as `lineItems()` does today minus its first two entries and its Tax entry |
-| `taxLine` | `Tax` with `formatMoney(taxAmount, currency)`, or `null` when `taxAmount` is null. It is the only place Tax travels (`decisions.md` Q30), so the block draws it once, after the charges and before the boxed summary |
+| `taxLine` | `Tax` with `formatMoney(taxAmount, currency)`, or `null` when `taxAmount` is null. It is the only place Tax travels (`decisions.md` Q30), so the block draws it once, after the charges and before the summary |
 | `copy` | The five labels as English literals in `PDF_DOCUMENT_COPY`, replacing `descriptionLabel` and `amountLabel` |
 
 The shared helper `lineItems()` in `receiptPdf.ts` splits in three: `lineItems()`
@@ -580,8 +580,8 @@ storybook build`.
   an item titled `中8號` with no font bytes, so it asserts the `pdf-lib` error
   and not a result the block built.
 - **Nothing reaches the issuer band.** Every scan reads each page's strings,
-  rules and boxes back from the bytes and finds them at or above `BODY_BOTTOM`,
-  except the issuer block's two lines on the last page.
+  rules back from the bytes and finds them at or above `BODY_BOTTOM`, except the
+  issuer block's two lines on the last page, and finds no box on any page.
 - **Determinism** (`SC-77`, `decisions.md` Q39). Two renders of one 30-item input, the second with
   the clock a day later, return identical bytes. The renderer stamps each
   document's own date as its creation and modification date and reads the clock
