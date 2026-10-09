@@ -51,7 +51,7 @@ import {
   surfacePrefill,
   walkBand,
 } from "./lib/select-cases.mjs";
-import { isAutomated, parseSuite } from "./lib/suites.mjs";
+import { isAutomated, parseSuite, parseWalks } from "./lib/suites.mjs";
 
 const SUITE = `# demo/thing/widget Test Cases
 
@@ -187,6 +187,115 @@ const candidates = journey.cases.map((tc) => ({
   },
   tc: { ...tc, journey },
 }));
+
+const MODERN_SUITE = `# demo/thing/widget Test Cases
+
+**Status:** pending-review · 0/2
+
+## Walk 1: Fill and confirm
+
+### Route
+
+1. Fill the form.
+
+## demo-thing-widget-US1: Somebody does a thing
+
+**As a** collector,
+**I want** a thing,
+**so that** it is done.
+
+### g10.auction-account-record.TC-s25 (US1-TC1): The thing happens
+
+**Steps:**
+
+1. Open the thing.
+
+**Expected Results:**
+
+* The thing is open.
+
+## Ungrouped
+
+### demo-thing-widget-US1: Somebody does a thing
+
+#### g10.auction-account-record.TC-k8m (US1-TC2): The other thing happens
+
+**Steps:**
+
+1. Open the other thing.
+
+**Expected Results:**
+
+* The other thing is open.
+`;
+
+test("a modern case heading and an ungrouped case keep their references", () => {
+  const modern = parseSuite(MODERN_SUITE);
+  assert.equal(modern.journeys.length, 2);
+  assert.equal(
+    modern.journeys[0].cases[0].id,
+    "g10.auction-account-record.TC-s25",
+  );
+  assert.equal(modern.journeys[0].cases[0].modern, true);
+  assert.equal(modern.journeys[1].ungrouped, true);
+  assert.equal(
+    modern.journeys[1].cases[0].id,
+    "g10.auction-account-record.TC-k8m",
+  );
+});
+
+test("walk parsing keeps stable case refs and their local US/TC references", () => {
+  const [walk] = parseWalks(
+    [
+      "## Walk 1: Fill and confirm",
+      "",
+      "### Route",
+      "",
+      "1. Open the form.",
+      "   - The form is open. `TC-s25 (US1-TC2)`",
+      "2. Submit a valid form.",
+      "   a. The form is accepted. `TC-k8m (US2-TC3)`",
+    ].join("\n"),
+  );
+  assert.equal(walk.title, "Walk 1: Fill and confirm");
+  assert.deepEqual(walk.refs, [
+    { id: "tc-s25", journeyNum: 1, tcNum: 2, line: 6 },
+    { id: "tc-k8m", journeyNum: 2, tcNum: 3, line: 8 },
+  ]);
+});
+
+test("a composed walk parses a full lower-level case id and ignores pairing checks", () => {
+  const [walk] = parseWalks(
+    [
+      "## Walk 1: Admin publishes, site displays",
+      "",
+      "### Route",
+      "",
+      "1. Admin creates `listing_a`.",
+      "   - Pairing check: record the listing id.",
+      "   - `g10adm.auction-listing.TC-2hq (US1-TC1)`",
+      "2. Site opens the same listing id.",
+      "   - Pairing check: the site id matches the admin id.",
+      "   - `g10.auction-listing-page.TC-8kx (US1-TC1)`",
+    ].join("\n"),
+  );
+  assert.deepEqual(walk.refs, [
+    {
+      id: "tc-2hq",
+      caseId: "g10adm.auction-listing.tc-2hq",
+      journeyNum: 1,
+      tcNum: 1,
+      line: 7,
+    },
+    {
+      id: "tc-8kx",
+      caseId: "g10.auction-listing-page.tc-8kx",
+      journeyNum: 1,
+      tcNum: 1,
+      line: 10,
+    },
+  ]);
+});
 
 test("a case carries the text of its steps, not only their count", () => {
   const [tc] = journey.cases;

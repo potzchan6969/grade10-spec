@@ -4,6 +4,38 @@
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
+## Walk 1: Bid on a lot, close it, and verify the result
+
+**Starting state:**
+
+- customer A and customer B are signed in on separate sessions.
+- `<listing_5>` is live, has no bids, and its recorded close is near enough to
+  complete the pass in one session.
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_5>` | A live HKD listing with no bids |
+| `<starting price>` | 120000 minor units |
+| `<increment>` | 25000 minor units |
+| `<user A maximum>` | 800000 minor units |
+| `<user B maximum>` | 505000 minor units |
+| `<user B raise>` | 900000 minor units |
+
+### Route
+
+1. Open `<listing_5>` in both sessions.
+2. As customer A, set `<user A maximum>`; as customer B, set `<user B maximum>`.
+   - Customer A remains the leader at the second-highest maximum plus one increment. `TC-r2v (US4-TC1)`
+3. As customer B, raise to `<user B raise>`.
+   - Customer B leads at customer A's maximum plus one increment, with no intermediate bids at the maximum amounts. `TC-r2v (US4-TC1)`
+4. Wait through the recorded close without reloading.
+   a. Customer A reads Won, with the final price on the lot and in My Auctions. `TC-3iz (US12-TC1)`
+   b. Customer B reads Didn't win, with the same final price and no card charge. `TC-3iz (US12-TC1)`
+5. Read the lot page and its catalogue card as the result is recorded.
+   - The lot reads Won, the catalogue card reads Ended, and neither surface reloads. `TC-8w7 (US12-TC2)`
+
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 
 **As an** operator with catalogue grant,

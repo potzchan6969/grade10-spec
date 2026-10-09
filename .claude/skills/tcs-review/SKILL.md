@@ -75,7 +75,7 @@ execution; a review classification is not a pass or fail result.
 
 5. **Prepare before you present anything,** as `## Preparing the Suite` below
    lays out, in its order, each part its own commit, and one push when it is
-   all done, before the first journey. **Prepare first** under **The Review Lane** and the `<v>` table
+   all done, before the first journey. **Prepare first** under **The Review Lane** and the `rev` table
    under **Naming** say what each status allows: `draft` freely, `actual`
    still `manual` on the reviewer's yes, `automated` and `deprecated` never.
 
@@ -118,7 +118,7 @@ execution; a review classification is not a pass or fail result.
    spec's author.
    Check the journey, the file, then the domain suite for one that covers it;
    on a hit show both and ask: update, add as distinct, or drop. Write it as
-   `draft` at the next unused `TC<m>`, `<v>` at `1`, and walk it like any
+   `draft` at the next unused `TC<m>`, `rev=1`, and walk it like any
    other draft — never straight to `actual`, even dictated. Record what
    distinguishes a case added over a duplicate.
 
@@ -165,7 +165,21 @@ Before the first journey, in this order. Each part is its own commit, named in
 **The Review Lane**'s table; the branch is pushed once, when every part is
 done, so the verdict commits hold only the reviewer's decisions.
 
-1. **Regenerate or restyle.** A suite whose `**Drafts styled:**` sits below
+1. **Migrate legacy case headings.** Before restyling or presenting a case,
+   convert every legacy case heading in the selected suite to
+   `### <scope>.TC-<sequence> (US<n>-TC<m>): <title>`. Keep the existing
+   trace marker id, `rev`, local journey number, case number, title and case
+   content unchanged. A case with no marker receives one through the trace
+   CLI or a validated batch manifest; preserve its current `Trace` journey and
+   resolve `covers` from existing scenario markers, never from title similarity.
+   If its coverage cannot be resolved, record the case as a preparation
+   blocker for the suite owner rather than inventing a marker. After migration,
+   within every journey group, including groups under `## Ungrouped`, preserve
+   the order of non-deprecated cases and move every `deprecated` case to the
+   bottom. This is a presentation-only reorder: it changes no purpose, status,
+   id or `rev`. Migration and ordering are one preparation commit.
+
+2. **Regenerate or restyle.** A suite whose `**Drafts styled:**` sits below
    `tcs_rules_rev` has its drafts regenerated, as **Rules Revisions** says,
    without asking and without narrating it: the levels above first, then the
    file from line 1 to its end, through `/spec-to-tcs`. `actual` cases are
@@ -174,17 +188,17 @@ done, so the verdict commits hold only the reviewer's decisions.
    revision has its drafts restyled to `docs/governance/tcs-conventions.md`
    instead.
 
-2. **Check coverage by claim.** **Coverage is checked by claim** holds the
+3. **Check coverage by claim.** **Coverage is checked by claim** holds the
    rule. Read every scenario serving the suite's journeys and find the case
    whose expected results assert its THEN; a case that only traces the
    journey does not count. A scenario no case asserts gets a new `draft` at
-   the journey's next unused `TC<m>`, `<v>` at `1`, without asking — it is
+   the journey's next unused `TC<m>`, `rev=1`, without asking — it is
    walked like any other draft. A journey with no case at all is covered the
    same way. List the scenarios under `**Out of suite:**` and ask whether to
    write a case for each; write one only on a yes, and take its id off the
    list.
 
-3. **Fill in the mechanism.** Read the spec's flow requirement,
+4. **Fill in the mechanism.** Read the spec's flow requirement,
    `ui-design.md`, the PRD pages, and the conventions' `## Setup Recipes` and
    `## Where Things Are`. Bring every `draft` to **Executable without
    asking**: where to go, which control, what goes in, how a state is
@@ -199,12 +213,12 @@ done, so the verdict commits hold only the reviewer's decisions.
    Testability plans no `automation`. An `actual` case still `manual` is
    filled only on the reviewer's yes.
 
-4. **Propose test data.** Rows the rule implies, as **Rows may add what the
+5. **Propose test data.** Rows the rule implies, as **Rows may add what the
    rule implies** says, each with the rule it traces. The reviewer takes or
    refuses each row; a taken row is written in. A row added to an `actual`
-   case changes what it verifies: `<v>` bumped, back to `draft`.
+   case changes what it verifies: `rev` bumped, back to `draft`.
 
-5. **Push, then summarise.** Push the branch once. Then one message before
+6. **Push, then summarise.** Push the branch once. Then one message before
    the first journey: the cases written for bare scenarios and the
    out-of-suite answers, the steps filled per case, the results sharpened,
    the values changed, the rows added and refused, the flow disagreements and
