@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T14:22:38.137Z",
+  "generatedAt": "2026-10-09T14:34:32.636Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -105,6 +105,7 @@
     "Toast / Close": "skipped",
     "Tooltip": "ok",
     "Vault Asset Card": "warn",
+    "Vault Asset Status": "warn",
     "auth-sign-in: sign-in-card/body": "ok",
     "auth-sign-in: sign-in-card/legal": "ok",
     "auth-sign-in: sign-in-email-form/section": "ok",
@@ -897,6 +898,11 @@
     "7054-7072": "Vaulted Asset",
     "7068-7718": "Vault Portfolio",
     "7068-8263": "Vault Asset Card",
+    "7068-9956": "Vault Asset Status",
+    "7068-9957": "Vault Asset Status",
+    "7068-9958": "Vault Asset Status",
+    "7068-9959": "Vault Asset Status",
+    "7068-9960": "Vault Asset Status",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1057,6 +1063,9 @@
     ],
     "Vault Asset Card": [
       "Vault Asset Card: no code component (looked for src/components/**/vaultassetcard.tsx or vaultassetcard.tsx)"
+    ],
+    "Vault Asset Status": [
+      "Vault Asset Status: no code component (looked for src/components/**/vaultassetstatus.tsx or vaultassetstatus.tsx)"
     ]
   }
 }
