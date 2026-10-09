@@ -281,9 +281,9 @@ account path SHALL not be the required return destination.
 - **AND** it does not require the native Continue shopping button or send the
   member to a Shopify account page
 
-<!-- trace:scenario id=g10.store-checkout.SC-p16 rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-p16 rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-16 - An invalid payment event does not settle an order
-**Serves:** Order settlement and return - the settlement guard rejects an event it cannot bind to this shop and order
+**Serves:** grade10-site-store-checkout-US-03 - The collector's purchase is not settled by an event the store cannot bind to this shop and order
 
 - **GIVEN** a payment event has an unknown provider reference, wrong shop or invalid signature
 - **WHEN** the store receives the event
