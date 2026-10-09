@@ -10,13 +10,11 @@ description: Review a planned OpenSpec change before `pnpm spec:accept` - the PR
 
 ## Flow
 
-1. **Preflight** - Run the review preflight once. Its manifest lists changed requirements, linked PRD lines, durable targets and overlaps. If blocked, report its blockers and stop.
+1. **Evidence** - Follow [Planning and Review Efficiency](../../../docs/governance/planning-review-efficiency.md) for gate receipts, scoped expansions, reruns and bounded searches. Reuse matching evidence from planning-dev; otherwise run the missing gate once. A blocked preflight stops review.
 
    ```bash
    pnpm plan:review-preflight <change> --json
    ```
-
-   Then check acceptance and manual gates. A refusal from either stops the review.
 
    ```bash
    pnpm accept:preflight <change>
@@ -26,10 +24,10 @@ description: Review a planned OpenSpec change before `pnpm spec:accept` - the PR
    pnpm check:manual
    ```
 
-2. **Prior review** - If the ledger exists, verify prior findings against their sources and review the diff since its `reviewed` revision plus affected context. Otherwise review in full.
-3. **Read sources** - Open the manifest's lines first. Expand to full sources and every affected durable file when `expandToFullSources` is true, or an overlap or disagreement appears. The manifest bounds the first read, not the checks below.
-4. **Review** - Apply the checks below, using Cluster Mode when changes share requirements or dependencies.
-5. **Record** - Write the findings, reviewed revision and verdict to each change's ledger.
+2. **Prior review** - Use the ledger's reviewed revision and repair diff to bound a rerun, including changed dependencies. Without usable prior coverage, review in full.
+3. **Read sources** - Open the manifest's lines and scoped expansions first. Follow related durable rules that consume a changed outcome. Batch independent reads into a review packet; expand disagreements rather than unrelated sources.
+4. **Review** - Apply the checks below, using Cluster Mode when changes share requirements or dependencies. Use QA2's source-linked coverage and dispositions for unchanged reconciliations; investigate changed, missing or inconsistent evidence.
+5. **Record** - Write the findings, reviewed revision, coverage and verdict to each change's ledger.
 
 ## Ledger and Reruns
 
@@ -37,13 +35,20 @@ description: Review a planned OpenSpec change before `pnpm spec:accept` - the PR
 
 ```
 reviewed: <store commit sha>
+source-identity: <review-scope digest, or unavailable>
+baseline-identity: <durable baseline identity, or unavailable>
 verdict: <the verdict line>
 
 | # | Severity | Where | Finding | Owner | Fix in | Status |
+
+## Coverage
+
+| Source or dependency | Checked identity | Checks applied | Carried from |
 ```
 
 - **Status** - Use `open`, or `fixed <sha>` after source verification. Rewrite the ledger with the reviewed SHA on a rerun.
-- **Reruns** - A blocker or a fix changing requirement text requires a fresh review. Other `fix` and `note` findings need no rerun.
+- **Reruns** - A blocker or changed requirement text requires an independent rerun using the scope rules above. Fresh context does not mean a full reread. Other `fix` and `note` findings need no rerun. Record checked sources and carried-forward coverage beside the findings table.
+- **Identity** - The manifest digest identifies review inputs, not every gate input. Record separate gate receipts and hashes for additional dependency sources. Unavailable identities or incomplete coverage prevent reuse of that evidence; they do not excuse a check.
 
 ## Cluster Mode
 

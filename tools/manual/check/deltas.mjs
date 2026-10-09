@@ -421,6 +421,7 @@ export function readDeltaFiles(root, changes) {
       const sections = deltaSections(text);
       files.push({
         change: change.id,
+        dependsOn: change.dependsOn ?? [],
         accepted: change.accepted === true,
         spec: delta.spec,
         file,
@@ -593,14 +594,21 @@ export function overlapClaims(files) {
 /** RULE `overlap`: two changes folding one requirement. A MODIFIED or a
  * REMOVED block archived second writes the first's text away, silently; an
  * ADDED block archived second fails outright, since the fold refuses to add
- * a name that exists. Either way each change is named to the other, with the
- * other's heading, so a person reads both before building on either
+ * a name that exists. A recorded dependency orders a stack: the upstream
+ * contract is accepted before its dependent one, so their shared requirement
+ * is intentional and must not make every unrelated pull request red. All
+ * other overlaps name each change to the other, with the other's heading,
+ * so a person reads both before building on either
  * (`shared-planning-agent-rounds-SC-102`). */
 function checkOverlap(files, add) {
   const claims = overlapClaims(files);
+  const dependencies = new Map(
+    files.map((one) => [one.change, new Set(one.dependsOn)]),
+  );
 
   for (const held of claims.values()) {
     if (new Set(held.map((one) => one.change)).size < 2) continue;
+    if (isOrdered(held, dependencies)) continue;
     for (const claim of held) {
       const others = held
         .filter((one) => one.change !== claim.change)
@@ -618,6 +626,27 @@ function checkOverlap(files, add) {
       );
     }
   }
+}
+
+/** A dependency stack can extend the same requirement in order. Both paths
+ * would be a cycle, which is not an order and remains an overlap failure. */
+function isOrdered(held, dependencies) {
+  const reaches = (from, target, seen = new Set()) => {
+    if (seen.has(from)) return false;
+    seen.add(from);
+    for (const next of dependencies.get(from) ?? []) {
+      if (next === target || reaches(next, target, seen)) return true;
+    }
+    return false;
+  };
+
+  return held.every((claim, index) =>
+    held.slice(index + 1).every((other) => {
+      const forward = reaches(claim.change, other.change);
+      const backward = reaches(other.change, claim.change);
+      return forward !== backward;
+    }),
+  );
 }
 
 /** RULE `issued`: `<capability>-SC/US/TC-<n>` is issued once, ever. The

@@ -21,9 +21,12 @@ decisions, journeys, UI design where present, and the relevant
 in their source artifacts before acceptance. Do not invent an answer.
 
 Write the `spec.md` outline: `## Purpose` and `## Feature set`. Freeze the
-complete anchors: the journey set plus the feature-set root groups. If an
-anchor changes after a reading starts, invalidate QA1 and Dev and restart both
-in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
+complete anchors: the journey set plus the feature-set root groups. Apply
+[Planning and Review Efficiency](../../../docs/governance/planning-review-efficiency.md)
+for input identities, blind snapshots, dependency-based restarts, gate receipts
+and compact handoffs. An anchor edit restarts both independent readings for
+the affected scope; uncertain dependencies restart the whole run. Patch
+non-anchor clarifications explicitly, then rerun QA2.
 
 ## Decision Sweep
 
@@ -64,7 +67,8 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
 3. **QA2** - Reconciliation. In a fresh context, reconcile each blind case
    and scenario against the anchors in `feature-tcs.md`. Record whether a case
    was folded, rejected with reason, raised for the human or remains uncovered.
-   Put unresolved product questions in `decisions.md`'s `## Raised` table.
+   Put unresolved product questions in `decisions.md`'s `## Raised` table. Return
+   source-linked coverage and dispositions for the acceptance reviewer.
 4. **Resolve and Check** - A question the readings cannot settle goes to the
    same human, as a numbered `Q<n>` row, and is put to them as a
    [Clarification Request](../../../AGENTS.md#questions-and-blockers).
@@ -88,11 +92,14 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    Reconcile, do not merge: each change keeps its own scope, acceptance and
    verdict, and a slow change never holds the others once ownership and order
    are settled.
-6. **Review** - In a fresh context, run `accept-review`; a cluster is reviewed
-   as one run. Accept only on its `Ready to accept` verdict. Batch findings by source owner for repair. Follow `accept-review`
-   for the ledger and rerun criteria, including changed requirement text.
-7. **Accept and Publish** - With the human's acceptance authorization, obtain
-   the current baseline and accept the reviewed plan:
+6. **Review** - Settle the source revision, gather the review packet and gate
+   receipts, then dispatch an independent `accept-review` reader; a cluster
+   is reviewed as one run. Accept only on its `Ready to accept` verdict. Batch
+   findings by source owner for repair. Pass the prior ledger and repair diff
+   on a rerun; the owning skill decides when to expand its scope.
+7. **Accept and Publish** - With the human's acceptance authorization, reuse
+   the matching acceptance receipt or refresh it when inputs or baseline
+   changed, then accept the reviewed plan:
 
    ```bash
    pnpm accept:preflight <change>

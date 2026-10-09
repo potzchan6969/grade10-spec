@@ -3,9 +3,10 @@
  * Build the compact, deterministic input map for a fresh planning review.
  *
  * The map is deliberately derived from the active change and the fold's own
- * contract targets. It is a starting index only: callers expand to the full
- * sources when it says the index is incomplete or contains an overlap.
+ * contract targets. Scoped expansions tell callers which additional sources
+ * they need when an index is incomplete or overlapping.
  */
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { contractTargets } from "./lib/acceptance.mjs";
@@ -210,6 +211,70 @@ function allRequirements(root, changeId) {
   return found.filter((one) => one.change !== changeId);
 }
 
+function activeSpecPaths(root) {
+  const changes = join(root, "openspec", "changes");
+  if (!existsSync(changes)) return [];
+  return readdirSync(changes, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name !== "archive")
+    .flatMap((entry) => walk(root, join(changes, entry.name)))
+    .filter((path) => path.endsWith("/spec.md"));
+}
+
+function activeChangeMetadataPaths(root, changeId) {
+  const changes = join(root, "openspec", "changes");
+  const paths = existsSync(changes)
+    ? readdirSync(changes, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory() && entry.name !== "archive")
+        .map((entry) => `openspec/changes/${entry.name}/.openspec.yaml`)
+    : [];
+  paths.push(`openspec/changes/${changeId}/.openspec.yaml`);
+  return paths;
+}
+
+function sourceIdentity(root, changeId, sourcePaths, pages, durableTargets) {
+  const inputs = new Set([
+    "openspec/config.yaml",
+    ...sourcePaths,
+    ...walkMarkdown(root, join(root, "docs", "prds")),
+    ...activeSpecPaths(root),
+    ...activeChangeMetadataPaths(root, changeId),
+    ...pages.map((page) => page.file),
+    ...durableTargets.map((target) => target.path),
+  ]);
+  const hash = createHash("sha256");
+  const sortedInputs = [...inputs].sort();
+  hash.update(`docs/prds-directory:${existsSync(join(root, "docs", "prds"))}`);
+  hash.update("\0");
+  for (const path of sortedInputs) {
+    hash.update(path);
+    hash.update("\0");
+    hash.update(
+      existsSync(join(root, path))
+        ? readFileSync(join(root, path))
+        : "<missing>",
+    );
+    hash.update("\0");
+  }
+  return {
+    version: 1,
+    purpose: "review-scope-inputs",
+    algorithm: "sha256",
+    digest: hash.digest("hex"),
+    inputCount: sortedInputs.length,
+    change: changeId,
+  };
+}
+
+function expansion(scope, reason, { path, capability, paths } = {}) {
+  return {
+    scope,
+    ...(capability ? { capability } : {}),
+    ...(path ? { path } : {}),
+    ...(paths ? { paths: [...paths].sort() } : {}),
+    reason,
+  };
+}
+
 function overlaps(root, changeId, changed) {
   const others = allRequirements(root, changeId);
   const found = [];
@@ -257,7 +322,7 @@ export function buildReviewScope(root, changeId) {
   );
   const pageIndex = pageLines(root, sourcePaths, capabilities);
   const pages = pageIndex.pages;
-  const expansionReasons = [];
+  const sourceExpansions = [];
   for (const file of [
     "proposal.md",
     "decisions.md",
@@ -265,7 +330,11 @@ export function buildReviewScope(root, changeId) {
     ".openspec.yaml",
   ]) {
     if (!existsSync(join(dir, file)))
-      expansionReasons.push(`required artifact is missing: ${file}`);
+      sourceExpansions.push(
+        expansion("global", `required artifact is missing: ${file}`, {
+          path: `openspec/changes/${changeId}/${file}`,
+        }),
+      );
   }
   const record = existsSync(join(dir, ".openspec.yaml"))
     ? readFileSync(join(dir, ".openspec.yaml"), "utf8")
@@ -274,32 +343,71 @@ export function buildReviewScope(root, changeId) {
     !existsSync(join(dir, "tech-design.md")) &&
     !/^design_waived:\s*\S/m.test(record)
   )
-    expansionReasons.push("tech-design.md or a design waiver is not indexed");
+    sourceExpansions.push(
+      expansion("global", "tech-design.md or a design waiver is not indexed", {
+        path: `openspec/changes/${changeId}/tech-design.md`,
+      }),
+    );
   let durableTargets = [];
   try {
     durableTargets = contractTargets(root, changeId);
   } catch (error) {
-    expansionReasons.push(`durable target derivation failed: ${error.message}`);
+    sourceExpansions.push(
+      expansion("global", `durable target derivation failed: ${error.message}`),
+    );
   }
   if (changedRequirements.length === 0)
-    expansionReasons.push("no changed requirements were indexed");
+    sourceExpansions.push(
+      expansion("global", "no changed requirements were indexed"),
+    );
   if (pages.length === 0)
-    expansionReasons.push("no PRD section or frontmatter links were indexed");
+    sourceExpansions.push(
+      expansion("global", "no PRD section or frontmatter links were indexed", {
+        path: "docs/prds/",
+      }),
+    );
   if (pages.some((page) => page.missing || page.line === null))
-    expansionReasons.push("a linked PRD page or section could not be resolved");
-  if (pageIndex.frontmatterCoverageIncomplete)
-    expansionReasons.push("PRD frontmatter coverage could not be established");
-  for (const capability of capabilities) {
-    if (!pageIndex.frontmatterCapabilities.has(capability))
-      expansionReasons.push(
-        `no PRD frontmatter page was indexed for capability: ${capability}`,
+    for (const page of pages.filter((one) => one.missing || one.line === null))
+      sourceExpansions.push(
+        expansion(
+          "capability",
+          "a linked PRD page or section could not be resolved",
+          { path: page.file },
+        ),
       );
+  if (pageIndex.frontmatterCoverageIncomplete)
+    sourceExpansions.push(
+      expansion("global", "PRD frontmatter coverage could not be established", {
+        path: "docs/prds/",
+      }),
+    );
+  for (const capability of capabilities) {
+    if (!pageIndex.frontmatterCapabilities.has(capability)) {
+      const paths = [...new Set(pages.map((page) => page.file))].filter(
+        (path) => existsSync(join(root, path)),
+      );
+      sourceExpansions.push(
+        expansion(
+          "capability",
+          `no PRD frontmatter page was indexed for capability: ${capability}`,
+          { capability, paths },
+        ),
+      );
+    }
   }
   if (durableTargets.length === 0)
-    expansionReasons.push("no durable targets were indexed");
+    sourceExpansions.push(
+      expansion("global", "no durable targets were indexed"),
+    );
   const conflict = overlaps(root, changeId, changedRequirements);
-  if (conflict.length > 0)
-    expansionReasons.push("overlapping active deltas require both sources");
+  for (const overlap of conflict)
+    sourceExpansions.push(
+      expansion("overlap", "overlapping active deltas require both sources", {
+        capability: overlap.capability,
+        paths: [overlap.current.path, ...overlap.other.map((one) => one.path)],
+      }),
+    );
+  const expansionReasons = sourceExpansions.map((one) => one.reason);
 
   return {
     version: 1,
@@ -309,7 +417,17 @@ export function buildReviewScope(root, changeId) {
     pageLines: pages,
     durableTargets,
     overlaps: conflict,
-    expandToFullSources: expansionReasons.length > 0,
+    sourceExpansions,
+    sourceIdentity: sourceIdentity(
+      root,
+      changeId,
+      sourcePaths,
+      pages,
+      durableTargets,
+    ),
+    // Older consumers interpret this as broad expansion. New consumers should
+    // use sourceExpansions to honor capability and overlap scope.
+    expandToFullSources: sourceExpansions.length > 0,
     expansionReasons,
   };
 }
