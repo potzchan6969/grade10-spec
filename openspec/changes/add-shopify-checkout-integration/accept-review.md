@@ -1,7 +1,76 @@
-reviewed: bea3f808087d80b9e9c95e030026962b370ee3ac
-verdict: Not ready - 2 blockers
+reviewed: f748677272ca9732883cafdff3ae5d0ea2228516
+verdict: Not ready - 1 blocker
 
 ## Review Scope
+
+This is a fresh acceptance rerun dated 2026-10-09. The reviewer did not write the plan or the earlier reviews. It read the store branch `claude/checkout-frontend-only` at `f748677272ca`, one commit past the previous review at `bea3f808087d`: `f748677272ca` ("settle the checkout verification wording"). Application facts were read on `codex/feat-shopify-checkout-integration` and the application's `origin/main`. Nothing was accepted, published, committed or pushed, and no planning source was edited.
+
+- **Owner override** - @kinisworking asked for the content review despite the external gate refusal X1, as on the previous runs. Every check below was run
+- **Scope** - Every open finding was checked against its sources. The diff `bea3f808..f7486772` was reviewed with its context: both pages' verification lines and decision rows, the new **Pay** and **Where it starts** items, Q1, the tech-design Not in This Change list, the ui-design Verification row, the delta Feature set, the QA records and the owner's dispositions in `planning-run.md`. The cart page edits were read against the `add-store-cart-drawer-ui` deltas
+- **Fold** - The only delta edit drops four labelled Feature set leaves. The fold merges by label and keeps unlabelled durable leaves (`foldGroups`, verified on the previous run), so the folded Feature set is the durable one plus the delta's labelled leaves, without the N4 near-duplicates. The fold was not rebuilt
+- **Draft fingerprint** - `f34ffbc1e62a3aeb306a372972e329f29d905560ad887b61e572f73fb7901aa8`, against baseline `b3fd6c97aa735c9713a1f271c9a0fd84d962a0f1560b7bc06a1bb2163c7e78db`
+
+## Gates
+
+The gates ran on Node `24.14.1` with `PLAN_NO_FETCH=1`.
+
+| Command | Observed result |
+| --- | --- |
+| `pnpm plan:review-preflight add-shopify-checkout-integration --json` | Exit 0. `status: ready`. Five changed requirements, two linked page lines, four durable targets, no overlaps, no blockers, `expandToFullSources: false` |
+| `pnpm accept:preflight add-shopify-checkout-integration` | Exit 1. One refusal, `[check:manual/overlap]` on `shared/ui/site-chrome` `SiteHeader composes Nav with session-aware account entry` (X1). Three durable files to write: checkout `spec.md`, `user-journeys.md` and `feature-tcs.md` |
+| `pnpm check:manual` | Exit 1 with 2 failures and 277 warnings. Both failures are the two sides of X1. No warning names the checkout or cart page, and none refuses a 🚧 line. The durable suite still reports SC-08 and SC-16 untraced, as expected before the fold |
+
+## Findings
+
+Blockers first. X1 is outside this change; this change has no blocker of its own.
+
+| # | Severity | Where | Finding | Owner | Fix in | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| X1 | blocker (external) | `openspec/changes/omit-profile-account-menu/specs/shared/ui/site-chrome/spec.md` and `openspec/changes/restrict-auctions-by-region/specs/shared/ui/site-chrome/spec.md`, both MODIFIED `SiteHeader composes Nav with session-aware account entry` | Two in-flight changes fold the same requirement, so whichever archives second reverts the first. This refuses `spec:accept` for every change, this one included. Reproduced on this run | Owners of `omit-profile-account-menu` and `restrict-auctions-by-region` | Choose one owner delta for the requirement, rebase the other on it (or declare `depends_on`), then rerun `pnpm check:manual` | open |
+| B3 | blocker | [checkout.md:70-73, 98](../../../docs/prds/products/grade10-site/store/checkout.md); [cart.md:82-85, 149](../../../docs/prds/products/grade10-site/store/cart.md); [ui-design.md:42](ui-design.md); delta **Answers** (spec.md:364), SC-37 (spec.md:447), SC-57 (spec.md:457) | Verified: both page lines and both decision rows now say the gate answers the Proceed to Checkout press, with the account link or action where the profile page is enabled. The ui-design Treatment cell agrees. Within this change the condition has one name, "the profile page is enabled", in the pages, the delta, the design and the cases. The cart-drawer delta's own name for it is F13 | @kinisworking | - | fixed f7486772 |
+| B1 | blocker | [checkout.md:70-73](../../../docs/prds/products/grade10-site/store/checkout.md) "The bar" vs delta **Answers**, SC-37, SC-57 | Verified on the previous run; the cart.md decision row closed with B3 | @kinisworking | - | fixed 43a88fa4 |
+| B2 | blocker | SC-60; [ui-design.md](ui-design.md) "Changed cart during Pay"; US6-TC5-2 | Verified on the previous run; unchanged since | @kinisworking | - | fixed bea3f808 |
+| F1 | fix | Delta `## Feature set`; [planning-run.md](planning-run.md) | Premise withdrawn on the previous run: the fold merges by label and never dropped the durable leaves | Checkout planning owner | - | fixed 43a88fa4 |
+| F2 | fix | Durable SC-09, SC-10, SC-11, SC-19, SC-20, SC-21 | Premise withdrawn on the previous run: the folded suite reaches all six through the active US-01 cases | Checkout QA owner | - | fixed 43a88fa4 |
+| F3 | fix | [decisions.md](decisions.md) Q30; [tech-design.md](tech-design.md) Context; `add-checkout-purchase-safety` proposal | Verified on the previous run; unchanged since | @kinisworking | - | fixed 43a88fa4 |
+| F4 | fix | SC-37, SC-57, **Answers**; US1-TC13-3, US1-TC26-2 | Verified on the previous run; unchanged since | Checkout planning owner | - | fixed bea3f808 |
+| F5 | fix | [checkout.md:69](../../../docs/prds/products/grade10-site/store/checkout.md) vs checkout.md:22, 50-52, 92 | Verified: the unmarked item "**Pay** - the drawer's Proceed to Checkout button" joins the two names on the page, as delta **Pay** (spec.md:360) does. A page reader can now tell that "One Pay at a time" is about that button | Checkout page owner | - | fixed f7486772 |
+| F6 | fix | Delta MODIFIED `Shopify uses the store's carrier rule`; [checkout.md:75](../../../docs/prds/products/grade10-site/store/checkout.md) | Verified on the previous run; unchanged since | Checkout page owner | - | fixed 43a88fa4 |
+| F7 | fix | [checkout.md:64-66](../../../docs/prds/products/grade10-site/store/checkout.md) "Where it starts" | Verified: the 🚧 "No separate checkout page" line is now an unmarked item that links the Cart Drawer page, so no 🚧 line asks this delta for an outcome it does not carry. The unmarked statement is true today: the application's `origin/main` has no `/checkout` route in the storefront. `add-store-cart-drawer-ui` keeps the requirement ("Checkout SHALL NOT open a separate surface"). The kept scenarios' wording is N5 | Checkout planning owner | - | fixed f7486772 |
+| F8 | fix | [checkout.md:102-104](../../../docs/prds/products/grade10-site/store/checkout.md) | Verified on the previous run; unchanged since | Checkout page owner | - | fixed 43a88fa4 |
+| F9 | fix | [feature-tcs.md](specs/grade10-site/store/checkout/feature-tcs.md) Task Dispositions; [planning-run.md](planning-run.md) | Verified on the previous run; unchanged since | Checkout QA owner | - | fixed bea3f808 |
+| F10 | fix | [tech-design.md:83](tech-design.md) Not in This Change; [decisions.md:20](decisions.md) Q1; [checkout.md:92](../../../docs/prds/products/grade10-site/store/checkout.md) "Current decision" | Verified: the tech design lists "Review before reuse" for `add-checkout-purchase-safety`, naming `reusedCheckout` as today's gap, and Q1 points the review before a reused invoice at that change (Q24). The page row was left as it was, and that holds for the reason given under F11: it states the durable requirement this delta keeps, which is the target, and the page is not where implementation drift is recorded | Checkout planning owner | - | fixed f7486772 |
+| F11 | fix | Unmarked [checkout.md:56-58](../../../docs/prds/products/grade10-site/store/checkout.md) "Another Pay", "Changed purchase", "Recovery"; [planning-run.md:95](planning-run.md) "Second review repairs" | Withdrawn on the owner's disposition, which holds. Under [writing.md](../../../docs/governance/writing.md) "Marks", a 🚧 line needs an active change that carries the accepted requirement, and `pnpm check:manual` refuses a 🚧 line no accepted change delivers. `add-checkout-purchase-safety` has no delta and no acceptance; its `.openspec.yaml` `page_waived` says its 🚧 marks follow acceptance. The three lines restate the published durable requirement "A checkout intent is safe to repeat" (spec.md:149), which this change keeps unmodified, so they state what the product should be and agree with the contract. The Drift checklist item rules out a page note that the code says otherwise. The gap is recorded where it belongs: Q30, the tech design's Not in This Change list and the purchase-safety proposal. When that change is accepted, its owner marks these lines 🚧 | Checkout page owner, with the `add-checkout-purchase-safety` owner | - | fixed f7486772 |
+| F12 | fix | [feature-tcs.md:3712](specs/grade10-site/store/checkout/feature-tcs.md) "SC-16"; feature-tcs.md:3709 and [planning-run.md:91, 94](planning-run.md) | Verified: both records say SC-16 rev 2 serves US-03 and is traced after the fold, and both F1 records now say the fold keeps the durable leaves rather than that they were restored | Checkout QA owner | - | fixed f7486772 |
+| F13 | fix | [cart.md:82-85, 149](../../../docs/prds/products/grade10-site/store/cart.md) ("where the profile page is enabled") vs `add-store-cart-drawer-ui` [cart-drawer spec.md:252-253](../add-store-cart-drawer-ui/specs/grade10-site/store/cart-drawer/spec.md) **Link** and SC-31 (spec.md:271) ("when the site's profile address is enabled") | The cart page and the delta that serves its 🚧 "The bar" line name one setting two ways. Both mean the same switch (`config.gates.profile` in `CartDrawerHost.tsx`). Otherwise the cart page edits agree with that delta: the gate answers the Checkout press (**Gate**, SC-30), shows the bar and the basket's goods value, links the account page under the condition (**Link**, SC-31), and starts no check of its own (**No local check**). This does not hold this change, whose sources use one name; it would be a same-facts blocker on `add-store-cart-drawer-ui`'s own review | `add-store-cart-drawer-ui` owner | Cart-drawer delta **Link** and SC-31: "the site's profile page is enabled", the word this change and both pages use | open |
+| N1 | note | Delta **Request** | Verified on the previous run; unchanged since | `add-checkout-purchase-safety` owner | - | fixed 43a88fa4 |
+| N2 | note | [checkout.md:37](../../../docs/prds/products/grade10-site/store/checkout.md) ("within seconds") | Unchanged. No requirement states a settlement clock. The line predates this change | Checkout page owner | Page | open |
+| N3 | note | [checkout.md:78](../../../docs/prds/products/grade10-site/store/checkout.md); [ui-design.md:25-26](ui-design.md) | Verified on the previous run; unchanged since | Checkout planning owner | - | fixed 43a88fa4 |
+| N4 | note | Delta `## Feature set` (spec.md:3-23) | Verified: the delta no longer restates the Hosted invoice, Purchase intent, Recovery and Changed intent leaves, so the folded Feature set keeps the durable leaves once each | Checkout planning owner | - | fixed f7486772 |
+| N5 | note | Kept scenarios SC-01 (spec.md:50, "opens checkout"), SC-04 (spec.md:77, "is on checkout") and SC-06 (spec.md:165, "the public checkout") vs [checkout.md:64-66](../../../docs/prds/products/grade10-site/store/checkout.md) "there is no `/checkout` page" | The scenarios still describe checkout as a place to open and be on. Read as the drawer's checkout review they are true, so nothing contradicts; the words are older than the page's | Checkout planning owner | Optionally reword them to the drawer's checkout review when they next change revision | open |
+
+## Checks
+
+- **Warnings** - No `spec ... changed meaning` warning names a page in scope. The cart page's ❓ "Struck price on a line" row belongs to the cart-drawer capability and is outside this change.
+- **Page to delta** - The 🚧 lines Checkout integration, One Pay at a time, Later cart and Return path are served. No 🚧 line is left unserved: "Where it starts" is unmarked and true today (F7). Unmarked lines 56-58 state the published durable requirement this change keeps (F11 withdrawn). No ADDED or MODIFIED requirement lacks a page line.
+- **Same facts** - Within this change, none is stated two ways. HKD 120,000, gross goods, the 2,000 ms poll, points above 0, the closed answer set, Pay as the Proceed to Checkout button, the invoice not being rewritten by later edits, and the account action where the profile page is enabled all agree across the pages, the delta, the designs and the cases. Across the sibling cart-drawer delta, the profile condition has a second name (F13).
+- **Nothing open** - The checkout page has no ❓ or `TBC` line. Every `## Raised` row has landed, and there is no `awaiting:` entry on this change. Q1 now names the change that delivers review before reuse.
+- **Folded result** - All four MODIFIED requirement names exist on main. "A checkout intent is safe to repeat" stays unmodified. `Purpose` is kept. The Feature set keeps every durable leaf once, beside the delta's labelled leaves (N4). The folded suite leaves no scenario untraced, as the previous run's folded-copy check showed; this commit changes no scenario.
+- **Designs** - Every ui-design state ties to an anchor and to scenarios or an out-of-suite disposition; the Verification Treatment cell now names the profile condition. The tech design delivers every requirement and lists review before reuse as `add-checkout-purchase-safety`'s (F10).
+- **Journeys and cases** - US-01 to US-06 are served. This commit changes no case; totals stay 45 draft and 47 deprecated. Every QA2 disposition is recorded, and the stale records are corrected (F12).
+- **Overlap** - No other active change has a delta on `grade10-site/store/checkout`. `add-checkout-purchase-safety` has no delta. `add-store-cart-drawer-ui` agrees with this delta that the gate answers the press, that the link depends on the profile setting and that checkout opens no separate surface; only its word for the profile setting differs from the cart page (F13).
+
+Apart from X1, this change is ready to accept: it has no blocker of its own, and this commit changed no requirement text. F13 is the cart-drawer change's to repair and holds nothing here; N2 and N5 are notes. No fresh review is needed after those repairs. `spec:accept` stays refused until X1 is resolved.
+
+Not ready - 1 blocker
+
+---
+
+## Historical review - 2026-10-09 (bea3f808)
+
+This section is the previous ledger's top section, kept as history. It reviewed `bea3f808087d80b9e9c95e030026962b370ee3ac` with the verdict "Not ready - 2 blockers". Its findings' current statuses are in the table above.
+
+### Review Scope
 
 This is a fresh acceptance rerun dated 2026-10-09. The reviewer did not write the plan or the previous review. It read the store branch `claude/checkout-frontend-only` at `bea3f808087d`, which is two commits past the previous review at `217e6d6c1e6a`: `43a88fa4e86c` (owner repairs) and `bea3f808087d` (QA2 rerun and the SC-16 Serves fix). Application facts were read on `codex/feat-shopify-checkout-integration` at `c05700431`. Nothing was accepted, published, committed or pushed, and no planning source was edited.
 
@@ -10,7 +79,7 @@ This is a fresh acceptance rerun dated 2026-10-09. The reviewer did not write th
 - **Fold** - The fold was rebuilt in a scratch copy with `prepareAcceptance` and checked with `pnpm check:manual` on that copy. The copy's only other failure, ids in other changes' `rounds.md` "issued nowhere", comes from the copy having no git history and is not reported by `accept:preflight`
 - **Draft fingerprint** - `ed2ad175bf676059a8873d9e8e1ddf6004e30fa9cc7ed379ac9e8f89ed07deef`, against baseline `b3fd6c97aa735c9713a1f271c9a0fd84d962a0f1560b7bc06a1bb2163c7e78db`
 
-## Gates
+### Gates
 
 The gates ran on Node `24.14.1` with `PLAN_NO_FETCH=1`.
 
@@ -21,7 +90,7 @@ The gates ran on Node `24.14.1` with `PLAN_NO_FETCH=1`.
 | `pnpm check:manual` | Exit 1 with 2 failures and 277 warnings. Both failures are the two sides of X1. The "holds 19 test cases and no page shows them" warning is gone (F8). The durable suite still reports SC-08 and SC-16 untraced, as expected before the fold |
 | `check:manual` on the folded copy | No warning names `grade10-site/store/checkout`. SC-07, SC-16 and the six durable-only scenarios are reached; SC-08 is Out of suite |
 
-## Findings
+### Findings
 
 Blockers first. X1 is outside this change; B3 is this change's.
 
@@ -48,7 +117,7 @@ Blockers first. X1 is outside this change; B3 is this change's.
 | N3 | note | [checkout.md:77](../../../docs/prds/products/grade10-site/store/checkout.md); [ui-design.md:25-26](ui-design.md) | Verified: the "Order labels" line states the product, and the Components separator has three columns | Checkout planning owner | - | fixed 43a88fa4 |
 | N4 | note | Delta `## Feature set` (spec.md:11-17) vs durable Feature set | After the fold, the restored labelled leaves sit beside the durable unlabelled ones they repeat: "Recovery: provider and store recovery without a second payable invoice" beside "Provider and store recovery without a second payable invoice", "Hosted invoice" beside "Local order and provider references bound before the buyer leaves", and "Purchase intent" beside "One open checkout intent for repeated Pay actions and lost responses". Nothing contradicts, but the durable Feature set says each of these twice | Checkout planning owner | Optionally drop the four restored leaves from the delta; the fold keeps the durable ones | open |
 
-## Checks
+### Checks
 
 - **Warnings** - No `spec ... changed meaning` warning names a page in scope. The cart page's ❓ "Struck price on a line" row belongs to the cart-drawer capability and is outside this change.
 - **Page to delta** - The 🚧 lines Checkout integration, One Pay at a time, Later cart and Return path are served. "No separate checkout page" is still not (F7). The carrier modification now serves the unmarked "Shipping rate" line (F6). Unmarked lines 56-58 state outcomes that the active purchase-safety change still has to deliver (F11).
