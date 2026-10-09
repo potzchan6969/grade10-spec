@@ -1,18 +1,18 @@
 # grade10-site/store/checkout Test Cases
 
-**Status:** pending-review · 0/55
+**Status:** pending-review · 0/46
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 **Out of suite:** grade10-site-store-checkout-SC-07, grade10-site-store-checkout-SC-08, grade10-site-store-checkout-SC-44
 
-## grade10-site-store-checkout-US5: Collector resumes one purchase safely
+## grade10-site-store-checkout-US5: Collector starts one payment at a time
 
-**As a** signed-in collector who repeats Pay, reloads or loses an answer,
-**I want** the store to return my existing invoice or purchase state,
-**so that** I do not accidentally create or pay for a second purchase.
+**As a** signed-in collector who presses Pay again or changes the cart while a payment is starting,
+**I want** the drawer to accept one Pay at a time and open only the answer for my current cart,
+**so that** I do not leave for a payment I did not mean to start.
 
 <!-- trace:case id=g10.store-checkout.TC-x86 rev=1 covers=g10.store-checkout.SC-5x2 -->
-### grade10-site-store-checkout-US5-TC1-1: Pending Pay disables another submission on the same surface
+### grade10-site-store-checkout-US5-TC1-1: A pending Pay accepts no second Pay in the drawer
 
 **Classification:**
 
@@ -31,19 +31,19 @@
 
 * customer(member) is on `<grade10 store url>`.
 * The drawer has current lines and accepted tender.
-* The payment answer is delayed.
+* The checkout answer is mocked to stay pending.
 
 **Steps:**
 
 1. Open the cart drawer.
 2. Click Proceed to Checkout.
-3. Click the checkout control again before the answer.
+3. Click Proceed to Checkout again before the answer.
 4. Release the hosted-invoice answer.
 
 **Expected Results:**
 
 * Pay shows loading until the answer arrives.
-* The surface sends one submission.
+* The drawer sends one checkout request.
 * The supplied hosted invoice opens.
 
 <!-- trace:case id=g10.store-checkout.TC-a8o rev=1 covers=g10.store-checkout.SC-i09,g10.store-checkout.SC-dwk -->
@@ -53,7 +53,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -81,6 +81,8 @@
 * The saved invoice opens for the same purchase.
 * Exactly one matching order and payable invoice exist.
 
+**Deprecated:** Q24 moves invoice reuse on repeated Pay to add-checkout-purchase-safety.
+
 <!-- trace:case id=g10.store-checkout.TC-fnc rev=1 covers=g10.store-checkout.SC-dwk -->
 ### grade10-site-store-checkout-US5-TC3-1: Same-session reload retains the existing purchase
 
@@ -88,7 +90,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -116,6 +118,8 @@
 * Pay returns the existing invoice or truthful lifecycle.
 * No second order or payable invoice is created.
 
+**Deprecated:** Q29 makes Pay after reload a new request the backend decides; keeping one purchase across reload is add-checkout-purchase-safety (Q24).
+
 <!-- trace:case id=g10.store-checkout.TC-03q rev=1 covers=g10.store-checkout.SC-8hm -->
 ### grade10-site-store-checkout-US5-TC4-1: A lost payment answer recovers the existing purchase
 
@@ -125,7 +129,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -160,8 +164,10 @@ Runs once per row of **Test data**.
 * The existing purchase is recovered or remains visibly settling.
 * No second order or payable invoice is created.
 
+**Deprecated:** Q27 limits the drawer to failure feedback without retry; recovering the purchase behind a lost answer is add-checkout-purchase-safety (Q24). Replaced by `grade10-site-store-checkout-US5-TC13-1`.
+
 <!-- trace:case id=g10.store-checkout.TC-9sb rev=1 covers=g10.store-checkout.SC-v95 -->
-### grade10-site-store-checkout-US5-TC5-1: Settling answers show and poll the known purchase
+### grade10-site-store-checkout-US5-TC5-1: A settling answer opens Your Orders and polls the purchase
 
 **Classification:**
 
@@ -179,22 +185,24 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(member) is on `<grade10 store url>`.
-* The payment decision returns the known purchase as settling.
+* The checkout answer is mocked as settling for the submitted purchase.
 * Order reads keep that purchase pending before returning paid.
 
 **Steps:**
 
 1. Open the cart drawer.
 2. Click Proceed to Checkout.
-3. Read the opened order.
+3. Read the matching order in Your Orders.
 4. Wait for its paid read.
+5. Open the cart drawer.
 
 **Expected Results:**
 
-* The known pending purchase remains visible.
-* Existing order labels describe the returned state.
-* Pending order reads continue until payment is observed.
-* Paid observation refreshes authoritative cart and tender.
+* Step 2 opens Your Orders, not a hosted payment page.
+* The matching pending purchase is visible.
+* Existing order labels describe its state.
+* Pending order reads continue until paid is read.
+* After the paid read, the drawer shows freshly read cart and tender.
 
 <!-- trace:case id=g10.store-checkout.TC-cvz rev=1 covers=g10.store-checkout.SC-s19,g10.store-checkout.SC-v95 -->
 ### grade10-site-store-checkout-US5-TC6-1: Terminal replay retains the existing purchase outcome
@@ -205,7 +213,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -244,6 +252,8 @@ Runs once per row of **Test data**.
 * No new payable invoice or replacement order is created.
 * Terminal orders are not polled as open purchases.
 
+**Deprecated:** Q24 moves terminal replay to add-checkout-purchase-safety.
+
 <!-- trace:case id=g10.store-checkout.TC-zhh rev=1 covers=g10.store-checkout.SC-g88 -->
 ### grade10-site-store-checkout-US5-TC7-1: Concurrent tabs converge on one purchase and invoice
 
@@ -251,7 +261,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -285,6 +295,8 @@ Runs once per row of **Test data**.
 * Neither answer returns a canceled or superseded invoice URL.
 * A canceled or superseded invoice never opens from either tab.
 
+**Deprecated:** Q29 moves concurrent tabs converging on one purchase to add-checkout-purchase-safety.
+
 <!-- trace:case id=g10.store-checkout.TC-q5v rev=1 covers=g10.store-checkout.SC-t20 -->
 ### grade10-site-store-checkout-US5-TC8-1: Interruption before payment dispatch permits safe recovery
 
@@ -292,7 +304,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -317,6 +329,8 @@ Runs once per row of **Test data**.
 * Recovery returns the same purchase.
 * Only one order and payable invoice are created.
 
+**Deprecated:** Q24 moves dispatch recovery to add-checkout-purchase-safety.
+
 <!-- trace:case id=g10.store-checkout.TC-8c2 rev=1 covers=g10.store-checkout.SC-u21,g10.store-checkout.SC-v95 -->
 ### grade10-site-store-checkout-US5-TC9-1: Ambiguous dispatch blocks another invoice until recovery
 
@@ -324,7 +338,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -354,6 +368,8 @@ Runs once per row of **Test data**.
 * The known purchase remains visible and recoverable.
 * Repeated Pay cannot dispatch another payable invoice.
 
+**Deprecated:** Q24 moves ambiguous dispatch recovery to add-checkout-purchase-safety.
+
 <!-- trace:case id=g10.store-checkout.TC-gtu rev=1 covers=g10.store-checkout.SC-j10 -->
 ### grade10-site-store-checkout-US5-TC10-1: Response loss at Shopify recovers one existing invoice
 
@@ -361,7 +377,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -387,6 +403,8 @@ Runs once per row of **Test data**.
 * The existing invoice is retained.
 * No replacement order or payable invoice is created.
 
+**Deprecated:** Q24 moves recovery of a lost Shopify answer to add-checkout-purchase-safety.
+
 <!-- trace:case id=g10.store-checkout.TC-nxk rev=1 covers=g10.store-checkout.SC-5ie -->
 ### grade10-site-store-checkout-US5-TC11-1: Conflict refreshes current intent without automatic payment
 
@@ -394,7 +412,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -422,7 +440,7 @@ Runs once per row of **Test data**.
 * Conflict does not redirect to the older hosted invoice.
 * No automatic replacement Pay or invoice creation starts.
 
----
+**Deprecated:** Q29 moves concurrent-tab conflicts to add-checkout-purchase-safety; the stale-answer outcome is `grade10-site-store-checkout-US6-TC3-1` and `grade10-site-store-checkout-US4-TC6-1`.
 
 <!-- trace:case id=g10.store-checkout.TC-tdy rev=1 covers=g10.store-checkout.SC-0al -->
 ### grade10-site-store-checkout-US5-TC12-1: Missing compatible checkout protocol prevents unsafe fallback
@@ -433,7 +451,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression, release
@@ -469,10 +487,61 @@ Runs once per row of **Test data**.
 * No legacy checkout creation request is sent as fallback.
 * No new order or payable invoice is created by the incompatible request.
 
+**Deprecated:** Q25 sends the existing checkout request with no context read or protocol envelope, so there is no protocol to fall back from.
+
+### grade10-site-store-checkout-US5-TC13-1: A lost Pay answer ends the pending Pay without retry
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-05
+
+**Pre-conditions:**
+
+* customer(member) is on `<grade10 store url>`.
+* The current basket review and accepted tender are ready.
+* The checkout answer is mocked as `<lost answer>`.
+
+**Test data:**
+
+| lost answer |
+| --- |
+| The connection drops before the answer arrives |
+| The answer arrives but cannot be read |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Wait for the pending Pay to end.
+4. Read the drawer feedback.
+5. Click Proceed to Checkout once the basket is ready.
+
+**Expected Results:**
+
+* Pay stops loading after the lost answer.
+* The drawer shows the existing failure feedback.
+* The feedback says neither that no invoice exists nor that one was canceled.
+* No hosted payment page opens.
+* No checkout request is sent again before step 5.
+* Step 5 sends one new checkout request.
+
+---
+
 ## grade10-site-store-checkout-US6: Collector keeps the cart built after Pay
 
 **As a** signed-in collector who changes the cart or tender after starting payment,
-**I want** the older invoice retired and my later cart preserved when payment settles,
+**I want** my later cart and choices kept when the earlier payment settles,
 **so that** a delayed purchase cannot remove my later choices.
 
 <!-- trace:case id=g10.store-checkout.TC-ec6 rev=1 covers=g10.store-checkout.SC-k11,g10.store-checkout.SC-o8s,g10.store-checkout.SC-2jt -->
@@ -484,7 +553,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke, regression
@@ -525,6 +594,8 @@ Runs once per row of **Test data**.
 * Retirement prevents two payable invoices.
 * Only backend order facts show the older order canceled.
 
+**Deprecated:** Q24 moves retiring the older unpaid invoice to add-checkout-purchase-safety; the edited request is `grade10-site-store-checkout-US1-TC35-1`.
+
 <!-- trace:case id=g10.store-checkout.TC-0a2 rev=1 covers=g10.store-checkout.SC-o8s -->
 ### grade10-site-store-checkout-US6-TC2-1: Retirement uncertainty preserves edits and truthful order state
 
@@ -532,7 +603,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
@@ -562,6 +633,8 @@ Runs once per row of **Test data**.
 * Open order reads continue while retirement remains unresolved.
 * No replacement payable invoice starts before safe backend permission.
 
+**Deprecated:** Q24 moves invoice retirement and its uncertainty to add-checkout-purchase-safety.
+
 <!-- trace:case id=g10.store-checkout.TC-cde rev=1 covers=g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US6-TC3-1: Late basket or tender answers cannot redirect edited intent
 
@@ -583,7 +656,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(member) is on `<grade10 store url>`.
-* The hosted-invoice answer for the submitted purchase is delayed.
+* The drawer holds variant A, quantity 1, an accepted code and 10 accepted points.
+* The checkout answer for that cart is mocked to stay pending.
 
 **Test data:**
 
@@ -598,14 +672,16 @@ Runs once per row of **Test data**.
 1. Open the cart drawer.
 2. Click Proceed to Checkout.
 3. Make `<later edit>` before the answer arrives.
-4. Release the earlier hosted-invoice answer.
-5. Read the current drawer and browser destination.
+4. Wait for the edit to be saved.
+5. Release the earlier hosted-invoice answer.
+6. Read the current drawer and browser destination.
 
 **Expected Results:**
 
-* The earlier answer cannot open its stale invoice.
-* Current drawer facts reflect the later committed choices.
+* The earlier answer opens no hosted page; the browser stays on Grade10.
+* The drawer shows the later saved choices, not the earlier answer.
 * The later cart and tender remain intact.
+* No new Pay starts by itself.
 
 <!-- trace:case id=g10.store-checkout.TC-suh rev=1 covers=g10.store-checkout.SC-2n2,g10.store-checkout.SC-xu2,g10.store-checkout.SC-jab -->
 ### grade10-site-store-checkout-US6-TC4-1: Payment of an older version preserves later cart choices
@@ -630,7 +706,7 @@ Runs once per row of **Test data**.
 * customer(member) is on `<grade10 orders url>`.
 * The invoice fixes variant A, quantity 1, and its original tender.
 * The active cart now holds `<later cart>` with `<later tender>`.
-* Payment wins the race with retirement of the older invoice.
+* The older purchase is paid after the later choices were saved.
 
 **Test data:**
 
@@ -692,6 +768,50 @@ Runs once per row of **Test data**.
 * The original invoice retains its submitted lines and tender.
 * Reload shows later persisted cart and tender choices.
 
+### grade10-site-store-checkout-US6-TC6-1: An older order shows canceled only when its read says so
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-06
+
+**Pre-conditions:**
+
+* customer(member) is on `<grade10 orders url>`.
+* An unpaid older order holds variant A, quantity 1.
+* The member then saved variant A at quantity 2 in the cart.
+* The older order's read is mocked to report `<order read>`.
+
+**Test data:**
+
+| order read | Expected order state |
+| --- | --- |
+| Canceled | Existing canceled label |
+| Still pending | Existing pending label, never canceled |
+
+**Steps:**
+
+1. Open the older order in Your Orders.
+2. Read its order state.
+3. Open the cart drawer.
+4. Read its current lines.
+
+**Expected Results:**
+
+* The older order shows the expected order state from **Test data**.
+* The saved edit alone never shows the older order canceled.
+* The drawer still shows variant A at quantity 2.
+
 ---
 
 ## grade10-site-store-checkout-US1: Collector sends a current cart to hosted payment
@@ -731,8 +851,10 @@ Runs once per row of **Test data**.
 
 | accepted tender |
 | --- |
-| No store code; zero points selected |
-| One accepted store code; zero points selected |
+| No store code; no points spent |
+| One accepted store code; no points spent |
+| No store code; a valid positive points choice |
+| No store code; 1 point, the smallest positive choice |
 | One accepted store code; a valid positive points choice |
 
 **Steps:**
@@ -749,8 +871,8 @@ Runs once per row of **Test data**.
 * The bound order carries `<reviewed basket>` and `<accepted tender>`.
 * The returned hosted URL opens directly from the drawer.
 * The invoice shows the reviewed basket and accepted tender.
-* Zero points reaches hosted payment without a points refusal.
-* The zero-points invoice has no points deduction.
+* No points spent reaches hosted payment without a points refusal.
+* With no points spent, the invoice has no points deduction.
 * Shopify collects the shipping address and payment.
 
 <!-- trace:case id=g10.store-checkout.TC-sew rev=1 covers=g10.store-checkout.SC-b02 -->
@@ -1999,6 +2121,49 @@ Runs once per row of **Test data**.
 * The response requires account verification.
 * No order or hosted invoice is created.
 
+### grade10-site-store-checkout-US1-TC35-1: A Pay after saved edits sends the edited basket and tender
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on `<grade10 store url>`.
+* The cart holds variant A, quantity 1, with 10 accepted points.
+* An earlier Pay for that cart opened a hosted invoice, left unpaid.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| edited quantity | 2, different from the 1 already sent |
+| edited points | 20, different from the 10 already sent; both valid in the fixture |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Increase variant A to `<edited quantity>`.
+3. Enter `<edited points>` in the points control.
+4. Wait for both writes and the current review.
+5. Click Proceed to Checkout in the drawer.
+6. Read the opened hosted invoice.
+
+**Expected Results:**
+
+* The drawer shows variant A at `<edited quantity>` and `<edited points>` accepted.
+* The opened invoice shows variant A at `<edited quantity>`.
+* The opened invoice deducts `<edited points>`, not the 10 sent before.
+
 ---
 
 ## grade10-site-store-checkout-US2: Collector repairs a changed cart line
@@ -2305,8 +2470,8 @@ Runs once per row of **Test data**.
 * The drawer shows existing failure feedback.
 * No hosted URL opens for the failed outcome.
 * Checkout becomes available when the request ends and basket is ready.
-* A later click retains the purchase identity.
-* Only the backend permits continuation; no duplicate invoice starts.
+* No checkout request is sent again until the collector clicks.
+* Step 4 sends one new checkout request.
 
 <!-- trace:case id=g10.store-checkout.TC-q9i rev=1 covers=g10.store-checkout.SC-5tt -->
 ### grade10-site-store-checkout-US2-TC9-1: Contradictory reviews and failed quotes prevent payment
@@ -2405,7 +2570,7 @@ Runs once per row of **Test data**.
 **Replaced by:** `grade10-site-store-checkout-US5-TC4-1`.
 
 <!-- trace:case id=g10.store-checkout.TC-59c rev=1 covers=g10.store-checkout.SC-4av,g10.store-checkout.SC-jmi -->
-### grade10-site-store-checkout-US2-TC11-1: Reused invoices still require a current Pay decision
+### grade10-site-store-checkout-US2-TC11-1: Pay refuses a basket or tender changed after the opening review
 
 Runs once per row of **Test data**.
 
@@ -2425,7 +2590,6 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(member) is on `<grade10 store url>`.
-* An unpaid invoice exists for the unchanged purchase.
 * Opening review passes, then `<current refusal>` occurs before Pay.
 
 **Test data:**
@@ -2448,10 +2612,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Pay checks current basket and tender before returning any saved URL.
+* Pay decides on the current basket and tender, not the opening review.
 * The affected line or refused tender is identified.
-* The saved hosted invoice does not open.
-* No replacement order or payable invoice is created.
+* No hosted payment page opens.
 
 <!-- trace:case id=g10.store-checkout.TC-ubu rev=1 covers=g10.store-checkout.SC-zu1 -->
 ### grade10-site-store-checkout-US2-TC12-1: Withdrawn and sold-out lines remain distinct on review

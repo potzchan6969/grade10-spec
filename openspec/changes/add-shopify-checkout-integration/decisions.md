@@ -46,6 +46,11 @@
 | Q27 | What happens when the Pay answer is lost or cannot be read? | The drawer ends the pending Pay, shows the existing failure feedback and does not retry by itself. It claims neither that no invoice exists nor that one was canceled. A later Pay is a deliberate new request | Automatic retry, or treating a transport error as proof nothing was created |
 | Q28 | What does the drawer do with an answer for an older cart, tender or member? | Nothing: it does not open Shopify, navigate or overwrite current state. The drawer keeps the current cart | Opening the older invoice |
 | Q29 | What does a repeated Pay on another tab or after reload do? | It is a new request; the backend's current behavior decides. Converging tabs on one purchase is `add-checkout-purchase-safety` | A browser-held purchase identity |
+| Q30 | After a lost answer, can a second Pay leave two orders? | Yes, until `add-checkout-purchase-safety` lands. Today's backend keeps only the newest payable invoice and cancels the older one (`supersedePromisedOrders`), so one invoice stays payable. The existing failure feedback is unchanged. Accepted by @kinisworking on 2026-10-09 with Q24 | New feedback copy or a browser-held purchase to prevent it |
+| Q31 | Is Pay available for an edited cart while an older Pay is pending? | No. One Pay at a time per drawer: Pay returns only when the pending answer ends, and that answer then opens nothing because the cart changed (Q28) | A second request while one is pending |
+| Q32 | Does a canceled older order belong to this change? | No. An order read shows canceled through the existing order-status labels; when the backend cancels is `add-checkout-purchase-safety`. This change's suite does not test it | A drawer or order-page state owned by this change |
+| Q33 | Does this suite keep the settlement, notification and ownership cases? | Yes. "Shopify payment settles one Grade10 order" stays in this change's delta for its cart release paragraph, so its existing backend tests are linked without backend changes | Moving them to `add-checkout-purchase-safety` |
+| Q34 | What happens to drawer answer kinds the current request never returns? | Remove `settled`, `terminal`, `intentConflict` and `recoveryRequired` from the frontend resolution; they belonged to the removed v2 transport. Follows Q25 | Keeping unreachable branches |
 
 ## Raised
 
@@ -56,6 +61,10 @@
 | `grade10-site/store/checkout` | Does the shop's review of the cart retire an open invoice? | Q23 |
 | `grade10-site/store/checkout` | Does this change keep the backend guarantees? | Q24 |
 | `grade10-site/store/checkout` | Which payment request does the drawer send after the v2 transport was removed? | Q25 |
+| `grade10-site/store/checkout` | After a lost Pay answer, today's backend may already hold a payable invoice, and a deliberate second Pay is a new request. Does this change ship with a second payable invoice possible until `add-checkout-purchase-safety` lands, and does the failure feedback point the collector to Your Orders before paying again? | Q30 |
+| `grade10-site/store/checkout` | While a Pay is pending and the collector saves a cart or tender edit, is Pay available for the edited cart before the older answer arrives, or only once it does? | Q31 |
+| `grade10-site/store/checkout` | With retirement moved to `add-checkout-purchase-safety`, can an older order read canceled in this change at all, and does the "Canceled older invoice" state belong to this change's acceptance? | Q32 |
+| `grade10-site/store/checkout` | Settlement through notification and reconciliation, repeated or invalid notifications, and another member's order reads are backend guarantees this change does not modify. Does this change's suite keep verifying them, or do they move with the backend guarantees to `add-checkout-purchase-safety`? | Q33 |
 
 ## Product Authority
 
