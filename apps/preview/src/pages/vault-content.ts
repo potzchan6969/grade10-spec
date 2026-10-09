@@ -48,7 +48,7 @@ const VAULT_MY_VISITS_STORY_ID = "pages-appointment-appointments--default";
 const VAULT_MANAGE_VISIT_STORY_ID = VAULT_MY_VISITS_STORY_ID;
 const INTAKE_TRACKER_STORY_ID = "pages-submissions--in-progress";
 const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
-const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--graded";
+const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-asset-detail--graded";
 const VAULT_RETRIEVAL_STORY_ID = "vault-request-retrieval-dialog--default";
 /** Storybook ids for vault item-card assemblies (workbench deep links). */
 const VAULT_ITEM_CARD_IN_VAULT_STORY_ID = "vault-vault-item-card--in-vault";
@@ -108,18 +108,41 @@ type VaultAssetStatus =
 
 type ValuationSource = "Declared" | "Intake estimate" | "Market";
 
+type VaultAssetValuePotential = {
+  gradedEstimateHkd: number;
+  upsidePercent: number;
+};
+
+type VaultAssetCustodyLogItem = {
+  label: string;
+  description: string;
+  state: "completed" | "upcoming";
+};
+
+type VaultAssetDocument = {
+  label: string;
+  action?: string;
+  href?: string;
+};
+
 type VaultAsset = {
   id: string;
   name: string;
   category: RegisterCategory;
   categoryLabel: string;
   condition: ItemCondition;
+  conditionDescription?: string;
   grade: string;
   cert: string | null;
   vaultId: string | null;
+  location?: string;
   status: VaultAssetStatus;
   estimateHkd: number;
   valuationSource: ValuationSource;
+  estimateChangePercent?: number;
+  valuePotential?: VaultAssetValuePotential;
+  custodyLog?: VaultAssetCustodyLogItem[];
+  documents?: VaultAssetDocument[];
   imageSrc: string;
 };
 
@@ -184,6 +207,110 @@ const VAULT_ASSETS: VaultAsset[] = [
 ];
 
 const PORTFOLIO_ASSETS = VAULT_ASSETS.filter(isPortfolioHolding);
+
+/**
+ * Detailed fixtures for the asset detail page, aligned with the Figma
+ * "Vaulted Asset" frames. The first item is graded; the second is raw.
+ */
+const VAULT_ASSET_DETAILS: VaultAsset[] = [
+  {
+    id: "va-detail-graded",
+    name: "1997 Pocket Monsters Checklist Carddass",
+    category: "trading-card",
+    categoryLabel: "Trading card · Carddass",
+    condition: "Graded",
+    conditionDescription: "Graded, Gem Mint",
+    grade: "PSA 10 Gem Mint",
+    cert: "63261276",
+    vaultId: "G10-VLT-004821",
+    location: "Crown Fine Art, Hong Kong",
+    status: "In Vault",
+    estimateHkd: 98000,
+    valuationSource: "Intake estimate",
+    estimateChangePercent: 12.4,
+    custodyLog: [
+      {
+        label: "Stored in vault",
+        description: "Crown Fine Art, 12 Oct 2026",
+        state: "completed",
+      },
+      {
+        label: "Valuation recorded - HK$98,000",
+        description: "Intake estimate by Grade10 specialist, 12 Oct 2026",
+        state: "upcoming",
+      },
+      {
+        label: "Authentication & inspection passed",
+        description: "Cert checked against the PSA registry, 11 Oct 2026",
+        state: "upcoming",
+      },
+      {
+        label: "Received at Grade10 intake",
+        description: "Drop-off, Hong Kong Grade10 Store, 10 Oct 2026",
+        state: "upcoming",
+      },
+    ],
+    documents: [
+      { label: "Vault intake certificate", action: "PDF" },
+      {
+        label: "PSA cert report",
+        action: "View",
+        href: "https://www.psacard.com/cert/63261276",
+      },
+      { label: "Insurance schedule", action: "PDF" },
+      { label: "High-res imagery", action: "ZIP" },
+    ],
+    imageSrc: SCAN_IMAGE,
+  },
+  {
+    id: "va-detail-raw",
+    name: "1997 Pocket Monsters Checklist Carddass",
+    category: "trading-card",
+    categoryLabel: "Trading card · Carddass",
+    condition: "Raw",
+    conditionDescription: "Raw, Lightly Played",
+    grade: "Raw",
+    cert: null,
+    vaultId: "G10-VLT-004821",
+    location: "Crown Fine Art, Hong Kong",
+    status: "In Vault",
+    estimateHkd: 98000,
+    valuationSource: "Intake estimate",
+    estimateChangePercent: 12.4,
+    valuePotential: {
+      gradedEstimateHkd: 180000,
+      upsidePercent: 83,
+    },
+    custodyLog: [
+      {
+        label: "Stored in vault",
+        description: "Crown Fine Art, 12 Oct 2026",
+        state: "completed",
+      },
+      {
+        label: "Valuation recorded - HK$98,000",
+        description: "Intake estimate by Grade10 specialist, 12 Oct 2026",
+        state: "upcoming",
+      },
+      {
+        label: "Authentication & inspection passed",
+        description: "Physical inspection by Grade10 specialist, 11 Oct 2026",
+        state: "upcoming",
+      },
+      {
+        label: "Received at Grade10 intake",
+        description: "Drop-off, Hong Kong Grade10 Store, 10 Oct 2026",
+        state: "upcoming",
+      },
+    ],
+    documents: [
+      { label: "Vault intake certificate", action: "PDF" },
+      { label: "Insurance schedule", action: "PDF" },
+      { label: "High-res imagery", action: "ZIP" },
+    ],
+    imageSrc: SCAN_IMAGE,
+  },
+];
 
 const PORTFOLIO_SUMMARY = {
   itemCount: PORTFOLIO_ASSETS.length,
@@ -687,7 +814,10 @@ export type {
   RegisterCategory,
   ValuationSource,
   VaultAsset,
+  VaultAssetCustodyLogItem,
+  VaultAssetDocument,
   VaultAssetStatus,
+  VaultAssetValuePotential,
 };
 export {
   ACCOUNT_EMAIL,
@@ -723,6 +853,7 @@ export {
   SUMMARY_COPY,
   slotsForVisitDay,
   statusBadgeVariant,
+  VAULT_ASSET_DETAILS,
   VAULT_ASSETS,
   VAULT_BOOK_VISIT_HREF,
   VAULT_BOOK_VISIT_STORY_ID,
