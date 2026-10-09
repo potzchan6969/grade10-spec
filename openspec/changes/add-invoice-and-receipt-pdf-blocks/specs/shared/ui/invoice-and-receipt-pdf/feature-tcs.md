@@ -1520,9 +1520,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression, release
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** InvoicePdf export
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/invoice-pdf.test.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order-item-table-pdf.spec.ts`
 
 **Pre-conditions:**
 
@@ -1564,9 +1566,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** InvoicePdf export
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-document.test.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order-item-table-pdf.spec.ts`
 
 **Pre-conditions:**
 
@@ -1728,9 +1732,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression, release
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** ReceiptPdf export
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/receipt-pdf.test.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order-item-table-pdf.spec.ts`
 
 **Pre-conditions:**
 
@@ -1935,9 +1941,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Document shape
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order-item-table-pdf.spec.ts`
 
 **Pre-conditions:**
 
@@ -2018,9 +2026,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Document shape
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts`
 
 **Pre-conditions:**
 
@@ -2157,9 +2167,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Document shape
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order-item-table-pdf.spec.ts`
 
 **Pre-conditions:**
 
@@ -2200,9 +2212,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Document shape
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order-item-table-pdf.spec.ts`
 
 **Pre-conditions:**
 
@@ -2242,9 +2256,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Document shape
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order-item-table-pdf.spec.ts`
 
 **Pre-conditions:**
 

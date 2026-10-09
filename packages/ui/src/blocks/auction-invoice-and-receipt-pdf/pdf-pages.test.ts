@@ -97,6 +97,14 @@ async function expectBodyAboveBottom(bytes: ArrayBuffer) {
   }
 }
 
+/** Where a drawn string reads in the document: page by page, top to bottom. */
+function readingOrder(pages: DrawnText[][], text: string): number {
+  const page = pageOf(pages, text);
+  const row = pages[page]?.find((one) => one.text === text);
+  expect(row, `"${text}" is drawn`).toBeDefined();
+  return page * 1000 - (row?.y ?? 0);
+}
+
 /** A page's text from the top down, left to right along a line. */
 function topDown(page: DrawnText[]): DrawnText[] {
   return [...page].sort((a, b) => b.y - a.y || a.x - b.x);
@@ -119,7 +127,7 @@ async function expectBlackDividers(bytes: ArrayBuffer) {
   expect(drawn).toBeGreaterThanOrEqual(5);
 }
 
-describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
+describe.each(DOCUMENTS)("%s's pages", (name, render) => {
   // shared-ui-invoice-and-receipt-pdf-SC-62
   it("continues a long table on the next page under the repeated column header", async () => {
     const bytes = await render(30);
@@ -148,6 +156,28 @@ describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
     expect(
       pages.flatMap((page) => page.filter(isLot).map((row) => row.text)),
     ).toEqual(sampleItems(30).map((item) => item.title));
+
+    // Page 1 draws the header once, above its first row; the Item Total row
+    // is drawn once, after the last row.
+    const first = pages[0] ?? [];
+    for (const label of HEADER)
+      expect(first.filter((row) => row.text === label)).toHaveLength(1);
+    expect(first.find((row) => row.text === "Item")?.y).toBeGreaterThan(
+      first.find(isLot)?.y ?? Number.POSITIVE_INFINITY,
+    );
+    expect(
+      pages.flat().filter((row) => row.text === "Item Total"),
+    ).toHaveLength(1);
+    const lastTitle = sampleItems(30).at(-1)?.title ?? "";
+    expect(readingOrder(pages, "Item Total")).toBeGreaterThan(
+      readingOrder(pages, lastTitle),
+    );
+    if (name === "ReceiptPdf") {
+      const order = ["Order Total", ...BREAKDOWN].map((label) =>
+        readingOrder(pages, label),
+      );
+      expect(order).toEqual([...order].sort((a, b) => a - b));
+    }
   });
 
   // shared-ui-invoice-and-receipt-pdf-SC-63
@@ -247,25 +277,39 @@ describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
     };
     const rightOf = await textRight();
     const one = await drawnPages(await render(1, issuer));
-    const long = await drawnPages(await render(30, issuer));
-    expect(long.length).toBeGreaterThan(1);
-    const last = long.at(-1);
-    const email = drawnRow(last ?? [], "support@grade10.com");
+    const oneEmail = drawnRow(one[0] ?? [], "support@grade10.com");
     const nameAbove = (row: DrawnText, under: DrawnText) =>
       row.text === "Issuer Co" &&
       Math.abs(row.y - under.y - LINE_HEIGHT) < 0.01;
-    const name = (last ?? []).find((row) => nameAbove(row, email)) as DrawnText;
-    expect(name).toBeDefined();
-    expect(email.y).toBeCloseTo(MARGIN);
-    expect(name.y - email.y).toBeCloseTo(LINE_HEIGHT);
-    expect(rightOf(email)).toBeCloseTo(RIGHT_EDGE);
-    expect(rightOf(name)).toBeCloseTo(RIGHT_EDGE);
-    const oneEmail = drawnRow(one[0] ?? [], "support@grade10.com");
-    expect([email.x, email.y]).toEqual([oneEmail.x, oneEmail.y]);
     const oneName = (one[0] ?? []).find((row) => nameAbove(row, oneEmail));
-    expect([name.x, name.y]).toEqual([oneName?.x, oneName?.y]);
-    for (const page of long.slice(0, -1)) {
-      expect(page.map((row) => row.text)).not.toContain("support@grade10.com");
+    // 30 items run to two pages, 60 to three.
+    for (const [count, pageCount] of [
+      [30, 2],
+      [60, 3],
+    ] as const) {
+      const long = await drawnPages(await render(count, issuer));
+      expect(long).toHaveLength(pageCount);
+      expect(
+        long.flat().filter((row) => row.text === "support@grade10.com"),
+        `${count} items: the issuer email once`,
+      ).toHaveLength(1);
+      const last = long.at(-1);
+      const email = drawnRow(last ?? [], "support@grade10.com");
+      const issuerName = (last ?? []).find((row) =>
+        nameAbove(row, email),
+      ) as DrawnText;
+      expect(issuerName).toBeDefined();
+      expect(email.y).toBeCloseTo(MARGIN);
+      expect(issuerName.y - email.y).toBeCloseTo(LINE_HEIGHT);
+      expect(rightOf(email)).toBeCloseTo(RIGHT_EDGE);
+      expect(rightOf(issuerName)).toBeCloseTo(RIGHT_EDGE);
+      expect([email.x, email.y]).toEqual([oneEmail.x, oneEmail.y]);
+      expect([issuerName.x, issuerName.y]).toEqual([oneName?.x, oneName?.y]);
+      for (const page of long.slice(0, -1)) {
+        expect(page.map((row) => row.text)).not.toContain(
+          "support@grade10.com",
+        );
+      }
     }
   });
 

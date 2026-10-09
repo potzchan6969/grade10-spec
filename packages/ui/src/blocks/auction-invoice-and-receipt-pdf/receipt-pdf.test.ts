@@ -242,6 +242,28 @@ describe("receipt PDF renderer", () => {
     for (const row of order.slice(4, 7)) {
       expect(row.x).toBeCloseTo(SUMMARY_LEFT, 2);
     }
+    const strings = rows.map((row) => row.text);
+    expect(strings).not.toContain("Description");
+    expect(strings).not.toContain("Amount");
+    expect(strings.filter((text) => text === "Lot A")).toHaveLength(1);
+    const onItsRow = (label: string, amount: string) =>
+      rows.some(
+        (row) =>
+          row.text === amount &&
+          Math.abs(row.y - drawnRow(rows, label).y) < 0.01,
+      );
+    for (const line of SUMMARY_LINE_ITEMS)
+      expect(onItsRow(line.label, line.amount), line.label).toBe(true);
+    for (const [label, amount] of [
+      ["Original Invoice Total", DATA.paymentBreakdown.originalInvoiceTotal],
+      ["Previous Payments", DATA.paymentBreakdown.previousPayments],
+      [
+        "Current Payment Received",
+        DATA.paymentBreakdown.currentPaymentReceived,
+      ],
+      ["Remaining Balance Due", DATA.paymentBreakdown.remainingBalanceDue],
+    ] as const)
+      expect(onItsRow(label, amount), label).toBe(true);
   });
 
   // shared-ui-invoice-and-receipt-pdf-SC-3

@@ -103,44 +103,65 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
   it("draws one row per item in the order given, then the Item Total row", async () => {
     const items = [
       lot("A", [100, 20, 120]),
-      lot("B", [200, 40, 240]),
+      lot("A", [200, 40, 240]),
       lot("C", [300, 60, 360]),
     ];
-    const rows = await drawnText(
-      await render({
-        items,
-        itemTotal: {
-          winningBid: "HKD 600.00",
-          buyersPremium: "HKD 120.00",
-          total: "HKD 720.00",
-        },
-      }),
+    const itemTotal = {
+      winningBid: "HKD 600.00",
+      buyersPremium: "HKD 120.00",
+      total: "HKD 720.00",
+    };
+    const rows = await drawnText(await render({ items, itemTotal }));
+    const rightOf = await textRight();
+    const columns = ["Winning Bid", "Buyer's Premium", "Total"].map((label) =>
+      drawnRow(rows, label),
     );
-    const titles = items.map((item) => drawnRow(rows, item.title));
+    const amountsOf = (row: {
+      winningBid: string;
+      buyersPremium: string;
+      total: string;
+    }) => [row.winningBid, row.buyersPremium, row.total] as const;
+
+    // The first two items share a title and still draw as two rows.
+    const shared = rows
+      .filter((row) => row.text === items[0]?.title)
+      .sort((a, b) => b.y - a.y);
+    expect(shared).toHaveLength(2);
+    const titles = [
+      shared[0],
+      shared[1],
+      drawnRow(rows, items[2]?.title ?? ""),
+    ] as DrawnText[];
     expect(titles[0]?.y).toBeGreaterThan(titles[1]?.y ?? 0);
     expect(titles[1]?.y).toBeGreaterThan(titles[2]?.y ?? 0);
     for (const [index, item] of items.entries()) {
-      for (const amount of [item.winningBid, item.buyersPremium, item.total]) {
-        expect(
-          rows.some(
-            (drawn) =>
-              drawn.text === amount &&
-              Math.abs(drawn.y - (titles[index]?.y ?? 0)) < 0.01,
-          ),
-          `${item.title} ${amount}`,
-        ).toBe(true);
+      for (const [column, amount] of amountsOf(item).entries()) {
+        const drawn = rows.find(
+          (row) =>
+            row.text === amount &&
+            Math.abs(row.y - (titles[index]?.y ?? 0)) < 0.01,
+        );
+        expect(drawn, `${item.title} ${amount}`).toBeDefined();
+        expect(rightOf(drawn as DrawnText)).toBeCloseTo(
+          rightOf(columns[column] as DrawnText),
+        );
       }
     }
-    const itemTotal = drawnRow(rows, "Item Total");
-    expect(itemTotal.y).toBeLessThan(titles[2]?.y ?? 0);
-    for (const amount of ["HKD 600.00", "HKD 120.00", "HKD 720.00"]) {
-      expect(
-        rows.some(
-          (drawn) =>
-            drawn.text === amount && Math.abs(drawn.y - itemTotal.y) < 0.01,
-        ),
-        amount,
-      ).toBe(true);
+
+    // One header and one Item Total row, under the last item.
+    expect(rows.filter((row) => row.text === "Item")).toHaveLength(1);
+    const totals = rows.filter((row) => row.text === "Item Total");
+    expect(totals).toHaveLength(1);
+    const totalRow = totals[0] as DrawnText;
+    expect(totalRow.y).toBeLessThan(titles[2]?.y ?? 0);
+    for (const [column, amount] of amountsOf(itemTotal).entries()) {
+      const drawn = rows.find(
+        (row) => row.text === amount && Math.abs(row.y - totalRow.y) < 0.01,
+      );
+      expect(drawn, amount).toBeDefined();
+      expect(rightOf(drawn as DrawnText)).toBeCloseTo(
+        rightOf(columns[column] as DrawnText),
+      );
     }
   });
 
