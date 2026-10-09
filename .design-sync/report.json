@@ -1,10 +1,13 @@
 {
-  "generatedAt": "2026-10-09T08:01:53.326Z",
+  "generatedAt": "2026-10-09T08:53:44.856Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
     "AcutionRecordCard": "warn",
     "Alert": "warn",
+    "Asset Custody & Documents": "warn",
+    "Asset Details": "warn",
+    "Asset Summary": "warn",
     "Auction": "warn",
     "Auctions / Category Button": "warn",
     "Avatar": "skipped",
@@ -865,7 +868,7 @@
     "7021-1380": "/ VAULT",
     "7025-2": "Page",
     "7025-2927": "Detail Row",
-    "7029-2": "Vault Item Detail",
+    "7029-2": "Vaulted Asset",
     "7035-268": "Detail row",
     "7038-29": "Link",
     "7038-32": "Link",
@@ -880,6 +883,12 @@
     "7046-5415": "Stepper",
     "7046-5420": "Stepper",
     "7046-56": "Step",
+    "7054-5061": "Asset Custody & Documents",
+    "7054-5062": "Asset Custody & Documents",
+    "7054-5063": "Asset Custody & Documents",
+    "7054-5729": "Asset Details",
+    "7054-5768": "Asset Summary",
+    "7054-5864": "Vaulted Asset Components",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -917,6 +926,15 @@
     ],
     "Alert": [
       "packages/design-system/src/components/display/alert.figma.ts: emits variant, which packages/design-system/src/components/display/alert.tsx does not name — the Dev Mode snippet would not compile"
+    ],
+    "Asset Custody & Documents": [
+      "Asset Custody & Documents: no code component (looked for src/components/**/assetcustodydocuments.tsx or assetcustodydocuments.tsx)"
+    ],
+    "Asset Details": [
+      "Asset Details: no code component (looked for src/components/**/assetdetails.tsx or assetdetails.tsx)"
+    ],
+    "Asset Summary": [
+      "Asset Summary: no code component (looked for src/components/**/assetsummary.tsx or assetsummary.tsx)"
     ],
     "Auction": [
       "Auction: no code component (looked for src/components/**/auction.tsx or auction.tsx)"
