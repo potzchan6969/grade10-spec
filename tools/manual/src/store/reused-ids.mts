@@ -21,7 +21,9 @@ export type Reuse = {
 type Entry = { id: string; title: string; marker: string | null };
 
 const STORY = /^([a-z0-9][a-z0-9-]*?-US-?(\d+)([a-z]?))\b:?\s*(.*)$/i;
-const CASE = /^([a-z0-9][a-z0-9-]*?-US-?\d+[a-z]?-TC\d+)-\d+\b:?\s*(.*)$/i;
+const LEGACY_CASE =
+  /^([a-z0-9][a-z0-9-]*?-US-?\d+[a-z]?-TC\d+)-\d+\b:?\s*(.*)$/i;
+const MODERN_CASE = /^(\S+)\s+\(US-?\d+-TC-?\d+\):\s*(.*)$/i;
 const MARKER = /^<!-- trace:case id=(\S+)/;
 const DELTA_JOURNEYS = new Set(["User journeys", "Context user journeys"]);
 const JOURNEYS = "user-journeys.md";
@@ -50,6 +52,13 @@ function markerAbove(lines: string[], section: Section): string | null {
   return null;
 }
 
+function caseEntry(heading: string): { id: string; title: string } | null {
+  const modern = MODERN_CASE.exec(heading);
+  if (modern) return { id: modern[1], title: tidy(modern[2]) };
+  const legacy = LEGACY_CASE.exec(heading);
+  return legacy ? { id: legacy[1], title: tidy(legacy[2]) } : null;
+}
+
 function suiteEntries(text: string | null | undefined) {
   const stories = new Map<string, Entry>();
   const cases = new Map<string, Entry>();
@@ -64,12 +73,12 @@ function suiteEntries(text: string | null | undefined) {
           title: tidy(story[4]),
           marker: null,
         });
-    } else if (section.level === 3) {
-      const one = CASE.exec(section.heading);
+    } else if (section.level === 3 || section.level === 4) {
+      const one = caseEntry(section.heading);
       if (one)
-        cases.set(one[1].toLowerCase(), {
-          id: one[1],
-          title: tidy(one[2]),
+        cases.set(one.id.toLowerCase(), {
+          id: one.id,
+          title: one.title,
           marker: markerAbove(lines, section),
         });
     }

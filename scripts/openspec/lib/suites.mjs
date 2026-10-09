@@ -439,7 +439,7 @@ export function issuedPrefix(spec) {
 function blockAfter(lines, from) {
   const body = [];
   for (let j = from; j < lines.length; j++) {
-    if (/^(\*\*|#{2,3}\s|---)/.test(lines[j])) break;
+    if (/^(\*\*|#{2,4}\s|---)/.test(lines[j])) break;
     body.push(lines[j]);
   }
   return body;
@@ -541,6 +541,7 @@ export function parseSuite(text) {
   };
   let journey = null;
   let tc = null;
+  let ungrouped = false;
 
   const pushCase = () => {
     if (tc && journey) journey.cases.push(tc);
@@ -558,6 +559,7 @@ export function parseSuite(text) {
     const meta = line.match(/^##\s+(Raised|Settled|Reconciliation)\s*$/);
     if (meta) {
       pushJourney();
+      ungrouped = false;
       const key = meta[1].toLowerCase();
       const body = [];
       for (let j = i + 1; j < lines.length && !/^##\s/.test(lines[j]); j++) {
@@ -566,6 +568,17 @@ export function parseSuite(text) {
       suite[key] = body.filter(
         (one) => one.trim() && !one.trim().startsWith("<!--"),
       ).length;
+      continue;
+    }
+
+    if (/^##\s+Ungrouped\s*$/.test(line)) {
+      pushJourney();
+      ungrouped = true;
+      continue;
+    }
+    if (/^##\s+Walk\b/.test(line)) {
+      pushJourney();
+      ungrouped = false;
       continue;
     }
 
@@ -614,6 +627,7 @@ export function parseSuite(text) {
     const jh = line.match(/^##\s+(([\w-]+)-US-?(\d+)):\s*(.+?)\s*$/);
     if (jh) {
       pushJourney();
+      ungrouped = false;
       journey = {
         capability: jh[2],
         num: Number(jh[3]),
@@ -626,6 +640,24 @@ export function parseSuite(text) {
       };
       continue;
     }
+    const uh = ungrouped
+      ? line.match(/^###\s+(([\w-]+)-US-?(\d+)):\s*(.+?)\s*$/)
+      : null;
+    if (uh) {
+      pushJourney();
+      journey = {
+        capability: uh[2],
+        num: Number(uh[3]),
+        raw: uh[1],
+        hyphenated: /-US-\d+$/.test(uh[1]),
+        title: uh[4],
+        line: i + 1,
+        story: [],
+        cases: [],
+        ungrouped: true,
+      };
+      continue;
+    }
     if (/^##\s+(Journey|Flow|Requirement)\b/.test(line)) {
       suite.legacy.add(
         "pre-journey-id headings (`## Journey:` / `## Flow` / `## Requirement:`)",
@@ -634,26 +666,39 @@ export function parseSuite(text) {
       continue;
     }
 
-    const ch = line.match(/^###\s+(\S+):\s*(.+?)\s*$/);
+    const modern = line.match(
+      /^(###|####)\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):\s*(.+?)\s*$/,
+    );
+    const legacy = !modern
+      ? ungrouped
+        ? line.match(/^####\s+(\S+):\s*(.+?)\s*$/)
+        : line.match(/^###\s+(\S+):\s*(.+?)\s*$/)
+      : null;
+    const ch = modern ?? legacy;
     if (ch) {
       pushCase();
-      const id = ch[1];
-      const journeyScoped = id.match(
-        /^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/,
-      );
+      const id = modern ? modern[2] : legacy[1];
+      const journeyScoped = modern
+        ? [modern[0], journey?.capability ?? null, modern[3], modern[4]]
+        : id.match(/^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/);
       if (!journeyScoped)
         suite.legacy.add(
-          "case ids that are not `<capability>-US<n>-TC<m>-<v>`",
+          "case ids that are not `<scope>.TC-<sequence> (US<n>-TC<m>)`",
         );
       tc = {
         id,
         capability: journeyScoped?.[1] ?? null,
         journeyNum: journeyScoped ? Number(journeyScoped[2]) : null,
         tcNum: journeyScoped ? Number(journeyScoped[3]) : null,
-        version: journeyScoped?.[4] ? Number(journeyScoped[4]) : null,
+        version: modern
+          ? null
+          : journeyScoped?.[4]
+            ? Number(journeyScoped[4])
+            : null,
+        modern: Boolean(modern),
         journeyScoped: Boolean(journeyScoped),
-        hyphenated: /-US-\d+-TC-\d+/.test(id),
-        title: ch[2],
+        hyphenated: !modern && /-US-\d+-TC-\d+/.test(id),
+        title: modern ? modern[5] : legacy[2],
         line: i + 1,
         props: new Map(),
         propOrder: [],
@@ -744,7 +789,7 @@ export function parseSuite(text) {
         let seenBlank = false;
         for (let j = i + 1; j < lines.length; j++) {
           const t = lines[j];
-          if (/^(\*\*|#{2,3}\s|---)/.test(t)) break;
+          if (/^(\*\*|#{2,4}\s|---)/.test(t)) break;
           if (t.trim() === "") {
             if (parts.join("").trim() !== "") break;
             if (seenBlank) break;
@@ -777,7 +822,7 @@ export function parseSuite(text) {
       if (/^\*\*Steps:\*\*/.test(line)) {
         for (let j = i + 1; j < lines.length; j++) {
           const t = lines[j];
-          if (/^(\*\*|#{2,3}\s|---)/.test(t)) break;
+          if (/^(\*\*|#{2,4}\s|---)/.test(t)) break;
           if (/^\s*\d+\.\s+\S/.test(t)) {
             tc.steps++;
             tc.stepTexts.push(t.trim().replace(/^\d+\.\s+/, ""));

@@ -207,10 +207,17 @@ function caseHeadingRevision(heading) {
   return match && positiveRevision(match[1]) ? match[1] : null;
 }
 
+function isCaseHeading(heading) {
+  return (
+    /^\s*#{3,4}\s+\S+\s+\(US-?\d+-TC-?\d+\):/.test(heading) ||
+    /^\s*#{3,4}\s+\S/.test(heading)
+  );
+}
+
 function deprecatedCaseAt(lines, headingIndex) {
-  if (!/^\s*###\s+\S/.test(lines[headingIndex] ?? "")) return false;
+  if (!isCaseHeading(lines[headingIndex] ?? "")) return false;
   for (let index = headingIndex + 1; index < lines.length; index += 1) {
-    if (/^\s*###\s+\S/.test(lines[index])) break;
+    if (isCaseHeading(lines[index])) break;
     if (
       /^\s*\*\s+(?:\*\*)?Status:(?:\*\*)?\s+deprecated\s*$/i.test(lines[index])
     )
@@ -242,7 +249,7 @@ function caseMarkerCovers(rawCovers, lines, markerIndex, issue) {
     );
   if (new Set(covers).size !== covers.length)
     issue("duplicate-cover", "case marker repeats a covered scenario id");
-  if (!/^\s*###\s+\S/.test(lines[markerIndex + 1] ?? ""))
+  if (!isCaseHeading(lines[markerIndex + 1] ?? ""))
     issue(
       "marker-adjacency",
       "case marker must sit immediately above a case heading",
@@ -261,9 +268,29 @@ function isSuiteFile(file) {
 
 function caseHeadings(lines) {
   const headings = [];
+  let inWalk = false;
+  let inUngrouped = false;
   for (let index = 0; index < lines.length; index += 1) {
+    if (/^\s*##\s+Walk\b/.test(lines[index])) {
+      inWalk = true;
+      inUngrouped = false;
+      continue;
+    }
+    if (/^\s*##\s+Ungrouped\s*$/.test(lines[index])) {
+      inWalk = false;
+      inUngrouped = true;
+      continue;
+    }
+    if (/^\s*##\s+/.test(lines[index])) {
+      inWalk = false;
+      inUngrouped = false;
+    }
+    if (inWalk) continue;
+    if (inUngrouped && /^\s*###\s+\S+-US-?\d+[a-z]?:/.test(lines[index]))
+      continue;
     const revision = caseHeadingRevision(lines[index]);
-    if (revision) headings.push({ index, revision });
+    if (revision || isCaseHeading(lines[index]))
+      headings.push({ index, revision });
   }
   return headings;
 }
@@ -522,7 +549,10 @@ export function parseTraceGraph({
         continue;
       }
       suiteCaseCounts.marked += 1;
-      if (matchingCase.revision !== heading.revision)
+      if (
+        heading.revision !== null &&
+        matchingCase.revision !== heading.revision
+      )
         issue(
           "case-revision-mismatch",
           `case marker revision ${matchingCase.revision} must match heading revision ${heading.revision}`,
@@ -1129,8 +1159,8 @@ function initialize(kind, values) {
       fail("scenario target must be one exact #### Scenario heading line");
     marker = `trace:scenario id=${id} rev=1`;
   } else {
-    if (!/^\s*###\s+\S/.test(target))
-      fail("case target must be one exact ### case heading line");
+    if (!isCaseHeading(target))
+      fail("case target must be one exact case heading line");
     const covers = requireOption(values, "covers")
       .split(",")
       .map((item) => normalizeInputReference(item, "SC", "--covers"));
@@ -1191,7 +1221,8 @@ function initializeBatch(values) {
           `batch record ${key} existing id does not match the adjacent marker`,
         );
       existingId = existingFields.id;
-      if (existingFields.rev !== caseHeadingRevision(target))
+      const headingRevision = caseHeadingRevision(target);
+      if (headingRevision && existingFields.rev !== headingRevision)
         fail(`batch record ${key} existing revision differs from its heading`);
       markerIndex = indexInFile - 1;
     } else {
@@ -1199,16 +1230,12 @@ function initializeBatch(values) {
     }
     if (input.kind === "scenario" && !/^\s*####\s+Scenario:\s+\S/.test(target))
       fail(`batch scenario ${key} target must be a scenario heading`);
-    if (input.kind === "case" && !/^\s*###\s+\S/.test(target))
+    if (input.kind === "case" && !isCaseHeading(target))
       fail(`batch case ${key} target must be a case heading`);
     const revision =
       input.kind === "case"
-        ? caseHeadingRevision(target)
+        ? (caseHeadingRevision(target) ?? String(input.revision ?? "1"))
         : String(input.revision ?? "1");
-    if (input.kind === "case" && revision === null)
-      fail(
-        `batch case ${key} target must end with a positive TC<n>-<v> revision`,
-      );
     if (!positiveRevision(revision))
       fail(`batch record ${key} has an invalid revision: ${revision}`);
     const covers = input.kind === "case" ? input.covers : [];

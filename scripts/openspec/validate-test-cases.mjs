@@ -380,6 +380,7 @@ function checkSuite(root, filePath, rulesRev) {
 
   // --- journeys ----------------------------------------------------------
   const seenJourneys = new Set();
+  const seenCaseIds = new Set();
   for (const j of suite.journeys) {
     if (j.hyphenated)
       warn(
@@ -393,9 +394,11 @@ function checkSuite(root, filePath, rulesRev) {
       );
     const canonical = `${j.capability}-US-${String(j.num).padStart(2, "0")}`;
     const alternate = `${j.capability}-US-${j.num}`;
-    if (seenJourneys.has(j.num))
-      err(j.line, `journey ${j.num} appears more than once`);
-    seenJourneys.add(j.num);
+    if (!j.ungrouped) {
+      if (seenJourneys.has(j.num))
+        err(j.line, `journey ${j.num} appears more than once`);
+      seenJourneys.add(j.num);
+    }
     const retired =
       spec?.retired?.has(canonical) || spec?.retired?.has(alternate);
     if (retired && statusCounts(j.cases).deprecated !== j.cases.length)
@@ -426,9 +429,10 @@ function checkSuite(root, filePath, rulesRev) {
       );
     const story = new Set(j.story);
     if (
-      !(story.has("as a") || story.has("as an")) ||
-      !story.has("i want") ||
-      !story.has("so that")
+      !j.ungrouped &&
+      (!(story.has("as a") || story.has("as an")) ||
+        !story.has("i want") ||
+        !story.has("so that"))
     )
       err(
         j.line,
@@ -440,6 +444,9 @@ function checkSuite(root, filePath, rulesRev) {
     const seenTc = new Set();
     for (const tc of j.cases) {
       const at = tc.line;
+      if (seenCaseIds.has(tc.id))
+        err(at, `case id \`${tc.id}\` appears more than once in this suite`);
+      seenCaseIds.add(tc.id);
       if (tc.journeyScoped) {
         if (tc.hyphenated)
           warn(
@@ -456,10 +463,12 @@ function checkSuite(root, filePath, rulesRev) {
         if (seenTc.has(tc.tcNum))
           err(at, `TC${tc.tcNum} appears more than once under ${j.raw}`);
         seenTc.add(tc.tcNum);
-        if (tc.version === null)
-          warn(at, `case \`${tc.id}\` carries no version suffix`);
-        else if (tc.version < 1)
-          err(at, `case \`${tc.id}\` has version ${tc.version}`);
+        if (!tc.modern) {
+          if (tc.version === null)
+            warn(at, `case \`${tc.id}\` carries no version suffix`);
+          else if (tc.version < 1)
+            err(at, `case \`${tc.id}\` has version ${tc.version}`);
+        }
       }
 
       for (const [name, vocab, multi, optional] of PROPERTIES) {
@@ -997,15 +1006,17 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
           break;
         body += ` ${next.trim()}`;
       }
-      const ids = [...body.matchAll(/`([\w-]+-e2e-US\d+-TC\d+-\d+)`/g)].map(
-        (m) => m[1],
-      );
+      const ids = [
+        ...body.matchAll(
+          /`((?:[\w-]+-e2e-US\d+-TC\d+-\d+)|(?:[\w.-]+\.TC-[0-9a-z]+))`/gi,
+        ),
+      ].map((m) => m[1]);
       if (ids.length === 0) {
         record(
           "error",
           rel,
           i + 1,
-          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<product>-<domain>-e2e-US<n>-TC<m>-<v>`",
+          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<scope>.TC-<sequence>`",
         );
         continue;
       }
@@ -1030,11 +1041,9 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
   }
 }
 
-// --- a case's <v> and its trace rev are one number ----------------------
-// `<v>` in the case id and `rev` on its `trace:case` marker both count the
-// times what the case verifies has changed. Two counters for one fact drift -
-// the migration stamped `rev=1` over cases already at `-2` - so where a case
-// carries a marker, the two agree.
+// --- legacy case versions and trace revisions ----------------------------
+// Modern headings take their version only from the adjacent marker's `rev`.
+// Legacy headings retain the old suffix check until each suite migrates.
 for (const p of suites) {
   const lines = readFileSync(p, "utf8").split("\n");
   const rel = relative(ROOT, p);
@@ -1043,13 +1052,17 @@ for (const p of suites) {
     if (!marker) continue;
     let j = i + 1;
     while (j < lines.length && lines[j].trim() === "") j++;
-    const heading = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
-    if (!heading || heading[2] === marker[1]) continue;
+    const modern = /^(?:###|####)\s+(\S+)\s+\(US-?\d+-TC-?\d+\):/.exec(
+      lines[j] ?? "",
+    );
+    const legacy = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
+    if (modern) continue;
+    if (!legacy || legacy[2] === marker[1]) continue;
     record(
       "error",
       rel,
       j + 1,
-      `case \`${heading[1]}\` is at \`<v>\` ${heading[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
+      `case \`${legacy[1]}\` is at \`<v>\` ${legacy[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
     );
   }
 }

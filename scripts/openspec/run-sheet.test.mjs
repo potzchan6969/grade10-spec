@@ -188,6 +188,62 @@ const candidates = journey.cases.map((tc) => ({
   tc: { ...tc, journey },
 }));
 
+const MODERN_SUITE = `# demo/thing/widget Test Cases
+
+**Status:** pending-review · 0/2
+
+## Walk 1: Fill and confirm
+
+### Route
+
+1. Fill the form.
+
+## demo-thing-widget-US1: Somebody does a thing
+
+**As a** collector,
+**I want** a thing,
+**so that** it is done.
+
+### g10.auction-account-record.TC-s25 (US1-TC1): The thing happens
+
+**Steps:**
+
+1. Open the thing.
+
+**Expected Results:**
+
+* The thing is open.
+
+## Ungrouped
+
+### demo-thing-widget-US1: Somebody does a thing
+
+#### g10.auction-account-record.TC-k8m (US1-TC2): The other thing happens
+
+**Steps:**
+
+1. Open the other thing.
+
+**Expected Results:**
+
+* The other thing is open.
+`;
+
+test("a modern case heading and an ungrouped case keep their references", () => {
+  const modern = parseSuite(MODERN_SUITE);
+  assert.equal(modern.journeys.length, 2);
+  assert.equal(
+    modern.journeys[0].cases[0].id,
+    "g10.auction-account-record.TC-s25",
+  );
+  assert.equal(modern.journeys[0].cases[0].modern, true);
+  assert.equal(modern.journeys[1].ungrouped, true);
+  assert.equal(
+    modern.journeys[1].cases[0].id,
+    "g10.auction-account-record.TC-k8m",
+  );
+});
+
 test("a case carries the text of its steps, not only their count", () => {
   const [tc] = journey.cases;
   assert.equal(tc.steps, 2);
