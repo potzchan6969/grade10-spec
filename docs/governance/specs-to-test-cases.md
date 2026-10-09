@@ -11,7 +11,7 @@ A **feature** suite is written **blind**: by a fresh reader who cannot see the s
 ## The Rule
 
 - **The spec is correct** — once the scenarios exist and the two readings are reconciled, a suite that disagrees with the spec is regenerated. Before reconciliation there is nothing to disagree with: the suite is the only reading there is, and it is provisional. A proposal never links a suite in place of a spec delta
-- **Anchors are given** — every section is one `user-journeys.md` journey. A capability nobody walks carries one section instead, `## <capability>-US1`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued case id is permanent. There is no cap on the number of journeys. A suite never invents a flow, and splitting or merging journeys is an edit to the journeys file
+- **Anchors are given** — every section is one `user-journeys.md` journey. A capability nobody walks carries one section instead, `## <capability>-US-<n>`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued case id is permanent. There is no cap on the number of journeys. A suite never invents a flow, and splitting or merging journeys is an edit to the journeys file
 - **A case comes from an anchor** — never from a scenario, which on a feature run does not exist yet. A case that carries behaviour no anchor implies is a product decision in disguise, and reconciliation is where it is settled
 - **A hole is reported** — an anchor no case covers, a case tracing an anchor nothing defines: report it, never close it by inventing a case or a journey
 - **Properties are QA's** — they classify scenarios the spec states. A wrong property is fixed in review and is never grounds to change a step or an expected result
@@ -51,7 +51,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 | A case carries behaviour **nobody ever decided** | Stop and ask the author |
 | A case carries behaviour **nobody present can settle** | Keep the case `draft` with `**Blocked:** <who settles it>` |
 | A scenario no case reaches | Add a case, or `**Out of suite:**` naming where it is verified instead |
-| A scenario a domain case already walks, and the feature run left to it | A `- **Covered at domain** —` bullet naming the domain case in backticks and in full, `` `g10.auction-domain.TC-a1` ``, in place of a feature case; `pnpm run tcs:validate` refuses an id no `domain-tcs.md` holds, or one `deprecated` |
+| A scenario a domain case already walks, and the feature run left to it | A `- **Covered at domain** —` bullet naming the domain case in backticks and in full, `` `g10.auction-dmn.TC-a1` ``, in place of a feature case; `pnpm run tcs:validate` refuses an id no `domain-tcs.md` holds, or one `deprecated` |
 | The two readings **state opposite things** | Stop and ask the author |
 
 - **A contradiction is never resolved by the run** — where a case and a scenario both describe the same behaviour and disagree, one of them is wrong and nothing in the material says which. Filing it as a misreading is how the blind reading gets overruled by the reading it exists to check, so it goes to the author like any undecided behaviour
@@ -72,17 +72,20 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 | --- | --- | --- |
 | `<capability>-US-<n>` | `user-journeys.md` journey | `grade10-site-store-product-listing-US-01` |
 | `<capability>-SC-<n>` | `spec.md` scenario | `grade10-site-store-product-listing-SC-01` |
-| `<capability>-US<n>` | `feature-tcs.md` journey heading | `grade10-site-store-product-listing-US1` |
-| `<scope>.TC-<sequence> (US<n>-TC<m>)` | any `*-tcs.md` case heading | `g10.auction-account-record.TC-s25 (US1-TC2)` |
-| `<product>-<domain>-e2e-US<n>` | `domain-tcs.md` journey heading | `grade10-site-auction-e2e-US1` |
-| `<product>-e2e-US<n>` | `product-tcs.md` journey heading | `grade10-admin-e2e-US1` |
-| `platform-e2e-US<n>` | `platform-tcs.md` journey heading | `platform-e2e-US1` |
+| `<capability>-US-<n>` | `feature-tcs.md` journey heading | `grade10-site-store-product-listing-US-01` |
+| `<brand>.<domain>-<capability>.TC-<xxx> (US<n>-TC<m>)` | feature case heading | `g10.auction-account-record.TC-s25 (US1-TC2)` |
+| `<brand>.<domain>-dmn.US<n>` | `domain-tcs.md` journey heading | `g10.auction-dmn.US1` |
+| `<brand>.<domain>-dmn.TC-<xxx> (US<n>-TC<m>)` | domain case heading | `g10.auction-dmn.TC-2hq (US1-TC1)` |
+| `<brand>-pdt.US<n>` | `product-tcs.md` journey heading | `g10adm-pdt.US1` |
+| `<brand>-pdt.TC-<xxx> (US<n>-TC<m>)` | product case heading | `g10adm-pdt.TC-2hq (US1-TC1)` |
+| `platform.US<n>` | `platform-tcs.md` journey heading | `platform.US1` |
+| `platform.TC-<xxx> (US<n>-TC<m>)` | platform case heading | `platform.TC-2hq (US1-TC1)` |
 
-- **`<capability>`** — the full path with slashes as hyphens, `<product>-<domain>-<capability>`, so two capabilities of one name stay apart
+- **`<capability>`** — the full path with slashes as hyphens, `<product>-<domain>-<capability>`, so two capabilities of one name stay apart. Feature journey headings copy the user-journey id; composed levels use their brand and level slug
 - **A scenario added beside one takes a letter** — `<n>` may carry one lower-case letter, `…-SC-07a`, so a scenario placed beside `…-SC-07` renumbers no other; the letter is part of the id
-- **`e2e` sits in the capability slot** — a domain, product or platform suite numbers its own journeys; each is a path across capabilities, domains or products, and its `**Trace:**` names every capability journey it crosses
+- **Level slugs identify composed suites** — `dmn` joins capabilities in one domain, `pdt` joins domains in one product, and `platform` joins products. A composed case's `**Trace:**` names every capability journey it crosses
 - **A prefix never moves** — fixed at a capability's first ids; a renamed or moved capability goes on issuing what it issued. Read the ids that exist before issuing one; only a first id derives the prefix from the path
-- **Compact form in a suite** — the hyphen after `US` drops and the number is not zero-padded: `…-US-01` becomes `## …-US1: …`. The journeys file and the `**Trace:**` line keep the canonical `…-US-01`
+- **Local case references stay compact** — `(US<n>-TC<m>)` drops the hyphen and zero-padding from the journey and case numbers. Feature journey headings copy the canonical user-journey id; domain, product and platform headings use `g10.auction-dmn.US1`, `g10adm-pdt.US1` and `platform.US1`
 - **Cases number per journey from 1** — an issued id is permanent; a retired case is `deprecated`, never renumbered away; a new case takes the next unused `TC<m>`
 - **The display id is stable** — `<scope>.TC-<sequence>` is the marker's case id, and `(US<n>-TC<m>)` is the suite-local journey and case reference. The heading carries the title after the closing parenthesis
 - **`rev` tracks behaviour, not prose** — `rev=1` is the first written version. It is bumped only when product behaviour changes what the case verifies, and the marker is the sole version source for both human and automated readers. Walk-route optimization, restyling, and purpose-preserving wording changes do not bump it

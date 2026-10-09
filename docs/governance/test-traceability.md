@@ -22,7 +22,7 @@ test("the gallery refuses a ninth media item", () => {});
 test("supporting gallery behavior", () => {});
 ```
 
-- **Reference** - `<app>.<product>-<capability>.<US|SC|TC>-<seq>`. Apps are `g10`, `zzz`, `g10adm`, and `zzzadm`. `US` identifies a journey, `SC` a scenario, and `TC` a test case. The CLI creates `SC` and `TC` markers.
+- **Reference** - Feature markers use `<app>.<product>-<capability>.<US|SC|TC>-<seq>`. Domain markers use `<app>.<domain>-dmn.<SC|TC>-<seq>`, product markers use `<app>-pdt.<SC|TC>-<seq>`, and platform markers use `platform.<SC|TC>-<seq>`. Apps are `g10`, `zzz`, `g10adm`, and `zzzadm`. `US` identifies a journey, `SC` a scenario, and `TC` a test case. The CLI creates `SC` and `TC` markers.
 - **Casing** - App, product, capability, and sequence are stored in lowercase. Product and capability are lowercase hyphenated slugs. The kind token is uppercase. CLI inputs are case-insensitive and are written in canonical casing. A stored marker with different casing fails validation as `noncanonical-id`.
 - **Capability slug** - The capability slug stays stable across its journeys, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.
 - **Sequence** - Exactly three Base36 characters (`000` to `zzz`), stored in lowercase. Initialization derives a non-numeric candidate from the scope, kind, and exact heading, then advances only to avoid an existing scenario or case marker in that app, product, and capability. The sequence is shared by `SC` and `TC` markers. The scan includes durable specs, active changes, and archived changes so an archived marker does not free its suffix.
@@ -64,10 +64,10 @@ the proposed markers without changing files.
 Derive the scope from the suite's path. A feature suite under
 `specs/<app>/<product>/<domain>/<capability>/` uses that app, product, and
 capability. A domain suite under `specs/<app>/<product>/domain-tcs.md` uses
-that app and product with the capability `domain`. A product suite under
-`specs/<app>/product-tcs.md` uses that app directory as the product slug and
-the capability `product`. Active change copies use the same scope as their
-durable suite.
+that app and product with the display level `dmn`. A product suite under
+`specs/<app>/product-tcs.md` uses the app display slug with the level `pdt`.
+The platform suite uses the display scope `platform`. Active change copies use
+the same scope as their durable suite.
 
 The case heading displays the stable marker id and the suite-local reference:
 `### <scope>.TC-<sequence> (US<n>-TC<m>): <title>`. The marker's `rev` is the
@@ -94,8 +94,8 @@ Run the CLI from this repository:
 ```sh
 pnpm run trace -- init scenario --file openspec/specs/<path>/spec.md --target '#### Scenario: Exact existing heading' --app g10 --product auction --capability listing-media --dry-run
 pnpm run trace -- init case --file openspec/specs/<path>/feature-tcs.md --target '### Exact existing case heading' --app g10 --product auction --capability listing-media --covers g10.auction-listing-media.SC-c93 --dry-run
-pnpm run trace -- init case --file openspec/specs/grade10-site/auction/domain-tcs.md --target '### Exact domain case heading' --app g10 --product auction --capability domain --covers g10.auction-domain.SC-c93 --dry-run
-pnpm run trace -- init case --file openspec/specs/grade10-admin/product-tcs.md --target '### Exact product case heading' --app g10adm --product grade10-admin --capability product --covers g10adm.grade10-admin-product.SC-c93 --dry-run
+pnpm run trace -- init case --file openspec/specs/grade10-site/auction/domain-tcs.md --target '### Exact domain case heading' --app g10 --product auction --capability domain --covers g10.auction-dmn.SC-c93 --dry-run
+pnpm run trace -- init case --file openspec/specs/grade10-admin/product-tcs.md --target '### Exact product case heading' --app g10adm --product grade10-admin --capability product --covers g10adm-pdt.SC-c93 --dry-run
 pnpm run trace -- link --file <app-test-file> --target '  test("exact test title", () => {});' --acceptance g10.auction-listing-media.TC-c94@2 --dry-run
 pnpm run trace -- link --file <app-test-file> --target '  test("supporting behavior", () => {});' --supports g10.auction-listing-media.SC-c93 --dry-run
 pnpm run trace -- validate --app-root <grade10-app-root>

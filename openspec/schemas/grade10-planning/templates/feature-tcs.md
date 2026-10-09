@@ -4,9 +4,11 @@
      them, across a product's domains is <product>/product-tcs.md, and across
      products is platform-tcs.md. Above feature level a case composes two or
      more journeys and its **Trace:** names each of them, the heading id is
-     <product>-<domain>-e2e-US<n> (product: <product>-e2e-US<n>; platform:
-     platform-e2e-US<n>), and product and platform carry no coverage
-     obligation - they are smoke passes.
+     <brand>.<domain>-dmn.US<n> (product: <brand>-pdt.US<n>; platform:
+     platform.US<n>), and product and platform carry no coverage
+     obligation - they are smoke passes. Case headings use
+     <brand>.<domain>-<capability>.TC-<xxx>, <brand>.<domain>-dmn.TC-<xxx>,
+     <brand>-pdt.TC-<xxx> or platform.TC-<xxx>, followed by (US<n>-TC<m>).
 
      An INDEPENDENT reading of the user-journeys.md and feature set beside this
      file, written without sight of the spec's ## Requirements — never derived
