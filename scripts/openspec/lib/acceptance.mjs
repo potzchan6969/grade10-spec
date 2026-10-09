@@ -774,7 +774,11 @@ function mergeCases(existing, incoming, capability) {
         : prior?.marker;
     cases.set(number, { ...one, marker: one.marker ?? inherited ?? null });
   }
-  return [...cases.values()];
+  return [...cases.values()].sort((a, b) => {
+    const deprecated = (one) =>
+      /\*\*Status:\*\*\s*deprecated\b/i.test(one.section.raw);
+    return Number(deprecated(a)) - Number(deprecated(b));
+  });
 }
 
 function caseNumber(section) {
