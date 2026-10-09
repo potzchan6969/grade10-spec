@@ -61,14 +61,15 @@ In Your Orders.
 Grade10 Your Orders link, and the staging walk proves the matching purchase
 appears after return.
 
-🚧 **No separate checkout page** - the live review, the price check and the
-verification gate all run in the cart drawer; there is no `/checkout` page
-to navigate to.
+- **Where it starts** - the live review, the price check and the
+  verification gate all run in the cart drawer; there is no `/checkout` page -
+  [Cart Drawer](/p/grade10-site/store/cart)
 
 - **Members only** — checkout is signed in; there is no guest checkout
+- **Pay** - the drawer's Proceed to Checkout button
 - **The bar** — goods worth **HKD 120,000** or more: pressing Proceed to
   Checkout shows the verify message, with an account link where the profile
-  page is on; no checkout session is created. A verified member, or a basket under the
+  page is enabled; no checkout session is created. A verified member, or a basket under the
   bar, proceeds. They verify on [their account](/p/grade10-site/account/kyc)
 - **The cart** - Kept while the collector is at Shopify
 - **Shipping rate** - Shopify asks the store's carrier rule; a served destination gets the same rate the store preview shows, and any other gets none
@@ -94,7 +95,7 @@ to navigate to.
 | Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
 | Invoice retirement | Decided | Only the member's own line or tender edit retires an open invoice. The shop's stock or price review leaves it for the next Pay to replace. Decided 2026-10-08. | Product |
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |
-| Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
+| Verification gate | Decided | When the gross-goods gate answers Proceed to Checkout, the drawer shows the threshold message, with the account action where the profile page is enabled. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
 :::
 

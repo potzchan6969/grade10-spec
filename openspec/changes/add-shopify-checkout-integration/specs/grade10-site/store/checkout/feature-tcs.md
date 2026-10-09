@@ -3706,10 +3706,10 @@ Runs once per row of **Test data**.
   - **Pay naming (F5)** - E2e steps and results name the control Proceed to Checkout, and say "checkout request" for what it sends; api cases US1-TC33-1 and US1-TC34-1 send the checkout request. US1-TC12-2 now reads "No verification feedback appears". Revisions are unchanged: wording only
   - **SC-63 rev 2** - No case asserted the removed purchase key, cart id and version line, so no case changes
   - **Durable-only scenarios (F2)** - SC-09, SC-10, SC-11, SC-19, SC-20 and SC-21 serve US-01, and `check:manual` joins a case to every scenario serving the journey it traces, skipping deprecated cases. After the fold, the active US-01 cases reach them, so they are not left untraced. Listing them `**Out of suite:**` would be refused because a living case traces them. No active case asserts their THEN; `add-checkout-purchase-safety` owes their cases in its Owed Cases section
-  - **Feature set (F1)** - The roots are unchanged. The restored leaves are Hosted invoice, Purchase intent, Recovery and Changed intent. They are served by the unchanged durable "A checkout intent is safe to repeat" and by SC-08. SC-08 stays Out of suite with task 11.10; the other scenarios are owed as above. No case traces a feature set group
+  - **Feature set (F1, N4)** - The roots are unchanged. The fold merges the Feature set by label, so the durable leaves for provider binding, intent, recovery and changed intent stay without being restated in the delta. SC-08 stays Out of suite with task 11.10; the durable-only scenarios are owed as above. No case traces a feature set group
   - **Records (F9)** - Tasks 11.6 and 11.7 now name SC-64 and SC-65, and the Task Dispositions table says so
   - **SC-07** - A check of the folded store shows the same anchor join reaches SC-07 through the active US-02 cases, so it leaves the `**Out of suite:**` header. Its verifier stays tasks 11.6 and 11.7. SC-08 serves a feature set group, which no case traces, and stays Out of suite with task 11.10
-  - **SC-16 (open)** - SC-16 serves the "Order settlement and return" group. US3-TC14-1 traces US-03, so after the fold `check:manual` still reports SC-16 untraced, as it does for the durable suite today. Pointing SC-16's `**Serves:**` at US-03 is the delta owner's repair. Until then, the warning remains
+  - **SC-16** - SC-16 rev 2 serves US-03 (bea3f808), so US3-TC14-1 reaches it after the fold
 
 ### Case Dispositions - 2026-10-09
 

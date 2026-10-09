@@ -80,8 +80,8 @@ The refusals are the coupon's own —
   lines, the code and the points straight to Shopify; there is no separate
   checkout page to reopen or re-read them
 - 🚧 **The bar** — goods of **HKD 120,000** or more: an unverified member
-  who presses Proceed to Checkout sees the verify message and the account
-  link; no checkout session is created. Under the bar, or already verified,
+  who presses Proceed to Checkout sees the verify message, with the account
+  link where the profile page is enabled; no checkout session is created. Under the bar, or already verified,
   Proceed to Checkout runs —
   [Checkout](/p/grade10-site/store/checkout#integration-readiness)
 - 🚧 **Sent** — the order is promised with the same code and points the
@@ -146,7 +146,7 @@ and tax before the invoice. A second code on one cart.
 | Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
 | Struck price on a line | ❓ Open | A line both repriced and on sale strikes through one price: the list price, with the reprice given a signal of its own, or the price seen before, with the sale shown only by the lower price. Recommended: settle it with the change that prices the shop's sale in this drawer. | Product |
 | Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
-| Verification before a session | Decided | Goods of HKD 120,000 or more replace Proceed to Checkout with the verify message and the account link. No checkout session is created until the member is verified. The identity check still runs only on the account page. Asking Shopify first and showing the gate from its reply is not this drawer. | Product |
+| Verification before a session | Decided | Goods of HKD 120,000 or more answer Proceed to Checkout with the verify message, and the account link where the profile page is enabled. No checkout session is created until the member is verified. The identity check still runs only on the account page. Asking Shopify first and showing the gate from its reply is not this drawer. | Product |
 | Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
 | The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
 :::

@@ -80,6 +80,7 @@ The spec governs what Pay sends, one Pay at a time, older and lost answers, and 
 [`add-checkout-purchase-safety`](../add-checkout-purchase-safety/proposal.md) owns these. The durable requirement "A checkout intent is safe to repeat" stays published and unmodified (Q24).
 
 - **Purchase identity** - One purchase across Pay, reload and lost answers; terminal replay
+- **Review before reuse** - A live review before the backend returns a standing invoice; today `reusedCheckout` returns it first
 - **Concurrent Pay** - Tabs converging on one order and invoice
 - **Dispatch** - Persisted dispatch claim, response-loss recovery and the manual-recovery block
 - **Retirement** - Durable retirement after member edits; canceled shown only from provider facts

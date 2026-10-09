@@ -17,7 +17,7 @@
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | When is the basket read? | Preserve the durable contract: review on open and make a current decision at Pay, including reuse | Earlier drawer quote replacing Pay's decision |
+| Q1 | When is the basket read? | Preserve the durable contract: review on open and make a current decision at Pay, including reuse. The review before a reused invoice is delivered by `add-checkout-purchase-safety` (Q24) | Earlier drawer quote replacing Pay's decision |
 | Q2 | Which Shopify flow is used? | Shopify Draft Order hosted invoice; the same purchase reuses its saved invoice | Embedded payment or fresh creation on repeat |
 | Q3 | Who uses public checkout? | Fresh signed-in member session; operator/typed-email adapters retain established gates | Public guest checkout |
 | Q4 | Where are shipping and tax calculated? | Shopify owns final shipping, tax and payment; drawer shows an estimate | Drawer shown as final charge |
