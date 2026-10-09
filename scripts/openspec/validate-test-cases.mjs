@@ -198,7 +198,7 @@ function checkManualRows(root, text, cases, err) {
   }
 }
 
-function checkSuite(root, filePath, rulesRev) {
+function checkSuite(root, filePath, rulesRev, allCases) {
   const rel = relative(root, filePath);
   const text = readFileSync(filePath, "utf8");
   const dir = dirname(filePath);
@@ -231,10 +231,10 @@ function checkSuite(root, filePath, rulesRev) {
   const warn = (line, msg) => record("warning", rel, line, msg);
 
   // Walk references are intentionally checked separately from case parsing.
-  // A walk may cite a legacy case definition during migration, but its route
-  // reference must still resolve to the adjacent stable trace marker and to
-  // the case's own US/TC reference. The case definition remains the authority
-  // for the observation; this check only prevents a dangling or mis-scoped ref.
+  // A compact ref resolves in this suite. A composed walk may use a full
+  // stable id to reference a lower-level case in another suite. The case
+  // definition remains the authority for the observation; prose pairing checks
+  // carry no id and are not interpreted here.
   if (parseWalks(text).length > 0) {
     const walkCases = new Map();
     const lines = text.split("\n");
@@ -265,13 +265,28 @@ function checkSuite(root, filePath, rulesRev) {
     }
     for (const walk of parseWalks(text)) {
       for (const ref of walk.refs) {
-        const found = walkCases.get(ref.id);
+        const found = ref.caseId
+          ? allCases.get(ref.caseId) ?? allCases.get(ref.caseId.toLowerCase())
+          : walkCases.get(ref.id);
         if (!found) {
           err(
             ref.line,
-            `walk \`${walk.title}\` references \`${ref.id}\`, but no case definition with that stable id exists in this suite`,
+            `walk \`${walk.title}\` references \`${ref.caseId ?? ref.id}\`, but no case definition with that stable id exists in the ${ref.caseId ? "store" : "suite"}`,
           );
           continue;
+        }
+        if (ref.caseId && level === "feature")
+          err(
+            ref.line,
+            `feature walk \`${walk.title}\` cannot reference lower-level case \`${ref.caseId}\`; keep the route within this capability`,
+          );
+        if (ref.caseId && found.level !== level) {
+          const rank = { feature: 0, domain: 1, product: 2, platform: 3 };
+          if (rank[found.level] >= rank[level])
+            err(
+              ref.line,
+              `walk \`${walk.title}\` references \`${ref.caseId}\` from ${found.level} level, but a ${level} walk may reference only a lower-level case`,
+            );
         }
         if (found.journeyNum !== ref.journeyNum || found.tcNum !== ref.tcNum)
           err(
@@ -800,6 +815,7 @@ const longestPrefix = (id, list) =>
     .sort((a, b) => b.length - a.length)[0] ?? null;
 const productOf = (traceId) => longestPrefix(traceId, PRODUCTS);
 const domainOf = (traceId) => longestPrefix(traceId, DOMAINS);
+const allSuites = findSuites(ROOT);
 const suites = findSuites(ROOT, args.scope);
 const specs = dirsHolding(ROOT, "spec.md").filter(inScope);
 
@@ -851,6 +867,9 @@ if (suites.length === 0) {
 }
 
 const index = caseIndex(ROOT, suites);
+const allCaseIndex = new Map(
+  [...caseIndex(ROOT, allSuites)].map(([id, value]) => [id.toLowerCase(), value]),
+);
 
 if (args.captureBaseline) {
   const out = {};
@@ -902,7 +921,7 @@ if (args.swept) {
   process.exit(1);
 }
 
-const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
+const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev, allCaseIndex));
 
 // --- every journey is walked by a product user or outside agent ---------
 // The classes are the store's two product users. An outside agent such as a

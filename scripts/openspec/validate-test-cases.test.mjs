@@ -299,6 +299,132 @@ test("a walk cannot reference a missing stable case id", () => {
   assert.match(out, /walk `Walk 1: Complete the thing` references `tc-zzz`/);
 });
 
+test("a platform walk resolves a full lower-level feature case id", () => {
+  const root = mkdtempSync(join(tmpdir(), "cross-suite-walk-"));
+  for (const [name, content] of Object.entries(
+    specFiles("openspec/specs/demo/alpha/item"),
+  )) {
+    const file = join(root, name);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content);
+  }
+
+  const feature = [
+    "# demo/alpha Test Cases",
+    "",
+    "**Status:** pending-review · 0/1",
+    "**Drafts styled:** 2026-09-24, tcs-rules r5",
+    "",
+    "## demo-alpha-US1: Collector does the thing",
+    "",
+    "**As a** collector,",
+    "**I want** the thing,",
+    "**so that** it is done.",
+    "",
+    "### demo.alpha.TC-a1b (US1-TC1): The thing happens",
+    "",
+    "**Classification:**",
+    "",
+    "* **Severity:** major",
+    "* **Priority:** high",
+    "* **Status:** draft",
+    "* **Behaviour:** positive",
+    "* **Type:** functional",
+    "* **Suites:** regression",
+    "* **Layer:** e2e",
+    "* **Automation status:** manual",
+    "* **Testability:** manual",
+    "* **Trace:** demo-alpha-US-01",
+    "",
+    "**Pre-conditions:**",
+    "None.",
+    "",
+    "**Steps:**",
+    "",
+    "1. Do the thing.",
+    "",
+    "**Expected Results:**",
+    "",
+    "* The thing happened.",
+    "",
+    "## Reconciliation",
+    "",
+    "**Run:** 2026-09-24; cross-suite walk fixture.",
+    "",
+  ].join("\n");
+  const featureFile = join(
+    root,
+    "openspec/specs/demo/alpha/item/feature-tcs.md",
+  );
+  mkdirSync(dirname(featureFile), { recursive: true });
+  writeFileSync(featureFile, feature);
+
+  const platform = [
+    "# platform Test Cases",
+    "",
+    "**Status:** pending-review · 0/1",
+    "**Drafts styled:** 2026-09-24, tcs-rules r5",
+    "",
+    "## Walk 1: Admin publishes, site displays",
+    "",
+    "### Route",
+    "",
+    "1. Admin creates `listing_a`.",
+    "   - Pairing check: record the listing id.",
+    "   - `demo.alpha.TC-a1b (US1-TC1)`",
+    "",
+    "## platform-US1: The platform route holds",
+    "",
+    "**As an** admin,",
+    "**I want** the platform route,",
+    "**so that** the products agree.",
+    "",
+    "### platform.TC-c3d (US1-TC1): The products agree",
+    "",
+    "**Classification:**",
+    "",
+    "* **Severity:** major",
+    "* **Priority:** high",
+    "* **Status:** draft",
+    "* **Behaviour:** positive",
+    "* **Type:** integration",
+    "* **Suites:** smoke",
+    "* **Layer:** e2e",
+    "* **Automation status:** manual",
+    "* **Testability:** manual",
+    "* **Trace:** demo-alpha-US-01, another-market-US-01",
+    "",
+    "**Pre-conditions:**",
+    "None.",
+    "",
+    "**Steps:**",
+    "",
+    "1. Complete the platform route.",
+    "",
+    "**Expected Results:**",
+    "",
+    "* The products agree.",
+    "",
+    "## Reconciliation",
+    "",
+    "**Run:** 2026-09-24; cross-suite walk fixture.",
+    "",
+  ].join("\n");
+  const platformFile = join(root, "openspec/specs/platform-tcs.md");
+  writeFileSync(platformFile, platform);
+
+  for (const [name, content] of Object.entries(
+    specFiles("openspec/specs/another/market/item"),
+  )) {
+    const file = join(root, name);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content.replaceAll("demo-alpha", "another-market"));
+  }
+
+  const result = run(root);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
 // A sweep regenerates drafts freely, and may never move a reviewed case: every
 // `actual` or `deprecated` case the baseline recorded keeps its id, its trace
 // and its status (docs/governance/specs-to-test-cases.md, Rules Revisions).

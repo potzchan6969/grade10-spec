@@ -545,12 +545,14 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
 }
 
 const WALK_CASE_REFERENCE =
-  /(?:^|[`\s])(TC-([0-9a-z]{3}))\s*\(\s*US-?(\d+)\s*-\s*TC-?(\d+)\s*\)/gi;
+  /(?:^|[`\s])((?:[a-z0-9][\w.-]*\.)?TC-([0-9a-z]{3}))\s*\(\s*US-?(\d+)\s*-\s*TC-?(\d+)\s*\)/gi;
 
 /** Read only the executable references in `## Walk` sections. Walk prose is
  * deliberately not interpreted here: the validator can prove that a route
- * points at an existing case and local case reference, while the case remains
- * the authority for the observation itself. */
+ * points at an existing case and local case reference, including a full stable
+ * id when a composed walk crosses suite files, while the case remains the
+ * authority for the observation itself. Pairing checks without a case id stay
+ * prose and do not create observations. */
 export function parseWalks(text) {
   const lines = text.split("\n");
   const walks = [];
@@ -570,12 +572,16 @@ export function parseWalks(text) {
     if (!current) continue;
     WALK_CASE_REFERENCE.lastIndex = 0;
     for (const match of line.matchAll(WALK_CASE_REFERENCE)) {
-      current.refs.push({
-        id: match[1].toLowerCase(),
+      const fullId = match[1];
+      const id = `TC-${match[2]}`.toLowerCase();
+      const ref = {
+        id,
         journeyNum: Number(match[3]),
         tcNum: Number(match[4]),
         line: i + 1,
-      });
+      };
+      if (fullId.includes(".")) ref.caseId = fullId.toLowerCase();
+      current.refs.push(ref);
     }
   }
   return walks;
@@ -1095,7 +1101,7 @@ export function caseIndex(root, paths) {
     for (const line of readFileSync(p, "utf8").split("\n")) {
       lineNo += 1;
       const h = line.match(
-        /^(?:###|####)\s+((?:\S+\.TC-[0-9a-z]+)|(?:\S+-TC\d+(?:-\d+)?))(?:\s+\(US-?\d+-TC-?\d+\))?:/,
+        /^(?:###|####)\s+((?:\S+\.TC-[0-9a-z]+)|(?:\S+-TC\d+(?:-\d+)?))(?:\s+\(US-?(\d+)-TC-?(\d+)\))?:/,
       );
       if (h) {
         id = h[1];
@@ -1104,6 +1110,8 @@ export function caseIndex(root, paths) {
             level,
             rel,
             line: lineNo,
+            journeyNum: h[2] ? Number(h[2]) : null,
+            tcNum: h[3] ? Number(h[3]) : null,
             traces: [],
             status: null,
           });

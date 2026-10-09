@@ -264,6 +264,39 @@ test("walk parsing keeps stable case refs and their local US/TC references", () 
   ]);
 });
 
+test("a composed walk parses a full lower-level case id and ignores pairing checks", () => {
+  const [walk] = parseWalks(
+    [
+      "## Walk 1: Admin publishes, site displays",
+      "",
+      "### Route",
+      "",
+      "1. Admin creates `listing_a`.",
+      "   - Pairing check: record the listing id.",
+      "   - `g10adm.auction-listing.TC-2hq (US1-TC1)`",
+      "2. Site opens the same listing id.",
+      "   - Pairing check: the site id matches the admin id.",
+      "   - `g10.auction-listing-page.TC-8kx (US1-TC1)`",
+    ].join("\n"),
+  );
+  assert.deepEqual(walk.refs, [
+    {
+      id: "tc-2hq",
+      caseId: "g10adm.auction-listing.tc-2hq",
+      journeyNum: 1,
+      tcNum: 1,
+      line: 7,
+    },
+    {
+      id: "tc-8kx",
+      caseId: "g10.auction-listing-page.tc-8kx",
+      journeyNum: 1,
+      tcNum: 1,
+      line: 10,
+    },
+  ]);
+});
+
 test("a case carries the text of its steps, not only their count", () => {
   const [tc] = journey.cases;
   assert.equal(tc.steps, 2);
