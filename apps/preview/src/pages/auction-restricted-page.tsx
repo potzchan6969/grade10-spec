@@ -17,12 +17,14 @@ type AuctionRestrictedPageProps = {
  * No nav item is current.
  */
 function AuctionRestrictedPage({ onBrowseStore }: AuctionRestrictedPageProps) {
-  const { onMyAuctions: _onMyAuctions, ...header } = AUCTION_SITE_HEADER;
   return (
     <div className="flex min-h-svh w-full flex-col bg-background">
       <SiteHeader
-        {...header}
-        navItems={header.navItems.filter((item) => item.label !== "Auction")}
+        {...AUCTION_SITE_HEADER}
+        onMyAuctions={undefined}
+        navItems={AUCTION_SITE_HEADER.navItems.filter(
+          (item) => item.label !== "Auction",
+        )}
       />
       <main className="flex w-full flex-1 items-center justify-center">
         <VStack

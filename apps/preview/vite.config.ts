@@ -18,18 +18,31 @@ const dirname =
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
-    alias: {
-      "@": path.join(dirname, "src"),
-    },
+    alias: [
+      {
+        find: "react-email",
+        replacement: path.join(dirname, "../emails/node_modules/react-email"),
+      },
+      {
+        find: "@/emails",
+        replacement: path.join(dirname, "../emails/emails"),
+      },
+      {
+        find: "@/components/email",
+        replacement: path.join(dirname, "../emails/components/email"),
+      },
+      { find: "@", replacement: path.join(dirname, "src") },
+    ],
   },
   test: {
     projects: [
       {
+        extends: true,
         test: {
           name: "unit",
           sequence: { groupOrder: 0 },
           environment: "node",
-          include: ["src/**/*.test.ts"],
+          include: ["src/**/*.test.ts", "src/**/*.test.mjs"],
         },
       },
       {

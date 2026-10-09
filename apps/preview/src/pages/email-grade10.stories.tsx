@@ -141,6 +141,28 @@ export const PaymentOverdue: Story = {
       .value;
     expect(message).toContain(`Invoice: ${WINNER_ORDER_INVOICE_ID}`);
     expect(modal.getByRole("button", { name: "Copy Message" })).toBeVisible();
+    expect(modal.getByRole("button", { name: "Copy address" })).toBeVisible();
+    expect(modal.getByRole("button", { name: "Copy subject" })).toBeVisible();
+
+    const originalExecCommand = document.execCommand;
+    document.execCommand = () => true;
+    try {
+      await modal.getByRole("button", { name: "Copy Message" }).click();
+      expect(modal.getByRole("button", { name: "Copied" })).toBeVisible();
+      expect(page.queryByRole("status")).toBeNull();
+      expect(modal.getByRole("button", { name: "Copy address" })).toBeVisible();
+      expect(modal.getByRole("button", { name: "Copy subject" })).toBeVisible();
+      await waitFor(
+        () =>
+          expect(
+            modal.getByRole("button", { name: "Copy Message" }),
+          ).toBeVisible(),
+        { timeout: 2200 },
+      );
+    } finally {
+      document.execCommand = originalExecCommand;
+    }
+
     expect(
       modal.getByRole("button", { name: "Open Mail App" }),
     ).toHaveAttribute(

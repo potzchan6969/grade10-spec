@@ -1,6 +1,6 @@
 # Product specification and design-system repository
 
-This repository is the versioned source of truth for product requirements and the design system beneath Grade10 applications. It is intentionally not an application: do not add product data fetching, authentication, routing, stores, or feature orchestration here.
+This repository is the versioned source of truth for product requirements and the design system beneath Grade10 applications. It is not an application: do not add data fetching, authentication, routing, stores, or feature orchestration.
 
 ## Operating principles
 
