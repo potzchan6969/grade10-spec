@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T03:28:05.608Z",
+  "generatedAt": "2026-10-09T04:08:43.996Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -24,6 +24,7 @@
     "Collection Card": "warn",
     "Combobox": "warn",
     "Container": "warn",
+    "Detail row": "warn",
     "Dialog": "ok",
     "Dialog Header": "skipped",
     "Dropdown Menu": "ok",
@@ -863,7 +864,18 @@
     "7021-1379": "---",
     "7021-1380": "/ VAULT",
     "7025-2": "Page",
+    "7025-2927": "Detail Row",
     "7029-2": "Vault Item Detail",
+    "7035-268": "Detail row",
+    "7038-29": "Link",
+    "7038-32": "Link",
+    "7038-35": "Link",
+    "7038-38": "Link",
+    "7038-41": "Link",
+    "7038-44": "Link",
+    "7038-47": "Link",
+    "7038-50": "Link",
+    "7038-53": "Link",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -922,6 +934,9 @@
     ],
     "Container": [
       "Container: no code component (looked for src/components/**/container.tsx or container.tsx)"
+    ],
+    "Detail row": [
+      "Detail row: no code component (looked for src/components/**/detailrow.tsx or detailrow.tsx)"
     ],
     "Dropdown Menu Group Label": [
       "Dropdown Menu Group Label: no code component (looked for src/components/**/dropdownmenugrouplabel.tsx or dropdownmenugrouplabel.tsx)"
