@@ -118,7 +118,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Stated zones
 
-**Decided by:** `packages/ui/src/lib/format-datetime.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
@@ -162,7 +162,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Stated zones
 
-**Decided by:** `packages/ui/src/lib/format-datetime.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
@@ -252,7 +252,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Stated zones
 
-**Decided by:** `packages/ui/src/lib/format-datetime.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
@@ -465,7 +465,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Refusals
 
-**Decided by:** `packages/ui/src/lib/format-datetime.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`, `packages/date/src/shapes.test.ts`
 
 **Pre-conditions:**
 

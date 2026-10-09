@@ -1,4 +1,4 @@
-import { formatLocalDay } from "@grade10/ui";
+import { formatDay } from "@grade10/date";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
@@ -6,7 +6,11 @@ import {
   winnerOrderSettled,
 } from "./winner-order.story-shared";
 import { winnerOrderContactMail } from "./winner-order-contact-mail";
-import { CANCELLED_AT_MS, type WinnerOrderPage } from "./winner-order-page";
+import {
+  CANCELLED_AT_MS,
+  CANCELLED_ZONE,
+  type WinnerOrderPage,
+} from "./winner-order-page";
 
 const meta = {
   ...winnerOrderMeta(),
@@ -50,9 +54,9 @@ export const Cancelled: Story = {
       canvas.getByText("1999 Pokémon Base Set Charizard PSA 9"),
     ).toBeVisible();
     expect(canvasElement.textContent).toContain("12,800");
-    const cancelledOn = formatLocalDay(CANCELLED_AT_MS, {
+    const cancelledOn = formatDay(CANCELLED_AT_MS, {
       locale: "en",
-      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timeZone: CANCELLED_ZONE,
     });
     const alert = canvas.getByText(`Cancelled on ${cancelledOn}`);
     expect(alert).toBeVisible();

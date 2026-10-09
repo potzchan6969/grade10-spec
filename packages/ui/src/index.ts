@@ -610,32 +610,6 @@ export {
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
 export {
-  ACTIVITY_RELATIVE_MAX_MS,
-  type ActivityTimeCopy,
-  formatActivityAt,
-  formatCalendarDayLabel,
-  formatCollectorDeadline,
-  formatDay,
-  formatDeadline,
-  formatEvent,
-  formatListingClosed,
-  formatListingEnds,
-  formatListingOpens,
-  formatLocalDay,
-  formatLocalMoment,
-  formatLocalTime,
-  formatMoment,
-  formatRelativeAt,
-  formatViewerZoneName,
-  formatZonedLocalMoment,
-  formatZonedLocalTime,
-  isPastActivityCap,
-  JUST_NOW_MAX_MS,
-  resolveActivityNow,
-  resolveShippedLocale,
-  type ShippedLocale,
-} from "./lib/format-datetime";
-export {
   currencyExponent,
   DEFAULT_LISTING_CURRENCY,
   formatMoney,
