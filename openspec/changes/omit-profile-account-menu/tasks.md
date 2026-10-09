@@ -70,7 +70,7 @@ Menu Requirement Is Replaced.
       (`grade10-site-site-page-shell-SC-08`)
 - [ ] 2.6 Verify: `pnpm --dir apps/frontend/grade10 run typecheck && pnpm --dir apps/frontend/grade10 run test`
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @mason5991)
 
 Uses draft `feature-tcs.md` as its input once groups 1 and 2 have landed.
 `grade10-site-auction-auction-orders-US-01` moves no behaviour
