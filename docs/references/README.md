@@ -59,3 +59,8 @@ is the legal wording the vault and grading print, drafted for counsel: the
 forfeiture notice, the notices clause, the licence line, the complaints
 footer, the collection statement, grading's clause 6 and the uncollected-cards
 notice, with where each value lives while it is unset.
+
+[`store-order-status-brief.md`](store-order-status-brief.md) is the brief
+behind Order Status: one row per note and each combination a decision settles
+by name, the badge and note the store gives it, and where the store records
+it, for `add-store-order-status`'s task 1.1 to check.
