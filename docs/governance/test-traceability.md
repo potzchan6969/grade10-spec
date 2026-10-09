@@ -78,9 +78,11 @@ restyle or wording-only edit that preserves the purpose keeps `rev`. A changed
 change an ID to represent a new revision.
 
 New cases receive a marker when they are written. A modified case keeps its ID
-and updates its revision and coverage as needed. Migration adds markers to
-existing cases without rewriting their content or headings, except where an
-unresolved or conflicting `rev` must first be settled by the suite owner. Use
+and updates its revision and coverage as needed. Review migration adds missing
+markers and rewrites legacy case headings to the stable display form without
+rewriting their purpose, title, steps, results or `rev`, except where
+unresolved or conflicting coverage must first be settled by the suite owner.
+Use
 the repository CLI to allocate every new scenario ID needed by `covers`; keep
 existing scenario IDs unchanged. Migration is complete only when the inventory
 shows no unmarked case in active changes or durable suites.
