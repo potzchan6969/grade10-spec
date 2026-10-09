@@ -1,0 +1,20 @@
+{
+  "name": "@grade10/ui-verification",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./model": {
+      "types": "./src/model.d.mts",
+      "import": "./src/model.mjs"
+    },
+    "./archive": "./src/archive.mjs",
+    "./archive-api": "./src/archive-api.mjs",
+    "./calibration": "./src/calibration.mjs",
+    "./scoring": "./src/scoring.mjs",
+    "./worker": "./worker/index.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}
