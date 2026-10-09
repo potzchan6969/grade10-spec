@@ -1,6 +1,17 @@
 /** A point in time: a `Date`, or its epoch milliseconds. */
 export type Instant = Date | number;
 
+/**
+ * Back to a plain `Date`. Working in a zone yields a `TZDate`, which carries
+ * its offset into `toISOString` - so a boundary that reached a wire would
+ * serialize as `...+00:00` where every other instant the platform sends is
+ * `...Z`. What a boundary returns is an instant; the zone was how it was
+ * computed.
+ */
+export function plainDate(at: Date): Date {
+  return new Date(at.valueOf());
+}
+
 /** The instant as a `Date`, or a `RangeError` for one that is not a time. */
 export function toInstant(at: Instant): Date {
   const instant = new Date(at);
