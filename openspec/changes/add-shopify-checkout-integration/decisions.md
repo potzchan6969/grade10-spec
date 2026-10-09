@@ -2,15 +2,16 @@
 
 ## Goals
 
-- **Integration** - Consume all cart-header backend behavior through existing frontend boundaries.
-- **Complete contract** - Retain published checkout requirements for review, hosted handoff, safe repetition/recovery, settlement/return and carrier rates.
-- **Cart protection** - Reflect authoritative conversion and preserve later edited or rebuilt carts with their tender.
+- **Integration** - Use the current checkout request, cart, tender, quote and order reads through existing frontend boundaries.
+- **One Pay at a time** - Accept one Pay per drawer and ignore answers for an older cart, tender or member.
+- **Cart protection** - Read the cart and tender again after payment; the backend's merged member-edit guard decides what clears.
 
 ## Non-Goals
 
 - **Operations** - No migration execution, deployment, provider setup, production write or real payment in this planning run.
 - **Product additions** - No guest storefront checkout, new badge, standalone checkout page, embedded payment or new Shopify return destination.
 - **Local workarounds** - No browser-owned invoice authority, local cart deletion, new dependency or duplicate data client.
+- **Backend** - No backend, contract, schema or migration change. Purchase reuse, terminal replay, concurrency, dispatch recovery and durable retirement belong to [`add-checkout-purchase-safety`](../add-checkout-purchase-safety/proposal.md).
 
 ## Decisions
 
@@ -39,6 +40,12 @@
 | Q21 | Does this add Awaiting payment? | Follow existing spec status labels; add no new shared badge in this amendment | Speculative status-set migration |
 | Q22 | How are the 2026-10-08 review findings addressed? | One canonical persisted purchase and dispatch claim; live validation before invoice reuse; no canceled invoice handoff; distinguish member edits from shop review; v2 explicitly accepts zero points | Returning a superseded URL, validation bypass, general-version cleanup or rejecting ordinary no-points checkout |
 | Q23 | Does the shop's review of the cart retire an open invoice? | No. Only a member line or tender edit records retirement; a shop stock or price review leaves the invoice for the next Pay, which supersedes it. Decided 2026-10-08 | Retiring on every general-version change |
+| Q24 | What does this change deliver? | Frontend integration with the current backend only. The published requirement "A checkout intent is safe to repeat" stays in the durable spec, unmodified by this change. Its backend guarantees move to `add-checkout-purchase-safety`. Decided 2026-10-09 by @kinisworking; supersedes Q17, Q20 and the backend parts of Q6, Q11, Q13-Q16 and Q22 | Backend Groups 8-10 and 12 inside this change, or rewriting the durable requirement to today's behavior |
+| Q25 | Which payment request does the drawer send? | The existing `checkout.createCheckout`: reviewed lines with their seen unit price, the accepted coupon fields, positive points, or no points field when none are spent. No purchase key, cart id or version, context read or protocol envelope. Decided 2026-10-09 | The v2 request and its zero-inclusive points field |
+| Q26 | What do the added journeys promise? | US-05: one Pay at a time from the drawer, with no stale handoff. US-06: a later cart survives payment of an earlier one. Neither promises invoice reuse or retirement. Issued case ids stay | Removing US-05 and orphaning its issued cases |
+| Q27 | What happens when the Pay answer is lost or cannot be read? | The drawer ends the pending Pay, shows the existing failure feedback and does not retry by itself. It claims neither that no invoice exists nor that one was canceled. A later Pay is a deliberate new request | Automatic retry, or treating a transport error as proof nothing was created |
+| Q28 | What does the drawer do with an answer for an older cart, tender or member? | Nothing: it does not open Shopify, navigate or overwrite current state. The drawer keeps the current cart | Opening the older invoice |
+| Q29 | What does a repeated Pay on another tab or after reload do? | It is a new request; the backend's current behavior decides. Converging tabs on one purchase is `add-checkout-purchase-safety` | A browser-held purchase identity |
 
 ## Raised
 
@@ -47,10 +54,13 @@
 | `grade10-site/store/checkout` | Retain every durable safety requirement despite branch gaps? | Q20 |
 | `grade10-site/store/checkout` | Introduce a new unpaid badge? | Q21 |
 | `grade10-site/store/checkout` | Does the shop's review of the cart retire an open invoice? | Q23 |
+| `grade10-site/store/checkout` | Does this change keep the backend guarantees? | Q24 |
+| `grade10-site/store/checkout` | Which payment request does the drawer send after the v2 transport was removed? | Q25 |
 
 ## Product Authority
 
 - **Instruction** - On 2026-10-07, @kinisworking said: "the frontend should be integrated all changes from the backend and the requirements from the specs".
 - **Supersession** - Earlier frontend-only decisions remain in acceptance history; they do not constrain this amendment.
 - **Follow-up** - On 2026-10-08, the owner authorized updating this amendment to follow the merged backend and address the readiness findings. Q8 and Q22 clarify existing journeys and feature roots; their frozen anchors are unchanged.
+- **Frontend scope** - On 2026-10-09, @kinisworking chose to keep this change to the frontend and move the backend guarantees to a separate change. Q24 supersedes the 2026-10-07 instruction for this change only; the durable requirements are not weakened.
 - **Acceptance** - Scope clarification settles planning inputs; the complete plan receives human acceptance after QA2 and fresh acceptance review.

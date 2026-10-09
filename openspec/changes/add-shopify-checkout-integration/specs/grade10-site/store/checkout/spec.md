@@ -3,25 +3,24 @@
 ## Feature set
 
 - Current basket and tender
-  - Live review: review on open and make a current decision at Pay, including reuse
-  - Accepted tender: persist coupon and points before handoff
+  - Live review: review on open; the checkout request makes the Pay decision
+  - Accepted tender: wait for coupon and points writes before Pay
   - Estimate: leave shipping, tax and final payment to Shopify
 - Hosted Shopify handoff
   - Member identity: require a fresh signed-in storefront session
-  - Hosted invoice: bind order and provider facts before leaving
-  - Safe response: preserve refusal/verification feedback and guard stale navigation
+  - Current request: send reviewed lines, seen prices and accepted tender
+  - Safe response: keep refusal and verification feedback; open only the current answer
 - Safe repetition and recovery
-  - Purchase identity: preserve one purchase across Pay, reload and terminal replay
-  - Invoice reuse: resume the same purchase without duplicate creation
-  - Recovery: retain one purchase through concurrency, response loss and worker failure
-  - Changed intent: persist basket/tender edits and retire older invoices
+  - One Pay at a time: one pending Pay per drawer
+  - Stale answers: an answer for an older cart, tender or member opens nothing
+  - Lost answers: existing failure feedback, no automatic retry
 - Order settlement and return
   - Order state: poll pending purchases and read authoritative settlement
-  - Cart conversion: clear only the unchanged cart bought; preserve later cart/tender
+  - Cart refresh: read the cart and tender again once an order is paid
   - Return: use the static Shopify confirmation link to Your Orders
 - Carrier rates
   - Stateless callback: preserve token gating and served destinations
-  - Preview parity: verify the same rate/currency without cart or order writes
+  - Preview parity: the same rate and currency without cart or order writes
 
 ## MODIFIED Requirements
 

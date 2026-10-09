@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-10-09
+awaiting:
+  decisions: backend scope, ordering and owner for the published safe-repeat requirement - /planning-pm
+  specs: deltas for grade10-site/store/checkout once scope is decided - /planning-dev
