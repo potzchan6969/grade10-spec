@@ -23,7 +23,7 @@
 ## Components
 
 | Export | Owner | Role |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | Existing CartDrawer and copy | `@grade10/ui` | Cart, tender and checkout feedback |
 | Existing OrderHistory and OrderDetails | `@grade10/ui` | Supplied order facts and status |
 | Existing feedback and account action | Grade10 drawer host | Verification, refusal and failure |

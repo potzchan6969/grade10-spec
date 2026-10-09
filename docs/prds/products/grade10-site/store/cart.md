@@ -80,8 +80,8 @@ The refusals are the coupon's own —
   lines, the code and the points straight to Shopify; there is no separate
   checkout page to reopen or re-read them
 - 🚧 **The bar** — goods of **HKD 120,000** or more: an unverified member
-  sees the verify message and the account link where Proceed to Checkout
-  was; no checkout session is created. Under the bar, or already verified,
+  who presses Proceed to Checkout sees the verify message and the account
+  link; no checkout session is created. Under the bar, or already verified,
   Proceed to Checkout runs —
   [Checkout](/p/grade10-site/store/checkout#integration-readiness)
 - 🚧 **Sent** — the order is promised with the same code and points the

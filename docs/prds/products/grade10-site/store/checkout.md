@@ -66,14 +66,15 @@ verification gate all run in the cart drawer; there is no `/checkout` page
 to navigate to.
 
 - **Members only** — checkout is signed in; there is no guest checkout
-- **The bar** — goods worth **HKD 120,000** or more: the drawer replaces
-  Proceed to Checkout with the verify message and an account link; no
-  checkout session is created. A verified member, or a basket under the
+- **The bar** — goods worth **HKD 120,000** or more: pressing Proceed to
+  Checkout shows the verify message, with an account link where the profile
+  page is on; no checkout session is created. A verified member, or a basket under the
   bar, proceeds. They verify on [their account](/p/grade10-site/account/kyc)
 - **The cart** - Kept while the collector is at Shopify
+- **Shipping rate** - Shopify asks the store's carrier rule; a served destination gets the same rate the store preview shows, and any other gets none
 
 - **The invoice** - Fixes the purchase; later cart edits do not change it
-- **Order labels** - Existing shared order-status labels remain in use; this change adds no new badge
+- **Order labels** - Existing shared order-status labels; there is no separate unpaid badge
 
 :::detail{title="Design record" for="engineer"}
 - **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
@@ -95,4 +96,8 @@ to navigate to.
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |
 | Verification gate | Decided | The existing drawer checkout shows the threshold-and-account-link message with an account action when the gross-goods gate answers. The identity check itself still runs only on the account page. | Product |
 | The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
+:::
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-site/store/checkout"}
 :::

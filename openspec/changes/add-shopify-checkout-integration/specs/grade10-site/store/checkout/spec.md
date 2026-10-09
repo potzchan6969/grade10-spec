@@ -8,9 +8,13 @@
   - Estimate: leave shipping, tax and final payment to Shopify
 - Hosted Shopify handoff
   - Member identity: require a fresh signed-in storefront session
+  - Hosted invoice: bind order and provider facts before the buyer leaves
   - Current request: send reviewed lines, seen prices and accepted tender
   - Safe response: keep refusal and verification feedback; open only the current answer
 - Safe repetition and recovery
+  - Purchase intent: one open checkout for repeated Pay, reload and terminal replay
+  - Recovery: provider and store recovery without a second payable invoice
+  - Changed intent: a changed basket or tender retires the older open checkout
   - One Pay at a time: one pending Pay per drawer
   - Stale answers: an answer for an older cart, tender or member opens nothing
   - Lost answers: existing failure feedback, no automatic retry
@@ -355,11 +359,13 @@ rate. The callback SHALL not create an order or change the cart.
 
 The cart drawer SHALL send Pay through the store's existing checkout request and act only on the answer to the current request. The store's checkout request decides the purchase; the drawer holds no purchase identity of its own.
 
-**Request** - Pay SHALL wait for acknowledged cart and tender writes and for the current review and quote. It SHALL send each reviewed line with the unit price the collector saw, and the accepted store code or wallet coupon. It SHALL send the accepted points when they are more than 0, and no points field when none are spent. It SHALL send no purchase key, cart id or cart version.
+**Request** - Pay SHALL wait for acknowledged cart and tender writes and for the current review and quote. It SHALL send each reviewed line with the unit price the collector saw, and the accepted store code or wallet coupon. It SHALL send the accepted points when they are more than 0, and no points field when none are spent.
+
+**Pay** - Pay is the drawer's Proceed to Checkout control.
 
 **One Pay at a time** - The drawer SHALL hold at most one pending Pay. The lines and tender it sent SHALL stay fixed for that request; a later edit applies to the next Pay.
 
-**Answers** - The drawer SHALL use the existing treatment for each answer: a hosted invoice opens Shopify, a settling order opens Your Orders, a named line or refused tender is named in the drawer, verification shows the threshold feedback and account action, and anything else shows the existing failure feedback.
+**Answers** - The drawer SHALL use the existing treatment for each answer: a hosted invoice opens Shopify, a settling order opens Your Orders, a named line or refused tender is named in the drawer, verification shows the threshold feedback, with the account action where the profile page is enabled, and anything else shows the existing failure feedback.
 
 **Older answers** - An answer for an older cart, tender, member or request SHALL open nothing, navigate nowhere and change no drawer state. The drawer SHALL keep the current cart and tender.
 
@@ -367,7 +373,7 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 
 **Paid refresh** - Once an order read reports `paid`, the frontend SHALL read the cart and tender again. It SHALL settle no order and delete no cart line itself.
 
-<!-- trace:scenario id=g10.store-checkout.SC-uzw rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-uzw rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-63 - Pay sends the reviewed lines and only the chosen tender
 **Serves:** grade10-site-store-checkout-US-01 - The collector sends the reviewed lines and accepted tender to hosted payment
 
@@ -375,7 +381,6 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **WHEN** the collector presses Pay
 - **THEN** the checkout request carries each reviewed line with the unit price the collector saw and the accepted code
 - **AND** it carries 20 points when 20 are accepted, and no points field when none are spent
-- **AND** it carries no purchase key, cart id or cart version
 
 <!-- trace:scenario id=g10.store-checkout.SC-14a rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-58 - Pay waits for acknowledged cart and tender writes
@@ -436,24 +441,24 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **AND** the pending Pay ends and the drawer sends no further checkout request by itself
 - **AND** Pay is available again once the basket is ready, and a later Pay is a new request
 
-<!-- trace:scenario id=g10.store-checkout.SC-vsd rev=2 -->
+<!-- trace:scenario id=g10.store-checkout.SC-vsd rev=3 -->
 #### Scenario: grade10-site-store-checkout-SC-37 - Existing verification feedback keeps the account gate
 **Serves:** grade10-site-store-checkout-US-01 - Existing verification feedback keeps the account gate
 
 - **GIVEN** the gross-goods gate requires account verification
 - **WHEN** Pay receives the verification outcome
-- **THEN** existing threshold feedback and account action appear with no hosted handoff
-- **AND** the action opens the existing account verification route
+- **THEN** existing threshold feedback appears with no hosted handoff
+- **AND** where the profile page is enabled, an account action opens the existing account verification route
 - **AND** promo or points cannot bypass the gross-goods gate
 
-<!-- trace:scenario id=g10.store-checkout.SC-ecp rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-ecp rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-57 - Gross goods preserve the existing verification boundary
 **Serves:** `grade10-site-store-checkout-US-01` - Gross goods preserve the existing verification boundary
 
 - **GIVEN** gross goods are below, at or above HKD 120,000, with a verified or unverified member and accepted discounts or points
 - **WHEN** the storefront or direct Pay evaluates the account gate
 - **THEN** an unverified member below the limit and a verified member at or above it may proceed with a ready reviewed basket
-- **AND** an unverified member at or above the gross-goods limit receives existing verification feedback and account action without order or invoice creation
+- **AND** an unverified member at or above the gross-goods limit receives existing verification feedback, with the account action where the profile page is enabled, without order or invoice creation
 - **AND** discounts and points cannot move the gross-goods boundary
 
 <!-- trace:scenario id=g10.store-checkout.SC-2n2 rev=3 -->
@@ -474,11 +479,12 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **THEN** the authoritative cart has no active purchased lines and default tender
 - **AND** the frontend observes conversion without local cleanup
 
-<!-- trace:scenario id=g10.store-checkout.SC-15p rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-60 - Later cart edits leave the open invoice unchanged
-**Serves:** grade10-site-store-checkout-US-06 - Later cart edits leave the open invoice unchanged
+<!-- trace:scenario id=g10.store-checkout.SC-15p rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-60 - Later cart edits never rewrite the sent invoice
+**Serves:** grade10-site-store-checkout-US-06 - Later cart edits never rewrite the sent invoice
 
 - **GIVEN** a collector has opened an unpaid hosted invoice for the lines and tender they sent
 - **WHEN** a separate Grade10 tab saves later line and tender edits and reloads
-- **THEN** the open invoice keeps the lines and tender that were sent
+- **THEN** the hosted invoice is never changed to the later lines or tender
 - **AND** the cart and tender reads show the later saved choices
+- **AND** whether that invoice stays payable is the store's answer, not the drawer's
