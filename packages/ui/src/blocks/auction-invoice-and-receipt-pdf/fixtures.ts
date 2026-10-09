@@ -22,7 +22,7 @@ const HKD = new Intl.NumberFormat("en-US", {
 
 const amount = (cents: number) => HKD.format(cents / 100);
 
-const hkd = (cents: number) => `HKD ${amount(cents)}`;
+const hkd = (cents: number) => `HK$${amount(cents)}`;
 
 const centsOf = (amount: string) =>
   Math.round(Number(amount.replace(/[^\d.]/g, "")) * 100);
@@ -124,18 +124,18 @@ const ITEMS: readonly PdfItemRow[] = [
 ];
 
 const INVOICE_CHARGES = [
-  { label: "Shipping & Handling", amount: "HKD 80.00" },
-  { label: "Insurance", amount: "HKD 40.00" },
-  { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,120.00" },
+  { label: "Shipping & Handling", amount: "HK$80.00" },
+  { label: "Insurance", amount: "HK$40.00" },
+  { key: "subtotal" as const, label: "Subtotal", amount: "HK$3,120.00" },
   {
     key: "paymentProcessingFee" as const,
     label: "Payment Processing Fee",
-    amount: "HKD 112.25",
+    amount: "HK$112.25",
   },
   {
     key: "orderTotal" as const,
     label: "Order Total",
-    amount: "HKD 3,232.25",
+    amount: "HK$3,232.25",
   },
 ] as const;
 
@@ -187,13 +187,13 @@ export const BANK_TRANSFER_INVOICE: InvoicePdfData = {
   paymentMethod: "Bank transfer",
   lineItems: [
     ...INVOICE_CHARGES.slice(0, 2),
-    { key: "subtotal", label: "Subtotal", amount: "HKD 3,120.00" },
+    { key: "subtotal", label: "Subtotal", amount: "HK$3,120.00" },
     {
       key: "paymentProcessingFee",
       label: "Payment Processing Fee",
       amount: "Free",
     },
-    { key: "orderTotal", label: "Order Total", amount: "HKD 3,120.00" },
+    { key: "orderTotal", label: "Order Total", amount: "HK$3,120.00" },
   ],
   bankRails: BANK_TRANSFER_RAILS,
 };
@@ -208,15 +208,15 @@ export const WITH_TAX_INVOICE: InvoicePdfData = {
   ...SAMPLE_INVOICE,
   lineItems: [
     ...INVOICE_CHARGES.slice(0, 2),
-    { key: "subtotal", label: "Subtotal", amount: "HKD 3,276.00" },
+    { key: "subtotal", label: "Subtotal", amount: "HK$3,276.00" },
     {
       key: "paymentProcessingFee",
       label: "Payment Processing Fee",
-      amount: "HKD 118.00",
+      amount: "HK$118.00",
     },
-    { key: "orderTotal", label: "Order Total", amount: "HKD 3,394.00" },
+    { key: "orderTotal", label: "Order Total", amount: "HK$3,394.00" },
   ],
-  taxLine: { label: "Tax", amount: "HKD 156.00" },
+  taxLine: { label: "Tax", amount: "HK$156.00" },
 };
 
 export const SAMPLE_RECEIPT: ReceiptPdfData = {
@@ -230,10 +230,10 @@ export const SAMPLE_RECEIPT: ReceiptPdfData = {
   shipTo: SHIP_TO,
   lineItems: RECEIPT_CHARGES,
   paymentBreakdown: {
-    originalInvoiceTotal: "HKD 3,232.25",
-    previousPayments: "HKD 0.00",
-    currentPaymentReceived: "HKD 3,232.25",
-    remainingBalanceDue: "HKD 0.00",
+    originalInvoiceTotal: "HK$3,232.25",
+    previousPayments: "HK$0.00",
+    currentPaymentReceived: "HK$3,232.25",
+    remainingBalanceDue: "HK$0.00",
   },
   paymentMethod: "Visa card ending 4242",
   paymentReference: null,
@@ -252,20 +252,20 @@ export const WITH_TAX_RECEIPT: ReceiptPdfData = {
   ...SAMPLE_RECEIPT,
   lineItems: [
     ...INVOICE_CHARGES.slice(0, 2),
-    { key: "subtotal", label: "Subtotal", amount: "HKD 3,276.00" },
+    { key: "subtotal", label: "Subtotal", amount: "HK$3,276.00" },
     {
       key: "paymentProcessingFee",
       label: "Payment Processing Fee",
-      amount: "HKD 118.00",
+      amount: "HK$118.00",
     },
-    { key: "orderTotal", label: "Order Total", amount: "HKD 3,394.00" },
+    { key: "orderTotal", label: "Order Total", amount: "HK$3,394.00" },
   ],
-  taxLine: { label: "Tax", amount: "HKD 156.00" },
+  taxLine: { label: "Tax", amount: "HK$156.00" },
   paymentBreakdown: {
-    originalInvoiceTotal: "HKD 3,394.00",
-    previousPayments: "HKD 0.00",
-    currentPaymentReceived: "HKD 3,394.00",
-    remainingBalanceDue: "HKD 0.00",
+    originalInvoiceTotal: "HK$3,394.00",
+    previousPayments: "HK$0.00",
+    currentPaymentReceived: "HK$3,394.00",
+    remainingBalanceDue: "HK$0.00",
   },
 };
 
@@ -312,9 +312,9 @@ function receiptFor(items: readonly PdfItemRow[]): ReceiptPdfData {
     ...table,
     paymentBreakdown: {
       originalInvoiceTotal: orderTotal,
-      previousPayments: "HKD 0.00",
+      previousPayments: "HK$0.00",
       currentPaymentReceived: orderTotal,
-      remainingBalanceDue: "HKD 0.00",
+      remainingBalanceDue: "HK$0.00",
     },
   };
 }
