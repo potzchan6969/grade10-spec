@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T11:15:45.387Z",
+  "generatedAt": "2026-10-09T14:22:38.137Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -104,6 +104,7 @@
     "Toast": "ok",
     "Toast / Close": "skipped",
     "Tooltip": "ok",
+    "Vault Asset Card": "warn",
     "auth-sign-in: sign-in-card/body": "ok",
     "auth-sign-in: sign-in-card/legal": "ok",
     "auth-sign-in: sign-in-email-form/section": "ok",
@@ -894,6 +895,8 @@
     "7054-6854": "Asset Summary",
     "7054-6855": "Asset Summary",
     "7054-7072": "Vaulted Asset",
+    "7068-7718": "Vault Portfolio",
+    "7068-8263": "Vault Asset Card",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1051,6 +1054,9 @@
       "Text Area.status: no getEnum('status') in any template — this Figma axis reaches no code prop",
       "Text Area.state: no getEnum('state') in any template — this Figma axis reaches no code prop",
       "Text Area.isDisabled: no getEnum('isDisabled') in any template — this Figma axis reaches no code prop"
+    ],
+    "Vault Asset Card": [
+      "Vault Asset Card: no code component (looked for src/components/**/vaultassetcard.tsx or vaultassetcard.tsx)"
     ]
   }
 }
