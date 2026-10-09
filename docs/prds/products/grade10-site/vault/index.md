@@ -38,6 +38,7 @@ made.
 | Page | What it holds |
 | --- | --- |
 | [Collector Pages](/p/grade10-site/vault/collector-pages) | What a collector does on their own case, and what they hear |
+| [Portfolio](/p/grade10-site/vault/portfolio) | What a collector holds in the vault, and the acts on one item |
 | [Case Lifecycle](/p/grade10-site/vault/case-lifecycle) | The fourteen statuses, the two lanes, the timers, the exits |
 | [Loan and Money](/p/grade10-site/vault/loan-and-money) | The arithmetic, the policy the brand lends under, the money records and corrections, the ledger |
 | [Documents and Signing](/p/grade10-site/vault/documents-and-signing) | The three documents, the ceremony, consent, copies, verification |
