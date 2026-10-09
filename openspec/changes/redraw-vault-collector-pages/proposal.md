@@ -35,6 +35,11 @@ None. The retired case-flow screens stay retired; their requirements live in the
 - `packages/ui` — `ListingLotGallery` gains a per-image label rendered beside the counter.
 - No product routes, data fetching or backend contract yet — the screens are the design reference for the flow they mount.
 
+## References
+
+- [Portfolio](../../../docs/prds/products/grade10-site/vault/portfolio.md)
+- [Portfolio · The item's page](../../../docs/prds/products/grade10-site/vault/portfolio.md#the-item-s-page)
+
 ## Follow-on changes
 
 - Wiring the portfolio surfaces to the vault worker's reads and acts.
