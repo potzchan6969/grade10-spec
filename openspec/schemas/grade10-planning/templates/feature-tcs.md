@@ -26,6 +26,11 @@
 **Status:** pending-review · 0/<number of draft cases>
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
 
+<!-- Optional walks come here, before the journey sections. A walk carries
+     Starting state, Shared test data when useful, and Route. It references
+     cases; it does not repeat their definitions. See the Walks and Case
+     Placement rules and tcs-conventions.md for the route syntax. -->
+
 ## <capability>-US<n>: <!-- journey title, copied from user-journeys.md -->
 
 **As a** <role>,

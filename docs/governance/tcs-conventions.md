@@ -34,6 +34,16 @@ The lines below came across from `tcs-rules` r3 when this file was split from it
 - **The arrival may be the first result** — `The listing loads` tells "could not get there" from "wrong"; a case whose results are only the arrival is not a case
 - **Plain words, no internal names** — `Click the collection tile`, not `dispatch the tile's click handler`
 
+### Walks
+
+- **Walk shape** — `## Walk <n>: <title>`, followed by `**Starting state:**`, optional `**Shared test data:**`, and `### Route`
+- **Route checks** — use a `-` bullet for a normal validation and put its compact case reference at the end: `TC-nsg (US1-TC12)`
+- **Route branches** — use `a.` and `b.` for actual alternative conditions, with the expected result and case reference on the same line; do not use a branch to create a new observation
+- **Case references** — use `TC-<sequence> (US<n>-TC<m>)` in a walk; the full case definition remains in its owning suite
+- **No walk description** — a `*-tcs.md` walk carries setup, data and route only; generic explanation belongs in this file or its template
+- **Complete case results** — the case definition remains the complete record of its Expected Results. A walk may repeat the result needed at that route point so a human knows what to record, but may not add or remove an assertion
+- **Shared setup** — shared walk data saves human tester effort; it never makes a case depend on another case's result
+
 ### Pre-conditions
 
 The concrete setup that produces the scenario's GIVEN, in the environment's terms, one condition per bullet: a manipulated condition (`Network conditions are manipulated to block static styling assets (CSS)`), a stubbed upstream (`The catalogue endpoint is mocked to return a 500`), seeded data (`At least one collection is missing its artwork`), or where the actor already is.

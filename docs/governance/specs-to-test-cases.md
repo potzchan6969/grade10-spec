@@ -1,5 +1,5 @@
 ---
-tcs_rules_rev: 4
+tcs_rules_rev: 5
 ---
 
 # Specs to Test Cases
@@ -110,7 +110,18 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **A suite exists only where a path exists** — a product with one domain has no `product-tcs.md`, a product with no specs has nothing, and `platform-tcs.md` starts with the first cross-product path; none of those absences is a gap
 - **`shared/` gets no product suite** — its capabilities get feature suites, and paths across them `shared/<domain>/domain-tcs.md`
 - **Levels run top down** — platform, product, domain, feature, deriving and reviewing alike; each level names the paths it owns and the level below covers what those do not reach. A feature run reads the domain suite first, so a path a domain case walks is not written twice
+- **The suite file sets walk scope** — a walk in `feature-tcs.md` stays within its capability, one in `domain-tcs.md` may cross that domain's capabilities, one in `product-tcs.md` may cross that product's domains, and one in `platform-tcs.md` may cross products. A route that crosses the file's scope moves to the parent suite; it does not become an exception in the lower suite
 - **`/spec-to-tcs [platform|product|domain|feature] <target>`** — the level first, or inferred from the target's shape
+
+### Walks and Case Placement
+
+- **A walk is an execution route** — it arranges independent cases so a human tester can reuse a starting state, test data and page path; it is not a journey, a case or a second source of requirements
+- **A walk does not replace a journey** — journeys keep the actor, goal and value; walks keep the route a tester drives. A feature walk may cross journeys within one capability, and a higher-level walk may cross the journeys and capabilities in its file scope
+- **A case stays independent** — its own pre-conditions, test data, steps and complete Expected Results remain runnable without another case having passed. A walk may share setup without making one case depend on another
+- **A case definition appears once** — a higher-level walk may reference a lower-level case, but never copies its definition. A feature case referenced by a domain, product or platform walk but by no feature walk remains in the owning feature suite under `## Ungrouped`, grouped by journey
+- **Higher-level reuse is not domain coverage** — a route reference does not create `Covered at domain`. That disposition belongs to a domain-owned case whose Expected Results fully assert the feature scenario
+- **Walks come first** — in a suite that carries walks, print walks before case definitions; print grouped cases by journey, then `## Ungrouped` for cases with no walk at that suite level. A case referenced by several walks is printed once
+- **A route cannot invent an observation** — every result in a walk belongs to a referenced case. If an upstream case fails, later cases on that route are blocked for that walk; a tester-only shortcut belongs in the downstream case's own steps and carries no automation reference
 
 ### One purpose, one case
 
@@ -120,7 +131,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **Within a level** — two cases whose traces and outcomes say the same thing are one case; differing only in a value, one case with a row per run
 - **A case earns its place by a distinct risk** — before a case is written, name what it guards that no other case at its level does: a boundary, a partition, a state transition, a permission, an error. A case that names none is a row on the case it repeats, a result on the run it shares, or not written. Coverage is counted in anchors and scenarios reached, never in cases
 - **Across levels** — a `product` or `platform` case re-walks lower coverage on purpose, to ask whether the seam holds. Duplication is a lower case that exists only to re-test a higher path, or two composed cases at one level on the same path
-- **A feature case is not written for a path a domain case walks** — draft or not: the feature run reads the domain suite first, leaves the path to it, and the reconciliation records it as **Covered at domain**. The domain case has to assert the outcome, not only pass through it; a refusal, a boundary or an outcome it does not assert is still the feature's case
+- **A higher-level walk does not replace a feature case** — a feature run may leave a scenario to a domain-owned case only when reconciliation records **Covered at domain** and that case's Expected Results fully assert the scenario. A domain, product or platform walk that only reuses a feature case does not create that disposition; the feature case remains in its owning suite and may sit under `## Ungrouped`
 - **The validator reports, a human decides** — identical trace sets among composed cases, and journeys traced at more than one level, are evidence, not proof
 
 ### When a Change Touches a Suite Above It
