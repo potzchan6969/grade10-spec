@@ -159,9 +159,9 @@ function OrderDetails({
       </RevealGroup>
       <div
         className={cn(
-          "grid w-full items-start gap-12",
+          "grid w-full items-start gap-6 lg:gap-12",
           hasSidebar
-            ? "grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+            ? "grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
             : "grid-cols-1",
         )}
       >
