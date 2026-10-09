@@ -1,4 +1,4 @@
-## 1. SiteHeader's closed item set (grade10-spec)
+## 1. SiteHeader's closed item set (grade10-spec) (owner: @mason5991)
 
 - [ ] 1.1 Tests first, in their own commit: a type test beside
       `packages/ui/src/blocks/site-chrome/site-header.tsx` asserting with
