@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T04:08:43.996Z",
+  "generatedAt": "2026-10-09T07:27:21.909Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -876,6 +876,8 @@
     "7038-47": "Link",
     "7038-50": "Link",
     "7038-53": "Link",
+    "7046-48": "Step",
+    "7046-56": "Step",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1018,7 +1020,8 @@
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
     ],
     "Step": [
-      "Step.upcoming: no getEnum('upcoming') in any template — this Figma axis reaches no code prop"
+      "Step.upcoming: no getEnum('upcoming') in any template — this Figma axis reaches no code prop",
+      "Step.orientation: no getEnum('orientation') in any template — this Figma axis reaches no code prop"
     ],
     "Tab": [
       "Tab: no code component (looked for src/components/**/tab.tsx or tab.tsx)"
