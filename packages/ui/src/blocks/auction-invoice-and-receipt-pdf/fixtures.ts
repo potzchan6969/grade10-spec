@@ -20,7 +20,9 @@ const HKD = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
-const hkd = (cents: number) => `HKD ${HKD.format(cents / 100)}`;
+const amount = (cents: number) => HKD.format(cents / 100);
+
+const hkd = (cents: number) => `HKD ${amount(cents)}`;
 
 const centsOf = (amount: string) =>
   Math.round(Number(amount.replace(/[^\d.]/g, "")) * 100);
@@ -32,9 +34,9 @@ export function sampleItems(count: number): PdfItemRow[] {
     const n = index + 1;
     return {
       title: `Lot ${String(n).padStart(digits, "0")}`,
-      winningBid: hkd(n * 10_000),
-      buyersPremium: hkd(n * 2_000),
-      total: hkd(n * 12_000),
+      winningBid: amount(n * 10_000),
+      buyersPremium: amount(n * 2_000),
+      total: amount(n * 12_000),
     };
   });
 }
@@ -42,7 +44,7 @@ export function sampleItems(count: number): PdfItemRow[] {
 /** The Item Total a caller would supply for `items`: each column summed. */
 export function itemTotalOf(items: readonly PdfItemRow[]): PdfItemTotal {
   const sum = (key: keyof PdfItemTotal) =>
-    hkd(items.reduce((cents, item) => cents + centsOf(item[key]), 0));
+    amount(items.reduce((cents, item) => cents + centsOf(item[key]), 0));
   return {
     winningBid: sum("winningBid"),
     buyersPremium: sum("buyersPremium"),
@@ -115,9 +117,9 @@ const SHIP_TO = {
 const ITEMS: readonly PdfItemRow[] = [
   {
     title: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
-    winningBid: "HKD 2,500.00",
-    buyersPremium: "HKD 500.00",
-    total: "HKD 3,000.00",
+    winningBid: "2,500.00",
+    buyersPremium: "500.00",
+    total: "3,000.00",
   },
 ];
 

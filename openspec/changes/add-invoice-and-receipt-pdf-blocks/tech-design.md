@@ -526,9 +526,9 @@ the item exists.
 | Field | Source |
 | --- | --- |
 | `items[0].title` | `listing.title`, or `"Auction lot"` when it has none, as `listingTitle` does today |
-| `items[0].winningBid` | `formatMoney(hammerAmount, currency)` |
-| `items[0].buyersPremium` | `formatMoney(buyerPremiumAmount, currency)` |
-| `items[0].total` | `formatMoney(hammerAmount + buyerPremiumAmount, currency)`. `grade10` adds the two integers of minor units. The block adds nothing |
+| `items[0].winningBid` | `formatAmount(hammerAmount, currency)`: `formatMoney` without the currency, so the item table's amounts carry none (`decisions.md` Q41) |
+| `items[0].buyersPremium` | `formatAmount(buyerPremiumAmount, currency)` |
+| `items[0].total` | `formatAmount(hammerAmount + buyerPremiumAmount, currency)`. `grade10` adds the two integers of minor units. The block adds nothing |
 | `itemTotal` | The same three strings, since the one item is the whole table |
 | `lineItems` | Shipping & Handling, Insurance, then the three keyed summary rows, each omitted when its amount is null, as `lineItems()` does today minus its first two entries and its Tax entry |
 | `taxLine` | `Tax` with `formatMoney(taxAmount, currency)`, or `null` when `taxAmount` is null. It is the only place Tax travels (`decisions.md` Q30), so the block draws it once, after the charges and before the summary |
