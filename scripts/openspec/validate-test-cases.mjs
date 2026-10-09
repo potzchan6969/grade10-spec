@@ -62,6 +62,8 @@ import {
   parseSuite,
   parseWalks,
   productPrefix,
+  modernDomainPrefix,
+  modernProductPrefix,
   prop,
   readDomainIds,
   readPlatformIds,
@@ -220,6 +222,10 @@ function checkSuite(root, filePath, rulesRev) {
         : level === "domain"
           ? domainPrefix(root, dir)
           : (issuedPrefix(spec) ?? basename(dir));
+  const capabilities = new Set([capability]);
+  if (level === "platform") capabilities.add("platform");
+  if (level === "product") capabilities.add(modernProductPrefix(root, dir));
+  if (level === "domain") capabilities.add(modernDomainPrefix(root, dir));
   const err = (line, msg) => record("error", rel, line, msg);
   const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
@@ -435,15 +441,15 @@ function checkSuite(root, filePath, rulesRev) {
   const seenJourneys = new Set();
   const seenCaseIds = new Set();
   for (const j of suite.journeys) {
-    if (j.hyphenated)
+    if (level !== "feature" && j.hyphenated)
       warn(
         j.line,
         `journey heading \`${j.raw}\` uses the spec's hyphenated id; suite headings are compact (e.g. \`${j.capability}-US${j.num}\`)`,
       );
-    if (j.capability !== capability)
+    if (!capabilities.has(j.capability))
       err(
         j.line,
-        `journey heading names capability \`${j.capability}\`, but this spec issues \`${capability}-\``,
+        `journey heading names capability \`${j.capability}\`, but this suite accepts \`${[...capabilities].join("\` or \`")}\``,
       );
     const canonical = `${j.capability}-US-${String(j.num).padStart(2, "0")}`;
     const alternate = `${j.capability}-US-${j.num}`;
@@ -478,7 +484,7 @@ function checkSuite(root, filePath, rulesRev) {
     if (level === "feature" && spec?.unwalked && j.num !== 1)
       err(
         j.line,
-        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
+        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US-01\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
       );
     const story = new Set(j.story);
     if (
@@ -506,8 +512,11 @@ function checkSuite(root, filePath, rulesRev) {
             at,
             `case id \`${tc.id}\` uses the legacy hyphenated form; current is \`<scope>.TC-<sequence> (US<n>-TC<m>)\``,
           );
-        if (tc.capability !== capability)
-          err(at, `case id \`${tc.id}\` names capability \`${tc.capability}\``);
+        if (!capabilities.has(tc.capability))
+          err(
+            at,
+            `case id \`${tc.id}\` names capability \`${tc.capability}\`; this suite accepts \`${[...capabilities].join("\` or \`")}\``,
+          );
         if (tc.journeyNum !== j.num)
           err(
             at,

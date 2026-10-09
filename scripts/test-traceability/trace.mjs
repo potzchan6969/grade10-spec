@@ -146,7 +146,7 @@ function checkFields(record, expected, issue) {
 }
 
 const referencePattern =
-  /^([a-z][a-z0-9]*)\.([a-z][a-z0-9]*(?:-[a-z0-9]+)+)\.(US|SC|TC)-([0-9a-z]{3})$/i;
+  /^([a-z][a-z0-9]*)\.([a-z][a-z0-9]*(?:-[a-z0-9]+)*)\.(US|SC|TC)-([0-9a-z]{3})$/i;
 
 function parseReference(value) {
   const match = referencePattern.exec(value ?? "");
@@ -311,12 +311,19 @@ function normalizeApp(value, option) {
   return app;
 }
 
+function referenceScope(app, product, capability) {
+  if (capability === "domain") return `${product}-dmn`;
+  if (capability === "product") return `${app}-pdt`;
+  if (capability === "platform") return "platform";
+  return `${product}-${capability}`;
+}
+
 function formatReference(app, product, kind, capability, sequence) {
-  return `${app}.${product}-${capability}.${kind}-${sequence}`;
+  return `${app}.${referenceScope(app, product, capability)}.${kind}-${sequence}`;
 }
 
 function nextSequence(storeRoot, app, product, capability, kind, target) {
-  const scope = `${product}-${capability}`;
+  const scope = referenceScope(app, product, capability);
   const markdownRoots = [
     resolve(storeRoot, "openspec/specs"),
     resolve(storeRoot, "openspec/changes"),
@@ -343,7 +350,7 @@ function nextSequence(storeRoot, app, product, capability, kind, target) {
 }
 
 function allocateSequence(used, app, product, capability, kind, target) {
-  const scope = `${product}-${capability}`;
+  const scope = referenceScope(app, product, capability);
   const seed = `${app}.${scope}.${kind}\0${target}`;
   const digest = createHash("sha256").update(seed).digest();
   const start = digest.readUInt32BE(0) % 36 ** 3;
@@ -1325,7 +1332,7 @@ function initializeBatch(values) {
     const first = [...group].sort((a, b) =>
       `${a.file}\0${a.target}`.localeCompare(`${b.file}\0${b.target}`),
     )[0];
-    const scopeKey = `${first.app}.${first.product}-${first.capability}`;
+    const scopeKey = `${first.app}.${referenceScope(first.app, first.product, first.capability)}`;
     const explicitIds = new Set(
       group.map((item) => item.existingId).filter(Boolean),
     );
@@ -1339,7 +1346,7 @@ function initializeBatch(values) {
         !parsedId ||
         parsedId.kind !== expectedKind ||
         parsedId.app !== first.app ||
-        parsedId.scope !== `${first.product}-${first.capability}`
+        parsedId.scope !== referenceScope(first.app, first.product, first.capability)
       )
         fail(
           `batch mirror group ${mirrorKey} existing id has the wrong scope or kind`,
@@ -1430,7 +1437,7 @@ function initializeBatch(values) {
 
   const plannedScopeByFile = new Map();
   for (const record of records) {
-    const scope = `${record.app}.${record.product}-${record.capability}`;
+    const scope = `${record.app}.${referenceScope(record.app, record.product, record.capability)}`;
     const current = plannedScopeByFile.get(record.file);
     if (current && current !== scope)
       fail(`batch records in ${record.file} mix marker scopes`);

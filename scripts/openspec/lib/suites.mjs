@@ -204,7 +204,7 @@ export function capabilityId(root, filePath) {
     .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
 }
 
-/** `openspec/specs/grade10-site/auction/` issues `grade10-site-auction-e2e-*`. */
+/** Legacy composed prefix retained while older suites migrate to level scopes. */
 export function domainPrefix(root, dir) {
   const rel = relative(root, dir)
     .replace(/^openspec\/specs\//, "")
@@ -218,6 +218,37 @@ export function productPrefix(root, dir) {
     .replace(/^openspec\/specs\//, "")
     .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
   return `${rel.split("/")[0]}-e2e`;
+}
+
+/** Display prefixes for composed-suite headings and markers. Legacy prefixes
+ * remain accepted while suites migrate to these level-separated forms. */
+export function modernDomainPrefix(root, dir) {
+  const rel = relative(root, dir)
+    .replace(/^openspec\/specs\//, "")
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
+  const [product, domain] = rel.split("/");
+  const app =
+    product === "grade10-site"
+      ? "g10"
+      : product === "grade10-admin"
+        ? "g10adm"
+        : product;
+  return `${app}.${domain}-dmn`;
+}
+
+/** Display prefix for a product-level suite. */
+export function modernProductPrefix(root, dir) {
+  const rel = relative(root, dir)
+    .replace(/^openspec\/specs\//, "")
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
+  const product = rel.split("/")[0];
+  const app =
+    product === "grade10-site"
+      ? "g10"
+      : product === "grade10-admin"
+        ? "g10adm"
+        : product;
+  return `${app}-pdt`;
 }
 
 /** The `decisions.md` of the change this suite sits in, if it sits in one at
@@ -661,16 +692,18 @@ export function parseSuite(text) {
       }
     }
 
-    const jh = line.match(/^##\s+(([\w-]+)-US-?(\d+)):\s*(.+?)\s*$/);
+    const jh = line.match(
+      /^##\s+(([\w.-]+)-US-?(\d+)|([\w.-]+)\.US-?(\d+)):\s*(.+?)\s*$/,
+    );
     if (jh) {
       pushJourney();
       ungrouped = false;
       journey = {
-        capability: jh[2],
-        num: Number(jh[3]),
+        capability: jh[2] ?? jh[4],
+        num: Number(jh[3] ?? jh[5]),
         raw: jh[1],
         hyphenated: /-US-\d+$/.test(jh[1]),
-        title: jh[4],
+        title: jh[6],
         line: i + 1,
         story: [],
         cases: [],
@@ -678,16 +711,18 @@ export function parseSuite(text) {
       continue;
     }
     const uh = ungrouped
-      ? line.match(/^###\s+(([\w-]+)-US-?(\d+)):\s*(.+?)\s*$/)
+      ? line.match(
+          /^###\s+(([\w.-]+)-US-?(\d+)|([\w.-]+)\.US-?(\d+)):\s*(.+?)\s*$/,
+        )
       : null;
     if (uh) {
       pushJourney();
       journey = {
-        capability: uh[2],
-        num: Number(uh[3]),
+        capability: uh[2] ?? uh[4],
+        num: Number(uh[3] ?? uh[5]),
         raw: uh[1],
         hyphenated: /-US-\d+$/.test(uh[1]),
-        title: uh[4],
+        title: uh[6],
         line: i + 1,
         story: [],
         cases: [],
@@ -1011,9 +1046,14 @@ export function readSuite(root, filePath) {
   const spec = composed
     ? readDomainIds(dir)
     : readSpecIds(join(dir, "spec.md"));
-  const capability = composed
-    ? domainPrefix(root, dir)
-    : (issuedPrefix(spec) ?? basename(dir));
+  const capability =
+    level === "platform"
+      ? "platform"
+      : level === "product"
+        ? modernProductPrefix(root, dir)
+        : level === "domain"
+          ? modernDomainPrefix(root, dir)
+          : (issuedPrefix(spec) ?? basename(dir));
   const cases = [];
   for (const j of suite.journeys)
     for (const tc of j.cases) cases.push({ ...tc, journey: j });
@@ -1054,7 +1094,9 @@ export function caseIndex(root, paths) {
     let lineNo = 0;
     for (const line of readFileSync(p, "utf8").split("\n")) {
       lineNo += 1;
-      const h = line.match(/^###\s+(\S+?):/);
+      const h = line.match(
+        /^(?:###|####)\s+((?:\S+\.TC-[0-9a-z]+)|(?:\S+-TC\d+(?:-\d+)?))(?:\s+\(US-?\d+-TC-?\d+\))?:/,
+      );
       if (h) {
         id = h[1];
         if (!index.has(id))
