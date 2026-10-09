@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T07:51:20.746Z",
+  "generatedAt": "2026-10-09T08:01:53.326Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -24,7 +24,7 @@
     "Collection Card": "warn",
     "Combobox": "warn",
     "Container": "warn",
-    "Detail row": "warn",
+    "Detail row": "ok",
     "Dialog": "ok",
     "Dialog Header": "skipped",
     "Dropdown Menu": "ok",
@@ -938,9 +938,6 @@
     ],
     "Container": [
       "Container: no code component (looked for src/components/**/container.tsx or container.tsx)"
-    ],
-    "Detail row": [
-      "Detail row: no code component (looked for src/components/**/detailrow.tsx or detailrow.tsx)"
     ],
     "Dropdown Menu Group Label": [
       "Dropdown Menu Group Label: no code component (looked for src/components/**/dropdownmenugrouplabel.tsx or dropdownmenugrouplabel.tsx)"
