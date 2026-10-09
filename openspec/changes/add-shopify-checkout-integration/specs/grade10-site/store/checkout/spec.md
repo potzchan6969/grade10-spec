@@ -416,6 +416,26 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **AND** it says neither that no invoice exists nor that one was canceled
 - **AND** a later Pay is a new request that the store decides
 
+<!-- trace:scenario id=g10.store-checkout.SC-cbb rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-64 - A settling answer opens Your Orders
+**Serves:** grade10-site-store-checkout-US-05 - The collector whose Pay answers with a settling order goes to Your Orders, not Shopify
+
+- **GIVEN** Pay has been sent for the current cart and tender
+- **WHEN** its answer is a settling order with no hosted invoice
+- **THEN** the drawer opens Your Orders and no Shopify page
+- **AND** Your Orders shows the matching order with its existing status label
+- **AND** Your Orders reads the order again while it can still move
+
+<!-- trace:scenario id=g10.store-checkout.SC-f6v rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-65 - A failed answer ends the pending Pay for a deliberate retry
+**Serves:** `grade10-site-store-checkout-US-02` - The collector retries a Pay whose answer failed
+
+- **GIVEN** Pay has been sent for a ready reviewed basket
+- **WHEN** its answer is a failure other than a named line, a refused tender or verification
+- **THEN** the drawer shows the existing failure feedback and opens no Shopify page
+- **AND** the pending Pay ends and the drawer sends no further checkout request by itself
+- **AND** Pay is available again once the basket is ready, and a later Pay is a new request
+
 <!-- trace:scenario id=g10.store-checkout.SC-vsd rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-37 - Existing verification feedback keeps the account gate
 **Serves:** grade10-site-store-checkout-US-01 - Existing verification feedback keeps the account gate

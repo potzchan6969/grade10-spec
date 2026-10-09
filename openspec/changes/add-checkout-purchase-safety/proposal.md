@@ -22,7 +22,7 @@ The published checkout requirement "A checkout intent is safe to repeat" says on
 
 ## Product Record
 
-- [Checkout](../../../docs/prds/products/grade10-site/store/checkout.md)
+- [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
 
 ## Capabilities
 
