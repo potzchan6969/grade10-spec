@@ -26,7 +26,7 @@ export const RULE_STRONG = rgb(0.1, 0.1, 0.1);
 export const RIGHT_EDGE = A4_WIDTH - MARGIN;
 /** Where an identity row's value starts - clear of every label this sheet draws, including "Payment reference". */
 export const META_VALUE_LEFT = MARGIN + 160;
-/** A boxed summary: right-aligned, narrower than the sheet. */
+/** The summary: right-aligned, narrower than the sheet. */
 export const SUMMARY_WIDTH = 220;
 export const SUMMARY_LEFT = RIGHT_EDGE - SUMMARY_WIDTH;
 /** The lowest y any body block reaches on any page, keeping the issuer band clear. */
@@ -49,7 +49,7 @@ export type PdfPartyAddress = Record<string, string | null> | null;
 /** `amount` arrives pre-formatted - a caller's own money-formatting module is the only place minor units become text. */
 export type PdfLineItem = {
   /** Recognized regardless of `label`'s text, so a translated label still
-   * routes into the boxed summary. Absent on an ordinary charge. */
+   * routes into the summary. Absent on an ordinary charge. */
   key?: "subtotal" | "paymentProcessingFee" | "orderTotal";
   label: string;
   amount: string;
@@ -318,7 +318,6 @@ export function measuredBlock(layout: PdfLayout): PdfBlock {
       reach(options.start.y);
       reach(options.end.y);
     },
-    drawRectangle: (options: { y: number }) => reach(options.y),
   } as unknown as PDFPage;
   const next = layout(measuring, 0);
   return {
@@ -366,7 +365,7 @@ export type PdfItemTableData = {
   copy: PdfDocumentCopy;
 };
 
-/** The table's blocks: the column header, one row per item, and the tail from the Item Total row to the boxed summary. */
+/** The table's blocks: the column header, one row per item, and the tail from the Item Total row to the summary. */
 export type PdfItemTable = {
   header: PdfBlock;
   rows: readonly [PdfBlock, ...PdfBlock[]];
@@ -443,7 +442,7 @@ const ORDER_TOTAL_SIZE = 13;
 /**
  * The three lines every order value ends in - never a charge of their own,
  * always the arithmetic over the charges above them. Pulled out of the flat
- * charge list into their own boxed, right-aligned summary, Order Total
+ * charge list into their own right-aligned summary, Order Total
  * bold and set off by a rule the way a receipt's payment breakdown is.
  * Grouped by `PdfLineItem.key`, not `label` text - a translated label must
  * still route into the summary.
@@ -454,7 +453,6 @@ function drawSummary(
   summary: readonly PdfLineItem[],
   y: number,
 ): number {
-  const summaryTop = y;
   for (const item of summary) {
     if (item.key !== "orderTotal") {
       drawMoneyRow(page, fonts, item.label, item.amount, SUMMARY_LEFT, y);
@@ -484,15 +482,6 @@ function drawSummary(
     );
     y -= LINE_HEIGHT;
   }
-  const summaryPadding = 8;
-  page.drawRectangle({
-    x: SUMMARY_LEFT - summaryPadding,
-    y: y - 5,
-    width: SUMMARY_WIDTH + summaryPadding * 2,
-    height: summaryTop - y + 13,
-    borderColor: RULE,
-    borderWidth: 0.8,
-  });
   return y;
 }
 

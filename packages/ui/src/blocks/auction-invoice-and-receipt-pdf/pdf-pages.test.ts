@@ -10,13 +10,7 @@ import {
 import type { InvoicePdfData } from "./invoice-pdf";
 import { InvoicePdf } from "./invoice-pdf";
 import type { PdfItemRow } from "./pdf-document";
-import {
-  BODY_BOTTOM,
-  LINE_HEIGHT,
-  MARGIN,
-  RIGHT_EDGE,
-  SUMMARY_WIDTH,
-} from "./pdf-document";
+import { BODY_BOTTOM, LINE_HEIGHT, MARGIN, RIGHT_EDGE } from "./pdf-document";
 import type { DrawnText } from "./pdf-test-helpers";
 import {
   drawnContent,
@@ -72,9 +66,9 @@ function pageOf(pages: DrawnText[][], text: string): number {
 }
 
 /**
- * Every line, rule and box a body block draws sits at or above `BODY_BOTTOM`
- * on every page; only the issuer block's two lines reach below it, on the
- * last page.
+ * Every line and rule a body block draws sits at or above `BODY_BOTTOM` on
+ * every page, and no page draws a box; only the issuer block's two lines reach
+ * below `BODY_BOTTOM`, on the last page.
  */
 async function expectBodyAboveBottom(bytes: ArrayBuffer) {
   const pages = await drawnPages(bytes);
@@ -96,11 +90,10 @@ async function expectBodyAboveBottom(bytes: ArrayBuffer) {
         BODY_BOTTOM,
       );
     }
-    for (const box of await drawnRectangles(bytes, index)) {
-      expect(box.y, `page ${index + 1} box`).toBeGreaterThanOrEqual(
-        BODY_BOTTOM,
-      );
-    }
+    expect(
+      await drawnRectangles(bytes, index),
+      `page ${index + 1} draws no box`,
+    ).toEqual([]);
   }
 }
 
@@ -219,11 +212,6 @@ describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
       ]) {
         expect(pageOf(pages, text), `${count} items: ${text}`).toBe(page);
       }
-      expect(
-        (await drawnRectangles(bytes, page)).some(
-          (box) => box.width > SUMMARY_WIDTH,
-        ),
-      ).toBe(true);
       const lastLot = sampleItems(count).at(-1)?.title ?? "";
       if (pageOf(pages, lastLot) === page - 1) {
         const opening = topDown(pages[page] ?? []);
@@ -369,7 +357,7 @@ describe("an invoice's pages", () => {
   });
 
   // shared-ui-invoice-and-receipt-pdf-SC-76
-  it("keeps the issuer block on the page that ends with the boxed summary", async () => {
+  it("keeps the issuer block on the page that ends with the summary", async () => {
     let ranOn = false;
     for (const count of COUNTS(40)) {
       const bytes = await invoice(count);
@@ -378,11 +366,6 @@ describe("an invoice's pages", () => {
       if (pages.length > 1) ranOn = true;
       const page = pageOf(pages, "support@grade10.com");
       expect(pageOf(pages, "Order Total")).toBe(page);
-      expect(
-        (await drawnRectangles(bytes, page)).some(
-          (box) => box.width > SUMMARY_WIDTH,
-        ),
-      ).toBe(true);
       expectIssuerBandClear(pages[page] ?? []);
     }
     expect(ranOn).toBe(true);

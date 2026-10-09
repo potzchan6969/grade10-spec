@@ -92,7 +92,7 @@ function textOf(content: string): DrawnText[] {
   return rows;
 }
 
-/** Read rectangles emitted by the renderer, used to prove boxed summaries. */
+/** Read rectangles emitted by the renderer, used to prove none is drawn. */
 export async function drawnRectangles(
   bytes: ArrayBuffer | Uint8Array,
   page = 0,
