@@ -29,7 +29,7 @@
       `pnpm --filter @grade10/ui exec vitest run --project storybook src/blocks/site-chrome`,
       `pnpm check:manual` and `pnpm run lint`
 
-## 2. Account-menu tests (grade10)
+## 2. Account-menu tests (grade10) (owner: @mason5991)
 
 The settled scope already runs, so this group is its tests alone, in one
 commit; each passes on arrival and fails if a handler leaves its gate. Every
