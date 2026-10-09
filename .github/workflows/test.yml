@@ -103,6 +103,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Test the UI verification archive package
+        run: pnpm --dir packages/ui-verification test
+
       - name: Install Playwright Chromium
         run: pnpm run setup:browsers
 
