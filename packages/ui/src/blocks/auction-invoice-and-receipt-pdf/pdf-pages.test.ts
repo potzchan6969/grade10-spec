@@ -104,6 +104,21 @@ function topDown(page: DrawnText[]): DrawnText[] {
 
 const isLot = (row: DrawnText) => /^Lot \d+/.test(row.text);
 
+/** Every divider on every page is stroked in black, and the document has some. */
+async function expectBlackDividers(bytes: ArrayBuffer) {
+  const pages = (await PDFDocument.load(bytes)).getPageCount();
+  let drawn = 0;
+  for (let index = 0; index < pages; index++) {
+    for (const rule of await drawnHorizontalLines(bytes, index)) {
+      drawn += 1;
+      expect(rule.color, `page ${index + 1} rule at y ${rule.y}`).toEqual([
+        0, 0, 0,
+      ]);
+    }
+  }
+  expect(drawn).toBeGreaterThanOrEqual(5);
+}
+
 describe.each(DOCUMENTS)("%s's pages", (_name, render) => {
   // shared-ui-invoice-and-receipt-pdf-SC-62
   it("continues a long table on the next page under the repeated column header", async () => {
@@ -433,3 +448,17 @@ function expectIssuerBandClear(page: DrawnText[]) {
     expect(row.y, row.text).toBeGreaterThan(name.y);
   }
 }
+
+describe("every divider", () => {
+  it.each([1, 30])("is black on an invoice of %i item(s)", async (count) => {
+    await expectBlackDividers(
+      await invoice(count, { bankRails: ALL_BANK_RAILS }),
+    );
+  });
+
+  it.each([1, 30])("is black on a receipt of %i item(s)", async (count) => {
+    await expectBlackDividers(
+      await receipt(count, { paymentReference: "TRF-7731" }),
+    );
+  });
+});

@@ -19,8 +19,7 @@ export const TITLE_SIZE = 20;
 export const LINE_HEIGHT = 15;
 export const INK = rgb(0.12, 0.12, 0.12);
 export const MUTED = rgb(0.4, 0.4, 0.4);
-export const RULE = rgb(0.82, 0.82, 0.82);
-export const RULE_STRONG = rgb(0.1, 0.1, 0.1);
+export const RULE = rgb(0, 0, 0);
 
 /** Where a money row's amount right-aligns to. */
 export const RIGHT_EDGE = A4_WIDTH - MARGIN;
@@ -221,12 +220,16 @@ export function drawRuleSpan(
   y: number,
   options: {
     gap?: number;
-    color?: ReturnType<typeof rgb>;
     thickness?: number;
   } = {},
 ): number {
-  const { gap = 5, color = RULE, thickness = 0.6 } = options;
-  page.drawLine({ start: { x: x1, y }, end: { x: x2, y }, thickness, color });
+  const { gap = 5, thickness = 0.6 } = options;
+  page.drawLine({
+    start: { x: x1, y },
+    end: { x: x2, y },
+    thickness,
+    color: RULE,
+  });
   return y - gap;
 }
 
@@ -524,7 +527,6 @@ export function measureItemTable(
       );
     }
     return drawRuleSpan(page, MARGIN, RIGHT_EDGE, y - 4, {
-      color: RULE_STRONG,
       thickness: 0.8,
       gap: 0,
     });
@@ -566,7 +568,6 @@ export function measureItemTable(
   const summary = data.lineItems.filter((item) => item.key !== undefined);
   const tail = measuredBlock((page, y) => {
     drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, {
-      color: RULE_STRONG,
       thickness: 0.8,
     });
     let line = y - ROW_LEAD;
