@@ -17,19 +17,43 @@
      planning-dev, reconcile with QA2, and check with `pnpm run tcs:validate`.
      Human QA uses tcs-review after implementation is deployed and available. -->
 
-<!-- <capability> is the capability's path with slashes as hyphens:
-     grade10-site/store/product-listing issues
-     grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
+<!-- <scope> is the stable marker prefix, for example
+     g10.auction-account-record. The suite-local reference remains in
+     parentheses: TC-s25 (US1-TC2). -->
 
 # <product>/<domain>/<capability> Test Cases
 
 **Status:** pending-review · 0/<number of draft cases>
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
 
-<!-- Optional walks come here, before the journey sections. A walk carries
-     Starting state, Shared test data when useful, and Route. It references
-     cases; it does not repeat their definitions. See the Walks and Case
-     Placement rules and tcs-conventions.md for the route syntax. -->
+<!-- Walks come first. A walk carries Starting state, optional Shared test data,
+     and Route. It references each case once or more; it never repeats a case
+     definition or creates an observation. A feature walk stays in this
+     capability. Higher-level routes belong in the parent suite. -->
+
+## Walk 1: <title>
+
+**Starting state:**
+
+- <state that places the actor at the route's entry point>
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<fixture>` | <fixture or value> |
+
+### Route
+
+1. <action that moves the tester to the next route point>.
+   - <observation to record> `TC-<sequence> (US1-TC1)`
+2. <action that opens an alternative route>.
+   a. <condition and observation> `TC-<sequence> (US1-TC2)`
+   b. <condition and observation> `TC-<sequence> (US1-TC3)`
+
+<!-- Cases referenced by a walk are printed once under their owning journey.
+     A case referenced only by a higher-level walk is printed under Ungrouped,
+     grouped by journey. -->
 
 ## <capability>-US<n>: <!-- journey title, copied from user-journeys.md -->
 
@@ -37,7 +61,7 @@
 **I want** <goal>,
 **so that** <reason>.
 
-### <capability>-US<n>-TC1-1: <!-- clean descriptive title -->
+### <scope>.TC-<sequence> (US<n>-TC<m>): <!-- clean descriptive title -->
 
 **Classification:**
 
@@ -67,6 +91,40 @@
 **Expected Results:**
 
 * <!-- from THEN -->
+
+<!-- Repeat the journey sections in file order. After all walked cases, print
+     cases that belong to no walk at this level under the following groups. -->
+
+## Ungrouped
+
+### <capability>-US<n>: <!-- journey title -->
+
+#### <scope>.TC-<sequence> (US<n>-TC<m>): <!-- clean descriptive title -->
+
+**Classification:**
+
+* **Severity:** blocker | critical | major | normal | minor | trivial
+* **Priority:** high | medium | low
+* **Status:** draft
+* **Behaviour:** positive | negative | destructive
+* **Type:** functional | acceptance | usability | security | performance | compatibility | integration
+* **Suites:** smoke | regression | release | none
+* **Layer:** e2e | api | unit
+* **Automation status:** manual
+* **Testability:** automation | manual | automation, manual
+* **Trace:** <capability>-US-<n>
+
+**Pre-conditions:**
+
+* <state>
+
+**Steps:**
+
+1. <step>
+
+**Expected Results:**
+
+* <result>
 
 <!-- The blind reading's raised questions are not a section here. They go to
      the change's decisions.md, under its ## Raised table, one row per point the
