@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T07:34:55.854Z",
+  "generatedAt": "2026-10-09T07:51:20.746Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -85,9 +85,9 @@
     "Segmented Control Item": "skipped",
     "Stat": "warn",
     "Status Indicator": "skipped",
-    "Step": "warn",
+    "Step": "ok",
     "Step Indicator": "ok",
-    "Stepper": "warn",
+    "Stepper": "skipped",
     "Stepper Input": "ok",
     "Switch": "ok",
     "Tab": "warn",
@@ -1020,13 +1020,6 @@
     ],
     "Stat": [
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
-    ],
-    "Step": [
-      "Step.upcoming: no getEnum('upcoming') in any template — this Figma axis reaches no code prop",
-      "Step.orientation: no getEnum('orientation') in any template — this Figma axis reaches no code prop"
-    ],
-    "Stepper": [
-      "Stepper.orientation: no getEnum('orientation') in any template — this Figma axis reaches no code prop"
     ],
     "Tab": [
       "Tab: no code component (looked for src/components/**/tab.tsx or tab.tsx)"
