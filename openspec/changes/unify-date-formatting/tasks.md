@@ -25,7 +25,7 @@ The bump in 2.1 takes the store's booking block change too, so it waits for the 
 - [ ] 3.4 Add the store's date check and its test, and run it in CI: over `packages/` and `apps/`, matching `Intl.DateTimeFormat`, `toLocaleDateString`, `toLocaleTimeString` and a date-fns import, and not number formatting
 - [ ] 3.5 Verify: `pnpm run test:stories`, `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run check:manual`
 
-## 4. Take the final bump (grade10)
+## 4. Take the final bump (grade10) (owner: @seankcw)
 
 - [ ] 4.1 Bump `external/grade10-spec` to the commit that deletes the store's formatters
 - [ ] 4.2 Verify: `pnpm run typecheck`, every test lane, `pnpm run check:libs`
