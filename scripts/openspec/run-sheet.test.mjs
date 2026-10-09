@@ -51,7 +51,7 @@ import {
   surfacePrefill,
   walkBand,
 } from "./lib/select-cases.mjs";
-import { isAutomated, parseSuite } from "./lib/suites.mjs";
+import { isAutomated, parseSuite, parseWalks } from "./lib/suites.mjs";
 
 const SUITE = `# demo/thing/widget Test Cases
 
@@ -242,6 +242,26 @@ test("a modern case heading and an ungrouped case keep their references", () => 
     modern.journeys[1].cases[0].id,
     "g10.auction-account-record.TC-k8m",
   );
+});
+
+test("walk parsing keeps stable case refs and their local US/TC references", () => {
+  const [walk] = parseWalks(
+    [
+      "## Walk 1: Fill and confirm",
+      "",
+      "### Route",
+      "",
+      "1. Open the form.",
+      "   - The form is open. `TC-s25 (US1-TC2)`",
+      "2. Submit a valid form.",
+      "   a. The form is accepted. `TC-k8m (US2-TC3)`",
+    ].join("\n"),
+  );
+  assert.equal(walk.title, "Walk 1: Fill and confirm");
+  assert.deepEqual(walk.refs, [
+    { id: "tc-s25", journeyNum: 1, tcNum: 2, line: 6 },
+    { id: "tc-k8m", journeyNum: 2, tcNum: 3, line: 8 },
+  ]);
 });
 
 test("a case carries the text of its steps, not only their count", () => {

@@ -60,6 +60,7 @@ import {
   levelOf,
   PROPERTIES,
   parseSuite,
+  parseWalks,
   productPrefix,
   prop,
   readDomainIds,
@@ -222,6 +223,58 @@ function checkSuite(root, filePath, rulesRev) {
   const err = (line, msg) => record("error", rel, line, msg);
   const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
+
+  // Walk references are intentionally checked separately from case parsing.
+  // A walk may cite a legacy case definition during migration, but its route
+  // reference must still resolve to the adjacent stable trace marker and to
+  // the case's own US/TC reference. The case definition remains the authority
+  // for the observation; this check only prevents a dangling or mis-scoped ref.
+  if (parseWalks(text).length > 0) {
+    const walkCases = new Map();
+    const lines = text.split("\n");
+    let pendingMarker = null;
+    for (let i = 0; i < lines.length; i++) {
+      const marker = /^<!--\s*trace:case\s+id=(\S+)\s+/.exec(lines[i]);
+      if (marker) {
+        pendingMarker = marker[1];
+        continue;
+      }
+      const modern = /^(?:###|####)\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):/.exec(
+        lines[i],
+      );
+      const legacy = !modern
+        ? /^###\s+\S+-US-?(\d+)-TC-?(\d+)(?:-\d+)?:/.exec(lines[i])
+        : null;
+      if (!modern && !legacy) continue;
+      const id = modern?.[1] ?? pendingMarker;
+      if (id) {
+        const stable = id.slice(id.lastIndexOf(".") + 1).toLowerCase();
+        walkCases.set(stable, {
+          journeyNum: Number(modern?.[2] ?? legacy?.[1]),
+          tcNum: Number(modern?.[3] ?? legacy?.[2]),
+          line: i + 1,
+        });
+      }
+      pendingMarker = null;
+    }
+    for (const walk of parseWalks(text)) {
+      for (const ref of walk.refs) {
+        const found = walkCases.get(ref.id);
+        if (!found) {
+          err(
+            ref.line,
+            `walk \`${walk.title}\` references \`${ref.id}\`, but no case definition with that stable id exists in this suite`,
+          );
+          continue;
+        }
+        if (found.journeyNum !== ref.journeyNum || found.tcNum !== ref.tcNum)
+          err(
+            ref.line,
+            `walk \`${walk.title}\` references \`${ref.id}\` as US${ref.journeyNum}-TC${ref.tcNum}, but the case is US${found.journeyNum}-TC${found.tcNum}`,
+          );
+      }
+    }
+  }
 
   // Q49 and Q69 (`run-a-round-on-every-artifact`): every automated case of an
   // in-flight change names what decides it, whatever day the change opened.
@@ -451,7 +504,7 @@ function checkSuite(root, filePath, rulesRev) {
         if (tc.hyphenated)
           warn(
             at,
-            `case id \`${tc.id}\` uses the older hyphenated form; current is \`<capability>-US<n>-TC<m>-<v>\``,
+            `case id \`${tc.id}\` uses the legacy hyphenated form; current is \`<scope>.TC-<sequence> (US<n>-TC<m>)\``,
           );
         if (tc.capability !== capability)
           err(at, `case id \`${tc.id}\` names capability \`${tc.capability}\``);
@@ -1062,7 +1115,7 @@ for (const p of suites) {
       "error",
       rel,
       j + 1,
-      `case \`${legacy[1]}\` is at \`<v>\` ${legacy[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
+      `legacy case heading \`${legacy[1]}\` carries suffix ${legacy[2]}, but its trace marker carries \`rev=${marker[1]}\` — migration must preserve the marker rev`,
     );
   }
 }

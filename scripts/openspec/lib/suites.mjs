@@ -513,6 +513,43 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
   for (const path of values) tc.decidedBy.push({ path, line: at + 1 });
 }
 
+const WALK_CASE_REFERENCE =
+  /(?:^|[`\s])(TC-([0-9a-z]{3}))\s*\(\s*US-?(\d+)\s*-\s*TC-?(\d+)\s*\)/gi;
+
+/** Read only the executable references in `## Walk` sections. Walk prose is
+ * deliberately not interpreted here: the validator can prove that a route
+ * points at an existing case and local case reference, while the case remains
+ * the authority for the observation itself. */
+export function parseWalks(text) {
+  const lines = text.split("\n");
+  const walks = [];
+  let current = null;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const heading = /^##\s+(Walk\b.*)$/i.exec(line);
+    if (heading) {
+      current = { title: heading[1], line: i + 1, refs: [] };
+      walks.push(current);
+      continue;
+    }
+    if (/^##\s+/.test(line)) {
+      current = null;
+      continue;
+    }
+    if (!current) continue;
+    WALK_CASE_REFERENCE.lastIndex = 0;
+    for (const match of line.matchAll(WALK_CASE_REFERENCE)) {
+      current.refs.push({
+        id: match[1].toLowerCase(),
+        journeyNum: Number(match[3]),
+        tcNum: Number(match[4]),
+        line: i + 1,
+      });
+    }
+  }
+  return walks;
+}
+
 /** Split a suite into its header, journey sections and cases. Current format only;
  *  older shapes are detected and reported rather than parsed into silence.
  *
