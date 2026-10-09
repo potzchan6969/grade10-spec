@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T14:34:32.636Z",
+  "generatedAt": "2026-10-09T16:25:32.862Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -105,6 +105,7 @@
     "Toast / Close": "skipped",
     "Tooltip": "ok",
     "Vault Asset Card": "warn",
+    "Vault Asset List": "warn",
     "Vault Asset Status": "warn",
     "auth-sign-in: sign-in-card/body": "ok",
     "auth-sign-in: sign-in-card/legal": "ok",
@@ -896,13 +897,24 @@
     "7054-6854": "Asset Summary",
     "7054-6855": "Asset Summary",
     "7054-7072": "Vaulted Asset",
+    "7068-10059": "Vault Asset Status",
+    "7068-10079": "_note-29891791557525939",
+    "7068-10249": "Vault Asset Card",
+    "7068-10250": "Vault Asset Card",
     "7068-7718": "Vault Portfolio",
     "7068-8263": "Vault Asset Card",
-    "7068-9956": "Vault Asset Status",
     "7068-9957": "Vault Asset Status",
-    "7068-9958": "Vault Asset Status",
     "7068-9959": "Vault Asset Status",
     "7068-9960": "Vault Asset Status",
+    "7068-9963": "Vault Asset Status",
+    "7077-10664": "Vault Portfolio Components",
+    "7077-10761": "Vault Asset List",
+    "7077-10911": "Vault Asset List",
+    "7077-10912": "Vault Asset List",
+    "7077-11209": "Vault Asset Card",
+    "7077-11303": "Vault Asset List",
+    "7077-11880": "Vault Asset List",
+    "7077-12136": "Vault Asset Card",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1063,6 +1075,9 @@
     ],
     "Vault Asset Card": [
       "Vault Asset Card: no code component (looked for src/components/**/vaultassetcard.tsx or vaultassetcard.tsx)"
+    ],
+    "Vault Asset List": [
+      "Vault Asset List: no code component (looked for src/components/**/vaultassetlist.tsx or vaultassetlist.tsx)"
     ],
     "Vault Asset Status": [
       "Vault Asset Status: no code component (looked for src/components/**/vaultassetstatus.tsx or vaultassetstatus.tsx)"
