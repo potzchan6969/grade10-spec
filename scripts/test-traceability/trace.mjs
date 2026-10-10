@@ -446,6 +446,7 @@ export function parseTraceGraph({
           file: source.file,
           line,
           covers: [],
+          coversSpecified: fields.covers !== undefined,
         };
         markerScope = checkMarkdownMarkerScope(fields.id, markerScope, issue);
         if (!positiveRevision(record.revision))
@@ -642,6 +643,9 @@ export function parseTraceGraph({
     scenarios: scenarios.filter((record) => !linkedScenarioIds.has(record.id)),
     cases: cases.filter((record) => !linkedCaseIds.has(record.id)),
   };
+  const scenarioLinkPending = cases.filter(
+    (record) => !record.coversSpecified,
+  );
 
   return {
     roots,
@@ -652,6 +656,7 @@ export function parseTraceGraph({
     issues,
     unlinked,
     links: validLinkCount(cases, tests, byScenario, byCase),
+    scenarioLinkPending,
   };
 }
 
@@ -969,6 +974,7 @@ function summarize(graph) {
     `Links: ${graph.links}`,
     `Unlinked scenarios: ${unlinked.scenarios.length}`,
     `Unlinked cases: ${unlinked.cases.length}`,
+    `Scenario-link pending cases: ${graph.scenarioLinkPending.length}`,
   ];
   if (issues.length)
     lines.push(
@@ -1019,6 +1025,7 @@ function reportObject(graph) {
       scenarios: recordOutput(graph.unlinked.scenarios),
       cases: recordOutput(graph.unlinked.cases),
     },
+    scenarioLinkPending: recordOutput(graph.scenarioLinkPending),
     issues: issueOutput,
   };
 }
@@ -1036,7 +1043,7 @@ function renderReport(graph) {
   output.push("Cases:");
   for (const record of graph.cases)
     output.push(
-      `  ${record.id} rev=${record.revision} covers=${record.covers.join(",")} at ${displayPath(record.file, graph.roots)}:${record.line}`,
+      `  ${record.id} rev=${record.revision}${record.coversSpecified ? ` covers=${record.covers.join(",") || "none"}` : " covers=(pending QA2)"} at ${displayPath(record.file, graph.roots)}:${record.line}`,
     );
   output.push("Tests:");
   for (const record of graph.tests) {

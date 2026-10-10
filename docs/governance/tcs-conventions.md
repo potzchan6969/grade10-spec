@@ -1,6 +1,6 @@
 # Test Case Conventions
 
-How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.md) holds the contract — ids, properties, levels, what a case may claim — and this file holds the house style that sits on top of it. `/spec-to-tcs` writes every draft to it; `/tcs-review` restyles drafts to it before a review starts, and adds to it when a review ends.
+How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.md) holds creation, coverage, traceability, lifecycle and validation; this is the one shared file for writing style. `/spec-to-tcs` writes every draft to it; `/tcs-review` restyles drafts to it before a review starts, and adds to it when a review ends. No other file may define a competing writing convention.
 
 ## How This File Grows
 
@@ -14,6 +14,16 @@ How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.m
 - **A convention that must hold everywhere is a contract** — it moves to `specs-to-test-cases.md` with a rules revision, and leaves this file
 - **A confirmed line applies at once** — when the review that confirmed it ends: to the reviewed file, its remaining drafts and its `actual` cases still `manual`; and to every other suite in the same domain folder, its `actual` cases still `manual`, unasked, in its own commit, skipping a suite with an open `tcs-review/*` branch or pull request. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
 - **`automated` and `deprecated` cases are never restyled to it** — an `automated` case changes only with its behaviour, a `deprecated` one never
+
+## Before Adding a Convention
+
+Every candidate from a review passes this gate before it is offered to the reviewer.
+
+1. **Classify the candidate** — confirm that it changes only how a case is written: title, wording, step shape, result shape, pre-condition, placeholder, test-data presentation, actor wording or layout
+2. **Check the core rulebook** — compare it with [`specs-to-test-cases.md`](specs-to-test-cases.md). A candidate that changes anchors, formal coverage, scenario links, case ownership, suite levels, lifecycle, export eligibility, validation or the number of cases is a core-rule change, not a convention
+3. **Check existing conventions** — search `## Store-wide`, the applicable scope under `## Domains, Products and Capabilities`, and `## Refused`. A duplicate, narrower conflict or refused pattern is not offered silently
+4. **Resolve conflicts explicitly** — a direct contradiction is reported to the reviewer with both rules named. The existing core rule wins; no new convention is written until the core rule is changed through its governance path
+5. **Record one line only after consent** — confirmed rules use the existing dated-line format, with the scope and reason when narrower than store-wide
 
 ## Store-wide
 

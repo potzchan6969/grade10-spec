@@ -65,10 +65,14 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
 
    A refusal is a Dev repair; rerun the check before starting QA2.
 3. **QA2** - Reconciliation. In a fresh context, reconcile each blind case
-   and scenario against the anchors in `feature-tcs.md`. Record whether a case
-   was folded, rejected with reason, raised for the human or remains uncovered.
-   Put unresolved product questions in `decisions.md`'s `## Raised` table. Return
-   source-linked coverage and dispositions for the acceptance reviewer.
+   and scenario against the anchors in `feature-tcs.md`. Do not regenerate from
+   scenarios. First record each case's disposition; then add post-hoc `covers`
+   links for the scenarios whose THEN is fully asserted by that case. One case
+   may link multiple scenarios when one route, starting state and checking
+   fully assert each. Record uncovered scenarios, over-claimed cases and
+   contradictions separately from anchor coverage. Put unresolved product
+   questions in `decisions.md`'s `## Raised` table. Return source-linked
+   coverage and dispositions for the acceptance reviewer.
 4. **Resolve and Check** - A question the readings cannot settle goes to the
    same human, as a numbered `Q<n>` row, and is put to them as a
    [Clarification Request](../../../AGENTS.md#questions-and-blockers).
@@ -117,9 +121,10 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
 
 Every external implementation change needs `tech-design.md`; use
 `design_waived: <why>` only for work wholly in this store. Each scenario has
-an anchor in `**Serves:**`; each case has one in `**Trace:**`. Reconciliation
-does not add scenario ids to blind cases. Task groups include tests before
-implementation, verification, and a final end-to-end walk.
+an anchor in `**Serves:**`; each case has one in `**Trace:**`.
+Reconciliation may add post-hoc scenario ids to a case marker's optional
+`covers` list, but generation never derives a case from them. Task groups
+include tests before implementation, verification, and a final end-to-end walk.
 
 ## Completion
 

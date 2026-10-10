@@ -167,6 +167,25 @@ test("validate accepts an anchor-only active case marker", () => {
   }
 });
 
+test("report distinguishes an anchor-only case from a deprecated empty link", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture();
+  try {
+    writeFileSync(
+      caseFile,
+      readFileSync(caseFile, "utf8").replace(
+        " covers=g10.store-product-listing.SC-001",
+        "",
+      ),
+    );
+    const result = runCli(["report", "--store-root", storeRoot]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /Scenario-link pending cases: 1/);
+    assert.match(result.stdout, /covers=\(pending QA2\)/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("batch initialization allocates stable ids for mirrored cases and planned scenarios", () => {
   const root = mkdtempSync(resolve(tmpdir(), "trace-batch-test-"));
   const storeRoot = resolve(root, "store");

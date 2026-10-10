@@ -1,10 +1,10 @@
 ---
-tcs_rules_rev: 5
+tcs_rules_rev: 6
 ---
 
 # Specs to Test Cases
 
-A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is written from the anchors a capability declares, never from the scenarios beside it and never as a second source of truth. Case shape follows [Virtuoso QA's guide](https://www.virtuosoqa.com/post/test-cases); the property vocabularies are the standard ones, so a suite reads the same to any tool that takes it.
+A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is written from the anchors a capability declares, never from the scenarios beside it and never as a second source of truth. This document owns creation, coverage, traceability, lifecycle and validation. [`tcs-conventions.md`](tcs-conventions.md) is the one shared writing-rule file: generation and review read it, and review may add confirmed writing rules to it.
 
 A **feature** suite is written **blind**: by a fresh reader who cannot see the spec's `## Requirements` at all. A suite derived from the scenarios can only find inconsistency inside them, never the behaviour they left out. In the single planning run, QA1 writes cases from frozen anchors, Dev independently writes scenarios, and QA2 reconciles both after they land. New cases remain draft through acceptance; human QA reviews and classifies them after deployment makes the implementation available, through `/tcs-review`. Manual execution uses `/tcs-run-sheet`; a review classification is not a test result.
 
@@ -14,6 +14,9 @@ A **feature** suite is written **blind**: by a fresh reader who cannot see the s
 - **Anchors are given** — every section is one `user-journeys.md` journey. A capability nobody walks carries one section instead, `## <capability>-US-<n>`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued case id is permanent. There is no cap on the number of journeys. A suite never invents a flow, and splitting or merging journeys is an edit to the journeys file
 - **A case comes from an anchor** — never from a scenario, which on a feature run does not exist yet. A case that carries behaviour no anchor implies is a product decision in disguise, and reconciliation is where it is settled
 - **A hole is reported** — an anchor no case covers, a case tracing an anchor nothing defines: report it, never close it by inventing a case or a journey
+- **Coverage is an observable outcome** — count distinct outcomes a tester can observe, not every input value, row, actor or combination. Values that preserve the same route, checking and expected result stay rows in one case
+- **Group before splitting** — group assertions by starting state, route and checking. Split only when the purpose, route, expected checking or risk changes. A case earns its place by a distinct outcome, boundary, partition, transition, permission or error risk
+- **Partitions are representative** — choose one representative from each outcome-equivalent partition, plus both sides of a stated boundary and interactions that change the outcome or risk. Do not generate a Cartesian product by default
 - **Properties are QA's** — they classify scenarios the spec states. A wrong property is fixed in review and is never grounds to change a step or an expected result
 
 ## The Isolated Input
@@ -21,7 +24,7 @@ A **feature** suite is written **blind**: by a fresh reader who cannot see the s
 A feature run reads a bundle the caller assembles, and nothing outside it.
 
 - **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, its `decisions.md` — the goals and the non-goals, so no case is written against something the interview ruled out, and its `## Raised` table, which is what earlier runs asked and what came of it — its `ui-design.md` where one exists — written before the requirements, with its states tied to anchors rather than scenario ids, and with the dispositions the second requirements pass wrote onto those bullets stripped — the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped, and that suite's `## Settled` — the questions earlier runs asked and had answered, which is what keeps a refused reading from being raised again every time — and the domain suite above the capability, the change's `domain-tcs.md` or else the durable one, with its `## Reconciliation` stripped: its cases are composed from journeys and name no scenario, so reading them costs no blindness, and it is how a feature run knows which paths are already walked (**Across levels**)
-- **Excluded** — every `## Requirements` section, `openspec/specs/` beyond the two included sections and the domain suite, and `openspec/changes/archive/` entirely. An archived change keeps an un-stripped `## Reconciliation` naming scenario ids, so reading archive reopens the leak invisibly on the next change to that capability
+- **Excluded** — every `## Requirements` section, scenario text used as a source for case generation, `openspec/specs/` beyond the two included sections and the domain suite, and `openspec/changes/archive/` entirely. An archived change keeps an un-stripped `## Reconciliation` naming scenario ids, so reading archive reopens the leak invisibly on the next change to that capability
 - **Recorded** — the `## Reconciliation` Run line names the bundle: what the pass read, and what it was denied. Nothing in this store computes or verifies a digest of it, so the line is the run's own statement, not proof; a hash written there says only that somebody wrote a hash
 - **Assembled by hand where no caller built one** — a person running the skill directly assembles it and says so in the report. Reading the requirements "just to check" is how the property is lost, and nothing downstream can detect that it was
 - **An empty `## Raised`, run after run, is the failure signal** — and the only one this store can actually read. It sits in the change's `decisions.md`, and `pnpm check:manual` warns on an empty one. The Run line says what the reader saw, never how it read. A second reading that asks nothing, several runs running, has either stopped being blind or stopped being a different method, and the suite is not passed on that basis until someone has checked why
@@ -66,6 +69,19 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **A row waiting on a walk names it** — a row whose walk nobody has run yet reads `to be walked in <the walk>`, and the run that runs the lane rewrites the rows to what the walk reached
 - **Scenario ids are temporary here** — they may appear in `## Reconciliation` only while the change is open; acceptance and `/tcs-review` strip them from the durable suite, leaving the dispositions and the reasons
 
+## Coverage and Traceability
+
+The suite has two different coverage relationships. They must not be collapsed into one field.
+
+- **Formal coverage points to anchors** — a case's `**Trace:**` is its durable, required coverage. For a feature case it names one journey anchor; composed cases name every journey they intentionally cross. This relationship decides which suite owns the case and whether a case belongs in the file
+- **Scenario links are post-hoc evidence** — `trace:case ... covers=...` is optional until QA2 compares the independent case and scenario readings. QA1 and `/spec-to-tcs` never read scenarios to create or shape a case. QA2 may link one case to one or more scenarios after both readings exist
+- **One case may cover several scenarios** — use multiple scenario links only when the same route, starting state and checking fully assert each scenario. Separate the case when the scenarios require a different route, purpose, expected checking or risk
+- **No scenario link is valid during blind generation** — a new active case may have a trace marker with `id` and `rev` only. It is anchor-covered and scenario-link-pending, not invalid. `covers=none` remains reserved for deprecated cases
+- **QA2 owns scenario coverage** — QA2 identifies scenarios with no asserting case, cases whose outcomes have no scenario, and contradictions. It records links and dispositions after the blind reading; it does not feed scenario text back into generation
+- **A missing scenario link is not a missing anchor** — the validator distinguishes an anchor with no case, an active case with no post-hoc scenario links, and a scenario with no asserting case. Only the first and third are coverage findings; the second is pending QA2 evidence
+- **Legacy markers remain valid** — existing active cases with `covers` keep their links. The optional form applies to new or refreshed markers and does not force a repository-wide rewrite
+- **Coverage findings stay reviewable** — a validator reports the scope and severity of a gap. It does not invent a case, link a scenario by similarity, or reject an otherwise valid anchor-only draft solely because QA2 has not run
+
 ## Naming
 
 | Id | Lives in | Example |
@@ -107,7 +123,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 | `feature` | `<capability>/feature-tcs.md` | one capability's journeys, refusals and edge cases | that capability's `spec.md` and `user-journeys.md`, and the domain suite above it | every scenario its journeys accept, by its own case or by a domain case its `## Reconciliation` records as **Covered at domain** | one journey |
 
 - **The file name carries the level** — `test-cases.md` is not a suite name
-- **`product` and `platform` are health checks** — every case `**Suites:** smoke`; a suite past a page has stopped being a smoke pass
+- **`product` and `platform` are curated seam suites** — they cover high-value paths across domains or products. There is no fixed case-count cap and no requirement to enumerate lower-level coverage; stop when every important seam, critical path and cross-scope failure risk has a representative case, with duplicates grouped into rows or lower-level references
 - **A suite exists only where a path exists** — a product with one domain has no `product-tcs.md`, a product with no specs has nothing, and `platform-tcs.md` starts with the first cross-product path; none of those absences is a gap
 - **`shared/` gets no product suite** — its capabilities get feature suites, and paths across them `shared/<domain>/domain-tcs.md`
 - **Levels run top down** — platform, product, domain, feature, deriving and reviewing alike; each level names the paths it owns and the level below covers what those do not reach. A feature run reads the domain suite first, so a path a domain case walks is not written twice
@@ -209,13 +225,13 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 
 ## How a Case Reads
 
-The house style — titles, step and result shape, pre-condition and placeholder wording, classification starting shapes, setup recipes — is [`tcs-conventions.md`](tcs-conventions.md), not this document. This document is the contract; that file is how a case reads on top of it, and it moves without a rules revision.
+The house style — titles, step and result shape, pre-condition and placeholder wording, classification starting shapes, setup recipes — is [`tcs-conventions.md`](tcs-conventions.md). This document is the creation contract; the conventions file is the only writing-rule source and moves without a creation-rules revision.
 
 - **Generation writes to it** — `/spec-to-tcs` reads the conventions before it writes, a narrower line over a store-wide one; a draft is born in the current style
 - **Review restyles to it** — `/tcs-review` brings every `draft` to the conventions before the first journey: stable id kept, `rev` unchanged, status `draft`, coverage untouched. A manual `actual` case only on the reviewer's yes; `automated` and `deprecated` cases never
 - **Review adds to it, and applies what it adds** — when a review ends, the writing rule each of the reviewer's edits suggests is offered back as a candidate line; each is confirmed, reworded or refused. A fact about one product — its page, control, label, status value or behaviour — stays in the case and is not offered. A confirmed line applies everywhere by default and is applied at once to the reviewed file and to its domain's manual `actual` cases. Nothing lands unasked
 - **It refines how, never what** — a convention cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule this document; a contradicting line is reported and this document followed
-- **A convention that must hold everywhere is a contract** — it moves here with a rules revision
+- **A convention cannot silently become a contract** — if a writing rule changes coverage, ownership, traceability, lifecycle or validation, it is proposed here as a contract change instead of being added to `tcs-conventions.md`
 
 ## The Review Lane
 
@@ -234,7 +250,7 @@ The house style — titles, step and result shape, pre-condition and placeholder
 - **Only a human approves** — verdicts approve, change, defer or retire, in the reviewer's words; ids are echoed back and only what was named is marked. Approve → `actual`, defer → `draft`, retire → `deprecated`; the file status follows on its own
 - **Questions are answered from the spec** — quoting the clause, never from an assumption about the product. A "how do I run this" is a case failing **Executable without asking**: the answer is offered as an edit to its steps
 - **Prepare first** — before the first journey, in order: legacy case headings are migrated to the stable display form while preserving marker id, `rev`, purpose and content; a draft below the rules revision is regenerated, unasked and unnarrated, otherwise restyled to the conventions; coverage is checked by claim; the mechanism is filled in until every draft is **Executable without asking**; test data is proposed. An `actual` case still `manual` is touched only on the reviewer's yes; an `automated` case is left as it is. The reviewer gets one summary of what preparation changed, the regenerate aside, and each changed case carries its note again when its journey is walked
-- **Coverage is checked by claim** — every journey in the suite has a case, and every scenario serving it has a case whose expected results assert its THEN; a case merely tracing the journey does not count. A scenario no case asserts gets a new `draft` at the journey's next unused `TC<m>`, unasked, reviewed like any other. A scenario under `**Out of suite:**` is listed, and the reviewer is asked whether to write a case for it. A scenario under a live **Covered at domain** case counts as covered
+- **Coverage is checked by claim** — every journey in the suite has a case, and QA2 later identifies every scenario serving it whose THEN is asserted by a case. A case merely tracing the journey does not count for that post-hoc scenario link. A scenario no case asserts is a QA2 finding, not an instruction for blind generation to read or copy the scenario. A scenario under `**Out of suite:**` is listed, and the reviewer is asked whether to write a case for it. A scenario under a live **Covered at domain** case counts as covered
 - **A flow that disagrees is classified, not fixed** — where the spec's flow, `ui-design.md` or the PRD disagrees with a case, the PRD, the Feature set, `decisions.md`, `## Reconciliation` and `## Settled` are read first: already settled → follow it; the case misread → a proposed change; the spec wrong or silent → a gap for its author; undecidable → both sides shown to the reviewer
 - **Journeys are the author's** — a doubt about a journey itself (two with one purpose, one too wide, a wrong actor) is a finding for the spec's author, landed on the PRD as a ❓ or in the next change's `decisions.md`; a review never edits `user-journeys.md`
 - **Teach at the end** — the writing rules the reviewer's edits suggest are offered back as candidate lines for [`tcs-conventions.md`](tcs-conventions.md), one at a time; an edit that states a fact about one case — where a value is read, how a state is reached — stays in the case and is not offered; a confirmed line applies everywhere unless it is worded in one domain's vocabulary, and only then is its scope asked; refused ones land under `## Refused`. A confirmed line is applied at once, as that file's **A confirmed line applies at once** says
@@ -338,6 +354,8 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - **A row defines the state** — `<listing_6> | A live listing led by user A, current bid <leader price>`, so independence is checkable
 - **The spec's markers become concrete assumptions** — derived from the rule, never against it: `<bid time>` is `5 minutes before the recorded close, inside <extension window>`
 - **Roles are not data** — `customer(gold member)`, `admin(shop staff)` in the pre-conditions; no row
+- **Partition selection is explicit** — record the partition or boundary reason in the row value or reconciliation note. Add a second member of a class only when the class has more than one meaningful representation, the provider responds differently, or the risk is materially different
+- **Interaction rows are earned** — combine dimensions only when their interaction changes an outcome, state transition, permission, provider answer or failure risk. Otherwise keep dimensions in separate rows or cases
 
 ## A Case That Already Exists Is Not Written Twice
 
@@ -347,7 +365,7 @@ Read the suite before adding a case, by agent or by hand: a duplicate is a defec
 - **Distinct** — a different route where the spec states each outcome; the same assertion at another layer the spec states; a refusal beside the acceptance it mirrors
 - **When one is found** — show the existing case beside the proposed one and ask: update the existing case (a step, a row, a result, under its status's re-wording rules, no new id), add anyway (record what distinguishes it), or drop it (say which case covers it). Never add silently; never delete the older case — it is `deprecated` only when the spec no longer states the behaviour. In `/workflow-specify` the product manager's word at the reconciliation is the answer
 - **A new assertion on the same run joins the case** — same starting state, same route, and the new result observed on it: the step or result goes into the existing case under its id, so a tester walks it once. A `draft` keeps its `rev`; an `actual` case takes it as a behaviour change — `rev` bumped, back to `draft`, its file `reopened` — carried in the change's delta suite. An `automated` one goes the same way, and the change's `tasks.md` owes a task updating its test and its acceptance link to the new revision. A long case is a signal to check, not a limit — `tcs-conventions.md`'s **Size and shape**
-- **Across levels** — at generation, a path a domain case already walks gets no feature case (**One purpose, one case**). An existing feature case wholly covered by an `approved` domain case is a trim candidate at review; never trim an existing case against a domain file still holding drafts
+- **Across levels** — at generation, a path a domain case already walks gets no feature case (**One purpose, one case**) when the domain case fully asserts the same outcome. A higher-level case is still required when it checks a seam or outcome the lower level does not. An existing feature case wholly covered by an `approved` domain case is a trim candidate at review; never trim an existing case against a domain file still holding drafts
 
 ## Step 5: Classify the Case
 
@@ -366,7 +384,7 @@ Ten properties, in this order, on every case. Where a value usually starts is **
 | Priority | `high` | every pass, including a smoke pass before a release |
 | | `medium` | a full pass of this capability |
 | | `low` | when there is time, or when this area changed |
-| Status | `draft` | generated or edited since its last review; not exported |
+| Status | `draft` | generated or edited since its last review; not export-eligible |
 | | `actual` | a reviewer stands behind it against its scenarios; exports |
 | | `deprecated` | the spec no longer states it; kept, never exported, never renumbered |
 | Behaviour | `positive` | the intended thing, and it works |
@@ -401,10 +419,10 @@ Ten properties, in this order, on every case. Where a value usually starts is **
 - **Behaviour at a limit** — the accepted edge is `positive`, the refused one `negative`
 - **A broken input is `negative`** — an empty payload, a blocked asset, a `500`, a dropped connection, even when the product carries on
 - **Type is exactly one** — the kind of verification; which runs it joins is `Suites`, zero or more comma-separated, written `**Suites:** none` rather than omitted
-- **Trace identity** — every active and durable case carries the stable `trace:case` marker required by [Test Traceability](test-traceability.md), including cases without an automated acceptance link. Its `rev` is the case version. Keep the id across revisions; allocate a new one only for a genuinely new case, through the trace CLI. The marker's `covers` list names exactly the scenarios serving the case's `Trace` journeys. Resolve unclear legacy coverage with the suite owner; do not guess
+- **Trace identity** — every active and durable case carries the stable `trace:case` marker required by [Test Traceability](test-traceability.md), including cases without an automated acceptance link. Its `rev` is the case version. Keep the id across revisions; allocate a new one only for a genuinely new case, through the trace CLI. The marker's `covers` list is optional post-hoc QA2 evidence and may name multiple scenarios; it never replaces the case's required anchor in `**Trace:**`. Resolve unclear legacy coverage with the suite owner; do not guess
 - **Automation status** — generation writes `manual`; engineering flips it when the test lands, with `pnpm run tcs:automated <case…> --decided-by <path>` in this store, editing the line in place, and the flag writing the Decided-by line in the same edit, so the flip rides the commit that landed the test; `automation` testability still `manual` is the backlog. It decides whether wording may move: a `manual` case may be re-worded in review, an `automated` case is frozen and changes only with its behaviour, as a `rev` bump back to `draft`. `automation` testability plans QA's suite; it satisfies neither `ui-component-testing.md` nor a `tasks.md` checkbox. Selected app-test links use [Test Traceability](test-traceability.md)
 - **Trace** — one journey per feature case; a case that would trace two is two cases or a journey not yet written, and a case with no trace does not belong in the file. Every id is defined by a `user-journeys.md` in scope; `<requirement> / <journey title>` only where a spec has no ids
-- **Scenario coverage is checked, not recorded** — generation verifies every scenario accepting a journey has a case and reports the rest as gaps
+- **Scenario coverage is post-hoc** — generation does not inspect scenario text or require `covers`; QA2 links scenarios after the independent readings. The validator reports anchor coverage as an error when absent, and scenario-link coverage as pending or a finding according to suite lifecycle; it never derives a link by title or text similarity
 
 ## The File Header
 
@@ -421,7 +439,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 
 - **A transition, never a claim** — the writer compares the current and next approved shares by exact cross multiplication, then writes the table above. `/spec-to-tcs`, `/tcs-review` and the fold do this after every write. `pnpm run tcs:validate` verifies the stored ratio and the statuses the snapshot can carry; the prior file is what proves whether incomplete progress is `pending-review` or `reopened`
 - **Activity lives in Git** — `in-review` is not a file status. A remote `tcs-review/*` branch or its open pull request means review work is in flight; closing or merging it ends that activity. A partially reviewed file at rest remains `pending-review` or `reopened`
-- **Only `approved` exports** — and only its `actual` cases, only when someone runs an export
+- **Only eligible suites export** — a suite must be `approved` and the exported cases must be `actual`; `draft`, `deprecated`, anchor-only pending cases and `reopened` suites are not export-eligible. A pending QA2 link is a review finding, not a reason to invent `covers`
 - **`**Drafts styled:**`** — the revision of this document the file's `draft` cases were last written against, and when; present exactly while the file holds a `draft`. `actual` cases carry no revision: a reviewer's yes is the convention
 - **`**Reviewed:**`** — the date the file reached `approved` and the revision, written by `/tcs-review` on that transition; no reviewer name, git records who. When the file falls out of `approved` the line stays and gains `, lapsed <YYYY-MM-DD>`, written by whichever run added the draft. A new approval writes the line fresh
 - **`reopened` sorts first** — `/tcs-review` lists regressed suites ahead of `pending-review` ones
@@ -498,7 +516,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 
 | Tool | Does |
 | --- | --- |
-| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, reads the conventions, derives the level's file with every new case `draft`, restyles existing drafts; on a feature run reads the domain suite above and leaves the paths it walks to it, and joins a new assertion to the case whose run it shares; shows an existing suite and asks; regenerates the drafts of a suite below the rules revision, top down; refuses a whole-file regenerate over `actual` cases or an `approved` file |
+| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | runs the creation workflow, reads this document plus the sole writing-rule file, derives the level's file with every new case `draft`, restyles existing drafts; on a feature run reads the domain suite above and leaves the paths it walks to it, and joins a new assertion to the case whose run it shares; shows an existing suite and asks; regenerates the drafts of a suite below the rules revision, top down; refuses a whole-file regenerate over `actual` cases or an `approved` file |
 | `/tcs-review [<target>]` (`tcs-review` skill) | finds suites awaiting review, walks drafts one journey at a time, quotes scenarios on request, records verdicts |
 | `planning-dev` skill | Integrated QA1, Dev and QA2 planning, then acceptance and publication |
 | `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; the Decided-by verdicts, and every path a Decided-by line names resolving inside the store to a file that exists; every **Covered at domain** id naming a domain case that exists and is not `deprecated`; warns on an archived case the fold left behind; reports duplicate-purpose candidates and a case needing a mocked state that plans no automation; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
@@ -514,7 +532,7 @@ A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 - **A tab is a snapshot** — written once, pinned to the commit it was written from, never resynced. A case that later changes, or is deprecated, leaves the tab alone: the tab says what was tested and the markdown says what the case is now
 - **`actual` only** — `--include-draft` takes drafts and stone-grey-bands them; a `deprecated` case never crosses
 - **A run includes automated cases** unless the person asked to leave them out. `--exclude-automated` leaves them out and still says how many, named, with what decides each
-- **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated. The person confirms that list before a tab is written
+- **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated. A change-scoped run records the requested change, affected capabilities and source commit in its run metadata. The person confirms that list before a tab is written
 - **Production unless they asked for the sandbox** — `--sandbox` writes to `TCS_SHEET_SANDBOX_ID`. That id is a repository variable, never in the code
 - **An occupied title is a refusal** — a new run whose tab name already exists is not written and is not given a `-2` suffix. `--overwrite <id>` recreates that run's tab and rewrites its four Summary rows in place, and only after a person names the id. If Summary and the tabs disagree, the writer prints both and stops
 - **The case columns are locked** — a protected range refuses an edit at the cell. `Web`, `Mobile`, `Auto web`, `Auto mobile` and `Notes` are the tester's; the case to their left and the classification to their right are not. A wrong case is fixed in `openspec/`
