@@ -90,7 +90,9 @@
     "riding_elsewhere": "此優惠碼已用於另一個未完成的結帳。",
     "no_tender": "這裡不能使用獎賞優惠碼。",
     "wallet_unavailable": "暫時無法讀取你的獎賞，請稍後再試。",
-    "gift_refused": "此優惠碼贈送的商品暫時無法加入。"
+    "gift_refused": "此優惠碼贈送的商品暫時無法加入。",
+    "site_discount_wins": "網站優惠為這張訂單減得更多，商店會改用網站優惠；此優惠碼會保留在你的錢包。",
+    "shop_refused": "商店不接受此優惠碼用於這張訂單。"
   },
   "pointsRefusal": {
     "noMember": "積分只供計劃會員使用。",
