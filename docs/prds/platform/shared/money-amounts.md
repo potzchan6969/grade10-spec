@@ -29,9 +29,8 @@ refused on every surface.
 | 2 | AED, AUD, BRL, CAD, CHF, CNY, CZK, DKK, EUR, GBP, HKD, ILS, INR, MXN, MYR, NOK, NZD, PHP, PLN, RON, SEK, SGD, THB, TRY, TWD, USD, ZAR |
 | 3 | BHD, IQD, JOD, KWD, LYD, OMR, TND |
 
-- **IDR** ❓ TBC: the shared listing formatter held IDR and the platform table
-  did not. The product owner decides whether IDR joins the table. Until then
-  IDR is refused everywhere.
+- **IDR** — ❓ TBC: whether IDR joins the table. The product owner decides.
+  Until then IDR is refused everywhere.
 
 ## Currencies in Use
 
@@ -61,21 +60,15 @@ Money takes two shapes, and each surface uses the one its audience calls for.
   for JPY, three for KWD (`KWD 1,234.567`). A whole amount keeps them.
 - **Grouping** — thousands are grouped in both shapes. A collector's decimal
   and grouping marks follow the reader's own locale. Sent messages use English.
-- **Bid amounts** ❓ TBC: the auction listing and the bid ladder show whole
-  major units, as in `HK$800` and `¥15,000`, where the digits rule above gives
-  `HK$800.00`. The product owner decides whether bid amounts keep the digits
-  rule or keep whole units.
-- **Narrow symbol** ❓ TBC: the order pages print summary lines as `$1,770.00`
-  and the total as `HK$1,704.50` on the same HKD order, which the collector
-  shape does not give. [Order Detail](/p/grade10-site/store/order-detail) and
-  [Bidding](/p/grade10-site/auction/bidding) hold the same split. The product
-  owner decides whether a summary line may drop the region. This page allows
-  two shapes and no third, so a dropped region is either a third shape or a
-  mistake.
-- **Invoice item amounts** ❓ TBC: the auction invoice's item table prints bare
-  numbers, and its totals print the symbol shape. The product owner decides
-  whether item lines keep the bare number under a header that names the
-  currency.
+- **Bid amounts** — ❓ TBC: whether bid amounts show the digits above or whole
+  units. The product owner decides. The evidence is in the money sweep
+  reference.
+- **Summary lines** — ❓ TBC: whether a summary line beside a total may drop the
+  region, as `$` beside `HK$` on one HKD order. The product owner decides.
+- **Narrow symbol** — ❓ TBC: whether a line that drops the region is a third
+  shape. This page allows two shapes and no third. The product owner decides.
+- **Invoice item lines** — ❓ TBC: whether item lines keep bare numbers under a
+  header that names the currency. The product owner decides.
 
 :::detail{title="Code helpers" for="engineer"}
 | Helper | Module | Use for |
@@ -87,19 +80,20 @@ Money takes two shapes, and each surface uses the one its audience calls for.
 | `currencyExponent`, `SUPPORTED_CURRENCY_CODES` | `@grade10/utils/money` | The digits of a code, and the codes in the table above |
 | `formatMoney`, `parseMoneyInputToMinor` | `@grade10/ui` (`lib/format-money`) | The shared auction listing blocks, which keep their own copy of the table |
 | `formatMinor` | `@grade10/frontend-console` (`money.ts`) | Console tables, the operator shape |
-
-The table lives in `@grade10/utils` for the Grade10 backend and frontends, and
-`@grade10/ui` keeps the same codes, held equal to this page by a test. A
-surface that needs a new helper adds it to `@grade10/utils/money`, not to its
-own file.
 :::
 
 :::detail{title="Product decisions" for="pm"}
-Floating point loses cents, so an amount is never a decimal inside the
-platform. A collector wants the symbol and their own punctuation. An operator
-scanning a table that spans currencies needs the ISO code on every row, because
-a column where some amounts are dollars and some are yen is a mistake waiting
-to be made.
+**Users.** Collectors reading an amount on a storefront, auction, vault or
+grading page. Operators reading rows that can span currencies. Engineers adding
+a surface that shows money.
+
+**Measurement.** None. A test holds the shared table equal to this page's table,
+so the two cannot drift apart unnoticed.
+
+**Decisions.** One table of codes and digits for every surface, rather than one
+table per surface. Two shapes, chosen by audience. An amount the currency cannot
+hold is refused, never rounded. Floating point loses cents, so an amount is
+never a decimal inside the platform.
 
 **Not in scope.** Which currency a brand quotes in, which sits on its owning
 page. Currency conversion, which the platform does not do.
