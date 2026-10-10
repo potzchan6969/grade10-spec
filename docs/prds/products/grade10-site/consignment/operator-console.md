@@ -104,4 +104,6 @@ pinned to a consignment when its agreement is prepared.
 | Payouts on the vault's rule | Decided | Recorded after the bank transfer by a treasurer; a correction takes a second holder of the grant - decided under the owner's delegation, 2026-10-08 | Finance |
 | Seller display is an admin act | Decided | The owner names the admin as the one who sets it - decided by the owner, 2026-10-08 | Product |
 | Every figure a setting | Decided | The schedule, the term, the windows, fees, identity and when a consignor is paid are settings admins change in the console, each starting on the recommended default - decided by the owner, 2026-10-08 | Product |
+| One payout per consignment | ❓ Open | Proposed: every sale of a consignment past its window is paid as one payout, and a sale still inside its window waits for its own day | Finance |
+| A schedule version per save | ❓ Open | Proposed: each settings save that moves a figure is the next schedule version, the one an agreement prepared after it pins | Product |
 :::

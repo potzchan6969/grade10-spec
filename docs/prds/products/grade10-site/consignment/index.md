@@ -174,10 +174,9 @@ and the seller named only where an admin sets it. The design is
 | Treasurer | A consigned item sold | Knows what is owed to whom and when, and records it once |
 | Buyer | Buying a consigned card | Buys it as any other card, in the shop or online |
 
-**Not in scope.** A consignor's own page listing their consignments, which
-waits for a collector's page of their items; payouts by card or into a
-wallet; consignments in a currency other than the brand's; a consignor
-setting a price below the floor themselves.
+**Not in scope.** Payouts by card or into a wallet; consignments in a
+currency other than the brand's; a consignor setting a price below the floor
+themselves.
 
 **Measurement.** Items consigned; share sold within the term; days on sale;
 payouts made on their due day.
@@ -192,5 +191,6 @@ payouts made on their due day.
 | Messages | Decided | The consignment service sends its own, by email, as the vault and grading do - decided under the owner's delegation, 2026-10-08 | Product |
 | Every figure is a setting | Decided | Commission, the minimum, fees, the term and the windows are settings admins change in the console, each pinned to a consignment when its agreement is prepared - decided by the owner, 2026-10-08 | Product |
 | Flexible, with a default | Decided | Identity, when a consignor is paid and a refund after payout are settings too; the recommendation is the default: always verified, paid after the return window, a refund set against the next payout - decided by the owner, 2026-10-08 | Product |
+| A consignor's own page | ❓ Open | Built ahead of a collector's page of their items: under their profile, a signed-in consignor reads each consignment, its items' prices, sales and payouts, the terms pinned to it, the payouts made, its documents and the emails sent; a buyer's seller line waits for a store product that names its item - taken by the building agent, 2026-10-10, for the owner to confirm | Product |
 | Nobody collects | ❓ Open | Reminders, then a written notice, as grading's ladder runs | Legal |
 :::

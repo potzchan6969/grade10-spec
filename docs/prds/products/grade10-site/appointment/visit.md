@@ -40,6 +40,7 @@ The manage link opens one page per visit, and the page follows the visit from th
 - **Ticket** - staff add the walk-in and show the ticket QR on their screen; the collector's phone follows the place in line and the estimate
 - **Called** - the ticket turns to the counter; a walk-in not seen in 10 minutes leaves the line
 - **Paused** - the wait page says walk-ins are paused, and until when
+- ❓ **Addresses** - the wait page answers at `grade10.com/book/<shop>/walk-in` and a ticket at `grade10.com/book/ticket#<secret>`, the secret in the fragment as the manage link's is
 
 ## Messages
 
@@ -83,7 +84,7 @@ A collector who books once comes back to one link for everything about that visi
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Changes | Decided | Move and cancel until the slot ends, unless checked in. | Product |
-| One live visit per service | ❓ Open | Ignores visits past their hold and walk-ins, so a collector who missed their time books again. | Product |
+| One live visit per service | ❓ Open | Ignores visits past their hold and walk-ins, so a collector who missed their time books again; the visit they missed closes as Missed. | Product |
 | Email is not identity | ❓ Open | Signed out, a second booking under a held address says the link went to that address and shows no time. | Product |
 | Move to another shop | ❓ Open | Not offered; the collector cancels and books again. | Operations |
 | Self check-in | ❓ Open | None; an "I'm here" on Running late only pings the desk. | Operations |

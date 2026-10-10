@@ -55,6 +55,10 @@ new intake and no new label.
 - **Paper first** - the next service's agreement is signed before the first
   mark closes
 - **The owner decides** - or staff, for an item the house owns
+- ❓ Product — **Where a hand-off starts** - the item page lists each
+  hand-off its open marks allow, offered or withheld with the reason, and
+  opens the next service's page to prepare its agreement; the act is the
+  next service's, 2026-10-10
 
 | From | To | When |
 | --- | --- | --- |
@@ -107,5 +111,9 @@ zero; marks refused by name; hand-offs completed in one visit.
 | A sale settles itself | Decided | The selling service moves the owner and closes its mark; nobody records a sale by hand - decided under the owner's delegation, 2026-10-08 | Product |
 | Selling from the vault | Decided | A setting, on by default: a storage-lane item sells from the vault and its vault case passes to the buyer; this replaces the register's refusal of a vaulted item changing owner - decided by the owner, 2026-10-08 | Product |
 | A live loan and a sale | Decided | A setting, by default no sale until the loan is repaid; the other choice lets the proceeds repay it first - decided by the owner, 2026-10-08 | Product |
+| The vault takes an item over | Decided | A slab at grading and a won lot pass into the vault case in one act once its custody agreement is executed; grading reads the case from the item rather than a typed reference, which stays only for a card handed in before cards were items - decided under the owner's delegation, 2026-10-10 | Product |
+| Consignment takes an item over | Decided | Adding an item another service holds - grading's card, a lot or a listing ended unsold, a storage vault case - names that mark, and the hand-off runs when the consignment agreement is sealed - decided under the owner's delegation, 2026-10-10 | Product |
+| A lot of an item | Decided | A lot whose product links one item asks before it is published; its mark opens when it goes live and closes sold when its order is paid, moving the owner to the winner, or unsold when nobody won or the order is cancelled, or withdrawn when the lot is called off - decided under the owner's delegation, 2026-10-10 | Product |
+| A card going home | Decided | The grading mark closes at hand-back or withdrawal and the item leaves custody; a card the grader did not return closes lost and stays on the register - decided under the owner's delegation, 2026-10-10 | Product |
 | A forfeited item for sale | ❓ Open | Who sells an item the lender owns | Legal |
 :::

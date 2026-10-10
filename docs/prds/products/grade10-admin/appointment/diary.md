@@ -52,4 +52,5 @@ resource is what the diary can promise.
 | Source | ❓ Open | Booked by reads as the source: Online, Staff or Walk-in. | Product |
 | Insights | ❓ Open | A tab beside Bookings: booked share, missed, walk-in wait and walk-ins lost, with one busy-hours chart. | Operations |
 | Service editor | ❓ Open | One page per service in English and 繁中, adding the hold, walk-ins and what to bring. | Product |
+| Staff booking | ❓ Open | Staff book any start from now, up to a year ahead; the notice and the horizon are the collector's. | Operations |
 :::

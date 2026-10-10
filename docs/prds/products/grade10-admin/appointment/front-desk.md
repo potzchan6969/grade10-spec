@@ -102,6 +102,10 @@ A shop serves booked visitors and walk-ins at the same counters, so the desk has
 | Changing an outcome | ❓ Open | Within 7 days, with a reason; never on a visit sent to grading or the vault. | Operations |
 | Live updates | ❓ Open | Polling; no live connection per shop. | Engineering |
 | WhatsApp | ❓ Open | Staff tap a prepared message; nothing sends by itself. | Operations |
+| Not seen | ❓ Open | Staff press Didn't come once the 10 minutes pass; no visit ends by itself. | Operations |
+| Close early and product visits | ❓ Open | A visit grading or the vault booked for itself stays booked; its product moves it. | Operations |
+| You're next sent | ❓ Open | The Sent mark on a row is the phone's own; another staff phone does not see it. | Operations |
+| Desk acts and Undo | ❓ Open | Check in, Call, Add walk-in and the closures apply at once with no Undo; a mark keeps its Undo. | Product |
 
 The risk is a floor that stops pressing Call: the counters then read free while people are served, and the estimates drift. Design: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd). Benchmarks: [Genius Bar and cal.com](/references/appointment-benchmarks).
 :::

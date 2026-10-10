@@ -20,12 +20,15 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 
 ## Booking
 
-- 🚧 **The diary service** — a Grading drop-off service bound to the
+- ❓ **The diary service** — a Grading drop-off service bound to the
   submission, as the vault's visit is: the visit carries the list, the diary
-  is given no address, and the submission owns every email
-- 🚧 **Where it is booked** — in grading's own booking view, which the
+  is given no address, and the submission owns every email; or the
+  collector's own Grading drop-off, booked with the submission as an answer,
+  which gets the pass, the diary's mail and [Your Visit](/p/grade10-site/appointment/visit) until staff transfer it
+- ❓ **Where it is booked** — in grading's own booking view, which the
   collector's page opens after the plan is kept, and for any submission that
-  holds no drop-off and has none to join
+  holds no drop-off and has none to join; or [Book a Visit](/p/grade10-site/appointment/booking) with the submission
+  filled in
 - 🚧 **The Bulk drop-off** — 20 cards or more books the longer service; so
   do two lists on one visit that pass 20 together, and a booked list edited
   past 20
@@ -36,11 +39,13 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 - 🚧 **A second submission** — joins the drop-off the first one booked: the
   first submission owns the visit, the second is listed under it and its page
   reads the same day and time, and the slot is sized for both lists
-- 🚧 **A walk-in** — books the customer-bookable Grading service at
+- ❓ **A walk-in** — books the customer-bookable Grading service at
   `grade10.com/book` with a name and an email, and lists the cards at the
-  counter
-- 🚧 **Move or cancel** — any time before the visit starts, from the page
-  of the submission that owns the visit; an email each
+  counter; or staff add them to the line at the counter with a ticket —
+  [Walk-in Ticket](/p/grade10-site/appointment/visit#walk-in-ticket)
+- ❓ **Move or cancel** — any time before the visit starts, from the page
+  of the submission that owns the visit; an email each; or until the slot
+  ends, from [Your Visit](/p/grade10-site/appointment/visit)
 - 🚧 **Leaving a joined visit** — a second submission's page offers no move
   and no cancel of the visit: it leaves by cancelling itself, and the visit
   stands, sized for the lists left on it
@@ -48,14 +53,15 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
   collector did not come (the shop's console may also close it first);
   within the hour the submission reads the outcome, sends the missed email
   and keeps the list and the estimate as they were, and another drop-off is
-  booked from the submission page
+  booked from the submission page; ❓ or with Book again on [Your Visit](/p/grade10-site/appointment/visit)
 - 🚧 **A visit ended without a hand-in restarts the plan's clock** — missed
   or cancelled, from the day it ended, `plan_expiry_days` counted from there
   rather than from the day the plan was first kept, for every submission on
   the visit, a joined one too, so a collector whose visit ended weeks into
   their plan is not left with only what was originally left to book again in
-- 🚧 **The booked view** — the day, the time and the shop, add to calendar,
-  move, cancel, and the day the cards leave with the estimated day back
+- ❓ **The booked view** — the day, the time and the shop, add to calendar,
+  move, cancel, and the day the cards leave with the estimated day back; or
+  the pass and [Your Visit](/p/grade10-site/appointment/visit), which carry no batch line
 
 ## Before You Come
 

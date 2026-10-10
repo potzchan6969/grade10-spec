@@ -20,6 +20,10 @@ that receive, move and count.
 
 - **Every row opens its item** - an item named on a vault case, a grading
   card, a consignment or a lot opens the same item page
+- ❓ Product — **Tab order** - the tabs read Items, Receiving, Transit,
+  Locations, Products and Stock, Deals and Settings, as the design draws
+  them; the catalogue's Imports and Schemas open from Products and Stock's
+  More, 2026-10-10
 
 ## Scan
 
@@ -28,6 +32,12 @@ that receive, move and count.
 - **Inside a task** - while packing, receiving or counting, a scan adds the
   item to the task instead
 - **Nothing found** - a scan that finds no item offers to receive a new one
+- ❓ Product — **A near miss** - a code nobody has offers the code one
+  letter away from it among those the sheet has read, since the console
+  keeps no list of every code; the owner has not confirmed it, 2026-10-10
+- ❓ Product — **On a phone** - the camera reads a label's QR code and a
+  slab's barcode where the phone's browser can, and a typed code does the
+  same where it cannot, 2026-10-10
 
 ## The Item Page
 
@@ -45,6 +55,9 @@ that receive, move and count.
 - **Apply to a service** - one menu naming the vault, grading, consignment,
   the auction and the store, each offered or withheld with the reason in
   words - [Services and Hand-offs](/p/grade10-admin/inventory/services#applying-an-item)
+- ❓ Product — **Where an apply starts** - an offered service opens that
+  service's own page with the item named, where its agreement is prepared;
+  the item page states the steps and runs none of them, 2026-10-10
 - **Move** - a scan of the unit it goes to
 - **Print label** - at any time
 - **Retire** - as the register runs it -
@@ -60,6 +73,10 @@ that receive, move and count.
   [Intake and Release](/p/grade10-admin/inventory/intake#receiving-an-item)
 - **Room left** - the cap each unit an item can go to still leaves
 - **Unmatched** - a parcel nobody expected waits here until staff match it
+- ❓ Product — **Returned unopened** - a parcel no request fits goes back to
+  its sender sealed: staff give the reason, and it leaves the desk as a
+  cancelled shipment with the reason on its timeline; booking the courier
+  stays by hand, 2026-10-10
 
 ## Locations Page
 

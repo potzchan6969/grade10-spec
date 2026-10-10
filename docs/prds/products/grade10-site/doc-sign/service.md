@@ -83,4 +83,8 @@ held at zero; packets re-checked with no finding.
 | One signing address | Decided | `grade10.com/sign`, so a signer meets one ceremony whatever they sign - decided under the owner's delegation, 2026-10-08 | Product |
 | Templates approved by Legal | Decided | Production refuses to seal an unapproved version, as grading refuses a placeholder - only Legal approves a version - decided by the owner, 2026-10-08 | Legal |
 | When the vault and grading move | ❓ Open | After consignment ships on the service | Engineering |
+| A sandbox run on an unapproved version in production | ❓ Open | Refused when the sandbox packet is prepared, before a sample person signs; the design shows the run stopped at the seal - taken by engineering while building the service, 2026-10-10 | Legal |
+| Who vouches for an admin's signer | ❓ Open | The identity check the host recorded the last time the person signed, until the KYC store mints an entrypoint for consignment - taken by engineering while building the service, 2026-10-10 | Engineering |
+| What an admin's any-document dialog prepares | ❓ Open | The partner master agreement and the deal schedule, whose data the dialog asks for; a template a service's record fills, such as the consignment agreement, is shown held and prepared from its consignment - taken by engineering while building the console, 2026-10-10 | Product |
+| Where the signing address is carried | ❓ Open | `/sign` waits on a documents gate of its own, open on the lanes the consignment worker runs on and shut on UAT and production until it launches - taken by engineering while building the site, 2026-10-10 | Engineering |
 :::
