@@ -90,7 +90,9 @@
     "riding_elsewhere": "此优惠码已用于另一个未完成的结账。",
     "no_tender": "这里不能使用奖励优惠码。",
     "wallet_unavailable": "暂时无法读取你的奖励，请稍后再试。",
-    "gift_refused": "此优惠码赠送的商品暂时无法加入。"
+    "gift_refused": "此优惠码赠送的商品暂时无法加入。",
+    "site_discount_wins": "网站优惠为这张订单减得更多，商店会改用网站优惠；此优惠码会保留在你的钱包。",
+    "shop_refused": "商店不接受此优惠码用于这张订单。"
   },
   "pointsRefusal": {
     "noMember": "积分只供计划会员使用。",

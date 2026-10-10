@@ -9,7 +9,10 @@ The product details page shows one product, its price, and the one sellable
 item a collector can add.
 
 - **Card** — name, description, images and the one sellable item's price;
-  badges and compare-at price where the catalogue provides them
+  badges and compare-at price where the catalogue provides them; every one of
+  the shop's own automatic discounts that reaches the product is named among
+  the badges, and one with no condition prices the card, the price before it
+  struck through — [Discounts](/p/grade10-site/store/discounts#site-discounts)
 - **One item to buy** — the page offers no size, option or variant choice.
   Shopify's sale identifier stays internal to availability and cart handling
 - 🚧 **Buy** — choose a quantity, add the product, and stay on the page; while

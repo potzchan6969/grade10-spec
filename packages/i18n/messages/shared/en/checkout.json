@@ -90,7 +90,9 @@
     "riding_elsewhere": "This promo code is already on another open checkout.",
     "no_tender": "Reward promo codes cannot be used here.",
     "wallet_unavailable": "Your rewards could not be read right now. Try again in a moment.",
-    "gift_refused": "The gift this promo code gives cannot be added right now."
+    "gift_refused": "The gift this promo code gives cannot be added right now.",
+    "site_discount_wins": "A site discount takes more off this basket, so the shop applies it instead. This promo code stays in your wallet.",
+    "shop_refused": "The shop will not apply this promo code to this basket."
   },
   "pointsRefusal": {
     "noMember": "Points are for members of the programme.",
