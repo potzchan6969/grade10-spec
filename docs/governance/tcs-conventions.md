@@ -4,15 +4,15 @@ How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.m
 
 ## How This File Grows
 
-- **Only a writing rule is a candidate** — when a `/tcs-review` ends, each change the reviewer made to a case is read for the rule it suggests about how a case is written, and that rule is offered back as one line: what was changed, and the rule. The reviewer confirms, rewords or refuses each one; nothing lands unasked
+- **Only a reusable writing rule is a candidate** — when a `/tcs-review` ends, offer a convention only when a confirmed, reusable rule about how a case is written emerged. A case-specific edit, product fact, or style change with no reusable rule produces no candidate and no convention follow-up
 - **A fact is not a candidate** — a change naming one product's page, control, label, status value or behaviour, where a value is read, or how a state is reached stays in the case it was made to, and is not offered. `## Setup Recipes` and `## Where Things Are` take no line from a review
-- **A confirmed line applies everywhere** — it lands under `## Store-wide` by default. Only a line worded in one domain's vocabulary is scoped narrower, and then the review says why and asks the reviewer which scope
+- **A confirmed line has store-wide scope by default** — it lands under `## Store-wide` unless its wording is explicitly domain-specific. How that scope is applied to existing cases follows **A confirmed line applies at once** below
 - **Refused lines land under `## Refused`** — the next review reads that section and does not offer the same pattern again
 - **One line per convention** — `- <YYYY-MM-DD>, <suite path>: <the pattern, as a rule>`. A line that needs an example names an approved case id rather than pasting one
 - **Narrower wins** — a capability line beats a store-wide one for that capability's suites
 - **It refines how, never what** — a convention cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule the contract; a line that contradicts [`specs-to-test-cases.md`](specs-to-test-cases.md) is reported and the contract followed
 - **A convention that must hold everywhere is a contract** — it moves to `specs-to-test-cases.md` with a rules revision, and leaves this file
-- **A confirmed line applies at once** — when the review that confirmed it ends: to the reviewed file, its remaining drafts and its `actual` cases still `manual`; and to every other suite in the same domain folder, its `actual` cases still `manual`, unasked, in its own commit, skipping a suite with an open `tcs-review/*` branch or pull request. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
+- **A confirmed line applies at once** — when the review that confirmed it ends, apply it to the reviewed suite's remaining drafts and its manual `actual` cases. A same-domain propagation may update other cases in a separately listed style-only follow-up, preserving purpose, expected results, trace, status, test-data meaning and automation links; a semantic change waits for that suite's review. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
 - **`automated` and `deprecated` cases are never restyled to it** — an `automated` case changes only with its behaviour, a `deprecated` one never
 
 ## Before Adding a Convention

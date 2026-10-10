@@ -1,5 +1,5 @@
 ---
-tcs_rules_rev: 6
+tcs_rules_rev: 5
 ---
 
 # Specs to Test Cases
@@ -229,35 +229,21 @@ The house style — titles, step and result shape, pre-condition and placeholder
 
 - **Generation writes to it** — `/spec-to-tcs` reads the conventions before it writes, a narrower line over a store-wide one; a draft is born in the current style
 - **Review restyles to it** — `/tcs-review` brings every `draft` to the conventions before the first journey: stable id kept, `rev` unchanged, status `draft`, coverage untouched. A manual `actual` case only on the reviewer's yes; `automated` and `deprecated` cases never
-- **Review adds to it, and applies what it adds** — when a review ends, the writing rule each of the reviewer's edits suggests is offered back as a candidate line; each is confirmed, reworded or refused. A fact about one product — its page, control, label, status value or behaviour — stays in the case and is not offered. A confirmed line applies everywhere by default and is applied at once to the reviewed file and to its domain's manual `actual` cases. Nothing lands unasked
+- **Review follows its gate** — `/tcs-review` uses `tcs-conventions.md`'s candidate and conflict gate. A confirmed style rule applies to the reviewed suite; a same-domain propagation may touch other cases only as a separately listed, style-only follow-up that preserves purpose, expected results, trace, status, test data meaning and automation links
 - **It refines how, never what** — a convention cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule this document; a contradicting line is reported and this document followed
 - **A convention cannot silently become a contract** — if a writing rule changes coverage, ownership, traceability, lifecycle or validation, it is proposed here as a contract change instead of being added to `tcs-conventions.md`
 
-## The Review Lane
+## Review Contract
 
-**The one lane still on a pull request**, merged by its reviewer: a verdict is a reviewer's own over a durable file, with no artifact row and no hand for the landing to land it as.
+`/tcs-review` owns the review procedure. This section owns the invariant contract; branch, commit, push, presentation and interaction steps live only in the skill.
 
-| | |
-| --- | --- |
-| Branch | `tcs-review/<level>-<target>`, off `main`, pushed before the first verdict; the remote branch or its open pull request is the `in-review` signal. A second reviewer on the same suite appends `-US<n>-<m>` |
-| Commits | preparation first, each part its own commit: `test(<domain>): regenerate <target> test cases under tcs-rules r<n>` or `test(<domain>): restyle <target> test cases`, `test(<domain>): cover <target> scenarios`, `test(<domain>): fill in how to run <target> test cases`, `test(<domain>): add test data to <target> test cases`. Then `test(<domain>): approve <target> US<n> test cases`, one per journey that changed, made on moving to the next journey. Then the follow-ups — `docs(governance): conventions from the <target> review` and `test(<domain>): apply conventions from the <target> review` — batched by purpose |
-| Pushes | once when preparation is done, before the reviewer sees a case; once when the process ends; and once if the reviewer leaves midway. Never between journeys |
-| PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — the journeys the branch carries |
-| PR label | `documentation` |
-| Merges | one pull request, opened when the process ends, its description listing what the follow-ups changed; a review left midway pushes and opens the pull request with what it has |
-
-- **One journey at a time** — its three-line statement, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
-- **Only a human approves** — verdicts approve, change, defer or retire, in the reviewer's words; ids are echoed back and only what was named is marked. Approve → `actual`, defer → `draft`, retire → `deprecated`; the file status follows on its own
-- **Questions are answered from the spec** — quoting the clause, never from an assumption about the product. A "how do I run this" is a case failing **Executable without asking**: the answer is offered as an edit to its steps
-- **Prepare first** — before the first journey, in order: legacy case headings are migrated to the stable display form while preserving marker id, `rev`, purpose and content; a draft below the rules revision is regenerated, unasked and unnarrated, otherwise restyled to the conventions; coverage is checked by claim; the mechanism is filled in until every draft is **Executable without asking**; test data is proposed. An `actual` case still `manual` is touched only on the reviewer's yes; an `automated` case is left as it is. The reviewer gets one summary of what preparation changed, the regenerate aside, and each changed case carries its note again when its journey is walked
-- **Coverage is checked by claim** — every journey in the suite has a case, and QA2 later identifies every scenario serving it whose THEN is asserted by a case. A case merely tracing the journey does not count for that post-hoc scenario link. A scenario no case asserts is a QA2 finding, not an instruction for blind generation to read or copy the scenario. A scenario under `**Out of suite:**` is listed, and the reviewer is asked whether to write a case for it. A scenario under a live **Covered at domain** case counts as covered
-- **A flow that disagrees is classified, not fixed** — where the spec's flow, `ui-design.md` or the PRD disagrees with a case, the PRD, the Feature set, `decisions.md`, `## Reconciliation` and `## Settled` are read first: already settled → follow it; the case misread → a proposed change; the spec wrong or silent → a gap for its author; undecidable → both sides shown to the reviewer
-- **Journeys are the author's** — a doubt about a journey itself (two with one purpose, one too wide, a wrong actor) is a finding for the spec's author, landed on the PRD as a ❓ or in the next change's `decisions.md`; a review never edits `user-journeys.md`
-- **Teach at the end** — the writing rules the reviewer's edits suggest are offered back as candidate lines for [`tcs-conventions.md`](tcs-conventions.md), one at a time; an edit that states a fact about one case — where a value is read, how a state is reached — stays in the case and is not offered; a confirmed line applies everywhere unless it is worded in one domain's vocabulary, and only then is its scope asked; refused ones land under `## Refused`. A confirmed line is applied at once, as that file's **A confirmed line applies at once** says
-- **Finding suites** — any file holding a `draft`: none → say so and name where suites live; one → review it; more → list `reopened` first, then `pending-review`, with approved/active progress, and ask. A matching remote `tcs-review/*` branch or open pull request overlays `in-review`; it is not written into the suite
-- **Top down** — platform, product, domain, then feature; when a domain's last feature suite is approved, offer its `domain-tcs.md`, then `platform-tcs.md`
-- **Two reviewers is allowed** — open PRs on the file are reported as information; the file is re-read from disk before each verdict is written
-- **Leaving midway still lands** — a reviewer who stops mid-review gets what is done committed, pushed and opened as the pull request
+- **Review unit** — review one journey at a time. The reviewer sees the journey, all relevant walk context, the draft cases, duplicates and coverage questions, then gives verdicts before the next journey.
+- **Walk context** — show every walk that references the current journey before its cases. A walk is an execution route, not a case, journey or verdict unit. Cases with no walk remain in the suite and are handled as `## Ungrouped`.
+- **Orientation** — give a suite-level product walkthrough before the first verdict. Explain TCS concepts just in time while reviewing; orientation is not a requirement or an execution result.
+- **Human verdict** — only the reviewer may approve, change, defer or retire a case. The file status follows the verdicts; the review never writes execution results.
+- **Coverage and findings** — QA2 links scenarios post-hoc; review reports anchor gaps, uncovered scenarios, contradictions, duplicate candidates and journey findings without inventing coverage.
+- **Convention boundary** — only a reusable writing rule may become a convention. Case facts stay in the case; a contract change is reported here, not added as a convention. If no candidate survives the gate, no convention follow-up is created.
+- **Review output** — the suite carries its status and durable reconciliation memory; the skill reports verdicts, remaining drafts, findings and any style-only propagation. The run sheet owns execution results.
 
 ## The Suites This Store Does Not Yet Have
 
@@ -291,7 +277,7 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 - **The sweep lands in its own commits** — separate from any review verdict, pushed before review starts, so the review's diff holds only the reviewer's decisions
 - **A bump does not sweep** — the bump is its own commit and touches no suite. A suite below it is regenerated when `/tcs-review` next prepares it, or when someone runs `/spec-to-tcs` on it from `pnpm run tcs:stale`; a bulk sweep is a separate run somebody chooses, never part of the bump
 - **A derived header change does not bump** — migrate the header across live suites; their case bodies and `**Drafts styled:**` stamps stay as they are
-- **What each revision changed** — r4: the revision became one integer and how a case reads moved to `tcs-conventions.md`; a sweep regenerates drafts; the `reopened` status and the lapsed `**Reviewed:**` line; **Executable without asking**, **A result may sharpen, never move**, **A value is the rule, or stands for it** and **Rows may add what the rule implies**. r6: formal coverage is anchor-first, scenario links are optional post-hoc QA2 evidence, one case may link multiple scenarios, outcome-equivalent values group into rows, and approved export requires scenario-link evidence
+- **What each revision changed** — r4: the revision became one integer and how a case reads moved to `tcs-conventions.md`; a sweep regenerates drafts; the `reopened` status and the lapsed `**Reviewed:**` line; **Executable without asking**, **A result may sharpen, never move**, **A value is the rule, or stands for it** and **Rows may add what the rule implies**. The current r5 major change includes anchor-first formal coverage, post-hoc QA2 scenario evidence, multiple scenario links per case, outcome-equivalent rows and approved export evidence; keep these changes under r5 until this major change closes
 
 ## Step 1: Digest the Capability
 
@@ -517,7 +503,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 | Tool | Does |
 | --- | --- |
 | `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | runs the creation workflow, reads this document plus the sole writing-rule file, derives the level's file with every new case `draft`, restyles existing drafts; on a feature run reads the domain suite above and leaves the paths it walks to it, and joins a new assertion to the case whose run it shares; shows an existing suite and asks; regenerates the drafts of a suite below the rules revision, top down; refuses a whole-file regenerate over `actual` cases or an `approved` file |
-| `/tcs-review [<target>]` (`tcs-review` skill) | finds suites awaiting review, walks drafts one journey at a time, quotes scenarios on request, records verdicts |
+| `/tcs-review [<target>]` or `/tcs-review walk <target>` (`tcs-review` skill) | verdict mode finds suites awaiting review and walks drafts one journey at a time; read-only walk mode shows product context, walks one by one, then ungrouped case headers |
 | `planning-dev` skill | Integrated QA1, Dev and QA2 planning, then acceptance and publication |
 | `pnpm run tcs:validate` | validates the suite contract and anchor coverage; errors on malformed headers, duplicate or invalid ids, unresolved anchor traces, invalid properties/order, empty Expected Results, invalid actors, invalid composed levels, broken Decided-by paths, invalid **Covered at domain** ids, and an `approved` suite whose `actual` case is still anchor-only; warns on QA2-pending scenario links, legacy shape, archived cases left behind, duplicate-purpose candidates and a mocked state with no automation plan; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
 | `pnpm run tcs:stale` | suites whose drafts sit below the current revision, each owed a regenerate; a report, never a sweep |

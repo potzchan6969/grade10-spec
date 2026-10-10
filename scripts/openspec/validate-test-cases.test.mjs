@@ -133,7 +133,7 @@ test("an approved actual anchor-only case is not export-eligible", () => {
     .replaceAll("**Status:** draft", "**Status:** actual");
   const withReview = text.replace(
     "**Status:** approved · 3/3\n",
-    "**Status:** approved · 3/3\n**Reviewed:** 2026-09-01, tcs-rules r6\n",
+    "**Status:** approved · 3/3\n**Reviewed:** 2026-09-01, tcs-rules r5\n",
   );
   writeFileSync(
     file,
