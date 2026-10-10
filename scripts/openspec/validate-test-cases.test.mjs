@@ -593,12 +593,9 @@ test("a Covered at domain line is refused when its domain case is missing or dep
 });
 
 test("a Covered at domain line resolves a modern stable domain case heading", () => {
-  const root = store(
-    "// the story: demo-alpha-US1-TC1-1\n",
-    [
-      "- **Covered at domain** — the thing happens, walked by `demo.domain-dmn.TC-a1b`",
-    ],
-  );
+  const root = store("// the story: demo-alpha-US1-TC1-1\n", [
+    "- **Covered at domain** — the thing happens, walked by `demo.domain-dmn.TC-a1b`",
+  ]);
   const domain = join(root, "openspec/specs/demo/domain-tcs.md");
   mkdirSync(dirname(domain), { recursive: true });
   writeFileSync(

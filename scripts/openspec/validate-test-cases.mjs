@@ -58,12 +58,12 @@ import {
   issuedPrefix,
   LEGACY_TYPES,
   levelOf,
+  modernDomainPrefix,
+  modernProductPrefix,
   PROPERTIES,
   parseSuite,
   parseWalks,
   productPrefix,
-  modernDomainPrefix,
-  modernProductPrefix,
   prop,
   readDomainIds,
   readPlatformIds,
@@ -266,7 +266,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     for (const walk of parseWalks(text)) {
       for (const ref of walk.refs) {
         const found = ref.caseId
-          ? allCases.get(ref.caseId) ?? allCases.get(ref.caseId.toLowerCase())
+          ? (allCases.get(ref.caseId) ?? allCases.get(ref.caseId.toLowerCase()))
           : walkCases.get(ref.id);
         if (!found) {
           err(
@@ -464,7 +464,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     if (!capabilities.has(j.capability))
       err(
         j.line,
-        `journey heading names capability \`${j.capability}\`, but this suite accepts \`${[...capabilities].join("\` or \`")}\``,
+        `journey heading names capability \`${j.capability}\`, but this suite accepts \`${[...capabilities].join("` or `")}\``,
       );
     const canonical = `${j.capability}-US-${String(j.num).padStart(2, "0")}`;
     const alternate = `${j.capability}-US-${j.num}`;
@@ -530,7 +530,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
         if (!capabilities.has(tc.capability))
           err(
             at,
-            `case id \`${tc.id}\` names capability \`${tc.capability}\`; this suite accepts \`${[...capabilities].join("\` or \`")}\``,
+            `case id \`${tc.id}\` names capability \`${tc.capability}\`; this suite accepts \`${[...capabilities].join("` or `")}\``,
           );
         if (tc.journeyNum !== j.num)
           err(
@@ -868,7 +868,10 @@ if (suites.length === 0) {
 
 const index = caseIndex(ROOT, suites);
 const allCaseIndex = new Map(
-  [...caseIndex(ROOT, allSuites)].map(([id, value]) => [id.toLowerCase(), value]),
+  [...caseIndex(ROOT, allSuites)].map(([id, value]) => [
+    id.toLowerCase(),
+    value,
+  ]),
 );
 
 if (args.captureBaseline) {
@@ -921,7 +924,9 @@ if (args.swept) {
   process.exit(1);
 }
 
-const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev, allCaseIndex));
+const summaries = suites.map((p) =>
+  checkSuite(ROOT, p, rulesRev, allCaseIndex),
+);
 
 // --- every journey is walked by a product user or outside agent ---------
 // The classes are the store's two product users. An outside agent such as a

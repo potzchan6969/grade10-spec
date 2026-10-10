@@ -1346,7 +1346,8 @@ function initializeBatch(values) {
         !parsedId ||
         parsedId.kind !== expectedKind ||
         parsedId.app !== first.app ||
-        parsedId.scope !== referenceScope(first.app, first.product, first.capability)
+        parsedId.scope !==
+          referenceScope(first.app, first.product, first.capability)
       )
         fail(
           `batch mirror group ${mirrorKey} existing id has the wrong scope or kind`,
