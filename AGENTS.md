@@ -1,6 +1,6 @@
 # Product specification and design-system repository
 
-This repository is the versioned source of truth for product requirements and the design system for the grade10 repository, where this repository is imported as a submodule. It holds no application code. When a change needs product data fetching, authentication, routing, stores, or feature orchestration, do that work in the grade10 repository where the application code lives.
+This repository is the versioned source of truth for product requirements and the design system for the grade10 repository, where this repository is imported as a submodule. When a change needs product data fetching, authentication, routing, stores, or feature orchestration, do that work in the grade10 repository where the application code lives.
 
 ## Operating principles
 
