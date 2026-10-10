@@ -508,6 +508,7 @@
     "notFoundTitle": "未能读取这间门店的轮候",
     "notFoundBody": "请检查海报上的网址，或预约时间。",
     "unreadable": "未能读取。",
-    "retry": "再试"
+    "retry": "再试",
+    "opensAt": "{time} 起接待现场排队"
   }
 }

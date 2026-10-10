@@ -508,6 +508,7 @@
     "notFoundTitle": "이 매장의 대기를 불러오지 못했습니다",
     "notFoundBody": "포스터의 주소를 확인하거나 시간을 예약하세요.",
     "unreadable": "불러오지 못했습니다.",
-    "retry": "다시 시도"
+    "retry": "다시 시도",
+    "opensAt": "{time}부터 방문 접수"
   }
 }

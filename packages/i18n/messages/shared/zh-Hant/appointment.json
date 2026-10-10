@@ -508,6 +508,7 @@
     "notFoundTitle": "未能讀取這間門市的輪候",
     "notFoundBody": "請檢查海報上的網址，或預約時間。",
     "unreadable": "未能讀取。",
-    "retry": "再試"
+    "retry": "再試",
+    "opensAt": "{time} 起接待現場排隊"
   }
 }

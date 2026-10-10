@@ -508,6 +508,7 @@
     "notFoundTitle": "This shop’s wait could not be read",
     "notFoundBody": "Check the address on the poster, or book a time.",
     "unreadable": "This could not be read.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "opensAt": "Walk-ins from {time}"
   }
 }
