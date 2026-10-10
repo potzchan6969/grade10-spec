@@ -108,7 +108,6 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 
 Run the appropriate checks before handoff:
 
-- `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
 - `pnpm push:main` runs `pnpm check:manual`, `pnpm run validate:changes` and `pnpm run tcs:validate` on what it sends, as CI does; run one alone while drafting. `check:manual` refuses an unmarked page, application work with no tech design, a capability with no journeys file, a 🚧 line no change delivers, and a backticked id the store issues nowhere; it warns (`dense`) past the budget in `docs/governance/writing.md`.
 - `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
 - `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
@@ -131,11 +130,4 @@ Run the appropriate checks before handoff:
 
 `AGENTS.md` is canonical. `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` are compatibility aliases.
 
-`.claude/skills/` is canonical, with `.codex/skills/` and `.cursor/skills/` symlinked to it, so every platform reads the same files; adding a platform means adding its symlink to the parity check and sync scripts. `.claude/agents/` is canonical for the round's readers, mirrored nowhere; the parity check asserts every reader the schema names resolves.
-
-When agent-related files change, run:
-
-```bash
-pnpm run agent:sync-parity
-pnpm run agent:check-parity
-```
+`.claude/skills/` is canonical, with `.codex/skills/` and `.cursor/skills/` symlinked to it, so every platform reads the same files. `.claude/agents/` is canonical for the round's readers, mirrored nowhere. The symlinks are tracked in git; a planning round that cannot find a reader fails there.
