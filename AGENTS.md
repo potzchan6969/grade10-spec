@@ -47,14 +47,7 @@ If you have a good reason to push back on a design, raise it with the design's o
 
 ## Product UI component contracts
 
-This repository specifies product UI components and, since the `reinstate-shared-ui-package` change, hosts their shared implementations: a compound component named by a capability spec lives once in `packages/ui` (`@grade10/ui`) and every consuming application imports it rather than maintaining its own copy. The capability spec under `openspec/specs/` remains the export contract the implementation must satisfy.
-
-Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-contracts.md) before designing a new public UI contract or making a material component-contract change.
-
-- Components receive all consumer-owned content, product state, and behavior through props. Callback props use `on<Event>` names.
-- No data fetching, mutations, routing, app stores, analytics, feature flags, browser storage, or application imports inside the component itself.
-- Components may use React state, context, effects, refs, timers, and browser APIs for internal presentation and DOM behavior. They must not use those mechanisms to acquire, persist, subscribe to, or orchestrate consumer-owned product state.
-- The export contract lives in the capability spec under `openspec/specs/`. Record a contract change as an OpenSpec change whose delta names the exact exports affected and the consuming applications that must adapt.
+Shared compound components live once in `packages/ui` (`@grade10/ui`), and their export contract is the capability spec in `openspec/specs/`. Components take all content, state and behavior through props and never fetch data, route, or read app stores. Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-contracts.md) before designing a new contract or changing one materially.
 
 ## Design system package
 
