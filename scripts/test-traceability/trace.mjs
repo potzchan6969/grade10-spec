@@ -36,7 +36,7 @@ const allowedApps = new Set(["g10", "zzz", "g10adm", "zzzadm"]);
 
 const usage = `Usage:
   pnpm run trace -- init scenario --file <path> --target <exact heading line> --app <g10|zzz|g10adm|zzzadm> --product <slug> --capability <slug> [--dry-run]
-  pnpm run trace -- init case --file <path> --target <exact case heading line> --app <g10|zzz|g10adm|zzzadm> --product <slug> --capability <slug> --covers <SC-ref[,SC-ref...]> [--dry-run]
+  pnpm run trace -- init case --file <path> --target <exact case heading line> --app <g10|zzz|g10adm|zzzadm> --product <slug> --capability <slug> [--covers <SC-ref[,SC-ref...]>] [--dry-run]
   pnpm run trace -- init batch --manifest <json-file> [--dry-run]
   pnpm run trace -- link --file <path> --target <exact test line> (--acceptance <TC-ref@revision> | --supports <SC-ref>) [--dry-run]
   pnpm run trace -- validate [--store-root <path>] [--app-root <Grade10 root>]
@@ -133,14 +133,14 @@ function attributes(text, issue) {
   return result;
 }
 
-function checkFields(record, expected, issue) {
+function checkFields(record, expected, issue, optional = []) {
   const actual = Object.keys(record);
   for (const field of expected) {
     if (!Object.hasOwn(record, field))
       issue("marker-shape", `missing ${field}`);
   }
   for (const field of actual) {
-    if (!expected.includes(field))
+    if (!expected.includes(field) && !optional.includes(field))
       issue("marker-shape", `unexpected field: ${field}`);
   }
 }
@@ -226,9 +226,18 @@ function deprecatedCaseAt(lines, headingIndex) {
   return false;
 }
 
-/** The scenarios a case marker covers, read one way by `validate` and `fold`:
- * `covers=none` stands only above a deprecated case, which covers nothing. */
+/** The scenarios a case marker covers, read one way by `validate` and `fold`.
+ * New cases may omit `covers` until QA2 links them to scenarios. `covers=none`
+ * still stands only above a deprecated case, which covers nothing. */
 function caseMarkerCovers(rawCovers, lines, markerIndex, issue) {
+  if (rawCovers === undefined) {
+    if (!isCaseHeading(lines[markerIndex + 1] ?? ""))
+      issue(
+        "marker-adjacency",
+        "case marker must sit immediately above a case heading",
+      );
+    return [];
+  }
   const retired =
     rawCovers === "none" && deprecatedCaseAt(lines, markerIndex + 1);
   if (rawCovers === "none" && !retired)
@@ -422,9 +431,8 @@ export function parseTraceGraph({
         }
         const [, type, rawFields = ""] = marker;
         const fields = attributes(rawFields, issue);
-        const expected =
-          type === "scenario" ? ["id", "rev"] : ["id", "rev", "covers"];
-        checkFields(fields, expected, issue);
+        const expected = ["id", "rev"];
+        checkFields(fields, expected, issue, type === "case" ? ["covers"] : []);
         const kind = type === "scenario" ? "SC" : "TC";
         const record = {
           type,
@@ -454,12 +462,7 @@ export function parseTraceGraph({
             );
           scenarios.push(record);
         } else {
-          record.covers = caseMarkerCovers(
-            fields.covers ?? "",
-            lines,
-            index,
-            issue,
-          );
+          record.covers = caseMarkerCovers(fields.covers, lines, index, issue);
           cases.push(record);
         }
         continue;
@@ -675,7 +678,7 @@ function readCaseMarkers(file, issues) {
     const line = index + 1;
     const issue = (code, message) => issues.push({ code, message, file, line });
     const fields = attributes(marker[2] ?? "", issue);
-    checkFields(fields, ["id", "rev", "covers"], issue);
+    checkFields(fields, ["id", "rev"], issue, ["covers"]);
     const id = canonicalMarkerReference(
       fields.id ?? "",
       "TC",
@@ -690,7 +693,7 @@ function readCaseMarkers(file, issues) {
         `revision must be a positive integer: ${revision || "(empty)"}`,
       );
 
-    const covers = fields.covers ?? "";
+    const covers = fields.covers;
     const canonicalCovers = caseMarkerCovers(covers, lines, index, issue);
 
     records.push({
@@ -869,7 +872,12 @@ function validateFoldHandover({ storeRoot = scriptRoot, changeId }) {
 
       const [target] = targets;
       for (const field of ["id", "rev", "covers"]) {
-        if (activeCase.fields[field] !== target.fields[field]) {
+        if (
+          activeCase.fields[field] !== target.fields[field] &&
+          (field !== "covers" ||
+            activeCase.fields.covers !== undefined ||
+            target.fields.covers !== undefined)
+        ) {
           issues.push({
             code: "case-mismatch",
             message: `durable case marker ${activeCase.id} field ${field} differs: expected ${JSON.stringify(activeCase.fields[field])}, found ${JSON.stringify(target.fields[field])}`,
@@ -1168,14 +1176,17 @@ function initialize(kind, values) {
   } else {
     if (!isCaseHeading(target))
       fail("case target must be one exact case heading line");
-    const covers = requireOption(values, "covers")
-      .split(",")
-      .map((item) => normalizeInputReference(item, "SC", "--covers"));
+    const covers = values.covers
+      ? values.covers
+          .split(",")
+          .map((item) => normalizeInputReference(item, "SC", "--covers"))
+      : [];
     if (new Set(covers).size !== covers.length)
       fail("--covers must be a comma-separated list of distinct SC ids");
-    validateReferencesForMutation(storeRoot, "scenario", covers);
+    if (covers.length > 0)
+      validateReferencesForMutation(storeRoot, "scenario", covers);
     const revision = caseHeadingRevision(target) ?? "1";
-    marker = `trace:case id=${id} rev=${revision} covers=${covers.join(",")}`;
+    marker = `trace:case id=${id} rev=${revision}${covers.length > 0 ? ` covers=${covers.join(",")}` : ""}`;
   }
   insertMarker({ file, target, marker, syntax: "html", dryRun: values.dryRun });
 }
@@ -1219,7 +1230,7 @@ function initializeBatch(values) {
       const existingFields = parsedMarker
         ? attributes(parsedMarker[1], () => {})
         : null;
-      if (!existingFields?.id || !existingFields.rev || !existingFields.covers)
+      if (!existingFields?.id || !existingFields.rev)
         fail(
           `batch record ${key} does not have an adjacent complete case marker`,
         );
@@ -1245,16 +1256,17 @@ function initializeBatch(values) {
         : String(input.revision ?? "1");
     if (!positiveRevision(revision))
       fail(`batch record ${key} has an invalid revision: ${revision}`);
-    const covers = input.kind === "case" ? input.covers : [];
+    const covers = input.kind === "case" ? (input.covers ?? []) : [];
     if (input.kind === "case" && !Array.isArray(covers))
       fail(`batch case ${key} requires a covers array`);
     if (
       input.kind === "case" &&
-      covers.length === 0 &&
+      Array.isArray(input.covers) &&
+      input.covers.length === 0 &&
       !deprecatedCaseAt(lines, indexInFile)
     )
       fail(
-        `batch case ${key} may use empty coverage only on a deprecated case`,
+        `batch case ${key} may use an empty covers array only when the case is deprecated or when covers is omitted`,
       );
     return {
       key,
@@ -1267,6 +1279,7 @@ function initializeBatch(values) {
       capability,
       revision,
       covers,
+      coversSpecified: input.covers !== undefined,
       mirrorKey: input.mirrorKey ?? key,
       existingId,
       markerIndex,
@@ -1483,7 +1496,7 @@ function initializeBatch(values) {
     const marker =
       record.kind === "scenario"
         ? `trace:scenario id=${id} rev=${record.revision}`
-        : `trace:case id=${id} rev=${record.revision} covers=${coversByKey.get(record.key).join(",") || "none"}`;
+        : `trace:case id=${id} rev=${record.revision}${coversByKey.get(record.key).length > 0 || record.coversSpecified ? ` covers=${coversByKey.get(record.key).join(",") || "none"}` : ""}`;
     const fileUpdate = updates.get(record.file);
     if (record.markerIndex === null) {
       fileUpdate.lines.splice(
