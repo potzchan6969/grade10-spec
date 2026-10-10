@@ -109,14 +109,6 @@ export function runPreflight(
   ];
   return {
     ...scope,
-    expandToFullSources: scope.expandToFullSources || blockers.length > 0,
-    expansionReasons:
-      blockers.length > 0
-        ? [
-            ...scope.expansionReasons,
-            "preflight blockers require full-source review",
-          ]
-        : scope.expansionReasons,
     status: blockers.length === 0 ? "ready" : "blocked",
     blockers,
     validation: { status: validation.status },
@@ -145,9 +137,9 @@ if (import.meta.main) {
       console.log(
         `Scope: ${result.changedRequirements.length} requirements, ${result.pageLines.length} PRD lines, ${result.durableTargets.length} durable targets, ${result.overlaps.length} overlaps`,
       );
-      if (result.expandToFullSources)
+      if (result.sourceExpansions.length > 0)
         console.log(
-          `Expand review to full sources: ${result.expansionReasons.join("; ")}`,
+          `Expand review sources: ${result.sourceExpansions.map((one) => `${one.scope}: ${one.reason}`).join("; ")}`,
         );
     }
     process.exitCode = result.status === "ready" ? 0 : 1;

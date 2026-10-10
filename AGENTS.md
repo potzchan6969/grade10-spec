@@ -1,6 +1,6 @@
 # Product specification and design-system repository
 
-This repository is the versioned source of truth for product requirements and the design system beneath Grade10 applications. It is intentionally not an application: do not add product data fetching, authentication, routing, stores, or feature orchestration here.
+This repository is the versioned source of truth for product requirements and the design system beneath Grade10 applications. It is not an application: do not add data fetching, authentication, routing, stores, or feature orchestration.
 
 ## Operating principles
 
@@ -123,7 +123,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 ## Design system package
 
-`packages/design-system` (`@grade10/design-system`) holds the theme tokens and shadcn primitives. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. `packages/date` (`@grade10/date`) holds the date formatters and the typed-day bridge, React-free. Add no other package without a recorded product decision.
+`packages/design-system` (`@grade10/design-system`) holds the theme tokens and shadcn primitives. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. `packages/date` (`@grade10/date`) holds the date formatters, the typed-day bridge and the date arithmetic, React-free. Add no other package without a recorded product decision.
 
 Use the `design-system-primitives` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
@@ -157,7 +157,7 @@ Run the appropriate checks before handoff:
 
 ## Pushes, Pull Requests and Commits
 
-- Push to `main` with `pnpm push:main`, not a pull request: it rebases, runs the checks the paths owe and pushes, whatever the paths touch. A pull request is for a change its author wants someone to read first (`pnpm push:main --pr`). Settle a conflict as `/spec-push` says.
+- Push with `pnpm push:main`, not a pull request: it rebases, runs the checks the paths owe and pushes, whatever paths touch. A pull request is for a change its author wants someone to read first (`pnpm push:main --pr`). Settle a conflict as `/spec-push` says.
 - PR labels: use one of `feature`, `bug`, `ci`, `agent`, `enhancement`, `maintenance`, or `documentation`, when labels are available.
 - Commit subjects use the Conventional Commits format. Do not add issue or PR prefixes; repository tooling adds them.
 - Keep commits atomic. Split unrelated implementation, documentation, refactoring, and generated build output into separate commits when practical.

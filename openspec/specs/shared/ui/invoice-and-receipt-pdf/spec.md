@@ -31,7 +31,7 @@ amendment describes give way to this table. Each invoice still holds one lot.
   - Meta rows: invoice number, sent-at date, payment deadline, payment method
   - Party blocks: Bill To, Ship To
   - Lot and charges: a Description/Amount table headed by the lot title, the
-    charges given, an optional supplied Tax line, and a boxed
+    charges given, an optional supplied Tax line, and a
     Subtotal/Payment Processing Fee/Order Total summary
   - Bank details: every enabled SWIFT, FPS and HK local transfer rail plus the
     bank reference, a full-width section below the order-value summary, shown
@@ -44,7 +44,7 @@ amendment describes give way to this table. Each invoice still holds one lot.
   - Item table: one row per item, each with the item title and its Winning
     Bid, Buyer's Premium and Total, closed by an Item Total row that totals
     each column, then the charges given, an optional supplied Tax line, and a
-    boxed Subtotal/Payment Processing Fee/Order Total summary; one item reads
+    Subtotal/Payment Processing Fee/Order Total summary; one item reads
     as one row
 - ReceiptPdf export
   - Title and issuer mark, matching InvoicePdf's
@@ -273,36 +273,37 @@ name SHALL render more heavily weighted than its email.
 
 - **GIVEN** invoices without bank details and receipts, each with 1 to 40 items,
   each title on one line, the charges Shipping & Handling `HKD 80.00` and
-  Insurance `HKD 40.00`, a boxed summary and the issuer email
+  Insurance `HKD 40.00`, a summary and the issuer email
   `support@grade10.com`
 - **WHEN** InvoicePdf and ReceiptPdf render each of them
 - **THEN** in every invoice, the page that shows the issuer's email also shows
-  the boxed summary, and in every receipt it also shows the four payment
+  the summary, and in every receipt it also shows the four payment
   breakdown lines
 - **AND** on that page no line of another section is drawn at or below the name
   line of the issuer block, the line directly above the issuer's email
 - **AND** at least one invoice and at least one receipt in the range run onto a
   second page
 
-### Requirement: InvoicePdf and ReceiptPdf render their charges in the order given, ending in a boxed summary
+### Requirement: InvoicePdf and ReceiptPdf render their charges in the order given, ending in a summary
 
 The charges under the item table add what the document charges beyond its
 items. Subtotal, Payment Processing Fee, and Order Total are pulled out of the
-flat charge list into their own boxed, right-aligned summary regardless of
+flat charge list into their own right-aligned summary regardless of
 where the caller placed them in the list; every other charge renders below the
 Item Total row and above the summary, in the order the caller gave.
 
 **Order** - InvoicePdf and ReceiptPdf SHALL render every charge that is not
 Subtotal, Payment Processing Fee, or Order Total below the Item Total row, in
 the order the caller supplied it. **Summary** - InvoicePdf and ReceiptPdf SHALL
-render Subtotal and Payment Processing Fee inside a boxed summary below the
-other charges, and SHALL render Order Total inside that same summary, set off
-by a rule and rendered more heavily weighted than every other line.
+render Subtotal and Payment Processing Fee in a summary below the other
+charges, with no border drawn around it, and SHALL render Order Total in that
+same summary, set off by a rule and rendered more heavily weighted than every
+other line.
 
-<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-63o rev=2 -->
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-3 - Charges render in the order given, with the summary boxed below them
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-63o rev=3 -->
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-3 - Charges render in the order given, with the summary below them
 
-**Serves:** InvoicePdf export - charges render in the order given, ending in a boxed summary
+**Serves:** InvoicePdf export - charges render in the order given, ending in a summary
 
 - **GIVEN** one item and, under it, the charges Shipping & Handling
   `HKD 80.00` and Insurance `HKD 40.00`, followed by Subtotal, Payment
@@ -311,12 +312,13 @@ by a rule and rendered more heavily weighted than every other line.
 - **THEN** the Item Total row comes first, and the two charges appear below it,
   in the order given
 - **AND** Subtotal, Payment Processing Fee, and Order Total appear together
-  in a boxed summary below them, Order Total set off by a rule
+  in a summary below them, with no border around it, Order Total set off by a
+  rule
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-8b8 rev=2 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-4 - Omitting a charge does not disturb the others' order
 
-**Serves:** InvoicePdf export - charges render in the order given, ending in a boxed summary
+**Serves:** InvoicePdf export - charges render in the order given, ending in a summary
 
 - **GIVEN** every charge from `shared-ui-invoice-and-receipt-pdf-SC-3` except
   Insurance
@@ -626,7 +628,7 @@ neither SHALL embed the time of rendering.
 
 `taxLine` is an optional caller-supplied `PdfLineItem` on both data objects.
 When present, the renderer SHALL insert it as a charge immediately before the
-boxed Subtotal/Payment Processing Fee/Order Total summary. When omitted or
+Subtotal/Payment Processing Fee/Order Total summary. When omitted or
 `null`, no Tax row SHALL render. The renderer does not compute, validate or
 reformat the tax amount, and the tax line does not define a tax rate,
 jurisdiction or formal tax receipt.
@@ -640,7 +642,7 @@ jurisdiction or formal tax receipt.
   labelled `Tax` and an amount of `HKD 12.00`
 - **WHEN** InvoicePdf and ReceiptPdf render their data
 - **THEN** each document shows the supplied Tax line immediately before the
-  boxed summary
+  summary
 - **AND** each document shows the amount exactly as supplied
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-m09 rev=1 -->
@@ -651,7 +653,7 @@ jurisdiction or formal tax receipt.
 - **GIVEN** an invoice and receipt with `taxLine` omitted or set to `null`
 - **WHEN** InvoicePdf and ReceiptPdf render their data
 - **THEN** neither document shows a Tax line
-- **AND** the other charges and boxed summary retain their order
+- **AND** the other charges and summary retain their order
 
 ### Requirement: InvoicePdf and ReceiptPdf list the order's items as rows of one table
 
@@ -754,11 +756,11 @@ header.
 
 - **GIVEN** a receipt with one item titled `Lot A`, Winning Bid `HKD 100.00`,
   Buyer's Premium `HKD 20.00` and Total `HKD 120.00`, an Item Total of the same
-  three amounts, the charge Shipping & Handling `HKD 80.00`, a boxed summary,
+  three amounts, the charge Shipping & Handling `HKD 80.00`, a summary,
   and the four payment breakdown lines
 - **WHEN** ReceiptPdf renders it
 - **THEN** from top to bottom it shows the column header, the `Lot A` row, the
-  Item Total row, the Shipping & Handling line, the boxed summary, and then the
+  Item Total row, the Shipping & Handling line, the summary, and then the
   four payment breakdown lines
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-fp9 rev=1 -->
@@ -794,15 +796,15 @@ note. **Whole
 rows** - InvoicePdf and ReceiptPdf SHALL NOT split an item row across two pages.
 A row that does not fit below the row before it SHALL move whole to the next
 page. **Item Total and summary** - InvoicePdf and ReceiptPdf SHALL draw the Item
-Total row, the charges under it, the optional Tax line and the boxed summary on
+Total row, the charges under it, the optional Tax line and the summary on
 one page. When they do not fit below the last item row, they SHALL all move to
 the next page together, under the repeated column header, with no item row moved
 over with them. **Bank details** - InvoicePdf SHALL draw the Bank details section
-on one page. When it does not fit below the boxed summary, it SHALL move to the
+on one page. When it does not fit below the summary, it SHALL move to the
 next page whole. **Payment section** - ReceiptPdf SHALL draw its Payment section
-on one page. When it does not fit below the boxed summary, it SHALL move to the
+on one page. When it does not fit below the summary, it SHALL move to the
 next page whole. **Payment breakdown** - ReceiptPdf SHALL draw its four payment
-breakdown lines on one page. When they do not fit below the boxed summary, they
+breakdown lines on one page. When they do not fit below the summary, they
 SHALL all move to the next page together.
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-8hh rev=1 -->
@@ -866,10 +868,10 @@ SHALL all move to the next page together.
 
 - **GIVEN** invoices and receipts with 1 to 40 items, each title on one line,
   the charges Shipping & Handling `HKD 80.00` and Insurance `HKD 40.00`, a
-  supplied Tax line `HKD 12.00`, and a boxed summary
+  supplied Tax line `HKD 12.00`, and a summary
 - **WHEN** InvoicePdf and ReceiptPdf render each of them
 - **THEN** in every document, the Item Total row, both charges, the Tax line and
-  the boxed summary are drawn on one page
+  the summary are drawn on one page
 - **AND** in at least one invoice and at least one receipt that page is the
   second page while the last item row is on the first, and the second page opens
   with the column header followed by the Item Total row, with no item row between
@@ -880,13 +882,13 @@ SHALL all move to the next page together.
 
 **Serves:** InvoicePdf export - a winner never reads bank details cut by a page edge
 
-- **GIVEN** invoices with 1 to 40 items, each title on one line, a boxed
+- **GIVEN** invoices with 1 to 40 items, each title on one line, a
   summary, and bank details with SWIFT, FPS and HK local transfer rails and a
   reference
 - **WHEN** InvoicePdf renders each of them
 - **THEN** in every invoice, the Bank details heading, all three rails and the
   reference note are drawn on one page
-- **AND** in at least one invoice the boxed summary is on one page and the Bank
+- **AND** in at least one invoice the summary is on one page and the Bank
   details section is on the next
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-y2j rev=1 -->
@@ -894,12 +896,12 @@ SHALL all move to the next page together.
 
 **Serves:** ReceiptPdf export - a winner never reads the transfer reference cut by a page edge
 
-- **GIVEN** receipts with 1 to 40 items, each title on one line, a boxed summary,
+- **GIVEN** receipts with 1 to 40 items, each title on one line, a summary,
   and the transfer reference `TRF-7731`
 - **WHEN** ReceiptPdf renders each of them
 - **THEN** in every receipt, the Payment heading, the transfer reference label
   and `TRF-7731` are drawn on one page
-- **AND** in at least one receipt the boxed summary is on one page and the
+- **AND** in at least one receipt the summary is on one page and the
   Payment section is on the next
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-huz rev=1 -->
@@ -911,7 +913,7 @@ SHALL all move to the next page together.
 - **WHEN** ReceiptPdf renders each of them
 - **THEN** in every receipt, the four payment breakdown lines are drawn on one
   page, in their fixed order
-- **AND** in at least one receipt the boxed summary is on the first page and the
+- **AND** in at least one receipt the summary is on the first page and the
   four lines are on the second
 
 ### Requirement: InvoicePdf and ReceiptPdf refuse to render a document they cannot draw whole
@@ -929,7 +931,7 @@ reject a document whose item title holds a character the standard font cannot
 draw, and SHALL NOT draw a placeholder in its place. **Cannot fit** - InvoicePdf
 and ReceiptPdf SHALL reject a document in which one item row is taller than the
 room a page leaves above the issuer block, in which the Item Total row with the
-charges and the boxed summary are taller than that room, or in which the three
+charges and the summary are taller than that room, or in which the three
 amount columns leave the Item column too narrow to draw a title. The error SHALL name
 which of the three does not fit.
 
@@ -964,7 +966,7 @@ which of the three does not fit.
   otherwise complete: the first has one item whose three amounts are each a
   string of 60 characters (`HKD ` and 56 digits), the second has one item whose
   title is the word `lot` repeated 2,500 times with a space between, and the
-  third has 120 charges between the Item Total row and the boxed summary
+  third has 120 charges between the Item Total row and the summary
 - **WHEN** InvoicePdf and ReceiptPdf render each of them
 - **THEN** each call rejects with an error and returns no PDF
 - **AND** the errors say, in that order, that the amounts, the item row and the
@@ -986,7 +988,7 @@ table, the summary and every other section fit it.
 **Serves:** Document shape - an ordinary single-lot invoice stays on one sheet
 
 - **GIVEN** invoice data with one item, the charges Shipping & Handling and
-  Insurance, a boxed summary, a Bill To and a Ship To of recipient, address
+  Insurance, a summary, a Bill To and a Ship To of recipient, address
   line 1, city line and country each, and `bankRails` with SWIFT, FPS and HK
   local transfer
 - **WHEN** InvoicePdf renders it
@@ -998,7 +1000,7 @@ table, the summary and every other section fit it.
 
 **Serves:** Document shape - an ordinary single-lot receipt stays on one sheet
 
-- **GIVEN** receipt data with one item, the charge Shipping & Handling, a boxed
+- **GIVEN** receipt data with one item, the charge Shipping & Handling, a
   summary, a transfer reference, the four payment breakdown lines, and a Bill To
   and a Ship To of recipient, address line 1, city line and country each
 - **WHEN** ReceiptPdf renders it

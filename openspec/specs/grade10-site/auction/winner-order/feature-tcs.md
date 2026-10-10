@@ -4,6 +4,89 @@
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Out of suite:** none.
 
+## Walk 1: Fill and Confirm a Delivery Address
+
+**Starting state:**
+
+- customer(winner) is on <winner order url> for <order_setup>, with Complete Order Setup open.
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| Company Name | Northwind Collectibles |
+| Phone country | United States |
+| Phone digits | 4155550100 |
+| Country or region | United States |
+
+### Route
+
+1. Open Add Address for delivery.
+   - Phone shows a globe only, with no flag or calling-code divider. `TC-nsg (US1-TC12)`
+   - No calling country is chosen; Personal is selected; Company Name is hidden. `TC-4gp (US1-TC13)`
+2. Select Company.
+   - Company Name is shown and required. `TC-rx1 (US1-TC14)`
+3. Submit without a company name.
+   - Confirmation is refused with a message beside Company Name; no address is saved. `TC-51d (US1-TC15)`
+4. Enter phone values.
+   a. Country without digits → field validation appears `TC-r03 (US1-TC16)`
+   b. Digits without country → field validation appears `TC-qwo (US1-TC17)`
+5. Enter accepted phone values.
+   - The unusual format is accepted. `TC-jo6 (US1-TC18)`
+   - The parseable number is stored in E.164. `TC-qia (US1-TC19)`
+6. Leave Address Line 2 and State empty.
+   - The address can still be submitted. `TC-phu (US1-TC20)`
+7. Submit a valid company address with phone.
+   - The order carries Northwind Collectibles, Alex Chen, the phone and postal code; the address card omits the phone and postal code. `TC-u2z (US1-TC24)`
+8. Read Order Summary.
+   - The full delivery and billing addresses are shown. `TC-kqe (US1-TC25)`
+
+## Walk 2: Pay the Confirmed Order by Card
+
+**Starting state:**
+
+- customer(winner) is on <winner order url> for a confirmed, unpaid order.
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_paid>` | An order with a confirmed delivery address and unpaid invoice |
+| `<card_declined>` | A card that the payment provider declines |
+| `<card_approved>` | A card that the payment provider approves |
+
+### Route
+
+1. Open the order and read the invoice.
+   - Every invoice line, Pay with Card, the confirmed delivery address and the lot are shown. `TC-9gh (US4-TC1)`
+2. Choose one payment branch:
+   a. Let the payment session time out → the page says payment was not completed; the order remains Pending Payment; Pay Now is available. `TC-3ie (US4-TC3)`
+   b. Pay with `<card_declined>`, then `<card_approved>` → the invoice stays unpaid and payable after the decline; the approved payment is accepted and the order reads paid. `TC-5vo (US1-TC6)`
+3. Read the payment transition for the approved-payment branch.
+   - The page first shows Confirming payment, not Preparing Shipment. `TC-w3e (US4-TC5)`
+   - The recorded payment makes the order read Preparing Shipment. `TC-s0i (US4-TC6)`
+4. Open the receipt.
+   - The winning bid, buyer's premium, shipping, insurance when added, Tax when added and final amount show; the lines sum to the final amount and name the payment method. `TC-h7f (US2-TC1)`
+   - Original Invoice Total equals the total, Previous Payments is 0, Current Payment Received equals the total and Remaining Balance Due is 0. `TC-qvc (US2-TC4)`
+
+## Walk 3: Follow a Paid Order to Delivery
+
+**Starting state:**
+
+- customer(winner) is on <winner order url> for a paid order awaiting shipment.
+
+### Route
+
+1. Read Order Progress.
+   - The badge reads Preparing Shipment, uses the default style, Shipping is the current progress step, Shipping subtext reads Preparing to ship, and no step is labelled Preparing Shipment. `TC-nmg (US2-TC55)`
+2. Open the carrier tracker from the tracking number.
+   - The tracking number is an external link with an arrow; no Track shipment button or carrier name appears; the link opens the carrier URL in a new tab. `TC-uox (US2-TC13)` `TC-4zy (US2-TC2)`
+3. Read the delivery proof.
+   - The carrier timestamp and signature are retained. `TC-l8v (US2-TC3)`
+4. Read the delivered order.
+   - The tracking number remains an external link with an arrow; no Track shipment button or carrier name appears; the link opens the carrier URL in a new tab. `TC-l0r (US2-TC12)`
+
 ## winner-order-US1: Winner settles a won lot
 
 **As a** winner,

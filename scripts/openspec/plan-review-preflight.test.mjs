@@ -5,9 +5,11 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { runPreflight } from "./plan-review-preflight.mjs";
 
-function rootWithSpec(spec, { overlap = false } = {}) {
+function rootWithSpec(spec, { overlap = false, prd = false } = {}) {
   const root = mkdtempSync(join(tmpdir(), "plan-review-preflight-"));
   const files = {
+    "openspec/changes/build-alpha/.openspec.yaml":
+      "schema: grade10-planning\ndesign_waived: no UI design change\n",
     "openspec/changes/build-alpha/proposal.md": "# Build alpha\n",
     "openspec/changes/build-alpha/decisions.md": "## Decisions\n",
     "openspec/changes/build-alpha/tech-design.md": "# Technical design\n",
@@ -16,6 +18,9 @@ function rootWithSpec(spec, { overlap = false } = {}) {
   };
   if (overlap)
     files["openspec/changes/build-beta/specs/site/search/spec.md"] = spec;
+  if (prd)
+    files["docs/prds/products/site/search.md"] =
+      "---\ntitle: Search\nspec: site/search\n---\n\n# Search\n";
   for (const [path, text] of Object.entries(files)) {
     const target = join(root, path);
     mkdirSync(dirname(target), { recursive: true });
@@ -66,6 +71,27 @@ test("preflight catches a missing adjacent trace marker before QA2", () => {
   assert.equal(result.status, "blocked");
   assert.equal(result.expandToFullSources, true);
   assert.match(result.blockers.join("\n"), /missing its adjacent trace marker/);
+  assert.equal(
+    result.sourceExpansions.some((one) =>
+      one.reason.includes("preflight blocker"),
+    ),
+    false,
+  );
+});
+
+test("preflight blockers stop readiness without adding a broad source expansion", () => {
+  const result = runPreflight(
+    rootWithSpec(
+      valid.replace("<!-- trace:scenario id=site-search-SC-01 rev=1 -->\n", ""),
+      { prd: true },
+    ),
+    "build-alpha",
+    { validate: () => ({ status: 0, output: "" }) },
+  );
+  assert.equal(result.status, "blocked");
+  assert.equal(result.blockers.length, 1);
+  assert.equal(result.expandToFullSources, false);
+  assert.deepEqual(result.sourceExpansions, []);
 });
 
 test("preflight keeps an agreeing active overlap as review scope", () => {

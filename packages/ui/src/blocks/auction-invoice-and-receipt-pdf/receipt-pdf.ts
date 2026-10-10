@@ -151,7 +151,7 @@ function paymentSectionBlock(
   });
 }
 
-/** The four immutable payment lines from `receiptBreakdown`, boxed and right-aligned. */
+/** The four immutable payment lines from `receiptBreakdown`, right-aligned. */
 function paymentBreakdownBlock(
   fonts: Fonts,
   data: Pick<ReceiptPdfData, "paymentBreakdown" | "copy">,

@@ -48,8 +48,9 @@ function Tabs({
 // (32) + pad → 36 at `sm`.
 //
 // `list` — no track; `Gap/gap-6` between triggers and `Gap/gap-2` horizontal
-// padding. Active state is a sliding `Base/foreground` underline (2px), not a
-// border on each trigger. Height matches the trigger rung (`size-10` / `size-8`).
+// padding. Active state is a sliding `Custom/primary-border` underline (2px),
+// not a border on each trigger. Height matches the trigger rung (`size-10` /
+// `size-8`).
 const tabsListVariants = cva(
   "group/tabs-list relative inline-flex items-center justify-center text-foreground",
   {
@@ -251,7 +252,7 @@ function TabsList({
           "pointer-events-none absolute z-0 opacity-0 transition-[transform,width,height] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[transform,width,height] motion-reduce:transition-none!",
           variant === "pill" &&
             "top-0.5 left-0 rounded-(--radius-full) bg-background shadow-[0_8px_16px_var(--shadow-color,rgb(117_114_111_/_20%))]",
-          variant === "list" && "bottom-0 left-0 bg-foreground",
+          variant === "list" && "bottom-0 left-0 bg-primary-border",
         )}
       />
       {children}

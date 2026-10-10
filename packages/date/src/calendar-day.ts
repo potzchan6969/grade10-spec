@@ -5,19 +5,10 @@ import {
   parseISO,
   startOfDay as startOfDayIn,
 } from "date-fns";
+import { plainDate } from "./instant.ts";
 import { localeFor } from "./locales.ts";
 import { PLATFORM_ZONE } from "./platform.ts";
 import { PATTERNS, render } from "./render.ts";
-
-/**
- * Back to a plain `Date`. Working in a zone yields a `TZDate`, which carries
- * its offset into `toISOString` - so a boundary that reached a wire would
- * serialize as `...+00:00` where every other instant the platform sends is
- * `...Z`. What these return is an instant; the zone was how it was computed.
- */
-function instant(at: Date): Date {
-  return new Date(at.valueOf());
-}
 
 /**
  * A `<input type="date">` yields a calendar day with no time and no zone; the
@@ -42,7 +33,7 @@ export function startOfDay(
 ): Date | undefined {
   if (!day) return undefined;
   const on = tz(timeZone);
-  return instant(startOfDayIn(parseISO(day, { in: on }), { in: on }));
+  return plainDate(startOfDayIn(parseISO(day, { in: on }), { in: on }));
 }
 
 export function endOfDay(
@@ -51,7 +42,7 @@ export function endOfDay(
 ): Date | undefined {
   if (!day) return undefined;
   const on = tz(timeZone);
-  return instant(endOfDayIn(parseISO(day, { in: on }), { in: on }));
+  return plainDate(endOfDayIn(parseISO(day, { in: on }), { in: on }));
 }
 
 /** The value a date field shows for a stored instant. */

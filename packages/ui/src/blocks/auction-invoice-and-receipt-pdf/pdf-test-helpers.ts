@@ -36,6 +36,8 @@ export type DrawnHorizontalLine = {
   x1: number;
   x2: number;
   y: number;
+  /** The stroke colour's red, green and blue, each 0 to 1. */
+  color: [number, number, number];
 };
 
 /** Read the text operands emitted on one page of the renderer's returned PDF bytes. */
@@ -92,7 +94,7 @@ function textOf(content: string): DrawnText[] {
   return rows;
 }
 
-/** Read rectangles emitted by the renderer, used to prove boxed summaries. */
+/** Read rectangles emitted by the renderer, used to prove none is drawn. */
 export async function drawnRectangles(
   bytes: ArrayBuffer | Uint8Array,
   page = 0,
@@ -121,7 +123,7 @@ export async function drawnRectangles(
   return [...directRectangles, ...pathRectangles];
 }
 
-/** Read horizontal rules emitted on one page. */
+/** Read horizontal rules emitted on one page, with the colour each is stroked in. */
 export async function drawnHorizontalLines(
   bytes: ArrayBuffer | Uint8Array,
   page = 0,
@@ -129,14 +131,15 @@ export async function drawnHorizontalLines(
   const content = await drawnContent(bytes, page);
   return [
     ...content.matchAll(
-      /(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+m\s+(?:\1\s+\2\s+m\s+)?(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+l\s+S/g,
+      /(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+RG\s+\d+(?:\.\d+)?\s+w\s+\[\]\s+0\s+d\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+m\s+(?:\4\s+\5\s+m\s+)?(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+l\s+S/g,
     ),
   ]
-    .filter((match) => Number(match[2]) === Number(match[4]))
+    .filter((match) => Number(match[5]) === Number(match[7]))
     .map((match) => ({
-      x1: Number(match[1]),
-      x2: Number(match[3]),
-      y: Number(match[2]),
+      x1: Number(match[4]),
+      x2: Number(match[6]),
+      y: Number(match[5]),
+      color: [Number(match[1]), Number(match[2]), Number(match[3])],
     }));
 }
 

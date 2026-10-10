@@ -81,12 +81,11 @@ function WinnerOrderContactDialog({
   function copyValue(
     field: Exclude<CopiedField, null>,
     value: string,
-    successToast: string,
-    manualToast: string,
+    feedback?: { successToast: string; manualToast: string },
   ) {
     function succeed() {
       setCopiedField(field);
-      toast.success(successToast);
+      if (feedback) toast.success(feedback.successToast);
     }
 
     // Sync path first — keeps the click gesture (Storybook iframes reject
@@ -97,12 +96,12 @@ function WinnerOrderContactDialog({
     }
 
     if (!navigator.clipboard?.writeText) {
-      toast.info(manualToast, { description: value });
+      if (feedback) toast.info(feedback.manualToast, { description: value });
       return;
     }
 
     void navigator.clipboard.writeText(value).then(succeed, () => {
-      toast.info(manualToast, { description: value });
+      if (feedback) toast.info(feedback.manualToast, { description: value });
     });
   }
 
@@ -120,12 +119,10 @@ function WinnerOrderContactDialog({
               copyAriaLabel="Copy address"
               label="To"
               onCopy={() =>
-                copyValue(
-                  "to",
-                  mail.to,
-                  "Address copied",
-                  "Copy the address manually",
-                )
+                copyValue("to", mail.to, {
+                  successToast: "Address copied",
+                  manualToast: "Copy the address manually",
+                })
               }
               value={mail.to}
             />
@@ -135,12 +132,10 @@ function WinnerOrderContactDialog({
               copyAriaLabel="Copy subject"
               label="Subject"
               onCopy={() =>
-                copyValue(
-                  "subject",
-                  mail.subject,
-                  "Subject copied",
-                  "Copy the subject manually",
-                )
+                copyValue("subject", mail.subject, {
+                  successToast: "Subject copied",
+                  manualToast: "Copy the subject manually",
+                })
               }
               value={mail.subject}
             />
@@ -163,18 +158,11 @@ function WinnerOrderContactDialog({
           </Button>
           <Button
             className="w-full sm:w-auto"
-            onClick={() =>
-              copyValue(
-                "email",
-                fullEmail,
-                "Message copied",
-                "Copy the message manually",
-              )
-            }
+            onClick={() => copyValue("email", fullEmail)}
             size="md"
             type="button"
           >
-            Copy Message
+            {copiedField === "email" ? "Copied" : "Copy Message"}
           </Button>
         </DialogFooter>
       </DialogContent>

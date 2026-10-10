@@ -131,6 +131,12 @@ jobs:
         if: ${{ !cancelled() }}
         run: pnpm run diagrams:check
 
+      # One package turns an instant into text; a formatter anywhere else is a
+      # second answer to what a date reads. Not skipped when Biome fails.
+      - name: Check dates
+        if: ${{ !cancelled() }}
+        run: pnpm run check:dates
+
   # Its own job: the CLI is the only thing it needs, and a Biome failure must
   # never be what lets a malformed change through. Read-only — it writes
   # nothing back to the branch.

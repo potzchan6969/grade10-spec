@@ -9,7 +9,6 @@ import {
   MARGIN,
   RIGHT_EDGE,
   SUMMARY_LEFT,
-  SUMMARY_WIDTH,
 } from "./pdf-document";
 import type { DrawnText } from "./pdf-test-helpers";
 import {
@@ -465,7 +464,7 @@ describe("invoice PDF renderer", () => {
     ],
     ["Insurance omitted", [SHIPPING], ["Shipping & Handling"]],
   ])(
-    "draws the charges below the Item Total row in the order given, then the boxed summary (%s)",
+    "draws the charges below the Item Total row in the order given, then the summary (%s)",
     async (_case, charges, expected) => {
       const bytes = await InvoicePdf({
         ...DATA,
@@ -487,18 +486,9 @@ describe("invoice PDF renderer", () => {
       expect(subtotal.y).toBeLessThan(lastCharge.y);
       expect(fee.y).toBeLessThan(subtotal.y);
       expect(total.y).toBeLessThan(fee.y);
-      const summaryBox = (await drawnRectangles(bytes)).find(
-        (rectangle) =>
-          rectangle.x < SUMMARY_LEFT && rectangle.width > SUMMARY_WIDTH,
-      );
-      expect(summaryBox).toBeDefined();
-      expect((summaryBox?.x ?? 0) + (summaryBox?.width ?? 0)).toBeGreaterThan(
-        RIGHT_EDGE,
-      );
-      expect(subtotal.y).toBeLessThan(
-        (summaryBox?.y ?? 0) + (summaryBox?.height ?? 0),
-      );
-      expect(total.y).toBeGreaterThan(summaryBox?.y ?? A4_WIDTH);
+      for (const row of [subtotal, fee, total]) {
+        expect(row.x).toBeCloseTo(SUMMARY_LEFT, 2);
+      }
       expect(
         (await drawnHorizontalLines(bytes)).some(
           (rule) =>
@@ -509,6 +499,15 @@ describe("invoice PDF renderer", () => {
       ).toBe(true);
     },
   );
+
+  // shared-ui-invoice-and-receipt-pdf-SC-3
+  it("draws the summary without a border", async () => {
+    const bytes = await InvoicePdf({
+      ...DATA,
+      lineItems: [SHIPPING, INSURANCE, ...SUMMARY],
+    });
+    expect(await drawnRectangles(bytes)).toEqual([]);
+  });
 
   // shared-ui-invoice-and-receipt-pdf-SC-16
   it("draws Order Total exactly as given, not the sum of Subtotal and the fee", async () => {

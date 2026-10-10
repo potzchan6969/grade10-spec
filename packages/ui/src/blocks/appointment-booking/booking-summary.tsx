@@ -1,10 +1,10 @@
+import { formatDay, formatTimeOfDay } from "@grade10/date";
 import { Separator } from "@grade10/design-system/components/display/separator";
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Storefront } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import { formatLocalDay, formatLocalTime } from "../../lib/format-datetime";
 import type { LocaleProps } from "./booking-copy";
 
 type BookingSummaryCopy = {
@@ -46,7 +46,7 @@ function BookingSummary({
   const when =
     start !== undefined && timeZone !== undefined ? (
       <span className="whitespace-nowrap">
-        {`${formatLocalDay(start, { locale, timeZone })}, ${formatLocalTime(start, { locale, timeZone })}`}
+        {`${formatDay(start, { locale, timeZone })}, ${formatTimeOfDay(start, { locale, timeZone })}`}
       </span>
     ) : undefined;
   return (

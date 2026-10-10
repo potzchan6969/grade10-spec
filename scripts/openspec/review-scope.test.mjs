@@ -1,5 +1,11 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -61,15 +67,51 @@ test("scope indexes PRD pages named by capability frontmatter", () => {
   assert.equal(scope.expandToFullSources, false);
 });
 
-test("scope expands when no capability frontmatter page can be indexed", () => {
-  const scope = buildReviewScope(
-    fixture({ frontmatter: false }),
-    "build-alpha",
-  );
+test("missing capability PRD expands verified linked pages without inventing a path", () => {
+  const root = fixture({ frontmatter: false });
+  const scope = buildReviewScope(root, "build-alpha");
   assert.equal(scope.expandToFullSources, true);
+  assert.deepEqual(
+    scope.sourceExpansions.filter((one) => one.capability),
+    [
+      {
+        scope: "capability",
+        capability: "site/search",
+        paths: ["docs/prds/products/site/alpha.md"],
+        reason:
+          "no PRD frontmatter page was indexed for capability: site/search",
+      },
+    ],
+  );
+  assert.equal(
+    scope.sourceExpansions.some((one) => one.scope === "global"),
+    false,
+  );
+  assert.equal(
+    existsSync(join(root, "docs/prds/products/site/search.md")),
+    false,
+  );
+  for (const item of scope.sourceExpansions)
+    for (const path of item.paths ?? [])
+      assert.ok(existsSync(join(root, path)));
   assert.match(
     scope.expansionReasons.join("\n"),
     /no PRD frontmatter page was indexed for capability: site\/search/,
+  );
+});
+
+test("global PRD index failure is explicitly marked for full fallback", () => {
+  const root = fixture({ frontmatter: false });
+  const prds = join(root, "docs", "prds");
+  rmSync(prds, { recursive: true, force: true });
+  const scope = buildReviewScope(root, "build-alpha");
+  assert.equal(scope.expandToFullSources, true);
+  assert.ok(
+    scope.sourceExpansions.some(
+      (one) =>
+        one.scope === "global" &&
+        one.reason === "PRD frontmatter coverage could not be established",
+    ),
   );
 });
 
@@ -107,10 +149,60 @@ test("scope indexes requirements, linked page lines, and folded Purpose target",
   assert.equal(scope.expandToFullSources, false);
 });
 
-test("an active overlap is visible and forces full-source expansion", () => {
+test("an active overlap produces an explicit overlap-scoped expansion", () => {
   const scope = buildReviewScope(fixture({ overlap: true }), "build-alpha");
   assert.equal(scope.overlaps.length, 1);
   assert.equal(scope.overlaps[0].other[0].change, "build-beta");
   assert.equal(scope.expandToFullSources, true);
+  assert.deepEqual(scope.sourceExpansions.at(-1), {
+    scope: "overlap",
+    capability: "site/search",
+    paths: [
+      "openspec/changes/build-alpha/specs/site/search/spec.md",
+      "openspec/changes/build-beta/specs/site/search/spec.md",
+    ],
+    reason: "overlapping active deltas require both sources",
+  });
   assert.match(scope.expansionReasons.join("\n"), /overlapping active deltas/);
+});
+
+test("source identity changes when a source input changes", () => {
+  const root = fixture();
+  const first = buildReviewScope(root, "build-alpha").sourceIdentity;
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/tasks.md"),
+    "## 2. Build\n",
+  );
+  const second = buildReviewScope(root, "build-alpha").sourceIdentity;
+  assert.notEqual(first.digest, second.digest);
+  assert.equal(first.algorithm, "sha256");
+  assert.equal(first.purpose, "review-scope-inputs");
+  assert.ok(first.inputCount > 1);
+});
+
+test("source identity includes current change metadata and store config", () => {
+  const root = fixture();
+  const before = buildReviewScope(root, "build-alpha").sourceIdentity.digest;
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/.openspec.yaml"),
+    "schema: grade10-planning\ndesign_waived: approved\n",
+  );
+  const afterMetadata = buildReviewScope(root, "build-alpha").sourceIdentity
+    .digest;
+  assert.notEqual(before, afterMetadata);
+
+  writeFileSync(join(root, "openspec/config.yaml"), "schema: grade10\n");
+  const afterConfig = buildReviewScope(root, "build-alpha").sourceIdentity
+    .digest;
+  assert.notEqual(afterMetadata, afterConfig);
+});
+
+test("source identity includes metadata for overlapping active changes", () => {
+  const root = fixture({ overlap: true });
+  const before = buildReviewScope(root, "build-alpha").sourceIdentity.digest;
+  const metadata = join(root, "openspec/changes/build-beta/.openspec.yaml");
+  mkdirSync(dirname(metadata), { recursive: true });
+  writeFileSync(metadata, "schema: grade10-planning\n");
+  const after = buildReviewScope(root, "build-alpha").sourceIdentity.digest;
+  assert.notEqual(before, after);
 });

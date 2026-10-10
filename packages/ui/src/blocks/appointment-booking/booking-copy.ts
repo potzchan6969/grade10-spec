@@ -1,7 +1,4 @@
-import {
-  formatViewerZoneName,
-  type ShippedLocale,
-} from "../../lib/format-datetime";
+import { formatViewerZoneName } from "@grade10/date";
 
 /** How a block words the shop's zone: the consumer's label when it has one,
  * otherwise the zone's short name (`HKT`, `EDT`) at the instant the block
@@ -12,7 +9,7 @@ function zoneLabel(timeZone: string, at: number, label?: string): string {
 
 type LocaleProps = {
   /** The language the dates are worded in. */
-  locale?: ShippedLocale;
+  locale?: string;
 };
 
 export type { LocaleProps };

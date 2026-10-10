@@ -24,6 +24,7 @@
     "./lib/*": "./src/lib/*.ts"
   },
   "dependencies": {
+    "@grade10/date": "workspace:*",
     "@grade10/design-system": "workspace:*",
     "@pdf-lib/fontkit": "^1.1.1",
     "@phosphor-icons/react": "^2.1.10",

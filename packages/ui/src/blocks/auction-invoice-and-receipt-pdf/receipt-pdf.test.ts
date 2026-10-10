@@ -2,13 +2,7 @@ import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
 import { TABLE_LABELS } from "./fixtures";
-import {
-  LINE_HEIGHT,
-  MARGIN,
-  RIGHT_EDGE,
-  SUMMARY_LEFT,
-  SUMMARY_WIDTH,
-} from "./pdf-document";
+import { LINE_HEIGHT, MARGIN, RIGHT_EDGE, SUMMARY_LEFT } from "./pdf-document";
 import {
   drawnHorizontalLines,
   drawnRectangles,
@@ -245,15 +239,41 @@ describe("receipt PDF renderer", () => {
           rule.y > (order[1]?.y ?? 0),
       ),
     ).toBe(true);
-    const summaryBox = (await drawnRectangles(bytes)).find(
-      (rectangle) =>
-        rectangle.x < SUMMARY_LEFT && rectangle.width > SUMMARY_WIDTH,
-    );
-    expect(summaryBox).toBeDefined();
-    expect(order[4]?.y).toBeLessThan(
-      (summaryBox?.y ?? 0) + (summaryBox?.height ?? 0),
-    );
-    expect(order[7]?.y).toBeLessThan(summaryBox?.y ?? 0);
+    for (const row of order.slice(4, 7)) {
+      expect(row.x).toBeCloseTo(SUMMARY_LEFT, 2);
+    }
+    const strings = rows.map((row) => row.text);
+    expect(strings).not.toContain("Description");
+    expect(strings).not.toContain("Amount");
+    expect(strings.filter((text) => text === "Lot A")).toHaveLength(1);
+    const onItsRow = (label: string, amount: string) =>
+      rows.some(
+        (row) =>
+          row.text === amount &&
+          Math.abs(row.y - drawnRow(rows, label).y) < 0.01,
+      );
+    for (const line of SUMMARY_LINE_ITEMS)
+      expect(onItsRow(line.label, line.amount), line.label).toBe(true);
+    for (const [label, amount] of [
+      ["Original Invoice Total", DATA.paymentBreakdown.originalInvoiceTotal],
+      ["Previous Payments", DATA.paymentBreakdown.previousPayments],
+      [
+        "Current Payment Received",
+        DATA.paymentBreakdown.currentPaymentReceived,
+      ],
+      ["Remaining Balance Due", DATA.paymentBreakdown.remainingBalanceDue],
+    ] as const)
+      expect(onItsRow(label, amount), label).toBe(true);
+  });
+
+  // shared-ui-invoice-and-receipt-pdf-SC-3
+  it("draws the summary without a border", async () => {
+    const bytes = await ReceiptPdf({
+      ...DATA,
+      paymentReference: null,
+      lineItems: SUMMARY_LINE_ITEMS,
+    });
+    expect(await drawnRectangles(bytes)).toEqual([]);
   });
 
   // shared-ui-invoice-and-receipt-pdf-SC-52, shared-ui-invoice-and-receipt-pdf-SC-53,

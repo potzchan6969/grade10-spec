@@ -570,7 +570,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The tax line renders immediately before the boxed summary with the supplied label and amount.
+* The tax line renders immediately before the summary with the supplied label and amount.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-2xh rev=1 covers=none -->
 ### shared-ui-invoice-and-receipt-pdf-US1-TC18-1: A null tax line behaves like an omitted tax line
@@ -1340,8 +1340,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Valid invoice data with one item whose title fits one line, the charges Shipping & Handling and Insurance, a boxed summary, a Bill To and a Ship To of recipient, address line 1, city line and country each, and bank details for the SWIFT, FPS and HK local transfer rails.
-* Valid receipt data with one item whose title fits one line, the charge Shipping & Handling, a boxed summary, a transfer reference, the four payment breakdown lines, and a Bill To and a Ship To of recipient, address line 1, city line and country each.
+* Valid invoice data with one item whose title fits one line, the charges Shipping & Handling and Insurance, a summary, a Bill To and a Ship To of recipient, address line 1, city line and country each, and bank details for the SWIFT, FPS and HK local transfer rails.
+* Valid receipt data with one item whose title fits one line, the charge Shipping & Handling, a summary, a transfer reference, the four payment breakdown lines, and a Bill To and a Ship To of recipient, address line 1, city line and country each.
 
 **Steps:**
 
@@ -1480,12 +1480,12 @@ Runs once per row of **Test data**.
 
 1. Render `InvoicePdf` with the supplied props.
 2. Parse the returned bytes as a PDF document and read page 1.
-3. Read from the boxed summary down to the issuer block.
+3. Read from the summary down to the issuer block.
 
 **Expected Results:**
 
 * No "Bank details" heading, columns, divider, or reference note appear anywhere on the sheet.
-* Nothing is drawn between the boxed summary and the issuer block: no empty section, box or rule stands where the section would sit.
+* Nothing is drawn between the summary and the issuer block: no empty section, box or rule stands where the section would sit.
 * The issuer block sits at the foot of the page, right-aligned, where it sits on every invoice.
 * Every other section of the invoice still renders.
 
@@ -1683,7 +1683,7 @@ Runs once per row of **Test data**.
 * No second item row is drawn.
 * An Item Total row sits directly under the item row, with the three `<item_total_1>` amounts, one under each amount column.
 * No lot title heading and no Description or Amount header appears.
-* Step 4: the charges and the boxed summary follow the Item Total row.
+* Step 4: the charges and the summary follow the Item Total row.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC52-1: Several items read as one row each in the order given
 
@@ -1727,7 +1727,7 @@ Runs once per row of **Test data**.
 * One Item Total row follows the last item row, with the three `<item_total_3>` amounts, one under each amount column.
 * No other Item Total row and no second header appears on the page.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC53-1: Charges follow the Item Total row and add no item row
+### shared-ui-invoice-and-receipt-pdf-US1-TC53-2: Charges follow the Item Total row and add no item row
 
 **Classification:**
 
@@ -1759,13 +1759,13 @@ Runs once per row of **Test data**.
 
 1. Render `InvoicePdf` with the supplied props.
 2. Parse the returned bytes as a PDF document and read page 1.
-3. Read from the Item Total row down to the boxed summary.
+3. Read from the Item Total row down to the summary.
 
 **Expected Results:**
 
 * The Shipping & Handling, Insurance and Tax rows follow the Item Total row, in that order, each with its `<charges_1>` amount.
-* The boxed summary follows the Tax row and shows Subtotal, Payment Processing Fee and Order Total with the `<summary_1>` amounts.
-* Order Total sits inside the same box as the other two lines, set off from them by a rule.
+* The summary follows the Tax row and shows Subtotal, Payment Processing Fee and Order Total with the `<summary_1>` amounts.
+* Order Total sits with the other two lines, set off from them by a rule, and no border is drawn around the three.
 * Winning Bid and Buyer's Premium appear in the item row only, not as charge rows.
 * The Item Total row is still the last row of the item table.
 
@@ -1888,7 +1888,7 @@ Runs once per row of **Test data**.
 
 * The header row, a divider under it, one `<item_1>` row and the Item Total row with the `<item_total_1>` amounts come first, in that order.
 * No lot title heading and no Description or Amount header appears.
-* The charge rows and the boxed summary follow, with their supplied amounts.
+* The charge rows and the summary follow, with their supplied amounts.
 * The payment breakdown follows the summary: Original Invoice Total, Previous Payments, Current Payment Received, Remaining Balance Due, in that order, with the `<breakdown_1>` amounts.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC57-1: Several items read as one receipt row each in the order given
@@ -2011,7 +2011,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 4 shows one page, sized A4.
-* The last item row, the Item Total row, the boxed summary and the issuer block are all on page 1.
+* The last item row, the Item Total row, the summary and the issuer block are all on page 1.
 * No two of these overlap.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC60-1: One item past the page limit adds a second page
@@ -2054,7 +2054,7 @@ Runs once per row of **Test data**.
 * Step 4 shows two pages, not three.
 * Each page is sized A4.
 * The item rows `Lot 001` to `Lot <items_over>` each appear once across the two pages, in order.
-* The Item Total row and the boxed summary each appear once across the two pages.
+* The Item Total row and the summary each appear once across the two pages.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC61-1: A continuation page repeats the column header
 
@@ -2185,7 +2185,7 @@ Runs once per row of **Test data**.
 * In that case page 1 ends after the row above it, with no line of `<item_long>` beneath.
 * The other item rows each appear once across the pages, in order.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC64-1: Item Total, the charges and the summary stay together at a page end
+### shared-ui-invoice-and-receipt-pdf-US1-TC64-2: Item Total, the charges and the summary stay together at a page end
 
 **Classification:**
 
@@ -2227,7 +2227,7 @@ Runs once per row of **Test data**.
 * At every count, the Item Total row, the three charge rows and the three summary lines sit on one page.
 * The Item Total row is never the last row on a page with the charges or the summary starting the next.
 * The three charge rows keep their order, between the Item Total row and the summary.
-* The three summary lines sit inside one box, whole.
+* The three summary lines sit together, whole, with no border around them.
 * At least one count puts the last item row on page 1 and the Item Total row on page 2.
 * On that page 2 the column header, with a divider under it, comes first and the Item Total row follows it, with no item row between them.
 
@@ -2609,13 +2609,13 @@ Runs once per row of **Test data**.
 
 1. Render `InvoicePdf` with the first count in `<n>`.
 2. Parse the returned bytes as a PDF document.
-3. Find the page of the boxed summary, of the Bank details heading, of each of the three rails and of the reference note.
+3. Find the page of the summary, of the Bank details heading, of each of the three rails and of the reference note.
 4. Repeat steps 1 to 3 for each other count in `<n>`.
 
 **Expected Results:**
 
 * At every count, the Bank details heading, the three rails and the reference note sit on one page.
-* At least one count puts the boxed summary on one page and the whole Bank details section on the next.
+* At least one count puts the summary on one page and the whole Bank details section on the next.
 * In that case no part of the section stays beside the summary.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC74-1: A receipt's Payment section moves to the next page whole
@@ -2651,13 +2651,13 @@ Runs once per row of **Test data**.
 
 1. Render `ReceiptPdf` with the first count in `<n>`.
 2. Parse the returned bytes as a PDF document.
-3. Find the page of the boxed summary, of the Payment heading, of the transfer reference label and of `<transfer_reference>`.
+3. Find the page of the summary, of the Payment heading, of the transfer reference label and of `<transfer_reference>`.
 4. Repeat steps 1 to 3 for each other count in `<n>`.
 
 **Expected Results:**
 
 * At every count, the Payment heading, the transfer reference label and `<transfer_reference>` sit on one page.
-* At least one count puts the boxed summary on one page and the whole Payment section on the next.
+* At least one count puts the summary on one page and the whole Payment section on the next.
 * In that case no part of the section stays beside the summary.
 
 ### shared-ui-invoice-and-receipt-pdf-US1-TC75-1: The issuer block never stands alone on a page
@@ -2695,13 +2695,13 @@ Runs once per row of **Test data**.
 
 1. Render `<renderer>` with the first count in `<n>`.
 2. Parse the returned bytes as a PDF document.
-3. Find the page of the issuer email, of the boxed summary and, on a receipt, of each of the four payment breakdown lines, and read every line drawn on the issuer email's page.
+3. Find the page of the issuer email, of the summary and, on a receipt, of each of the four payment breakdown lines, and read every line drawn on the issuer email's page.
 4. Repeat steps 1 to 3 for each other count in `<n>`.
 5. Repeat steps 1 to 4 for the other renderer.
 
 **Expected Results:**
 
-* At every count, the page that shows the issuer email also shows the boxed summary.
+* At every count, the page that shows the issuer email also shows the summary.
 * On a receipt, that page also shows the four payment breakdown lines.
 * On that page, no line of another section is drawn at or below the name line of the issuer block, the line directly above the issuer email.
 * At least one count of each renderer runs onto a second page.
@@ -2892,7 +2892,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | One item titled `Lot A` whose Winning Bid, Buyer's Premium and Total are each `HKD 12345678901234567890123456789012345678901234567890123456` (60 characters) | The amounts |
 | One item whose title is the word `lot` repeated 2,500 times with a space between, with Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00` and Total `HKD 120.00` | The item row |
-| One item titled `Lot A` with Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00` and Total `HKD 120.00`, and 120 charges labelled `Charge 001` to `Charge 120`, each `HKD 1.00`, between the Item Total row and the boxed summary | The Item Total row with its charges |
+| One item titled `Lot A` with Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00` and Total `HKD 120.00`, and 120 charges labelled `Charge 001` to `Charge 120`, each `HKD 1.00`, between the Item Total row and the summary | The Item Total row with its charges |
 
 **Steps:**
 

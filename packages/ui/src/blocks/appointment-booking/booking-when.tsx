@@ -1,4 +1,4 @@
-import { formatLocalDay, formatLocalTime } from "../../lib/format-datetime";
+import { formatDay, formatTimeOfDay } from "@grade10/date";
 import { type LocaleProps, zoneLabel } from "./booking-copy";
 
 type BookingWhenProps = LocaleProps & {
@@ -17,7 +17,7 @@ function formatBookingWhen({
   locale = "en",
 }: BookingWhenProps): string {
   const options = { locale, timeZone };
-  return `${formatLocalDay(start, options)}, ${formatLocalTime(start, options)}–${formatLocalTime(end, options)} (${zoneLabel(timeZone, start, timeZoneLabel)})`;
+  return `${formatDay(start, options)}, ${formatTimeOfDay(start, options)}–${formatTimeOfDay(end, options)} (${zoneLabel(timeZone, start, timeZoneLabel)})`;
 }
 
 export type { BookingWhenProps };

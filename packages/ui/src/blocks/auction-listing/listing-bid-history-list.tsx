@@ -1,3 +1,5 @@
+import type { ActivityTimeCopy } from "@grade10/date";
+import { formatActivityAt } from "@grade10/date";
 import {
   Avatar,
   AvatarFallback,
@@ -16,11 +18,6 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { CrownSimple, Info } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  type ActivityTimeCopy,
-  formatActivityAt,
-  type ShippedLocale,
-} from "../../lib/format-datetime";
 import { formatMoney } from "../../lib/format-money";
 import { useClockNow } from "./listing-clock";
 import type { ListingBidHistoryRow } from "./types";
@@ -43,7 +40,7 @@ type ListingBidHistoryListProps = {
   rows: readonly ListingBidHistoryRow[];
   heading?: string;
   currency: string;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
   /** Resets entrance animation when the bidding lifecycle changes. */
@@ -60,7 +57,7 @@ type BidHistoryRowItemProps = {
   animateEnter: boolean;
   useEnterWrapper: boolean;
   entranceMode: "expand" | "fade";
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
   nowMs: number;
@@ -68,7 +65,7 @@ type BidHistoryRowItemProps = {
 
 function formatRowTime(
   row: ListingBidHistoryRow,
-  locale: ShippedLocale,
+  locale: string,
   timeZone: string,
   activityTimeCopy: ActivityTimeCopy,
   nowMs: number,

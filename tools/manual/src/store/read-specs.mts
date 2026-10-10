@@ -49,12 +49,10 @@ const SCENARIO_HEADING = new RegExp(
   `^Scenario:\\s*(?:(${SCENARIO_ID.source})\\s+-\\s+)?(.+)$`,
 );
 const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
-/** A case id is journey-scoped, `<capability>-US<n>-TC<m>-<v>`
- * (`docs/governance/specs-to-test-cases.md`, Naming). Older suites still
- * carry the hyphenated `-US-<n>-TC-<m>` and the flat `<capability>-TC-<n>`,
- * and both stay readable: an issued id is permanent, so a suite is never
- * renumbered to a newer shape. */
-const CASE_HEADING =
+/** A case heading displays its stable marker id and suite-local reference.
+ * Older headings stay readable during migration. */
+const MODERN_CASE_HEADING = /^(\S+)\s+\(US-?\d+-TC-?\d+\):\s*(.+)$/;
+const LEGACY_CASE_HEADING =
   /^([a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?):\s*(.+)$/;
 /** The anchor a scenario serves, on its own line under the heading and above
  * `**GIVEN**` / `**WHEN**`. Machine-read up to the first dash; the prose after
@@ -503,7 +501,8 @@ export function readTestCases(text: string): TestSuite {
   const found: { section: Section; id: string; title: string }[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
-      const match = CASE_HEADING.exec(section.heading);
+      const modern = MODERN_CASE_HEADING.exec(section.heading);
+      const match = modern ?? LEGACY_CASE_HEADING.exec(section.heading);
       if (match) {
         found.push({ section, id: match[1], title: match[2] });
         continue;

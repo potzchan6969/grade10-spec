@@ -18,7 +18,7 @@
 
 <!-- <capability> is the capability's path with slashes as hyphens:
      grade10-site/store/product-listing issues
-     grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
+     g10.store-product-listing.SC-xxx, g10.store-product-listing.TC-xxx (US1-TC1). -->
 
 <!-- Everything below is the second pass, written after the blind suite and
      the reconciliation. `openspec instructions specs` carries the rules for

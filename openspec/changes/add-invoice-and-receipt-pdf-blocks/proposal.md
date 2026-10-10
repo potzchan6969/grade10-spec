@@ -30,7 +30,7 @@ own task, see Impact).
 - **Amendment (`decisions.md` Q31-Q39): items as rows.** `InvoicePdf` and
   `ReceiptPdf` list an order's items as table rows, each with Winning Bid,
   Buyer's Premium and Total, on every document including one with a single
-  item. The Item Total row, the charges under the table and the boxed summary
+  item. The Item Total row, the charges under the table and the summary
   follow it, and a table too long for one page continues on the next. This
   replaces the lot heading and the Description/Amount header the Q18-Q20
   amendment below describes, and changes the one-A4-page rule to one page per
@@ -48,7 +48,7 @@ own task, see Impact).
   - `InvoicePdf` draws the invoice's title and issuer mark, meta rows
     (invoice number, sent-at and payment-deadline dates, and payment method),
     Bill To and Ship To, including a phone line when supplied, the lot
-    heading, a Description/Amount table of charges ending in a boxed
+    heading, a Description/Amount table of charges ending in a
     Subtotal/Payment Processing Fee/Order Total summary, an optional supplied
     `taxLine`, an optional plain-text `Replaces invoice {id}` row, and the issuer block pinned to the sheet's bottom right.
   - `ReceiptPdf` draws the same title/issuer-mark, meta rows (receipt number,
@@ -115,7 +115,7 @@ None.
 
 - **Tax line shape.** This change exposes the presentation slot only: an
   optional `PdfLineItem` named `taxLine`, supplied by the application and
-  rendered on both documents before the boxed summary. Tax calculation,
+  rendered on both documents before the summary. Tax calculation,
   jurisdiction and persistence remain owned by the auction tax change.
 - **Formal tax receipt.** This change exposes no company-details or tax-ID
   receipt block. Finance may sponsor a future requirement when one exists.
