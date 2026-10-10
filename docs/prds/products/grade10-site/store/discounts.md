@@ -61,8 +61,8 @@ A Draft Order is created for each checkout, carrying at most one discount
 code and, on top of it, points:
 - **Discount code, order coupon, product coupon, or gift** (Shopify
   Discount code) — whichever one the checkout carries, minted the moment the
-  checkout is submitted; a percentage coupon carries its own rate and the
-  order records the cut the shop took
+  checkout is submitted; a percentage coupon carries its own rate, so the
+  shop takes exactly that rate
 - **Points** (order-wise discount)
 - **Site discounts** — read onto the draft by accepting Shopify's own
   automatic discounts, combined or not with the one discount code per
