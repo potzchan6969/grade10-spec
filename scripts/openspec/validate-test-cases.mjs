@@ -198,6 +198,21 @@ function checkManualRows(root, text, cases, err) {
   }
 }
 
+function caseTraceMarker(text, headingLine) {
+  const lines = text.split("\n");
+  let index = headingLine - 2;
+  while (index >= 0 && lines[index].trim() === "") index -= 1;
+  const marker = /^<!--\s*trace:case\s+id=(\S+)\s+rev=(\S+)(?:\s+covers=(\S+))?\s*-->$/.exec(
+    lines[index] ?? "",
+  );
+  if (!marker) return null;
+  return {
+    id: marker[1],
+    revision: marker[2],
+    covers: marker[3] ?? null,
+  };
+}
+
 function checkSuite(root, filePath, rulesRev, allCases) {
   const rel = relative(root, filePath);
   const text = readFileSync(filePath, "utf8");
@@ -518,6 +533,20 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     const seenTc = new Set();
     for (const tc of j.cases) {
       const at = tc.line;
+      const marker = caseTraceMarker(text, at);
+      if (
+        marker?.covers === null &&
+        prop(tc, "Status").toLowerCase() !== "deprecated"
+      ) {
+        const approvedActual =
+          suite.status === "approved" && prop(tc, "Status") === "actual";
+        const message = approvedActual
+          ? `case \`${tc.id}\` is not export-eligible — QA2 must add post-hoc scenario links before export`
+          : `case \`${tc.id}\` has no post-hoc scenario links — QA2 must reconcile it before approval`;
+        if (approvedActual)
+          err(at, message);
+        else warn(at, message);
+      }
       if (seenCaseIds.has(tc.id))
         err(at, `case id \`${tc.id}\` appears more than once in this suite`);
       seenCaseIds.add(tc.id);

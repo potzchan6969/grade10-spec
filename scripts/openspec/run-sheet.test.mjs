@@ -47,6 +47,7 @@ import {
   caseRow,
   caseRows,
   inReadingOrder,
+  matchesChangedScope,
   selectCases,
   surfacePrefill,
   walkBand,
@@ -666,6 +667,23 @@ test("a durable suite wins when a change repeats the case id", () => {
   });
   assert.equal(picked[0].read.rel, base.read.rel);
   assert.equal(picked[0].tc.title, base.tc.title);
+});
+
+test("changed-since selection follows the suite scope without selecting by scenario text", () => {
+  const feature = candidates[0].read;
+  assert.equal(
+    matchesChangedScope(feature, [
+      "docs/prds/products/demo/thing/widget.md",
+    ]),
+    true,
+  );
+  assert.equal(
+    matchesChangedScope(feature, [
+      "docs/prds/products/demo/other-capability.md",
+    ]),
+    false,
+  );
+  assert.equal(matchesChangedScope(feature, []), true);
 });
 
 test("shared-planning-agent-rounds-SC-61 - an automated case is left out by default, and reported", () => {

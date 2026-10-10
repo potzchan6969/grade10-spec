@@ -34,6 +34,41 @@ function durableSuite(one) {
   return one.read.rel.startsWith("openspec/specs/");
 }
 
+/**
+ * A changed-since selection is intentionally scope-based, not text-based: a
+ * changed spec, PRD or suite selects the cases owned by the matching suite
+ * level. It never tries to infer which individual assertion changed.
+ */
+function suiteScope(read) {
+  const path = read.rel
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "")
+    .replace(/^openspec\/specs\//, "");
+  if (read.level === "platform") return "";
+  if (read.level === "product") return path.replace(/\/product-tcs\.md$/, "");
+  if (read.level === "domain") return path.replace(/\/domain-tcs\.md$/, "");
+  return path.replace(/\/feature-tcs\.md$/, "");
+}
+
+export function matchesChangedScope(read, changedPaths) {
+  if (!changedPaths || changedPaths.length === 0) return true;
+  if (read.level === "platform")
+    return changedPaths.some(
+      (path) =>
+        path.startsWith("openspec/") || path.startsWith("docs/prds/"),
+    );
+  const scope = suiteScope(read);
+  return changedPaths.some((path) => {
+    if (path === read.rel) return true;
+    const marker = `/${scope}`;
+    return (
+      path.includes(`${marker}/`) ||
+      path.includes(`${marker}.`) ||
+      path.endsWith(marker) ||
+      path.startsWith(`${scope}/`)
+    );
+  });
+}
+
 /** Everything the store holds, as one flat list of candidates. */
 export function readCandidates(root, scope = null) {
   const out = [];
@@ -64,6 +99,7 @@ export function selectCases(candidates, options = {}) {
     level = null,
     includeDraft = false,
     includeAutomated = false,
+    changedPaths = null,
   } = options;
 
   const allowed = new Set(includeDraft ? ["actual", "draft"] : ["actual"]);
@@ -124,6 +160,7 @@ export function selectCases(candidates, options = {}) {
   const wantLevel = level ? list(level) : null;
 
   for (const one of candidates) {
+    if (!matchesChangedScope(one.read, changedPaths)) continue;
     if (wantLevel && !wantLevel.includes(one.read.level)) continue;
     if (
       wantPriority &&

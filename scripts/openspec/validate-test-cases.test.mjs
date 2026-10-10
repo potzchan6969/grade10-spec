@@ -110,6 +110,44 @@ function store(story, manual = MANUAL) {
   return root;
 }
 
+test("an anchor-only active case is a non-blocking QA2 warning before approval", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8").replace(
+    "### demo-alpha-US1-TC1-1: The thing happens, 1",
+    "<!-- trace:case id=demo.alpha.TC-001 rev=1 -->\n### demo-alpha-US1-TC1-1: The thing happens, 1",
+  );
+  writeFileSync(file, text);
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.equal(result.status, 0, out);
+  assert.match(out, /no post-hoc scenario links/);
+});
+
+test("an approved actual anchor-only case is not export-eligible", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8")
+    .replace("**Status:** pending-review · 0/3", "**Status:** approved · 3/3")
+    .replace("**Drafts styled:** 2026-09-01, tcs-rules r3.0\n", "")
+    .replaceAll("**Status:** draft", "**Status:** actual");
+  const withReview = text.replace(
+    "**Status:** approved · 3/3\n",
+    "**Status:** approved · 3/3\n**Reviewed:** 2026-09-01, tcs-rules r6\n",
+  );
+  writeFileSync(
+    file,
+    withReview.replace(
+      "### demo-alpha-US1-TC1-1: The thing happens, 1",
+      "<!-- trace:case id=demo.alpha.TC-001 rev=1 -->\n### demo-alpha-US1-TC1-1: The thing happens, 1",
+    ),
+  );
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.notEqual(result.status, 0, out);
+  assert.match(out, /not export-eligible/);
+});
+
 const run = runValidator;
 
 // Product and platform suites have no adjacent spec.md: their traces resolve

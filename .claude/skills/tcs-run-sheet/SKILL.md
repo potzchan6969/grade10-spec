@@ -32,13 +32,25 @@ what you found to ids and pass them explicitly:
 pnpm run tcs:run-sheet -- --name auction-signin --cases-file /tmp/pick.txt --dry-run
 ```
 
+**A change scope.** When a commit is the known baseline, use
+`--changed-since <sha>`. It selects cases from suites whose capability,
+domain, product or platform scope contains a changed spec, PRD or suite file.
+It deliberately selects at suite scope, not by trying to infer which sentence
+changed. The resulting ids are still printed and require human confirmation.
+
+```bash
+pnpm run tcs:run-sheet -- --name auction-change --changed-since <baseline-sha> --dry-run
+```
+
 Cross levels freely. A feature case and the domain case that crosses it belong
 in the same pass when the request covers both.
 
 ## The steps
 
-1. **Resolve the request** to a selection, by either route above. Automated
+1. **Resolve the request** to a selection, by one route above. Automated
    cases are in by default. Drafts stay out unless the person asked for them.
+   A changed-since selection is a scope hint, not proof that every selected
+   case changed; the reviewer may remove cases before dispatch.
 2. **Dry run it.** Pass `--include-automated` unless they asked to leave
    automated cases out. `--dry-run` prints every case it would write and
    touches no network. Read the list yourself first: a case that does not
