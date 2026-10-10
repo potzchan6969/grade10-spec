@@ -12,22 +12,20 @@ When human input is needed, ask in the Clarification Request format in the [`cla
 
 ## Sources of truth
 
-| Need | Canonical location | Notes |
-| --- | --- | --- |
-| Durable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` | The rolling latest accepted contract. Acceptance preserves planning history; the first task claim records its baseline and target scope. Archive reconciles it. See [`PRDs and OpenSpec`](docs/governance/prd-and-openspec.md#the-changes-record). Applications and the shared layer are in `openspec/specs/README.md`. |
-| The PRD: what a capability is and should be, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | Written first, and moved first by whoever learns a product detail — PM, designer, QA or engineer; the product manager keeps it whole. The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose — what runs unmarked, 🚧 on what an active change delivers, ❓ on what nobody has confirmed — with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Never restates a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
-| Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
-| Proposed change | `openspec/changes/<change-name>/` | Delta design, specs, and tasks; archive after delivery. Not for bugs: `docs/governance/bug-fixes.md`. |
-| Who walks a capability | `user-journeys.md` beside its `spec.md` | The INVEST journeys. It names no scenario: a scenario names the journey it serves. A capability nobody reaches on its own — a policy, a package contract, a makers-only surface — writes `**Walked by:** nobody` instead, routing its anchors to the feature set without excusing it a suite. |
-| Test cases for a capability | `feature-tcs.md` beside its `spec.md` | An independent blind reading of that capability's anchors, written without sight of the scenarios and reconciled against them after. Its name carries its level — one domain's is `domain-tcs.md` beside them, the wider smoke passes `product-tcs.md` and `platform-tcs.md`. See `docs/governance/specs-to-test-cases.md`. |
-| Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
-| User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` | `shared/` answers every key no brand claims, once per language; a brand answers only what says something about itself, in every language it speaks. Assembled in `src/catalogs.ts`. Types refuse a key the vocabulary does not name; `pnpm run test` refuses layers that leave one unanswered, or answer one twice. |
-| Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
-| Product component implementation | `packages/ui/src/blocks/` | Shared compound components, one directory per capability; the capability spec remains the export contract. |
-| A change's rounds | `rounds.md` beside `tasks.md` | One row per round, written by the landing. |
-| Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
+| Need | Canonical location |
+| --- | --- |
+| Testable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` |
+| Product intent: why, for whom, and what is still open | `docs/prds/products/<product>/<capability>.md` |
+| Evidence behind a decision | `docs/references/<doc>.md` |
+| Proposed change | `openspec/changes/<change-name>/` |
+| Who walks a capability | `user-journeys.md` beside its `spec.md` |
+| Test cases | `feature-tcs.md` beside its `spec.md` |
+| Design token values | `packages/design-system/tokens.json` |
+| User-facing copy | `packages/i18n/messages/` |
+| Design-system primitive | `packages/design-system/src/components/` |
+| Shared compound component | `packages/ui/src/blocks/` |
 
-If a statement is testable, it belongs in `openspec/specs/` and nowhere else, reached through a change's delta. A PRD is the capability's manual page, written before the change: it states the outcome in the reader's words, marked 🚧 or ❓ where it is not yet running, holds what a requirement cannot carry, and names its capability spec rather than restating it. Where an unmarked line and the spec disagree, the spec is correct.
+Testable statements belong in `openspec/specs/` only, reached through a change's delta. A PRD names its spec and never restates it. Where a PRD line and the spec disagree, the spec is correct. Details: [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md).
 
 Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) for the required maintenance lifecycle and a format-selection guide.
 
