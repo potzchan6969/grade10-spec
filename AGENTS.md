@@ -39,12 +39,11 @@ Start from the capability's PRD in `docs/prds/` and its design in Storybook. Con
 
 Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
-## Design Override
+## Completed designs
 
-The agreed look is what `main` holds in `packages/ui/src/blocks`, `packages/design-system/src/components`, its `tokens.json` and `apps/preview/src/pages`. The hooks `pnpm install` sets stop a commit that changes it, or a merge that drops its lines.
+A completed design is the agreed look. Implement it as drawn in `packages/ui/src/blocks`, `packages/design-system/src/components`, `tokens.json` and `apps/preview/src/pages`, and do not restyle it on the way. A missing state or variant belongs to the designer.
 
-- **Never restyle it on the way** — a missing state or variant is the designer's; never pass `--no-verify`.
-- **A stop is your person's** — show them its lines; only on their yes, end the message with `Design-Override: <what changes and why>` — [Design Override](docs/prds/products/shared/design-sync/design-override.md).
+If you have a good reason to push back on a design, raise it with the design's owner rather than deciding it yourself. Never bypass a commit hook to get past a design change.
 
 ## Product UI component contracts
 
