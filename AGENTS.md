@@ -125,7 +125,3 @@ Run the appropriate checks before handoff:
 - PR labels: use one of `feature`, `bug`, `ci`, `agent`, `enhancement`, `maintenance`, or `documentation`, when labels are available.
 - Commit subjects use the Conventional Commits format. Do not add issue or PR prefixes; repository tooling adds them.
 - Keep commits atomic. Split unrelated implementation, documentation, refactoring, and generated build output into separate commits when practical.
-
-## Agent-platform parity
-
-`AGENTS.md` is canonical; `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` symlink to it. Skills live in `.claude/skills/`.
