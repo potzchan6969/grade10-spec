@@ -1,4 +1,14 @@
 export {
+  addDays,
+  atOrBefore,
+  calendarDaysBetween,
+  endOfDayAfter,
+  firstOfMonth,
+  hourOf,
+  startOfDayAfter,
+  wholeMonthsBetween,
+} from "./arithmetic.ts";
+export {
   dayValue,
   endOfDay,
   formatCalendarDay,
