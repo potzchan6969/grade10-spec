@@ -60,9 +60,9 @@ An order carries one discount, whichever kind reached it:
 A Draft Order is created for each checkout, carrying at most one discount
 code and, on top of it, points:
 - **Discount code, order coupon, product coupon, or gift** (Shopify
-  Discount code) — whichever one the checkout carries; a product coupon
-  or a gift is minted the moment the checkout is submitted, never on an
-  earlier price preview
+  Discount code) — whichever one the checkout carries, minted the moment the
+  checkout is submitted; a percentage coupon carries its own rate and the
+  order records the cut the shop took
 - **Points** (order-wise discount)
 - **Site discounts** — read onto the draft by accepting Shopify's own
   automatic discounts, combined or not with the one discount code per
@@ -176,6 +176,17 @@ locations" switch is on, off by default, so merchandising one is two
 settings rather than one. A shop whose locations are not POS Pro cannot
 have one at the counter at all.
 
+- **On the listing** — every live site discount is read from the shop and
+  named on the cards and product pages it reaches; one with no condition
+  prices the card, the larger where two would —
+  [Product Listing](/p/grade10-site/store/product-listing)
+- **In the cart** — the shop prices the basket the way its checkout will:
+  each line shows what the site discounts take off it, and the chosen code
+  reads as applied, set aside or refused, as the checkout then answers —
+  [Cart Drawer](/p/grade10-site/store/cart)
+- ❓ **A site discount for some customers only** — one the shop authors for a
+  customer segment is shown on the listing to everyone; whether the listing
+  hides it from the rest. Product confirms
 - **Beside a coupon** — Shopify's own rule: the site discount's setting
   and the coupon's own say whether they stack; where they cannot, the
   shop keeps the larger cut and a coupon set aside goes back to the wallet
@@ -243,7 +254,9 @@ today.
 | Combine setting | Decided | Each coupon's definition states what it stacks with — a reward's definition, or the operator's mint of a store coupon — with a store default where none is stated. | Product |
 | Nothing is held | Decided | Points and coupons alike stay spendable until a paid order takes them. A claim takes the instrument off every earlier sale first, so a member is never locked out of their own coupon by a draft or a sale they walked away from. The one refusal left is a sale that cannot let go: an online checkout the provider reports collected or will not close, which can still collect and still carries the cut, or a sale still being submitted with the coupon. | Product |
 | A retired counter sale | Decided | The shop owns that cart and it can still collect, so a newer promise retires the sale and never cancels it. Whatever reward it holds comes off and its code is deactivated, so no coupon is ever locked to a counter. The shop goes on honouring a code a cart already carries, so what keeps that honest is the settlement: a sale is spent against what it actually carried. A cut it gave for a coupon the order had given up spends the coupon where no other sale claims it, and is reported either way rather than taken twice. | Product |
-| Price preview | Decided | The cart drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — that holds nothing; a coupon's Shopify Discount is minted only once the checkout is submitted. | Engineering |
+| Price preview | Decided | The cart drawer reads one store quote that the shop prices — its site discounts and the chosen code beside them — with points after both. The code is a preview code: minted at the coupon's own value, scoped to the member, standing 15 minutes, its text derived under the shop's secret so nobody can type it, and never sent to a draft anyone can pay. The checkout's own code is minted once the checkout is submitted. | Engineering |
+| Preview against the shop | ❓ Open | Whether the shop's price preview answers each code and each site discount line by line, as the store reads it; to be confirmed on a dev shop. Engineering confirms. | Engineering |
+| Coupon value | Decided | A percentage coupon is a percentage code online, so 10% off is 10% as the shop rounds it — never a fixed amount the store worked out. A ceiling it would pass is minted as that ceiling, in money. | Product |
 | A free item alone online | ❓ Open | A 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping — whether it ships free, or is collection only. | Product |
 | Product special sale vs. Sale price | Decided | Kept separate — Sale price stays the ad hoc, unscheduled tool; Product special sale is the scheduled, exclusive one. | Product |
 | Points on an exclusive line | Decided | Points always redeem, even on a product special sale — points is a payment method, not a merchandising discount. | Product |

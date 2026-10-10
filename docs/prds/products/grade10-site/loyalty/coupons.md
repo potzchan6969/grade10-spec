@@ -6,10 +6,10 @@ reviewed: 2026-10-06
 ---
 
 A coupon is Grade10's own instrument: what a redemption leaves the member
-holding, and what an order carries to spend it. Grade10 prices it against
-the order's lines; a Shopify discount — a code, or at the till a gift's line
-discounted to nothing — is only how that price reaches the order and how the
-checkout shows it, never what decides it.
+holding, and what an order carries to spend it. Grade10 decides whether the
+member may spend it on the order's lines; online, the shop prices it, from a
+Shopify discount code carrying the coupon's own value — a 10% coupon is a 10%
+code — and the cut the order records is the shop's own figure.
 
 ::image{src="assets/diagrams/coupon-life.svg" alt="A coupon from redeemed or granted, to available, to claimed by a sale, to used when that order is paid, with the Shopify discount code a claim mints above it"}
 
@@ -168,6 +168,8 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 | Every line free | Every eligible line is already fully discounted |
 | The cut will not split | The amount cannot be divided across the eligible lines |
 | Gift already held | A gift whose variant the basket already carries |
+| Site discount gives more | The shop's own automatic discount and this coupon cannot both apply, and the automatic takes more; the coupon stays in the wallet |
+| Refused by the shop | The shop would not apply the coupon's code to this basket |
 
 ## Spending one
 
@@ -227,6 +229,7 @@ are on [Discounts](/p/grade10-site/store/discounts).
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| A rate at the shop's rate | Decided | Online, a percentage coupon is minted as a percentage code, so the shop takes the rate as it rounds it rather than a fixed amount the store worked out. A ceiling the rate would pass is minted as that ceiling, in money, because a shop code caps no rate. At the till a coupon is still minted as the store's own cut. | Product |
 | Deactivating a code | Decided | It never refuses a claim. The shop honours a code a cart already carries, so settlement guards the money and the deactivation is retried. | Product |
 | What the member is shown | Decided | A coupon a sale claims reads as it would unclaimed: no claimed state, no sale named, and nothing said when a claim moves. A till spend they were told had landed is still corrected if its sale is abandoned unpaid. | Product |
 | An online order that expires | Decided | It keeps its claim until its code can no longer be collected, and the programme's clock then releases it. A counter sale gives its coupon back at its hour. | Engineering |

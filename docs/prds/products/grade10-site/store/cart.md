@@ -15,7 +15,8 @@ back to that page.
 | Who | A signed-in member; a signed-out session holds no lines |
 | Promo codes | **1 per cart** — a second replaces the first |
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
-| Estimated total | **Goods − code − points** — before shipping, tax and the shop's own sale, which the invoice prices |
+| Estimated total | **Goods − site discounts − code − points**, as the shop's checkout prices them — before shipping and tax |
+| Shop's answer | Within **2.5 s**; past it, or where the shop does not answer, the drawer shows the store's own figures, with no site discount in them |
 | Held codes | The member's own store codes and reward coupons, the ones that fit first, the soonest to expire first; every store code is minted to a member, so the list is complete |
 | Carried to checkout | 🚧 The code and the points, held with the cart; Proceed to Checkout sends them straight to Shopify; paying the invoice clears the cart, them included — [Checkout](/p/grade10-site/store/checkout#integration-readiness) |
 
@@ -37,6 +38,10 @@ back to that page.
   on another device; the figures are read again either way
 - **Repriced** - a line the shop repriced shows the new price with the price
   the member saw before struck through
+- **Site discount** — a line one of the shop's own automatic discounts cuts
+  shows the price after it, with the price before it struck through; the
+  subtotal reads after the site discounts —
+  [Discounts](/p/grade10-site/store/discounts#site-discounts)
 
 ## Promo Code
 
@@ -48,6 +53,14 @@ read against the cart as it stands and held nowhere.
   and the total does not move
 - 🚧 **Picked** — a held code applies the same way from the list; one that
   cannot ride this cart is listed apart with its reason
+- **Set aside for a site discount** — where the code and a site discount
+  cannot both apply and the site discount takes more, the drawer says so and
+  the total shows the site discount, the answer the shop's checkout gives;
+  the code stays in the wallet
+- **Refused by the shop** — a code the store holds but the shop would not
+  apply to this basket is listed with that reason, and the total does not move
+- **The shop's figure** — a code's cut is what the shop takes, so a 10% code
+  takes 10% as the shop rounds it
 - 🚧 **Removed** — Remove puts the code back; a cart edit that makes it
   stop fitting takes it off with a notice
 - 🚧 **Wallet not answered** — the codes the store minted are still listed
@@ -143,8 +156,9 @@ and tax before the invoice. A second code on one cart.
 | Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
-| Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
-| Struck price on a line | ❓ Open | A line both repriced and on sale strikes through one price: the list price, with the reprice given a signal of its own, or the price seen before, with the sale shown only by the lower price. Recommended: settle it with the change that prices the shop's sale in this drawer. | Product |
+| Shipping | Decided | Unknown until the invoice; the estimated total is the goods after the site discounts and this store's own tender. | Product |
+| Priced by the shop | Decided | The drawer asks the shop to price the basket the way its checkout will, site discounts and the chosen code together, so a code the drawer shows as applied is applied at checkout. The held list is still answered by the store's own rules, because asking the shop once per held code on every edit is too many calls; the chosen code is the one the shop answers. | Product |
+| Struck price on a line | Decided | A line a site discount cuts strikes through its price before the sale, as the drawer's design draws a site sale; a line both repriced and on sale strikes through that price, and the reprice shows only in the price. | Design |
 | Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
 | Verification before a session | Decided | Goods of HKD 120,000 or more answer Proceed to Checkout with the verify message, and the account link where the profile page is enabled. No checkout session is created until the member is verified. The identity check still runs only on the account page. Asking Shopify first and showing the gate from its reply is not this drawer. | Product |
 | Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
