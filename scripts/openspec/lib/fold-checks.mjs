@@ -3,7 +3,8 @@ import { join } from "node:path";
 import YAML from "yaml";
 import { deltaSections } from "../../../tools/manual/src/store/read-changes.mts";
 
-const CASE_LINE = /^###\s+(\S+-TC\d+)-(\d+)\b[:\s-]*(.*)$/i;
+const MODERN_CASE_LINE = /^#{3,4}\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):\s*(.*)$/i;
+const LEGACY_CASE_LINE = /^###\s+(\S+-TC\d+)-(\d+)\b[:\s-]*(.*)$/i;
 const CASE_MARKER = /<!--\s*trace:case id=(\S+)/;
 const SUITE_FILE = /-tcs\.md$/;
 const SPECS = "openspec/specs/";
@@ -14,13 +15,17 @@ export function casesOf(text) {
   const lines = text.split("\n");
   const cases = new Map();
   lines.forEach((line, at) => {
-    const found = CASE_LINE.exec(line);
+    const modern = MODERN_CASE_LINE.exec(line);
+    const legacy = modern ? null : LEGACY_CASE_LINE.exec(line);
+    const found = modern ?? legacy;
     if (!found) return;
     let above = at - 1;
     while (above >= 0 && !lines[above].trim()) above -= 1;
-    cases.set(found[1], {
-      title: found[3].trim(),
-      marker: CASE_MARKER.exec(lines[above] ?? "")?.[1] ?? null,
+    const marker = CASE_MARKER.exec(lines[above] ?? "")?.[1] ?? null;
+    const markerId = marker ? /id=(\S+)/.exec(marker)?.[1] : null;
+    cases.set(markerId ?? found[1], {
+      title: (modern ? found[4] : found[3]).trim(),
+      marker,
     });
   });
   return cases;

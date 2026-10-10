@@ -715,6 +715,56 @@ describe("one requirement two changes both fold", () => {
     ]);
   });
 
+  it("accepts an overlap whose dependent change is ordered after its prerequisite", async () => {
+    const root = changing(
+      "first",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/second/.openspec.yaml":
+          "schema: grade10-planning\ndepends_on:\n  - first\n",
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md": [
+          "## MODIFIED Requirements",
+          "",
+          ...requirement("Alpha does things", "alpha-SC-01", "the next thing"),
+          "",
+        ].join("\n"),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toEqual([]);
+  });
+
+  it("keeps a cyclic dependency overlap as a failure", async () => {
+    const root = changing(
+      "first",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/first/.openspec.yaml":
+          "schema: grade10-planning\ndepends_on:\n  - second\n",
+        "openspec/changes/second/.openspec.yaml":
+          "schema: grade10-planning\ndepends_on:\n  - first\n",
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md": [
+          "## MODIFIED Requirements",
+          "",
+          ...requirement("Alpha does things", "alpha-SC-01", "the next thing"),
+          "",
+        ].join("\n"),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toHaveLength(2);
+  });
+
   // Decides shared-planning-agent-rounds-US16-TC1-1.
   it("shared-planning-agent-rounds-SC-102 - names an ADDED block to the MODIFIED one of the same name in another change, however each is headed", async () => {
     const root = changing(

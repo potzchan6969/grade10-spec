@@ -1,7 +1,7 @@
 # grade10-site/auction/listing-page Test Cases
 
-**Status:** reopened · 16/55
-**Drafts styled:** 2026-10-07, tcs-rules r4
+**Status:** reopened · 15/55
+**Drafts styled:** 2026-10-08, tcs-rules r4
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 
 ## grade10-site-auction-listing-page-US1: Collector opens a lot at its own address
@@ -190,9 +190,11 @@ The catalogue publishes <a published lot>.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page.spec.ts`
 
 **Pre-conditions:**
 
@@ -294,7 +296,7 @@ a bidding countdown is shown on <a published lot>.
 **I want** to open a lot's own address from the catalogue without a page load,
 **so that** the lot I picked out of the list is the page I land on.
 
-<!-- trace:case id=g10.auction-listing-page.TC-fe3 rev=1 covers=g10.auction-listing-page.SC-fl9,g10.auction-listing-page.SC-aga -->
+<!-- trace:case id=g10.auction-listing-page.TC-fe3 rev=1 covers=g10.auction-listing-page.SC-fl9 -->
 ### grade10-site-auction-listing-page-US5-TC1-1: Catalogue opens the lot's own address
 
 **Classification:**
@@ -322,14 +324,14 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 
 * The browser is on that lot's address, showing that lot's page.
 
-<!-- trace:case id=g10.auction-listing-page.TC-edm rev=1 covers=g10.auction-listing-page.SC-fl9,g10.auction-listing-page.SC-aga -->
-### grade10-site-auction-listing-page-US5-TC2-1: Sitemap names no lot address
+<!-- trace:case id=g10.auction-listing-page.TC-edm rev=2 covers=g10.auction-listing-page.SC-aga -->
+### grade10-site-auction-listing-page-US5-TC2-2: Sitemap lists each published lot
 
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -339,7 +341,7 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 * **Trace:** grade10-site-auction-listing-page-US-05
 
 **Pre-conditions:**
-None.
+The catalogue holds `<a published lot>`.
 
 **Steps:**
 
@@ -348,8 +350,8 @@ None.
 
 **Expected Results:**
 
-* No entry is a lot address.
-* None carries an unfilled parameter in place of one.
+* `<a published lot>`'s address is listed as an absolute URL of the serving environment.
+* No entry carries an unfilled parameter in place of a lot.
 
 ---
 
@@ -2283,6 +2285,8 @@ the code must never appear on this capability's public surfaces.
 | `grade10-site-auction-listing-page-US12-TC9-1` | Folded — covered by `grade10-site-auction-listing-page-SC-53` |
 | `grade10-site-auction-listing-page-SC-52` | Covered by `grade10-site-auction-listing-page-US15-TC1-1` and `US15-TC2-1` |
 | `grade10-site-auction-listing-page-SC-53` | Covered by `grade10-site-auction-listing-page-US12-TC9-1` |
+
+**Run:** 2026-10-08, listing-page sitemap aligned to `grade10-site/site/crawlable-pages`. `grade10-site-auction-listing-page-US5-TC2-1` retargeted as `US5-TC2-2` / `TC-edm@2`: the sitemap lists each published lot the catalogue holds, and none is an unfilled parameter.
 
 ### Manual
 

@@ -43,8 +43,6 @@ type SiteHeaderCopy = NavCopy & {
   submissions?: string;
   /** Store-launch membership destination. TBC — shown only with `onMembership`. */
   membership?: string;
-  /** Optional authenticated orders destination label. */
-  orders?: string;
   signOut: string;
 };
 
@@ -77,13 +75,11 @@ type SiteHeaderProps = {
   accountEmail?: string;
   onProfile?: () => void;
   onMyOrders?: () => void;
-  onMyAuctions: () => void;
+  onMyAuctions?: () => void;
   /** Opens Submissions. Omitted unless this handler is supplied. */
   onSubmissions?: () => void;
   /** Store-launch membership item. TBC — omitted unless this handler is supplied. */
   onMembership?: () => void;
-  /** Opens the consumer-owned authenticated orders destination. */
-  onOrders?: () => void;
   onSignOut: () => void;
   /**
    * Opens the account menu on first paint. Stories that are the layout SoT for
@@ -98,12 +94,12 @@ type SiteHeaderProps = {
  *
  * Signed out shows a primary Sign In button. Signed in shows the account icon
  * and a menu with the email's initial avatar above the sign-in email, then
- * My Auctions, then Sign Out (destructive, separated). Cart, search, Profile, My Orders,
- * Submissions, Membership, and Orders stay optional via handlers — Profile joins first
+ * the supplied items, then Sign Out (destructive, separated). Cart, search,
+ * Profile, My Orders, My Auctions,
+ * Submissions, and Membership stay optional via handlers — Profile joins first
  * once its handler is supplied, My Orders joins ahead of My Auctions once
- * Store answers, Submissions joins after My Auctions once its copy and handler
- * are supplied, Membership joins after that once its copy and handler are
- * supplied, and Orders joins after that once both its copy and handler are
+ * Store answers, My Auctions joins once its handler is supplied, Submissions joins after My Auctions once its copy and handler
+ * are supplied, and Membership joins after that once its copy and handler are
  * supplied. When cart is present,
  * `SiteHeader` owns the active-line count badge on the cart icon
  * (`cartItemCount`), matching the cart drawer title. On compact viewports,
@@ -135,7 +131,6 @@ function SiteHeader({
   onMyAuctions,
   onSubmissions,
   onMembership,
-  onOrders,
   onSignOut,
   accountMenuDefaultOpen,
   className,
@@ -147,7 +142,6 @@ function SiteHeader({
     myAuctions,
     submissions,
     membership,
-    orders,
     signOut,
     ...navCopy
   } = copy;
@@ -191,9 +185,11 @@ function SiteHeader({
                 {myOrders}
               </DropdownMenuItem>
             ) : null}
-            <DropdownMenuItem onClick={onMyAuctions}>
-              {myAuctions}
-            </DropdownMenuItem>
+            {onMyAuctions != null ? (
+              <DropdownMenuItem onClick={onMyAuctions}>
+                {myAuctions}
+              </DropdownMenuItem>
+            ) : null}
             {submissions && onSubmissions ? (
               <DropdownMenuItem onClick={onSubmissions}>
                 {submissions}
@@ -203,9 +199,6 @@ function SiteHeader({
               <DropdownMenuItem onClick={onMembership}>
                 {membership}
               </DropdownMenuItem>
-            ) : null}
-            {orders && onOrders ? (
-              <DropdownMenuItem onClick={onOrders}>{orders}</DropdownMenuItem>
             ) : null}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />

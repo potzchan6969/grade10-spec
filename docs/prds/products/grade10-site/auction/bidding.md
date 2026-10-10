@@ -159,6 +159,9 @@ any maximum.
 - **An answer lost on the way** — when a bid's answer never arrives, the bid
   reads as placed if the bidder's standing holds it, and the bid form says
   **Could not place this bid.** if it does not
+- 🚧 **Restricted region** — a bid, watch or order action sent from a region
+  where auctions are not offered is refused before the auction hears of it;
+  the restriction page, not a bid-form line, is the answer
 
 ## Auction Panel
 
@@ -491,4 +494,6 @@ surface.
 | Card line on the non-winner letter | Decided | The letter omits it; My Auctions says the card was not charged. | Product |
 | Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |
 | One-hour reminder | Decided | Dropped. Bidding closes in 24 hours is the last warning before close; extended bidding still mails. Replaces the decision that it stays beside the 24-hour letter. | Product (@jeffffej0909) |
+| Restricted regions | 🚧 In flight | A region where auctions are not offered sees no auction entry point — the Auction nav item, account-menu auction items, watch controls and My Auctions included — and a direct auction address answers the restriction page. Bids, watches and order actions from that region are refused before the auction hears of them. | Product |
+| Restricted collector with open commitments | ❓ Open | Whether a signed-in collector in a restricted region who holds a standing bid, a watched lot or an unpaid winner invoice keeps read access to My Auctions and the order to settle it, or loses the auction surface entirely. The spec drafts assume read-only access to commitments already made; Product confirms. | Product |
 :::

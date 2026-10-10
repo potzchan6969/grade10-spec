@@ -130,6 +130,39 @@ test("finds pages through selected workspace exports and their dependencies", as
   );
 });
 
+test("finds pages through the date package a block formats with", async () => {
+  const root = await fixture({
+    "apps/preview/src/pages/when.stories.tsx":
+      'import { When } from "@grade10/ui"; export const Default = {};',
+    "apps/preview/src/pages/other.stories.tsx":
+      'import { Other } from "@grade10/ui"; export const Default = {};',
+    "packages/ui/src/index.ts":
+      'export { When } from "./blocks/when"; export { Other } from "./blocks/other";',
+    "packages/ui/src/blocks/when.tsx":
+      'import { formatDay } from "@grade10/date"; export const When = formatDay;',
+    "packages/ui/src/blocks/other.tsx": "export const Other = {};",
+    "packages/date/src/index.ts":
+      'export { formatDay } from "./shapes.ts"; export { formatEvent } from "./events.ts";',
+    "packages/date/src/shapes.ts": "export const formatDay = () => '';",
+    "packages/date/src/events.ts": "export const formatEvent = () => '';",
+  });
+
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: ["packages/date/src/shapes.ts"],
+      root,
+    }),
+    ["apps/preview/src/pages/when.stories.tsx"],
+  );
+  assert.deepEqual(
+    await affectedPageStories({
+      changedFiles: ["packages/date/src/events.ts"],
+      root,
+    }),
+    [],
+  );
+});
+
 test("treats workbench configuration as affecting every page", async () => {
   const root = await workspace();
 

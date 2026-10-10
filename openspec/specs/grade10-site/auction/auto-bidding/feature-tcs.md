@@ -23,9 +23,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 An open listing with no bids, with the row's starting price.
@@ -64,9 +66,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 An open listing whose current bid and minimum increment match the row.
@@ -105,9 +109,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer(leads with a committed maximum matching the row) is on that open listing's page.

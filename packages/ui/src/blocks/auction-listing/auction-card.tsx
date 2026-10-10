@@ -1,15 +1,10 @@
+import { formatCollectorDeadline } from "@grade10/date";
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import {
-  formatListingClosed,
-  formatListingEnds,
-  formatListingOpens,
-  type ShippedLocale,
-} from "../../lib/format-datetime";
 import { formatMoney } from "../../lib/format-money";
 import type { WatchButtonCopy } from "../auction-record/types";
 import { WatchButton } from "../auction-record/watch-button";
@@ -57,7 +52,7 @@ type AuctionCardProps = {
   bidCountLabel?: string;
   /** Static close, open, or closed line. Omit it and no clock is shown. */
   when?: AuctionCardWhen;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   badges?: readonly AuctionCardBadge[];
   /**
@@ -84,21 +79,23 @@ type AuctionCardProps = {
   className?: string;
 };
 
+const SCHEDULE_PREFIX = {
+  ends: "Ends",
+  opens: "Opens",
+  closed: "Closed",
+} as const;
+
 function scheduleLabel(
   when: AuctionCardWhen | undefined,
-  locale: ShippedLocale,
+  locale: string,
   timeZone: string,
 ): string | null {
   if (when == null) return null;
-  const options = { locale, timeZone };
-  switch (when.kind) {
-    case "ends":
-      return formatListingEnds(when.at, options);
-    case "opens":
-      return formatListingOpens(when.at, options);
-    case "closed":
-      return formatListingClosed(when.at, options);
-  }
+  return formatCollectorDeadline(when.at, {
+    locale,
+    timeZone,
+    prefix: SCHEDULE_PREFIX[when.kind],
+  });
 }
 
 /**
@@ -106,8 +103,8 @@ function scheduleLabel(
  * watch. Grade, featured, and ending-soon marks are badges the consumer
  * supplies.
  *
- * The clock line is static (`formatListingEnds`, `formatListingOpens`,
- * `formatListingClosed`). The rolling countdown stays on the lot bid card.
+ * The clock line is static: the viewer's zone, behind `Ends`, `Opens` or
+ * `Closed`. The rolling countdown stays on the lot bid card.
  */
 function AuctionCard({
   copy,

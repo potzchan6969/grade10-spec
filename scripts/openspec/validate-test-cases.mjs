@@ -58,8 +58,11 @@ import {
   issuedPrefix,
   LEGACY_TYPES,
   levelOf,
+  modernDomainPrefix,
+  modernProductPrefix,
   PROPERTIES,
   parseSuite,
+  parseWalks,
   productPrefix,
   prop,
   readDomainIds,
@@ -195,7 +198,7 @@ function checkManualRows(root, text, cases, err) {
   }
 }
 
-function checkSuite(root, filePath, rulesRev) {
+function checkSuite(root, filePath, rulesRev, allCases) {
   const rel = relative(root, filePath);
   const text = readFileSync(filePath, "utf8");
   const dir = dirname(filePath);
@@ -219,9 +222,80 @@ function checkSuite(root, filePath, rulesRev) {
         : level === "domain"
           ? domainPrefix(root, dir)
           : (issuedPrefix(spec) ?? basename(dir));
+  const capabilities = new Set([capability]);
+  if (level === "platform") capabilities.add("platform");
+  if (level === "product") capabilities.add(modernProductPrefix(root, dir));
+  if (level === "domain") capabilities.add(modernDomainPrefix(root, dir));
   const err = (line, msg) => record("error", rel, line, msg);
   const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
+
+  // Walk references are intentionally checked separately from case parsing.
+  // A compact ref resolves in this suite. A composed walk may use a full
+  // stable id to reference a lower-level case in another suite. The case
+  // definition remains the authority for the observation; prose pairing checks
+  // carry no id and are not interpreted here.
+  if (parseWalks(text).length > 0) {
+    const walkCases = new Map();
+    const lines = text.split("\n");
+    let pendingMarker = null;
+    for (let i = 0; i < lines.length; i++) {
+      const marker = /^<!--\s*trace:case\s+id=(\S+)\s+/.exec(lines[i]);
+      if (marker) {
+        pendingMarker = marker[1];
+        continue;
+      }
+      const modern = /^(?:###|####)\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):/.exec(
+        lines[i],
+      );
+      const legacy = !modern
+        ? /^###\s+\S+-US-?(\d+)-TC-?(\d+)(?:-\d+)?:/.exec(lines[i])
+        : null;
+      if (!modern && !legacy) continue;
+      const id = modern?.[1] ?? pendingMarker;
+      if (id) {
+        const stable = id.slice(id.lastIndexOf(".") + 1).toLowerCase();
+        walkCases.set(stable, {
+          journeyNum: Number(modern?.[2] ?? legacy?.[1]),
+          tcNum: Number(modern?.[3] ?? legacy?.[2]),
+          line: i + 1,
+        });
+      }
+      pendingMarker = null;
+    }
+    for (const walk of parseWalks(text)) {
+      for (const ref of walk.refs) {
+        const found = ref.caseId
+          ? (allCases.get(ref.caseId) ?? allCases.get(ref.caseId.toLowerCase()))
+          : walkCases.get(ref.id);
+        if (!found) {
+          err(
+            ref.line,
+            `walk \`${walk.title}\` references \`${ref.caseId ?? ref.id}\`, but no case definition with that stable id exists in the ${ref.caseId ? "store" : "suite"}`,
+          );
+          continue;
+        }
+        if (ref.caseId && level === "feature")
+          err(
+            ref.line,
+            `feature walk \`${walk.title}\` cannot reference lower-level case \`${ref.caseId}\`; keep the route within this capability`,
+          );
+        if (ref.caseId && found.level !== level) {
+          const rank = { feature: 0, domain: 1, product: 2, platform: 3 };
+          if (rank[found.level] >= rank[level])
+            err(
+              ref.line,
+              `walk \`${walk.title}\` references \`${ref.caseId}\` from ${found.level} level, but a ${level} walk may reference only a lower-level case`,
+            );
+        }
+        if (found.journeyNum !== ref.journeyNum || found.tcNum !== ref.tcNum)
+          err(
+            ref.line,
+            `walk \`${walk.title}\` references \`${ref.id}\` as US${ref.journeyNum}-TC${ref.tcNum}, but the case is US${found.journeyNum}-TC${found.tcNum}`,
+          );
+      }
+    }
+  }
 
   // Q49 and Q69 (`run-a-round-on-every-artifact`): every automated case of an
   // in-flight change names what decides it, whatever day the change opened.
@@ -380,22 +454,25 @@ function checkSuite(root, filePath, rulesRev) {
 
   // --- journeys ----------------------------------------------------------
   const seenJourneys = new Set();
+  const seenCaseIds = new Set();
   for (const j of suite.journeys) {
-    if (j.hyphenated)
+    if (level !== "feature" && j.hyphenated)
       warn(
         j.line,
         `journey heading \`${j.raw}\` uses the spec's hyphenated id; suite headings are compact (e.g. \`${j.capability}-US${j.num}\`)`,
       );
-    if (j.capability !== capability)
+    if (!capabilities.has(j.capability))
       err(
         j.line,
-        `journey heading names capability \`${j.capability}\`, but this spec issues \`${capability}-\``,
+        `journey heading names capability \`${j.capability}\`, but this suite accepts \`${[...capabilities].join("` or `")}\``,
       );
     const canonical = `${j.capability}-US-${String(j.num).padStart(2, "0")}`;
     const alternate = `${j.capability}-US-${j.num}`;
-    if (seenJourneys.has(j.num))
-      err(j.line, `journey ${j.num} appears more than once`);
-    seenJourneys.add(j.num);
+    if (!j.ungrouped) {
+      if (seenJourneys.has(j.num))
+        err(j.line, `journey ${j.num} appears more than once`);
+      seenJourneys.add(j.num);
+    }
     const retired =
       spec?.retired?.has(canonical) || spec?.retired?.has(alternate);
     if (retired && statusCounts(j.cases).deprecated !== j.cases.length)
@@ -422,13 +499,14 @@ function checkSuite(root, filePath, rulesRev) {
     if (level === "feature" && spec?.unwalked && j.num !== 1)
       err(
         j.line,
-        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
+        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US-01\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
       );
     const story = new Set(j.story);
     if (
-      !(story.has("as a") || story.has("as an")) ||
-      !story.has("i want") ||
-      !story.has("so that")
+      !j.ungrouped &&
+      (!(story.has("as a") || story.has("as an")) ||
+        !story.has("i want") ||
+        !story.has("so that"))
     )
       err(
         j.line,
@@ -440,14 +518,20 @@ function checkSuite(root, filePath, rulesRev) {
     const seenTc = new Set();
     for (const tc of j.cases) {
       const at = tc.line;
+      if (seenCaseIds.has(tc.id))
+        err(at, `case id \`${tc.id}\` appears more than once in this suite`);
+      seenCaseIds.add(tc.id);
       if (tc.journeyScoped) {
         if (tc.hyphenated)
           warn(
             at,
-            `case id \`${tc.id}\` uses the older hyphenated form; current is \`<capability>-US<n>-TC<m>-<v>\``,
+            `case id \`${tc.id}\` uses the legacy hyphenated form; current is \`<scope>.TC-<sequence> (US<n>-TC<m>)\``,
           );
-        if (tc.capability !== capability)
-          err(at, `case id \`${tc.id}\` names capability \`${tc.capability}\``);
+        if (!capabilities.has(tc.capability))
+          err(
+            at,
+            `case id \`${tc.id}\` names capability \`${tc.capability}\`; this suite accepts \`${[...capabilities].join("` or `")}\``,
+          );
         if (tc.journeyNum !== j.num)
           err(
             at,
@@ -456,10 +540,12 @@ function checkSuite(root, filePath, rulesRev) {
         if (seenTc.has(tc.tcNum))
           err(at, `TC${tc.tcNum} appears more than once under ${j.raw}`);
         seenTc.add(tc.tcNum);
-        if (tc.version === null)
-          warn(at, `case \`${tc.id}\` carries no version suffix`);
-        else if (tc.version < 1)
-          err(at, `case \`${tc.id}\` has version ${tc.version}`);
+        if (!tc.modern) {
+          if (tc.version === null)
+            warn(at, `case \`${tc.id}\` carries no version suffix`);
+          else if (tc.version < 1)
+            err(at, `case \`${tc.id}\` has version ${tc.version}`);
+        }
       }
 
       for (const [name, vocab, multi, optional] of PROPERTIES) {
@@ -729,6 +815,7 @@ const longestPrefix = (id, list) =>
     .sort((a, b) => b.length - a.length)[0] ?? null;
 const productOf = (traceId) => longestPrefix(traceId, PRODUCTS);
 const domainOf = (traceId) => longestPrefix(traceId, DOMAINS);
+const allSuites = findSuites(ROOT);
 const suites = findSuites(ROOT, args.scope);
 const specs = dirsHolding(ROOT, "spec.md").filter(inScope);
 
@@ -780,6 +867,12 @@ if (suites.length === 0) {
 }
 
 const index = caseIndex(ROOT, suites);
+const allCaseIndex = new Map(
+  [...caseIndex(ROOT, allSuites)].map(([id, value]) => [
+    id.toLowerCase(),
+    value,
+  ]),
+);
 
 if (args.captureBaseline) {
   const out = {};
@@ -831,7 +924,9 @@ if (args.swept) {
   process.exit(1);
 }
 
-const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
+const summaries = suites.map((p) =>
+  checkSuite(ROOT, p, rulesRev, allCaseIndex),
+);
 
 // --- every journey is walked by a product user or outside agent ---------
 // The classes are the store's two product users. An outside agent such as a
@@ -997,15 +1092,17 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
           break;
         body += ` ${next.trim()}`;
       }
-      const ids = [...body.matchAll(/`([\w-]+-e2e-US\d+-TC\d+-\d+)`/g)].map(
-        (m) => m[1],
-      );
+      const ids = [
+        ...body.matchAll(
+          /`((?:[\w-]+-e2e-US\d+-TC\d+-\d+)|(?:[\w.-]+\.TC-[0-9a-z]+))`/gi,
+        ),
+      ].map((m) => m[1]);
       if (ids.length === 0) {
         record(
           "error",
           rel,
           i + 1,
-          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<product>-<domain>-e2e-US<n>-TC<m>-<v>`",
+          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<scope>.TC-<sequence>`",
         );
         continue;
       }
@@ -1030,11 +1127,9 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
   }
 }
 
-// --- a case's <v> and its trace rev are one number ----------------------
-// `<v>` in the case id and `rev` on its `trace:case` marker both count the
-// times what the case verifies has changed. Two counters for one fact drift -
-// the migration stamped `rev=1` over cases already at `-2` - so where a case
-// carries a marker, the two agree.
+// --- legacy case versions and trace revisions ----------------------------
+// Modern headings take their version only from the adjacent marker's `rev`.
+// Legacy headings retain the old suffix check until each suite migrates.
 for (const p of suites) {
   const lines = readFileSync(p, "utf8").split("\n");
   const rel = relative(ROOT, p);
@@ -1043,13 +1138,17 @@ for (const p of suites) {
     if (!marker) continue;
     let j = i + 1;
     while (j < lines.length && lines[j].trim() === "") j++;
-    const heading = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
-    if (!heading || heading[2] === marker[1]) continue;
+    const modern = /^(?:###|####)\s+(\S+)\s+\(US-?\d+-TC-?\d+\):/.exec(
+      lines[j] ?? "",
+    );
+    const legacy = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
+    if (modern) continue;
+    if (!legacy || legacy[2] === marker[1]) continue;
     record(
       "error",
       rel,
       j + 1,
-      `case \`${heading[1]}\` is at \`<v>\` ${heading[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
+      `legacy case heading \`${legacy[1]}\` carries suffix ${legacy[2]}, but its trace marker carries \`rev=${marker[1]}\` — migration must preserve the marker rev`,
     );
   }
 }

@@ -1,3 +1,4 @@
+import { formatMediumDay } from "@grade10/date";
 import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Card,
@@ -36,11 +37,10 @@ function itemBadgeVariant(
   return "info";
 }
 
+const HAND_IN_CLOCK = { locale: "en-HK", timeZone: "Asia/Hong_Kong" };
+
 function formatHandInDate(ms: number): string {
-  return new Intl.DateTimeFormat("en-HK", {
-    dateStyle: "medium",
-    timeZone: "Asia/Hong_Kong",
-  }).format(new Date(ms));
+  return formatMediumDay(ms, HAND_IN_CLOCK);
 }
 
 function ScanThumbs({ item }: { item: IntakeItemRow }) {

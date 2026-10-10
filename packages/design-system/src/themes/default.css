@@ -66,6 +66,7 @@
    * the baseline theme still renders components that bind them; grade10.css
    * overrides every one with a designed value. Re-stated verbatim in .dark so
    * they re-resolve against that block's own base slots. */
+  --primary-border: var(--primary);
   --primary-muted: color-mix(in oklab, var(--primary) 10%, transparent);
   --primary-muted-hover: color-mix(in oklab, var(--primary) 20%, transparent);
   --primary-muted-foreground: var(--primary);
@@ -146,6 +147,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
   /* tinted-surface extension — see the :root block. */
+  --primary-border: var(--primary);
   --primary-muted: color-mix(in oklab, var(--primary) 10%, transparent);
   --primary-muted-hover: color-mix(in oklab, var(--primary) 20%, transparent);
   --primary-muted-foreground: var(--primary);

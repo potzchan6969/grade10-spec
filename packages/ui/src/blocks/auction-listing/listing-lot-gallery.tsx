@@ -350,9 +350,11 @@ function ListingLotGallery({
                 >
                   <span className="sr-only">
                     Image {safeIndex + 1} of {images.length}
+                    {selectedImage.label ? `, ${selectedImage.label}` : ""}
                   </span>
                   <span aria-hidden>
                     {safeIndex + 1} / {images.length}
+                    {selectedImage.label ? ` · ${selectedImage.label}` : ""}
                   </span>
                 </Badge>
               </>

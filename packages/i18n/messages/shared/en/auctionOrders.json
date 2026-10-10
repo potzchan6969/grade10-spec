@@ -13,6 +13,14 @@
   "payInvoice": "Pay invoice",
   "viewDetail": "View detail",
   "contactUs": "Contact Us",
+  "setup": {
+    "fee": {
+      "card": "Card fee about 3.4% + a fixed amount",
+      "bankTransfer": "Bank fee set on your invoice"
+    },
+    "cardUnavailable": "Card is not yet available in {currency}.",
+    "paymentUnavailable": "Payment is not yet available in {currency}."
+  },
   "cancelledOn": "Cancelled on {date}",
   "insuranceTooltip": "0.9% of the order value during transit.",
   "taxLabel": "Tax",
@@ -29,6 +37,7 @@
     "copySubject": "Copy subject",
     "subjectCopied": "Subject copied",
     "copyMessage": "Copy Message",
+    "copied": "Copied",
     "messageCopied": "Message copied",
     "copyAddressManual": "Copy the address manually",
     "copySubjectManual": "Copy the subject manually",

@@ -1,12 +1,9 @@
+import { formatCalendarDayLabel, formatTimeOfDay } from "@grade10/date";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Calendar } from "@grade10/design-system/components/forms/calendar";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import {
-  formatCalendarDayLabel,
-  formatLocalTime,
-} from "../../lib/format-datetime";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
 import { type LocaleProps, zoneLabel } from "./booking-copy";
@@ -140,7 +137,7 @@ function BookingSlotPicker({
                   className="m-0 grid min-w-0 grid-cols-2 gap-2 border-0 p-0 sm:grid-cols-3"
                 >
                   {list.map((slot) => {
-                    const startLabel = formatLocalTime(slot.start, {
+                    const startLabel = formatTimeOfDay(slot.start, {
                       locale,
                       timeZone,
                     });

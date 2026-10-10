@@ -43,6 +43,8 @@ export type ListingLotGalleryImage = {
   /** Zoom dialog image. Falls back to `src`. */
   zoomSrc?: string;
   alt: string;
+  /** Short caption shown next to the slide counter, e.g. `Front`. */
+  label?: string;
 };
 
 export type ListingAuctionStanding =

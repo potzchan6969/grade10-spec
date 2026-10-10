@@ -1,3 +1,9 @@
+import {
+  formatCollectorDeadline,
+  formatDay,
+  formatMoment,
+  formatZonedLocalTime,
+} from "@grade10/date";
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
@@ -10,13 +16,6 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
-import {
-  formatCollectorDeadline,
-  formatLocalDay,
-  formatLocalMoment,
-  formatZonedLocalTime,
-  type ShippedLocale,
-} from "../../lib/format-datetime";
 import { formatMoney } from "../../lib/format-money";
 import {
   elapsedDurationParts,
@@ -190,7 +189,7 @@ function StandingStatusBadge({
 }: {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
-  locale: ShippedLocale;
+  locale: string;
   bidEnrollment?: BidEnrollment;
 }) {
   if (!viewerHasAuctionStanding(view, bidEnrollment)) {
@@ -230,7 +229,7 @@ function StandingStatusBadge({
 type PriceBlockProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   /**
    * Below `sm`: one line under the bid count instead of the full time column
@@ -254,14 +253,14 @@ type ClosedClose = {
  */
 function closedClose(
   view: ListingAuctionBidView,
-  locale: ShippedLocale,
+  locale: string,
   timeZone: string,
 ): ClosedClose | null {
   if (!view.closed || view.deadlineAtMs == null) return null;
   const at = view.deadlineAtMs;
   const options = { locale, timeZone };
   return {
-    day: formatLocalDay(at, options),
+    day: formatDay(at, options),
     time: formatZonedLocalTime(at, options),
     ran:
       view.opensAtMs != null
@@ -277,7 +276,7 @@ function closedClose(
 function compactClosedSummary(
   copy: ListingAuctionBidFieldsCopy,
   view: ListingAuctionBidView,
-  locale: ShippedLocale,
+  locale: string,
   timeZone: string,
 ): string | null {
   const close = closedClose(view, locale, timeZone);
@@ -300,7 +299,7 @@ function CompactTimeLine({
 }: {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
 }) {
   if (view.opens) return null;
@@ -397,14 +396,14 @@ function PriceBlock({
 type TimeBlockProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
 };
 
 function formatCollectorDeadlineLine(
   view: ListingAuctionBidView,
   copy: ListingAuctionBidFieldsCopy,
-  locale: ShippedLocale,
+  locale: string,
   timeZone: string,
 ): string | undefined {
   const at = view.deadlineAtMs;
@@ -446,7 +445,7 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
   const closedPrimary =
     close?.day ??
     (view.deadlineAtMs != null
-      ? formatLocalMoment(view.deadlineAtMs, { locale, timeZone })
+      ? formatMoment(view.deadlineAtMs, { locale, timeZone })
       : view.countdown);
 
   return (
@@ -521,7 +520,7 @@ type BidActionsProps = {
   copy: ListingAuctionBidFieldsCopy;
   view: ListingAuctionBidView;
   bidEnrollment?: BidEnrollment;
-  locale: ShippedLocale;
+  locale: string;
   onPlaceBid: () => void;
   onCommitMaximum: (amountMinor: number) => void;
   authorizationStatus?: BidAuthorizationStatus;

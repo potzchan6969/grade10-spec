@@ -1,3 +1,4 @@
+import type { ActivityTimeCopy } from "@grade10/date";
 import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
@@ -11,10 +12,6 @@ import {
   useRef,
   useState,
 } from "react";
-import type {
-  ActivityTimeCopy,
-  ShippedLocale,
-} from "../../lib/format-datetime";
 import {
   BidActions,
   BuyerFeeHint,
@@ -51,7 +48,7 @@ type ListingAuctionBidCardProps = {
   history: readonly ListingBidHistoryRow[];
   historyResetKey?: string;
   bidEnrollment?: BidEnrollment;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   onPlaceBid: () => void;
   onCommitMaximum: (amountMinor: number) => void;

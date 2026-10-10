@@ -3,22 +3,11 @@ import { cn } from "@grade10/design-system/lib/utils";
 import {
   formatHkd,
   statusBadgeVariant,
-  type ValuationSource,
   type VaultAsset,
 } from "./vault-content";
+import { valuationLabel } from "./vault-item-card-valuation";
 
 const IMAGE_RADIUS = "rounded-(--radius-2xl) md:rounded-(--radius-3xl)";
-
-function valuationLabel(source: ValuationSource): string {
-  switch (source) {
-    case "Declared":
-      return "Declared value";
-    case "Intake estimate":
-      return "Intake estimate";
-    case "Market":
-      return "Market estimate";
-  }
-}
 
 /**
  * Collectible tile for the vault portfolio grid. Only vaulted holdings —
@@ -94,4 +83,4 @@ function VaultItemCard({
   );
 }
 
-export { VaultItemCard, valuationLabel };
+export { VaultItemCard };

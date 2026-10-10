@@ -1,4 +1,6 @@
-"use client";
+import { platformLanguageOf, shortMonthName, weekdayName } from "@grade10/date";
+
+("use client");
 
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import {
@@ -162,12 +164,6 @@ function isMonthDropdown(options: DropdownProps["options"]): boolean {
   );
 }
 
-function shortMonthName(monthIndex: number, localeCode: string): string {
-  return new Date(2020, monthIndex, 1).toLocaleDateString(localeCode, {
-    month: "short",
-  });
-}
-
 function CalendarDropdown({
   options,
   value,
@@ -180,7 +176,7 @@ function CalendarDropdown({
   const { dayPickerProps } = useDayPicker();
   const selected = value === undefined ? null : String(value);
   const monthMenu = isMonthDropdown(options);
-  const localeCode = dayPickerProps.locale?.code ?? "en";
+  const language = platformLanguageOf(dayPickerProps.locale?.code ?? "en");
   const pickable = (options ?? []).filter((option) => !option.disabled);
   const shown =
     pickable.find((option) => String(option.value) === selected) ??
@@ -189,7 +185,7 @@ function CalendarDropdown({
   if (pickable.length <= 1) {
     const text =
       monthMenu && shown != null
-        ? shortMonthName(shown.value, localeCode)
+        ? shortMonthName(shown.value, language)
         : (shown?.label ?? "");
     return (
       <span className={cn("px-2 text-sm font-medium", className)}>{text}</span>
@@ -197,7 +193,7 @@ function CalendarDropdown({
   }
   const triggerLabel =
     monthMenu && shown != null
-      ? shortMonthName(shown.value, localeCode)
+      ? shortMonthName(shown.value, language)
       : undefined;
   return (
     <Select
@@ -621,7 +617,7 @@ function Calendar({
           endMonth={endMonth}
           formatters={{
             formatWeekdayName: (date) =>
-              date.toLocaleDateString("en", { weekday: "short" }).slice(0, 2),
+              weekdayName(date.getDay(), "en").slice(0, 2),
             ...formatters,
           }}
           month={displayMonth}

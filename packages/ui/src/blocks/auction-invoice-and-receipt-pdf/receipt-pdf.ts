@@ -1,30 +1,27 @@
 import type { PDFPage } from "pdf-lib";
-import { PDFDocument } from "pdf-lib";
 import type {
   Fonts,
+  PdfBlock,
   PdfDocumentCopy,
+  PdfItemRow,
+  PdfItemTotal,
   PdfLineItem,
   PdfPartyAddress,
   PdfRenderOptions,
 } from "./pdf-document";
 import {
-  A4_HEIGHT,
-  A4_WIDTH,
   addressLines,
   BODY_SIZE,
-  drawIssuer,
-  drawLineItems,
   drawMetaRow,
   drawMoneyRow,
-  drawParties,
   drawRuleSpan,
   drawText,
-  drawTitle,
   formatDateTime,
   LINE_HEIGHT,
-  loadFonts,
   MARGIN,
+  measuredBlock,
   RIGHT_EDGE,
+  renderDocument,
   SUMMARY_LEFT,
 } from "./pdf-document";
 
@@ -63,14 +60,18 @@ export type ReceiptPdfCopy = PdfDocumentCopy & {
 
 /** The only values a receipt renderer is allowed to consume. */
 export type ReceiptPdfData = {
-  listingTitle: string;
+  /** One row per item, in the order drawn. */
+  items: readonly PdfItemRow[];
+  itemTotal: PdfItemTotal;
   receiptNumber: string;
   paidAt: Date;
   invoiceId: string;
   paymentReferenceCode: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
+  /** The charges under the item table and the keyed summary rows. */
   lineItems: readonly ReceiptPdfLineItem[];
+  /** The only route for Tax, drawn after the other charges. */
   taxLine?: ReceiptPdfLineItem | null;
   paymentBreakdown: ReceiptPaymentBreakdown;
   paymentMethod: string;
@@ -136,95 +137,73 @@ function drawMetaBlock(
   return y - LINE_HEIGHT * 2;
 }
 
-/** A transfer reference, only when the payment carries one. */
-function drawPaymentSection(
-  page: PDFPage,
+/** The "Payment" heading and its transfer reference, drawn only when the payment carries one. */
+function paymentSectionBlock(
   fonts: Fonts,
-  data: Pick<ReceiptPdfData, "paymentReference" | "copy">,
-  y: number,
-): number {
-  if (!data.paymentReference) return y;
-  drawText(
-    page,
-    fonts.bold,
-    data.copy.paymentSectionLabel,
-    MARGIN,
-    y,
-    BODY_SIZE,
-  );
-  y -= LINE_HEIGHT;
-  drawMetaRow(
-    page,
-    fonts,
-    data.copy.transferReferenceLabel,
-    data.paymentReference,
-    y,
-  );
-  return y - LINE_HEIGHT * 2;
-}
-
-/** The four immutable payment lines from `receiptBreakdown`, boxed and right-aligned. */
-function drawPaymentBreakdown(
-  page: PDFPage,
-  fonts: Fonts,
-  data: ReceiptPdfData,
-  y: number,
-): void {
-  drawText(
-    page,
-    fonts.bold,
-    data.copy.paymentBreakdownLabel,
-    MARGIN,
-    y,
-    BODY_SIZE,
-  );
-  y -= LINE_HEIGHT;
-
-  const rows = receiptBreakdown(data);
-  y = drawRuleSpan(page, SUMMARY_LEFT, RIGHT_EDGE, y, { gap: LINE_HEIGHT });
-  rows.slice(0, -1).forEach(([label, amount]) => {
-    drawMoneyRow(page, fonts, label, amount, SUMMARY_LEFT, y);
+  paymentReference: string,
+  copy: ReceiptPdfCopy,
+): PdfBlock {
+  return measuredBlock((page, y) => {
+    drawText(page, fonts.bold, copy.paymentSectionLabel, MARGIN, y, BODY_SIZE);
     y -= LINE_HEIGHT;
+    drawMetaRow(page, fonts, copy.transferReferenceLabel, paymentReference, y);
+    return y - LINE_HEIGHT * 2;
   });
-  y = drawRuleSpan(page, SUMMARY_LEFT, RIGHT_EDGE, y, { gap: LINE_HEIGHT });
-  const [lastLabel, lastAmount] = rows[rows.length - 1];
-  drawMoneyRow(page, fonts, lastLabel, lastAmount, SUMMARY_LEFT, y, true);
 }
 
-/** Render one deterministic A4 receipt from immutable payment and invoice snapshots. */
-export async function ReceiptPdf(
+/** The four immutable payment lines from `receiptBreakdown`, right-aligned. */
+function paymentBreakdownBlock(
+  fonts: Fonts,
+  data: Pick<ReceiptPdfData, "paymentBreakdown" | "copy">,
+): PdfBlock {
+  const rows = receiptBreakdown(data);
+  return measuredBlock((page, y) => {
+    drawText(
+      page,
+      fonts.bold,
+      data.copy.paymentBreakdownLabel,
+      MARGIN,
+      y,
+      BODY_SIZE,
+    );
+    y -= LINE_HEIGHT;
+    y = drawRuleSpan(page, SUMMARY_LEFT, RIGHT_EDGE, y, { gap: LINE_HEIGHT });
+    for (const [label, amount] of rows.slice(0, -1)) {
+      drawMoneyRow(page, fonts, label, amount, SUMMARY_LEFT, y);
+      y -= LINE_HEIGHT;
+    }
+    y = drawRuleSpan(page, SUMMARY_LEFT, RIGHT_EDGE, y, { gap: LINE_HEIGHT });
+    const [lastLabel, lastAmount] = rows[rows.length - 1];
+    drawMoneyRow(page, fonts, lastLabel, lastAmount, SUMMARY_LEFT, y, true);
+    return y - LINE_HEIGHT;
+  });
+}
+
+/** Render one deterministic receipt of A4 pages from immutable payment and invoice snapshots. */
+export function ReceiptPdf(
   data: ReceiptPdfData,
   options: ReceiptPdfRenderOptions = {},
 ): Promise<ArrayBuffer> {
-  const pdf = await PDFDocument.create();
-  pdf.setProducer("grade10 auction receipts");
-  pdf.setCreationDate(data.paidAt);
-  pdf.setModificationDate(data.paidAt);
-
-  const fonts = await loadFonts(pdf, options.fontBytes, options.boldFontBytes);
-
-  const page = pdf.addPage([A4_WIDTH, A4_HEIGHT]);
-  let y = A4_HEIGHT - MARGIN;
-  y = drawTitle(page, fonts, data.copy.documentTitle, data.issuerName, y);
-  y = drawMetaBlock(page, fonts, data, y);
-  y = drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, { gap: LINE_HEIGHT * 1.5 });
-  y = drawParties(page, fonts, data.billTo, data.shipTo, data.copy, y);
-  y = drawLineItems(
-    page,
-    fonts,
-    data.listingTitle,
-    data.lineItems,
-    data.taxLine,
-    data.copy,
-    y,
-  );
-  y -= LINE_HEIGHT;
-  y = drawPaymentSection(page, fonts, data, y);
-  drawPaymentBreakdown(page, fonts, data, y);
-  drawIssuer(page, fonts, data.issuerName, data.issuerEmail);
-
-  const bytes = await pdf.save({ useObjectStreams: false });
-  const output = new Uint8Array(bytes.byteLength);
-  output.set(bytes);
-  return output.buffer;
+  const { paymentReference } = data;
+  return renderDocument({
+    producer: "grade10 auction receipts",
+    date: data.paidAt,
+    data,
+    options,
+    drawMeta: (page, fonts, y) => drawMetaBlock(page, fonts, data, y),
+    trailing: (fonts) => [
+      ...(paymentReference
+        ? [
+            {
+              what: "The Payment section",
+              block: paymentSectionBlock(fonts, paymentReference, data.copy),
+            },
+          ]
+        : []),
+      {
+        what: "The payment breakdown",
+        block: paymentBreakdownBlock(fonts, data),
+      },
+    ],
+  });
 }

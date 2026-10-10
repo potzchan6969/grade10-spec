@@ -5,3 +5,5 @@ depends_on:
   - add-winner-bank-transfer
   - add-winner-partial-payment
   - add-winner-refund
+hands:
+  dev: "@htonyl"

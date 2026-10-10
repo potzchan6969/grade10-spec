@@ -21,31 +21,38 @@ export type OrderShippedProps = {
 
 /**
  * When fulfilment becomes shipped with a tracking number attached.
- * Primary action is the carrier tracker; Winner Order is secondary.
+ * A recorded tracker link leads; otherwise Winner Order is the primary action.
  */
 export default function OrderShippedEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   orderUrl = previewLot.orderUrl,
-  trackingUrl = previewLot.trackingUrl,
+  trackingUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   carrierName = previewLot.carrierName,
   trackingNumber = previewLot.trackingNumber,
   shippedAt = previewLot.shippedAt,
   deliveryAddress = previewLot.deliveryAddress,
 }: OrderShippedProps) {
+  const trackerUrl = trackingUrl?.trim() || undefined;
+  const trackingSummary = `${carrierName}: ${trackingNumber}`;
+
   return (
     <AuctionLetter
-      body="Your auction is on its way. Track the parcel with the carrier, or open Winner Order for the full order."
+      body={
+        trackerUrl
+          ? "Your auction is on its way. Track the parcel with the carrier, or open Winner Order for the full order."
+          : "Your auction is on its way. Open Winner Order for the full order."
+      }
       brandName={brandName}
       campaign="shipped"
       canUnsubscribe={false}
-      ctaHref={trackingUrl}
-      ctaLabel="Track shipment"
+      ctaHref={trackerUrl ?? orderUrl}
+      ctaLabel={trackerUrl ? "Track shipment" : "View order"}
       details={[
         {
           label: "Tracking",
-          value: `${carrierName}: ${trackingNumber}`,
+          value: trackingSummary,
           subtext: `Shipped ${shippedAt}`,
         },
       ]}
@@ -53,10 +60,10 @@ export default function OrderShippedEmail({
       highlight={{ label: "Delivery address", value: deliveryAddress }}
       listingUrl={orderUrl}
       lotTitle={lotTitle}
-      preheader={`${carrierName}: ${trackingNumber}`}
+      preheader={trackingSummary}
       primaryImageUrl={primaryImageUrl}
-      secondaryCtaHref={orderUrl}
-      secondaryCtaLabel="View order"
+      secondaryCtaHref={trackerUrl ? orderUrl : undefined}
+      secondaryCtaLabel={trackerUrl ? "View order" : undefined}
       whyYouGotThis="You won this auction and paid for it on Grade10."
     />
   );
@@ -66,7 +73,6 @@ OrderShippedEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,
-  trackingUrl: previewLot.trackingUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   carrierName: previewLot.carrierName,
   trackingNumber: previewLot.trackingNumber,

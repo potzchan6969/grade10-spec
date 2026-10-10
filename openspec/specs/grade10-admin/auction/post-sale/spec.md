@@ -488,7 +488,7 @@ receipt's receipt ID and internal audit number, per
 | Payment method | Paid, payment recorded and flagged payment entries: a card with its brand and last four digits, or bank transfer, cash, or other with its description |
 | Flag | Flagged payment and flag cleared entries: the flag's kind and the payment it sits on |
 | Proof files | Proof uploaded entries: the winner's files. Proof confirmed and payment recorded entries: every file on the payment record |
-| External reference | Payment recorded entries only |
+| External reference | Payment recorded entries only; flag cleared entries: the optional return reference |
 | Reason | Mandatory on an operator-initiated log entry that needs one, per "History is append-only and retained". A proof returned entry carries both the external and the internal reason |
 | Payment-provider reference | Where one applies |
 

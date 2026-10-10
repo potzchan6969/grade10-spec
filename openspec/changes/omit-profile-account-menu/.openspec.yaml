@@ -4,4 +4,7 @@ depends_on:
   - nav-cart-count-badge
 hands:
   design: "@tangconst"
-ui_waived: no new surface; the Auction first account-menu story holds the auction-launch menu, and the Auction & Store stories follow the interim Q7 records
+  dev: "@mason5991"
+ui_waived: no new surface; the Auction first account-menu story holds the
+  auction-launch menu, and the Auction & Store stories follow the interim Q7
+  records

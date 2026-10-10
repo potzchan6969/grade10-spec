@@ -1,5 +1,6 @@
 import { getMessages } from "@grade10/i18n";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { SAMPLE_INVOICE, TABLE_LABELS } from "./fixtures";
 import { InvoicePdf } from "./invoice-pdf";
 import { drawnStrings } from "./pdf-test-helpers";
 import { ReceiptPdf } from "./receipt-pdf";
@@ -9,38 +10,45 @@ const { auctionInvoicePdf } = getMessages("grade10", "en");
 const INVOICE_COPY = {
   ...auctionInvoicePdf.document,
   ...auctionInvoicePdf.invoice,
+  ...TABLE_LABELS,
   replacesInvoiceLabel: "Replaces invoice",
 } as const;
 const RECEIPT_COPY = {
   ...auctionInvoicePdf.document,
   ...auctionInvoicePdf.receipt,
+  ...TABLE_LABELS,
 } as const;
 
 const FILLER = new Date("2026-09-15T11:04:00.000Z");
 
+const ITEMS = {
+  items: SAMPLE_INVOICE.items,
+  itemTotal: SAMPLE_INVOICE.itemTotal,
+};
+
 const INVOICE = {
-  listingTitle: "Lot A",
+  ...ITEMS,
   invoiceNumber: "IN-202609-LK7P2Q01",
   sentAt: FILLER,
   paymentDeadline: FILLER,
   paymentMethod: "Card",
   billTo: null,
   shipTo: null,
-  lineItems: [{ label: "Hammer price", amount: "HKD 100.00" }],
+  lineItems: [{ label: "Shipping & Handling", amount: "HKD 80.00" }],
   issuerName: "Grade10",
   issuerEmail: "support@grade10.com",
   copy: INVOICE_COPY,
 } as const;
 
 const RECEIPT = {
-  listingTitle: "Lot A",
+  ...ITEMS,
   receiptNumber: "receipt_123",
   paidAt: FILLER,
   invoiceId: "invoice_123",
   paymentReferenceCode: "LOT-001",
   billTo: null,
   shipTo: null,
-  lineItems: [{ label: "Hammer price", amount: "HKD 100.00" }],
+  lineItems: [{ label: "Shipping & Handling", amount: "HKD 80.00" }],
   paymentBreakdown: {
     originalInvoiceTotal: "HKD 120.00",
     previousPayments: "HKD 20.00",

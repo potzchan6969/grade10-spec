@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "fc5a46a407945ad060dcfa9d6cdab29a46e82b5cd18660515c36035f5f4df345"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "3cc802a8006d7d3e7cac1f65ef9728bd3dd24eba",
+    "capturedAt": "2026-10-09T08:53:49.584Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/auction/auction-orders/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction-orders/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The list holds one row per won order"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction-orders/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Signed-in collectors open account destinations from the header menu",
+          "Requirement: Signed-in collectors open what the build carries from the account menu",
+          "Requirement: The account control leads where the collector can go",
+          "Requirement: The header marks the surface being viewed"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: SiteHeader composes Nav with session-aware account entry"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

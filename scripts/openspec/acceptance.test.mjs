@@ -1865,6 +1865,27 @@ test("suite fold puts a revised case where its earlier revision stood", () => {
   );
 });
 
+test("suite fold puts deprecated cases at the bottom of their journey", () => {
+  const merged = merge(
+    suiteOf(
+      group(
+        1,
+        caseBlock("site-search-US1-TC1-1", "actual"),
+        caseBlock("site-search-US1-TC2-1", "deprecated"),
+        caseBlock("site-search-US1-TC3-1", "draft"),
+      ),
+    ),
+    suiteOf(group(1, caseBlock("site-search-US1-TC4-1", "actual"))),
+  );
+  const order = [...merged.matchAll(/^### (\S+):/gm)].map((one) => one[1]);
+  assert.deepEqual(order, [
+    "site-search-US1-TC1-1",
+    "site-search-US1-TC3-1",
+    "site-search-US1-TC4-1",
+    "site-search-US1-TC2-1",
+  ]);
+});
+
 test("suite fold keeps the marker above a journey's first case when the change rewrites the journey", () => {
   const marker =
     "<!-- trace:case id=g.search.TC-b1 rev=1 covers=g.search.SC-b1 -->";

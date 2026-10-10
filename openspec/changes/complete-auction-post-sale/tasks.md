@@ -1,4 +1,4 @@
-## 1. Fee and Tax (grade10)
+## 1. Fee and Tax (grade10) (owner: @htonyl)
 
 - [ ] 1.1 Add `invoicePricing.ts` to `packages/grade10-auction/contracts` with `buyerPremiumMinor`, `priceInvoice`, `suggestProcessingFee` and `maskAccount`, folding `buyerCharges.ts` into it; `packages/grade10-auction/contracts/test/invoicePricing.test.ts`
 - [ ] 1.2 The fee migration adds the card fee columns with their pair and range checks to `auction_payment_settings`; `paymentSettings.get` and `save` move from `auction:settle` to `auction:payment`; the settings service and router save and read the card rule, zero allowed, half a pair refused; `pnpm run check:migrations`, `apps/backend/grade10/auction/test/db/trpc/paymentSettings.spec.ts`
@@ -22,7 +22,7 @@
 - [ ] 3.5 `stripeConfig` in mode `test` accepts only test keys; `createCheckoutSession` takes `expiresAt` and `paymentMethodTypes`; `retrieveCheckoutSession` and `expireCheckoutSession` on the port; the E2E fake session completes and expires; `packages/grade10-auction/backend/test/stripe/config.test.ts`, `apps/backend/grade10/auction/test/helpers/fakeStripe.ts`
 - [ ] 3.6 `orderProofReferences` feeds the orphan sweep; `repositories/orderComments.ts`; `packages/grade10-auction/backend/test/repositories/orderProofs.repo.test.ts`, `apps/backend/grade10/auction/test/db/sweeps/orphanedObjects.spec.ts`
 
-## 4. Money In and Proofs (grade10)
+## 4. Money In and Proofs (grade10) (owner: @htonyl)
 
 - [ ] 4.1 `cardPayments.ts`: `prepareCheckout` with a fresh session per click, attempt-keyed idempotency and the compare-and-set; `recordCheckoutPaid` writes money on every invoice state and flags per the table; `recordCheckoutClosed`, all behind `payWinnerInvoice` and the webhook; the webhook handler routes the four session events; `apps/backend/grade10/auction/test/db/webhooks/handleEvent.spec.ts`, `apps/backend/grade10/auction/test/db/webhooks/webhooks.spec.ts`
 - [ ] 4.2 `proofs.ts`: behind `uploadWinnerPaymentProof`, each file is sniffed by its bytes, stored under a content-addressed key and the deadline frozen; `reviewProof` returns with both reasons and the Proof not accepted letter, or confirms into `paid`; `readOrderProof`; `apps/backend/grade10/auction/test/db/admin/proofs.spec.ts`
@@ -31,7 +31,7 @@
 - [ ] 4.5 `fulfilment.ts` writes `dispatched_at`, `trackerUrl` and `delivered_at` with their log rows and letters, and the winner reads the number as the tracker link or as plain text (SC-237, SC-238); `comments.addComment`; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts`
 - [ ] 4.6 `quote.reissueInvoice`: one Reissue on `pending` or `expired` with no payment that counts toward the balance, a reason and at least one change (`NO_CHANGE`), the deadline kept or restarted, the setup snapshots moved and the open checkout session expired; `setup.ts`: `confirmSetup` behind `confirmWinnerAddress`, once, with `METHOD_UNAVAILABLE`, `reopenSetup`, `recordSetup`; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts`
 
-## 5. Operator Surface (grade10)
+## 5. Operator Surface (grade10) (owner: @htonyl)
 
 - [ ] 5.1 `trpc/routers/orders.ts` with the grant per procedure, `auditDetails` on each and a cap on the audit row; `router.spec.ts` pins the grants to `OPERATOR_ACTION_PERMISSIONS`; `apps/backend/grade10/auction/test/db/trpc/router.spec.ts`, `apps/backend/grade10/auction/test/db/trpc/auditTrail.spec.ts`, `apps/backend/grade10/auction/test/db/trpc/refusals.spec.ts`; no input carries `actor` or `at`, the service takes them from the session and `ctx.clock()` after the lock (SC-166); a repeated request answers the recorded outcome and a reused key is refused, writing nothing (SC-240, SC-241)
 - [ ] 5.2 The winner entrypoint exposes the winner methods under their current names and its prototype equals the allowlist; the store router forwards them unchanged and ignores a client-sent `userId`; `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts`, `apps/backend/grade10/store/test/db/auctionRouter.spec.ts`
@@ -44,7 +44,7 @@
 - [ ] 6.2 `services/orders/testWinners.ts`: `createTestWinner` (plus-tag rule, `createUnverifiedAccount`, `ACCOUNT_EXISTS`, `ensureTestBidder`, `insertClosedSandboxLot`, `closeOne`, replay by account) and `listTestWinners`; `trpc/routers/testWinners.ts` on the `testBids` middleware; `apps/backend/grade10/auction/test/db/trpc/testWinners.spec.ts`
 - [ ] 6.3 `seedDevWinnerFixture` builds its lot with `insertClosedSandboxLot` and the real close and reaches each status through the order services; `packages/grade10-auction/backend/test/devFixtures/seedDevWinnerFixture.test.ts`
 
-## 7. Admin Workspace (grade10)
+## 7. Admin Workspace (grade10) (owner: @htonyl)
 
 - [ ] 7.1 Console: `ActionMenu` with keyboard-reachable disabled items, `FormDialog.dismissLabel`, `CursorPager.labels`, `Notice.actions`, `PromptDialog` moved in from the vault slice; `node scripts/test.mjs packages/frontend-console`
 - [ ] 7.2 `features/operations/orders` slice: models, repository, API service with the proof urls, `refusalCopy` over every operator code, the three hooks; `TrpcAuctionAdminProcedureClient` gains `orders` and `testWinners`; `node scripts/test.mjs packages/grade10-auction/admin-frontend`
@@ -57,7 +57,7 @@
 - [ ] 7.9 Tests first for post-sale SC-22 and SC-203 in `packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrderDetail.test.tsx`: the Winner section shows the name, the account email and the phone from the confirmed delivery address; then the section; `node scripts/test.mjs packages/grade10-auction/admin-frontend`
 - [ ] 7.10 Tests first for post-sale SC-239 in `packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrderDetail.test.tsx` and `OrdersWorklist.test.tsx`: the worklist, the order page, the timeline and the send and reissue dialog read in Hong Kong time whatever the browser zone; then one formatter for them; `node scripts/test.mjs packages/grade10-auction/admin-frontend`
 
-## 8. Winner Setup (grade10)
+## 8. Winner Setup (grade10) (owner: @htonyl)
 
 - [ ] 8.1 Tests first for SC-248, SC-249 and payment-settings SC-12 in `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts`: `readWinnerOrder` answers `paymentMethodsOffered` from the card rule and the bank details, and `confirmWinnerAddress` refuses card with no card rule and any method where neither is offered, with `METHOD_UNAVAILABLE`, and for SC-257 an order whose currency offers neither method still derives Setup Overdue at its deadline and takes `reopenSetup` and `recordSetup`; then `methodsOffered` in `services/orders/setup.ts` behind both, and `paymentMethodsOffered` on `WinnerOrderRead` with `packages/grade10-auction/contracts/test/winnerOrder.test.ts`; `node scripts/test.mjs apps/backend/grade10/auction`
 - [ ] 8.2 Tests first for SC-254, SC-255 and SC-256 in `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts` and `apps/backend/grade10/store/test/db/auctionRouter.spec.ts`: the draft is saved, answered only in Awaiting Setup, refused once confirmed or past the deadline, and cleared by confirm, reopen, record and cancel; then `setup_draft` in the order migration and the Drizzle schema, `saveSetupDraft` behind `saveWinnerSetupDraft` on the winner entrypoint and its allowlist, the store router forwarding it, and `eraseBidder` nulling it; `pnpm run check:migrations`, `packages/grade10-auction/backend/test/repositories/orders.drizzle.test.ts`, `node scripts/test.mjs apps/backend/grade10/store`
@@ -66,13 +66,13 @@
 - [ ] 8.5 Tests first for SC-254 and SC-255 in `apps/frontend/grade10/src/pages/auctions/AuctionWinnerOrderPage.test.tsx`: applying an unsaved one-time address calls `saveWinnerSetupDraft`, and a reload restores it ahead of the saved addresses for delivery and for billing; then the page wiring; `node scripts/test.mjs apps/frontend/grade10`
 - [ ] 8.6 Tests first for SC-250 in `apps/frontend/grade10/src/pages/auctions/WinnerOrderContactDialog.test.tsx`: Copy Message reads Copied, then Copy Message, and calls no toast; the To and Subject controls are unchanged; then drop `toast.success` from the Copy Message path in `WinnerOrderContactDialog.tsx`; `node scripts/test.mjs apps/frontend/grade10`
 
-## 9. Letter Template (grade10-spec)
+## 9. Letter Template (grade10-spec) (owner: @htonyl)
 
 - [ ] 9.2 The Proof not accepted letter under `apps/emails/emails/auction/order/`; `pnpm --dir apps/emails run typecheck`
 - [ ] 9.3 The Contact Us preview `apps/preview/src/pages/winner-order-contact-dialog.tsx`: Copy Message reads Copied for a moment and fires no toast, as SC-250 states; the To and Subject controls are unchanged; `pnpm --dir apps/preview run lint`, `pnpm --dir apps/preview run build-storybook`
 - [ ] 9.4 The Shipped letter under `apps/emails/emails/auction/order/` takes the tracker link only when the operator recorded one: with none, its primary action is View order, opening Winner Order, and the tracking number reads as plain text (`order-mail-SC-62`, `order-mail-US1-TC55-1`); `pnpm --dir apps/emails run typecheck`
 
-## 10. E2E and Docs (grade10)
+## 10. E2E and Docs (grade10) (owner: @htonyl)
 
 - [ ] 10.1 `post-sale-journey.spec.ts` with the card, bank and operator journeys, seeded through `testWinners.create` and signed in from `AuthDoor.readOutbox`; `pnpm run test:e2e`
 - [ ] 10.2 The winner-order, partial-payment, refund, account-record and suspension specs and their helpers read `Awaiting Setup`; `pnpm run test:e2e`

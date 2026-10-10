@@ -21,9 +21,11 @@
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-payment-method.spec.ts`
 
 **Pre-conditions:**
 
@@ -62,9 +64,11 @@
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-payment-method.spec.ts`
 
 **Pre-conditions:**
 
@@ -242,9 +246,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-payment-method.spec.ts`
 
 **Pre-conditions:**
 
@@ -366,9 +372,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/placeBid.spec.ts`
 
 **Pre-conditions:**
 
@@ -408,9 +416,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-payment-method.spec.ts`
 
 **Pre-conditions:**
 
@@ -455,9 +465,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-payment-method.spec.ts`
 
 **Pre-conditions:**
 
@@ -596,9 +608,11 @@ does not exist yet.
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-payment-method.spec.ts`
 
 **Pre-conditions:**
 
@@ -635,9 +649,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-04
+
+**Decided by:** `grade10:packages/grade10-auction/frontend/src/features/listings/presentation/views/ListingView.test.tsx`
 
 **Pre-conditions:**
 

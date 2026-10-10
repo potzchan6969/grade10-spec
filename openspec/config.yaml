@@ -51,7 +51,7 @@ rules:
     - "Include a metric that would move if this change works."
     - "Mark the PRDs the change touches before the deltas. A change carrying a 🚧 line cannot also claim `skip_specs`, and `skip_specs: true` owes a `skip_specs_why` beside it."
   specs:
-    - "`/planning-dev` freezes journeys and feature-set roots as anchors. Isolated contexts run QA1 blind draft cases without scenarios, Dev technical design and scenarios, then QA2 reconciliation. An anchor change invalidates both readings and restarts them fresh. The same human resolves questions and accepts once."
+    - "`/planning-dev` freezes journeys and feature-set roots as anchors. Isolated contexts run QA1 blind draft cases without scenarios, Dev technical design and scenarios, then QA2 reconciliation. Planning-dev owns dependency-based restarts and input identities. The same human resolves questions and accepts once."
     - "Write `## Purpose` only when the text composed from the durable Purpose and the PRD differs from the durable one. When written it replaces that Purpose whole, for an existing capability as much as a new one."
     - "Feature set root group names are machine-read anchors. Rename one deliberately and update every `**Serves:**` and `**Trace:**` naming it in the same change. Leaves carry no ids."
     - "`pnpm spec:accept` publishes requirements and a snapshot. First claim records durable-spec commit and target scope. Archive compares that scope with durable specs; every difference needs acknowledgement. It does not fold again."

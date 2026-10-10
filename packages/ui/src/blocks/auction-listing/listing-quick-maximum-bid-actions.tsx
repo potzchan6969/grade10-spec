@@ -13,7 +13,6 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
 import { type FormEvent, type KeyboardEvent, useMemo, useState } from "react";
-import type { ShippedLocale } from "../../lib/format-datetime";
 import {
   formatMoney,
   formatMoneyNumeric,
@@ -80,7 +79,7 @@ type BidAuthorizationStatus = "idle" | "pending" | "error";
 type ListingQuickMaximumBidActionsProps = {
   copy: ListingQuickMaximumBidActionsCopy;
   view: ListingAuctionBidView;
-  locale: ShippedLocale;
+  locale: string;
   onCommitMaximum: (amountMinor: number) => void;
   /** When true, presets and custom amount stay visible but are not interactive. */
   amountEntryLocked?: boolean;
@@ -133,7 +132,7 @@ function ListingQuickMaximumBidActions({
 
   const presets = useMemo((): MaximumPreset[] => {
     const formatDelta = (deltaMinor: number) =>
-      `$${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
+      `${formatMoneyPrefix(view.currency, { locale })}${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
     const raiseDeltaTemplate = isLeadingWithMaximum
       ? copy.amountAboveMaximum
       : copy.amountAboveCurrent;

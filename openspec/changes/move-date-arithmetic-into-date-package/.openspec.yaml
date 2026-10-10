@@ -1,0 +1,10 @@
+schema: grade10-planning
+created: 2026-10-09
+promoted_by: "@seankcw"
+ui_waived: "no screen or state changes; every printed string stays the same"
+skip_specs: true
+skip_specs_why: "a refactor - it moves date arithmetic into one package and
+  changes no answer, requirement or scenario; no durable spec names an
+  arithmetic export"
+hands:
+  dev: "@seankcw"

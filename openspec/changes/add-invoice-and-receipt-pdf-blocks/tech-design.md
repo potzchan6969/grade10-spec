@@ -26,15 +26,16 @@ contract").
 - Move `grade10`'s renderer verbatim in behaviour — same layout, same
   `pdf-lib` calls, same tested output — changing only what this move and
   `decisions.md` Q20 require: every hardcoded label routed through a `copy`
-  argument, and the boxed-summary grouping keyed on something other than an
+  argument, and the summary grouping keyed on something other than an
   English label string (see "The summary grouping can no longer match on
   label text" below).
 - `packages/ui`'s `public-exports.test.ts` convention and a consuming app's
   typecheck are the enforcement that the exported functions and types match
   `spec.md`, not a code review.
 - No new exported name beyond `InvoicePdf`, `ReceiptPdf`, and the types a
-  caller needs to build their arguments — everything else in
-  `pdf-document.ts` stays unexported, as it already is in `grade10`.
+  caller needs to build their arguments. `../../index` exports only those;
+  the rest of `pdf-document.ts` is reachable only by importing the file
+  directly through the block's `*` subpath, which no caller needs.
 - Tests that call the renderer and inspect the returned PDF's structure
   (page count, page size, and whatever `pdf-lib`'s own reader can confirm),
   the same shape `grade10`'s existing `invoicePdf.test.ts`/`receiptPdf.test.ts`
@@ -78,15 +79,16 @@ contract").
 
 | File | Holds |
 | --- | --- |
-| `pdf-document.ts` | The A4 layout and drawing primitives both documents share, moved from `grade10`'s `pdfDocument.ts` verbatim except for the `copy`-threading and `key`-discriminant changes below. Unexported except through `invoice-pdf.ts`/`receipt-pdf.ts`. From the Q31-Q38 amendment it also holds the item types, the measured item table, the page `Sheet` and the blocks it places. |
+| `pdf-document.ts` | The A4 layout and drawing primitives both documents share, moved from `grade10`'s `pdfDocument.ts` verbatim except for the `copy`-threading and `key`-discriminant changes below. Not in `../../index`. From the Q31-Q38 amendment it also holds the item types, the measured item table, the fit check, the page `Sheet` that places the blocks, and `renderDocument`, the one page sequence both documents run. |
 | `invoice-pdf.ts` | `InvoicePdf`, `InvoicePdfData`, `InvoicePdfCopy`, exported |
 | `receipt-pdf.ts` | `ReceiptPdf`, `receiptBreakdown`, `ReceiptPdfData`, `ReceiptPdfCopy`, exported |
 | `fixtures.ts` | Sample data both story files and `apps/preview`'s pages share, unexported from the package - the role `grade10`'s `invoiceSample.ts`/`receiptSample.ts` played there, moved here so both consumers stop keeping their own copy. The item samples (`sampleItems(count)`, `itemTotalOf(items)`, the five table labels) land first and are all the amendment needs; the whole-document samples stay with group 4's open task 4.1 |
-| `drawn-text.ts` | Test helper, unexported: reads every string a page draws from its content stream, with the x, y and font size of its text matrix, for any page index. Today's `drawnStrings` in `pdf-dates.test.ts` moves here and gains the position, the size and the page index |
+| `pdf-test-helpers.ts` | Test helper, unexported: reads every string a page draws from its content stream, with the x, y and font size of its text matrix, and every rule and box, for any page index |
 | `invoice-pdf.stories.tsx`, `receipt-pdf.stories.tsx` | Call the renderer on `fixtures.ts` sample data and preview the returned bytes with `pdf-preview.tsx`'s `pdfjs-dist` viewer — there is no component to render as JSX |
 | `pdf-preview.tsx` | `PdfPreview`, a small `pdfjs-dist`-based canvas viewer for the returned bytes - Storybook-only, not exported from `../../index`. It draws every page, one canvas each, since the first version drew page 1 only and a long table runs on |
 | `public-exports.test.ts` | Asserts every name in this table's second column exports from `../../index`, per `auction-order`'s own test |
 | `pdf-document.test.ts`, `invoice-pdf.test.ts`, `receipt-pdf.test.ts` | Moved from `grade10`'s `contracts/test/`, proving `spec.md`'s scenarios at the level Non-Goals fixes |
+| `pdf-pages.test.ts` | The page-break scans of a long table, the continuation pages, the issuer on the last page, and the same bytes a day later |
 
 **Also edits:** `packages/ui/package.json` — adds `pdf-lib` and
 `@pdf-lib/fontkit` as dependencies, the two packages `grade10`'s renderer
@@ -122,7 +124,7 @@ draw directly.
 ```ts
 export type PdfLineItem = {
   /** Recognized regardless of `label`'s text, so a translated label still
-   * routes into the boxed summary. Absent on an ordinary charge. */
+   * routes into the summary. Absent on an ordinary charge. */
   key?: "subtotal" | "paymentProcessingFee" | "orderTotal";
   label: string;
   amount: string;
@@ -246,7 +248,7 @@ export type ReceiptPdfData = {
 ```
 
 **The summary grouping can no longer match on label text (`decisions.md`
-Q20).** `grade10`'s `drawLineItems` currently sorts a charge into the boxed
+Q20).** `grade10`'s `drawLineItems` currently sorts a charge into the
 summary by `SUMMARY_LABELS.has(item.label)` — a `Set` of the literal English
 strings `"Subtotal"`, `"Payment Processing Fee"`, `"Order Total"`. That only
 ever worked because `grade10`'s backend happens to hardcode those same
@@ -264,8 +266,8 @@ hardcodes moves to a `copy` field (`decisions.md` Q20).** `drawParties`'s
 (`"Description"`/`"Amount"` until the Q31-Q35 amendment), `drawTitle`'s caller-supplied `"Invoice"`/`"Receipt"` title, every
 meta-row label (`"Receipt number"`, `"Invoice number"`, `"Date paid"`,
 `"Payment method"`, `"Payment reference"`, `"Date of issue"`, `"Date due"`),
-`drawPaymentSection`'s `"Payment"`/`"Transfer reference"`,
-`drawPaymentBreakdown`'s `"Payment breakdown"` and `receiptBreakdown`'s four
+`paymentSectionBlock`'s `"Payment"`/`"Transfer reference"`,
+`paymentBreakdownBlock`'s `"Payment breakdown"` and `receiptBreakdown`'s four
 row labels, and the replacement label — all become `copy.*` fields instead of
 string literals in `pdf-document.ts`. A line item's own `label` (`"Shipping
 & Handling"`, `"Subtotal"`, and so on) already arrives as a caller-supplied string on
@@ -308,11 +310,11 @@ whatever string the caller already built for `ReceiptPdf`'s own
 here already follows — this renderer does not know payment methods exist as
 a concept, only that it draws whatever string it is given.
 
-**InvoicePdf gains a conditional `drawBankRails` section, full width below
+**InvoicePdf gains a conditional `bankDetailsBlock` section, full width below
 the order value (`decisions.md` Q22).** Living in `invoice-pdf.ts` itself,
 matching `receipt-pdf.ts`'s own document-specific sections
-(`drawPaymentSection`, `drawPaymentBreakdown`) rather than the shared
-`pdf-document.ts` — no other document draws it. `drawBankRails` draws
+(`paymentSectionBlock`, `paymentBreakdownBlock`) rather than the shared
+`pdf-document.ts` — no other document draws it. `bankDetailsBlock` draws
 `copy.bankDetailsHeading`
 then one column for each enabled rail - SWIFT, FPS, and HK local transfer in
 that order when supplied. Each column has its own heading and stack of
@@ -357,7 +359,7 @@ Total amounts are whatever strings arrive.
 | `InvoicePdf`, `ReceiptPdf`, `receiptBreakdown`, `addressLines`, `PdfPartyAddress`, `ReceiptPaymentBreakdown`, `InvoicePdfRenderOptions`, `ReceiptPdfRenderOptions` | Unchanged. |
 
 **The keyed summary rows stay in `lineItems`.** `key` still routes Subtotal,
-Payment Processing Fee and Order Total into the boxed summary, and the charges
+Payment Processing Fee and Order Total into the summary, and the charges
 are the rows with no `key`. A caller that still lists Winning Bid, Buyer's
 Premium or Tax there gets them drawn again as charges, Tax once more beside
 `taxLine`. The renderer cannot tell them from other charges without matching
@@ -385,7 +387,7 @@ because widths and wrapped lines come from the whole table.
 - **Amount columns** - Winning Bid, Buyer's Premium and Total, right-aligned,
   each as wide as its widest header, row amount or Item Total amount, with a
   floor of `MIN_AMOUNT_COLUMN`. The Total column ends at `RIGHT_EDGE`, so the
-  charges and the boxed summary under the table keep their right edge. An amount
+  charges and the summary under the table keep their right edge. An amount
   is never wrapped, drawn smaller or allowed to overflow (Q38,
   `shared-ui-invoice-and-receipt-pdf-SC-72`).
 - **Item column** - the content width left after the amount columns and one
@@ -427,7 +429,7 @@ added only when a block needs it, so a document that fits is exactly one page.
 | --- | --- | --- |
 | Column header | The four labels and the rule under them | Never alone at a page foot. Placed with the row after it, and drawn again at the top of every continuation page, with nothing else of the page head |
 | Item row | The wrapped title lines and the three amounts on the first line | Never inside a row. A row that does not fit moves whole |
-| Tail | The Item Total row, the charges, the optional Tax line and the boxed summary | Never inside the tail. It moves whole, under a repeated header, with no item row moved over |
+| Tail | The Item Total row, the charges, the optional Tax line and the summary | Never inside the tail. It moves whole, under a repeated header, with no item row moved over |
 | Bank details (invoice) | Heading, rail columns, rule and reference note | Moves whole, and is not tied to the summary above it |
 | Payment section (receipt) | The "Payment" heading and the transfer reference, only when one is given | Moves whole, and is not tied to the summary above it |
 | Payment breakdown (receipt) | Its heading and the four lines | Moves whole |
@@ -465,14 +467,18 @@ document, whatever ends above it (`SC-39`, `SC-40`, `SC-48`, `SC-66`). Other
 pages leave the band empty.
 
 **Three refusals (`decisions.md` Q38, Q39).** `spec.md` states each one. None draws a
-page first: the check runs before the PDF document is created or while the
-table is measured.
+page first: each check runs while the table and the blocks after it are
+measured, before the first page exists.
 
 | Refusal | Raised by | Error |
 | --- | --- | --- |
-| An empty item list (`SC-69`) | A guard at the top of `InvoicePdf` and `ReceiptPdf`, before the PDF document is created | A `RangeError` that says no items were given |
+| An empty item list (`SC-69`) | `measureItemTable`, before any page exists | A `RangeError` that says no items were given |
 | A title the standard font cannot draw, with no embedded font supplied (`SC-70`) | `pdf-lib`, when the title is first measured: the standard font throws on a character it cannot encode. The block adds no check and draws no placeholder | The `pdf-lib` error, unchanged |
 | A row, the tail or the amount columns that cannot fit (`SC-71`) | The measuring step. An item row or the tail taller than a page body, or an Item column narrower than `MIN_TITLE_COLUMN` | A `RangeError` that names which of the three does not fit |
+
+`requireFits` is the one fit check. It also refuses Bank details, the Payment
+section or the payment breakdown taller than a page body, naming the section,
+since a document that cannot be drawn whole is refused (Q39).
 
 Nothing draws off the page and nothing is truncated or shrunk. `grade10` picks the
 embedded font from the item titles (see "What `grade10` maps"), so a Chinese
@@ -520,12 +526,12 @@ the item exists.
 | Field | Source |
 | --- | --- |
 | `items[0].title` | `listing.title`, or `"Auction lot"` when it has none, as `listingTitle` does today |
-| `items[0].winningBid` | `formatMoney(hammerAmount, currency)` |
-| `items[0].buyersPremium` | `formatMoney(buyerPremiumAmount, currency)` |
-| `items[0].total` | `formatMoney(hammerAmount + buyerPremiumAmount, currency)`. `grade10` adds the two integers of minor units. The block adds nothing |
+| `items[0].winningBid` | `formatAmount(hammerAmount, currency)`: `formatMoney` without the currency, so the item table's amounts carry none (`decisions.md` Q41) |
+| `items[0].buyersPremium` | `formatAmount(buyerPremiumAmount, currency)` |
+| `items[0].total` | `formatAmount(hammerAmount + buyerPremiumAmount, currency)`. `grade10` adds the two integers of minor units. The block adds nothing |
 | `itemTotal` | The same three strings, since the one item is the whole table |
 | `lineItems` | Shipping & Handling, Insurance, then the three keyed summary rows, each omitted when its amount is null, as `lineItems()` does today minus its first two entries and its Tax entry |
-| `taxLine` | `Tax` with `formatMoney(taxAmount, currency)`, or `null` when `taxAmount` is null. It is the only place Tax travels (`decisions.md` Q30), so the block draws it once, after the charges and before the boxed summary |
+| `taxLine` | `Tax` with `formatMoney(taxAmount, currency)`, or `null` when `taxAmount` is null. It is the only place Tax travels (`decisions.md` Q30), so the block draws it once, after the charges and before the summary |
 | `copy` | The five labels as English literals in `PDF_DOCUMENT_COPY`, replacing `descriptionLabel` and `amountLabel` |
 
 The shared helper `lineItems()` in `receiptPdf.ts` splits in three: `lineItems()`
@@ -563,7 +569,7 @@ storybook build`.
 
 - **Unit tests per scenario** read the returned bytes with `pdf-lib`: page
   count, page size, and every string per page with its x and y from
-  `drawn-text.ts`. The Latin fallback face writes readable hex strings. The
+  `pdf-test-helpers.ts`. The Latin fallback face writes readable hex strings. The
   store ships no CJK face, so the embedded-face path stays in `grade10`'s tests.
 - **Page-break scenarios scan item counts** (1 to 40) rather than hard-code the
   count where a break falls, so a change to a row height moves no test. A scan
@@ -573,16 +579,19 @@ storybook build`.
 - **Refusals** (`SC-69` to `SC-71`) expect the call to reject. `SC-70` renders
   an item titled `中8號` with no font bytes, so it asserts the `pdf-lib` error
   and not a result the block built.
-- **A block's height equals what it draws.** A unit test draws each block on a
-  recording page and checks the lowest y it touched against `block.height`.
+- **Nothing reaches the issuer band.** Every scan reads each page's strings,
+  rules back from the bytes and finds them at or above `BODY_BOTTOM`, except the
+  issuer block's two lines on the last page, and finds no box on any page.
 - **Determinism** (`SC-77`, `decisions.md` Q39). Two renders of one 30-item input, the second with
   the clock a day later, return identical bytes. The renderer stamps each
   document's own date as its creation and modification date and reads the clock
   nowhere else.
 - **Stories** show every fixture through `PdfPreview`, all pages, so a reviewer
-  sees a long table on every pull request that touches the directory. The first
-  commit that rewrites `drawLineItems` stops at the Design Override check
-  (spacing and rule lines go), so it waits for the person's yes (Q35).
+  sees a long table on every pull request that touches the directory, and each
+  `LongTable` story checks that the preview draws more than one page. The
+  Design Override check reads class strings and style props, not pdf-lib's
+  drawing, so it stops no commit here; the person's review of these stories is
+  the design check (Q35).
 - **`grade10`** runs `pnpm run typecheck`, `pnpm run lint`,
   `pnpm run test --filter grade10`, and the focused auction PDF service tests.
   Its mapping tests assert that `lineItems` carries no Winning Bid, Buyer's
@@ -615,9 +624,9 @@ storybook build`.
   repository's own typecheck.
 - **[Risk]** A block's measured height drifts from what its `draw` puts on the
   page, so a row clips the footer band or two blocks overlap. →
-  **Mitigation:** height and `draw` read one row layout built once per block,
-  and a unit test draws every block on a recording page and compares the lowest
-  y touched with `block.height`.
+  **Mitigation:** `measuredBlock` measures a block by running its own `draw` on
+  a page that records coordinates, so height and drawing are one layout, and
+  every scan finds the real bytes at or above `BODY_BOTTOM`.
 - **[Risk]** One item row or the tail is taller than a page body, or the amount
   columns leave the title column too narrow. → **Mitigation:** the measuring step
   rejects the document with an error naming what does not fit (see "Three

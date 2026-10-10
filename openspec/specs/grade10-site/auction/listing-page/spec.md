@@ -43,8 +43,8 @@ close extends and how a lot is settled stay `grade10-site/auction/auction`'s.
 - Catalogue and sitemap
   - Opened from the catalogue: the catalogue reaches a lot's own address
     without a page load
-  - No lot in the sitemap: which lots the auction publishes is unknown at build
-    time, so no entry is a lot address
+  - Lots in the sitemap: every lot the catalogue holds is listed when the
+    sitemap is fetched, and none is an unfilled parameter
 - Live lot updates
   - Without a reload: another page's accepted bid, an extension or a close
     shows with the new price, bid count and close
@@ -192,9 +192,10 @@ carry on from what was served rather than disagreeing with it.
 The catalogue SHALL open a lot's own address from that lot, without a page
 load.
 
-The sitemap lists the surfaces the build writes a document for, and a lot is
-not one of them: which lots the auction publishes is not known when the site
-is built.
+The sitemap SHALL list every lot the catalogue holds, read when it is fetched
+rather than when the site is built, as `grade10-site/site/crawlable-pages`
+requires of every public address. No entry SHALL carry an unfilled parameter
+in place of a lot.
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-fl9 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-08 - A lot is opened from the catalogue
@@ -204,13 +205,14 @@ is built.
 - **WHEN** they open a lot it lists
 - **THEN** that lot's address is what they are on, showing that lot's page
 
-<!-- trace:scenario id=g10.auction-listing-page.SC-aga rev=1 -->
-#### Scenario: grade10-site-auction-listing-page-SC-09 - The sitemap names no lot
+<!-- trace:scenario id=g10.auction-listing-page.SC-aga rev=2 -->
+#### Scenario: grade10-site-auction-listing-page-SC-09 - The sitemap lists each published lot
 **Serves:** grade10-site-auction-listing-page-US-05 - Collector reaches a lot from the catalogue
 
+- **GIVEN** a published lot the catalogue holds
 - **WHEN** the sitemap is fetched
-- **THEN** no entry is a lot address
-- **AND** none carries an unfilled parameter in place of one
+- **THEN** that lot's address is listed as an absolute URL of the serving environment
+- **AND** none carries an unfilled parameter in place of a lot
 
 ### Requirement: A lot's page offers to watch it
 
@@ -720,6 +722,7 @@ the public page does not make the code a separate field or an alternate route.
 - **AND** neither the response, its share preview, nor any client-fetched
   data carries a labelled listing-code or payment-reference field
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-ajz rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-28 - A called-off listing keeps its canonical address
 **Serves:** Public identifier - the canonical address remains usable after the lot leaves browse and search
 

@@ -4,9 +4,9 @@
 
 No Figma frame draws these documents: the PDFs have never had one, and
 `decisions.md` Q35 decides none for the item table. The table is built from
-the requirements and previewed in Storybook. The first commit that changes the
-block, in group 7, 9 or 10, lands only after the person's Design Override yes,
-and each later commit the check stops carries its own `Design-Override:` line.
+the requirements and previewed in Storybook. The Design Override check reads
+class strings and style props, not pdf-lib's drawing, so it stops no change to
+these documents. The person's review of the rendered PDFs is the design check.
 
 The layout reference is a sample consolidated invoice the person supplied: the
 columns Item, Winning Bid, Buyer's Premium and Total, one row per item, a
@@ -44,9 +44,9 @@ table runs onto a second page.
 | Several items | One row per item in the order given, then the Item Total row | `shared-ui-invoice-and-receipt-pdf-SC-57` |
 | Long item title | The title wraps inside its column, and the three amounts stay beside its first line | `shared-ui-invoice-and-receipt-pdf-SC-58` |
 | Non-Latin item title | The title draws in the embedded face when one is supplied, and the row layout does not move | `shared-ui-invoice-and-receipt-pdf-SC-59` holds the row layout for a title with no spaces. **Out of suite:** the embedded face is the renderer's existing font option, and `packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts` in `grade10` draws a Chinese invoice with the embedded fixture face (`draws a Chinese invoice with a font viewers accept`) |
-| Charges under the table | Shipping & Handling, Insurance and Tax rows in the order given, then the boxed summary | `shared-ui-invoice-and-receipt-pdf-SC-3` for the charges and the summary, `shared-ui-invoice-and-receipt-pdf-SC-52` for Tax |
+| Charges under the table | Shipping & Handling, Insurance and Tax rows in the order given, then the summary, drawn with no border | `shared-ui-invoice-and-receipt-pdf-SC-3` for the charges and the summary, `shared-ui-invoice-and-receipt-pdf-SC-52` for Tax |
 | Table past one page | The table continues on the next page under the repeated column header, and no item row splits across two pages | `shared-ui-invoice-and-receipt-pdf-SC-62`, `shared-ui-invoice-and-receipt-pdf-SC-63` |
-| Page end after the last item | The Item Total row, the charges, the Tax line and the boxed summary move together to the next page when they do not fit, under the repeated column header, with no item row moved over with them | `shared-ui-invoice-and-receipt-pdf-SC-64` |
+| Page end after the last item | The Item Total row, the charges, the Tax line and the summary move together to the next page when they do not fit, under the repeated column header, with no item row moved over with them | `shared-ui-invoice-and-receipt-pdf-SC-64` |
 | Page end before Bank details | Bank details move whole to the next page when they do not fit below the summary | `shared-ui-invoice-and-receipt-pdf-SC-74` |
 
 ### Receipt PDF
@@ -56,7 +56,7 @@ table runs onto a second page.
 | One item | One item row, the Item Total row under it, then the charges, the summary and the payment breakdown | `shared-ui-invoice-and-receipt-pdf-SC-60` |
 | Several items | One row per item in the order given, then the Item Total row | `shared-ui-invoice-and-receipt-pdf-SC-57` |
 | Table past one page | The table continues on the next page under the repeated column header, and no item row splits across two pages | `shared-ui-invoice-and-receipt-pdf-SC-62`, `shared-ui-invoice-and-receipt-pdf-SC-63` |
-| Page end after the last item | The Item Total row, the charges, the Tax line and the boxed summary move together to the next page when they do not fit, under the repeated column header, with no item row moved over with them | `shared-ui-invoice-and-receipt-pdf-SC-64` |
+| Page end after the last item | The Item Total row, the charges, the Tax line and the summary move together to the next page when they do not fit, under the repeated column header, with no item row moved over with them | `shared-ui-invoice-and-receipt-pdf-SC-64` |
 | Page end before the Payment section | The Payment section, with the transfer reference, moves whole to the next page when it does not fit below the summary | `shared-ui-invoice-and-receipt-pdf-SC-75` |
 | Page end before the payment breakdown | The four payment breakdown lines move together to the next page when they do not fit | `shared-ui-invoice-and-receipt-pdf-SC-65` |
 

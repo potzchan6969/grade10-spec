@@ -8,7 +8,7 @@ import {
 import { IntakeItemCard } from "./intake-item-card";
 
 const meta = {
-  title: "Pages/Submissions/Item Card",
+  title: "Submissions/Item Card",
   component: IntakeItemCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

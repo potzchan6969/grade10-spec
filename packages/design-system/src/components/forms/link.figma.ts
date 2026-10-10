@@ -10,6 +10,7 @@ const variant = instance.getEnum("variant", {
   default: "default",
   secondary: "secondary",
   error: "error",
+  brand: "brand",
 });
 
 // `state` is interaction only. Hover is a CSS pseudo-state with no prop behind

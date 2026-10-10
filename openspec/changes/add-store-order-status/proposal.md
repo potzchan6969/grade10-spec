@@ -7,10 +7,8 @@ Orders and Order Details share one interim adapter, `customerOrderStatus` in
 the grade10 application's `apps/frontend/grade10/src/pages/orders/orderStatus.ts`,
 and no requirement says what its answer should be. It differs from the
 [Order Status](../../../docs/prds/products/grade10-site/commerce/order-status.md)
-page in five ways:
+page in four ways:
 
-- **Completed** - a paid, fully fulfilled order reads Completed, archived or
-  not (`orderStatus.ts:36-38`)
 - **Till sales** - a paid counter sale reads Completed by where it was sold,
   whatever its fulfilment (`orderStatus.ts:27-29`)
 - **Partial refunds** - a partial refund reads the same as a full one, because
@@ -40,20 +38,23 @@ their own segment.
   from this rule, which replaces the interim adapter
 - **One stored copy** - Your Orders and Order Details read one stored copy of
   Shopify's facts: an order paid in full, refunded or canceled reaches it
-  within 5 minutes, and any other change to an order Shopify holds open,
-  placed in the last 90 days, within the hour (Q23, Q24)
-- **Your Orders** - lists a web checkout once the shop records it, and groups
-  orders by whether Shopify still holds them open rather than by badge (Q15,
-  Q16)
+  within 5 minutes, and any other change to an order not canceled, placed in
+  the last 90 days, within the hour (Q23, Q28)
+- **Your Orders** - lists a web checkout once the shop records it, and puts an
+  order with past purchases once its badge reads finished: Completed,
+  Canceled, Refunded in full, or refunded in part once every item is
+  fulfilled (Q15, Q16, Q28, Q29)
 - **Shared badge** - `OrderHistoryStatus` keeps its six variants and drops the
   meaning it gave each one; Order Status defines what a Store order's badge
   means
 
 The ordered rule replaces the source PRD's fifteen-step priority list, which
 resolved badges only and could not produce the notes its own tables showed.
-The rule was drawn from the thirty rows that PRD confirmed. Q9 and Q19 changed
-rule 4 since. Its owner files the PRD with the references before group 1, and
-task 1.1 checks every row (Q17).
+The rule was drawn in #132 from the thirty rows that PRD confirmed. The
+[Store Order Status Brief](../../../docs/references/store-order-status-brief.md)
+holds its 28 rows, and task 1.1 checks every one; D3, the one outcome changed
+since #132 that a collector sees, is settled on common storefront practice
+rather than by an owner check (Q17).
 
 ## Non-Goals
 
@@ -91,16 +92,16 @@ rule; both depend on the id `grade10-site/commerce/order-status`.
 
 1. **Facts the Store order lacks** - the typed Store order carries a
    normalised lifecycle that folds partial and full refunds together, and no
-   archived flag or return status; the Shopify order query fetches neither.
-   The tech design decides how Shopify's financial status, fulfilment status,
-   `closed`, `cancelledAt` and `returnStatus` reach the rule, how they are
+   return status; the Shopify order query does not fetch it. The tech design
+   decides how Shopify's financial status, fulfilment status, `cancelledAt`
+   and `returnStatus` reach the rule, how they are
    stored for Your Orders, which reads stored rows, and how existing orders
    are backfilled.
 2. **Returns** - `returned` is not a member of Shopify's fulfilment status;
    Shopify reports returns on the order's `returnStatus`, and the rule reads
    them there.
 3. **Till sales** - the tech design checks how Shopify reports fulfilment and
-   archiving for this shop's counter sales (Q12).
+   payment for this shop's counter sales (Q12).
 4. **One implementation** - the rule is written once, where both pages and a
    later notification centre can import it, and is tested over every
    combination of its vocabulary.
@@ -118,3 +119,4 @@ change.
 - [Refunds](../../../docs/prds/products/grade10-site/store/refunds.md)
 - [Shipping · Today](../../../docs/prds/products/grade10-site/store/shipping.md#today)
 - [Your Orders](../../../docs/prds/products/grade10-site/store/order-history.md)
+- [Store Order Status Brief](../../../docs/references/store-order-status-brief.md)

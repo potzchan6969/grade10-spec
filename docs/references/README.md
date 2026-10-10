@@ -72,3 +72,8 @@ Genius Bar, hybrid queue products and cal.com do for booked and walk-in
 visits, and what [Front Desk](../prds/products/grade10-admin/appointment/front-desk.md)
 and [Your Visit](../prds/products/grade10-site/appointment/visit.md) take from
 them.
+
+[`store-order-status-brief.md`](store-order-status-brief.md) is the brief
+behind Order Status: one row per note and each combination a decision settles
+by name, the badge and note the store gives it, and where the store records
+it, for `add-store-order-status`'s task 1.1 to check.
