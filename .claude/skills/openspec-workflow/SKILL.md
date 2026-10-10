@@ -1,11 +1,11 @@
 ---
 name: openspec-workflow
-description: The OpenSpec product specification workflow - the eight-artifact grade10-planning schema, the PM, design and dev planning hand-offs, acceptance, amendment and archive of a change, and how a PRD line becomes an OpenSpec delta. Use when a product feature needs an OpenSpec change, when writing or reviewing a change's artifacts, or when accepting or archiving one. Not needed to build from a PRD alone.
+description: The OpenSpec change record for product work - the eight-artifact grade10-planning schema, deltas against openspec/specs, the PM, design and dev hand-offs, acceptance, amendment and archive. Use when a feature will not finish in one session or must be handed to someone else, when writing or reviewing a change's artifacts, or when accepting or archiving one. Not needed when a feature is planned and built end to end in one session from its PRD.
 ---
 
 # OpenSpec workflow
 
-Use this when a product feature needs an OpenSpec change. A feature confirmed from its PRD in `docs/prds/` and its design in Storybook can be planned and built without one.
+A change record exists so unfinished product work can be picked up later by a person or another session: its deltas say what the spec should become, and its artifacts say why. A feature built end to end in one session from its PRD in `docs/prds/` and its design in Storybook does not need one. Keep the PRD's 🚧 and ❓ marks current either way.
 
 One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in eight artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`. The CLI is `@fission-ai/openspec@1.8.0`; `pnpm openspec …` runs it with no global install.
 

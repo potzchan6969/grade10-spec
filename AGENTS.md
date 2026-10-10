@@ -35,7 +35,7 @@ Read [`docs/governance/design-system-workflows.md`](docs/governance/design-syste
 
 ## Product features
 
-Start from the capability's PRD in `docs/prds/` and its design in Storybook. Confirm the high-level details and designs there, then plan and build. When the work needs an OpenSpec change (deltas, acceptance, archive), load the [`openspec-workflow`](.claude/skills/openspec-workflow/SKILL.md) skill.
+Start from the capability's PRD in `docs/prds/` and its design in Storybook. Confirm the high-level details and designs there, then plan and build. When a feature will be left unfinished or handed to someone else, write its deltas as an OpenSpec change by loading the [`openspec-workflow`](.claude/skills/openspec-workflow/SKILL.md) skill.
 
 Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
