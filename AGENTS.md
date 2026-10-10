@@ -4,11 +4,7 @@ This repository is the versioned source of truth for product requirements and th
 
 ## Operating principles
 
-- Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, primitives, and conventions before proposing a new structure.
-- Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style, [`docs/governance/writing.md`](docs/governance/writing.md): headings as plain Title Case labels, values first, items leading with the key term in bold, the reader's words, short sentences with no flourish, decided facts flat and present-tense, ❓ or `TBC` on anything unconfirmed, 🚧 only on what is confirmed and being built. Copy the page its Copy table names for the kind of page you are writing. Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. A case that proves a rule, a state that dresses an outcome and a mechanism belong to the suite, the design record and the architecture doc.
-- Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
-- Keep changes reviewable: one product decision or component capability per push where practical.
-- Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
+- Respect [`docs/governance/writing.md`](docs/governance/writing.md) when writing any documents in the repository.
 
 ## Questions and blockers
 
