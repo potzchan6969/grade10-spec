@@ -128,6 +128,4 @@ Run the appropriate checks before handoff:
 
 ## Agent-platform parity
 
-`AGENTS.md` is canonical. `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` are compatibility aliases.
-
-`.claude/skills/` is canonical, with `.codex/skills/` and `.cursor/skills/` symlinked to it, so every platform reads the same files. `.claude/agents/` is canonical for the round's readers, mirrored nowhere. The symlinks are tracked in git; a planning round that cannot find a reader fails there.
+`AGENTS.md` is canonical; `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` symlink to it. Skills live in `.claude/skills/`.
