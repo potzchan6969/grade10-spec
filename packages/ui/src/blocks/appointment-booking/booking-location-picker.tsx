@@ -39,12 +39,15 @@ function BookingLocationPicker({
                 onSelect(value);
               }
             }}
-            value={selectedId}
+            value={selectedId ?? ""}
           >
             {list.map((location) => (
               <RadioCard
                 description={location.address}
                 key={location.id}
+                onClick={() => {
+                  if (location.id === selectedId) onSelect(location.id);
+                }}
                 title={location.name}
                 value={location.id}
               />

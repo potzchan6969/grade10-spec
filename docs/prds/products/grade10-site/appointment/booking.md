@@ -32,6 +32,7 @@ leaves holding a link that manages it.
 - **Reminder** — once, ahead of the visit, at the lead the service sets
 - **One live visit per service** — booking the same service twice under one
   address is told about the visit already held
+- ❓ **Visit page** - the manage link opens [Your Visit](/p/grade10-site/appointment/visit), which follows the visit through the day
 
 ## Designs
 
@@ -40,6 +41,8 @@ leaves holding a link that manages it.
 ::story{id="appointment-booking-bookingdetailsform--default" title="The details step"}
 
 ::story{id="appointment-booking-bookingconfirmation--default" title="The confirmation"}
+
+Every step, state and phone frame: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd).
 
 :::detail{title="Product decisions" for="pm"}
 A visit is booked by the person who will turn up, not by an account, because
@@ -54,6 +57,10 @@ gave.
 | Second visit, same service | Decided | Refused while one is live; a collector with two cards books one visit. | Product |
 | Phone number | ❓ Open | Optional today; a shop that calls the morning of a visit may want it required. | Operations |
 | Reminder lead | ❓ Open | One day by default; a same-day drop-off may want an hour. | Product |
+| Services by card count | ❓ Open | Grading drop-off for 1 to 19 cards, 30 min; Bulk grading drop-off for 20 or more, 45 min, in the Grading room. | Operations |
+| A full day | ❓ Open | Shows the earliest time at each shop and, today, the walk-in wait; no waitlist. | Product |
+| Prefill | ❓ Open | A signed-in collector's name, email and phone; Book again carries the service, the shop and the answers. | Product |
+| Shop facts in 繁中 | ❓ Open | Shop names, addresses, how to get there and counter names are stored in both languages. | Product |
 | Payment at booking | Decided | None; what the visit costs is settled in the shop. | Product |
 | Anonymous write | Decided | A challenge plus a per-address budget of ten asks a day. A booking holds a desk and sends mail on nobody's authority, and the two brakes answer different questions: whether a person is there at all, and how much one address may spend however convincingly it asks. | Product |
 :::

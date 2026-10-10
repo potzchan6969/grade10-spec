@@ -10,7 +10,7 @@ import { EmptyState } from "@grade10/design-system/components/display/empty-stat
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { SiteHeader } from "@grade10/ui";
+import { LISTING_LOT_GRID_CLASS, SiteHeader } from "@grade10/ui";
 import { Package, Vault } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { VAULT_FOOTER, VAULT_SITE_HEADER } from "./vault-content";
@@ -34,6 +34,27 @@ function VaultPageShell({
           }
         >
           {children}
+        </div>
+      </main>
+      <Footer {...VAULT_FOOTER} />
+    </div>
+  );
+}
+
+function VaultItemDetailPageShell({
+  children,
+  header,
+}: {
+  children: ReactNode;
+  header?: ReactNode;
+}) {
+  return (
+    <div className="flex min-h-svh flex-col bg-background">
+      <SiteHeader {...VAULT_SITE_HEADER} />
+      <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 pb-16 sm:px-8">
+        <div className="flex flex-col gap-8 pt-8 sm:gap-12 lg:pt-12">
+          {header}
+          <div className={LISTING_LOT_GRID_CLASS}>{children}</div>
         </div>
       </main>
       <Footer {...VAULT_FOOTER} />
@@ -265,5 +286,6 @@ export {
   ProposalBanner,
   SummaryStat,
   VaultEmptyState,
+  VaultItemDetailPageShell,
   VaultPageShell,
 };

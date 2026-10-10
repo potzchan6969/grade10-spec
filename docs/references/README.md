@@ -66,3 +66,9 @@ is the legal wording the vault and grading print, drafted for counsel: the
 forfeiture notice, the notices clause, the licence line, the complaints
 footer, the collection statement, grading's clause 6 and the uncollected-cards
 notice, with where each value lives while it is unset.
+
+[`appointment-benchmarks.md`](appointment-benchmarks.md) is what Apple's
+Genius Bar, hybrid queue products and cal.com do for booked and walk-in
+visits, and what [Front Desk](../prds/products/grade10-admin/appointment/front-desk.md)
+and [Your Visit](../prds/products/grade10-site/appointment/visit.md) take from
+them.

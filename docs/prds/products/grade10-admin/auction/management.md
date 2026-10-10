@@ -435,7 +435,6 @@ it.
 | HK$1,000.00 | 3.4% + HK$2.35 | HK$37.63 | HK$1,037.63 |
 | HK$3,120.00 | 3.4% + HK$2.35 | HK$112.25 | HK$3,232.25 |
 
-::story{id="auction-admin-payment-settings--loaded" title="Payment settings loaded"}
 
 ## Grants
 

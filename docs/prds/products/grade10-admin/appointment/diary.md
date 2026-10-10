@@ -29,6 +29,7 @@ they read, and what they do for a collector at the counter.
 - **Close out** — completed, or a no-show
 - **Product bookings** — shown with their product and case, read-only; the
   vault moves its own visits
+- ❓ **Front desk** - The Day on today checks visitors in, keeps Waiting and calls the next person to a free counter; [Front Desk](/p/grade10-admin/appointment/front-desk)
 
 ## Permissions
 
@@ -48,4 +49,7 @@ resource is what the diary can promise.
 | Blocks over bookings | Decided | A block never cancels a booking already inside it; the operator sees both. | Operations |
 | Product visits | Decided | Read-only here; moved from the product that owns the case. | Product |
 | Staff rosters | Decided | Out of scope; a resource is a desk or a room, never a person. | Product |
+| Source | ❓ Open | Booked by reads as the source: Online, Staff or Walk-in. | Product |
+| Insights | ❓ Open | A tab beside Bookings: booked share, missed, walk-in wait and walk-ins lost, with one busy-hours chart. | Operations |
+| Service editor | ❓ Open | One page per service in English and 繁中, adding the hold, walk-ins and what to bring. | Product |
 :::

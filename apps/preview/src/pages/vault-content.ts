@@ -48,8 +48,8 @@ const VAULT_MY_VISITS_STORY_ID = "pages-appointment-appointments--default";
 const VAULT_MANAGE_VISIT_STORY_ID = VAULT_MY_VISITS_STORY_ID;
 const INTAKE_TRACKER_STORY_ID = "pages-submissions--in-progress";
 const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
-const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--in-vault";
-const VAULT_RETRIEVAL_STORY_ID = "pages-vault-request-retrieval--default";
+const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--graded";
+const VAULT_RETRIEVAL_STORY_ID = "vault-request-retrieval-dialog--default";
 /** Storybook ids for vault item-card assemblies (workbench deep links). */
 const VAULT_ITEM_CARD_IN_VAULT_STORY_ID =
   "pages-vault-vault-item-card--in-vault";

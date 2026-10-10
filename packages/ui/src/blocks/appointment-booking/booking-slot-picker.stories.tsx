@@ -83,6 +83,23 @@ export const Default: Story = {
   },
 };
 
+/** Picking the ticked day or time again reports again, so Back then Continue
+ * is never stuck. */
+export const Repick: Story = {
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /September 3rd, 2026/ }),
+    );
+    expect(args.onSelectDay).toHaveBeenCalledTimes(1);
+    expect(args.onSelectDay).toHaveBeenLastCalledWith("2026-09-03");
+    const time = canvas.getByRole("button", { name: "10:15" });
+    await userEvent.click(time);
+    await userEvent.click(time);
+    expect(args.onSelectSlot).toHaveBeenCalledTimes(2);
+  },
+};
+
 /** Stepping forward reports the next month; at the bound the step is gone. */
 export const MonthBounds: Story = {
   play: async ({ args, canvasElement }) => {

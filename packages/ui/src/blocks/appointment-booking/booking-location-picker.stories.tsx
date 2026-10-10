@@ -1,6 +1,6 @@
 import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { BookingLocationPicker } from "./booking-location-picker";
 import { CAUSEWAY_BAY, LOCATION_PICKER_COPY } from "./fixtures";
 
@@ -32,6 +32,33 @@ export const Default: Story = {
     expect(
       canvas.getByText("13 Pak Sha Road, Causeway Bay, Hong Kong"),
     ).toBeVisible();
+  },
+};
+
+/** The ticked shop reports again when picked, so Back then Continue is never
+ * stuck; before any pick nothing is ticked. */
+export const Repick: Story = {
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Hong Kong Grade10 Store/ }),
+    );
+    expect(args.onSelect).toHaveBeenCalledTimes(1);
+    expect(args.onSelect).toHaveBeenLastCalledWith(CAUSEWAY_BAY.id);
+  },
+};
+
+export const FirstPick: Story = {
+  args: { selectedId: undefined },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const radio = canvas.getByRole("radio", {
+      name: /Hong Kong Grade10 Store/,
+    });
+    expect(radio).not.toBeChecked();
+    await userEvent.click(radio);
+    expect(args.onSelect).toHaveBeenCalledTimes(1);
+    expect(args.onSelect).toHaveBeenLastCalledWith(CAUSEWAY_BAY.id);
   },
 };
 

@@ -27,6 +27,15 @@ own task, see Impact).
 
 ## What Changes
 
+- **Amendment (`decisions.md` Q31-Q39): items as rows.** `InvoicePdf` and
+  `ReceiptPdf` list an order's items as table rows, each with Winning Bid,
+  Buyer's Premium and Total, on every document including one with a single
+  item. The Item Total row, the charges under the table and the boxed summary
+  follow it, and a table too long for one page continues on the next. This
+  replaces the lot heading and the Description/Amount header the Q18-Q20
+  amendment below describes, and changes the one-A4-page rule to one page per
+  fitting table. Each invoice still holds one lot; combining lots is not part
+  of this change.
 - **Timezone alignment:** PR #921 fixes invoice and receipt PDF dates to
   `Asia/Hong_Kong`, labelled `GMT+8`. This amendment removes the proposed
   winner-selected zone, phone entry, invoice snapshot and `winnerTimeZone`
@@ -86,11 +95,11 @@ None.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/preview` (this repository) | Its `winner-order.invoice-pdf.stories.tsx`/`winner-order.receipt-pdf.stories.tsx` switch from rendering `InvoicePdf`/`ReceiptPdf` as JSX to calling the renderer and previewing the returned bytes with the `pdfjs-dist`-based `PdfPreview` viewer. |
+| `apps/preview` (this repository) | Its `winner-order.invoice-pdf.stories.tsx`/`winner-order.receipt-pdf.stories.tsx` switch from rendering `InvoicePdf`/`ReceiptPdf` as JSX to calling the renderer and previewing the returned bytes with the `pdfjs-dist`-based `PdfPreview` viewer. Q31-Q38 adds a several-item sample and a sample whose table runs onto a second page to each. |
 | `@grade10/ui` | The `auction-invoice-and-receipt-pdf` block's `InvoicePdf`/`ReceiptPdf` change from DOM components to pdf-lib renderer functions; adds `pdf-lib` and `@pdf-lib/fontkit` as dependencies. |
 | `@grade10/design-system` | No change before this amendment (composed only); after it, no longer composed at all — the renderer draws directly with pdf-lib, not through design-system primitives. |
 | `@grade10/i18n` | No change — every label still reaches the renderer as a `copy` argument, per the existing component-contract rule (`decisions.md` Q20). |
-| `grade10` (`packages/grade10-auction`) | Already runs an equivalent pdf-lib renderer of its own (`@grade10/auction-contracts`); once it bumps the submodule, it switches its backend service and demo lab to import `InvoicePdf`/`ReceiptPdf` from `@grade10/ui` and can retire its own copy. Named here, built in `grade10`. |
+| `grade10` (`packages/grade10-auction`) | Imports `InvoicePdf`/`ReceiptPdf` from `@grade10/ui` and keeps no renderer of its own (groups 3 to 5, landed). Q31-Q39 has it map the invoice's winning bid, buyer's premium and total into one item row, supply Tax as `taxLine` and not as a `lineItems` entry, and supply the table's new labels in its interim `copy` literals. Named here, built in `grade10` (group 11). |
 
 ## References
 
@@ -100,6 +109,7 @@ None.
 - [Post-Bidding · Bank Transfer Instructions](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-instructions)
 - [Post-Bidding · Receipt Documents](../../../docs/prds/products/grade10-site/auction/post-bidding.md#receipt-documents)
 - [Auction Invoice and Receipt Contents](../../../docs/references/auction-invoice-and-receipt-contents.md)
+- [Invoice and Receipt PDF Blocks · On the Page](../../../docs/prds/products/shared/ui/invoice-and-receipt-pdf.md#on-the-page)
 
 ## Scope boundaries
 
@@ -112,6 +122,15 @@ None.
 - **Bank account details.** `InvoicePdf` receives the immutable payment-
   instruction snapshot issued by Finance configuration. Live SWIFT, FPS and
   Hong Kong local values, including the QR asset, are not source-controlled.
+- **One lot per invoice.** `winner-order` still requires one invoice and one
+  auction order per lot. The item table draws what the application supplies and
+  decides nothing about how many lots an invoice holds (`decisions.md` Q31).
+- **Stored PDFs.** The archive serves the bytes of a document's first open, so
+  an invoice or receipt opened before this ships keeps its old layout
+  (`decisions.md` Q37).
+- **Refusals.** A document the renderer cannot draw whole - no items, a title
+  the standard font cannot draw, a row or amount set that cannot fit - is
+  refused, not drawn cut or shrunk (`decisions.md` Q38, Q39).
 - **Replacement relationship.** The active
   `define-public-auction-identifiers` delta is kept in the same direction as
   this contract: the new invoice carries `replacesInvoice` and renders

@@ -1,0 +1,91 @@
+{
+  "version": 2,
+  "change": "add-winner-how-to-pay-rails",
+  "baseline": "a9e63ddf021eca7a2619c700626890a2d0a58eb6dac1121dfd616355f477b09e",
+  "fingerprint": "062cd6a4a86f9c3b05a48ab2dfb04c2a788a6cc0dc26943f2e8530a9ef089c6b",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-08T09:42:13.031Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-instructions",
+      "sha256": "581d13c565d2cf1bbb83e0334a02bc8b69f4ca587a6eb6b4c1d6f098be902f2d",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-proof",
+      "sha256": "7d857e52f240f3e2ec75a97cc38e19fe71c8dd45ff210d3628d1e897031d6eb0",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-winner-how-to-pay-rails/decisions.md",
+      "sha256": "5b67e7d87d5e7ccece69e99e09efc570623576a412924b85dc5ec908a7867d35",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-how-to-pay-rails/proposal.md",
+      "sha256": "62b925742202de45f88762cdbbc6a024d877fcced6c313840126f97b3aa8e7d0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-how-to-pay-rails/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "128906e97fd1fede3537c73d6d38f1a267af989f9545b36622a6bba3786e50ad",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-how-to-pay-rails/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "04cc5dd0f2e9bd7f004496110278401ac4f7abd87e0149c9ca9ff90a17aba438",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-how-to-pay-rails/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "4309640737911929eb33d118ecc3ea6114097bbe33507380845aba00c1006ddf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-how-to-pay-rails/tech-design.md",
+      "sha256": "b0c71707411179fe329dd49b9ff7234e4f7652845ae68104977152c69947d6e5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-how-to-pay-rails/ui-design.md",
+      "sha256": "12330fdf9796dbcac695494adbac6f6fed5c21ea674e97be9837edd73a001b39",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "926f1a7eecc18d6045ea66f2caa03c2d8455824b030b139df7cfb1a458623423",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "c7e54ad6c4e457f20024a518499320d65b144eb3cafdad30f74e1aa40eae5be6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "bbc928ccc871579d475b786777bd05ff31ebd260305d313b5c3f5e1f4d29cda4",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-winner-how-to-pay-rails/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A bank transfer invoice shows how to pay"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
