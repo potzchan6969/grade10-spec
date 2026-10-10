@@ -175,9 +175,11 @@ done, so the verdict commits hold only the reviewer's decisions.
    trace marker id, `rev`, local journey number, case number, title and case
    content unchanged. A case with no marker receives one through the trace
    CLI or a validated batch manifest; preserve its current `Trace` journey and
-   resolve `covers` from existing scenario markers, never from title similarity.
-   If its coverage cannot be resolved, record the case as a preparation
-   blocker for the suite owner rather than inventing a marker. After migration,
+   preserve any existing `covers` links. If no links are present, leave the
+   marker anchor-only for QA2; never derive links from scenario text or title
+   similarity. If its formal anchor cannot be resolved, record the case as a
+   preparation blocker for the suite owner rather than inventing a marker.
+   After migration,
    within every journey group, including groups under `## Ungrouped`, preserve
    the order of non-deprecated cases and move every `deprecated` case to the
    bottom. This is a presentation-only reorder: it changes no purpose, status,

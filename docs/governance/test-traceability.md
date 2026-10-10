@@ -27,7 +27,7 @@ test("supporting gallery behavior", () => {});
 - **Capability slug** - The capability slug stays stable across its journeys, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.
 - **Sequence** - Exactly three Base36 characters (`000` to `zzz`), stored in lowercase. Initialization derives a non-numeric candidate from the scope, kind, and exact heading, then advances only to avoid an existing scenario or case marker in that app, product, and capability. The sequence is shared by `SC` and `TC` markers. The scan includes durable specs, active changes, and archived changes so an archived marker does not free its suffix.
 - **Scenario id** - An `SC` reference identifies one scenario. A scenario marker carries its positive `rev`.
-- **Case id** - A `TC` reference identifies one case. `covers` lists one or more `SC` references separated by commas. A deprecated case with no current scenario may use `covers=none`; active and durable behavior must name one or more scenarios. A case can cover scenarios from any app, product, or capability, and a scenario can be covered by multiple cases.
+- **Case id** - A `TC` reference identifies one case. `covers` is optional until QA2 performs the post-hoc comparison; when present it lists one or more `SC` references separated by commas. One case can cover multiple scenarios when one route, starting state and checking fully assert each. A deprecated case with no current scenario may use `covers=none`; active anchor-only cases omit the field rather than using `none`. A case can cover scenarios from any app, product, or capability, and a scenario can be covered by multiple cases.
 - **Revision** - A positive integer, starting at `1`. Increase it when the scenario or case meaning changes. For cases, `rev` on the marker is the version source used by human and automated readers. An acceptance test names the exact current case revision; `supports` names a scenario directly.
 - **Markdown scope** - All scenario and case marker ids in one Markdown file share one app, product, and capability prefix. Application test files can link markers from multiple scopes.
 
@@ -41,20 +41,35 @@ same marker as the case they carry into the durable suite.
 
 The `id` is allocated by `pnpm run trace -- init case` for the exact case
 heading and its app, product, and capability scope. Preserve an existing ID
-when a case already has one. Never choose a suffix by hand. `covers` lists the
-exact scenario IDs that serve the journey or journeys named by the case's
-`**Trace:**` line, in source order. Each ID must resolve to one scenario
-marker. A deprecated case with no current behavior may use `covers=none`;
-the CLI accepts that only when its case status is `deprecated`. A missing or
-unclear journey-to-scenario link is a coverage question; do not fill it by
-similarity of titles or expected results.
+when a case already has one. Never choose a suffix by hand. `**Trace:**` is the
+formal anchor relationship; `covers` is optional post-hoc scenario evidence.
+When present, it lists the exact scenario IDs that the case's route and
+Expected Results fully assert, in source order, and each ID must resolve to one
+scenario marker. A deprecated case with no current behavior may use
+`covers=none`; the CLI accepts that only when its case status is `deprecated`.
+A missing scenario link on an active case is pending QA2, not an instruction to
+derive a case from scenario text or title similarity.
+
+An anchor-only case during blind generation therefore carries no `covers` field:
+
+```md
+<!-- trace:case id=g10.auction-listing-media.TC-c94 rev=1 -->
+### g10.auction-listing-media.TC-c94 (US1-TC1): Upload a supported image
+```
+
+After QA2 confirms the post-hoc relationship, the same marker keeps its stable
+id and revision and gains the scenario evidence:
+
+```md
+<!-- trace:case id=g10.auction-listing-media.TC-c94 rev=1 covers=g10.auction-listing-media.SC-c93 -->
+```
 
 For a reviewed migration that needs to add many markers together, use
 `pnpm run trace -- init batch --manifest <json-file>`. Each manifest record
 names a unique `key`, `kind`, repository-relative `file`, exact `target`, and
 the app, product, and capability scope. A scenario record may set `revision`;
-a case record lists `covers` as existing scenario IDs or scenario keys from the
-same manifest. Records with the same `mirrorKey` receive one ID, for an active
+a case record may omit `covers` during blind generation, or list existing
+scenario IDs or scenario keys from the same manifest after QA2. Records with the same `mirrorKey` receive one ID, for an active
 and durable copy of the same record. When another copy already owns the ID,
 `existingId` preserves it. Set `replaceCovers` on a case record to update only
 an existing marker's `covers` value while keeping its ID and revision. The
@@ -93,7 +108,7 @@ Run the CLI from this repository:
 
 ```sh
 pnpm run trace -- init scenario --file openspec/specs/<path>/spec.md --target '#### Scenario: Exact existing heading' --app g10 --product auction --capability listing-media --dry-run
-pnpm run trace -- init case --file openspec/specs/<path>/feature-tcs.md --target '### Exact existing case heading' --app g10 --product auction --capability listing-media --covers g10.auction-listing-media.SC-c93 --dry-run
+pnpm run trace -- init case --file openspec/specs/<path>/feature-tcs.md --target '### Exact existing case heading' --app g10 --product auction --capability listing-media --dry-run
 pnpm run trace -- init case --file openspec/specs/grade10-site/auction/domain-tcs.md --target '### Exact domain case heading' --app g10 --product auction --capability domain --covers g10.auction-dmn.SC-c93 --dry-run
 pnpm run trace -- init case --file openspec/specs/grade10-admin/product-tcs.md --target '### Exact product case heading' --app g10adm --product grade10-admin --capability product --covers g10adm-pdt.SC-c93 --dry-run
 pnpm run trace -- link --file <app-test-file> --target '  test("exact test title", () => {});' --acceptance g10.auction-listing-media.TC-c94@2 --dry-run
@@ -109,15 +124,15 @@ From a Grade10 app checkout, use the spec-store checkout explicitly:
 pnpm --dir <grade10-spec-root> run trace -- validate --app-root "$PWD"
 ```
 
-`--target` matches the entire source line. Mutating commands require `--file` and `--target`, refuse a missing or ambiguous target, and insert one adjacent marker. `init` requires `--app`, `--product`, and `--capability`; it derives a stable non-numeric sequence within that full scope and accepts those values in any casing. Case initialization reads a legacy heading revision when one exists, otherwise starts the marker at `rev=1`. `--covers`, `--acceptance`, and `--supports` resolve references without regard to input casing and write canonical values. `--dry-run` prints the proposed marker without writing. Case initialization and test linking also require referenced ids to resolve to one record.
+`--target` matches the entire source line. Mutating commands require `--file` and `--target`, refuse a missing or ambiguous target, and insert one adjacent marker. `init` requires `--app`, `--product`, and `--capability`; it derives a stable non-numeric sequence within that full scope and accepts those values in any casing. Case initialization reads a legacy heading revision when one exists, otherwise starts the marker at `rev=1`. Optional `--covers`, `--acceptance`, and `--supports` resolve references without regard to input casing and write canonical values. `--dry-run` prints the proposed marker without writing. A case initialization with no `--covers` resolves no scenario references; QA2 adds them later with the batch coverage replacement path.
 
-`validate` scans durable specs and active changes under the store, then source files under `--app-root`. It excludes archived changes and generated or third-party directories. It checks duplicate IDs, unknown apps, malformed or non-positive revisions, malformed markers, noncanonical casing, mixed marker scopes within a Markdown file, unresolved references, marker adjacency, every suite case's required marker, and acceptance links whose revision no longer matches the case. Invalid links return a non-zero exit code. Unlinked scenarios and cases are reported as rollout information and do not fail validation.
+`validate` scans durable specs and active changes under the store, then source files under `--app-root`. It excludes archived changes and generated or third-party directories. It checks duplicate IDs, unknown apps, malformed or non-positive revisions, malformed markers, noncanonical casing, mixed marker scopes within a Markdown file, unresolved references, marker adjacency, every suite case's required marker, and acceptance links whose revision no longer matches the case. Missing `covers` on an active case is valid while QA2 is pending; malformed or unresolved `covers`, and `covers=none` on a non-deprecated case, still fail. Invalid links return a non-zero exit code. Unlinked scenarios and anchor-only cases are reported separately as rollout information and do not fail validation.
 
-`fold --change <id>` checks the pre-archive handover for one active change. For each `openspec/changes/<id>/specs/<product>/<domain>/<capability>/feature-tcs.md`, it reads the matching durable suite under `openspec/specs/`. Every active case marker must appear exactly once there with the same `id`, `rev`, and ordered `covers` values. Each active case's `covers` references must resolve to a scenario marker anywhere in the active or durable store. Missing, changed, or duplicate durable case markers and unresolved references fail the command. Use `--store-root` for an alternate store or an isolated fixture.
+`fold --change <id>` checks the pre-archive handover for one active change. For each `openspec/changes/<id>/specs/<product>/<domain>/<capability>/feature-tcs.md`, it reads the matching durable suite under `openspec/specs/`. Every active case marker must appear exactly once there with the same `id` and `rev`. When either side carries `covers`, the ordered scenario links must match; when both omit it, the case remains anchor-only and QA2-link-pending. Each present `covers` reference must resolve to a scenario marker anywhere in the active or durable store. Missing, changed, or duplicate durable case markers and unresolved references fail the command. Use `--store-root` for an alternate store or an isolated fixture.
 
 `validate` remains strict across active and durable files, so it can report the deliberate case marker duplication before archive. `fold` is the transitional validator for that handover; run `validate` after archive.
 
-`report` lists the records and links and calls out unlinked records. A scenario is unlinked when no case covers it and no test supports it. A case is unlinked when no current acceptance test accepts it. Pass `--json` for structured output. `--store-root` selects another store root, chiefly for isolated fixtures.
+`report` lists the records and links and calls out unlinked records. A scenario is unlinked when no case covers it and no test supports it. A case is acceptance-unlinked when no current acceptance test accepts it; an anchor-only case is listed separately as scenario-link-pending. Pass `--json` for structured output. `--store-root` selects another store root, chiefly for isolated fixtures.
 
 ## Lifecycle
 
