@@ -47,5 +47,13 @@
   "bookMine": {
     "title": "你的所有預約 — Grade10",
     "description": "以你的電郵在 Grade10 預約的每一次到店。"
+  },
+  "bookTicket": {
+    "title": "你的籌號 — Grade10",
+    "description": "查看你在 Grade10 門市即場輪候的位置。"
+  },
+  "bookWalkIn": {
+    "title": "即場到店 — Grade10",
+    "description": "Grade10 門市今天的即場輪候時間及營業時間。"
   }
 }

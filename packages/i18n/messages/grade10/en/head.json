@@ -47,5 +47,13 @@
   "bookMine": {
     "title": "Your visits — Grade10",
     "description": "Every visit booked with Grade10 under your email address."
+  },
+  "bookTicket": {
+    "title": "Your ticket — Grade10",
+    "description": "Follow your place in the walk-in line at a Grade10 shop."
+  },
+  "bookWalkIn": {
+    "title": "Walk in — Grade10",
+    "description": "Today’s walk-in wait and hours at a Grade10 shop."
   }
 }

@@ -47,5 +47,13 @@
   "bookMine": {
     "title": "你的所有预约 — Grade10",
     "description": "以你的邮箱在 Grade10 预约的每一次到店。"
+  },
+  "bookTicket": {
+    "title": "你的筹号 — Grade10",
+    "description": "查看你在 Grade10 门店现场排队的位置。"
+  },
+  "bookWalkIn": {
+    "title": "现场到店 — Grade10",
+    "description": "Grade10 门店今天的现场排队时间及营业时间。"
   }
 }
