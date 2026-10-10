@@ -34,6 +34,18 @@ The lines below came across from `tcs-rules` r3 when this file was split from it
 - **The arrival may be the first result** — `The listing loads` tells "could not get there" from "wrong"; a case whose results are only the arrival is not a case
 - **Plain words, no internal names** — `Click the collection tile`, not `dispatch the tile's click handler`
 
+### Walks
+
+- **Walk shape** — `## Walk <n>: <title>`, followed by `**Starting state:**`, optional `**Shared test data:**`, and `### Route`
+- **Route checks** — use a `-` bullet for a normal validation and put its compact case reference at the end: `TC-nsg (US1-TC12)`
+- **Route branches** — use `a.` and `b.` for actual alternative conditions, with the expected result and case reference on the same line; do not use a branch to create a new observation
+- **Case references** — use `TC-<sequence> (US<n>-TC<m>)` in a walk; the full case definition remains in its owning suite
+- **No walk description** — a `*-tcs.md` walk carries setup, data and route only; generic explanation belongs in this file or its template
+- **Complete case results** — the case definition remains the complete record of its Expected Results. A walk may repeat the result needed at that route point so a human knows what to record, but may not add or remove an assertion
+- **Shared setup** — shared walk data saves human tester effort; it never makes a case depend on another case's result
+- **Out-of-scope cases** — the tester follows the route unchanged and skips the out-of-scope reference and its checking
+- **Several walks** — a case may be referenced by several walks. Each reference names only an observation already present in that case; a walk cannot create a new observation
+
 ### Pre-conditions
 
 The concrete setup that produces the scenario's GIVEN, in the environment's terms, one condition per bullet: a manipulated condition (`Network conditions are manipulated to block static styling assets (CSS)`), a stubbed upstream (`The catalogue endpoint is mocked to return a 500`), seeded data (`At least one collection is missing its artwork`), or where the actor already is.
@@ -71,9 +83,10 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 ### Test data
 
 - **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
+- **Rows with one checking** — keep one row when values share the same purpose, route and expected checking. Use separate rows when the expected provider answer or checking differs; use separate cases when the purpose differs
 - 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: In a `Field | Value` table, `Field` is a plain name such as `lot_1`. `Value` states the exact value or the conditions a fixture must meet. A test walk binds the name to a concrete value meeting that row, and expected results refer to the binding rather than pasting the row's description.
 - 2026-09-25, grade10-site/auction/domain-tcs.md: A value that is not a boundary states an assumption and the range the requirement accepts, for example `HKD 800.00 or JPY 8000 or USD 8.00 (any price > 500 minor units)`. A boundary keeps its exact number and adds a readable reading. An exact reading has no tilde: `1800s (30mins)`. Use `~` only when that reading has a remainder: `1024b (1KiB or ~1KB)`. The exact number stays, so the reading never moves the bound.
-- 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `grade10-site-auction-auction-US2-TC12-1` does. The expected result states the formula that equals it. A step does not state the outcome.
+- 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `g10.auction-auction.TC-xxx (US2-TC12)` does. The expected result states the formula that equals it. A step does not state the outcome.
 - 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: Rows for a refusal take one value per distinct answer the provider gives, not several values that produce the same answer.
 - 2026-10-06, shared/auth/users/feature-tcs.md: When a rule names a class of values, for example any role other than `user`, the test data takes two members of the class as rows; two are enough.
 - 2026-10-07, shared/auth/audit/feature-tcs.md: A case manual QA can run walks the product flow that reaches the write, such as a guest checkout for a trusted-product create, not the call behind it.

@@ -562,6 +562,22 @@ test("validate requires the case marker revision to match the heading version", 
   }
 });
 
+test("validate uses the marker revision for a modern case heading", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture({ revision: 2 });
+  try {
+    const contents = readFileSync(caseFile, "utf8").replace(
+      /^### .*$/m,
+      "### g10.store-product-listing.TC-001 (US1-TC1): Listing opens",
+    );
+    writeFileSync(caseFile, contents);
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /Suite cases checked: 1 \(unmarked: 0\)/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("validate and report build a graph from fixtures without a registry", () => {
   const validate = runCli([
     "validate",
