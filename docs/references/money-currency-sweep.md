@@ -70,47 +70,33 @@ email (`email/render.tsx:60-71`, `emailPort.ts:278-283`); vault
 No `Intl.NumberFormat` with a currency exists outside `utils/money.ts`. No
 `HK$`, `¥` or `₩` symbol is hardcoded in scoped production source.
 
-## Bypasses and Defects
+## Findings and Their Verdicts
 
-Ordered by consequence. Each is a candidate fix, not a decision.
+Each candidate went to an independent devil's-advocate review before any change.
+Verdicts are as of this snapshot, and the fixed items name the commit.
 
-1. **Rounding instead of refusal** —
-   `integrations/shopify-pos/grade10/src/acts/money.ts:34-39` reimplements
-   `toMinorUnits` with `Math.round(value * 10**exponent)`. It rounds `1.005`
-   HKD to 100 minor units where the platform refuses it. Its decimal counts are
-   right for JPY and KWD.
-2. **POS cash pad crashes on JPY** —
-   `packages/pos/frontend/src/shell/state.ts:268,273-275` accepts `.` and a
-   two-decimal cap for every currency. Typing `1.5` in JPY shows `¥1.5`, then
-   `cash.ts:71` throws in `toMinorUnits`. A KWD store cannot type the third decimal.
-3. **Divides before the helper** —
-   `packages/shopify/backend/src/admin/draftOrders.ts:149-151` calls
-   `fromMinorUnits(discount.amountMinor / quantity, …)`. The helper throws when the
-   quantity does not divide the discount, so a checkout can fail.
-4. **Hardcoded two decimals** —
-   `packages/inventory/backend/src/services/priceChartingClient.ts:17-21` uses
-   `Math.round(number * 100)`. Correct for USD only.
-   `packages/inventory/admin-frontend/.../views/record/StockDialogs.tsx:462`
-   does the same for HKD only.
-5. **Silent currency substitution** —
-   `packages/grade10-auction/frontend/src/features/orders/winner-order/winnerOrderView.ts:213`
-   reads `order.invoice?.currency ?? order.currency ?? "HKD"`, and
-   `winnerOrderRead.ts:99` builds `{ amountMinor: 0, currency: "HKD" }`. A USD or
-   JPY lot with no invoice shows `HK$0.00`.
-6. **Stale formatter in the spec repository** —
-   `packages/ui/src/lib/format-money.ts:57` sets `minimumFractionDigits: 0`, so
-   `249000` HKD shows `HK$2,490`. The spec's scenario and the platform formatter
-   show `HK$2,490.00`. See the question on bid amounts in the page.
-7. **Bare number in a customer document** —
-   `packages/grade10-auction/backend/src/services/auctions/orderDocument.ts:137-141`
-   prints item amounts with `formatAmount`, while its totals use the symbol.
-8. **Mixed formatting in shared code** — `packages/shopify/backend/src/admin/draftOrders.ts:193,205`
-   wraps `fromMinorUnits` in `Number(...)`, sending a number where a decimal
-   string is the contract.
+| # | Claim | Verdict | Where it stands |
+| --- | --- | --- | --- |
+| 1 | Shopify POS till rounds over-precise decimals (`integrations/shopify-pos/grade10/src/acts/money.ts`) | Partial | Fixed in `fa63f660`: refuses instead of rounding |
+| 2 | POS cash pad throws for a decimal point in a zero-decimal currency (`packages/pos/frontend/src/shell/screens/cash.ts`) | Partial, latent | Fixed in `9479d29e`: Apply stays off, no throw from typed input. Terminal totals still reach the throwing helper; the POS brands today are HKD and USD |
+| 3 | Inventory stock dialog multiplies and rounds a typed price (`StockDialogs.tsx`) | Partial | Fixed in `a9675e30`: refuses an over-precise price |
+| 4 | Draft-order discount divides before the helper (`draftOrders.ts:149`) | Refuted | The caller refuses an indivisible cut before this line, returning a typed refusal |
+| 5 | Draft-order `Number(...)` wrapping loses precision (`draftOrders.ts:193,205`) | Refuted on precision | Shortest round-trip form is exact for these strings. The Shopify wire type is not checked here |
+| 6 | PriceCharting rounds with `* 100` (`priceChartingClient.ts:17-21`) | Refuted | The source is USD-only, and integers are read as cents |
+| 7 | Winner-order HKD fallback shows `HK$0.00` (`winnerOrderView.ts:213`, `winnerOrderRead.ts:99`) | Refuted | The fallback is dead for a live order: the server supplies the winning bid's currency |
+| 8 | Till `money()` prints the operator code shape on a member-facing screen (`integrations/shopify-pos/grade10/src/acts/money.ts`) | Decision | Open: [Display Shapes](/platform/shared/money-amounts) |
+| 9 | Auction invoice item lines print bare numbers (`orderDocument.ts:137-141`) | Decision | Open: [Display Shapes](/platform/shared/money-amounts) |
+| 10 | A bare `$` in grading paste reads as HKD (`paste.ts:37-50`) | Decision | Deliberate and tested. Open whether to warn or refuse |
+| 11 | Shared formatter shows whole HKD without fraction digits (`packages/ui/src/lib/format-money.ts`) | Decision | Open: [Display Shapes](/platform/shared/money-amounts). Changing it changes the agreed auction look |
 
 Not defects: `integrations/shopify-pos/grade10/src/host/tabletMoney.ts:19`
 (`*100` is percent in hundredths) and `loyalty/.../earning.ts:47` (`/100` is
 basis points).
+
+Still open from the review, not fixed: `tabletMoney.ts` and `host/fake.ts`
+still call the throwing `toMinorUnits`, and points amounts that cannot be read
+are read as zero in `flow.ts:717`. Neither is reachable with the amounts
+Shopify sends.
 
 ## Carrier Convention
 
@@ -140,8 +126,9 @@ from the exponent by design and is recorded here so it is not "fixed".
 
 ## Open Questions Carried to the Page
 
-- Whole-unit bid amounts on the auction listing and bid ladder, against the digits rule.
-- Whether a summary line beside an HKD total may drop `HK$` to `$`.
+- Whether bid amounts show the digits or whole units (the auction listing and bid ladder).
+- Whether a summary line beside an HKD total may drop `HK$` to `$` (order detail and post-bidding pages).
 - Whether invoice item lines keep bare numbers.
 - Whether the narrow symbol is a third shape.
 - Whether IDR joins the platform table.
+- Whether a bare `$` in grading paste should warn or be refused.
