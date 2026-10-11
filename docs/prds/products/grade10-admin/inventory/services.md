@@ -81,6 +81,9 @@ new intake and no new label.
 - **The owner moves** - when an item leaves to its buyer, or is kept in the
   vault for them, the service that sold it moves the owner and closes its
   mark; nobody records the sale by hand
+- **A refund puts it back** - when a sale is refunded after the item left to
+  its buyer, the service that sold it moves the owner back and reopens its
+  mark, so the item can go on sale again
 - **House stock settles** - a paid order sells the lot's stock hold -
   [Products and Stock](/p/grade10-admin/inventory/catalog#intake)
 
