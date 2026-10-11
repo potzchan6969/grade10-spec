@@ -46,16 +46,19 @@ The manage link opens one page per visit, and the page follows the visit from th
 
 | Message | When |
 | --- | --- |
-| Confirmation | on booking |
-| Day before | at the service's reminder lead, with the pass, Running late and the typhoon line |
+| Confirmation | on booking, or once the payment arrives |
+| Receipt | once a payment arrives, with the amount |
+| Time released | when a checkout is left unpaid for 30 minutes |
+| Reminder | at each lead the service sets, with the pass, Running late and the typhoon line |
 | Moved | on a move |
-| Cancelled | by the collector; by the shop, with the reason; shop closed, with Pick another time |
-| Thanks | 2 hours after the shop next opens, for a plain Completed visit |
-| We missed you | 2 hours after the shop next opens, for a Missed visit; withdrawn when the outcome is corrected, never sent inside a closure |
+| Cancelled | by the collector; by the shop, with the reason; shop closed, with Pick another time; with the refund where the service gives one |
+| Refunded | once Stripe returns the payment |
+| Thanks | 2 hours after the shop next opens, for a plain Completed visit, unless the service turns it off |
+| We missed you | 2 hours after the shop next opens, for a Missed visit, unless the service turns it off; withdrawn when the outcome is corrected, never sent inside a closure |
 | You're next | WhatsApp, tapped by staff when a walk-in with a phone is next, with the ticket link |
 | Running late? | WhatsApp, tapped by staff for a booked visitor past the start, with the visit link |
 
-Every message carries Manage your visit. A visit sent to grading or the vault gets their mail instead of Thanks.
+Every message is mail and carries Manage your visit; the WhatsApp rows are taps by staff, not messages the system sends. A visit sent to grading or the vault gets their mail instead of Thanks.
 
 :::flow{title="A booked visit from the pass to the counter"}
 ## *Collector* - **Gets the day-before message**
