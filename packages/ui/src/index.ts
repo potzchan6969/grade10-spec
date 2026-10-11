@@ -50,6 +50,100 @@ export type {
   BookingService,
   BookingSlot,
 } from "./blocks/appointment-booking/types";
+export type {
+  VisitAct,
+  VisitCancelReason,
+  VisitFact,
+  VisitFullDayShop,
+  VisitLateChoice,
+  VisitListRow,
+  VisitTone,
+  VisitWaitService,
+  VisitWaitShop,
+} from "./blocks/appointment-visit/types";
+// shared/ui/appointment-visit
+export {
+  VisitActRow,
+  type VisitActRowProps,
+} from "./blocks/appointment-visit/visit-act-row";
+export {
+  VisitBody,
+  type VisitBodyCopy,
+  type VisitBodyProps,
+  type VisitNoticeCopy,
+} from "./blocks/appointment-visit/visit-body";
+export {
+  VisitBookedPass,
+  type VisitBookedPassCopy,
+  type VisitBookedPassProps,
+} from "./blocks/appointment-visit/visit-booked-pass";
+export {
+  VisitCancelPanel,
+  type VisitCancelPanelCopy,
+  type VisitCancelPanelProps,
+} from "./blocks/appointment-visit/visit-cancel-panel";
+export {
+  VisitFacts,
+  type VisitFactsCopy,
+  type VisitFactsProps,
+} from "./blocks/appointment-visit/visit-facts";
+export {
+  VisitFullDay,
+  type VisitFullDayCopy,
+  type VisitFullDayProps,
+} from "./blocks/appointment-visit/visit-full-day";
+export {
+  VisitLatePanel,
+  type VisitLatePanelCopy,
+  type VisitLatePanelProps,
+} from "./blocks/appointment-visit/visit-late-panel";
+export {
+  VisitLinkOpensNothing,
+  type VisitLinkOpensNothingCopy,
+  type VisitLinkOpensNothingProps,
+} from "./blocks/appointment-visit/visit-link-opens-nothing";
+export {
+  VisitList,
+  type VisitListCopy,
+  type VisitListProps,
+} from "./blocks/appointment-visit/visit-list";
+export {
+  VisitMovePanel,
+  type VisitMovePanelCopy,
+  type VisitMovePanelProps,
+} from "./blocks/appointment-visit/visit-move-panel";
+export {
+  VisitPass,
+  type VisitPassCopy,
+  type VisitPassProps,
+} from "./blocks/appointment-visit/visit-pass";
+export {
+  VisitPhaseHeader,
+  type VisitPhaseHeaderCopy,
+  type VisitPhaseHeaderProps,
+} from "./blocks/appointment-visit/visit-phase-header";
+export {
+  VisitReconnecting,
+  type VisitReconnectingCopy,
+  type VisitReconnectingProps,
+} from "./blocks/appointment-visit/visit-reconnecting";
+export {
+  type VisitRefusal,
+  VisitRefusedBook,
+  type VisitRefusedBookCopy,
+  type VisitRefusedBookProps,
+} from "./blocks/appointment-visit/visit-refused-book";
+export {
+  VisitTicketBody,
+  type VisitTicketBodyCopy,
+  type VisitTicketBodyProps,
+} from "./blocks/appointment-visit/visit-ticket-body";
+export {
+  VisitWaitBody,
+  type VisitWaitBodyCopy,
+  type VisitWaitBodyProps,
+  type VisitWaitNoticeCopy,
+} from "./blocks/appointment-visit/visit-wait-body";
 // shared/ui/invoice-and-receipt-pdf
 export {
   InvoicePdf,
@@ -305,6 +399,64 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
+// shared/ui/consignment-mine
+export {
+  ConsignmentSellerLine,
+  type ConsignmentSellerLineCopy,
+  type ConsignmentSellerLineProps,
+} from "./blocks/consignment-mine/consignment-seller-line";
+export {
+  MyConsignmentCard,
+  type MyConsignmentCardCopy,
+  type MyConsignmentCardProps,
+} from "./blocks/consignment-mine/my-consignment-card";
+export {
+  MyConsignmentDetail,
+  type MyConsignmentDetailCopy,
+  type MyConsignmentDetailProps,
+} from "./blocks/consignment-mine/my-consignment-detail";
+export {
+  MyConsignmentItem,
+  type MyConsignmentItemCopy,
+  type MyConsignmentItemProps,
+} from "./blocks/consignment-mine/my-consignment-item";
+export {
+  MyConsignmentList,
+  type MyConsignmentListCopy,
+  type MyConsignmentListProps,
+} from "./blocks/consignment-mine/my-consignment-list";
+export {
+  MyConsignmentRecord,
+  type MyConsignmentRecordCopy,
+  type MyConsignmentRecordProps,
+} from "./blocks/consignment-mine/my-consignment-record";
+export {
+  MyConsignmentTerms,
+  type MyConsignmentTermsCopy,
+  type MyConsignmentTermsProps,
+} from "./blocks/consignment-mine/my-consignment-terms";
+export {
+  MyConsignmentsFailed,
+  type MyConsignmentsFailedCopy,
+  type MyConsignmentsFailedProps,
+} from "./blocks/consignment-mine/my-consignments-failed";
+export {
+  MyConsignmentsSignIn,
+  type MyConsignmentsSignInCopy,
+  type MyConsignmentsSignInProps,
+} from "./blocks/consignment-mine/my-consignments-sign-in";
+export type {
+  MyConsignmentChannelValue,
+  MyConsignmentDetailView,
+  MyConsignmentDocumentView,
+  MyConsignmentItemView,
+  MyConsignmentMessageView,
+  MyConsignmentPayoutView,
+  MyConsignmentState,
+  MyConsignmentSummary,
+  MyConsignmentsState,
+  MyConsignmentTermsView,
+} from "./blocks/consignment-mine/types";
 // shared-ui/loyalty-membership
 export {
   ActivityList,
