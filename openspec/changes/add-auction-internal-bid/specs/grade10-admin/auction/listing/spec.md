@@ -92,7 +92,12 @@ once the release has completed.
 - **WHEN** an operator opens the listing
 - **THEN** it says the stock was released, with the release date and time
 
-### Requirement: Relist opens a new draft from an Unsold listing
+## RENAMED Requirements
+
+- FROM: `### Requirement: Relist opens a new draft from an Unsold listing`
+- TO: `### Requirement: Relist opens a new draft from an Unsold or a Bought in listing`
+
+### Requirement: Relist opens a new draft from an Unsold or a Bought in listing
 
 The Listings table row of an Unsold or a Bought in listing SHALL offer
 **Relist** when every condition holds, and SHALL NOT show it otherwise; no
@@ -161,7 +166,7 @@ quantity, SHALL apply as well.
   available falls by three and the Unsold listing is unchanged
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-z9c rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-137 - Relist shows on the row of a released Unsold listing only
+#### Scenario: grade10-admin-auction-listing-SC-137 - Relist shows on the row of a released Unsold or Bought in listing only
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
 
 - **GIVEN** listings in no campaign: an Unsold listing whose stock was

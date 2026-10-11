@@ -1,6 +1,6 @@
 # grade10-admin/auction/internal-bid Test Cases
 
-**Status:** pending-review · 0/62
+**Status:** pending-review · 0/63
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
 ## Background
@@ -3147,6 +3147,49 @@ Runs once per row of **Test data**.
 * Step 2 shows one entry recording the row's act on that internal bidder, by the admin who made it, at Grade10's time.
 * Step 2: the entry names no listing, and shows `<house maximum>` in no form, such as 612300 or 6,123.
 
+<!-- trace:case id=g10adm.auction-internal-bid.TC-nbx rev=1 covers=g10adm.auction-internal-bid.SC-uem -->
+### grade10-admin-auction-internal-bid-US9-TC9-1: An internal bidder whose only Not placed internal bid is on a closed lot can be retired
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Pre-conditions:**
+
+* `<bidder P>` is an active internal bidder profile, named only on `<listing_66>`'s internal bid.
+* `<listing_66>`'s internal bid of `<short amount>` was not placed at its time, and `<listing_66>` then closed with customer A winning at `<current bid>`.
+* admin(holds auction:reserve) is on <grade10 auction admin internal bidders url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<bidder P>` | An active internal bidder profile: name "QA House P", email label qa-house-p@internal.test |
+| `<listing_66>` | An HKD listing, closed |
+| `<current bid>` | 600000 minor units |
+| `<short amount>` | 550000 minor units, below `<current bid>` |
+
+**Steps:**
+
+1. Retire `<bidder P>`.
+2. Reload the list and read `<bidder P>`'s row.
+3. Open `<listing_66>`'s editor and read the Internal bid section.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 shows `<bidder P>` retired, its name and email label kept.
+* Step 3 shows the internal bid Not placed at `<short amount>`, as `<bidder P>`.
+
 ## Settled
 
 - An internal bid can be set on a Created or a Published listing, never on a Draft; a window change on a Created listing that leaves its time outside the window clears it, and only a reserve holder sees that (Q10)
@@ -3174,11 +3217,14 @@ Runs once per row of **Test data**.
 - Every read shows an internal bidder's current name, past bids included; names need not be unique (Q45)
 - An operator without `auction:reserve` sees no Internal bidders page and no internal bidder in any read (Q46)
 - The audit trail records each add, rename, email label change and retirement of an internal bidder with the operator and the time; no audit row links an internal bidder to a listing (Q47)
+- An internal bidder is retired only when no Scheduled internal bid, and no Not placed internal bid on a listing before its effective close, names it; a Not placed internal bid on a closed lot does not keep it in use (Q40)
 
 ## Reconciliation
 
 **Run:** QA2 round 5, 2026-10-12. QA1's round-5 blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md` with `grade10-admin-auction-internal-bid-US-09`, `proposal.md`, `decisions.md` with its `## Raised` table through Q40, the linked pages under `docs/prds/`, this suite with `## Reconciliation` stripped and its `## Settled`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-5 reading added `grade10-admin-auction-internal-bid-SC-54` to `grade10-admin-auction-internal-bid-SC-67`, `grade10-site-auction-auto-bidding-SC-47` and the internal bidder requirement without QA1's cases. QA2 read QA1's blocks, the delta specs, `decisions.md` through Q47, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. The round-4 dispositions below the round-5 bullets stand where not restated. It is a statement, not proof.
 
+- **Accept review, revised Q40** - finding 28: a Not placed internal bid on a listing past its effective close no longer keeps its internal bidder in use. `grade10-admin-auction-internal-bid-US9-TC9-1` (new, draft) by `grade10-admin-auction-internal-bid-SC-70`; `grade10-admin-auction-internal-bid-US9-TC6-1` keeps its Not placed row, whose lot still takes bids, and its version
+- **Accept review, call-off** - finding 29: a called-off listing has no internal bid, and the design stores no fifth state. `grade10-admin-auction-internal-bid-US2-TC4-1` already expects no internal bid held after the call-off; it keeps its version
 - **Round 5, folded in** - `grade10-admin-auction-internal-bid-US1-TC1-1` keeps `grade10-admin-auction-internal-bid-SC-01` and `grade10-admin-auction-internal-bid-SC-08`, its pick and its read of the internal bidder joined to the same run; `grade10-admin-auction-internal-bid-US1-TC3-1` gains its No internal bidder row for `grade10-admin-auction-internal-bid-SC-54`; `grade10-admin-auction-internal-bid-US1-TC12-1` (new) by `grade10-admin-auction-internal-bid-SC-58`; `grade10-admin-auction-internal-bid-US1-TC13-1` (new) by `grade10-admin-auction-internal-bid-SC-56` and `grade10-admin-auction-internal-bid-SC-57`; `grade10-admin-auction-internal-bid-US1-TC14-1` (new) by `grade10-admin-auction-internal-bid-SC-55`; `grade10-admin-auction-internal-bid-US7-TC1-1` by `grade10-admin-auction-internal-bid-SC-18`, `grade10-admin-auction-internal-bid-SC-39` and `grade10-admin-auction-internal-bid-SC-66`; `grade10-admin-auction-internal-bid-US7-TC2-1` gains its Change bidder row for `grade10-admin-auction-internal-bid-SC-19`; `grade10-admin-auction-internal-bid-US7-TC3-1` gains its Change bidder row for `grade10-admin-auction-internal-bid-SC-20`; `grade10-admin-auction-internal-bid-US7-TC7-1` and `grade10-admin-auction-internal-bid-US7-TC8-1` keep their scenarios, reading no internal bidder; `grade10-admin-auction-internal-bid-US7-TC10-1` (new) by `grade10-admin-auction-internal-bid-SC-67`; `grade10-admin-auction-internal-bid-US9-TC1-1` by `grade10-admin-auction-internal-bid-SC-60`; `grade10-admin-auction-internal-bid-US9-TC2-1` by `grade10-admin-auction-internal-bid-SC-61`; `grade10-admin-auction-internal-bid-US9-TC3-1` by `grade10-admin-auction-internal-bid-SC-62`; `grade10-admin-auction-internal-bid-US9-TC4-1` by `grade10-admin-auction-internal-bid-SC-63`; `grade10-admin-auction-internal-bid-US9-TC5-1` by `grade10-admin-auction-internal-bid-SC-65`; `grade10-admin-auction-internal-bid-US9-TC6-1` by `grade10-admin-auction-internal-bid-SC-64`; `grade10-admin-auction-internal-bid-US9-TC7-1` by `grade10-admin-auction-internal-bid-SC-66`
 - **Round 5, joined to the run they share** - `grade10-admin-auction-internal-bid-US1-TC12-1` seeds two collectors on the first lot and reads each lot's own pseudonym, for `grade10-site-auction-auto-bidding-SC-47`; `grade10-admin-auction-internal-bid-US1-TC13-1` reads the lot page before and after the save and the internal bid's state, as `grade10-admin-auction-internal-bid-SC-56` and `grade10-admin-auction-internal-bid-SC-57` state; `grade10-admin-auction-internal-bid-US7-TC1-1` looks for Internal bidders in the navigation, for `grade10-admin-auction-internal-bid-SC-66`; `grade10-admin-auction-internal-bid-US7-TC10-1` reads the email label and the maximum beside the name, and staff read no maximum, as `grade10-admin-auction-internal-bid-SC-67` states; `grade10-admin-auction-internal-bid-US9-TC2-1` gains rows for a label in other letter case, a Retired profile's label and a label that is not an email address (Q42, `grade10-admin-auction-internal-bid-SC-61`); `grade10-admin-auction-internal-bid-US9-TC3-1` reads the house's bid under the new name (Q45, `grade10-admin-auction-internal-bid-SC-62`); `grade10-admin-auction-internal-bid-US9-TC4-1` reads the Scheduled internal bid still naming the profile (`grade10-admin-auction-internal-bid-SC-63`); `grade10-admin-auction-internal-bid-US9-TC7-1` gains a List row (`grade10-admin-auction-internal-bid-SC-66`). Every case keeps its version as a draft
 - **Round 5, corrected to the requirement** - `grade10-admin-auction-internal-bid-US1-TC13-1` expected a bidder change on a Placed or Not placed internal bid to be refused saying the time has passed; the requirement, under Q37, names it Internal bidder is fixed, and the case now says so. Its Not placed row now starts at `<starting price>`, short of the 408000 minimum next bid, so one pre-condition holds every row. `grade10-admin-auction-internal-bid-US1-TC14-1` said not active and `grade10-admin-auction-internal-bid-US9-TC6-1` said an internal bid still uses the profile; they now read retired, and in use naming the listing, as `grade10-admin-auction-internal-bid-SC-55` and `grade10-admin-auction-internal-bid-SC-64` state. Each reading names the same refusal; none moves an outcome

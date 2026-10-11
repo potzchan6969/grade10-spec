@@ -282,9 +282,14 @@ are the implementation choices.
       has `(storefront 'internal', user_id <id>)`, read under the profile
       lock, so a first commit and a label change cannot cross
     - `retire` sets `retired_at`, refusing `IN_USE` with the `listingIds`
-      of every internal bid row in `scheduled` or `not_placed` that names
-      the profile. A `placed`, `cleared` or `dropped` row does not block it,
-      and a `placed` row keeps raising and lowering as the retired profile
+      of every internal bid row that names the profile and is `scheduled`,
+      or `not_placed` on a listing still `created` or `published` whose
+      `ends_at` is after now (Q40). A `not_placed` row on a listing past its
+      effective close can no longer be saved or removed, so it does not
+      block; nor does a `placed` or `cleared` row, and a `placed` row keeps
+      raising and lowering as the retired profile. A listing reaching its
+      close while `retire` reads it only removes a blocker, so the read needs
+      no listing lock
     - Label uniqueness is a unique index on `lower(email_label)` over every
       row, retired ones included; a conflict returns `LABEL_IN_USE`
     - Names are read live from the profile, so a rename shows in every
@@ -331,7 +336,7 @@ check), `auction.bids` (no column change).
 | `internal_bidder_id` | `text` | No | - | FK `internal_bidders.id`; changed only while `scheduled` or `cleared` |
 | `maximum` | `bigint` | No | - | Minor units in the listing's currency, `> 0`; whole and ceiling checks are the service's, by currency |
 | `commit_at` | `timestamptz(3)` | No | - | The set time |
-| `state` | `text` | No | `'scheduled'` | `scheduled`, `placed`, `not_placed`, `cleared`, `dropped` |
+| `state` | `text` | No | `'scheduled'` | `scheduled`, `placed`, `not_placed`, `cleared` |
 | `resolved_at` | `timestamptz(3)` | Yes | - | When the commit placed it or found it short |
 | `cleared_at` | `timestamptz(3)` | Yes | - | When a listing edit cleared it |
 | `updated_by` | `text` | No | - | Operator user id of the last save |
@@ -345,14 +350,19 @@ check), `auction.bids` (no column change).
 - **Index** - `idx_internal_bids_due` on `(commit_at)` where
   `state = 'scheduled'`, for the sweep; `idx_internal_bids_bidder_open` on
   `(internal_bidder_id)` where `state in ('scheduled', 'not_placed')`, for
-  the retire check
+  the retire check, which joins `auction_listings` on each hit to drop a
+  `not_placed` row past its listing's effective close
 - **No version trigger** - deliberately; a save before the time must not
   relay to open pages
 - **`ck_auction_listings_stock_release`** - reason set gains `bought-in close`
 - **No seed** - a profile's `bidders` row is written by `create`, with
   `email` `<id>@internal.invalid`, `name` null and alerts off
 - **Removal** - removing a `scheduled` or `not_placed` row deletes it; a
-  `cleared` row is replaced by the next save; call-off sets `dropped`
+  `cleared` row is replaced by the next save; call-off deletes the row in
+  any state inside its own transaction, so `readInternalBid` returns `null`
+  and the sweep never finds it. The house's bid rows keep what was placed,
+  and the call-off's own audit row is the record; the delete writes no
+  internal-bid audit row, as a listing-edit clear writes none
 
 Authoritative: the profile row for name, label and Active or Retired; the
 internal bid row for amount, time, state and which profile; the house's bid

@@ -28,7 +28,7 @@ any collector's maximum - [Internal Bid](/p/grade10-admin/auction/internal-bid).
   - Read after the close: the listing's own page and its Listings table row read Bought in
 - Internal bidders
   - Profiles: internal bidder profiles, each a name and a unique email label, kept in auction admin with no site account behind them
-  - Rename and retire: a label is fixed once the profile has bid; a profile is retired only when no Scheduled or Not placed internal bid uses it, and keeps its history
+  - Rename and retire: a label is fixed once the profile has bid; a profile is retired only when no Scheduled internal bid, and no Not placed internal bid on a listing before its effective close, uses it, and keeps its history
 - Access
   - Secret floor: only `auction:reserve` sets or reads an internal bid; reserve holders see which internal bidder bid; other operators see the house's bids labelled House, and Bought in after the close; the audit trail never records the amount or the time
 
@@ -798,7 +798,8 @@ and an email label, and no site account behind it. An admin holding
 2. Add a profile with a name and an email label. It is Active.
 3. Rename a profile at any time, or change its email label until a bid has
    been placed for it on any listing.
-4. Retire a profile that no Scheduled or Not placed internal bid names.
+4. Retire a profile that no Scheduled internal bid names, and no Not placed
+   internal bid on a listing that has not passed its effective close.
 
 | Field | Rule |
 | --- | --- |
@@ -819,7 +820,7 @@ and SHALL change nothing:
 | The email label is not an email address | Not an email address |
 | Another profile has the email label | Email label in use |
 | The email label is changed after a bid has been placed for the profile | Email label is fixed |
-| A Scheduled or Not placed internal bid names the profile, when it is retired | In use, naming each listing whose internal bid names it |
+| A Scheduled internal bid, or a Not placed internal bid on a listing that has not passed its effective close, names the profile, when it is retired | In use, naming each of those listings |
 
 Grade10 SHALL NOT delete a profile. A Retired profile SHALL keep every bid
 placed for it, and the reads under "Other operators read the house's bids as
@@ -828,8 +829,8 @@ a profile's current name.
 
 An internal bidder SHALL bid only through internal bids. Adding one SHALL
 create no site account, and no site bid panel SHALL accept a bid for it. Its
-email label is a label only: Grade10 SHALL address no letter and send no push
-to an internal bidder, per `grade10-site/auction/notifications`.
+email label is a label only: Grade10 SHALL address no letter to an internal
+bidder, per `grade10-site/auction/notifications`.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-piq rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-60 - An admin adds an internal bidder
@@ -907,6 +908,19 @@ to an internal bidder, per `grade10-site/auction/notifications`.
   another listing
 - **AND** an admin holding `auction:reserve` still reads the closed listing's
   bid at 31000 HKD minor units as House, Harbour Cards
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-uem rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-70 - A Not placed internal bid on a closed listing does not keep its internal bidder in use
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin retires an internal bidder whose only Not placed internal bid is on a lot that has closed
+
+- **GIVEN** an internal bidder named Kowloon Vault whose only internal bid is
+  Not placed at 50000 HKD minor units on listing L3, which closed with
+  collector A winning at 53000 HKD minor units
+- **WHEN** the admin retires Kowloon Vault
+- **THEN** Grade10 accepts it and Internal bidders lists Kowloon Vault as
+  Retired
+- **AND** an admin holding `auction:reserve` still reads L3's internal bid as
+  Not placed at 50000 HKD minor units, as Kowloon Vault
 
 ### Requirement: Only secret-floor access reaches an internal bid
 
@@ -1092,11 +1106,12 @@ NOT match an internal bidder's email label, for any operator.
 
 ### Requirement: Call-off and Relist drop the internal bid
 
-Calling a listing off SHALL drop its internal bid with the listing: Grade10
-SHALL NOT commit it afterwards, and a bid already placed for the house SHALL
-be called off with every other bid, per `grade10-admin/auction/listing`. A
-draft opened by Relist SHALL carry no internal bid, per
-`grade10-admin/auction/listing`.
+Calling a listing off SHALL drop its internal bid, whatever its state: the
+listing then has no internal bid, an admin holding `auction:reserve` reads
+none on it, and Grade10 SHALL NOT commit one on it afterwards. A bid already
+placed for the house SHALL be called off with every other bid, per
+`grade10-admin/auction/listing`. A draft opened by Relist SHALL carry no
+internal bid, per `grade10-admin/auction/listing`.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-p8p rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-21 - A called-off listing never commits its internal bid

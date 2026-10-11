@@ -51,5 +51,5 @@ the change's `decisions.md`.
 | --- | --- | --- | --- |
 | Undisclosed | 🚧 In flight | The house bids under a listing pseudonym and nothing tells collectors it may bid; Legal confirms the terms before release. Disclosure was ruled out because it tells a collector when to stop. | Product (@htonyl) |
 | Set time | 🚧 In flight | Committed at a time the admin sets, not from the start, so early bids meet no floor. | Product (@htonyl) |
-| Staff see House | 🚧 In flight | Other operators read its bids as House once it bids, never its amount or time. A placeholder account was ruled out because it shows staff a made-up account. | Product (@htonyl) |
+| Staff see House | 🚧 In flight | Other operators read its bids as House once it bids, each with its own time; never its amount, or its commit time before it bids. A placeholder account was ruled out because it shows staff a made-up account. | Product (@htonyl) |
 :::
