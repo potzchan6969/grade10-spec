@@ -61,7 +61,7 @@ remaining inventory hold at that close and SHALL NOT wait for an operator.
 - **AND** the product's available rises by two
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-02v rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-147 - A bought-in close releases the hold
+#### Scenario: grade10-admin-auction-listing-SC-156 - A bought-in close releases the hold
 **Serves:** grade10-admin-auction-listing-US-09 - the house bought the lot in and the stock comes back
 
 - **GIVEN** a published listing of a created product with an active hold of
@@ -85,7 +85,7 @@ once the release has completed.
 - **THEN** it says the stock was released, with the release date and time
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-hfn rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-154 - A bought-in listing shows the release date
+#### Scenario: grade10-admin-auction-listing-SC-163 - A bought-in listing shows the release date
 **Serves:** grade10-admin-auction-listing-US-09 - the operator sees the stock of a bought-in lot is back
 
 - **GIVEN** a listing that closed Bought in and whose hold was released
@@ -227,7 +227,7 @@ quantity, SHALL apply as well.
 - **AND** no listing is stored and available is unchanged
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-khm rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-148 - Relist from a bought-in listing carries no internal bid
+#### Scenario: grade10-admin-auction-listing-SC-157 - Relist from a bought-in listing carries no internal bid
 **Serves:** grade10-admin-auction-listing-US-09 - a lot the house bought in goes back on sale
 
 - **GIVEN** a Bought in listing in no campaign whose stock was released, and
@@ -238,7 +238,7 @@ quantity, SHALL apply as well.
 - **AND** the Bought in listing still reads Bought in
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-jqy rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-153 - A bought-in lot offers Relist under the Unsold exclusions
+#### Scenario: grade10-admin-auction-listing-SC-162 - A bought-in lot offers Relist under the Unsold exclusions
 **Serves:** grade10-admin-auction-listing-US-09 - a bought-in lot goes back on sale only where an unsold one would
 
 - **GIVEN** three Bought in listings: one in no campaign whose stock was
@@ -270,7 +270,7 @@ NOT say that the listing has an internal bid; who leads is read in the
 listing's bids, per `grade10-admin/auction/internal-bid`.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-qgd rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-149 - A lot the house won reads Bought in
+#### Scenario: grade10-admin-auction-listing-SC-158 - A lot the house won reads Bought in
 **Serves:** grade10-admin-auction-listing-US-09 - the operator finds a bought-in lot on the table
 
 - **GIVEN** three closed listings: one with a collector winner, one with no
@@ -282,15 +282,15 @@ listing's bids, per `grade10-admin/auction/internal-bid`.
   opens its order
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-x1a rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-150 - A bought-in lot is in neither the Won nor the Unsold view
+#### Scenario: grade10-admin-auction-listing-SC-159 - A bought-in lot is in neither the Won nor the Unsold view
 **Serves:** grade10-admin-auction-listing-US-09 - the operator filters the table by outcome
 
-- **GIVEN** the listings of `grade10-admin-auction-listing-SC-149`
+- **GIVEN** the listings of `grade10-admin-auction-listing-SC-158`
 - **WHEN** an operator filters the Listings table to Unsold, and then to Won
 - **THEN** the house's listing is in neither
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-cvx rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-151 - A protected lot reads as any live lot before its close
+#### Scenario: grade10-admin-auction-listing-SC-160 - A protected lot reads as any live lot before its close
 **Serves:** grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-07 - a live lot the house leads shows staff no sign of it before its close
 
 - **GIVEN** a published listing still taking bids, where the house leads
@@ -300,10 +300,10 @@ listing's bids, per `grade10-admin/auction/internal-bid`.
 - **AND** nothing on the row says Bought in, House or an internal bid
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-ls6 rev=1 -->
-#### Scenario: grade10-admin-auction-listing-SC-152 - The Bought in view holds only bought-in lots
+#### Scenario: grade10-admin-auction-listing-SC-161 - The Bought in view holds only bought-in lots
 **Serves:** grade10-admin-auction-listing-US-09 - the operator finds every lot the house bought in
 
-- **GIVEN** the listings of `grade10-admin-auction-listing-SC-149`
+- **GIVEN** the listings of `grade10-admin-auction-listing-SC-158`
 - **WHEN** an operator filters the Listings table to Bought in
 - **THEN** it holds the house's listing alone
 
@@ -311,7 +311,7 @@ listing's bids, per `grade10-admin/auction/internal-bid`.
 #### Scenario: grade10-admin-auction-listing-SC-155 - A bought-in listing's own page reads Bought in
 **Serves:** grade10-admin-auction-listing-US-09 - the operator opens a lot the house bought in and sees why it has no order
 
-- **GIVEN** the house's listing of `grade10-admin-auction-listing-SC-149`
+- **GIVEN** the house's listing of `grade10-admin-auction-listing-SC-158`
 - **AND** an operator whose roles are exactly `staff`
 - **WHEN** they open the listing
 - **THEN** it reads Closed and Bought in, with no order to open
