@@ -82,6 +82,15 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
   never both - [Services and Hand-offs](/p/grade10-admin/inventory/services#marks-that-share-an-item)
 - **The consignor's until sold** - the owner moves to the buyer only when the
   item leaves to them or is kept in the vault for them
+- ❓ **The store and the auction, not built** - consignment puts nothing on
+  sale in Shopify or the auction and hears no sale back; staff record each
+  listing, sale, refund and delivery on the consignment by hand until the
+  store's consigned product and the auction's lot of a consigned item are
+  designed
+- ❓ **Asking online, not built** - only staff open a consignment; the site
+  has no request page until its form and rules are designed
+- ❓ **The reserve** - this page gives a consignor a reserve, while every
+  auction listing is absolute - [Bidding](/p/grade10-site/auction/bidding)
 
 ## Price
 
