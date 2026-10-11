@@ -137,7 +137,7 @@ const MY_CONSIGNMENT: MyConsignmentDetailView = {
       state: "On sale",
       endingSoon: true,
       channel: "At auction",
-      lines: ["Reserve HK$12,000.00", "On sale until 18 Oct 2026"],
+      lines: ["Floor HK$12,000.00", "On sale until 18 Oct 2026"],
     },
     {
       id: "G10-0877",
