@@ -47,11 +47,11 @@ If you have a good reason to push back on a design, raise it with the design's o
 
 ## Product UI component contracts
 
-Shared compound components live once in `packages/ui` (`@grade10/ui`), and their export contract is the capability spec in `openspec/specs/`. Components take all content, state and behavior through props and never fetch data, route, or read app stores. Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-contracts.md) before designing a new contract or changing one materially.
+Shared compound components live once in `packages/ui` (`@grade10/ui`), and their export contract is the capability spec in `openspec/specs/`. Components take all content, state and behavior through props and never fetch data, route, read app stores, or import the message catalogs. Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-contracts.md) before designing a new contract or changing one materially.
 
 ## Design system package
 
-`packages/design-system` (`@grade10/design-system`) holds the theme tokens and shadcn primitives. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. `packages/date` (`@grade10/date`) holds the date formatters and the typed-day bridge, React-free. Add no other package without a recorded product decision.
+`packages/design-system` (`@grade10/design-system`) holds the theme tokens and shadcn primitives. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way; their contracts are below. `packages/date` (`@grade10/date`) holds the date formatters and the typed-day bridge, React-free. Add no other package without a recorded product decision.
 
 Use the `design-system-primitives` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
@@ -63,7 +63,7 @@ Use the `design-system-primitives` skill whenever creating or changing a primiti
 
 ## Sharing with consuming apps
 
-Consumers add this repository as a Git submodule and build from `openspec/specs/`, reading the manual's pages for rationale and the design tokens for values. Shared compound components are consumed from `@grade10/ui` from source, so a shared component change lands once here and reaches every application through a submodule bump. Application-owned state, adapters, and wiring remain implementation work in each application.
+Consumers add this repository as a Git submodule and build from `openspec/specs/`, reading the manual's pages for rationale and the design tokens for values. Shared compound components are consumed from `@grade10/ui` from source, so a shared component change reaches every application through a submodule bump. Application-owned state, adapters, and wiring remain implementation work in each application.
 
 Pin the submodule SHA in the application repository; updates are normal pull requests that move that SHA. Do not use git submodules inside this repository; this repository itself is the reusable submodule.
 
