@@ -29,9 +29,9 @@ other mark stands alone.
   consignment
 - **Standing alone** - a card at grading takes no other mark; any other pair
   waits for one mark to close, or passes the item by a hand-off
-- **A live loan** - an item securing a live loan takes no sale until the
-  loan is repaid, by default; an admin may let a sale repay the loan first
-  from the proceeds
+- **A financed case** - an item in a financed vault case takes no sale
+  until the case is released, by default, repaid or not; an admin may let a
+  sale repay the loan first from the proceeds
 
 ## Applying an Item
 
@@ -110,7 +110,7 @@ zero; marks refused by name; hand-offs completed in one visit.
 | A hand-off is one act | Decided | Paper first, the owner decides, and the item never leaves custody - decided under the owner's delegation, 2026-10-08 | Product |
 | A sale settles itself | Decided | The selling service moves the owner and closes its mark; nobody records a sale by hand - decided under the owner's delegation, 2026-10-08 | Product |
 | Selling from the vault | Decided | A setting, on by default: a storage-lane item sells from the vault and its vault case passes to the buyer; this replaces the register's refusal of a vaulted item changing owner - decided by the owner, 2026-10-08 | Product |
-| A live loan and a sale | Decided | A setting, by default no sale until the loan is repaid; the other choice lets the proceeds repay it first - decided by the owner, 2026-10-08 | Product |
+| A live loan and a sale | Decided | A setting, by default no sale until the loan is repaid; the other choice lets the proceeds repay it first - decided by the owner, 2026-10-08. A financed case blocks a sale until it is released, since the vault tells inventory nothing on a payout or a repayment - decided by the owner, 2026-10-11 | Product |
 | The vault takes an item over | Decided | A slab at grading and a won lot pass into the vault case in one act once its custody agreement is executed; grading reads the case from the item rather than a typed reference, which stays only for a card handed in before cards were items - decided under the owner's delegation, 2026-10-10 | Product |
 | Consignment takes an item over | Decided | Adding an item another service holds - grading's card, a lot or a listing ended unsold, a storage vault case - names that mark, and the hand-off runs when the consignment agreement is sealed - decided under the owner's delegation, 2026-10-10 | Product |
 | A lot of an item | Decided | A lot whose product links one item asks before it is published; its mark opens when it goes live and closes sold when its order is paid, moving the owner to the winner, or unsold when nobody won or the order is cancelled, or withdrawn when the lot is called off - decided under the owner's delegation, 2026-10-10 | Product |

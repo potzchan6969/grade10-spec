@@ -114,7 +114,7 @@ An admin changes every setting here; each starts on its default.
 | How often a unit is counted | each safe weekly, each locker monthly | any number of days, per unit |
 | Missing until lost | **30** days | any number of days |
 | Sell from the vault | on, storage lane only | off |
-| A live loan and a sale | no sale until repaid | the proceeds repay the loan first |
+| A live loan and a sale | no sale until the vault case is released | the proceeds repay the loan first |
 
 - **On the audit chain** - every change, with the old and new value
 
