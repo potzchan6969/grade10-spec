@@ -309,18 +309,19 @@ The rule holds for a Scheduled internal bid and for one Not placed while the
 listing was still `created`. An edit that leaves every limit met SHALL keep
 the internal bid unchanged.
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-rzd rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-rzd rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-28 - A window change past the time clears the internal bid
 **Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's window moves under a floor set before it was published
 
 - **GIVEN** a `created` `HKD` listing closing 2026-11-02T20:00:00Z, with a
-  Scheduled internal bid of 50000 HKD minor units at 2026-11-02T18:00:00Z
+  Scheduled internal bid of 50000 HKD minor units at 2026-11-02T18:00:00Z as
+  Harbour Cards
 - **AND** an operator whose roles are exactly `staff`
 - **WHEN** they move its scheduled close to 2026-11-02T17:00:00Z and save
 - **THEN** Grade10 accepts the save, and its answer says nothing of an
   internal bid
 - **AND** an admin holding `auction:reserve` then sees the internal bid
-  cleared by a listing edit, with 50000 HKD minor units and
+  cleared by a listing edit, with 50000 HKD minor units, Harbour Cards and
   2026-11-02T18:00:00Z
 - **AND** when 2026-11-02T18:00:00Z passes, Grade10 places no bid for the
   house on the listing
@@ -957,16 +958,16 @@ bidders.
 - **THEN** Grade10 refuses both
 - **AND** the internal bid is unchanged
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-53a rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-53a rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-20 - The audit trail records a set without its amount
 **Serves:** grade10-admin-auction-internal-bid-US-07 - an auditor reads who protected a lot
 
 - **GIVEN** an admin who saved an internal bid of 50000 HKD minor units at
-  2026-11-02T18:00:00Z on a listing
+  2026-11-02T18:00:00Z as Harbour Cards on a listing
 - **WHEN** an operator holding audit access reads the audit trail for that
   listing
 - **THEN** it shows the admin set an internal bid on the listing, and when
-- **AND** it shows neither 50000 nor 2026-11-02T18:00:00Z
+- **AND** it shows neither 50000, 2026-11-02T18:00:00Z nor Harbour Cards
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-d57 rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-66 - Staff cannot open or change internal bidders
@@ -979,6 +980,17 @@ bidders.
 - **THEN** auction admin shows them no Internal bidders page
 - **AND** Grade10 refuses each call, and Harbour Cards is unchanged and the
   only internal bidder
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-d6h rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-68 - The audit trail records an internal bidder act without a listing
+**Serves:** grade10-admin-auction-internal-bid-US-09 - an auditor reads who changed the house's bidders
+
+- **GIVEN** an internal bidder named Harbour Cards, named by a Scheduled
+  internal bid of 50000 HKD minor units on a listing
+- **WHEN** an admin holding `auction:reserve` renames it Harbour Cards Ltd,
+  and an operator holding audit access reads the audit trail
+- **THEN** it shows the admin renamed the internal bidder, and when
+- **AND** the entry names no listing and shows no 50000
 
 ### Requirement: Other operators read the house's bids as House
 
@@ -1066,6 +1078,17 @@ NOT match an internal bidder's email label, for any operator.
   harbour@internal.grade10.example, with a maximum of 50000
 - **AND** an operator whose roles are exactly `staff` reading the same reads
   sees House with no name, email label or maximum
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-s2h rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-69 - An internal bidder's email label matches no Listings search
+**Serves:** grade10-admin-auction-internal-bid-US-07 - an operator looks for the house among the bidders
+
+- **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-67`
+- **WHEN** an admin holding `auction:reserve`, and an operator whose roles
+  are exactly `staff`, each search the Listings table by
+  harbour@internal.grade10.example and read the bidder moderation list
+- **THEN** the search matches no listing for either
+- **AND** neither finds Harbour Cards in the bidder moderation list
 
 ### Requirement: Call-off and Relist drop the internal bid
 
