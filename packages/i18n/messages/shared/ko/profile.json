@@ -135,6 +135,7 @@
       "priceChanged": "가격이 변경되었습니다",
       "offSale": "물품 판매가 중지되었습니다",
       "sold": "물품이 판매되었습니다",
+      "payoutDue": "지급일 확정",
       "paid": "지급이 완료되었습니다",
       "endingSoon": "위탁이 곧 종료됩니다",
       "endedUnsold": "위탁이 판매 없이 종료되었습니다",

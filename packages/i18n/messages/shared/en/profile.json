@@ -135,6 +135,7 @@
       "priceChanged": "We changed your price",
       "offSale": "Your item is off sale",
       "sold": "Your item sold",
+      "payoutDue": "Payout date set",
       "paid": "You have been paid",
       "endingSoon": "Your consignment ends soon",
       "endedUnsold": "Your consignment ended unsold",
