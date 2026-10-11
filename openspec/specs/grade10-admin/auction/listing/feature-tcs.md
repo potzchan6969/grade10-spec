@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review · 0/117
+**Status:** pending-review · 0/125
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 **Out of suite:** grade10-admin-auction-listing-SC-64, grade10-admin-auction-listing-SC-65, grade10-admin-auction-listing-SC-66, grade10-admin-auction-listing-SC-67
@@ -1567,6 +1567,109 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.auction-listing.TC-ow9 rev=1 covers=g10adm.auction-listing.SC-bcv -->
+### grade10-admin-auction-listing-US3-TC27-1: Moving starts at into the past is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft opens tomorrow.
+
+**Steps:**
+
+1. Open that draft.
+2. Set starts at to a time not after now.
+3. Save the draft.
+4. Reopen the draft and read its starts at.
+
+**Expected Results:**
+
+* Step 2 shows a refusal under Starts at before Save.
+* Step 3 refuses the save.
+* Step 4 still shows tomorrow's opening.
+
+<!-- trace:case id=g10adm.auction-listing.TC-d11 rev=1 covers=g10adm.auction-listing.SC-d7l -->
+### grade10-admin-auction-listing-US3-TC28-1: Moving scheduled close at into the past is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing closes next week.
+
+**Steps:**
+
+1. Open that listing.
+2. Set scheduled close at to a time not after now.
+3. Save the listing.
+4. Reopen the listing and read its close and status.
+
+**Expected Results:**
+
+* Step 2 shows a refusal under Close before Save.
+* Step 3 refuses the save.
+* Step 4 still shows next week's close and the listing as created.
+
+<!-- trace:case id=g10adm.auction-listing.TC-pqm rev=1 covers=g10adm.auction-listing.SC-s0s -->
+### grade10-admin-auction-listing-US3-TC29-1: A starts at left as stored saves after it passes
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* `<listing_1>` is a created listing whose stored starts at has passed.
+
+**Steps:**
+
+1. Save `<listing_1>` with a new title and its stored starts at, to the minute.
+2. Read `<listing_1>`.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 shows the new title and the same starts at.
+
 ## grade10-admin-auction-listing-US4: Operator puts a listing in front of collectors
 
 **As an** auction operator,
@@ -2127,6 +2230,172 @@ Runs once per row of **Test data**.
 * Step 5 reads 100000 minor units HKD.
 
 ---
+
+<!-- trace:case id=g10adm.auction-listing.TC-mwk rev=1 covers=g10adm.auction-listing.SC-ow2 -->
+### grade10-admin-auction-listing-US4-TC16-1: A publish at after starts at is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing opens on 2030-01-10 at 10:00.
+
+**Steps:**
+
+1. Open that listing.
+2. Set publish at to 2030-01-10 11:00.
+3. Save the listing.
+4. Reopen the listing and read its publish at.
+
+**Expected Results:**
+
+* Step 2 shows a refusal under Publish at before Save.
+* Step 3 refuses the save.
+* Step 4 shows no publish at.
+
+<!-- trace:case id=g10adm.auction-listing.TC-pc6 rev=1 covers=g10adm.auction-listing.SC-ji9 -->
+### grade10-admin-auction-listing-US4-TC17-1: A publish at equal to starts at is accepted
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* `<listing_1>` is a created listing that opens on 2030-01-10 at 10:00.
+
+**Steps:**
+
+1. Set publish at on `<listing_1>` to 2030-01-10 10:00.
+2. Read `<listing_1>`.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 shows publish at 2030-01-10 10:00 and the listing as created.
+
+<!-- trace:case id=g10adm.auction-listing.TC-dcp rev=1 covers=g10adm.auction-listing.SC-i7s -->
+### grade10-admin-auction-listing-US4-TC18-1: Publish now on a scheduled listing asks first and clears publish at
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has a publish at in the future.
+
+**Steps:**
+
+1. Select that listing and press Publish.
+2. Read the confirmation.
+3. Confirm.
+4. Read the listing's status and publish at.
+
+**Expected Results:**
+
+* Step 2 names the scheduled time and says publishing now removes it.
+* Step 4 shows the listing as published with no publish at.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rw9 rev=1 covers=g10adm.auction-listing.SC-2mk -->
+### grade10-admin-auction-listing-US4-TC19-1: Publish now without publish at publishes after starts at passed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has no publish at, its opening has passed and its close is in the future.
+
+**Steps:**
+
+1. Select that listing and press Publish.
+2. Read the listing's status.
+
+**Expected Results:**
+
+* Step 1 asks for no confirmation.
+* Step 2 shows the listing as published.
+
+<!-- trace:case id=g10adm.auction-listing.TC-705 rev=1 covers=g10adm.auction-listing.SC-npx -->
+### grade10-admin-auction-listing-US4-TC20-1: A scheduled created listing names what its publish still needs
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has a publish at in the future.
+
+**Steps:**
+
+1. Open that listing.
+2. Empty its title.
+3. Read the message under Publish at.
+
+**Expected Results:**
+
+* Step 3 names title as a field the publish still needs.
 
 ## grade10-admin-auction-listing-US5: Operator calls a listing off before it closes
 

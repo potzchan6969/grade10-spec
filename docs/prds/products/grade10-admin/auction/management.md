@@ -66,7 +66,16 @@ the card is in the winner's hands. The collector's half is
   Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
 - **Publish** — a created listing is ready but not visible; publishing is a
-  separate move, now or at a Publish at after now that can be cleared
+  separate move, now or at a Publish at after now and no later than the
+  start, that can be cleared
+- **Publish now** — publishes at once, even after the start; on a listing
+  with a Publish at it asks first, because publishing now removes that time
+- **Schedule as typed** — a Publish at, start or close in the past, a close
+  not after the start, or a Publish at after the start shows under its field
+  before Save; a time left as stored is not refused, so a listing whose start
+  has passed still saves
+- **Publish still needs** — a created listing with a Publish at names under
+  it each field its publish still needs
 - **Call off** — any time before the close, bids or not; the stock is
   released, the listing leaves browse and search, and its canonical
   slug remains reserved and directly accessible. Its listing code stays
@@ -115,8 +124,9 @@ the card is in the winner's hands. The collector's half is
 - **Refused** — a currency outside the three, or a starting price that is not
   a whole amount of 0 or more; a slug of the wrong shape, or one another listing
   holds; two categories from one taxonomy, or a published or canceled
-  campaign; a close not after the start, or a close or Publish at not after
-  now at create; a ninth media item, an unsupported or empty file, or
+  campaign; a close not after the start, a Publish at after the start, a
+  start, close or Publish at typed not after now, or a close not after now at
+  create; a ninth media item, an unsupported or empty file, or
   removing the last item once created; prices, window, slug or sandbox on a
   published listing, and every write on a closed, settled or canceled one
 
@@ -527,6 +537,7 @@ settings.
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
+| Schedule order | Decided | Publish at, then the start, then the close; a Publish at at the start is allowed. Each typed time must be after now, and a stored time that has passed is kept, so a live listing still saves. Publish now ignores the order and removes the Publish at after asking. Chosen over warnings only, which let a listing publish already closed. | Product |
 | Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |

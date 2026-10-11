@@ -395,6 +395,12 @@ to set:
   `draft`. When both starts at and scheduled close at are set, scheduled
   close at MUST be after starts at. At create, scheduled close at MUST also
   be after now.
+- A write that sets starts at or scheduled close at to a time not after now
+  SHALL be refused on the admin form and on the API. A value left as stored,
+  compared to the minute, SHALL NOT be refused, so a listing whose opening has
+  passed still saves its other fields.
+- The admin form SHALL show each of these refusals under its field while the
+  operator types, before Save.
 - **Extension duration (seconds)** — how long extended bidding runs after the
   scheduled close, and after each bid during it, per
   `grade10-site/auction/auction`. A whole number ≥ 0. Zero turns extended
@@ -536,6 +542,35 @@ be refused.
 - **THEN** the listing is published
 - **AND** its slug opens the public listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-bcv rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-149 - Moving starts at into the past is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a draft listing whose starts at is tomorrow
+- **WHEN** an operator sets starts at to a time not after now and saves
+- **THEN** the admin form shows the refusal under Starts at before Save
+- **AND** the API refuses the same write
+- **AND** the stored starts at is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-d7l rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-150 - Moving scheduled close at into the past is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a created listing whose scheduled close at is next week
+- **WHEN** an operator sets scheduled close at to a time not after now
+- **THEN** the admin form shows the refusal under Close before Save
+- **AND** the API refuses the same write
+- **AND** the listing remains created with its stored close
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-s0s rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-151 - A starts at left as stored saves after it passes
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a created listing whose stored starts at has passed
+- **WHEN** an operator changes its title and saves without touching starts at
+- **THEN** Grade10 stores the new title
+- **AND** starts at is unchanged
+
 ### Requirement: Publish happens now or at a scheduled time
 
 An authorized operator SHALL publish a `created` listing. Publish SHALL move
@@ -549,12 +584,24 @@ timestamp that MUST be after now.
   or later listing SHALL be refused.
 - A publish at that is not after now SHALL be refused on the admin form and
   on the API. Create SHALL refuse if publish at is set and not after now.
+- Publish at MUST NOT be after starts at; a publish at equal to starts at is
+  allowed. A write that would put publish at after starts at, by changing
+  either, SHALL be refused on the admin form and on the API.
+- While a `created` listing has publish at set, the admin form SHALL name
+  under Publish at each field its publish still needs that the form holds
+  empty: product, inventory unit, title, slug, starting price, starts at,
+  scheduled close at, and media.
 - When publish at is unset, the listing SHALL stay `created` until an
   operator publishes it.
 - When publish at arrives and the listing is `created`, Grade10 SHALL
   publish it without a further operator action.
 - A `draft` listing SHALL NOT be published, by hand or when publish at
   arrives. Publish of a listing that is not `created` SHALL be refused.
+
+Publishing a `created` listing by hand SHALL clear its publish at. When the
+listing has publish at set, the admin form SHALL ask the operator to confirm
+first and SHALL say that the scheduled time is removed. Without publish at,
+the form SHALL publish on the press, also when starts at has passed.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-del rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-29 - Operator publishes a created listing immediately
@@ -623,6 +670,52 @@ timestamp that MUST be after now.
 - **WHEN** an operator sets a new publish at
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains published
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ow2 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-147 - A publish at after starts at is refused
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing whose starts at is 2030-01-10 10:00
+- **WHEN** an operator sets publish at to 2030-01-10 11:00
+- **THEN** the admin form shows the refusal under Publish at before Save
+- **AND** the API refuses the same write
+- **AND** the stored publish at is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ji9 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-148 - A publish at equal to starts at is accepted
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing whose starts at is 2030-01-10 10:00
+- **WHEN** an operator sets publish at to 2030-01-10 10:00 and saves
+- **THEN** Grade10 stores that publish at
+- **AND** the listing remains created
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-i7s rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-152 - Publish now on a scheduled listing asks first and clears publish at
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing with publish at set in the future
+- **WHEN** an operator presses Publish
+- **THEN** the admin form asks for confirmation and says the scheduled time is removed
+- **AND** on confirming, the listing is published
+- **AND** its publish at is cleared
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-2mk rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-153 - Publish now without publish at publishes after starts at passed
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing with no publish at, whose starts at has passed
+  and whose scheduled close at is in the future
+- **WHEN** an operator presses Publish
+- **THEN** the listing is published without a confirmation
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-npx rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-154 - A scheduled created listing names what its publish still needs
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing with publish at set
+- **WHEN** the operator empties its title in the form
+- **THEN** the form names title under Publish at as a field the publish still needs
 
 ### Requirement: Operator may call off a listing that has not closed
 
