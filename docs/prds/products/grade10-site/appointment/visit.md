@@ -14,7 +14,7 @@ The manage link opens one page per visit, and the page follows the visit from th
 | Completed | Book again | 已完成 |
 | With grading | Your cards are with grading; grading's own mail follows | 卡牌已轉交評級 |
 | With the vault | Your item is with the vault; the vault's own mail follows | 物品已轉交保險庫 |
-| Time passed | the time held until, Change time and Cancel until the slot ends, walk in and wait, or book another time | 時間已過 |
+| Time passed | the time held until, Change time and Cancel until the slot ends, or book another time | 時間已過 |
 | Missed | Book again | 已錯過 |
 | Cancelled | who cancelled and the shop's reason, Book again | 你已取消, 門市已取消 |
 | Shop closed | the closure's reason, Pick another time | 門市今天休息 |
@@ -31,16 +31,8 @@ The manage link opens one page per visit, and the page follows the visit from th
 
 - **Until the end of the slot** - Change time and Cancel; Cancel asks a reason the collector may skip
 - **Until the end of the hold** - Running late: the collector says about when they will arrive, and the desk sees the new time
-- **After the hold** - Time passed: Change time and Cancel stay until the slot ends; after that, walk in and wait, or book another time. The visit stops counting as the live visit for its service
+- **After the hold** - Time passed: Change time and Cancel stay until the slot ends; after that, book another time. The visit stops counting as the live visit for its service
 - **Typhoon** - Today and the day-before message say "Signal 8 or black rain: we close while it's up and email you."
-
-## Walk-in Ticket
-
-- **Wait page** - the door poster prints the shop's wait page address, with no QR; the page shows the walk-in wait for each service now, today's hours and Book a time; nobody joins from it
-- **Ticket** - staff add the walk-in and send the ticket link on WhatsApp to the phone, or by email; the link follows the place in line and the estimate. A walk-in who gives neither listens for their ticket number
-- **Called** - the ticket turns to the counter; a walk-in not seen in 10 minutes leaves the line
-- **Paused** - the wait page says walk-ins are paused, and until when
-- ❓ **Addresses** - the wait page answers at `grade10.com/book/<shop>/walk-in` and a ticket at `grade10.com/book/ticket#<secret>`, the secret in the fragment as the manage link's is
 
 ## Messages
 
@@ -55,7 +47,6 @@ The manage link opens one page per visit, and the page follows the visit from th
 | Refunded | once Stripe returns the payment |
 | Thanks | 2 hours after the shop next opens, for a plain Completed visit, unless the service turns it off |
 | We missed you | 2 hours after the shop next opens, for a Missed visit, unless the service turns it off; withdrawn when the outcome is corrected, never sent inside a closure |
-| You're next | WhatsApp, tapped by staff when a walk-in with a phone is next, with the ticket link |
 | Running late? | WhatsApp, tapped by staff for a booked visitor past the start, with the visit link |
 
 Every message is mail and carries Manage your visit; the WhatsApp rows are taps by staff, not messages the system sends. A visit sent to grading or the vault gets their mail instead of Thanks.
@@ -76,7 +67,7 @@ Completed, or sent to grading or the vault; the page says which.
 :::
 
 :::detail{title="Product decisions" for="pm"}
-A collector who books once comes back to one link for everything about that visit, so the page answers what the shop would otherwise answer by phone: where to go, what to show, how long the wait is and what happened to the cards. Out of scope: payment, a self check-in, a waitlist, automatic WhatsApp or SMS.
+A collector who books once comes back to one link for everything about that visit, so the page answers what the shop would otherwise answer by phone: where to go, what to show, how long the wait is and what happened to the cards. Out of scope: walk-ins, a self check-in, a waitlist, automatic WhatsApp or SMS.
 
 | Measure | Counts |
 | --- | --- |
@@ -87,12 +78,12 @@ A collector who books once comes back to one link for everything about that visi
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Changes | Decided | Move and cancel until the slot ends, unless checked in. | Product |
-| One live visit per service | ❓ Open | Ignores visits past their hold and walk-ins, so a collector who missed their time books again; the visit they missed closes as Missed. | Product |
+| One live visit per service | ❓ Open | Ignores visits past their hold, so a collector who missed their time books again; the visit they missed closes as Missed. | Product |
 | Email is not identity | ❓ Open | Signed out, a second booking under a held address says the link went to that address and shows no time. | Product |
 | Move to another shop | ❓ Open | Not offered; the collector cancels and books again. | Operations |
 | Self check-in | ❓ Open | None; an "I'm here" on Running late only pings the desk. | Operations |
 | Wallet pass | ❓ Open | None; the pass lives on the page and in the day-before message. | Product |
-| No QR | Decided | The pass, the ticket and the door poster carry no QR; a phone or an email finds the visit, so neither the collector nor staff need a camera. | Product |
+| No QR | Decided | The pass carries no QR; a phone or an email finds the visit, so neither the collector nor staff need a camera. | Product |
 | No visit code | Decided | Nobody is shown a visit code; a phone, an email or a name finds the visit. The system still issues one, and a typed code still finds the visit, as a backup. | Product |
 | After-visit mail | ❓ Open | Thanks and We missed you, 2 hours after the shop next opens. | Product |
 | Manage link | ❓ Open | Derived from a server key, so every message can carry it while the record keeps only a hash. | Engineering |

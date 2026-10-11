@@ -67,10 +67,10 @@ gave.
 | Phone number | Decided | Optional by default; a service turns on Require a phone number when the shop calls before the visit, and the booking is refused without one. Set per service, because only some visits need a call. | Operations |
 | Reminders | Decided | Set per service: up to five leads, a day and two hours before by default, each removable. | Product |
 | Services by card count | ❓ Open | Grading drop-off for 1 to 19 cards, 30 min; Bulk grading drop-off for 20 or more, 45 min, in the Grading room. | Operations |
-| A full day | ❓ Open | Shows the earliest time at each shop and, today, the walk-in wait; no waitlist. | Product |
+| A full day | ❓ Open | Shows the earliest time at each shop; no waitlist. | Product |
 | Prefill | Decided | A signed-in collector books under the account's name, email and phone, shown read-only; a wrong detail is changed on the account. Book again carries the service, the shop and the answers. | Product |
 | Shop facts in 繁中 | ❓ Open | Shop names, addresses, how to get there and counter names are stored in both languages. | Product |
-| Payment at booking | Decided | Set per service: none, a deposit or the full price, in HKD, paid on Stripe's checkout. Staff bookings, walk-ins and product visits pay in the shop. | Product |
+| Payment at booking | Decided | Set per service: none, a deposit or the full price, in HKD, paid on Stripe's checkout. Staff bookings and product visits pay in the shop. | Product |
 | Refunds | Decided | Set per service and off by default: a collector's cancellation before a cut-off, and a visit the shop cancels, each refunds in full only when the service allows it. | Product |
 | Unpaid hold | Decided | 30 minutes, the shortest checkout Stripe keeps open; an unpaid booking then ends and frees the time. | Engineering |
 | Anonymous write | Decided | A challenge plus a per-address budget of ten asks a day. A booking holds a desk and sends mail on nobody's authority, and the two brakes answer different questions: whether a person is there at all, and how much one address may spend however convincingly it asks. | Product |

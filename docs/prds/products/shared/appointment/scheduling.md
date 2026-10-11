@@ -56,7 +56,7 @@ exactly as a new booking. A closed booking refuses every further move,
 cancellation or outcome, and repeating the same cancellation or outcome
 answers the booking unchanged.
 
-- ❓ **Calls and walk-ins** - a call seats a waiting visit on any open resource that runs its service from now, and a walk-in becomes a visit when called; [Front Desk](/p/grade10-admin/appointment/front-desk) states both
+- ❓ **Calls** - a call seats a waiting visit on any open resource that runs its service from now; [Front Desk](/p/grade10-admin/appointment/front-desk) states it
 
 ## Notifications
 

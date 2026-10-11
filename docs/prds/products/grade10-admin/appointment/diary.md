@@ -52,10 +52,10 @@ resource is what the diary can promise.
 | Product visits | Decided | Read-only here; moved from the product that owns the case. | Product |
 | Hours | Decided | Up to four windows a day, so a lunch break closes the shop; a counter follows the shop's hours or keeps its own. | Operations |
 | Public holidays | Decided | Hong Kong's general holidays load per year; each is closed, has special hours or opens as usual, per shop. | Operations |
-| Messages | Decided | Every booking moment mails the collector through one sink; email is the only channel, and WhatsApp joins it later without a change to what triggers a message. Walk-ins get none. | Product |
+| Messages | Decided | Every booking moment mails the collector through one sink; email is the only channel, and WhatsApp joins it later without a change to what triggers a message. | Product |
 | Staff rosters | Decided | Out of scope; a resource is a desk or a room, never a person. | Product |
-| Source | ❓ Open | Booked by reads as the source: Online, Staff or Walk-in. | Product |
-| Insights | ❓ Open | A tab beside Bookings: booked share, missed, walk-in wait and walk-ins lost, with one busy-hours chart. | Operations |
-| Service editor | ❓ Open | One page per service in English and 繁中, adding the hold, walk-ins and what to bring. | Product |
+| Source | ❓ Open | Booked by reads as the source: Online or Staff. | Product |
+| Insights | ❓ Open | A tab beside Bookings: missed, the wait from check-in to the call, with one busy-hours chart. | Operations |
+| Service editor | ❓ Open | One page per service in English and 繁中, adding the hold and what to bring. | Product |
 | Staff booking | ❓ Open | Staff book any start from now, up to a year ahead; the notice and the horizon are the collector's. | Operations |
 :::
