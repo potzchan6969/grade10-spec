@@ -14,7 +14,7 @@ import { VisitPass, type VisitPassCopy } from "./visit-pass";
 
 type VisitBookedPassCopy = {
   confirmation: BookingConfirmationCopy;
-  /** The pass's words, drawn when the visit has a code. */
+  /** The pass's words, drawn when the visit has a name. */
   pass: VisitPassCopy;
   directions: string;
   /** Until when it can be changed or cancelled. */
@@ -27,8 +27,8 @@ type VisitBookedPassCopy = {
 type VisitBookedPassProps = {
   copy: VisitBookedPassCopy;
   confirmation: Omit<BookingConfirmationProps, "copy" | "className">;
-  /** The visit code; without one no pass is drawn. */
-  code?: string | null;
+  /** Who the visit is booked for; without a name no pass is drawn. */
+  name?: string | null;
   /** The shop on a map, opened outside the site. */
   directionsHref: string;
   /** What to bring and know, one line each. */
@@ -44,7 +44,7 @@ type VisitBookedPassProps = {
 function VisitBookedPass({
   copy,
   confirmation,
-  code,
+  name,
   directionsHref,
   before,
   getThere,
@@ -59,7 +59,7 @@ function VisitBookedPass({
       hAlign="stretch"
     >
       <BookingConfirmation {...confirmation} copy={copy.confirmation} />
-      {code ? <VisitPass code={code} copy={copy.pass} /> : null}
+      {name ? <VisitPass copy={copy.pass} name={name} /> : null}
       <HStack gap="md" wrap>
         <Link href={directionsHref} rel="noopener" target="_blank">
           {copy.directions}

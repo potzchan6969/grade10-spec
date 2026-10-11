@@ -18,7 +18,7 @@ import type {
 } from "@grade10/ui";
 
 /** Grading Submission at the Causeway Bay shop, Thu 3 Sep 2026, 10:15 to 10:45. */
-const VISIT_CODE = "BK-7QH2K";
+const VISIT_NAME = "Alex Chan";
 const SHOP = "Hong Kong Grade10 Store";
 const ADDRESS = "13 Pak Sha Road, Causeway Bay, Hong Kong";
 const SERVICE = "Grading Submission";
@@ -29,7 +29,7 @@ const WAIT_HREF = "#/book/wait/causeway-bay";
 const DIRECTIONS_HREF = `https://maps.google.com/?q=${encodeURIComponent(`Grade10 ${SHOP} ${ADDRESS}`)}`;
 
 const PASS_WORDS = {
-  codeLabel: "Visit code",
+  nameLabel: "Booked for",
 } as const;
 
 const PASS_LINE = `${SERVICE} · ${SHOP} · 10:15 to 10:45`;
@@ -44,20 +44,17 @@ const VISIT_FACTS: readonly VisitFact[] = [
   { label: "Service", value: SERVICE, sub: "30 min" },
   {
     label: "Booked for",
-    value: "Alex Chan",
+    value: VISIT_NAME,
     sub: `${EMAIL} · +852 9123 4567`,
   },
   { label: "Shop phone", value: "+852 2345 6789" },
 ];
 
-/** A visit that ended or is off: the time struck where it is off, the code kept. */
+/** A visit that ended or is off: the time struck where it is off. */
 function endedFacts(struck: boolean): readonly VisitFact[] {
-  return [
-    ...VISIT_FACTS.map((fact, index) =>
-      index === 0 && struck ? { ...fact, struck } : fact,
-    ),
-    { label: "Visit code", value: VISIT_CODE, mono: true },
-  ];
+  return VISIT_FACTS.map((fact, index) =>
+    index === 0 && struck ? { ...fact, struck } : fact,
+  );
 }
 
 const BEFORE_NOTES: readonly NoteListItem[] = [
@@ -117,8 +114,8 @@ const BOOKED_COPY: VisitBodyCopy = {
   lede: `Thu 3 Sep, 10:15 to 10:45 HKT at ${SHOP}.`,
   pass: {
     ...PASS_WORDS,
-    title: "Visit code",
-    note: "Show it at the counter on the day.",
+    title: "Your pass",
+    note: "At the counter, give your phone or email.",
   },
   footNote: "You can change or cancel until 10:45 on the day.",
 };
@@ -132,7 +129,12 @@ const TODAY_COPY: VisitBodyCopy = {
   notice: {
     text: "Signal 8 or black rain: we close while it’s up and email you.",
   },
-  pass: { ...PASS_WORDS, title: "Show this at the counter", line: PASS_LINE },
+  pass: {
+    ...PASS_WORDS,
+    title: "Your pass",
+    line: PASS_LINE,
+    note: "At the counter, give your phone or email.",
+  },
   footNote: "Change or cancel until 10:45. We hold your time until 10:25.",
 };
 
@@ -144,9 +146,9 @@ const LATE_TOLD_COPY: VisitBodyCopy = {
   lede: `We told ${SHOP} you’ll be about 10 min late. Show your pass when you arrive.`,
   pass: {
     ...PASS_WORDS,
-    title: "Show this at the counter",
+    title: "Your pass",
     line: PASS_LINE,
-    note: "Show this at the counter.",
+    note: "At the counter, give your phone or email.",
   },
   footNote:
     "After 10:25 you can still come: check in and wait for the next free counter.",
@@ -164,7 +166,7 @@ const CHECKED_IN_COPY: VisitBodyCopy = {
   },
   pass: {
     ...PASS_WORDS,
-    title: "Show this at the counter",
+    title: "Your pass",
     line: PASS_LINE,
     note: "Show this at your counter.",
   },
@@ -198,9 +200,9 @@ const TIME_PASSED_COPY: VisitBodyCopy = {
   },
   pass: {
     ...PASS_WORDS,
-    title: "Show this at the counter",
+    title: "Your pass",
     line: PASS_LINE,
-    note: "Show this when you arrive. You wait from when you check in.",
+    note: "When you arrive, give your phone or email. You wait from when you check in.",
   },
   footNote: `Change or cancel until 10:45. Or book ${SERVICE} again right away.`,
 };
@@ -269,7 +271,7 @@ const MOVE_PANEL_COPY: VisitMovePanelCopy = {
   confirm: "Pick a time",
   moving: "Moving…",
   keep: "Keep 10:15",
-  consequence: `Your visit code stays ${VISIT_CODE}. We’ll email ${EMAIL} the new time.`,
+  consequence: `We’ll email ${EMAIL} the new time.`,
 };
 
 const LATE_CHOICES: readonly VisitLateChoice[] = [
@@ -310,14 +312,13 @@ const LINK_OPENS_NOTHING_COPY: VisitLinkOpensNothingCopy = {
     "The email on the visit was changed, so its links went to the new address.",
   mine: "My visits",
   book: "Book a visit",
-  code: "Have your visit code? Staff at any shop can find your visit with it.",
+  staff: "Staff at any shop can find your visit by your phone or email.",
 };
 
 const BOOKED_PASS_COPY: VisitPassCopy = {
   ...PASS_WORDS,
   title: "Booked",
-  line: "For Alex Chan",
-  note: "Show this at the counter on the day.",
+  note: "At the counter, give your phone or email.",
 };
 
 const BOOKED_BEFORE: readonly string[] = [
@@ -543,8 +544,8 @@ export {
   TIME_PASSED_COPY,
   TODAY_COPY,
   TOLD_ROWS,
-  VISIT_CODE,
   VISIT_FACTS,
+  VISIT_NAME,
   WAIT_COPY,
   WAIT_HREF,
   WAIT_SERVICES,

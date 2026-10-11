@@ -16,7 +16,7 @@ type VisitMovePanelCopy = {
   moving: string;
   /** Keep the visit's own time. */
   keep: string;
-  /** What stays and who hears of it. */
+  /** Who hears of the new time. */
   consequence: string;
 };
 
@@ -34,8 +34,8 @@ type VisitMovePanelProps = {
 };
 
 /**
- * Change time: only the free times at the visit's own shop, the code kept,
- * the new time mailed. The visit's own time is never offered back to it —
+ * Change time: only the free times at the visit's own shop, the new time
+ * mailed. The visit's own time is never offered back to it —
  * keeping it is the panel's other button.
  */
 function VisitMovePanel({

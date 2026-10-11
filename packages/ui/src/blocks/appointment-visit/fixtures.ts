@@ -24,7 +24,7 @@ import type { VisitTicketBodyCopy } from "./visit-ticket-body";
 import type { VisitWaitBodyCopy } from "./visit-wait-body";
 
 /** Grading Submission at the Causeway Bay shop, Thu 3 Sep 2026, 10:15 to 10:45. */
-const VISIT_CODE = "BK-7QH2K";
+const VISIT_NAME = "Alex Chan";
 const VISIT_SHOP = "Hong Kong Grade10 Store";
 const VISIT_ADDRESS = "13 Pak Sha Road, Causeway Bay, Hong Kong";
 const VISIT_SERVICE = "Grading Submission";
@@ -35,20 +35,20 @@ const WAIT_HREF = "#/book/wait/causeway-bay";
 const DIRECTIONS_HREF = `https://maps.google.com/?q=${encodeURIComponent(`Grade10 ${VISIT_SHOP} ${VISIT_ADDRESS}`)}`;
 
 const VISIT_PASS_COPY: VisitPassCopy = {
-  title: "Visit code",
-  codeLabel: "Visit code",
-  note: "Show it at the counter on the day.",
+  title: "Your pass",
+  nameLabel: "Booked for",
+  note: "At the counter, give your phone or email.",
 };
 
 const TODAY_PASS_COPY: VisitPassCopy = {
-  title: "Show this at the counter",
-  codeLabel: "Visit code",
+  title: "Your pass",
+  nameLabel: "Booked for",
   line: `${VISIT_SERVICE} · ${VISIT_SHOP} · 10:15 to 10:45`,
 };
 
 const CALLED_PASS_COPY: VisitPassCopy = {
   title: "Counter 3",
-  codeLabel: "Visit code",
+  nameLabel: "Booked for",
   line: `${VISIT_SERVICE} · ${VISIT_SHOP} · 10:15`,
   note: "We hold the counter for you until 10:25.",
 };
@@ -74,7 +74,7 @@ const VISIT_FACTS: readonly VisitFact[] = [
   { label: "Service", value: VISIT_SERVICE, sub: "30 min" },
   {
     label: "Booked for",
-    value: "Alex Chan",
+    value: VISIT_NAME,
     sub: `${VISIT_EMAIL} · +852 9123 4567`,
   },
   { label: "Shop phone", value: "+852 2345 6789" },
@@ -82,7 +82,7 @@ const VISIT_FACTS: readonly VisitFact[] = [
 
 const STRUCK_FACTS: readonly VisitFact[] = VISIT_FACTS.map((fact, index) =>
   index === 0 ? { ...fact, struck: true } : fact,
-).concat({ label: "Visit code", value: VISIT_CODE, mono: true });
+);
 
 const BEFORE_NOTES: readonly NoteListItem[] = [
   { id: "bring-0", content: "Bring each card in a penny sleeve." },
@@ -184,7 +184,7 @@ const PASSED_BODY_COPY: VisitBodyCopy = {
   },
   pass: {
     ...TODAY_PASS_COPY,
-    note: "Show this when you arrive. You wait from when you check in.",
+    note: "When you arrive, give your phone or email. You wait from when you check in.",
   },
   footNote: `Change or cancel until 10:45. Or book ${VISIT_SERVICE} again right away.`,
 };
@@ -199,7 +199,7 @@ const LINK_OPENS_NOTHING_COPY: VisitLinkOpensNothingCopy = {
     "The email on the visit was changed, so its links went to the new address.",
   mine: "My visits",
   book: "Book a visit",
-  code: "Have your visit code? Staff at any shop can find your visit with it.",
+  staff: "Staff at any shop can find your visit by your phone or email.",
 };
 
 const CANCEL_PANEL_COPY: VisitCancelPanelCopy = {
@@ -255,15 +255,14 @@ const MOVE_PANEL_COPY: VisitMovePanelCopy = {
   confirm: "Pick a time",
   moving: "Moving…",
   keep: "Keep 10:15",
-  consequence: `Your visit code stays ${VISIT_CODE}. We’ll email ${VISIT_EMAIL} the new time.`,
+  consequence: `We’ll email ${VISIT_EMAIL} the new time.`,
 };
 
 const BOOKED_PASS_COPY: Omit<VisitBookedPassCopy, "confirmation"> = {
   pass: {
     title: "Booked",
-    codeLabel: "Visit code",
-    line: "For Alex Chan",
-    note: "Show this at the counter on the day.",
+    nameLabel: "Booked for",
+    note: "At the counter, give your phone or email.",
   },
   directions: "Directions",
   until: "You can change or cancel until 10:45 on Thu 3 Sep.",
@@ -313,7 +312,6 @@ const UPCOMING_ROWS: readonly VisitListRow[] = [
     id: "bk_live",
     service: VISIT_SERVICE,
     status: "Booked",
-    code: VISIT_CODE,
     location: VISIT_SHOP,
     when: "3 Sep 2026, 10:15–10:45",
   },
@@ -321,7 +319,6 @@ const UPCOMING_ROWS: readonly VisitListRow[] = [
     id: "bk_later",
     service: "Store/Auction Listing",
     status: "Booked",
-    code: "BK-3MD8P",
     location: VISIT_SHOP,
     when: "10 Sep 2026, 14:00–15:00",
   },
@@ -497,8 +494,8 @@ export {
   TODAY_BODY_COPY,
   TOLD_ROWS,
   UPCOMING_ROWS,
-  VISIT_CODE,
   VISIT_FACTS,
+  VISIT_NAME,
   VISIT_PASS_COPY,
   WAIT_COPY,
   WAIT_HREF,

@@ -22,5 +22,5 @@ export const Default: Story = {
   },
 };
 
-/** A visit that is off: its time struck, its code kept as a fact. */
+/** A visit that is off: its time struck. */
 export const Off: Story = { args: { facts: STRUCK_FACTS } };

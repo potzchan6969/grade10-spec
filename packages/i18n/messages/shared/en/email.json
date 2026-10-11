@@ -21,8 +21,6 @@
     "calendar": "A calendar file is attached, so you can add the visit to your calendar.",
     "beforeYouCome": "Before you come",
     "cancelledReason": "Reason",
-    "visitCode": "Visit code",
-    "showPass": "Show this at the counter",
     "runningLate": "Running late on the day? Tell us about when you’ll arrive. We hold your time until {held}.",
     "typhoon": "Signal 8 or black rain: we close while it’s up and email you.",
     "manageVisit": "Manage your visit",

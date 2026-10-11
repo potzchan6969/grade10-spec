@@ -77,11 +77,6 @@ function Section({
             <Text as="span" size="sm" tone="secondary">
               {row.status}
             </Text>
-            {row.code ? (
-              <Text as="span" size="sm" tone="secondary">
-                {row.code}
-              </Text>
-            ) : null}
           </HStack>
           <Text as="span" size="sm" tone="secondary">
             {row.location}

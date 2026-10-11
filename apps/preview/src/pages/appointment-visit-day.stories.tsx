@@ -30,8 +30,8 @@ import {
   TIME_PASSED_COPY,
   TODAY_COPY,
   TOLD_ROWS,
-  VISIT_CODE,
   VISIT_FACTS,
+  VISIT_NAME,
   WAIT_HREF,
 } from "./appointment-visit-content";
 import { AppointmentPageShell } from "./vault-shared";
@@ -95,7 +95,7 @@ function TodayVisit({ told }: { told: boolean }) {
             ]
       }
       before={BEFORE_NOTES}
-      code={VISIT_CODE}
+      name={VISIT_NAME}
       copy={copy}
       facts={VISIT_FACTS}
       onDismiss={() => setSaid(undefined)}
@@ -210,7 +210,7 @@ function AppointmentVisitDayPage({ state }: { state: DayState }) {
               ]
             : []
         }
-        code={VISIT_CODE}
+        name={VISIT_NAME}
         copy={later.copy}
         facts={VISIT_FACTS}
         noticeHref={state === "timePassed" ? WAIT_HREF : undefined}

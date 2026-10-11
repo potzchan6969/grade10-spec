@@ -30,7 +30,6 @@ type VisitListRow = {
   service: ReactNode;
   /** The word for where the visit stands. */
   status: string;
-  code?: string | null;
   location: ReactNode;
   /** The visit's day and times, formatted. */
   when: string;

@@ -13,8 +13,8 @@ type VisitLinkOpensNothingCopy = {
   moved: string;
   mine: string;
   book: string;
-  /** The way in with a visit code instead. */
-  code: string;
+  /** Staff can still find the visit at the counter. */
+  staff: string;
 };
 
 type VisitLinkOpensNothingProps = {
@@ -49,7 +49,7 @@ function VisitLinkOpensNothing({
         <Link href={bookHref}>{copy.book}</Link>
       </HStack>
       <Text as="p" size="sm" tone="secondary">
-        {copy.code}
+        {copy.staff}
       </Text>
     </VStack>
   );

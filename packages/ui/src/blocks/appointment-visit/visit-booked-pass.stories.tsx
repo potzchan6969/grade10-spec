@@ -10,7 +10,7 @@ import {
   BOOKED_PASS_COPY,
   DIRECTIONS_HREF,
   GET_THERE_ROWS,
-  VISIT_CODE,
+  VISIT_NAME,
 } from "./fixtures";
 import { VisitBookedPass } from "./visit-booked-pass";
 
@@ -35,7 +35,7 @@ const meta = {
       manageHref: "#/book/manage",
       calendarHref: "#/book/bk_live.ics",
     },
-    code: VISIT_CODE,
+    name: VISIT_NAME,
     directionsHref: DIRECTIONS_HREF,
     before: BOOKED_BEFORE,
     getThere: GET_THERE_ROWS,
@@ -49,7 +49,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(VISIT_CODE)).toBeVisible();
+    expect(canvas.getByText(VISIT_NAME)).toBeVisible();
+    expect(canvas.queryByText(/BK-/)).toBeNull();
+    expect(canvas.queryByText(/visit code/i)).toBeNull();
     expect(
       canvas.getByRole("region", { name: "How to get there" }),
     ).toBeVisible();
@@ -60,9 +62,9 @@ export const Default: Story = {
   },
 };
 
-/** No visit code yet: no pass. */
-export const NoCode: Story = {
-  args: { code: null },
+/** No name on the visit: no pass. */
+export const NoName: Story = {
+  args: { name: null },
   play: async ({ canvasElement }) => {
     expect(canvasElement.querySelector('[data-slot="visit-pass"]')).toBeNull();
   },

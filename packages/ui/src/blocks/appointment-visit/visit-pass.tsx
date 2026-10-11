@@ -4,31 +4,32 @@ import { FactCard } from "../page-blocks/fact-card";
 
 type VisitPassCopy = {
   title: string;
-  codeLabel: string;
-  /** What the visit is, under the code. */
+  nameLabel: string;
+  /** What the visit is, under the name. */
   line?: string;
   note?: string;
 };
 
 type VisitPassProps = {
   copy: VisitPassCopy;
-  /** The visit code staff find the visit with. */
-  code: string;
+  /** Who the visit is booked for. */
+  name: string;
 };
 
 /**
- * The pass: the visit code as large text, what the visit is, and the counter
- * once called. Staff at any shop find the visit with the code.
+ * The pass: who the visit is booked for as large text, what the visit is,
+ * and the counter once called. Staff at any shop find the visit by the
+ * collector's phone, email or name.
  */
-function VisitPass({ copy, code }: VisitPassProps) {
+function VisitPass({ copy, name }: VisitPassProps) {
   return (
     <FactCard copy={{ title: copy.title }} slot="visit-pass">
       <VStack gap="xs">
         <Text as="span" size="xs" tone="secondary">
-          {copy.codeLabel}
+          {copy.nameLabel}
         </Text>
-        <Text as="span" face="mono" size="display" weight="bold">
-          {code}
+        <Text as="span" size="display" weight="bold">
+          {name}
         </Text>
         {copy.line ? (
           <Text as="span" size="sm">

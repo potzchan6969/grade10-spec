@@ -14,8 +14,8 @@ import {
   TODAY_ACTS,
   TODAY_BODY_COPY,
   TOLD_ROWS,
-  VISIT_CODE,
   VISIT_FACTS,
+  VISIT_NAME,
   WAIT_HREF,
 } from "./fixtures";
 import { VisitBody } from "./visit-body";
@@ -29,7 +29,7 @@ const meta = {
   args: {
     copy: BOOKED_BODY_COPY,
     tone: "info",
-    code: VISIT_CODE,
+    name: VISIT_NAME,
     acts: BOOKED_ACTS,
     facts: VISIT_FACTS,
     before: BEFORE_NOTES,
@@ -49,6 +49,8 @@ export const Booked: Story = {
       canvas.getByRole("heading", { name: "Grading Submission" }),
     ).toBeVisible();
     expect(canvas.getByRole("button", { name: "Cancel visit" })).toBeVisible();
+    expect(canvas.getByRole("region", { name: "Your pass" })).toBeVisible();
+    expect(canvas.queryByText(/BK-/)).toBeNull();
     expect(
       canvas.getByRole("region", { name: "Before you come" }),
     ).toBeVisible();
@@ -124,7 +126,7 @@ export const TimePassed: Story = {
   },
 };
 
-/** Called off: the time struck, no pass, the code kept as a fact. */
+/** Called off: the time struck, and no pass. */
 export const Cancelled: Story = {
   args: {
     copy: CANCELLED_BODY_COPY,

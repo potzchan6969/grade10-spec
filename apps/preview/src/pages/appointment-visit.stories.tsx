@@ -41,8 +41,8 @@ import {
   RECONNECTING_COPY,
   SERVICE,
   TOLD_ROWS,
-  VISIT_CODE,
   VISIT_FACTS,
+  VISIT_NAME,
 } from "./appointment-visit-content";
 import {
   firstAvailableVisitDay,
@@ -134,7 +134,7 @@ function BookedVisit({ offline }: { offline: boolean }) {
           : []
       }
       before={BEFORE_NOTES}
-      code={VISIT_CODE}
+      name={VISIT_NAME}
       copy={copy}
       facts={VISIT_FACTS}
       onDismiss={() => setSaid(undefined)}
@@ -250,7 +250,7 @@ function AppointmentVisitPage({ state }: { state: VisitState }) {
       <VisitShell>
         <VisitBookedPass
           before={BOOKED_BEFORE}
-          code={VISIT_CODE}
+          name={VISIT_NAME}
           confirmation={{
             record: { ...VISIT_RECORD, id: "bk_grading", service: SERVICE },
             manageHref: "#/book/manage",
@@ -301,7 +301,7 @@ function AppointmentVisitPage({ state }: { state: VisitState }) {
     <VisitShell>
       <VisitBody
         acts={acts}
-        code={VISIT_CODE}
+        name={VISIT_NAME}
         copy={ended.copy}
         facts={endedFacts(ended.struck)}
         onDismiss={() => {}}

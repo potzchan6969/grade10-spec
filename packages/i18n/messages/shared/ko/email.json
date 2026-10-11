@@ -21,8 +21,6 @@
     "calendar": "캘린더 파일을 첨부했으니 방문 일정을 캘린더에 추가하세요.",
     "beforeYouCome": "방문 전 안내",
     "cancelledReason": "사유",
-    "visitCode": "방문 코드",
-    "showPass": "카운터에서 보여 주세요",
     "runningLate": "당일 늦으시나요? 언제쯤 도착하는지 알려 주세요. {held}까지 시간을 잡아 둡니다.",
     "typhoon": "태풍 경보 8호 또는 흑색 호우 경보가 발령되면 그동안 문을 닫고 이메일로 알려 드립니다.",
     "manageVisit": "방문 관리",

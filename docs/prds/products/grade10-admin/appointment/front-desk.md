@@ -17,7 +17,7 @@ The Day, opened on today, is the shop's front desk: who is here, who waits, whic
 
 A staff member checks a visitor in on arrival, so every arrival is one somebody saw.
 
-- **Find** - by phone, email, name or visit code, typed into the Check in field; nothing is scanned, so the desk needs no scanner or camera
+- **Find** - by phone, email or name, typed into the Check in field; nothing is scanned, so the desk needs no scanner or camera
 - **Wrong shop** - a visit booked at another shop offers Move here or Add as walk-in
 - **Not today, cancelled or already in** - each says so and checks nobody in
 - **Check in and call** - one act when a counter that runs the service is free
@@ -104,7 +104,7 @@ A shop serves booked visitors and walk-ins at the same counters, so the desk has
 | Not seen | ❓ Open | Staff press Didn't come once the 10 minutes pass; no visit ends by itself. | Operations |
 | Close early and product visits | ❓ Open | A visit grading or the vault booked for itself stays booked; its product moves it. | Operations |
 | You're next sent | ❓ Open | The Sent mark on a row is the phone's own; another staff phone does not see it. | Operations |
-| No QR | Decided | No pass, ticket or poster carries a QR; staff find a visit by phone, email, name or code, and send the ticket link. | Product |
+| No QR | Decided | No pass, ticket or poster carries a QR; staff find a visit by phone, email or name, and send the ticket link. A visit code is shown nowhere; a typed one still finds the visit. | Product |
 | Desk acts and Undo | ❓ Open | Check in, Call, Add walk-in and the closures apply at once with no Undo; a mark keeps its Undo. | Product |
 
 The risk is a floor that stops pressing Call: the counters then read free while people are served, and the estimates drift. Design: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd). Benchmarks: [Genius Bar and cal.com](/references/appointment-benchmarks).

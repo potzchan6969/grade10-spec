@@ -21,9 +21,8 @@ The manage link opens one page per visit, and the page follows the visit from th
 
 ## The Pass
 
-- **Visit code** - BK- and five characters on the listing-code scheme, so a code read aloud with O, I or L still finds the visit
-- **On the pass** - the code in large text, the service, the shop and the time, and the counter once called; no QR
-- **At the counter** - the collector shows the code or gives their phone or email, and staff find the visit
+- **On the pass** - who the visit is booked for, the service, the shop and the time, and the counter once called; no QR and no code
+- **At the counter** - the collector gives their phone or email, and staff find the visit
 - **Where** - the visit page on the day, and the day-before message
 - **Not a key** - the pass checks a visit in and releases nothing; grading and the vault check who collects
 - **Product visits** - a visit grading or the vault books for itself has no pass and no visit page
@@ -62,9 +61,9 @@ Every message carries Manage your visit. A visit sent to grading or the vault ge
 ## *Collector* - **Gets the day-before message**
 The pass, how to get there, Running late and the typhoon line.
 ## *Collector* - **Shows the pass at the counter**
-The visit page on the day opens on the visit code.
+The visit page on the day opens on the pass.
 ## *Staff* - **Finds the visit**
-By the code, a phone, an email or a name. The visit is checked in; with a counter free, Check in and call seats them at once.
+By a phone, an email or a name. The visit is checked in; with a counter free, Check in and call seats them at once.
 ## *Collector* - **Waits**
 The page shows Waiting and the estimate.
 ## *Staff* - **Calls them**
@@ -90,9 +89,10 @@ A collector who books once comes back to one link for everything about that visi
 | Move to another shop | ❓ Open | Not offered; the collector cancels and books again. | Operations |
 | Self check-in | ❓ Open | None; an "I'm here" on Running late only pings the desk. | Operations |
 | Wallet pass | ❓ Open | None; the pass lives on the page and in the day-before message. | Product |
-| No QR | Decided | The pass, the ticket and the door poster carry no QR; a code, a phone or an email finds the visit, so neither the collector nor staff need a camera. | Product |
+| No QR | Decided | The pass, the ticket and the door poster carry no QR; a phone or an email finds the visit, so neither the collector nor staff need a camera. | Product |
+| No visit code | Decided | Nobody is shown a visit code; a phone, an email or a name finds the visit. The system still issues one, and a typed code still finds the visit, as a backup. | Product |
 | After-visit mail | ❓ Open | Thanks and We missed you, 2 hours after the shop next opens. | Product |
 | Manage link | ❓ Open | Derived from a server key, so every message can carry it while the record keeps only a hash. | Engineering |
 
-The risk is a pass nobody opens; the desk finds the visit by name, code, phone or email. Design: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd). Benchmarks: [Genius Bar and cal.com](/references/appointment-benchmarks). The desk's side: [Front Desk](/p/grade10-admin/appointment/front-desk).
+The risk is a pass nobody opens; the desk finds the visit by name, phone or email. Design: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd). Benchmarks: [Genius Bar and cal.com](/references/appointment-benchmarks). The desk's side: [Front Desk](/p/grade10-admin/appointment/front-desk).
 :::

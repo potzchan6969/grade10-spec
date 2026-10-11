@@ -27,7 +27,7 @@ type VisitBodyCopy = VisitPhaseHeaderCopy & {
   said?: string;
   dismiss: string;
   notice?: VisitNoticeCopy;
-  /** The pass's words, drawn when the visit has a code. */
+  /** The pass's words, drawn when the visit has a name. */
   pass?: VisitPassCopy;
   /** The line under the acts. */
   footNote?: string;
@@ -41,8 +41,8 @@ type VisitBodyCopy = VisitPhaseHeaderCopy & {
 type VisitBodyProps = {
   copy: VisitBodyCopy;
   tone: VisitTone;
-  /** The visit code; without one no pass is drawn. */
-  code?: string | null;
+  /** Who the visit is booked for; without a name no pass is drawn. */
+  name?: string | null;
   /** Where the notice's link leads. */
   noticeHref?: string;
   acts: readonly VisitAct[];
@@ -66,7 +66,7 @@ type VisitBodyProps = {
 function VisitBody({
   copy,
   tone,
-  code,
+  name,
   noticeHref,
   acts,
   panel,
@@ -106,7 +106,7 @@ function VisitBody({
           title={copy.notice.title ?? copy.notice.text}
         />
       ) : null}
-      {copy.pass && code ? <VisitPass code={code} copy={copy.pass} /> : null}
+      {copy.pass && name ? <VisitPass copy={copy.pass} name={name} /> : null}
       {panel}
       <VisitActRow acts={acts} />
       {copy.footNote ? (
