@@ -157,7 +157,7 @@ export const AUCTION_ITEM: MyConsignmentItemView = {
   state: "On sale",
   endingSoon: true,
   channel: "At auction",
-  lines: ["Reserve HK$12,000.00", "On sale until 18 Oct 2026"],
+  lines: ["Floor HK$12,000.00", "On sale until 18 Oct 2026"],
 };
 
 export const SOLD_ITEM: MyConsignmentItemView = {

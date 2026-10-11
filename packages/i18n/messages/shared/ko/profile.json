@@ -75,8 +75,6 @@
     "itemsTitle": "내 물품",
     "listPrice": "판매가",
     "floor": "최저가",
-    "reserve": "최저 낙찰가",
-    "noReserve": "최저 낙찰가 없음",
     "soldFor": "판매 가격",
     "soldOn": "{date} 판매",
     "yourPayout": "지급액",

@@ -73,7 +73,7 @@
     "items": "Items",
     "salePrice": "Sale price",
     "payout": "Payout",
-    "dueOn": "Paid on",
+    "dueOn": "Payout due",
     "paidTo": "Paid to",
     "valueDate": "Paid on",
     "price": "Price",

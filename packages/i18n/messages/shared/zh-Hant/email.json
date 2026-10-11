@@ -73,7 +73,7 @@
     "items": "物品",
     "salePrice": "售價",
     "payout": "結算金額",
-    "dueOn": "付款日",
+    "dueOn": "付款到期日",
     "paidTo": "付款戶口",
     "valueDate": "付款日",
     "price": "價格",

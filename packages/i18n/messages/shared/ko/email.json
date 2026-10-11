@@ -73,7 +73,7 @@
     "items": "물품",
     "salePrice": "판매 가격",
     "payout": "정산 금액",
-    "dueOn": "지급일",
+    "dueOn": "지급 예정일",
     "paidTo": "지급 계좌",
     "valueDate": "지급일",
     "price": "가격",

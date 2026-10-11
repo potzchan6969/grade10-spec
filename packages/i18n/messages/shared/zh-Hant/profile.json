@@ -75,8 +75,6 @@
     "itemsTitle": "你的物品",
     "listPrice": "標價",
     "floor": "底價",
-    "reserve": "底價（拍賣）",
-    "noReserve": "沒有底價",
     "soldFor": "成交價",
     "soldOn": "{date} 售出",
     "yourPayout": "你的款項",
