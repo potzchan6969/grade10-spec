@@ -247,14 +247,14 @@ Runs once per row of **Test data**.
 * Pay returns the existing order and invoice or settling state.
 * No second Grade10 order or Shopify invoice is created.
 
-## grade10-site-store-checkout-US5: Collector starts one payment at a time
+## grade10-site-store-checkout-US7: Collector starts one payment at a time
 
 **As a** signed-in collector who presses Pay again or changes the cart while a payment is starting,
 **I want** the drawer to accept one Pay at a time and open only the answer for my current cart,
 **so that** I do not leave for a payment I did not mean to start.
 
 <!-- trace:case id=g10.store-checkout.TC-a8o rev=1 covers=g10.store-checkout.SC-i09 -->
-### grade10-site-store-checkout-US5-TC2-1: Repeated Pay resumes the saved invoice after current review
+### grade10-site-store-checkout-US7-TC2-1: Repeated Pay resumes the saved invoice after current review
 
 **Classification:**
 
@@ -267,7 +267,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
+* **Trace:** grade10-site-store-checkout-US-07
 
 **Pre-conditions:**
 
@@ -289,7 +289,7 @@ Runs once per row of **Test data**.
 * Exactly one matching order and payable invoice exist.
 
 <!-- trace:case id=g10.store-checkout.TC-cvz rev=1 covers=g10.store-checkout.SC-s19 -->
-### grade10-site-store-checkout-US5-TC6-1: Terminal replay retains the existing purchase outcome
+### grade10-site-store-checkout-US7-TC6-1: Terminal replay retains the existing purchase outcome
 
 Runs once per row of **Test data**.
 
@@ -304,7 +304,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
+* **Trace:** grade10-site-store-checkout-US-07
 
 **Pre-conditions:**
 
@@ -337,7 +337,7 @@ Runs once per row of **Test data**.
 * Terminal orders are not polled as open purchases.
 
 <!-- trace:case id=g10.store-checkout.TC-q5v rev=1 covers=g10.store-checkout.SC-t20 -->
-### grade10-site-store-checkout-US5-TC8-1: Interruption before payment dispatch permits safe recovery
+### grade10-site-store-checkout-US7-TC8-1: Interruption before payment dispatch permits safe recovery
 
 **Classification:**
 
@@ -350,7 +350,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
+* **Trace:** grade10-site-store-checkout-US-07
 
 **Pre-conditions:**
 
@@ -369,7 +369,7 @@ Runs once per row of **Test data**.
 * Only one order and payable invoice are created.
 
 <!-- trace:case id=g10.store-checkout.TC-8c2 rev=1 covers=g10.store-checkout.SC-u21 -->
-### grade10-site-store-checkout-US5-TC9-1: Ambiguous dispatch blocks another invoice until recovery
+### grade10-site-store-checkout-US7-TC9-1: Ambiguous dispatch blocks another invoice until recovery
 
 **Classification:**
 
@@ -382,7 +382,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
+* **Trace:** grade10-site-store-checkout-US-07
 
 **Pre-conditions:**
 
@@ -406,7 +406,7 @@ Runs once per row of **Test data**.
 * Repeated Pay cannot dispatch another payable invoice.
 
 <!-- trace:case id=g10.store-checkout.TC-gtu rev=1 covers=g10.store-checkout.SC-j10 -->
-### grade10-site-store-checkout-US5-TC10-1: Response loss at Shopify recovers one existing invoice
+### grade10-site-store-checkout-US7-TC10-1: Response loss at Shopify recovers one existing invoice
 
 **Classification:**
 
@@ -419,7 +419,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-05
+* **Trace:** grade10-site-store-checkout-US-07
 
 **Pre-conditions:**
 
@@ -438,14 +438,14 @@ Runs once per row of **Test data**.
 * The existing invoice is retained.
 * No replacement order or payable invoice is created.
 
-## grade10-site-store-checkout-US6: Collector keeps the cart built after Pay
+## grade10-site-store-checkout-US8: Collector keeps the cart built after Pay
 
 **As a** signed-in collector who changes the cart or tender after starting payment,
 **I want** my later cart and choices kept when the earlier payment settles,
 **so that** a delayed purchase cannot remove my later choices.
 
 <!-- trace:case id=g10.store-checkout.TC-ec6 rev=1 covers=g10.store-checkout.SC-k11 -->
-### grade10-site-store-checkout-US6-TC1-1: Persisted edits retire the older unpaid invoice
+### grade10-site-store-checkout-US8-TC1-1: Persisted edits retire the older unpaid invoice
 
 Runs once per row of **Test data**.
 
@@ -460,7 +460,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-06
+* **Trace:** grade10-site-store-checkout-US-08
 
 **Pre-conditions:**
 
@@ -503,23 +503,23 @@ Runs once per row of **Test data**.
 
 | Scenario | Active draft |
 | --- | --- |
-| grade10-site-store-checkout-SC-09 | `grade10-site-store-checkout-US5-TC2-1` |
-| grade10-site-store-checkout-SC-10 | `grade10-site-store-checkout-US5-TC10-1` |
-| grade10-site-store-checkout-SC-11 | `grade10-site-store-checkout-US6-TC1-1` |
-| grade10-site-store-checkout-SC-19 | `grade10-site-store-checkout-US5-TC6-1` |
-| grade10-site-store-checkout-SC-20 | `grade10-site-store-checkout-US5-TC8-1` |
-| grade10-site-store-checkout-SC-21 | `grade10-site-store-checkout-US5-TC9-1` |
+| grade10-site-store-checkout-SC-09 | `grade10-site-store-checkout-US7-TC2-1` |
+| grade10-site-store-checkout-SC-10 | `grade10-site-store-checkout-US7-TC10-1` |
+| grade10-site-store-checkout-SC-11 | `grade10-site-store-checkout-US8-TC1-1` |
+| grade10-site-store-checkout-SC-19 | `grade10-site-store-checkout-US7-TC6-1` |
+| grade10-site-store-checkout-SC-20 | `grade10-site-store-checkout-US7-TC8-1` |
+| grade10-site-store-checkout-SC-21 | `grade10-site-store-checkout-US7-TC9-1` |
 
 ### Manual
 
 | Manual | Why |
 | --- | --- |
-| `grade10-site-store-checkout-US5-TC2-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
-| `grade10-site-store-checkout-US5-TC6-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
-| `grade10-site-store-checkout-US5-TC8-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
-| `grade10-site-store-checkout-US5-TC9-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
-| `grade10-site-store-checkout-US5-TC10-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
-| `grade10-site-store-checkout-US6-TC1-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
+| `grade10-site-store-checkout-US7-TC2-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
+| `grade10-site-store-checkout-US7-TC6-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
+| `grade10-site-store-checkout-US7-TC8-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
+| `grade10-site-store-checkout-US7-TC9-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
+| `grade10-site-store-checkout-US7-TC10-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
+| `grade10-site-store-checkout-US8-TC1-1` | To be walked through the checkout and provider test harness after backend design and implementation; no execution credit |
 
 | `grade10-site-store-checkout-US1-TC3-1` | To be walked through the checkout test harness after backend design and implementation; no execution credit |
 | `grade10-site-store-checkout-US1-TC4-1` | To be walked through the checkout test harness after backend design and implementation; no execution credit |
