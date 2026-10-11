@@ -20,7 +20,7 @@ the value below is the default it starts on -
 | Minimum commission | per item; none |
 | Fees | listing, return and early take-back; none |
 | Term on sale | **90** days |
-| Return window | **14** days after a store sale; **7** days after an auction lot is delivered or kept in the vault |
+| Return window | **14** days after a store sale is delivered; **7** days after an auction lot is delivered or collected |
 | When a consignor is paid | after the return window |
 | A refund after payout | set against the consignor's next payout |
 | Identity before signing | always verified |
@@ -29,6 +29,9 @@ the value below is the default it starts on -
 
 - **Unset refuses** - an agreement is not prepared while a figure it prints
   is unset
+- ❓ Product - **Delivery never reported** - when the return window of an
+  online sale starts if its delivery is never reported; until the owner
+  decides, it waits for a reported delivery or staff recording one
 
 ## One Consignment
 
@@ -52,7 +55,7 @@ The item is listed in the shop and online and goes to a display case; the consig
 At the till or online; the item comes off sale everywhere at once.
 
 ## *Treasurer* - **Pays the consignor**
-After the return window, the sale price less commission and fees, by bank transfer, with a statement.
+After the return window, the listed price less commission and fees, by bank transfer, with a statement.
 :::
 
 :::flow{title="One consignment" case="At auction"}
@@ -60,33 +63,39 @@ After the return window, the sale price less commission and fees, by bank transf
 Online, or at the counter with staff, naming the items.
 
 ## *Staff* - **Receives the items**
-As in the shop; an item already in the vault stays there.
+As in the shop; an item in a vault case is taken once its case is released.
 
 ## *Staff and consignor* - **Agree the terms**
-The commission from the schedule and whether the consignor may be named; the lot has no reserve, as no listing does.
+A floor for each item, which is the lot's start price and which the auction cannot change; the commission from the schedule; and whether the consignor may be named. The lot has no reserve.
 
 ## *Consignor* - **Signs**
 The consignment agreement.
 
 ## *Staff* - **Lists the lot**
-A lot made from the item, its photographs and facts, in a campaign or alone - [Auction Management](/p/grade10-admin/auction/management#listings).
+The lot comes to auction admin as a draft made from the item, its photographs and facts; staff place it in a campaign or alone - [Auction Management](/p/grade10-admin/auction/management#listings).
 
 ## *Winner* - **Pays**
-The winner's order runs as for any lot; the winner may also collect at a shop or keep the item in the vault.
+The winner's order runs as for any lot; the winner may collect at a shop instead, then keep the card in a vault case of their own.
 
 ## *Treasurer* - **Pays the consignor**
-Once the lot is delivered or kept in the vault and the window has passed, the hammer price less commission and fees.
+Once the lot is delivered or collected and the window has passed, the hammer price less commission and fees.
 :::
 
 - **One item, one channel** - an item is on sale in the shop or at auction,
   never both - [Services and Hand-offs](/p/grade10-admin/inventory/services#marks-that-share-an-item)
 - **The consignor's until sold** - the owner moves to the buyer only when the
-  item leaves to them or is kept in the vault for them
-- ❓ **The store and the auction, not built** - consignment puts nothing on
-  sale in Shopify or the auction and hears no sale back; staff record each
-  listing, sale, refund and delivery on the consignment by hand until the
-  store's consigned product and the auction's lot of a consigned item are
-  designed
+  item is delivered to them or they collect it
+- **Listed for you** - each item becomes one store product, or a draft lot
+  that staff place
+- **Sales come back on their own** - the store and the auction report each
+  sale, delivery and refund; staff record one by hand only when a channel
+  did not report it
+- **The first sale wins** - a second sale of the same item is refunded
+- **A card in a vault case** - refused until its vault case is released;
+  the item can be consigned in the same visit
+- ❓ Product - **Selling from the vault** - whether the consignor releases
+  the vault case first, or the case passes to the buyer -
+  [Services and Hand-offs](/p/grade10-admin/inventory/services#marks-that-share-an-item)
 - ❓ **Asking online, not built** - only staff open a consignment; the site
   has no request page until its form and rules are designed
 
@@ -97,8 +106,13 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
   consignor is told
 - **Below the floor** - only on the consignor's written yes, kept on the
   consignment
-- **At auction** - no reserve; a consigned lot is absolute like every
-  listing - [Bidding](/p/grade10-site/auction/bidding)
+- **At auction** - the floor is the lot's start price, and the auction
+  cannot change it; no reserve, as on every listing -
+  [Bidding](/p/grade10-site/auction/bidding)
+- **Paid on the listed price** - a cut the buyer gets at checkout is the
+  house's
+- ❓ Product - **Points and discounts** - whether points, coupons and the
+  shop's discounts reach a consigned card
 
 ## Commission and Payout
 
@@ -108,7 +122,7 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
 - **Outside the schedule** - a commission a partner negotiates is set by
   someone who may approve it -
   [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
-- **What is paid** - the sale price less commission and fees; at auction, the
+- **What is paid** - the listed price less commission and fees; at auction, the
   hammer price less commission and fees, the buyer's premium being the
   house's
 - **How** - a bank transfer a treasurer records with its reference; a
@@ -116,10 +130,13 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
 - **When** - after the return window by default; an admin may switch a
   channel to paying at the sale, the refund then set against later payouts,
   or to one monthly statement
-- **A refund before payout** - reverses the sale; an item that comes back
+- **A return before payout** - reverses the sale; an item that comes back
   goes on sale for the rest of its term
-- **A refund after payout** - set against the consignor's next payout, by
-  default
+- **A refund where the buyer keeps the card** - the house's; the sale stands
+- **A return after payout** - the item comes back to the consignor with the
+  choices, and the refund is set against their next payout, by default
+- ❓ Product - **Nothing to set against** - when a refund after payout is
+  asked back from the consignor if no later payout comes
 
 ## Seller Display
 
@@ -136,9 +153,10 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
 | --- | --- |
 | Received | the items are checked in, with the receipt |
 | Agreement signed | the sealed agreement, with its terms |
-| On sale | the item is listed in the shop or at auction |
+| On sale | the item is listed in the shop or at auction, with its link |
 | Price changed | staff changed the price within the floor |
-| Sold | the sale price, and the day the payout is due |
+| Sold | the sale price, and the payout day once the buyer has the item |
+| Payout date set | the buyer has the item: the payout and its day |
 | Paid | the payout, with its statement |
 | Ending soon | seven days before the term ends, with the choices |
 | Ended unsold | the term ended, with the choices |
@@ -153,7 +171,8 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
 - **Unsold at auction** - relist, the store, the vault, or collect or ship it
   back
 - **Taken back early** - the consignor may take an item back before it
-  sells, for the early take-back fee where an admin set one
+  sells, for the early take-back fee where an admin set one; a lot live at
+  auction only once the auction calls it off or it closes
 - ❓ Legal - **Nobody collects** - reminders, then a written notice and what
   follows it, as grading's ladder runs, is proposed
 
@@ -194,12 +213,19 @@ payouts made on their due day.
 | One service, two channels | Decided | One consignment service serves the store and the auction; the consignor, the agreement, the commission and the payout are the same, and only the sale differs - decided under the owner's delegation, 2026-10-08 | Product |
 | Commission bound to the consignment | Decided | Pinned when the agreement is prepared, as grading pins its fee sheet; an agreement waiting for a signature keeps its schedule, and a change reaches the next agreement prepared - decided by the owner, 2026-10-08 | Product |
 | The shop and online | Decided | One store product per consigned item sells in the shop and online, wherever the store sells - decided under the owner's delegation, 2026-10-08; no shop-only listing - decided by the owner, 2026-10-11 | Product |
-| No reserve | Decided | A consigned lot is absolute like every auction listing; the consignor's protection is the start price and the choice of channel - decided by the owner, 2026-10-11 | Product |
+| No reserve | Decided | A consigned lot is absolute like every auction listing; the consignor's protection is the floor and the choice of channel - decided by the owner, 2026-10-11 | Product |
 | List price and floor | Decided | Staff change the price within the floor; below it only on the consignor's written yes - decided under the owner's delegation, 2026-10-08 | Product |
+| Floor is the start price | Decided | An item for auction needs a floor at signing, 0 allowed; the lot opens at it and the auction cannot change it - decided under the owner's delegation, 2026-10-11 | Product |
+| Paid on the listed price | Decided | The consignor is paid on the listed price; a cut the buyer gets is the house's, and a refund where the buyer keeps the card is the house's too - decided under the owner's delegation, 2026-10-11 | Product |
+| Window from delivery | Decided | The return window counts from delivery: 14 days for a store sale, 7 for an auction lot delivered or collected - decided by the owner, 2026-10-11 | Product |
 | Seller display | Decided | Optional and set by an admin - decided by the owner, 2026-10-08. Only where the consignor agreed, under their display name - decided under the owner's delegation, 2026-10-08 | Product |
 | Messages | Decided | The consignment service sends its own, by email, as the vault and grading do - decided under the owner's delegation, 2026-10-08 | Product |
 | Every figure is a setting | Decided | Commission, the minimum, fees, the term and the windows are settings admins change in the console, each pinned to a consignment when its agreement is prepared - decided by the owner, 2026-10-08 | Product |
 | Flexible, with a default | Decided | Identity, when a consignor is paid and a refund after payout are settings too; the recommendation is the default: always verified, paid after the return window, a refund set against the next payout - decided by the owner, 2026-10-08 | Product |
 | A consignor's own page | ❓ Open | Built ahead of a collector's page of their items: under their profile, a signed-in consignor reads each consignment, its items' prices, sales and payouts, the terms pinned to it, the payouts made, its documents and the emails sent; a buyer's seller line waits for a store product that names its item - taken by the building agent, 2026-10-10, for the owner to confirm | Product |
 | Nobody collects | ❓ Open | Reminders, then a written notice, as grading's ladder runs | Legal |
+| Delivery never reported | ❓ Open | When an online sale's return window starts if its delivery is never reported; until decided, it waits for a reported delivery or staff recording one | Product |
+| Selling from the vault | ❓ Open | Whether the consignor releases the vault case first, or the case passes to the buyer; until decided, a card in a vault case is refused until it is released | Product |
+| Points and discounts | ❓ Open | Whether points, coupons and the shop's discounts reach a consigned card; the consignor is paid on the listed price either way | Product |
+| Nothing to set against | ❓ Open | When a refund after payout is asked back from the consignor if no later payout comes | Product |
 :::

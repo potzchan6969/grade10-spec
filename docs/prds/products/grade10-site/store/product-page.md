@@ -110,4 +110,5 @@ auction lot's address.
 | Low-stock annotation | Decided | The Product Detail frame's Low inventory indicator, which asks for `Only X left`, is superseded: this page's no-scarcity rule governs, and the frame is historical, since the stories are the agreed look. | Design |
 | Remaining count in the shared blocks | Decided | Grade10 supplies none of the product header's or the listing card's remaining-count element, nor the purchase panel's stepper ceiling from a stock count, so no Grade10 surface shows them. The blocks keep all three as optional props. | Product |
 | A catalogue image that fails to transform | ❓ Open | Whether a card whose image exists but fails to load or resize from the CDN falls back to no `og:image`, the same as a card with no image, or something else. | Engineering |
+| Points and discounts on a consigned card | ❓ Open | Whether points, coupons and the shop's discounts reach a card a collector consigned; the consignor is paid on the listed price either way - [Consignment](/p/grade10-site/consignment#price). | Product |
 :::

@@ -47,6 +47,9 @@ the card is in the winner's hands. The collector's half is
   a changed quantity moves the hold, changing the product warns that Save
   moves it, create is refused without a matching hold, and a call-off
   releases it
+- **A consigned lot** - consignment makes it as a draft from the item, its
+  photographs and facts; it takes no stock hold, and its starting price is
+  the consignment's floor, which an operator here cannot change
 - **Cert ID** - creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for regular stock without a Cert
   record; each Cert ID can have its own live listing, and only one
@@ -96,7 +99,9 @@ the card is in the winner's hands. The collector's half is
   on any new draft. Relist shows on an Unsold listing only, to an operator who
   can operate auctions; nothing is stored until Save. It shows on the
   listing's row in the Listings table, once its stock was released, and not
-  on a listing in a campaign or one already relisted
+  on a listing in a campaign or one already relisted. A consigned lot is
+  relisted from its consignment, and reads Relist from consignment with its
+  reference
 - **Media** — an operator can choose reusable assets from the selected
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:
@@ -128,7 +133,9 @@ the card is in the winner's hands. The collector's half is
   start, close or Publish at typed not after now, or a close not after now at
   create; a ninth media item, an unsupported or empty file, or
   removing the last item once created; prices, window, slug or sandbox on a
-  published listing, and every write on a closed, settled or canceled one
+  published listing, and every write on a closed, settled or canceled one;
+  the starting price or currency of a consigned lot; a refund that writes off
+  a consigned lot not yet delivered
 
 :::detail{title="Listings code map" for="engineer"}
 - **Close** — `sweeps/close.ts`
@@ -538,6 +545,7 @@ settings.
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
 | Schedule order | Decided | Publish at, then the start, then the close; a Publish at at the start is allowed. Each typed time must be after now, and a stored time that has passed is kept, so a live listing still saves. Publish now ignores the order and removes the Publish at after asking. Chosen over warnings only, which let a listing publish already closed. | Product |
+| A consigned lot | Decided | Consignment makes it as a draft with no stock hold and owns its start price, which is the consignment's floor, and its relist. | Product |
 | Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |

@@ -72,7 +72,7 @@ A scan of a storage unit, refused past the unit's cap - [Locations](/p/grade10-a
 | Way out | Custody ends when |
 | --- | --- |
 | Collected at a shop | the owner, or a person they named, signs the receipt |
-| Shipped | the carrier's proof of delivery, or Shopify's fulfilment for a store sale |
+| Shipped | the carrier's proof of delivery, or the delivery Shopify reports for a store sale |
 | Sold and kept | the owner moves to the buyer; the item stays where it is |
 | Written off | lost or destroyed and paid out under its agreement; the item retires |
 

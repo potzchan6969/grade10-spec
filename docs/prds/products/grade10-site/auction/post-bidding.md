@@ -108,6 +108,8 @@ meaning.
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
   order and delivery before dispatch are refused
+- **Collected at a shop** — an operator records the collection as the
+  dispatch and the delivery, so the order reads Delivered
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
 - 🚧 **Shipment** — while the lot is dispatched (`fulfilled`), Order Progress

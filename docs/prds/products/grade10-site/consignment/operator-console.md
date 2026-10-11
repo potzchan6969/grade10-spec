@@ -33,6 +33,7 @@ the settings the schedule runs on.
 | --- | --- |
 | Header | the consignor, by name under the identity grant; the channel; the term's end; whether the consignor is named on the store |
 | Items | each item, its list price and floor, its listing in the shop or at auction, and a link to its item page |
+| Channel | each item's store product or lot, whether it carries the latest terms, and every flag on it |
 | Terms | the commission and fees pinned to the agreement, and the term |
 | Documents | the agreement, the receipt and each statement |
 | Money | the sale, commission, fees and the payout, each with who recorded it |
@@ -44,6 +45,23 @@ the settings the schedule runs on.
 - **Before the act** - a dialog states the rule first: the floor, the
   schedule, the term
 - **Withheld in words** - an act not offered yet says why
+- **Live at auction** - take back, move and price change are withheld while
+  the lot is published, until the auction calls it off or it closes
+- **Retry** - sends the item again to a channel that refused it or stopped
+  answering
+- **Dismiss** - clears a flag staff have dealt with; a changed fact raises it
+  again
+- **Record by hand** - a sale, a delivery or a refund, only when the store or
+  the auction did not report it
+
+| Flag | Means | Dismissed under |
+| --- | --- | --- |
+| Sold twice | a second sale of the item; the flag names the order to refund | `consignment:operate` |
+| Out of step | the store product differs from the consignment; the store puts it back | `consignment:operate` |
+| Cannot apply | the channel reported a fact the consignment cannot take | `consignment:operate` |
+| Price moved | the item sold at a price other than the listed one | `consignment:operate` |
+| Amount differs | a sale recorded by hand differs from the one the channel reported | `consignment:approve` |
+| Refund in part | the store refunded part of a sale | `consignment:approve` |
 
 ## Payouts
 
@@ -66,7 +84,7 @@ pinned to a consignment when its agreement is prepared.
 | Minimum commission | none | an amount per item |
 | Fees: listing, return, early take-back | none | an amount each |
 | Term on sale | **90** days | any number of days |
-| Return window | **14** days after a store sale; **7** after an auction lot is delivered or kept in the vault | any number of days, per channel |
+| Return window | **14** days after a store sale is delivered; **7** after an auction lot is delivered or collected | any number of days, per channel |
 | When a consignor is paid | after the return window | at the sale; one monthly statement |
 | A refund after payout | set against the next payout | asked back from the consignor |
 | Identity before signing | always verified | above a sale price; never |
@@ -84,8 +102,8 @@ pinned to a consignment when its agreement is prepared.
 | Grant | Roles | Opens |
 | --- | --- | --- |
 | `consignment:read` | staff, treasurer, admin | the queue and every consignment |
-| `consignment:operate` | staff, admin | receive, terms within the schedule, the agreement, list, price within the floor, take off sale, return |
-| `consignment:approve` | staff, admin | a commission outside the schedule; a price below the floor on the consignor's yes |
+| `consignment:operate` | staff, admin | receive, terms within the schedule, the agreement, list, price within the floor, take off sale, return, retry a channel, dismiss a flag |
+| `consignment:approve` | staff, admin | a commission outside the schedule; a price below the floor on the consignor's yes; dismiss an amount that differs or a refund in part |
 | `consignment:payout` | treasurer, admin | record a payout, correct one, the due list and the export |
 | `consignment:display` | admin | name a consignor on the store and the lot, where they agreed |
 | `consignment:settings` | admin | change a setting |
