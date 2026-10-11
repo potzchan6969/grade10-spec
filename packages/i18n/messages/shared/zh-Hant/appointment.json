@@ -198,7 +198,19 @@
     "before": "到店前",
     "holdLine": "我們會為你保留時段至 {time}。如會遲到，請在預約頁面通知我們。",
     "getThere": "交通",
-    "another": "再預約一次"
+    "another": "再預約一次",
+    "pay": {
+      "deposit": "預約時支付 {amount} 訂金",
+      "full": "預約時支付 {amount}",
+      "line": "{charge}。{refund}",
+      "refundCollector": "如你於到訪前最少 {hours} 小時取消，可獲退款。",
+      "refundShop": "如店舖取消，可獲退款。",
+      "refundBoth": "如你於到訪前最少 {hours} 小時取消，或店舖取消，可獲退款。",
+      "refundNone": "取消或缺席均不設退款。",
+      "continue": "前往付款",
+      "opening": "正在開啟付款頁面…",
+      "unavailable": "此服務暫時未能在網上預約，請致電店舖預約。"
+    }
   },
   "visit": {
     "mine": "我的預約",
@@ -402,7 +414,24 @@
     "offline": "最後更新 {time}。此頁會自動重試。",
     "tryNow": "立即重試",
     "trying": "重試中…",
-    "unreadable": "未能讀取預約。"
+    "unreadable": "未能讀取預約。",
+    "payment": {
+      "phaseConfirming": "正在確認付款",
+      "confirmingTitle": "正在確認你的付款",
+      "confirmingLede": "{when}，{shop}。只需數秒，請保持此頁面開啟。",
+      "confirmingNote": "確認後我們會發電郵到 {email}。",
+      "phaseExpired": "付款未完成",
+      "expiredTitle": "付款未完成",
+      "expiredLede": "你於 {day} {time} 的時段已釋出，並無收取任何費用。",
+      "expiredNote": "再次預約以選擇時段並付款。",
+      "paid": "已付款",
+      "paidDeposit": "{amount} 訂金",
+      "paidFull": "{amount}",
+      "refunding": "退款",
+      "refundingValue": "{amount}，正退回你的信用卡",
+      "refunded": "已退款",
+      "refundedValue": "{day} 退回 {amount}"
+    }
   },
   "ticket": {
     "yourTicket": "你的籌號",

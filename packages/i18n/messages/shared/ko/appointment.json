@@ -198,7 +198,19 @@
     "before": "방문 전에",
     "holdLine": "{time}까지 시간을 잡아 둡니다. 늦으시나요? 방문 페이지에서 알려 주세요.",
     "getThere": "오시는 길",
-    "another": "다른 방문 예약"
+    "another": "다른 방문 예약",
+    "pay": {
+      "deposit": "예약 시 보증금 {amount} 결제",
+      "full": "예약 시 {amount} 결제",
+      "line": "{charge}. {refund}",
+      "refundCollector": "방문 {hours}시간 전까지 취소하면 환불됩니다.",
+      "refundShop": "매장이 취소하면 환불됩니다.",
+      "refundBoth": "방문 {hours}시간 전까지 취소하거나 매장이 취소하면 환불됩니다.",
+      "refundNone": "취소하거나 방문하지 않으면 환불되지 않습니다.",
+      "continue": "결제하기",
+      "opening": "결제 페이지를 여는 중…",
+      "unavailable": "지금은 이 서비스를 온라인으로 예약할 수 없습니다. 매장에 전화해 예약해 주세요."
+    }
   },
   "visit": {
     "mine": "내 방문",
@@ -402,7 +414,24 @@
     "offline": "{time}에 업데이트했습니다. 이 페이지는 자동으로 다시 시도합니다.",
     "tryNow": "지금 시도",
     "trying": "시도 중…",
-    "unreadable": "방문을 불러오지 못했습니다."
+    "unreadable": "방문을 불러오지 못했습니다.",
+    "payment": {
+      "phaseConfirming": "결제 확인 중",
+      "confirmingTitle": "결제를 확인하고 있습니다",
+      "confirmingLede": "{when}, {shop}. 몇 초면 끝나니 이 페이지를 열어 두세요.",
+      "confirmingNote": "확인되면 {email}(으)로 이메일을 보냅니다.",
+      "phaseExpired": "결제 미완료",
+      "expiredTitle": "결제가 완료되지 않았습니다",
+      "expiredLede": "{day} {time} 시간이 해제되었습니다. 결제된 금액은 없습니다.",
+      "expiredNote": "다시 예약해 시간을 고르고 결제하세요.",
+      "paid": "결제 완료",
+      "paidDeposit": "보증금 {amount}",
+      "paidFull": "{amount}",
+      "refunding": "환불",
+      "refundingValue": "{amount}, 카드로 환불 진행 중",
+      "refunded": "환불 완료",
+      "refundedValue": "{day}에 {amount} 환불"
+    }
   },
   "ticket": {
     "yourTicket": "내 번호표",

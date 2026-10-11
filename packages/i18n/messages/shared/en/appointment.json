@@ -198,7 +198,19 @@
     "before": "Before you come",
     "holdLine": "We hold your time until {time}. Running late? Tell us from your visit page.",
     "getThere": "How to get there",
-    "another": "Book another visit"
+    "another": "Book another visit",
+    "pay": {
+      "deposit": "{amount} deposit at booking",
+      "full": "{amount}, paid at booking",
+      "line": "{charge}. {refund}",
+      "refundCollector": "Refunded if you cancel at least {hours, plural, one {# hour} other {# hours}} before.",
+      "refundShop": "Refunded if the shop cancels.",
+      "refundBoth": "Refunded if you cancel at least {hours, plural, one {# hour} other {# hours}} before, or if the shop cancels.",
+      "refundNone": "Not refunded if you cancel or miss the visit.",
+      "continue": "Continue to payment",
+      "opening": "Opening payment…",
+      "unavailable": "This service can’t be booked online right now. Call the shop to book it."
+    }
   },
   "visit": {
     "mine": "My visits",
@@ -402,7 +414,24 @@
     "offline": "Updated {time}. This page tries again by itself.",
     "tryNow": "Try now",
     "trying": "Trying…",
-    "unreadable": "The visit could not be read."
+    "unreadable": "The visit could not be read.",
+    "payment": {
+      "phaseConfirming": "Confirming payment",
+      "confirmingTitle": "Confirming your payment",
+      "confirmingLede": "{when} at {shop}. This takes a few seconds, so keep this page open.",
+      "confirmingNote": "We email {email} once it is confirmed.",
+      "phaseExpired": "Payment not completed",
+      "expiredTitle": "Payment not completed",
+      "expiredLede": "Your {time} time on {day} was released. Nothing was charged.",
+      "expiredNote": "Book again to pick a time and pay.",
+      "paid": "Paid",
+      "paidDeposit": "{amount} deposit",
+      "paidFull": "{amount}",
+      "refunding": "Refund",
+      "refundingValue": "{amount}, on its way back to your card",
+      "refunded": "Refunded",
+      "refundedValue": "{amount} on {day}"
+    }
   },
   "ticket": {
     "yourTicket": "Your ticket",
