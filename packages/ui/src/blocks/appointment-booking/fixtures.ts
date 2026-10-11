@@ -224,7 +224,6 @@ const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
   phoneMissing: "Enter a phone number.",
   phoneRequired: "Add a phone number. The shop calls before this visit.",
   bookingAs: "Booking as",
-  changeDetails: "Change details",
   answerMissing: "This is needed to continue.",
   choose: "Choose",
   submit: "Confirm Appointment",

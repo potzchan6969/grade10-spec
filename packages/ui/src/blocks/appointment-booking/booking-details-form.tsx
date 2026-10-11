@@ -57,8 +57,6 @@ type BookingDetailsFormCopy = {
   phoneRequired?: string;
   /** Leads the summary of seeded details: `Booking as`. */
   bookingAs?: string;
-  /** Opens the summarized details for editing: `Change details`. */
-  changeDetails?: string;
   answerMissing: string;
   /** Shown in a select before an option is picked. */
   choose: string;
@@ -77,9 +75,8 @@ type BookingDetailsFormProps = {
   /** Refuses an empty phone, and drops the `Optional` mark from its label. */
   phoneRequired?: boolean;
   /**
-   * Shows a seeded name and email as one summary with a Change details
-   * button instead of their fields. A required phone the seed lacks keeps
-   * its field.
+   * Shows a seeded name, email and phone as a read-only summary instead of
+   * their fields; a phone the seed lacks keeps its field.
    */
   summarized?: boolean;
   pending?: boolean;
@@ -105,8 +102,8 @@ const NO_ERRORS: FieldErrors = { answers: {} };
  * Name, email, phone, the service's questions in order, and notes. Refuses to
  * report while a name, an address, a required phone or a required answer is
  * missing, naming each; reports every text trimmed and answers keyed by
- * question key. Summarized, a seeded name and email read as one line until
- * Change details opens them.
+ * question key. Summarized, a seeded name, email and phone read as a
+ * summary nobody edits here.
  */
 function BookingDetailsForm({
   copy,
@@ -132,12 +129,11 @@ function BookingDetailsForm({
     initialValues?.answers ?? {},
   );
   const [errors, setErrors] = useState<FieldErrors>(NO_ERRORS);
-  const [editing, setEditing] = useState(
+  const editing =
     !summarized ||
-      !initialValues?.name?.trim() ||
-      !EMAIL.test(initialValues?.email?.trim() ?? ""),
-  );
-  const phoneField = editing || (phoneRequired && !initialValues?.phone);
+    !initialValues?.name?.trim() ||
+    !EMAIL.test(initialValues?.email?.trim() ?? "");
+  const phoneField = editing || !initialValues?.phone;
 
   function answer(key: string, value: Answer) {
     setAnswers((held) => ({ ...held, [key]: value }));
@@ -161,7 +157,6 @@ function BookingDetailsForm({
     );
     const found = validate(values, questions, copy, phoneRequired);
     setErrors(found);
-    if (found.name || found.email || found.phone) setEditing(true);
     if (
       found.name ||
       found.email ||
@@ -236,18 +231,6 @@ function BookingDetailsForm({
               <Text as="p" size="sm">
                 {phone}
               </Text>
-            ) : null}
-            {copy.changeDetails ? (
-              <HStack gap="sm">
-                <Button
-                  onClick={() => setEditing(true)}
-                  size="sm"
-                  type="button"
-                  variant="ghost"
-                >
-                  {copy.changeDetails}
-                </Button>
-              </HStack>
             ) : null}
           </VStack>
         )}

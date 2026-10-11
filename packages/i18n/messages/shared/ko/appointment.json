@@ -54,7 +54,6 @@
     "submit": "방문 예약하기",
     "choose": "선택하세요",
     "bookingAs": "예약자",
-    "changeDetails": "정보 변경",
     "kinds": {
       "short_text": "짧은 글",
       "long_text": "긴 글",

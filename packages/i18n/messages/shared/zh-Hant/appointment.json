@@ -54,7 +54,6 @@
     "submit": "確認預約",
     "choose": "請選擇",
     "bookingAs": "預約人",
-    "changeDetails": "更改資料",
     "kinds": {
       "short_text": "短文字",
       "long_text": "長文字",

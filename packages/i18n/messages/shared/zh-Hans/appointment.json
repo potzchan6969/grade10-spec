@@ -54,7 +54,6 @@
     "submit": "确认预约",
     "choose": "请选择",
     "bookingAs": "预约人",
-    "changeDetails": "更改资料",
     "kinds": {
       "short_text": "短文本",
       "long_text": "长文本",

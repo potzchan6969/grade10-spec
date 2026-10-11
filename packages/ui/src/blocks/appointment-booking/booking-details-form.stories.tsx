@@ -303,18 +303,21 @@ export const Summarized: Story = {
   },
 };
 
-/** Change details opens the summarized fields with what was seeded. */
-export const SummarizedChanged: Story = {
-  args: Summarized.args,
+/** A signed-in collector with no phone on the account is asked for one,
+ * still optional. */
+export const SummarizedWithoutPhone: Story = {
+  args: {
+    questions: [],
+    description: undefined,
+    summarized: true,
+    initialValues: { name: "Ada Lau", email: "ada@example.com" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Change details" }),
-    );
-    expect(canvas.getByRole("textbox", { name: "Name" })).toHaveValue(
-      "Ada Lau",
-    );
-    expect(canvas.queryByText("Booking as")).toBeNull();
+    expect(canvas.getByText("Booking as")).toBeVisible();
+    expect(
+      canvas.getByRole("textbox", { name: "Phone (optional)" }),
+    ).toBeVisible();
   },
 };
 
