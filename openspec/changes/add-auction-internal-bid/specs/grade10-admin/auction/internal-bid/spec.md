@@ -40,16 +40,21 @@ An admin holding `auction:reserve` SHALL:
 
 1. Open a listing that is `created` or `published` and has not reached its
    scheduled close.
-2. Enter the internal bid: an amount and the time Grade10 commits it.
+2. Enter the internal bid: an amount, the internal bidder it bids as, and
+   the time Grade10 commits it.
 3. Save. Grade10 accepts or refuses the save in the same answer.
-4. Read the internal bid back on the listing, with its state.
+4. Read the internal bid back on the listing, with its internal bidder and
+   its state.
 
-A listing SHALL carry at most one internal bid. A save on a listing that has
-one SHALL change it and SHALL NOT add a second.
+A listing SHALL carry at most one internal bid, and its internal bid SHALL
+name one internal bidder. A save on a listing that has one SHALL change it
+and SHALL NOT add a second. One internal bidder MAY serve the internal bids
+of many listings.
 
 | Field | Rule |
 | --- | --- |
 | Amount | Whole major units in the listing's currency, held as minor units; at least the listing's starting price, above 0, and at most the ceiling `grade10-site/auction/bid-increments` sets for that currency |
+| Internal bidder | Required. One internal bidder profile, under "An admin keeps internal bidder profiles"; one being chosen or changed is Active. It changes only while the internal bid is Scheduled or Cleared, or the listing has none; a Placed or Not placed internal bid keeps its internal bidder, retired or not |
 | Time | Required. From the listing's scheduled start to its scheduled close, both included; a time being set or changed is later than the moment of the save. A Not placed internal bid keeps its time |
 
 Grade10 SHALL refuse a save that breaks a rule below, naming the rule, and
@@ -58,17 +63,27 @@ SHALL store nothing:
 | Refused when | Refusal |
 | --- | --- |
 | The listing is `draft`, `closed`, `settled` or `canceled`; or it is past its scheduled close and has no Placed or Not placed internal bid | Not editable |
-| The amount or the time is missing | Required |
+| The amount, the internal bidder or the time is missing | Required |
+| An internal bidder being chosen or changed is Retired | Retired internal bidder |
+| The internal bidder is changed on a Placed or Not placed internal bid | Internal bidder is fixed |
 | The amount is not a whole number of major units | Whole amount |
 | The amount is below the starting price | Below the starting price, naming it |
 | The amount is above the ceiling | Above the ceiling, naming it |
 | A time being set or changed is before the scheduled start or after the scheduled close | Outside the bidding window |
 | A time being set or changed is at or before the moment of the save | Time has passed |
 
+A save that changes the internal bidder of a Placed or Not placed internal
+bid SHALL be refused as Internal bidder is fixed, whatever its amount.
+
 Grade10 SHALL NOT judge the amount against the listing's minimum next bid at
 Save; it judges it at the time, under "Internal bid states". An internal bid
 SHALL change no listing fact a collector reads until Grade10 commits it, per
-`grade10-site/auction/auto-bidding`.
+`grade10-site/auction/auto-bidding`; choosing or changing its internal bidder
+before then changes none either.
+
+A scenario of this capability that saves an internal bid without naming its
+internal bidder saves it with an Active one, and a re-save keeps the one the
+internal bid already names.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-dq6 rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-01 - An admin sets an internal bid on a published listing
@@ -215,6 +230,63 @@ SHALL change no listing fact a collector reads until Grade10 commits it, per
 - **THEN** Grade10 refuses it as not editable
 - **AND** the listing has no internal bid
 
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ols rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-54 - A save with no internal bidder is refused
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin leaves the internal bidder unchosen
+
+- **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`, and an
+  Active internal bidder named Harbour Cards
+- **WHEN** the admin saves an internal bid of 50000 HKD minor units at
+  2026-11-02T18:00:00Z with no internal bidder
+- **THEN** Grade10 refuses it, asking for the internal bidder
+- **AND** the listing has no internal bid
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-1af rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-55 - A retired internal bidder is refused
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin names an internal bidder no longer in use
+
+- **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`, and a
+  Retired internal bidder named Old Stock
+- **WHEN** the admin saves an internal bid of 50000 HKD minor units at
+  2026-11-02T18:00:00Z as Old Stock
+- **THEN** Grade10 refuses it, saying the internal bidder is retired
+- **AND** the listing has no internal bid
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-dnq rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-56 - Before its time the admin changes the internal bidder
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin picks another internal bidder before the house has bid
+
+- **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01` with its
+  Scheduled internal bid as Harbour Cards, and an Active internal bidder named
+  Kowloon Vault, at 2026-11-02T12:00:00Z
+- **WHEN** the admin saves the same amount and time as Kowloon Vault
+- **THEN** Grade10 accepts it and the internal bid reads Scheduled as Kowloon
+  Vault, at 50000 HKD minor units and 2026-11-02T18:00:00Z
+- **AND** the listing's public facts are unchanged
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-i32 rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-57 - After its time the internal bidder is fixed
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin tries to change who the house bids as once its time has come
+
+- **GIVEN** two `HKD` listings, one with a Placed and one with a Not placed
+  internal bid, each as Harbour Cards, and an Active internal bidder
+  named Kowloon Vault
+- **WHEN** the admin saves each internal bid at its own amount as Kowloon
+  Vault
+- **THEN** Grade10 refuses each, saying the internal bidder is fixed
+- **AND** each internal bid still reads as Harbour Cards, in the state and at
+  the amount it had
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-rzl rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-58 - One internal bidder serves two listings
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin protects two lots as the same internal bidder
+
+- **GIVEN** two published `HKD` listings with no internal bid, and an Active
+  internal bidder named Harbour Cards
+- **WHEN** the admin saves an internal bid on each as Harbour Cards
+- **THEN** Grade10 accepts both
+- **AND** each listing carries one internal bid, as Harbour Cards
+
 ### Requirement: A listing edit clears an internal bid it leaves outside its limits
 
 When an operator saves a change to a `created` listing that leaves its
@@ -224,8 +296,8 @@ internal bid outside a limit below, Grade10 SHALL:
   internal bid, and answer the operator the same way.
 - Clear the internal bid in the same save, so Grade10 never commits it.
 - Show an admin holding `auction:reserve` that the internal bid was cleared
-  by a listing edit, with its amount, its time and when it was cleared,
-  until an admin saves a new one.
+  by a listing edit, with its amount, its internal bidder, its time and when
+  it was cleared, until an admin saves a new one.
 
 | Edit | Clears the internal bid when |
 | --- | --- |
@@ -343,12 +415,12 @@ the internal bid unchanged.
 An internal bid SHALL be in one of these states, and the admin SHALL see its
 state on the listing beside its amount and time.
 
-| State | Meaning | Amount | Time | Removable |
-| --- | --- | --- | --- | --- |
-| Scheduled | Its time has not arrived; the house is not in the bidding | Changes under the Save rules | Changes under the Save rules | Yes |
-| Placed | Grade10 committed it at its time | Raised, or lowered under "An admin changes a placed internal bid" | Fixed | No |
-| Not placed | At its time it was short of the minimum next bid, or the listing was still `created`; nothing was placed | Saved again under the Save rules, its time kept, under "An admin learns an internal bid came too late": while the listing is `created` it stays Not placed; while the listing takes bids, a save at or above the minimum next bid, its own amount included, places it at once, a lower below it stays Not placed, and a raise below it is refused | Fixed | Yes |
-| Cleared | A listing edit left it outside its limits; Grade10 never commits it | - | - | Replaced by the next save |
+| State | Meaning | Amount | Internal bidder | Time | Removable |
+| --- | --- | --- | --- | --- | --- |
+| Scheduled | Its time has not arrived; the house is not in the bidding | Changes under the Save rules | Changes under the Save rules | Changes under the Save rules | Yes |
+| Placed | Grade10 committed it at its time | Raised, or lowered under "An admin changes a placed internal bid" | Fixed | Fixed | No |
+| Not placed | At its time it was short of the minimum next bid, or the listing was still `created`; nothing was placed | Saved again under the Save rules, its time kept, under "An admin learns an internal bid came too late": while the listing is `created` it stays Not placed; while the listing takes bids, a save at or above the minimum next bid, its own amount included, places it at once, a lower below it stays Not placed, and a raise below it is refused | Fixed | Fixed | Yes |
+| Cleared | A listing edit left it outside its limits; Grade10 never commits it | - | Shown; the next save names an Active one | - | Replaced by the next save |
 
 Grade10 SHALL move an internal bid from Scheduled to Placed or Not placed at
 its time, whether or not anyone has the listing open, per
@@ -532,13 +604,15 @@ removed. Until the listing's effective close, the admin SHALL be able to:
    any bid already placed for the house on the listing, per
    `grade10-site/auction/auto-bidding`.
 
-A raise or a lower SHALL hold to the amount rules of the Save. Grade10 SHALL
-refuse every other change, naming the reason, and leave the internal bid as
+A raise or a lower SHALL hold to the amount rules of the Save, and SHALL bid
+as the internal bidder the internal bid names, even once that internal bidder
+is Retired. Grade10 SHALL refuse every other change, naming the reason, and leave the internal bid as
 it was:
 
 | Refused when | Refusal |
 | --- | --- |
 | The time is changed after it has arrived | Time is fixed |
+| The internal bidder is changed | Internal bidder is fixed |
 | A Placed internal bid is removed | Time is fixed |
 | A raise is below the listing's minimum next bid | Below the minimum next bid, naming it |
 | A lower amount would move the leader or the current bid | Moves the lead or the current bid |
@@ -656,6 +730,18 @@ bid", with that bid.
 - **THEN** Grade10 refuses it, as not taking bids
 - **AND** the internal bid reads Placed at 50000 HKD minor units
 
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ubh rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-59 - A placed internal bid raises as its retired internal bidder
+**Serves:** grade10-admin-auction-internal-bid-US-03 - the admin keeps protecting a lot after retiring the internal bidder it bids as
+
+- **GIVEN** an `HKD` listing where a collector leads at 51000 HKD minor units
+  with a maximum of 60000, over a Placed internal bid of 50000 as Harbour
+  Cards, and Harbour Cards has since been retired
+- **WHEN** the admin raises the internal bid to 80000 HKD minor units
+- **THEN** Grade10 accepts it and the house leads at 61000 HKD minor units
+- **AND** the internal bid reads Placed at 80000 HKD minor units as Harbour
+  Cards
+
 ### Requirement: An admin reads a lot the house bought in
 
 When a listing closes with the house leading, the admin SHALL see it Bought
@@ -700,17 +786,141 @@ winning bidder. For a bought-in lot Grade10 SHALL:
 - **AND** the house's Listings row offers no Open order
 - **AND** Grade10 sent no won or address letter for the house's lot
 
+### Requirement: An admin keeps internal bidder profiles
+
+An **internal bidder** is a profile an internal bid bids as. It has a name
+and an email label, and no site account behind it. An admin holding
+`auction:reserve` SHALL:
+
+1. Open Internal bidders in auction admin and read every profile with its
+   name, its email label and its state.
+2. Add a profile with a name and an email label. It is Active.
+3. Rename a profile at any time, or change its email label until a bid has
+   been placed for it on any listing.
+4. Retire a profile that no Scheduled or Not placed internal bid names.
+
+| Field | Rule |
+| --- | --- |
+| Name | Required; may change at any time |
+| Email label | Required; an email address, unique among every profile, Retired ones included, compared without regard to letter case; fixed once a bid has been placed for the profile on any listing |
+
+| State | Offered at Save | Can be named by a new or changed internal bid | History |
+| --- | --- | --- | --- |
+| Active | Yes | Yes | Kept |
+| Retired | No | No | Kept |
+
+Grade10 SHALL refuse a profile act that breaks a rule below, naming the rule,
+and SHALL change nothing:
+
+| Refused when | Refusal |
+| --- | --- |
+| The name or the email label is missing | Required |
+| The email label is not an email address | Not an email address |
+| Another profile has the email label | Email label in use |
+| The email label is changed after a bid has been placed for the profile | Email label is fixed |
+| A Scheduled or Not placed internal bid names the profile, when it is retired | In use, naming each listing whose internal bid names it |
+
+Grade10 SHALL NOT delete a profile. A Retired profile SHALL keep every bid
+placed for it, and the reads under "Other operators read the house's bids as
+House" SHALL show it as they did before it was retired. Every read SHALL show
+a profile's current name.
+
+An internal bidder SHALL bid only through internal bids. Adding one SHALL
+create no site account, and no site bid panel SHALL accept a bid for it. Its
+email label is a label only: Grade10 SHALL address no letter and send no push
+to an internal bidder, per `grade10-site/auction/notifications`.
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-piq rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-60 - An admin adds an internal bidder
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin adds an internal bidder to bid as
+
+- **GIVEN** an admin holding `auction:reserve`
+- **WHEN** they add an internal bidder named Harbour Cards with the email
+  label harbour@internal.grade10.example
+- **THEN** Grade10 accepts it and Internal bidders lists Harbour Cards as
+  Active, with that email label
+- **AND** Harbour Cards is offered as the internal bidder when the admin sets
+  an internal bid on a listing
+- **AND** no site account exists for harbour@internal.grade10.example
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-h93 rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-61 - An email label another profile has is refused
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin reuses an email label already taken
+
+- **GIVEN** an Active internal bidder with the email label
+  harbour@internal.grade10.example, and a Retired one with the email label
+  old@internal.grade10.example
+- **WHEN** the admin adds an internal bidder with the email label
+  Harbour@internal.grade10.example, and another with
+  old@internal.grade10.example
+- **THEN** Grade10 refuses each, saying the email label is in use
+- **AND** Internal bidders lists the same two profiles as before
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ec7 rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-62 - A rename after bidding shows in the listing's bids
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin renames an internal bidder that has already bid
+
+- **GIVEN** an internal bidder named Harbour Cards, for which a bid of 31000
+  HKD minor units has been placed on a listing
+- **WHEN** the admin renames it Harbour Cards Ltd
+- **THEN** Grade10 accepts it
+- **AND** an admin holding `auction:reserve` reads that listing's bid at 31000
+  HKD minor units as House, Harbour Cards Ltd
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-2x8 rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-63 - The email label is fixed once the profile has bid
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin changes the email label of an internal bidder
+
+- **GIVEN** an internal bidder named Harbour Cards, for which a bid has been
+  placed on a listing, and one named Kowloon Vault, whose only internal bid
+  is Scheduled
+- **WHEN** the admin changes the email label of each
+- **THEN** Grade10 refuses Harbour Cards's change, saying the email label is
+  fixed, and keeps its email label
+- **AND** Grade10 accepts Kowloon Vault's change, and its Scheduled internal
+  bid still names Kowloon Vault
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-9ng rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-64 - An internal bidder in use is not retired
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin retires an internal bidder a coming internal bid still needs
+
+- **GIVEN** an internal bidder named Harbour Cards, named by a Scheduled
+  internal bid on listing L1, and one named Kowloon Vault, named by a Not
+  placed internal bid on listing L2
+- **WHEN** the admin retires each
+- **THEN** Grade10 refuses Harbour Cards, naming L1, and Kowloon Vault,
+  naming L2
+- **AND** both stay Active
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-bio rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-65 - A retired internal bidder keeps its history and is no longer offered
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin retires an internal bidder whose lots have closed
+
+- **GIVEN** an internal bidder named Harbour Cards whose only internal bid is
+  on a listing that closed bought in, the house leading at 31000 HKD minor
+  units
+- **WHEN** the admin retires Harbour Cards
+- **THEN** Grade10 accepts it and Internal bidders lists Harbour Cards as
+  Retired
+- **AND** Harbour Cards is not offered when the admin sets an internal bid on
+  another listing
+- **AND** an admin holding `auction:reserve` still reads the closed listing's
+  bid at 31000 HKD minor units as House, Harbour Cards
+
 ### Requirement: Only secret-floor access reaches an internal bid
 
 Only an operator holding `auction:reserve` SHALL set, change, remove or read
-an internal bid: its amount, its time and its state. For any other operator:
+an internal bid: its amount, its internal bidder, its time and its state.
+Only such an operator SHALL open, add, rename, change or retire an internal
+bidder profile. For any other operator:
 
-- The listing editor SHALL show no internal bid section. Until the listing
+- Auction admin SHALL show no Internal bidders page, and the listing editor
+  SHALL show no internal bid section. Until the listing
   closes it SHALL show nothing that says the listing has, had or may have
   one; once a lot closes bought in, it reads Bought in, per
   `grade10-admin/auction/listing`, and still shows no amount, time or state.
-- Grade10 SHALL refuse a set, change, remove or read of an internal bid and
-  change nothing.
+- Grade10 SHALL refuse a set, change, remove or read of an internal bid, and
+  any read or act on an internal bidder profile, and change nothing.
 - No operator read SHALL show that a listing has an internal bid before a bid
   is placed for the house on it, except the audit trail below. A Scheduled, Not placed or Cleared internal
   bid leaves no trace in any read open to them. Once the house has bid, its
@@ -718,10 +928,14 @@ an internal bid: its amount, its time and its state. For any other operator:
 
 The audit trail SHALL record each set, change and removal with the operator,
 the listing and the time it was made, and SHALL NOT record the internal bid's
-amount or its time. An operator holding audit access without
+amount, its internal bidder or its time. It SHALL record each add, rename,
+email label change and retirement of an internal bidder profile with the
+operator, the profile and the time it was made, and SHALL NOT record a
+listing or an internal bid amount with it. An operator holding audit access without
 `auction:reserve` MAY learn from it that a listing's internal bid was set,
 changed or removed, never its amount or its time. `auction:reserve` SHALL read, in the roles list, as the
-grant that sets and reads a listing's internal bid.
+grant that sets and reads a listing's internal bid and keeps the internal
+bidders.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-n08 rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-18 - Staff see no internal bid
@@ -754,11 +968,24 @@ grant that sets and reads a listing's internal bid.
 - **THEN** it shows the admin set an internal bid on the listing, and when
 - **AND** it shows neither 50000 nor 2026-11-02T18:00:00Z
 
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-d57 rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-66 - Staff cannot open or change internal bidders
+**Serves:** grade10-admin-auction-internal-bid-US-07 - an operator without secret-floor access looks for the house's bidders
+
+- **GIVEN** an Active internal bidder named Harbour Cards
+- **AND** an operator whose roles are exactly `staff`
+- **WHEN** they open auction admin, and call Grade10 to list the internal
+  bidders, to rename Harbour Cards and to add one
+- **THEN** auction admin shows them no Internal bidders page
+- **AND** Grade10 refuses each call, and Harbour Cards is unchanged and the
+  only internal bidder
+
 ### Requirement: Other operators read the house's bids as House
 
 Every operator read that lists a listing's bids or bidders SHALL name the
 house **House**, never its listing pseudonym, and SHALL show nothing of it
-until a bid is placed for it. Collectors still read the house only under its
+until a bid is placed for it. On a listing, the house is the internal bidder
+the listing's internal bid names. Collectors still read the house only under its
 listing pseudonym, per `grade10-site/auction/auto-bidding`. For an operator
 without `auction:reserve`:
 
@@ -773,10 +1000,12 @@ No read open to them SHALL show the house's maximum, any commitment, raise or
 lower of it, or the internal bid's time before the house bids. A house bid's
 own Accepted At SHALL show, as the public history shows it, even where it
 equals the internal bid's time. An operator holding
-`auction:reserve` reads the same rows as House with the house's maximum, and
-every commitment, raise and lower, per `grade10-site/auction/auto-bidding`.
-The house SHALL NOT appear in the bidder moderation list, and a search of the
-Listings table by a bidder's email SHALL NOT match it.
+`auction:reserve` reads the same rows as House with the internal bidder's name
+and email label where a collector's row shows an account, the house's
+maximum, and every commitment, raise and lower, per
+`grade10-site/auction/auto-bidding`. No internal bidder SHALL appear in the
+bidder moderation list, and a search of the Listings table by an email SHALL
+NOT match an internal bidder's email label, for any operator.
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-ftu rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-32 - Staff read the house's bids as House
@@ -823,6 +1052,20 @@ Listings table by a bidder's email SHALL NOT match it.
   activity
 - **THEN** they see House's one bid at 31000 HKD minor units
 - **AND** no row shows 50000, 70000, 60000, a raise or a lower
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-epm rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-67 - A reserve holder reads which internal bidder bid
+**Serves:** `grade10-admin-auction-internal-bid-US-09`, `grade10-site/auction/auto-bidding#grade10-site-auction-auto-bidding-US-04` - the admin traces which internal bidder the house bid as
+
+- **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-32`, whose
+  internal bid names Harbour Cards, with the email label
+  harbour@internal.grade10.example
+- **WHEN** an admin holding `auction:reserve` reads its bid ledger and bidder
+  summaries
+- **THEN** House's bid at 31000 HKD minor units reads House, Harbour Cards,
+  harbour@internal.grade10.example, with a maximum of 50000
+- **AND** an operator whose roles are exactly `staff` reading the same reads
+  sees House with no name, email label or maximum
 
 ### Requirement: Call-off and Relist drop the internal bid
 

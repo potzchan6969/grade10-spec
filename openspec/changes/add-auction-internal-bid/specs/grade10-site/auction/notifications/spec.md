@@ -25,7 +25,9 @@ a lot that closes with a winner who is not the recipient:
 - **No public bid, no letter** - a lower of the house maximum, and a house
   maximum that is not placed, write no public bid and SHALL send no letter.
 - **The house** - Grade10 SHALL address no letter of this capability, and no
-  winner letter of `grade10-site/auction/notifications-order`, to the house.
+  winner letter of `grade10-site/auction/notifications-order`, to the house:
+  to no internal bidder of `grade10-admin/auction/internal-bid`, at its email
+  label or anywhere else.
 
 No letter SHALL say or imply that a bid, a lead or a win was the house's.
 

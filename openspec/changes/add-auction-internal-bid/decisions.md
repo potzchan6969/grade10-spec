@@ -64,6 +64,13 @@
 | Q38 | Can an internal bidder bid through the site's bid panel? | No: a profile has no site account, so its only bids are internal bids (recommended) | Letting it bid by hand, outside the internal bid rules |
 | Q39 | What do operators read of the profile? | A reserve holder reads which profile bid on each listing; other operators read House as in Q25; collectors read the listing pseudonym as in Q1. Agent default, open to override | Showing every operator the profile, which shows staff which lots are protected |
 | Q40 | Renaming and retiring a profile | A name can change any time; the email label is fixed once the profile has bid; a profile is retired only when no Scheduled or Not placed internal bid uses it, keeps its history and is no longer offered. Agent default, open to override | Deleting a profile, which loses the bids it made |
+| Q41 | May a Placed internal bid keep raising and lowering after its internal bidder is retired? | Yes: a Placed or Not placed internal bid keeps its bidder, retired or not. Agent default, open to override | Refusing its raises and lowers, which leaves a running lot without its protection |
+| Q42 | Email label rules | An email address, unique across every profile including retired ones, compared ignoring letter case; it may equal a collector's email and is never mailed. Agent default, open to override | Unique among active profiles only, which makes past bids ambiguous |
+| Q43 | Can a retired profile be made active again? | No; a new profile is added instead. Agent default, open to override | An un-retire act with its own refusals |
+| Q44 | Does a Listings search by email ever match a profile's label? | Never, for any operator. Agent default, open to override | Matching it for reserve holders |
+| Q45 | Which name do past bids show after a rename? | The current name, history included; names need not be unique. Agent default, open to override | The name at the time of each bid |
+| Q46 | Can operators without `auction:reserve` read the profiles? | No; they see no Internal bidders page and no profile in any read. Agent default, open to override | A read-only list for staff |
+| Q47 | What the audit trail records for profiles | Profile acts (add, rename, retire) with the operator and the time; no audit row links a profile to a listing. Agent default, open to override | Naming the profile on internal-bid audit rows |
 
 ## Raised
 
@@ -93,3 +100,13 @@
 | grade10-admin/auction/internal-bid | Once the lot takes bids, is re-saving a Not placed bid's own amount, still below the minimum next bid, accepted or refused? | Q34 |
 | grade10-admin/auction/internal-bid | A lower of a Not placed bid that still reaches the minimum next bid: placed, or a lower that stays Not placed? | Q35 |
 | grade10-admin/auction/internal-bid | After Q30, can the lead-or-price refusal ever show on its own? | Q30 |
+| grade10-admin/auction/internal-bid | After a rename, does a past house bid read the new name or the name at the time? | Q45 |
+| grade10-admin/auction/internal-bid | Is label uniqueness case-insensitive, and must a label be an email address? | Q42 |
+| grade10-admin/auction/internal-bid | Does a retired profile's label stay taken? | Q42 |
+| grade10-admin/auction/internal-bid | Can a retired profile be made active again? | Q43 |
+| grade10-admin/auction/internal-bid | Can a Placed internal bid whose profile was retired still be raised or lowered? | Q41 |
+| grade10-admin/auction/internal-bid | Can operators without auction:reserve read the profiles list? | Q46 |
+| grade10-admin/auction/internal-bid | Do audit entries name the profile, and are profile acts audited? | Q47 |
+| grade10-admin/auction/internal-bid | Does the listing-edit cleared notice name the cleared profile? | Q39 |
+| grade10-site/auction/auto-bidding | Does the reserve holder's committed-maximum trace name the profile? | Q39 |
+| grade10-admin/auction/internal-bid | Can a collector register a site account whose email is a profile's label? | Q42 |

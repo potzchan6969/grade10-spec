@@ -166,8 +166,9 @@ it has been beaten: the new current bid is that maximum plus one
 increment, unless the increment would pass the new leader's maximum. An
 operator SHALL see every committed maximum and its Accepted At, except the
 house maximum: only an operator holding `auction:reserve` SHALL see it, and
-every commitment, raise and lower of it with its Accepted At. Every operator
-reads the house's bids as House, per `grade10-admin/auction/internal-bid`.
+every commitment, raise and lower of it with its Accepted At, and the
+internal bidder it was committed as. Every operator reads the house's bids as
+House, per `grade10-admin/auction/internal-bid`.
 
 | Field | Meaning |
 | --- | --- |
@@ -242,8 +243,15 @@ two-maximum rule, ties to the earlier commitment, one resolution per
 commitment, bids placed on its behalf, the bid count, bid history, and
 extended bidding.
 
+- **Bidder** - on a listing, the house is the internal bidder that listing's
+  internal bid names, per `grade10-admin/auction/internal-bid`: one bidder on
+  that listing, never one of its collectors. An internal bidder SHALL bid only
+  as a house maximum; Grade10 SHALL accept no bid for it from a site bid
+  panel.
 - **Pseudonym** - the house SHALL bid under a listing pseudonym given as a
-  collector's is. No listing fact, bid history row, letter or page a collector
+  collector's is, on each listing apart. An internal bidder that bids on
+  several listings SHALL read under each listing's own pseudonym, and no
+  public fact SHALL link its bids on one listing to another. No listing fact, bid history row, letter or page a collector
   reads SHALL say or imply that a bid is the house's. Operator reads name it
   House instead, per `grade10-admin/auction/internal-bid`.
 - **Checks** - Grade10 SHALL hold the house maximum to the ceiling and the
@@ -280,6 +288,19 @@ extended bidding.
   bid, with no card, bid-panel enrollment or verified identity behind it
 - **WHEN** the house maximum is committed
 - **THEN** Grade10 accepts it and places the bid the resolution requires
+
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-7m7 rev=1 -->
+#### Scenario: grade10-site-auction-auto-bidding-SC-47 - One internal bidder reads as each listing's own pseudonym
+**Serves:** House maximum - one internal bidder's commitments on two lots read apart
+
+- **GIVEN** two open `HKD` listings whose internal bids both name the same
+  internal bidder: on the first, collectors A and B have bid as Bidder 1 and
+  Bidder 2; on the second, nobody has bid
+- **WHEN** both house maximums are committed
+- **THEN** the first listing's public history records the house's bid as
+  Bidder 3, and the second's as Bidder 1
+- **AND** no public fact on either listing names the internal bidder or the
+  other listing
 
 ### Requirement: The house maximum is committed at its set time
 
