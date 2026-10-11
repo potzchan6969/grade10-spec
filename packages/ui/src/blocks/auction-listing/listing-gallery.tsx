@@ -147,7 +147,7 @@ function ListingGallery({ images, copy, className }: ListingGalleryProps) {
                 className={cn(
                   "relative h-16 w-12 overflow-hidden rounded-sm border bg-muted",
                   thumbIndex === index
-                    ? "border-foreground"
+                    ? "border-primary-border"
                     : "border-transparent",
                 )}
                 key={`${thumbSrc}:${thumb.thumbLabel ?? thumb.alt}`}
