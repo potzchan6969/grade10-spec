@@ -135,9 +135,8 @@
   "staffMessages": {
     "youreNext": "{first} 你好，下一位就到你在 Grade10 {shop}店{service}（号码 {ticket}）。请即返回门店：叫号后我们会为你保留 10 分钟。",
     "yourTicket": "你的号码",
-    "scanTicket": "扫描以查看你的号码",
     "posterTitle": "即场到店，或预约时间",
-    "posterScan": "扫描查看今天的等候时间",
+    "posterWait": "在上面的网址查看今天的等候时间",
     "posterTicket": "到柜台领取号码",
     "posterNearby": "请留在附近，轮到你时我们会通过 WhatsApp 通知你。"
   },
@@ -207,7 +206,6 @@
   "visit": {
     "mine": "我的预约",
     "code": "预约编号",
-    "qrAlt": "预约编号 {code} 的二维码",
     "yourVisit": "你的预约",
     "before": "到店前",
     "told": "你提供的资料",
@@ -497,7 +495,7 @@
     "paused": "暂停即场到店",
     "noTime": "今天不再接受即场到店",
     "shut": "今天的即场轮候已结束",
-    "how": "想即场到店，请到柜台告诉我们。你会收到筹号，可在手机上查看；下一位到你时，我们会 WhatsApp 你。",
+    "how": "想即场到店，请到柜台告诉我们。我们会把号码链接发到你的手机或电邮；下一位到你时，我们会 WhatsApp 你。",
     "updated": "{time} 更新 · 时间为 {zone}",
     "pausedHead": "暂停即场到店",
     "pausedText": "我们现时只接待预约的顾客。请预约时间，届时见。",

@@ -30,7 +30,6 @@ const DIRECTIONS_HREF = `https://maps.google.com/?q=${encodeURIComponent(`Grade1
 
 const PASS_WORDS = {
   codeLabel: "Visit code",
-  qrAlt: `QR code for visit ${VISIT_CODE}`,
 } as const;
 
 const PASS_LINE = `${SERVICE} · ${SHOP} · 10:15 to 10:45`;
@@ -343,7 +342,7 @@ const WAIT_COPY: VisitWaitBodyCopy = {
   waitNow: "Walk-in wait now",
   book: "Book",
   openToday: "Open today",
-  how: "To walk in, tell us at the counter. You get a ticket to follow on your phone, and we’ll WhatsApp you when you’re next.",
+  how: "To walk in, tell us at the counter. We send a ticket link to your phone or email, and we’ll WhatsApp you when you’re next.",
   updated: "Updated 12:00 · times in HKT",
   bookTime: "Book a time",
 };

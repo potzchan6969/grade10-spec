@@ -14,7 +14,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Before the day: the code as a QR and as text, and when to show it. */
+/** Before the day: the code as large text, and no QR. */
 export const Booked: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -22,7 +22,7 @@ export const Booked: Story = {
     expect(canvas.getByText(VISIT_CODE)).toBeVisible();
     expect(
       canvasElement.querySelector('[data-slot="authenticator-qr"]'),
-    ).not.toBeNull();
+    ).toBeNull();
   },
 };
 

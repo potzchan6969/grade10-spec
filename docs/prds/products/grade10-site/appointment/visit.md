@@ -22,7 +22,8 @@ The manage link opens one page per visit, and the page follows the visit from th
 ## The Pass
 
 - **Visit code** - BK- and five characters on the listing-code scheme, so a code read aloud with O, I or L still finds the visit
-- **On the pass** - the code as a QR and as text, the service, the shop and the time, and the counter once called
+- **On the pass** - the code in large text, the service, the shop and the time, and the counter once called; no QR
+- **At the counter** - the collector shows the code or gives their phone or email, and staff find the visit
 - **Where** - the visit page on the day, and the day-before message
 - **Not a key** - the pass checks a visit in and releases nothing; grading and the vault check who collects
 - **Product visits** - a visit grading or the vault books for itself has no pass and no visit page
@@ -36,8 +37,8 @@ The manage link opens one page per visit, and the page follows the visit from th
 
 ## Walk-in Ticket
 
-- **Wait page** - the door poster's QR opens the shop's wait page: the walk-in wait for each service now, today's hours and Book a time; nobody joins from it
-- **Ticket** - staff add the walk-in and show the ticket QR on their screen; the collector's phone follows the place in line and the estimate
+- **Wait page** - the door poster prints the shop's wait page address, with no QR; the page shows the walk-in wait for each service now, today's hours and Book a time; nobody joins from it
+- **Ticket** - staff add the walk-in and send the ticket link on WhatsApp to the phone, or by email; the link follows the place in line and the estimate. A walk-in who gives neither listens for their ticket number
 - **Called** - the ticket turns to the counter; a walk-in not seen in 10 minutes leaves the line
 - **Paused** - the wait page says walk-ins are paused, and until when
 - ❓ **Addresses** - the wait page answers at `grade10.com/book/<shop>/walk-in` and a ticket at `grade10.com/book/ticket#<secret>`, the secret in the fragment as the manage link's is
@@ -61,9 +62,9 @@ Every message carries Manage your visit. A visit sent to grading or the vault ge
 ## *Collector* - **Gets the day-before message**
 The pass, how to get there, Running late and the typhoon line.
 ## *Collector* - **Shows the pass at the counter**
-The visit page on the day opens on the QR.
-## *Staff* - **Scans it**
-The visit is checked in; with a counter free, Check in and call seats them at once.
+The visit page on the day opens on the visit code.
+## *Staff* - **Finds the visit**
+By the code, a phone, an email or a name. The visit is checked in; with a counter free, Check in and call seats them at once.
 ## *Collector* - **Waits**
 The page shows Waiting and the estimate.
 ## *Staff* - **Calls them**
@@ -89,8 +90,9 @@ A collector who books once comes back to one link for everything about that visi
 | Move to another shop | ❓ Open | Not offered; the collector cancels and books again. | Operations |
 | Self check-in | ❓ Open | None; an "I'm here" on Running late only pings the desk. | Operations |
 | Wallet pass | ❓ Open | None; the pass lives on the page and in the day-before message. | Product |
+| No QR | Decided | The pass, the ticket and the door poster carry no QR; a code, a phone or an email finds the visit, so neither the collector nor staff need a camera. | Product |
 | After-visit mail | ❓ Open | Thanks and We missed you, 2 hours after the shop next opens. | Product |
 | Manage link | ❓ Open | Derived from a server key, so every message can carry it while the record keeps only a hash. | Engineering |
 
-The risk is a pass nobody opens; the desk finds the visit by name, code or phone. Design: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd). Benchmarks: [Genius Bar and cal.com](/references/appointment-benchmarks). The desk's side: [Front Desk](/p/grade10-admin/appointment/front-desk).
+The risk is a pass nobody opens; the desk finds the visit by name, code, phone or email. Design: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd). Benchmarks: [Genius Bar and cal.com](/references/appointment-benchmarks). The desk's side: [Front Desk](/p/grade10-admin/appointment/front-desk).
 :::

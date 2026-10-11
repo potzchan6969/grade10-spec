@@ -90,7 +90,7 @@ function WalkInBody({ state }: { state: WalkInState }) {
   );
 }
 
-/** The door poster's page, read on the phone that scanned it. */
+/** The door poster's page, opened from the address it shows. */
 function AppointmentWalkInPage({ state }: { state: WalkInState }) {
   return (
     <AppointmentPageShell>

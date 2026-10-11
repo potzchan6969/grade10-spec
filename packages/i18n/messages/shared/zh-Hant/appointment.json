@@ -135,9 +135,8 @@
   "staffMessages": {
     "youreNext": "{first} 你好，下一位就到你在 Grade10 {shop}店{service}（籌號 {ticket}）。請即返回門市：叫號後我們會為你保留 10 分鐘。",
     "yourTicket": "你的籌號",
-    "scanTicket": "掃描以查看你的籌號",
     "posterTitle": "即場到店，或預約時間",
-    "posterScan": "掃描查看今天的輪候時間",
+    "posterWait": "在上面的網址查看今天的輪候時間",
     "posterTicket": "到櫃檯索取籌號",
     "posterNearby": "請留在附近，下一位到你時我們會 WhatsApp 你。"
   },
@@ -207,7 +206,6 @@
   "visit": {
     "mine": "我的預約",
     "code": "預約編號",
-    "qrAlt": "預約編號 {code} 的二維碼",
     "yourVisit": "你的預約",
     "before": "到店前",
     "told": "你提供的資料",
@@ -497,7 +495,7 @@
     "paused": "暫停即場到店",
     "noTime": "今天不再接受即場到店",
     "shut": "今天的即場輪候已結束",
-    "how": "想即場到店，請到櫃檯告訴我們。你會收到籌號，可在手機上查看；下一位到你時，我們會 WhatsApp 你。",
+    "how": "想即場到店，請到櫃檯告訴我們。我們會把籌號連結發到你的手機或電郵；下一位到你時，我們會 WhatsApp 你。",
     "updated": "{time} 更新 · 時間為 {zone}",
     "pausedHead": "暫停即場到店",
     "pausedText": "我們現時只接待預約的顧客。請預約時間，屆時見。",

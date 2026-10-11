@@ -135,9 +135,8 @@
   "staffMessages": {
     "youreNext": "Hi {first}, you’re next for your {service} at Grade10 {shop}, ticket {ticket}. Please head back now: once we call you, we hold your turn for 10 min.",
     "yourTicket": "Your ticket",
-    "scanTicket": "Scan to follow your ticket",
     "posterTitle": "Walk in or book a time",
-    "posterScan": "Scan for today’s wait",
+    "posterWait": "See today’s wait at the address above",
     "posterTicket": "Ask at the counter for a ticket",
     "posterNearby": "Stay nearby. We’ll WhatsApp you when you’re next."
   },
@@ -207,7 +206,6 @@
   "visit": {
     "mine": "My visits",
     "code": "Visit code",
-    "qrAlt": "QR code for visit {code}",
     "yourVisit": "Your visit",
     "before": "Before you come",
     "told": "What you told us",
@@ -497,7 +495,7 @@
     "paused": "Walk-ins paused",
     "noTime": "No more walk-ins today",
     "shut": "Walk-ins closed for today",
-    "how": "To walk in, tell us at the counter. You get a ticket to follow on your phone, and we’ll WhatsApp you when you’re next.",
+    "how": "To walk in, tell us at the counter. We send a ticket link to your phone or email, and we’ll WhatsApp you when you’re next.",
     "updated": "Updated {time} · times in {zone}",
     "pausedHead": "Walk-ins are paused",
     "pausedText": "We’re seeing booked visits only for now. Book a time and we’ll see you then.",

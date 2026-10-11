@@ -1,13 +1,10 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { AuthenticatorQr } from "../auth-two-factor/authenticator-qr";
 import { FactCard } from "../page-blocks/fact-card";
 
 type VisitPassCopy = {
   title: string;
   codeLabel: string;
-  /** The QR's alternative text, naming the code. */
-  qrAlt: string;
   /** What the visit is, under the code. */
   line?: string;
   note?: string;
@@ -15,22 +12,17 @@ type VisitPassCopy = {
 
 type VisitPassProps = {
   copy: VisitPassCopy;
-  /** The visit code the QR carries. */
+  /** The visit code staff find the visit with. */
   code: string;
 };
 
 /**
- * The pass: the visit code as a QR and as text, what the visit is, and the
- * counter once called. The QR carries the code itself, so a pass scanned at
- * any shop finds the visit and opens nothing else.
+ * The pass: the visit code as large text, what the visit is, and the counter
+ * once called. Staff at any shop find the visit with the code.
  */
 function VisitPass({ copy, code }: VisitPassProps) {
   return (
-    <FactCard
-      copy={{ title: copy.title }}
-      lead={<AuthenticatorQr altText={copy.qrAlt} value={code} />}
-      slot="visit-pass"
-    >
+    <FactCard copy={{ title: copy.title }} slot="visit-pass">
       <VStack gap="xs">
         <Text as="span" size="xs" tone="secondary">
           {copy.codeLabel}

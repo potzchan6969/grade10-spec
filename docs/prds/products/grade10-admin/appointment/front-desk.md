@@ -17,8 +17,7 @@ The Day, opened on today, is the shop's front desk: who is here, who waits, whic
 
 A staff member checks a visitor in on arrival, so every arrival is one somebody saw.
 
-- **Scan** - the pass carries the visit code as a QR; a scanner types it into the Check in field, a phone reads it with its camera
-- **Search** - by name, visit code or phone
+- **Find** - by phone, email, name or visit code, typed into the Check in field; nothing is scanned, so the desk needs no scanner or camera
 - **Wrong shop** - a visit booked at another shop offers Move here or Add as walk-in
 - **Not today, cancelled or already in** - each says so and checks nobody in
 - **Check in and call** - one act when a counter that runs the service is free
@@ -45,7 +44,7 @@ Call puts a waiting person at a counter, and the counter stays theirs until the 
 
 A walk-in waits as an entry and becomes a visit when called, so every visit to a counter is counted.
 
-- **Join** - a staff member adds the name, the service and, if the collector wishes, a phone or an email; the collector scans the ticket QR on the staff screen to follow their turn
+- **Join** - a staff member adds the name, the service and, if the collector wishes, a phone or an email; a phone gets the ticket link on WhatsApp, an email gets it by email, and a walk-in with neither listens for their ticket number
 - **Serve now** - a free counter seats the walk-in at once
 - **You're next** - for a walk-in with a phone, one tap opens a WhatsApp message carrying their ticket link
 - **Paused until** - one value per shop, closing time or until turned back on, set from The Day or Shop Setup
@@ -69,9 +68,9 @@ A walk-in waits as an entry and becomes a visit when called, so every visit to a
 ## *Collector* - **Asks at the counter**
 Wants to hand in 8 cards for grading.
 ## *Staff* - **Adds them to Waiting**
-Name, service and a phone; the screen shows ticket W03, the estimate about 10 to 20 min and the ticket QR.
+Name, service and a phone; the screen shows ticket W03, the estimate about 10 to 20 min and Send on WhatsApp for the ticket link.
 ## *Collector* - **Follows the ticket**
-Their phone shows the place in line and the estimate as it moves.
+The ticket link shows the place in line and the estimate as it moves.
 ## *Staff* - **Sends You're next**
 The Next line names them; one tap opens the WhatsApp message.
 ## *Staff* - **Calls them to Counter 1**
@@ -105,6 +104,7 @@ A shop serves booked visitors and walk-ins at the same counters, so the desk has
 | Not seen | ❓ Open | Staff press Didn't come once the 10 minutes pass; no visit ends by itself. | Operations |
 | Close early and product visits | ❓ Open | A visit grading or the vault booked for itself stays booked; its product moves it. | Operations |
 | You're next sent | ❓ Open | The Sent mark on a row is the phone's own; another staff phone does not see it. | Operations |
+| No QR | Decided | No pass, ticket or poster carries a QR; staff find a visit by phone, email, name or code, and send the ticket link. | Product |
 | Desk acts and Undo | ❓ Open | Check in, Call, Add walk-in and the closures apply at once with no Undo; a mark keeps its Undo. | Product |
 
 The risk is a floor that stops pressing Call: the counters then read free while people are served, and the estimates drift. Design: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd). Benchmarks: [Genius Bar and cal.com](/references/appointment-benchmarks).

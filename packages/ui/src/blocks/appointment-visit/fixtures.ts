@@ -37,21 +37,18 @@ const DIRECTIONS_HREF = `https://maps.google.com/?q=${encodeURIComponent(`Grade1
 const VISIT_PASS_COPY: VisitPassCopy = {
   title: "Visit code",
   codeLabel: "Visit code",
-  qrAlt: `QR code for visit ${VISIT_CODE}`,
   note: "Show it at the counter on the day.",
 };
 
 const TODAY_PASS_COPY: VisitPassCopy = {
   title: "Show this at the counter",
   codeLabel: "Visit code",
-  qrAlt: `QR code for visit ${VISIT_CODE}`,
   line: `${VISIT_SERVICE} · ${VISIT_SHOP} · 10:15 to 10:45`,
 };
 
 const CALLED_PASS_COPY: VisitPassCopy = {
   title: "Counter 3",
   codeLabel: "Visit code",
-  qrAlt: `QR code for visit ${VISIT_CODE}`,
   line: `${VISIT_SERVICE} · ${VISIT_SHOP} · 10:15`,
   note: "We hold the counter for you until 10:25.",
 };
@@ -265,7 +262,6 @@ const BOOKED_PASS_COPY: Omit<VisitBookedPassCopy, "confirmation"> = {
   pass: {
     title: "Booked",
     codeLabel: "Visit code",
-    qrAlt: `QR code for visit ${VISIT_CODE}`,
     line: "For Alex Chan",
     note: "Show this at the counter on the day.",
   },
@@ -357,7 +353,7 @@ const WAIT_COPY: VisitWaitBodyCopy = {
   waitNow: "Walk-in wait now",
   book: "Book",
   openToday: "Open today",
-  how: "To walk in, tell us at the counter. You get a ticket to follow on your phone, and we’ll WhatsApp you when you’re next.",
+  how: "To walk in, tell us at the counter. We send a ticket link to your phone or email, and we’ll WhatsApp you when you’re next.",
   updated: "Updated 12:00 · times in HKT",
   bookTime: "Book a time",
 };
