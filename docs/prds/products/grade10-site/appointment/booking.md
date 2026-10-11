@@ -12,8 +12,10 @@ leaves holding a link that manages it.
 - **Day** — a month calendar marking the days with something free, no further
   than the service's horizon
 - **Time** — the day's offered starts, in the shop's zone with the zone named
-- **Details** — name, email, a phone number if they wish, the service's
-  questions, notes
+- **Details** — name, email, a phone number, the service's questions, notes;
+  the phone is optional unless the service requires one
+- **Signed in** — the account's name, email and phone read as one summary
+  with Change details, and only the service's questions are left to answer
 - **URL**
   1. `grade10.com/book` — the flow
   2. `grade10.com/book?service=<slug>` — the flow opened at one service
@@ -55,11 +57,11 @@ gave.
 | Account | Decided | None needed; a name and an email book a visit. | Product |
 | Time zone shown | Decided | The shop's, named; the visit is physical. | Product |
 | Second visit, same service | Decided | Refused while one is live; a collector with two cards books one visit. | Product |
-| Phone number | ❓ Open | Optional today; a shop that calls the morning of a visit may want it required. | Operations |
+| Phone number | Decided | Optional by default; a service turns on Require a phone number when the shop calls before the visit, and the booking is refused without one. Set per service, because only some visits need a call. | Operations |
 | Reminder lead | ❓ Open | One day by default; a same-day drop-off may want an hour. | Product |
 | Services by card count | ❓ Open | Grading drop-off for 1 to 19 cards, 30 min; Bulk grading drop-off for 20 or more, 45 min, in the Grading room. | Operations |
 | A full day | ❓ Open | Shows the earliest time at each shop and, today, the walk-in wait; no waitlist. | Product |
-| Prefill | ❓ Open | A signed-in collector's name, email and phone; Book again carries the service, the shop and the answers. | Product |
+| Prefill | Decided | A signed-in collector's name, email and phone, shown as a summary with Change details; a change applies to this booking only. Book again carries the service, the shop and the answers. | Product |
 | Shop facts in 繁中 | ❓ Open | Shop names, addresses, how to get there and counter names are stored in both languages. | Product |
 | Payment at booking | Decided | None; what the visit costs is settled in the shop. | Product |
 | Anonymous write | Decided | A challenge plus a per-address budget of ten asks a day. A booking holds a desk and sends mail on nobody's authority, and the two brakes answer different questions: whether a person is there at all, and how much one address may spend however convincingly it asks. | Product |

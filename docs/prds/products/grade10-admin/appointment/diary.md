@@ -7,8 +7,8 @@ order: 1
 The Appointments section of the admin console: what an operator sets up, what
 they read, and what they do for a collector at the counter.
 
-- **Services** — create, edit, retire; its questions; the resources it runs on,
-  per shop
+- **Services** — create, edit, retire; its questions; whether a booking must
+  carry a phone number; the resources it runs on, per shop
 - **Shops** — create, edit, retire; each with its resources, weekly rules and
   special dates
 - **Resources** — a shop's desks, rooms and devices; each may keep its own hours
