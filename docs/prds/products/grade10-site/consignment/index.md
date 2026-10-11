@@ -63,7 +63,7 @@ Online, or at the counter with staff, naming the items.
 As in the shop; an item already in the vault stays there.
 
 ## *Staff and consignor* - **Agree the terms**
-The reserve where the consignor sets one, the commission from the schedule, and whether the consignor may be named.
+The commission from the schedule and whether the consignor may be named; the lot has no reserve, as no listing does.
 
 ## *Consignor* - **Signs**
 The consignment agreement.
@@ -89,8 +89,6 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
   designed
 - ❓ **Asking online, not built** - only staff open a consignment; the site
   has no request page until its form and rules are designed
-- ❓ **The reserve** - this page gives a consignor a reserve, while every
-  auction listing is absolute - [Bidding](/p/grade10-site/auction/bidding)
 
 ## Price
 
@@ -99,7 +97,8 @@ Once the lot is delivered or kept in the vault and the window has passed, the ha
   consignor is told
 - **Below the floor** - only on the consignor's written yes, kept on the
   consignment
-- **At auction** - the consignor's reserve, where they set one
+- **At auction** - no reserve; a consigned lot is absolute like every
+  listing - [Bidding](/p/grade10-site/auction/bidding)
 
 ## Commission and Payout
 
@@ -194,7 +193,8 @@ payouts made on their due day.
 | --- | --- | --- | --- |
 | One service, two channels | Decided | One consignment service serves the store and the auction; the consignor, the agreement, the commission and the payout are the same, and only the sale differs - decided under the owner's delegation, 2026-10-08 | Product |
 | Commission bound to the consignment | Decided | Pinned when the agreement is prepared, as grading pins its fee sheet; an agreement waiting for a signature keeps its schedule, and a change reaches the next agreement prepared - decided by the owner, 2026-10-08 | Product |
-| The shop and online | Decided | One store product per consigned item sells in the shop and online; staff may limit it to the shop - decided under the owner's delegation, 2026-10-08 | Product |
+| The shop and online | Decided | One store product per consigned item sells in the shop and online, wherever the store sells - decided under the owner's delegation, 2026-10-08; no shop-only listing - decided by the owner, 2026-10-11 | Product |
+| No reserve | Decided | A consigned lot is absolute like every auction listing; the consignor's protection is the start price and the choice of channel - decided by the owner, 2026-10-11 | Product |
 | List price and floor | Decided | Staff change the price within the floor; below it only on the consignor's written yes - decided under the owner's delegation, 2026-10-08 | Product |
 | Seller display | Decided | Optional and set by an admin - decided by the owner, 2026-10-08. Only where the consignor agreed, under their display name - decided under the owner's delegation, 2026-10-08 | Product |
 | Messages | Decided | The consignment service sends its own, by email, as the vault and grading do - decided under the owner's delegation, 2026-10-08 | Product |
