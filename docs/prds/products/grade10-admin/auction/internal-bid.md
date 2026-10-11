@@ -13,7 +13,8 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
 
 | Rule | Value |
 | --- | --- |
-| Per listing | **One**, on a created or published listing |
+| Per listing | **One**, on a created or published listing, bidding as one internal bidder |
+| Internal bidders | Profiles kept in auction admin: a name and a unique email label, no site account |
 | Amount | Whole major units, from the starting price to the currency's ceiling |
 | Commit time | Required; from the start to the scheduled close, both included |
 | Who | `auction:reserve` only |
@@ -22,6 +23,8 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
 
 ## Internal Bid
 
+- 🚧 **Internal bidders** - an admin adds, renames and retires the profiles an
+  internal bid can bid as, and picks one for each listing
 - 🚧 **Before its time** - the amount and the time can change or be removed;
   the house is not in the bidding
 - 🚧 **At its time** - Grade10 commits it once; an amount short of the minimum

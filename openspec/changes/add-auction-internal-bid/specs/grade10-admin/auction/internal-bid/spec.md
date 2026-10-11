@@ -10,6 +10,7 @@ any collector's maximum - [Internal Bid](/p/grade10-admin/auction/internal-bid).
 
 - Setting an internal bid
   - Amount and time: one house maximum per Created or Published listing, with a required commit time from the start to the scheduled close
+  - Internal bidder: a required pick of one active internal bidder profile per listing, changeable only before its time
   - Save limits: an amount above the ceiling or below the starting price, or a commit time already past, is refused at Save
   - Listing edits: a Created listing's window, starting-price or currency change that leaves the internal bid outside its limits clears it, and the admin sees that
   - Unpublished at its time: an internal bid whose time comes while the listing is still Created is Not placed
@@ -25,8 +26,11 @@ any collector's maximum - [Internal Bid](/p/grade10-admin/auction/internal-bid).
   - House win: a lot the house leads at the close closes Bought in, with no order, stock released and Relist offered
   - Never a winner: the house is never the winner of a lot for orders, order letters or post-sale work
   - Read after the close: the listing's own page and its Listings table row read Bought in
+- Internal bidders
+  - Profiles: internal bidder profiles, each a name and a unique email label, kept in auction admin with no site account behind them
+  - Rename and retire: a label is fixed once the profile has bid; a profile is retired only when no Scheduled or Not placed internal bid uses it, and keeps its history
 - Access
-  - Secret floor: only `auction:reserve` sets or reads an internal bid; other operators see the house's bids labelled House, and Bought in after the close; the audit trail never records the amount or the time
+  - Secret floor: only `auction:reserve` sets or reads an internal bid; reserve holders see which internal bidder bid; other operators see the house's bids labelled House, and Bought in after the close; the audit trail never records the amount or the time
 
 ## ADDED Requirements
 

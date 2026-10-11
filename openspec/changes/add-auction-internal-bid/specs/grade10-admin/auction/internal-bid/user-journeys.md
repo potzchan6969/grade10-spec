@@ -3,7 +3,7 @@
 ### grade10-admin-auction-internal-bid-US-01: Admin protects a lot with an internal bid at a set time
 
 **As an** auction admin,
-**I want** to set a hidden house maximum on a listing and the time Grade10 commits it,
+**I want** to set a hidden house maximum on a listing, the internal bidder it bids as, and the time Grade10 commits it,
 **so that** the lot cannot sell below what the house will accept, without a high starting price putting early bidders off.
 
 ### grade10-admin-auction-internal-bid-US-02: Admin changes an internal bid before its time
@@ -47,3 +47,9 @@
 **As an** auction admin,
 **I want** to see that a change to a listing's window, starting price or currency cleared its internal bid,
 **so that** I can set a new one before the lot sells unprotected.
+
+### grade10-admin-auction-internal-bid-US-09: Admin keeps the internal bidders an internal bid can bid as
+
+**As an** auction admin,
+**I want** to add, rename and retire internal bidder profiles in auction admin,
+**so that** each listing's internal bid can bid as the internal bidder I choose for it.

@@ -33,6 +33,8 @@ lots with no internal bid.
   letters. For operators it closes with no order and no winner letters,
   releases its stock as an Unsold close does, offers Relist, and reads Bought
   in on the Listings table
+- **Internal bidders** - an admin keeps several internal bidder profiles in
+  auction admin, and picks one for each listing's internal bid
 - **Secret to staff** - only `auction:reserve` (admin) sets an internal bid or
   sees its amount, time or state. Other operators see nothing of it until the
   house bids, then its bids labelled House and Bought in after the close,
