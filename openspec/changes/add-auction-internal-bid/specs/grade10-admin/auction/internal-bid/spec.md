@@ -882,13 +882,13 @@ bidder, per `grade10-site/auction/notifications`.
 - **AND** Grade10 accepts Kowloon Vault's change, and its Scheduled internal
   bid still names Kowloon Vault
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-9ng rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-9ng rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-64 - An internal bidder in use is not retired
 **Serves:** grade10-admin-auction-internal-bid-US-09 - the admin retires an internal bidder a coming internal bid still needs
 
 - **GIVEN** an internal bidder named Harbour Cards, named by a Scheduled
   internal bid on listing L1, and one named Kowloon Vault, named by a Not
-  placed internal bid on listing L2
+  placed internal bid on listing L2, which still takes bids
 - **WHEN** the admin retires each
 - **THEN** Grade10 refuses Harbour Cards, naming L1, and Kowloon Vault,
   naming L2
