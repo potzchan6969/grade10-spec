@@ -161,9 +161,6 @@
     "passedToday": "No times are left today at {shop}.",
     "earliestEach": "Earliest at each shop",
     "noFreeYet": "No free times yet",
-    "walkTitle": "Walk in today: about {from} to {to} min",
-    "walkBody": "No booking needed. Come to {shop} and we call you when a counter is free.",
-    "seeWait": "See the wait now",
     "noticeHours": "Book at least {hours, plural, one {# hour} other {# hours}} ahead, up to {days} days ahead.",
     "noticeDays": "Book at least {notice, plural, one {# day} other {# days}} ahead, up to {days} days ahead.",
     "noticeNone": "Book up to {days} days ahead.",
@@ -331,10 +328,7 @@
     "passed": {
       "phaseNote": "held until {held}",
       "title": "We held your time until {held}",
-      "lede": "Come in and wait as a walk-in, or book another time.",
-      "walkTitle": "Walk in now: about {from} to {to} min",
-      "walkText": "{service} at {shop}. Staff check you in when you arrive.",
-      "seeWait": "See the wait",
+      "lede": "Or book another time.",
       "note": "Change or cancel until {end}. Or book {service} again right away.",
       "noteBook": "Or book {service} again right away."
     },
@@ -390,11 +384,12 @@
       "sub": "{service} · {when} · {shop}",
       "free": "{time} on {day} opens for others to book.",
       "mail": "We’ll email {email} that it’s cancelled.",
+      "refunded": "Your {amount} is refunded.",
+      "notRefunded": "Not refunded.",
       "why": "Why are you cancelling? (optional)",
       "reasons": {
         "cant": "I can’t make it",
         "wrong": "I booked the wrong time",
-        "walk": "I’ll walk in instead",
         "other": "Something else"
       },
       "more": "Tell us more (optional)",
@@ -424,6 +419,7 @@
       "expiredTitle": "Payment not completed",
       "expiredLede": "Your {time} time on {day} was released. Nothing was charged.",
       "expiredNote": "Book again to pick a time and pay.",
+      "releaseFailed": "Your time could not be released just now. Nothing was charged, and it is released by itself within {minutes} minutes.",
       "paid": "Paid",
       "paidDeposit": "{amount} deposit",
       "paidFull": "{amount}",

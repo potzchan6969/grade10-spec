@@ -161,9 +161,6 @@
     "passedToday": "{shop}門市今天已沒有可預約時間。",
     "earliestEach": "各門市最早時間",
     "noFreeYet": "暫時沒有空檔",
-    "walkTitle": "今天即場到店：約 {from} 至 {to} 分鐘",
-    "walkBody": "毋須預約，直接到{shop}門市，有櫃檯空出時我們會叫你。",
-    "seeWait": "查看現時輪候",
     "noticeHours": "請最少提前 {hours} 小時預約，最多可預約 {days} 天內的時段。",
     "noticeDays": "請最少提前 {notice} 天預約，最多可預約 {days} 天內的時段。",
     "noticeNone": "最多可預約 {days} 天內的時段。",
@@ -331,10 +328,7 @@
     "passed": {
       "phaseNote": "保留至 {held}",
       "title": "我們為你保留時段至 {held}",
-      "lede": "你可以即場到店輪候，或預約其他時間。",
-      "walkTitle": "現在即場到店：約 {from} 至 {to} 分鐘",
-      "walkText": "{shop}店的{service}。到店後職員會為你報到。",
-      "seeWait": "查看輪候",
+      "lede": "或預約其他時間。",
       "note": "{end} 前可以更改或取消，或立即再預約{service}。",
       "noteBook": "或立即再預約{service}。"
     },
@@ -390,11 +384,12 @@
       "sub": "{service} · {when} · {shop}店",
       "free": "{day} {time} 的時段會開放給其他人預約。",
       "mail": "我們會發電郵到 {email} 確認取消。",
+      "refunded": "你的 {amount} 會退還。",
+      "notRefunded": "不予退款。",
       "why": "取消原因（選填）",
       "reasons": {
         "cant": "我未能出席",
         "wrong": "我選錯了時間",
-        "walk": "我會改為即場到店",
         "other": "其他原因"
       },
       "more": "補充說明（選填）",
@@ -424,6 +419,7 @@
       "expiredTitle": "付款未完成",
       "expiredLede": "你於 {day} {time} 的時段已釋出，並無收取任何費用。",
       "expiredNote": "再次預約以選擇時段並付款。",
+      "releaseFailed": "暫時未能釋放你的時段。你未被收費，時段會在 {minutes} 分鐘內自動釋放。",
       "paid": "已付款",
       "paidDeposit": "{amount} 訂金",
       "paidFull": "{amount}",

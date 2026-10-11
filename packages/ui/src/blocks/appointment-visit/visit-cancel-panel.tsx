@@ -12,7 +12,6 @@ import type { VisitCancelReason } from "./types";
 const REASONS = [
   "cant",
   "wrong",
-  "walk",
   "other",
 ] as const satisfies readonly VisitCancelReason[];
 

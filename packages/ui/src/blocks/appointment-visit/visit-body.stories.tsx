@@ -16,7 +16,6 @@ import {
   TOLD_ROWS,
   VISIT_FACTS,
   VISIT_NAME,
-  WAIT_HREF,
 } from "./fixtures";
 import { VisitBody } from "./visit-body";
 import { VisitCancelPanel } from "./visit-cancel-panel";
@@ -109,21 +108,9 @@ export const Called: Story = {
   args: { copy: CALLED_BODY_COPY, tone: "ink", acts: [], told: undefined },
 };
 
-/** Time passed: walk in now, with the wait one link away. */
+/** Time passed: the held time is gone, so book another. */
 export const TimePassed: Story = {
-  args: {
-    copy: PASSED_BODY_COPY,
-    tone: "warn",
-    noticeHref: WAIT_HREF,
-    before: undefined,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("link", { name: "See the wait" })).toHaveAttribute(
-      "href",
-      WAIT_HREF,
-    );
-  },
+  args: { copy: PASSED_BODY_COPY, tone: "warn", before: undefined },
 };
 
 /** Called off: the time struck, and no pass. */

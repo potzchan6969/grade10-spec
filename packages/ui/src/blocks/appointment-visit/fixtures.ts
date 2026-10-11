@@ -176,16 +176,7 @@ const PASSED_BODY_COPY: VisitBodyCopy = {
   phase: "Time passed",
   note: "held until 10:25",
   title: "We held your time until 10:25",
-  lede: "Come in and wait as a walk-in, or book another time.",
-  notice: {
-    title: "Walk in now: about 15 to 25 min",
-    text: `${VISIT_SERVICE} at ${VISIT_SHOP}. Staff check you in when you arrive.`,
-    link: "See the wait",
-  },
-  pass: {
-    ...TODAY_PASS_COPY,
-    note: "When you arrive, give your phone or email. You wait from when you check in.",
-  },
+  lede: "Or book another time.",
   footNote: `Change or cancel until 10:45. Or book ${VISIT_SERVICE} again right away.`,
 };
 
@@ -211,7 +202,6 @@ const CANCEL_PANEL_COPY: VisitCancelPanelCopy = {
   reasons: {
     cant: "I can’t make it",
     wrong: "I booked the wrong time",
-    walk: "I’ll walk in instead",
     other: "Something else",
   },
   more: "Tell us more (optional)",

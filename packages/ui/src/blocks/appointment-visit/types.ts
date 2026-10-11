@@ -36,7 +36,7 @@ type VisitListRow = {
 };
 
 /** One way a collector may say why they cancel. */
-type VisitCancelReason = "cant" | "wrong" | "walk" | "other";
+type VisitCancelReason = "cant" | "wrong" | "other";
 
 /** One pick of how late the collector runs, worded by the consumer. */
 type VisitLateChoice = {
