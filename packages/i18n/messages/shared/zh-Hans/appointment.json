@@ -43,6 +43,7 @@
     "email": "邮箱",
     "phone": "电话",
     "phoneIncomplete": "请输入完整的电话号码。",
+    "phoneRequired": "请填写电话号码，店铺会在到访前致电。",
     "phonePlaceholder": "+852 1234 5678",
     "notes": "有什么需要我们知道？",
     "optional": "选填",
@@ -52,6 +53,8 @@
     "answerMissing": "请选择一项以继续。",
     "submit": "确认预约",
     "choose": "请选择",
+    "bookingAs": "预约人",
+    "changeDetails": "更改资料",
     "kinds": {
       "short_text": "短文本",
       "long_text": "长文本",

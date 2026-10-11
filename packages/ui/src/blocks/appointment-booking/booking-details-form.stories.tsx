@@ -271,3 +271,73 @@ export const PendingWithError: Story = {
     expect(canvas.getByRole("textbox", { name: "Name" })).toHaveValue("Ada");
   },
 };
+
+/** A signed-in collector's name and email read as one summary; the
+ * reported values are the seeded ones. */
+export const Summarized: Story = {
+  args: {
+    questions: [],
+    description: undefined,
+    summarized: true,
+    initialValues: {
+      name: "Ada Lau",
+      email: "ada@example.com",
+      phone: "+85291234567",
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Booking as")).toBeVisible();
+    expect(canvas.getByText("ada@example.com")).toBeVisible();
+    expect(canvas.queryByRole("textbox", { name: "Name" })).toBeNull();
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Confirm Appointment" }),
+    );
+    expect(args.onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "Ada Lau",
+        email: "ada@example.com",
+        phone: "+85291234567",
+      }),
+    );
+  },
+};
+
+/** Change details opens the summarized fields with what was seeded. */
+export const SummarizedChanged: Story = {
+  args: Summarized.args,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Change details" }),
+    );
+    expect(canvas.getByRole("textbox", { name: "Name" })).toHaveValue(
+      "Ada Lau",
+    );
+    expect(canvas.queryByText("Booking as")).toBeNull();
+  },
+};
+
+/** A service that needs a phone refuses an empty one and drops the
+ * Optional mark; a summary without a phone keeps the phone field. */
+export const PhoneRequired: Story = {
+  args: {
+    questions: [],
+    description: undefined,
+    phoneRequired: true,
+    summarized: true,
+    initialValues: { name: "Ada Lau", email: "ada@example.com" },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Booking as")).toBeVisible();
+    expect(canvas.getByRole("textbox", { name: "Phone" })).toBeVisible();
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Confirm Appointment" }),
+    );
+    expect(
+      canvas.getByText("Add a phone number. The shop calls before this visit."),
+    ).toBeVisible();
+    expect(args.onSubmit).not.toHaveBeenCalled();
+  },
+};

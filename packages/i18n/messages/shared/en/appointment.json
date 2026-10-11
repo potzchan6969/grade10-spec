@@ -43,6 +43,7 @@
     "email": "Email",
     "phone": "Phone",
     "phoneIncomplete": "Enter the whole phone number.",
+    "phoneRequired": "Add a phone number. The shop calls before this visit.",
     "phonePlaceholder": "+852 1234 5678",
     "notes": "Anything we should know?",
     "optional": "optional",
@@ -52,6 +53,8 @@
     "answerMissing": "This is needed to continue.",
     "submit": "Confirm Appointment",
     "choose": "Choose",
+    "bookingAs": "Booking as",
+    "changeDetails": "Change details",
     "kinds": {
       "short_text": "Short text",
       "long_text": "Long text",

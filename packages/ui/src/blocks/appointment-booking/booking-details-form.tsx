@@ -53,6 +53,12 @@ type BookingDetailsFormCopy = {
   emailMissing: string;
   emailInvalid: string;
   phoneMissing: string;
+  /** Shown when a required phone is left empty; falls back to `phoneMissing`. */
+  phoneRequired?: string;
+  /** Leads the summary of seeded details: `Booking as`. */
+  bookingAs?: string;
+  /** Opens the summarized details for editing: `Change details`. */
+  changeDetails?: string;
   answerMissing: string;
   /** Shown in a select before an option is picked. */
   choose: string;
@@ -68,6 +74,14 @@ type BookingDetailsFormProps = {
   initialValues?: Partial<BookingDetailsValues>;
   /** Locks email to the seeded value — native disabled, still submitted. */
   emailDisabled?: boolean;
+  /** Refuses an empty phone, and drops the `Optional` mark from its label. */
+  phoneRequired?: boolean;
+  /**
+   * Shows a seeded name and email as one summary with a Change details
+   * button instead of their fields. A required phone the seed lacks keeps
+   * its field.
+   */
+  summarized?: boolean;
   pending?: boolean;
   error?: ReactNode;
   onSubmit: (values: BookingDetailsValues) => void;
@@ -89,8 +103,10 @@ const NO_ERRORS: FieldErrors = { answers: {} };
 
 /**
  * Name, email, phone, the service's questions in order, and notes. Refuses to
- * report while a name, an address or a required answer is missing, naming
- * each; reports every text trimmed and answers keyed by question key.
+ * report while a name, an address, a required phone or a required answer is
+ * missing, naming each; reports every text trimmed and answers keyed by
+ * question key. Summarized, a seeded name and email read as one line until
+ * Change details opens them.
  */
 function BookingDetailsForm({
   copy,
@@ -98,6 +114,8 @@ function BookingDetailsForm({
   description,
   initialValues,
   emailDisabled = false,
+  phoneRequired = false,
+  summarized = false,
   pending = false,
   error,
   onSubmit,
@@ -114,6 +132,12 @@ function BookingDetailsForm({
     initialValues?.answers ?? {},
   );
   const [errors, setErrors] = useState<FieldErrors>(NO_ERRORS);
+  const [editing, setEditing] = useState(
+    !summarized ||
+      !initialValues?.name?.trim() ||
+      !EMAIL.test(initialValues?.email?.trim() ?? ""),
+  );
+  const phoneField = editing || (phoneRequired && !initialValues?.phone);
 
   function answer(key: string, value: Answer) {
     setAnswers((held) => ({ ...held, [key]: value }));
@@ -135,8 +159,9 @@ function BookingDetailsForm({
       },
       questions,
     );
-    const found = validate(values, questions, copy);
+    const found = validate(values, questions, copy, phoneRequired);
     setErrors(found);
+    if (found.name || found.email || found.phone) setEditing(true);
     if (
       found.name ||
       found.email ||
@@ -166,42 +191,83 @@ function BookingDetailsForm({
             </Text>
           ) : null}
         </VStack>
-        <TextInput
-          autoComplete="name"
-          label={copy.name}
-          message={errors.name}
-          name="name"
-          onChange={(event) => setName(event.target.value)}
-          status={errors.name ? "error" : "default"}
-          value={name}
-        />
-        <TextInput
-          autoComplete="email"
-          inputMode="email"
-          label={copy.email}
-          message={errors.email}
-          name="email"
-          onChange={
-            emailDisabled ? undefined : (event) => setEmail(event.target.value)
-          }
-          disabled={emailDisabled}
-          status={errors.email ? "error" : "default"}
-          type="email"
-          value={email}
-        />
-        <AuctionPhoneField
-          country={phoneCountry ? (phoneCountry as Country) : undefined}
-          countrySearchPlaceholder={copy.countrySearchPlaceholder}
-          defaultCountry="HK"
-          label={`${copy.phone} (${copy.optional})`}
-          message={errors.phone}
-          name="phone"
-          onChange={setPhone}
-          onCountryChange={(next) => setPhoneCountry(next ?? "")}
-          placeholder={copy.phonePlaceholder}
-          status={errors.phone ? "error" : "default"}
-          value={phone}
-        />
+        {editing ? (
+          <>
+            <TextInput
+              autoComplete="name"
+              label={copy.name}
+              message={errors.name}
+              name="name"
+              onChange={(event) => setName(event.target.value)}
+              status={errors.name ? "error" : "default"}
+              value={name}
+            />
+            <TextInput
+              autoComplete="email"
+              inputMode="email"
+              label={copy.email}
+              message={errors.email}
+              name="email"
+              onChange={
+                emailDisabled
+                  ? undefined
+                  : (event) => setEmail(event.target.value)
+              }
+              disabled={emailDisabled}
+              status={errors.email ? "error" : "default"}
+              type="email"
+              value={email}
+            />
+          </>
+        ) : (
+          <VStack data-slot="booking-details-summary" gap="xs" hAlign="stretch">
+            {copy.bookingAs ? (
+              <Text as="p" size="sm" tone="secondary">
+                {copy.bookingAs}
+              </Text>
+            ) : null}
+            <Text as="p" size="md" weight="medium">
+              {name}
+            </Text>
+            <Text as="p" size="sm">
+              {email}
+            </Text>
+            {phone && !phoneField ? (
+              <Text as="p" size="sm">
+                {phone}
+              </Text>
+            ) : null}
+            {copy.changeDetails ? (
+              <HStack gap="sm">
+                <Button
+                  onClick={() => setEditing(true)}
+                  size="sm"
+                  type="button"
+                  variant="ghost"
+                >
+                  {copy.changeDetails}
+                </Button>
+              </HStack>
+            ) : null}
+          </VStack>
+        )}
+        {phoneField ? (
+          <AuctionPhoneField
+            country={phoneCountry ? (phoneCountry as Country) : undefined}
+            countrySearchPlaceholder={copy.countrySearchPlaceholder}
+            defaultCountry="HK"
+            label={
+              phoneRequired ? copy.phone : `${copy.phone} (${copy.optional})`
+            }
+            message={errors.phone}
+            name="phone"
+            onChange={setPhone}
+            onCountryChange={(next) => setPhoneCountry(next ?? "")}
+            placeholder={copy.phonePlaceholder}
+            status={errors.phone ? "error" : "default"}
+            value={phone}
+          />
+        ) : null}
         {questions.map((question) => (
           <QuestionField
             answer={answers[question.key]}
@@ -471,6 +537,7 @@ function validate(
   values: BookingDetailsValues,
   questions: readonly BookingQuestion[],
   copy: BookingDetailsFormCopy,
+  phoneRequired: boolean,
 ): FieldErrors {
   const answers: Record<string, string> = {};
   for (const question of questions) {
@@ -490,7 +557,14 @@ function validate(
         : EMAIL.test(values.email)
           ? undefined
           : copy.emailInvalid,
-    phone: values.phone === "" || phoneReady ? undefined : copy.phoneMissing,
+    phone:
+      values.phone === ""
+        ? phoneRequired
+          ? (copy.phoneRequired ?? copy.phoneMissing)
+          : undefined
+        : phoneReady
+          ? undefined
+          : copy.phoneMissing,
     answers,
   };
 }
