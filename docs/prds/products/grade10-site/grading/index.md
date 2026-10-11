@@ -12,7 +12,7 @@ one level, and every card in it carries its own outcome.
   1. `grade10.com/grading/sign#<token>` — the submission agreement and the
      hand-back receipt on the shop iPad, opened from the QR code or link staff
      hand over
-  2. `grade10.com/book` — a walk-in's drop-off with no list; the cards are
+  2. `grade10.com/book` — a Grading visit booked with no list; the cards are
      listed at the counter
   3. `admin.grade10.com/grading` — the queue, the batches and one submission;
      `admin.grade10.com/grading/walk-in` for a list written at the desk
@@ -88,7 +88,7 @@ Every item is a value or an act outside the code, with who closes it.
    are unset and refuse by name until written, the rest run on the table's
    defaults — [Grading Console](/p/grade10-admin/grading/console#settings)
 8. *Product, Engineering* — **The diary services** — the drop-off, its Bulk
-   variant and the walk-in's visit, named and sized in the diary
+   variant and the customer-bookable Grading visit, named and sized in the diary
 9. *Operations* — **Till products** — every product behind a grading variant
    carries type `Grading Service` or tag `no-earn`
 10. *Legal* — **Counsel's wording** — clauses 4, 5 and 6, the hand-back

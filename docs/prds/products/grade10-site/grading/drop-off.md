@@ -24,7 +24,7 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
   submission, as the vault's visit is: the visit carries the list, the diary
   is given no address, and the submission owns every email; or the
   collector's own Grading drop-off, booked with the submission as an answer,
-  which gets the pass, the diary's mail and [Your Visit](/p/grade10-site/appointment/visit) until staff transfer it
+  which gets the diary's mail and [Your Visit](/p/grade10-site/appointment/visit) until staff transfer it
 - ❓ **Where it is booked** — in grading's own booking view, which the
   collector's page opens after the plan is kept, and for any submission that
   holds no drop-off and has none to join; or [Book a Visit](/p/grade10-site/appointment/booking) with the submission
@@ -41,8 +41,8 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
   reads the same day and time, and the slot is sized for both lists
 - ❓ **A walk-in** — books the customer-bookable Grading service at
   `grade10.com/book` with a name and an email, and lists the cards at the
-  counter; or staff add them to the line at the counter with a ticket —
-  [Walk-in Ticket](/p/grade10-site/appointment/visit#walk-in-ticket)
+  counter; the shop keeps no walk-in line —
+  [Front Desk](/p/grade10-admin/appointment/front-desk)
 - ❓ **Move or cancel** — any time before the visit starts, from the page
   of the submission that owns the visit; an email each; or until the slot
   ends, from [Your Visit](/p/grade10-site/appointment/visit)
@@ -61,7 +61,7 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
   their plan is not left with only what was originally left to book again in
 - ❓ **The booked view** — the day, the time and the shop, add to calendar,
   move, cancel, and the day the cards leave with the estimated day back; or
-  the pass and [Your Visit](/p/grade10-site/appointment/visit), which carry no batch line
+  [Your Visit](/p/grade10-site/appointment/visit), which carry no batch line
 
 ## Before You Come
 
@@ -104,7 +104,7 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 | A missed visit closes a visit | Decided | After the grace period grading tells the diary the collector did not come, the same shape the vault takes; the submission reads the outcome within the hour. Only the plan's expiry clock ends a plan, restarted from the day a visit ended without a hand-in, missed or cancelled, so a collector who missed a visit rebooks from the page with the list intact and the clock they actually have left | Product |
 | One visit for two submissions | Decided | The first submission owns the visit and a second joins it, listed under the same day and time with the slot sized for both lists, so a collector with two levels still makes one trip and the diary holds one booking | Product |
 | The booking blocks are the diary's | Decided | The picker, the details, the confirmation and the manage card are `@grade10/ui`'s appointment-booking exports; grading adds the batch line and its own wizard rail | Design |
-| Diary services | Decided | A product-bound drop-off service, a Bulk variant with the longer duration, and the customer-bookable Grading visit kept for the walk-in, about 20 and 45 minutes; the horizon, the minimum notice and the buffers are each service's diary fields | Product, Engineering |
+| Diary services | Decided | A product-bound drop-off service, a Bulk variant with the longer duration, and the customer-bookable Grading visit, about 20 and 45 minutes; the horizon, the minimum notice and the buffers are each service's diary fields | Product, Engineering |
 | Batch cut-off | Decided | Thursday 19:00 with the batch shipping the next day, checked against the courier's pickup schedule | Operations |
 | One shop | Decided | More shops appear in the picker as they open; the first release has one | Owner |
 :::
