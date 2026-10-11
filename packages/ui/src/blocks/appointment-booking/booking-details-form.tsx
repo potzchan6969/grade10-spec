@@ -226,7 +226,7 @@ function BookingDetailsForm({
                 {copy.bookingAs}
               </Text>
             ) : null}
-            <Text as="p" size="md" weight="medium">
+            <Text as="p" weight="medium">
               {name}
             </Text>
             <Text as="p" size="sm">
