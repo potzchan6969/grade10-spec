@@ -1222,9 +1222,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/catalogue-access.spec.ts`
 
 **Pre-conditions:**
 
@@ -1254,9 +1256,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/catalogue-access.spec.ts`
 
 **Pre-conditions:**
 
@@ -1284,9 +1288,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/catalogue-access.spec.ts`
 
 **Pre-conditions:**
 
@@ -1316,9 +1322,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/catalogue-access.spec.ts`
 
 **Pre-conditions:**
 
@@ -1354,9 +1362,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/catalogue-access.spec.ts`
 
 **Pre-conditions:**
 
@@ -1383,9 +1393,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/catalogue-access.spec.ts`
 
 **Pre-conditions:**
 
@@ -1418,9 +1430,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/catalogue-access.spec.ts`
 
 **Pre-conditions:**
 
@@ -2558,9 +2572,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction-bids.spec.ts`
 
 **Pre-conditions:**
 
@@ -2602,9 +2618,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction-bids.spec.ts`
 
 **Pre-conditions:**
 
@@ -2863,9 +2881,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction-bids.spec.ts`
 
 **Pre-conditions:**
 
@@ -2908,9 +2928,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction-bids.spec.ts`
 
 **Pre-conditions:**
 

@@ -161,9 +161,11 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -337,9 +339,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -461,9 +465,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -504,9 +510,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -667,9 +675,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 One listing has more public and private events than one page holds. No new event is added during the pass.
@@ -696,9 +706,11 @@ One listing has more public and private events than one page holds. No new event
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -739,9 +751,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -793,9 +807,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 A Grade10 storefront session for account A.
@@ -878,9 +894,11 @@ No storefront session.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1218,9 +1236,11 @@ None.
 * **Type:** functional
 * **Suites:** smoke, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 customer(signed-in bidder with one accepted automatic maximum and no automatic
@@ -1255,9 +1275,11 @@ bidding** is visible beside public recent bids.
 * **Type:** functional
 * **Suites:** smoke, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1289,9 +1311,11 @@ bidding** is visible beside public recent bids.
 * **Type:** security
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1332,9 +1356,11 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Type:** functional
 * **Suites:** smoke, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 customer(signed-in bidder with at least one automatic bid Grade10 placed for
@@ -1368,9 +1394,11 @@ lot's page.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 customer(signed-in bidder with one accepted automatic maximum and no automatic
@@ -1399,9 +1427,11 @@ bid placed for them yet on `<listing_max_only>`) is on that lot's page.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
 
 **Pre-conditions:**
 customer(signed-in bidder with both bid-sequence and maximum rows on
