@@ -29,7 +29,7 @@ Needs the reads of group 2 landed. No table and no migration: nothing records a 
 - [ ] 3.8 Add the daily trigger to the sweep and cron section of `docs/architecture/auction.md` and the two secrets to the secrets section of `docs/deployment.md`
 - [ ] 3.9 Verify: `pnpm run test:backend`, `pnpm run check:libs` (it runs `check-crons`), `pnpm run typecheck`
 
-## 4. Today in three columns and the daily dialog (grade10)
+## 4. Today in three columns and the daily dialog (grade10) (owner: @mason5991)
 
 Builds against the contracts and fixtures of group 2, never a running backend.
 
