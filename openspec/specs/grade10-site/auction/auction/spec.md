@@ -57,8 +57,7 @@ card.
 - Refused attempts
   - Not a bid: a refused attempt writes no bid, no standing and no history,
     and moves nobody's row
-  - Said on the bid form: the refusal shows on the bid form, in words that
-    name what the bidder can do
+  - Said on the bid form: refusals show inline in existing words except an above-ceiling response, which shows no maximum-bid message, automatic retry or response-driven field reset
   - Operator-side record: each refusal is one structured operational log
     naming the bidder, the lot, the code, the amount and the floor or ceiling
   - Lost answer: a bid whose answer is lost on the way back reads as placed
@@ -975,14 +974,17 @@ lot is settled at its close"; that close moves the version, and the refusal
 does not. The bidder's record SHALL never show a refused attempt.
 
 The bid form SHALL say why under the bid action, in the words below, and
-nowhere else: never in a toast, and never in the words the server sent.
+nowhere else: never in a toast, and never in the words the server sent. An
+above-ceiling response SHALL show no maximum-bid message or generic refusal
+message, SHALL NOT reset the custom field from the response, and SHALL NOT
+automatically retry.
 
 | Refused when | Code | The bid form says |
 | --- | --- | --- |
 | The amount is not a whole count of minor units above zero, checked by the bid form before it sends | None: the request is never sent | Enter a valid amount. |
 | At or above the identity bar without a verified identity, at the storefront | `IDENTITY_REQUIRED` | Bids this high need a verified identity. Verify from your account, then bid again. |
 | Below the minimum next bid | `AMOUNT_TOO_LOW` | Minimum bid is {amount}. with the minimum next bid |
-| Above the currency's ceiling | `AMOUNT_TOO_HIGH` | Maximum bid is {amount}. with the ceiling |
+| Above the currency's ceiling | `AMOUNT_TOO_HIGH` | No message |
 | Not above the bidder's own maximum on the listing | `MAXIMUM_NOT_RAISED` | Your new maximum must be higher than your current one. |
 | No linked card, or the bidder was never registered with one | `PAYMENT_METHOD_REQUIRED`, `NOT_REGISTERED` | Link a card to bid. |
 | Another card after the first accepted bid on the listing | `PAYMENT_METHOD_REFUSED` | This listing's card is locked after the first accepted bid. |
@@ -1030,20 +1032,21 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
 - **AND** B's maximum stays 110000 HKD minor units and their bidding history
   gains no entry
 
-<!-- trace:scenario id=g10.auction-auction.SC-fnt rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-fnt rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-91 - Each refusal reads in its own words
 **Serves:** grade10-site-auction-auction-US-14 - the bidder reads why a bid was refused
 
 - **WHEN** a bid is refused for any reason the refusal table names
-- **THEN** the bid form shows that row's words under the bid action
+- **THEN** the bid form shows that row's words under the bid action, except
+  an above-ceiling response, which shows no message
 - **AND** no toast opens
 
-<!-- trace:scenario id=g10.auction-auction.SC-nh5 rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-nh5 rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-92 - The server's words never reach the bid form
 **Serves:** grade10-site-auction-auction-US-14 - a refusal the bid form has no words of its own for
 
-- **WHEN** the auction refuses a bid with a code the table gives no words of
-  its own, or with a message of its own
+- **WHEN** the auction refuses a bid with a code other than `AMOUNT_TOO_HIGH`
+  that the table gives no words of its own, or with a message of its own
 - **THEN** the bid form says Your bid did not go through.
 - **AND** none of the server's message shows
 
@@ -1058,6 +1061,16 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
   units
 - **AND** nothing of the refusal reaches the bidder's record, bidding history
   or My Auctions
+<!-- trace:scenario id=g10.auction-auction.SC-cfg rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-103 - A defensive above-ceiling answer shows no message
+
+**Serves:** grade10-site-auction-auction-US-14 - the bidder reviews their amount after a defensive refusal
+
+- **GIVEN** an open listing and a bidder reviewing a custom maximum
+- **WHEN** the service answers `AMOUNT_TOO_HIGH`, with or without a ceiling or a server message
+- **THEN** no maximum-bid message, generic refusal message or toast appears
+- **AND** the response does not reset the custom draft or submit another attempt
+- **AND** the refused bid leaves every record and listing fact unchanged as required above
 
 ### Requirement: A bid whose answer is lost reads as placed when the bidder's standing holds it
 

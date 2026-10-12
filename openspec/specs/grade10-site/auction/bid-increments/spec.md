@@ -1,6 +1,7 @@
 # grade10-site/auction/bid-increments Specification
 
 ## Purpose
+
 Makes the next auction bid proportionate to the price being beaten, using one
 Grade10-owned schedule for each supported auction currency.
 
