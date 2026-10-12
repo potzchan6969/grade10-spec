@@ -240,6 +240,7 @@ export const Listed: Story = {
         canvas.getByRole("button", { name: "View Listing" }),
       ).toBeVisible();
       expect(canvas.getByText("Listed")).toBeVisible();
+      expect(canvas.getByText("Listed").querySelector("svg")).toBeNull();
       expect(canvas.getByText("Listed in the Grade10 Store")).toBeVisible();
     });
     expect(
@@ -268,6 +269,7 @@ export const LiveAuction: Story = {
         canvas.getByRole("button", { name: "View Auction" }),
       ).toBeVisible();
       expect(canvas.getByText("Live Auction")).toBeVisible();
+      expect(canvas.getByText("Live Auction").querySelector("svg")).toBeNull();
       expect(canvas.getByText("Listed for auction")).toBeVisible();
     });
     // Locked while bidding is live — no retrieval until it settles.

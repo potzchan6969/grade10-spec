@@ -74,7 +74,7 @@ function VaultAssetSummary({
               : statusBadgeVariant(asset.status)
           }
         >
-          <ShieldCheck aria-hidden weight="bold" />
+          {liveListing ? null : <ShieldCheck aria-hidden weight="bold" />}
           {statusLabel(asset.status)}
         </Badge>
         <h1 className="font-heading text-3xl font-semibold tracking-tight text-balance md:text-4xl">
