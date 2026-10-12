@@ -9,5 +9,27 @@
     "capturedAt": "2026-10-08T02:27:50.120Z",
     "targets": []
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "a66097bfe8d255503c3b472f8d654e240254b4c7",
+      "components": [
+        "admin",
+        "appointment-service",
+        "auction-service",
+        "auth",
+        "e-kyc-service",
+        "grading-service",
+        "inventory-service",
+        "loyalty-service",
+        "store-service",
+        "vault-service",
+        "web",
+        "zzz-admin",
+        "zzz-auth",
+        "zzz-store-service",
+        "zzz-web"
+      ]
+    }
+  ]
 }
