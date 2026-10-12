@@ -27,7 +27,7 @@ const HEADER_COPY = {
 };
 
 const meta = {
-  title: "Auction Listing/LotHeader",
+  title: "Auction/Display/Blocks/ListingLotHeader",
   component: ListingLotHeader,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

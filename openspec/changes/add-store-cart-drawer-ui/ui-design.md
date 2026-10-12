@@ -61,7 +61,7 @@ slot or empty-state browse actions (`cart-drawer-empty-state`).
 
 ### Product Pictures
 
-The [CartItem Default story](https://storybook.grade10-stg.com/?path=/story/store-cart-cartitem--default) and existing `CartItem` thumbnail frame are the design reference. `CartItemSummary.imageSrc` and `imageAlt` already exist in [types](../../../packages/ui/src/blocks/store-cart/types.ts); the [renderer](../../../packages/ui/src/blocks/store-cart/cart-drawer.tsx) already supplies the picture, item-name alt fallback and no-picture placeholder. No primitive, token, message key, export or layout change is required. Shared picture stories and controlled assets are missing coverage to add in grade10-spec.
+The [CartItem Default story](https://storybook.grade10-stg.com/?path=/story/store-cart-blocks-cartitem--default) and existing `CartItem` thumbnail frame are the design reference. `CartItemSummary.imageSrc` and `imageAlt` already exist in [types](../../../packages/ui/src/blocks/store-cart/types.ts); the [renderer](../../../packages/ui/src/blocks/store-cart/cart-drawer.tsx) already supplies the picture, item-name alt fallback and no-picture placeholder. No primitive, token, message key, export or layout change is required. Shared picture stories and controlled assets are missing coverage to add in grade10-spec.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -76,7 +76,7 @@ The [CartItem Default story](https://storybook.grade10-stg.com/?path=/story/stor
 
 ## Points Reference
 
-[Storybook Default](https://storybook.grade10-stg.com/?path=/story/store-cart-cartdrawer--default)
+[Storybook Default](https://storybook.grade10-stg.com/?path=/story/store-cart-blocks-cartdrawer--default)
 is the requested layout reference. Reuse `CartDrawer` and its existing rounded
 amount input, `pt` suffix, Apply, rate/balance text, Use max and applied Remove
 action. Supply localized live data; do not copy the story's sample balance.

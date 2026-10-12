@@ -2,8 +2,8 @@
 
 ### Store Locator (Location & Hours)
 
-Layout SoT: Storybook `pages-store-locator-page--default` and
-`pages-store-locator-page--narrow`.
+Layout SoT: Storybook `store-store-locator-store-locator--default` and
+`store-store-locator-store-locator--narrow`.
 
 No Figma frame draws this page. The Storybook assembly is the agreed look
 (Q14) until a frame lands in draw-store-locator-page. Do not invent a Figma
@@ -34,10 +34,10 @@ delivery work in grade10.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Default | Location & Hours heading, map, store name, address lines and hours rows, one per day, Monday first (Q16); Storybook `pages-store-locator-page--default` | `grade10-site-store-store-locator-SC-01`, `shared-ui-store-locator-SC-02` |
+| Default | Location & Hours heading, map, store name, address lines and hours rows, one per day, Monday first (Q16); Storybook `store-store-locator-store-locator--default` | `grade10-site-store-store-locator-SC-01`, `shared-ui-store-locator-SC-02` |
 | Map link | The whole map is one link, named from the map's link copy, opening Google Maps in a new tab; the embedded map takes no focus | `grade10-site-store-store-locator-SC-04`, `shared-ui-store-locator-SC-05` |
 | Chrome on Store Locator | Header marks Store Locator; footer Help column leads with it | `grade10-site-store-store-locator-SC-06`, `grade10-site-store-store-locator-SC-07`, `grade10-site-store-store-locator-SC-08` |
-| Narrow | Map above the details, one column, no sideways scroll; Storybook `pages-store-locator-page--narrow` | `grade10-site-store-store-locator-SC-09` |
+| Narrow | Map above the details, one column, no sideways scroll; Storybook `store-store-locator-store-locator--narrow` | `grade10-site-store-store-locator-SC-09` |
 | Free pick-up link | The store name in the claim is a link to Store Locator | `grade10-site-store-product-page-SC-25` |
 | Shipping fee, no page | Text, not a link, plain like the text around it, with no underline (Q22) | `grade10-site-store-product-page-SC-38` |
 | Map not loaded | The map's place still opens Google Maps; the box keeps its size and muted background, with no message (Q19) | `grade10-site-store-store-locator-SC-13` |

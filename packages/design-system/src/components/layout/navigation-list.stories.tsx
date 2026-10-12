@@ -3,7 +3,7 @@ import { NavigationLink } from "./navigation-link";
 import { NavigationList } from "./navigation-list";
 
 const meta = {
-  title: "Components/NavigationList",
+  title: "Design System/Layout/NavigationList",
   component: NavigationList,
   tags: ["autodocs"],
 } satisfies Meta<typeof NavigationList>;
@@ -19,7 +19,7 @@ export const Default: Story = {
       </NavigationLink>
       <NavigationLink href="#auction">Auction</NavigationLink>
       <NavigationLink href="#grade">Grade</NavigationLink>
-      <NavigationLink href="?path=/story/pages-store-locator-page--default">
+      <NavigationLink href="?path=/story/store-store-locator-store-locator--default">
         Store Locator
       </NavigationLink>
     </NavigationList>

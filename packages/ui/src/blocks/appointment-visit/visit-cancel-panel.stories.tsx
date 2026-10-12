@@ -24,7 +24,7 @@ function Held(props: VisitCancelPanelProps) {
 }
 
 const meta = {
-  title: "Appointment Visit/VisitCancelPanel",
+  title: "Appointment/Visit/Blocks/VisitCancelPanel",
   component: VisitCancelPanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

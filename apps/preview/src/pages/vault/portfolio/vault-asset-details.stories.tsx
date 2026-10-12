@@ -7,7 +7,7 @@ import { VaultAssetDetails } from "./vault-asset-details";
  * Graded and raw attribute lists for the vault asset detail page.
  */
 const meta = {
-  title: "Vault/Asset Details",
+  title: "Vault/Portfolio/Parts/VaultAssetDetails",
   component: VaultAssetDetails,
   parameters: { layout: "padded" },
   decorators: [

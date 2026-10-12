@@ -10,7 +10,7 @@ holds it; the `<img>` does not change
 
 ## 2. The manual (grade10-spec)
 
-- [ ] 2.1 Point the `::story` "The whole photo in the well" on `docs/prds/products/shared/ui/store-product-listing.md` at `store-product-listing-productcardimage--non-square-photo`, and the Non Square Photo row of `ui-design.md` at the built story
+- [ ] 2.1 Point the `::story` "The whole photo in the well" on `docs/prds/products/shared/ui/store-product-listing.md` at `store-product-listing-blocks-productcardimage--non-square-photo`, and the Non Square Photo row of `ui-design.md` at the built story
 - [ ] 2.2 After group 1 is verified, take the 🚧 off **Whole photo** under `Product Tile`, restating no requirement
 - [ ] 2.3 Verify: `pnpm check:manual`
 

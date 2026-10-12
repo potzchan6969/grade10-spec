@@ -47,7 +47,7 @@ sells.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Unavailable Items Removed story at `<shared ui storybook url>` and click Open Cart.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Unavailable Items Removed story at `<shared ui storybook url>` and click Open Cart.
 2. Wait until the skeletons clear.
 3. Look at the drawer body.
 4. Look at the toasts.
@@ -159,7 +159,7 @@ sells.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Only Delisted Lines story at `<shared ui storybook url>` and click Open Cart.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Only Delisted Lines story at `<shared ui storybook url>` and click Open Cart.
 2. Wait until the skeletons clear.
 3. Look at the drawer body.
 4. Look at the drawer title, below the body, and the toasts.
@@ -247,7 +247,7 @@ sells.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Mixed Line States story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Mixed Line States story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 3. Look at the drawer title.
 

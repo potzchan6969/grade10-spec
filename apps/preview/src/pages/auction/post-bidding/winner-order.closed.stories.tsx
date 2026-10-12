@@ -14,7 +14,7 @@ import {
 
 const meta = {
   ...winnerOrderMeta(),
-  title: "My Auctions/Winner Order/Closed",
+  title: "Auction/Post Bidding/Winner Order/Closed",
   args: { status: "cancelled" },
   parameters: {
     ...winnerOrderMeta().parameters,

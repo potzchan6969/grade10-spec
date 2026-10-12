@@ -12,7 +12,8 @@ export const UTILITY_LINKS = [
 ];
 
 /** Workbench Store Locator page — keep in sync with preview `STORE_LOCATOR_HREF`. */
-const STORE_LOCATOR_HREF = "?path=/story/pages-store-locator-page--default";
+const STORE_LOCATOR_HREF =
+  "?path=/story/store-store-locator-store-locator--default";
 
 export const NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },

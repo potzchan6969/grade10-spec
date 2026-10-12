@@ -8,7 +8,7 @@ import { VaultAssetStatus } from "./vault-asset-status";
  * In Vault renders nothing.
  */
 const meta = {
-  title: "Vault/Asset Status",
+  title: "Vault/Portfolio/Parts/VaultAssetStatus",
   component: VaultAssetStatus,
   parameters: { layout: "centered" },
   decorators: [

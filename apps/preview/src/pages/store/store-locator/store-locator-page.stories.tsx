@@ -164,7 +164,7 @@ function StoreLocatorPage() {
 }
 
 const meta = {
-  title: "Pages/Store Locator Page",
+  title: "Store/Store Locator/Store Locator",
   component: StoreLocatorPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

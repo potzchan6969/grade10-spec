@@ -16,7 +16,7 @@ import { VaultAssetList } from "./vault-asset-list";
  * (annotation); tabs with zero items hide; each tab keeps its own sort.
  */
 const meta = {
-  title: "Vault/Asset List",
+  title: "Vault/Portfolio/Parts/VaultAssetList",
   component: VaultAssetList,
   parameters: { layout: "padded" },
   decorators: [

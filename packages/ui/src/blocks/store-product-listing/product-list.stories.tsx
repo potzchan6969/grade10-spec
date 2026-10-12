@@ -4,7 +4,7 @@ import { LISTING_COPY, PRODUCTS } from "./fixtures";
 import { ProductList } from "./product-list";
 
 const meta = {
-  title: "Store Product Listing/ProductList",
+  title: "Store/Product Listing/Blocks/ProductList",
   component: ProductList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

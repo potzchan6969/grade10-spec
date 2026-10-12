@@ -9,7 +9,7 @@ const Box = ({ children }: { children: ReactNode }) => (
 );
 
 const meta = {
-  title: "Components/Divider",
+  title: "Design System/Display/Divider",
   component: Divider,
   tags: ["autodocs"],
   argTypes: {

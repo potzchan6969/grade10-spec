@@ -6,11 +6,11 @@
 
 | Surface | Storybook (SoT) | Figma (historical) |
 | --- | --- | --- |
-| Available | [`ProductCardImage` → Default](?path=/story/store-product-listing-productcardimage--default) | [Product Card Image](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074) |
-| On sale | [`ProductCardImage` → Sale](?path=/story/store-product-listing-productcardimage--sale) | none |
-| In cart | [`ProductCardImage` → In Cart](?path=/story/store-product-listing-productcardimage--in-cart) | none |
-| Sold out, where the tile sells | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-productcardimage--sold-out) | none |
-| Sold out, where nothing sells | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler) | none |
+| Available | [`ProductCardImage` → Default](?path=/story/store-product-listing-blocks-productcardimage--default) | [Product Card Image](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074) |
+| On sale | [`ProductCardImage` → Sale](?path=/story/store-product-listing-blocks-productcardimage--sale) | none |
+| In cart | [`ProductCardImage` → In Cart](?path=/story/store-product-listing-blocks-productcardimage--in-cart) | none |
+| Sold out, where the tile sells | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-blocks-productcardimage--sold-out) | none |
+| Sold out, where nothing sells | [`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-blocks-productcardimage--sold-out-with-handler) | none |
 
 The Figma frame still draws the photo multiplied. Its redraw is handed to the
 redraw-store-product-card-frames change (Q2); the stories are the look until then.

@@ -15,7 +15,7 @@ const undoUnwatch = fn();
  * Unwatch instead; this is the Bell control `ListingLotHeader` composes.
  */
 const meta = {
-  title: "Auction Listing/WatchButton",
+  title: "Auction/Bidding/Blocks/WatchButton",
   component: WatchButton,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

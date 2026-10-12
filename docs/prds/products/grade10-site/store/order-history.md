@@ -37,6 +37,6 @@ to the Store
 
 ## Designs
 
-::story{id="pages-store-store-order-history-page--filled" title="Your Orders, filled"}
+::story{id="store-order-history-order-history--filled" title="Your Orders, filled"}
 
-::story{id="store-order-history-orderhistory--empty" title="An account with no orders"}
+::story{id="store-order-history-blocks-orderhistory--empty" title="An account with no orders"}

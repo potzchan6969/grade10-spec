@@ -10,26 +10,26 @@ The design reference is the Figma file `Grade10-DS-2026` and the Storybook workb
 - Raw: [7054:7072](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7054-7072)
 - Blocks: [7025:2](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7025-2), with annotated sub-frames Asset Summary `7054:6854`, Asset Details `7054:6185`, Asset Custody & Documents `7054:5063`
 - Gallery annotation: [7029:76](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7029-76)
-- Stories: `pages-vault-asset-detail--graded`, `pages-vault-asset-detail--raw`; block stories `vault-asset-summary--*`, `vault-asset-details--*`, `vault-asset-custody-documents--default`
+- Stories: `vault-portfolio-asset-detail--graded`, `vault-portfolio-asset-detail--raw`; block stories `vault-portfolio-parts-vaultassetsummary--*`, `vault-portfolio-parts-vaultassetdetails--*`, `vault-portfolio-parts-vaultassetcustodydocuments--default`
 
 ### Portfolio
 
 - Page: [7068:7718](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7068-7718)
 - Stats card: `7102:1514` — provisional; the stats treatment is still being designed.
 - Blocks: Vault Asset Card [7068:10249](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7068-10249) with Vault Asset status [7068:9960](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7068-9960), Vault Asset List [7077:10911](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7077-10911)
-- Stories: `pages-vault-portfolio--*`; block stories `vault-asset-status--*`, `vault-asset-card--*`, `vault-asset-list--*`, `vault-portfolio-stats--*`
+- Stories: `vault-portfolio-portfolio--*`; block stories `vault-portfolio-parts-vaultassetstatus--*`, `vault-portfolio-parts-vaultassetcard--*`, `vault-portfolio-parts-vaultassetlist--*`, `vault-portfolio-parts-vaultportfoliostats--*`
 
 ### Request Retrieval
 
-`awaiting:` figma — the dialog frame has not been drawn; the workbench story `vault-request-retrieval-dialog--*` stands in until it is: the item row, the pickup location, and three next steps — review, pickup window, collect in store with matching ID.
+`awaiting:` figma — the dialog frame has not been drawn; the workbench story `vault-portfolio-asset-detail-retrieval-dialog--*` stands in until it is: the item row, the pickup location, and three next steps — review, pickup window, collect in store with matching ID.
 
 ### Intake Tracker
 
-`awaiting:` figma — no frame drawn; the workbench story `pages-submissions--in-progress` stands in until it is.
+`awaiting:` figma — no frame drawn; the workbench story `vault-collector-pages-intake-tracker--in-progress` stands in until it is.
 
 ### Book a Visit
 
-`awaiting:` figma — no frame drawn; the workbench story `pages-appointment-book-visit--default` stands in until it is.
+`awaiting:` figma — no frame drawn; the workbench story `appointment-booking-book-visit--default` stands in until it is.
 
 ## Components
 

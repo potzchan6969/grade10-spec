@@ -5,7 +5,7 @@ import { SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
 
 /** Workbench Store Locator page — keep in sync with preview `STORE_LOCATOR_HREF`. */
 export const STORE_LOCATOR_HREF =
-  "?path=/story/pages-store-locator-page--default";
+  "?path=/story/store-store-locator-store-locator--default";
 
 export const STORE_NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },

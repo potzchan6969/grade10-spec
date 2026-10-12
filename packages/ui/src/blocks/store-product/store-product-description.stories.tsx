@@ -4,7 +4,7 @@ import { DESCRIPTION_COPY, PRODUCT_DETAIL_STORY } from "./fixtures";
 import { StoreProductDescription } from "./store-product-description";
 
 const meta = {
-  title: "Store Product/Product Description",
+  title: "Store/Product Page/Blocks/StoreProductDescription",
   component: StoreProductDescription,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

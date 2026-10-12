@@ -4,7 +4,7 @@ import { BookingConfirmation } from "./booking-confirmation";
 import { CONFIRMATION_COPY, LIVE_ANSWERS, LIVE_RECORD } from "./fixtures";
 
 const meta = {
-  title: "Appointment Booking/BookingConfirmation",
+  title: "Appointment/Booking/Blocks/BookingConfirmation",
   component: BookingConfirmation,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

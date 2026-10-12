@@ -9,7 +9,7 @@ import { LegalPage } from "./legal-page";
  * `@grade10/i18n` English — the same catalogs the application pages read.
  */
 const meta = {
-  title: "Pages/Legal",
+  title: "Site/Carried Surfaces/Legal",
   component: LegalPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -41,7 +41,10 @@ export const TermsOfService: Story = {
     ).toBeVisible();
     expect(
       canvas.getByRole("link", { name: "Terms of Service" }),
-    ).toHaveAttribute("href", "?path=/story/pages-legal--terms-of-service");
+    ).toHaveAttribute(
+      "href",
+      "?path=/story/site-carried-surfaces-legal--terms-of-service",
+    );
   },
 };
 
@@ -68,6 +71,9 @@ export const PrivacyPolicy: Story = {
     ).toBeVisible();
     expect(
       canvas.getByRole("link", { name: "Privacy Policy" }),
-    ).toHaveAttribute("href", "?path=/story/pages-legal--privacy-policy");
+    ).toHaveAttribute(
+      "href",
+      "?path=/story/site-carried-surfaces-legal--privacy-policy",
+    );
   },
 };

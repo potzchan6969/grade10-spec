@@ -4,7 +4,7 @@ import { BOOKED_ACTS, ENDED_ACTS, TODAY_ACTS } from "./fixtures";
 import { VisitActRow } from "./visit-act-row";
 
 const meta = {
-  title: "Appointment Visit/VisitActRow",
+  title: "Appointment/Visit/Blocks/VisitActRow",
   component: VisitActRow,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

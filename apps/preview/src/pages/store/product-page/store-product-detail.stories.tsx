@@ -7,7 +7,7 @@ import {
 import { StoreProductDetail } from "./store-product-detail";
 
 const meta = {
-  title: "Store Product/Product Detail",
+  title: "Store/Product Page/Parts/StoreProductDetail",
   component: StoreProductDetail,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

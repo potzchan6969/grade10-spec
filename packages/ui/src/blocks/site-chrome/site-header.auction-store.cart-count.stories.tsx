@@ -12,7 +12,7 @@ import {
 } from "./site-header.auction-store.story-shared";
 
 const meta = {
-  title: "Site Chrome/SiteHeader/Auction & Store/Cart count",
+  title: "Site/Page Shell/Blocks/SiteHeader/Auction & Store/Cart count",
   component: SiteHeader,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

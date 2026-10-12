@@ -3,7 +3,7 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import { SignInEmailForm } from "./sign-in-email-form";
 
 const meta = {
-  title: "Auth Sign In/SignInEmailForm",
+  title: "Auth/Sign In/Blocks/SignInEmailForm",
   component: SignInEmailForm,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

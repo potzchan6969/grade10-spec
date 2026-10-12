@@ -10,7 +10,7 @@ import {
 } from "./fixtures";
 
 const meta = {
-  title: "Appointment Booking/BookingDetailsForm",
+  title: "Appointment/Booking/Blocks/BookingDetailsForm",
   component: BookingDetailsForm,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -305,7 +305,7 @@ function AppointmentVisitPage({ state }: { state: VisitState }) {
 }
 
 const meta = {
-  title: "Pages/Appointment/Visit",
+  title: "Appointment/Visit/Visit",
   component: AppointmentVisitPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

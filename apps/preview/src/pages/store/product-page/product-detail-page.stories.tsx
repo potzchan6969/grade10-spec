@@ -26,7 +26,7 @@ function ProductDetailPage({ product }: { product: ProductDetailProduct }) {
 }
 
 const meta = {
-  title: "Pages/Store/Product Detail Page",
+  title: "Store/Product Page/Product Detail",
   component: ProductDetailPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

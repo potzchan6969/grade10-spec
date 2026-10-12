@@ -320,11 +320,11 @@ Per shop, flipped from the admin console, enforced on the next request: terminal
 
 ## Designs
 
-::story{id="store-cart-cartdrawerfooter--interactive-member" title="A code typed in the cart"}
+::story{id="store-cart-blocks-cartdrawerfooter--interactive-member" title="A code typed in the cart"}
 
-::story{id="store-order-detail-orderdetails--item-coupon" title="An order with a product coupon"}
+::story{id="store-order-detail-blocks-orderdetails--item-coupon" title="An order with a product coupon"}
 
-::story{id="store-order-detail-orderdetails--order-discount" title="An order with an order coupon"}
+::story{id="store-order-detail-blocks-orderdetails--order-discount" title="An order with an order coupon"}
 
 :::detail{title="Draft order" for="engineer"}
 - **Where** — `packages/grade10-store/backend/src/services/coupons`,

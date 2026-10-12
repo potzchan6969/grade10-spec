@@ -12,7 +12,7 @@ import {
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Store Product Listing/ProductBrowse/States",
+  title: "Store/Product Listing/Blocks/ProductBrowse/States",
   component: ProductBrowse,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

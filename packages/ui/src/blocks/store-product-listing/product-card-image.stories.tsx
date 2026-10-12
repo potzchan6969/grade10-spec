@@ -13,7 +13,7 @@ const defaults = {
 };
 
 const meta = {
-  title: "Store Product Listing/ProductCardImage",
+  title: "Store/Product Listing/Blocks/ProductCardImage",
   component: ProductCardImage,
   tags: ["autodocs"],
   args: defaults,

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CheckboxListInput } from "./checkbox-list-input";
 
 const meta = {
-  title: "Components/CheckboxListInput",
+  title: "Design System/Forms/CheckboxListInput",
   component: CheckboxListInput,
   tags: ["autodocs"],
   args: { children: "Label", count: "10", defaultChecked: true },

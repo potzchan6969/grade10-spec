@@ -26,13 +26,13 @@ the callbacks.
 A page finds each block by the slot it gives it; given none, a block keeps
 the design system's own.
 
-::story{id="page-blocks-factcard--every-part" title="A fact card with every part"}
+::story{id="site-page-shell-blocks-factcard--every-part" title="A fact card with every part"}
 
-::story{id="page-blocks-notelist--with-link-item" title="A line carrying a link"}
+::story{id="site-page-shell-blocks-notelist--with-link-item" title="A line carrying a link"}
 
-::story{id="page-blocks-stagerail--financed-mid" title="A rail at its fifth stage"}
+::story{id="site-page-shell-blocks-stagerail--financed-mid" title="A rail at its fifth stage"}
 
-::story{id="page-blocks-emptypanel--with-action" title="An empty panel with a way out"}
+::story{id="site-page-shell-blocks-emptypanel--with-action" title="An empty panel with a way out"}
 
 :::detail{title="Product decisions" for="pm"}
 Design Override refuses a site page that draws a card, a list, a table, a

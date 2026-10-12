@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PaginationLink } from "./pagination-link";
 
 const meta = {
-  title: "Components/PaginationLink",
+  title: "Design System/Display/PaginationLink",
   component: PaginationLink,
   tags: ["autodocs"],
   args: { children: "1" },

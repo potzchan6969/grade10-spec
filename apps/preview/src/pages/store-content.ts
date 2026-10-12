@@ -87,7 +87,7 @@ const SOCIAL_ICON_PROPS = {
   weight: "fill",
 } as const;
 
-/** Shared chrome matching Components/Footer — Auction only and Store launch. */
+/** Shared chrome matching Design System/Layout/Footer — Auction only and Store launch. */
 const FOOTER_COPY = {
   attribution: "A division of MemeStrategy (HKEX: 2440)",
   copyright: "© 2026 Grade10. All rights reserved.",
@@ -129,7 +129,7 @@ const FOOTER_LEGAL_COLUMN = {
 };
 
 /**
- * Store-launch footer — Components/Footer → Store launch. Shop destinations
+ * Store-launch footer — Design System/Layout/Footer → Store launch. Shop destinations
  * and Store Locator join Docs and Legal; no bar legal duplicates.
  */
 const STORE_FOOTER = {
@@ -164,7 +164,7 @@ const STORE_FOOTER = {
 };
 
 /**
- * Auction-only footer — Components/Footer → Auction only. Brand, social,
+ * Auction-only footer — Design System/Layout/Footer → Auction only. Brand, social,
  * Docs, Privacy and Terms. No shop column and no bar legal duplicates.
  */
 const AUCTION_FOOTER = {

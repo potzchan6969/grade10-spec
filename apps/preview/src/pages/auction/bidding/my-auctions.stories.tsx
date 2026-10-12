@@ -95,7 +95,7 @@ function MyAuctionsPage({
 }
 
 const meta = {
-  title: "Pages/Auction/My Auctions Page",
+  title: "Auction/Bidding/My Auctions",
   component: MyAuctionsPage,
   tags: ["autodocs"],
   parameters: {
@@ -104,9 +104,9 @@ const meta = {
       description: {
         component: `
 Store chrome around shared \`AuctionRecord\`. Small-viewport lot card variants:
-[Auction Card](?path=/story/my-auctions-auction-card--leading).
+[Auction Card](?path=/story/auction-bidding-blocks-auctionrecordrow--leading).
 Full card stack without chrome:
-[Filled — small viewport](?path=/story/my-auctions-my-auctions--filled-small-viewport).
+[Filled — small viewport](?path=/story/auction-bidding-blocks-auctionrecord--filled-small-viewport).
 `,
       },
     },

@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { Step } from "./step";
 
 const meta = {
-  title: "Components/Step",
+  title: "Design System/Display/Step",
   component: Step,
   tags: ["autodocs"],
   argTypes: {

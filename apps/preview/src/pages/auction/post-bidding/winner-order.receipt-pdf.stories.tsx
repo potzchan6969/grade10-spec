@@ -17,7 +17,7 @@ function ReceiptPdfPreview({ data }: { data: ReceiptPdfData }) {
 }
 
 const meta = {
-  title: "My Auctions/Winner Order/PDF/Receipt",
+  title: "Auction/Post Bidding/Winner Order/Receipt PDF",
   component: ReceiptPdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

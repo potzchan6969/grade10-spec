@@ -4,7 +4,7 @@ import { expect, userEvent, waitFor, within } from "storybook/test";
 import { CarouselProgress, CarouselProgressItem } from "./carousel-progress";
 
 const meta = {
-  title: "Components/CarouselProgress",
+  title: "Design System/Display/CarouselProgress",
   component: CarouselProgress,
   tags: ["autodocs"],
   parameters: {

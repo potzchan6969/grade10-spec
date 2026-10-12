@@ -14,10 +14,10 @@ import {
 /**
  * Earlier Featured band explorations kept for reference — scrolling row,
  * overlapping pair, and the lifted card those rows used. The live surface is
- * Auction List/Featured Auctions → Carousel banner.
+ * Auction/Display/Blocks/FeaturedAuctionsBanner → Carousel banner.
  */
 const meta = {
-  title: "Auction List/Featured Auctions/Archived",
+  title: "Auction/Display/Auction List/Featured Archived",
   beforeEach: pinCatalogueClock,
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
@@ -147,7 +147,7 @@ export const FeaturedLot: Story = {
  * with pill/dot pagination instead of a scrolling row.
  *
  * Dots and auto-play fill use the design-system `CarouselProgress` primitive
- * (`Components/CarouselProgress` in design-system Storybook).
+ * (`Design System/Display/CarouselProgress` in design-system Storybook).
  */
 export const OverlappingPair: Story = {
   name: "Overlapping pair",
@@ -156,7 +156,7 @@ export const OverlappingPair: Story = {
     docs: {
       description: {
         story:
-          "Pagination and the auto-play timer are `CarouselProgress` / `CarouselProgressItem` from `@grade10/design-system`. See Components/CarouselProgress in the design-system Storybook.",
+          "Pagination and the auto-play timer are `CarouselProgress` / `CarouselProgressItem` from `@grade10/design-system`. See Design System/Display/CarouselProgress in the design-system Storybook.",
       },
     },
   },

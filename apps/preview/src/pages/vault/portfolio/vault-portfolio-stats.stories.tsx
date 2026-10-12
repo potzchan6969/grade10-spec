@@ -8,7 +8,7 @@ import { VaultPortfolioStats } from "./vault-portfolio-stats";
  * Provisional: the stats treatment is still being designed.
  */
 const meta = {
-  title: "Vault/Portfolio Stats",
+  title: "Vault/Portfolio/Parts/VaultPortfolioStats",
   component: VaultPortfolioStats,
   parameters: { layout: "padded" },
 } satisfies Meta<typeof VaultPortfolioStats>;

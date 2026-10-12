@@ -71,21 +71,13 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    /* Read top-down: the assemblies this workbench owns, then the compound
-     * components they are built from, then the primitives underneath.
-     * Appointment follows the booking flow; every other group stays
-     * alphabetical. The workbench preview restates this order: Storybook
-     * reads `storySort` from that file and does not follow a re-export. */
     options: {
-      storySort: {
-        method: "alphabetical",
-        order: [
-          "Pages",
-          ["Appointment", ["Book Visit", "Confirmation", "Appointments"]],
-          "*",
-          "Components",
-        ],
-      },
+      // Titles A to Z, each file's stories in the order it declares them. The
+      // workbench (`pnpm storybook`) orders by the manual instead.
+      storySort: (a, b) =>
+        a.title === b.title
+          ? 0
+          : a.title.localeCompare(b.title, undefined, { numeric: true }),
     },
 
     a11y: {

@@ -13,11 +13,11 @@ import { AuctionCataloguePage } from "./auction-catalogue-page";
 /**
  * Launch catalogue: header and footer, Featured carousel when set, then All
  * auctions — no category tiles. Featured band:
- * Auction List/Featured Auctions. All auctions grid:
- * Auction List/All Auctions.
+ * Auction/Display/Blocks/FeaturedAuctionsBanner. All auctions grid:
+ * Auction/Display/Auction List/All Auctions.
  */
 const meta = {
-  title: "Pages/Auction/Auction List",
+  title: "Auction/Display/Auction List",
   component: AuctionCataloguePage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

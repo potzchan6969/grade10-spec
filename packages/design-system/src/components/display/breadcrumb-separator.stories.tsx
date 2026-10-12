@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BreadcrumbSeparator } from "./breadcrumb-separator";
 
 const meta = {
-  title: "Components/BreadcrumbSeparator",
+  title: "Design System/Display/BreadcrumbSeparator",
   component: BreadcrumbSeparator,
   tags: ["autodocs"],
 } satisfies Meta<typeof BreadcrumbSeparator>;

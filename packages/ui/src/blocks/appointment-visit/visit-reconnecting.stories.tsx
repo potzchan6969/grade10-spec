@@ -4,7 +4,7 @@ import { RECONNECTING_COPY } from "./fixtures";
 import { VisitReconnecting } from "./visit-reconnecting";
 
 const meta = {
-  title: "Appointment Visit/VisitReconnecting",
+  title: "Appointment/Visit/Blocks/VisitReconnecting",
   component: VisitReconnecting,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

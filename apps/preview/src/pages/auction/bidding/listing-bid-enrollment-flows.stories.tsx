@@ -5,7 +5,7 @@ import { BidPanelCountdownDemo } from "./bid-panel-countdown-demo";
 import { ListingBidEnrollmentInteractiveDemo } from "./listing-bid-enrollment-demo";
 
 const meta = {
-  title: "Auction Listing/Bid Panel/Flows",
+  title: "Auction/Bidding/Flows/Bid Panel",
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

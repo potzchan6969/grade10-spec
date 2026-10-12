@@ -9,7 +9,7 @@ import {
 } from "./site-header.auction-store.story-shared";
 
 const meta = {
-  title: "Site Chrome/SiteHeader/Auction & Store/Surfaces",
+  title: "Site/Page Shell/Blocks/SiteHeader/Auction & Store/Surfaces",
   component: SiteHeader,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

@@ -105,19 +105,19 @@ the one a search engine keeps.
   addresses, images and current bids. A closed lot's offer stays on the lot
   page
 
-::story{id="pages-auction-auction-list--default" title="Auction list"}
+::story{id="auction-display-auction-list--default" title="Auction list"}
 
-::story{id="auction-list-featured-auctions--carousel-banner" title="Featured carousel"}
+::story{id="auction-display-blocks-featuredauctionsbanner--carousel-banner" title="Featured carousel"}
 
-::story{id="auction-list-all-auctions--default" title="All auctions"}
+::story{id="auction-display-auction-list-all-auctions--default" title="All auctions"}
 
-::story{id="auction-list-all-auctions--empty" title="No auctions"}
+::story{id="auction-display-auction-list-all-auctions--empty" title="No auctions"}
 
-::story{id="auction-list-all-auctions-lot-card--active" title="Active"}
+::story{id="auction-display-parts-auctionlotcard--active" title="Active"}
 
-::story{id="auction-list-all-auctions-lot-card--upcoming" title="Upcoming"}
+::story{id="auction-display-parts-auctionlotcard--upcoming" title="Upcoming"}
 
-::story{id="auction-list-all-auctions-lot-card--ended" title="Closed"}
+::story{id="auction-display-parts-auctionlotcard--ended" title="Closed"}
 
 ## Auction Details
 
@@ -159,7 +159,7 @@ lot before any script runs.
   updates; the readable label stays Bidder N —
   [Bidding · Auction Panel](/p/grade10-site/auction/bidding#auction-panel)
 
-::story{id="auction-listing-listing-product--default" title="A live lot page, gallery and bid panel assembled"}
+::story{id="auction-display-parts-listingproduct--default" title="A live lot page, gallery and bid panel assembled"}
 
 ### Media Gallery
 

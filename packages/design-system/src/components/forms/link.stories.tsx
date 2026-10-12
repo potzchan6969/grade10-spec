@@ -3,7 +3,7 @@ import { ExternalLinkIcon } from "lucide-react";
 import { Link } from "./link";
 
 const meta = {
-  title: "Components/Link",
+  title: "Design System/Forms/Link",
   component: Link,
   tags: ["autodocs"],
   args: { children: "Link", href: "#link" },

@@ -110,7 +110,7 @@ function AppointmentConfirmationPage() {
 }
 
 const meta = {
-  title: "Pages/Appointment/Confirmation",
+  title: "Appointment/Booking/Confirmation",
   component: AppointmentConfirmationPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

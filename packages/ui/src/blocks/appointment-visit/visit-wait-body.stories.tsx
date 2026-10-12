@@ -10,7 +10,7 @@ import {
 import { VisitWaitBody } from "./visit-wait-body";
 
 const meta = {
-  title: "Appointment Visit/VisitWaitBody",
+  title: "Appointment/Visit/Blocks/VisitWaitBody",
   component: VisitWaitBody,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

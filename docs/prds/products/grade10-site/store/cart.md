@@ -104,13 +104,13 @@ The refusals are the coupon's own —
 
 ## Designs
 
-::story{id="store-cart-cartdrawer--default" title="The cart drawer"}
+::story{id="store-cart-blocks-cartdrawer--default" title="The cart drawer"}
 
-::story{id="store-cart-cartdrawerfooter--interactive-member" title="A code and points on the cart"}
+::story{id="store-cart-blocks-cartdrawerfooter--interactive-member" title="A code and points on the cart"}
 
-::story{id="store-cart-cartdrawer--unavailable-items-removed" title="Lines whose product left the shop, leaving"}
+::story{id="store-cart-blocks-cartdrawer--unavailable-items-removed" title="Lines whose product left the shop, leaving"}
 
-::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
+::story{id="store-cart-blocks-cartdrawer--empty-state" title="An empty cart"}
 
 :::detail{title="Code map" for="engineer"}
 - **The quote** - `quote.basket`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with

@@ -16,7 +16,7 @@ import { expect, waitFor, within } from "storybook/test";
  * Every word here matches the shared `signIn` catalog.
  */
 const meta = {
-  title: "Auth Sign In/Link Follow Toasts",
+  title: "Auth/Sign In/Blocks/LinkFollowToasts",
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   decorators: [

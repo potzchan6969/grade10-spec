@@ -4,7 +4,7 @@ import { BALANCE, REWARDS } from "./fixtures";
 import { RewardMenu } from "./reward-menu";
 
 const meta = {
-  title: "Loyalty Membership/RewardMenu",
+  title: "Loyalty/Rewards/Blocks/RewardMenu",
   component: RewardMenu,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

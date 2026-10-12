@@ -20,9 +20,9 @@ const CARD_FACT_LABELS = {
 };
 
 const FILLED_SMALL_VIEWPORT_STORY =
-  "?path=/story/my-auctions-my-auctions--filled-small-viewport";
+  "?path=/story/auction-bidding-blocks-auctionrecord--filled-small-viewport";
 const MY_AUCTIONS_PAGE_STORY =
-  "?path=/story/pages-auction-my-auctions-page--default";
+  "?path=/story/auction-bidding-my-auctions--post-auction";
 
 function AuctionCard(item: AuctionRecordRowProps) {
   return (
@@ -44,7 +44,7 @@ function AuctionCard(item: AuctionRecordRowProps) {
  * One story per standing / action shape — revise in Figma, then sync back.
  */
 const meta = {
-  title: "My Auctions/Auction Card",
+  title: "Auction/Bidding/Blocks/AuctionRecordRow",
   component: AuctionRecordRow,
   args: BIDDING_CHARIZARD,
   tags: ["autodocs"],

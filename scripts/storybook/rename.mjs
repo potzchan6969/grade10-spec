@@ -3,7 +3,8 @@
  * place that cites them. The mapping is one `old title<TAB>new title` per
  * line. Only each meta's `title` string changes in a story file; elsewhere an
  * exact old id, a `<old title id>--` prefix or a quoted old title path is
- * rewritten, so a link keeps pointing at the same story.
+ * rewritten, so a link keeps pointing at the same story. `--also <repository>`
+ * rewrites exact ids in another repository that links to these stories.
  */
 import { execFile } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
@@ -17,6 +18,9 @@ const SKIP = [
   /(^|\/)node_modules\//,
   /(^|\/)storybook-static[^/]*\//,
   /^openspec\/changes\/archive\//,
+  // A test's ids are its own fixtures, not links to these stories.
+  /(^|\/)test\//,
+  /\.test\.[cm]?[jt]sx?$/,
   /(^|\/)pnpm-lock\.yaml$/,
 ];
 
@@ -109,13 +113,17 @@ export async function rename({ root = rootDirectory, mapping, also = [] }) {
   // Longest first, so `A/B/C` is rewritten before `A/B` could claim it.
   const titles = [...mapping].sort(([a], [b]) => b.length - a.length);
 
+  // Another repository has stories of its own under titles that may match an
+  // old one here, so only an exact id of this store's is rewritten there.
+  const exact = { ids, prefixes: new Map(), titles: [] };
   const changed = [];
   for (const repository of [root, ...also]) {
+    const maps = repository === root ? { ids, prefixes, titles } : exact;
     for (const path of await trackedTextFiles(repository)) {
       const file = join(repository, path);
       if (!existsSync(file)) continue;
       const text = readFileSync(file, "utf8");
-      const out = rewriteText(text, { ids, prefixes, titles });
+      const out = rewriteText(text, maps);
       if (out !== text) {
         writeFileSync(file, out);
         changed.push(file);

@@ -85,7 +85,7 @@ function FooterWithPromoNest({
  * checkout CTA (`4791:2773`).
  *
  * Enter/held-list UI lives on the nested `CartPromoSheet` hosted by
- * [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs) (or the nest host
+ * [`CartDrawer`](?path=/docs/store-cart-blocks-cartdrawer--docs) (or the nest host
  * in these stories). Shopper copy uses **promo code** only — never coupon.
  * `PromoState` `applied` is for order-level codes; a product coupon updates the
  * matching line’s `couponCode` / `price` instead — not a footer discount row.
@@ -96,7 +96,7 @@ function FooterWithPromoNest({
  * held section).
  */
 const meta = {
-  title: "Store Cart/CartDrawerFooter",
+  title: "Store/Cart/Blocks/CartDrawerFooter",
   component: CartDrawerFooter,
   tags: ["autodocs"],
   decorators: container,

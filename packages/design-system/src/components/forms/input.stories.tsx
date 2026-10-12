@@ -9,7 +9,7 @@ import { Input, InputShell, InputStatusIcon } from "./input";
  * design has not drawn yet.
  */
 const meta = {
-  title: "Components/InputShell",
+  title: "Design System/Forms/InputShell",
   component: InputShell,
   tags: ["autodocs"],
   args: { label: "Input Field", message: "Message" },

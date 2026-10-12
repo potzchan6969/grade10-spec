@@ -4,7 +4,7 @@ import { IMAGE } from "./fixtures";
 import { OrderHistoryLineItem } from "./order-history-line-item";
 
 const meta = {
-  title: "Store Order History/OrderHistoryLineItem",
+  title: "Store/Order History/Blocks/OrderHistoryLineItem",
   component: OrderHistoryLineItem,
   tags: ["autodocs"],
   args: {

@@ -21,7 +21,7 @@ import { VisitBody } from "./visit-body";
 import { VisitCancelPanel } from "./visit-cancel-panel";
 
 const meta = {
-  title: "Appointment Visit/VisitBody",
+  title: "Appointment/Visit/Blocks/VisitBody",
   component: VisitBody,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

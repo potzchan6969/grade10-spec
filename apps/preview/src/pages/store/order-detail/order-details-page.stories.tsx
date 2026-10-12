@@ -59,7 +59,7 @@ function OrderDetailsPage() {
 }
 
 const meta = {
-  title: "Pages/Store/Store Order Details Page",
+  title: "Store/Order Detail/Order Details",
   component: OrderDetailsPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

@@ -75,37 +75,37 @@ through an optional cart slot, as it does for account.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 
-::story{id="components-nav-overview--all-controls" title="Nav — all controls"}
+::story{id="design-system-layout-nav-overview--all-controls" title="Nav — all controls"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-1" title="Cart count — 1 item"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-1" title="Cart count — 1 item"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-3" title="Cart count — 3 items"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-3" title="Cart count — 3 items"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-123" title="Cart count — 123 items"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-123" title="Cart count — 123 items"}
 
-::story{id="site-chrome-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
 
-::story{id="site-chrome-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
 
-::story{id="components-nav-account--sign-in" title="Nav — Sign In button"}
+::story{id="design-system-layout-nav-account--sign-in" title="Nav — Sign In button"}
 
-::story{id="components-nav-layout--narrow" title="Nav — narrow (375px)"}
+::story{id="design-system-layout-nav-layout--narrow" title="Nav — narrow (375px)"}
 
-::story{id="components-nav-layout--menu-open" title="Nav — menu open (375px)"}
+::story{id="design-system-layout-nav-layout--menu-open" title="Nav — menu open (375px)"}
 
-::story{id="components-nav-layout--language-nested" title="Nav — language nested (375px)"}
+::story{id="design-system-layout-nav-layout--language-nested" title="Nav — language nested (375px)"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-in" title="Auction first — signed in"}
 
-::story{id="site-chrome-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
-::story{id="components-nav-overview--another-brand" title="Nav — another brand"}
+::story{id="design-system-layout-nav-overview--another-brand" title="Nav — another brand"}
 
-::story{id="components-footer--auction-only" title="Footer — auction only"}
+::story{id="design-system-layout-footer--auction-only" title="Footer — auction only"}
 
 The site's own rules for what the shell must do — the landmarks, the session
 timing, the small-width reflow — are [the page shell's](/p/grade10-site/site/page-shell).

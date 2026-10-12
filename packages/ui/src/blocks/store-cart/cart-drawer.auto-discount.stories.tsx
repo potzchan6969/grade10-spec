@@ -143,10 +143,10 @@ function SiteSalePromoHost({
  * A product-class site sale shows as line sale + compare-at; the code is the
  * only footer Discount row when it stacks. An order-class site discount shows
  * as its own footer row instead. Core drawer states stay under
- * [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs).
+ * [`CartDrawer`](?path=/docs/store-cart-blocks-cartdrawer--docs).
  */
 const meta = {
-  title: "Store Cart/CartDrawer/Auto Discount",
+  title: "Store/Cart/Blocks/CartDrawer/Auto Discount",
   component: CartDrawer,
   tags: ["autodocs"],
   parameters: {

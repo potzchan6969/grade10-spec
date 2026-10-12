@@ -4,7 +4,7 @@ import { STRUCK_FACTS, VISIT_FACTS } from "./fixtures";
 import { VisitFacts } from "./visit-facts";
 
 const meta = {
-  title: "Appointment Visit/VisitFacts",
+  title: "Appointment/Visit/Blocks/VisitFacts",
   component: VisitFacts,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -58,7 +58,7 @@ function RefundDetailsDemo({
 }
 
 const meta = {
-  title: "My Auctions/Winner Order/Refund Details",
+  title: "Auction/Post Bidding/Winner Order/Refund Details",
   component: RefundDetailsDemo,
   tags: ["autodocs"],
   parameters: {

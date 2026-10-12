@@ -12,7 +12,7 @@ const BRANDS: OrderDetailsPaymentBrand[] = [
 ];
 
 const meta = {
-  title: "Store Order Detail/OrderDetailsPaymentLogo",
+  title: "Store/Order Detail/Blocks/OrderDetailsPaymentLogo",
   component: OrderDetailsPaymentLogo,
   tags: ["autodocs"],
   args: {

@@ -16,7 +16,7 @@ import {
  * lives under Featured Auctions/Archived. Lots are from the collection draw.
  */
 const meta = {
-  title: "Auction List/All Auctions/Lot Card",
+  title: "Auction/Display/Parts/AuctionLotCard",
   component: AuctionLotCard,
   parameters: { layout: "padded" },
   beforeEach: pinCatalogueClock,

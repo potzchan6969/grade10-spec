@@ -45,8 +45,7 @@ const COMPLETE_PERSONAL = {
 };
 
 const meta = {
-  title:
-    "My Auctions/Winner Order/Setup/Complete Order Setup/AuctionAddressForm",
+  title: "Auction/Post Bidding/Blocks/AuctionAddressForm",
   component: AuctionAddressForm,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

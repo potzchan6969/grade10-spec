@@ -8,7 +8,7 @@ const SELECTED = new Date(2026, 9, 7);
 const MONTH = new Date(2026, 9, 1);
 
 const meta = {
-  title: "Components/Calendar",
+  title: "Design System/Forms/Calendar",
   component: Calendar,
   tags: ["autodocs"],
   parameters: {

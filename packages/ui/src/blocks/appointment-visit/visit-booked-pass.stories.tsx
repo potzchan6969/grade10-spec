@@ -15,7 +15,7 @@ import {
 import { VisitBookedPass } from "./visit-booked-pass";
 
 const meta = {
-  title: "Appointment Visit/VisitBookedPass",
+  title: "Appointment/Visit/Blocks/VisitBookedPass",
   component: VisitBookedPass,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

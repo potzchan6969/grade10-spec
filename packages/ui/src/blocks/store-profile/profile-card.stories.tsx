@@ -9,7 +9,7 @@ import { ProfileForm } from "./profile-form";
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Store Profile/ProfileCard",
+  title: "Account/Profile/Blocks/ProfileCard",
   component: ProfileCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

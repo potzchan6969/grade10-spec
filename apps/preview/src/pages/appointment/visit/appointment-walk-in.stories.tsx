@@ -102,7 +102,7 @@ function AppointmentWalkInPage({ state }: { state: WalkInState }) {
 }
 
 const meta = {
-  title: "Pages/Appointment/Walk In",
+  title: "Appointment/Visit/Walk In",
   component: AppointmentWalkInPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

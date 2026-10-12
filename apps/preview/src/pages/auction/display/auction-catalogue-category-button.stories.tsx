@@ -10,7 +10,7 @@ import { AuctionCategoryButton } from "./auction-catalogue-card";
  * opacity. Click the selected tile again to clear.
  */
 const meta = {
-  title: "Auction List/All Auctions/Later/Category Button",
+  title: "Auction/Display/Parts/AuctionCategoryButton",
   component: AuctionCategoryButton,
   parameters: { layout: "padded" },
   decorators: [

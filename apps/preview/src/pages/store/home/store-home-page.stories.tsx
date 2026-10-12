@@ -76,7 +76,7 @@ function StoreHomePage() {
 }
 
 const meta = {
-  title: "Pages/Store/Store Home Page",
+  title: "Store/Home/Store Home",
   component: StoreHomePage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

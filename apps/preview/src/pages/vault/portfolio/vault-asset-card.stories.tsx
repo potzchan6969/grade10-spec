@@ -18,7 +18,7 @@ import { VaultAssetCard } from "./vault-asset-card";
  * price line follow the asset's listing state.
  */
 const meta = {
-  title: "Vault/Asset Card",
+  title: "Vault/Portfolio/Parts/VaultAssetCard",
   component: VaultAssetCard,
   parameters: { layout: "padded" },
   decorators: [

@@ -3,7 +3,7 @@ import { CheckIcon } from "lucide-react";
 import { Badge } from "./badge";
 
 const meta = {
-  title: "Components/Badge",
+  title: "Design System/Display/Badge",
   component: Badge,
   tags: ["autodocs"],
   args: { children: "Badge" },

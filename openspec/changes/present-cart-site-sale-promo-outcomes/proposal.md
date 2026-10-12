@@ -38,9 +38,9 @@ Applicable story each show their outcome, and their play tests pass.
   where a promo code meets the sale, it supplies the code only as
   `PromoState`, never as a line's `couponCode`
 - The drawer strikes any list price it is given and compares no amounts; a
-  new Equal List Price story under `Store Cart/CartItem` shows a list price
+  new Equal List Price story under `Store/Cart/Blocks/CartItem` shows a list price
   equal to the price, still struck through
-- The story proofs under `Store Cart/CartDrawer/Auto Discount` assert each
+- The story proofs under `Store/Cart/Blocks/CartDrawer/Auto Discount` assert each
   outcome; a new On Sale canvas shows two sale lines, one holding two,
   beside a line off the sale, a sold-out line and an unavailable line the
   drawer removes as it opens, with no code

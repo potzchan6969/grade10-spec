@@ -34,9 +34,10 @@ import {
 } from "./fixtures";
 import type { AuctionRecordRowProps } from "./types";
 
-const AUCTION_CARD_STORY = "?path=/story/my-auctions-auction-card--leading";
+const AUCTION_CARD_STORY =
+  "?path=/story/auction-bidding-blocks-auctionrecordrow--leading";
 const MY_AUCTIONS_PAGE_STORY =
-  "?path=/story/pages-auction-my-auctions-page--default";
+  "?path=/story/auction-bidding-my-auctions--post-auction";
 
 const breadcrumbs = (
   <Breadcrumbs>
@@ -128,7 +129,7 @@ function MyAuctions({
 }
 
 const meta = {
-  title: "My Auctions/My Auctions",
+  title: "Auction/Bidding/Blocks/AuctionRecord",
   component: AuctionRecord,
   tags: ["autodocs"],
   parameters: {

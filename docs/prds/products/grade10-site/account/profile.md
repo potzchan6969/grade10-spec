@@ -79,11 +79,11 @@ for.
 - 🚧 **Bio field** - several lines, in the design system's own multi-line
   field; the read view shows the lines as typed
 
-::story{id="store-profile-profilecard--default" title="The profile, read"}
+::story{id="account-profile-blocks-profilecard--default" title="The profile, read"}
 
-::story{id="store-profile-profilecard--editing-body" title="The profile, being edited"}
+::story{id="account-profile-blocks-profilecard--editing-body" title="The profile, being edited"}
 
-::story{id="store-profile-profilecard--error-state" title="A read that failed"}
+::story{id="account-profile-blocks-profilecard--error-state" title="A read that failed"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector arrives at a profile to adjust, never a blank form to fill, so the

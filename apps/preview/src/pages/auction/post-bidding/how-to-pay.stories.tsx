@@ -56,7 +56,7 @@ function HowToPayDemo({
 }
 
 const meta = {
-  title: "My Auctions/Winner Order/Payment/View Bank Details",
+  title: "Auction/Post Bidding/Winner Order/Payment/View Bank Details",
   component: HowToPayDemo,
   tags: ["autodocs"],
   parameters: {

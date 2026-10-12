@@ -12,7 +12,7 @@ import { MembershipSummary } from "./membership-summary";
 const BALANCE = 1250;
 
 const meta = {
-  title: "Loyalty Membership/MembershipSummary",
+  title: "Loyalty/Profile/Blocks/MembershipSummary",
   component: MembershipSummary,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

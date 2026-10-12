@@ -4,7 +4,7 @@ import { ConsignmentSellerLine } from "./consignment-seller-line";
 import { SELLER_LINE_LOT_COPY, SELLER_LINE_STORE_COPY } from "./fixtures";
 
 const meta = {
-  title: "Consignment Mine/ConsignmentSellerLine",
+  title: "Store/Product Page/Blocks/ConsignmentSellerLine",
   component: ConsignmentSellerLine,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

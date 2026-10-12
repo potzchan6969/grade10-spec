@@ -36,13 +36,13 @@ import { ListingAuctionBidCardLoading } from "./fixtures";
  * page story.
  */
 const meta = {
-  title: "Auction Listing/Listing Product",
+  title: "Auction/Display/Parts/ListingProduct",
   parameters: {
     layout: "padded",
     docs: {
       description: {
         component:
-          "Same block composition as Pages/Auction/Auction Lot Details (without site nav/footer). Prefer the page stories for full bidding states with live simulation.",
+          "Same block composition as Auction/Display/Lot Details (without site nav/footer). Prefer the page stories for full bidding states with live simulation.",
       },
     },
   },

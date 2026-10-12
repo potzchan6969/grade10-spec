@@ -16,10 +16,10 @@ const container: Decorator[] = [
  *
  * Displays the drawer title ("Cart"), active item count badge (excluding sold-out items),
  * and a dismiss/close icon button. Loading bones for the badge are covered here;
- * composed fetch-on-open lives on [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs).
+ * composed fetch-on-open lives on [`CartDrawer`](?path=/docs/store-cart-blocks-cartdrawer--docs).
  */
 const meta = {
-  title: "Store Cart/CartDrawerHeader",
+  title: "Store/Cart/Blocks/CartDrawerHeader",
   component: CartDrawerHeader,
   tags: ["autodocs"],
   decorators: container,

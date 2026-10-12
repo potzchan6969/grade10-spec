@@ -10,7 +10,7 @@ import { AuctionCard } from "./auction-card";
 const CLOSE_MS = Date.UTC(2026, 8, 1, 18, 0);
 
 const meta = {
-  title: "Auction Listing/AuctionCard",
+  title: "Auction/Display/Blocks/AuctionCard",
   component: AuctionCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
