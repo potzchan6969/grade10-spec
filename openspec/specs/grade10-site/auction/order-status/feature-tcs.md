@@ -4,130 +4,89 @@
 **Drafts styled:** 2026-10-12, tcs-rules r5
 **Out of suite:** none for this change's new scenarios; the scenarios it restates unchanged keep their durable cases.
 
-
-
-
-## Walk 1: Expired derives Payment Overdue
+## Walk 1: Expired invoice keeps Pending Payment without winner card pay
 
 **Starting state:**
 
 - Auction order invoice becomes `expired` at the deadline.
-
-### Route
-
-1. Read derived order status.
-   - Order status is Payment Overdue. g10.auction-order-status.US1-TC1
-
-## Walk 2: Winner card pay is refused when expired
-
-**Starting state:**
-
 - Invoice status is `expired`.
-
-### Route
-
-1. Submit a winner card payment for the invoice.
-   - Payment is refused. g10.auction-order-status.US1-TC2
-   - Invoice remains `expired`. g10.auction-order-status.US1-TC2
-   - Order status remains Payment Overdue. g10.auction-order-status.US1-TC2
-
-## Walk 3: Operator manual settle pays an expired invoice
-
-**Starting state:**
-
 - Invoice status is `expired`; operator holds payment-processing.
-
-### Route
-
-1. Operator records a manual settlement with method and proof.
-   - Invoice becomes `paid`. g10.auction-order-status.US1-TC3
-   - Order derives as Processing. g10.auction-order-status.US1-TC3
-
-## Walk 4: The order status follows the current invoice after a reissue
-
-**Starting state:**
-
 - <order_1> had <invoice_1> replaced by <invoice_2>, `pending`.
+- <order_1> is `payment_verifying` on <invoice_1>.
+- <order_1> has an invoice, status `expired`.
+- An auction order's card invoice of 323225 minor units in HKD is `expired`.
+- An auction order's invoice is `payment_verifying`.
 
-**Test data:**
+**Shared test data:**
 
-| Field | Value |
+| Item | Value |
 | --- | --- |
 | <invoice_1> | The replaced invoice |
 | <invoice_2> | The current invoice |
-
-### Route
-
-1. Read the order's invoice status.
-2. Read the stored status of <invoice_1>.
-   - The order's invoice status is <invoice_2>'s, `pending`. g10.auction-order-status.US1-TC13
-   - <invoice_1> holds no status and is not `cancelled`. g10.auction-order-status.US1-TC13
-   - The order reads Pending Payment. g10.auction-order-status.US1-TC13
-
-## Walk 5: Reissuing is refused while proof is checked
-
-**Starting state:**
-
-- <order_1> is `payment_verifying` on <invoice_1>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
 | <invoice_1> | The invoice under check |
 | <invoice_2> | Its replacement |
 
 ### Route
 
-1. Reissue <invoice_1> as <invoice_2>.
-2. Read the order's current invoice and status.
+1. Read derived order status.
+   - Order status is Payment Overdue. g10.auction-order-status.US1-TC1
+2. Submit a winner card payment for the invoice.
+   - Payment is refused. g10.auction-order-status.US1-TC2
+   - Invoice remains `expired`. g10.auction-order-status.US1-TC2
+   - Order status remains Payment Overdue. g10.auction-order-status.US1-TC2
+3. Operator records a manual settlement with method and proof.
+   - Invoice becomes `paid`. g10.auction-order-status.US1-TC3
+   - Order derives as Processing. g10.auction-order-status.US1-TC3
+4. Read the order's invoice status.
+5. Read the stored status of <invoice_1>.
+   - The order's invoice status is <invoice_2>'s, `pending`. g10.auction-order-status.US1-TC13
+   - <invoice_1> holds no status and is not `cancelled`. g10.auction-order-status.US1-TC13
+   - The order reads Pending Payment. g10.auction-order-status.US1-TC13
+6. Reissue <invoice_1> as <invoice_2>.
    - The reissue is refused; no <invoice_2> exists. g10.auction-order-status.US1-TC14
+7. Read the order's current invoice and status.
    - <invoice_1> is still current and `payment_verifying`. g10.auction-order-status.US1-TC14
-
-## Walk 6: An expired invoice cannot enter payment_verifying
-
-**Starting state:**
-
-- <order_1> has an invoice, status `expired`.
-
-### Route
-
-1. Record a winner proof upload.
+8. Record a winner proof upload.
    - The write is refused; the status stays `expired`. g10.auction-order-status.US1-TC15
-
-## Walk 7: A card payment landing on an expired invoice pays it, flagged Paid late
-
-**Starting state:**
-
-- An auction order's card invoice of 323225 minor units in HKD is `expired`.
-
-### Route
-
-1. Complete a card payment of 323225 minor units in HKD for the invoice.
-2. Read the invoice status, the payment and the derived order status.
+9. Complete a card payment of 323225 minor units in HKD for the invoice.
+10. Read the invoice status, the payment and the derived order status.
    - The invoice status is `paid`. g10.auction-order-status.US1-TC16
    - The payment is recorded and flagged Paid late. g10.auction-order-status.US1-TC16
    - The order derives as Preparing Shipment. g10.auction-order-status.US1-TC16
-
-## Walk 8: A card payment landing on a checked invoice moves nothing
-
-**Starting state:**
-
-- An auction order's invoice is `payment_verifying`.
-
-### Route
-
-1. Report a completed card payment for the order total against the invoice, as the payment provider would.
-2. Read the invoice status, the payment and the derived order status.
+11. Report a completed card payment for the order total against the invoice, as the payment provider would.
+12. Read the invoice status, the payment and the derived order status.
    - The payment is recorded and flagged Unexpected status, and counts toward nothing. g10.auction-order-status.US1-TC17
    - The invoice status is still `payment_verifying`. g10.auction-order-status.US1-TC17
    - The order still derives as Payment Verifying. g10.auction-order-status.US1-TC17
 
-## Walk 9: A card payment on a cancelled invoice moves no status
+## Walk 2: Expired invoice keeps Pending Payment without winner card pay
 
 **Starting state:**
 
 - The winner started a card payment for an auction order's total, and an operator then cancelled the order.
+- An auction order's invoice is in the row's invoice status.
+- An auction order whose invoice status is `<status>`.
+- A published lot with a winning bid, whose close is due.
+- ❓ The spec does not identify the surface where the tester waits for `the named lot` to close.
+- An auction order whose invoice status is `expired`.
+- admin(operator with payment processing).
+- An auction order in the row's starting state.
+- An auction order whose bank transfer invoice is `pending` and whose fulfilment status is `unfulfilled`.
+
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| `expired` | Payment Overdue |
+| `payment_verifying` | Payment Verifying |
+| Item | `<status>`: `not_issued` |
+| Item | `<status>`: `paid` |
+| Item | `<status>`: `cancelled` |
+| `paid` | Set the invoice status to `pending` |
+| `cancelled` | Record a payment against the invoice |
+| `not_issued`, with no delivery address confirmed | Send the invoice |
+| Item | `<check>`: return; `<invoice status>`: `pending`; `<order status>`: Pending Payment |
+| Item | `<check>`: confirm; `<invoice status>`: `paid`; `<order status>`: Preparing Shipment |
 
 ### Route
 
@@ -136,179 +95,83 @@
    - The payment is recorded and flagged Paid after cancel, and counts toward nothing. g10.auction-order-status.US1-TC18
    - The invoice status is still `cancelled`. g10.auction-order-status.US1-TC18
    - The order still derives as Cancelled. g10.auction-order-status.US1-TC18
-
-## Walk 10: No card payment starts on an expired or checked invoice
-
-**Starting state:**
-
-- An auction order's invoice is in the row's invoice status.
-
-**Test data:**
-
-| Invoice status | The order derives as |
-| --- | --- |
-| `expired` | Payment Overdue |
-| `payment_verifying` | Payment Verifying |
-
-### Route
-
-1. As the winner, try to start a card payment for the invoice.
-2. Read the invoice status and the derived order status.
+3. As the winner, try to start a card payment for the invoice.
+4. Read the invoice status and the derived order status.
    - No card payment starts, and no card is charged. g10.auction-order-status.US1-TC19
    - The invoice status is unchanged. g10.auction-order-status.US1-TC19
    - The order derives as the row's **The order derives as**. g10.auction-order-status.US1-TC19
-
-## Walk 11: Proof upload is refused on an invoice that is not pending
-
-**Starting state:**
-
-- An auction order whose invoice status is `<status>`.
-
-**Test data:**
-
-| `<status>` |
-| --- |
-| `not_issued` |
-| `paid` |
-| `cancelled` |
-
-### Route
-
-1. Record a winner proof upload against the invoice.
-2. Read the invoice status.
+5. Record a winner proof upload against the invoice.
    - The upload is refused. g10.auction-order-status.US1-TC20
+6. Read the invoice status.
    - The invoice status is still `<status>`. g10.auction-order-status.US1-TC20
-
-## Walk 12: A new order starts not issued and unfulfilled, and expiry writes only the invoice status
-
-**Starting state:**
-
-- A published lot with a winning bid, whose close is due.
-- ❓ The spec does not identify the surface where the tester waits for `the named lot` to close.
-
-### Route
-
-1. Let the lot close, and read the new auction order's invoice and fulfilment statuses.
-2. Send its invoice with a payment deadline of 2026-09-19T09:00:00Z, then let that deadline pass with no payment.
-3. Read both statuses again.
-   - Step 1 reads `not_issued` and `unfulfilled`. g10.auction-order-status.US1-TC21
-   - Step 3 reads `expired` and `unfulfilled`. g10.auction-order-status.US1-TC21
-
-## Walk 13: Reissuing an expired invoice makes it pending with the new deadline
-
-**Starting state:**
-
-- An auction order whose invoice status is `expired`.
-- admin(operator with payment processing).
-
-### Route
-
-1. Reissue the invoice with a fresh deadline and a reason.
-2. Read the invoice status and the payment deadline.
+7. Let the lot close, and read the new auction order's invoice and fulfilment statuses.
+   - reads `not_issued` and `unfulfilled`. g10.auction-order-status.US1-TC21
+8. Send its invoice with a payment deadline of 2026-09-19T09:00:00Z, then let that deadline pass with no payment.
+9. Read both statuses again.
+   - reads `expired` and `unfulfilled`. g10.auction-order-status.US1-TC21
+10. Reissue the invoice with a fresh deadline and a reason.
    - The invoice status is `pending`. g10.auction-order-status.US1-TC22
+11. Read the invoice status and the payment deadline.
    - The payment deadline is the one the reissue set. g10.auction-order-status.US1-TC22
-
-## Walk 14: A write the transitions do not allow leaves the invoice status unchanged
-
-**Starting state:**
-
-- An auction order in the row's starting state.
-- admin(operator with payment processing).
-
-**Test data:**
-
-| Starting state | Write |
-| --- | --- |
-| `paid` | Set the invoice status to `pending` |
-| `cancelled` | Record a payment against the invoice |
-| `not_issued`, with no delivery address confirmed | Send the invoice |
-
-### Route
-
-1. Follow one Test data row.
-   a. Use Starting state "`paid`"; Write "Set the invoice status to `pending`".
-   b. Use Starting state "`cancelled`"; Write "Record a payment against the invoice".
-   c. Use Starting state "`not_issued`, with no delivery address confirmed"; Write "Send the invoice".
-2. Read the invoice status.
+12. Attempt the row's write.
    - The write is refused. g10.auction-order-status.US1-TC23
+13. Read the invoice status.
    - The invoice status is still the row's starting status. g10.auction-order-status.US1-TC23
+14. Record a winner proof upload, and read the invoice status.
+   - reads `payment_verifying`. g10.auction-order-status.US1-TC24
+15. As the operator, <check> the proof.
+16. Read the invoice status and the derived order status.
+   - reads <invoice status> and <order status>. g10.auction-order-status.US1-TC24
 
-## Walk 15: Proof moves a pending invoice to payment_verifying, and an operator moves it on
-
-**Starting state:**
-
-- An auction order whose bank transfer invoice is `pending` and whose fulfilment status is `unfulfilled`.
-- admin(operator with payment processing).
-
-**Test data:**
-
-| `<check>` | `<invoice status>` | `<order status>` |
-| --- | --- | --- |
-| return | `pending` | Pending Payment |
-| confirm | `paid` | Preparing Shipment |
-
-### Route
-
-1. Record a winner proof upload, and read the invoice status.
-2. As the operator, <check> the proof.
-3. Read the invoice status and the derived order status.
-   - Step 1 reads `payment_verifying`. g10.auction-order-status.US1-TC24
-   - Step 3 reads <invoice status> and <order status>. g10.auction-order-status.US1-TC24
-
-## Walk 16: A refund is terminal after partial collection
+## Walk 3: Refund is terminal after partial collection
 
 **Starting state:**
 
 - An auction order has invoice status `refunded` after partial payment and fulfilment status `unfulfilled`.
+- An auction order has a payment above its invoice total and the difference has been returned.
 
 ### Route
 
 1. Read the derived order status.
    - The status is Refunded. g10.auction-order-status.US2-TC1
    - It does not return to Partially Paid or Processing. g10.auction-order-status.US2-TC1
-
-## Walk 17: An overpayment keeps the existing status
-
-**Starting state:**
-
-- An auction order has a payment above its invoice total and the difference has been returned.
-
-### Route
-
-1. Read the derived order status.
+2. Read the derived order status.
    - The order keeps its status from before the overpayment return. g10.auction-order-status.US2-TC2
    - The status is not Refunded. g10.auction-order-status.US2-TC2
 
-## Walk 18: An expired invoice derives Payment Overdue
+## Walk 4: Payment deadline past reads Payment Overdue and adjacent checks
 
 **Starting state:**
 
 - An unpaid invoice has stored status `expired` and fulfilment status `unfulfilled`.
+- An auction order has no confirmed address, no invoice and a passed address deadline.
 
 ### Route
 
 1. Read the derived order status.
    - The status is Payment Overdue. g10.auction-order-status.US3-TC1
    - Winner card Pay is unavailable. g10.auction-order-status.US3-TC1
-
-## Walk 19: An incomplete setup derives Setup Overdue
-
-**Starting state:**
-
-- An auction order has no confirmed address, no invoice and a passed address deadline.
-
-### Route
-
-1. Read the derived order status.
+2. Read the derived order status.
    - The status is Setup Overdue. g10.auction-order-status.US4-TC1
    - Winner address confirmation is unavailable. g10.auction-order-status.US4-TC1
 
-## Walk 20: No invoice and no address reads Awaiting Setup
+## Walk 5: Winner misses the address deadline
 
 **Starting state:**
 
 - `<awaiting-address order>` was opened by a lot close, its invoice status is `not_issued`, and no delivery address is confirmed.
 - Its address window is open.
+- `<preparing-invoice order>`'s invoice status is `not_issued` and its winner confirmed a delivery address.
+- The order's invoice status is `not_issued` and its 48-hour address window closed two hours ago.
+- `<awaiting-address order>`'s address window closed two hours ago, no address
+- customer(winner of `<awaiting-address order>`) is signed in.
+
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| Item | Order: `<awaiting-address order>`; Delivery address: none confirmed; Order status: Setup Overdue |
+| Item | Order: `<preparing-invoice order>`; Delivery address: confirmed inside the window; Order status: Preparing Invoice |
 
 ### Route
 
@@ -317,61 +180,30 @@
    - The order status is Awaiting Setup. g10.auction-order-status.US5-TC4
    - The invoice status is `not_issued`. g10.auction-order-status.US5-TC4
    - Both the winner and the operator read the same status. g10.auction-order-status.US5-TC4
-
-## Walk 21: A confirmed address reads Preparing Invoice before send
-
-**Starting state:**
-
-- `<preparing-invoice order>`'s invoice status is `not_issued` and its winner confirmed a delivery address.
-
-### Route
-
-1. Read the derived order status.
+3. Read the derived order status.
    - The order status is Preparing Invoice. g10.auction-order-status.US5-TC5
    - The invoice status is still `not_issued`. g10.auction-order-status.US5-TC5
-
-## Walk 22: A closed address window without an address reads Setup Overdue
-
-**Starting state:**
-
-- The order's invoice status is `not_issued` and its 48-hour address window closed two hours ago.
-
-**Test data:**
-
-| Order | Delivery address | Order status |
-| --- | --- | --- |
-| `<awaiting-address order>` | none confirmed | Setup Overdue |
-| `<preparing-invoice order>` | confirmed inside the window | Preparing Invoice |
-
-### Route
-
-1. Read the derived order status.
+4. Read the derived order status.
    - The order status is the one the row names. g10.auction-order-status.US5-TC6
    - A closed window without an address derives Setup Overdue. g10.auction-order-status.US5-TC6
    - The invoice status is still `not_issued`. g10.auction-order-status.US5-TC6
-
-## Walk 23: A winner's address write is refused on a closed window
-
-**Starting state:**
-
-- `<awaiting-address order>`'s address window closed two hours ago, no address
-is confirmed, its invoice status is `not_issued`, and it derives Setup Overdue.
-- customer(winner of `<awaiting-address order>`) is signed in.
-
-### Route
-
-1. Submit a delivery address confirmation as the winner.
-2. Read the order's stored delivery address and status.
+5. Submit a delivery address confirmation as the winner.
+6. Read the order's stored delivery address and status.
    - The write is refused. g10.auction-order-status.US5-TC7
    - The order holds no confirmed delivery address. g10.auction-order-status.US5-TC7
    - The order status is still Setup Overdue. g10.auction-order-status.US5-TC7
 
-## Walk 24: An order with no invoice cannot be dispatched
+## Walk 6: Operator resolves a missed address deadline
 
 **Starting state:**
 
 - `<preparing-invoice order>`'s invoice status is `not_issued` and its delivery address is confirmed.
 - admin(holds fulfilment) is on `<preparing-invoice order>`.
+- `<awaiting-address order>`'s invoice status is `not_issued` and no delivery address is confirmed.
+- admin(holds payment-processing) is on `<awaiting-address order>`.
+- `<awaiting-address order>` derived as Setup Overdue because its address
+- An operator holding payment-processing has reopened the address form with a reason.
+- `<closed-window order>` is unconfirmed Setup Overdue with invoice status `not_issued` and `address_window_open` false.
 
 ### Route
 
@@ -380,100 +212,46 @@ is confirmed, its invoice status is `not_issued`, and it derives Setup Overdue.
    - The dispatch is refused. g10.auction-order-status.US6-TC8
    - No tracking facts are recorded. g10.auction-order-status.US6-TC8
    - The order status is still Preparing Invoice. g10.auction-order-status.US6-TC8
-
-## Walk 25: An invoice is refused a send with no confirmed address
-
-**Starting state:**
-
-- `<awaiting-address order>`'s invoice status is `not_issued` and no delivery address is confirmed.
-- admin(holds payment-processing) is on `<awaiting-address order>`.
-
-### Route
-
-1. Attempt to send the invoice.
-2. Read the invoice status.
+3. Attempt to send the invoice.
+4. Read the invoice status.
    - The send is refused. g10.auction-order-status.US6-TC9
    - The invoice status is still `not_issued`. g10.auction-order-status.US6-TC9
    - No payment deadline is started. g10.auction-order-status.US6-TC9
-
-## Walk 26: A reopen restores the write through derived status
-
-**Starting state:**
-
-- `<awaiting-address order>` derived as Setup Overdue because its address
-window closed two hours ago, it has no confirmed address, and its invoice
-status is `not_issued`.
-- An operator holding payment-processing has reopened the address form with a reason.
-
-### Route
-
-1. Read the derived order status.
-2. Submit a delivery address confirmation as the winner.
-3. Read the derived order status again.
-   - Step 1 reads Awaiting Setup, derived from the reopened window. g10.auction-order-status.US6-TC10
+5. Read the derived order status.
+   - reads Awaiting Setup, derived from the reopened window. g10.auction-order-status.US6-TC10
+6. Submit a delivery address confirmation as the winner.
    - The write is accepted. g10.auction-order-status.US6-TC10
-   - Step 3 reads Preparing Invoice. g10.auction-order-status.US6-TC10
-
-## Walk 27: An operator's address write is accepted on a closed window
-
-**Starting state:**
-
-- `<closed-window order>` is unconfirmed Setup Overdue with invoice status `not_issued` and `address_window_open` false.
-
-### Route
-
-1. As an operator holding payment-processing, record a delivery address on the order.
-2. Read the order's conditions and derived status.
+7. Read the derived order status again.
+   - reads Preparing Invoice. g10.auction-order-status.US6-TC10
+8. As an operator holding payment-processing, record a delivery address on the order.
+9. Read the order's conditions and derived status.
    - The write is accepted. g10.auction-order-status.US6-TC12
    - `address_confirmed` is true and `address_window_open` is still false. g10.auction-order-status.US6-TC12
    - The order derives as Preparing Invoice. g10.auction-order-status.US6-TC12
 
-## Walk 28: A recorded payment derives Partially Paid
+## Walk 7: Partially Paid status ends self-service Pay for good and adjacent checks
 
 **Starting state:**
 
 - An auction order has invoice status `partially_paid`, a positive remaining balance, and fulfilment status `unfulfilled`.
+- An auction order is Partially Paid and still has money due.
+- An auction order is in Pending Payment, and its only recorded payment counts toward nothing.
+- An auction order exists with invoice `paid` and fulfilment `unfulfilled`.
 
 ### Route
 
 1. Read the derived order status.
    - The derived status is Partially Paid. g10.auction-order-status.US7-TC3
    - The remaining balance is not used to derive a different status. g10.auction-order-status.US7-TC3
-
-## Walk 29: Partially Paid has no self-service deadline
-
-**Starting state:**
-
-- An auction order is Partially Paid and still has money due.
-
-### Route
-
-1. Attempt winner card Pay, invoice reissue and operator cancellation.
+2. Attempt winner card Pay, invoice reissue and operator cancellation.
    - Winner Pay, reissue and cancellation are refused. g10.auction-order-status.US7-TC4
    - The order remains Partially Paid. g10.auction-order-status.US7-TC4
-
-## Walk 30: Money that counts toward nothing moves no status
-
-**Starting state:**
-
-- An auction order is in Pending Payment, and its only recorded payment counts toward nothing.
-
-### Route
-
-1. Read the derived order status.
+3. Read the derived order status.
    - The derived status is Pending Payment. g10.auction-order-status.US7-TC5
    - The derived status is not Partially Paid. g10.auction-order-status.US7-TC5
-
-## Walk 31: Paid and undispatched derives Preparing Shipment
-
-**Starting state:**
-
-- An auction order exists with invoice `paid` and fulfilment `unfulfilled`.
-
-### Route
-
-1. Read derived order status.
+4. Read derived order status.
    - Order derives as Preparing Shipment. g10.auction-order-status.US8-TC7
+
 ### g10.auction-order-status.US1-TC1: Expired derives Payment Overdue
 
 **Classification:**

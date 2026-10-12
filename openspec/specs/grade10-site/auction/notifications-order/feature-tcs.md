@@ -3,256 +3,108 @@
 **Status:** pending-review · 0/12
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-## Walk 1: Winning a lot sends auction-won
+## Walk 1: Post-close letters and adjacent checks
 
 **Starting state:**
 
 - customer(winner of `<lot_1>`) has a registered email.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | A lot that just closed with this winner |
-
-### Route
-
-1. Close `<lot_1>` with this winner.
-2. Open the winner's inbox.
-   - One auction-won letter names `<lot_1>` and the setup deadline. g10.auction-notifications-order.US1-TC1
-   - It names no amount owed. g10.auction-notifications-order.US1-TC1
-
-## Walk 2: Invoice send is the first payment reminder
-
-**Starting state:**
-
 - customer(winner of `<lot_1>`) has confirmed setup.
 - admin(operator) can send the invoice for `<lot_1>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An order in Preparing Invoice |
-| `<total>` | 312000 minor units HKD |
-
-### Route
-
-1. Admin(operator) sends the invoice for `<lot_1>` with `<total>`.
-2. Open the winner's inbox.
-   - One payment-reminder letter names `<total>` and the payment deadline. g10.auction-notifications-order.US1-TC2
-   - The deadline uses `Asia/Hong_Kong` and is labelled `GMT+8`. g10.auction-notifications-order.US1-TC2
-   - No separate invoice-sent letter exists. g10.auction-notifications-order.US1-TC2
-
-## Walk 3: Reissue sends payment reminder only
-
-**Starting state:**
-
 - customer(winner of `<lot_1>`) has a pending or expired invoice.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An order whose invoice an operator can reissue |
-
-### Route
-
-1. Admin(operator) reissues the invoice for `<lot_1>`.
-2. Open the winner's inbox and the send log.
-   - One payment-reminder letter for the new invoice. g10.auction-notifications-order.US1-TC3
-   - No invoice-reissued letter. g10.auction-notifications-order.US1-TC3
-
-## Walk 4: Final notice is 24 hours before the payment deadline
-
-**Starting state:**
-
 - customer(winner of `<lot_1>`) has a pending unpaid invoice.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An order with a pending invoice and a known payment deadline |
-
-### Route
-
-1. Wait until 24 hours before the payment deadline.
-2. Open the winner's inbox.
-   - One final-notice letter for `<lot_1>`. g10.auction-notifications-order.US1-TC4
-   - No letter waits until the deadline transition itself. g10.auction-notifications-order.US1-TC4
-
-## Walk 5: Paying early cancels later reminders
-
-**Starting state:**
-
 - customer(winner of `<lot_1>`) pays on day 2 after the invoice was issued.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An order whose invoice was issued two days ago and is now paid |
-
-### Route
-
-1. Wait until day 3 after invoice issue.
-2. Open the winner's inbox for reminder kinds.
-   - No day-3, day-6, or final-notice payment reminder for that invoice. g10.auction-notifications-order.US1-TC5
-
-## Walk 6: A retried payment confirmation sends nothing twice
-
-**Starting state:**
-
 - The payment-received letter for `<lot_1>` has already been sent.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An order whose payment-received letter was sent |
-
-### Route
-
-1. Deliver the payment confirmation webhook again.
-2. Open the winner's inbox and the send log.
-   - No second payment-received letter. g10.auction-notifications-order.US1-TC6
-
-## Walk 7: A post-close letter Contact Us link carries the ready mailto
-
-**Starting state:**
-
 - customer(winner of `<lot_1>`) has a registered email and the letter in the row is due.
 - ❓ The spec does not identify the surface where the tester waits for `<lot_1>` to close.
+- customer(winner of `<lot_1>`) has a registered email and can open `<the winner's auction order url>` for the same payment-overdue order.
+- customer(winner of `<lot_1>`) opens a payment overdue letter in a browser mail surface that does not hand off to a system mail client.
+- customer(winner of `<lot_1>`) has a registered email and the letter in the row is the latest for that order.
+- An operator has recorded a partial payment on the order for `<lot_1>` and the partial-payment letter is due.
+- `<lot_1>`'s order reads Preparing Shipment.
 
-**Test data:**
+**Shared test data:**
 
-| Letter | Fixture |
+| Item | Value |
 | --- | --- |
+| `<lot_1>` | A lot that just closed with this winner |
+| `<lot_1>` | An order in Preparing Invoice |
+| `<total>` | 312000 minor units HKD |
+| `<lot_1>` | An order whose invoice an operator can reissue |
+| `<lot_1>` | An order with a pending invoice and a known payment deadline |
+| `<lot_1>` | An order whose invoice was issued two days ago and is now paid |
+| `<lot_1>` | An order whose payment-received letter was sent |
 | Setup overdue | A won lot whose setup overdue letter is due |
 | Payment overdue | A won lot whose payment overdue letter is due |
 | Order cancelled | A won lot whose order cancelled letter is due |
 | Delivered | A won lot whose delivered letter is due |
-
-### Route
-
-1. Follow one Test data row.
-   a. Use Letter "Setup overdue"; Fixture "A won lot whose setup overdue letter is due".
-   b. Use Letter "Payment overdue"; Fixture "A won lot whose payment overdue letter is due".
-   c. Use Letter "Order cancelled"; Fixture "A won lot whose order cancelled letter is due".
-   d. Use Letter "Delivered"; Fixture "A won lot whose delivered letter is due".
-2. Open the letter.
-3. Read the letter body and the Contact Us link.
-   - The letter body names `support@grade10.com`. g10.auction-notifications-order.US1-TC7
-   - Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the ready email for that order. g10.auction-notifications-order.US1-TC7
-   - The mailto is not a bare `mailto:support@grade10.com` without subject and body. g10.auction-notifications-order.US1-TC7
-
-## Walk 8: Overdue letter mailto matches Winner Order subject and body for the same order
-
-**Starting state:**
-
-- customer(winner of `<lot_1>`) has a registered email and can open `<the winner's auction order url>` for the same payment-overdue order.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
 | `<lot_1>` | A won lot in Payment Overdue with a payment overdue letter already sent |
 | `<invoice_id>` | The issued invoice id on that order |
-
-### Route
-
-1. Open the payment overdue letter for `<lot_1>` and read the Contact Us `mailto:` subject and body.
-2. Open `<the winner's auction order url>` for that order.
-3. Click Contact Us and read Subject and Message.
-   - Letter mailto subject equals the dialog Subject `Auction order `<invoice_id>`: payment overdue`. g10.auction-notifications-order.US1-TC11
-   - Letter mailto body matches the dialog Message order facts. g10.auction-notifications-order.US1-TC11
-
-## Walk 9: Letter Contact Us still names the address when no mail client will open
-
-**Starting state:**
-
-- customer(winner of `<lot_1>`) opens a payment overdue letter in a browser mail surface that does not hand off to a system mail client.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
 | `<lot_1>` | A won lot whose payment overdue letter is open |
-
-### Route
-
-1. Open the payment overdue letter for `<lot_1>`.
-2. Read the letter body without activating Contact Us.
-   - The letter body still shows `support@grade10.com` for the collector to copy by hand. g10.auction-notifications-order.US1-TC12
-
-## Walk 10: Overdue cancelled and delivered Contact Us are not a bare support mailto
-
-**Starting state:**
-
-- customer(winner of `<lot_1>`) has a registered email and the letter in the row is the latest for that order.
-
-**Test data:**
-
-| Letter | `<lot_1>` |
-| --- | --- |
 | Setup overdue | A won lot whose setup overdue letter is open |
 | Payment overdue | A won lot whose payment overdue letter is open |
 | Order cancelled | A won lot whose order cancelled letter is open |
 | Delivered | A won lot whose delivered letter is open |
-
-### Route
-
-1. Follow one Test data row.
-   a. Use Letter "Setup overdue".
-   b. Use Letter "Payment overdue".
-   c. Use Letter "Order cancelled".
-   d. Use Letter "Delivered".
-2. Inspect the Contact Us href.
-   - The href includes a subject query. g10.auction-notifications-order.US1-TC13
-   - The href includes a body query. g10.auction-notifications-order.US1-TC13
-   - The href is not only `mailto:support@grade10.com`. g10.auction-notifications-order.US1-TC13
-
-## Walk 11: Partial-payment letter Contact Us carries the ready mailto without the balance
-
-**Starting state:**
-
-- customer(winner of `<lot_1>`) has a registered email.
-- An operator has recorded a partial payment on the order for `<lot_1>` and the partial-payment letter is due.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_1>` to close.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
 | `<lot_1>` | A won lot whose partial-payment letter is due |
 | `<invoice_id>` | The current invoice id on that order |
 | `<receipt_ids>` | Receipt ids recorded so far |
 
 ### Route
 
-1. Wait for the partial-payment letter for `<lot_1>`.
-2. Open the letter.
-3. Read the letter body and the Contact Us link.
+1. Close `<lot_1>` with this winner.
+   - One auction-won letter names `<lot_1>` and the setup deadline. g10.auction-notifications-order.US1-TC1
+2. Open the winner's inbox.
+   - It names no amount owed. g10.auction-notifications-order.US1-TC1
+3. admin(operator) sends the invoice for `<lot_1>` with `<total>`.
+4. Open the winner's inbox.
+   - One payment-reminder letter names `<total>` and the payment deadline. g10.auction-notifications-order.US1-TC2
+   - The deadline uses `Asia/Hong_Kong` and is labelled `GMT+8`. g10.auction-notifications-order.US1-TC2
+   - No separate invoice-sent letter exists. g10.auction-notifications-order.US1-TC2
+5. admin(operator) reissues the invoice for `<lot_1>`.
+   - One payment-reminder letter for the new invoice. g10.auction-notifications-order.US1-TC3
+6. Open the winner's inbox and the send log.
+   - No invoice-reissued letter. g10.auction-notifications-order.US1-TC3
+7. Wait until 24 hours before the payment deadline.
+   - One final-notice letter for `<lot_1>`. g10.auction-notifications-order.US1-TC4
+8. Open the winner's inbox.
+   - No letter waits until the deadline transition itself. g10.auction-notifications-order.US1-TC4
+9. Wait until day 3 after invoice issue.
+10. Open the winner's inbox for reminder kinds.
+   - No day-3, day-6, or final-notice payment reminder for that invoice. g10.auction-notifications-order.US1-TC5
+11. Deliver the payment confirmation webhook again.
+12. Open the winner's inbox and the send log.
+   - No second payment-received letter. g10.auction-notifications-order.US1-TC6
+13. Wait for the letter named in the row for `<lot_1>`.
+   - The letter body names `support@grade10.com`. g10.auction-notifications-order.US1-TC7
+14. Open the letter.
+   - Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the ready email for that order. g10.auction-notifications-order.US1-TC7
+15. Read the letter body and the Contact Us link.
+   - The mailto is not a bare `mailto:support@grade10.com` without subject and body. g10.auction-notifications-order.US1-TC7
+16. Open the payment overdue letter for `<lot_1>` and read the Contact Us `mailto:` subject and body.
+17. Open `<the winner's auction order url>` for that order.
+18. Click Contact Us and read Subject and Message.
+   - Letter mailto subject equals the dialog Subject `Auction order `<invoice_id>`: payment overdue`. g10.auction-notifications-order.US1-TC11
+   - Letter mailto body matches the dialog Message order facts. g10.auction-notifications-order.US1-TC11
+19. Open the payment overdue letter for `<lot_1>`.
+20. Read the letter body without activating Contact Us.
+   - The letter body still shows `support@grade10.com` for the collector to copy by hand. g10.auction-notifications-order.US1-TC12
+21. Open the letter named in the row for `<lot_1>`.
+22. Inspect the Contact Us href.
+   - The href includes a subject query. g10.auction-notifications-order.US1-TC13
+   - The href includes a body query. g10.auction-notifications-order.US1-TC13
+   - The href is not only `mailto:support@grade10.com`. g10.auction-notifications-order.US1-TC13
+23. Wait for the partial-payment letter for `<lot_1>`.
+24. Open the letter.
+25. Read the letter body and the Contact Us link.
    - The letter body names `support@grade10.com`. g10.auction-notifications-order.US1-TC14
    - Contact Us is a `mailto:` to `support@grade10.com`. g10.auction-notifications-order.US1-TC14
    - The mailto subject is `Auction order `<invoice_id>`: partial payment`. g10.auction-notifications-order.US1-TC14
    - The mailto body may list `<receipt_ids>` and does not name the remaining balance. g10.auction-notifications-order.US1-TC14
-
-## Walk 12: A shipped letter with no tracker link leads with the order
-
-**Starting state:**
-
-- customer(winner of `<lot_1>`) has a registered email.
-- `<lot_1>`'s order reads Preparing Shipment.
-
-### Route
-
-1. Dispatch `<lot_1>`'s order with a carrier and a tracking number, and no tracker link.
-2. Open the winner's inbox and read the shipped letter.
+26. Dispatch `<lot_1>`'s order with a carrier and a tracking number, and no tracker link.
+27. Open the winner's inbox and read the shipped letter.
    - The primary action is View order, and it opens `<lot_1>`'s Winner Order. g10.auction-notifications-order.US1-TC55
    - The tracking number reads as plain text, not a link. g10.auction-notifications-order.US1-TC55
    - The letter offers no track-and-trace action. g10.auction-notifications-order.US1-TC55
+
 ### g10.auction-notifications-order.US1-TC1: Winning a lot sends auction-won
 
 **Classification:**
