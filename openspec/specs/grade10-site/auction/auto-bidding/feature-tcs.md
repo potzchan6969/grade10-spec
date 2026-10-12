@@ -1,16 +1,87 @@
 # grade10-site/auction/auto-bidding Test Cases
 
 **Status:** pending-review · 4/24
-**Drafts styled:** 2026-10-02, tcs-rules r4
+**Drafts styled:** 2026-10-12, tcs-rules r5
 
-## grade10-site-auction-auto-bidding-US1: Collector commits a maximum on an open listing
+
+
+## Walk 1: Collector commits a maximum on an open listing
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-auto-bidding.US1-TC1** — Navigate to `<an open listing url>` priced in the row's currency. → Enter the row's maximum. → Confirm the commitment. **Expected:** * Grade10 accepts the commitment. * The current bid is the row's starting price.
+2. **g10.auction-auto-bidding.US1-TC2** — Navigate to `<an open listing url>` priced in the row's currency. → Enter the row's attempted maximum. → Confirm the commitment. → Check the current bid and the leader. **Expected:** * Grade10 refuses the commitment. * The current bid and the leader are unchanged.
+3. **g10.auction-auto-bidding.US1-TC3** — Enter the row's raised maximum. → Confirm the raise. → Check who leads and the current bid. **Expected:** * Grade10 accepts the raise. * Customer still leads.
+4. **g10.auction-auto-bidding.US1-TC4** — Enter the row's attempted maximum. → Confirm the commitment. → Check the committed maximum. **Expected:** * Grade10 refuses it. * Customer's committed maximum remains the row's committed maximum.
+5. **g10.auction-auto-bidding.US1-TC5** — Enter the row's maximum in the custom maximum on the bid panel. → Confirm the commitment. → Read the current bid, the leader, the bid count and Recent Bids. **Expected:** * Grade10 accepts the commitment. * The current bid is 0 plus the currency's lowest increment, the row's current bid after, not 0.
+6. **g10.auction-auto-bidding.US1-TC6** — As customer B, submit the row's attempted maximum on the listing. → Read the API response. → Read the listing's current bid, leader and committed maxima. **Expected:** * Grade10 refuses the commitment, naming the row's minimum next bid. * No maximum is recorded for customer B.
+7. **g10.auction-auto-bidding.US1-TC7** — Wait until the scheduled close passes with no further commitment. → Read the listing's state, winner and winning bid. **Expected:** * The listing is closed. * Customer A wins.
+8. **g10.auction-auto-bidding.US1-TC8** — As customer B, enter the row's `<user B maximum>` in the custom maximum on the bid panel. → Confirm the commitment. → Read the current bid, the leader and Recent Bids. **Expected:** * Step 2 is the row's outcome. * Step 3 reads the row's current bid and leader, and `<user A maximum>` appears nowhere.
+
+## Walk 2: Collector reads their own maximum and standing
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-auto-bidding.US2-TC1** — Open the listing. **Expected:** * Customer sees their own maximum, the row's committed maximum. * Customer sees the current bid, the row's value, as a separate fact.
+2. **g10.auction-auto-bidding.US2-TC2** — Open the listing. **Expected:** * Customer sees that they do not lead. * Customer's own committed maximum is unchanged.
+3. **g10.auction-auto-bidding.US2-TC3** — Sign in as customer B. → Open the listing's public facts. **Expected:** * The facts carry the current bid, the row's value. * The facts do not carry, and do not allow deriving, customer A's maximum, the row's value.
+4. **g10.auction-auto-bidding.US2-TC4** — Commit a maximum of 60000 minor units as customer C. → Read customer C's standing. → Read the listing's public bid history. **Expected:** * Grade10 accepts customer C's commitment. * Customer C is reported as not leading.
+
+## Walk 3: Collector competes through two maxima
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-auto-bidding.US3-TC1** — Commit `<customer B maximum>` as customer B. → Read the listing's current bid and leader. **Expected:** * The current bid matches the row's resolved current bid. * The leader matches the row's resolved leader.
+2. **g10.auction-auto-bidding.US3-TC2** — Raise customer B's maximum to 30000 minor units. → Read the listing's leader and current bid. **Expected:** * Customer A still leads. * The current bid is 31000 minor units.
+3. **g10.auction-auto-bidding.US3-TC3** — Raise customer A's maximum to 30000 minor units. → Read the listing's leader and current bid. **Expected:** * Customer B still leads. * The current bid is 31000 minor units.
+4. **g10.auction-auto-bidding.US3-TC4** — Raise customer A's maximum to 60000 minor units. → Read the listing's leader and current bid. **Expected:** * Customer A leads. * The current bid is 51000 minor units.
+5. **g10.auction-auto-bidding.US3-TC5** — Commit a maximum of 810000 minor units as customer B. → Read the listing's leader and current bid. **Expected:** * Customer B leads. * The current bid is 810000 minor units, not higher.
+6. **g10.auction-auto-bidding.US3-TC6** — Commit a maximum of 60000 minor units as customer C. → Read the listing's leader and current bid. → Read the public bid history's ordering and timestamps. **Expected:** * Customer B remains the leader. * The current bid is 60000 minor units.
+
+## Walk 4: Operator traces every committed maximum
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-auto-bidding.US4-TC1** — Open that listing's bid history. **Expected:** * Each commitment shows its bidder, its maximum, and its Accepted At. ---
+
+## Walk 5: Collector's auto-bid counts as a bid
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-auto-bidding.US5-TC5** — Read the listing's bid count. → Read the listing's bid history. **Expected:** * The bid count includes that bid. * The history shows it as placed on that bidder's behalf, not as a manual bid.
+2. **g10.auction-auto-bidding.US5-TC6** — Let time pass with no further commitment accepted. → Read the current bid and whether Grade10 placed any further bid. **Expected:** * Grade10 places no further bid on either bidder's behalf. * The current bid is unchanged.
+3. **g10.auction-auto-bidding.US5-TC7** — As customer B, commit `<user B maximum>` on `<listing_3>`. → Read the API response and `<listing_3>`'s bids. → As customer A, raise the maximum to `<user A raise>`. → Read the API response. → Read both customers' card activity at the card provider. **Expected:** * Step 2: customer A leads at `<user B maximum>` plus `<increment>`, and that bid is recorded as placed on customer A's behalf. * Step 4 accepts the raise on the auction's rules alone, with no wait on the card provider, and Your maximum reads `<user A raise>`.
+4. **g10.auction-auto-bidding.US5-TC8** — As customer B, commit a maximum of `<user B maximum>` at `<bid time>`. → Read the current bid and Time left. → Wait until the new close passes with no further commitment. **Expected:** * Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`. * No further bid is placed on either maximum before the close.
+5. **g10.auction-auto-bidding.US5-TC9** — Wait for 20:00 UTC. → Read the listing's state and recorded close. **Expected:** * The listing is in extended bidding. * The recorded close reads 20:30 UTC.
+
+## g10.auction-auto-bidding.US1: Collector commits a maximum on an open listing
 
 **As a** collector,
 **I want** to commit the most I will pay and raise it later,
 **so that** Grade10 bids for me only as far as needed to lead.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-0x8 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-### grade10-site-auction-auto-bidding-US1-TC1-1: First maximum opens bidding at the starting price
+### g10.auction-auto-bidding.US1-TC1: First maximum opens bidding at the starting price
 
 Runs once per row of **Test data**.
 
@@ -53,7 +124,7 @@ An open listing with no bids, with the row's starting price.
 * Customer leads.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-7gl rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-### grade10-site-auction-auto-bidding-US1-TC2-1: Maximum below the minimum next bid is refused
+### g10.auction-auto-bidding.US1-TC2: Maximum below the minimum next bid is refused
 
 Runs once per row of **Test data**.
 
@@ -96,7 +167,7 @@ An open listing whose current bid and minimum increment match the row.
 * The current bid and the leader are unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-9qy rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-### grade10-site-auction-auto-bidding-US1-TC3-1: Leader raises their own maximum
+### g10.auction-auto-bidding.US1-TC3: Leader raises their own maximum
 
 Runs once per row of **Test data**.
 
@@ -139,7 +210,7 @@ customer(leads with a committed maximum matching the row) is on that open listin
 * The current bid is unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-vq3 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-### grade10-site-auction-auto-bidding-US1-TC4-1: Lowering a maximum is refused
+### g10.auction-auto-bidding.US1-TC4: Lowering a maximum is refused
 
 Runs once per row of **Test data**.
 
@@ -181,7 +252,7 @@ customer(has a committed maximum matching the row) is on that open listing's pag
 * Customer's committed maximum remains the row's committed maximum.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-j8v rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
-### grade10-site-auction-auto-bidding-US1-TC5-1: Lone maximum on a zero start stands at the lowest increment
+### g10.auction-auto-bidding.US1-TC5: Lone maximum on a zero start stands at the lowest increment
 
 Runs once per row of **Test data**.
 
@@ -231,7 +302,7 @@ Runs once per row of **Test data**.
 * Customer leads.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-65a rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
-### grade10-site-auction-auto-bidding-US1-TC6-1: Maximum one minor unit below the minimum on a zero start is refused
+### g10.auction-auto-bidding.US1-TC6: Maximum one minor unit below the minimum on a zero start is refused
 
 Runs once per row of **Test data**.
 
@@ -276,7 +347,7 @@ Runs once per row of **Test data**.
 * The current bid and the leader are as the row's standing gives them.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-y4r rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
-### grade10-site-auction-auto-bidding-US1-TC7-1: Lone bidder wins a zero-start lot at the lowest increment
+### g10.auction-auto-bidding.US1-TC7: Lone bidder wins a zero-start lot at the lowest increment
 
 Runs once per row of **Test data**.
 
@@ -320,7 +391,7 @@ Runs once per row of **Test data**.
 * The winning bid is 0 plus the currency's lowest increment, the row's winning bid, not 0.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-ic0 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
-### grade10-site-auction-auto-bidding-US1-TC8-1: Second maximum on a zero start must clear one increment above the opening price
+### g10.auction-auto-bidding.US1-TC8: Second maximum on a zero start must clear one increment above the opening price
 
 Runs once per row of **Test data**.
 
@@ -370,14 +441,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-auto-bidding-US2: Collector reads their own maximum and standing
+## g10.auction-auto-bidding.US2: Collector reads their own maximum and standing
 
 **As a** collector,
 **I want** to see my own maximum, the current bid, and whether I lead,
 **so that** I know where I stand without my cap being shown to anyone else.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-mjs rev=1 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw -->
-### grade10-site-auction-auto-bidding-US2-TC1-1: Bidder reads their own commitment apart from the current bid
+### g10.auction-auto-bidding.US2-TC1: Bidder reads their own commitment apart from the current bid
 
 Runs once per row of **Test data**.
 
@@ -418,7 +489,7 @@ customer(committed a maximum matching the row) is on a listing whose current bid
 * Customer sees that they lead.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-13a rev=1 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw -->
-### grade10-site-auction-auto-bidding-US2-TC2-1: Overtaken bidder sees that they no longer lead
+### g10.auction-auto-bidding.US2-TC2: Overtaken bidder sees that they no longer lead
 
 **Classification:**
 
@@ -448,7 +519,7 @@ customer(has been overtaken on an open listing) is on that listing's page.
 * Customer's own committed maximum is unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-7io rev=1 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw -->
-### grade10-site-auction-auto-bidding-US2-TC3-1: Leader's maximum is not disclosed to another bidder
+### g10.auction-auto-bidding.US2-TC3: Leader's maximum is not disclosed to another bidder
 
 Runs once per row of **Test data**.
 
@@ -489,7 +560,9 @@ customer A(leads with a committed maximum matching the row) is on a listing whos
 * The facts do not carry, and do not allow deriving, customer A's maximum, the row's value.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-nmi rev=1 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw -->
-### grade10-site-auction-auto-bidding-US2-TC4-1: A tie is accepted and reported as not leading
+### g10.auction-auto-bidding.US2-TC4: A tie is accepted and reported as not leading
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -529,7 +602,7 @@ customer B(leads an HKD listing with a committed maximum of 60000 minor units).
 
 ---
 
-## grade10-site-auction-auto-bidding-US3: Collector competes through two maxima
+## g10.auction-auto-bidding.US3: Collector competes through two maxima
 
 **As a** collector,
 **I want** the current bid to come from the two highest maxima,
@@ -537,7 +610,7 @@ customer B(leads an HKD listing with a committed maximum of 60000 minor units).
 with whoever committed first.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-1qu rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC1-1: Current bid resolves from the leader's and challenger's maxima
+### g10.auction-auto-bidding.US3-TC1: Current bid resolves from the leader's and challenger's maxima
 
 Runs once per row of **Test data**.
 
@@ -582,7 +655,9 @@ An open HKD listing where customer A leads with a committed maximum of 1000 mino
 * Grade10 accepts no intermediate bid between the previous current bid and the resolved one.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-hpg rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC2-1: Challenger raises again and still stays below the leader
+### g10.auction-auto-bidding.US3-TC2: Challenger raises again and still stays below the leader
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -619,7 +694,9 @@ customer A(leads an HKD listing at a current bid of 23500 minor units), and cust
 * The current bid is 31000 minor units.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-29q rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC3-1: Overtaken bidder raises but stays below the new leader
+### g10.auction-auto-bidding.US3-TC3: Overtaken bidder raises but stays below the new leader
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -656,7 +733,9 @@ customer B(leads an HKD listing with a committed maximum of 50000 minor units), 
 * The current bid is 31000 minor units.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-s1n rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC4-1: Overtaken bidder raises past the current leader
+### g10.auction-auto-bidding.US3-TC4: Overtaken bidder raises past the current leader
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -693,7 +772,9 @@ customer B(leads an HKD listing with a committed maximum of 50000 minor units), 
 * The current bid is 51000 minor units.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-wr4 rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC5-1: The current bid cannot exceed the new leader's own maximum
+### g10.auction-auto-bidding.US3-TC5: The current bid cannot exceed the new leader's own maximum
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -730,7 +811,9 @@ customer A(leads an HKD listing with a committed maximum of 800000 minor units).
 * The current bid is 810000 minor units, not higher.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-7oh rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC6-1: Equal maximum keeps the earlier leader and orders both public records together
+### g10.auction-auto-bidding.US3-TC6: Equal maximum keeps the earlier leader and orders both public records together
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -770,14 +853,14 @@ customer B(leads with a committed maximum of 60000 minor units).
 
 ---
 
-## grade10-site-auction-auto-bidding-US4: Operator traces every committed maximum
+## g10.auction-auto-bidding.US4: Operator traces every committed maximum
 
 **As an** operator,
 **I want** to read every committed maximum and when it was accepted,
 **so that** I can answer a dispute about who committed what.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-de4 rev=1 covers=g10.auction-auto-bidding.SC-aqd -->
-### grade10-site-auction-auto-bidding-US4-TC1-1: Operator reads every committed maximum to answer a dispute
+### g10.auction-auto-bidding.US4-TC1: Operator reads every committed maximum to answer a dispute
 
 **Classification:**
 
@@ -805,14 +888,14 @@ admin(holds `auction:operate`) is on <grade10 auction admin listings url>. That 
 
 ---
 
-## grade10-site-auction-auto-bidding-US5: Collector's auto-bid counts as a bid
+## g10.auction-auto-bidding.US5: Collector's auto-bid counts as a bid
 
 **As a** collector,
 **I want** every bid Grade10 places for me to count as a bid,
 **so that** my auto-bids keep a lot open during extended bidding as a manual bid would.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-dhr rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC1-1: The hold is the maximum, not the current bid
+### g10.auction-auto-bidding.US5-TC1: The hold is the maximum, not the current bid
 
 Runs once per row of **Test data**.
 
@@ -851,7 +934,7 @@ An open listing whose current bid matches the row.
 * Exactly one active authorization exists for that bidder and listing.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-5xp rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC2-1: A raise that cannot be authorized changes nothing
+### g10.auction-auto-bidding.US5-TC2: A raise that cannot be authorized changes nothing
 
 Runs once per row of **Test data**.
 
@@ -891,7 +974,7 @@ customer A(leads with a committed maximum matching the row). The card authorizat
 * The leader and the current bid are unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-hqr rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC3-1: An auto-bid step needs no new card check
+### g10.auction-auto-bidding.US5-TC3: An auto-bid step needs no new card check
 
 Runs once per row of **Test data**.
 
@@ -931,7 +1014,7 @@ customer A(leads with an authorized maximum matching the row) while the current 
 * Customer A's authorization remains the row's maximum.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-rmo rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC5-1: An auto bid is counted and recorded on the bidder's behalf
+### g10.auction-auto-bidding.US5-TC5: An auto bid is counted and recorded on the bidder's behalf
 
 **Classification:**
 
@@ -962,7 +1045,7 @@ Grade10 has raised a bidder's bid on their behalf.
 * The history shows it as placed on that bidder's behalf, not as a manual bid.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-zjt rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC6-1: Standing maxima do not keep bidding on their own
+### g10.auction-auto-bidding.US5-TC6: Standing maxima do not keep bidding on their own
 
 **Classification:**
 
@@ -993,7 +1076,9 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * The current bid is unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-s4f rev=2 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC7-2: Committing, auto-bidding and raising take nothing from the card
+### g10.auction-auto-bidding.US5-TC7: Committing, auto-bidding and raising take nothing from the card
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1041,7 +1126,9 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * Step 5: nothing is held or charged on either card.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-y3w rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC8-1: Auto bid during extended bidding restarts the timer once
+### g10.auction-auto-bidding.US5-TC8: Auto bid during extended bidding restarts the timer once
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1086,7 +1173,9 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * No further bid is placed on either maximum before the close.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-wqa rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC9-1: Maximum committed before the close starts extended bidding
+### g10.auction-auto-bidding.US5-TC9: Maximum committed before the close starts extended bidding
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1130,6 +1219,14 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 - A raise is accepted or refused on the auction's rules alone; a raise refused for a card reason no longer exists, and its case is deprecated.
 - An auto-bid step's price is US3's to assert; with no card check left to tell it apart, the US5 case that read it is deprecated.
 
+### Archived fold records
+
+- Archived suites are reconciliation evidence only; they are not regeneration input.
+- **2026-09-16-default-auction-bid-holds-off** — `grade10-site-auction-auto-bidding-US5-TC1-1` → `g10.auction-auto-bidding.US5-TC1`; `grade10-site-auction-auto-bidding-US5-TC2-1` → `g10.auction-auto-bidding.US5-TC2`; `grade10-site-auction-auto-bidding-US5-TC3-1` → `g10.auction-auto-bidding.US5-TC3`
+- **2026-09-17-revise-auction-extended-bidding** — `grade10-site-auction-auto-bidding-US5-TC4-2` → `g10.auction-auto-bidding.US5`; `grade10-site-auction-auto-bidding-US5-TC7-1` → `g10.auction-auto-bidding.US5-TC7`
+- **2026-10-02-relay-auction-live-state** — `grade10-site-auction-auto-bidding-US1-TC5-1` → `g10.auction-auto-bidding.US1-TC5`; `grade10-site-auction-auto-bidding-US1-TC6-1` → `g10.auction-auto-bidding.US1-TC6`; `grade10-site-auction-auto-bidding-US1-TC7-1` → `g10.auction-auto-bidding.US1-TC7`; `grade10-site-auction-auto-bidding-US1-TC8-1` → `g10.auction-auto-bidding.US1-TC8`
+- **2026-10-03-refused-bid-is-not-a-bid** — `grade10-site-auction-auto-bidding-US1-TC8-1` → `g10.auction-auto-bidding.US1-TC8`; `grade10-site-auction-auto-bidding-US5-TC1-1` → `g10.auction-auto-bidding.US5-TC1`; `grade10-site-auction-auto-bidding-US5-TC2-1` → `g10.auction-auto-bidding.US5-TC2`; `grade10-site-auction-auto-bidding-US5-TC3-1` → `g10.auction-auto-bidding.US5-TC3`; `grade10-site-auction-auto-bidding-US5-TC7-2` → `g10.auction-auto-bidding.US5-TC7`
+
 ## Reconciliation
 
 **Run:** QA2 reconciliation 2026-10-01 for change `relay-auction-live-state`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-auto-bidding-US-01`. Read the change's `proposal.md`, `decisions.md` (Q16 to Q30), `tech-design.md`, `tasks.md`, this delta `spec.md`, `user-journeys.md` and `domain-tcs.md`. QA1 had read the frozen anchors only.
@@ -1147,10 +1244,10 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 
 **Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-auto-bidding-SC-25` and the accepted raise of `grade10-site-auction-auto-bidding-SC-32` by `grade10-site-auction-auto-bidding-US5-TC7-2`
+- **Folded in** - `grade10-site-auction-auto-bidding-SC-25` and the accepted raise of `grade10-site-auction-auto-bidding-SC-32` by `g10.auction-auto-bidding.US5-TC7`
 - **Covered at domain** - `g10.auction-dmn.US4-TC3` reads the refusal and the bid form's words of `grade10-site-auction-auto-bidding-SC-32`'s second half, a maximum not raised
-- **Revised** - `grade10-site-auction-auto-bidding-US5-TC7-2` reads that nothing is taken from the card; its marker drops grade10-site-auction-auto-bidding-SC-19, grade10-site-auction-auto-bidding-SC-20 and grade10-site-auction-auto-bidding-SC-21 and covers `grade10-site-auction-auto-bidding-SC-32`. `grade10-site-auction-auto-bidding-US1-TC8-1` loses the hold switch pre-condition only, `<v>` kept
-- **Deprecated** - `grade10-site-auction-auto-bidding-US5-TC1-1`, `grade10-site-auction-auto-bidding-US5-TC2-1` and `grade10-site-auction-auto-bidding-US5-TC3-1`, with the hold requirement
+- **Revised** - `g10.auction-auto-bidding.US5-TC7` reads that nothing is taken from the card; its marker drops grade10-site-auction-auto-bidding-SC-19, grade10-site-auction-auto-bidding-SC-20 and grade10-site-auction-auto-bidding-SC-21 and covers `grade10-site-auction-auto-bidding-SC-32`. `g10.auction-auto-bidding.US1-TC8` loses the hold switch pre-condition only, `<v>` kept
+- **Deprecated** - `g10.auction-auto-bidding.US5-TC1`, `g10.auction-auto-bidding.US5-TC2` and `g10.auction-auto-bidding.US5-TC3`, with the hold requirement
 - **Raised** - none
 - **Contradicted** - none
-- **Uncovered anchors** - none; the Feature set's No card hold leaf by `grade10-site-auction-auto-bidding-US5-TC7-2`
+- **Uncovered anchors** - none; the Feature set's No card hold leaf by `g10.auction-auto-bidding.US5-TC7`

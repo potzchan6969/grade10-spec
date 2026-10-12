@@ -3,14 +3,52 @@
 **Status:** approved · 9/9
 **Reviewed:** 2026-10-05, tcs-rules r4
 
-## grade10-site-auction-bid-payment-method-US1: Collector bids on the card already linked
+
+
+## Walk 1: Collector bids on the card already linked
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bid-payment-method.US1-TC1** — Read the amount controls on the bid panel. → Click the bid action. → Close the setup modal without linking a card. → Reload <listing_1 url> and read Highest bid and the bid count. → Navigate to <my auctions url> and look for <listing_1>. **Expected:** * Step 1: the quick bids and the custom maximum show, disabled. * Step 2 opens card-link setup, the bid form asks for a card, and no bid is placed.
+2. **g10.auction-bid-payment-method.US1-TC2** — Enter <maximum> in the custom maximum on the bid panel. → Click the bid action. → Read the bid panel. → Read the linked card's activity at the card provider. **Expected:** * Step 2: no confirmation or payment-method modal opens. * Step 3: the panel shows the collector leading at <maximum>, in the one answer, with no authorizing state before it.
+3. **g10.auction-bid-payment-method.US1-TC6** — Enter <next bid> in the bid panel. → Click the bid action. → Read the bid panel's linked card. → Read the linked card's activity at the card provider. **Expected:** * No card choice is asked for, and the bid is accepted. * Step 3 shows <the successful Visa>, with Change no longer offered.
+4. **g10.auction-bid-payment-method.US1-TC7** — Wait until <listing_8> is recorded closed with customer A winning. → Read customer A's and customer B's card activity at the card provider. → As customer A, open <listing_8>'s order from View order on My Auctions. → Start paying the invoice by card. **Expected:** * Step 2: nothing is held or charged on either card, by the bids or by the close. * Step 4 opens the provider's hosted Checkout for the winner order's invoice.
+5. **g10.auction-bid-payment-method.US1-TC9** — Submit <other-card maximum> on <listing_10> with <the other card>. → Read the API response. → Read <listing_10>'s current bid, the leader and the collector's maximum. **Expected:** * Step 2 refuses the bid because the listing's card is locked. * Step 3: the current bid and leader are unchanged, and the collector's maximum stays <locked maximum> on <the successful Visa>.
+6. **g10.auction-bid-payment-method.US1-TC10** — Enter <low maximum> in the custom maximum on the bid panel. → Click the bid action. → Read the bid form and the linked card on the bid panel. → Click Change on the linked card. **Expected:** * Step 3: the bid form names the minimum next bid, 21000 minor units (HKD 210.00), and Change is still offered on the linked card. * Step 4 opens card-link setup.
+
+## Walk 2: Collector raises a bid on the same card
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bid-payment-method.US2-TC1** — Enter <raised maximum> in the bid panel. → Click the bid action. → Read the bid panel. → Read the collector's card activity at the card provider. **Expected:** * Step 2: no card choice is asked for. * Step 3: the panel shows <raised maximum> at once, with no authorizing state before it.
+
+## Walk 3: Collector understands the buyer-premium rate before bidding
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bid-payment-method.US4-TC1** — Read the bid panel, under the bid action. → Enter <next bid> in the bid panel without placing it. **Expected:** * Step 1: the buyer's premium reads 20% of the winning bid, not behind a tooltip. * Step 2: no premium amount and no invoice total show.
+2. **g10.auction-bid-payment-method.US4-TC2** — Render the premium disclosure for <currency>. **Expected:** * It reads the row's disclosure. * No currency amount appears in it.
+
+## g10.auction-bid-payment-method.US1: Collector bids on the card already linked
 
 **As a** signed-in collector with a linked card,
 **I want** my maximum to stand the moment I commit it, with nothing taken from my card,
 **so that** I bid in one step and pay only if I win.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-x2e rev=2 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC1-2: No linked card means no bid, setup opens, and no bid is recorded
+### g10.auction-bid-payment-method.US1-TC1: No linked card means no bid, setup opens, and no bid is recorded
 
 **Classification:**
 
@@ -53,7 +91,7 @@
 * Step 5 shows no row for <listing_1>.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-tm1 rev=2 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC2-2: Committing a maximum stands at once, with nothing taken from the card
+### g10.auction-bid-payment-method.US1-TC2: Committing a maximum stands at once, with nothing taken from the card
 
 **Classification:**
 
@@ -96,7 +134,7 @@
 * Step 4: nothing is held or charged on <the successful Visa>.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-heq rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC3-1: A pending or challenged authorization stays on the bid surface
+### g10.auction-bid-payment-method.US1-TC3: A pending or challenged authorization stays on the bid surface
 
 Runs once per row of **Test data**.
 
@@ -142,7 +180,7 @@ Runs once per row of **Test data**.
 * The bid does not show as accepted.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-h30 rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC4-1: A declined or unusable card is refused near the bid action
+### g10.auction-bid-payment-method.US1-TC4: A declined or unusable card is refused near the bid action
 
 Runs once per row of **Test data**.
 
@@ -189,7 +227,7 @@ Runs once per row of **Test data**.
 * Step 3: the card can be changed, as no bid is on <listing_1> yet.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-b9p rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC5-1: A provider failure has its own copy and leaves nothing held
+### g10.auction-bid-payment-method.US1-TC5: A provider failure has its own copy and leaves nothing held
 
 Runs once per row of **Test data**.
 
@@ -235,7 +273,7 @@ Runs once per row of **Test data**.
 * No bid is accepted and no authorization stands.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-d2o rev=2 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a -->
-### grade10-site-auction-bid-payment-method-US1-TC6-2: A linked card carries over to a new listing
+### g10.auction-bid-payment-method.US1-TC6: A linked card carries over to a new listing
 
 **Classification:**
 
@@ -278,7 +316,7 @@ Runs once per row of **Test data**.
 * Step 4: nothing is held or charged on <the successful Visa> for <listing_2>.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-rg2 rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
-### grade10-site-auction-bid-payment-method-US1-TC7-1: Only the winner pays, through Checkout on the winner order
+### g10.auction-bid-payment-method.US1-TC7: Only the winner pays, through Checkout on the winner order
 
 **Classification:**
 
@@ -321,7 +359,7 @@ Runs once per row of **Test data**.
 * Step 4 opens the provider's hosted Checkout for the winner order's invoice.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-hgh rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
-### grade10-site-auction-bid-payment-method-US1-TC8-1: A bid from an account with no linked card is refused, asking for a card
+### g10.auction-bid-payment-method.US1-TC8: A bid from an account with no linked card is refused, asking for a card
 
 **Classification:**
 
@@ -363,7 +401,7 @@ Runs once per row of **Test data**.
 * Step 5 shows no row for <listing_1>.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-ilh rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
-### grade10-site-auction-bid-payment-method-US1-TC9-1: A bid on another card after the first accepted bid is refused as locked
+### g10.auction-bid-payment-method.US1-TC9: A bid on another card after the first accepted bid is refused as locked
 
 **Classification:**
 
@@ -407,7 +445,7 @@ Runs once per row of **Test data**.
 * Step 3: the current bid and leader are unchanged, and the collector's maximum stays <locked maximum> on <the successful Visa>.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-l7t rev=1 covers=g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
-### grade10-site-auction-bid-payment-method-US1-TC10-1: A refused first bid leaves the card changeable
+### g10.auction-bid-payment-method.US1-TC10: A refused first bid leaves the card changeable
 
 **Classification:**
 
@@ -449,14 +487,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-bid-payment-method-US2: Collector raises a bid on the same card
+## g10.auction-bid-payment-method.US2: Collector raises a bid on the same card
 
 **As a** collector who already bid on a listing,
 **I want** a higher bid to use the card I already committed to that listing,
 **so that** I can raise my maximum without selecting a card again.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-x5g rev=2 covers=g10.auction-bid-payment-method.SC-7z5 -->
-### grade10-site-auction-bid-payment-method-US2-TC1-2: A higher maximum is accepted on the same card, with nothing taken from it
+### g10.auction-bid-payment-method.US2-TC1: A higher maximum is accepted on the same card, with nothing taken from it
 
 **Classification:**
 
@@ -500,7 +538,7 @@ Runs once per row of **Test data**.
 * Step 4: nothing is held or charged on <the successful Visa> for <listing_12>.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-hk4 rev=1 covers=g10.auction-bid-payment-method.SC-7z5 -->
-### grade10-site-auction-bid-payment-method-US2-TC2-1: A refused raise keeps the prior maximum and blocks nothing after
+### g10.auction-bid-payment-method.US2-TC2: A refused raise keeps the prior maximum and blocks nothing after
 
 **Classification:**
 
@@ -543,55 +581,12 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-bid-payment-method-US3: Collector is released when outbid
+## Settled
 
-**As a** collector who has been outbid,
-**I want** the hold on my card cancelled,
-**so that** money is not held for a listing I cannot win.
+- `g10.auction-bid-payment-method.US3` is retired by `refused-bid-is-not-a-bid`; its deprecated case content is removed from the durable suite.
+- Retired marker IDs folded here: `g10.auction-bid-payment-method.TC-txz`
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-txz rev=1 covers=none -->
-### grade10-site-auction-bid-payment-method-US3-TC1-1: Being outbid cancels the hold once, capturing nothing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** destructive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-payment-method-US-03
-
-**Pre-conditions:**
-
-* customer A leads <listing_4> with an active authorization.
-* customer B(signed in, card linked) is on <listing_4 url> in a separate session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <listing_4> | An open listing taking bids, led by customer A |
-| <customer B maximum> | A maximum above customer A's maximum |
-
-**Steps:**
-
-1. As customer B, place <customer B maximum>.
-2. Read customer A's authorization for <listing_4> at the card provider.
-3. Deliver the same cancellation outcome from the provider again.
-4. Read customer A's authorizations, bids and orders for <listing_4>.
-
-**Expected Results:**
-
-* Step 2: customer A's authorization is cancelled; nothing is captured.
-* Step 4: one cancellation only; no second hold or accepted bid.
-
----
-
-## grade10-site-auction-bid-payment-method-US4: Collector understands the buyer-premium rate before bidding
+## g10.auction-bid-payment-method.US4: Collector understands the buyer-premium rate before bidding
 
 **As a** collector considering a live lot,
 **I want** to know the buyer's premium rate before I bid,
@@ -599,7 +594,7 @@ Runs once per row of **Test data**.
 does not exist yet.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-lbz rev=1 covers=g10.auction-bid-payment-method.SC-x21,g10.auction-bid-payment-method.SC-oeb -->
-### grade10-site-auction-bid-payment-method-US4-TC1-1: The bid panel shows the 20% rate and no premium amount
+### g10.auction-bid-payment-method.US4-TC1: The bid panel shows the 20% rate and no premium amount
 
 **Classification:**
 
@@ -638,7 +633,7 @@ does not exist yet.
 * Step 2: no premium amount and no invoice total show.
 
 <!-- trace:case id=g10.auction-bid-payment-method.TC-nvs rev=1 covers=g10.auction-bid-payment-method.SC-x21,g10.auction-bid-payment-method.SC-oeb -->
-### grade10-site-auction-bid-payment-method-US4-TC2-1: The rate reads 20% in every supported currency
+### g10.auction-bid-payment-method.US4-TC2: The rate reads 20% in every supported currency
 
 Runs once per row of **Test data**.
 
@@ -681,12 +676,18 @@ Runs once per row of **Test data**.
 ## Settled
 
 - The bid panel shows the fixed 20% rate only; the calculated premium amount is invoice-only.
-- `grade10-site-auction-bid-payment-method-US-04-TC1` is `grade10-site-auction-bid-payment-method-US4-TC1`: renamed to the compact id form while still draft.
-- `grade10-site-auction-bid-payment-method-US-04-TC2` is `grade10-site-auction-bid-payment-method-US4-TC2`: renamed to the compact id form while still draft.
+- `grade10-site-auction-bid-payment-method-US-04-TC1` is `g10.auction-bid-payment-method.US4-TC1`: renamed to the compact id form while still draft.
+- `grade10-site-auction-bid-payment-method-US-04-TC2` is `g10.auction-bid-payment-method.US4-TC2`: renamed to the compact id form while still draft.
 - Committing or raising a maximum takes nothing from the card and waits on no payment provider, so no case reads an authorization, a provider challenge, a pending state, a declined card at bid time or a provider failure; those cases are deprecated (decisions Q1, Q5).
 - Being outbid has nothing to release; US3 is retired with its case (decisions Q13).
 - Only the winner pays, by the invoice on their winner order; what the winner order shows after payment is `grade10-site/auction/winner-order`'s.
-- `grade10-site-auction-bid-payment-method-US1-TC8-1` joins `grade10-site-auction-bid-payment-method-US1-TC1-2`: one walk with no card, setup still available, and no bid recorded. `US1-TC8-1` is deprecated.
+- `g10.auction-bid-payment-method.US1-TC8` joins `g10.auction-bid-payment-method.US1-TC1`: one walk with no card, setup still available, and no bid recorded. `US1-TC8-1` is deprecated.
+
+### Archived fold records
+
+- Archived suites are reconciliation evidence only; they are not regeneration input.
+- **2026-09-24-fix-auction-payment-hold-increment** — `grade10-site-auction-bid-payment-method-US1-TC1-1` → `g10.auction-bid-payment-method.US1-TC1`; `grade10-site-auction-bid-payment-method-US1-TC2-1` → `g10.auction-bid-payment-method.US1-TC2`; `grade10-site-auction-bid-payment-method-US1-TC3-1` → `g10.auction-bid-payment-method.US1-TC3`; `grade10-site-auction-bid-payment-method-US1-TC4-1` → `g10.auction-bid-payment-method.US1-TC4`; `grade10-site-auction-bid-payment-method-US1-TC5-1` → `g10.auction-bid-payment-method.US1-TC5`; `grade10-site-auction-bid-payment-method-US1-TC6-1` → `g10.auction-bid-payment-method.US1-TC6`; `grade10-site-auction-bid-payment-method-US2-TC1-1` → `g10.auction-bid-payment-method.US2-TC1`; `grade10-site-auction-bid-payment-method-US2-TC2-1` → `g10.auction-bid-payment-method.US2-TC2`; `grade10-site-auction-bid-payment-method-US3-TC1-1` → `g10.auction-bid-payment-method.US3-TC1`
+- **2026-10-03-refused-bid-is-not-a-bid** — `grade10-site-auction-bid-payment-method-US1-TC1-2` → `g10.auction-bid-payment-method.US1-TC1`; `grade10-site-auction-bid-payment-method-US1-TC2-2` → `g10.auction-bid-payment-method.US1-TC2`; `grade10-site-auction-bid-payment-method-US1-TC3-1` → `g10.auction-bid-payment-method.US1-TC3`; `grade10-site-auction-bid-payment-method-US1-TC4-1` → `g10.auction-bid-payment-method.US1-TC4`; `grade10-site-auction-bid-payment-method-US1-TC5-1` → `g10.auction-bid-payment-method.US1-TC5`; `grade10-site-auction-bid-payment-method-US1-TC6-2` → `g10.auction-bid-payment-method.US1-TC6`; `grade10-site-auction-bid-payment-method-US1-TC7-1` → `g10.auction-bid-payment-method.US1-TC7`; `grade10-site-auction-bid-payment-method-US1-TC8-1` → `g10.auction-bid-payment-method.US1-TC8`; `grade10-site-auction-bid-payment-method-US1-TC9-1` → `g10.auction-bid-payment-method.US1-TC9`; `grade10-site-auction-bid-payment-method-US1-TC10-1` → `g10.auction-bid-payment-method.US1-TC10`; `grade10-site-auction-bid-payment-method-US2-TC1-2` → `g10.auction-bid-payment-method.US2-TC1`; `grade10-site-auction-bid-payment-method-US2-TC2-1` → `g10.auction-bid-payment-method.US2-TC2`; `grade10-site-auction-bid-payment-method-US3-TC1-1` → `g10.auction-bid-payment-method.US3-TC1`
 
 ## Reconciliation
 
@@ -696,10 +697,10 @@ Runs once per row of **Test data**.
 
 **Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
 
-- **Folded in** - a commit with no linked card by `grade10-site-auction-bid-payment-method-US1-TC1-2`; a later bid on the same card by `grade10-site-auction-bid-payment-method-US2-TC1-2`; a linked card on a new listing by `grade10-site-auction-bid-payment-method-US1-TC6-2`; bidding takes nothing from the card by `grade10-site-auction-bid-payment-method-US1-TC2-2` and `grade10-site-auction-bid-payment-method-US2-TC1-2`; a bidder who does not win is never charged by `grade10-site-auction-bid-payment-method-US1-TC7-1`; another card after the first accepted bid by `grade10-site-auction-bid-payment-method-US1-TC9-1`
-- **Added by QA2** - `grade10-site-auction-bid-payment-method-US1-TC10-1`: a refused first bid locks no card and Change stays offered. No blind case refused a first bid on a linked card
-- **Corrected** - `grade10-site-auction-bid-payment-method-US1-TC8-1` and `grade10-site-auction-bid-payment-method-US1-TC9-1` traced the Feature set group Card refusals; they trace their section's journey, `grade10-site-auction-bid-payment-method-US-01`. The markers of the revised cases drop the retired authorization scenarios, and those reading nothing taken from the card cover bidding taking nothing from the card
-- **Deprecated** - `grade10-site-auction-bid-payment-method-US1-TC3-1`, `grade10-site-auction-bid-payment-method-US1-TC4-1`, `grade10-site-auction-bid-payment-method-US1-TC5-1`, `grade10-site-auction-bid-payment-method-US2-TC2-1` and `grade10-site-auction-bid-payment-method-US3-TC1-1`, with the authorization requirements and `grade10-site-auction-bid-payment-method-US-03`
+- **Folded in** - a commit with no linked card by `g10.auction-bid-payment-method.US1-TC1`; a later bid on the same card by `g10.auction-bid-payment-method.US2-TC1`; a linked card on a new listing by `g10.auction-bid-payment-method.US1-TC6`; bidding takes nothing from the card by `g10.auction-bid-payment-method.US1-TC2` and `g10.auction-bid-payment-method.US2-TC1`; a bidder who does not win is never charged by `g10.auction-bid-payment-method.US1-TC7`; another card after the first accepted bid by `g10.auction-bid-payment-method.US1-TC9`
+- **Added by QA2** - `g10.auction-bid-payment-method.US1-TC10`: a refused first bid locks no card and Change stays offered. No blind case refused a first bid on a linked card
+- **Corrected** - `g10.auction-bid-payment-method.US1-TC8` and `g10.auction-bid-payment-method.US1-TC9` traced the Feature set group Card refusals; they trace their section's journey, `grade10-site-auction-bid-payment-method-US-01`. The markers of the revised cases drop the retired authorization scenarios, and those reading nothing taken from the card cover bidding taking nothing from the card
+- **Deprecated** - `g10.auction-bid-payment-method.US1-TC3`, `g10.auction-bid-payment-method.US1-TC4`, `g10.auction-bid-payment-method.US1-TC5`, `g10.auction-bid-payment-method.US2-TC2` and `g10.auction-bid-payment-method.US3-TC1`, with the authorization requirements and `grade10-site-auction-bid-payment-method-US-03`
 - **Settled by the artifacts** - a raise from a stale page that still names the locked card is accepted; only a bid naming another card is refused as locked (the requirement)
 - **Raised** - none
 - **Retired** - the card authorization on commit leaves the renamed requirement on the linked card; the scenarios of the removed requirements retire as their migrations name. No retired id is reissued

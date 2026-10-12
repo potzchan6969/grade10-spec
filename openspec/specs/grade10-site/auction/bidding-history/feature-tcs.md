@@ -1,16 +1,149 @@
 # grade10-site/auction/bidding-history Test Cases
 
 **Status:** pending-review · 16/41
-**Drafts styled:** 2026-10-07, tcs-rules r4
+**Drafts styled:** 2026-10-12, tcs-rules r5
 
-## grade10-site-auction-bidding-history-US1: Collector reads their bidding index
+
+
+## Walk 1: Collector reads their bidding index
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US1-TC1** — Navigate to <grade10 bids url>. → Check that listing in the bidding index. **Expected:** * That listing appears once at the position of its latest activity. * Its summary shows the collector's current standing.
+2. **g10.auction-bidding-history.US1-TC2** — Type <refused bid> into the custom maximum on the bid panel. → Confirm the bid. → Navigate to <grade10 bids url>. → Select **Active**. → Select **Completed**. **Expected:** * Step 2: the bid form names the minimum, <opening price>. * Step 4 lists <listing_a>.
+3. **g10.auction-bidding-history.US1-TC3** — Navigate to <grade10 bids url>. → Select **Active**. → Select **Completed**. **Expected:** * Step 2 shows only the open listing. * Step 3 shows the closed and canceled listings.
+4. **g10.auction-bidding-history.US1-TC4** — Navigate to <grade10 bids url>. → Follow every returned cursor. **Expected:** * Every active listing appears exactly once in latest-activity order.
+5. **g10.auction-bidding-history.US1-TC5** — Navigate to <grade10 bids url>. → Check the bidding index. **Expected:** * The bidding index is empty. * The page shows this Grade10 account's index.
+6. **g10.auction-bidding-history.US1-TC6** — Navigate to <grade10 bids url>. → Select the row's filter. → Find <listing>. **Expected:** * <listing> shows once, with the row's standing. * It shows its current or final price.
+7. **g10.auction-bidding-history.US1-TC7** — Type <refused bid> into the custom maximum on the bid panel. → Confirm the bid. → Navigate to <grade10 bids url>. → Read the **Active** list. → Expand <listing_c>. **Expected:** * Step 2: the bid form names the minimum, <next minimum>. * <listing_c> reads Outbid, priced at <current bid>.
+8. **g10.auction-bidding-history.US1-TC8** — As customer A, navigate to <grade10 bids url> and select **Completed**. → As customer B, navigate to <grade10 bids url> and select **Active**, then **Completed**. **Expected:** * Step 1 lists <listing_g> with standing Canceled. * Step 2 lists customer B's accepted listings.
+
+## Walk 2: Collector audits every maximum Grade10 accepted
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US2-TC1** — Enter <maximum> in the custom maximum on the bid panel and place the bid. → Navigate to <grade10 bids url>. → Expand <listing_h>. **Expected:** * Step 3 shows one event, a maximum set at <maximum>, for the signed-in account.
+2. **g10.auction-bidding-history.US2-TC2** — Type <refused raise> into the custom maximum on the bid panel. → Confirm the bid. → Navigate to <grade10 bids url>. → Expand <listing_e>. → Return to <listing_e url> and read the bid count. **Expected:** * Step 2: the bid form keeps <customer A maximum> as the maximum on file. * Step 4 shows the noted entries.
+3. **g10.auction-bidding-history.US2-TC3** — Note the bidding index on <grade10 bids url>. → Open <listing_malformed url>. → Type <malformed maximum> into the custom maximum on the bid panel. → Read the custom maximum. → Return to <grade10 bids url>. **Expected:** * The custom maximum shows <malformed maximum> is not accepted. * No bid is submitted.
+4. **g10.auction-bidding-history.US2-TC4** — As customer A, enter <first maximum> in the custom maximum and place the bid. → Enter <raised maximum> in the custom maximum and place the bid. → Navigate to <grade10 bids url> and expand <listing_private_max>. → As customer B, navigate to <grade10 bids url> and expand <listing_private_max> if it is listed. → Signed out, open <listing_private_max url> and read public recent bids. **Expected:** * Step 3 records <first maximum> and then <raised maximum>. * Customer B's bidding index lists customer B's accepted listings.
+5. **g10.auction-bidding-history.US2-TC5** — As customer B, enter <customer B maximum> in the custom maximum and place the bid. → As customer A, navigate to <grade10 bids url>. → Expand <listing_engine>. → Signed out, open <listing_engine url> and read the new public price. **Expected:** * Step 3 labels customer A's answering movement as automatic. * Step 4 shows the listing pseudonym on the new public price.
+
+## Walk 3: Collector reads one listing's combined history
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US3-TC1** — As customer B, enter <customer B maximum> in the custom maximum and place the bid. → As customer A, navigate to <grade10 bids url>. → Expand <listing_outbid>. **Expected:** * Customer B appears under the listing pseudonym. * That step shows customer A outbid at the public price.
+2. **g10.auction-bidding-history.US3-TC2** — As customer B, enter <customer B maximum> in the custom maximum and place the bid. → As customer A, navigate to <grade10 bids url>. → Expand <listing_auto>. **Expected:** * Customer B's action comes first when they share a time. * Customer A's following movement is marked automatic.
+3. **g10.auction-bidding-history.US3-TC4** — Navigate to <grade10 bids url>. → Expand that listing's combined history. → Follow every returned cursor. **Expected:** * Every retained event visible to that collector appears exactly once in stable order.
+4. **g10.auction-bidding-history.US3-TC5** — Navigate to <grade10 bids url>. → Expand <listing_f>. → Follow every cursor at a page size of 1. → Read the same history as one page of 50. **Expected:** * Step 3 returns every record of <split decision> on one page. * Step 4 reads those records in the same order.
+5. **g10.auction-bidding-history.US3-TC6** — Enter <customer B maximum> in the custom maximum on the bid panel and place the bid. → Read the listing's public recent bids. → Navigate to <grade10 bids url> and expand <listing_boundary>. **Expected:** * Step 2 matches the row's public history, under listing pseudonyms. * The leader matches the row.
+
+## Walk 4: Collector's bidding history stays on their storefront account
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US4-TC1** — Navigate to <grade10 bids url> as account A. → Check the bidding index and combined histories. **Expected:** * Auction returns only A's Grade10 activity and the public movements that belong in its combined histories.
+2. **g10.auction-bidding-history.US4-TC2** — Sign in to ZZZ as that account. → Read its bidding history. **Expected:** * The ZZZ history lists that storefront's activity.
+3. **g10.auction-bidding-history.US4-TC3** — Read the API response for an account bidding index with no storefront session. → Read the API response for a public listing. **Expected:** * Grade10 refuses the account index read. * The public listing read shows public price movements and listing pseudonyms.
+4. **g10.auction-bidding-history.US4-TC4** — Navigate to <grade10 bids url>. → Read and page the index and that listing's combined history. → Check that listing's bid, maximum, listing standing and auction close. **Expected:** * The noted bid, maximum, listing standing and auction close match the note. ---
+
+## Walk 5: Collector opens their bids at /bids
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US5-TC1** — Navigate to <grade10 bids url>. → Check the page and the site chrome. → Switch to **Completed**. **Expected:** * The page shows the Active summaries inside the existing site chrome. * Switching to **Completed** stays in that same page.
+2. **g10.auction-bidding-history.US5-TC2** — Navigate to <grade10 bids url>. → Expand that summary. **Expected:** * The combined history identifies the public movement that outbid **You**. * The page offers a route to the still-open listing.
+3. **g10.auction-bidding-history.US5-TC3** — Navigate to <grade10 bids url>. → Complete the existing sign-in flow. **Expected:** * The Grade10 site starts its existing sign-in flow. * Successful sign-in returns the collector to `/bids`.
+4. **g10.auction-bidding-history.US5-TC4** — Navigate to <grade10 bids url>. → Select that filter. → Wait until the filter finishes loading. **Expected:** * The page shows the empty state for the selected filter. * That empty state is the list's message.
+5. **g10.auction-bidding-history.US5-TC5** — Navigate to <grade10 bids url>. → Check the page during the delay. **Expected:** * The page shows a labeled bidding-history loading state inside the site chrome. * That loading state is the list's message.
+6. **g10.auction-bidding-history.US5-TC6** — Navigate to <grade10 bids url>. → Check the page. **Expected:** * The page shows a retryable bidding-history error. * That error is the list's message.
+7. **g10.auction-bidding-history.US5-TC7** — Expand that summary. → Check the summary and the history area during the delay. **Expected:** * That summary stays visible with a labeled history-loading state. * The history area shows that loading state.
+8. **g10.auction-bidding-history.US5-TC8** — Activate the next-page control. → Activate it again while the next page is still loading. **Expected:** * The entries already shown remain visible while the next page loads. * The next-page control takes one request for that page.
+
+## Walk 6: Collector opens their bids at /bids
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US5-TC9** — Expand that listing. → Check that summary and the other summaries. **Expected:** * That summary remains visible with a retryable history error. * Other summaries and their histories remain usable.
+2. **g10.auction-bidding-history.US5-TC10** — Sign in to <zzz store url>. → Look for a bidding-history route or screen. → Use ZZZ's authenticated backend against the shared history contract. **Expected:** * ZZZ's storefront routes match the routes from before this capability. * A signed-in ZZZ history read returns that storefront's activity.
+
+## Walk 7: Collector reviews maximum history on the lot
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US6-TC1** — Activate **Your bidding**. → Inspect the dialog title, description, tab order, and the active tab. → Activate **Your maximums**. → Inspect the maximum rows and whether a sticky current-maximum summary is **Expected:** * The dialog title is **Your bidding**. * Tabs appear in order **Bid placed**, then **Your maximums**.
+2. **g10.auction-bidding-history.US6-TC2** — Activate **Your bidding**. → Activate **Your maximums**. → Inspect every maximum row. → Navigate to <grade10 bids url>. → Expand `<listing_raised_max>`. **Expected:** * **Your maximums** lists the accepted set and raise, newest first, each row an amount and a time. * Both lot tabs list those accepted amounts.
+3. **g10.auction-bidding-history.US6-TC3** — Activate **Your bidding**. → Inspect **Bid placed** and **Your maximums**. → Dismiss the dialog. → Re-check public recent bids, live maximum and listing standing. **Expected:** * **Bid placed** and **Your maximums** list customer A's amounts and times. * Public recent bids, the live maximum and the standing match the note.
+
+## Walk 8: Collector reviews bids Grade10 placed on the lot
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US7-TC1** — Activate **Your bidding**. → Inspect the active tab and **Bid placed** rows. → Activate **Your maximums**. → Inspect maximum rows. **Expected:** * **Bid placed** is the initial active tab. * Tab order is **Bid placed**, then **Your maximums**.
+2. **g10.auction-bidding-history.US7-TC2** — Activate **Your bidding**. → Inspect the active tab copy. → Activate **Your maximums** and return to **Bid placed**. **Expected:** * **Bid placed** is active on open and shows the empty-bids state. * **Bid placed** and **Your maximums** stay separate tabs.
+3. **g10.auction-bidding-history.US7-TC3** — Activate **Your bidding**. → Switch between **Bid placed** and **Your maximums**. → Dismiss the dialog. → Re-check standing, live maximum, and public recent bids. **Expected:** * Standing, the live maximum and public recent bids match the note. ---
+
+## Walk 9: Collector reads clearer maximum labels on /bids
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US8-TC1** — Navigate to <grade10 bids url>. → Expand `<listing_account_labels>`. → Inspect the set and raise events. → Read the account navigation. **Expected:** * Those events read as a maximum set and a maximum raised. * The chronology lists those accepted amounts.
+
+## Walk 10: Collector sees public bid avatars without learning emails
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bidding-history.US9-TC1** — Read the anonymous public listing response for `<listing_1>`. → Find the public bid row for that bidder. **Expected:** * The row's listing pseudonym is of the form Bidder N. * The row's avatar character is `<expected_letter>`.
+2. **g10.auction-bidding-history.US9-TC2** — Read the anonymous public listing response for `<listing_2>`. → Check each of those two public bid rows. **Expected:** * Each row's avatar character is `B`. * Each row still shows a listing pseudonym of the form Bidder N.
+
+## g10.auction-bidding-history.US1: Collector reads their bidding index
 
 **As a** collector,
 **I want** every listing I placed a bid on in one private index,
 **so that** I can see my standing without hunting through the catalogue.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-xaz rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
-### grade10-site-auction-bidding-history-US1-TC1-1: Repeated activity is grouped under one listing
+### g10.auction-bidding-history.US1-TC1: Repeated activity is grouped under one listing
 
 **Classification:**
 
@@ -42,7 +175,7 @@
 * Its summary shows the collector's current standing.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-bhz rev=2 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
-### grade10-site-auction-bidding-history-US1-TC2-2: A listing whose every bid was refused is not in the index
+### g10.auction-bidding-history.US1-TC2: A listing whose every bid was refused is not in the index
 
 **Classification:**
 
@@ -89,7 +222,7 @@
 * Each standing on the index is Leading, Outbid, Won or Canceled.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-c6d rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
-### grade10-site-auction-bidding-history-US1-TC3-1: Active and completed activity separate cleanly
+### g10.auction-bidding-history.US1-TC3: Active and completed activity separate cleanly
 
 **Classification:**
 
@@ -98,6 +231,7 @@
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -120,7 +254,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * Step 3 shows the closed and canceled listings.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-s3o rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
-### grade10-site-auction-bidding-history-US1-TC4-1: Paging does not repeat or skip a listing
+### g10.auction-bidding-history.US1-TC4: Paging does not repeat or skip a listing
 
 **Classification:**
 
@@ -129,6 +263,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
@@ -151,7 +286,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * Every active listing appears exactly once in latest-activity order.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-ev8 rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
-### grade10-site-auction-bidding-history-US1-TC5-1: Account with no bidding activity has an empty index
+### g10.auction-bidding-history.US1-TC5: Account with no bidding activity has an empty index
 
 **Classification:**
 
@@ -160,6 +295,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -184,7 +320,7 @@ A signed-in collector has activity on one open listing, one closed listing, and 
 * The page shows this Grade10 account's index.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-wit rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
-### grade10-site-auction-bidding-history-US1-TC6-1: Each listing's standing is Leading, Outbid, Won or Canceled
+### g10.auction-bidding-history.US1-TC6: Each listing's standing is Leading, Outbid, Won or Canceled
 
 Runs once per row of **Test data**.
 
@@ -229,7 +365,7 @@ Runs once per row of **Test data**.
 * It shows its current or final price.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-hv4 rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
-### grade10-site-auction-bidding-history-US1-TC7-1: A refused bid leaves an Outbid listing in its place
+### g10.auction-bidding-history.US1-TC7: A refused bid leaves an Outbid listing in its place
 
 **Classification:**
 
@@ -280,7 +416,7 @@ Runs once per row of **Test data**.
 * Step 5's history matches that last accepted bid.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-92c rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
-### grade10-site-auction-bidding-history-US1-TC8-1: A call-off adds no listing for a collector who never bid on it
+### g10.auction-bidding-history.US1-TC8: A call-off adds no listing for a collector who never bid on it
 
 **Classification:**
 
@@ -321,14 +457,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-bidding-history-US2: Collector audits every maximum Grade10 accepted
+## g10.auction-bidding-history.US2: Collector audits every maximum Grade10 accepted
 
 **As a** collector,
 **I want** every maximum Grade10 accepts for me kept as a private event,
 **so that** I can see what I set or raised, and what was placed automatically, without exposing my maximum to a rival.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-1ao rev=2 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
-### grade10-site-auction-bidding-history-US2-TC1-2: An accepted bid is recorded once, as a maximum
+### g10.auction-bidding-history.US2-TC1: An accepted bid is recorded once, as a maximum
 
 **Classification:**
 
@@ -367,7 +503,7 @@ Runs once per row of **Test data**.
 * Step 3 shows one event, a maximum set at <maximum>, for the signed-in account.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-q0n rev=2 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
-### grade10-site-auction-bidding-history-US2-TC2-2: A refused bid adds no event to the collector's history
+### g10.auction-bidding-history.US2-TC2: A refused bid adds no event to the collector's history
 
 **Classification:**
 
@@ -413,7 +549,7 @@ Runs once per row of **Test data**.
 * Step 5's bid count is the one noted.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-l6l rev=1 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
-### grade10-site-auction-bidding-history-US2-TC3-1: Browser-only validation creates no Auction event
+### g10.auction-bidding-history.US2-TC3: Browser-only validation creates no Auction event
 
 **Classification:**
 
@@ -422,6 +558,7 @@ Runs once per row of **Test data**.
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -455,7 +592,7 @@ Runs once per row of **Test data**.
 * The bidding index matches the note from step 1.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-5aw rev=1 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
-### grade10-site-auction-bidding-history-US2-TC4-1: Automatic maximum is recorded and stays private
+### g10.auction-bidding-history.US2-TC4: Automatic maximum is recorded and stays private
 
 **Classification:**
 
@@ -464,6 +601,7 @@ Runs once per row of **Test data**.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -500,7 +638,7 @@ Runs once per row of **Test data**.
 * Signed-out recent bids show the public price and the listing pseudonym.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-shn rev=1 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
-### grade10-site-auction-bidding-history-US2-TC5-1: Engine bid is labeled automatic
+### g10.auction-bidding-history.US2-TC5: Engine bid is labeled automatic
 
 **Classification:**
 
@@ -509,6 +647,7 @@ Runs once per row of **Test data**.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -543,14 +682,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-bidding-history-US3: Collector reads one listing's combined history
+## g10.auction-bidding-history.US3: Collector reads one listing's combined history
 
 **As a** collector,
 **I want** one chronology of public price movement and my private standing,
 **so that** I can see how I was outbid without seeing anyone's hidden maximum.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-sow rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### grade10-site-auction-bidding-history-US3-TC1-1: Competing bid shows customer A outbid
+### g10.auction-bidding-history.US3-TC1: Competing bid shows customer A outbid
 
 **Classification:**
 
@@ -592,7 +731,7 @@ Runs once per row of **Test data**.
 * The amounts shown are the public price.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-i8u rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### grade10-site-auction-bidding-history-US3-TC2-1: Automatic response is attributed to customer A
+### g10.auction-bidding-history.US3-TC2: Automatic response is attributed to customer A
 
 **Classification:**
 
@@ -601,6 +740,7 @@ Runs once per row of **Test data**.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -634,7 +774,7 @@ Runs once per row of **Test data**.
 * Both records read as one step.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-ybl rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### grade10-site-auction-bidding-history-US3-TC3-1: Failed attempt sits beside unchanged auction state
+### g10.auction-bidding-history.US3-TC3: Failed attempt sits beside unchanged auction state
 
 **Classification:**
 
@@ -665,7 +805,7 @@ Runs once per row of **Test data**.
 * The auction's accepted price and leading pseudonym remain unchanged.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-mug rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### grade10-site-auction-bidding-history-US3-TC4-1: Full retained history remains pageable
+### g10.auction-bidding-history.US3-TC4: Full retained history remains pageable
 
 **Classification:**
 
@@ -674,6 +814,7 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
@@ -695,7 +836,9 @@ One listing has more public and private events than one page holds. No new event
 * Every retained event visible to that collector appears exactly once in stable order.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-iuc rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
-### grade10-site-auction-bidding-history-US3-TC5-1: A history page never splits one auction decision
+### g10.auction-bidding-history.US3-TC5: A history page never splits one auction decision
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -738,7 +881,7 @@ One listing has more public and private events than one page holds. No new event
 * Step 4 reads those records in the same order.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-mq5 rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
-### grade10-site-auction-bidding-history-US3-TC6-1: Boundary maxima write the stated history
+### g10.auction-bidding-history.US3-TC6: Boundary maxima write the stated history
 
 Runs once per row of **Test data**.
 
@@ -790,14 +933,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-bidding-history-US4: Collector's bidding history stays on their storefront account
+## g10.auction-bidding-history.US4: Collector's bidding history stays on their storefront account
 
 **As a** collector,
 **I want** only my Grade10 account's history,
 **so that** another storefront or an unsigned visitor cannot read my maximums or my standing.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-nvt rev=1 covers=g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
-### grade10-site-auction-bidding-history-US4-TC1-1: Storefront account reads its own history
+### g10.auction-bidding-history.US4-TC1: Storefront account reads its own history
 
 **Classification:**
 
@@ -806,6 +949,7 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -826,7 +970,7 @@ A Grade10 storefront session for account A.
 * Auction returns only A's Grade10 activity and the public movements that belong in its combined histories.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-0mp rev=1 covers=g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
-### grade10-site-auction-bidding-history-US4-TC2-1: Same account id on another storefront is unrelated
+### g10.auction-bidding-history.US4-TC2: Same account id on another storefront is unrelated
 
 **Classification:**
 
@@ -835,6 +979,7 @@ A Grade10 storefront session for account A.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -853,7 +998,7 @@ Grade10 and ZZZ each have an account with the same account id. Grade10 holds pri
 * The ZZZ history lists that storefront's activity.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-ls6 rev=1 covers=g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
-### grade10-site-auction-bidding-history-US4-TC3-1: Anonymous reader cannot read private history
+### g10.auction-bidding-history.US4-TC3: Anonymous reader cannot read private history
 
 **Classification:**
 
@@ -862,6 +1007,7 @@ Grade10 and ZZZ each have an account with the same account id. Grade10 holds pri
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
@@ -883,7 +1029,7 @@ No storefront session.
 * The public listing read shows public price movements and listing pseudonyms.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-87o rev=1 covers=g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
-### grade10-site-auction-bidding-history-US4-TC4-1: Reading history is inert
+### g10.auction-bidding-history.US4-TC4: Reading history is inert
 
 **Classification:**
 
@@ -917,7 +1063,7 @@ No storefront session.
 
 ---
 
-## grade10-site-auction-bidding-history-US5: Collector opens their bids at /bids
+## g10.auction-bidding-history.US5: Collector opens their bids at /bids
 
 **As a** collector,
 **I want** `/bids` to show my active and completed summaries and expand each
@@ -925,7 +1071,7 @@ listing's history,
 **so that** I can audit standing without leaving the page.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-p6t rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC1-1: Signed-in collector opens active bids
+### g10.auction-bidding-history.US5-TC1: Signed-in collector opens active bids
 
 **Classification:**
 
@@ -955,7 +1101,7 @@ A signed-in Grade10 collector with active and completed bidding activity.
 * Switching to **Completed** stays in that same page.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-04o rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC2-1: Outbid summary leads to its explanation and listing
+### g10.auction-bidding-history.US5-TC2: Outbid summary leads to its explanation and listing
 
 **Classification:**
 
@@ -964,6 +1110,7 @@ A signed-in Grade10 collector with active and completed bidding activity.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -983,7 +1130,7 @@ An open listing on which the collector is outbid.
 * The page offers a route to the still-open listing.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-9al rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC3-1: Signed-out visitor preserves the destination
+### g10.auction-bidding-history.US5-TC3: Signed-out visitor preserves the destination
 
 **Classification:**
 
@@ -992,6 +1139,7 @@ An open listing on which the collector is outbid.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1011,7 +1159,7 @@ The visitor is signed out.
 * Successful sign-in returns the collector to `/bids`.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-u0u rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC4-1: Empty filter is explicit
+### g10.auction-bidding-history.US5-TC4: Empty filter is explicit
 
 **Classification:**
 
@@ -1020,6 +1168,7 @@ The visitor is signed out.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1040,7 +1189,7 @@ A signed-in collector with no entries in the selected filter.
 * That empty state is the list's message.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-5h6 rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC5-1: Initial loading reserves the bidding list
+### g10.auction-bidding-history.US5-TC5: Initial loading reserves the bidding list
 
 **Classification:**
 
@@ -1049,6 +1198,7 @@ A signed-in collector with no entries in the selected filter.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1070,7 +1220,7 @@ A signed-in collector with no entries in the selected filter.
 * That loading state is the list's message.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-u23 rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC6-1: Index failure is retryable
+### g10.auction-bidding-history.US5-TC6: Index failure is retryable
 
 **Classification:**
 
@@ -1079,6 +1229,7 @@ A signed-in collector with no entries in the selected filter.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1100,7 +1251,7 @@ A signed-in collector with no entries in the selected filter.
 * That error is the list's message.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-jy9 rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC7-1: Expanding history preserves its summary while loading
+### g10.auction-bidding-history.US5-TC7: Expanding history preserves its summary while loading
 
 **Classification:**
 
@@ -1109,6 +1260,7 @@ A signed-in collector with no entries in the selected filter.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1130,7 +1282,7 @@ A signed-in collector with no entries in the selected filter.
 * The history area shows that loading state.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-h9q rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC8-1: Loading more preserves entries already shown
+### g10.auction-bidding-history.US5-TC8: Loading more preserves entries already shown
 
 **Classification:**
 
@@ -1139,6 +1291,7 @@ A signed-in collector with no entries in the selected filter.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1158,7 +1311,7 @@ A visible index or combined history page with a further cursor.
 * The next-page control takes one request for that page.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-e9b rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC9-1: History failure preserves the listing summary
+### g10.auction-bidding-history.US5-TC9: History failure preserves the listing summary
 
 **Classification:**
 
@@ -1167,6 +1320,7 @@ A visible index or combined history page with a further cursor.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1188,7 +1342,7 @@ A visible index or combined history page with a further cursor.
 * Other summaries and their histories remain usable.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-nyy rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### grade10-site-auction-bidding-history-US5-TC10-1: ZZZ receives no bidding-history page
+### g10.auction-bidding-history.US5-TC10: ZZZ receives no bidding-history page
 
 **Classification:**
 
@@ -1197,6 +1351,7 @@ A visible index or combined history page with a further cursor.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** compatibility
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1218,14 +1373,14 @@ None.
 
 ---
 
-## grade10-site-auction-bidding-history-US6: Collector reviews maximum history on the lot
+## g10.auction-bidding-history.US6: Collector reviews maximum history on the lot
 
 **As a** signed-in collector,
 **I want** to open **Your bidding** on a lot and read every accepted maximum I set or raised there,
 **so that** I can see when I raised the ceiling without leaving the lot or opening the full account chronology.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-p4o rev=1 covers=g10.auction-bidding-history.SC-roe -->
-### grade10-site-auction-bidding-history-US6-TC1-1: Maximum-only lot opens on Bid placed with empty bids
+### g10.auction-bidding-history.US6-TC1: Maximum-only lot opens on Bid placed with empty bids
 
 **Classification:**
 
@@ -1253,7 +1408,7 @@ bidding** is visible beside public recent bids.
 2. Inspect the dialog title, description, tab order, and the active tab.
 3. Activate **Your maximums**.
 4. Inspect the maximum rows and whether a sticky current-maximum summary is
-   shown.
+ shown.
 
 **Expected Results:**
 
@@ -1264,7 +1419,7 @@ bidding** is visible beside public recent bids.
 * The live maximum stays on the bid panel.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-3hn rev=2 covers=g10.auction-bidding-history.SC-roe -->
-### grade10-site-auction-bidding-history-US6-TC2-2: Raised maximums list without refusals on the lot
+### g10.auction-bidding-history.US6-TC2: Raised maximums list without refusals on the lot
 
 **Classification:**
 
@@ -1300,7 +1455,7 @@ bidding** is visible beside public recent bids.
 * Step 5 lists those accepted amounts.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-s22 rev=1 covers=g10.auction-bidding-history.SC-roe -->
-### grade10-site-auction-bidding-history-US6-TC3-1: Lot personal bidding stays private and inert
+### g10.auction-bidding-history.US6-TC3: Lot personal bidding stays private and inert
 
 **Classification:**
 
@@ -1337,7 +1492,7 @@ bidding** is visible beside public recent bids.
 
 ---
 
-## grade10-site-auction-bidding-history-US7: Collector reviews bids Grade10 placed on the lot
+## g10.auction-bidding-history.US7: Collector reviews bids Grade10 placed on the lot
 
 **As a** signed-in collector,
 **I want** the lot dialog to separate the bids Grade10 placed for me from my
@@ -1345,7 +1500,7 @@ maximums, open on **Bid placed** by default, and list that tab first,
 **so that** I do not read an auto-bid step as my maximum.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-lx1 rev=1 covers=g10.auction-bidding-history.SC-mx5,g10.auction-bidding-history.SC-u76,g10.auction-bidding-history.SC-g01 -->
-### grade10-site-auction-bidding-history-US7-TC1-1: Bid placed stays default when both lists have rows
+### g10.auction-bidding-history.US7-TC1: Bid placed stays default when both lists have rows
 
 **Classification:**
 
@@ -1383,7 +1538,7 @@ lot's page.
 * The live maximum stays on the bid panel.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-j30 rev=1 covers=g10.auction-bidding-history.SC-mx5,g10.auction-bidding-history.SC-u76,g10.auction-bidding-history.SC-g01 -->
-### grade10-site-auction-bidding-history-US7-TC2-1: Empty Bid placed remains the default before any auto-bid
+### g10.auction-bidding-history.US7-TC2: Empty Bid placed remains the default before any auto-bid
 
 **Classification:**
 
@@ -1416,7 +1571,7 @@ bid placed for them yet on `<listing_max_only>`) is on that lot's page.
 * **Bid placed** and **Your maximums** stay separate tabs.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-7py rev=1 covers=g10.auction-bidding-history.SC-mx5,g10.auction-bidding-history.SC-u76,g10.auction-bidding-history.SC-g01 -->
-### grade10-site-auction-bidding-history-US7-TC3-1: Reading separated lists does not change auction facts
+### g10.auction-bidding-history.US7-TC3: Reading separated lists does not change auction facts
 
 **Classification:**
 
@@ -1451,14 +1606,14 @@ public recent bids before opening the dialog.
 
 ---
 
-## grade10-site-auction-bidding-history-US8: Collector reads clearer maximum labels on /bids
+## g10.auction-bidding-history.US8: Collector reads clearer maximum labels on /bids
 
 **As a** signed-in collector,
 **I want** configure and raise events on `/bids` named as maximum set or raised,
 **so that** the account chronology matches the lot wording without a new account tab.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-qo3 rev=2 covers=g10.auction-bidding-history.SC-9ua -->
-### grade10-site-auction-bidding-history-US8-TC1-2: Account chronology names maximum set and raised, and no refusal
+### g10.auction-bidding-history.US8-TC1: Account chronology names maximum set and raised, and no refusal
 
 **Classification:**
 
@@ -1492,7 +1647,7 @@ public recent bids before opening the dialog.
 
 ---
 
-## grade10-site-auction-bidding-history-US9: Collector sees public bid avatars without learning emails
+## g10.auction-bidding-history.US9: Collector sees public bid avatars without learning emails
 
 **As a** collector,
 **I want** each public bid avatar to show one letter from that bidder's email
@@ -1501,7 +1656,9 @@ without learning their email or name,
 behind the listing pseudonym.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-ava rev=1 -->
-### grade10-site-auction-bidding-history-US9-TC1-1: Public ledger avatar matches the email local-part letter
+### g10.auction-bidding-history.US9-TC1: Public ledger avatar matches the email local-part letter
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1539,7 +1696,7 @@ behind the listing pseudonym.
 * The response body contains neither `<email_ada>` nor a personal display name for that bidder.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-avb rev=1 -->
-### grade10-site-auction-bidding-history-US9-TC2-1: Erased or letterless email falls back to B
+### g10.auction-bidding-history.US9-TC2: Erased or letterless email falls back to B
 
 **Classification:**
 
@@ -1575,18 +1732,25 @@ behind the listing pseudonym.
 - `/bids` standing is Leading, Outbid, Won or Canceled.
 - A lot lost at the close reads Outbid on `/bids` and Didn't win on My Auctions (decisions Q14).
 
+### Archived fold records
+
+- Archived suites are reconciliation evidence only; they are not regeneration input.
+- **2026-09-17-add-lot-maximum-bid-history** — `grade10-site-auction-bidding-history-US6-TC1-1` → `g10.auction-bidding-history.US6-TC1`; `grade10-site-auction-bidding-history-US6-TC2-1` → `g10.auction-bidding-history.US6-TC2`; `grade10-site-auction-bidding-history-US6-TC3-1` → `g10.auction-bidding-history.US6-TC3`; `grade10-site-auction-bidding-history-US7-TC1-1` → `g10.auction-bidding-history.US7-TC1`; `grade10-site-auction-bidding-history-US7-TC2-1` → `g10.auction-bidding-history.US7-TC2`; `grade10-site-auction-bidding-history-US7-TC3-1` → `g10.auction-bidding-history.US7-TC3`; `grade10-site-auction-bidding-history-US8-TC1-1` → `g10.auction-bidding-history.US8-TC1`
+- **2026-10-03-refused-bid-is-not-a-bid** — `grade10-site-auction-bidding-history-US1-TC1-1` → `g10.auction-bidding-history.US1-TC1`; `grade10-site-auction-bidding-history-US1-TC2-2` → `g10.auction-bidding-history.US1-TC2`; `grade10-site-auction-bidding-history-US1-TC6-1` → `g10.auction-bidding-history.US1-TC6`; `grade10-site-auction-bidding-history-US1-TC7-1` → `g10.auction-bidding-history.US1-TC7`; `grade10-site-auction-bidding-history-US1-TC8-1` → `g10.auction-bidding-history.US1-TC8`; `grade10-site-auction-bidding-history-US2-TC1-2` → `g10.auction-bidding-history.US2-TC1`; `grade10-site-auction-bidding-history-US2-TC2-2` → `g10.auction-bidding-history.US2-TC2`; `grade10-site-auction-bidding-history-US3-TC3-1` → `g10.auction-bidding-history.US3-TC3`; `grade10-site-auction-bidding-history-US3-TC5-1` → `g10.auction-bidding-history.US3-TC5`; `grade10-site-auction-bidding-history-US4-TC4-1` → `g10.auction-bidding-history.US4-TC4`; `grade10-site-auction-bidding-history-US6-TC2-2` → `g10.auction-bidding-history.US6-TC2`; `grade10-site-auction-bidding-history-US6-TC3-1` → `g10.auction-bidding-history.US6-TC3`; `grade10-site-auction-bidding-history-US8-TC1-2` → `g10.auction-bidding-history.US8-TC1`
+- **2026-10-07-email-initial-bid-avatars** — `grade10-site-auction-bidding-history-US9-TC1-1` → `g10.auction-bidding-history.US9-TC1`; `grade10-site-auction-bidding-history-US9-TC2-1` → `g10.auction-bidding-history.US9-TC2`
+
 ## Reconciliation
 
 **Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-bidding-history-SC-47` by the Canceled row of `grade10-site-auction-bidding-history-US1-TC6-1`; `grade10-site-auction-bidding-history-SC-48` by `grade10-site-auction-bidding-history-US3-TC5-1`; `grade10-site-auction-bidding-history-SC-49` by `grade10-site-auction-bidding-history-US1-TC2-2`; `grade10-site-auction-bidding-history-SC-50` by `grade10-site-auction-bidding-history-US1-TC7-1` and `grade10-site-auction-bidding-history-US2-TC2-2`; `grade10-site-auction-bidding-history-SC-44` by `grade10-site-auction-bidding-history-US6-TC2-2`; `grade10-site-auction-bidding-history-SC-46` by `grade10-site-auction-bidding-history-US8-TC1-2`; `grade10-site-auction-bidding-history-SC-18` and `grade10-site-auction-bidding-history-SC-45` by `grade10-site-auction-bidding-history-US4-TC4-1` and `grade10-site-auction-bidding-history-US6-TC3-1`; `grade10-site-auction-auction-SC-90`, an Outbid listing keeping its place, by `grade10-site-auction-bidding-history-US1-TC7-1`
+- **Folded in** - `grade10-site-auction-bidding-history-SC-47` by the Canceled row of `g10.auction-bidding-history.US1-TC6`; `grade10-site-auction-bidding-history-SC-48` by `g10.auction-bidding-history.US3-TC5`; `grade10-site-auction-bidding-history-SC-49` by `g10.auction-bidding-history.US1-TC2`; `grade10-site-auction-bidding-history-SC-50` by `g10.auction-bidding-history.US1-TC7` and `g10.auction-bidding-history.US2-TC2`; `grade10-site-auction-bidding-history-SC-44` by `g10.auction-bidding-history.US6-TC2`; `grade10-site-auction-bidding-history-SC-46` by `g10.auction-bidding-history.US8-TC1`; `grade10-site-auction-bidding-history-SC-18` and `grade10-site-auction-bidding-history-SC-45` by `g10.auction-bidding-history.US4-TC4` and `g10.auction-bidding-history.US6-TC3`; `grade10-site-auction-auction-SC-90`, an Outbid listing keeping its place, by `g10.auction-bidding-history.US1-TC7`
 - **Covered at domain** - `g10.auction-dmn.US3-TC2` walks `grade10-site-auction-bidding-history-SC-29`: a maximum below the next bid is refused and its history gains no event
-- **Added by QA2** - `grade10-site-auction-bidding-history-US1-TC8-1` for the other half of `grade10-site-auction-bidding-history-SC-47`: a call-off adds no listing for a collector who only watched. `grade10-site-auction-bidding-history-US2-TC1-2` for `grade10-site-auction-bidding-history-SC-51`: the durable case read an accepted manual bid, which no longer exists; an accepted bid now reads as one maximum set. `grade10-site-auction-bidding-history-US1-TC1-1` restyled: its pre-condition asked for manual bids. The `grade10-site-auction-bidding-history-US7` heading carries the journey's new words, with no case changed
-- **Revised** - `grade10-site-auction-bidding-history-US1-TC2-2`, `grade10-site-auction-bidding-history-US2-TC2-2`, `grade10-site-auction-bidding-history-US6-TC2-2` and `grade10-site-auction-bidding-history-US8-TC1-2`: QA1 kept their ids, but each now verifies that a refusal is absent where it was retained, so each moves up a revision. The markers of `grade10-site-auction-bidding-history-US1-TC1-1`, `grade10-site-auction-bidding-history-US1-TC2-2`, `grade10-site-auction-bidding-history-US2-TC1-2` and `grade10-site-auction-bidding-history-US2-TC2-2` drop the retired grade10-site-auction-bidding-history-SC-02 and grade10-site-auction-bidding-history-SC-38, and those of `grade10-site-auction-bidding-history-US2-TC1-2` and `grade10-site-auction-bidding-history-US2-TC2-2` drop grade10-site-auction-bidding-history-SC-37 too. `grade10-site-auction-bidding-history-US4-TC4-1` and `grade10-site-auction-bidding-history-US6-TC3-1` lose the hold from what reading leaves unchanged, a draft restyle with `<v>` kept
-- **Corrected** - `grade10-site-auction-bidding-history-US3-TC5-1`, `grade10-site-auction-bidding-history-US6-TC2-2` and `grade10-site-auction-bidding-history-US6-TC3-1` traced Feature set groups; they trace their sections' journeys
-- **Deprecated** - `grade10-site-auction-bidding-history-US3-TC3-1`, a failed attempt beside the auction
+- **Added by QA2** - `g10.auction-bidding-history.US1-TC8` for the other half of `grade10-site-auction-bidding-history-SC-47`: a call-off adds no listing for a collector who only watched. `g10.auction-bidding-history.US2-TC1` for `grade10-site-auction-bidding-history-SC-51`: the durable case read an accepted manual bid, which no longer exists; an accepted bid now reads as one maximum set. `g10.auction-bidding-history.US1-TC1` restyled: its pre-condition asked for manual bids. The `grade10-site-auction-bidding-history-US7` heading carries the journey's new words, with no case changed
+- **Revised** - `g10.auction-bidding-history.US1-TC2`, `g10.auction-bidding-history.US2-TC2`, `g10.auction-bidding-history.US6-TC2` and `g10.auction-bidding-history.US8-TC1`: QA1 kept their ids, but each now verifies that a refusal is absent where it was retained, so each moves up a revision. The markers of `g10.auction-bidding-history.US1-TC1`, `g10.auction-bidding-history.US1-TC2`, `g10.auction-bidding-history.US2-TC1` and `g10.auction-bidding-history.US2-TC2` drop the retired grade10-site-auction-bidding-history-SC-02 and grade10-site-auction-bidding-history-SC-38, and those of `g10.auction-bidding-history.US2-TC1` and `g10.auction-bidding-history.US2-TC2` drop grade10-site-auction-bidding-history-SC-37 too. `g10.auction-bidding-history.US4-TC4` and `g10.auction-bidding-history.US6-TC3` lose the hold from what reading leaves unchanged, a draft restyle with `<v>` kept
+- **Corrected** - `g10.auction-bidding-history.US3-TC5`, `g10.auction-bidding-history.US6-TC2` and `g10.auction-bidding-history.US6-TC3` traced Feature set groups; they trace their sections' journeys
+- **Deprecated** - `g10.auction-bidding-history.US3-TC3`, a failed attempt beside the auction
 - **Raised, answered** - Q14: a lot lost at the close reads Outbid on `/bids` and Didn't win on My Auctions, as grade10 runs, recommended; answer in `## Settled`
-- **Reworded** - `grade10-site-auction-bidding-history-SC-05`: an empty index is now for an account that has placed no bid, in place of one with no retained maximum attempt or automatic-bid activity; `grade10-site-auction-bidding-history-US1-TC5-1` still asserts it
+- **Reworded** - `grade10-site-auction-bidding-history-SC-05`: an empty index is now for an account that has placed no bid, in place of one with no retained maximum attempt or automatic-bid activity; `g10.auction-bidding-history.US1-TC5` still asserts it
 - **Retired** - grade10-site-auction-bidding-history-SC-02, a failed-only listing, and grade10-site-auction-bidding-history-SC-13, a failed attempt beside the auction, leave their renamed requirements with refused attempts; grade10-site-auction-bidding-history-SC-38, a refused maximum kept as an event, and grade10-site-auction-bidding-history-SC-37, a manual bid request refused, leave "Every accepted maximum action leaves a private event". `grade10-site-auction-bidding-history-SC-51` states the rule that replaces grade10-site-auction-bidding-history-SC-37: every bid is a maximum. No retired id is reissued
 - **Contradicted** - none
 - **Uncovered anchors** - none
@@ -1595,7 +1759,7 @@ behind the listing pseudonym.
 
 | Case | Disposition |
 | --- | --- |
-| `grade10-site-auction-bidding-history-US9-TC1-1` | Folded — covered by `grade10-site-auction-bidding-history-SC-52` |
-| `grade10-site-auction-bidding-history-US9-TC2-1` | Folded — covered by `grade10-site-auction-bidding-history-SC-53` |
-| `grade10-site-auction-bidding-history-SC-52` | Covered by `grade10-site-auction-bidding-history-US9-TC1-1` |
-| `grade10-site-auction-bidding-history-SC-53` | Covered by `grade10-site-auction-bidding-history-US9-TC2-1` |
+| `g10.auction-bidding-history.US9-TC1` | Folded — covered by `grade10-site-auction-bidding-history-SC-52` |
+| `g10.auction-bidding-history.US9-TC2` | Folded — covered by `grade10-site-auction-bidding-history-SC-53` |
+| `grade10-site-auction-bidding-history-SC-52` | Covered by `g10.auction-bidding-history.US9-TC1` |
+| `grade10-site-auction-bidding-history-SC-53` | Covered by `g10.auction-bidding-history.US9-TC2` |

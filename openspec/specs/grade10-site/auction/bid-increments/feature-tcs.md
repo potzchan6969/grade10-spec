@@ -1,17 +1,49 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** reopened · 5/12
+**Status:** pending-review · 5/12
 **Reviewed:** 2026-09-22, tcs-rules r3.0, lapsed 2026-10-02
-**Drafts styled:** 2026-10-09, tcs-rules r4
+**Drafts styled:** 2026-10-12, tcs-rules r5
 
-## grade10-site-auction-bid-increments-US1: Collector places a bid across a price tier
+
+
+## Walk 1: Collector places a bid across a price tier
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bid-increments.US1-TC1** — Open the bid panel on the listing. → Read the minimum next amount. **Expected:** * The minimum next amount is the row's minimum next amount. * On a positive start it is the starting price, not the starting price plus its increment.
+2. **g10.auction-bid-increments.US1-TC2** — Open the listing bid panel. → Place a bid of `<current public price>` plus `<increment>`. **Expected:** * The new public price is `<minimum next amount>`.
+3. **g10.auction-bid-increments.US1-TC3** — Open the listing bid panel. → Enter `<bid amount>` as the bid amount. → Confirm the bid. **Expected:** * The bid is accepted.
+4. **g10.auction-bid-increments.US1-TC4** — Open the listing bid panel. → Enter `<bid amount>` as the bid amount. → Confirm the bid. **Expected:** * The bid is refused. * The refusal names `<minimum>` as the minimum.
+5. **g10.auction-bid-increments.US1-TC5** — Open the listing. → Read the minimum next amount. **Expected:** * The minimum next amount is shown in `<listing currency>`. **Out of suite:**
+6. **g10.auction-bid-increments.US1-TC6** — Enter the row's bid amount in the custom maximum on the bid panel. → Confirm the bid. → Read the minimum next amount on the bid panel. **Expected:** * Step 2: the bid is accepted. * Step 3: the minimum next amount is the opening price plus the increment at the opening price, the row's next minimum after.
+7. **g10.auction-bid-increments.US1-TC7** — Enter the row's bid amount in the custom maximum on the bid panel. → Confirm the bid. → Read the bid panel. **Expected:** * Step 2: the bid is refused, naming the row's opening price as the minimum. * Step 3: the listing still has no accepted bid.
+8. **g10.auction-bid-increments.US1-TC8** — As customer A, submit a bid of `<ceiling>` on `<listing_1>`. → Read the API response. → As customer B, submit a bid of `<ceiling>` plus the increment at it. → Read the API response. → Read `<listing_1>`'s current bid, leader and bid count. **Expected:** * Step 2: customer A's bid is accepted at `<ceiling>`. * Step 4: customer B's bid is refused, naming the ceiling.
+
+## Walk 2: Collector bids up to the currency ceiling
+
+**Starting state:**
+
+- Reset the fixture to each case's own **Pre-conditions** before running that case.
+
+**Route:**
+
+1. **g10.auction-bid-increments.US2-TC1** — Open the listing bid panel. → Enter `<bid amount>` as the bid amount. → Confirm the bid. **Expected:** * The bid is accepted.
+2. **g10.auction-bid-increments.US2-TC2** — Read the listing's price, leader, bid count and maximums. → Submit the row's bid amount through the authenticated auction API. → Read the API response. → Read the listing's price, leader, bid count and maximums. → Read the operational refusal entry for this attempt. **Expected:** * Step 3: the service refuses with `AMOUNT_TOO_HIGH`. * Step 3: `ceilingMinor` equals the row's ceiling.
+3. **g10.auction-bid-increments.US2-TC3** — As the collector, submit `<maximum>` through the authenticated auction API. → Read the response and the collector's maximums on the listing. **Expected:** * The maximum is refused and the refusal names `<ceiling>` as the ceiling. * No maximum is recorded for the collector.
+4. **g10.auction-bid-increments.US2-TC4** — Read the listing's bid count and maximums. → As customer B, submit the amount through the authenticated auction API. → Read the API response. → Read the listing's price, leader, bid count and maximums. → Read the operational refusal entry for this attempt. **Expected:** * Step 3: the service refuses with `AMOUNT_TOO_HIGH`. * Step 3: `ceilingMinor` equals the row's ceiling.
+
+## g10.auction-bid-increments.US1: Collector places a bid across a price tier
 
 **As a** collector,
 **I want** the minimum next bid to scale with the lot's price,
 **so that** I can enter an affordable opening bid and a sensible later bid.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-8e2 rev=2 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-### grade10-site-auction-bid-increments-US1-TC1-2: Minimum before any bid is the opening price
+### g10.auction-bid-increments.US1-TC1: Minimum before any bid is the opening price
 
 Runs once per row of **Test data**.
 
@@ -59,7 +91,7 @@ Runs once per row of **Test data**.
 * On a zero start it is the currency's lowest increment, never 0.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-0lh rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-### grade10-site-auction-bid-increments-US1-TC2-1: Boundary price takes the higher tier
+### g10.auction-bid-increments.US1-TC2: Boundary price takes the higher tier
 
 Runs once per row of **Test data**.
 
@@ -70,6 +102,7 @@ Runs once per row of **Test data**.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -99,7 +132,7 @@ The collector is enrolled and can bid.
 * The new public price is `<minimum next amount>`.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-qui rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-### grade10-site-auction-bid-increments-US1-TC3-1: Amount above the minimum is accepted
+### g10.auction-bid-increments.US1-TC3: Amount above the minimum is accepted
 
 **Classification:**
 
@@ -108,6 +141,7 @@ The collector is enrolled and can bid.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -135,7 +169,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 * The bid is accepted.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-5ez rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-### grade10-site-auction-bid-increments-US1-TC4-1: Amount below the minimum is refused
+### g10.auction-bid-increments.US1-TC4: Amount below the minimum is refused
 
 **Classification:**
 
@@ -144,6 +178,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 * **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -172,7 +207,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 * The refusal names `<minimum>` as the minimum.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
-### grade10-site-auction-bid-increments-US1-TC5-1: Listing publishes the next minimum
+### g10.auction-bid-increments.US1-TC5: Listing publishes the next minimum
 
 Runs once per row of **Test data**.
 
@@ -183,6 +218,7 @@ Runs once per row of **Test data**.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -216,7 +252,7 @@ An open listing is available in `<listing currency>`.
 - `grade10-site-auction-bid-increments-SC-07` — Manual-floor calculation is covered by the backend auction test lane.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-n6d rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk,g10.auction-bid-increments.SC-w8f -->
-### grade10-site-auction-bid-increments-US1-TC6-1: First bid at the opening price is accepted, then one increment applies
+### g10.auction-bid-increments.US1-TC6: First bid at the opening price is accepted, then one increment applies
 
 Runs once per row of **Test data**.
 
@@ -261,7 +297,7 @@ Runs once per row of **Test data**.
 * On the USD 10000 row the USD 100 tier applies, not the USD 0 tier.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-9do rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk,g10.auction-bid-increments.SC-w8f -->
-### grade10-site-auction-bid-increments-US1-TC7-1: First bid below the opening price is refused
+### g10.auction-bid-increments.US1-TC7: First bid below the opening price is refused
 
 Runs once per row of **Test data**.
 
@@ -305,7 +341,7 @@ Runs once per row of **Test data**.
 * Step 3: the minimum next amount is still the row's opening price.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-4ox rev=2 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk,g10.auction-bid-increments.SC-w8f -->
-### grade10-site-auction-bid-increments-US1-TC8-2: Lot starting at the ceiling takes one first bid there
+### g10.auction-bid-increments.US1-TC8: Lot starting at the ceiling takes one first bid there
 
 Runs once per row of **Test data**.
 
@@ -351,14 +387,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-bid-increments-US2: Collector bids up to the currency ceiling
+## g10.auction-bid-increments.US2: Collector bids up to the currency ceiling
 
 **As a** collector,
 **I want** Grade10 to refuse an amount above the ceiling and tell me the limit,
 **so that** a mistyped bid or maximum never commits me to an amount I cannot settle.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-xdy rev=1 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
-### grade10-site-auction-bid-increments-US2-TC1-1: Bid equal to the ceiling is accepted
+### g10.auction-bid-increments.US2-TC1: Bid equal to the ceiling is accepted
 
 **Classification:**
 
@@ -367,6 +403,7 @@ Runs once per row of **Test data**.
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -394,7 +431,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 * The bid is accepted.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-d9d rev=2 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
-### grade10-site-auction-bid-increments-US2-TC2-2: Direct bid above the ceiling is refused without effects
+### g10.auction-bid-increments.US2-TC2: Direct bid above the ceiling is refused without effects
 
 Runs once per row of **Test data**.
 
@@ -443,7 +480,9 @@ Runs once per row of **Test data**.
 * Step 5: one entry names bidder, listing, code, amount and ceiling.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-dfw rev=2 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
-### grade10-site-auction-bid-increments-US2-TC3-2: Auto-bid maximum above the ceiling is refused
+### g10.auction-bid-increments.US2-TC3: Auto-bid maximum above the ceiling is refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -480,7 +519,7 @@ Runs once per row of **Test data**.
 * No maximum is recorded for the collector.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-dlk rev=2 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
-### grade10-site-auction-bid-increments-US2-TC4-2: Listing at the ceiling refuses a further direct bid
+### g10.auction-bid-increments.US2-TC4: Listing at the ceiling refuses a further direct bid
 
 Runs once per row of **Test data**.
 
@@ -536,6 +575,13 @@ Runs once per row of **Test data**.
 - Where a lone maximum above the opening price stands is the auto-bidding suite's; this suite asserts only the minimum.
 - The custom field stops or corrects oversized entry at the currency ceiling. Service refusal cases send amounts directly; the service ceiling and refusal remain unchanged (Q1, Q4).
 
+### Archived fold records
+
+- Archived suites are reconciliation evidence only; they are not regeneration input.
+- **2026-09-16-cap-auction-bid-amount** — `grade10-site-auction-bid-increments-US1-TC1-1` → `g10.auction-bid-increments.US1-TC1`; `grade10-site-auction-bid-increments-US1-TC2-1` → `g10.auction-bid-increments.US1-TC2`; `grade10-site-auction-bid-increments-US1-TC3-1` → `g10.auction-bid-increments.US1-TC3`; `grade10-site-auction-bid-increments-US1-TC4-1` → `g10.auction-bid-increments.US1-TC4`; `grade10-site-auction-bid-increments-US1-TC5-1` → `g10.auction-bid-increments.US1-TC5`; `grade10-site-auction-bid-increments-US2-TC1-1` → `g10.auction-bid-increments.US2-TC1`; `grade10-site-auction-bid-increments-US2-TC2-1` → `g10.auction-bid-increments.US2-TC2`; `grade10-site-auction-bid-increments-US2-TC3-1` → `g10.auction-bid-increments.US2-TC3`; `grade10-site-auction-bid-increments-US2-TC4-1` → `g10.auction-bid-increments.US2-TC4`
+- **2026-10-02-relay-auction-live-state** — `grade10-site-auction-bid-increments-US1-TC1-2` → `g10.auction-bid-increments.US1-TC1`; `grade10-site-auction-bid-increments-US1-TC6-1` → `g10.auction-bid-increments.US1-TC6`; `grade10-site-auction-bid-increments-US1-TC7-1` → `g10.auction-bid-increments.US1-TC7`; `grade10-site-auction-bid-increments-US1-TC8-1` → `g10.auction-bid-increments.US1-TC8`
+- **2026-10-07-cap-custom-maximum-entry** — `grade10-site-auction-bid-increments-US1-TC8-2` → `g10.auction-bid-increments.US1-TC8`; `grade10-site-auction-bid-increments-US2-TC3-2` → `g10.auction-bid-increments.US2-TC3`
+
 ## Reconciliation
 
 **Run:** QA2 reconciliation 2026-10-01, rerun after Q28 and Q35, for change `relay-auction-live-state`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-01`. Read the change's `proposal.md`, `decisions.md` (Q16 to Q30), `tech-design.md`, `tasks.md`, this delta `spec.md`, `user-journeys.md` and `domain-tcs.md`. QA1 had read the frozen anchors only.
@@ -555,10 +601,10 @@ Runs once per row of **Test data**.
 
 | Finding | Disposition |
 | --- | --- |
-| The JPY ceiling moves down from 150000000000 minor units | **Folded in:** the requirement's table and `grade10-site-auction-bid-increments-SC-10` / the JPY row of `grade10-site-auction-bid-increments-US1-TC8-2` and `grade10-site-auction-bid-increments-US2-TC3-2`. The interim 10000000000 gave way to 5000000000 (Q6); the rerun after it reread both cases at 5000000000 |
-| The bid panel's custom maximum field refuses any draft above 9,999,999,999, so a JPY maximum above the ceiling cannot be entered there | **Folded in:** `grade10-site-auction-bid-increments-US2-TC3-2` sends the maximum to the auction service directly. With the ceiling at 5000000000 (Q6) the field takes 5000000001 too, so the case keeps the direct send to read the service's own refusal, as task 5.1 walks it |
+| The JPY ceiling moves down from 150000000000 minor units | **Folded in:** the requirement's table and `grade10-site-auction-bid-increments-SC-10` / the JPY row of `g10.auction-bid-increments.US1-TC8` and `g10.auction-bid-increments.US2-TC3`. The interim 10000000000 gave way to 5000000000 (Q6); the rerun after it reread both cases at 5000000000 |
+| The bid panel's custom maximum field refuses any draft above 9,999,999,999, so a JPY maximum above the ceiling cannot be entered there | **Folded in:** `g10.auction-bid-increments.US2-TC3` sends the maximum to the auction service directly. With the ceiling at 5000000000 (Q6) the field takes 5000000001 too, so the case keeps the direct send to read the service's own refusal, as task 5.1 walks it |
 | Accept-review fix round: the earlier row credited `grade10-site-auction-bid-increments-SC-08` to this change | **Rejected:** `grade10-site-auction-bid-increments-SC-08` is the USD at-ceiling bid, unchanged here; only the table and `grade10-site-auction-bid-increments-SC-10` move |
-| Unchanged scenarios restated by the modified block - `SC-08`, `SC-09`, `SC-11` | **Out of suite:** the durable suite's `grade10-site-auction-bid-increments-US2-TC1-1`, `grade10-site-auction-bid-increments-US2-TC2-1` and `grade10-site-auction-bid-increments-US2-TC4-1`; their USD and HKD values do not move |
+| Unchanged scenarios restated by the modified block - `SC-08`, `SC-09`, `SC-11` | **Out of suite:** the durable suite's `g10.auction-bid-increments.US2-TC1`, `g10.auction-bid-increments.US2-TC2` and `g10.auction-bid-increments.US2-TC4`; their USD and HKD values do not move |
 | Q6: the JPY ceiling itself is still reachable from a quick bid chip | **Rejected:** no scenario states it, and `tech-design.md` no longer claims it - the lot page's chips come from `@grade10/ui` and carry no ceiling, and grade10's `quickBidAmounts.ts` runs only in its own test, whose amounts task 4.1 moves under the new ceiling |
 
 **Uncovered anchors:** none for `grade10-site-auction-bid-increments-US-01` or `grade10-site-auction-bid-increments-US-02`.
@@ -567,9 +613,9 @@ Runs once per row of **Test data**.
 
 | Finding | Disposition |
 | --- | --- |
-| `grade10-site-auction-bid-increments-US2-TC3-2` against `grade10-site-auction-bid-increments-SC-10` | **Joined:** JPY listing, minimum 150000 minor units, and no maximum recorded, match the scenario; the maximum and ceiling, first read as 10000000001 and 10000000000, are 5000000001 and 5000000000 since Q6 |
-| `grade10-site-auction-bid-increments-US1-TC8-2` against the requirement's table and its refusal once the next minimum passes the ceiling | **Joined:** the USD, HKD and JPY rows read 1000000000, 8000000000 and 5000000000 minor units since Q6, as the table does; the second bidder's refusal names the ceiling |
-| Q4 and Q6 name this capability's ceiling requirement as their carrier | **Joined:** both cases sit on it, and `grade10-site-auction-bid-increments-US2-TC3-2` sends the maximum to the service directly to read the service's own refusal |
+| `g10.auction-bid-increments.US2-TC3` against `grade10-site-auction-bid-increments-SC-10` | **Joined:** JPY listing, minimum 150000 minor units, and no maximum recorded, match the scenario; the maximum and ceiling, first read as 10000000001 and 10000000000, are 5000000001 and 5000000000 since Q6 |
+| `g10.auction-bid-increments.US1-TC8` against the requirement's table and its refusal once the next minimum passes the ceiling | **Joined:** the USD, HKD and JPY rows read 1000000000, 8000000000 and 5000000000 minor units since Q6, as the table does; the second bidder's refusal names the ceiling |
+| Q4 and Q6 name this capability's ceiling requirement as their carrier | **Joined:** both cases sit on it, and `g10.auction-bid-increments.US2-TC3` sends the maximum to the service directly to read the service's own refusal |
 | Task groups 4 and 5 carry no owner | **Joined:** suite-neutral; task 5.1 still walks both cases by id |
 | Case ids against the durable suite - `TC8-2` and `TC3-2` bump `TC8-1` and `TC3-1` | **Joined:** a version bump on the same case number, so the fold replaces the earlier version; no other active change issues ids here |
 
@@ -579,11 +625,11 @@ Runs once per row of **Test data**.
 
 | Finding | Disposition |
 | --- | --- |
-| `grade10-site-auction-bid-increments-US2-TC3-2` against `grade10-site-auction-bid-increments-SC-10` | **Joined:** JPY listing, minimum 150000 minor units, maximum 5000000001 refused naming 5000000000, and no maximum recorded, match the scenario |
-| `grade10-site-auction-bid-increments-US1-TC8-2` against the requirement's table | **Joined:** the JPY row reads 5000000000 minor units (JPY 5,000,000,000), as the table and the bidding page's Ceiling row do; USD and HKD do not move |
-| `TC3-2`'s pre-condition said the field cannot carry the maximum, but 5000000001 sits under the field's 9,999,999,999 | **Folded in:** `grade10-site-auction-bid-increments-US2-TC3-2` keeps the direct send to read the service's own refusal, and now says the field would carry the maximum too |
+| `g10.auction-bid-increments.US2-TC3` against `grade10-site-auction-bid-increments-SC-10` | **Joined:** JPY listing, minimum 150000 minor units, maximum 5000000001 refused naming 5000000000, and no maximum recorded, match the scenario |
+| `g10.auction-bid-increments.US1-TC8` against the requirement's table | **Joined:** the JPY row reads 5000000000 minor units (JPY 5,000,000,000), as the table and the bidding page's Ceiling row do; USD and HKD do not move |
+| `TC3-2`'s pre-condition said the field cannot carry the maximum, but 5000000001 sits under the field's 9,999,999,999 | **Folded in:** `g10.auction-bid-increments.US2-TC3` keeps the direct send to read the service's own refusal, and now says the field would carry the maximum too |
 | Earlier rows that stated 10000000000, the field keeping the maximum out of the panel, or the quick-chip claim as current | **Folded in:** each row now states its outcome - 5000000000 (Q6), the field takes the maximum, and the chip claim is gone from `tech-design.md` |
-| Unchanged scenarios restated by the modified block - `SC-08`, `SC-09`, `SC-11` | **Out of suite:** walked by the durable suite's `grade10-site-auction-bid-increments-US2-TC1-1`, `grade10-site-auction-bid-increments-US2-TC2-1` and `grade10-site-auction-bid-increments-US2-TC4-1`, whose USD and HKD values match those scenarios |
+| Unchanged scenarios restated by the modified block - `SC-08`, `SC-09`, `SC-11` | **Out of suite:** walked by the durable suite's `g10.auction-bid-increments.US2-TC1`, `g10.auction-bid-increments.US2-TC2` and `g10.auction-bid-increments.US2-TC4`, whose USD and HKD values match those scenarios |
 | Case ids against the durable suite - `TC8-2` and `TC3-2` bump `TC8-1` and `TC3-1` | **Joined:** a version bump on the same case number; no other active change issues ids here |
 | Questions for the PM | None - Q4 and Q6 settle the service's refusal and the JPY ceiling |
 
@@ -593,13 +639,13 @@ Runs once per row of **Test data**.
 
 | Finding | Disposition |
 | --- | --- |
-| `grade10-site-auction-bid-increments-US2-TC3-2` against `grade10-site-auction-bid-increments-SC-10`, and `grade10-site-auction-bid-increments-US1-TC8-2` against the requirement's table | **Joined:** JPY minimum 150000, maximum 5000000001 refused naming 5000000000, no maximum recorded; the table's USD, HKD and JPY rows match `TC8-2`'s |
+| `g10.auction-bid-increments.US2-TC3` against `grade10-site-auction-bid-increments-SC-10`, and `g10.auction-bid-increments.US1-TC8` against the requirement's table | **Joined:** JPY minimum 150000, maximum 5000000001 refused naming 5000000000, no maximum recorded; the table's USD, HKD and JPY rows match `TC8-2`'s |
 | `TC3-2`'s pre-conditions ran as a paragraph and its placeholders were bare | **Folded in:** restyled to one bullet per condition with placeholders in backticks; values and outcomes unchanged |
 | Both cases are manual | **Joined:** no automated case here, so no Decided-by line is owed; task 5.1 walks both |
 | Case ids against the durable suite - `TC8-2` and `TC3-2` bump `TC8-1` and `TC3-1` | **Joined:** no other active change issues ids here |
 | Questions for the PM | None - Q4 and Q6 settle the service's refusal and the JPY ceiling |
 
-**Uncovered anchors:** none for `grade10-site-auction-bid-increments-US-01` or `grade10-site-auction-bid-increments-US-02`; `SC-08`, `SC-09` and `SC-11` stay out of suite with the durable `grade10-site-auction-bid-increments-US2-TC1-1`, `grade10-site-auction-bid-increments-US2-TC2-1` and `grade10-site-auction-bid-increments-US2-TC4-1` as their verifiers, and both cases stay draft.
+**Uncovered anchors:** none for `grade10-site-auction-bid-increments-US-01` or `grade10-site-auction-bid-increments-US-02`; `SC-08`, `SC-09` and `SC-11` stay out of suite with the durable `g10.auction-bid-increments.US2-TC1`, `g10.auction-bid-increments.US2-TC2` and `g10.auction-bid-increments.US2-TC4` as their verifiers, and both cases stay draft.
 
 **Run:** QA1 read only `/private/tmp/issue-1008-01a11f70-1791528937777/qa1-input`: frozen outline and context journey, proposal, decisions, linked PRD and UI states, configuration, continuity cases and the auction domain suite. Requirements, scenario markers and coverage, technical design, tasks, reconciliation and archives were excluded. QA2 reconciled it with independent Dev output and durable continuity markers at checkpoint `7e827ba031b8083adb5d16105a7bae40e689d3e2`, against fetched main `68548f870`.
 
@@ -621,5 +667,5 @@ Runs once per row of **Test data**.
 
 | Manual | Why |
 | --- | --- |
-| `grade10-site-auction-bid-increments-US1-TC8-2` | A person drives the auction service's bid procedure for each currency row against the deployed service, in task 5.1's walk; `bidIncrements.test.ts` in the application repository pins the ceiling value only |
-| `grade10-site-auction-bid-increments-US2-TC3-2` | A person sends the JPY maximum to the deployed service's bid procedure and reads the refusal and the collector's maximums, in task 5.1's walk; `placeBid.spec.ts` in the application repository is to refuse it once task 4.1 lands |
+| `g10.auction-bid-increments.US1-TC8` | A person drives the auction service's bid procedure for each currency row against the deployed service, in task 5.1's walk; `bidIncrements.test.ts` in the application repository pins the ceiling value only |
+| `g10.auction-bid-increments.US2-TC3` | A person sends the JPY maximum to the deployed service's bid procedure and reads the refusal and the collector's maximums, in task 5.1's walk; `placeBid.spec.ts` in the application repository is to refuse it once task 4.1 lands |
