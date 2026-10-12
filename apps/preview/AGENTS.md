@@ -13,6 +13,18 @@ would; it is not a production application.
   The page owns its state loop and callbacks; packages only receive props.
 - Declare `parameters: { layout: "fullscreen" }` for every page story.
 
+## Composing primitives
+
+- Before composing a design-system primitive — a dialog, toast, menu,
+  tab set, and the like — read its source docblock and canonical stories in
+  `packages/design-system/src/components/` and match the documented
+  composition: canonical action order and variants, accessibility wiring
+  (`DialogDescription` for `aria-describedby`, `aria-labelledby` hooks), and
+  focus behaviour. The contract lives in prose, not prop types; nothing
+  fails when it is ignored.
+- The same applies to `@grade10/ui` blocks — read the block's docblock
+  before placing it.
+
 ## Flow stories
 
 - A story under a `Flows` folder uses `FlowContainer` from
