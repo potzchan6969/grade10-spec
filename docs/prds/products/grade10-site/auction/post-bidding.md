@@ -18,8 +18,7 @@ Bidding stops, the result is fixed at once, and only the winner gets an order.
 - **No card was charged** — nothing was held on any card while bidding; a
   losing bidder's My Auctions row says their card was not charged
 - **The winner** — gets the auction-won letter asking for setup by `Confirm
-  by …`, naming no amount; their My Auctions row reads Won with View order,
-  and the lot joins My Auction Orders
+  by …`, naming no amount; their My Auctions row reads Won with View order
 - **Everyone else hears once** — a bidder who lost, and a watch-only
   collector, each get one letter about the close and nothing after it —
   [Bidding ·
@@ -67,17 +66,8 @@ winner of three lots has three orders, each with its own deadlines.
 
 ### My Auction Orders
 
-Every won lot on one list: the lot with View lot, the auction, the winning
-bid, the status and one next action - Complete Order Setup while Awaiting
-Setup, Pay Invoice while Pending Payment, and View detail otherwise. Orders
-waiting on the winner come first, then the rest by newest
-close, and an empty list points to My Auctions.
-
-**Not in the account menu** - a winner opens each order from its Won row on
-My Auctions, so the menu offers no second orders item
-
-**Opened from** - its address alone; a link from My Auctions to the list is a
-later change
+Retired — there is no separate orders list. My Auctions lists the won lots and
+each Won row opens its own Winner Order.
 
 ::changes{spec="grade10-site/auction/auction-orders"}
 
@@ -533,7 +523,7 @@ other lots.
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the order, invoice and fulfilment records, and the derived status
-- **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, 🚧 `AuctionWinnerOrder` and `AuctionAddressForm`, in `packages/ui` — [Auction Order Blocks](/p/shared/ui/auction-order)
+- **Blocks** — 🚧 `AuctionWinnerOrder` and `AuctionAddressForm`, in `packages/ui` — [Auction Order Blocks](/p/shared/ui/auction-order)
 - **Grant** — `auction:moderate`, the one grant that suspends and reinstates, in the auction service and on the admin Users panel
 - **Mail** — `apps/emails/emails/auction/`
 - **Identifiers** — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers)
@@ -541,8 +531,6 @@ other lots.
 
 :::detail{title="Test cases" for="qa"}
 ::cases{id="grade10-site/auction/winner-order"}
-
-::cases{id="grade10-site/auction/auction-orders"}
 
 ::cases{id="grade10-site/auction/order-status"}
 
@@ -612,8 +600,8 @@ a second payment provider, and changes to the bid-time rules.
 | Delivered content | Decided | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
 | Cancelled content | Decided | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
 | Cancelling a paid order | 🚧 In flight | An order with money counting toward its balance cannot be cancelled; it is refunded instead. Only unpaid orders are cancelled, so the cancelled letter names no payment. Chosen over cancelling a paid order, which would leave money with no order to return it against. Owned by `refine-auction-order-cancellation` Q13. | Product (@jeffffej0909) |
-| A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
-| Opening My Auction Orders | Decided | My Auctions links to the list, so it stays reachable now that the account menu offers no orders item; a later change builds the link. Rejected each Won row staying the only way to an order, with the list reached by its address alone. | Product (@tangconst) |
+| A separate orders page | Decided | None — My Auctions lists the won lots and each Won row opens its own Winner Order; `grade10-site/auction/auction-orders` is retired. Reverses the earlier decision to follow won lots on My Auction Orders: the list duplicated My Auctions' Won rows and nothing on the site reached it. | Product (@tangconst) |
+| Opening My Auction Orders | Decided | Moot — the page is removed, so the deferred My Auctions link is never built. | Product (@tangconst) |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Country or region on delivery setup | Decided | On Winner Order delivery Add Address, country or region lists every country and region A–Z in a searchable field; typing filters matching names. **BREAKING** vs letter typeahead on Select (`full-winner-order-country-region-list` non-goal reversed). Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set and over letter-jump Select. | Product (@tangconst) |

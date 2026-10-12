@@ -1848,3 +1848,5 @@ Runs once per row of **Test data**.
 | Settled: Profile and Membership wait on Product | Dropped, then restated | A Settled line is read as answered by the next blind pass, so an open question never sits there. Q1 and Q5 are now answered: `## Settled` places Profile in the menu line and states Membership's rule |
 | Scenarios | All reached | Every scenario the delta carries has a case asserting its outcome: `grade10-site-site-page-shell-SC-06` to `grade10-site-site-page-shell-SC-08`, `grade10-site-site-page-shell-SC-13`, `grade10-site-site-page-shell-SC-14` and `grade10-site-site-page-shell-SC-56` to `grade10-site-site-page-shell-SC-67`; `grade10-site-site-page-shell-SC-13` by the durable `grade10-site-site-page-shell-US5-TC1-1` |
 | Contradictions | None | Where a case and a scenario state the same behaviour they agree |
+
+**Run:** removal reconciliation, 2026-10-12, for `remove-my-auction-orders`, `grade10-site/site/page-shell`. The modified requirement drops "or My Auction Orders" from its not-offered rule and from `grade10-site-site-page-shell-SC-56`. No case moves - no case asserted the name, and the menu's closed set is unchanged by it.

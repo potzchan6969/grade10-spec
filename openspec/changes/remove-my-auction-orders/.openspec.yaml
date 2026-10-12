@@ -1,0 +1,11 @@
+schema: grade10-planning
+created: 2026-10-12
+design_waived: removal only - every task lands in this store; the delta names
+  the exports and files, nothing new is designed
+purpose_rewritten:
+  grade10-site/auction/auction-orders: the page no longer exists - there is no
+    separate orders list; My Auctions' Won rows open each Winner Order
+  shared/ui/auction-order: the list, row and empty blocks are removed, so the
+    capability is the detail and the address form alone
+depends_on:
+  - omit-profile-account-menu

@@ -1,7 +1,6 @@
 # grade10-site/auction/auction-orders Test Cases
 
-**Status:** pending-review · 0/7
-**Drafts styled:** 2026-09-15, tcs-rules r3.0
+**Status:** retired
 
 ## grade10-site-auction-auction-orders-US1: Winner finds what each won order needs next
 
@@ -16,7 +15,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -45,7 +44,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -85,7 +84,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -129,7 +128,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -158,7 +157,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -188,7 +187,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -218,7 +217,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -266,3 +265,5 @@ Runs once per row of **Test data**.
 | The account-menu link | Dropped, no case | No case asserted it and no scenario stated it. The menu's closed set is `grade10-site/site/page-shell`'s, where the auction-launch menu offers My Auctions and Sign Out and no other item |
 | Raised: what opens the list | Landed as Q13, settled | With the menu entry gone and each Won row opening its own order, nothing in the site opens the list. Product decided My Auctions links to it; a later change builds the link with its scenario and case, so no case here moves |
 | Contradictions | None | The durable cases walk the list from its address and agree with the carried scenarios |
+
+**Run:** removal reconciliation, 2026-10-12, for `remove-my-auction-orders`. The capability is removed - there is no list to walk. Every case is deprecated; none migrates, since a Won row opening its order stays `grade10-site/auction/account-record`'s walk. |

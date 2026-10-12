@@ -743,7 +743,7 @@ collector change them, and SHALL leave the listing's alert setting unchanged.
 
 A Won row SHALL offer the application-supplied entry point to that lot's
 auction order. Selecting it SHALL open the matching order, per
-`grade10-site/auction/auction-orders`. The row SHALL remain read-only: it
+`grade10-site/auction/winner-order`. The row SHALL remain read-only: it
 SHALL NOT record payment, confirm or change an address, or change order status.
 
 <!-- trace:scenario id=g10.auction-account-record.SC-we1 rev=1 -->

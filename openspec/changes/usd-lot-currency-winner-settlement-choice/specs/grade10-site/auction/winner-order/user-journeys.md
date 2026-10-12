@@ -8,7 +8,7 @@
 
 ## ADDED User journeys
 
-### winner-order-US-XX: Winner chooses the currency they pay in
+### winner-order-US-24: Winner chooses the currency they pay in
 
 **As a** winner on a USD lot,
 **I want** to settle in USD or HKD when I set the order up,

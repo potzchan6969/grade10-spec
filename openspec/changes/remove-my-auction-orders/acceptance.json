@@ -1,0 +1,217 @@
+{
+  "version": 2,
+  "change": "remove-my-auction-orders",
+  "baseline": "c297c95c253f4d9cc1e558fe03790b521eaaa264f31d97aa731beac91baec299",
+  "fingerprint": "7f9db83c3f0b41c50f6ef366e00057feda1c21952a58fdff6ed7708be542d12b",
+  "reviewedBy": "tangconst",
+  "acceptedAt": "2026-10-12T09:41:53.487Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#the-close",
+      "sha256": "d817e1b09db3f8b5ea119796e4002d3591baefa1a0d5d02490b622cf3f9f296d",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/auction-order.md#the-blocks",
+      "sha256": "2b434f155d66b237d59f7e0b0800f906e5988126417302dd35c04124347a468e",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/decisions.md",
+      "sha256": "41e3c1646c8bd80cae5fb98256ef3144abf379d67f331eb7dead79693e4c0c94",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/proposal.md",
+      "sha256": "01d9b2a4f29dc8ea7ab6d3f94db98a631e3b145a49819de65d8c6275e1f685fc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "4715da4e5ae0415c42ac04b3cfded8742d006c44cd83f1bebcb62c3668be65c4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "57e0bbd7bfed35cf6d888751fc62a41bb094c1cdd24df8baa3fc82c2642c29b9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "d6cc627b44523bc46a44d0bbfac1933698f1be45a837749f06a18444a266de95",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/auction/auction-orders/feature-tcs.md",
+      "sha256": "8dd5d60f03dd2045bfc9ecf56ab52349ddff9c499b5f3fb386de573be2aaf36f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/auction/auction-orders/spec.md",
+      "sha256": "d9c8fc800b73a57d2bc82265d5bfb9cbc9dd1efd492a9443d57dd537b3c9b2a1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/auction/auction-orders/user-journeys.md",
+      "sha256": "2edd82bf4051444711e684fd48d2ed2f73d33fc35a7b8dc14a51c6a987c18ae1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "f92c37a1ab0fdd14a15b2b7bab62bf27cf39fe7e92d39857b5df84c33d2c3a61",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "624796f1aaca666f18d283cdffdbb20b47d2ca028d16b7969ea14bceffa0189b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "69adb8bd507bdde41073e4f637648c5db1908c3c47c85654cc517ad8d932ebb8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/shared/ui/auction-order/feature-tcs.md",
+      "sha256": "a3443301ba075d9100759836c4d18cc620271743ea4eb24007bfc5abd9e1bf48",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/shared/ui/auction-order/spec.md",
+      "sha256": "e9b6ea096c938f43f404918c8de0f6d34f6c8aab6cd2b11b56ac7b8ffa5439cd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/remove-my-auction-orders/specs/shared/ui/auction-order/user-journeys.md",
+      "sha256": "814081aceef267b580e57f4a5ea1fb53eb63a8a9d5972919fca0f6209efb757b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "edf45d6890c053eda97ba26f0e398891024eca9f5d84b214d9ea54e37d907441",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "17921deab15dacda08967b2d0b64d7ddfbbe0187a815c9ac4088592be3b405c4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "a4fc7585d53da0a06a0cfd89b772b16cc952563d1765d45ee1b112211767313f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/feature-tcs.md",
+      "sha256": "8dd5d60f03dd2045bfc9ecf56ab52349ddff9c499b5f3fb386de573be2aaf36f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/spec.md",
+      "sha256": "76f3fa60239d28fe7d106f8f2e4209b12b9be10c439566827a1a76d3e4c4f032",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/user-journeys.md",
+      "sha256": "f283b37d4b1b885a54ada8386a4a8ba666711a8ab51a6cd9f32e0134ffb1b780",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "4a1f0993b295c3ecb990d69c80b2ce505f2eaf892b3a7e9a8ebf2bec2f2a3c89",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "ba5d955e377a31ebf6618fc9d9a84801f4c20b0a7b166edb46a16b5800415e96",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "b61f3ea9f9591f6f043f0438060f51f31f0b8c69977cbf106ff79bc3c2269be7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+      "sha256": "6a19414559c685faba811c8fbe1daf49864a9f2f360a5e8ff2f9fdab563a2d23",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/spec.md",
+      "sha256": "337f7c2f4d0cd84bf298e949c6159c322d95763c04a79bad6ca637a4ddaa0889",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/user-journeys.md",
+      "sha256": "814081aceef267b580e57f4a5ea1fb53eb63a8a9d5972919fca0f6209efb757b",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "anchors": [
+        "Requirement: A Won row opens its auction order"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Each row offers View lot and the action its status needs",
+        "Requirement: Empty and failed reads",
+        "Requirement: No separate auction orders page is served",
+        "Requirement: The list holds one row per won order"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction-orders/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Signed-in collectors open what the build carries from the account menu"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: The auction-order surface exports",
+        "Requirement: The winner-order surface exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
