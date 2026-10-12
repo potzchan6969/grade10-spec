@@ -15,10 +15,10 @@ import {
 } from "@grade10/design-system/components/overlays/dropdown-menu";
 import { cn } from "@grade10/design-system/lib/utils";
 import { ArrowsDownUp, CaretDown, Check } from "@phosphor-icons/react";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { VaultAssetCard } from "./vault-asset-card";
 import type { VaultAsset } from "./vault-content";
-import { PAGE_ENTER_CLASS } from "./vault-shared";
+import { PAGE_ENTER_CLASS, StickyTabBar } from "./vault-shared";
 
 /** Per-card enter stagger — 40ms, capped so long lists don't drag. */
 const REVEAL_STAGGER_MS = 30;
@@ -114,41 +114,6 @@ function sortAssets(assets: VaultAsset[], sort: SortKey): VaultAsset[] {
     case "highest-price":
       return sorted.sort((a, b) => (b.listedHkd ?? 0) - (a.listedHkd ?? 0));
   }
-}
-
-/** Bottom rule only while stuck — at rest the bar sits flush with the page. */
-function StickyTabBar({ children }: { children: ReactNode }) {
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const [stuck, setStuck] = useState(false);
-
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry) return;
-      setStuck(!entry.isIntersecting);
-    });
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <>
-      <div
-        aria-hidden
-        className="pointer-events-none h-px w-full"
-        ref={sentinelRef}
-      />
-      <div
-        className={cn(
-          "sticky top-0 z-10 -mx-4 bg-background/95 px-4 py-3 backdrop-blur-sm supports-backdrop-filter:bg-background/90 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8",
-          stuck && "border-b border-border",
-        )}
-      >
-        {children}
-      </div>
-    </>
-  );
 }
 
 /**
