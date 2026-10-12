@@ -26,7 +26,7 @@ requirements of `shared-ui/auth-user-directory` forward; only the home moved.
   - Actions together: hand-offs and standing moves the console offered, hand-offs before ban, unban, or erase
   - Standing with its reason: a banned account shows why in the panel when the console supplies it; the table Status cell stays one line
   - Timeline: when the account joined, and that it is banned when it is, without inventing a time the console did not supply
-  - Session detail: where a session was raised, when it ends, and which surface it belongs to, never what authenticates it
+  - Session detail: where a session was raised and when it ends, never what authenticates it
 - Narrowing and order
   - Fixed filter shape: Type, Roles, Status and Email — labels and option words from the consumer; no role vocabulary inside the component
   - Exclusive Type: Elevated or Users; Roles is choosable only for Elevated
@@ -158,9 +158,8 @@ identifier. When the account holds no sessions, ending every session SHALL NOT
 be offered.
 
 A session SHALL be able to carry, beside its identifier, when it began, when
-it ends without a revocation, where it was raised, and which surface it
-belongs to, the site or the console — each supplied by the consumer already in
-words, each rendered when supplied and omitted when not.
+it ends without a revocation, and where it was raised — each supplied by the
+consumer already in words, each rendered when supplied and omitted when not.
 
 <!-- trace:scenario id=g10.shared-user-directory.SC-uz8 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-07 - An operator reads where an account is signed in
@@ -185,32 +184,7 @@ words, each rendered when supplied and omitted when not.
 - **GIVEN** a session the consumer supplied with where it was raised and when it ends
 - **WHEN** that session renders
 - **THEN** both are shown as the consumer supplied them
-- **AND THEN** a session supplied with neither shows no place and no end time,
-  only its identifier and whatever else it was supplied, such as its surface
-
-#### Scenario: shared-console-user-directory-SC-40 - A session says which surface it belongs to
-**Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
-
-- **GIVEN** two sessions of one account, the consumer supplying the site as one's surface and the console as the other's
-- **WHEN** the dialog and the account panel each render them
-- **THEN** each view shows the surface the consumer supplied beside each session
-- **AND THEN** the two sessions read as different surfaces in both views
-
-#### Scenario: shared-console-user-directory-SC-41 - Ending one session leaves the other's surface standing
-**Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
-
-- **GIVEN** two sessions of one account, the consumer supplying the site as one's surface and the console as the other's
-- **WHEN** the operator ends one of them from the dialog or from the account panel's sessions area
-- **THEN** that view reports the ended session by its own identifier
-- **AND THEN** the session the consumer still supplies shows its own surface, in the dialog and in the panel
-
-#### Scenario: shared-console-user-directory-SC-42 - A session supplied no surface shows none
-**Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
-
-- **GIVEN** two sessions of one account, the consumer supplying the console as one's surface and none for the other
-- **WHEN** the dialog and the account panel each render them
-- **THEN** the first shows the console as its surface
-- **AND THEN** the other shows no surface, neither the site's nor the console's, beside whatever else it was supplied
+- **AND THEN** a session supplied with neither shows its identifier alone
 
 ### Requirement: One confirmation serves every moderation move
 
