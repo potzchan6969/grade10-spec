@@ -206,8 +206,8 @@ Runs once per row of **Test data**.
 * `<lot_3>` is not included.
 * `<lot_2>` is included, external lot status Ended.
 
-<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=2 -->
-### grade10-site-auction-lot-status-US2-TC4-2: Called-off address disappears without a code-only alternate
+<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=3 -->
+### grade10-site-auction-lot-status-US2-TC4-3: Called-off address disappears without a code-only alternate
 
 Runs once per row of **Test data**.
 
@@ -240,13 +240,17 @@ Runs once per row of **Test data**.
 
 1. Search the catalogue for the listing.
 2. Open `<listing_url>` directly.
-3. Open `<grade10 auction url>/listings/<listing_code>`.
+3. Inspect the original-address response body.
+4. Open `<grade10 auction url>/listings/<listing_code>`.
+5. Inspect its response body and page.
 
 **Expected Results:**
 
 * Catalogue and search do not return the listing.
 * `<listing_url>` returns 404 with Page not found.
 * The listing code does not resolve as an address.
+* Steps 3 and 5 contain no original-lot data or code.
+* Step 4 returns 404 and Step 5 shows Page not found.
 * No alternate called-off page appears.
 
 
@@ -258,8 +262,8 @@ Runs once per row of **Test data**.
 **I want** a called-off lot I bid on to stay in My Auctions,
 **so that** I can see my card was not charged.
 
-<!-- trace:case id=g10.auction-lot-status.TC-byf rev=2 covers=g10.auction-lot-status.SC-yoe -->
-### grade10-site-auction-lot-status-US3-TC1-2: Only the bidder still sees a called-off lot
+<!-- trace:case id=g10.auction-lot-status.TC-byf rev=3 -->
+### grade10-site-auction-lot-status-US3-TC1-3: Only the bidder still sees a called-off lot
 
 **Classification:**
 
@@ -280,23 +284,30 @@ Runs once per row of **Test data**.
 * customer A bid on <lot_4>.
 * customer B watched <lot_4> and did not bid.
 * <lot_4> was called off.
+* `<replacement>` is now public at `<lot_4>`'s former address.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | <lot_4> | A lot customer A bid on and customer B watched, then called off |
+| replacement | A public replacement with a different title using the released slug |
 
 **Steps:**
 
 1. In customer A's session, navigate to <grade10 my auctions url>.
-2. In customer B's session, navigate to <grade10 my auctions url>.
+2. Read <lot_4>'s row and history.
+3. Inspect the row's lot navigation control.
+4. In customer B's session, navigate to <grade10 my auctions url>.
 
 **Expected Results:**
 
-* Step 1 lists <lot_4>, and the row says Your card was not charged.
-* Step 1's row names no card hold, release or authorization.
-* Step 2 does not list <lot_4>.
+* Step 2 names <lot_4>, not `<replacement>`.
+* The row says Your card was not charged.
+* Original bids and history remain attached to <lot_4>.
+* No card hold, release or authorization appears.
+* Step 3 has no link that opens `<replacement>`.
+* Step 4 does not list <lot_4>.
 
 ## Reconciliation
 

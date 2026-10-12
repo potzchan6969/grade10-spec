@@ -70,8 +70,8 @@
 **I want** cancelling a campaign to take its listings with it,
 **so that** a called-off event leaves nothing a collector can still reach.
 
-<!-- trace:case id=g10adm.auction-domain.TC-t49 rev=2 -->
-### grade10-admin-auction-e2e-US2-TC1-2: Campaign cancellation releases addresses for later lots
+<!-- trace:case id=g10adm.auction-domain.TC-t49 rev=3 -->
+### grade10-admin-auction-e2e-US2-TC1-3: Campaign cancellation releases addresses for later lots
 
 **Classification:**
 
@@ -91,6 +91,7 @@
 * admin(holds auction:operate) is on <grade10 auction admin campaigns url>.
 * <campaign_2> is published, with <listing_3> and <listing_4> published under it.
 * <replacement_3> and <replacement_4> are complete editable drafts outside <campaign_2>.
+* Both original listing codes were recorded before cancellation.
 
 **Test data:**
 
@@ -117,6 +118,7 @@
 10. Publish <replacement_3>.
 11. Open /auction/listings/<slug_3>.
 12. Open /auction/listings/<slug_4>.
+13. Reopen both canceled listings in admin.
 
 **Expected Results:**
 
@@ -125,11 +127,15 @@
 * Step 4 shows <listing_4> as canceled under the listing cancel rules.
 * Step 5 returns 404 and Page not found.
 * Step 6 shows neither the cover nor the canceled lots.
+* Both canceled listing codes remain their original codes.
 * Steps 7 and 8 save both released slugs.
 * Step 9 creates <replacement_3> without a slug collision.
 * Step 11 returns <replacement_3>, not <listing_3>.
 * Step 12 returns 404 while <replacement_4> remains unpublished.
 * <campaign_2> and its canceled listings stay canceled.
+* Canceled lots remain absent from public browse/search after reuse.
+* Replacement codes differ from the canceled lot codes.
+* Step 13 keeps both original codes and canceled status.
 
 
 ---

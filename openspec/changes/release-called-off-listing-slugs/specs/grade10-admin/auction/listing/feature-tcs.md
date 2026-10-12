@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** reopened · 0/125
+**Status:** reopened · 0/126
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 
@@ -1027,8 +1027,8 @@ Runs once per row of **Test data**.
 * Step 1 accepts the save.
 * Step 2 shows neither draft occupying a slug.
 
-<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=1 covers=g10adm.auction-listing.SC-jx5 -->
-### grade10-admin-auction-listing-US3-TC13-1: Create can reuse a canceled listing's original slug
+<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=2 -->
+### grade10-admin-auction-listing-US3-TC13-2: Create can reuse a canceled listing's original slug
 
 **Classification:**
 
@@ -1047,25 +1047,37 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(auction operator) is on `<grade10 auction admin listings url>`.
-* A canceled listing previously used slug charizard-psa-9.
-* A draft has every required field set, including slug charizard-psa-9.
+* `<original_listing>` is called off, previously used `<released_slug>`, and retains `<original_code>`.
+* `<replacement>` is a complete saved draft with a different slug.
+* admin(holds auction:operate) is on the Listings page.
+
+Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Slug | charizard-psa-9 (1 to 64 lower-case hyphenated words) |
+| `<original_listing>` | `<released_slug>` | `<original_code>` | `<replacement>` |
+| --- | --- | --- | --- |
+| A listing called off during this release | Its original valid slug | Its reserved code | A complete draft for another available unit |
+| A listing called off before this release | Its original valid slug | Its reserved code | A complete draft for another available unit |
 
 **Steps:**
 
-1. Open the draft.
-2. Create the draft.
-3. Read the canceled listing's slug.
+1. Open `<replacement>`.
+2. Enter `<released_slug>` in the slug field.
+3. Leave the slug field.
+4. Click Save.
+5. Create the replacement.
+6. Open `<original_listing>` in Listings.
+7. Read its status and code.
 
 **Expected Results:**
 
-* Step 2 shows the draft as created.
-* Step 3 shows the canceled listing still without charizard-psa-9.
+* Step 3 reports no unavailable-slug error.
+* Step 4 saves `<released_slug>`.
+* Step 5 creates `<replacement>` without collision.
+* Step 7 shows canceled and `<original_code>`.
+* `<original_listing>` no longer holds `<released_slug>`.
+* The replacement's code differs from `<original_code>`.
 
 <!-- trace:case id=g10adm.auction-listing.TC-xtt rev=1 covers=g10adm.auction-listing.SC-4kw -->
 ### grade10-admin-auction-listing-US3-TC14-1: Create cannot reuse a closed listing's slug
@@ -4614,8 +4626,8 @@ changes later.
 * `LK423` remains unavailable.
 * The later listing receives a different code.
 
-<!-- trace:case id=g10adm.auction-listing.TC-1jo rev=2 -->
-### grade10-admin-auction-listing-US72-TC11-2: Call off keeps its code after address reuse
+<!-- trace:case id=g10adm.auction-listing.TC-1jo rev=3 -->
+### grade10-admin-auction-listing-US72-TC11-3: Call off keeps its code after address reuse
 
 **Classification:**
 
@@ -4650,15 +4662,16 @@ changes later.
 1. Open `<later_listing>`.
 2. Enter `<original_slug>` in its slug field.
 3. Click Save.
-4. Read its listing code.
-5. Open `<called_off_listing>`.
-6. Read its listing code.
+4. Create `<later_listing>`.
+5. Read its listing code.
+6. Open `<called_off_listing>`.
+7. Read its listing code.
 
 **Expected Results:**
 
 * Step 3 saves the released slug on `<later_listing>`.
-* Step 4 shows a code different from `<listing_code>`.
-* Step 6 still shows `<listing_code>`.
+* Step 5 shows a code different from `<listing_code>`.
+* Step 7 still shows `<listing_code>`.
 * `<called_off_listing>` stays canceled.
 
 
@@ -4848,6 +4861,56 @@ changes later.
 
 * Save is refused with an unavailable-slug result.
 * The draft's stored slug remains unchanged.
+
+<!-- trace:case id=g10adm.auction-listing.TC-wrn rev=1 -->
+### grade10-admin-auction-listing-US73-TC7-1: Competing reuse saves leave only one slug holder
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* admin A and admin B hold auction:operate in separate sessions.
+* A called-off listing has released `<original_slug>`.
+* `<draft_a>` and `<draft_b>` are saved complete drafts with different slugs.
+* Each admin is editing one draft, before either Save occurs.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| original_slug | The called-off listing's original valid slug |
+| draft_a and draft_b | Complete drafts for separate available units, with different titles |
+
+**Steps:**
+
+1. In both sessions, enter `<original_slug>`.
+2. In both sessions, leave the slug field.
+3. As admin A, click Save.
+4. As admin B, click Save without repeating availability checking.
+5. Reopen both drafts.
+6. Create `<draft_a>`.
+7. Publish `<draft_a>`.
+8. Open its public address.
+
+**Expected Results:**
+
+* Step 2 reports the slug available in both sessions.
+* Step 3 saves `<original_slug>` on `<draft_a>`.
+* Step 4 refuses the stale reuse attempt.
+* Step 5 shows `<draft_b>`'s original saved slug unchanged.
+* Only `<draft_a>` holds `<original_slug>`.
+* Step 8 returns `<draft_a>`, never `<draft_b>` or the canceled lot.
 
 ## Settled
 

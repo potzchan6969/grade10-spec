@@ -1170,8 +1170,8 @@ finds it.
 **I want** a called-off lot gone from browse and search,
 **so that** its former address answers the current lot or Page not found.
 
-<!-- trace:case id=g10.auction-domain.TC-dw9 rev=3 -->
-### grade10-site-auction-e2e-US11-TC01-3: Released address follows its new public holder
+<!-- trace:case id=g10.auction-domain.TC-dw9 rev=4 -->
+### grade10-site-auction-e2e-US11-TC01-4: Released address follows its new public holder
 
 **Classification:**
 
@@ -1191,6 +1191,8 @@ finds it.
 
 * `<lot_1>` was published and listed in the catalogue, then an operator called it off.
 * customer A bid on `<lot_1>` before call off.
+* `<original_code>` is its reserved code from admin.
+* The account history was recorded before call off.
 * customer A has `<lot_1 address>` saved from when `<lot_1>` was published.
 * `<lot_2>` is a complete draft holding the released slug, with a different title.
 
@@ -1207,19 +1209,30 @@ finds it.
 1. Navigate to `<grade10 auction url>`.
 2. Search the catalogue for the title of `<lot_1>`.
 3. Navigate to `<lot_1 address>`.
-4. As admin(holds auction:operate), create `<lot_2>`.
-5. Publish `<lot_2>`.
-6. As customer A, navigate to `<lot_1 address>`.
-7. Navigate to `<grade10 my auctions url>`.
+4. As customer A, read `<lot_1>` in My Auctions.
+5. As admin(holds auction:operate), read `<lot_1>`'s code.
+6. Create `<lot_2>`.
+7. Publish `<lot_2>`.
+8. As customer A, navigate to `<lot_1 address>`.
+9. Navigate to `<grade10 my auctions url>`.
+10. As admin(holds auction:operate), reopen `<lot_1>`.
+11. As customer A, search its original title in the catalogue.
 
 **Expected Results:**
 
 * Step 2: `<lot_1>` does not appear in the catalogue.
 * Step 3 returns 404 and Page not found.
-* Step 6 returns 200 and `<lot_2>`'s page.
-* Step 6 shows `<lot_2>`'s title, not `<lot_1>`'s.
-* Step 7 still lists `<lot_1>` for customer A.
-* Its row says the card was not charged.
+* Step 8 returns 200 and `<lot_2>`'s page.
+* Step 8 shows `<lot_2>`'s title, not `<lot_1>`'s.
+* Step 9 still lists `<lot_1>` for customer A.
+* Steps 4 and 9 retain `<lot_1>`'s original bids/history.
+* Both rows say the card was not charged.
+* Neither row links to `<lot_2>`.
+* Step 5 keeps `<original_code>` reserved on `<lot_1>`.
+* The replacement has a different code.
+* Step 10 shows canceled with `<original_code>` unchanged.
+* Step 11 does not find `<lot_1>`.
+* `<lot_1>` stays out of public browse and watchlist after reuse.
 
 
 ---
