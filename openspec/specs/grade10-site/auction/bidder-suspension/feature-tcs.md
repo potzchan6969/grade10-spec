@@ -1,6 +1,6 @@
 # grade10-site/auction/bidder-suspension Test Cases
 
-**Status:** pending-review · 0/8
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
 ## Walk 1: Resolve a deadline suspension without restoring bidding
@@ -24,7 +24,11 @@
    - The account is suspended, the new auction actions are refused, and the notice explains what is owed and how to resolve it. `g10.auction-bidder-suspension.US1-TC1`
 2. Pay `<invoice_1>` in full.
    - The invoice becomes `paid`, but bidding remains refused and the suspension remains visible. `g10.auction-bidder-suspension.US1-TC2`
-3. Open `<won_lot_1>` and its auction order.
+3. As `admin`, reissue an expired invoice; as `customer`, pay the reissued invoice and try to bid.
+   - The reissued invoice can be paid, but bidding remains refused and the suspension remains visible. `g10.auction-bidder-suspension.US1-TC7`
+4. As `customer`, open <g10 store url>, <g10 loyalty url> and <g10 auction account record url>, then try to bid.
+   - Sign-in, store, loyalty and account-record access remain available; only the auction action is refused. `g10.auction-bidder-suspension.US1-TC8`
+5. Open `<won_lot_1>` and its auction order.
    - The won lot remains won and its invoice remains payable. `g10.auction-bidder-suspension.US1-TC4`
 
 ## Walk 2: Operate the suspension lifecycle
@@ -146,6 +150,94 @@ Runs once per row of **Test data**.
 * The payment is accepted and the invoice becomes `paid`.
 * The maximum at step 5 is refused.
 * The account record still shows the suspension and its reason.
+
+<!-- trace:case id=g10.auction-bidder-suspension.TC-3no rev=1 -->
+### g10.auction-bidder-suspension.US1-TC7: Reissuing an invoice does not reinstate bidding
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.auction-bidder-suspension.US1
+
+**Pre-conditions:**
+
+* `customer` is suspended from auctions.
+* `<expired_invoice_1>` belongs to `customer` and its payment deadline has passed.
+* `admin` holds `auction:moderate` and can reissue the invoice.
+
+**Test data:**
+
+| `<expired_invoice_1>` | `<reissued_invoice_1>` | `<open_lot_1>` |
+| --- | --- | --- |
+| Expired auction invoice belonging to the suspended customer | The same invoice after its payment deadline is reissued | Open lot on which the suspended customer has no standing maximum |
+
+**Steps:**
+
+1. As `admin`, open `<expired_invoice_1>`.
+2. Reissue `<expired_invoice_1>` as `<reissued_invoice_1>` with a new payment deadline.
+3. As `customer`, open `<reissued_invoice_1>` and pay it in full.
+4. Open <g10 auction url>.
+5. Try to commit a maximum on `<open_lot_1>`.
+6. Open <g10 auction account record url>.
+
+**Expected Results:**
+
+* The reissued invoice is payable and the payment is accepted.
+* The maximum at step 5 is refused.
+* The account record still shows the suspension and its reason after the invoice is paid.
+
+<!-- trace:case id=g10.auction-bidder-suspension.TC-ixs rev=1 -->
+### g10.auction-bidder-suspension.US1-TC8: Suspension leaves non-auction account access available
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.auction-bidder-suspension.US1
+
+**Pre-conditions:**
+
+* `customer` is suspended from auctions and signed out.
+* `<store_item_1>` is available to buy.
+* `<loyalty_action_1>` is available to the customer.
+* `<account_record_1>` belongs to `customer`.
+
+**Test data:**
+
+| `<store_item_1>` | `<loyalty_action_1>` | `<account_record_1>` |
+| --- | --- | --- |
+| Available store item | Earn or redeem action available to the customer | Customer's auction suspension or invoice record |
+
+**Steps:**
+
+1. Sign in as `customer`.
+2. Open <g10 store url>, browse `<store_item_1>` and complete its purchase.
+3. Open <g10 loyalty url> and complete `<loyalty_action_1>`.
+4. Open <g10 auction account record url> and read `<account_record_1>`.
+5. Open <g10 auction url> and try to commit a maximum on an open lot.
+
+**Expected Results:**
+
+* Sign-in is accepted.
+* The store item can be browsed and purchased.
+* The loyalty action is accepted.
+* The account record remains readable.
+* The maximum at step 5 is refused; the suspension does not block non-auction account access.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-kz8 rev=1 -->
 ### g10.auction-bidder-suspension.US1-TC4: A won lot remains payable after suspension
