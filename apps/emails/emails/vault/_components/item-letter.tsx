@@ -19,7 +19,8 @@ export type { Fact } from "@/emails/_components/letter-shell";
 export { FactsGroup, Note } from "@/emails/_components/letter-shell";
 
 export type ItemLetterProps = Omit<LetterShellProps, "trailer" | "greeting"> & {
-  itemLine: ItemLineProps;
+  /** The item's line above the footer; omitted when the block already names it. */
+  itemLine?: ItemLineProps;
   /** Scannable bullets under the lead, like `AuctionLetter`'s `points`. */
   points?: string[];
   /** Paragraphs between the bullets and the item block. */
@@ -51,7 +52,7 @@ export function ItemLetter({
     <LetterShell
       {...shell}
       greeting="Hello,"
-      trailer={<ItemLine {...itemLine} />}
+      trailer={itemLine ? <ItemLine {...itemLine} /> : null}
     >
       {points.length > 0 ? (
         <Section className="mb-2 mt-1">

@@ -4,7 +4,6 @@ import { ItemLetter } from "@/emails/vault/_components/item-letter";
 import {
   previewItem,
   previewItemFooterLines,
-  previewItemLine,
 } from "@/emails/vault/item-fixtures";
 
 export type ItemVaultedProps = {
@@ -32,7 +31,6 @@ export default function ItemVaultedEmail({
         whyYouGotThis: `${itemTitle} is now in our vault.`,
       }}
       heading="Safely stored"
-      itemLine={previewItemLine}
       lead={`${itemTitle} is now in our vault.`}
       preheader={`${itemTitle} is safely stored.`}
     />
