@@ -78,8 +78,9 @@ The application sources were read on 2026-10-13 in the Grade10 workspace.
   token early. A same-member reopen observes outstanding writes or checkout
   work and reads the persisted choice again; a different member never
   inherits the earlier member's results. No action is replayed on clearing.
-  Q16 remains open for a successful checkout answer after dismissal; the
-  checkout owner finalizes that answer treatment before acceptance.
+  Q16 and checkout Q35 preserve current successful checkout navigation after
+  dismissal. Its request identity does not use the tender-view opening guard;
+  plain close or reopen does not make that checkout answer stale.
 - **Checkout owner** - This change builds the shared guard and host mapping.
   `add-shopify-checkout-integration` retains checkout request/answer ownership
   and verifies that its pending Pay joins this input. Its stale-answer tests

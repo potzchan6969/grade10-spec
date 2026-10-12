@@ -68,3 +68,26 @@ not make a checkout answer stale by itself.
   the exported promo sheet, and exempts dismissal's collapsed-state callback
   from edit guards. Fresh QA1 retains legacy case identities under the correct
   anchors and avoids a duplicate compatibility suite
+
+## Pending QA2
+
+**Run:** 2026-10-13, fresh reader against committed source `3de9ce9fa4bc`
+plus the explicit non-anchor Q16/Q35 clarification and coordinator repairs.
+This is scoped reconciliation, not regeneration of the historical suites.
+
+| Capability | Cases | Closure |
+| --- | --- | --- |
+| `grade10-site/store/cart-drawer` | 43 active drafts; 9 QA1 pending additions and 1 QA2 addition | Revised SC23 and new SC34-SC40 have full asserting cases; US7-US9 anchors covered |
+| `shared/ui/store-cart` | 8 active drafts; 4 QA1 pending additions and 1 QA2 addition | Legacy SC37-SC39 exact links repaired; SC64-SC69 have full asserting cases; US19-US20 and context dismissal covered |
+| `grade10-site/store/checkout` | 48 active drafts; 3 QA2 additions | Revised SC34/SC35 and SC66-SC68 have full asserting cases; pending, external-edit and recovery anchors covered |
+
+- **Dispositions** - The three owning `feature-tcs.md` files record each blind pending case and affected existing case before their source-linked coverage tables. All cases retain lifecycle, identity and revision. Five genuinely uncovered routes are added as QA2 drafts, with no blind-generation credit.
+- **New identities** - Cart `g10.store-cart-drawer.TC-n5c`; shared `g10.shared-store-cart.TC-wh7`; checkout `g10.store-checkout.TC-iux`, `g10.store-checkout.TC-5c1` and `g10.store-checkout.TC-u6z`. Each is allocated by `pnpm run trace -- init case` with the owning scope.
+- **Overclaims** - Scoped repair removes revised SC23 from 12 narrower active legacy cart cases and revised SC35 from the partial member-change case. Legacy shared cases link their respective SC37, SC38 and SC39 individually. Partial blind cart routes claim anchors without overclaiming a complete scenario.
+- **Clarification** - Cart US9-TC3 checks a current successful reply while closed. New checkout US5-TC14 checks all three dismissal routes, leaving closed and reopening before the reply, rejecting a second pending Pay and then opening Shopify. Q16/Q35 are settled; closing alone invalidates no checkout request.
+- **Source repair** - QA2 reported the obsolete open-Q16 sentence in cart technical design; the coordinator repaired it and separated tender-view opening guards from the checkout current-request guard.
+- **Gaps** - No changed scenario, anchor or unresolved product choice remains uncovered. No domain impact: these changes do not alter the Store domain suite's composed paths.
+- **Evidence** - The owning ledgers name the future controlled fixtures and actor walks. No implementation, case classification or execution occurred. The coordinator owns committed, quiescent planning gates and acceptance review.
+- **Focused validation** - Case identity/lifecycle comparison against the initial committed tree and diff check pass. Checkout suite validation passes with one partial-case warning. Cart/shared suite validation reports modern shared naming and retained legacy-case placement conflicts; the coordinator owns their resolution before acceptance. This is a structural gate finding, not an unresolved product decision.
+
+Full QA2 evidence is saved at `/tmp/cart-pending-qa2-report.md`.
