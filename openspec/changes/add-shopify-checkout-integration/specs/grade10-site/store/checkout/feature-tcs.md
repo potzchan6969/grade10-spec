@@ -3359,9 +3359,9 @@ scope; this section supersedes its coverage claims for the revised scenarios.
 | --- | --- |
 | `grade10-site-store-checkout-SC-34` (`SC-5x2`) | `grade10-site-store-checkout-US5-TC1-2` |
 | `grade10-site-store-checkout-SC-35` (`SC-cc7`) | `grade10-site-store-checkout-US6-TC3-1`; US4-TC6 retains the additional member-change boundary without claiming the full scenario |
-| `g10.store-checkout.SC66` (`SC-87t`) | `g10.store-checkout.US5-TC15` |
-| `g10.store-checkout.SC67` (`SC-4e3`) | `g10.store-checkout.US5-TC14` |
-| `g10.store-checkout.SC68` (`SC-0mn`) | `g10.store-checkout.US2-TC15` |
+| `grade10-site-store-checkout-SC-66` (`SC-87t`) | `g10.store-checkout.US5-TC15` |
+| `grade10-site-store-checkout-SC-67` (`SC-4e3`) | `g10.store-checkout.US5-TC14` |
+| `grade10-site-store-checkout-SC-68` (`SC-0mn`) | `g10.store-checkout.US2-TC15` |
 
 - **Anchor coverage** - US05 covers one pending Pay, last-operation lifetime, dismissal and current hosted navigation; US06 retains external edits and deliberate later Pay. US02 covers deliberate recovery under data guards; US04 retains stale-member rejection.
 - **Overclaims** - The partial member-change route no longer claims all of SC35. Cart US9-TC3 remains the closed-only reply case; it is not used as complete SC67 coverage because it does not reopen before the answer.

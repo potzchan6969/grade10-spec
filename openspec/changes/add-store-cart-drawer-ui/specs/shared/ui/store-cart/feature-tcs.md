@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/8
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
-## g10.shared-store-cart.US19: Shopper waits before another drawer action
+## shared.ui-store-cart.US19: Shopper waits before another drawer action
 
 **As a** shopper whose drawer is waiting for an answer,
 **I want** the item controls, tender controls and navigation actions to wait together,
@@ -23,7 +23,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.shared-store-cart.US19
+* **Trace:** shared.ui-store-cart.US19
 
 **Pre-conditions:**
 
@@ -38,7 +38,7 @@
 * Points and promo inputs, Apply, Use max, both Remove actions, held-code selection and Checkout are disabled and invoke no callbacks. Accepted figures and draft 120 persist.
 
 <!-- trace:case id=g10.shared-store-cart.TC-ja3 rev=1 covers=g10.shared-store-cart.SC-pxz -->
-### g10.shared-store-cart.US19-TC1: Pending blocks item, tender and navigation controls
+### shared.ui-store-cart.US19-TC1: Pending blocks item, tender and navigation controls
 
 **Classification:**
 
@@ -51,7 +51,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.shared-store-cart.US19
+* **Trace:** shared.ui-store-cart.US19
 
 **Test data:**
 
@@ -87,7 +87,7 @@
 * Disclosures remain closed; links and Checkout start no navigation.
 
 <!-- trace:case id=g10.shared-store-cart.TC-cpt rev=1 covers=g10.shared-store-cart.SC-xrx -->
-### g10.shared-store-cart.US19-TC2: Pending protects editing in an open promo sheet
+### shared.ui-store-cart.US19-TC2: Pending protects editing in an open promo sheet
 
 **Classification:**
 
@@ -100,7 +100,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.shared-store-cart.US19
+* **Trace:** shared.ui-store-cart.US19
 
 **Test data:**
 
@@ -136,7 +136,7 @@
 * Each dismissal route closes the existing sheet.
 
 <!-- trace:case id=g10.shared-store-cart.TC-d72 rev=1 covers=g10.shared-store-cart.SC-mxv -->
-### g10.shared-store-cart.US19-TC3: Pending allows reading, scrolling and drawer dismissal
+### shared.ui-store-cart.US19-TC3: Pending allows reading, scrolling and drawer dismissal
 
 **Classification:**
 
@@ -184,7 +184,7 @@
 * No item, tender or navigation callback runs through dismissal.
 
 <!-- trace:case id=g10.shared-store-cart.TC-wh7 rev=1 covers=g10.shared-store-cart.SC-rb9 -->
-### g10.shared-store-cart.US19-TC4: Pending stops a delayed removal before dispatch
+### shared.ui-store-cart.US19-TC4: Pending stops a delayed removal before dispatch
 
 **Classification:**
 
@@ -197,7 +197,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.shared-store-cart.US19
+* **Trace:** shared.ui-store-cart.US19
 
 **Pre-conditions:**
 
@@ -217,7 +217,7 @@
 * Pending invokes no removal callback and the retained row leaves its removal animation.
 * Clearing pending leaves the item present and invokes no removal callback automatically.
 
-## g10.shared-store-cart.US20: Shopper resumes after the drawer receives an answer
+## shared.ui-store-cart.US20: Shopper resumes after the drawer receives an answer
 
 **As a** shopper whose drawer is no longer waiting,
 **I want** only currently available actions to return without repeating an earlier action,
@@ -237,7 +237,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.shared-store-cart.US20
+* **Trace:** shared.ui-store-cart.US20
 
 **Pre-conditions:**
 
@@ -265,7 +265,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.shared-store-cart.US20
+* **Trace:** shared.ui-store-cart.US20
 
 **Test data:**
 
@@ -298,7 +298,7 @@
 * Explicit false overrides none of the existing disabled reasons.
 * Existing guarded controls remain unavailable and invoke no callbacks.
 <!-- trace:case id=g10.shared-store-cart.TC-wru rev=1 covers=g10.shared-store-cart.SC-fct -->
-### g10.shared-store-cart.US20-TC1: Clearing pending restores only currently permitted actions
+### shared.ui-store-cart.US20-TC1: Clearing pending restores only currently permitted actions
 
 **Classification:**
 
@@ -311,7 +311,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.shared-store-cart.US20
+* **Trace:** shared.ui-store-cart.US20
 
 **Test data:**
 
@@ -363,23 +363,23 @@ This dated scope supersedes earlier pending coverage claims.
 | `shared-ui-store-cart-US18-TC1-1` / `TC-cxw` | Retain issued identity and draft lifecycle; canonical US19 Trace; exact tender-only guard |
 | `shared-ui-store-cart-US18-TC2-1` / `TC-sxg` | Retain issued identity and draft lifecycle; canonical US20 Trace; exact tender-only recovery |
 | `shared-ui-store-cart-US18-TC3-1` / `TC-swe` | Retain compatibility purpose; add all public parts, omitted/false interaction input and legacy tender true rows |
-| `g10.shared-store-cart.US19-TC1` / `TC-ja3` | Retain blind draft; sharpen compound/standalone rows and Enter, Space and input attempts |
-| `g10.shared-store-cart.US19-TC2` / `TC-cpt` | Retain blind draft; sharpen nested/standalone sheet, loyalty link and existing dismissal callback |
-| `g10.shared-store-cart.US19-TC3` / `TC-d72` | Retain blind draft; add sheet-first dismissal, collapsed proposal, focus and blocked edit/opening proposals |
-| `g10.shared-store-cart.US20-TC1` / `TC-wru` | Retain blind draft; attempt actions before clearing to observe no replay |
-| `g10.shared-store-cart.US19-TC4` / `TC-wh7` | New QA2 draft from uncovered delayed-removal THEN, allocated by trace CLI; no QA1 credit |
+| `shared.ui-store-cart.US19-TC1` / `TC-ja3` | Retain blind draft; sharpen compound/standalone rows and Enter, Space and input attempts |
+| `shared.ui-store-cart.US19-TC2` / `TC-cpt` | Retain blind draft; sharpen nested/standalone sheet, loyalty link and existing dismissal callback |
+| `shared.ui-store-cart.US19-TC3` / `TC-d72` | Retain blind draft; add sheet-first dismissal, collapsed proposal, focus and blocked edit/opening proposals |
+| `shared.ui-store-cart.US20-TC1` / `TC-wru` | Retain blind draft; attempt actions before clearing to observe no replay |
+| `shared.ui-store-cart.US19-TC4` / `TC-wh7` | New QA2 draft from uncovered delayed-removal THEN, allocated by trace CLI; no QA1 credit |
 
 | Source in `spec.md` | Complete asserting case |
 | --- | --- |
 | `shared-ui-store-cart-SC-37` (`SC-9yi`) | `shared-ui-store-cart-US18-TC1-1` |
 | `shared-ui-store-cart-SC-38` (`SC-nty`) | `shared-ui-store-cart-US18-TC2-1` |
 | `shared-ui-store-cart-SC-39` (`SC-x24`) | `shared-ui-store-cart-US18-TC3-1` |
-| `g10.shared-store-cart.SC64` (`SC-pxz`) | `g10.shared-store-cart.US19-TC1` |
-| `g10.shared-store-cart.SC65` (`SC-xrx`) | `g10.shared-store-cart.US19-TC2` |
-| `g10.shared-store-cart.SC66` (`SC-mxv`) | `g10.shared-store-cart.US19-TC3` |
-| `g10.shared-store-cart.SC67` (`SC-fct`) | `g10.shared-store-cart.US20-TC1` |
+| `g10.shared-store-cart.SC64` (`SC-pxz`) | `shared.ui-store-cart.US19-TC1` |
+| `g10.shared-store-cart.SC65` (`SC-xrx`) | `shared.ui-store-cart.US19-TC2` |
+| `g10.shared-store-cart.SC66` (`SC-mxv`) | `shared.ui-store-cart.US19-TC3` |
+| `g10.shared-store-cart.SC67` (`SC-fct`) | `shared.ui-store-cart.US20-TC1` |
 | `g10.shared-store-cart.SC68` (`SC-2h3`) | `shared-ui-store-cart-US18-TC3-1` |
-| `g10.shared-store-cart.SC69` (`SC-rb9`) | `g10.shared-store-cart.US19-TC4` |
+| `g10.shared-store-cart.SC69` (`SC-rb9`) | `shared.ui-store-cart.US19-TC4` |
 
 - **Anchor coverage** - US19 covers pending controls, retained values, delayed removal and dismissal; US20 covers recovery and compatibility. Context US04 covers dismissal. Durable order-discount US18 is unchanged.
 - **Overclaims** - The three legacy cases now link SC37, SC38 and SC39 individually; they do not each claim all three. Standalone, dismissal and delayed-removal gaps are closed above.
@@ -393,11 +393,11 @@ This dated scope supersedes earlier pending coverage claims.
 | `shared-ui-store-cart-US18-TC1-1` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
 | `shared-ui-store-cart-US18-TC2-1` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
 | `shared-ui-store-cart-US18-TC3-1` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
-| `g10.shared-store-cart.US19-TC1` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
-| `g10.shared-store-cart.US19-TC2` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
-| `g10.shared-store-cart.US19-TC3` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
-| `g10.shared-store-cart.US20-TC1` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
-| `g10.shared-store-cart.US19-TC4` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
+| `shared.ui-store-cart.US19-TC1` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
+| `shared.ui-store-cart.US19-TC2` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
+| `shared.ui-store-cart.US19-TC3` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
+| `shared.ui-store-cart.US20-TC1` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
+| `shared.ui-store-cart.US19-TC4` | To be walked in Cart Drawer Group 10.1 controlled compound and public-part fixtures, then Group 12.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
 
 
 

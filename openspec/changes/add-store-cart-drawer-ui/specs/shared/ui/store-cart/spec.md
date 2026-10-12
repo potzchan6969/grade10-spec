@@ -64,7 +64,7 @@ when the consumer's operation finishes.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-9yi rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-37 - Pending tender prevents a second action
-**Serves:** g10.shared-store-cart.US19 - Shopper waits before another tender action
+**Serves:** shared.ui-store-cart.US19 - Shopper waits before another tender action
 
 - **GIVEN** supplied action callbacks and an existing accepted summary
 - **WHEN** the consumer sets tenderPending true, including with the promo sheet open
@@ -73,7 +73,7 @@ when the consumer's operation finishes.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-nty rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-38 - Clearing pending restores existing availability
-**Serves:** g10.shared-store-cart.US20 - Shopper continues after the consumer answers
+**Serves:** shared.ui-store-cart.US20 - Shopper continues after the consumer answers
 
 - **GIVEN** the drawer was pending with some action callbacks absent
 - **WHEN** the consumer clears tenderPending
@@ -82,7 +82,7 @@ when the consumer's operation finishes.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-x24 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-39 - Existing consumers keep their behavior
-**Serves:** g10.shared-store-cart.US20 - Shopper uses the existing tender contract
+**Serves:** shared.ui-store-cart.US20 - Shopper uses the existing tender contract
 
 - **WHEN** a consumer omits tenderPending or supplies false
 - **THEN** the existing layout and callback-gated availability remain unchanged
@@ -125,7 +125,7 @@ the shared component SHALL acquire no product data or persistence.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-pxz rev=1 -->
 #### Scenario: g10.shared-store-cart.SC64 - Pending reaches every drawer action
-**Serves:** g10.shared-store-cart.US19 - Shopper waits before editing or leaving for another surface
+**Serves:** shared.ui-store-cart.US19 - Shopper waits before editing or leaving for another surface
 
 - **GIVEN** the compound or its standalone public parts with supplied item, tender, disclosure, checkout and account/loyalty callbacks
 - **WHEN** the consumer sets interactionPending true with accepted cart values visible
@@ -134,7 +134,7 @@ the shared component SHALL acquire no product data or persistence.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-xrx rev=1 -->
 #### Scenario: g10.shared-store-cart.SC65 - An open promo sheet shares pending
-**Serves:** g10.shared-store-cart.US19 - Shopper waits with the code sheet already open
+**Serves:** shared.ui-store-cart.US19 - Shopper waits with the code sheet already open
 
 - **GIVEN** the nested or standalone public promo sheet is open with entered text and held codes
 - **WHEN** the consumer sets interactionPending true and the shopper tries editing, Apply, held-code selection or the loyalty link
@@ -153,7 +153,7 @@ the shared component SHALL acquire no product data or persistence.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-fct rev=1 -->
 #### Scenario: g10.shared-store-cart.SC67 - Clearing pending restores only allowed actions
-**Serves:** g10.shared-store-cart.US20 - Shopper resumes from the current accepted state or failure
+**Serves:** shared.ui-store-cart.US20 - Shopper resumes from the current accepted state or failure
 
 - **GIVEN** interactionPending was true with some callbacks absent or current data guards still withholding actions
 - **WHEN** the consumer clears interactionPending
@@ -162,7 +162,7 @@ the shared component SHALL acquire no product data or persistence.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-2h3 rev=1 -->
 #### Scenario: g10.shared-store-cart.SC68 - Omitted interaction state preserves consumers
-**Serves:** g10.shared-store-cart.US20 - Shopper continues with an existing consumer
+**Serves:** shared.ui-store-cart.US20 - Shopper continues with an existing consumer
 
 - **WHEN** a consumer of the compound or a standalone public part omits interactionPending or supplies false, with tenderPending false or true where supported
 - **THEN** existing layout, loading presentation and callback guards remain unchanged
@@ -170,7 +170,7 @@ the shared component SHALL acquire no product data or persistence.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-rb9 rev=1 -->
 #### Scenario: g10.shared-store-cart.SC69 - Delayed user removal cannot cross pending
-**Serves:** g10.shared-store-cart.US19 - Shopper waits before a removal callback can start
+**Serves:** shared.ui-store-cart.US19 - Shopper waits before a removal callback can start
 
 - **GIVEN** the shopper started a removal animation whose callback has not dispatched
 - **WHEN** interactionPending becomes true before that callback runs

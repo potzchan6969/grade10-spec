@@ -64,15 +64,15 @@ reconciliation).
 
 **Trace ownership** - The earlier active pending-tender journey reused
 `shared-ui-store-cart-US-18`, which durable main already assigns to reading an
-order discount. The pending increment uses its issued `g10.shared-store-cart.US19`
-and `g10.shared-store-cart.US20` anchors. The erroneous active addition is
+order discount. The pending increment uses its issued `shared.ui-store-cart.US19`
+and `shared.ui-store-cart.US20` anchors. The erroneous active addition is
 removed before publication; durable order-discount US18 is untouched. Existing
 pending case identities remain and their formal traces move to these canonical
 pending anchors. Both shared readings restart against the corrected anchor set.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| grade10-site/store/cart-drawer | What does a successful checkout reply do after the collector closes the pending drawer? | Q16; checkout Q35 |
+| grade10-site/store/cart-drawer | What does a successful checkout reply do after the collector closes the pending drawer? | Q16 |
 | shared/ui/store-cart | Which cart does the drawer read? | Q1 |
 
 | grade10-site/store/cart-drawer | What happens to invalid or zero input? | Q7 |

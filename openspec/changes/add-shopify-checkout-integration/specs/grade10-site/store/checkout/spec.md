@@ -488,7 +488,7 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **AND** whether that invoice stays payable is the store's answer, not the drawer's
 
 <!-- trace:scenario id=g10.store-checkout.SC-87t rev=1 -->
-#### Scenario: g10.store-checkout.SC66 - Ending Pay does not release another active operation
+#### Scenario: grade10-site-store-checkout-SC-66 - Ending Pay does not release another active operation
 **Serves:** grade10-site-store-checkout-US-05 - Collector waits until the current drawer can accept another Pay
 
 - **GIVEN** Pay and a current drawer refresh are active
@@ -498,7 +498,7 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **AND** no new Pay starts automatically
 
 <!-- trace:scenario id=g10.store-checkout.SC-4e3 rev=2 -->
-#### Scenario: g10.store-checkout.SC67 - Closing pending Pay preserves a sent request
+#### Scenario: grade10-site-store-checkout-SC-67 - Closing pending Pay preserves a sent request
 **Serves:** grade10-site-store-checkout-US-05 - Collector leaves while the payment request waits
 
 - **GIVEN** a checkout request is active
@@ -508,7 +508,7 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **AND** a later successful hosted-invoice answer opens Shopify if the cart, tender, member and request remain current, whether the drawer stays closed or has reopened
 
 <!-- trace:scenario id=g10.store-checkout.SC-0mn rev=1 -->
-#### Scenario: g10.store-checkout.SC68 - Failed Pay releases only currently permitted actions
+#### Scenario: grade10-site-store-checkout-SC-68 - Failed Pay releases only currently permitted actions
 **Serves:** grade10-site-store-checkout-US-02 - Collector chooses a deliberate next action after failure
 
 - **GIVEN** a checkout request is active and its answer fails or cannot be read

@@ -103,9 +103,9 @@ controls alongside the drawer-wide guard below.
 
 | State | Shows | Anchor | Scenario / Disposition |
 | --- | --- | --- | --- |
-| Pending tender | Existing points/promo inputs, tender actions and Checkout disabled, accepted figures retained | `g10.shared-store-cart.US19` | `shared-ui-store-cart-SC-37` |
-| Resolved tender | Existing callback-gated availability restored | `g10.shared-store-cart.US20` | `shared-ui-store-cart-SC-38` |
-| Pending omitted | Existing appearance and interaction | `g10.shared-store-cart.US20` | `shared-ui-store-cart-SC-39` |
+| Pending tender | Existing points/promo inputs, tender actions and Checkout disabled, accepted figures retained | `shared.ui-store-cart.US19` | `shared-ui-store-cart-SC-37` |
+| Resolved tender | Existing callback-gated availability restored | `shared.ui-store-cart.US20` | `shared-ui-store-cart-SC-38` |
+| Pending omitted | Existing appearance and interaction | `shared.ui-store-cart.US20` | `shared-ui-store-cart-SC-39` |
 
 ### Pending Drawer Operations
 
@@ -126,7 +126,7 @@ sheet-first dismissal; pending adds no overlay or second backdrop.
 | Overlapping operations | Existing pending display until all operations end | `g10.store-cart-drawer.US8` | `g10.store-cart-drawer.SC38`; one completion cannot clear another active operation |
 | Failed operation | Existing error and recovery; current-data guards still apply | `g10.store-cart-drawer.US8` | `g10.store-cart-drawer.SC39`; terminal failure is not active work and sends no automatic retry |
 | Pending dismissal | Close, backdrop and Escape available; drawer content scrolls | `g10.store-cart-drawer.US9` | `g10.store-cart-drawer.SC40`; existing dismissal and scrolling, no cancellation of sent work |
-| Pending shared drawer | Existing item and tender controls and navigation wait | `g10.shared-store-cart.US19` | `g10.shared-store-cart.SC64`, `g10.shared-store-cart.SC69`; pointer/keyboard callbacks and delayed user removal guarded |
-| Pending open promo sheet | Existing values retained; editing waits; sheet dismissal available | `g10.shared-store-cart.US19` | `g10.shared-store-cart.SC65`, `g10.shared-store-cart.SC66`; nested and standalone exported sheet share the guard; dismissal's collapsed-state proposal and close callback remain available |
-| Resolved shared drawer | Existing callback and availability guards return | `g10.shared-store-cart.US20` | `g10.shared-store-cart.SC67`; other guards remain and no user action replays |
-| Pending omitted | Existing consumer appearance and controls | `g10.shared-store-cart.US20` | `g10.shared-store-cart.SC68`; omitted/false input and legacy tenderPending preserve consumers |
+| Pending shared drawer | Existing item and tender controls and navigation wait | `shared.ui-store-cart.US19` | `g10.shared-store-cart.SC64`, `g10.shared-store-cart.SC69`; pointer/keyboard callbacks and delayed user removal guarded |
+| Pending open promo sheet | Existing values retained; editing waits; sheet dismissal available | `shared.ui-store-cart.US19` | `g10.shared-store-cart.SC65`, `g10.shared-store-cart.SC66`; nested and standalone exported sheet share the guard; dismissal's collapsed-state proposal and close callback remain available |
+| Resolved shared drawer | Existing callback and availability guards return | `shared.ui-store-cart.US20` | `g10.shared-store-cart.SC67`; other guards remain and no user action replays |
+| Pending omitted | Existing consumer appearance and controls | `shared.ui-store-cart.US20` | `g10.shared-store-cart.SC68`; omitted/false input and legacy tenderPending preserve consumers |

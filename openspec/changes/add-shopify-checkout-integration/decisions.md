@@ -57,7 +57,7 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-site/store/checkout` | After the collector closes pending Pay, does a still-current successful answer open Shopify or leave the collector on the page? | Q35; cart drawer Q16 |
+| `grade10-site/store/checkout` | After the collector closes pending Pay, does a still-current successful answer open Shopify or leave the collector on the page? | Q35 |
 | `grade10-site/store/checkout` | Retain every durable safety requirement despite branch gaps? | Q20 |
 | `grade10-site/store/checkout` | Introduce a new unpaid badge? | Q21 |
 | `grade10-site/store/checkout` | Does the shop's review of the cart retire an open invoice? | Q23 |

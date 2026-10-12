@@ -22,7 +22,7 @@ suite and the case-writing rules and template.
 | Capability | Pending anchors | Existing roots |
 | --- | --- | --- |
 | `grade10-site/store/cart-drawer` | `g10.store-cart-drawer.US7`, `g10.store-cart-drawer.US8`, `g10.store-cart-drawer.US9`, Pending operations | Drawer entry, Current cart review, Honest cart summary, Member tender context, Cart changes, Continuing onward, Checkout from the drawer |
-| `shared/ui/store-cart` | `g10.shared-store-cart.US19`, `g10.shared-store-cart.US20`, Pending operations | Existing durable feature-set roots retained whole |
+| `shared/ui/store-cart` | `shared.ui-store-cart.US19`, `shared.ui-store-cart.US20`, Pending operations | Existing durable feature-set roots retained whole |
 | `grade10-site/store/checkout` | Existing `grade10-site-store-checkout-US-05` and `grade10-site-store-checkout-US-06`; Safe repetition and recovery | Current basket and tender, Hosted Shopify handoff, Order settlement and return, Carrier rates |
 
 QA1 receives no requirement text, scenarios, technical design, reconciliation,

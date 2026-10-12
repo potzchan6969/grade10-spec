@@ -10,13 +10,13 @@ it.
 
 ## ADDED User journeys
 
-### g10.shared-store-cart.US19: Shopper waits before another drawer action
+### shared.ui-store-cart.US19: Shopper waits before another drawer action
 
 **As a** shopper whose drawer is waiting for an answer,
 **I want** the item controls, tender controls and navigation actions to wait together,
 **so that** no remaining control can start a conflicting action.
 
-### g10.shared-store-cart.US20: Shopper resumes after the drawer receives an answer
+### shared.ui-store-cart.US20: Shopper resumes after the drawer receives an answer
 
 **As a** shopper whose drawer is no longer waiting,
 **I want** only currently available actions to return without repeating an earlier action,
