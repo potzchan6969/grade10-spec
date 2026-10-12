@@ -184,6 +184,10 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - **Other choices** - an admin may ask for the check only above a sale
   price, or not at all; a payout always goes to an account in the
   consignor's name
+- **Every paper follows it** - the receipt, the agreement and a return
+  receipt each ask for the check only where the setting does; a check on
+  file is printed on the certificate either way - decided by the owner,
+  2026-10-12
 
 :::detail{title="Product decisions" for="pm"}
 A collector who wants to sell a card through Grade10 has no way to: the
