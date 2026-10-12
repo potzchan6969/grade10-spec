@@ -35,7 +35,6 @@ export default function RetrievalRequestedEmail({
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
         lines: [...previewItemFooterLines],
-        whyYouGotThis: `You asked for ${itemTitle} back from the vault.`,
       }}
       heading="Retrieval request received"
       itemLine={previewItemLine}

@@ -28,7 +28,6 @@ export default function ItemVaultedEmail({
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
         lines: [...previewItemFooterLines],
-        whyYouGotThis: `${itemTitle} is now in our vault.`,
       }}
       heading="Safely stored"
       lead={`${itemTitle} is now in our vault.`}

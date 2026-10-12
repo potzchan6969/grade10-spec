@@ -40,7 +40,6 @@ export default function RetrievalApprovedEmail({
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
         lines: [...previewItemFooterLines],
-        whyYouGotThis: `We approved your request to take ${itemTitle} out of the vault.`,
       }}
       heading="Your retrieval is approved"
       itemLine={previewItemLine}

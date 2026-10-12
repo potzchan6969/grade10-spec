@@ -30,7 +30,6 @@ export default function RetrievalDeclinedEmail({
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
         lines: [...previewItemFooterLines],
-        whyYouGotThis: `We could not approve your request to take ${itemTitle} out of the vault.`,
       }}
       heading="We could not approve this retrieval"
       itemLine={previewItemLine}
