@@ -686,6 +686,31 @@ test("a Covered at domain line resolves a modern stable domain case heading", ()
   );
 });
 
+test("a Covered at domain line resolves a modern domain heading id", () => {
+  const root = store("// the story: demo-alpha-US1-TC1-1\n", [
+    "- **Covered at domain** — the thing happens, walked by `demo.domain-dmn.US1-TC1`",
+  ]);
+  const domain = join(root, "openspec/specs/demo/domain-tcs.md");
+  mkdirSync(dirname(domain), { recursive: true });
+  writeFileSync(
+    domain,
+    [
+      "# demo Test Cases",
+      "",
+      "## demo.domain-dmn.US1: A path across the domain",
+      "",
+      "### demo.domain-dmn.US1-TC1: The composed path",
+      "",
+      "* **Status:** actual",
+      "* **Trace:** demo-alpha-US-01, demo-beta-US-01",
+    ].join("\n"),
+  );
+  assert.doesNotMatch(
+    run(root).stdout,
+    /covered at domain by `demo\.domain-dmn\.US1-TC1`, which no/,
+  );
+});
+
 // Archived changes copied suites across without their cases before the carry
 // gate refused it. The validator warns on each archived case no live suite
 // holds under its id, `<v>` aside, and the durable suite does not name.

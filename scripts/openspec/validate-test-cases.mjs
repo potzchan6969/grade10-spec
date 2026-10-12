@@ -59,6 +59,7 @@ import {
   LEGACY_TYPES,
   levelOf,
   modernDomainPrefix,
+  modernFeaturePrefix,
   modernProductPrefix,
   PROPERTIES,
   parseSuite,
@@ -242,6 +243,17 @@ function checkSuite(root, filePath, rulesRev, allCases) {
   if (level === "platform") capabilities.add("platform");
   if (level === "product") capabilities.add(modernProductPrefix(root, dir));
   if (level === "domain") capabilities.add(modernDomainPrefix(root, dir));
+  if (level === "feature") capabilities.add(modernFeaturePrefix(root, dir));
+  const specJourneyIds = new Set(spec?.journeys?.keys() ?? []);
+  if (level === "feature" && spec) {
+    for (const id of spec.journeys.keys()) {
+      const match = /(?:US-?)(\d+)$/i.exec(id);
+      if (match)
+        specJourneyIds.add(
+          `${modernFeaturePrefix(root, dir)}.US${Number(match[1])}`,
+        );
+    }
+  }
   const err = (line, msg) => record("error", rel, line, msg);
   const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
@@ -285,9 +297,19 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     }
     for (const walk of parseWalks(text)) {
       for (const ref of walk.refs) {
-        const found = ref.caseId
-          ? (allCases.get(ref.caseId) ?? allCases.get(ref.caseId.toLowerCase()))
-          : walkCases.get(ref.id);
+        const localCase =
+          ref.caseId &&
+          level === "feature" &&
+          ref.caseId
+            .toLowerCase()
+            .startsWith(`${modernFeaturePrefix(root, dir).toLowerCase()}.`)
+            ? walkCases.get(ref.caseId.split(".").at(-1).toLowerCase())
+            : null;
+        const found = localCase
+          ? { ...localCase, level, rel }
+          : ref.caseId
+            ? (allCases.get(ref.caseId) ?? allCases.get(ref.caseId.toLowerCase()))
+            : walkCases.get(ref.id);
         if (!found) {
           err(
             ref.line,
@@ -495,6 +517,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       `${j.capability}-US-${String(j.num).padStart(2, "0")}`,
       `${j.capability}-US-${j.num}`,
       `${j.capability}.US${j.num}`,
+      `${modernFeaturePrefix(root, dir)}.US${j.num}`,
     ];
     if (!j.ungrouped) {
       if (seenJourneys.has(j.num))
@@ -513,7 +536,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       !retired &&
       !spec.unwalked &&
       spec.journeys.size > 0 &&
-      !journeyIds.some((id) => spec.journeys.has(id))
+      !journeyIds.some((id) => specJourneyIds.has(id))
     )
       err(j.line, `journey \`${j.raw}\` is not defined in the spec beside it`);
     // A capability nobody walks carries exactly one section. More than one
@@ -1130,7 +1153,7 @@ const summaries = suites.map((p) =>
       }
       const ids = [
         ...body.matchAll(
-          /`((?:[\w-]+-e2e-US\d+-TC\d+-\d+)|(?:[\w.-]+\.TC-[0-9a-z]+))`/gi,
+          /`((?:[\w-]+-e2e-US\d+-TC\d+-\d+)|(?:[\w.-]+\.TC-[0-9a-z]+)|(?:[\w.-]+\.US-?\d+-TC-?\d+))`/gi,
         ),
       ].map((m) => m[1]);
       if (ids.length === 0) {
