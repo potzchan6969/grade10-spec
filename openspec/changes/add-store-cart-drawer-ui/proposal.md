@@ -15,6 +15,10 @@ baseline.
 Store answers the cart drawer, reviews and edits the member cart, and reaches
 the existing checkout without first leaving that surface.
 
+The reported cart has blank picture boxes for products whose catalogue pictures load on the collection. The approved [thumbnail brief](../../../docs/references/store-cart-thumbnails.md) extends this change to current product pictures.
+
+**Thumbnail metric:** share of reviewed cart lines with a catalogue picture whose matching thumbnail loads in the drawer. The seeded browser regression requires all such lines to load.
+
 ## What Changes
 
 - Expose Cart in the site header on every surface once the Store cart drawer
@@ -24,8 +28,8 @@ the existing checkout without first leaving that surface.
   Store integration.
 - Run the existing live cart review on every open; keep unconfirmed values and
   Checkout unavailable while the read is pending or failed.
-- Map only reviewed line and subtotal facts into the shared drawer, and keep
-  shipping, images, promo redemption, points, tax, and discounts neutral or
+- Map only reviewed line and subtotal facts, including current product pictures, into the shared drawer, and keep
+  shipping, promo redemption, points, tax, and discounts neutral or
   absent where the current integration supplies no answer.
 - For a signed-in collector, read held promo-code eligibility and the basket's
   points ceiling against the reviewed lines. Preserve existing promo editing;
@@ -41,20 +45,7 @@ the existing checkout without first leaving that surface.
 
 ## Non-Goals
 
-- Rebuilding `shared/ui/store-cart` components or changing their layout.
-  This increment only adds the optional pending tender guard.
-- Any backend implementation or contract change: no Worker, API procedure,
-  provider read, database/schema, webhook, or checkout-creation
-  work.
-- Adding or removing promo-code editing, or calculating shipping, tax, or discounts locally.
-  The existing combined basket quote owns tender amounts and totals.
-- Changing Figma annotations, components, or tokens.
-- Adding a dedicated `/cart` route or changing the existing checkout page.
-- A Browse More or catalogue handoff from the drawer (removed with
-  `CartItemSlot` in `cart-drawer-empty-state`).
-- Deciding when Cart appears or what a signed-out Cart press does; those rules
-  belong to durable `grade10-site/site/page-shell` and
-  `require-sign-in-from-nav-cart`.
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 
@@ -67,7 +58,7 @@ the existing checkout without first leaving that surface.
 ### Modified Capabilities
 
 - `shared/ui/store-cart` — optional consumer-owned pending tender state disables
-  existing controls without changing their layout or adding promo editing.
+  existing controls without changing their layout or adding promo editing; specifies the existing optional picture props and fallback rendering.
 
 - `grade10-site/site/page-shell` — carries Cart in the header: absent until
   the Store cart drawer answers, then global on every surface. Scenarios
@@ -89,8 +80,7 @@ the existing checkout without first leaving that surface.
   same submodule bump) so `emptyTitle` and the empty `EmptyState` contract
   exist.
 
-No backend implementation, database, admin, deployment, or new production
-dependency is part of this change.
+The thumbnail extension also touches Shopify variant reads, optional reviewed-line response fields, application joins and fixtures in grade10. Shared picture stories and controlled assets stay in grade10-spec. `CartItemSummary`, `CartItem`, `CartDrawerBody` and `CartDrawer` retain their existing exports and presentation; the Grade10 storefront supplies the enriched props. No database, admin, deployment or new production dependency is required.
 
 No domain impact: the drawer reuses existing product and checkout addresses
 without changing the journeys those destination capabilities own.
@@ -106,6 +96,9 @@ The application owner archives after deployment acceptance.
 
 ## References
 
+- [Cart Drawer · Reviewing the Cart](../../../docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart)
+- [Shared Cart · Product Pictures](../../../docs/prds/products/shared/ui/store-cart.md#product-pictures)
+- [Approved Thumbnail Brief](../../../docs/references/store-cart-thumbnails.md)
 - [Shared Tender Actions](../../../docs/prds/products/shared/ui/store-cart.md#tender-actions)
 - [Cart Promo Code](../../../docs/prds/products/grade10-site/store/cart.md#promo-code)
 - [Cart Points](../../../docs/prds/products/grade10-site/store/cart.md#points)

@@ -22,6 +22,7 @@ back to that page.
 
 ## Reviewing the Cart
 
+- 🚧 **Product pictures** - the cart shows each product's current picture so the collector can recognise what they are buying
 - **Current read** — every line is read against the shop on open; the
   price and the stock are the shop's own —
   [Cart Validation](/p/grade10-site/store/cart-validation)
@@ -130,7 +131,7 @@ considering. Its value is a total they can trust before they go to pay.
 | Signed-out collector | Presses Add to cart on the listing or product page | Meets the sign-in dialog; no guest cart is built. |
 | Collector whose cart moved | Opens Cart before checkout | Sees current facts or a clear unresolved state, never a stale claim. |
 
-**Not in scope.** A dedicated cart page. Product-image enrichment. Shipping
+**Not in scope.** A dedicated cart page. Variant-specific pictures. Shipping
 and tax before the invoice. A second code on one cart.
 
 **Measurement.**
@@ -148,6 +149,7 @@ and tax before the invoice. A second code on one cart.
 | Overlay, not page | Decided | Cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything. | Product |
 | Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store and checkout — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
+| Product pictures | Decided | Use the product's first picture, as the collection card does, from the current cart read. Chosen over variant-specific pictures or pictures held with the cart, which can differ from the catalogue. | Product |
 | One session scope | Decided | The cart is the signed-in member's. A signed-out session holds no lines; there is no guest checkout and no guest cart to merge. | Product |
 | One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
 | Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
