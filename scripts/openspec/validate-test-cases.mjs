@@ -308,7 +308,8 @@ function checkSuite(root, filePath, rulesRev, allCases) {
         const found = localCase
           ? { ...localCase, level, rel }
           : ref.caseId
-            ? (allCases.get(ref.caseId) ?? allCases.get(ref.caseId.toLowerCase()))
+            ? (allCases.get(ref.caseId) ??
+              allCases.get(ref.caseId.toLowerCase()))
             : walkCases.get(ref.id);
         if (!found) {
           err(
