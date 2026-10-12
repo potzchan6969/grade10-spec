@@ -6,22 +6,38 @@
 
 
 
+
 ## Walk 1: Collector places a bid across a price tier
 
 **Starting state:**
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bid-increments.US1-TC1** — Open the bid panel on the listing. → Read the minimum next amount. **Expected:** * The minimum next amount is the row's minimum next amount. * On a positive start it is the starting price, not the starting price plus its increment.
-2. **g10.auction-bid-increments.US1-TC2** — Open the listing bid panel. → Place a bid of `<current public price>` plus `<increment>`. **Expected:** * The new public price is `<minimum next amount>`.
-3. **g10.auction-bid-increments.US1-TC3** — Open the listing bid panel. → Enter `<bid amount>` as the bid amount. → Confirm the bid. **Expected:** * The bid is accepted.
-4. **g10.auction-bid-increments.US1-TC4** — Open the listing bid panel. → Enter `<bid amount>` as the bid amount. → Confirm the bid. **Expected:** * The bid is refused. * The refusal names `<minimum>` as the minimum.
-5. **g10.auction-bid-increments.US1-TC5** — Open the listing. → Read the minimum next amount. **Expected:** * The minimum next amount is shown in `<listing currency>`. **Out of suite:**
-6. **g10.auction-bid-increments.US1-TC6** — Enter the row's bid amount in the custom maximum on the bid panel. → Confirm the bid. → Read the minimum next amount on the bid panel. **Expected:** * Step 2: the bid is accepted. * Step 3: the minimum next amount is the opening price plus the increment at the opening price, the row's next minimum after.
-7. **g10.auction-bid-increments.US1-TC7** — Enter the row's bid amount in the custom maximum on the bid panel. → Confirm the bid. → Read the bid panel. **Expected:** * Step 2: the bid is refused, naming the row's opening price as the minimum. * Step 3: the listing still has no accepted bid.
-8. **g10.auction-bid-increments.US1-TC8** — As customer A, submit a bid of `<ceiling>` on `<listing_1>`. → Read the API response. → As customer B, submit a bid of `<ceiling>` plus the increment at it. → Read the API response. → Read `<listing_1>`'s current bid, leader and bid count. **Expected:** * Step 2: customer A's bid is accepted at `<ceiling>`. * Step 4: customer B's bid is refused, naming the ceiling.
+1. Open the bid panel on the listing.
+2. Read the minimum next amount. `g10.auction-bid-increments.US1-TC1`
+3. Open the listing bid panel.
+4. Place a bid of `<current public price>` plus `<increment>`. `g10.auction-bid-increments.US1-TC2`
+5. Open the listing bid panel.
+6. Enter `<bid amount>` as the bid amount.
+7. Confirm the bid. `g10.auction-bid-increments.US1-TC3`
+8. Open the listing bid panel.
+9. Enter `<bid amount>` as the bid amount.
+10. Confirm the bid. `g10.auction-bid-increments.US1-TC4`
+11. Open the listing.
+12. Read the minimum next amount. `g10.auction-bid-increments.US1-TC5`
+13. Enter the row's bid amount in the custom maximum on the bid panel.
+14. Confirm the bid.
+15. Read the minimum next amount on the bid panel. `g10.auction-bid-increments.US1-TC6`
+16. Enter the row's bid amount in the custom maximum on the bid panel.
+17. Confirm the bid.
+18. Read the bid panel. `g10.auction-bid-increments.US1-TC7`
+19. As customer A, submit a bid of `<ceiling>` on `<listing_1>`.
+20. Read the API response.
+21. As customer B, submit a bid of `<ceiling>` plus the increment at it.
+22. Read the API response.
+23. Read `<listing_1>`'s current bid, leader and bid count. `g10.auction-bid-increments.US1-TC8`
 
 ## Walk 2: Collector bids up to the currency ceiling
 
@@ -29,12 +45,25 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bid-increments.US2-TC1** — Open the listing bid panel. → Enter `<bid amount>` as the bid amount. → Confirm the bid. **Expected:** * The bid is accepted.
-2. **g10.auction-bid-increments.US2-TC2** — Read the listing's price, leader, bid count and maximums. → Submit the row's bid amount through the authenticated auction API. → Read the API response. → Read the listing's price, leader, bid count and maximums. → Read the operational refusal entry for this attempt. **Expected:** * Step 3: the service refuses with `AMOUNT_TOO_HIGH`. * Step 3: `ceilingMinor` equals the row's ceiling.
-3. **g10.auction-bid-increments.US2-TC3** — As the collector, submit `<maximum>` through the authenticated auction API. → Read the response and the collector's maximums on the listing. **Expected:** * The maximum is refused and the refusal names `<ceiling>` as the ceiling. * No maximum is recorded for the collector.
-4. **g10.auction-bid-increments.US2-TC4** — Read the listing's bid count and maximums. → As customer B, submit the amount through the authenticated auction API. → Read the API response. → Read the listing's price, leader, bid count and maximums. → Read the operational refusal entry for this attempt. **Expected:** * Step 3: the service refuses with `AMOUNT_TOO_HIGH`. * Step 3: `ceilingMinor` equals the row's ceiling.
+1. Open the listing bid panel.
+2. Enter `<bid amount>` as the bid amount.
+3. Confirm the bid. `g10.auction-bid-increments.US2-TC1`
+4. Read the listing's price, leader, bid count and maximums.
+5. Submit the row's bid amount through the authenticated auction API.
+6. Read the API response.
+7. Read the listing's price, leader, bid count and maximums.
+8. Read the operational refusal entry for this attempt. `g10.auction-bid-increments.US2-TC2`
+9. As the collector, submit `<maximum>` through the authenticated auction API.
+10. Read the response and the collector's maximums on the listing. `g10.auction-bid-increments.US2-TC3`
+11. Read the listing's bid count and maximums.
+12. As customer B, submit the amount through the authenticated auction API.
+13. Read the API response.
+14. Read the listing's price, leader, bid count and maximums.
+15. Read the operational refusal entry for this attempt. `g10.auction-bid-increments.US2-TC4`
+
+## Walk 1: Collector places a bid across a price tier
 
 ## g10.auction-bid-increments.US1: Collector places a bid across a price tier
 

@@ -7,15 +7,16 @@
 
 
 
+
 ## Walk 1: Collector browses Auction listings
 
 **Starting state:**
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US1-TC2** — Read the API response for `<listing_11>`. **Expected:** * It carries the scheduled close, the recorded close, the extension duration and the extension cap. * It carries no extension window.
+1. Read the API response for `<listing_11>`. `g10.auction-auction.US1-TC2`
 
 ## Walk 2: Collector places a bid inside the window
 
@@ -23,16 +24,30 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US2-TC5** — Submit `<bid amount>` on `<listing_25>`. → Read the API response. → Read the linked card's activity at the card provider. **Expected:** * Step 2 accepts the bid in the one answer, by the listing's bid rules, with no wait on the card provider. * Step 3 shows nothing held or charged on the card for `<listing_25>`.
-2. **g10.auction-auction.US2-TC10** — Submit a valid bid at `<first bid time>`. → Read the recorded close. → Submit a valid bid at `<second bid time>`. → Read the recorded close. **Expected:** * The recorded close reads `<first bid time>` plus `<extension duration>` = `<close after first>`. * The recorded close reads `<second bid time>` plus `<extension duration>` = `<close after second>`.
-3. **g10.auction-auction.US2-TC11** — Submit a valid bid. → Read the recorded close. → Wait until the recorded close passes. **Expected:** * The bid is accepted. * The recorded close reads `<scheduled close>` plus `<extension cap>`.
-4. **g10.auction-auction.US2-TC12** — Wait for `<scheduled close>`. → Read the recorded close. **Expected:** * The listing is in extended bidding. * The recorded close reads `<scheduled close>` plus `<short duration>` = `<result>`.
-5. **g10.auction-auction.US2-TC13** — Wait for the scheduled close. → Read the listing's state and recorded close. **Expected:** * The listing is closed at its scheduled close. * It never entered extended bidding.
-6. **g10.auction-auction.US2-TC14** — Wait for `<scheduled close>`. → Read the listing's state and recorded close. → When the row has `<extended close>`, wait until `<extended close>` with no bid. → Read the listing's state. **Expected:** * The listing reads `<result>`.
-7. **g10.auction-auction.US2-TC6** — Submit a valid bid at `<bid time>`. → Read the recorded close. **Expected:** * The bid is accepted. * The recorded close reads as the row states.
-8. **g10.auction-auction.US2-TC7** — Submit a valid bid on `<listing_8>` at 20:10 UTC. → Read both recorded closes. **Expected:** * `<listing_8>` reads 20:40 UTC. * `<listing_9>` still reads 20:30 UTC.
+1. Submit `<bid amount>` on `<listing_25>`.
+2. Read the API response.
+3. Read the linked card's activity at the card provider. `g10.auction-auction.US2-TC5`
+4. Submit a valid bid at `<first bid time>`.
+5. Read the recorded close.
+6. Submit a valid bid at `<second bid time>`.
+7. Read the recorded close. `g10.auction-auction.US2-TC10`
+8. Submit a valid bid.
+9. Read the recorded close.
+10. Wait until the recorded close passes. `g10.auction-auction.US2-TC11`
+11. Wait for `<scheduled close>`.
+12. Read the recorded close. `g10.auction-auction.US2-TC12`
+13. Wait for the scheduled close.
+14. Read the listing's state and recorded close. `g10.auction-auction.US2-TC13`
+15. Wait for `<scheduled close>`.
+16. Read the listing's state and recorded close.
+17. When the row has `<extended close>`, wait until `<extended close>` with no bid.
+18. Read the listing's state. `g10.auction-auction.US2-TC14`
+19. Submit a valid bid at `<bid time>`.
+20. Read the recorded close. `g10.auction-auction.US2-TC6`
+21. Submit a valid bid on `<listing_8>` at 20:10 UTC.
+22. Read both recorded closes. `g10.auction-auction.US2-TC7`
 
 ## Walk 3: Collector places a bid inside the window
 
@@ -40,13 +55,22 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US2-TC8** — Submit a bid at the minimum next bid. → Read Time left. **Expected:** * The bid is accepted. * The close moves to `<extension duration>` after that bid.
-2. **g10.auction-auction.US2-TC9** — Submit a bid at the minimum next bid. → Read the listing's bids and recorded close. **Expected:** * Grade10 refuses the bid. * No accepted bid is added and the recorded close is unchanged.
-3. **g10.auction-auction.US2-TC15** — Enter the row's `<opening price>` in the custom maximum on the bid panel. → Place the bid. → Read Highest bid, the bid count and Recent Bids. → Read the minimum next bid. **Expected:** * The bid is accepted. * Highest bid reads `<opening price>`, never 0.
-4. **g10.auction-auction.US2-TC16** — Submit a bid of the row's `<bid amount>` on `<listing_22>`. → Read the API response. → Read `<listing_22>`'s bids and bid count. **Expected:** * Grade10 refuses the bid, naming `<opening price>` as the minimum. * No accepted bid is recorded, and the bid count stays 0.
-5. **g10.auction-auction.US2-TC19** — Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_26>` at the same moment. → Read both API responses. → Read `<listing_26>` from the public listing API. **Expected:** * Each response is one answer: accepted with a standing, or refused. * customer B leads, and Highest bid reads `<bid A>` plus `<increment>`.
+1. Submit a bid at the minimum next bid.
+2. Read Time left. `g10.auction-auction.US2-TC8`
+3. Submit a bid at the minimum next bid.
+4. Read the listing's bids and recorded close. `g10.auction-auction.US2-TC9`
+5. Enter the row's `<opening price>` in the custom maximum on the bid panel.
+6. Place the bid.
+7. Read Highest bid, the bid count and Recent Bids.
+8. Read the minimum next bid. `g10.auction-auction.US2-TC15`
+9. Submit a bid of the row's `<bid amount>` on `<listing_22>`.
+10. Read the API response.
+11. Read `<listing_22>`'s bids and bid count. `g10.auction-auction.US2-TC16`
+12. Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_26>` at the same moment.
+13. Read both API responses.
+14. Read `<listing_26>` from the public listing API. `g10.auction-auction.US2-TC19`
 
 ## Walk 4: Collector meets the identity bar on a high-value bid
 
@@ -54,11 +78,19 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US4-TC1** — Enter `<bid at the bar>` in the bid field and select **Place Bid**. → Read Highest bid and the bid count. → Read `<card>`'s activity at the card provider. **Expected:** * The bid is forwarded and accepted as any other - no refusal names a verified identity. * Highest bid reads `<bid at the bar>`, and the bid count rises by one.
-2. **g10.auction-auction.US4-TC2** — Enter the bid amount the row names in the bid field and select **Place Bid**. → Read the refusal on the bid form. → Reload `<listing_12>` and read Highest bid and the bid count. → Navigate to `<my auctions url>` and look for `<listing_12>`. → Navigate to `<grade10 bids url>` and look for `<listing_12>`. **Expected:** * The bid is refused as needing a verified identity, and the refusal says where to verify from the account. * Highest bid and the bid count are unchanged - the auction records no bid.
-3. **g10.auction-auction.US4-TC3** — Enter the bid amount the row names in the bid field and select **Place Bid**. → Read Highest bid. → Read the calls the run made to the identity store. **Expected:** * The bid is forwarded and accepted as any other, and Highest bid reads the bid amount the row names. * No standing was read.
+1. Enter `<bid at the bar>` in the bid field and select **Place Bid**.
+2. Read Highest bid and the bid count.
+3. Read `<card>`'s activity at the card provider. `g10.auction-auction.US4-TC1`
+4. Enter the bid amount the row names in the bid field and select **Place Bid**.
+5. Read the refusal on the bid form.
+6. Reload `<listing_12>` and read Highest bid and the bid count.
+7. Navigate to `<my auctions url>` and look for `<listing_12>`.
+8. Navigate to `<grade10 bids url>` and look for `<listing_12>`. `g10.auction-auction.US4-TC2`
+9. Enter the bid amount the row names in the bid field and select **Place Bid**.
+10. Read Highest bid.
+11. Read the calls the run made to the identity store. `g10.auction-auction.US4-TC3`
 
 ## Walk 5: Collector reads the catalogue in one order
 
@@ -66,16 +98,23 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US5-TC1** — Navigate to <grade10 auction catalogue url>. → Read the lots in listed order. **Expected:** * `<listing_14>` is listed before `<listing_15>`. * `<listing_15>` is listed before `<listing_16>`.
-2. **g10.auction-auction.US5-TC2** — Navigate to <grade10 auction catalogue url>. → Read the lots in listed order. **Expected:** * `<listing_17>` is listed before `<listing_18>`. * `<listing_19>` is listed before `<listing_20>`.
-3. **g10.auction-auction.US5-TC3** — Read the API response for the Auction catalogue. → Read the API response for the Auction catalogue again. **Expected:** * `<listing_23>` and `<listing_24>` are in the same order both times.
-4. **g10.auction-auction.US5-TC4** — Read the API response one page at a time to the end. → Read the API response for the whole catalogue. **Expected:** * Both readings list the lots in the same order. * No lot is listed twice.
-5. **g10.auction-auction.US5-TC5** — Navigate to `<grade10 auction catalogue url>`. → Read the page sections. **Expected:** * No Featured band is present. * All auctions is shown with lots in the catalogue resting order.
-6. **g10.auction-auction.US5-TC6** — Read the catalogue page for category chrome. **Expected:** * There is no Categories heading, no category tiles, and no busy filter chrome. * The only sections are Featured when set, then All auctions.
-7. **g10.auction-auction.US5-TC7** — Navigate to `<grade10 auction catalogue url>`. → Read the Featured band and the All auctions area. **Expected:** * Featured still shows the curated slide or slides. * All auctions shows a message that there are no auctions.
-8. **g10.auction-auction.US5-TC8** — Read the Featured band for `<featured lot>`. → Read All auctions for `<featured lot>` and the list order. **Expected:** * `<featured lot>` appears in Featured and again in All auctions. * All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible lot.
+1. Navigate to <grade10 auction catalogue url>.
+2. Read the lots in listed order. `g10.auction-auction.US5-TC1`
+3. Navigate to <grade10 auction catalogue url>.
+4. Read the lots in listed order. `g10.auction-auction.US5-TC2`
+5. Read the API response for the Auction catalogue.
+6. Read the API response for the Auction catalogue again. `g10.auction-auction.US5-TC3`
+7. Read the API response one page at a time to the end.
+8. Read the API response for the whole catalogue. `g10.auction-auction.US5-TC4`
+9. Navigate to `<grade10 auction catalogue url>`.
+10. Read the page sections. `g10.auction-auction.US5-TC5`
+11. Read the catalogue page for category chrome. `g10.auction-auction.US5-TC6`
+12. Navigate to `<grade10 auction catalogue url>`.
+13. Read the Featured band and the All auctions area. `g10.auction-auction.US5-TC7`
+14. Read the Featured band for `<featured lot>`.
+15. Read All auctions for `<featured lot>` and the list order. `g10.auction-auction.US5-TC8`
 
 ## Walk 6: Collector reads the catalogue in one order
 
@@ -83,11 +122,15 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US5-TC9** — Navigate to `<grade10 auction catalogue url>`. → Read the document canonical and share address. **Expected:** * Canonical and share address are `/auction` with no category query.
-2. **g10.auction-auction.US5-TC10** — Read the first batch of All auctions cards. → Scroll near the end of the shown lots. → Wait for the next batch. **Expected:** * Step 2 shows Boneyard skeleton cards below the lots already shown, or the next batch lands without pagination controls. * Step 3 shows additional lots below the first batch.
-3. **g10.auction-auction.US5-TC11** — Find `<upcoming lot>` on All auctions. → Read its card for money and countdown. **Expected:** * The card shows no starting bid and no money amount. * The card shows Opens in from the served open.
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the document canonical and share address. `g10.auction-auction.US5-TC9`
+3. Read the first batch of All auctions cards.
+4. Scroll near the end of the shown lots.
+5. Wait for the next batch. `g10.auction-auction.US5-TC10`
+6. Find `<upcoming lot>` on All auctions.
+7. Read its card for money and countdown. `g10.auction-auction.US5-TC11`
 
 ## Walk 7: Collector reads Featured on the catalogue
 
@@ -95,13 +138,19 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US6-TC1** — Navigate to `<grade10 auction catalogue url>`. → Read the Featured band and the single slide. **Expected:** * Featured band is present with one slide. * The slide shows `<front page image>` as banner and slab, the lot title, LIVE BIDDING with a live status dot, relative Ends in, the current bid, and Bid Now.
-2. **g10.auction-auction.US6-TC2** — Read the current bid on the Featured slide after first paint. → Let the served current bid for `<featured lot>` become `<bid after>`. → Read the current bid on the Featured slide. **Expected:** * Step 1 shows `<bid before>`. * Step 3 shows `<bid after>` with a rolling number as the amount increases.
-3. **g10.auction-auction.US6-TC3** — Navigate to `<grade10 auction catalogue url>`. → Read the countdown and status chrome on the Featured slide. **Expected:** * The countdown matches the row (Ends in or Opens in). * Upcoming shows UPCOMING with no live status dot and View Auction, and shows no starting bid or money amount.
-4. **g10.auction-auction.US6-TC4** — Navigate to `<grade10 auction catalogue url>`. → Read the Featured slides from first to last. **Expected:** * Featured shows three slides in order `<lot A>`, then `<lot B>`, then `<lot C>`.
-5. **g10.auction-auction.US6-TC5** — Navigate to `<grade10 auction catalogue url>`. → Read whether a Featured band is present. **Expected:** * No Featured band is shown. * All auctions is the catalogue content below the page chrome.
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the Featured band and the single slide. `g10.auction-auction.US6-TC1`
+3. Read the current bid on the Featured slide after first paint.
+4. Let the served current bid for `<featured lot>` become `<bid after>`.
+5. Read the current bid on the Featured slide. `g10.auction-auction.US6-TC2`
+6. Navigate to `<grade10 auction catalogue url>`.
+7. Read the countdown and status chrome on the Featured slide. `g10.auction-auction.US6-TC3`
+8. Navigate to `<grade10 auction catalogue url>`.
+9. Read the Featured slides from first to last. `g10.auction-auction.US6-TC4`
+10. Navigate to `<grade10 auction catalogue url>`.
+11. Read whether a Featured band is present. `g10.auction-auction.US6-TC5`
 
 ## Walk 8: Collector advances Featured slides
 
@@ -109,12 +158,19 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US7-TC1** — Read the visible Featured lot. → Activate the progress control to advance to the next slide. → Read the visible Featured lot. **Expected:** * Step 1 shows `<lot A>`. * Step 3 shows `<lot B>`.
-2. **g10.auction-auction.US7-TC4** — Read the visible Featured lot. → Activate stage next on the Featured image. → Read the visible Featured lot. **Expected:** * Step 1 shows `<lot A>`. * Step 3 shows `<lot B>`.
-3. **g10.auction-auction.US7-TC2** — Read the visible Featured lot. → Advance with the progress control until each remaining slide has been shown. → Read each visible Featured lot after each advance. **Expected:** * The visible lots are `<lot A>`, then `<lot B>`, then `<lot C>` without leaving the Featured band.
-4. **g10.auction-auction.US7-TC3** — Navigate to `<grade10 auction catalogue url>`. → Read the Featured progress control. **Expected:** * The single slide is shown. * There is no multi-dot advance among slides.
+1. Read the visible Featured lot.
+2. Activate the progress control to advance to the next slide.
+3. Read the visible Featured lot. `g10.auction-auction.US7-TC1`
+4. Read the visible Featured lot.
+5. Activate stage next on the Featured image.
+6. Read the visible Featured lot. `g10.auction-auction.US7-TC4`
+7. Read the visible Featured lot.
+8. Advance with the progress control until each remaining slide has been shown.
+9. Read each visible Featured lot after each advance. `g10.auction-auction.US7-TC2`
+10. Navigate to `<grade10 auction catalogue url>`.
+11. Read the Featured progress control. `g10.auction-auction.US7-TC3`
 
 ## Walk 9: Collector opens a Featured lot
 
@@ -122,11 +178,14 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US8-TC1** — Activate Bid Now on the Featured slide. → Read the page that opens. **Expected:** * The browser opens `<lot page url>` — the details page for `<featured lot>`.
-2. **g10.auction-auction.US8-TC3** — Activate View Auction on the Featured slide. → Read the page that opens. **Expected:** * The browser opens `<lot page url>` — the details page for `<upcoming lot>`.
-3. **g10.auction-auction.US8-TC2** — Activate Bid Now on the visible Featured slide. → Read the page that opens. **Expected:** * The browser opens `<lot B page url>` — the details page for `<lot B>`, not `<lot A>`. ---
+1. Activate Bid Now on the Featured slide.
+2. Read the page that opens. `g10.auction-auction.US8-TC1`
+3. Activate View Auction on the Featured slide.
+4. Read the page that opens. `g10.auction-auction.US8-TC3`
+5. Activate Bid Now on the visible Featured slide.
+6. Read the page that opens. `g10.auction-auction.US8-TC2`
 
 ## Walk 10: Collector watches from an All auctions card
 
@@ -134,11 +193,16 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US9-TC1** — Activate watch on the All auctions card for `<open lot>`. → Read the card's watch state. → Open My Auctions and read whether `<open lot>` is watched. **Expected:** * The card shows the watched state. * `<open lot>` is watched the same way as from the lot page and My Auctions.
-2. **g10.auction-auction.US9-TC2** — Activate watch off on the All auctions card for `<open lot>`. → Read the card's watch state. → Open My Auctions and read whether `<open lot>` remains watched. **Expected:** * The card shows the unwatched state. * `<open lot>` is no longer watched, same as unwatching from the lot page or My Auctions.
-3. **g10.auction-auction.US9-TC3** — Find the All auctions card for `<closed lot>`. → Read whether a watch control is present on that card. **Expected:** * The closed lot card shows no watch control. ---
+1. Activate watch on the All auctions card for `<open lot>`.
+2. Read the card's watch state.
+3. Open My Auctions and read whether `<open lot>` is watched. `g10.auction-auction.US9-TC1`
+4. Activate watch off on the All auctions card for `<open lot>`.
+5. Read the card's watch state.
+6. Open My Auctions and read whether `<open lot>` remains watched. `g10.auction-auction.US9-TC2`
+7. Find the All auctions card for `<closed lot>`.
+8. Read whether a watch control is present on that card. `g10.auction-auction.US9-TC3`
 
 ## Walk 11: Bidder is held to the close with everyone else
 
@@ -146,15 +210,26 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US11-TC4** — As customer A, place `<bid amount>` at `<bid time>`. → Read the API response for `<listing_4>`. **Expected:** * The bid is accepted when placed, with no wait for a payment. * customer A leads and Highest bid reads `<bid amount>`.
-2. **g10.auction-auction.US11-TC5** — As customer A, place `<bid amount>` at `<bid time>`. → Read the API response for `<listing_5>`. → Let settling resume. → Read the lot's result. **Expected:** * Step 1 is refused. * At step 2 no accepted bid is added, the recorded close does not move, and `<listing_5>` is still not recorded closed.
-3. **g10.auction-auction.US11-TC6** — Wait for the scheduled close. → Read the API response for `<listing_6>`. **Expected:** * `<listing_6>` never entered extended bidding. * It is closed at 20:00:00 UTC, with its one bidder winning.
-4. **g10.auction-auction.US11-TC7** — Wait for the recorded close. → Read the API response for `<listing_7>`. **Expected:** * Step 2 reads `<listing_7>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`.
-5. **g10.auction-auction.US11-TC8** — Wait for `<listing_8>`'s recorded close. → Let `<who reaches it>` reach `<listing_8>`. → Read the API response for `<listing_8>`. **Expected:** * `<listing_8>` is recorded closed `<recorded by>`, with customer A winning. * Before then, `<listing_8>` takes no bid and reports no result.
-6. **g10.auction-auction.US11-TC9** — Wait until 10 seconds past `<close>`. → Read the API response for `<listing_11>`. **Expected:** * `<listing_11>` reads `<result>`, recorded within seconds of `<close>`. * The close is recorded before the next sweep, well inside `<sweep interval>`.
-7. **g10.auction-auction.US11-TC10** — Read `<listing_12>` from the public listing API. → Read the auction service's time from its public time read. → One second later, read the public time again. **Expected:** * Step 1 gives scheduled close 20:00:00 UTC and recorded close 20:25:00 UTC. * Step 1 gives extension duration 1800s and extension cap 3600s.
+1. As customer A, place `<bid amount>` at `<bid time>`.
+2. Read the API response for `<listing_4>`. `g10.auction-auction.US11-TC4`
+3. As customer A, place `<bid amount>` at `<bid time>`.
+4. Read the API response for `<listing_5>`.
+5. Let settling resume.
+6. Read the lot's result. `g10.auction-auction.US11-TC5`
+7. Wait for the scheduled close.
+8. Read the API response for `<listing_6>`. `g10.auction-auction.US11-TC6`
+9. Wait for the recorded close.
+10. Read the API response for `<listing_7>`. `g10.auction-auction.US11-TC7`
+11. Wait for `<listing_8>`'s recorded close.
+12. Let `<who reaches it>` reach `<listing_8>`.
+13. Read the API response for `<listing_8>`. `g10.auction-auction.US11-TC8`
+14. Wait until 10 seconds past `<close>`.
+15. Read the API response for `<listing_11>`. `g10.auction-auction.US11-TC9`
+16. Read `<listing_12>` from the public listing API.
+17. Read the auction service's time from its public time read.
+18. One second later, read the public time again. `g10.auction-auction.US11-TC10`
 
 ## Walk 12: Bidder keeps a lot open only by moving its price
 
@@ -162,10 +237,14 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US12-TC1** — As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid. → Read Highest bid, the leader and Time left. **Expected:** * Highest bid reads `<user B maximum>`. * customer A still leads, as the earlier maximum.
-2. **g10.auction-auction.US12-TC2** — Select **Raise**, enter `<raised maximum>` and confirm. → Read Your maximum, Highest bid and Time left. → Wait until `<close before raise>` with no further bid. → Read the lot's result. **Expected:** * Your maximum reads `<raised maximum>`. * Highest bid stays `<leader price>`.
+1. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+2. Read Highest bid, the leader and Time left. `g10.auction-auction.US12-TC1`
+3. Select **Raise**, enter `<raised maximum>` and confirm.
+4. Read Your maximum, Highest bid and Time left.
+5. Wait until `<close before raise>` with no further bid.
+6. Read the lot's result. `g10.auction-auction.US12-TC2`
 
 ## Walk 13: Runner-up takes the lead when the leader's account is erased
 
@@ -173,11 +252,17 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US13-TC1** — Read `<listing_27>` from the public listing API. → Erase customer A's account through the account-erasure procedure. → Read `<listing_27>` from the public listing API. → As customer B, read their own standing on `<listing_27>`. **Expected:** * Step 1 reads Highest bid `<price before>`, led by customer A. * Step 3 reads Highest bid `<price after>`, the next maximum left plus one increment, capped at the new leader's maximum.
-2. **g10.auction-auction.US13-TC2** — Erase customer A's account through the account-erasure procedure. → Read `<listing_28>` from the public listing API. **Expected:** * `<listing_28>` has no leader and no current bid. * The next bid must reach 20000 minor units (HKD 200.00), the opening price.
-3. **g10.auction-auction.US13-TC3** — Read `<listing_32>` from the public listing API, noting its scheduled close. → Erase the row's erased customer's account through the account-erasure procedure. → Read `<listing_32>` from the public listing API. **Expected:** * Step 1 reads Highest bid `<price before>`. * Step 3 reads Highest bid `<price after>`, led by the row's leader after.
+1. Read `<listing_27>` from the public listing API.
+2. Erase customer A's account through the account-erasure procedure.
+3. Read `<listing_27>` from the public listing API.
+4. As customer B, read their own standing on `<listing_27>`. `g10.auction-auction.US13-TC1`
+5. Erase customer A's account through the account-erasure procedure.
+6. Read `<listing_28>` from the public listing API. `g10.auction-auction.US13-TC2`
+7. Read `<listing_32>` from the public listing API, noting its scheduled close.
+8. Erase the row's erased customer's account through the account-erasure procedure.
+9. Read `<listing_32>` from the public listing API. `g10.auction-auction.US13-TC3`
 
 ## Walk 14: Bidder reads why a bid was refused, and nothing else moves
 
@@ -185,12 +270,32 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auction.US14-TC1** — Enter the row's amount entered in the custom maximum on the bid panel. → Place the bid. → Read the bid form. → Reload the lot page and read Highest bid, the bid count, Recent Bids and the bid panel's standing. → Navigate to `<my auctions url>` and look for `<listing_29>`. → Navigate to `<grade10 bids url>` and look for `<listing_29>`. **Expected:** * Step 3 shows the row's words on the bid form. * Step 4 reads Highest bid `<current bid>`, bid count `<bid count>`, and Recent Bids as before, with no row for the customer.
-2. **g10.auction-auction.US14-TC2** — As customer B, enter `<below minimum>` in the custom maximum and place the bid. → As customer A, read Highest bid, Recent Bids and the bid panel's standing, without reloading. → As customer A, navigate to `<my auctions url>` and read `<listing_30>`'s row. → As customer A, read their mailbox for a letter about `<listing_30>` sent after step 1. **Expected:** * Step 1 is refused on customer B's bid form. * Step 2 reads Highest bid `<current bid>`, Recent Bids unchanged, and customer A still Leading.
-3. **g10.auction-auction.US14-TC3** — Enter the row's bid in the custom maximum on the bid panel. → Place the bid. → Wait until the bid form settles. → Read the bid form. → Reload the lot page and read the bid panel's standing. → Navigate to `<my auctions url>` and look for `<listing_31>`. **Expected:** * Step 4 reads the row's words on the bid form, never both placed and refused. * Step 5 reads the row's standing after.
-4. **g10.auction-auction.US14-TC4** — Place the bid. → Wait for the mocked refusal answer. → Read the bid form and custom maximum field. → Read the number of bid attempts sent. → Reload the listing and read its public bids and standing. → Read My Auctions and Bidding History for `<listing_29>`. **Expected:** * Step 3: no maximum-bid or generic refusal message appears. * Step 3: no server message or toast appears.
+1. Enter the row's amount entered in the custom maximum on the bid panel.
+2. Place the bid.
+3. Read the bid form.
+4. Reload the lot page and read Highest bid, the bid count, Recent Bids and the bid panel's standing.
+5. Navigate to `<my auctions url>` and look for `<listing_29>`.
+6. Navigate to `<grade10 bids url>` and look for `<listing_29>`. `g10.auction-auction.US14-TC1`
+7. As customer B, enter `<below minimum>` in the custom maximum and place the bid.
+8. As customer A, read Highest bid, Recent Bids and the bid panel's standing, without reloading.
+9. As customer A, navigate to `<my auctions url>` and read `<listing_30>`'s row.
+10. As customer A, read their mailbox for a letter about `<listing_30>` sent after step 1. `g10.auction-auction.US14-TC2`
+11. Enter the row's bid in the custom maximum on the bid panel.
+12. Place the bid.
+13. Wait until the bid form settles.
+14. Read the bid form.
+15. Reload the lot page and read the bid panel's standing.
+16. Navigate to `<my auctions url>` and look for `<listing_31>`. `g10.auction-auction.US14-TC3`
+17. Place the bid.
+18. Wait for the mocked refusal answer.
+19. Read the bid form and custom maximum field.
+20. Read the number of bid attempts sent.
+21. Reload the listing and read its public bids and standing.
+22. Read My Auctions and Bidding History for `<listing_29>`. `g10.auction-auction.US14-TC4`
+
+## Walk 1: Collector browses Auction listings
 
 ## g10.auction-auction.US1: Collector browses Auction listings
 

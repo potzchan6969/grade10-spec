@@ -5,22 +5,39 @@
 
 
 
+
 ## Walk 1: Collector commits a maximum on an open listing
 
 **Starting state:**
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auto-bidding.US1-TC1** — Navigate to `<an open listing url>` priced in the row's currency. → Enter the row's maximum. → Confirm the commitment. **Expected:** * Grade10 accepts the commitment. * The current bid is the row's starting price.
-2. **g10.auction-auto-bidding.US1-TC2** — Navigate to `<an open listing url>` priced in the row's currency. → Enter the row's attempted maximum. → Confirm the commitment. → Check the current bid and the leader. **Expected:** * Grade10 refuses the commitment. * The current bid and the leader are unchanged.
-3. **g10.auction-auto-bidding.US1-TC3** — Enter the row's raised maximum. → Confirm the raise. → Check who leads and the current bid. **Expected:** * Grade10 accepts the raise. * Customer still leads.
-4. **g10.auction-auto-bidding.US1-TC4** — Enter the row's attempted maximum. → Confirm the commitment. → Check the committed maximum. **Expected:** * Grade10 refuses it. * Customer's committed maximum remains the row's committed maximum.
-5. **g10.auction-auto-bidding.US1-TC5** — Enter the row's maximum in the custom maximum on the bid panel. → Confirm the commitment. → Read the current bid, the leader, the bid count and Recent Bids. **Expected:** * Grade10 accepts the commitment. * The current bid is 0 plus the currency's lowest increment, the row's current bid after, not 0.
-6. **g10.auction-auto-bidding.US1-TC6** — As customer B, submit the row's attempted maximum on the listing. → Read the API response. → Read the listing's current bid, leader and committed maxima. **Expected:** * Grade10 refuses the commitment, naming the row's minimum next bid. * No maximum is recorded for customer B.
-7. **g10.auction-auto-bidding.US1-TC7** — Wait until the scheduled close passes with no further commitment. → Read the listing's state, winner and winning bid. **Expected:** * The listing is closed. * Customer A wins.
-8. **g10.auction-auto-bidding.US1-TC8** — As customer B, enter the row's `<user B maximum>` in the custom maximum on the bid panel. → Confirm the commitment. → Read the current bid, the leader and Recent Bids. **Expected:** * Step 2 is the row's outcome. * Step 3 reads the row's current bid and leader, and `<user A maximum>` appears nowhere.
+1. Navigate to `<an open listing url>` priced in the row's currency.
+2. Enter the row's maximum.
+3. Confirm the commitment. `g10.auction-auto-bidding.US1-TC1`
+4. Navigate to `<an open listing url>` priced in the row's currency.
+5. Enter the row's attempted maximum.
+6. Confirm the commitment.
+7. Check the current bid and the leader. `g10.auction-auto-bidding.US1-TC2`
+8. Enter the row's raised maximum.
+9. Confirm the raise.
+10. Check who leads and the current bid. `g10.auction-auto-bidding.US1-TC3`
+11. Enter the row's attempted maximum.
+12. Confirm the commitment.
+13. Check the committed maximum. `g10.auction-auto-bidding.US1-TC4`
+14. Enter the row's maximum in the custom maximum on the bid panel.
+15. Confirm the commitment.
+16. Read the current bid, the leader, the bid count and Recent Bids. `g10.auction-auto-bidding.US1-TC5`
+17. As customer B, submit the row's attempted maximum on the listing.
+18. Read the API response.
+19. Read the listing's current bid, leader and committed maxima. `g10.auction-auto-bidding.US1-TC6`
+20. Wait until the scheduled close passes with no further commitment.
+21. Read the listing's state, winner and winning bid. `g10.auction-auto-bidding.US1-TC7`
+22. As customer B, enter the row's `<user B maximum>` in the custom maximum on the bid panel.
+23. Confirm the commitment.
+24. Read the current bid, the leader and Recent Bids. `g10.auction-auto-bidding.US1-TC8`
 
 ## Walk 2: Collector reads their own maximum and standing
 
@@ -28,12 +45,15 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auto-bidding.US2-TC1** — Open the listing. **Expected:** * Customer sees their own maximum, the row's committed maximum. * Customer sees the current bid, the row's value, as a separate fact.
-2. **g10.auction-auto-bidding.US2-TC2** — Open the listing. **Expected:** * Customer sees that they do not lead. * Customer's own committed maximum is unchanged.
-3. **g10.auction-auto-bidding.US2-TC3** — Sign in as customer B. → Open the listing's public facts. **Expected:** * The facts carry the current bid, the row's value. * The facts do not carry, and do not allow deriving, customer A's maximum, the row's value.
-4. **g10.auction-auto-bidding.US2-TC4** — Commit a maximum of 60000 minor units as customer C. → Read customer C's standing. → Read the listing's public bid history. **Expected:** * Grade10 accepts customer C's commitment. * Customer C is reported as not leading.
+1. Open the listing. `g10.auction-auto-bidding.US2-TC1`
+2. Open the listing. `g10.auction-auto-bidding.US2-TC2`
+3. Sign in as customer B.
+4. Open the listing's public facts. `g10.auction-auto-bidding.US2-TC3`
+5. Commit a maximum of 60000 minor units as customer C.
+6. Read customer C's standing.
+7. Read the listing's public bid history. `g10.auction-auto-bidding.US2-TC4`
 
 ## Walk 3: Collector competes through two maxima
 
@@ -41,14 +61,21 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auto-bidding.US3-TC1** — Commit `<customer B maximum>` as customer B. → Read the listing's current bid and leader. **Expected:** * The current bid matches the row's resolved current bid. * The leader matches the row's resolved leader.
-2. **g10.auction-auto-bidding.US3-TC2** — Raise customer B's maximum to 30000 minor units. → Read the listing's leader and current bid. **Expected:** * Customer A still leads. * The current bid is 31000 minor units.
-3. **g10.auction-auto-bidding.US3-TC3** — Raise customer A's maximum to 30000 minor units. → Read the listing's leader and current bid. **Expected:** * Customer B still leads. * The current bid is 31000 minor units.
-4. **g10.auction-auto-bidding.US3-TC4** — Raise customer A's maximum to 60000 minor units. → Read the listing's leader and current bid. **Expected:** * Customer A leads. * The current bid is 51000 minor units.
-5. **g10.auction-auto-bidding.US3-TC5** — Commit a maximum of 810000 minor units as customer B. → Read the listing's leader and current bid. **Expected:** * Customer B leads. * The current bid is 810000 minor units, not higher.
-6. **g10.auction-auto-bidding.US3-TC6** — Commit a maximum of 60000 minor units as customer C. → Read the listing's leader and current bid. → Read the public bid history's ordering and timestamps. **Expected:** * Customer B remains the leader. * The current bid is 60000 minor units.
+1. Commit `<customer B maximum>` as customer B.
+2. Read the listing's current bid and leader. `g10.auction-auto-bidding.US3-TC1`
+3. Raise customer B's maximum to 30000 minor units.
+4. Read the listing's leader and current bid. `g10.auction-auto-bidding.US3-TC2`
+5. Raise customer A's maximum to 30000 minor units.
+6. Read the listing's leader and current bid. `g10.auction-auto-bidding.US3-TC3`
+7. Raise customer A's maximum to 60000 minor units.
+8. Read the listing's leader and current bid. `g10.auction-auto-bidding.US3-TC4`
+9. Commit a maximum of 810000 minor units as customer B.
+10. Read the listing's leader and current bid. `g10.auction-auto-bidding.US3-TC5`
+11. Commit a maximum of 60000 minor units as customer C.
+12. Read the listing's leader and current bid.
+13. Read the public bid history's ordering and timestamps. `g10.auction-auto-bidding.US3-TC6`
 
 ## Walk 4: Operator traces every committed maximum
 
@@ -56,9 +83,9 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auto-bidding.US4-TC1** — Open that listing's bid history. **Expected:** * Each commitment shows its bidder, its maximum, and its Accepted At. ---
+1. Open that listing's bid history. `g10.auction-auto-bidding.US4-TC1`
 
 ## Walk 5: Collector's auto-bid counts as a bid
 
@@ -66,13 +93,24 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-auto-bidding.US5-TC5** — Read the listing's bid count. → Read the listing's bid history. **Expected:** * The bid count includes that bid. * The history shows it as placed on that bidder's behalf, not as a manual bid.
-2. **g10.auction-auto-bidding.US5-TC6** — Let time pass with no further commitment accepted. → Read the current bid and whether Grade10 placed any further bid. **Expected:** * Grade10 places no further bid on either bidder's behalf. * The current bid is unchanged.
-3. **g10.auction-auto-bidding.US5-TC7** — As customer B, commit `<user B maximum>` on `<listing_3>`. → Read the API response and `<listing_3>`'s bids. → As customer A, raise the maximum to `<user A raise>`. → Read the API response. → Read both customers' card activity at the card provider. **Expected:** * Step 2: customer A leads at `<user B maximum>` plus `<increment>`, and that bid is recorded as placed on customer A's behalf. * Step 4 accepts the raise on the auction's rules alone, with no wait on the card provider, and Your maximum reads `<user A raise>`.
-4. **g10.auction-auto-bidding.US5-TC8** — As customer B, commit a maximum of `<user B maximum>` at `<bid time>`. → Read the current bid and Time left. → Wait until the new close passes with no further commitment. **Expected:** * Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`. * No further bid is placed on either maximum before the close.
-5. **g10.auction-auto-bidding.US5-TC9** — Wait for 20:00 UTC. → Read the listing's state and recorded close. **Expected:** * The listing is in extended bidding. * The recorded close reads 20:30 UTC.
+1. Read the listing's bid count.
+2. Read the listing's bid history. `g10.auction-auto-bidding.US5-TC5`
+3. Let time pass with no further commitment accepted.
+4. Read the current bid and whether Grade10 placed any further bid. `g10.auction-auto-bidding.US5-TC6`
+5. As customer B, commit `<user B maximum>` on `<listing_3>`.
+6. Read the API response and `<listing_3>`'s bids.
+7. As customer A, raise the maximum to `<user A raise>`.
+8. Read the API response.
+9. Read both customers' card activity at the card provider. `g10.auction-auto-bidding.US5-TC7`
+10. As customer B, commit a maximum of `<user B maximum>` at `<bid time>`.
+11. Read the current bid and Time left.
+12. Wait until the new close passes with no further commitment. `g10.auction-auto-bidding.US5-TC8`
+13. Wait for 20:00 UTC.
+14. Read the listing's state and recorded close. `g10.auction-auto-bidding.US5-TC9`
+
+## Walk 1: Collector commits a maximum on an open listing
 
 ## g10.auction-auto-bidding.US1: Collector commits a maximum on an open listing
 

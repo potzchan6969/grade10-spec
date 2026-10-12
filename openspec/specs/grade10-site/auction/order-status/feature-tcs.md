@@ -6,22 +6,27 @@
 
 
 
+
 ## Walk 1: Expired invoice keeps Pending Payment without winner card pay
 
 **Starting state:**
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US1-TC1** — Read derived order status. **Expected:** * Order status is Payment Overdue.
-2. **g10.auction-order-status.US1-TC2** — Submit a winner card payment for the invoice. **Expected:** * Payment is refused. * Invoice remains `expired`.
-3. **g10.auction-order-status.US1-TC3** — Operator records a manual settlement with method and proof. **Expected:** * Invoice becomes `paid`. * Order derives as Processing.
-4. **g10.auction-order-status.US1-TC13** — Read the order's invoice status. → Read the stored status of <invoice_1>. **Expected:** * The order's invoice status is <invoice_2>'s, `pending`. * <invoice_1> holds no status and is not `cancelled`.
-5. **g10.auction-order-status.US1-TC14** — Reissue <invoice_1> as <invoice_2>. → Read the order's current invoice and status. **Expected:** * The reissue is refused; no <invoice_2> exists. * <invoice_1> is still current and `payment_verifying`.
-6. **g10.auction-order-status.US1-TC15** — Record a winner proof upload. **Expected:** * The write is refused; the status stays `expired`.
-7. **g10.auction-order-status.US1-TC16** — Complete a card payment of 323225 minor units in HKD for the invoice. → Read the invoice status, the payment and the derived order status. **Expected:** * The invoice status is `paid`. * The payment is recorded and flagged Paid late.
-8. **g10.auction-order-status.US1-TC17** — Report a completed card payment for the order total against the invoice, as the payment provider would. → Read the invoice status, the payment and the derived order status. **Expected:** * The payment is recorded and flagged Unexpected status, and counts toward nothing. * The invoice status is still `payment_verifying`.
+1. Read derived order status. `g10.auction-order-status.US1-TC1`
+2. Submit a winner card payment for the invoice. `g10.auction-order-status.US1-TC2`
+3. Operator records a manual settlement with method and proof. `g10.auction-order-status.US1-TC3`
+4. Read the order's invoice status.
+5. Read the stored status of <invoice_1>. `g10.auction-order-status.US1-TC13`
+6. Reissue <invoice_1> as <invoice_2>.
+7. Read the order's current invoice and status. `g10.auction-order-status.US1-TC14`
+8. Record a winner proof upload. `g10.auction-order-status.US1-TC15`
+9. Complete a card payment of 323225 minor units in HKD for the invoice.
+10. Read the invoice status, the payment and the derived order status. `g10.auction-order-status.US1-TC16`
+11. Report a completed card payment for the order total against the invoice, as the payment provider would.
+12. Read the invoice status, the payment and the derived order status. `g10.auction-order-status.US1-TC17`
 
 ## Walk 2: Expired invoice keeps Pending Payment without winner card pay
 
@@ -29,15 +34,24 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US1-TC18** — Complete that card payment. → Read the invoice status, the payment and the derived order status. **Expected:** * The payment is recorded and flagged Paid after cancel, and counts toward nothing. * The invoice status is still `cancelled`.
-2. **g10.auction-order-status.US1-TC19** — As the winner, try to start a card payment for the invoice. → Read the invoice status and the derived order status. **Expected:** * No card payment starts, and no card is charged. * The invoice status is unchanged.
-3. **g10.auction-order-status.US1-TC20** — Record a winner proof upload against the invoice. → Read the invoice status. **Expected:** * The upload is refused. * The invoice status is still `<status>`.
-4. **g10.auction-order-status.US1-TC21** — Let the lot close, and read the new auction order's invoice and fulfilment statuses. → Send its invoice with a payment deadline of 2026-09-19T09:00:00Z, then let that deadline pass with no payment. → Read both statuses again. **Expected:** * Step 1 reads `not_issued` and `unfulfilled`. * Step 3 reads `expired` and `unfulfilled`.
-5. **g10.auction-order-status.US1-TC22** — Reissue the invoice with a fresh deadline and a reason. → Read the invoice status and the payment deadline. **Expected:** * The invoice status is `pending`. * The payment deadline is the one the reissue set.
-6. **g10.auction-order-status.US1-TC23** — Attempt the row's write. → Read the invoice status. **Expected:** * The write is refused. * The invoice status is still the row's starting status.
-7. **g10.auction-order-status.US1-TC24** — Record a winner proof upload, and read the invoice status. → As the operator, <check> the proof. → Read the invoice status and the derived order status. **Expected:** * Step 1 reads `payment_verifying`. * Step 3 reads <invoice status> and <order status>.
+1. Complete that card payment.
+2. Read the invoice status, the payment and the derived order status. `g10.auction-order-status.US1-TC18`
+3. As the winner, try to start a card payment for the invoice.
+4. Read the invoice status and the derived order status. `g10.auction-order-status.US1-TC19`
+5. Record a winner proof upload against the invoice.
+6. Read the invoice status. `g10.auction-order-status.US1-TC20`
+7. Let the lot close, and read the new auction order's invoice and fulfilment statuses.
+8. Send its invoice with a payment deadline of 2026-09-19T09:00:00Z, then let that deadline pass with no payment.
+9. Read both statuses again. `g10.auction-order-status.US1-TC21`
+10. Reissue the invoice with a fresh deadline and a reason.
+11. Read the invoice status and the payment deadline. `g10.auction-order-status.US1-TC22`
+12. Attempt the row's write.
+13. Read the invoice status. `g10.auction-order-status.US1-TC23`
+14. Record a winner proof upload, and read the invoice status.
+15. As the operator, <check> the proof.
+16. Read the invoice status and the derived order status. `g10.auction-order-status.US1-TC24`
 
 ## Walk 3: Refund is terminal after partial collection
 
@@ -45,10 +59,10 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US2-TC1** — Read the derived order status. **Expected:** * The status is Refunded. * It does not return to Partially Paid or Processing.
-2. **g10.auction-order-status.US2-TC2** — Read the derived order status. **Expected:** * The order keeps its status from before the overpayment return. * The status is not Refunded.
+1. Read the derived order status. `g10.auction-order-status.US2-TC1`
+2. Read the derived order status. `g10.auction-order-status.US2-TC2`
 
 ## Walk 4: Payment deadline past reads Payment Overdue
 
@@ -56,9 +70,9 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US3-TC1** — Read the derived order status. **Expected:** * The status is Payment Overdue. * Winner card Pay is unavailable.
+1. Read the derived order status. `g10.auction-order-status.US3-TC1`
 
 ## Walk 5: Setup deadline past reads Setup Overdue
 
@@ -66,9 +80,9 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US4-TC1** — Read the derived order status. **Expected:** * The status is Setup Overdue. * Winner address confirmation is unavailable.
+1. Read the derived order status. `g10.auction-order-status.US4-TC1`
 
 ## Walk 6: Winner misses the address deadline
 
@@ -76,12 +90,14 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US5-TC4** — Read the derived order status. → Read the invoice status. **Expected:** * The order status is Awaiting Setup. * The invoice status is `not_issued`.
-2. **g10.auction-order-status.US5-TC5** — Read the derived order status. **Expected:** * The order status is Preparing Invoice. * The invoice status is still `not_issued`.
-3. **g10.auction-order-status.US5-TC6** — Read the derived order status. **Expected:** * The order status is the one the row names. * A closed window without an address derives Setup Overdue.
-4. **g10.auction-order-status.US5-TC7** — Submit a delivery address confirmation as the winner. → Read the order's stored delivery address and status. **Expected:** * The write is refused. * The order holds no confirmed delivery address.
+1. Read the derived order status.
+2. Read the invoice status. `g10.auction-order-status.US5-TC4`
+3. Read the derived order status. `g10.auction-order-status.US5-TC5`
+4. Read the derived order status. `g10.auction-order-status.US5-TC6`
+5. Submit a delivery address confirmation as the winner.
+6. Read the order's stored delivery address and status. `g10.auction-order-status.US5-TC7`
 
 ## Walk 7: Operator resolves a missed address deadline
 
@@ -89,12 +105,17 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US6-TC8** — Attempt to dispatch `<preparing-invoice order>`. → Read the derived order status. **Expected:** * The dispatch is refused. * No tracking facts are recorded.
-2. **g10.auction-order-status.US6-TC9** — Attempt to send the invoice. → Read the invoice status. **Expected:** * The send is refused. * The invoice status is still `not_issued`.
-3. **g10.auction-order-status.US6-TC10** — Read the derived order status. → Submit a delivery address confirmation as the winner. → Read the derived order status again. **Expected:** * Step 1 reads Awaiting Setup, derived from the reopened window. * The write is accepted.
-4. **g10.auction-order-status.US6-TC12** — As an operator holding payment-processing, record a delivery address on the order. → Read the order's conditions and derived status. **Expected:** * The write is accepted. * `address_confirmed` is true and `address_window_open` is still false.
+1. Attempt to dispatch `<preparing-invoice order>`.
+2. Read the derived order status. `g10.auction-order-status.US6-TC8`
+3. Attempt to send the invoice.
+4. Read the invoice status. `g10.auction-order-status.US6-TC9`
+5. Read the derived order status.
+6. Submit a delivery address confirmation as the winner.
+7. Read the derived order status again. `g10.auction-order-status.US6-TC10`
+8. As an operator holding payment-processing, record a delivery address on the order.
+9. Read the order's conditions and derived status. `g10.auction-order-status.US6-TC12`
 
 ## Walk 8: Partially Paid status ends self-service Pay for good
 
@@ -102,11 +123,11 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US7-TC3** — Read the derived order status. **Expected:** * The derived status is Partially Paid. * The remaining balance is not used to derive a different status.
-2. **g10.auction-order-status.US7-TC4** — Attempt winner card Pay, invoice reissue and operator cancellation. **Expected:** * Winner Pay, reissue and cancellation are refused. * The order remains Partially Paid.
-3. **g10.auction-order-status.US7-TC5** — Read the derived order status. **Expected:** * The derived status is Pending Payment. * The derived status is not Partially Paid.
+1. Read the derived order status. `g10.auction-order-status.US7-TC3`
+2. Attempt winner card Pay, invoice reissue and operator cancellation. `g10.auction-order-status.US7-TC4`
+3. Read the derived order status. `g10.auction-order-status.US7-TC5`
 
 ## Walk 9: Expired invoice keeps Pending Payment without winner card pay
 
@@ -114,9 +135,11 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-order-status.US8-TC7** — Follow the case's numbered steps.
+1. Follow the case's numbered steps. `g10.auction-order-status.US8-TC7`
+
+## Walk 1: Expired invoice keeps Pending Payment without winner card pay
 
 ## g10.auction-order-status.US1: Expired invoice keeps Pending Payment without winner card pay
 

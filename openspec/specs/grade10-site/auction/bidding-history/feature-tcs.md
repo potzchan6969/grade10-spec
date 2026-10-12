@@ -5,22 +5,39 @@
 
 
 
+
 ## Walk 1: Collector reads their bidding index
 
 **Starting state:**
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US1-TC1** — Navigate to <grade10 bids url>. → Check that listing in the bidding index. **Expected:** * That listing appears once at the position of its latest activity. * Its summary shows the collector's current standing.
-2. **g10.auction-bidding-history.US1-TC2** — Type <refused bid> into the custom maximum on the bid panel. → Confirm the bid. → Navigate to <grade10 bids url>. → Select **Active**. → Select **Completed**. **Expected:** * Step 2: the bid form names the minimum, <opening price>. * Step 4 lists <listing_a>.
-3. **g10.auction-bidding-history.US1-TC3** — Navigate to <grade10 bids url>. → Select **Active**. → Select **Completed**. **Expected:** * Step 2 shows only the open listing. * Step 3 shows the closed and canceled listings.
-4. **g10.auction-bidding-history.US1-TC4** — Navigate to <grade10 bids url>. → Follow every returned cursor. **Expected:** * Every active listing appears exactly once in latest-activity order.
-5. **g10.auction-bidding-history.US1-TC5** — Navigate to <grade10 bids url>. → Check the bidding index. **Expected:** * The bidding index is empty. * The page shows this Grade10 account's index.
-6. **g10.auction-bidding-history.US1-TC6** — Navigate to <grade10 bids url>. → Select the row's filter. → Find <listing>. **Expected:** * <listing> shows once, with the row's standing. * It shows its current or final price.
-7. **g10.auction-bidding-history.US1-TC7** — Type <refused bid> into the custom maximum on the bid panel. → Confirm the bid. → Navigate to <grade10 bids url>. → Read the **Active** list. → Expand <listing_c>. **Expected:** * Step 2: the bid form names the minimum, <next minimum>. * <listing_c> reads Outbid, priced at <current bid>.
-8. **g10.auction-bidding-history.US1-TC8** — As customer A, navigate to <grade10 bids url> and select **Completed**. → As customer B, navigate to <grade10 bids url> and select **Active**, then **Completed**. **Expected:** * Step 1 lists <listing_g> with standing Canceled. * Step 2 lists customer B's accepted listings.
+1. Navigate to <grade10 bids url>.
+2. Check that listing in the bidding index. `g10.auction-bidding-history.US1-TC1`
+3. Type <refused bid> into the custom maximum on the bid panel.
+4. Confirm the bid.
+5. Navigate to <grade10 bids url>.
+6. Select **Active**.
+7. Select **Completed**. `g10.auction-bidding-history.US1-TC2`
+8. Navigate to <grade10 bids url>.
+9. Select **Active**.
+10. Select **Completed**. `g10.auction-bidding-history.US1-TC3`
+11. Navigate to <grade10 bids url>.
+12. Follow every returned cursor. `g10.auction-bidding-history.US1-TC4`
+13. Navigate to <grade10 bids url>.
+14. Check the bidding index. `g10.auction-bidding-history.US1-TC5`
+15. Navigate to <grade10 bids url>.
+16. Select the row's filter.
+17. Find <listing>. `g10.auction-bidding-history.US1-TC6`
+18. Type <refused bid> into the custom maximum on the bid panel.
+19. Confirm the bid.
+20. Navigate to <grade10 bids url>.
+21. Read the **Active** list.
+22. Expand <listing_c>. `g10.auction-bidding-history.US1-TC7`
+23. As customer A, navigate to <grade10 bids url> and select **Completed**.
+24. As customer B, navigate to <grade10 bids url> and select **Active**, then **Completed**. `g10.auction-bidding-history.US1-TC8`
 
 ## Walk 2: Collector audits every maximum Grade10 accepted
 
@@ -28,13 +45,30 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US2-TC1** — Enter <maximum> in the custom maximum on the bid panel and place the bid. → Navigate to <grade10 bids url>. → Expand <listing_h>. **Expected:** * Step 3 shows one event, a maximum set at <maximum>, for the signed-in account.
-2. **g10.auction-bidding-history.US2-TC2** — Type <refused raise> into the custom maximum on the bid panel. → Confirm the bid. → Navigate to <grade10 bids url>. → Expand <listing_e>. → Return to <listing_e url> and read the bid count. **Expected:** * Step 2: the bid form keeps <customer A maximum> as the maximum on file. * Step 4 shows the noted entries.
-3. **g10.auction-bidding-history.US2-TC3** — Note the bidding index on <grade10 bids url>. → Open <listing_malformed url>. → Type <malformed maximum> into the custom maximum on the bid panel. → Read the custom maximum. → Return to <grade10 bids url>. **Expected:** * The custom maximum shows <malformed maximum> is not accepted. * No bid is submitted.
-4. **g10.auction-bidding-history.US2-TC4** — As customer A, enter <first maximum> in the custom maximum and place the bid. → Enter <raised maximum> in the custom maximum and place the bid. → Navigate to <grade10 bids url> and expand <listing_private_max>. → As customer B, navigate to <grade10 bids url> and expand <listing_private_max> if it is listed. → Signed out, open <listing_private_max url> and read public recent bids. **Expected:** * Step 3 records <first maximum> and then <raised maximum>. * Customer B's bidding index lists customer B's accepted listings.
-5. **g10.auction-bidding-history.US2-TC5** — As customer B, enter <customer B maximum> in the custom maximum and place the bid. → As customer A, navigate to <grade10 bids url>. → Expand <listing_engine>. → Signed out, open <listing_engine url> and read the new public price. **Expected:** * Step 3 labels customer A's answering movement as automatic. * Step 4 shows the listing pseudonym on the new public price.
+1. Enter <maximum> in the custom maximum on the bid panel and place the bid.
+2. Navigate to <grade10 bids url>.
+3. Expand <listing_h>. `g10.auction-bidding-history.US2-TC1`
+4. Type <refused raise> into the custom maximum on the bid panel.
+5. Confirm the bid.
+6. Navigate to <grade10 bids url>.
+7. Expand <listing_e>.
+8. Return to <listing_e url> and read the bid count. `g10.auction-bidding-history.US2-TC2`
+9. Note the bidding index on <grade10 bids url>.
+10. Open <listing_malformed url>.
+11. Type <malformed maximum> into the custom maximum on the bid panel.
+12. Read the custom maximum.
+13. Return to <grade10 bids url>. `g10.auction-bidding-history.US2-TC3`
+14. As customer A, enter <first maximum> in the custom maximum and place the bid.
+15. Enter <raised maximum> in the custom maximum and place the bid.
+16. Navigate to <grade10 bids url> and expand <listing_private_max>.
+17. As customer B, navigate to <grade10 bids url> and expand <listing_private_max> if it is listed.
+18. Signed out, open <listing_private_max url> and read public recent bids. `g10.auction-bidding-history.US2-TC4`
+19. As customer B, enter <customer B maximum> in the custom maximum and place the bid.
+20. As customer A, navigate to <grade10 bids url>.
+21. Expand <listing_engine>.
+22. Signed out, open <listing_engine url> and read the new public price. `g10.auction-bidding-history.US2-TC5`
 
 ## Walk 3: Collector reads one listing's combined history
 
@@ -42,13 +76,24 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US3-TC1** — As customer B, enter <customer B maximum> in the custom maximum and place the bid. → As customer A, navigate to <grade10 bids url>. → Expand <listing_outbid>. **Expected:** * Customer B appears under the listing pseudonym. * That step shows customer A outbid at the public price.
-2. **g10.auction-bidding-history.US3-TC2** — As customer B, enter <customer B maximum> in the custom maximum and place the bid. → As customer A, navigate to <grade10 bids url>. → Expand <listing_auto>. **Expected:** * Customer B's action comes first when they share a time. * Customer A's following movement is marked automatic.
-3. **g10.auction-bidding-history.US3-TC4** — Navigate to <grade10 bids url>. → Expand that listing's combined history. → Follow every returned cursor. **Expected:** * Every retained event visible to that collector appears exactly once in stable order.
-4. **g10.auction-bidding-history.US3-TC5** — Navigate to <grade10 bids url>. → Expand <listing_f>. → Follow every cursor at a page size of 1. → Read the same history as one page of 50. **Expected:** * Step 3 returns every record of <split decision> on one page. * Step 4 reads those records in the same order.
-5. **g10.auction-bidding-history.US3-TC6** — Enter <customer B maximum> in the custom maximum on the bid panel and place the bid. → Read the listing's public recent bids. → Navigate to <grade10 bids url> and expand <listing_boundary>. **Expected:** * Step 2 matches the row's public history, under listing pseudonyms. * The leader matches the row.
+1. As customer B, enter <customer B maximum> in the custom maximum and place the bid.
+2. As customer A, navigate to <grade10 bids url>.
+3. Expand <listing_outbid>. `g10.auction-bidding-history.US3-TC1`
+4. As customer B, enter <customer B maximum> in the custom maximum and place the bid.
+5. As customer A, navigate to <grade10 bids url>.
+6. Expand <listing_auto>. `g10.auction-bidding-history.US3-TC2`
+7. Navigate to <grade10 bids url>.
+8. Expand that listing's combined history.
+9. Follow every returned cursor. `g10.auction-bidding-history.US3-TC4`
+10. Navigate to <grade10 bids url>.
+11. Expand <listing_f>.
+12. Follow every cursor at a page size of 1.
+13. Read the same history as one page of 50. `g10.auction-bidding-history.US3-TC5`
+14. Enter <customer B maximum> in the custom maximum on the bid panel and place the bid.
+15. Read the listing's public recent bids.
+16. Navigate to <grade10 bids url> and expand <listing_boundary>. `g10.auction-bidding-history.US3-TC6`
 
 ## Walk 4: Collector's bidding history stays on their storefront account
 
@@ -56,12 +101,17 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US4-TC1** — Navigate to <grade10 bids url> as account A. → Check the bidding index and combined histories. **Expected:** * Auction returns only A's Grade10 activity and the public movements that belong in its combined histories.
-2. **g10.auction-bidding-history.US4-TC2** — Sign in to ZZZ as that account. → Read its bidding history. **Expected:** * The ZZZ history lists that storefront's activity.
-3. **g10.auction-bidding-history.US4-TC3** — Read the API response for an account bidding index with no storefront session. → Read the API response for a public listing. **Expected:** * Grade10 refuses the account index read. * The public listing read shows public price movements and listing pseudonyms.
-4. **g10.auction-bidding-history.US4-TC4** — Navigate to <grade10 bids url>. → Read and page the index and that listing's combined history. → Check that listing's bid, maximum, listing standing and auction close. **Expected:** * The noted bid, maximum, listing standing and auction close match the note. ---
+1. Navigate to <grade10 bids url> as account A.
+2. Check the bidding index and combined histories. `g10.auction-bidding-history.US4-TC1`
+3. Sign in to ZZZ as that account.
+4. Read its bidding history. `g10.auction-bidding-history.US4-TC2`
+5. Read the API response for an account bidding index with no storefront session.
+6. Read the API response for a public listing. `g10.auction-bidding-history.US4-TC3`
+7. Navigate to <grade10 bids url>.
+8. Read and page the index and that listing's combined history.
+9. Check that listing's bid, maximum, listing standing and auction close. `g10.auction-bidding-history.US4-TC4`
 
 ## Walk 5: Collector opens their bids at /bids
 
@@ -69,16 +119,26 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US5-TC1** — Navigate to <grade10 bids url>. → Check the page and the site chrome. → Switch to **Completed**. **Expected:** * The page shows the Active summaries inside the existing site chrome. * Switching to **Completed** stays in that same page.
-2. **g10.auction-bidding-history.US5-TC2** — Navigate to <grade10 bids url>. → Expand that summary. **Expected:** * The combined history identifies the public movement that outbid **You**. * The page offers a route to the still-open listing.
-3. **g10.auction-bidding-history.US5-TC3** — Navigate to <grade10 bids url>. → Complete the existing sign-in flow. **Expected:** * The Grade10 site starts its existing sign-in flow. * Successful sign-in returns the collector to `/bids`.
-4. **g10.auction-bidding-history.US5-TC4** — Navigate to <grade10 bids url>. → Select that filter. → Wait until the filter finishes loading. **Expected:** * The page shows the empty state for the selected filter. * That empty state is the list's message.
-5. **g10.auction-bidding-history.US5-TC5** — Navigate to <grade10 bids url>. → Check the page during the delay. **Expected:** * The page shows a labeled bidding-history loading state inside the site chrome. * That loading state is the list's message.
-6. **g10.auction-bidding-history.US5-TC6** — Navigate to <grade10 bids url>. → Check the page. **Expected:** * The page shows a retryable bidding-history error. * That error is the list's message.
-7. **g10.auction-bidding-history.US5-TC7** — Expand that summary. → Check the summary and the history area during the delay. **Expected:** * That summary stays visible with a labeled history-loading state. * The history area shows that loading state.
-8. **g10.auction-bidding-history.US5-TC8** — Activate the next-page control. → Activate it again while the next page is still loading. **Expected:** * The entries already shown remain visible while the next page loads. * The next-page control takes one request for that page.
+1. Navigate to <grade10 bids url>.
+2. Check the page and the site chrome.
+3. Switch to **Completed**. `g10.auction-bidding-history.US5-TC1`
+4. Navigate to <grade10 bids url>.
+5. Expand that summary. `g10.auction-bidding-history.US5-TC2`
+6. Navigate to <grade10 bids url>.
+7. Complete the existing sign-in flow. `g10.auction-bidding-history.US5-TC3`
+8. Navigate to <grade10 bids url>.
+9. Select that filter.
+10. Wait until the filter finishes loading. `g10.auction-bidding-history.US5-TC4`
+11. Navigate to <grade10 bids url>.
+12. Check the page during the delay. `g10.auction-bidding-history.US5-TC5`
+13. Navigate to <grade10 bids url>.
+14. Check the page. `g10.auction-bidding-history.US5-TC6`
+15. Expand that summary.
+16. Check the summary and the history area during the delay. `g10.auction-bidding-history.US5-TC7`
+17. Activate the next-page control.
+18. Activate it again while the next page is still loading. `g10.auction-bidding-history.US5-TC8`
 
 ## Walk 6: Collector opens their bids at /bids
 
@@ -86,10 +146,13 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US5-TC9** — Expand that listing. → Check that summary and the other summaries. **Expected:** * That summary remains visible with a retryable history error. * Other summaries and their histories remain usable.
-2. **g10.auction-bidding-history.US5-TC10** — Sign in to <zzz store url>. → Look for a bidding-history route or screen. → Use ZZZ's authenticated backend against the shared history contract. **Expected:** * ZZZ's storefront routes match the routes from before this capability. * A signed-in ZZZ history read returns that storefront's activity.
+1. Expand that listing.
+2. Check that summary and the other summaries. `g10.auction-bidding-history.US5-TC9`
+3. Sign in to <zzz store url>.
+4. Look for a bidding-history route or screen.
+5. Use ZZZ's authenticated backend against the shared history contract. `g10.auction-bidding-history.US5-TC10`
 
 ## Walk 7: Collector reviews maximum history on the lot
 
@@ -97,11 +160,21 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US6-TC1** — Activate **Your bidding**. → Inspect the dialog title, description, tab order, and the active tab. → Activate **Your maximums**. → Inspect the maximum rows and whether a sticky current-maximum summary is **Expected:** * The dialog title is **Your bidding**. * Tabs appear in order **Bid placed**, then **Your maximums**.
-2. **g10.auction-bidding-history.US6-TC2** — Activate **Your bidding**. → Activate **Your maximums**. → Inspect every maximum row. → Navigate to <grade10 bids url>. → Expand `<listing_raised_max>`. **Expected:** * **Your maximums** lists the accepted set and raise, newest first, each row an amount and a time. * Both lot tabs list those accepted amounts.
-3. **g10.auction-bidding-history.US6-TC3** — Activate **Your bidding**. → Inspect **Bid placed** and **Your maximums**. → Dismiss the dialog. → Re-check public recent bids, live maximum and listing standing. **Expected:** * **Bid placed** and **Your maximums** list customer A's amounts and times. * Public recent bids, the live maximum and the standing match the note.
+1. Activate **Your bidding**.
+2. Inspect the dialog title, description, tab order, and the active tab.
+3. Activate **Your maximums**.
+4. Inspect the maximum rows and whether a sticky current-maximum summary is `g10.auction-bidding-history.US6-TC1`
+5. Activate **Your bidding**.
+6. Activate **Your maximums**.
+7. Inspect every maximum row.
+8. Navigate to <grade10 bids url>.
+9. Expand `<listing_raised_max>`. `g10.auction-bidding-history.US6-TC2`
+10. Activate **Your bidding**.
+11. Inspect **Bid placed** and **Your maximums**.
+12. Dismiss the dialog.
+13. Re-check public recent bids, live maximum and listing standing. `g10.auction-bidding-history.US6-TC3`
 
 ## Walk 8: Collector reviews bids Grade10 placed on the lot
 
@@ -109,11 +182,19 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US7-TC1** — Activate **Your bidding**. → Inspect the active tab and **Bid placed** rows. → Activate **Your maximums**. → Inspect maximum rows. **Expected:** * **Bid placed** is the initial active tab. * Tab order is **Bid placed**, then **Your maximums**.
-2. **g10.auction-bidding-history.US7-TC2** — Activate **Your bidding**. → Inspect the active tab copy. → Activate **Your maximums** and return to **Bid placed**. **Expected:** * **Bid placed** is active on open and shows the empty-bids state. * **Bid placed** and **Your maximums** stay separate tabs.
-3. **g10.auction-bidding-history.US7-TC3** — Activate **Your bidding**. → Switch between **Bid placed** and **Your maximums**. → Dismiss the dialog. → Re-check standing, live maximum, and public recent bids. **Expected:** * Standing, the live maximum and public recent bids match the note. ---
+1. Activate **Your bidding**.
+2. Inspect the active tab and **Bid placed** rows.
+3. Activate **Your maximums**.
+4. Inspect maximum rows. `g10.auction-bidding-history.US7-TC1`
+5. Activate **Your bidding**.
+6. Inspect the active tab copy.
+7. Activate **Your maximums** and return to **Bid placed**. `g10.auction-bidding-history.US7-TC2`
+8. Activate **Your bidding**.
+9. Switch between **Bid placed** and **Your maximums**.
+10. Dismiss the dialog.
+11. Re-check standing, live maximum, and public recent bids. `g10.auction-bidding-history.US7-TC3`
 
 ## Walk 9: Collector reads clearer maximum labels on /bids
 
@@ -121,9 +202,12 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US8-TC1** — Navigate to <grade10 bids url>. → Expand `<listing_account_labels>`. → Inspect the set and raise events. → Read the account navigation. **Expected:** * Those events read as a maximum set and a maximum raised. * The chronology lists those accepted amounts.
+1. Navigate to <grade10 bids url>.
+2. Expand `<listing_account_labels>`.
+3. Inspect the set and raise events.
+4. Read the account navigation. `g10.auction-bidding-history.US8-TC1`
 
 ## Walk 10: Collector sees public bid avatars without learning emails
 
@@ -131,10 +215,14 @@
 
 - Reset the fixture to each case's own **Pre-conditions** before running that case.
 
-**Route:**
+### Route
 
-1. **g10.auction-bidding-history.US9-TC1** — Read the anonymous public listing response for `<listing_1>`. → Find the public bid row for that bidder. **Expected:** * The row's listing pseudonym is of the form Bidder N. * The row's avatar character is `<expected_letter>`.
-2. **g10.auction-bidding-history.US9-TC2** — Read the anonymous public listing response for `<listing_2>`. → Check each of those two public bid rows. **Expected:** * Each row's avatar character is `B`. * Each row still shows a listing pseudonym of the form Bidder N.
+1. Read the anonymous public listing response for `<listing_1>`.
+2. Find the public bid row for that bidder. `g10.auction-bidding-history.US9-TC1`
+3. Read the anonymous public listing response for `<listing_2>`.
+4. Check each of those two public bid rows. `g10.auction-bidding-history.US9-TC2`
+
+## Walk 1: Collector reads their bidding index
 
 ## g10.auction-bidding-history.US1: Collector reads their bidding index
 
