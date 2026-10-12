@@ -67,23 +67,31 @@ function VaultRequestRetrievalDialog({
               <Text className="line-clamp-2" weight="medium">
                 {asset.name}
               </Text>
-              {/* Recap only fields the detail page shows: grade + cert, then
-                  the vault storage ID, each led by its icon on one row. */}
+              {/* Recap only fields the detail page shows: grade, then the
+                  vault storage ID, each led by its icon on one row. */}
               <div className="flex items-center gap-3 text-secondary-foreground">
                 <span className="flex min-w-0 items-center gap-1">
                   {asset.condition === "Graded" && asset.cert ? (
                     <SealCheck aria-hidden size={16} weight="regular" />
                   ) : null}
-                  <Text as="span" className="truncate" size="sm">
+                  <Text
+                    as="span"
+                    className="truncate text-secondary-foreground"
+                    size="sm"
+                  >
                     {asset.condition === "Graded" && asset.cert
-                      ? `${asset.grade} · Cert ${asset.cert}`
+                      ? asset.grade
                       : (asset.conditionDescription ?? asset.condition)}
                   </Text>
                 </span>
                 {asset.vaultId ? (
                   <span className="flex shrink-0 items-center gap-1">
                     <Vault aria-hidden size={16} weight="regular" />
-                    <Text as="span" className="tabular-nums" size="sm">
+                    <Text
+                      as="span"
+                      className="text-secondary-foreground tabular-nums"
+                      size="sm"
+                    >
                       {asset.vaultId}
                     </Text>
                   </span>
