@@ -12,7 +12,7 @@ import {
   DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import { MapPin } from "@phosphor-icons/react";
+import { MapPin, SealCheck, Vault } from "@phosphor-icons/react";
 import { SHOP_ADDRESS, SHOP_NAME, type VaultAsset } from "./vault-content";
 
 type VaultRequestRetrievalDialogProps = {
@@ -57,33 +57,38 @@ function VaultRequestRetrievalDialog({
           <DialogDescription className="sr-only">
             We’ll release this item from storage for pickup in store.
           </DialogDescription>
-          <div className="flex shrink-0 items-center gap-4 rounded-(--radius-2xl) bg-background-subtle p-3">
-            <div className="flex size-16 shrink-0 items-center justify-center rounded-(--radius-xl) bg-background">
-              <img
-                alt=""
-                className="max-h-full max-w-full object-contain"
-                src={asset.imageSrc}
-              />
-            </div>
+          <div className="flex shrink-0 items-center gap-4 overflow-clip rounded-(--radius-2xl) border border-border bg-background-subtle p-3">
+            <img
+              alt=""
+              className="size-16 shrink-0 rounded-(--radius-xl) object-cover"
+              src={asset.imageSrc}
+            />
             <VStack className="min-w-0" gap="xs" hAlign="start">
               <Text className="line-clamp-2" weight="medium">
                 {asset.name}
               </Text>
               {/* Recap only fields the detail page shows: grade + cert, then
-                  the vault storage ID. */}
-              <Text className="text-secondary-foreground" size="sm">
-                {asset.condition === "Graded" && asset.cert
-                  ? `${asset.grade} · Cert ${asset.cert}`
-                  : (asset.conditionDescription ?? asset.condition)}
-              </Text>
-              {asset.vaultId ? (
-                <Text
-                  className="text-secondary-foreground tabular-nums"
-                  size="xs"
-                >
-                  {asset.vaultId}
-                </Text>
-              ) : null}
+                  the vault storage ID, each led by its icon on one row. */}
+              <div className="flex items-center gap-3 text-secondary-foreground">
+                <span className="flex min-w-0 items-center gap-1">
+                  {asset.condition === "Graded" && asset.cert ? (
+                    <SealCheck aria-hidden size={16} weight="regular" />
+                  ) : null}
+                  <Text as="span" className="truncate" size="sm">
+                    {asset.condition === "Graded" && asset.cert
+                      ? `${asset.grade} · Cert ${asset.cert}`
+                      : (asset.conditionDescription ?? asset.condition)}
+                  </Text>
+                </span>
+                {asset.vaultId ? (
+                  <span className="flex shrink-0 items-center gap-1">
+                    <Vault aria-hidden size={16} weight="regular" />
+                    <Text as="span" className="tabular-nums" size="sm">
+                      {asset.vaultId}
+                    </Text>
+                  </span>
+                ) : null}
+              </div>
             </VStack>
           </div>
 
