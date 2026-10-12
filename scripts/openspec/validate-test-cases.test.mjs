@@ -341,8 +341,14 @@ test("a feature walk may reference a full case id from its own suite", () => {
   const root = store("", []);
   const suite = join(root, CHANGE, "feature-tcs.md");
   const original = readFileSync(suite, "utf8")
-    .replace("## demo-alpha-US1: Collector does the thing", "## demo-alpha.US1: Collector does the thing")
-    .replace("### demo-alpha-US1-TC1-1: The thing happens, 1", "### demo-alpha.US1-TC1: The thing happens, 1");
+    .replace(
+      "## demo-alpha-US1: Collector does the thing",
+      "## demo-alpha.US1: Collector does the thing",
+    )
+    .replace(
+      "### demo-alpha-US1-TC1-1: The thing happens, 1",
+      "### demo-alpha.US1-TC1: The thing happens, 1",
+    );
   writeFileSync(
     suite,
     original.replace(

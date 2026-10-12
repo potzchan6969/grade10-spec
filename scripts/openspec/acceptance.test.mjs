@@ -808,7 +808,10 @@ test("a change written from the spec template folds into a new durable spec", ()
   assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
   assert.match(durable, /## Feature set\n\n- Search\n {2}- Query: find/);
   assert.match(durable, /### Requirement: Search results/);
-  assert.match(durable, /#### Scenario: site.search-search.SC1 - Results match/);
+  assert.match(
+    durable,
+    /#### Scenario: site.search-search.SC1 - Results match/,
+  );
   assert.deepEqual(
     prepared.contractTargets.find(
       (one) => one.path === "openspec/specs/site/search/spec.md",

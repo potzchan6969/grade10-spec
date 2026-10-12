@@ -697,9 +697,7 @@ test("a durable suite wins when a change repeats the case id", () => {
 test("changed-since selection follows the suite scope without selecting by scenario text", () => {
   const feature = candidates[0].read;
   assert.equal(
-    matchesChangedScope(feature, [
-      "docs/prds/products/demo/thing/widget.md",
-    ]),
+    matchesChangedScope(feature, ["docs/prds/products/demo/thing/widget.md"]),
     true,
   );
   assert.equal(

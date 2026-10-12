@@ -298,9 +298,7 @@ function caseHeadings(lines) {
     if (inWalk) continue;
     if (
       inUngrouped &&
-      /^\s*###\s+\S+(?:-US-?\d+[a-z]?|\.US-?\d+[a-z]?):/.test(
-        lines[index],
-      )
+      /^\s*###\s+\S+(?:-US-?\d+[a-z]?|\.US-?\d+[a-z]?):/.test(lines[index])
     )
       continue;
     const revision = caseHeadingRevision(lines[index]);
@@ -649,9 +647,7 @@ export function parseTraceGraph({
     scenarios: scenarios.filter((record) => !linkedScenarioIds.has(record.id)),
     cases: cases.filter((record) => !linkedCaseIds.has(record.id)),
   };
-  const scenarioLinkPending = cases.filter(
-    (record) => !record.coversSpecified,
-  );
+  const scenarioLinkPending = cases.filter((record) => !record.coversSpecified);
 
   return {
     roots,

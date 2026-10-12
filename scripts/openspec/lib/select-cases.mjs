@@ -53,8 +53,7 @@ export function matchesChangedScope(read, changedPaths) {
   if (!changedPaths || changedPaths.length === 0) return true;
   if (read.level === "platform")
     return changedPaths.some(
-      (path) =>
-        path.startsWith("openspec/") || path.startsWith("docs/prds/"),
+      (path) => path.startsWith("openspec/") || path.startsWith("docs/prds/"),
     );
   const scope = suiteScope(read);
   return changedPaths.some((path) => {

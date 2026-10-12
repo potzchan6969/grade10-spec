@@ -541,8 +541,7 @@ const SUITE_SECTIONS = new Set([
   "Ungrouped",
   ...SUITE_LISTS,
 ]);
-const JOURNEY_GROUP =
-  /^((?:.+?\.US-?(\d+)([a-z]?)|.+?-US-?(\d+)([a-z]?)))\b/i;
+const JOURNEY_GROUP = /^((?:.+?\.US-?(\d+)([a-z]?)|.+?-US-?(\d+)([a-z]?)))\b/i;
 const WALK_SECTION = /^Walk\b/i;
 
 function paragraphs(text) {
@@ -825,9 +824,7 @@ function refuseRepeatedCases(text, capability, where, remedy) {
       );
     seenModern.add(number);
   }
-  for (const [, id] of text.matchAll(
-    /^#{3,4}\s+(\S+\.US-?\d+-TC-?\d+):/gim,
-  )) {
+  for (const [, id] of text.matchAll(/^#{3,4}\s+(\S+\.US-?\d+-TC-?\d+):/gim)) {
     if (seenModern.has(id))
       throw new Error(
         `${capability}: test case ${id} appears more than once in ${where}; ${remedy}`,

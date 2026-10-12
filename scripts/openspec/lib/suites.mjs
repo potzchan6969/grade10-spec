@@ -223,13 +223,15 @@ export function productPrefix(root, dir) {
 /** Display prefixes for composed-suite headings and markers. Legacy prefixes
  * remain accepted while suites migrate to these level-separated forms. */
 function appDisplayCode(product) {
-  return {
-    "grade10-site": "g10",
-    "grade10-admin": "g10adm",
-    "grade10-store": "g10str",
-    "zzz-site": "zzz",
-    "zzz-admin": "zzzadm",
-  }[product] ?? product;
+  return (
+    {
+      "grade10-site": "g10",
+      "grade10-admin": "g10adm",
+      "grade10-store": "g10str",
+      "zzz-site": "zzz",
+      "zzz-admin": "zzzadm",
+    }[product] ?? product
+  );
 }
 
 export function modernDomainPrefix(root, dir) {
@@ -338,7 +340,8 @@ export function readSpecIds(specPath) {
     const s = line.match(SCENARIO_HEADING);
     if (s) scenarios.add(s[1]);
     const display = line.match(scenarioDisplayHeading);
-    if (display && !previousLine.match(scenarioMarker)) scenarios.add(display[1]);
+    if (display && !previousLine.match(scenarioMarker))
+      scenarios.add(display[1]);
     const inline = line.match(SCENARIO_BULLET);
     if (inline) scenarios.add(inline[1]);
     previousLine = line;
@@ -780,15 +783,14 @@ export function parseSuite(text) {
       /^(###|####)\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):\s*(.+?)\s*$/,
     );
     const display = !modern
-      ? line.match(
-          /^(###|####)\s+(\S+\.US-?(\d+)-TC-?(\d+)):\s*(.+?)\s*$/,
-        )
+      ? line.match(/^(###|####)\s+(\S+\.US-?(\d+)-TC-?(\d+)):\s*(.+?)\s*$/)
       : null;
-    const legacy = !modern && !display
-      ? ungrouped
-        ? line.match(/^####\s+(\S+):\s*(.+?)\s*$/)
-        : line.match(/^###\s+(\S+):\s*(.+?)\s*$/)
-      : null;
+    const legacy =
+      !modern && !display
+        ? ungrouped
+          ? line.match(/^####\s+(\S+):\s*(.+?)\s*$/)
+          : line.match(/^###\s+(\S+):\s*(.+?)\s*$/)
+        : null;
     const ch = modern ?? display ?? legacy;
     if (ch) {
       pushCase();
@@ -796,12 +798,15 @@ export function parseSuite(text) {
       const journeyScoped = modern
         ? [modern[0], journey?.capability ?? null, modern[3], modern[4]]
         : display
-          ? [display[0], display[2].replace(/\.US-?\d+-TC-?\d+$/, ""), display[3], display[4]]
-        : id.match(/^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/);
+          ? [
+              display[0],
+              display[2].replace(/\.US-?\d+-TC-?\d+$/, ""),
+              display[3],
+              display[4],
+            ]
+          : id.match(/^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/);
       if (!journeyScoped)
-        suite.legacy.add(
-          "case ids that are not `<scope>.US<n>-TC<m>`",
-        );
+        suite.legacy.add("case ids that are not `<scope>.US<n>-TC<m>`");
       tc = {
         id,
         capability: journeyScoped?.[1] ?? null,

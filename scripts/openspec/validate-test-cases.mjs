@@ -202,9 +202,10 @@ function caseTraceMarker(text, headingLine) {
   const lines = text.split("\n");
   let index = headingLine - 2;
   while (index >= 0 && lines[index].trim() === "") index -= 1;
-  const marker = /^<!--\s*trace:case\s+id=(\S+)\s+rev=(\S+)(?:\s+covers=(\S+))?\s*-->$/.exec(
-    lines[index] ?? "",
-  );
+  const marker =
+    /^<!--\s*trace:case\s+id=(\S+)\s+rev=(\S+)(?:\s+covers=(\S+))?\s*-->$/.exec(
+      lines[index] ?? "",
+    );
   if (!marker) return null;
   return {
     id: marker[1],
@@ -266,9 +267,10 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       const display = !modern
         ? /^(?:###|####)\s+(\S+\.US-?(\d+)-TC-?(\d+)):\s*/.exec(lines[i])
         : null;
-      const legacy = !modern && !display
-        ? /^###\s+\S+-US-?(\d+)-TC-?(\d+)(?:-\d+)?:/.exec(lines[i])
-        : null;
+      const legacy =
+        !modern && !display
+          ? /^###\s+\S+-US-?(\d+)-TC-?(\d+)(?:-\d+)?:/.exec(lines[i])
+          : null;
       if (!modern && !display && !legacy) continue;
       const id = modern?.[1] ?? display?.[1] ?? pendingMarker;
       if (id) {
@@ -513,10 +515,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       spec.journeys.size > 0 &&
       !journeyIds.some((id) => spec.journeys.has(id))
     )
-      err(
-        j.line,
-        `journey \`${j.raw}\` is not defined in the spec beside it`,
-      );
+      err(j.line, `journey \`${j.raw}\` is not defined in the spec beside it`);
     // A capability nobody walks carries exactly one section. More than one
     // would have to be numbered by a feature set group's position, and an
     // issued case id is permanent.
@@ -552,8 +551,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
         const message = approvedActual
           ? `case \`${tc.id}\` is not export-eligible — QA2 must add post-hoc scenario links before export`
           : `case \`${tc.id}\` has no post-hoc scenario links — QA2 must reconcile it before approval`;
-        if (approvedActual)
-          err(at, message);
+        if (approvedActual) err(at, message);
         else warn(at, message);
       }
       if (seenCaseIds.has(tc.id))
