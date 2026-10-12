@@ -89,7 +89,7 @@
     "term": "寄賣期",
     "termDays": "發售 {days} 日",
     "returnWindow": "退貨期",
-    "windowDays": "店內售出後 {store} 日；拍品交付後 {auction} 日",
+    "windowDays": "店內售出的物品交付或取件後 {store} 日；拍品交付或取件後 {auction} 日",
     "storeCommission": "店內佣金",
     "storeBand": "{upTo} 或以下 {rate}%",
     "storeBandTop": "以上 {rate}%",

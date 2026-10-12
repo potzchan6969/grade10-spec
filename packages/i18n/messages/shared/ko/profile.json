@@ -89,7 +89,7 @@
     "term": "판매 기간",
     "termDays": "{days}일 판매",
     "returnWindow": "반품 기간",
-    "windowDays": "매장 판매 후 {store}일, 경매 물품 인도 후 {auction}일",
+    "windowDays": "매장 판매 물품 인도 또는 수령 후 {store}일, 경매 물품 인도 또는 수령 후 {auction}일",
     "storeCommission": "매장 수수료",
     "storeBand": "{upTo}까지 {rate}%",
     "storeBandTop": "그 이상 {rate}%",

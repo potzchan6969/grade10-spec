@@ -89,7 +89,7 @@
     "term": "Term",
     "termDays": "{days} days on sale",
     "returnWindow": "Return window",
-    "windowDays": "{store} days after a store sale; {auction} days after a lot is delivered",
+    "windowDays": "{store} days after a store sale is delivered or collected; {auction} days after a lot is delivered or collected",
     "storeCommission": "Store commission",
     "storeBand": "{rate}% up to {upTo}",
     "storeBandTop": "{rate}% above that",
