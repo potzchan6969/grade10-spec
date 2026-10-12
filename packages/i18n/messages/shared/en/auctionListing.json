@@ -135,6 +135,7 @@
   "unwatchAriaLabel": "Stop watching this auction",
   "unwatchToastDescription": "Email alerts for this auction are off.",
   "unwatchedTitle": "Unwatched this auction",
+  "useMinimum": "Use minimum",
   "userBidHistoryBidAmount": "Bid",
   "userBidHistoryBidsTab": "Bid placed",
   "userBidHistoryDescription": "We bid only as needed up to your maximum. If two people set the same maximum, the earlier one leads.",
