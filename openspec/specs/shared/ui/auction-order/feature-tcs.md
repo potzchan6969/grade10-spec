@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/22
 **Drafts styled:** 2026-09-22, tcs-rules r3
 
-## shared-ui-auction-order-US1: Address form component contract
+## g10.shared-auction-order.US1: Address form component contract
 
 **Walked by:** nobody on their own — a component contract; phone and address kind on the form are walked through `grade10-site/auction/winner-order`, which composes the block
 
@@ -12,7 +12,7 @@
 **so that** Winner Order setup can confirm delivery and billing through one contract.
 
 <!-- trace:case id=g10.shared-auction-order.TC-g8b rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC1-1: Personal is selected and Company Name is hidden
+### g10.shared-auction-order.US1-TC1: Personal is selected and Company Name is hidden
 
 **Classification:**
 
@@ -42,7 +42,7 @@
 * Company Name is not shown.
 
 <!-- trace:case id=g10.shared-auction-order.TC-fco rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC2-1: Company selection shows Company Name as required
+### g10.shared-auction-order.US1-TC2: Company selection shows Company Name as required
 
 **Classification:**
 
@@ -72,7 +72,7 @@
 * Company Name is shown and marked required.
 
 <!-- trace:case id=g10.shared-auction-order.TC-k7g rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC3-1: Switching to Company reveals Company Name
+### g10.shared-auction-order.US1-TC3: Switching to Company reveals Company Name
 
 **Classification:**
 
@@ -102,7 +102,7 @@
 * Personal-only layout no longer hides Company Name.
 
 <!-- trace:case id=g10.shared-auction-order.TC-fgm rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC4-1: Switching to Personal hides Company Name
+### g10.shared-auction-order.US1-TC4: Switching to Personal hides Company Name
 
 **Classification:**
 
@@ -131,7 +131,7 @@
 * Company Name is not shown.
 
 <!-- trace:case id=g10.shared-auction-order.TC-pqy rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC5-1: Company confirm without Company Name is refused
+### g10.shared-auction-order.US1-TC5: Company confirm without Company Name is refused
 
 **Classification:**
 
@@ -160,7 +160,7 @@
 * An error appears beside Company Name.
 
 <!-- trace:case id=g10.shared-auction-order.TC-08m rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC6-1: Phone country starts with nothing selected
+### g10.shared-auction-order.US1-TC6: Phone country starts with nothing selected
 
 **Classification:**
 
@@ -190,7 +190,7 @@
 * The phone field shows the empty-country chrome (globe, no calling code).
 
 <!-- trace:case id=g10.shared-auction-order.TC-fih rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC7-1: Confirm without phone country is refused
+### g10.shared-auction-order.US1-TC7: Confirm without phone country is refused
 
 **Classification:**
 
@@ -220,7 +220,7 @@
 * An error appears beside Phone.
 
 <!-- trace:case id=g10.shared-auction-order.TC-sou rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC8-1: Confirm with country but no digits is refused
+### g10.shared-auction-order.US1-TC8: Confirm with country but no digits is refused
 
 **Classification:**
 
@@ -250,7 +250,7 @@
 * An error appears beside Phone.
 
 <!-- trace:case id=g10.shared-auction-order.TC-t7g rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC9-1: Country and digits allow confirm
+### g10.shared-auction-order.US1-TC9: Country and digits allow confirm
 
 **Classification:**
 
@@ -287,7 +287,7 @@
 * The confirm callback receives the entered phone country and digits.
 
 <!-- trace:case id=g10.shared-auction-order.TC-m3r rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC10-1: Parseable phone is exported as E.164
+### g10.shared-auction-order.US1-TC10: Parseable phone is exported as E.164
 
 **Classification:**
 
@@ -325,7 +325,7 @@
 * The exported phone reads **Expected E.164**.
 
 <!-- trace:case id=g10.shared-auction-order.TC-ygt rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC11-1: Unusual phone format is still accepted
+### g10.shared-auction-order.US1-TC11: Unusual phone format is still accepted
 
 **Classification:**
 
@@ -363,7 +363,7 @@
 * The form does not refuse the number for hard libphonenumber validity.
 
 <!-- trace:case id=g10.shared-auction-order.TC-1gj rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC12-1: Address line 1 and postal code are required
+### g10.shared-auction-order.US1-TC12: Address line 1 and postal code are required
 
 **Classification:**
 
@@ -401,7 +401,7 @@ Runs once per row of **Test data**.
 * An error appears beside the empty required field.
 
 <!-- trace:case id=g10.shared-auction-order.TC-czf rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC13-1: Address line 2 may be left empty
+### g10.shared-auction-order.US1-TC13: Address line 2 may be left empty
 
 **Classification:**
 
@@ -430,7 +430,7 @@ Runs once per row of **Test data**.
 * Address line 2 is empty in the confirm payload.
 
 <!-- trace:case id=g10.shared-auction-order.TC-h1k rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC14-1: State may be left empty
+### g10.shared-auction-order.US1-TC14: State may be left empty
 
 **Classification:**
 
@@ -459,7 +459,7 @@ Runs once per row of **Test data**.
 * State is empty in the confirm payload.
 
 <!-- trace:case id=g10.shared-auction-order.TC-ga6 rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC15-1: Apt, Suite, and Building field is not collected
+### g10.shared-auction-order.US1-TC15: Apt, Suite, and Building field is not collected
 
 **Classification:**
 
@@ -488,7 +488,7 @@ Runs once per row of **Test data**.
 * No Apt., Suite, or Building field is shown.
 
 <!-- trace:case id=g10.shared-auction-order.TC-l1e rev=1 covers=g10.shared-auction-order.SC-7db -->
-### shared-ui-auction-order-US1-TC16-1: Confirm exports address kind with delivery values
+### g10.shared-auction-order.US1-TC16: Confirm exports address kind with delivery values
 
 **Classification:**
 
@@ -518,7 +518,7 @@ Runs once per row of **Test data**.
 * Delivery includes the entered company name and other delivery fields.
 
 <!-- trace:case id=g10.shared-auction-order.TC-xlg rev=1 covers=g10.shared-auction-order.SC-7db -->
-### shared-ui-auction-order-US1-TC17-1: Confirm exports phone with delivery values
+### g10.shared-auction-order.US1-TC17: Confirm exports phone with delivery values
 
 **Classification:**
 
@@ -548,7 +548,7 @@ Runs once per row of **Test data**.
 * When parseable, delivery phone reads E.164.
 
 <!-- trace:case id=g10.shared-auction-order.TC-y94 rev=1 covers=g10.shared-auction-order.SC-7db -->
-### shared-ui-auction-order-US1-TC18-1: The form renders on its own with supplied props
+### g10.shared-auction-order.US1-TC18: The form renders on its own with supplied props
 
 **Classification:**
 
@@ -578,7 +578,7 @@ Runs once per row of **Test data**.
 * Confirm and Cancel are visible and wired to their callbacks.
 
 <!-- trace:case id=g10.shared-auction-order.TC-joz rev=1 covers=g10.shared-auction-order.SC-7db -->
-### shared-ui-auction-order-US1-TC19-1: Supplied values and errors render as controlled props
+### g10.shared-auction-order.US1-TC19: Supplied values and errors render as controlled props
 
 **Classification:**
 
@@ -608,7 +608,7 @@ Runs once per row of **Test data**.
 * Step 2 shows the updated phone value and no Phone error.
 
 <!-- trace:case id=g10.shared-auction-order.TC-g9u rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC20-1: Application-supplied field errors render beside named fields
+### g10.shared-auction-order.US1-TC20: Application-supplied field errors render beside named fields
 
 **Classification:**
 
@@ -636,7 +636,7 @@ Runs once per row of **Test data**.
 * Each supplied error appears beside its named field.
 
 <!-- trace:case id=g10.shared-auction-order.TC-1f8 rev=1 covers=g10.shared-auction-order.SC-qy4 -->
-### shared-ui-auction-order-US1-TC21-1: The current step decides every step's state
+### g10.shared-auction-order.US1-TC21: The current step decides every step's state
 
 **Classification:**
 
@@ -666,7 +666,7 @@ Runs once per row of **Test data**.
 * Shipping and Completed read upcoming.
 
 <!-- trace:case id=g10.shared-auction-order.TC-fjf rev=1 covers=g10.shared-auction-order.SC-ofq -->
-### shared-ui-auction-order-US1-TC22-1: A press is reported, never acted on
+### g10.shared-auction-order.US1-TC22: A press is reported, never acted on
 
 **Classification:**
 

@@ -5,7 +5,7 @@
 
 **Out of suite:** none.
 
-## shared-ui-site-chrome-US1: Shared chrome contract
+## g10.shared-site-chrome.US1: Shared chrome contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
 **As an** application composing the shared chrome,
@@ -15,7 +15,7 @@ header for any brand,
 **so that** every product surface can render a correct header without
 reimplementing its behavior.
 
-### shared-ui-site-chrome-US1-TC28-1: My Auctions is omitted when onMyAuctions is not supplied
+### g10.shared-site-chrome.US1-TC28: My Auctions is omitted when onMyAuctions is not supplied
 
 **Classification:**
 

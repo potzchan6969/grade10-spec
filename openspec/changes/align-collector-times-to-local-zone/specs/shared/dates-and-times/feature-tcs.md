@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/18
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-dates-and-times-US1: The zone a date is stated in
+## g10.shared-dates-and-times.US1: The zone a date is stated in
 
 **Walked by:** nobody on their own - a format every surface that shows a date inherits; the journeys live in the capabilities that render one
 
@@ -12,7 +12,7 @@
 **so that** I read the same instant the same way wherever it is shown.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-obo rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC1-1: A collector moment reads in the viewer's own zone
+### g10.shared-dates-and-times.US1-TC1: A collector moment reads in the viewer's own zone
 
 Runs once per row of **Test data**.
 
@@ -58,7 +58,7 @@ Runs once per row of **Test data**.
 * No zone name follows the moment.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-d4g rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC2-1: A recent activity time reads the same in every zone
+### g10.shared-dates-and-times.US1-TC2: A recent activity time reads the same in every zone
 
 Runs once per row of **Test data**.
 
@@ -101,7 +101,7 @@ Runs once per row of **Test data**.
 * No zone name follows the time.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-fqv rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC3-1: A deadline names the viewer's zone as it stands at its instant
+### g10.shared-dates-and-times.US1-TC3: A deadline names the viewer's zone as it stands at its instant
 
 Runs once per row of **Test data**.
 
@@ -145,7 +145,7 @@ Runs once per row of **Test data**.
 * The line names <zone name>.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-v92 rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC4-1: A deadline outside the HKT and EDT examples names the viewer's zone
+### g10.shared-dates-and-times.US1-TC4: A deadline outside the HKT and EDT examples names the viewer's zone
 
 Runs once per row of **Test data**.
 
@@ -193,7 +193,7 @@ Runs once per row of **Test data**.
 * The line names neither HKT nor UTC.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-e5n rev=1 covers=g10.shared-dates-and-times.SC-v5n,g10.shared-dates-and-times.SC-ufn,g10.shared-dates-and-times.SC-6rx,g10.shared-dates-and-times.SC-7pr -->
-### shared-dates-and-times-US1-TC8-1: A message date names GMT+8 and reads the same for every recipient
+### g10.shared-dates-and-times.US1-TC8: A message date names GMT+8 and reads the same for every recipient
 
 Runs once per row of **Test data**.
 
@@ -235,7 +235,7 @@ Runs once per row of **Test data**.
 * The close time does not contain `HKT`.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-07a rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC9-1: A collector clock reads the same text on any machine zone
+### g10.shared-dates-and-times.US1-TC9: A collector clock reads the same text on any machine zone
 
 Runs once per row of **Test data**.
 
@@ -278,7 +278,7 @@ Runs once per row of **Test data**.
 * Step 2: the close line reads <deadline reads>.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-1pn rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC10-1: The lot page's deadline names the viewer's own zone
+### g10.shared-dates-and-times.US1-TC10: The lot page's deadline names the viewer's own zone
 
 Runs once per row of **Test data**.
 
@@ -319,7 +319,7 @@ Runs once per row of **Test data**.
 * The New York deadline does not contain HKT.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-0fp rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC11-1: A closed lot reads its close in the viewer's own zone
+### g10.shared-dates-and-times.US1-TC11: A closed lot reads its close in the viewer's own zone
 
 Runs once per row of **Test data**.
 
@@ -365,7 +365,7 @@ Runs once per row of **Test data**.
 * The close time names <zone name>, not UTC.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-bnl rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC12-1: The page and the email state one close in two zones
+### g10.shared-dates-and-times.US1-TC12: The page and the email state one close in two zones
 
 Runs once per row of **Test data**.
 
@@ -408,7 +408,7 @@ Runs once per row of **Test data**.
 * The email's close time is the same text for both viewer zones.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-g85 rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC13-1: A relative remaining time names no zone
+### g10.shared-dates-and-times.US1-TC13: A relative remaining time names no zone
 
 Runs once per row of **Test data**.
 
@@ -448,7 +448,7 @@ Runs once per row of **Test data**.
 * No zone name sits in the remaining time or in its label.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-of9 rev=1 covers=g10.shared-dates-and-times.SC-dfo,g10.shared-dates-and-times.SC-d40,g10.shared-dates-and-times.SC-fe1 -->
-### shared-dates-and-times-US1-TC14-1: A zone the platform does not recognise stops the render
+### g10.shared-dates-and-times.US1-TC14: A zone the platform does not recognise stops the render
 
 Runs once per row of **Test data**.
 
@@ -490,7 +490,7 @@ Runs once per row of **Test data**.
 * No time shows in UTC, or in the machine's zone, in its place.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-qrd rev=1 covers=g10.shared-dates-and-times.SC-v5n,g10.shared-dates-and-times.SC-ufn,g10.shared-dates-and-times.SC-6rx,g10.shared-dates-and-times.SC-7pr -->
-### shared-dates-and-times-US1-TC15-1: A letter's footer names GMT+8
+### g10.shared-dates-and-times.US1-TC15: A letter's footer names GMT+8
 
 Runs once per row of **Test data**.
 
@@ -530,7 +530,7 @@ Runs once per row of **Test data**.
 * The letter is worded in English.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-1hq rev=1 covers=g10.shared-dates-and-times.SC-v5n,g10.shared-dates-and-times.SC-ufn,g10.shared-dates-and-times.SC-6rx,g10.shared-dates-and-times.SC-7pr -->
-### shared-dates-and-times-US1-TC16-1: A day with no clock names no zone
+### g10.shared-dates-and-times.US1-TC16: A day with no clock names no zone
 
 **Classification:**
 
@@ -561,7 +561,7 @@ Runs once per row of **Test data**.
 * Step 2: the line reads `Dates and times are Hong Kong time (GMT+8).`
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-x7m rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC17-1: The invoice page states GMT+8 for every viewer
+### g10.shared-dates-and-times.US1-TC17: The invoice page states GMT+8 for every viewer
 
 Runs once per row of **Test data**.
 
@@ -602,7 +602,7 @@ Runs once per row of **Test data**.
 * The payment deadline is the same text for both viewer zones.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-xqa rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC18-1: A close shown as a day alone names no zone
+### g10.shared-dates-and-times.US1-TC18: A close shown as a day alone names no zone
 
 Runs once per row of **Test data**.
 
@@ -643,7 +643,7 @@ Runs once per row of **Test data**.
 * No zone name follows the day: not HKT, EDT or GMT.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-hi5 rev=1 covers=g10.shared-dates-and-times.SC-gkv -->
-### shared-dates-and-times-US1-TC19-1: An admin surface with no shop's clock of its own states UTC
+### g10.shared-dates-and-times.US1-TC19: An admin surface with no shop's clock of its own states UTC
 
 **Classification:**
 
@@ -674,7 +674,7 @@ Runs once per row of **Test data**.
 * Step 2: the entry does not read 09:30 (Hong Kong) or 21:30 (the machine's zone).
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-6n0 rev=1 covers=g10.shared-dates-and-times.SC-msf -->
-### shared-dates-and-times-US1-TC20-1: A collector's vault timeline stamp stays UTC
+### g10.shared-dates-and-times.US1-TC20: A collector's vault timeline stamp stays UTC
 
 **Classification:**
 
@@ -704,7 +704,7 @@ Runs once per row of **Test data**.
 * The stamp does not read 09:30 (the shop's clock) or 21:30 (the viewer's zone).
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-oss rev=1 covers=g10.shared-dates-and-times.SC-u8t -->
-### shared-dates-and-times-US1-TC22-1: An auction order operator surface states Hong Kong time
+### g10.shared-dates-and-times.US1-TC22: An auction order operator surface states Hong Kong time
 
 **Classification:**
 

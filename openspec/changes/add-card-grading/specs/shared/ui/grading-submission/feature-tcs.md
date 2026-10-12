@@ -10,7 +10,7 @@
 * A callback a block reports logs in the Actions panel under its own name. A story's own checks run when it opens and show in the Interactions panel; before a step that clicks, return the story to its start there and clear the Actions panel.
 * The Controls panel changes a story's props in place; a step that plays the consumer's part sets them there.
 
-## shared-ui-grading-submission-US1: The grading submission blocks
+## g10.shared-grading-submission.US1: The grading submission blocks
 
 **Walked by:** nobody on their own - a component contract every collector-facing grading page composes; the journeys of `grade10-site/grading/submission-plan`, `grade10-site/grading/dropoff-booking` and `grade10-site/grading/submission-lifecycle` are what reach it.
 
@@ -19,7 +19,7 @@
 **so that** every grading surface composes the same contract instead of redrawing it.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-juf rev=1 covers=g10.shared-grading-submission.SC-8at,g10.shared-grading-submission.SC-b0c,g10.shared-grading-submission.SC-4dl -->
-### shared-ui-grading-submission-US1-TC1-1: Every named grading block exports from the package entry
+### g10.shared-grading-submission.US1-TC1: Every named grading block exports from the package entry
 
 **Classification:**
 
@@ -51,7 +51,7 @@
 * Each export carries its own `<Name>Props` type and a `<Name>Copy` type for its words.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ghm rev=1 covers=g10.shared-grading-submission.SC-8at,g10.shared-grading-submission.SC-b0c,g10.shared-grading-submission.SC-4dl -->
-### shared-ui-grading-submission-US1-TC2-1: The booking set is imported unchanged, not redrawn
+### g10.shared-grading-submission.US1-TC2: The booking set is imported unchanged, not redrawn
 
 **Classification:**
 
@@ -82,7 +82,7 @@
 * No grading export duplicates a booking block.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-agr rev=1 covers=g10.shared-grading-submission.SC-8at,g10.shared-grading-submission.SC-b0c,g10.shared-grading-submission.SC-4dl -->
-### shared-ui-grading-submission-US1-TC3-1: No console-shaped component ships from the package
+### g10.shared-grading-submission.US1-TC3: No console-shaped component ships from the package
 
 **Classification:**
 
@@ -111,7 +111,7 @@
 * No export renders a console view; every export is collector-facing.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-rk6 rev=1 covers=g10.shared-grading-submission.SC-8at,g10.shared-grading-submission.SC-b0c,g10.shared-grading-submission.SC-4dl -->
-### shared-ui-grading-submission-US1-TC70-1: A line carrying a value is filled by the consumer's formatter, never by the block
+### g10.shared-grading-submission.US1-TC70: A line carrying a value is filled by the consumer's formatter, never by the block
 
 **Classification:**
 
@@ -144,7 +144,7 @@
 * Step 3: `matched` was called with `{ set: "Base Set", number: "4/102" }` and `minimumGrade` with `{ grade: "PSA 9" }`.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-kv3 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC4-1: The fee sheet lists one grader's levels and figures
+### g10.shared-grading-submission.US1-TC4: The fee sheet lists one grader's levels and figures
 
 **Classification:**
 
@@ -174,7 +174,7 @@
 * No grader control is drawn, since there is one grader.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-vd2 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC5-1: Cover rate shows only on the levels that carry one
+### g10.shared-grading-submission.US1-TC5: Cover rate shows only on the levels that carry one
 
 **Classification:**
 
@@ -204,7 +204,7 @@
 * Value, the level carrying none, shows no cover rate.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ils rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC6-1: A grader per tab keeps three fee sheets apart
+### g10.shared-grading-submission.US1-TC6: A grader per tab keeps three fee sheets apart
 
 **Classification:**
 
@@ -236,7 +236,7 @@
 * Step 3: CGC reads as selected.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-unb rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC7-1: A closed level names what closes it
+### g10.shared-grading-submission.US1-TC7: A closed level names what closes it
 
 Runs once per row of **Test data**.
 
@@ -277,7 +277,7 @@ Runs once per row of **Test data**.
 * Step 4: the level is not selected, and nothing logs under `onSelectLevel`.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-w43 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC8-1: The estimate reads cards times fee plus the cover line
+### g10.shared-grading-submission.US1-TC8: The estimate reads cards times fee plus the cover line
 
 **Classification:**
 
@@ -308,7 +308,7 @@ Runs once per row of **Test data**.
 * No figure of the picker's own shows, such as the fee times the cards alone.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-2x4 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC9-1: No level picked shows no estimate
+### g10.shared-grading-submission.US1-TC9: No level picked shows no estimate
 
 **Classification:**
 
@@ -336,7 +336,7 @@ Runs once per row of **Test data**.
 * No estimate shows under the levels.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-pp3 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC10-1: A matched card shows its reference sales
+### g10.shared-grading-submission.US1-TC10: A matched card shows its reference sales
 
 **Classification:**
 
@@ -366,7 +366,7 @@ Runs once per row of **Test data**.
 * The minimum grade reads on the card, with the line that the fee applies either way.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-lfy rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC11-1: A card kept as typed shows no reference row
+### g10.shared-grading-submission.US1-TC11: A card kept as typed shows no reference row
 
 **Classification:**
 
@@ -400,7 +400,7 @@ Runs once per row of **Test data**.
 * Step 4: no reference sales row renders.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-8k2 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC12-1: A card with no declared value is named on the list
+### g10.shared-grading-submission.US1-TC12: A card with no declared value is named on the list
 
 **Classification:**
 
@@ -429,7 +429,7 @@ Runs once per row of **Test data**.
 * The list names Pikachu Illustrator as still needing a declared value.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-4q0 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC13-1: A card above a ceiling is named on the list
+### g10.shared-grading-submission.US1-TC13: A card above a ceiling is named on the list
 
 **Classification:**
 
@@ -459,7 +459,7 @@ Runs once per row of **Test data**.
 * The line naming a second submission on the same drop-off shows.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-g75 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC14-1: An empty card list shows no card
+### g10.shared-grading-submission.US1-TC14: An empty card list shows no card
 
 **Classification:**
 
@@ -488,7 +488,7 @@ Runs once per row of **Test data**.
 * Add a card and Paste a list remain available.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-rtw rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC15-1: Editing, removing, the minimum grade and the paste fire their callbacks
+### g10.shared-grading-submission.US1-TC15: Editing, removing, the minimum grade and the paste fire their callbacks
 
 **Classification:**
 
@@ -524,7 +524,7 @@ Runs once per row of **Test data**.
 * Step 6: `onPaste` logs once.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-pui rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC16-1: The paste result names each outcome's count and line
+### g10.shared-grading-submission.US1-TC16: The paste result names each outcome's count and line
 
 **Classification:**
 
@@ -554,7 +554,7 @@ Runs once per row of **Test data**.
 * The counts read against the 20 lines read.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-y85 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC17-1: The Bulk notice renders once the pasted list carries it
+### g10.shared-grading-submission.US1-TC17: The Bulk notice renders once the pasted list carries it
 
 **Classification:**
 
@@ -583,7 +583,7 @@ Runs once per row of **Test data**.
 * The Bulk line names the level, its fee, its ceiling, its weeks and the longer drop-off.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-1rq rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC18-1: Add stays disabled while the paste is matching
+### g10.shared-grading-submission.US1-TC18: Add stays disabled while the paste is matching
 
 **Classification:**
 
@@ -613,7 +613,7 @@ Runs once per row of **Test data**.
 * Step 3: the add button is disabled, and nothing logs under `onApply`.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-lxl rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC19-1: The review schedule lists every card handed in
+### g10.shared-grading-submission.US1-TC19: The review schedule lists every card handed in
 
 **Classification:**
 
@@ -644,7 +644,7 @@ Runs once per row of **Test data**.
 * The good-to-know lines read in the order given.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-32i rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC20-1: The upcharge warning names both prices per card
+### g10.shared-grading-submission.US1-TC20: The upcharge warning names both prices per card
 
 **Classification:**
 
@@ -673,7 +673,7 @@ Runs once per row of **Test data**.
 * The warning names the card, the level it moves to, the difference due and the higher level's current fee.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-elz rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC21-1: No card above a ceiling shows no upcharge warning
+### g10.shared-grading-submission.US1-TC21: No card above a ceiling shows no upcharge warning
 
 **Classification:**
 
@@ -702,7 +702,7 @@ Runs once per row of **Test data**.
 * No upcharge warning shows anywhere on the review.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-sra rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC22-1: Book stays disabled until the consent tick is checked
+### g10.shared-grading-submission.US1-TC22: Book stays disabled until the consent tick is checked
 
 **Classification:**
 
@@ -738,7 +738,7 @@ Runs once per row of **Test data**.
 * Step 6: `onBook` logs.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-una rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC23-1: Booking pending disables both action buttons
+### g10.shared-grading-submission.US1-TC23: Booking pending disables both action buttons
 
 **Classification:**
 
@@ -767,7 +767,7 @@ Runs once per row of **Test data**.
 * Book the drop-off and Save and book later are both disabled.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-wbc rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC24-1: A booking error renders in the error tone
+### g10.shared-grading-submission.US1-TC24: A booking error renders in the error tone
 
 **Classification:**
 
@@ -799,7 +799,7 @@ Runs once per row of **Test data**.
 * Step 4: nothing logs under `onBook`.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-box rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC25-1: The status rail marks the reached stage among seven
+### g10.shared-grading-submission.US1-TC25: The status rail marks the reached stage among seven
 
 **Classification:**
 
@@ -830,7 +830,7 @@ Runs once per row of **Test data**.
 * Graded, Back and Home read as still to come.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-mjy rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC26-1: An ended submission's rail stays at its ending stage
+### g10.shared-grading-submission.US1-TC26: An ended submission's rail stays at its ending stage
 
 **Classification:**
 
@@ -860,7 +860,7 @@ Runs once per row of **Test data**.
 * The line names the ending; no later stage reads as reached.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-skj rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC27-1: The status word and the chip read as one pair
+### g10.shared-grading-submission.US1-TC27: The status word and the chip read as one pair
 
 Runs once per row of **Test data**.
 
@@ -902,7 +902,7 @@ Runs once per row of **Test data**.
 * The status word and the chip render together as one pair, each in the tone it was given.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-4tg rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC28-1: A closed submission shows the status word with no chip
+### g10.shared-grading-submission.US1-TC28: A closed submission shows the status word with no chip
 
 **Classification:**
 
@@ -930,7 +930,7 @@ Runs once per row of **Test data**.
 * Only the status word renders; no chip.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-7w7 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC29-1: The record names the intake id and photograph pair
+### g10.shared-grading-submission.US1-TC29: The record names the intake id and photograph pair
 
 **Classification:**
 
@@ -964,7 +964,7 @@ Runs once per row of **Test data**.
 * Step 4: the minimum grade reads on the set line.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-p99 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC30-1: Every recorded outcome pairs its badge with its line
+### g10.shared-grading-submission.US1-TC30: Every recorded outcome pairs its badge with its line
 
 Runs once per row of **Test data**.
 
@@ -1014,7 +1014,7 @@ Runs once per row of **Test data**.
 * The card renders the badge tone and the line the row's outcome carries.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-7aj rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC31-1: A graded card names its grade and cert
+### g10.shared-grading-submission.US1-TC31: A graded card names its grade and cert
 
 **Classification:**
 
@@ -1043,7 +1043,7 @@ Runs once per row of **Test data**.
 * The card names the grade in the grader's words, the label word, the grader and the cert.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-knd rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC32-1: An ungraded card names the grader's code and note
+### g10.shared-grading-submission.US1-TC32: An ungraded card names the grader's code and note
 
 **Classification:**
 
@@ -1074,7 +1074,7 @@ Runs once per row of **Test data**.
 * Umbreon holo's card is drawn apart from the graded card.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-74a rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC33-1: A listed card shows no photograph pair before hand-in
+### g10.shared-grading-submission.US1-TC33: A listed card shows no photograph pair before hand-in
 
 **Classification:**
 
@@ -1103,7 +1103,7 @@ Runs once per row of **Test data**.
 * No intake id and no photograph pair render.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-r4x rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC34-1: The pickup card asks for an ID above the threshold
+### g10.shared-grading-submission.US1-TC34: The pickup card asks for an ID above the threshold
 
 **Classification:**
 
@@ -1132,7 +1132,7 @@ Runs once per row of **Test data**.
 * The card shows the code, the items, where and when, what is due as one figure, and asks for an ID matching the collector's name.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ez5 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC35-1: The pickup card asks for nothing below the threshold
+### g10.shared-grading-submission.US1-TC35: The pickup card asks for nothing below the threshold
 
 **Classification:**
 
@@ -1161,7 +1161,7 @@ Runs once per row of **Test data**.
 * The card says nothing beyond the code is needed.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-dzz rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC36-1: The pickup card names an ID for the named person
+### g10.shared-grading-submission.US1-TC36: The pickup card names an ID for the named person
 
 **Classification:**
 
@@ -1190,7 +1190,7 @@ Runs once per row of **Test data**.
 * The bring line names the ID as the named person's, not the collector's.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-xxl rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC37-1: Naming a person is blocked until a name is entered
+### g10.shared-grading-submission.US1-TC37: Naming a person is blocked until a name is entered
 
 Runs once per row of **Test data**.
 
@@ -1229,7 +1229,7 @@ Runs once per row of **Test data**.
 * Save is disabled, and step 3 logs nothing.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-yso rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC38-1: Change and Remove each report through their own callback
+### g10.shared-grading-submission.US1-TC38: Change and Remove each report through their own callback
 
 **Classification:**
 
@@ -1262,7 +1262,7 @@ Runs once per row of **Test data**.
 * Step 4: `onRemove` logs once.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-sbp rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC39-1: The money block lists its lines in the fixed order
+### g10.shared-grading-submission.US1-TC39: The money block lists its lines in the fixed order
 
 **Classification:**
 
@@ -1302,7 +1302,7 @@ Runs once per row of **Test data**.
 * The due line renders in the `warning` tone.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-3is rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC40-1: No lead line shows when nothing is due
+### g10.shared-grading-submission.US1-TC40: No lead line shows when nothing is due
 
 **Classification:**
 
@@ -1332,7 +1332,7 @@ Runs once per row of **Test data**.
 * No settle lead renders above the lines.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-i7w rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC41-1: The storage line reads the fee per card per month
+### g10.shared-grading-submission.US1-TC41: The storage line reads the fee per card per month
 
 **Classification:**
 
@@ -1361,7 +1361,7 @@ Runs once per row of **Test data**.
 * The storage line names the fee per card, per month, and that it is accruing.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-gv2 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC42-1: The ladder shows three dated rungs, none reached
+### g10.shared-grading-submission.US1-TC42: The ladder shows three dated rungs, none reached
 
 **Classification:**
 
@@ -1392,7 +1392,7 @@ Runs once per row of **Test data**.
 * None is marked passed.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-5qq rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC43-1: A passed rung is marked once its day is reached
+### g10.shared-grading-submission.US1-TC43: A passed rung is marked once its day is reached
 
 Runs once per row of **Test data**.
 
@@ -1430,7 +1430,7 @@ Runs once per row of **Test data**.
 * The rungs the row names as passed are marked passed; the rungs it names as not passed are not.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-o2d rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC44-1: The notice rung names the posting date and its window
+### g10.shared-grading-submission.US1-TC44: The notice rung names the posting date and its window
 
 **Classification:**
 
@@ -1459,7 +1459,7 @@ Runs once per row of **Test data**.
 * The notice rung names the posting date and the 90 days.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-dil rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC45-1: A withdrawn, paid out or vaulted card is not counted held
+### g10.shared-grading-submission.US1-TC45: A withdrawn, paid out or vaulted card is not counted held
 
 **Classification:**
 
@@ -1488,7 +1488,7 @@ Runs once per row of **Test data**.
 * The cards held reads the count given, of the cards still held; the excluded card is not among them.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-fjx rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC46-1: Every rendered word comes from the copy prop
+### g10.shared-grading-submission.US1-TC46: Every rendered word comes from the copy prop
 
 **Classification:**
 
@@ -1524,7 +1524,7 @@ Runs once per row of **Test data**.
 * Every label matches the text `copy` supplies; no hardcoded string appears instead.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-hc6 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC47-1: No block fetches, mutates, routes or reads app state
+### g10.shared-grading-submission.US1-TC47: No block fetches, mutates, routes or reads app state
 
 **Classification:**
 
@@ -1552,7 +1552,7 @@ Runs once per row of **Test data**.
 * No block imports a router or an app store, or calls fetch, a mutation, or browser storage.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-0pd rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC48-1: An amount renders in its minor units and ISO code
+### g10.shared-grading-submission.US1-TC48: An amount renders in its minor units and ISO code
 
 Runs once per row of **Test data**.
 
@@ -1593,7 +1593,7 @@ Runs once per row of **Test data**.
 * No other amount shows than the ones the block was given.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-0qm rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC49-1: A day renders in the locale and zone supplied
+### g10.shared-grading-submission.US1-TC49: A day renders in the locale and zone supplied
 
 **Classification:**
 
@@ -1624,7 +1624,7 @@ Runs once per row of **Test data**.
 * The day reads in the locale and the zone the story supplies, not the browser's own.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-51l rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC50-1: Every design-record state has its own story
+### g10.shared-grading-submission.US1-TC50: Every design-record state has its own story
 
 **Classification:**
 
@@ -1654,7 +1654,7 @@ Runs once per row of **Test data**.
 * Every state names a story, and the story renders the state from props alone, with no application behind it.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ft3 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC51-1: Every level closed sends the collector to the counter
+### g10.shared-grading-submission.US1-TC51: Every level closed sends the collector to the counter
 
 **Classification:**
 
@@ -1685,7 +1685,7 @@ Runs once per row of **Test data**.
 * Step 3: no estimate renders, and nothing logs under `onSelectLevel`.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-p2y rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC52-1: The upcharge notice reads on the picker
+### g10.shared-grading-submission.US1-TC52: The upcharge notice reads on the picker
 
 **Classification:**
 
@@ -1714,7 +1714,7 @@ Runs once per row of **Test data**.
 * The notice reads that a card moved up a level is charged the difference before collection.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-nva rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC53-1: A grader priced with example figures still lists its levels
+### g10.shared-grading-submission.US1-TC53: A grader priced with example figures still lists its levels
 
 **Classification:**
 
@@ -1744,7 +1744,7 @@ Runs once per row of **Test data**.
 * The line about the figures renders.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-87f rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC54-1: The picker names the graders and the highest declared value
+### g10.shared-grading-submission.US1-TC54: The picker names the graders and the highest declared value
 
 **Classification:**
 
@@ -1776,7 +1776,7 @@ Runs once per row of **Test data**.
 * Step 3: `onSelectGrader` logs `bgs`.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-yzu rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC55-1: The cap refuses the card past it
+### g10.shared-grading-submission.US1-TC55: The cap refuses the card past it
 
 **Classification:**
 
@@ -1813,7 +1813,7 @@ Runs once per row of **Test data**.
 * Step 3: `onAdd` logs nothing.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-3jz rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC56-1: The reference out of reach keeps the list working
+### g10.shared-grading-submission.US1-TC56: The reference out of reach keeps the list working
 
 **Classification:**
 
@@ -1843,7 +1843,7 @@ Runs once per row of **Test data**.
 * The declared value is still asked for on each card.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-82m rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC57-1: A pasted line above the ceiling names the card and its value
+### g10.shared-grading-submission.US1-TC57: A pasted line above the ceiling names the card and its value
 
 **Classification:**
 
@@ -1873,7 +1873,7 @@ Runs once per row of **Test data**.
 * The second-submission line renders.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ejq rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC58-1: The paste reports its cards through onApply
+### g10.shared-grading-submission.US1-TC58: The paste reports its cards through onApply
 
 **Classification:**
 
@@ -1904,7 +1904,7 @@ Runs once per row of **Test data**.
 * The sheet writes to no list of its own: its result rows read as before.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-mg0 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC59-1: A paste error reads as an error, not an empty list
+### g10.shared-grading-submission.US1-TC59: A paste error reads as an error, not an empty list
 
 **Classification:**
 
@@ -1934,7 +1934,7 @@ Runs once per row of **Test data**.
 * Nothing reads as a list that matched nothing.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-jui rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC60-1: A running-late chip reads the words and the tone it was given
+### g10.shared-grading-submission.US1-TC60: A running-late chip reads the words and the tone it was given
 
 **Classification:**
 
@@ -1964,7 +1964,7 @@ Runs once per row of **Test data**.
 * The block reads no date and derives no lateness of its own.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-86q rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC61-1: A certificate reads against the lookup address it was given
+### g10.shared-grading-submission.US1-TC61: A certificate reads against the lookup address it was given
 
 **Classification:**
 
@@ -1994,7 +1994,7 @@ Runs once per row of **Test data**.
 * No address is built inside the block.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-xyy rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC62-1: A card with no grade shows its badge and no grade
+### g10.shared-grading-submission.US1-TC62: A card with no grade shows its badge and no grade
 
 Runs once per row of **Test data**.
 
@@ -2037,7 +2037,7 @@ Runs once per row of **Test data**.
 * No grade renders on a card the grader issued none for.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-o7s rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC63-1: The pickup card says nothing is due
+### g10.shared-grading-submission.US1-TC63: The pickup card says nothing is due
 
 **Classification:**
 
@@ -2067,7 +2067,7 @@ Runs once per row of **Test data**.
 * No figure to settle renders.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-06j rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC64-1: A refused naming reads the refusal under the field
+### g10.shared-grading-submission.US1-TC64: A refused naming reads the refusal under the field
 
 **Classification:**
 
@@ -2099,7 +2099,7 @@ Runs once per row of **Test data**.
 * Step 3: `onSave` logs nothing.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-usw rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC65-1: The money block reads an estimate as unpaid
+### g10.shared-grading-submission.US1-TC65: The money block reads an estimate as unpaid
 
 **Classification:**
 
@@ -2137,7 +2137,7 @@ Runs once per row of **Test data**.
 * No paid line renders.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-htg rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC66-1: A payout names its route beside the refunded fee
+### g10.shared-grading-submission.US1-TC66: A payout names its route beside the refunded fee
 
 **Classification:**
 
@@ -2173,7 +2173,7 @@ Runs once per row of **Test data**.
 * Both lines render, the payout naming its route.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-7gi rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC67-1: The paid line names its method, instant and till reference
+### g10.shared-grading-submission.US1-TC67: The paid line names its method, instant and till reference
 
 **Classification:**
 
@@ -2211,7 +2211,7 @@ Runs once per row of **Test data**.
 * The amount, the method, the instant and the till reference all read as they were given.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-i84 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC68-1: A matched card with no set or number reads from its name alone
+### g10.shared-grading-submission.US1-TC68: A matched card with no set or number reads from its name alone
 
 **Classification:**
 
@@ -2241,7 +2241,7 @@ Runs once per row of **Test data**.
 * Rendering the card raises no error: the story draws, and the Interactions panel shows no failure.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-mzl rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC69-1: A collected slab carries its hand-back photograph
+### g10.shared-grading-submission.US1-TC69: A collected slab carries its hand-back photograph
 
 **Classification:**
 
@@ -2275,7 +2275,7 @@ Runs once per row of **Test data**.
 * Step 4: the card given none shows none.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-btu rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC71-1: A shop naming no hours shows no Open row
+### g10.shared-grading-submission.US1-TC71: A shop naming no hours shows no Open row
 
 **Classification:**
 
@@ -2305,7 +2305,7 @@ Runs once per row of **Test data**.
 * No Open row renders.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ov1 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC72-1: A card's payout line shows once made, and its reversal once reversed
+### g10.shared-grading-submission.US1-TC72: A card's payout line shows once made, and its reversal once reversed
 
 **Classification:**
 
@@ -2340,7 +2340,7 @@ Runs once per row of **Test data**.
 * Step 4: the card given neither shows no such line.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-wkm rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC73-1: A review given no booking offers neither the booking nor the statement
+### g10.shared-grading-submission.US1-TC73: A review given no booking offers neither the booking nor the statement
 
 **Classification:**
 
@@ -2371,7 +2371,7 @@ Runs once per row of **Test data**.
 * Step 2: the save reports through its own callback.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-z4f rev=2 covers=none -->
-### shared-ui-grading-submission-US1-TC74-2: An open level carrying cover is picked by id
+### g10.shared-grading-submission.US1-TC74: An open level carrying cover is picked by id
 
 **Classification:**
 
@@ -2405,7 +2405,7 @@ Runs once per row of **Test data**.
 * Step 5: Express reads as selected.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-03b rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC75-1: The fee sheet and the picker each draw the one record they are given
+### g10.shared-grading-submission.US1-TC75: The fee sheet and the picker each draw the one record they are given
 
 **Classification:**
 
@@ -2437,7 +2437,7 @@ Runs once per row of **Test data**.
 * Nothing logs in the Actions panel: neither block reports on the other.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-hjc rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC76-1: A level with no figures reads the no-figure word, not nought
+### g10.shared-grading-submission.US1-TC76: A level with no figures reads the no-figure word, not nought
 
 **Classification:**
 
@@ -2467,7 +2467,7 @@ Runs once per row of **Test data**.
 * No column reads as HK$0.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-7ar rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC77-1: The fee sheet's title takes the heading rung it is given
+### g10.shared-grading-submission.US1-TC77: The fee sheet's title takes the heading rung it is given
 
 **Classification:**
 
@@ -2500,7 +2500,7 @@ Runs once per row of **Test data**.
 * Step 4: the title is a second-rung heading.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-mj2 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC78-1: A list given no cap refuses no add
+### g10.shared-grading-submission.US1-TC78: A list given no cap refuses no add
 
 **Classification:**
 
@@ -2531,7 +2531,7 @@ Runs once per row of **Test data**.
 * No line saying the submission is full renders.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ijg rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC79-1: A paste sheet with nothing read adds nothing
+### g10.shared-grading-submission.US1-TC79: A paste sheet with nothing read adds nothing
 
 **Classification:**
 
@@ -2563,7 +2563,7 @@ Runs once per row of **Test data**.
 * Step 4: the add button is disabled, and nothing logs under `onApply`.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-62a rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC80-1: Adding a card from the search reports the match
+### g10.shared-grading-submission.US1-TC80: Adding a card from the search reports the match
 
 **Classification:**
 
@@ -2594,7 +2594,7 @@ Runs once per row of **Test data**.
 * Step 4: `onAdd` logs the Blastoise match.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-1he rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC81-1: The value field reports once, on leaving it or Enter
+### g10.shared-grading-submission.US1-TC81: The value field reports once, on leaving it or Enter
 
 **Classification:**
 
@@ -2642,7 +2642,7 @@ Runs once per row of **Test data**.
 * Step 10: `onDeclare` logs once, with Charizard's id and <reopened value typed>.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-txr rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC82-1: The cap reads with the level the count closes
+### g10.shared-grading-submission.US1-TC82: The cap reads with the level the count closes
 
 **Classification:**
 
@@ -2671,7 +2671,7 @@ Runs once per row of **Test data**.
 * The cap and the level the count closes read as they were given.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-76a rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC83-1: The estimate carries what it includes and when it is paid
+### g10.shared-grading-submission.US1-TC83: The estimate carries what it includes and when it is paid
 
 **Classification:**
 
@@ -2709,7 +2709,7 @@ Runs once per row of **Test data**.
 * Step 3: neither line reads outside the estimate card.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-kko rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC84-1: A matched card's sales read with the reference note
+### g10.shared-grading-submission.US1-TC84: A matched card's sales read with the reference note
 
 **Classification:**
 
@@ -2746,7 +2746,7 @@ Runs once per row of **Test data**.
 * Step 3: the card kept as typed shows no sales and no reference note.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ial rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC85-1: The counter reads matching while the paste is matched
+### g10.shared-grading-submission.US1-TC85: The counter reads matching while the paste is matched
 
 **Classification:**
 
@@ -2778,7 +2778,7 @@ Runs once per row of **Test data**.
 * Step 4: the add button is disabled, and nothing logs under `onApply`.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-ji2 rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC86-1: An open level reads its figures in the words it was given
+### g10.shared-grading-submission.US1-TC86: An open level reads its figures in the words it was given
 
 **Classification:**
 
@@ -2808,7 +2808,7 @@ Runs once per row of **Test data**.
 * Step 2: HK$400 reads once on the card.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-58z rev=1 covers=none -->
-### shared-ui-grading-submission-US1-TC87-1: A refusal withdraws the act it refused
+### g10.shared-grading-submission.US1-TC87: A refusal withdraws the act it refused
 
 **Classification:**
 
@@ -2842,7 +2842,7 @@ Runs once per row of **Test data**.
 * Step 5: Book the drop-off is disabled; Save and book later is enabled.
 
 <!-- trace:case id=g10.shared-grading-submission.TC-94x rev=1 covers=g10.shared-grading-submission.SC-8at,g10.shared-grading-submission.SC-b0c,g10.shared-grading-submission.SC-4dl -->
-### shared-ui-grading-submission-US1-TC88-1: The package entry exports no grading collector block
+### g10.shared-grading-submission.US1-TC88: The package entry exports no grading collector block
 
 **Classification:**
 

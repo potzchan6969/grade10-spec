@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/36
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-ui-auction-listing-US1: The listing surface's rendering contract
+## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
 
@@ -14,7 +14,7 @@ is wide enough for that rail beside the main frame,
 progress instead of a crowded second rail.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-qgl rev=1 covers=g10.shared-auction-listing.SC-w7x,g10.shared-auction-listing.SC-tzp -->
-### shared-ui-auction-listing-US1-TC1-1: Buyer fee shows inline at 20%
+### g10.shared-auction-listing.US1-TC1: Buyer fee shows inline at 20%
 
 **Classification:**
 
@@ -45,7 +45,7 @@ progress instead of a crowded second rail.
 * Step 3: no buyer-fee tooltip opens.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-5tu rev=1 covers=g10.shared-auction-listing.SC-w7x,g10.shared-auction-listing.SC-tzp -->
-### shared-ui-auction-listing-US1-TC2-1: Signed-out panel omits the fee line
+### g10.shared-auction-listing.US1-TC2: Signed-out panel omits the fee line
 
 **Classification:**
 
@@ -74,7 +74,7 @@ progress instead of a crowded second rail.
 * The buyer-fee line is absent.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-lwb rev=1 covers=g10.shared-auction-listing.SC-7o5,g10.shared-auction-listing.SC-t9f,g10.shared-auction-listing.SC-2s5 -->
-### shared-ui-auction-listing-US1-TC3-1: Chips step from the current bid for a non-leader
+### g10.shared-auction-listing.US1-TC3: Chips step from the current bid for a non-leader
 
 Runs once per row of **Test data**.
 
@@ -117,7 +117,7 @@ Runs once per row of **Test data**.
 * Step 3: the amount entered is the 2× chip's amount.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-tcx rev=1 covers=g10.shared-auction-listing.SC-7o5,g10.shared-auction-listing.SC-t9f,g10.shared-auction-listing.SC-2s5 -->
-### shared-ui-auction-listing-US1-TC4-1: Chips step from a leader's committed maximum
+### g10.shared-auction-listing.US1-TC4: Chips step from a leader's committed maximum
 
 Runs once per row of **Test data**.
 
@@ -156,7 +156,7 @@ Runs once per row of **Test data**.
 * No chip reads <current bid> plus an increment.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-7vc rev=2 covers=g10.shared-auction-listing.SC-7o5,g10.shared-auction-listing.SC-t9f,g10.shared-auction-listing.SC-2s5 -->
-### shared-ui-auction-listing-US1-TC5-2: Before any bid, chip 1× is the opening price
+### g10.shared-auction-listing.US1-TC5: Before any bid, chip 1× is the opening price
 
 Runs once per row of **Test data**.
 
@@ -201,7 +201,7 @@ Runs once per row of **Test data**.
 * Step 3: the amount entered is <opening price>.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-gk7 rev=1 covers=g10.shared-auction-listing.SC-dv0 -->
-### shared-ui-auction-listing-US1-TC6-1: A leader's typed raise starts above their maximum
+### g10.shared-auction-listing.US1-TC6: A leader's typed raise starts above their maximum
 
 Runs once per row of **Test data**.
 
@@ -242,7 +242,7 @@ Runs once per row of **Test data**.
 * Step 3: the 1× chip reads <leader maximum> plus one increment, not the floor, where the two differ.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ijc rev=1 covers=g10.shared-auction-listing.SC-emk,g10.shared-auction-listing.SC-i3i -->
-### shared-ui-auction-listing-US1-TC7-1: Blocks import by name and the gallery stands alone
+### g10.shared-auction-listing.US1-TC7: Blocks import by name and the gallery stands alone
 
 **Classification:**
 
@@ -272,7 +272,7 @@ Runs once per row of **Test data**.
 * Step 2: the gallery renders both images with no bid panel.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-8cq rev=1 covers=g10.shared-auction-listing.SC-v9a,g10.shared-auction-listing.SC-4sr -->
-### shared-ui-auction-listing-US1-TC8-1: Each gallery view reads its own source, else the main one
+### g10.shared-auction-listing.US1-TC8: Each gallery view reads its own source, else the main one
 
 Runs once per row of **Test data**.
 
@@ -314,7 +314,7 @@ Runs once per row of **Test data**.
 * Step 4: the zoom shows <zoom shows>.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-04g rev=1 covers=g10.shared-auction-listing.SC-e6o,g10.shared-auction-listing.SC-96b,g10.shared-auction-listing.SC-1a8,g10.shared-auction-listing.SC-nlz,g10.shared-auction-listing.SC-ed7,g10.shared-auction-listing.SC-ln3 -->
-### shared-ui-auction-listing-US1-TC9-1: The strip shows only for several images
+### g10.shared-auction-listing.US1-TC9: The strip shows only for several images
 
 Runs once per row of **Test data**.
 
@@ -352,7 +352,7 @@ Runs once per row of **Test data**.
 * The gallery reads as <outcome>.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-bow rev=1 covers=g10.shared-auction-listing.SC-ogg,g10.shared-auction-listing.SC-0gu,g10.shared-auction-listing.SC-ptk -->
-### shared-ui-auction-listing-US1-TC10-1: Accessible names are the copy the application supplies
+### g10.shared-auction-listing.US1-TC10: Accessible names are the copy the application supplies
 
 **Classification:**
 
@@ -381,7 +381,7 @@ Runs once per row of **Test data**.
 * No accessible name is text the blocks supply themselves.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-53e rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi -->
-### shared-ui-auction-listing-US1-TC11-1: Bid rows read in the supplied locale and time zone
+### g10.shared-auction-listing.US1-TC11: Bid rows read in the supplied locale and time zone
 
 Runs once per row of **Test data**.
 
@@ -428,7 +428,7 @@ Runs once per row of **Test data**.
 * Each row keeps its accepted instant as data.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-7dq rev=1 covers=g10.shared-auction-listing.SC-ast,g10.shared-auction-listing.SC-h3u,g10.shared-auction-listing.SC-mm6 -->
-### shared-ui-auction-listing-US1-TC12-1: The owner opens their bidding from the recent-bids header
+### g10.shared-auction-listing.US1-TC12: The owner opens their bidding from the recent-bids header
 
 **Classification:**
 
@@ -462,7 +462,7 @@ Runs once per row of **Test data**.
 * Step 3: columns are amount and time only, no bid-type column.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-2dw rev=1 covers=g10.shared-auction-listing.SC-ast,g10.shared-auction-listing.SC-h3u,g10.shared-auction-listing.SC-mm6 -->
-### shared-ui-auction-listing-US1-TC13-1: Personal bid history with no rows renders nothing
+### g10.shared-auction-listing.US1-TC13: Personal bid history with no rows renders nothing
 
 **Classification:**
 
@@ -491,7 +491,7 @@ Runs once per row of **Test data**.
 * The recent-bids header still renders.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-0tl rev=1 covers=g10.shared-auction-listing.SC-yr9,g10.shared-auction-listing.SC-c86,g10.shared-auction-listing.SC-53a,g10.shared-auction-listing.SC-6dn -->
-### shared-ui-auction-listing-US1-TC14-1: Each dialog tab lists its own rows
+### g10.shared-auction-listing.US1-TC14: Each dialog tab lists its own rows
 
 **Classification:**
 
@@ -526,7 +526,7 @@ Runs once per row of **Test data**.
 * No maximum summary shows in the dialog.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-1nb rev=1 covers=g10.shared-auction-listing.SC-o4b,g10.shared-auction-listing.SC-wri,g10.shared-auction-listing.SC-1qn,g10.shared-auction-listing.SC-89v,g10.shared-auction-listing.SC-s3o,g10.shared-auction-listing.SC-srg,g10.shared-auction-listing.SC-ji6,g10.shared-auction-listing.SC-b43,g10.shared-auction-listing.SC-z9r,g10.shared-auction-listing.SC-92g,g10.shared-auction-listing.SC-b9p,g10.shared-auction-listing.SC-7da,g10.shared-auction-listing.SC-ujz,g10.shared-auction-listing.SC-egd -->
-### shared-ui-auction-listing-US1-TC15-1: The bid card follows the enrollment signal
+### g10.shared-auction-listing.US1-TC15: The bid card follows the enrollment signal
 
 Runs once per row of **Test data**.
 
@@ -569,7 +569,7 @@ Runs once per row of **Test data**.
 * Standing and the fee line are <standing and fee line>.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-edg rev=1 covers=g10.shared-auction-listing.SC-o4b,g10.shared-auction-listing.SC-wri,g10.shared-auction-listing.SC-1qn,g10.shared-auction-listing.SC-89v,g10.shared-auction-listing.SC-s3o,g10.shared-auction-listing.SC-srg,g10.shared-auction-listing.SC-ji6,g10.shared-auction-listing.SC-b43,g10.shared-auction-listing.SC-z9r,g10.shared-auction-listing.SC-92g,g10.shared-auction-listing.SC-b9p,g10.shared-auction-listing.SC-7da,g10.shared-auction-listing.SC-ujz,g10.shared-auction-listing.SC-egd -->
-### shared-ui-auction-listing-US1-TC16-1: Setup waits on a card and an attestation
+### g10.shared-auction-listing.US1-TC16: Setup waits on a card and an attestation
 
 Runs once per row of **Test data**.
 
@@ -610,7 +610,7 @@ Runs once per row of **Test data**.
 * Continue is <continue>.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-8vb rev=1 covers=g10.shared-auction-listing.SC-8xx -->
-### shared-ui-auction-listing-US1-TC17-1: A supplied accessory sits at the recent-bids header's end
+### g10.shared-auction-listing.US1-TC17: A supplied accessory sits at the recent-bids header's end
 
 **Classification:**
 
@@ -640,7 +640,7 @@ Runs once per row of **Test data**.
 * Step 2: the header renders with nothing in that place.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-npr rev=2 covers=g10.shared-auction-listing.SC-ik3 -->
-### shared-ui-auction-listing-US1-TC18-2: A lost standing shows the badge and no banner
+### g10.shared-auction-listing.US1-TC18: A lost standing shows the badge and no banner
 
 **Classification:**
 
@@ -670,7 +670,7 @@ Runs once per row of **Test data**.
 * Step 2: no banner shows on the card.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC19-1: Draft at the ceiling is accepted
+### g10.shared-auction-listing.US1-TC19: Draft at the ceiling is accepted
 
 **Classification:**
 
@@ -701,7 +701,7 @@ Runs once per row of **Test data**.
 * The draft shown is `9999999999`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC20-1: Typed digit past the ceiling restores the prior draft
+### g10.shared-auction-listing.US1-TC20: Typed digit past the ceiling restores the prior draft
 
 **Classification:**
 
@@ -732,7 +732,7 @@ Runs once per row of **Test data**.
 * The draft remains `9999999999`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-35i rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC21-1: Paste past the ceiling from empty stays empty
+### g10.shared-auction-listing.US1-TC21: Paste past the ceiling from empty stays empty
 
 **Classification:**
 
@@ -763,7 +763,7 @@ Runs once per row of **Test data**.
 * The draft remains empty.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC22-1: Paste past the ceiling restores the prior draft
+### g10.shared-auction-listing.US1-TC22: Paste past the ceiling restores the prior draft
 
 **Classification:**
 
@@ -794,7 +794,7 @@ Runs once per row of **Test data**.
 * The draft remains `500`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-bfp rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC23-1: Fractional paste that exceeds after whole-major cleaning restores the prior draft
+### g10.shared-auction-listing.US1-TC23: Fractional paste that exceeds after whole-major cleaning restores the prior draft
 
 **Classification:**
 
@@ -825,7 +825,7 @@ Runs once per row of **Test data**.
 * The draft remains `500`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC24-1: Raise path restores on overshoot
+### g10.shared-auction-listing.US1-TC24: Raise path restores on overshoot
 
 **Classification:**
 
@@ -854,7 +854,7 @@ Runs once per row of **Test data**.
 * The draft remains `9999999999`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC25-1: Over-ceiling refuse shows no dedicated error
+### g10.shared-auction-listing.US1-TC25: Over-ceiling refuse shows no dedicated error
 
 **Classification:**
 
@@ -886,7 +886,7 @@ Runs once per row of **Test data**.
 * No invalid-amount, below-floor or too-large message appears.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC26-1: Fractional paste at the ceiling after cleaning is accepted
+### g10.shared-auction-listing.US1-TC26: Fractional paste at the ceiling after cleaning is accepted
 
 **Classification:**
 
@@ -915,7 +915,7 @@ Runs once per row of **Test data**.
 * The draft shown is `9999999999`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-4f9 rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
-### shared-ui-auction-listing-US1-TC27-1: Closed sold Recent bids show a winner crown
+### g10.shared-auction-listing.US1-TC27: Closed sold Recent bids show a winner crown
 
 **Classification:**
 
@@ -946,7 +946,7 @@ Runs once per row of **Test data**.
 * Step 2: no row shows a crown.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-8pk rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
-### shared-ui-auction-listing-US1-TC28-1: Equal-max non-leader shows earlier-leads tip
+### g10.shared-auction-listing.US1-TC28: Equal-max non-leader shows earlier-leads tip
 
 **Classification:**
 
@@ -976,7 +976,7 @@ Runs once per row of **Test data**.
 * Step 2: the tooltip reads When maximums match, the earlier one leads.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-1bg rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
-### shared-ui-auction-listing-US1-TC29-1: No crown without its name
+### g10.shared-auction-listing.US1-TC29: No crown without its name
 
 **Classification:**
 
@@ -1005,7 +1005,7 @@ Runs once per row of **Test data**.
 * No row carries an accessible name the copy does not supply, Winner included.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-pz8 rev=1 covers=g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-as2 -->
-### shared-ui-auction-listing-US1-TC55-1: A catalogue tile close follows the viewer zone
+### g10.shared-auction-listing.US1-TC55: A catalogue tile close follows the viewer zone
 
 **Classification:**
 
@@ -1035,7 +1035,7 @@ Runs once per row of **Test data**.
 * The New York line names `EDT` and does not contain `HKT`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-38a rev=1 covers=g10.shared-auction-listing.SC-nlz -->
-### shared-ui-auction-listing-US1-TC30-1: Wide ListingLotGallery shows a left rail
+### g10.shared-auction-listing.US1-TC30: Wide ListingLotGallery shows a left rail
 
 **Classification:**
 
@@ -1066,7 +1066,7 @@ Runs once per row of **Test data**.
 * Previous and next remain available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-5ba rev=1 covers=g10.shared-auction-listing.SC-ed7 -->
-### shared-ui-auction-listing-US1-TC31-1: Stacked ListingLotGallery hides the rail
+### g10.shared-auction-listing.US1-TC31: Stacked ListingLotGallery hides the rail
 
 **Classification:**
 
@@ -1099,7 +1099,7 @@ Runs once per row of **Test data**.
 * Carousel progress remains available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-j0c rev=1 covers=g10.shared-auction-listing.SC-ln3 -->
-### shared-ui-auction-listing-US1-TC32-1: One ListingLotGallery image has no rail
+### g10.shared-auction-listing.US1-TC32: One ListingLotGallery image has no rail
 
 **Classification:**
 
@@ -1130,7 +1130,7 @@ Runs once per row of **Test data**.
 * Previous and next are not available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-dmy rev=1 covers=g10.shared-auction-listing.SC-1mh -->
-### shared-ui-auction-listing-US1-TC33-1: Empty ListingLotGallery has no item or navigation
+### g10.shared-auction-listing.US1-TC33: Empty ListingLotGallery has no item or navigation
 
 **Classification:**
 
@@ -1160,7 +1160,7 @@ Runs once per row of **Test data**.
 * Previous and next are not available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-n6b rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
-### shared-ui-auction-listing-US1-TC57-1: A tile's close line takes the supplied locale and zone together
+### g10.shared-auction-listing.US1-TC57: A tile's close line takes the supplied locale and zone together
 
 Runs once per row of **Test data**.
 
@@ -1200,7 +1200,7 @@ Runs once per row of **Test data**.
 * The line names <zone name>, in English though the locale is zh-Hant, and not HKT.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ae5 rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
-### shared-ui-auction-listing-US1-TC58-1: A bid row's display text replaces its formatted time
+### g10.shared-auction-listing.US1-TC58: A bid row's display text replaces its formatted time
 
 **Classification:**
 

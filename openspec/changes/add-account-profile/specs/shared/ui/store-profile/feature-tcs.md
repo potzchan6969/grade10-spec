@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/14
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-ui-store-profile-US1: The profile card, read view and form contract
+## g10.shared-store-profile.US1: The profile card, read view and form contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/store/account-profile`, which composes the surface
 
@@ -12,7 +12,7 @@
 **so that** both brands read and edit a profile the same way.
 
 <!-- trace:case id=g10.shared-store-profile.TC-1yv rev=1 covers=g10.shared-store-profile.SC-n3z,g10.shared-store-profile.SC-kr5 -->
-### shared-ui-store-profile-US1-TC1-1: Card, read view and form import and render apart
+### g10.shared-store-profile.US1-TC1: Card, read view and form import and render apart
 
 **Classification:**
 
@@ -45,7 +45,7 @@
 * Step 3 renders the form with no card around it.
 
 <!-- trace:case id=g10.shared-store-profile.TC-ghq rev=1 covers=g10.shared-store-profile.SC-ln9,g10.shared-store-profile.SC-mzb,g10.shared-store-profile.SC-d8w,g10.shared-store-profile.SC-z3a -->
-### shared-ui-store-profile-US1-TC2-1: Card shows the body the application selects
+### g10.shared-store-profile.US1-TC2: Card shows the body the application selects
 
 Runs once per row of **Test data**.
 
@@ -85,7 +85,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the title and the row's outcome.
 
 <!-- trace:case id=g10.shared-store-profile.TC-r9t rev=1 covers=g10.shared-store-profile.SC-7fw,g10.shared-store-profile.SC-ozv,g10.shared-store-profile.SC-4f1 -->
-### shared-ui-store-profile-US1-TC3-1: Read view shows the fields it is given and defaults none
+### g10.shared-store-profile.US1-TC3: Read view shows the fields it is given and defaults none
 
 Runs once per row of **Test data**.
 
@@ -124,7 +124,7 @@ Runs once per row of **Test data**.
 * Step 2 finds no word the props did not supply.
 
 <!-- trace:case id=g10.shared-store-profile.TC-cev rev=1 covers=g10.shared-store-profile.SC-67q,g10.shared-store-profile.SC-2r8 -->
-### shared-ui-store-profile-US1-TC4-1: Read view and form show the supplied fallback for a missing or broken avatar
+### g10.shared-store-profile.US1-TC4: Read view and form show the supplied fallback for a missing or broken avatar
 
 Runs once per row of **Test data**.
 
@@ -167,7 +167,7 @@ Runs once per row of **Test data**.
 * <fallback> shows in the avatar's place, no broken image.
 
 <!-- trace:case id=g10.shared-store-profile.TC-g2v rev=1 covers=g10.shared-store-profile.SC-tnt -->
-### shared-ui-store-profile-US1-TC5-1: Read view offers editing only with both an edit label and a handler
+### g10.shared-store-profile.US1-TC5: Read view offers editing only with both an edit label and a handler
 
 Runs once per row of **Test data**.
 
@@ -208,7 +208,7 @@ Runs once per row of **Test data**.
 * Step 2 calls the edit handler once.
 
 <!-- trace:case id=g10.shared-store-profile.TC-5j0 rev=1 covers=g10.shared-store-profile.SC-mc2,g10.shared-store-profile.SC-eqc,g10.shared-store-profile.SC-v9c -->
-### shared-ui-store-profile-US1-TC6-1: Form reports the values entered and the avatar outcome
+### g10.shared-store-profile.US1-TC6: Form reports the values entered and the avatar outcome
 
 Runs once per row of **Test data**.
 
@@ -259,7 +259,7 @@ Runs once per row of **Test data**.
 * Step 5 reports <typed name>, <typed bio> and the row's avatar outcome, once.
 
 <!-- trace:case id=g10.shared-store-profile.TC-y5b rev=1 covers=g10.shared-store-profile.SC-83g,g10.shared-store-profile.SC-67a -->
-### shared-ui-store-profile-US1-TC7-1: Form refuses nothing itself and shows the application's error
+### g10.shared-store-profile.US1-TC7: Form refuses nothing itself and shows the application's error
 
 **Classification:**
 
@@ -299,7 +299,7 @@ Runs once per row of **Test data**.
 * Step 5 shows <error> and keeps the entered values.
 
 <!-- trace:case id=g10.shared-store-profile.TC-v8k rev=1 covers=g10.shared-store-profile.SC-cxo -->
-### shared-ui-store-profile-US1-TC8-1: Form holds each field to the limit it is given
+### g10.shared-store-profile.US1-TC8: Form holds each field to the limit it is given
 
 Runs once per row of **Test data**.
 
@@ -339,7 +339,7 @@ Runs once per row of **Test data**.
 * Step 3 fails the type check, naming the missing limit.
 
 <!-- trace:case id=g10.shared-store-profile.TC-w3h rev=1 covers=g10.shared-store-profile.SC-at4 -->
-### shared-ui-store-profile-US1-TC9-1: Form shows the email it is given and edits none of it
+### g10.shared-store-profile.US1-TC9: Form shows the email it is given and edits none of it
 
 **Classification:**
 
@@ -377,7 +377,7 @@ Runs once per row of **Test data**.
 * Step 3 reports no email.
 
 <!-- trace:case id=g10.shared-store-profile.TC-bns rev=1 covers=g10.shared-store-profile.SC-bba -->
-### shared-ui-store-profile-US1-TC10-1: A save in flight cannot be sent again
+### g10.shared-store-profile.US1-TC10: A save in flight cannot be sent again
 
 **Classification:**
 
@@ -407,7 +407,7 @@ Runs once per row of **Test data**.
 * Step 2 reports nothing.
 
 <!-- trace:case id=g10.shared-store-profile.TC-chc rev=1 covers=g10.shared-store-profile.SC-0du -->
-### shared-ui-store-profile-US1-TC11-1: The avatar image carries the name the application gives it
+### g10.shared-store-profile.US1-TC11: The avatar image carries the name the application gives it
 
 Runs once per row of **Test data**.
 
@@ -450,7 +450,7 @@ Runs once per row of **Test data**.
 * Step 2 reads <image name>, never <display name> or a name of the component's own.
 
 <!-- trace:case id=g10.shared-store-profile.TC-1fi rev=1 covers=g10.shared-store-profile.SC-4f1,g10.shared-store-profile.SC-y6u -->
-### shared-ui-store-profile-US1-TC12-1: Every word on the surface comes from its copy
+### g10.shared-store-profile.US1-TC12: Every word on the surface comes from its copy
 
 **Classification:**
 
@@ -481,7 +481,7 @@ Runs once per row of **Test data**.
 * Step 3 fails the type check, naming the missing label.
 
 <!-- trace:case id=g10.shared-store-profile.TC-d6b rev=1 covers=g10.shared-store-profile.SC-7y6 -->
-### shared-ui-store-profile-US1-TC13-1: Form reports a cancel and no values
+### g10.shared-store-profile.US1-TC13: Form reports a cancel and no values
 
 **Classification:**
 
@@ -529,7 +529,7 @@ Runs once per row of **Test data**.
 * Step 5 shows no cancel control for any of <cancel props>.
 
 <!-- trace:case id=g10.shared-store-profile.TC-5zz rev=1 covers=g10.shared-store-profile.SC-tlq -->
-### shared-ui-store-profile-US1-TC14-1: Bio keeps its line breaks from the form to the read view
+### g10.shared-store-profile.US1-TC14: Bio keeps its line breaks from the form to the read view
 
 **Classification:**
 

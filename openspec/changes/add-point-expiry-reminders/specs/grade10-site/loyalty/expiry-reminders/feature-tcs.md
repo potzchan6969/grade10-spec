@@ -9,7 +9,7 @@
 * Each case sets the programme's clock and seeds its own members' balances; nothing carries between cases.
 * A member's day is the day their whole balance lapses, at the time of day the case names.
 
-## grade10-site-loyalty-expiry-reminders-US1: Who is owed a reminder before their points lapse
+## g10.loyalty-expiry-reminders.US1: Who is owed a reminder before their points lapse
 
 **Walked by:** nobody on their own - nothing delivers a reminder, so no member or operator reaches this capability; the member's story arrives with the change that binds a channel to it, and the expiry rule it reads is walked in `grade10-site/loyalty/programme`
 
@@ -18,7 +18,7 @@
 **so that** a channel chosen later can warn me before my points go.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-5wk rev=1 covers=g10.loyalty-expiry-reminders.SC-bhb,g10.loyalty-expiry-reminders.SC-7q3,g10.loyalty-expiry-reminders.SC-quh -->
-### grade10-site-loyalty-expiry-reminders-US1-TC1-1: A member is owed a reminder once their day falls within the lead time
+### g10.loyalty-expiry-reminders.US1-TC1: A member is owed a reminder once their day falls within the lead time
 
 Runs once per row of **Test data**.
 
@@ -67,7 +67,7 @@ Runs once per row of **Test data**.
 * It names `<member_1>` by user id alone: no name, email or mobile number.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-0an rev=1 covers=g10.loyalty-expiry-reminders.SC-7q3 -->
-### grade10-site-loyalty-expiry-reminders-US1-TC2-1: Days are counted on the Hong Kong clock
+### g10.loyalty-expiry-reminders.US1-TC2: Days are counted on the Hong Kong clock
 
 **Classification:**
 
@@ -110,7 +110,7 @@ Runs once per row of **Test data**.
 * The UTC date is the same at both steps.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-lb0 rev=1 covers=g10.loyalty-expiry-reminders.SC-qri -->
-### grade10-site-loyalty-expiry-reminders-US1-TC3-1: Two lead times on one day raise two reminders
+### g10.loyalty-expiry-reminders.US1-TC3: Two lead times on one day raise two reminders
 
 Runs once per row of **Test data**.
 
@@ -157,7 +157,7 @@ Runs once per row of **Test data**.
 * No two name the same lead.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-oxh rev=1 covers=g10.loyalty-expiry-reminders.SC-y1d -->
-### grade10-site-loyalty-expiry-reminders-US1-TC4-1: Asking again raises no second reminder
+### g10.loyalty-expiry-reminders.US1-TC4: Asking again raises no second reminder
 
 **Classification:**
 
@@ -192,7 +192,7 @@ Runs once per row of **Test data**.
 * Step 4's reminder is the one step 1 named.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-fgk rev=1 covers=g10.loyalty-expiry-reminders.SC-bhb,g10.loyalty-expiry-reminders.SC-t7s,g10.loyalty-expiry-reminders.SC-4yr,g10.loyalty-expiry-reminders.SC-quh -->
-### grade10-site-loyalty-expiry-reminders-US1-TC5-1: The answer names every member owed and no other
+### g10.loyalty-expiry-reminders.US1-TC5: The answer names every member owed and no other
 
 Runs once per row of **Test data**.
 
@@ -240,7 +240,7 @@ Runs once per row of **Test data**.
 * Each reminder names its member's own day and points.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-g1r rev=1 covers=g10.loyalty-expiry-reminders.SC-qfb -->
-### grade10-site-loyalty-expiry-reminders-US1-TC6-1: A programme with no lead-time setting starts and owes no reminder
+### g10.loyalty-expiry-reminders.US1-TC6: A programme with no lead-time setting starts and owes no reminder
 
 **Classification:**
 
@@ -272,7 +272,7 @@ Runs once per row of **Test data**.
 * Step 3's answer names nobody.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-yt2 rev=1 covers=g10.loyalty-expiry-reminders.SC-tvk -->
-### grade10-site-loyalty-expiry-reminders-US1-TC7-1: Lead times at the limit are accepted
+### g10.loyalty-expiry-reminders.US1-TC7: Lead times at the limit are accepted
 
 Runs once per row of **Test data**.
 
@@ -313,7 +313,7 @@ Runs once per row of **Test data**.
 * Step 3's answer holds the reminders the row names, for 2027-01-03.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-sbr rev=2 covers=g10.loyalty-expiry-reminders.SC-aib -->
-### grade10-site-loyalty-expiry-reminders-US1-TC8-2: Grade10's programme owes one reminder 30 days ahead
+### g10.loyalty-expiry-reminders.US1-TC8: Grade10's programme owes one reminder 30 days ahead
 
 Runs once per row of **Test data**.
 
@@ -353,7 +353,7 @@ Runs once per row of **Test data**.
 * No reminder names any lead other than 30 days.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-iyo rev=1 covers=g10.loyalty-expiry-reminders.SC-9az -->
-### grade10-site-loyalty-expiry-reminders-US1-TC9-1: The points stay current while the day stands
+### g10.loyalty-expiry-reminders.US1-TC9: The points stay current while the day stands
 
 Runs once per row of **Test data**.
 
@@ -402,7 +402,7 @@ Runs once per row of **Test data**.
 * Step 3's reminder is the one step 1 named.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-gjy rev=1 covers=g10.loyalty-expiry-reminders.SC-vup -->
-### grade10-site-loyalty-expiry-reminders-US1-TC10-1: A reminder is gone at once when its day moves
+### g10.loyalty-expiry-reminders.US1-TC10: A reminder is gone at once when its day moves
 
 Runs once per row of **Test data**.
 
@@ -447,7 +447,7 @@ Runs once per row of **Test data**.
 * Step 3 names no reminder for `<member_1>` on `<new day>`.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-bl4 rev=1 covers=g10.loyalty-expiry-reminders.SC-4iv -->
-### grade10-site-loyalty-expiry-reminders-US1-TC11-1: A reminder is gone when the balance is brought to nothing
+### g10.loyalty-expiry-reminders.US1-TC11: A reminder is gone when the balance is brought to nothing
 
 Runs once per row of **Test data**.
 
@@ -493,7 +493,7 @@ Runs once per row of **Test data**.
 * Step 3 names no reminder for `<member_1>`.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-dy1 rev=1 covers=g10.loyalty-expiry-reminders.SC-wib -->
-### grade10-site-loyalty-expiry-reminders-US1-TC12-1: A reminder is gone the moment the balance lapses
+### g10.loyalty-expiry-reminders.US1-TC12: A reminder is gone the moment the balance lapses
 
 **Classification:**
 
@@ -526,7 +526,7 @@ Runs once per row of **Test data**.
 * Step 4 names no reminder for `<member_1>`.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-7xb rev=1 covers=g10.loyalty-expiry-reminders.SC-vup -->
-### grade10-site-loyalty-expiry-reminders-US1-TC13-1: A reminder nobody asked for is gone too
+### g10.loyalty-expiry-reminders.US1-TC13: A reminder nobody asked for is gone too
 
 **Classification:**
 
@@ -558,7 +558,7 @@ Runs once per row of **Test data**.
 * Step 2 names no reminder for `<member_1>` on 2027-01-13.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-2lr rev=1 covers=g10.loyalty-expiry-reminders.SC-q6l -->
-### grade10-site-loyalty-expiry-reminders-US1-TC14-1: A raised reminder names no channel and nothing is sent
+### g10.loyalty-expiry-reminders.US1-TC14: A raised reminder names no channel and nothing is sent
 
 **Classification:**
 
@@ -592,7 +592,7 @@ Runs once per row of **Test data**.
 * Step 3: the Activity list has gained no line.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-9gd rev=1 covers=g10.loyalty-expiry-reminders.SC-tvk -->
-### grade10-site-loyalty-expiry-reminders-US1-TC15-1: A lead-time setting that cannot work stops the programme starting
+### g10.loyalty-expiry-reminders.US1-TC15: A lead-time setting that cannot work stops the programme starting
 
 Runs once per row of **Test data**.
 
@@ -633,7 +633,7 @@ Runs once per row of **Test data**.
 * The start-up failure names the lead-time setting and the row's reason.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-plu rev=1 covers=g10.loyalty-expiry-reminders.SC-jbb -->
-### grade10-site-loyalty-expiry-reminders-US1-TC16-1: Deleting the account drops the member's reminder
+### g10.loyalty-expiry-reminders.US1-TC16: Deleting the account drops the member's reminder
 
 **Classification:**
 
@@ -666,7 +666,7 @@ Runs once per row of **Test data**.
 * Step 3 names no reminder for `<member_1>`.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-pdh rev=2 covers=g10.loyalty-expiry-reminders.SC-r8n -->
-### grade10-site-loyalty-expiry-reminders-US1-TC17-2: Points returned to the running day are owed the same reminder again
+### g10.loyalty-expiry-reminders.US1-TC17: Points returned to the running day are owed the same reminder again
 
 Runs once per row of **Test data**.
 
@@ -717,7 +717,7 @@ Runs once per row of **Test data**.
 * Step 5's reminder is the one step 1 named.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-spx rev=1 covers=g10.loyalty-expiry-reminders.SC-eci -->
-### grade10-site-loyalty-expiry-reminders-US1-TC18-1: A lead time taken out of the setting is owed nothing
+### g10.loyalty-expiry-reminders.US1-TC18: A lead time taken out of the setting is owed nothing
 
 **Classification:**
 
@@ -752,7 +752,7 @@ Runs once per row of **Test data**.
 * Step 3 names no reminder with the 7-day lead.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-6nx rev=1 covers=g10.loyalty-expiry-reminders.SC-vup -->
-### grade10-site-loyalty-expiry-reminders-US1-TC19-1: A day moved but still within the lead owes a reminder for the new day
+### g10.loyalty-expiry-reminders.US1-TC19: A day moved but still within the lead owes a reminder for the new day
 
 **Classification:**
 
@@ -792,7 +792,7 @@ Runs once per row of **Test data**.
 * Step 3 names one reminder: `<member_1>`, 2027-01-20, 510 points, the 30-day lead.
 
 <!-- trace:case id=g10.loyalty-expiry-reminders.TC-5lh rev=1 covers=g10.loyalty-expiry-reminders.SC-4iv,g10.loyalty-expiry-reminders.SC-vup -->
-### grade10-site-loyalty-expiry-reminders-US1-TC20-1: Points granted onto a balance brought to nothing owe no reminder for the old day
+### g10.loyalty-expiry-reminders.US1-TC20: Points granted onto a balance brought to nothing owe no reminder for the old day
 
 Runs once per row of **Test data**.
 

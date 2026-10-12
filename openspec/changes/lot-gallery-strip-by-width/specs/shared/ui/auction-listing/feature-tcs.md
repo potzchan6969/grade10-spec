@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/4
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-ui-auction-listing-US1: The listing surface's rendering contract
+## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
 
@@ -14,7 +14,7 @@ is wide enough for that rail beside the main frame,
 progress instead of a crowded second rail.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-38a rev=1 covers=g10.shared-auction-listing.SC-nlz -->
-### shared-ui-auction-listing-US1-TC30-1: Wide ListingLotGallery shows a left rail
+### g10.shared-auction-listing.US1-TC30: Wide ListingLotGallery shows a left rail
 
 **Classification:**
 
@@ -45,7 +45,7 @@ progress instead of a crowded second rail.
 * Previous and next remain available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-5ba rev=1 covers=g10.shared-auction-listing.SC-ed7 -->
-### shared-ui-auction-listing-US1-TC31-1: Stacked ListingLotGallery hides the rail
+### g10.shared-auction-listing.US1-TC31: Stacked ListingLotGallery hides the rail
 
 **Classification:**
 
@@ -78,7 +78,7 @@ progress instead of a crowded second rail.
 * Carousel progress remains available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-j0c rev=1 covers=g10.shared-auction-listing.SC-ln3 -->
-### shared-ui-auction-listing-US1-TC32-1: One ListingLotGallery image has no rail
+### g10.shared-auction-listing.US1-TC32: One ListingLotGallery image has no rail
 
 **Classification:**
 
@@ -109,7 +109,7 @@ progress instead of a crowded second rail.
 * Previous and next are not available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-dmy rev=1 covers=g10.shared-auction-listing.SC-1mh -->
-### shared-ui-auction-listing-US1-TC33-1: Empty ListingLotGallery has no item or navigation
+### g10.shared-auction-listing.US1-TC33: Empty ListingLotGallery has no item or navigation
 
 **Classification:**
 

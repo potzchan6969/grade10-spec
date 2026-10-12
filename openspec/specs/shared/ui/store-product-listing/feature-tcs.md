@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/17
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-ui-store-product-listing-US1: What the listing surface holds
+## g10.shared-store-product-listing.US1: What the listing surface holds
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
 **As a** shopper reading a surface that composes the listing's tiles,
@@ -11,7 +11,7 @@
 **so that** a tile reads the same wherever the store draws it.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-oqz rev=1 covers=none -->
-### shared-ui-store-product-listing-US1-TC1-1: Sold-out tile with an activation target still opens its card
+### g10.shared-store-product-listing.US1-TC1: Sold-out tile with an activation target still opens its card
 
 **Classification:**
 
@@ -43,7 +43,7 @@
 * No cart control is drawn on the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-mzb rev=1 covers=g10.shared-store-product-listing.SC-rzq -->
-### shared-ui-store-product-listing-US1-TC2-1: Tile drawn with no cart control does not require cart copy
+### g10.shared-store-product-listing.US1-TC2: Tile drawn with no cart control does not require cart copy
 
 **Classification:**
 
@@ -75,7 +75,7 @@
 * No cart wording appears on the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-o4i rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC3-1: Tile given its address opens as a link
+### g10.shared-store-product-listing.US1-TC3: Tile given its address opens as a link
 
 **Classification:**
 
@@ -109,7 +109,7 @@
 * Step 3 opens the product in a new tab from each link and reports nothing, and the first tab stays where it was.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-e05 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC4-1: Name opens the product the same way as the photo
+### g10.shared-store-product-listing.US1-TC4: Name opens the product the same way as the photo
 
 Runs once per row of **Test data**.
 
@@ -156,7 +156,7 @@ Runs once per row of **Test data**.
 * The cart control is as the row's **Cart control** says while the pointer is over the photo and while focus is in the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-5vw rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC5-1: Name in the browse grid opens its own product
+### g10.shared-store-product-listing.US1-TC5: Name in the browse grid opens its own product
 
 **Classification:**
 
@@ -189,7 +189,7 @@ Runs once per row of **Test data**.
 * Step 4 logs one product activation, for `<product_1>`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-rny rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC6-1: Name is plain at rest and underlined on hover
+### g10.shared-store-product-listing.US1-TC6: Name is plain at rest and underlined on hover
 
 **Classification:**
 
@@ -221,7 +221,7 @@ Runs once per row of **Test data**.
 * Step 3 removes the underline.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-63a rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-xip,g10.shared-store-product-listing.SC-nh0,g10.shared-store-product-listing.SC-sz8,g10.shared-store-product-listing.SC-ry5,g10.shared-store-product-listing.SC-7v7 -->
-### shared-ui-store-product-listing-US1-TC7-1: Name is the tile's one keyboard stop to open, and opens from the keyboard
+### g10.shared-store-product-listing.US1-TC7: Name is the tile's one keyboard stop to open, and opens from the keyboard
 
 **Classification:**
 
@@ -260,7 +260,7 @@ Runs once per row of **Test data**.
 * Step 7 announces one control named for `<product_1>`; the photo is not announced.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-rg1 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC8-1: Sold-out name and photo stay inert on a tile that sells
+### g10.shared-store-product-listing.US1-TC8: Sold-out name and photo stay inert on a tile that sells
 
 Runs once per row of **Test data**.
 
@@ -309,7 +309,7 @@ Runs once per row of **Test data**.
 * Neither the name nor the photo is offered as a link or a button.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-lbw rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC9-1: No activation callback and no address leave name and photo inert
+### g10.shared-store-product-listing.US1-TC9: No activation callback and no address leave name and photo inert
 
 **Classification:**
 
@@ -346,7 +346,7 @@ Runs once per row of **Test data**.
 * Neither the name nor the photo is offered as a link or a button.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-xph rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC10-1: Sold-out name and photo open on a tile that does not sell
+### g10.shared-store-product-listing.US1-TC10: Sold-out name and photo open on a tile that does not sell
 
 **Classification:**
 
@@ -385,7 +385,7 @@ Runs once per row of **Test data**.
 * Step 7 lands focus on the name, underlined, not on the photo.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-64a rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC11-1: Name is a link where the tile is given an address alone
+### g10.shared-store-product-listing.US1-TC11: Name is a link where the tile is given an address alone
 
 Runs once per row of **Test data**.
 
@@ -433,7 +433,7 @@ Runs once per row of **Test data**.
 * The Actions panel logs no tile activation throughout.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-1vn rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-xip,g10.shared-store-product-listing.SC-nh0,g10.shared-store-product-listing.SC-sz8,g10.shared-store-product-listing.SC-ry5,g10.shared-store-product-listing.SC-7v7 -->
-### shared-ui-store-product-listing-US1-TC12-1: Photo used alone opens where a tile would, as its own stop
+### g10.shared-store-product-listing.US1-TC12: Photo used alone opens where a tile would, as its own stop
 
 Runs once per row of **Test data**.
 
@@ -477,7 +477,7 @@ Runs once per row of **Test data**.
 * Steps 3 to 6 go as the row's **Outcome** says.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-d6j rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
-### shared-ui-store-product-listing-US1-TC15-1: Photo draws as supplied in an available, on-sale or in-cart tile
+### g10.shared-store-product-listing.US1-TC15: Photo draws as supplied in an available, on-sale or in-cart tile
 
 Runs once per row of **Test data**.
 
@@ -522,7 +522,7 @@ Runs once per row of **Test data**.
 * Step 5: the photo's computed blend mode is `normal`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-ema rev=1 covers=g10.shared-store-product-listing.SC-ta3 -->
-### shared-ui-store-product-listing-US1-TC16-1: Sold-out photo draws as supplied under the sold-out treatment
+### g10.shared-store-product-listing.US1-TC16: Sold-out photo draws as supplied under the sold-out treatment
 
 Runs once per row of **Test data**.
 
@@ -563,7 +563,7 @@ Runs once per row of **Test data**.
 * Step 3: the photo's computed blend mode is `normal`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-5u0 rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
-### shared-ui-store-product-listing-US1-TC17-1: Every store surface drawing the tile shows the photo as supplied
+### g10.shared-store-product-listing.US1-TC17: Every store surface drawing the tile shows the photo as supplied
 
 Runs once per row of **Test data**.
 
@@ -607,7 +607,7 @@ Runs once per row of **Test data**.
 * Step 5: the photo's computed blend mode is `normal`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-pov rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC18-1: Non-square photo shows whole in every tile status
+### g10.shared-store-product-listing.US1-TC18: Non-square photo shows whole in every tile status
 
 Runs once per row of **Test data**.
 
@@ -656,7 +656,7 @@ Runs once per row of **Test data**.
 * Sold out row: the whole photo is faded.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-vn1 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC19-1: Landscape, square and small photos each show whole
+### g10.shared-store-product-listing.US1-TC19: Landscape, square and small photos each show whole
 
 Runs once per row of **Test data**.
 
@@ -705,7 +705,7 @@ Runs once per row of **Test data**.
 * Step 3: every edge of the photo opened on its own also shows in the well, all but the corners the row's **Outcome** rounds.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-e18 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC20-1: Slab tile shows the whole slab on every store surface
+### g10.shared-store-product-listing.US1-TC20: Slab tile shows the whole slab on every store surface
 
 Runs once per row of **Test data**.
 

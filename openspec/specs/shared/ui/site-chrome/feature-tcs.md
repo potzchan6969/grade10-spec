@@ -5,7 +5,7 @@
 
 **Out of suite:** none.
 
-## shared-ui-site-chrome-US1: Shared chrome contract
+## g10.shared-site-chrome.US1: Shared chrome contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
 **As an** application composing the shared chrome,
@@ -16,7 +16,7 @@ header for any brand,
 reimplementing its behavior.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-29c rev=1 covers=g10.shared-site-chrome.SC-cmm,g10.shared-site-chrome.SC-80n -->
-### shared-ui-site-chrome-US1-TC1-1: External primary-nav link opens a new tab
+### g10.shared-site-chrome.US1-TC1: External primary-nav link opens a new tab
 
 **Classification:**
 
@@ -47,7 +47,7 @@ reimplementing its behavior.
 * The compact-menu link has the same attributes.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-tyf rev=1 covers=g10.shared-site-chrome.SC-cmm,g10.shared-site-chrome.SC-80n -->
-### shared-ui-site-chrome-US1-TC2-1: Same-tab link has no blank target
+### g10.shared-site-chrome.US1-TC2: Same-tab link has no blank target
 
 **Classification:**
 
@@ -76,7 +76,7 @@ reimplementing its behavior.
 * The link has no `target="_blank"`.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-vbw rev=1 covers=g10.shared-site-chrome.SC-xvs,g10.shared-site-chrome.SC-rfu,g10.shared-site-chrome.SC-v7l,g10.shared-site-chrome.SC-ff5,g10.shared-site-chrome.SC-7fd,g10.shared-site-chrome.SC-i31,g10.shared-site-chrome.SC-h0z -->
-### shared-ui-site-chrome-US1-TC3-1: The shared chrome exports resolve
+### g10.shared-site-chrome.US1-TC3: The shared chrome exports resolve
 
 **Classification:**
 
@@ -105,7 +105,7 @@ reimplementing its behavior.
 * Every import resolves.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-awm rev=1 covers=g10.shared-site-chrome.SC-xvs,g10.shared-site-chrome.SC-rfu,g10.shared-site-chrome.SC-v7l,g10.shared-site-chrome.SC-ff5,g10.shared-site-chrome.SC-7fd,g10.shared-site-chrome.SC-i31,g10.shared-site-chrome.SC-h0z -->
-### shared-ui-site-chrome-US1-TC4-1: Header and footer render independently with supplied copy
+### g10.shared-site-chrome.US1-TC4: Header and footer render independently with supplied copy
 
 **Classification:**
 
@@ -136,7 +136,7 @@ reimplementing its behavior.
 * The supplied copy appears in the component that receives it.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-5t5 rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC5-1: No cart handler leaves no cart control
+### g10.shared-site-chrome.US1-TC5: No cart handler leaves no cart control
 
 **Classification:**
 
@@ -166,7 +166,7 @@ reimplementing its behavior.
 * No space is reserved for the missing control.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-an4 rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC6-1: Only supplied controls appear
+### g10.shared-site-chrome.US1-TC6: Only supplied controls appear
 
 **Classification:**
 
@@ -196,7 +196,7 @@ reimplementing its behavior.
 * Search and Cart do not appear.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-jkg rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC7-1: Language is not a wishlist or currency control
+### g10.shared-site-chrome.US1-TC7: Language is not a wishlist or currency control
 
 **Classification:**
 
@@ -226,7 +226,7 @@ reimplementing its behavior.
 * The locale presents language options and no currency switch.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-aui rev=1 covers=g10.shared-site-chrome.SC-7fd,g10.shared-site-chrome.SC-h0z -->
-### shared-ui-site-chrome-US1-TC8-1: Signed-out chrome presents Sign In
+### g10.shared-site-chrome.US1-TC8: Signed-out chrome presents Sign In
 
 **Classification:**
 
@@ -258,7 +258,7 @@ reimplementing its behavior.
 * Step 3: no Profile, My Orders or Membership control.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-9d7 rev=2 covers=none -->
-### shared-ui-site-chrome-US1-TC9-2: Signed-in chrome presents the account menu
+### g10.shared-site-chrome.US1-TC9: Signed-in chrome presents the account menu
 
 **Classification:**
 
@@ -291,7 +291,7 @@ reimplementing its behavior.
 * The menu does not offer KYC.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-0xk rev=1 covers=g10.shared-site-chrome.SC-xzm -->
-### shared-ui-site-chrome-US1-TC12-1: Activating My Orders invokes its handler
+### g10.shared-site-chrome.US1-TC12: Activating My Orders invokes its handler
 
 **Classification:**
 
@@ -322,7 +322,7 @@ reimplementing its behavior.
 * Step 3: no other account-menu handler is invoked.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-lc0 rev=2 covers=g10.shared-site-chrome.SC-xyv -->
-### shared-ui-site-chrome-US1-TC13-2: Account menu omits My Orders when its handler is not supplied
+### g10.shared-site-chrome.US1-TC13: Account menu omits My Orders when its handler is not supplied
 
 **Classification:**
 
@@ -353,7 +353,7 @@ reimplementing its behavior.
 * Step 3: no My Orders item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-psm rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC10-1: Compact chrome keeps account and reaches language
+### g10.shared-site-chrome.US1-TC10: Compact chrome keeps account and reaches language
 
 **Classification:**
 
@@ -386,7 +386,7 @@ reimplementing its behavior.
 * The menu panel leaves a visible gutter.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-jup rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC11-1: Wide chrome keeps navigation in the bar
+### g10.shared-site-chrome.US1-TC11: Wide chrome keeps navigation in the bar
 
 **Classification:**
 
@@ -415,7 +415,7 @@ reimplementing its behavior.
 * The compact menu trigger is absent.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-o41 rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC14-1: Account menu renders only My Auctions and Sign Out with no optional handlers supplied
+### g10.shared-site-chrome.US1-TC14: Account menu renders only My Auctions and Sign Out with no optional handlers supplied
 
 **Classification:**
 
@@ -444,7 +444,7 @@ reimplementing its behavior.
 * The menu lists only My Auctions and Sign Out, in that order.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-rkf rev=2 covers=g10.shared-site-chrome.SC-yiu,g10.shared-site-chrome.SC-hhb,g10.shared-site-chrome.SC-cl2 -->
-### shared-ui-site-chrome-US1-TC15-2: Account menu orders Profile, My Orders, My Auctions, Membership, then Sign Out when every handler is supplied
+### g10.shared-site-chrome.US1-TC15: Account menu orders Profile, My Orders, My Auctions, Membership, then Sign Out when every handler is supplied
 
 **Classification:**
 
@@ -477,7 +477,7 @@ reimplementing its behavior.
 * Step 3: no KYC item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-mp4 rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC16-1: Membership joins after My Auctions even when My Orders is not supplied
+### g10.shared-site-chrome.US1-TC16: Membership joins after My Auctions even when My Orders is not supplied
 
 **Classification:**
 
@@ -506,7 +506,7 @@ reimplementing its behavior.
 * My Orders does not appear, and Sign Out is the last item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-y33 rev=2 covers=g10.shared-site-chrome.SC-bzz -->
-### shared-ui-site-chrome-US1-TC17-2: Account menu shows the configured label and no avatar when no email is supplied
+### g10.shared-site-chrome.US1-TC17: Account menu shows the configured label and no avatar when no email is supplied
 
 **Classification:**
 
@@ -537,7 +537,7 @@ reimplementing its behavior.
 * Step 3: no avatar.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-tfo rev=2 covers=g10.shared-site-chrome.SC-oe5 -->
-### shared-ui-site-chrome-US1-TC18-2: Activating Membership invokes the supplied handler
+### g10.shared-site-chrome.US1-TC18: Activating Membership invokes the supplied handler
 
 **Classification:**
 
@@ -568,7 +568,7 @@ reimplementing its behavior.
 * Step 3: no other account-menu handler is invoked.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-isx rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC19-1: Membership is omitted without its handler
+### g10.shared-site-chrome.US1-TC19: Membership is omitted without its handler
 
 **Classification:**
 
@@ -597,7 +597,7 @@ reimplementing its behavior.
 * My Orders, My Auctions, and Sign Out remain, in that order.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-ylo rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi -->
-### shared-ui-site-chrome-US1-TC20-1: Membership is omitted when its handler is supplied but its copy is not
+### g10.shared-site-chrome.US1-TC20: Membership is omitted when its handler is supplied but its copy is not
 
 **Classification:**
 
@@ -625,7 +625,7 @@ reimplementing its behavior.
 * Membership does not appear in the menu, even though `onMembership` was supplied.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-f8v rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi,g10.shared-site-chrome.SC-6id,g10.shared-site-chrome.SC-szi,g10.shared-site-chrome.SC-1ow,g10.shared-site-chrome.SC-xw7,g10.shared-site-chrome.SC-bc3,g10.shared-site-chrome.SC-92l -->
-### shared-ui-site-chrome-US1-TC21-1: A cart slot replaces the built-in control
+### g10.shared-site-chrome.US1-TC21: A cart slot replaces the built-in control
 
 Runs once per row of **Test data**.
 
@@ -666,7 +666,7 @@ Runs once per row of **Test data**.
 * Activating the slot runs only the slot's own action, never a supplied Cart handler.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-6iz rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi,g10.shared-site-chrome.SC-6id,g10.shared-site-chrome.SC-szi,g10.shared-site-chrome.SC-1ow,g10.shared-site-chrome.SC-xw7,g10.shared-site-chrome.SC-bc3,g10.shared-site-chrome.SC-92l -->
-### shared-ui-site-chrome-US1-TC22-1: An empty cart hides the count indicator
+### g10.shared-site-chrome.US1-TC22: An empty cart hides the count indicator
 
 Runs once per row of **Test data**.
 
@@ -706,7 +706,7 @@ Runs once per row of **Test data**.
 * The Cart control's accessible name reads `Basket`, with no count.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-1qr rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi,g10.shared-site-chrome.SC-6id,g10.shared-site-chrome.SC-szi,g10.shared-site-chrome.SC-1ow,g10.shared-site-chrome.SC-xw7,g10.shared-site-chrome.SC-bc3,g10.shared-site-chrome.SC-92l -->
-### shared-ui-site-chrome-US1-TC23-1: Active cart counts appear in full
+### g10.shared-site-chrome.US1-TC23: Active cart counts appear in full
 
 Runs once per row of **Test data**.
 
@@ -754,7 +754,7 @@ Runs once per row of **Test data**.
 * `NavProps` takes no cart count.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-uca rev=1 covers=g10.shared-site-chrome.SC-5a2,g10.shared-site-chrome.SC-at6,g10.shared-site-chrome.SC-aq6,g10.shared-site-chrome.SC-dti,g10.shared-site-chrome.SC-bv8,g10.shared-site-chrome.SC-cp9,g10.shared-site-chrome.SC-y8d,g10.shared-site-chrome.SC-bjp,g10.shared-site-chrome.SC-bzz,g10.shared-site-chrome.SC-agk,g10.shared-site-chrome.SC-cl2,g10.shared-site-chrome.SC-w7p,g10.shared-site-chrome.SC-oe5,g10.shared-site-chrome.SC-0eb,g10.shared-site-chrome.SC-79u,g10.shared-site-chrome.SC-ebi,g10.shared-site-chrome.SC-6id,g10.shared-site-chrome.SC-szi,g10.shared-site-chrome.SC-1ow,g10.shared-site-chrome.SC-xw7,g10.shared-site-chrome.SC-bc3,g10.shared-site-chrome.SC-92l -->
-### shared-ui-site-chrome-US1-TC24-1: A count without a Cart handler adds no Cart control
+### g10.shared-site-chrome.US1-TC24: A count without a Cart handler adds no Cart control
 
 **Classification:**
 
@@ -784,7 +784,7 @@ Runs once per row of **Test data**.
 * No count indicator appears in the header.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-thx rev=1 covers=g10.shared-site-chrome.SC-cp9 -->
-### shared-ui-site-chrome-US1-TC25-1: Profile is omitted when onProfile is not supplied
+### g10.shared-site-chrome.US1-TC25: Profile is omitted when onProfile is not supplied
 
 **Classification:**
 
@@ -815,7 +815,7 @@ Runs once per row of **Test data**.
 * Step 3: no Profile item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-3cf rev=1 covers=g10.shared-site-chrome.SC-bjp -->
-### shared-ui-site-chrome-US1-TC26-1: Activating Profile invokes its handler
+### g10.shared-site-chrome.US1-TC26: Activating Profile invokes its handler
 
 **Classification:**
 
@@ -846,7 +846,7 @@ Runs once per row of **Test data**.
 * Step 3: no other account-menu handler is invoked.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-hf6 rev=1 covers=g10.shared-site-chrome.SC-61e -->
-### shared-ui-site-chrome-US1-TC27-1: The header takes no second orders item
+### g10.shared-site-chrome.US1-TC27: The header takes no second orders item
 
 **Classification:**
 

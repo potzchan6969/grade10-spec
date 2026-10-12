@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/1
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
-## shared-ui-store-home-US1: What the store home blocks hold
+## g10.shared-store-home.US1: What the store home blocks hold
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home` and `grade10-site/store/cross-sell`, which compose the blocks
 **As a** shopper reading a surface that composes the store home blocks,
@@ -11,7 +11,7 @@
 **so that** every surface built from them reads as one store.
 
 <!-- trace:case id=g10.shared-store-home.TC-tvf rev=1 covers=g10.shared-store-home.SC-rkl,g10.shared-store-home.SC-fxb,g10.shared-store-home.SC-l81 -->
-### shared-ui-store-home-US1-TC1-1: Section header renders title alone with no browse link
+### g10.shared-store-home.US1-TC1: Section header renders title alone with no browse link
 
 **Classification:**
 

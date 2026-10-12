@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-ui-store-product-listing-US1: What the listing surface holds
+## g10.shared-store-product-listing.US1: What the listing surface holds
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
 **As a** shopper reading a surface that composes the listing's tiles,
@@ -11,7 +11,7 @@
 **so that** a tile reads the same wherever the store draws it.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-d6j rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
-### shared-ui-store-product-listing-US1-TC15-1: Photo draws as supplied in an available, on-sale or in-cart tile
+### g10.shared-store-product-listing.US1-TC15: Photo draws as supplied in an available, on-sale or in-cart tile
 
 Runs once per row of **Test data**.
 
@@ -56,7 +56,7 @@ Runs once per row of **Test data**.
 * Step 5: the photo's computed blend mode is `normal`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-ema rev=1 covers=g10.shared-store-product-listing.SC-ta3 -->
-### shared-ui-store-product-listing-US1-TC16-1: Sold-out photo draws as supplied under the sold-out treatment
+### g10.shared-store-product-listing.US1-TC16: Sold-out photo draws as supplied under the sold-out treatment
 
 Runs once per row of **Test data**.
 
@@ -97,7 +97,7 @@ Runs once per row of **Test data**.
 * Step 3: the photo's computed blend mode is `normal`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-5u0 rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
-### shared-ui-store-product-listing-US1-TC17-1: Every store surface drawing the tile shows the photo as supplied
+### g10.shared-store-product-listing.US1-TC17: Every store surface drawing the tile shows the photo as supplied
 
 Runs once per row of **Test data**.
 

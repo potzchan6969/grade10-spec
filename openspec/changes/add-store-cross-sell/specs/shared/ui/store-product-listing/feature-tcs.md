@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/2
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
-## shared-ui-store-product-listing-US1: What the listing surface holds
+## g10.shared-store-product-listing.US1: What the listing surface holds
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
 **As a** shopper reading a surface that composes the listing's tiles,
@@ -11,7 +11,7 @@
 **so that** a tile reads the same wherever the store draws it.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-oqz rev=1 covers=none -->
-### shared-ui-store-product-listing-US1-TC1-1: Sold-out tile with an activation target still opens its card
+### g10.shared-store-product-listing.US1-TC1: Sold-out tile with an activation target still opens its card
 
 **Classification:**
 
@@ -43,7 +43,7 @@
 * No cart control is drawn on the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-mzb rev=1 covers=g10.shared-store-product-listing.SC-rzq -->
-### shared-ui-store-product-listing-US1-TC2-1: Tile drawn with no cart control does not require cart copy
+### g10.shared-store-product-listing.US1-TC2: Tile drawn with no cart control does not require cart copy
 
 **Classification:**
 
@@ -75,7 +75,7 @@
 * No cart wording appears on the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-o4i rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC3-1: Tile given its address opens as a link
+### g10.shared-store-product-listing.US1-TC3: Tile given its address opens as a link
 
 **Classification:**
 

@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/70
 **Drafts styled:** 2026-09-23, tcs-rules r3
 
-## shared-ui-invoice-and-receipt-pdf-US1: Invoice and Receipt PDF component contract
+## g10.shared-invoice-and-receipt-pdf.US1: Invoice and Receipt PDF component contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/auction/winner-order`, which composes the block behind the Invoice PDF control (`winner-order-SC-57`, `winner-order-SC-109`) and the Receipt PDF control (`winner-order-SC-67`)
 
@@ -12,7 +12,7 @@
 **so that** the document I read or download matches what the order page told me, however the page that composes it is built.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-0iu rev=2 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC1-2: Fully supplied invoice renders every meta row and line
+### g10.shared-invoice-and-receipt-pdf.US1-TC1: Fully supplied invoice renders every meta row and line
 
 **Classification:**
 
@@ -43,7 +43,7 @@
 * The item row and the Item Total row render, then every charge and summary line, in the order named.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-07f rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC2-1: Card-paid invoice omits bank rails despite a bank reference
+### g10.shared-invoice-and-receipt-pdf.US1-TC2: Card-paid invoice omits bank rails despite a bank reference
 
 **Classification:**
 
@@ -73,7 +73,7 @@
 * Bank rails do not render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-48f rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC3-1: Bank-transfer invoice renders bank rails when supplied
+### g10.shared-invoice-and-receipt-pdf.US1-TC3: Bank-transfer invoice renders bank rails when supplied
 
 **Classification:**
 
@@ -103,7 +103,7 @@
 * Bank rails render beside it.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-23a rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC4-1: Insurance line renders only when supplied
+### g10.shared-invoice-and-receipt-pdf.US1-TC4: Insurance line renders only when supplied
 
 **Classification:**
 
@@ -142,7 +142,7 @@ Runs once per row of **Test data**.
 * Every other order-value line still renders.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-5dx rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC5-1: Subtotal and Order Total survive Insurance being omitted
+### g10.shared-invoice-and-receipt-pdf.US1-TC5: Subtotal and Order Total survive Insurance being omitted
 
 **Classification:**
 
@@ -173,7 +173,7 @@ Runs once per row of **Test data**.
 * Neither row is dropped or reordered by Insurance's absence.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-e2u rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC6-1: Replaces invoice renders only when given
+### g10.shared-invoice-and-receipt-pdf.US1-TC6: Replaces invoice renders only when given
 
 **Classification:**
 
@@ -212,7 +212,7 @@ Runs once per row of **Test data**.
 * The prior invoice remains retained; this renderer does not mark it cancelled.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-kio rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC7-1: Bill To and Ship To render independently when they differ
+### g10.shared-invoice-and-receipt-pdf.US1-TC7: Bill To and Ship To render independently when they differ
 
 **Classification:**
 
@@ -243,7 +243,7 @@ Runs once per row of **Test data**.
 * Neither block echoes the other's content.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-h09 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC8-1: Fully supplied receipt renders every row in order
+### g10.shared-invoice-and-receipt-pdf.US1-TC8: Fully supplied receipt renders every row in order
 
 **Classification:**
 
@@ -275,7 +275,7 @@ Runs once per row of **Test data**.
 * The payment breakdown renders Original Invoice Total, then Previous Payments, then Current Payment Received, then Remaining Balance Due, in that order.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-d2d rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC9-1: Payment breakdown keeps its order at zero values
+### g10.shared-invoice-and-receipt-pdf.US1-TC9: Payment breakdown keeps its order at zero values
 
 **Classification:**
 
@@ -305,7 +305,7 @@ Runs once per row of **Test data**.
 * The order stays Original Invoice Total, Previous Payments, Current Payment Received, Remaining Balance Due.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-i5q rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC10-1: Manually-settled mark renders only for operator-recorded settlements
+### g10.shared-invoice-and-receipt-pdf.US1-TC10: Manually-settled mark renders only for operator-recorded settlements
 
 **Classification:**
 
@@ -344,7 +344,7 @@ Runs once per row of **Test data**.
 * When it renders, it is visually distinguishable from an unmarked receipt.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-tnf rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC11-1: Payment method content renders unchanged across its variants
+### g10.shared-invoice-and-receipt-pdf.US1-TC11: Payment method content renders unchanged across its variants
 
 **Classification:**
 
@@ -383,7 +383,7 @@ Runs once per row of **Test data**.
 * The payment method row renders the row's content verbatim, unchanged by which variant it is.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-agl rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC12-1: Superseded invoice renders only when given
+### g10.shared-invoice-and-receipt-pdf.US1-TC12: Superseded invoice renders only when given
 
 **Classification:**
 
@@ -421,7 +421,7 @@ Runs once per row of **Test data**.
 * Superseded invoice matches the row's outcome.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-exm rev=2 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC13-2: Insurance line renders only when given on the receipt
+### g10.shared-invoice-and-receipt-pdf.US1-TC13: Insurance line renders only when given on the receipt
 
 **Classification:**
 
@@ -453,7 +453,7 @@ Runs once per row of **Test data**.
 * Winning Bid and Buyer's Premium appear in the item row only, not as lines under the table.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-3e1 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC14-1: Receipt ID and invoice ID render as distinct rows
+### g10.shared-invoice-and-receipt-pdf.US1-TC14: Receipt ID and invoice ID render as distinct rows
 
 **Classification:**
 
@@ -484,7 +484,7 @@ Runs once per row of **Test data**.
 * Neither row is conflated with the other.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-8pn rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC15-1: Bill To and Ship To render independently on the receipt
+### g10.shared-invoice-and-receipt-pdf.US1-TC15: Bill To and Ship To render independently on the receipt
 
 **Classification:**
 
@@ -514,7 +514,7 @@ Runs once per row of **Test data**.
 * Ship To renders its own, distinct, supplied content.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-4q4 rev=1 covers=none -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC16-1: Tax line does not render when omitted on the invoice
+### g10.shared-invoice-and-receipt-pdf.US1-TC16: Tax line does not render when omitted on the invoice
 
 **Classification:**
 
@@ -544,7 +544,7 @@ Runs once per row of **Test data**.
 * Every other order-value line renders unaffected.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-ege rev=1 covers=none -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC17-1: Tax line renders with its content when supplied
+### g10.shared-invoice-and-receipt-pdf.US1-TC17: Tax line renders with its content when supplied
 
 **Classification:**
 
@@ -573,7 +573,7 @@ Runs once per row of **Test data**.
 * The tax line renders immediately before the summary with the supplied label and amount.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-2xh rev=1 covers=none -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC18-1: A null tax line behaves like an omitted tax line
+### g10.shared-invoice-and-receipt-pdf.US1-TC18: A null tax line behaves like an omitted tax line
 
 **Classification:**
 
@@ -612,7 +612,7 @@ Runs once per row of **Test data**.
 * Omission and `null` are both treated as absent.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-7d6 rev=1 covers=none -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC19-1: Issuer tax-details block does not render when omitted
+### g10.shared-invoice-and-receipt-pdf.US1-TC19: Issuer tax-details block does not render when omitted
 
 **Classification:**
 
@@ -642,7 +642,7 @@ Runs once per row of **Test data**.
 * Every other block renders unaffected.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-xdz rev=1 covers=none -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC20-1: Issuer tax-details and tax line render independently
+### g10.shared-invoice-and-receipt-pdf.US1-TC20: Issuer tax-details and tax line render independently
 
 **Classification:**
 
@@ -681,7 +681,7 @@ Runs once per row of **Test data**.
 * Each slot's presence matches its own prop, independent of the other slot's state.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-8hd rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-i50,g10.shared-invoice-and-receipt-pdf.SC-m09,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC21-1: Tax line behaves the same on invoice and receipt
+### g10.shared-invoice-and-receipt-pdf.US1-TC21: Tax line behaves the same on invoice and receipt
 
 **Classification:**
 
@@ -711,7 +711,7 @@ Runs once per row of **Test data**.
 * The optional tax-line omission behavior matches `InvoicePdf`'s.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-fwt rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC22-1: Preformatted amount content renders exactly as supplied
+### g10.shared-invoice-and-receipt-pdf.US1-TC22: Preformatted amount content renders exactly as supplied
 
 **Classification:**
 
@@ -741,7 +741,7 @@ Runs once per row of **Test data**.
 * No value is recomputed, reformatted, or stripped down to plain text.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-77p rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC23-1: Labels render from the copy prop, not a default
+### g10.shared-invoice-and-receipt-pdf.US1-TC23: Labels render from the copy prop, not a default
 
 **Classification:**
 
@@ -772,7 +772,7 @@ Runs once per row of **Test data**.
 * No row falls back to an English or other built-in label.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-elb rev=2 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC24-2: A blank amount or item title still renders its row
+### g10.shared-invoice-and-receipt-pdf.US1-TC24: A blank amount or item title still renders its row
 
 **Classification:**
 
@@ -812,7 +812,7 @@ Runs once per row of **Test data**.
 * Neither the Subtotal row nor the item row is silently dropped for carrying blank content.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-noc rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC25-1: Neither component shows a loading or error state
+### g10.shared-invoice-and-receipt-pdf.US1-TC25: Neither component shows a loading or error state
 
 **Classification:**
 
@@ -842,7 +842,7 @@ Runs once per row of **Test data**.
 * Neither shows a loading skeleton or a fetch-error state.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-kbj rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC26-1: Re-rendering with new props leaves no stale content
+### g10.shared-invoice-and-receipt-pdf.US1-TC26: Re-rendering with new props leaves no stale content
 
 **Classification:**
 
@@ -873,7 +873,7 @@ Runs once per row of **Test data**.
 * No row from the first render's props persists.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-nc0 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC27-1: A company address renders every field it is given
+### g10.shared-invoice-and-receipt-pdf.US1-TC27: A company address renders every field it is given
 
 **Classification:**
 
@@ -902,7 +902,7 @@ Runs once per row of **Test data**.
 * All nine fields render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-5sp rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC28-1: A personal address omits optional company, phone, address line 2 and state
+### g10.shared-invoice-and-receipt-pdf.US1-TC28: A personal address omits optional company, phone, address line 2 and state
 
 **Classification:**
 
@@ -932,7 +932,7 @@ Runs once per row of **Test data**.
 * Full name, address line 1, city, postal code, and country still render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-l8y rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC29-1: A receipt's company address renders every field it is given
+### g10.shared-invoice-and-receipt-pdf.US1-TC29: A receipt's company address renders every field it is given
 
 **Classification:**
 
@@ -961,7 +961,7 @@ Runs once per row of **Test data**.
 * All nine fields render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-w85 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC30-1: A receipt's personal address omits optional company, phone, address line 2 and state
+### g10.shared-invoice-and-receipt-pdf.US1-TC30: A receipt's personal address omits optional company, phone, address line 2 and state
 
 **Classification:**
 
@@ -991,7 +991,7 @@ Runs once per row of **Test data**.
 * Full name, address line 1, city, postal code, and country still render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-nlq rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC31-1: Bank rails render below the order value, full width, not as a meta row
+### g10.shared-invoice-and-receipt-pdf.US1-TC31: Bank rails render below the order value, full width, not as a meta row
 
 **Classification:**
 
@@ -1021,7 +1021,7 @@ Runs once per row of **Test data**.
 * The bank rails section spans the same width as the order-value summary.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-9uz rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC32-1: The order-value table header renders above the invoice's line items
+### g10.shared-invoice-and-receipt-pdf.US1-TC32: The order-value table header renders above the invoice's line items
 
 **Classification:**
 
@@ -1052,7 +1052,7 @@ Runs once per row of **Test data**.
 * The header sits immediately above the order-value lines, not the summary.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-2b3 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC33-1: The order-value table header renders above the receipt's line items
+### g10.shared-invoice-and-receipt-pdf.US1-TC33: The order-value table header renders above the receipt's line items
 
 **Classification:**
 
@@ -1082,7 +1082,7 @@ Runs once per row of **Test data**.
 * A divider separates the header from the first order-value line.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-kil rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC34-1: The issuer block sits at the foot of the invoice, right-aligned
+### g10.shared-invoice-and-receipt-pdf.US1-TC34: The issuer block sits at the foot of the invoice, right-aligned
 
 **Classification:**
 
@@ -1113,7 +1113,7 @@ Runs once per row of **Test data**.
 * The issuer block aligns to the right of the sheet.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-vwh rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC35-1: The issuer block sits at the foot of the receipt, right-aligned
+### g10.shared-invoice-and-receipt-pdf.US1-TC35: The issuer block sits at the foot of the receipt, right-aligned
 
 **Classification:**
 
@@ -1144,7 +1144,7 @@ Runs once per row of **Test data**.
 * The issuer block aligns to the right of the sheet.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-nod rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC36-1: A company address renders every line it is given
+### g10.shared-invoice-and-receipt-pdf.US1-TC36: A company address renders every line it is given
 
 **Classification:**
 
@@ -1173,7 +1173,7 @@ Runs once per row of **Test data**.
 * Every one of those lines is shown.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-6as rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC37-1: A personal address omits the company line
+### g10.shared-invoice-and-receipt-pdf.US1-TC37: A personal address omits the company line
 
 **Classification:**
 
@@ -1203,7 +1203,7 @@ Runs once per row of **Test data**.
 * Recipient, address line 1, the city/region/postal-code line, and country still render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-8v0 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-q1g,g10.shared-invoice-and-receipt-pdf.SC-1fi,g10.shared-invoice-and-receipt-pdf.SC-jp5 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC38-1: No address given renders "Not recorded"
+### g10.shared-invoice-and-receipt-pdf.US1-TC38: No address given renders "Not recorded"
 
 **Classification:**
 
@@ -1233,7 +1233,7 @@ Runs once per row of **Test data**.
 * No blank address lines appear in its place.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-oq0 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC39-1: A bank-transfer receipt names its recorded provider reference
+### g10.shared-invoice-and-receipt-pdf.US1-TC39: A bank-transfer receipt names its recorded provider reference
 
 **Classification:**
 
@@ -1262,7 +1262,7 @@ Runs once per row of **Test data**.
 * The Payment section shows the recorded provider reference given.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-61u rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC40-1: A card-paid receipt shows no provider-reference line
+### g10.shared-invoice-and-receipt-pdf.US1-TC40: A card-paid receipt shows no provider-reference line
 
 **Classification:**
 
@@ -1292,7 +1292,7 @@ Runs once per row of **Test data**.
 * Every other meta row and party block still renders.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-x92 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders in Hong Kong as GMT+8
+### g10.shared-invoice-and-receipt-pdf.US1-TC41: A date renders in Hong Kong as GMT+8
 
 **Classification:**
 
@@ -1323,7 +1323,7 @@ Runs once per row of **Test data**.
 * The row does not contain `HKT`.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-qz9 rev=2 covers=g10.shared-invoice-and-receipt-pdf.SC-3af,g10.shared-invoice-and-receipt-pdf.SC-nr3 -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC42-2: A document whose content fits returns exactly one A4 page
+### g10.shared-invoice-and-receipt-pdf.US1-TC42: A document whose content fits returns exactly one A4 page
 
 **Classification:**
 
@@ -1359,7 +1359,7 @@ Runs once per row of **Test data**.
 * The receipt's payment breakdown is on its page too.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-5k8 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC43-1: An invoice's payment method renders as its own meta row
+### g10.shared-invoice-and-receipt-pdf.US1-TC43: An invoice's payment method renders as its own meta row
 
 **Classification:**
 
@@ -1390,7 +1390,7 @@ Runs once per row of **Test data**.
   sent-at date, and payment deadline.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-gux rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC44-1: The payment method row appends after payment deadline, never reordering the rows before it
+### g10.shared-invoice-and-receipt-pdf.US1-TC44: The payment method row appends after payment deadline, never reordering the rows before it
 
 **Classification:**
 
@@ -1423,7 +1423,7 @@ Runs once per row of **Test data**.
   never inserts among them.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-h2z rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC45-1: A bank-transfer invoice shows the Bank details section below Order Total
+### g10.shared-invoice-and-receipt-pdf.US1-TC45: A bank-transfer invoice shows the Bank details section below Order Total
 
 **Classification:**
 
@@ -1457,7 +1457,7 @@ Runs once per row of **Test data**.
   it still render.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-az3 rev=2 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC46-2: A card-paid invoice shows no Bank details section, and no gap where it would sit
+### g10.shared-invoice-and-receipt-pdf.US1-TC46: A card-paid invoice shows no Bank details section, and no gap where it would sit
 
 **Classification:**
 
@@ -1490,7 +1490,7 @@ Runs once per row of **Test data**.
 * Every other section of the invoice still renders.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-1qm rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC47-1: Bank details lists only enabled rails under their own headings
+### g10.shared-invoice-and-receipt-pdf.US1-TC47: Bank details lists only enabled rails under their own headings
 
 **Classification:**
 
@@ -1524,7 +1524,7 @@ Runs once per row of **Test data**.
 * No HK local transfer heading, details, or empty column appears.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-3uj rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC48-1: The bank reference note bolds only the reference value
+### g10.shared-invoice-and-receipt-pdf.US1-TC48: The bank reference note bolds only the reference value
 
 **Classification:**
 
@@ -1556,7 +1556,7 @@ Runs once per row of **Test data**.
   rest of the line renders at normal weight.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-8la rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-2d5,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t,g10.shared-invoice-and-receipt-pdf.SC-1sf -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC49-1: Each document date ends in GMT+8 across a Hong Kong midnight
+### g10.shared-invoice-and-receipt-pdf.US1-TC49: Each document date ends in GMT+8 across a Hong Kong midnight
 
 Runs once per row of **Test data**.
 
@@ -1601,7 +1601,7 @@ Runs once per row of **Test data**.
 * The row does not contain `HKT`.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-ckd rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-2d5,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t,g10.shared-invoice-and-receipt-pdf.SC-1sf -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC50-1: The GMT+8 suffix stays under non-English copy
+### g10.shared-invoice-and-receipt-pdf.US1-TC50: The GMT+8 suffix stays under non-English copy
 
 Runs once per row of **Test data**.
 
@@ -1641,7 +1641,7 @@ Runs once per row of **Test data**.
 * Step 3: the row shows the Hong Kong day 1, the month September named in English and the year 2026, in the renderer's own arrangement, and the clock 20:00.
 * Steps 2 and 3: each row ends in `GMT+8`, not translated, dropped or replaced by an abbreviation.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC51-1: A one-item invoice reads as one row closed by Item Total
+### g10.shared-invoice-and-receipt-pdf.US1-TC51: A one-item invoice reads as one row closed by Item Total
 
 **Classification:**
 
@@ -1685,7 +1685,7 @@ Runs once per row of **Test data**.
 * No lot title heading and no Description or Amount header appears.
 * Step 4: the charges and the summary follow the Item Total row.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC52-1: Several items read as one row each in the order given
+### g10.shared-invoice-and-receipt-pdf.US1-TC52: Several items read as one row each in the order given
 
 **Classification:**
 
@@ -1727,7 +1727,7 @@ Runs once per row of **Test data**.
 * One Item Total row follows the last item row, with the three `<item_total_3>` amounts, one under each amount column.
 * No other Item Total row and no second header appears on the page.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC53-2: Charges follow the Item Total row and add no item row
+### g10.shared-invoice-and-receipt-pdf.US1-TC53: Charges follow the Item Total row and add no item row
 
 **Classification:**
 
@@ -1769,7 +1769,7 @@ Runs once per row of **Test data**.
 * Winning Bid and Buyer's Premium appear in the item row only, not as charge rows.
 * The Item Total row is still the last row of the item table.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC54-1: A long item title wraps inside its column
+### g10.shared-invoice-and-receipt-pdf.US1-TC54: A long item title wraps inside its column
 
 **Classification:**
 
@@ -1810,7 +1810,7 @@ Runs once per row of **Test data**.
 * The rows above and below keep their own lines, and no line overlaps another.
 * The `<item_3>` row starts under the last line of the wrapped title.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC55-1: A non-Latin item title draws in the supplied face
+### g10.shared-invoice-and-receipt-pdf.US1-TC55: A non-Latin item title draws in the supplied face
 
 **Classification:**
 
@@ -1849,7 +1849,7 @@ Runs once per row of **Test data**.
 * The `<item_cjk>` title sits in the Item column and its amounts in the amount columns.
 * The amount columns of the two rows line up.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC56-1: A one-item receipt shows its table above the payment breakdown
+### g10.shared-invoice-and-receipt-pdf.US1-TC56: A one-item receipt shows its table above the payment breakdown
 
 **Classification:**
 
@@ -1891,7 +1891,7 @@ Runs once per row of **Test data**.
 * The charge rows and the summary follow, with their supplied amounts.
 * The payment breakdown follows the summary: Original Invoice Total, Previous Payments, Current Payment Received, Remaining Balance Due, in that order, with the `<breakdown_1>` amounts.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC57-1: Several items read as one receipt row each in the order given
+### g10.shared-invoice-and-receipt-pdf.US1-TC57: Several items read as one receipt row each in the order given
 
 **Classification:**
 
@@ -1933,7 +1933,7 @@ Runs once per row of **Test data**.
 * One Item Total row follows the last item row, with the three `<item_total_3>` amounts, one under each amount column.
 * The column order and labels match the invoice's item table.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC58-1: Long and non-Latin item titles keep the receipt row layout
+### g10.shared-invoice-and-receipt-pdf.US1-TC58: Long and non-Latin item titles keep the receipt row layout
 
 Runs once per row of **Test data**.
 
@@ -1974,7 +1974,7 @@ Runs once per row of **Test data**.
 * No part of the title crosses into an amount column.
 * The Item Total row sits directly under the item row.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC59-1: A table at the page limit stays on one page
+### g10.shared-invoice-and-receipt-pdf.US1-TC59: A table at the page limit stays on one page
 
 **Classification:**
 
@@ -2014,7 +2014,7 @@ Runs once per row of **Test data**.
 * The last item row, the Item Total row, the summary and the issuer block are all on page 1.
 * No two of these overlap.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC60-1: One item past the page limit adds a second page
+### g10.shared-invoice-and-receipt-pdf.US1-TC60: One item past the page limit adds a second page
 
 **Classification:**
 
@@ -2056,7 +2056,7 @@ Runs once per row of **Test data**.
 * The item rows `Lot 001` to `Lot <items_over>` each appear once across the two pages, in order.
 * The Item Total row and the summary each appear once across the two pages.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC61-1: A continuation page repeats the column header
+### g10.shared-invoice-and-receipt-pdf.US1-TC61: A continuation page repeats the column header
 
 **Classification:**
 
@@ -2097,7 +2097,7 @@ Runs once per row of **Test data**.
 * The item rows `Lot 001` to `Lot <items_two>` each appear once across the pages, in order.
 * The Item Total row appears once, after `Lot <items_two>`.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC62-1: Every continuation page of a three-page table repeats the header
+### g10.shared-invoice-and-receipt-pdf.US1-TC62: Every continuation page of a three-page table repeats the header
 
 **Classification:**
 
@@ -2139,7 +2139,7 @@ Runs once per row of **Test data**.
 * The item rows `Lot 001` to `Lot <items_three>` each appear once across the pages, in order.
 * The Item Total row appears once, after the last item row.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC63-1: An item row never splits across a page end
+### g10.shared-invoice-and-receipt-pdf.US1-TC63: An item row never splits across a page end
 
 **Classification:**
 
@@ -2185,7 +2185,7 @@ Runs once per row of **Test data**.
 * In that case page 1 ends after the row above it, with no line of `<item_long>` beneath.
 * The other item rows each appear once across the pages, in order.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC64-2: Item Total, the charges and the summary stay together at a page end
+### g10.shared-invoice-and-receipt-pdf.US1-TC64: Item Total, the charges and the summary stay together at a page end
 
 **Classification:**
 
@@ -2231,7 +2231,7 @@ Runs once per row of **Test data**.
 * At least one count puts the last item row on page 1 and the Item Total row on page 2.
 * On that page 2 the column header, with a divider under it, comes first and the Item Total row follows it, with no item row between them.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC65-1: A receipt's totals and payment breakdown stay whole at a page end
+### g10.shared-invoice-and-receipt-pdf.US1-TC65: A receipt's totals and payment breakdown stay whole at a page end
 
 **Classification:**
 
@@ -2278,7 +2278,7 @@ Runs once per row of **Test data**.
 * At least one count puts the last item row on page 1 and the Item Total row on page 2.
 * On that page 2 the column header, with a divider under it, comes first and the Item Total row follows it, with no item row between them.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC66-1: A receipt's item table continues on a further page under the header
+### g10.shared-invoice-and-receipt-pdf.US1-TC66: A receipt's item table continues on a further page under the header
 
 **Classification:**
 
@@ -2321,7 +2321,7 @@ Runs once per row of **Test data**.
 * The item rows `Lot 001` to `Lot <receipt_items_two>` each appear once across the pages, in order.
 * The Item Total row appears once, after the last item row, and the payment breakdown follows the summary.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC67-1: A multi-page invoice carries the issuer block once, on the last page
+### g10.shared-invoice-and-receipt-pdf.US1-TC67: A multi-page invoice carries the issuer block once, on the last page
 
 **Classification:**
 
@@ -2363,7 +2363,7 @@ Runs once per row of **Test data**.
 * On page 3 the line directly above the issuer email is the issuer name.
 * The issuer block sits at the foot of page 3, right-aligned.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC68-1: A multi-page receipt carries the issuer block once, on the last page
+### g10.shared-invoice-and-receipt-pdf.US1-TC68: A multi-page receipt carries the issuer block once, on the last page
 
 **Classification:**
 
@@ -2406,7 +2406,7 @@ Runs once per row of **Test data**.
 * On page 2 the line directly above the issuer email is the issuer name.
 * The issuer block sits at the foot of page 2, right-aligned.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC69-1: The block draws every item amount as supplied and computes none
+### g10.shared-invoice-and-receipt-pdf.US1-TC69: The block draws every item amount as supplied and computes none
 
 Runs once per row of **Test data**.
 
@@ -2449,7 +2449,7 @@ Runs once per row of **Test data**.
 * Every other amount cell reads its own supplied string.
 * No cell shows a sum, a difference or a reformatted amount.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC70-1: A word wider than the Item column breaks inside the word
+### g10.shared-invoice-and-receipt-pdf.US1-TC70: A word wider than the Item column breaks inside the word
 
 **Classification:**
 
@@ -2490,7 +2490,7 @@ Runs once per row of **Test data**.
 * Each item's three amounts are drawn once, on the first line of its title.
 * The first line of the `<item_serial>` title starts with `Serial`, and its last line ends with `PSA-10`.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC71-1: A wide amount widens its column and still draws whole
+### g10.shared-invoice-and-receipt-pdf.US1-TC71: A wide amount widens its column and still draws whole
 
 **Classification:**
 
@@ -2531,7 +2531,7 @@ Runs once per row of **Test data**.
 * No amount overlaps another amount or the title beside it.
 * The amounts of each amount column, the Item Total row included, end at one right edge.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC72-1: A continuation page repeats the column header and nothing else
+### g10.shared-invoice-and-receipt-pdf.US1-TC72: A continuation page repeats the column header and nothing else
 
 **Classification:**
 
@@ -2577,7 +2577,7 @@ Runs once per row of **Test data**.
 * Pages 2 and 3 show neither `<document_number>` nor `<recipient>`.
 * Step 4: no page of the document shows a page number or a continuation note.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC73-1: Bank details move to the next page whole
+### g10.shared-invoice-and-receipt-pdf.US1-TC73: Bank details move to the next page whole
 
 **Classification:**
 
@@ -2618,7 +2618,7 @@ Runs once per row of **Test data**.
 * At least one count puts the summary on one page and the whole Bank details section on the next.
 * In that case no part of the section stays beside the summary.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC74-1: A receipt's Payment section moves to the next page whole
+### g10.shared-invoice-and-receipt-pdf.US1-TC74: A receipt's Payment section moves to the next page whole
 
 **Classification:**
 
@@ -2660,7 +2660,7 @@ Runs once per row of **Test data**.
 * At least one count puts the summary on one page and the whole Payment section on the next.
 * In that case no part of the section stays beside the summary.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC75-1: The issuer block never stands alone on a page
+### g10.shared-invoice-and-receipt-pdf.US1-TC75: The issuer block never stands alone on a page
 
 **Classification:**
 
@@ -2706,7 +2706,7 @@ Runs once per row of **Test data**.
 * On that page, no line of another section is drawn at or below the name line of the issuer block, the line directly above the issuer email.
 * At least one count of each renderer runs onto a second page.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC76-1: The issuer block sits in the same place on every document
+### g10.shared-invoice-and-receipt-pdf.US1-TC76: The issuer block sits in the same place on every document
 
 Runs once per row of **Test data**.
 
@@ -2749,7 +2749,7 @@ Runs once per row of **Test data**.
 * Step 4: the issuer email and the line directly above it sit at the same x and y as in step 2.
 * The block sits at the foot of the last page, right-aligned, name above email.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC77-1: The same data renders to the same bytes
+### g10.shared-invoice-and-receipt-pdf.US1-TC77: The same data renders to the same bytes
 
 **Classification:**
 
@@ -2788,7 +2788,7 @@ Runs once per row of **Test data**.
 
 * The two outputs of each renderer are identical, byte for byte.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC78-1: A document with no items fails to render
+### g10.shared-invoice-and-receipt-pdf.US1-TC78: A document with no items fails to render
 
 **Classification:**
 
@@ -2826,7 +2826,7 @@ Runs once per row of **Test data**.
 * No PDF bytes are returned.
 * The error says that no items were given.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC79-1: A title the standard font cannot draw fails to render
+### g10.shared-invoice-and-receipt-pdf.US1-TC79: A title the standard font cannot draw fails to render
 
 Runs once per row of **Test data**.
 
@@ -2865,7 +2865,7 @@ Runs once per row of **Test data**.
 * Each call rejects with an error.
 * No PDF bytes are returned, so no placeholder glyph or box stands in for a character of the title.
 
-### shared-ui-invoice-and-receipt-pdf-US1-TC80-1: A table that cannot fit a page fails to render
+### g10.shared-invoice-and-receipt-pdf.US1-TC80: A table that cannot fit a page fails to render
 
 Runs once per row of **Test data**.
 

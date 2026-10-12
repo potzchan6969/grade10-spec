@@ -48,7 +48,12 @@ const REQUIREMENT = "Requirement:";
 const SCENARIO_HEADING = new RegExp(
   `^Scenario:\\s*(?:(${SCENARIO_ID.source})\\s+-\\s+)?(.+)$`,
 );
-const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
+const MODERN_JOURNEY_ID = "[a-z0-9][a-z0-9.-]*\\.US\\d+";
+const LEGACY_JOURNEY_ID = "[a-z0-9][a-z0-9-]*-US-\\d+";
+const JOURNEY_ID_SOURCE = `(?:${MODERN_JOURNEY_ID}|${LEGACY_JOURNEY_ID})`;
+const JOURNEY_HEADING = new RegExp(
+  `^(${JOURNEY_ID_SOURCE}):\\s*(.+)$`,
+);
 /** A case heading displays its stable marker id and suite-local reference.
  * Older headings stay readable during migration. */
 const MODERN_CASE_HEADING = /^(\S+)\s+\(US-?\d+-TC-?\d+\):\s*(.+)$/;
@@ -71,8 +76,9 @@ const FEATURE_GROUP = /^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/;
 const WALKED_BY_NOBODY = /^\*\*Walked by:\*\*\s+nobody\b/m;
 const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
 /** What a `**Trace:**` names: the journey the case walks, in the spec's
- * canonical `-US-<n>` form. A scenario id is the older shape, and still
- * resolves — the suite beside a spec that predates journeys traces those. */
+ * modern `.US<n>` or legacy `-US-<n>` form. A scenario id is the older shape,
+ * and still resolves — the suite beside a spec that predates journeys traces
+ * those. */
 const TRACE_ID = /[a-z0-9][a-z0-9-]*-(?:US|SC)-\d+/g;
 /** Persistent file statuses. Historical archives may still say `in-review`;
  * the reader normalizes that old partial-review meaning to `pending-review`.
@@ -275,7 +281,7 @@ export function readJourney(section: Section): Journey {
   if (!match) {
     throw new StoreFileError(
       section.line,
-      "a journey heading is `### <capability>-US-<n>: <title>`",
+      "a journey heading is `### <scope>.US<n>: <title>` or the legacy `### <capability>-US-<n>: <title>`",
     );
   }
   return { id: match[1], title: match[2], text: section.body.trimEnd() };
@@ -358,7 +364,7 @@ const REMOVED_JOURNEYS = "REMOVED User journeys";
 /** Where that tombstone lands. A change writes `## REMOVED User journeys`;
  * archive turns it into a one-line `## Retired` entry in the durable file. */
 const RETIRED_JOURNEYS = "Retired";
-const JOURNEY_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
+const JOURNEY_ID = new RegExp(JOURNEY_ID_SOURCE, "g");
 
 /**
  * A `user-journeys.md`, whole: the journey-bearing sections, each holding a

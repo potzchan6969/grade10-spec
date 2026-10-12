@@ -8,14 +8,14 @@
 `add-winner-bank-transfer`. Setup letter bullets (address, method, billing) —
 `add-winner-setup-overdue-mail` (`order-mail-SC-55`, `order-mail-SC-56`).
 
-## order-mail-US1: Post-close letters
+## g10.auction-notifications-order.US1: Post-close letters
 
 **As a** customer(winner),
 **I want** the letters Grade10 sends about my auction order,
 **so that** I know what to do next without guessing.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-81s rev=1 covers=g10.auction-notifications-order.SC-2d0,g10.auction-notifications-order.SC-kkg,g10.auction-notifications-order.SC-s24,g10.auction-notifications-order.SC-dv3,g10.auction-notifications-order.SC-nrz,g10.auction-notifications-order.SC-7jz,g10.auction-notifications-order.SC-pnf,g10.auction-notifications-order.SC-wmw,g10.auction-notifications-order.SC-y5o,g10.auction-notifications-order.SC-3di,g10.auction-notifications-order.SC-18a,g10.auction-notifications-order.SC-4u6,g10.auction-notifications-order.SC-jw9,g10.auction-notifications-order.SC-qsh,g10.auction-notifications-order.SC-qmq,g10.auction-notifications-order.SC-pqi,g10.auction-notifications-order.SC-gec,g10.auction-notifications-order.SC-kas,g10.auction-notifications-order.SC-mva,g10.auction-notifications-order.SC-7pc,g10.auction-notifications-order.SC-ek4,g10.auction-notifications-order.SC-q85,g10.auction-notifications-order.SC-n3n,g10.auction-notifications-order.SC-dnr -->
-### order-mail-US1-TC1-1: Winning a lot sends auction-won
+### g10.auction-notifications-order.US1-TC1: Winning a lot sends auction-won
 
 **Classification:**
 
@@ -51,7 +51,7 @@
 * It names no amount owed.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-8bw rev=1 covers=g10.auction-notifications-order.SC-2d0,g10.auction-notifications-order.SC-kkg,g10.auction-notifications-order.SC-s24,g10.auction-notifications-order.SC-dv3,g10.auction-notifications-order.SC-nrz,g10.auction-notifications-order.SC-7jz,g10.auction-notifications-order.SC-pnf,g10.auction-notifications-order.SC-wmw,g10.auction-notifications-order.SC-y5o,g10.auction-notifications-order.SC-3di,g10.auction-notifications-order.SC-18a,g10.auction-notifications-order.SC-4u6,g10.auction-notifications-order.SC-jw9,g10.auction-notifications-order.SC-qsh,g10.auction-notifications-order.SC-qmq,g10.auction-notifications-order.SC-pqi,g10.auction-notifications-order.SC-gec,g10.auction-notifications-order.SC-kas,g10.auction-notifications-order.SC-mva,g10.auction-notifications-order.SC-7pc,g10.auction-notifications-order.SC-ek4,g10.auction-notifications-order.SC-q85,g10.auction-notifications-order.SC-n3n,g10.auction-notifications-order.SC-dnr -->
-### order-mail-US1-TC2-1: Invoice send is the first payment reminder
+### g10.auction-notifications-order.US1-TC2: Invoice send is the first payment reminder
 
 **Classification:**
 
@@ -90,7 +90,7 @@
 * No separate invoice-sent letter exists.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-5o0 rev=1 covers=g10.auction-notifications-order.SC-2d0,g10.auction-notifications-order.SC-kkg,g10.auction-notifications-order.SC-s24,g10.auction-notifications-order.SC-dv3,g10.auction-notifications-order.SC-nrz,g10.auction-notifications-order.SC-7jz,g10.auction-notifications-order.SC-pnf,g10.auction-notifications-order.SC-wmw,g10.auction-notifications-order.SC-y5o,g10.auction-notifications-order.SC-3di,g10.auction-notifications-order.SC-18a,g10.auction-notifications-order.SC-4u6,g10.auction-notifications-order.SC-jw9,g10.auction-notifications-order.SC-qsh,g10.auction-notifications-order.SC-qmq,g10.auction-notifications-order.SC-pqi,g10.auction-notifications-order.SC-gec,g10.auction-notifications-order.SC-kas,g10.auction-notifications-order.SC-mva,g10.auction-notifications-order.SC-7pc,g10.auction-notifications-order.SC-ek4,g10.auction-notifications-order.SC-q85,g10.auction-notifications-order.SC-n3n,g10.auction-notifications-order.SC-dnr -->
-### order-mail-US1-TC3-1: Reissue sends payment reminder only
+### g10.auction-notifications-order.US1-TC3: Reissue sends payment reminder only
 
 **Classification:**
 
@@ -126,7 +126,7 @@
 * No invoice-reissued letter.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-oqs rev=1 covers=g10.auction-notifications-order.SC-75a,g10.auction-notifications-order.SC-3bl,g10.auction-notifications-order.SC-xae,g10.auction-notifications-order.SC-h6q,g10.auction-notifications-order.SC-1x0,g10.auction-notifications-order.SC-ekh,g10.auction-notifications-order.SC-oc3 -->
-### order-mail-US1-TC4-1: Final notice is 24 hours before the payment deadline
+### g10.auction-notifications-order.US1-TC4: Final notice is 24 hours before the payment deadline
 
 **Classification:**
 
@@ -162,7 +162,7 @@
 * No letter waits until the deadline transition itself.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-tvz rev=1 covers=g10.auction-notifications-order.SC-75a,g10.auction-notifications-order.SC-3bl,g10.auction-notifications-order.SC-xae,g10.auction-notifications-order.SC-h6q,g10.auction-notifications-order.SC-1x0,g10.auction-notifications-order.SC-ekh,g10.auction-notifications-order.SC-oc3 -->
-### order-mail-US1-TC5-1: Paying early cancels later reminders
+### g10.auction-notifications-order.US1-TC5: Paying early cancels later reminders
 
 **Classification:**
 
@@ -197,7 +197,7 @@
 * No day-3, day-6, or final-notice payment reminder for that invoice.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-xwr rev=1 covers=g10.auction-notifications-order.SC-mcc,g10.auction-notifications-order.SC-d23 -->
-### order-mail-US1-TC6-1: A retried payment confirmation sends nothing twice
+### g10.auction-notifications-order.US1-TC6: A retried payment confirmation sends nothing twice
 
 **Classification:**
 
@@ -232,7 +232,7 @@
 * No second payment-received letter.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-gv0 rev=1 covers=g10.auction-notifications-order.SC-hhx -->
-### order-mail-US1-TC7-1: Setup overdue letter Contact Us carries the ready mailto and names the address
+### g10.auction-notifications-order.US1-TC7: Setup overdue letter Contact Us carries the ready mailto and names the address
 
 **Classification:**
 
@@ -273,7 +273,7 @@
 * The mailto includes a body with the matching order facts.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-7nr rev=1 covers=g10.auction-notifications-order.SC-xbe -->
-### order-mail-US1-TC8-1: Payment overdue letter Contact Us carries the ready mailto and names the address
+### g10.auction-notifications-order.US1-TC8: Payment overdue letter Contact Us carries the ready mailto and names the address
 
 **Classification:**
 
@@ -314,7 +314,7 @@
 * The mailto includes a body with the matching order facts.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-l79 rev=1 covers=g10.auction-notifications-order.SC-fza -->
-### order-mail-US1-TC9-1: Cancelled letter Contact Us carries the ready mailto and names the address
+### g10.auction-notifications-order.US1-TC9: Cancelled letter Contact Us carries the ready mailto and names the address
 
 **Classification:**
 
@@ -353,7 +353,7 @@
 * The mailto is not a bare `mailto:support@grade10.com` without subject and body.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-wcd rev=1 covers=g10.auction-notifications-order.SC-kn8 -->
-### order-mail-US1-TC10-1: Delivered letter Contact Us carries the ready mailto and names the address
+### g10.auction-notifications-order.US1-TC10: Delivered letter Contact Us carries the ready mailto and names the address
 
 **Classification:**
 
@@ -393,7 +393,7 @@
 * The mailto is not a bare `mailto:support@grade10.com` without subject and body.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-y9r rev=1 covers=g10.auction-notifications-order.SC-xbe -->
-### order-mail-US1-TC11-1: Overdue letter mailto matches Winner Order subject and body for the same order
+### g10.auction-notifications-order.US1-TC11: Overdue letter mailto matches Winner Order subject and body for the same order
 
 **Classification:**
 
@@ -431,7 +431,7 @@
 * Letter mailto body matches the dialog Message order facts.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-emn rev=1 covers=g10.auction-notifications-order.SC-xbe -->
-### order-mail-US1-TC12-1: Letter Contact Us still names the address when no mail client will open
+### g10.auction-notifications-order.US1-TC12: Letter Contact Us still names the address when no mail client will open
 
 **Classification:**
 
@@ -466,7 +466,7 @@
 * The letter body still shows `support@grade10.com` for the collector to copy by hand.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-8ag rev=1 covers=g10.auction-notifications-order.SC-fza,g10.auction-notifications-order.SC-kn8 -->
-### order-mail-US1-TC13-1: Overdue cancelled and delivered Contact Us are not a bare support mailto
+### g10.auction-notifications-order.US1-TC13: Overdue cancelled and delivered Contact Us are not a bare support mailto
 
 Runs once per row of **Test data**.
 
@@ -508,7 +508,7 @@ Runs once per row of **Test data**.
 * The href is not only `mailto:support@grade10.com`.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-dwz rev=1 covers=g10.auction-notifications-order.SC-0sv -->
-### order-mail-US1-TC14-1: Partial-payment letter Contact Us carries the ready mailto without the balance
+### g10.auction-notifications-order.US1-TC14: Partial-payment letter Contact Us carries the ready mailto without the balance
 
 **Classification:**
 
@@ -550,7 +550,7 @@ Runs once per row of **Test data**.
 * The mailto body may list <receipt_ids> and does not name the remaining balance.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-i2x rev=1 covers=g10.auction-notifications-order.SC-bgc -->
-### order-mail-US1-TC55-1: A shipped letter with no tracker link leads with the order
+### g10.auction-notifications-order.US1-TC55: A shipped letter with no tracker link leads with the order
 
 **Classification:**
 

@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/2
 **Drafts styled:** 2026-09-23, tcs-rules r3
 
-## shared-ui-invoice-and-receipt-pdf-US1: Invoice and Receipt PDF component contract
+## g10.shared-invoice-and-receipt-pdf.US1: Invoice and Receipt PDF component contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/auction/winner-order`, which composes the block behind the Invoice PDF control (`winner-order-SC-57`, `winner-order-SC-109`) and the Receipt PDF control (`winner-order-SC-67`)
 
@@ -12,7 +12,7 @@
 **so that** the document I read or download matches what the order page told me, however the page that composes it is built.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-8la rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-2d5,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t,g10.shared-invoice-and-receipt-pdf.SC-1sf -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC49-1: Each document date ends in GMT+8 across a Hong Kong midnight
+### g10.shared-invoice-and-receipt-pdf.US1-TC49: Each document date ends in GMT+8 across a Hong Kong midnight
 
 Runs once per row of **Test data**.
 
@@ -57,7 +57,7 @@ Runs once per row of **Test data**.
 * The row does not contain `HKT`.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-ckd rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-2d5,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t,g10.shared-invoice-and-receipt-pdf.SC-1sf -->
-### shared-ui-invoice-and-receipt-pdf-US1-TC50-1: The GMT+8 suffix stays under non-English copy
+### g10.shared-invoice-and-receipt-pdf.US1-TC50: The GMT+8 suffix stays under non-English copy
 
 Runs once per row of **Test data**.
 

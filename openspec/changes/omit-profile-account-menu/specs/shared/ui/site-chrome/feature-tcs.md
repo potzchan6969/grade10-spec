@@ -5,7 +5,7 @@
 
 **Out of suite:** none.
 
-## shared-ui-site-chrome-US1: Shared chrome contract
+## g10.shared-site-chrome.US1: Shared chrome contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
 **As an** application composing the shared chrome,
@@ -16,7 +16,7 @@ header for any brand,
 reimplementing its behavior.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-tfo rev=2 covers=g10.shared-site-chrome.SC-oe5 -->
-### shared-ui-site-chrome-US1-TC18-2: Activating Membership invokes the supplied handler
+### g10.shared-site-chrome.US1-TC18: Activating Membership invokes the supplied handler
 
 **Classification:**
 
@@ -47,7 +47,7 @@ reimplementing its behavior.
 * Step 3: no other account-menu handler is invoked.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-thx rev=1 covers=g10.shared-site-chrome.SC-cp9 -->
-### shared-ui-site-chrome-US1-TC25-1: Profile is omitted when onProfile is not supplied
+### g10.shared-site-chrome.US1-TC25: Profile is omitted when onProfile is not supplied
 
 **Classification:**
 
@@ -78,7 +78,7 @@ reimplementing its behavior.
 * Step 3: no Profile item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-3cf rev=1 covers=g10.shared-site-chrome.SC-bjp -->
-### shared-ui-site-chrome-US1-TC26-1: Activating Profile invokes its handler
+### g10.shared-site-chrome.US1-TC26: Activating Profile invokes its handler
 
 **Classification:**
 
@@ -109,7 +109,7 @@ reimplementing its behavior.
 * Step 3: no other account-menu handler is invoked.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-lc0 rev=2 covers=g10.shared-site-chrome.SC-xyv -->
-### shared-ui-site-chrome-US1-TC13-2: Account menu omits My Orders when its handler is not supplied
+### g10.shared-site-chrome.US1-TC13: Account menu omits My Orders when its handler is not supplied
 
 **Classification:**
 
@@ -140,7 +140,7 @@ reimplementing its behavior.
 * Step 3: no My Orders item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-9d7 rev=2 covers=none -->
-### shared-ui-site-chrome-US1-TC9-2: Signed-in chrome presents the account menu
+### g10.shared-site-chrome.US1-TC9: Signed-in chrome presents the account menu
 
 **Classification:**
 
@@ -173,7 +173,7 @@ reimplementing its behavior.
 * The menu does not offer KYC.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-0xk rev=1 covers=g10.shared-site-chrome.SC-xzm -->
-### shared-ui-site-chrome-US1-TC12-1: Activating My Orders invokes its handler
+### g10.shared-site-chrome.US1-TC12: Activating My Orders invokes its handler
 
 **Classification:**
 
@@ -204,7 +204,7 @@ reimplementing its behavior.
 * Step 3: no other account-menu handler is invoked.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-rkf rev=2 covers=g10.shared-site-chrome.SC-yiu,g10.shared-site-chrome.SC-hhb,g10.shared-site-chrome.SC-cl2 -->
-### shared-ui-site-chrome-US1-TC15-2: Account menu orders Profile, My Orders, My Auctions, Membership, then Sign Out when every handler is supplied
+### g10.shared-site-chrome.US1-TC15: Account menu orders Profile, My Orders, My Auctions, Membership, then Sign Out when every handler is supplied
 
 **Classification:**
 
@@ -237,7 +237,7 @@ reimplementing its behavior.
 * Step 3: no KYC item.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-y33 rev=2 covers=g10.shared-site-chrome.SC-bzz -->
-### shared-ui-site-chrome-US1-TC17-2: Account menu shows the configured label and no avatar when no email is supplied
+### g10.shared-site-chrome.US1-TC17: Account menu shows the configured label and no avatar when no email is supplied
 
 **Classification:**
 
@@ -268,7 +268,7 @@ reimplementing its behavior.
 * Step 3: no avatar.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-aui rev=1 covers=g10.shared-site-chrome.SC-7fd,g10.shared-site-chrome.SC-h0z -->
-### shared-ui-site-chrome-US1-TC8-1: Signed-out chrome presents Sign In
+### g10.shared-site-chrome.US1-TC8: Signed-out chrome presents Sign In
 
 **Classification:**
 
@@ -300,7 +300,7 @@ reimplementing its behavior.
 * Step 3: no Profile, My Orders or Membership control.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-hf6 rev=1 covers=g10.shared-site-chrome.SC-61e -->
-### shared-ui-site-chrome-US1-TC27-1: The header takes no second orders item
+### g10.shared-site-chrome.US1-TC27: The header takes no second orders item
 
 **Classification:**
 

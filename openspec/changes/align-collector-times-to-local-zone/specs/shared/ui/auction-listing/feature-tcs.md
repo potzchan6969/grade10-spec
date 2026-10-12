@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-ui-auction-listing-US1: The listing surface's rendering contract
+## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
 **Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
 
@@ -14,7 +14,7 @@ is wide enough for that rail beside the main frame,
 progress instead of a crowded second rail.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-53e rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi -->
-### shared-ui-auction-listing-US1-TC11-1: Bid rows read in the supplied locale and time zone
+### g10.shared-auction-listing.US1-TC11: Bid rows read in the supplied locale and time zone
 
 Runs once per row of **Test data**.
 
@@ -61,7 +61,7 @@ Runs once per row of **Test data**.
 * Each row keeps its accepted instant as data.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-n6b rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
-### shared-ui-auction-listing-US1-TC57-1: A tile's close line takes the supplied locale and zone together
+### g10.shared-auction-listing.US1-TC57: A tile's close line takes the supplied locale and zone together
 
 Runs once per row of **Test data**.
 
@@ -101,7 +101,7 @@ Runs once per row of **Test data**.
 * The line names <zone name>, in English though the locale is zh-Hant, and not HKT.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ae5 rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
-### shared-ui-auction-listing-US1-TC58-1: A bid row's display text replaces its formatted time
+### g10.shared-auction-listing.US1-TC58: A bid row's display text replaces its formatted time
 
 **Classification:**
 
