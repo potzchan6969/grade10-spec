@@ -90,6 +90,17 @@ export const LiveAuction: Story = {
   },
 };
 
+/** Boneyard skeleton while the holdings fetch settles. */
+export const Loading: Story = {
+  args: { asset: assetWithStatus("In Vault"), loading: true },
+  render: ({ asset }) => <VaultAssetCard asset={asset} loading />,
+};
+
+/** Boneyard capture target — `loading` at the card's 288px grid width. */
+export const BoneyardCapture: Story = {
+  args: { asset: assetWithStatus("In Vault"), loading: true },
+};
+
 /** Withdrawal requested, admin approval pending — intake estimate stays. */
 export const RetrievalPending: Story = {
   args: { asset: assetWithStatus("Retrieval Pending") },

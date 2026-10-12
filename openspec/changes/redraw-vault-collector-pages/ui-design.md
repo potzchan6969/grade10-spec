@@ -73,7 +73,7 @@ Flagged work, already landed in this repo pending this change's tasks:
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Status badges | `Listed`, `Live Auction`, `Retrieval Pending` overlay the card image as a brand `Badge`; In Vault shows no badge | `grade10-site-vault-portfolio-US-01` |
+| Status badges | `Listed` and `Live Auction` overlay the card image as a brand `Badge`, `Retrieval Pending` as an outlined `Badge`; In Vault shows no badge | `grade10-site-vault-portfolio-US-01` |
 | In Vault tab | Includes `Retrieval Pending` items awaiting admin approval (annotation); count includes them | `grade10-site-vault-portfolio-US-01` |
 | Empty tab | A tab with zero items is hidden (annotation) | `grade10-site-vault-portfolio-US-01` |
 | Tab sorts | All/In Vault: Highest est. value, Lowest est. value, Recently added. Live Auction: Ending Soonest (default), Highest Bid. Listed: Recently Listed (default), Highest Current Price. Each tab remembers its sort for the session | `grade10-site-vault-portfolio-US-01` |
