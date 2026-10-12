@@ -28,17 +28,17 @@
 ### Route
 
 1. Publish `<listing_1>` with `<product>` and `<alt text>`.
-   - The catalogue card shows the confirmed image and accessible name. `TC-5l7 (US1-TC1)`
+   - The catalogue card shows the confirmed image and accessible name. `g10.auction-dmn.US1-TC1`
 2. Open `<listing_2>` from its catalogue card.
-   - The card opens that lot's own page. `TC-23e (US2-TC1)`
+   - The card opens that lot's own page. `g10.auction-dmn.US2-TC1`
 3. Read `<listing_2>` before scripts run.
-   - The lot page is complete and its auction facts are present. `TC-yqv (US2-TC2)`
+   - The lot page is complete and its auction facts are present. `g10.auction-dmn.US2-TC2`
 4. Read the auction surfaces for `<listing_2>`.
-   - Each surface names the auction and remains discoverable. `TC-qvl (US2-TC3)`
+   - Each surface names the auction and remains discoverable. `g10.auction-dmn.US2-TC3`
 5. Study `<listing_3>` and place a first bid with `<card>`.
-   - The accepted bid stands on the lot without a charge before winning. `TC-rl3 (US3-TC1)`
+   - The accepted bid stands on the lot without a charge before winning. `g10.auction-dmn.US3-TC1`
 6. Try `<below increment>` on the same bid form.
-   - The bid is refused and recorded nowhere. `TC-5pk (US3-TC2)`
+   - The bid is refused and recorded nowhere. `g10.auction-dmn.US3-TC2`
 
 ## Walk 2: Compete, extend, and settle a lot
 
@@ -64,23 +64,23 @@
 
 1. Open `<listing_5>` in both sessions.
 2. Set `<user A maximum>` and `<user B maximum>`.
-   - Customer A leads at the second-highest maximum plus one increment. `TC-r2v (US4-TC1)`
+   - Customer A leads at the second-highest maximum plus one increment. `g10.auction-dmn.US4-TC1`
 3. Raise customer B's maximum to `<user B raise>`.
-   - Customer B leads at customer A's maximum plus one increment, with no intermediate bids at the maximum amounts. `TC-r2v (US4-TC1)`
+   - Customer B leads at customer A's maximum plus one increment, with no intermediate bids at the maximum amounts. `g10.auction-dmn.US4-TC1`
 4. Read customer A's outbid lot and bids index.
-   - The outbid standing reaches both surfaces. `TC-0cq (US5-TC1)`
+   - The outbid standing reaches both surfaces. `g10.auction-dmn.US5-TC1`
 5. Open the outbid summary and its lot.
-   - The summary opens its explanation and the lot. `TC-57p (US5-TC2)`
+   - The summary opens its explanation and the lot. `g10.auction-dmn.US5-TC2`
 6. Place a bid during extended bidding.
-   a. The accepted bid reaches the extension cap. `TC-5yl (US7-TC2)`
-   b. A price-moving auto-bid restarts the timer on the open page. `TC-wh3 (US7-TC3)`
+   a. The accepted bid reaches the extension cap. `g10.auction-dmn.US7-TC2`
+   b. A price-moving auto-bid restarts the timer on the open page. `g10.auction-dmn.US7-TC3`
 7. Read the catalogue card and open lot page after the extension.
-   - Both surfaces agree on the extended auction. `TC-n2z (US7-TC4)`
+   - Both surfaces agree on the extended auction. `g10.auction-dmn.US7-TC4`
 8. Wait through the recorded close without reloading.
-   a. Customer A reads Won with `<final price>` on the lot and in My Auctions. `TC-3iz (US12-TC1)`
-   b. Customer B reads Didn't win with `<final price>` and no card charge. `TC-3iz (US12-TC1)`
+   a. Customer A reads Won with `<final price>` on the lot and in My Auctions. `g10.auction-dmn.US12-TC1`
+   b. Customer B reads Didn't win with `<final price>` and no card charge. `g10.auction-dmn.US12-TC1`
 9. Read the lot page and catalogue card as the result is recorded.
-   - The lot reads Won, the catalogue card reads Ended, and neither surface reloads. `TC-8w7 (US12-TC2)`
+   - The lot reads Won, the catalogue card reads Ended, and neither surface reloads. `g10.auction-dmn.US12-TC2`
 
 ## Walk 3: Share a lot and protect private bidding facts
 
@@ -100,13 +100,13 @@
 ### Route
 
 1. Share `<shared lot link>` and open it in a fresh session.
-   - The link unfurls as `<listing_7>` and stays on that lot after hydration. `TC-wrl (US6-TC1)`
+   - The link unfurls as `<listing_7>` and stays on that lot after hydration. `g10.auction-dmn.US6-TC1`
 2. Open `<shared lot link>` while signed out.
-   - The visitor keeps the destination and sees no private bidding history. `TC-n6x (US8-TC2)`
+   - The visitor keeps the destination and sees no private bidding history. `g10.auction-dmn.US8-TC2`
 3. Read `<listing_7>` as the rival.
-   - The rival sees the price but never the leader's maximum. `TC-nhf (US8-TC1)`
+   - The rival sees the price but never the leader's maximum. `g10.auction-dmn.US8-TC1`
 4. Place a bid as the linked collector with `<card>`.
-   - The bid stands at once on the card on file. `TC-fp8 (US8-TC3)`
+   - The bid stands at once on the card on file. `g10.auction-dmn.US8-TC3`
 
 ## Walk 4: Exercise missing-lot and payment-error branches
 
@@ -127,11 +127,11 @@
 ### Route
 
 1. Open `<missing lot address>`.
-   - The address answers not found without an empty lot page. `TC-0rf (US9-TC1)`
+   - The address answers not found without an empty lot page. `g10.auction-dmn.US9-TC1`
 2. Submit a bid on `<listing_12>` with `<card>`.
-   - The unavailable card failure is explicit and recorded safely. `TC-13a (US9-TC2)`
+   - The unavailable card failure is explicit and recorded safely. `g10.auction-dmn.US9-TC2`
 3. Repeat the card authorization event.
-   - The lot changes once and does not duplicate the event. `TC-qus (US9-TC3)`
+   - The lot changes once and does not duplicate the event. `g10.auction-dmn.US9-TC3`
 
 ## Walk 5: Follow a called-off lot to its old address
 
@@ -149,11 +149,9 @@
 ### Route
 
 1. Search the catalogue for the title of `<lot_1>`.
-   a. `<lot_1>` does not appear in the catalogue. `TC-dw9 (US11-TC1)`
+   a. `<lot_1>` does not appear in the catalogue. `g10.auction-dmn.US11-TC1`
 2. Open `<lot_1 address>`.
-   a. The response is 200 and `<lot_1>`'s public listing page is on screen. `TC-dw9 (US11-TC1)`
-
-
+   a. The response is 200 and `<lot_1>`'s public listing page is on screen. `g10.auction-dmn.US11-TC1`
 ## g10.auction-dmn.US1: Operator publishes a gallery a collector can shop
 
 **As an** operator with catalogue grant,
@@ -163,7 +161,7 @@ catalogue and the listing page show,
 
 
 <!-- trace:case id=g10.auction-dmn.TC-5l7 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j,g10.auction-listing-media.SC-41j,g10.auction-listing-media.SC-j5f,g10.auction-listing-media.SC-1mk,g10.auction-listing-media.SC-su1,g10.auction-listing-media.SC-y9i,g10.auction-listing-media.SC-dva,g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
-### g10.auction-dmn.TC-5l7 (US1-TC1): Confirmed gallery image reaches the catalogue card
+### g10.auction-dmn.US1-TC1: Confirmed gallery image reaches the catalogue card
 
 **Classification:**
 
@@ -216,7 +214,7 @@ I read.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-23e rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-fl9,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
-### g10.auction-dmn.TC-23e (US2-TC1): Catalogue card opens its own lot page
+### g10.auction-dmn.US2-TC1: Catalogue card opens its own lot page
 
 **Classification:**
 
@@ -258,7 +256,7 @@ I read.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-yqv rev=1 covers=g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9,g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8 -->
-### g10.auction-dmn.TC-yqv (US2-TC2): Lot page answers whole before scripts run
+### g10.auction-dmn.US2-TC2: Lot page answers whole before scripts run
 
 **Classification:**
 
@@ -298,7 +296,7 @@ I read.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-qvl rev=2 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-mda,g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13,g10.auction-listing-page.SC-aga -->
-### g10.auction-dmn.TC-qvl (US2-TC3): Each auction surface names itself and is discoverable
+### g10.auction-dmn.US2-TC3: Each auction surface names itself and is discoverable
 
 Runs once per row of **Test data**.
 
@@ -353,7 +351,7 @@ Runs once per row of **Test data**.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-rl3 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
-### g10.auction-dmn.TC-rl3 (US3-TC1): Gallery study leads to an accepted first bid
+### g10.auction-dmn.US3-TC1: Gallery study leads to an accepted first bid
 
 **Classification:**
 
@@ -402,7 +400,7 @@ Runs once per row of **Test data**.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-5pk rev=2 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
-### g10.auction-dmn.TC-5pk (US3-TC2): Bid below the next increment is refused on the bid form and recorded nowhere
+### g10.auction-dmn.US3-TC2: Bid below the next increment is refused on the bid form and recorded nowhere
 
 **Classification:**
 
@@ -460,7 +458,7 @@ from my card until I win.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-r2v rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7,g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
-### g10.auction-dmn.TC-r2v (US4-TC1): Two maxima settle at the second-highest plus one increment
+### g10.auction-dmn.US4-TC1: Two maxima settle at the second-highest plus one increment
 
 **Classification:**
 
@@ -515,7 +513,7 @@ from my card until I win.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-0cq rev=2 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
-### g10.auction-dmn.TC-0cq (US5-TC1): Outbid standing reaches the lot page and the bids index
+### g10.auction-dmn.US5-TC1: Outbid standing reaches the lot page and the bids index
 
 **Classification:**
 
@@ -562,7 +560,7 @@ from my card until I win.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-57p rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj,g10.auction-listing-page.SC-fl9 -->
-### g10.auction-dmn.TC-57p (US5-TC2): Outbid summary opens its explanation and its lot
+### g10.auction-dmn.US5-TC2: Outbid summary opens its explanation and its lot
 
 **Classification:**
 
@@ -607,7 +605,7 @@ from my card until I win.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-wrl rev=1 covers=g10.auction-listing-page.SC-mda,g10.auction-listing-page.SC-c09,g10.auction-listing-page.SC-y8j,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
-### g10.auction-dmn.TC-wrl (US6-TC1): Shared link unfurls as the lot and stays put on hydration
+### g10.auction-dmn.US6-TC1: Shared link unfurls as the lot and stays put on hydration
 
 **Classification:**
 
@@ -653,7 +651,7 @@ from my card until I win.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-5yl rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
-### g10.auction-dmn.TC-5yl (US7-TC2): Extension cap holds while the bid is still accepted
+### g10.auction-dmn.US7-TC2: Extension cap holds while the bid is still accepted
 
 **Classification:**
 
@@ -701,7 +699,7 @@ from my card until I win.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-wh3 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-auction.SC-e9w,g10.auction-auction.SC-xd3,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
-### g10.auction-dmn.TC-wh3 (US7-TC3): Price-moving auto-bid in extended bidding restarts the timer on the open page
+### g10.auction-dmn.US7-TC3: Price-moving auto-bid in extended bidding restarts the timer on the open page
 
 **Classification:**
 
@@ -752,7 +750,7 @@ from my card until I win.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-n2z rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c,g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
-### g10.auction-dmn.TC-n2z (US7-TC4): Catalogue card and open lot page agree after an extension
+### g10.auction-dmn.US7-TC4: Catalogue card and open lot page agree after an extension
 
 **Classification:**
 
@@ -811,7 +809,7 @@ it.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-nhf rev=2 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
-### g10.auction-dmn.TC-nhf (US8-TC1): Rival reads the price but never the leader's maximum
+### g10.auction-dmn.US8-TC1: Rival reads the price but never the leader's maximum
 
 **Classification:**
 
@@ -857,7 +855,7 @@ it.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-n6x rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw,g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
-### g10.auction-dmn.TC-n6x (US8-TC2): Signed-out visitor keeps their destination
+### g10.auction-dmn.US8-TC2: Signed-out visitor keeps their destination
 
 **Classification:**
 
@@ -898,7 +896,7 @@ it.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-fp8 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
-### g10.auction-dmn.TC-fp8 (US8-TC3): A linked collector's bid stands at once on the card on file
+### g10.auction-dmn.US8-TC3: A linked collector's bid stands at once on the card on file
 
 **Classification:**
 
@@ -953,7 +951,7 @@ it.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-0rf rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13,g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8 -->
-### g10.auction-dmn.TC-0rf (US9-TC1): Address naming no published lot answers not found
+### g10.auction-dmn.US9-TC1: Address naming no published lot answers not found
 
 **Classification:**
 
@@ -991,7 +989,7 @@ it.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-13a rev=1 covers=g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
-### g10.auction-dmn.TC-13a (US9-TC2): Unavailable card capability fails the bid explicitly
+### g10.auction-dmn.US9-TC2: Unavailable card capability fails the bid explicitly
 
 **Classification:**
 
@@ -1034,7 +1032,7 @@ it.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-qus rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
-### g10.auction-dmn.TC-qus (US9-TC3): A repeated card authorization event changes the lot once
+### g10.auction-dmn.US9-TC3: A repeated card authorization event changes the lot once
 
 **Classification:**
 
@@ -1079,7 +1077,7 @@ it.
 **so that** a saved address still opens it.
 
 <!-- trace:case id=g10.auction-dmn.TC-dw9 rev=2 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw,g10.auction-listing-page.SC-ajz -->
-### g10.auction-dmn.TC-dw9 (US11-TC1): Called-off lot leaves the catalogue and keeps its address
+### g10.auction-dmn.US11-TC1: Called-off lot leaves the catalogue and keeps its address
 
 **Classification:**
 
@@ -1129,7 +1127,7 @@ it.
 
 
 <!-- trace:case id=g10.auction-dmn.TC-3iz rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp,g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7,g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi,g10.auction-account-record.SC-n9l,g10.auction-account-record.SC-2e8 -->
-### g10.auction-dmn.TC-3iz (US12-TC1): Winner and losing bidder read one result on the lot and My Auctions
+### g10.auction-dmn.US12-TC1: Winner and losing bidder read one result on the lot and My Auctions
 
 **Classification:**
 
@@ -1181,7 +1179,7 @@ it.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-8w7 rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp,g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
-### g10.auction-dmn.TC-8w7 (US12-TC2): Catalogue card and lot page turn at the close without a reload
+### g10.auction-dmn.US12-TC2: Catalogue card and lot page turn at the close without a reload
 
 **Classification:**
 
@@ -1230,7 +1228,7 @@ it.
 ### g10.auction-dmn.US1: Operator publishes a gallery a collector can shop
 
 <!-- trace:case id=g10.auction-dmn.TC-acb rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j,g10.auction-listing-media.SC-41j,g10.auction-listing-media.SC-j5f,g10.auction-listing-media.SC-1mk,g10.auction-listing-media.SC-su1,g10.auction-listing-media.SC-y9i,g10.auction-listing-media.SC-dva,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
-#### g10.auction-dmn.TC-acb (US1-TC2): Unsupported file never reaches the gallery or the catalogue
+#### g10.auction-dmn.US1-TC2: Unsupported file never reaches the gallery or the catalogue
 
 **Classification:**
 
@@ -1273,7 +1271,7 @@ it.
 ### g10.auction-dmn.US4: Collector commits a maximum and is bid to the lead
 
 <!-- trace:case id=g10.auction-dmn.TC-cru rev=2 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx -->
-#### g10.auction-dmn.TC-cru (US4-TC2): Auto-bid raises the leader on their behalf, with nothing taken from the card
+#### g10.auction-dmn.US4-TC2: Auto-bid raises the leader on their behalf, with nothing taken from the card
 
 **Classification:**
 
@@ -1323,7 +1321,7 @@ it.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-b5t rev=2 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7,g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx -->
-#### g10.auction-dmn.TC-b5t (US4-TC3): Lowering a maximum is refused on the bid form and the lead holds
+#### g10.auction-dmn.US4-TC3: Lowering a maximum is refused on the bid form and the lead holds
 
 **Classification:**
 
@@ -1373,7 +1371,7 @@ it.
 ### g10.auction-dmn.US10: Exploratory passes
 
 <!-- trace:case id=g10.auction-dmn.TC-cnk rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3,g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9 -->
-#### g10.auction-dmn.TC-cnk (US10-TC1): Roam the catalogue-to-bid path for one hour
+#### g10.auction-dmn.US10-TC1: Roam the catalogue-to-bid path for one hour
 
 **Classification:**
 
@@ -1412,7 +1410,7 @@ it.
 ---
 
 <!-- trace:case id=g10.auction-dmn.TC-6dl rev=2 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
-#### g10.auction-dmn.TC-6dl (US10-TC2): Roam competing maxima and the closing minutes for one hour
+#### g10.auction-dmn.US10-TC2: Roam competing maxima and the closing minutes for one hour
 
 **Classification:**
 
@@ -1463,25 +1461,3 @@ it.
 - A refused attempt is not a bid: it shows on the bid form that made it and nowhere in the bidder's history, My Auctions or the lot's public record (decisions Q6).
 - A losing row on My Auctions reads "Your card was not charged." (decision Q2).
 - HKD increments follow the Bidding page's schedule: HK$80 from HK$4,000 and HK$200 from HK$8,000.
-
-## Reconciliation
-
-**Run:** QA2 rerun, 2026-10-01, for change `relay-auction-live-state`. Joined the domain cases, composed from the journeys of auction, listing-page, account-record and auto-bidding, with the delta scenarios of those capabilities. QA2 added one expected result to US12-TC02: the card's closed state with no result before the close is recorded.
-
-| Finding | Disposition |
-| --- | --- |
-| US07-TC03: a price-moving auto-bid in extended bidding restarts the open page's countdown | **Folded in:** `grade10-site-auction-auction-SC-06`, `grade10-site-auction-listing-page-SC-30`; the feature suites leave both to this case |
-| US07-TC04: the card, the Featured slide and the lot page agree after an extension, on the service clock | **Folded in:** `grade10-site-auction-auction-SC-65`, `grade10-site-auction-auction-SC-66`, `grade10-site-auction-listing-page-SC-33`; the auction suite leaves the first two to this case |
-| US12-TC01: winner and losing bidder read one result and one final price on the lot and on My Auctions | **Folded in:** `grade10-site-auction-listing-page-SC-37`, `grade10-site-auction-listing-page-SC-38`, `grade10-site-auction-account-record-SC-66`; account-record leaves `grade10-site-auction-account-record-SC-18` and `grade10-site-auction-account-record-SC-19` to this case |
-| US12-TC02: the card and the lot page turn at the close without a reload | **Folded in:** `grade10-site-auction-auction-SC-88`, `grade10-site-auction-listing-page-SC-37` |
-
-**Uncovered anchors:** none. Every case traces two or more capabilities' journeys.
-
-**Run:** QA2, 2026-10-03. Joined the domain cases, composed from the journeys of auction, auto-bidding, bid-payment-method, bidding-history, account-record and listing-page, with this change's delta scenarios. It is a statement, not proof.
-
-- **Revised** - `g10.auction-dmn.TC-rl3@2`, `g10.auction-dmn.TC-5pk@2`, `g10.auction-dmn.TC-cru@2`, `g10.auction-dmn.TC-b5t@2`, `g10.auction-dmn.TC-0cq@2`, `g10.auction-dmn.TC-nhf@2`, `g10.auction-dmn.TC-fp8@2` and `g10.auction-dmn.TC-6dl@2`: each read a card hold, an authorization or a refused attempt kept in the record, so each moves up a revision and returns to draft. The six that were automated owe their test the new id and the flip back with a Decided by line
-- **Deprecated** - `g10.auction-dmn.TC-13a@1`, a bid failing on an unavailable card capability, and `g10.auction-dmn.TC-qus@1`, a repeated card authorization event: no bid asks the card
-- **Trace changed** - `g10.auction-dmn.TC-r2v@1` traces `grade10-site-auction-auction-US-02` in place of the retired grade10-site-auction-auction-US-03; its steps, results and status are unchanged
-- **Contradicted** - none
-
-**Run:** 2026-10-08, listing-page sitemap aligned to `grade10-site/site/crawlable-pages`. `g10.auction-dmn.TC-qvl@1` retargeted as `g10.auction-dmn.TC-qvl@2`: the sitemap lists every lot the catalogue holds.

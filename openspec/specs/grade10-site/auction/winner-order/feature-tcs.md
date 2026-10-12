@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/184
+**Status:** pending-review · 0/186
 **Drafts styled:** 2026-10-12, tcs-rules r5
 **Out of suite:** none.
 
@@ -22,26 +22,35 @@
 
 ### Route
 
-1. Open Add Address for delivery.
-   - Phone shows a globe only, with no flag or calling-code divider. `TC-nsg (US1-TC12)`
-   - No calling country is chosen; Personal is selected; Company Name is hidden. `TC-4gp (US1-TC13)`
-2. Select Company.
-   - Company Name is shown and required. `TC-rx1 (US1-TC14)`
-3. Submit without a company name.
-   - Confirmation is refused with a message beside Company Name; no address is saved. `TC-51d (US1-TC15)`
-4. Enter phone values.
-   a. Country without digits → field validation appears `TC-r03 (US1-TC16)`
-   b. Digits without country → field validation appears `TC-qwo (US1-TC17)`
-5. Enter accepted phone values.
-   - The unusual format is accepted. `TC-jo6 (US1-TC18)`
-   - The parseable number is stored in E.164. `TC-qia (US1-TC19)`
-6. Leave Address Line 2 and State empty.
-   - The address can still be submitted. `TC-phu (US1-TC20)`
-7. Submit a valid company address with phone.
-   - The order carries Northwind Collectibles, Alex Chen, the phone and postal code; the address card omits the phone and postal code. `TC-u2z (US1-TC24)`
-8. Read Order Summary.
-   - The full delivery and billing addresses are shown. `TC-kqe (US1-TC25)`
-
+1. Open Complete Order Setup. `g10.auction-winner-order.US1-TC12`
+2. Open Add Address for delivery.
+3. Look at the Phone field.
+4. Open Add Address for delivery. `g10.auction-winner-order.US1-TC13`
+5. Read the Personal / Company control and the fields below it.
+6. Click Company on the Personal / Company control. `g10.auction-winner-order.US1-TC14`
+7. Read the fields below it.
+8. Fill the fields from **Test data**. `g10.auction-winner-order.US1-TC15`
+9. Click confirm.
+10. Fill the fields from **Test data**. `g10.auction-winner-order.US1-TC16`
+11. Click confirm.
+12. Fill the fields from **Test data**. `g10.auction-winner-order.US1-TC17`
+13. Click confirm.
+14. Fill the fields from **Test data**. `g10.auction-winner-order.US1-TC18`
+15. Click confirm.
+16. Fill the fields from **Test data**. `g10.auction-winner-order.US1-TC19`
+17. Click confirm.
+18. Read the phone on the order's delivery address.
+19. Fill the fields from **Test data**. `g10.auction-winner-order.US1-TC20`
+20. Click confirm.
+21. Read the order's delivery address.
+22. Click Company. `g10.auction-winner-order.US1-TC24`
+23. Fill the fields from **Test data**.
+24. Click confirm.
+25. Reopen the delivery address picker.
+26. Open Complete Order Setup. `g10.auction-winner-order.US1-TC25`
+27. Enter the delivery address from **Test data**.
+28. Confirm setup.
+29. Read Delivery and Billing on Order Summary.
 ## Walk 2: Pay the Confirmed Order by Card
 
 **Starting state:**
@@ -58,18 +67,18 @@
 
 ### Route
 
-1. Open the order and read the invoice.
-   - Every invoice line, Pay with Card, the confirmed delivery address and the lot are shown. `TC-9gh (US4-TC1)`
-2. Choose one payment branch:
-   a. Let the payment session time out → the page says payment was not completed; the order remains Pending Payment; Pay Now is available. `TC-3ie (US4-TC3)`
-   b. Pay with `<card_declined>`, then `<card_approved>` → the invoice stays unpaid and payable after the decline; the approved payment is accepted and the order reads paid. `TC-5vo (US1-TC6)`
-3. Read the payment transition for the approved-payment branch.
-   - The page first shows Confirming payment, not Preparing Shipment. `TC-w3e (US4-TC5)`
-   - The recorded payment makes the order read Preparing Shipment. `TC-s0i (US4-TC6)`
-4. Open the receipt.
-   - The winning bid, buyer's premium, shipping, insurance when added, Tax when added and final amount show; the lines sum to the final amount and name the payment method. `TC-h7f (US2-TC1)`
-   - Original Invoice Total equals the total, Previous Payments is 0, Current Payment Received equals the total and Remaining Balance Due is 0. `TC-qvc (US2-TC4)`
-
+1. Navigate to <grade10 auction order url>. `g10.auction-winner-order.US4-TC1`
+2. Navigate to <grade10 auction order url>. `g10.auction-winner-order.US4-TC3`
+3. Click Pay Now.
+4. Wait until the payment session times out.
+5. Return to <grade10 auction order url>.
+6. Pay with <card_declining>. `g10.auction-winner-order.US1-TC6`
+7. Pay with <card_good>.
+8. Navigate to <grade10 auction order url>. `g10.auction-winner-order.US4-TC5`
+9. Navigate to <grade10 auction order url>. `g10.auction-winner-order.US4-TC6`
+10. Download the receipt PDF. `g10.auction-winner-order.US2-TC1`
+11. Read its lines.
+12. Download the receipt PDF. `g10.auction-winner-order.US2-TC4`
 ## Walk 3: Follow a Paid Order to Delivery
 
 **Starting state:**
@@ -78,23 +87,26 @@
 
 ### Route
 
-1. Read Order Progress.
-   - The badge reads Preparing Shipment, uses the default style, Shipping is the current progress step, Shipping subtext reads Preparing to ship, and no step is labelled Preparing Shipment. `TC-nmg (US2-TC55)`
-2. Open the carrier tracker from the tracking number.
-   - The tracking number is an external link with an arrow; no Track shipment button or carrier name appears; the link opens the carrier URL in a new tab. `TC-uox (US2-TC13)` `TC-4zy (US2-TC2)`
-3. Read the delivery proof.
-   - The carrier timestamp and signature are retained. `TC-l8v (US2-TC3)`
-4. Read the delivered order.
-   - The tracking number remains an external link with an arrow; no Track shipment button or carrier name appears; the link opens the carrier URL in a new tab. `TC-l0r (US2-TC12)`
-
-## winner-order-US1: Winner settles a won lot
+1. Read the status badge. `g10.auction-winner-order.US2-TC55`
+2. Read Order Progress.
+3. Read Order Progress. `g10.auction-winner-order.US2-TC13`
+4. Open <tracking number>.
+5. Read the shipment section of <order_shipped>. `g10.auction-winner-order.US2-TC2`
+6. Click <tracking number>.
+7. Read the shipment section of <order_shipped_no_link>.
+8. Wait for the delivery report to be processed. `g10.auction-winner-order.US2-TC3`
+9. Navigate to <winner order url> for <order_shipped>.
+10. Open the delivery proof.
+11. Read Order Progress. `g10.auction-winner-order.US2-TC12`
+12. Open <tracking number>.
+## g10.auction-winner-order.US1: Winner settles a won lot
 
 **As a** winner,
 **I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
 **so that** the lot I won becomes mine inside a deadline I can see, priced for where it is actually going.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8q4 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-8q4 (US1-TC1): A lot closing with a winner opens one order whose quoted charges read TBD
+### g10.auction-winner-order.US1-TC1: A lot closing with a winner opens one order whose quoted charges read TBD
 
 **Classification:**
 
@@ -132,7 +144,7 @@
 * Step 3: no charge is marked as an estimate.
 
 <!-- trace:case id=g10.auction-winner-order.TC-qaq rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-qaq (US1-TC2): With no delivery address the invoice cannot be paid
+### g10.auction-winner-order.US1-TC2: With no delivery address the invoice cannot be paid
 
 **Classification:**
 
@@ -170,7 +182,7 @@
 * Step 3: payment is refused until a delivery address is given.
 
 <!-- trace:case id=g10.auction-winner-order.TC-shz rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-shz (US1-TC3): A pre-filled default address must still be confirmed before paying
+### g10.auction-winner-order.US1-TC3: A pre-filled default address must still be confirmed before paying
 
 **Classification:**
 
@@ -205,7 +217,7 @@
 * The order asks the winner to confirm the delivery address.
 
 <!-- trace:case id=g10.auction-winner-order.TC-yuw rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-yuw (US1-TC4): Changing the address shows the old and new totals before paying
+### g10.auction-winner-order.US1-TC4: Changing the address shows the old and new totals before paying
 
 **Classification:**
 
@@ -247,7 +259,7 @@
 * No separate charge of <difference> is raised.
 
 <!-- trace:case id=g10.auction-winner-order.TC-0p6 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-0p6 (US1-TC5): The winner's card holds nothing from bidding and one fresh charge settles
+### g10.auction-winner-order.US1-TC5: The winner's card holds nothing from bidding and one fresh charge settles
 
 **Classification:**
 
@@ -287,7 +299,7 @@
 * Step 4 shows one charge, for the invoice total.
 
 <!-- trace:case id=g10.auction-winner-order.TC-5vo rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-5vo (US1-TC6): A declined card leaves the invoice payable
+### g10.auction-winner-order.US1-TC6: A declined card leaves the invoice payable
 
 **Classification:**
 
@@ -326,7 +338,7 @@
 * Step 2: payment is accepted; the order reads paid.
 
 <!-- trace:case id=g10.auction-winner-order.TC-vxj rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-vxj (US1-TC7): The payment deadline is seven days from the recorded close
+### g10.auction-winner-order.US1-TC7: The payment deadline is seven days from the recorded close
 
 **Classification:**
 
@@ -364,7 +376,7 @@
 * Step 2: Winner Order shows the same instant in the viewer's local zone as 08:00 `EDT`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-h5e rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-h5e (US1-TC8): Two named saved addresses are both offered on an order
+### g10.auction-winner-order.US1-TC8: Two named saved addresses are both offered on an order
 
 **Classification:**
 
@@ -403,7 +415,7 @@
 * Step 3: both are offered for the order.
 
 <!-- trace:case id=g10.auction-winner-order.TC-hrx rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-hrx (US1-TC9): One default address pre-fills a new order
+### g10.auction-winner-order.US1-TC9: One default address pre-fills a new order
 
 **Classification:**
 
@@ -441,7 +453,7 @@
 * Step 2: the delivery address is pre-filled with <address_work>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-jje rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-jje (US1-TC10): Editing a saved address leaves the order's snapshot
+### g10.auction-winner-order.US1-TC10: Editing a saved address leaves the order's snapshot
 
 **Classification:**
 
@@ -479,7 +491,7 @@
 * Step 2: the order still shows the original address line 1.
 
 <!-- trace:case id=g10.auction-winner-order.TC-5jc rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-5jc (US1-TC11): An address an unpaid order uses cannot be archived
+### g10.auction-winner-order.US1-TC11: An address an unpaid order uses cannot be archived
 
 **Classification:**
 
@@ -515,7 +527,7 @@
 * <address_work> stays available while the order uses it.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nsg rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-nsg (US1-TC12): Add Address opens with no phone country chosen
+### g10.auction-winner-order.US1-TC12: Add Address opens with no phone country chosen
 
 **Classification:**
 
@@ -553,7 +565,7 @@
 * No calling country is chosen.
 
 <!-- trace:case id=g10.auction-winner-order.TC-4gp rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-4gp (US1-TC13): Add Address opens on Personal with Company Name hidden
+### g10.auction-winner-order.US1-TC13: Add Address opens on Personal with Company Name hidden
 
 **Classification:**
 
@@ -589,7 +601,7 @@
 * Company Name is not shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-rx1 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-rx1 (US1-TC14): Choosing Company shows a required Company Name
+### g10.auction-winner-order.US1-TC14: Choosing Company shows a required Company Name
 
 **Classification:**
 
@@ -625,7 +637,7 @@
 * Company Name shows, marked required.
 
 <!-- trace:case id=g10.auction-winner-order.TC-51d rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-51d (US1-TC15): A company address without Company Name is refused
+### g10.auction-winner-order.US1-TC15: A company address without Company Name is refused
 
 **Classification:**
 
@@ -670,7 +682,7 @@
 * No address is saved or applied to the order.
 
 <!-- trace:case id=g10.auction-winner-order.TC-r03 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-r03 (US1-TC16): A phone country with no digits is refused
+### g10.auction-winner-order.US1-TC16: A phone country with no digits is refused
 
 **Classification:**
 
@@ -714,7 +726,7 @@
 * No address is saved or applied to the order.
 
 <!-- trace:case id=g10.auction-winner-order.TC-qwo rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-qwo (US1-TC17): Phone digits with no country are refused
+### g10.auction-winner-order.US1-TC17: Phone digits with no country are refused
 
 **Classification:**
 
@@ -758,7 +770,7 @@
 * No address is saved or applied to the order.
 
 <!-- trace:case id=g10.auction-winner-order.TC-jo6 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-jo6 (US1-TC18): An unusual phone format is accepted
+### g10.auction-winner-order.US1-TC18: An unusual phone format is accepted
 
 **Classification:**
 
@@ -802,7 +814,7 @@
 * The address is applied to the order.
 
 <!-- trace:case id=g10.auction-winner-order.TC-qia rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-qia (US1-TC19): A parseable phone is stored in E.164
+### g10.auction-winner-order.US1-TC19: A parseable phone is stored in E.164
 
 **Classification:**
 
@@ -848,7 +860,7 @@
 * Step 3: the phone reads <stored phone>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-phu rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-phu (US1-TC20): Address line 2 and state may be left empty
+### g10.auction-winner-order.US1-TC20: Address line 2 and state may be left empty
 
 **Classification:**
 
@@ -895,7 +907,7 @@
 * Step 3: line 1 and postal code show; line 2 and state are empty.
 
 <!-- trace:case id=g10.auction-winner-order.TC-2vd rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-2vd (US1-TC21): Add Address has no Apt, Suite or Building field
+### g10.auction-winner-order.US1-TC21: Add Address has no Apt, Suite or Building field
 
 **Classification:**
 
@@ -930,7 +942,7 @@
 * Address line 2 shows as the optional second line.
 
 <!-- trace:case id=g10.auction-winner-order.TC-4zr rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-4zr (US1-TC22): A personal address card is titled with the recipient's name
+### g10.auction-winner-order.US1-TC22: A personal address card is titled with the recipient's name
 
 **Classification:**
 
@@ -968,7 +980,7 @@
 * The body shows no postal code and no phone.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ajg rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-ajg (US1-TC23): A company address card is titled with the company name
+### g10.auction-winner-order.US1-TC23: A company address card is titled with the company name
 
 **Classification:**
 
@@ -1006,7 +1018,7 @@
 * The body shows no postal code and no phone.
 
 <!-- trace:case id=g10.auction-winner-order.TC-u2z rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-u2z (US1-TC24): A company delivery address with phone confirms onto the order
+### g10.auction-winner-order.US1-TC24: A company delivery address with phone confirms onto the order
 
 **Classification:**
 
@@ -1054,7 +1066,7 @@
 * Step 4: the card reads Northwind Collectibles, with no phone or postal code.
 
 <!-- trace:case id=g10.auction-winner-order.TC-kqe rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-kqe (US1-TC25): Order Summary shows the full delivery and billing addresses after setup
+### g10.auction-winner-order.US1-TC25: Order Summary shows the full delivery and billing addresses after setup
 
 **Classification:**
 
@@ -1102,7 +1114,7 @@
 * Billing shows the same as Delivery.
 
 <!-- trace:case id=g10.auction-winner-order.TC-apy rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-apy (US1-TC26): A sent invoice with Insurance shows the amount and its tip
+### g10.auction-winner-order.US1-TC26: A sent invoice with Insurance shows the amount and its tip
 
 **Classification:**
 
@@ -1139,7 +1151,7 @@
 * Step 2: the tooltip reads `0.9% of the order value during transit.`
 
 <!-- trace:case id=g10.auction-winner-order.TC-aq5 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-aq5 (US1-TC27): Before the invoice is sent, Insurance reads TBD
+### g10.auction-winner-order.US1-TC27: Before the invoice is sent, Insurance reads TBD
 
 **Classification:**
 
@@ -1175,7 +1187,7 @@
 * Step 2: the tooltip reads `0.9% of the order value during transit.`
 
 <!-- trace:case id=g10.auction-winner-order.TC-7cb rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.TC-7cb (US1-TC28): A sent invoice without Insurance shows no Insurance row
+### g10.auction-winner-order.US1-TC28: A sent invoice without Insurance shows no Insurance row
 
 **Classification:**
 
@@ -1209,7 +1221,7 @@
 * No Insurance row and no Insurance tooltip show.
 
 <!-- trace:case id=g10.auction-winner-order.TC-u99 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-u99 (US1-TC29): A listing code already held is replaced before publish
+### g10.auction-winner-order.US1-TC29: A listing code already held is replaced before publish
 
 **Classification:**
 
@@ -1248,7 +1260,7 @@
 * Step 3: both listings keep their codes.
 
 <!-- trace:case id=g10.auction-winner-order.TC-6vp rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-6vp (US1-TC34): The winner sees an operator's edit before send, and cannot change it
+### g10.auction-winner-order.US1-TC34: The winner sees an operator's edit before send, and cannot change it
 
 **Classification:**
 
@@ -1286,7 +1298,7 @@
 * Step 2: no control changes either.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gk5 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-gk5 (US1-TC35): Archiving an address a confirmed order uses leaves the order's copy
+### g10.auction-winner-order.US1-TC35: Archiving an address a confirmed order uses leaves the order's copy
 
 **Classification:**
 
@@ -1323,7 +1335,7 @@
 * Step 2: the order still shows <address_work>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nxn rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-nxn (US1-TC36): Delivery Add Address offers a complete A–Z country catalogue
+### g10.auction-winner-order.US1-TC36: Delivery Add Address offers a complete A–Z country catalogue
 
 **Classification:**
 
@@ -1354,7 +1366,7 @@
 * Step 2 keeps the full catalogue available inside the capped-height popup.
 
 <!-- trace:case id=g10.auction-winner-order.TC-0v6 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-0v6 (US1-TC37): Country/Region field label matches the manual wording
+### g10.auction-winner-order.US1-TC37: Country/Region field label matches the manual wording
 
 **Classification:**
 
@@ -1382,7 +1394,7 @@
 * The label reads Country/Region.
 
 <!-- trace:case id=g10.auction-winner-order.TC-20b rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-20b (US1-TC38): Closed field shows the selected or default country
+### g10.auction-winner-order.US1-TC38: Closed field shows the selected or default country
 
 **Classification:**
 
@@ -1412,7 +1424,7 @@
 * Country/Region options are not in the tree.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8fw rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-8fw (US1-TC39): Open catalogue lists every country inside a scrollable popup
+### g10.auction-winner-order.US1-TC39: Open catalogue lists every country inside a scrollable popup
 
 **Classification:**
 
@@ -1442,7 +1454,7 @@
 * Step 2 scrolls the long list inside a capped height without truncating the catalogue to a short set.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gsw rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-gsw (US1-TC40): Typing filters the list to matching country names
+### g10.auction-winner-order.US1-TC40: Typing filters the list to matching country names
 
 **Classification:**
 
@@ -1479,7 +1491,7 @@
 * Names that do not match (for example Australia) are not shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-x35 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-x35 (US1-TC41): Autocomplete filter works in isolation on a long list
+### g10.auction-winner-order.US1-TC41: Autocomplete filter works in isolation on a long list
 
 **Classification:**
 
@@ -1515,7 +1527,7 @@
 * Non-matching options are not shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8bf rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-8bf (US1-TC42): A query with no match leaves the list empty
+### g10.auction-winner-order.US1-TC42: A query with no match leaves the list empty
 
 **Classification:**
 
@@ -1550,7 +1562,7 @@
 * The list shows no country or region options.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9fh rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-9fh (US1-TC43): Filter matches an early-alphabet name
+### g10.auction-winner-order.US1-TC43: Filter matches an early-alphabet name
 
 **Classification:**
 
@@ -1586,7 +1598,7 @@
 * Unrelated late-alphabet names are not shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-r90 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-r90 (US1-TC44): Filter matches a late-alphabet name
+### g10.auction-winner-order.US1-TC44: Filter matches a late-alphabet name
 
 **Classification:**
 
@@ -1622,7 +1634,7 @@
 * Unrelated early-alphabet names are not shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-pvm rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-pvm (US1-TC45): Choosing a filtered country closes the picker on that selection
+### g10.auction-winner-order.US1-TC45: Choosing a filtered country closes the picker on that selection
 
 **Classification:**
 
@@ -1662,7 +1674,7 @@
 * Options are no longer in the tree.
 
 <!-- trace:case id=g10.auction-winner-order.TC-iso rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-iso (US1-TC46): Empty Country/Region is refused beside the field
+### g10.auction-winner-order.US1-TC46: Empty Country/Region is refused beside the field
 
 **Classification:**
 
@@ -1693,7 +1705,7 @@
 * The address is not applied with an empty country or region.
 
 <!-- trace:case id=g10.auction-winner-order.TC-wc8 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-wc8 (US1-TC47): Catalogue includes both early and late alphabet partitions
+### g10.auction-winner-order.US1-TC47: Catalogue includes both early and late alphabet partitions
 
 **Classification:**
 
@@ -1723,7 +1735,7 @@
 * The set is not limited to a short designated sample.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ujy rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-ujy (US1-TC30): Tax is pending before the invoice is sent
+### g10.auction-winner-order.US1-TC30: Tax is pending before the invoice is sent
 
 **Classification:**
 
@@ -1754,7 +1766,7 @@
 * The tip reads `Set by Grade10 for where your order ships. Some orders have none.`
 
 <!-- trace:case id=g10.auction-winner-order.TC-m21 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-m21 (US1-TC31): Sent tax is itemised throughout the order record
+### g10.auction-winner-order.US1-TC31: Sent tax is itemised throughout the order record
 
 **Classification:**
 
@@ -1787,7 +1799,7 @@
 * Each PDF's Subtotal includes the 6000 minor units in HKD.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nvv rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-nvv (US1-TC32): An untaxed invoice leaves Tax out
+### g10.auction-winner-order.US1-TC32: An untaxed invoice leaves Tax out
 
 **Classification:**
 
@@ -1818,7 +1830,7 @@
 * Order Summary offers no Tax info tip.
 
 <!-- trace:case id=g10.auction-winner-order.TC-dvc rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-dvc (US1-TC33): Card fee is grossed up on tax
+### g10.auction-winner-order.US1-TC33: Card fee is grossed up on tax
 
 **Classification:**
 
@@ -1850,7 +1862,7 @@
 * Grade10 computes the payment processing fee from that Subtotal.
 
 <!-- trace:case id=g10.auction-winner-order.TC-n0y rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-aky,g10.auction-winner-order.SC-tg2,g10.auction-winner-order.SC-ai3,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.TC-n0y (US1-TC48): Production offers card only until Finance confirms the account
+### g10.auction-winner-order.US1-TC48: Production offers card only until Finance confirms the account
 
 **Classification:**
 
@@ -1883,7 +1895,7 @@
 * The order is still Awaiting Setup, with no delivery address and no method recorded.
 
 <!-- trace:case id=g10.auction-winner-order.TC-4dz rev=1 covers=g10.auction-winner-order.SC-1aa -->
-### g10.auction-winner-order.TC-4dz (US1-TC49): A currency with no bank details offers card only
+### g10.auction-winner-order.US1-TC49: A currency with no bank details offers card only
 
 **Classification:**
 
@@ -1916,7 +1928,7 @@
 * The order is still Awaiting Setup, with no delivery address and no method recorded.
 
 <!-- trace:case id=g10.auction-winner-order.TC-o26 rev=1 covers=g10.auction-winner-order.SC-pt5 -->
-### g10.auction-winner-order.TC-o26 (US1-TC50): The method can change until the winner confirms
+### g10.auction-winner-order.US1-TC50: The method can change until the winner confirms
 
 **Classification:**
 
@@ -1948,7 +1960,7 @@
 * The order reads Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-miy rev=1 covers=g10.auction-winner-order.SC-wn1 -->
-### g10.auction-winner-order.TC-miy (US1-TC51): A confirmation with no method is refused
+### g10.auction-winner-order.US1-TC51: A confirmation with no method is refused
 
 **Classification:**
 
@@ -1979,7 +1991,7 @@
 * The order is still Awaiting Setup.
 
 <!-- trace:case id=g10.auction-winner-order.TC-csb rev=1 covers=g10.auction-winner-order.SC-7y2 -->
-### g10.auction-winner-order.TC-csb (US1-TC52): A currency with no card fee rule reads card as not yet available
+### g10.auction-winner-order.US1-TC52: A currency with no card fee rule reads card as not yet available
 
 **Classification:**
 
@@ -2014,7 +2026,7 @@
 * The order holds no delivery address and no method.
 
 <!-- trace:case id=g10.auction-winner-order.TC-z2f rev=1 covers=g10.auction-winner-order.SC-cz1 -->
-### g10.auction-winner-order.TC-z2f (US1-TC53): With neither method the winner reads payment is not yet available
+### g10.auction-winner-order.US1-TC53: With neither method the winner reads payment is not yet available
 
 **Classification:**
 
@@ -2047,7 +2059,7 @@
 * The order is still Awaiting Setup, holding no delivery address and no method.
 
 <!-- trace:case id=g10.auction-winner-order.TC-97r rev=1 covers=g10.auction-winner-order.SC-05o -->
-### g10.auction-winner-order.TC-97r (US1-TC56): A Traditional Chinese account reads and searches Country/Region in Traditional Chinese
+### g10.auction-winner-order.US1-TC56: A Traditional Chinese account reads and searches Country/Region in Traditional Chinese
 
 **Classification:**
 
@@ -2078,7 +2090,7 @@
 
 ---
 
-## winner-order-US2: Winner follows a settled lot to delivery
+## g10.auction-winner-order.US2: Winner follows a settled lot to delivery
 
 **As a** winner who has paid,
 **I want** a receipt PDF that says how I paid, what was paid before it and what
@@ -2086,7 +2098,7 @@ is still owed, a tracker, and proof of what was handed over,
 **so that** I can account for a high-value purchase without asking Grade10 for records.
 
 <!-- trace:case id=g10.auction-winner-order.TC-h7f rev=2 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.TC-h7f (US2-TC1): The receipt itemises what was paid and sums to the total
+### g10.auction-winner-order.US2-TC1: The receipt itemises what was paid and sums to the total
 
 **Classification:**
 
@@ -2124,7 +2136,7 @@ is still owed, a tracker, and proof of what was handed over,
 * It names how it was paid.
 
 <!-- trace:case id=g10.auction-winner-order.TC-qvc rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.TC-qvc (US2-TC4): A single full payment's receipt reads zero before and zero left
+### g10.auction-winner-order.US2-TC4: A single full payment's receipt reads zero before and zero left
 
 **Classification:**
 
@@ -2160,7 +2172,7 @@ is still owed, a tracker, and proof of what was handed over,
 * Current Payment Received <total>; Remaining Balance Due 0.
 
 <!-- trace:case id=g10.auction-winner-order.TC-myw rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.TC-myw (US2-TC5): Receipts for part payments carry the running history in order
+### g10.auction-winner-order.US2-TC5: Receipts for part payments carry the running history in order
 
 **Classification:**
 
@@ -2204,7 +2216,7 @@ is still owed, a tracker, and proof of what was handed over,
 * Step 2: each shows Original Invoice Total <total> and its row's values.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gss rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.TC-gss (US2-TC6): A receipt that closes within tolerance reads zero left
+### g10.auction-winner-order.US2-TC6: A receipt that closes within tolerance reads zero left
 
 **Classification:**
 
@@ -2243,7 +2255,7 @@ is still owed, a tracker, and proof of what was handed over,
 * No shortfall or write-off line shows.
 
 <!-- trace:case id=g10.auction-winner-order.TC-b4d rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.TC-b4d (US2-TC7): An overpayment's receipt records the whole payment and zero left
+### g10.auction-winner-order.US2-TC7: An overpayment's receipt records the whole payment and zero left
 
 **Classification:**
 
@@ -2281,7 +2293,7 @@ is still owed, a tracker, and proof of what was handed over,
 * No negative balance or credit line shows.
 
 <!-- trace:case id=g10.auction-winner-order.TC-vmr rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.TC-vmr (US2-TC8): A later refund or reversal leaves issued receipts unchanged
+### g10.auction-winner-order.US2-TC8: A later refund or reversal leaves issued receipts unchanged
 
 **Classification:**
 
@@ -2323,7 +2335,7 @@ is still owed, a tracker, and proof of what was handed over,
 * No receipt was reissued.
 
 <!-- trace:case id=g10.auction-winner-order.TC-4zy rev=3 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.TC-4zy (US2-TC2): A dispatched lot shows the tracking number as the carrier link only with a tracker link
+### g10.auction-winner-order.US2-TC2: A dispatched lot shows the tracking number as the carrier link only with a tracker link
 
 **Classification:**
 
@@ -2362,7 +2374,7 @@ is still owed, a tracker, and proof of what was handed over,
 * Step 3: <tracking number> shows as plain text, with no carrier name and no Track shipment control.
 
 <!-- trace:case id=g10.auction-winner-order.TC-l8v rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.TC-l8v (US2-TC3): Delivery proof keeps the carrier's timestamp and signature
+### g10.auction-winner-order.US2-TC3: Delivery proof keeps the carrier's timestamp and signature
 
 **Classification:**
 
@@ -2401,7 +2413,7 @@ is still owed, a tracker, and proof of what was handed over,
 * <handover time> and <signature> show, not only a delivered flag.
 
 <!-- trace:case id=g10.auction-winner-order.TC-v6v rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
-### g10.auction-winner-order.TC-v6v (US2-TC9): A receipt ID takes the payment month and the receipt shows the breakdown
+### g10.auction-winner-order.US2-TC9: A receipt ID takes the payment month and the receipt shows the breakdown
 
 **Classification:**
 
@@ -2441,7 +2453,7 @@ is still owed, a tracker, and proof of what was handed over,
 * Current Payment Received <total>; Remaining Balance Due 0.
 
 <!-- trace:case id=g10.auction-winner-order.TC-kq2 rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
-### g10.auction-winner-order.TC-kq2 (US2-TC10): Invoice and receipt PDFs outlive a deleted account
+### g10.auction-winner-order.US2-TC10: Invoice and receipt PDFs outlive a deleted account
 
 **Classification:**
 
@@ -2477,7 +2489,7 @@ is still owed, a tracker, and proof of what was handed over,
 * The replaced invoice, current invoice and receipt PDFs are all returned.
 
 <!-- trace:case id=g10.auction-winner-order.TC-xx4 rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
-### g10.auction-winner-order.TC-xx4 (US2-TC11): A repeated payment confirmation keeps one receipt ID
+### g10.auction-winner-order.US2-TC11: A repeated payment confirmation keeps one receipt ID
 
 **Classification:**
 
@@ -2514,7 +2526,7 @@ is still owed, a tracker, and proof of what was handed over,
 * No second receipt ID or audit number exists for <order_paid>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-uox rev=1 covers=g10.auction-winner-order.SC-h7d -->
-### g10.auction-winner-order.TC-uox (US2-TC13): Shipped Order Progress opens the carrier tracker
+### g10.auction-winner-order.US2-TC13: Shipped Order Progress opens the carrier tracker
 
 **Classification:**
 
@@ -2553,7 +2565,7 @@ is still owed, a tracker, and proof of what was handed over,
 * Step 2 opens <carrier tracking URL> in a new tab.
 
 <!-- trace:case id=g10.auction-winner-order.TC-l0r rev=2 covers=g10.auction-winner-order.SC-k4r -->
-### g10.auction-winner-order.TC-l0r (US2-TC12): Delivered order keeps the carrier tracker
+### g10.auction-winner-order.US2-TC12: Delivered order keeps the carrier tracker
 
 **Classification:**
 
@@ -2592,7 +2604,7 @@ is still owed, a tracker, and proof of what was handed over,
 * Step 2 opens <carrier tracking URL> in a new tab.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nmg rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
-### g10.auction-winner-order.TC-nmg (US2-TC55): Preparing Shipment pings Shipping with Preparing to ship
+### g10.auction-winner-order.US2-TC55: Preparing Shipment pings Shipping with Preparing to ship
 
 **Classification:**
 
@@ -2631,7 +2643,7 @@ is still owed, a tracker, and proof of what was handed over,
 * No step is labelled Preparing Shipment.
 
 <!-- trace:case id=g10.auction-winner-order.TC-7j8 rev=2 covers=g10.auction-winner-order.SC-lk0 -->
-### g10.auction-winner-order.TC-7j8 (US2-TC20): Shipped keeps Shipping current
+### g10.auction-winner-order.US2-TC20: Shipped keeps Shipping current
 
 **Classification:**
 
@@ -2668,7 +2680,7 @@ is still owed, a tracker, and proof of what was handed over,
 * Order Progress adds no separate Track shipment control and no separate carrier name.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gg7 rev=1 covers=g10.auction-winner-order.SC-tgb -->
-### g10.auction-winner-order.TC-gg7 (US2-TC14): Shipped order without a tracker link shows the number as plain text
+### g10.auction-winner-order.US2-TC14: Shipped order without a tracker link shows the number as plain text
 
 **Classification:**
 
@@ -2706,7 +2718,7 @@ is still owed, a tracker, and proof of what was handed over,
 * Step 2 opens nothing.
 
 <!-- trace:case id=g10.auction-winner-order.TC-45h rev=1 covers=g10.auction-winner-order.SC-lk0 -->
-### g10.auction-winner-order.TC-45h (US2-TC56): A shipped order with no tracker link shows the number as plain text
+### g10.auction-winner-order.US2-TC56: A shipped order with no tracker link shows the number as plain text
 
 **Classification:**
 
@@ -2743,14 +2755,14 @@ is still owed, a tracker, and proof of what was handed over,
 
 ---
 
-## winner-order-US3: Winner checks the buyer's premium on an invoice
+## g10.auction-winner-order.US3: Winner checks the buyer's premium on an invoice
 
 **As a** winner,
 **I want** the buyer's premium on my invoice to follow one published rule,
 **so that** I can check what I am charged on top of my winning bid.
 
 <!-- trace:case id=g10.auction-winner-order.TC-x85 rev=1 covers=g10.auction-winner-order.SC-zhu,g10.auction-winner-order.SC-b16,g10.auction-winner-order.SC-2mz,g10.auction-winner-order.SC-ip8 -->
-### g10.auction-winner-order.TC-x85 (US3-TC5): The invoice's Buyer's Premium follows the published rule
+### g10.auction-winner-order.US3-TC5: The invoice's Buyer's Premium follows the published rule
 
 Runs once per row of **Test data**.
 
@@ -2796,14 +2808,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US4: Winner pays an invoice by card
+## g10.auction-winner-order.US4: Winner pays an invoice by card
 
 **As a** winner
 **I want** to see the full invoice and pay it by card, even if a first attempt does not finish
 **so that** the lot moves to Preparing Shipment without contacting Grade10.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9gh rev=2 covers=g10.auction-winner-order.SC-bbg,g10.auction-winner-order.SC-7ra,g10.auction-winner-order.SC-u5t,g10.auction-winner-order.SC-49w,g10.auction-winner-order.SC-1yn,g10.auction-winner-order.SC-y2j -->
-### g10.auction-winner-order.TC-9gh (US4-TC1): An unpaid order shows invoice, Pay with Card, address and lot
+### g10.auction-winner-order.US4-TC1: An unpaid order shows invoice, Pay with Card, address and lot
 
 **Classification:**
 
@@ -2835,7 +2847,7 @@ Runs once per row of **Test data**.
   of Pay with Card.
 
 <!-- trace:case id=g10.auction-winner-order.TC-0cm rev=1 covers=g10.auction-winner-order.SC-bbg,g10.auction-winner-order.SC-7ra,g10.auction-winner-order.SC-u5t,g10.auction-winner-order.SC-49w,g10.auction-winner-order.SC-1yn,g10.auction-winner-order.SC-y2j -->
-### g10.auction-winner-order.TC-0cm (US4-TC2): Order Information reads Invoice Status, not Paid Status
+### g10.auction-winner-order.US4-TC2: Order Information reads Invoice Status, not Paid Status
 
 **Classification:**
 
@@ -2865,7 +2877,7 @@ Runs once per row of **Test data**.
 * No Paid Status label appears.
 
 <!-- trace:case id=g10.auction-winner-order.TC-3ie rev=1 covers=g10.auction-winner-order.SC-bbg,g10.auction-winner-order.SC-7ra,g10.auction-winner-order.SC-u5t,g10.auction-winner-order.SC-49w,g10.auction-winner-order.SC-1yn,g10.auction-winner-order.SC-y2j -->
-### g10.auction-winner-order.TC-3ie (US4-TC3): A timed-out payment session leaves the invoice payable
+### g10.auction-winner-order.US4-TC3: A timed-out payment session leaves the invoice payable
 
 **Classification:**
 
@@ -2898,7 +2910,7 @@ Runs once per row of **Test data**.
 * Pay Now is available.
 
 <!-- trace:case id=g10.auction-winner-order.TC-uf2 rev=1 covers=g10.auction-winner-order.SC-bbg,g10.auction-winner-order.SC-7ra,g10.auction-winner-order.SC-u5t,g10.auction-winner-order.SC-49w,g10.auction-winner-order.SC-1yn,g10.auction-winner-order.SC-y2j -->
-### g10.auction-winner-order.TC-uf2 (US4-TC4): Pay Now after an abandoned session starts a fresh one
+### g10.auction-winner-order.US4-TC4: Pay Now after an abandoned session starts a fresh one
 
 **Classification:**
 
@@ -2928,7 +2940,7 @@ Runs once per row of **Test data**.
 * It charges the same invoice amount.
 
 <!-- trace:case id=g10.auction-winner-order.TC-w3e rev=1 covers=g10.auction-winner-order.SC-bbg,g10.auction-winner-order.SC-7ra,g10.auction-winner-order.SC-u5t,g10.auction-winner-order.SC-49w,g10.auction-winner-order.SC-1yn,g10.auction-winner-order.SC-y2j -->
-### g10.auction-winner-order.TC-w3e (US4-TC5): A completed payment shows Confirming payment before Preparing Shipment
+### g10.auction-winner-order.US4-TC5: A completed payment shows Confirming payment before Preparing Shipment
 
 **Classification:**
 
@@ -2958,7 +2970,7 @@ Runs once per row of **Test data**.
 * The order does not read Preparing Shipment.
 
 <!-- trace:case id=g10.auction-winner-order.TC-s0i rev=1 covers=g10.auction-winner-order.SC-bbg,g10.auction-winner-order.SC-7ra,g10.auction-winner-order.SC-u5t,g10.auction-winner-order.SC-49w,g10.auction-winner-order.SC-1yn,g10.auction-winner-order.SC-y2j -->
-### g10.auction-winner-order.TC-s0i (US4-TC6): A recorded payment reads Preparing Shipment
+### g10.auction-winner-order.US4-TC6: A recorded payment reads Preparing Shipment
 
 **Classification:**
 
@@ -2989,7 +3001,7 @@ Runs once per row of **Test data**.
 ---
 
 <!-- trace:case id=g10.auction-winner-order.TC-td7 rev=1 covers=g10.auction-winner-order.SC-1yn -->
-### g10.auction-winner-order.TC-td7 (US4-TC7): A suspended winner reads the suspension under the lot
+### g10.auction-winner-order.US4-TC7: A suspended winner reads the suspension under the lot
 
 **Classification:**
 
@@ -3022,14 +3034,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US5: Winner misses the payment deadline
+## g10.auction-winner-order.US5: Winner misses the payment deadline
 
 **As a** winner whose invoice deadline has passed unpaid,
 **I want** Winner Order to read Payment Overdue with Contact Us and no card Pay,
 **so that** I know self-service payment has stopped and how to reach Grade10.
 
 <!-- trace:case id=g10.auction-winner-order.TC-uup rev=1 covers=g10.auction-winner-order.SC-9vf -->
-### g10.auction-winner-order.TC-uup (US5-TC1): Past the payment deadline the order reads Payment Overdue with Contact Us
+### g10.auction-winner-order.US5-TC1: Past the payment deadline the order reads Payment Overdue with Contact Us
 
 **Classification:**
 
@@ -3065,7 +3077,7 @@ Runs once per row of **Test data**.
 * Step 2: no card Pay is offered and no payment deadline shows.
 
 <!-- trace:case id=g10.auction-winner-order.TC-rwa rev=1 covers=g10.auction-winner-order.SC-9vf -->
-### g10.auction-winner-order.TC-rwa (US5-TC2): A cancelled order shows no stepper and no invoice PDF
+### g10.auction-winner-order.US5-TC2: A cancelled order shows no stepper and no invoice PDF
 
 **Classification:**
 
@@ -3101,96 +3113,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US6: Losing bidder gets their hold back when the lot closes
-
-**As a** bidder who did not win,
-**I want** the card hold my bids put there lifted as soon as the lot closes,
-**so that** losing an auction does not leave my money reserved until the
-authorization expires on its own.
-
-<!-- trace:case id=g10.auction-winner-order.TC-4ef rev=1 covers=none -->
-### g10.auction-winner-order.TC-4ef (US6-TC1): A losing bidder's card hold is released at the close
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-06
-
-**Pre-conditions:**
-
-* customer A holds a card authorization for their bid on <lot_1>.
-* customer B leads <lot_1>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_1> | A lot taking bids, bid on by customer A and led by customer B, about to close |
-
-**Steps:**
-
-1. Let <lot_1> close with customer B winning.
-2. Read the authorization for customer A and <lot_1> at the card provider.
-
-**Expected Results:**
-
-* customer A's authorization is released, not left to expire.
-* No charge is captured on customer A's card.
-
-<!-- trace:case id=g10.auction-winner-order.TC-mbk rev=1 covers=none -->
-### g10.auction-winner-order.TC-mbk (US6-TC2): Every hold a losing bidder's bids placed is released
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-06
-
-**Pre-conditions:**
-
-* customer A bid on <lot_1> more than once, each bid authorized on their card.
-* customer B leads <lot_1>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <lot_1> | A lot taking bids, with several bids from customer A, led by customer B, about to close |
-
-**Steps:**
-
-1. Let <lot_1> close with customer B winning.
-2. Read every authorization for customer A and <lot_1> at the card provider.
-
-**Expected Results:**
-
-* No authorization for customer A and <lot_1> is left held.
-
----
-
-## winner-order-US7: Winner misses the address deadline
+## g10.auction-winner-order.US7: Winner misses the address deadline
 
 **As a** winner who did not confirm a delivery address within 48 hours of lot close,
 **I want** Winner Order to read Setup Overdue with Contact Us and no Confirm,
 **so that** I know self-service setup has stopped and how to reach Grade10.
 
 <!-- trace:case id=g10.auction-winner-order.TC-2in rev=1 covers=g10.auction-winner-order.SC-36a,g10.auction-winner-order.SC-k2b -->
-### g10.auction-winner-order.TC-2in (US7-TC1): Past the setup deadline the order reads Setup Overdue with Contact Us
+### g10.auction-winner-order.US7-TC1: Past the setup deadline the order reads Setup Overdue with Contact Us
 
 **Classification:**
 
@@ -3226,7 +3156,7 @@ authorization expires on its own.
 * Step 2: no Confirm and no address editing are offered.
 
 <!-- trace:case id=g10.auction-winner-order.TC-s5e rev=1 covers=g10.auction-winner-order.SC-ii6 -->
-### g10.auction-winner-order.TC-s5e (US7-TC5): The setup deadline still runs where no method is offered
+### g10.auction-winner-order.US7-TC5: The setup deadline still runs where no method is offered
 
 **Classification:**
 
@@ -3258,7 +3188,7 @@ authorization expires on its own.
 * The operator can reopen or record its setup.
 
 <!-- trace:case id=g10.auction-winner-order.TC-zwj rev=1 covers=g10.auction-winner-order.SC-m55 -->
-### g10.auction-winner-order.TC-zwj (US7-TC6): The one-time address is gone once the setup deadline passes
+### g10.auction-winner-order.US7-TC6: The one-time address is gone once the setup deadline passes
 
 **Classification:**
 
@@ -3288,7 +3218,7 @@ authorization expires on its own.
 
 ---
 
-## winner-order-US8: Winner pays an invoice with a policy premium
+## g10.auction-winner-order.US8: Winner pays an invoice with a policy premium
 
 **As a** winner of an auction lot,
 **I want** my invoice to calculate the stated buyer premium correctly using the
@@ -3296,7 +3226,7 @@ current currency minimum,
 **so that** the amount I pay is explainable and collectible.
 
 <!-- trace:case id=g10.auction-winner-order.TC-n3p rev=1 covers=g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
-### g10.auction-winner-order.TC-n3p (US8-TC1): The invoice charges 20% of the winning bid as premium
+### g10.auction-winner-order.US8-TC1: The invoice charges 20% of the winning bid as premium
 
 **Classification:**
 
@@ -3334,7 +3264,7 @@ current currency minimum,
 * The total includes <premium>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-zt4 rev=1 covers=g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
-### g10.auction-winner-order.TC-zt4 (US8-TC2): A currency minimum above 20% becomes the premium
+### g10.auction-winner-order.US8-TC2: A currency minimum above 20% becomes the premium
 
 **Classification:**
 
@@ -3370,7 +3300,7 @@ current currency minimum,
 * The premium is <minimum>, not 20% of <winning bid>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-dd3 rev=1 covers=g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
-### g10.auction-winner-order.TC-dd3 (US8-TC3): With a zero minimum, 20% is rounded half up
+### g10.auction-winner-order.US8-TC3: With a zero minimum, 20% is rounded half up
 
 **Classification:**
 
@@ -3405,7 +3335,7 @@ current currency minimum,
 * The premium is <premium>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-i06 rev=1 covers=g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
-### g10.auction-winner-order.TC-i06 (US8-TC4): A sent invoice keeps its premium when the minimum changes
+### g10.auction-winner-order.US8-TC4: A sent invoice keeps its premium when the minimum changes
 
 **Classification:**
 
@@ -3445,14 +3375,14 @@ current currency minimum,
 
 ---
 
-## winner-order-US9: Winner pays an invoice by bank transfer
+## g10.auction-winner-order.US9: Winner pays an invoice by bank transfer
 
 **As a** winner who would rather not pay a card fee,
 **I want** to choose bank transfer, see where to send the money and what reference to quote, and send Grade10 proof,
 **so that** Grade10 can match my payment and my deadline stops while it is checked.
 
 <!-- trace:case id=g10.auction-winner-order.TC-w18 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-w18 (US9-TC1): A bank-transfer invoice shows three ways to pay and the reference
+### g10.auction-winner-order.US9-TC1: A bank-transfer invoice shows three ways to pay and the reference
 
 **Classification:**
 
@@ -3491,7 +3421,7 @@ current currency minimum,
 * No card Pay is offered.
 
 <!-- trace:case id=g10.auction-winner-order.TC-isg rev=2 covers=g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-8q1 -->
-### g10.auction-winner-order.TC-isg (US9-TC2): Uploading proof stops the deadline and reads Payment Verifying
+### g10.auction-winner-order.US9-TC2: Uploading proof stops the deadline and reads Payment Verifying
 
 **Classification:**
 
@@ -3534,7 +3464,7 @@ current currency minimum,
 * <proof> and its file name are not shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-n2e rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-n2e (US9-TC3): One to three files of each allowed type are accepted
+### g10.auction-winner-order.US9-TC3: One to three files of each allowed type are accepted
 
 Runs once per row of **Test data**.
 
@@ -3580,7 +3510,7 @@ Runs once per row of **Test data**.
 * The order reads Payment Verifying.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nhm rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-nhm (US9-TC4): Too few or too many files are refused
+### g10.auction-winner-order.US9-TC4: Too few or too many files are refused
 
 Runs once per row of **Test data**.
 
@@ -3624,7 +3554,7 @@ Runs once per row of **Test data**.
 * The order still reads Pending Payment; the deadline runs.
 
 <!-- trace:case id=g10.auction-winner-order.TC-chi rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-chi (US9-TC5): A file of exactly 5 MB is accepted
+### g10.auction-winner-order.US9-TC5: A file of exactly 5 MB is accepted
 
 **Classification:**
 
@@ -3662,7 +3592,7 @@ Runs once per row of **Test data**.
 * The order reads Payment Verifying.
 
 <!-- trace:case id=g10.auction-winner-order.TC-pld rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-pld (US9-TC6): A file of another type refuses the whole upload
+### g10.auction-winner-order.US9-TC6: A file of another type refuses the whole upload
 
 Runs once per row of **Test data**.
 
@@ -3707,7 +3637,7 @@ Runs once per row of **Test data**.
 * Nothing is stored; the order still reads Pending Payment.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8kk rev=2 covers=g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-8uw -->
-### g10.auction-winner-order.TC-8kk (US9-TC7): Backing out of the confirm step uploads nothing
+### g10.auction-winner-order.US9-TC7: Backing out of the confirm step uploads nothing
 
 **Classification:**
 
@@ -3748,7 +3678,7 @@ Runs once per row of **Test data**.
 * Submit Payment Proof is still offered.
 
 <!-- trace:case id=g10.auction-winner-order.TC-sni rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-sni (US9-TC8): While proof is checked, no deadline runs
+### g10.auction-winner-order.US9-TC8: While proof is checked, no deadline runs
 
 **Classification:**
 
@@ -3783,7 +3713,7 @@ Runs once per row of **Test data**.
 * No payment deadline shows as running.
 
 <!-- trace:case id=g10.auction-winner-order.TC-1vz rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-1vz (US9-TC9): A second upload is refused while Payment Verifying
+### g10.auction-winner-order.US9-TC9: A second upload is refused while Payment Verifying
 
 **Classification:**
 
@@ -3818,7 +3748,7 @@ Runs once per row of **Test data**.
 * The first proof set is unchanged.
 
 <!-- trace:case id=g10.auction-winner-order.TC-e6w rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-e6w (US9-TC10): A card payment is refused while Payment Verifying
+### g10.auction-winner-order.US9-TC10: A card payment is refused while Payment Verifying
 
 **Classification:**
 
@@ -3853,7 +3783,7 @@ Runs once per row of **Test data**.
 * The order still reads Payment Verifying.
 
 <!-- trace:case id=g10.auction-winner-order.TC-3c9 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-3c9 (US9-TC11): Proof upload is not offered where it does not apply
+### g10.auction-winner-order.US9-TC11: Proof upload is not offered where it does not apply
 
 Runs once per row of **Test data**.
 
@@ -3891,7 +3821,7 @@ Runs once per row of **Test data**.
 * No proof upload is offered.
 
 <!-- trace:case id=g10.auction-winner-order.TC-i2f rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-i2f (US9-TC12): An expired bank-transfer invoice takes no proof
+### g10.auction-winner-order.US9-TC12: An expired bank-transfer invoice takes no proof
 
 **Classification:**
 
@@ -3927,7 +3857,7 @@ Runs once per row of **Test data**.
 * Step 2: the upload is refused; the order still reads Payment Overdue.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gl2 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-gl2 (US9-TC13): Another collector can neither upload nor read the proof
+### g10.auction-winner-order.US9-TC13: Another collector can neither upload nor read the proof
 
 **Classification:**
 
@@ -3964,7 +3894,7 @@ Runs once per row of **Test data**.
 * <order_bt> still reads Pending Payment.
 
 <!-- trace:case id=g10.auction-winner-order.TC-q03 rev=2 covers=g10.auction-winner-order.SC-uxu -->
-### g10.auction-winner-order.TC-q03 (US9-TC14): An upload cut off part-way leaves the invoice pending
+### g10.auction-winner-order.US9-TC14: An upload cut off part-way leaves the invoice pending
 
 **Classification:**
 
@@ -4006,7 +3936,7 @@ Runs once per row of **Test data**.
 * Step 4: the upload is accepted.
 
 <!-- trace:case id=g10.auction-winner-order.TC-bxv rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-bxv (US9-TC15): The bank reference fits every way to pay
+### g10.auction-winner-order.US9-TC15: The bank reference fits every way to pay
 
 **Classification:**
 
@@ -4044,7 +3974,7 @@ Runs once per row of **Test data**.
 * It fits one 35-character SWIFT remittance line.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8vs rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-8vs (US9-TC16): A file over 5 MB refuses the whole upload
+### g10.auction-winner-order.US9-TC16: A file over 5 MB refuses the whole upload
 
 **Classification:**
 
@@ -4082,7 +4012,7 @@ Runs once per row of **Test data**.
 * None of the three files is stored; the order still reads Pending Payment.
 
 <!-- trace:case id=g10.auction-winner-order.TC-w24 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-w24 (US9-TC17): A file whose content is not its extension is refused
+### g10.auction-winner-order.US9-TC17: A file whose content is not its extension is refused
 
 **Classification:**
 
@@ -4120,7 +4050,7 @@ Runs once per row of **Test data**.
 * Nothing is stored; the order still reads Pending Payment.
 
 <!-- trace:case id=g10.auction-winner-order.TC-mxq rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-mxq (US9-TC18): A card payment on a bank-transfer invoice is refused
+### g10.auction-winner-order.US9-TC18: A card payment on a bank-transfer invoice is refused
 
 **Classification:**
 
@@ -4155,7 +4085,7 @@ Runs once per row of **Test data**.
 * The order still reads Pending Payment.
 
 <!-- trace:case id=g10.auction-winner-order.TC-6bf rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-6bf (US9-TC19): The old deadline passing during the check expires nothing
+### g10.auction-winner-order.US9-TC19: The old deadline passing during the check expires nothing
 
 **Classification:**
 
@@ -4190,7 +4120,7 @@ Runs once per row of **Test data**.
 * The order still reads Payment Verifying, not Payment Overdue.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ypl rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-ypl (US9-TC20): The reference copy control copies it exactly, on bank transfer only
+### g10.auction-winner-order.US9-TC20: The reference copy control copies it exactly, on bank transfer only
 
 **Classification:**
 
@@ -4230,7 +4160,7 @@ Runs once per row of **Test data**.
 * Step 3 shows no bank reference and no copy control.
 
 <!-- trace:case id=g10.auction-winner-order.TC-xl5 rev=2 covers=g10.auction-winner-order.SC-bb1 -->
-### g10.auction-winner-order.TC-xl5 (US9-TC30): Busy proof form blocks every leave route
+### g10.auction-winner-order.US9-TC30: Busy proof form blocks every leave route
 
 Runs once per row of **Test data**.
 
@@ -4271,7 +4201,7 @@ Runs once per row of **Test data**.
 * The form remains locked until <busy work> finishes.
 
 <!-- trace:case id=g10.auction-winner-order.TC-eu8 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-eu8 (US9-TC22): Bank transfer is recorded with the address where Grade10 holds bank details
+### g10.auction-winner-order.US9-TC22: Bank transfer is recorded with the address where Grade10 holds bank details
 
 **Classification:**
 
@@ -4302,7 +4232,7 @@ Runs once per row of **Test data**.
 * The order records bank transfer and reads Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-bmd rev=1 covers=g10.auction-winner-order.SC-8dl -->
-### g10.auction-winner-order.TC-bmd (US9-TC23): The choice shows each method's fee wording, neither selected
+### g10.auction-winner-order.US9-TC23: The choice shows each method's fee wording, neither selected
 
 **Classification:**
 
@@ -4334,7 +4264,7 @@ Runs once per row of **Test data**.
 * Neither method is selected.
 
 <!-- trace:case id=g10.auction-winner-order.TC-6nc rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-6nc (US9-TC21): Order summary offers Submit Payment Proof and View Bank Details
+### g10.auction-winner-order.US9-TC21: Order summary offers Submit Payment Proof and View Bank Details
 
 **Classification:**
 
@@ -4374,7 +4304,7 @@ Runs once per row of **Test data**.
 * Submit Payment Proof opens the Submit Payment Proof dialog.
 
 <!-- trace:case id=g10.auction-winner-order.TC-vvf rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-vvf (US9-TC32): View Bank Details opens on FPS with QR
+### g10.auction-winner-order.US9-TC32: View Bank Details opens on FPS with QR
 
 **Classification:**
 
@@ -4411,7 +4341,7 @@ Runs once per row of **Test data**.
 * The bank reference is shown as a detail row without Copy at the bottom of the FPS tab.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9v4 rev=2 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-9v4 (US9-TC24): HK Local and SWIFT tabs show expanded fields and stay readable
+### g10.auction-winner-order.US9-TC24: HK Local and SWIFT tabs show expanded fields and stay readable
 
 **Classification:**
 
@@ -4452,7 +4382,7 @@ Runs once per row of **Test data**.
 * At <wide_viewport>, the three tabs share the full-width track.
 
 <!-- trace:case id=g10.auction-winner-order.TC-xmr rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.TC-xmr (US9-TC25): Submit Payment Proof is proof-only
+### g10.auction-winner-order.US9-TC25: Submit Payment Proof is proof-only
 
 **Classification:**
 
@@ -4483,14 +4413,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US10: Winner's payment proof is not accepted
+## g10.auction-winner-order.US10: Winner's payment proof is not accepted
 
 **As a** winner whose payment proof Grade10 could not match,
 **I want** to read why and how long I have left,
 **so that** I can send the right proof or pay again before the deadline.
 
 <!-- trace:case id=g10.auction-winner-order.TC-39a rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.TC-39a (US10-TC2): The operator's internal reason never reaches the winner
+### g10.auction-winner-order.US10-TC2: The operator's internal reason never reaches the winner
 
 **Classification:**
 
@@ -4528,7 +4458,7 @@ Runs once per row of **Test data**.
 * <internal reason> appears on neither.
 
 <!-- trace:case id=g10.auction-winner-order.TC-bij rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.TC-bij (US10-TC3): After a return the winner can upload again
+### g10.auction-winner-order.US10-TC3: After a return the winner can upload again
 
 **Classification:**
 
@@ -4565,7 +4495,7 @@ Runs once per row of **Test data**.
 * The deadline stops with the time then left.
 
 <!-- trace:case id=g10.auction-winner-order.TC-bgm rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.TC-bgm (US10-TC4): Time left at the edges survives a return
+### g10.auction-winner-order.US10-TC4: Time left at the edges survives a return
 
 Runs once per row of **Test data**.
 
@@ -4607,7 +4537,7 @@ Runs once per row of **Test data**.
 * The deadline is <return time> plus the row's time left.
 
 <!-- trace:case id=g10.auction-winner-order.TC-zew rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.TC-zew (US10-TC5): A return adds no grace once the time left runs out
+### g10.auction-winner-order.US10-TC5: A return adds no grace once the time left runs out
 
 **Classification:**
 
@@ -4642,7 +4572,7 @@ Runs once per row of **Test data**.
 * Proof upload is hidden; the overdue alert shows Contact Us.
 
 <!-- trace:case id=g10.auction-winner-order.TC-t06 rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.TC-t06 (US10-TC6): A second return keeps the time left at the second upload
+### g10.auction-winner-order.US10-TC6: A second return keeps the time left at the second upload
 
 **Classification:**
 
@@ -4678,7 +4608,7 @@ Runs once per row of **Test data**.
 * The deadline is <return time> plus <time left 2>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-1ys rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.TC-1ys (US10-TC8): Returned proof shows the reason and the deadline resumes
+### g10.auction-winner-order.US10-TC8: Returned proof shows the reason and the deadline resumes
 
 **Classification:**
 
@@ -4721,7 +4651,7 @@ Runs once per row of **Test data**.
 * Step 2: Submit Payment Proof and View Bank Details are offered again.
 
 <!-- trace:case id=g10.auction-winner-order.TC-tlh rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.TC-tlh (US10-TC9): Only the latest return reason is shown
+### g10.auction-winner-order.US10-TC9: Only the latest return reason is shown
 
 **Classification:**
 
@@ -4761,7 +4691,7 @@ Runs once per row of **Test data**.
 * No proof file or file name is shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-e3m rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.TC-e3m (US10-TC10): Returned proof sends Proof not accepted with the new Pay by
+### g10.auction-winner-order.US10-TC10: Returned proof sends Proof not accepted with the new Pay by
 
 **Classification:**
 
@@ -4801,14 +4731,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US11: Winner bills a won lot to a different address
+## g10.auction-winner-order.US11: Winner bills a won lot to a different address
 
 **As a** winner who pays from a different address than the one the lot ships to,
 **I want** to give that billing address when I confirm where to ship,
 **so that** my invoice and receipt show who is billed as well as where the lot goes.
 
 <!-- trace:case id=g10.auction-winner-order.TC-qlk rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
-### g10.auction-winner-order.TC-qlk (US11-TC1): Billing Add Address has phone and Personal or Company
+### g10.auction-winner-order.US11-TC1: Billing Add Address has phone and Personal or Company
 
 **Classification:**
 
@@ -4845,7 +4775,7 @@ Runs once per row of **Test data**.
 * Company Name is hidden.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9ch rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
-### g10.auction-winner-order.TC-9ch (US11-TC2): A billing address with no phone digits is refused
+### g10.auction-winner-order.US11-TC2: A billing address with no phone digits is refused
 
 **Classification:**
 
@@ -4889,7 +4819,7 @@ Runs once per row of **Test data**.
 * The order's billing address is unchanged.
 
 <!-- trace:case id=g10.auction-winner-order.TC-dno rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
-### g10.auction-winner-order.TC-dno (US11-TC3): A company billing address without Company Name is refused
+### g10.auction-winner-order.US11-TC3: A company billing address without Company Name is refused
 
 **Classification:**
 
@@ -4934,7 +4864,7 @@ Runs once per row of **Test data**.
 * The order's billing address is unchanged.
 
 <!-- trace:case id=g10.auction-winner-order.TC-7ax rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
-### g10.auction-winner-order.TC-7ax (US11-TC4): A company billing address applies apart from delivery
+### g10.auction-winner-order.US11-TC4: A company billing address applies apart from delivery
 
 **Classification:**
 
@@ -4983,7 +4913,7 @@ Runs once per row of **Test data**.
 * Billing reads Northwind Billing Ltd, Toronto, with the phone.
 
 <!-- trace:case id=g10.auction-winner-order.TC-v3x rev=1 covers=g10.auction-winner-order.SC-rlh,g10.auction-winner-order.SC-1i2 -->
-### g10.auction-winner-order.TC-v3x (US11-TC5): Billing Add Address lists and filters the delivery Country/Region catalogue
+### g10.auction-winner-order.US11-TC5: Billing Add Address lists and filters the delivery Country/Region catalogue
 
 **Classification:**
 
@@ -5014,7 +4944,7 @@ Runs once per row of **Test data**.
 * Typing leaves only the names that match `Jap`, Japan among them.
 
 <!-- trace:case id=g10.auction-winner-order.TC-bwi rev=1 covers=g10.auction-winner-order.SC-z4a -->
-### g10.auction-winner-order.TC-bwi (US11-TC6): An unsaved one-time billing address is there on return
+### g10.auction-winner-order.US11-TC6: An unsaved one-time billing address is there on return
 
 **Classification:**
 
@@ -5047,14 +4977,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US12: Winner confirms delivery when five addresses are already saved
+## g10.auction-winner-order.US12: Winner confirms delivery when five addresses are already saved
 
 **As a** winner with five saved shipping addresses,
 **I want** to confirm a different address for this order without saving a sixth,
 **so that** a full address book does not block settlement before the address deadline.
 
 <!-- trace:case id=g10.auction-winner-order.TC-mv4 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-mv4 (US12-TC1): Add Address at the five-address cap shows phone and kind
+### g10.auction-winner-order.US12-TC1: Add Address at the five-address cap shows phone and kind
 
 **Classification:**
 
@@ -5090,7 +5020,7 @@ Runs once per row of **Test data**.
 * Phone shows a country selector and number input, no country chosen.
 
 <!-- trace:case id=g10.auction-winner-order.TC-yzv rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-yzv (US12-TC2): At the cap a one-time personal address confirms without saving
+### g10.auction-winner-order.US12-TC2: At the cap a one-time personal address confirms without saving
 
 **Classification:**
 
@@ -5137,7 +5067,7 @@ Runs once per row of **Test data**.
 * Step 5: the book still holds five addresses.
 
 <!-- trace:case id=g10.auction-winner-order.TC-jfw rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-jfw (US12-TC3): At the cap a company address without Company Name or phone is refused
+### g10.auction-winner-order.US12-TC3: At the cap a company address without Company Name or phone is refused
 
 **Classification:**
 
@@ -5185,7 +5115,7 @@ Runs once per row of **Test data**.
 * The book still holds five addresses.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8e5 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-8e5 (US12-TC4): At the cap, Add new address still opens
+### g10.auction-winner-order.US12-TC4: At the cap, Add new address still opens
 
 **Classification:**
 
@@ -5220,7 +5150,7 @@ Runs once per row of **Test data**.
 * The address form opens; no message blocks it.
 
 <!-- trace:case id=g10.auction-winner-order.TC-0hi rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-0hi (US12-TC5): At the cap a one-time address sets the order's delivery and saves nothing
+### g10.auction-winner-order.US12-TC5: At the cap a one-time address sets the order's delivery and saves nothing
 
 **Classification:**
 
@@ -5260,7 +5190,7 @@ Runs once per row of **Test data**.
 * Step 5: the book still holds five addresses.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nbn rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-nbn (US12-TC6): A one-time address sits as a draft at the top of the picker
+### g10.auction-winner-order.US12-TC6: A one-time address sits as a draft at the top of the picker
 
 **Classification:**
 
@@ -5298,7 +5228,7 @@ Runs once per row of **Test data**.
 * The five saved addresses list below it.
 
 <!-- trace:case id=g10.auction-winner-order.TC-j6u rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-j6u (US12-TC7): At the cap, saving a new address is refused with a reason
+### g10.auction-winner-order.US12-TC7: At the cap, saving a new address is refused with a reason
 
 **Classification:**
 
@@ -5337,7 +5267,7 @@ Runs once per row of **Test data**.
 * Step 4: a short reason says the book is full.
 
 <!-- trace:case id=g10.auction-winner-order.TC-go0 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-go0 (US12-TC8): Below the cap, a new address can be saved
+### g10.auction-winner-order.US12-TC8: Below the cap, a new address can be saved
 
 **Classification:**
 
@@ -5377,7 +5307,7 @@ Runs once per row of **Test data**.
 * Step 5: the book holds five, including <address_new>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-tz6 rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-tz6 (US12-TC9): Removing a saved address frees a slot for saving
+### g10.auction-winner-order.US12-TC9: Removing a saved address frees a slot for saving
 
 **Classification:**
 
@@ -5417,7 +5347,7 @@ Runs once per row of **Test data**.
 * Step 4: the checkbox is enabled and ticks.
 
 <!-- trace:case id=g10.auction-winner-order.TC-s5g rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-s5g (US12-TC10): Editing a saved address at the cap takes no extra slot
+### g10.auction-winner-order.US12-TC10: Editing a saved address at the cap takes no extra slot
 
 **Classification:**
 
@@ -5455,7 +5385,7 @@ Runs once per row of **Test data**.
 * <address_home> shows once, with <new street>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-yru rev=1 covers=g10.auction-winner-order.SC-v7i,g10.auction-winner-order.SC-0n0,g10.auction-winner-order.SC-2hb,g10.auction-winner-order.SC-zbm,g10.auction-winner-order.SC-esr,g10.auction-winner-order.SC-5xy,g10.auction-winner-order.SC-bre,g10.auction-winner-order.SC-2ve,g10.auction-winner-order.SC-y14 -->
-### g10.auction-winner-order.TC-yru (US12-TC11): A book already over the cap keeps every address and still refuses saves
+### g10.auction-winner-order.US12-TC11: A book already over the cap keeps every address and still refuses saves
 
 **Classification:**
 
@@ -5494,7 +5424,7 @@ Runs once per row of **Test data**.
 * Step 3: the checkbox is disabled and stays unticked.
 
 <!-- trace:case id=g10.auction-winner-order.TC-kp5 rev=1 covers=g10.auction-winner-order.SC-zyl -->
-### g10.auction-winner-order.TC-kp5 (US12-TC12): An unsaved one-time delivery address is there on return
+### g10.auction-winner-order.US12-TC12: An unsaved one-time delivery address is there on return
 
 **Classification:**
 
@@ -5529,14 +5459,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US13: Winner learns their order was cancelled
+## g10.auction-winner-order.US13: Winner learns their order was cancelled
 
 **As a** winner whose order an operator cancelled,
 **I want** Winner Order to say it was cancelled and when,
 **so that** I know the order is closed and how to contact Grade10.
 
 <!-- trace:case id=g10.auction-winner-order.TC-3x8 rev=2 covers=g10.auction-winner-order.SC-1fb -->
-### g10.auction-winner-order.TC-3x8 (US13-TC1): Cancelled keeps the lot and winning bid visible
+### g10.auction-winner-order.US13-TC1: Cancelled keeps the lot and winning bid visible
 
 **Classification:**
 
@@ -5568,14 +5498,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US14: Winner sees a refunded order as Refunded
+## g10.auction-winner-order.US14: Winner sees a refunded order as Refunded
 
 **As a** winner whose order Grade10 refunded because they were not happy with the item,
 **I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see Amount, Transfer to, Reason and Note — brand and last four for a card, or masked destination with the bank name under it for a transfer — whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
 **so that** I know the order is closed and still hold the record of what I paid.
 
 <!-- trace:case id=g10.auction-winner-order.TC-xfb rev=1 covers=g10.auction-winner-order.SC-zfp,g10.auction-winner-order.SC-yhv -->
-### g10.auction-winner-order.TC-xfb (US14-TC1): A card-refunded order reads Refunded and keeps its records
+### g10.auction-winner-order.US14-TC1: A card-refunded order reads Refunded and keeps its records
 
 **Classification:**
 
@@ -5617,14 +5547,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US15: Winner sees an overpayment returned
+## g10.auction-winner-order.US15: Winner sees an overpayment returned
 
 **As a** winner who paid more than the order,
 **I want** only the difference returned below the invoice total, while the lot, the shipping and the amount I should have paid stay, with a way to see why,
 **so that** I know the sale still stands.
 
 <!-- trace:case id=g10.auction-winner-order.TC-pca rev=1 covers=g10.auction-winner-order.SC-7m4 -->
-### g10.auction-winner-order.TC-pca (US15-TC1): A returned overpayment leaves the order and invoice standing
+### g10.auction-winner-order.US15-TC1: A returned overpayment leaves the order and invoice standing
 
 **Classification:**
 
@@ -5664,14 +5594,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US16: Winner emails Grade10 from a locked order
+## g10.auction-winner-order.US16: Winner emails Grade10 from a locked order
 
 **As a** winner whose payment access has closed,
 **I want** a ready email with this order's details that I can copy into any mail app,
 **so that** I can reach Grade10 without a system mail client, and support can find the order.
 
 <!-- trace:case id=g10.auction-winner-order.TC-iro rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-iro (US16-TC1): Contact Us opens the copy-first email dialog
+### g10.auction-winner-order.US16-TC1: Contact Us opens the copy-first email dialog
 
 **Classification:**
 
@@ -5706,7 +5636,7 @@ Runs once per row of **Test data**.
 * No mail app opens, and no toast naming only the address replaces the dialog.
 
 <!-- trace:case id=g10.auction-winner-order.TC-le5 rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-le5 (US16-TC2): The dialog addresses support@grade10.com
+### g10.auction-winner-order.US16-TC2: The dialog addresses support@grade10.com
 
 **Classification:**
 
@@ -5741,7 +5671,7 @@ Runs once per row of **Test data**.
 * To reads `support@grade10.com`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ta0 rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-ta0 (US16-TC3): A setup-overdue Subject names the lot and no invoice
+### g10.auction-winner-order.US16-TC3: A setup-overdue Subject names the lot and no invoice
 
 **Classification:**
 
@@ -5777,7 +5707,7 @@ Runs once per row of **Test data**.
 * Subject reads `Auction lot <lot_title>: setup overdue`, with no invoice id.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gxu rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-gxu (US16-TC4): A payment-overdue Subject names the invoice
+### g10.auction-winner-order.US16-TC4: A payment-overdue Subject names the invoice
 
 **Classification:**
 
@@ -5813,7 +5743,7 @@ Runs once per row of **Test data**.
 * Subject reads `Auction order <invoice_id>: payment overdue`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-rt4 rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-rt4 (US16-TC5): A partial-payment email lists receipts and never the balance
+### g10.auction-winner-order.US16-TC5: A partial-payment email lists receipts and never the balance
 
 **Classification:**
 
@@ -5852,7 +5782,7 @@ Runs once per row of **Test data**.
 * Message shows no remaining balance.
 
 <!-- trace:case id=g10.auction-winner-order.TC-28a rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-28a (US16-TC6): With several receipts, each receipt id is listed
+### g10.auction-winner-order.US16-TC6: With several receipts, each receipt id is listed
 
 **Classification:**
 
@@ -5889,7 +5819,7 @@ Runs once per row of **Test data**.
 * Message shows no remaining balance.
 
 <!-- trace:case id=g10.auction-winner-order.TC-59a rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-59a (US16-TC7): The support address is hidden until Contact Us opens
+### g10.auction-winner-order.US16-TC7: The support address is hidden until Contact Us opens
 
 **Classification:**
 
@@ -5925,7 +5855,7 @@ Runs once per row of **Test data**.
 * Step 2: To shows `support@grade10.com`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-a9f rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-a9f (US16-TC8): Copy Message comes first, Open Mail App second
+### g10.auction-winner-order.US16-TC8: Copy Message comes first, Open Mail App second
 
 **Classification:**
 
@@ -5961,7 +5891,7 @@ Runs once per row of **Test data**.
 * Open Mail App is the secondary action, second.
 
 <!-- trace:case id=g10.auction-winner-order.TC-mtb rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-mtb (US16-TC9): Message is editable; only the footer copies the whole email
+### g10.auction-winner-order.US16-TC9: Message is editable; only the footer copies the whole email
 
 **Classification:**
 
@@ -6000,7 +5930,7 @@ Runs once per row of **Test data**.
 * Step 3: Message keeps <winner_question>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-vdc rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-vdc (US16-TC10): Copy Message copies To, Subject and the edited Message
+### g10.auction-winner-order.US16-TC10: Copy Message copies To, Subject and the edited Message
 
 **Classification:**
 
@@ -6042,7 +5972,7 @@ Runs once per row of **Test data**.
 * It holds Message with <winner_question>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-mq9 rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-mq9 (US16-TC11): Open Mail App carries the current Subject and Message
+### g10.auction-winner-order.US16-TC11: Open Mail App carries the current Subject and Message
 
 **Classification:**
 
@@ -6082,7 +6012,7 @@ Runs once per row of **Test data**.
 * Its body includes <winner_question>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ovr rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-ovr (US16-TC12): The To and Subject copy controls copy only their field
+### g10.auction-winner-order.US16-TC12: The To and Subject copy controls copy only their field
 
 **Classification:**
 
@@ -6121,7 +6051,7 @@ Runs once per row of **Test data**.
 * Copy Message stays in the footer.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9co rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.TC-9co (US16-TC13): After a reissue, Subject names the current invoice
+### g10.auction-winner-order.US16-TC13: After a reissue, Subject names the current invoice
 
 **Classification:**
 
@@ -6159,7 +6089,7 @@ Runs once per row of **Test data**.
 * It does not name <replaced_invoice_id>.
 
 <!-- trace:case id=g10.auction-winner-order.TC-v40 rev=1 covers=g10.auction-winner-order.SC-e1w -->
-### g10.auction-winner-order.TC-v40 (US16-TC14): Contact Us on a cancelled order reads order cancelled
+### g10.auction-winner-order.US16-TC14: Contact Us on a cancelled order reads order cancelled
 
 **Classification:**
 
@@ -6198,7 +6128,7 @@ Runs once per row of **Test data**.
 * Neither names the operator's category or note.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nat rev=1 covers=g10.auction-winner-order.SC-i2y -->
-### g10.auction-winner-order.TC-nat (US16-TC15): Contact Us on an order with no method asks about setup
+### g10.auction-winner-order.US16-TC15: Contact Us on an order with no method asks about setup
 
 **Classification:**
 
@@ -6230,7 +6160,7 @@ Runs once per row of **Test data**.
 * The order status still reads Awaiting Setup.
 
 <!-- trace:case id=g10.auction-winner-order.TC-yp9 rev=1 covers=g10.auction-winner-order.SC-81q -->
-### g10.auction-winner-order.TC-yp9 (US16-TC16): Copy Message confirms through its own state on a locked order
+### g10.auction-winner-order.US16-TC16: Copy Message confirms through its own state on a locked order
 
 **Classification:**
 
@@ -6264,14 +6194,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US17: Winner matches a bank refund against their own statement
+## g10.auction-winner-order.US17: Winner matches a bank refund against their own statement
 
 **As a** winner whose refund was sent by bank transfer,
 **I want** the reference the operator sent it under, beside the amount and where it went,
 **so that** I can find the credit on my statement without asking Customer Service.
 
 <!-- trace:case id=g10.auction-winner-order.TC-3s7 rev=1 covers=g10.auction-winner-order.SC-u8s -->
-### g10.auction-winner-order.TC-3s7 (US17-TC1): A bank refund shows the masked destination and its reference
+### g10.auction-winner-order.US17-TC1: A bank refund shows the masked destination and its reference
 
 **Classification:**
 
@@ -6310,14 +6240,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US19: Winner confirms where a won lot ships
+## g10.auction-winner-order.US19: Winner confirms where a won lot ships
 
 **As a** winner
 **I want** to fill in and confirm a delivery address on the order
 **so that** Grade10 can quote shipping to the right place.
 
 <!-- trace:case id=g10.auction-winner-order.TC-clp rev=2 covers=g10.auction-winner-order.SC-cu4 -->
-### g10.auction-winner-order.TC-clp (US19-TC1): The page shows the lot once and none of the old sections
+### g10.auction-winner-order.US19-TC1: The page shows the lot once and none of the old sections
 
 **Classification:**
 
@@ -6351,7 +6281,7 @@ Runs once per row of **Test data**.
   shows.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gf4 rev=1 covers=g10.auction-winner-order.SC-cu4,g10.auction-winner-order.SC-apq -->
-### g10.auction-winner-order.TC-gf4 (US19-TC5): Timeline uses the auction-order read model timestamps
+### g10.auction-winner-order.US19-TC5: Timeline uses the auction-order read model timestamps
 
 **Classification:**
 
@@ -6382,7 +6312,7 @@ Runs once per row of **Test data**.
 * No timestamp is replaced with the page-load time.
 
 <!-- trace:case id=g10.auction-winner-order.TC-grt rev=1 covers=g10.auction-winner-order.SC-cu4,g10.auction-winner-order.SC-apq -->
-### g10.auction-winner-order.TC-grt (US19-TC2): Preparing Invoice shows the address and no payment
+### g10.auction-winner-order.US19-TC2: Preparing Invoice shows the address and no payment
 
 **Classification:**
 
@@ -6411,7 +6341,7 @@ Runs once per row of **Test data**.
 * No invoice and no Pay Now are shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-6xf rev=1 covers=g10.auction-winner-order.SC-cu4,g10.auction-winner-order.SC-apq -->
-### g10.auction-winner-order.TC-6xf (US19-TC3): A complete address with optional fields empty is accepted
+### g10.auction-winner-order.US19-TC3: A complete address with optional fields empty is accepted
 
 **Classification:**
 
@@ -6450,7 +6380,7 @@ Runs once per row of **Test data**.
 * The order status reads Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-lwp rev=1 covers=g10.auction-winner-order.SC-cu4,g10.auction-winner-order.SC-apq -->
-### g10.auction-winner-order.TC-lwp (US19-TC4): Empty required fields are refused with field errors
+### g10.auction-winner-order.US19-TC4: Empty required fields are refused with field errors
 
 **Classification:**
 
@@ -6483,14 +6413,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US20: Winner waits out a partial payment an operator is collecting
+## g10.auction-winner-order.US20: Winner waits out a partial payment an operator is collecting
 
 **As a** winner whose invoice an operator has started collecting in parts,
 **I want** a locked order with Contact Us and a receipt for every payment,
 **so that** I have proof of what I paid without tracking a running balance.
 
 <!-- trace:case id=g10.auction-winner-order.TC-sv8 rev=1 covers=g10.auction-winner-order.SC-34b -->
-### g10.auction-winner-order.TC-sv8 (US20-TC1): The partially paid order is locked
+### g10.auction-winner-order.US20-TC1: The partially paid order is locked
 
 **Classification:**
 
@@ -6522,14 +6452,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US21: Winner quotes their order
+## g10.auction-winner-order.US21: Winner quotes their order
 
 **As a** winner of an auction lot,
 **I want** my order to have a clear, stable payment reference I can quote,
 **so that** I can reference it when contacting support or making inquiries about my purchase, without a separate order ID to keep track of.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ppj rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
-### g10.auction-winner-order.TC-ppj (US21-TC1): Invoice and payment references appear on both invoice methods
+### g10.auction-winner-order.US21-TC1: Invoice and payment references appear on both invoice methods
 
 **Classification:**
 
@@ -6560,7 +6490,7 @@ Runs once per row of **Test data**.
 * No receipt breakdown or receipt amount is asserted here.
 
 <!-- trace:case id=g10.auction-winner-order.TC-93n rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
-### g10.auction-winner-order.TC-93n (US21-TC2): Invoice numbering continues after 99
+### g10.auction-winner-order.US21-TC2: Invoice numbering continues after 99
 
 **Classification:**
 
@@ -6590,7 +6520,7 @@ Runs once per row of **Test data**.
 * The payment reference remains `LK423`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ehf rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
-### g10.auction-winner-order.TC-ehf (US21-TC3): Listing-code allocation retries a projection collision
+### g10.auction-winner-order.US21-TC3: Listing-code allocation retries a projection collision
 
 **Classification:**
 
@@ -6620,7 +6550,7 @@ Runs once per row of **Test data**.
 * The code is not treated as collision-free merely because its source is a UUID or listing ID.
 
 <!-- trace:case id=g10.auction-winner-order.TC-wa2 rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
-### g10.auction-winner-order.TC-wa2 (US21-TC4): A stored payment reference survives allocator changes
+### g10.auction-winner-order.US21-TC4: A stored payment reference survives allocator changes
 
 **Classification:**
 
@@ -6650,7 +6580,7 @@ Runs once per row of **Test data**.
 * No new listing receives a retained code.
 
 <!-- trace:case id=g10.auction-winner-order.TC-azi rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
-### g10.auction-winner-order.TC-azi (US21-TC5): The public listing page withholds the payment reference
+### g10.auction-winner-order.US21-TC5: The public listing page withholds the payment reference
 
 **Classification:**
 
@@ -6680,14 +6610,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US22: Winner reviews invoice and payment details
+## g10.auction-winner-order.US22: Winner reviews invoice and payment details
 
 **As a** winner,
 **I want** my invoice and payment receipts to show stable public references built from my payment reference,
 **so that** I can contact Grade10, make a payment, and reconcile charges without exposing internal system keys.
 
 <!-- trace:case id=g10.auction-winner-order.TC-urm rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
-### g10.auction-winner-order.TC-urm (US22-TC1): Reissued invoice IDs still find the order
+### g10.auction-winner-order.US22-TC1: Reissued invoice IDs still find the order
 
 **Classification:**
 
@@ -6717,7 +6647,7 @@ Runs once per row of **Test data**.
 * The replacement invoice names the replaced invoice and keeps `LK423`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-mr5 rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
-### g10.auction-winner-order.TC-mr5 (US22-TC2): A finalized payment receives the new receipt identifier
+### g10.auction-winner-order.US22-TC2: A finalized payment receives the new receipt identifier
 
 **Classification:**
 
@@ -6749,7 +6679,7 @@ Runs once per row of **Test data**.
 * A receipt for another invoice starts at `P1` for that invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gfa rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
-### g10.auction-winner-order.TC-gfa (US22-TC3): Historical receipt identifiers stay unchanged
+### g10.auction-winner-order.US22-TC3: Historical receipt identifiers stay unchanged
 
 **Classification:**
 
@@ -6779,7 +6709,7 @@ Runs once per row of **Test data**.
 * No receipt ID is created for the refund, reversal or void.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gs5 rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
-### g10.auction-winner-order.TC-gs5 (US22-TC4): Provider references stay internal
+### g10.auction-winner-order.US22-TC4: Provider references stay internal
 
 **Classification:**
 
@@ -6809,14 +6739,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## winner-order-US23: Winner gets the address form back
+## g10.auction-winner-order.US23: Winner gets the address form back
 
 **As a** winner who missed the 48-hour address deadline,
 **I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
 **so that** I can still settle the lot I won once I have told Grade10 where to ship it.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9uu rev=1 covers=g10.auction-winner-order.SC-r6m -->
-### g10.auction-winner-order.TC-9uu (US23-TC1): Address confirmed a minute inside the window is accepted
+### g10.auction-winner-order.US23-TC1: Address confirmed a minute inside the window is accepted
 
 **Classification:**
 
@@ -6856,7 +6786,7 @@ Runs once per row of **Test data**.
 * No invoice is issued by the confirmation itself.
 
 <!-- trace:case id=g10.auction-winner-order.TC-io3 rev=1 covers=g10.auction-winner-order.SC-kz8 -->
-### g10.auction-winner-order.TC-io3 (US23-TC2): First confirmation is refused at the 48-hour mark
+### g10.auction-winner-order.US23-TC2: First confirmation is refused at the 48-hour mark
 
 **Classification:**
 
@@ -6895,7 +6825,7 @@ Runs once per row of **Test data**.
 * The order still reads Setup Overdue.
 
 <!-- trace:case id=g10.auction-winner-order.TC-w89 rev=1 covers=g10.auction-winner-order.SC-6ax -->
-### g10.auction-winner-order.TC-w89 (US23-TC4): A reopened address form runs a fresh 48 hours from the reopen
+### g10.auction-winner-order.US23-TC4: A reopened address form runs a fresh 48 hours from the reopen
 
 **Classification:**
 
@@ -6936,7 +6866,7 @@ Runs once per row of **Test data**.
 * The order reads Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-bth rev=1 covers=g10.auction-winner-order.SC-6ax -->
-### g10.auction-winner-order.TC-bth (US23-TC5): Winner has no way to reopen the address form
+### g10.auction-winner-order.US23-TC5: Winner has no way to reopen the address form
 
 **Classification:**
 
@@ -6968,7 +6898,7 @@ Runs once per row of **Test data**.
 * The address deadline is unchanged.
 
 <!-- trace:case id=g10.auction-winner-order.TC-w21 rev=1 covers=g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-gqs -->
-### g10.auction-winner-order.TC-w21 (US23-TC6): Three won lots open three orders with their own address deadlines
+### g10.auction-winner-order.US23-TC6: Three won lots open three orders with their own address deadlines
 
 **Classification:**
 
@@ -7008,7 +6938,7 @@ Runs once per row of **Test data**.
 * Each order keeps the address confirmed on it and awaits its own invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-aui rev=1 covers=g10.auction-winner-order.SC-js5,g10.auction-winner-order.SC-h7y -->
-### g10.auction-winner-order.TC-aui (US23-TC7): Sent invoice stops the winner changing the address
+### g10.auction-winner-order.US23-TC7: Sent invoice stops the winner changing the address
 
 **Classification:**
 
@@ -7040,7 +6970,7 @@ Runs once per row of **Test data**.
 * The area points the winner at Grade10 for a change.
 
 <!-- trace:case id=g10.auction-winner-order.TC-us7 rev=1 covers=g10.auction-winner-order.SC-h7y -->
-### g10.auction-winner-order.TC-us7 (US23-TC8): Expired invoice does not reopen the address form
+### g10.auction-winner-order.US23-TC8: Expired invoice does not reopen the address form
 
 **Classification:**
 
@@ -7072,7 +7002,7 @@ Runs once per row of **Test data**.
 * The overdue alert carries Contact Us and no card Pay control is shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-euy rev=1 covers=g10.auction-winner-order.SC-byg -->
-### g10.auction-winner-order.TC-euy (US23-TC9): A missed address deadline leaves the account address book alone
+### g10.auction-winner-order.US23-TC9: A missed address deadline leaves the account address book alone
 
 **Classification:**
 
@@ -7105,7 +7035,7 @@ Runs once per row of **Test data**.
 * The order still has no confirmed delivery address and still offers no address form.
 
 <!-- trace:case id=g10.auction-winner-order.TC-yee rev=1 covers=g10.auction-winner-order.SC-90v -->
-### g10.auction-winner-order.TC-yee (US23-TC10): A reopen sends the winner no letter
+### g10.auction-winner-order.US23-TC10: A reopen sends the winner no letter
 
 **Classification:**
 
@@ -7136,7 +7066,7 @@ Runs once per row of **Test data**.
 * No letter about the reopen reaches the winner.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ron rev=1 covers=g10.auction-winner-order.SC-oos -->
-### g10.auction-winner-order.TC-ron (US23-TC11): The address deadline counts from the extended close
+### g10.auction-winner-order.US23-TC11: The address deadline counts from the extended close
 
 **Classification:**
 
@@ -7218,201 +7148,3 @@ Runs once per row of **Test data**.
 - Shippable destinations only stays the open PRD question
 - A bid holds nothing on the card, so the close releases and captures nothing: the winner pays the invoice on their order, and a losing bidder reads on My Auctions that their card was not charged (decisions Q1, Q2).
 - Bank details are held per currency on each lane: the sample account outside production, and none in production until Finance confirms Grade10's account.
-
-## Reconciliation
-
-**Run:** 2026-09-16; scenario and suite readings were reconciled by the author.
-
-- **Uncovered anchors:** none.
-
-**Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
-
-- **Folded in** - `winner-order-SC-15` and `winner-order-SC-35` by `winner-order-US1-TC5-2`: nothing was held from bidding, and one charge pays the invoice through hosted Checkout; `winner-order-SC-26` and `winner-order-SC-27` lose the hold release only, and their coverage is as on main
-- **Revised** - `winner-order-US1-TC5-2`: QA1 kept the id, but the case no longer reads a hold released, so it moves up a revision; its marker drops winner-order-SC-12, winner-order-SC-13 and winner-order-SC-14
-- **Deprecated** - `winner-order-US6-TC1-1` and `winner-order-US6-TC2-1`, with winner-order-US-06; a losing bidder reads that their card was not charged on My Auctions, `grade10-site-auction-account-record-US4-TC1-2`
-- **Raised** - none
-- **Retired elsewhere** - winner-order-SC-12, winner-order-SC-13 and winner-order-SC-14, the hold released at the close, retire with `complete-auction-post-sale`, which renames their requirement and keeps none of them
-- **Contradicted** - none
-- **Uncovered anchors** - none
-
-| Finding | Disposition |
-| --- | --- |
-| Required identifier scenarios SC-114 and SC-122–SC-128 | Preserved in the winner-order spec; cases cover the changed identifier behavior. |
-| Existing receipt identifier scenario SC-131 | The winner-facing identifier retains the listing payment reference; this change does not change its existing format or receipt breakdown. |
-| UUID/listing-ID projection | A projection may collide; the allocator retries against active codes and retained reservations. |
-| Bank-transfer presentation | `add-winner-how-to-pay-rails` owns the detail rows, including its no-Copy rule; this change supplies only the payment-reference value. |
-| Admin permission and placement | Settled: existing listing-admin read access shows the code in both the Listings table and detail screen; knowing it cannot grant access or private data. |
-| Cached-preview behavior | Settled in Q15: previously cached content may persist without purge or regeneration; current pages and fresh metadata omit the code and private data. |
-
-**Run input:** QA1 wrote four blind cases from frozen `winner-order-US-09` and
-the `Bank transfer` Feature set root. QA2 reconciled those cases against the
-proposal, decisions, UI design, technical design, tasks, delta scenarios and
-journeys, the durable Winner Order suite, Post-Bidding, and active overlapping
-auction changes. This statement records the input to reconciliation, not proof
-that implementation works.
-
-| Blind case or scenario | Disposition |
-| --- | --- |
-| `winner-order-US9-TC28-1` | **Folded into:** `winner-order-US9-TC2-2`. The same successful-upload route now verifies the toast, Payment Verifying Alert and hidden payment controls. |
-| `winner-order-US9-TC29-1` | **Folded into:** `winner-order-US9-TC14-2`. The existing interrupted-upload route now verifies the open draft and failure toast before retry. |
-| `winner-order-US9-TC31-1` | **Folded into:** `winner-order-US9-TC7-2`. The existing back-out route now verifies inline irreversible microcopy and no second confirm screen. |
-| `winner-order-US9-TC30-2` | **Covered:** `winner-order-SC-219`. Busy leave blocking is a distinct route with no durable case. |
-| `winner-order-SC-99`, `winner-order-SC-100`, `winner-order-SC-101`, `winner-order-SC-103`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-121` and `winner-order-SC-239` | **Covered in durable suite:** unchanged Bank transfer scenarios retain their existing cases. |
-| Product questions | **Settled:** none. Decisions Q1-Q16 and the Post-Bidding Payment Verifying alert decide the behavior. |
-| Uncovered scenarios | **None.** SC-218, SC-219 and SC-220 map to revised or distinct cases; SC-119 maps to the revised retry case. |
-
-**Run:** QA2 reconciliation, 2026-10-06, for change `winner-order-tracking-link`. Reconciled both blind cases against the frozen `Order-progress tracking` feature-set group and `winner-order-US-02` journey, then read the delta scenarios, proposal, decisions, UI design, technical design, tasks, durable Winner Order spec and journeys, auction domain suite, and Post-Bidding · Order Status. This is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| `US2-TC2-1` is the durable retained-record case with carrier identity | **Dropped:** this suite no longer carries a copy of `TC-4zy`; `add-winner-order-tax-line` revises it to `US2-TC2-3` (tracking number as the carrier link only with a tracker link, no separate carrier name), and `winner-order-SC-20` is reached there. This change's own requirement and cases require no carrier name |
-| `winner-order-SC-251` - fulfilled order shows and opens the tracking-number link | **Covered:** `winner-order-SC-251` ← `US2-TC13-1` |
-| `winner-order-SC-252` - link remains after delivery is confirmed | **Covered:** `winner-order-SC-252` ← `US2-TC12-2` |
-| The Raised questions about the Track shipment control and Delivered state | **Settled:** decisions Q1 and Q3; the shipped case checks no separate control, and the delivered case checks the link remains |
-| `winner-order-SC-276` - no tracker link recorded shows the number as plain text | **Covered:** `winner-order-SC-276` ← `US2-TC14-1`; planning owner's decision Q6 |
-| Root group and journey coverage | **Covered:** both cases trace `winner-order-US-02`; neither case adds behavior outside `Order-progress tracking` |
-| Uncovered scenarios | **None.** All three delta scenarios have a case; the durable suite and auction domain suite add no other scenario for this change's frozen anchors |
-
-- **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
-- **Covered:** `winner-order-SC-253` ← `US2-TC20-2`.
-- **Raised:** none.
-
-**Run:** The blind pass read the Purpose, Feature set, `winner-order-US-01`, the proposal, decisions, UI design without scenario dispositions, and the linked PRD. It did not read durable or change requirements.
-
-**Run:** 2026-10-06, QA2 rerun after accept-review, not blind: the delta's requirements and scenarios, `ui-design.md`, the durable suite and the cases above. It split `winner-order-US1-TC31-1`'s expectations by surface, since the page places Tax before Payment Processing Fee and the PDFs before Subtotal. It revised the durable `winner-order-US1-TC1-1` and `winner-order-US1-TC2-1`, which still read Tax as an estimate. It also carries `winner-order-US2-TC1-1` and `winner-order-US2-TC2-1` revised, because this change owns every edit to `Records the winner keeps`.
-
-### Folded
-
-- `winner-order-US1-TC30-1`, Tax reads TBD with its tip before send -> `winner-order-SC-213`
-- `winner-order-US1-TC31-1`, sent Tax on the page with its tip and on both PDFs inside the Subtotal -> `winner-order-SC-217`, `winner-order-SC-214`, `winner-order-SC-04`
-- `winner-order-US1-TC32-1`, an untaxed invoice shows no Tax line and no tip anywhere -> `winner-order-SC-215`, `winner-order-SC-212`
-- `winner-order-US1-TC33-1`, the card fee priced from a Subtotal that includes Tax -> `winner-order-SC-216`
-
-### Revised
-
-- `winner-order-US1-TC1-2`, from `-TC1-1`: Shipping & Handling, Insurance and Tax read TBD before send and no charge is marked as an estimate, instead of reading as estimates; the payable-at-close result is dropped, since `winner-order-US1-TC3-1` refuses payment until the address is confirmed -> `winner-order-SC-04`, `winner-order-SC-213`
-- `winner-order-US1-TC2-2`, from `-TC2-1`: Shipping & Handling, Insurance and Tax read TBD, instead of still to be calculated -> `winner-order-SC-213`
-- `winner-order-US2-TC1-2`, from `-TC1-1`: the receipt lines read insurance when added and Tax when added, instead of any tax -> `winner-order-SC-18`
-- `winner-order-US2-TC2-3`, from `-TC2-1`: the tracker shows the tracking number as the carrier link when the operator recorded a tracker link and as plain text otherwise, and no separate carrier name, instead of the carrier and the tracking number -> `winner-order-SC-20`
-
-### Rejected
-
-- No blind case was dropped.
-
-### Escalated
-
-- None. The blind pass's itemisation reading matched `winner-order-SC-214`; it asked nothing the input left open.
-
-### Carried Unchanged
-
-- **Invoice fields** - `winner-order-SC-05`, `winner-order-SC-38`, `winner-order-SC-39`, `winner-order-SC-62`, `winner-order-SC-63`, `winner-order-SC-69`, `winner-order-SC-110`, `winner-order-SC-111` keep their meaning and their durable coverage. `winner-order-SC-04` changed meaning to a taxed total and is reached above by `winner-order-US1-TC31-1` and `winner-order-US1-TC1-2`
-- **Records the winner keeps** - `winner-order-SC-19`, `winner-order-SC-21`, `winner-order-SC-36`, `winner-order-SC-112`, `winner-order-SC-113`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-135`, `winner-order-SC-133`, `winner-order-SC-247`, `winner-order-SC-222`, `winner-order-SC-223`, `winner-order-SC-246` keep their meaning and their durable coverage. `winner-order-SC-18` and `winner-order-SC-20` changed and are reached above by `winner-order-US2-TC1-2` and `winner-order-US2-TC2-3`
-
-**Out of suite:** none of this change's scenarios.
-
-| Finding | Disposition |
-| --- | --- |
-| The winner sees retained facts without the internal reason | **Folded in:** `winner-order-SC-143` |
-| Contact Us on a cancelled order reads `order cancelled` | **Folded in:** `winner-order-SC-275` |
-
-| Finding | Disposition |
-| --- | --- |
-| The winner sees receipts without a second order or deadline | **Folded in:** `winner-order-SC-156` |
-
-Two independent readings of the same anchors: this suite, written without sight
-of any requirement, and a scenario draft written without sight of this suite.
-What they disagreed about is below.
-
-| Raised | Disposition |
-| --- | --- |
-| Which clock decides a confirmation sent at 47:59 and arriving at 48:01 | **Folded in.** Nobody had decided it. The requirement now judges a write by the moment Grade10 receives it, and `winner-order-SC-145` and `winner-order-SC-146` are phrased on receipt rather than on submission |
-| What the address deadline is measured from on an extended lot | **Folded in.** The scenario pass had already fixed it on the actual close; `winner-order-SC-144` proves it against a lot whose scheduled and actual closes differ |
-| Whether a winner may add an address to the account book while the address form is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-151` and `winner-order-US23-TC9-1` |
-| Whether a reopen after send does anything | **Already decided**, in `grade10-admin/auction/post-sale`: a reopen is refused once the invoice is sent. The suite could not see it |
-| Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-149` and `winner-order-US23-TC10-1` |
-| What a missed address deadline does to the reminder letters | **Dropped.** Address reminders belong to the durable Winner Order rules. Recorded here so the next blind pass does not raise it again |
-| Whether a winner may change a confirmed address after the deadline | **Dropped** after the planning owner decided that a confirmed address locks on confirm and this change adds no winner change control. The change scenario and its case are retired with their ids; the lock is the durable Winner Order rule |
-| Scenarios the payment-deadline requirement restates: `winner-order-SC-31`, `SC-33`, `SC-37` and `SC-107` | **Not this change's.** They are durable scenarios the modified requirement carries unchanged, and the durable suite covers them. This suite adds a case only for the scenarios this change writes |
-| What a card session that ends unpaid after the payment deadline does | **Folded in** after the planning owner decided it counts as a failed outcome: the invoice is written `expired` when the session ends and Pay Now stays closed. The requirement is the payment deadline's; `grade10-admin-auction-post-sale-SC-93` and `post-sale-US19-TC9-1` prove it |
-| Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-23`; the journeys those cases walk are durable and reach the suite at archive |
-| Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here but the payment deadline became ADDED after `check:manual` refused a draft that folded requirements the durable Winner Order rules also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |
-| Cases the address deadline on `main` now covers | **Dropped** after the durable Winner Order rules took on the 48-hour address deadline: Contact Us in place of the form, no suspension or cancellation, the displayed deadline, nothing to pay at close, and seven days from send. Its own suite walks them. The rest were renumbered under `winner-order-US23` |
-
-An operator may record a delivery address after the address deadline without
-reopening it. Neither reading proposed it; the action is
-`complete-auction-post-sale`'s.
-
-**Run:** 2026-10-07, QA2 for `clarify-auction-shipping-progress-copy`, appended to the durable reconciliation; earlier runs stand.
-
-- **Covered:** `winner-order-SC-55` ← `US2-TC55-1`.
-- **Covered:** `winner-order-SC-253` ← `US2-TC20-2` (recorded tracker link) and `US2-TC56-1` (no tracker link).
-- **Raised:** none.
-
-**Run:** 2026-10-08, amendment for the card fee, not blind: `Invoice fields`' card pricing, the durable suite and the cases above. The card fee is computed from the Payment Settings card rule instead of the payment provider's fees (decisions Q17).
-
-- **No longer carried unchanged** - `winner-order-SC-62`, listed as unchanged by the run above, now reads the card rule in Payment Settings. It keeps its numbers, and no case read where the fee came from, so no case moves
-
-**Run:** The same agent wrote the blind cases and the scenarios, so the two readings are not independent. The cases were written from the Feature set, the journeys, the proposal, the decisions and the linked PRD sections, then joined to the scenarios on their anchors.
-
-**Run:** 2026-10-06, QA2. A fresh reader joined every scenario and every case in this suite on their anchors, against the durable suite the fold lands on. "Kept with the durable suite" held for the restated Pay Now, Contact Us and card scenarios, not for the method choice: no durable case walks `SC-93`.
-
-| Spec scenario | Disposition |
-| --- | --- |
-| `winner-order-SC-90` | Covered by `US9-TC22-1` |
-| `winner-order-SC-91` | Was uncovered; added `US9-TC23-1` |
-| `winner-order-SC-92` | Was uncovered; added `US1-TC49-1` |
-| `winner-order-SC-93` | Was uncovered: no durable case walks a changed choice; added `US1-TC50-1` |
-| `winner-order-SC-94` | Was uncovered; added `US1-TC51-1` |
-| `winner-order-SC-226` | Covered by `US1-TC48-1` |
-| `winner-order-SC-248` | Was uncovered; added `US1-TC52-1` |
-| `winner-order-SC-249` | Was uncovered; added `US1-TC53-1` |
-| `winner-order-SC-250` | Was uncovered; added `US16-TC16-1` |
-| `winner-order-SC-257` | Was uncovered; added `US7-TC5-1` |
-| `winner-order-SC-49` | Covered by the durable `winner-order-US4-TC3-1` |
-| `winner-order-SC-50` | Covered by the durable `winner-order-US4-TC4-1` |
-| `winner-order-SC-51` | Covered by the durable `winner-order-US4-TC5-1` |
-| `winner-order-SC-52` | Covered by the durable `winner-order-US4-TC6-1` |
-| `winner-order-SC-160` | Covered by the durable `winner-order-US16-TC1-1` and `winner-order-US16-TC8-1` |
-| `winner-order-SC-161` | Covered by the durable `winner-order-US16-TC7-1` |
-| `winner-order-SC-162` | Covered by the durable `winner-order-US16-TC9-1` and `winner-order-US16-TC10-1` |
-| `winner-order-SC-163` | Covered by the durable `winner-order-US16-TC11-1` |
-| `winner-order-SC-167` | Covered by the durable `winner-order-US16-TC12-1` |
-| `winner-order-SC-15` | Covered by the durable `winner-order-US1-TC6-1` |
-| `winner-order-SC-35` | Covered by the durable `winner-order-US4-TC1-2` and `winner-order-US9-TC11-1` |
-| `winner-order-SC-259`, `SC-260` | Were uncovered; added `US11-TC5-1` |
-| `winner-order-SC-261` | Was uncovered; added `US1-TC56-1` |
-| `winner-order-SC-254` | Was uncovered; added `US12-TC12-1` |
-| `winner-order-SC-255` | Was uncovered; added `US11-TC6-1` |
-| `winner-order-SC-256` | Was uncovered; added `US7-TC6-1` |
-| `winner-order-SC-262` | Covered by `US16-TC15-1` |
-| Contradicted readings | None |
-
-- **Folded:** Q25 as `winner-order-SC-226`.
-- **Renumbered** - `winner-order-US1-TC43-1` became `US1-TC48-1`: the durable `winner-order-US1-TC43-1` is a Country/Region filter case, which the fold would have overwritten.
-- **Placed under their journeys** - this change's `user-journeys.md` carries `winner-order-US-07`, `-US-11`, `-US-12` and `-US-16` verbatim from the durable file as context journeys. The new cases sit under the journey their scenario serves: `US7-TC5-1` and `US7-TC6-1`, `US11-TC5-1` and `US11-TC6-1`, `US12-TC12-1`, `US16-TC15-1` and `US16-TC16-1`. `US1-TC52-1`, `US1-TC53-1` and `US1-TC56-1` stay under `winner-order-US1`, which their scenarios serve or which is the setup they walk.
-- **Split** - the one-time delivery and billing cases became `US12-TC12-1` and `US11-TC6-1`, and the Copy Message check left `US1-TC53-1` for `US16-TC16-1`, so each case walks one journey.
-- **Copy Message route** - `winner-order-SC-250` places Copy Message on a locked order, so `US16-TC16-1` starts from a Setup Overdue order. The route this change adds, an order with no method offered, is `US16-TC15-1`, which reads the `setup overdue` reason.
-- **Out of suite:** none.
-
-**Run:** 2026-10-08, amendment for the address lock, not blind: the closing paragraph of "A missed address deadline closes the address form", the durable suite and the cases above. The address locks on confirm, not at send, so the paragraph that retires the deadline at send no longer says the address locks there.
-
-- **Carried unchanged** - `winner-order-SC-150` keeps its meaning and its case: the send still retires the deadline. `winner-order-US23-TC8-1`'s pre-condition that read the lock at send now reads a confirmed, locked address, with no change of meaning
-
-**Run:** 2026-09-22; re-checked 2026-09-22 after primary CTA rename (**Submit
-Payment Proof**) and OUR note placement after payment reference; QA2 re-checked
-2026-10-08 after the case-id repair and the responsive tab-track rule. Scenario
-draft from the requirements reading; suite from the blind reading; neither saw
-the other's draft before join.
-
-- **Raised:** none — entry points, CTA label, FPS default, expanded rail
-  fields (beneficiary address, bank name, bank address, full account number),
-  responsive tab track, OUR placement, Grade10 / HSBC preview samples and
-  proof-only dialog were settled in `decisions.md` (including Q16–Q20).
-- **Folded:** none.
-- **Covered:** `winner-order-SC-180` ← `US9-TC21-1`; `winner-order-SC-181` ←
-  `US9-TC32-1`; `winner-order-SC-182`, `winner-order-SC-183` and
-  `winner-order-SC-95` ← `US9-TC24-2`; `winner-order-SC-184` ←
-  `US9-TC25-1`.
-- **Uncovered anchors:** none for this change's added scenarios.
-- **Out of suite:** abandon gate, HEIC converting — Storybook View Bank
-  Details / Submit Payment Proof.
