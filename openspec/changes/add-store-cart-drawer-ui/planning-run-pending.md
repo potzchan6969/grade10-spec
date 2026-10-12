@@ -91,3 +91,67 @@ This is scoped reconciliation, not regeneration of the historical suites.
 - **Focused validation** - Case identity/lifecycle comparison against the initial committed tree and diff check pass. Checkout suite validation passes with one partial-case warning. Cart/shared suite validation reports modern shared naming and retained legacy-case placement conflicts; the coordinator owns their resolution before acceptance. This is a structural gate finding, not an unresolved product decision.
 
 Full QA2 evidence is saved at `/tmp/cart-pending-qa2-report.md`.
+
+## Display Correction
+
+The shared display prefix is `shared.ui-store-cart`, as the suite validator
+requires for `shared/ui/store-cart`. US19 and US20 keep their numbers and
+behavior; scenario and case machine identities are unchanged. Both shared
+readings restart against
+`b6ef0d9f116c2499c71f488faf676deaecf9c2a535f80c718da2b83358da45ea`.
+The fresh QA1 matrix covers controls, open sheet, dismissal, recovery and
+compatibility; fresh Dev finds no semantic drift or needed contract repair.
+The affected QA2 rerun maps P1-P5 to the existing asserting cases and retains
+their exact machine revisions and coverage links. Application-owned scrolling,
+request completion and feedback remain with the application cases. No new
+behavior gap or product contradiction follows from the display correction;
+the case placement blocker remains. Its evidence is saved at
+`/tmp/cart-pending-display-qa2-report.md`.
+
+Checkout SC66-SC68 use the existing capability's legacy display heading form
+so the manual's state checker recognizes them. Their machine identities and
+behavior remain unchanged. Raised landing cells name Q16 and Q35 exactly.
+
+## Gate Receipts
+
+Checked commit: `c5b6b058a9ef051c410be5175f9558ff644a1ff1`, based on
+published store main `57696f4648f5b4ae947f37dab219cd9512737c4f`.
+The preceding main changes affect a separate session plan, with no changed
+cart inputs. Commands run on a committed tree with no source writer using
+the configured Node and pnpm runtime.
+
+| Gate | Exit | Result |
+| --- | --- | --- |
+| `git diff --check` | 0 | Passed |
+| `pnpm plan:review-preflight add-store-cart-drawer-ui --json` | 0 | Ready; source identity `6226a09ca4606efe1d6740fcb4c1e96aecd5f3854b70fade1a887a1378f570a0` |
+| `pnpm plan:review-preflight add-shopify-checkout-integration --json` | 0 | Ready; source identity `10fa4089a34a64e0296d1dd892f8312df0ec3ea947bd0bd3ba94c7dd398fcbfd` |
+| `pnpm check:manual --quiet` | 0 | 0 failures, 291 warnings |
+| `pnpm run tcs:validate add-shopify-checkout-integration` | 0 | 48 draft cases; 1 anchor-only warning |
+| `pnpm run tcs:validate add-store-cart-drawer-ui` | 1 | 4 legacy shared case placement errors; cart has 43 drafts and shared has 8 drafts |
+| `pnpm accept:preflight add-store-cart-drawer-ui add-shopify-checkout-integration` | 1 | Both changes refused by the folded-tree suite gate |
+
+Output receipts are saved under `/tmp/cart-pending-*-current.*` and
+`/tmp/cart-pending-*-repaired.txt`. The manual and acceptance gates inspect
+different trees; the successful manual check does not replace the refused
+acceptance gate.
+
+## Remaining Gate Blockers
+
+The old shared cases `shared-ui-store-cart-US18-TC1-1`,
+`shared-ui-store-cart-US18-TC2-1` and `shared-ui-store-cart-US18-TC3-1`
+encode US18. Their pending Trace anchors now correctly name US19 and US20,
+but the validator requires their headings to match their containing journey
+and reports a duplicate TC1 under US19. Renumbering issued identities or
+overwriting durable order-discount US18 would violate the planning contract.
+That case identity migration needs its own source repair before acceptance.
+
+The folded-tree gate also reports missing suites in console permissions,
+vault identity verification, shared console blocks, order settlement and
+two currency-change capabilities. Those unrelated omissions remain outside
+this pending increment.
+
+**Acceptance status** - Blocked. No independent acceptance verdict, new
+accepted fingerprint or published revision is claimed. The acceptance-review
+skill says a blocked preflight stops review, so acceptance review, acceptance
+and publication are not run. Application implementation is not part of this
+planning update.
