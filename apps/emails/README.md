@@ -36,6 +36,7 @@ Restart the preview server after pulling so discovery refreshes.
 | Auction order | `/preview/auction/order/auction-won` |
 | Grading | `/preview/grading/checked-in` |
 | Vault | `/preview/vault/offer-made` |
+| Vault items | `/preview/vault/item-vaulted` |
 
 This same preview app — sidebar, linter, spam/compatibility checks — is
 published as a static site on every push to `main` (and on demand) to
@@ -79,13 +80,15 @@ emails/
                            grades' two, a card not returned / damaged /
                            withdrawn, ready (above and below the threshold),
                            the uncollected rungs, collected
-  vault/                   the collector's letters about a case
-    _components/           VaultLetter, CaseLine, HowToPay, NoticeClause,
-                           ReminderSchedule, preview fixture
+  vault/                   the collector's letters about a case or an item
+    _components/           VaultLetter, CaseLine, ItemLetter, ItemLine,
+                           HowToPay, NoticeClause, ReminderSchedule,
+                           preview fixtures
                            the offer's two, custody's three, the loan's
                            five, falling due's three, the end of a case's
-                           four, the paper, the identity
-                           check
+                           four, the paper, the identity check, the item's
+                           four (vaulted, retrieval requested / approved /
+                           declined)
 ```
 
 `LetterShell` is the one shell both products write in: heading, greeting,
