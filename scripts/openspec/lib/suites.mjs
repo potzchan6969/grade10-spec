@@ -253,16 +253,6 @@ export function modernProductPrefix(root, dir) {
   return `${app}-pdt`;
 }
 
-/** Display prefix for a feature-level suite. */
-export function modernFeaturePrefix(root, dir) {
-  const rel = relative(root, dir)
-    .replace(/^openspec\/specs\//, "")
-    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
-  const [product, domain, capability] = rel.split("/");
-  const app = appDisplayCode(product);
-  return `${app}.${domain}-${capability}`;
-}
-
 /** The `decisions.md` of the change this suite sits in, if it sits in one at
  * all. Walks up to the directory holding `.openspec.yaml` — a durable suite
  * finds none, and so does a change written before the artifact existed. */
