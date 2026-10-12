@@ -29,6 +29,20 @@ state and can follow a safe carrier address when one is supplied
 🚧 **Read states** — loading, localized failure with Retry, and not-found stay
 distinct at the same address
 
+## Guest Order Link
+
+A guest order opens at `grade10.com/orders/<order-id>`, from the link Grade10
+emails once it is paid. The link carries its secret after `#`, so no server
+or log sees it.
+
+- **No account** - the link opens the order for whoever holds it; nothing
+  asks them to sign in
+- **Same page** - the same order facts, progress and tracking as a member's
+  order
+- **Wrong link** - an unknown order, a member's order or a wrong secret all
+  show not-found
+- **Not indexed** - search engines are told not to index the address
+
 ## Order Summary
 
 🚧 **Points** — when the shop names the settled order's points discount, under

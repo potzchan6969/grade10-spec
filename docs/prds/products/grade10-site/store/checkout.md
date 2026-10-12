@@ -12,7 +12,7 @@ to Grade10.
 # Leaving the store
 
 ## Collector — Press checkout
-In the cart drawer, signed in with Google or a magic link.
+In the cart drawer, signed in with Google or a magic link, or as a guest.
 
 ## Store — Read every line live
 Current price and stock, from Shopify. A line that moved comes back named.
@@ -65,7 +65,6 @@ appears after return.
   verification gate all run in the cart drawer; there is no `/checkout` page -
   [Cart Drawer](/p/grade10-site/store/cart)
 
-- **Members only** — checkout is signed in; there is no guest checkout
 - **Pay** - the drawer's Proceed to Checkout button
 - **The bar** — goods worth **HKD 120,000** or more: pressing Proceed to
   Checkout shows the verify message, with an account link where the profile
@@ -76,6 +75,25 @@ appears after return.
 
 - **The invoice** - Fixes the purchase; later cart edits do not change it
 - **Order labels** - Existing shared order-status labels; there is no separate unpaid badge
+
+## Guest Checkout
+
+A collector with no session checks out the cart this browser holds. Shopify's
+page asks for the email address, and the order belongs to no account.
+
+- **The basket only** - no promo code and no points; both are a member's
+- **Email on Shopify's page** - the address the guest types there is kept
+  with the order once it is paid
+- **No account** - paying makes no account, now or later
+- **No points** - a guest order earns nothing, whoever signs in later -
+  [Your Profile](/p/grade10-site/loyalty/profile#purchases-before-the-account)
+- **The bar** - goods worth **HKD 120,000** or more ask the guest to sign in;
+  no checkout session is created
+- **The cart** - this browser's cart is emptied when the guest leaves for
+  Shopify's page; the invoice holds the basket
+- **Order link** - once the order is paid, Grade10 emails a private link to
+  the order to the address the guest gave -
+  [Order Detail](/p/grade10-site/store/order-detail#guest-order-link)
 
 :::detail{title="Design record" for="engineer"}
 - **The pages** — [storefront checkout](https://github.com/9gag/grade10/blob/main/docs/architecture/storefront-checkout.md): five outcome kinds, one treatment per kind
@@ -89,6 +107,9 @@ appears after return.
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Guest checkout | Decided | A collector with no session checks out the browser's cart. Shopify's page takes the email; the order belongs to no account, makes none and earns no points. Supersedes members-only checkout. | Product |
+| Guest tender | Decided | A guest pays the basket alone: no promo code and no points. Every store code is minted to a member. | Product |
+| Guest order link | Decided | Once paid, Grade10 emails the guest a private link to the order, beside Shopify's own confirmation. The link carries its secret and needs no account. | Product |
 | Current decision | Decided | Cart open provides the early review; Pay makes its own current decision, including when it resumes an invoice. An earlier drawer quote never replaces that decision. | Product |
 | Frontend scope | Decided | The drawer uses the store's current checkout request and changes no backend. Invoice reuse, recovery and durable retirement are a separate backend change. Decided 2026-10-09. | @kinisworking |
 | Repeated purchase | Decided | The store owns invoice reuse and recovery. The drawer holds no purchase identity; it accepts one Pay at a time. | @kinisworking |
