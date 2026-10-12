@@ -20,6 +20,8 @@ export const previewItem = {
   grade: "PSA 10 Gem Mint",
   cert: "63261276",
   url: itemUrl,
+  /** Stand-in for the item's scan — the same image the auction previews use. */
+  imageUrl: "/static/product.fixture.png",
 
   email: "wing.chu@example.com",
 

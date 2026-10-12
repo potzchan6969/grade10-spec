@@ -1,9 +1,5 @@
 import { hkDate } from "@/emails/_components/format";
-import {
-  FactsGroup,
-  ItemLetter,
-  Note,
-} from "@/emails/vault/_components/item-letter";
+import { ItemLetter, Note } from "@/emails/vault/_components/item-letter";
 import { footerLines } from "@/emails/vault/fixtures";
 import { previewItem, previewItemLine } from "@/emails/vault/item-fixtures";
 
@@ -18,6 +14,20 @@ export default function RetrievalRequestedEmail({
 
   return (
     <ItemLetter
+      block={{
+        lotTitle: itemTitle,
+        listingUrl: previewItem.url,
+        primaryImageUrl: previewItem.imageUrl,
+        lotSubtext: "Retrieval Pending",
+        highlight: { label: "Requested on", value: hkDate(requestedAt) },
+        details: [
+          {
+            label: "Pickup at",
+            value: previewItem.shopName,
+            subtext: previewItem.shopAddress,
+          },
+        ],
+      }}
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
         lines: footerLines("custodian"),
@@ -26,14 +36,13 @@ export default function RetrievalRequestedEmail({
       heading="Retrieval request received"
       itemLine={previewItemLine}
       lead={`We have your request to take ${itemTitle} out of the vault. It shows as Retrieval Pending until we approve it.`}
+      points={[
+        "We review your request.",
+        "We confirm your pickup window once the item is released from storage.",
+        "You collect it in store with ID that matches your account.",
+      ]}
       preheader={`We have your request for ${itemTitle}. It is awaiting approval.`}
     >
-      <FactsGroup
-        facts={[
-          { label: "Requested on", value: hkDate(requestedAt) },
-          { label: "Pickup at", value: previewItem.shopName },
-        ]}
-      />
       <Note>
         While it is pending the item cannot be listed or requested again.
       </Note>

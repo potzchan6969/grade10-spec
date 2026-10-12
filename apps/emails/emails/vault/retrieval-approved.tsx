@@ -1,9 +1,5 @@
 import { hkDate, hkDateTime, hkTime } from "@/emails/_components/format";
-import {
-  FactsGroup,
-  ItemLetter,
-  Note,
-} from "@/emails/vault/_components/item-letter";
+import { ItemLetter } from "@/emails/vault/_components/item-letter";
 import { footerLines } from "@/emails/vault/fixtures";
 import { previewItem, previewItemLine } from "@/emails/vault/item-fixtures";
 
@@ -20,6 +16,24 @@ export default function RetrievalApprovedEmail({
 
   return (
     <ItemLetter
+      block={{
+        lotTitle: itemTitle,
+        listingUrl: previewItem.url,
+        primaryImageUrl: previewItem.imageUrl,
+        lotSubtext: `${previewItem.grade} · Cert ${previewItem.cert}`,
+        highlight: {
+          label: "Collect on",
+          value: `${hkDateTime(pickupFrom)} to ${hkTime(pickupUntil)}`,
+        },
+        details: [
+          {
+            label: "Where",
+            value: previewItem.shopName,
+            subtext: previewItem.shopAddress,
+          },
+          { label: "Open", value: previewItem.openingHours },
+        ],
+      }}
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
         lines: footerLines("custodian"),
@@ -28,29 +42,9 @@ export default function RetrievalApprovedEmail({
       heading="Your retrieval is approved"
       itemLine={previewItemLine}
       lead={`We approved your request. ${itemTitle} will be ready for you to collect in store.`}
+      points={["Bring ID that matches your account."]}
       preheader={`Collect ${itemTitle} on ${hkDate(pickupFrom)}.`}
-    >
-      <FactsGroup
-        facts={[
-          {
-            label: "Item",
-            value: itemTitle,
-            subtext: `${previewItem.grade} · Cert ${previewItem.cert}`,
-          },
-          {
-            label: "Collect on",
-            value: `${hkDateTime(pickupFrom)} to ${hkTime(pickupUntil)}`,
-          },
-          {
-            label: "Where",
-            value: previewItem.shopName,
-            subtext: previewItem.shopAddress,
-          },
-          { label: "Open", value: previewItem.openingHours },
-        ]}
-      />
-      <Note>Bring ID that matches your account.</Note>
-    </ItemLetter>
+    />
   );
 }
 

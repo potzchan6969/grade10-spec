@@ -1,4 +1,4 @@
-import { ItemLetter, Note } from "@/emails/vault/_components/item-letter";
+import { ItemLetter } from "@/emails/vault/_components/item-letter";
 import { footerLines } from "@/emails/vault/fixtures";
 import { previewItem, previewItemLine } from "@/emails/vault/item-fixtures";
 
@@ -13,6 +13,16 @@ export default function RetrievalDeclinedEmail({
 
   return (
     <ItemLetter
+      afterPoints={[
+        `Why: ${reason}.`,
+        "You can request retrieval again, or list the item, from its page.",
+      ]}
+      block={{
+        lotTitle: itemTitle,
+        listingUrl: previewItem.url,
+        primaryImageUrl: previewItem.imageUrl,
+        lotSubtext: "Still in the vault",
+      }}
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
         lines: footerLines("custodian"),
@@ -22,12 +32,7 @@ export default function RetrievalDeclinedEmail({
       itemLine={previewItemLine}
       lead={`We are not able to approve your request. ${itemTitle} is still safe in the vault and nothing has changed.`}
       preheader={`We could not approve your request for ${itemTitle}. It is still in the vault.`}
-    >
-      <Note>Why: {reason}.</Note>
-      <Note>
-        You can request retrieval again, or list the item, from its page.
-      </Note>
-    </ItemLetter>
+    />
   );
 }
 
