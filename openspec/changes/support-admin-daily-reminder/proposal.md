@@ -10,7 +10,7 @@ operator who opens them, and nothing says which listings closed yesterday. An
 invoice not sent, a proof not checked or a card not dispatched stays quiet
 until someone happens to look.
 
-**Metric:** orders that have waited more than 48 hours for an invoice, a proof
+**Metric:** orders that have waited 48 hours or more for an invoice, a proof
 check or a dispatch, counted at each Hong Kong midnight. It falls once the
 reminder runs.
 
