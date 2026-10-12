@@ -91,12 +91,12 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
   an above-ceiling response, which shows no message
 - **AND** no toast opens
 
-<!-- trace:scenario id=g10.auction-auction.SC-nh5 rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-nh5 rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-92 - The server's words never reach the bid form
 **Serves:** grade10-site-auction-auction-US-14 - a refusal the bid form has no words of its own for
 
-- **WHEN** the auction refuses a bid with a code the table gives no words of
-  its own, or with a message of its own
+- **WHEN** the auction refuses a bid with a code other than `AMOUNT_TOO_HIGH`
+  that the table gives no words of its own, or with a message of its own
 - **THEN** the bid form says Your bid did not go through.
 - **AND** none of the server's message shows
 
