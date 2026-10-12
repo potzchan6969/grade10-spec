@@ -10,13 +10,7 @@ import {
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import {
-  Gavel,
-  HourglassMedium,
-  ShieldCheck,
-  Storefront,
-  TrendUp,
-} from "@phosphor-icons/react";
+import { Gavel, ShieldCheck, Storefront, TrendUp } from "@phosphor-icons/react";
 import {
   assetPrice,
   formatHkd,
@@ -77,14 +71,13 @@ function VaultAssetSummary({
           variant={
             asset.status === "In Vault"
               ? "default"
-              : statusBadgeVariant(asset.status)
+              : asset.status === "Retrieval Pending"
+                ? "outline"
+                : statusBadgeVariant(asset.status)
           }
         >
           {asset.status === "In Vault" ? (
             <ShieldCheck aria-hidden weight="bold" />
-          ) : null}
-          {asset.status === "Retrieval Pending" ? (
-            <HourglassMedium aria-hidden weight="bold" />
           ) : null}
           {statusLabel(asset.status)}
         </Badge>
