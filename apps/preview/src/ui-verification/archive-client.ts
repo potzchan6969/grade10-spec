@@ -219,9 +219,10 @@ export async function listRecords(
   kind: "reviews" | "assessments",
   runId: string,
   caseId: string,
+  locale: string,
   signal: AbortSignal,
 ): Promise<ArchiveRecord[]> {
-  const query = new URLSearchParams({ runId, caseId, limit: "100" });
+  const query = new URLSearchParams({ runId, caseId, limit: "100", locale });
   const records: ArchiveRecord[] = [];
   const cursors = new Set<string>();
   let cursor: string | undefined;
@@ -260,12 +261,14 @@ export async function listRecords(
 export async function listCalibrations(
   base: string,
   assessment: ArchiveRecord,
+  locale: string,
   signal: AbortSignal,
 ): Promise<ArchiveRecord[]> {
   if (typeof assessment.assessmentId !== "string") return [];
   const query = new URLSearchParams({
     assessmentId: assessment.assessmentId,
     limit: "100",
+    locale,
   });
   if (typeof assessment.profileId === "string") {
     query.set("profileId", assessment.profileId);
@@ -325,6 +328,7 @@ export async function createReview(
   input: VerificationIdentity & {
     runId: string;
     profileId: ProfileId;
+    locale: string;
     decision: "approved" | "changes-requested";
     comment: string;
   },

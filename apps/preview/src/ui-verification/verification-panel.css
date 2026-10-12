@@ -213,7 +213,23 @@
   gap: 6px;
 }
 
-.verification-tabs [aria-selected="true"] {
+.verification-locale-control {
+  display: grid;
+  gap: 4px;
+}
+
+.verification-locale-control > p {
+  margin: 0;
+}
+
+.verification-locale-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.verification-tabs [aria-selected="true"],
+.verification-locale-tabs [aria-selected="true"] {
   border-color: var(--color-primary, #1ea7fd);
   box-shadow: inset 0 -2px var(--color-primary, #1ea7fd);
   font-weight: 700;

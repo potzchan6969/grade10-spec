@@ -1,3 +1,4 @@
+import { localesOf } from "@grade10/i18n";
 import type {
   CaptureOutcome,
   ImageArtifact,
@@ -5,6 +6,7 @@ import type {
   ProfileId,
   VerificationManifest,
 } from "@grade10/ui-verification/model";
+import { captureLocale } from "@grade10/ui-verification/model";
 import type { FormEvent } from "react";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
@@ -41,6 +43,13 @@ const PROFILE_TABS: readonly { id: ProfileId; label: string; size: string }[] =
     { id: "tablet", label: "Tablet 768x1024", size: "768 × 1024" },
     { id: "mobile", label: "Mobile 390x844", size: "390 × 844" },
   ];
+const GRADE10_LOCALES = localesOf("grade10");
+const LOCALE_LABELS: Readonly<Record<string, string>> = {
+  en: "English",
+  "zh-hant": "Traditional Chinese",
+  "zh-hans": "Simplified Chinese",
+  ko: "Korean",
+};
 
 interface IdentityOption {
   identity: VerificationIdentity;
@@ -73,6 +82,36 @@ function messageOf(error: unknown): string {
 
 function isProfileId(value: unknown): value is ProfileId {
   return value === "desktop" || value === "tablet" || value === "mobile";
+}
+
+function localeKey(value: string): string {
+  return value.toLowerCase();
+}
+
+function localeLabel(value: string): string {
+  const language = LOCALE_LABELS[localeKey(value)];
+  return language ? `${language} (${value})` : value;
+}
+
+function localeOfRecord(value: unknown): string {
+  if (!isRecord(value) || typeof value.locale !== "string") {
+    return captureLocale(undefined);
+  }
+  return captureLocale({ locale: value.locale });
+}
+
+function localeOptions(
+  manifest: VerificationManifest | null | undefined,
+): string[] {
+  if (!manifest) return [...GRADE10_LOCALES];
+  const recorded = manifest.captures.map((capture) => captureLocale(capture));
+  const requested = manifest.locales ?? [...GRADE10_LOCALES, ...recorded];
+  const unique = new Map<string, string>();
+  for (const locale of requested) {
+    const key = localeKey(locale);
+    if (!unique.has(key)) unique.set(key, locale);
+  }
+  return [...unique.values()];
 }
 
 function entryIdentity(value: unknown): VerificationIdentity | null {
@@ -209,12 +248,14 @@ function matchingRecords(
   runId: string,
   identity: VerificationIdentity,
   profileId: ProfileId,
+  locale: string,
 ): ArchiveRecord[] {
   return records.filter((record) => {
     const recordIdentity = entryIdentity(record);
     return (
       record.runId === runId &&
       record.profileId === profileId &&
+      localeKey(localeOfRecord(record)) === localeKey(locale) &&
       recordIdentity !== null &&
       sameIdentity(recordIdentity, identity)
     );
@@ -364,6 +405,7 @@ function scoreDetails(value: ArchiveRecord | null): string[] {
 function matchingCalibration(
   assessment: ArchiveRecord | null,
   calibrations: ArchiveRecord[],
+  locale: string,
 ): ArchiveRecord | null {
   if (
     !assessment ||
@@ -382,6 +424,7 @@ function matchingCalibration(
     }
     const key = calibration.calibrationKey;
     return (
+      localeKey(localeOfRecord(key)) === localeKey(locale) &&
       key.scorerId === scorer.id &&
       key.scorerVersion === scorer.version &&
       key.scorerModel === scorer.model &&
@@ -527,6 +570,7 @@ function captureFor(
   manifest: VerificationManifest | null,
   identity: VerificationIdentity | null,
   profileId: ProfileId,
+  locale: string,
 ): CaptureOutcome | null {
   if (!manifest || !identity) return null;
   return (
@@ -535,7 +579,8 @@ function captureFor(
         capture.caseId === identity.caseId &&
         capture.targetId === identity.targetId &&
         capture.capturePointId === identity.capturePointId &&
-        capture.profileId === profileId,
+        capture.profileId === profileId &&
+        localeKey(captureLocale(capture)) === localeKey(locale),
     ) ?? null
   );
 }
@@ -636,6 +681,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const [selectedRunId, setSelectedRunId] = useState("");
   const [manifest, setManifest] = useState<VerificationManifest | null>(null);
   const [profileId, setProfileId] = useState<ProfileId>("desktop");
+  const [localeId, setLocaleId] = useState<string>("en");
   const [imageUrls, setImageUrls] = useState<ImageUrls>({});
   const [reviews, setReviews] = useState<ArchiveRecord[]>([]);
   const [assessments, setAssessments] = useState<ArchiveRecord[]>([]);
@@ -793,9 +839,34 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const effectiveRunId = matchingRuns.some((run) => run.runId === selectedRunId)
     ? selectedRunId
     : (matchingRuns[0]?.runId ?? "");
+  const selectedManifestSummary =
+    matchingRuns.find((run) => run.runId === effectiveRunId) ?? manifest;
+  const localeChoices = useMemo(
+    () => localeOptions(selectedManifestSummary),
+    [selectedManifestSummary],
+  );
+  const selectedLocaleHasOption = localeChoices.some(
+    (locale) => localeKey(locale) === localeKey(localeId),
+  );
+  useEffect(() => {
+    if (selectedLocaleHasOption) return;
+    const firstLocale = localeChoices[0];
+    if (firstLocale) setLocaleId(firstLocale);
+  }, [localeChoices, selectedLocaleHasOption]);
+  const selectedLocaleHasEvidence = Boolean(
+    selectedManifestSummary &&
+      selectedIdentity &&
+      selectedManifestSummary.captures.some(
+        (capture) =>
+          capture.caseId === selectedIdentity.caseId &&
+          capture.targetId === selectedIdentity.targetId &&
+          capture.capturePointId === selectedIdentity.capturePointId &&
+          localeKey(captureLocale(capture)) === localeKey(localeId),
+      ),
+  );
   const selectedCapture = useMemo(
-    () => captureFor(manifest, selectedIdentity, profileId),
-    [manifest, profileId, selectedIdentity],
+    () => captureFor(manifest, selectedIdentity, profileId, localeId),
+    [localeId, manifest, profileId, selectedIdentity],
   );
   const selectedAssessment = latestRecord(
     selectedIdentity && manifest
@@ -804,17 +875,25 @@ export function VerificationPanel({ active }: { active: boolean }) {
           manifest.runId,
           selectedIdentity,
           profileId,
+          localeId,
         )
       : [],
   );
   const selectedReview = latestRecord(
     selectedIdentity && manifest
-      ? matchingRecords(reviews, manifest.runId, selectedIdentity, profileId)
+      ? matchingRecords(
+          reviews,
+          manifest.runId,
+          selectedIdentity,
+          profileId,
+          localeId,
+        )
       : [],
   );
   const selectedCalibration = matchingCalibration(
     selectedAssessment,
     calibrations,
+    localeId,
   );
   const isCalibratedAutoaccept = calibrationAutoaccepts(
     selectedAssessment,
@@ -896,6 +975,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
             "reviews",
             effectiveRunId,
             selectedIdentity.caseId,
+            localeId,
             controller.signal,
           ),
           listRecords(
@@ -903,6 +983,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
             "assessments",
             effectiveRunId,
             selectedIdentity.caseId,
+            localeId,
             controller.signal,
           ),
         ]);
@@ -923,7 +1004,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
       }
     });
     return () => controller.abort();
-  }, [active, effectiveRunId, refreshVersion, selectedIdentity]);
+  }, [active, effectiveRunId, localeId, refreshVersion, selectedIdentity]);
 
   useEffect(() => {
     if (!active || !archiveBase || !selectedAssessment) {
@@ -936,7 +1017,12 @@ export function VerificationPanel({ active }: { active: boolean }) {
     setCalibrations([]);
     setCalibrationError("");
     setLoadingCalibrations(true);
-    void listCalibrations(archiveBase, selectedAssessment, controller.signal)
+    void listCalibrations(
+      archiveBase,
+      selectedAssessment,
+      localeId,
+      controller.signal,
+    )
       .then((records) => {
         if (!controller.signal.aborted) setCalibrations(records);
       })
@@ -947,7 +1033,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
         if (!controller.signal.aborted) setLoadingCalibrations(false);
       });
     return () => controller.abort();
-  }, [active, selectedAssessment]);
+  }, [active, localeId, selectedAssessment]);
 
   useEffect(() => {
     const capture = selectedCapture;
@@ -1015,6 +1101,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
         targetId: selectedIdentity.targetId,
         capturePointId: selectedIdentity.capturePointId,
         profileId,
+        locale: localeId,
         decision: reviewDecision,
         comment: reviewComment.trim(),
       });
@@ -1025,6 +1112,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
           "reviews",
           effectiveRunId,
           selectedIdentity.caseId,
+          localeId,
           new AbortController().signal,
         ),
       );
@@ -1443,6 +1531,27 @@ export function VerificationPanel({ active }: { active: boolean }) {
             className="verification-section"
             aria-label="Viewport evidence"
           >
+            <div className="verification-locale-control">
+              <p className="verification-metadata">Capture locale</p>
+              <div
+                className="verification-locale-tabs"
+                role="tablist"
+                aria-label="Capture locale"
+              >
+                {localeChoices.map((locale) => (
+                  <button
+                    key={locale}
+                    type="button"
+                    role="tab"
+                    aria-selected={localeKey(localeId) === localeKey(locale)}
+                    aria-controls="verification-profile-panel"
+                    onClick={() => setLocaleId(locale)}
+                  >
+                    {localeLabel(locale)}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div
               className="verification-tabs"
               role="tablist"
@@ -1467,12 +1576,21 @@ export function VerificationPanel({ active }: { active: boolean }) {
               aria-label={`${profile.label} evidence`}
             >
               <p className="verification-metadata">
-                Recorded viewport: {profile.size}
+                Selected locale: {localeLabel(localeId)} · Recorded viewport:{" "}
+                {profile.size}
               </p>
               {!selectedCapture ? (
-                <p role="alert">
-                  This run has no outcome for the selected identity and profile.
-                </p>
+                selectedLocaleHasEvidence ? (
+                  <p role="alert">
+                    This run has no outcome for the selected identity and
+                    profile.
+                  </p>
+                ) : (
+                  <p className="verification-notice">
+                    No archived evidence for {localeLabel(localeId)} in this
+                    run. The panel does not substitute another locale.
+                  </p>
+                )
               ) : selectedCapture.status === "failed" ? (
                 <p role="alert">
                   Capture failed: {selectedCapture.failure.message}

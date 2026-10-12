@@ -25,6 +25,13 @@ const PROFILE_SIZES = {
   tablet: { width: 768, height: 1024 },
   mobile: { width: 390, height: 844 },
 };
+const GRADE10_LOCALES = ["en", "zh-Hant", "zh-Hans"];
+const LOCALE_LABELS = {
+  en: "English",
+  "zh-Hant": "Traditional Chinese",
+  "zh-Hans": "Simplified Chinese",
+  ko: "Korean",
+};
 const DECLARATIONS = [
   {
     schemaVersion: 1,
@@ -73,12 +80,31 @@ function escapeHtml(value) {
   );
 }
 
-async function screenshot(browser, viewport, text, background) {
+function localeEvidenceText(locale, runId, targetId, kind) {
+  const title = {
+    en: { site: "Not found", reference: "Page not found" },
+    "zh-Hant": { site: "找不到頁面", reference: "頁面不存在" },
+    "zh-Hans": { site: "找不到页面", reference: "页面不存在" },
+    ko: { site: "페이지를 찾을 수 없음", reference: "페이지 없음" },
+  }[locale]?.[kind];
+  return `${title ?? locale} · ${runId} · ${targetId}`;
+}
+
+async function waitForCondition(check, description) {
+  const deadline = Date.now() + 5_000;
+  while (Date.now() < deadline) {
+    if (await check()) return;
+    await new Promise((resolveWait) => setTimeout(resolveWait, 25));
+  }
+  assert.fail(`Timed out waiting for ${description}.`);
+}
+
+async function screenshot(browser, viewport, text, background, locale = "en") {
   const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
   try {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.setContent(
-      `<!doctype html><html lang="en"><head><meta charset="utf-8"><style>
+      `<!doctype html><html lang="${escapeHtml(locale)}"><head><meta charset="utf-8"><style>
         * { box-sizing: border-box; }
         html, body { width: 100%; height: 100%; margin: 0; }
         body { display: grid; place-items: center; padding: 8vw; background: ${background}; color: #172033; font: 32px / 1.2 Arial, sans-serif; }
@@ -139,6 +165,8 @@ async function publishRun(
     appRef = "fixture-app-checkpoint",
     referenceRef = "fixture-reference-checkpoint",
     includeReferenceRegion = true,
+    locales,
+    referenceEveryProfile = true,
   },
 ) {
   const catalogue = DECLARATIONS.map((declaration) => ({
@@ -151,66 +179,84 @@ async function publishRun(
   const objects = [];
 
   for (const [index, declaration] of catalogue.entries()) {
-    for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
-      const siteBytes = await screenshot(
-        browser,
-        viewport,
-        `${runId} ${declaration.targetId} site`,
-        index === 0 ? "#edf4ff" : "#f6f0ff",
-      );
-      const site = {
-        key: `ui-verification/${runId}/${declaration.caseId}/${declaration.targetId}/${declaration.capturePointId}/${profileId}/site.png`,
-        sha256: sha256(siteBytes),
-        ...viewport,
-      };
-      objects.push({ key: site.key, bytes: siteBytes });
-      const capture = {
-        caseId: declaration.caseId,
-        targetId: declaration.targetId,
-        capturePointId: declaration.capturePointId,
-        profileId,
-        inputFingerprint: sha256(
-          Buffer.from(`${runId}:${declaration.targetId}:${profileId}`),
-        ),
-        status: "captured",
-        provenance: {
-          verified: false,
-          appCommit,
-          referenceCommit,
-          capturedAt: createdAt,
-        },
-        site,
-      };
-      if (profileId === declaration.scoreProfile) {
-        const referenceBytes = await screenshot(
+    const requestedLocales = locales ?? ["en"];
+    for (const locale of requestedLocales) {
+      for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
+        const localeKey = locales ? `${locale}/` : "";
+        const siteBytes = await screenshot(
           browser,
           viewport,
-          `${runId} ${declaration.targetId} reference`,
-          "#f8f5ec",
+          locales
+            ? localeEvidenceText(locale, runId, declaration.targetId, "site")
+            : `${runId} ${declaration.targetId} site`,
+          index === 0 ? "#edf4ff" : "#f6f0ff",
+          locale,
         );
-        const reference = {
-          key: `ui-verification/${runId}/${declaration.caseId}/${declaration.targetId}/${declaration.capturePointId}/${profileId}/reference.png`,
-          sha256: sha256(referenceBytes),
+        const site = {
+          key: `ui-verification/${runId}/${declaration.caseId}/${declaration.targetId}/${declaration.capturePointId}/${localeKey}${profileId}/site.png`,
+          sha256: sha256(siteBytes),
           ...viewport,
         };
-        capture.reference = reference;
-        if (includeReferenceRegion) {
-          capture.siteRegion = {
-            x: 12,
-            y: 16,
-            width: Math.floor(viewport.width / 2),
-            height: Math.floor(viewport.height / 2),
+        objects.push({ key: site.key, bytes: siteBytes });
+        const capture = {
+          caseId: declaration.caseId,
+          targetId: declaration.targetId,
+          capturePointId: declaration.capturePointId,
+          profileId,
+          ...(locales ? { locale } : {}),
+          inputFingerprint: sha256(
+            Buffer.from(
+              `${runId}:${declaration.targetId}:${locale}:${profileId}`,
+            ),
+          ),
+          status: "captured",
+          provenance: {
+            verified: false,
+            appCommit,
+            referenceCommit,
+            capturedAt: createdAt,
+          },
+          site,
+        };
+        if (profileId === declaration.scoreProfile || referenceEveryProfile) {
+          const referenceBytes = await screenshot(
+            browser,
+            viewport,
+            locales
+              ? localeEvidenceText(
+                  locale,
+                  runId,
+                  declaration.targetId,
+                  "reference",
+                )
+              : `${runId} ${declaration.targetId} reference`,
+            "#f8f5ec",
+            locale,
+          );
+          const reference = {
+            key: `ui-verification/${runId}/${declaration.caseId}/${declaration.targetId}/${declaration.capturePointId}/${localeKey}${profileId}/reference.png`,
+            sha256: sha256(referenceBytes),
+            ...viewport,
           };
-          capture.referenceRegion = {
-            x: 120,
-            y: 80,
-            width: viewport.width - 240,
-            height: viewport.height - 160,
-          };
+          capture.reference = reference;
+          if (includeReferenceRegion) {
+            capture.siteRegion = {
+              x: 12,
+              y: 16,
+              width: Math.floor(viewport.width / 2),
+              height: Math.floor(viewport.height / 2),
+            };
+            capture.referenceRegion = {
+              x: 120,
+              y: 80,
+              width: viewport.width - 240,
+              height: viewport.height - 160,
+            };
+          }
+          objects.push({ key: reference.key, bytes: referenceBytes });
         }
-        objects.push({ key: reference.key, bytes: referenceBytes });
+        captures.push(capture);
       }
-      captures.push(capture);
     }
   }
 
@@ -227,6 +273,7 @@ async function publishRun(
     },
     catalogue,
     captures,
+    ...(locales ? { locales } : {}),
   };
   await archive.publish(manifest, objects);
   return manifest;
@@ -369,13 +416,19 @@ async function publishReferenceStoryRun(archive, browser) {
   );
 }
 
-async function publishAssessment(archive, manifest, declaration) {
+async function publishAssessment(
+  archive,
+  manifest,
+  declaration,
+  locale = "en",
+) {
   const capture = manifest.captures.find(
     (entry) =>
       entry.caseId === declaration.caseId &&
       entry.targetId === declaration.targetId &&
       entry.capturePointId === declaration.capturePointId &&
-      entry.profileId === declaration.scoreProfile,
+      entry.profileId === declaration.scoreProfile &&
+      (entry.locale ?? "en").toLowerCase() === locale.toLowerCase(),
   );
   assert(capture && capture.status === "captured" && capture.reference);
   const scorer = {
@@ -390,6 +443,7 @@ async function publishAssessment(archive, manifest, declaration) {
     targetId: capture.targetId,
     capturePointId: capture.capturePointId,
     profileId: capture.profileId,
+    locale,
     scorerId: scorer.id,
     scorerVersion: scorer.version,
     scorerModel: scorer.model,
@@ -406,12 +460,13 @@ async function publishAssessment(archive, manifest, declaration) {
     report: {
       schemaVersion: 1,
       ...expected,
+      locale,
       scorer,
       imageHashes: {
         site: capture.site.sha256,
         reference: capture.reference.sha256,
       },
-      similarity: 99,
+      similarity: locale === "zh-Hant" ? 98 : 99,
       dimensions: Object.fromEntries(
         ["layout", "typography", "color", "imagery", "content"].map((name) => [
           name,
@@ -421,7 +476,64 @@ async function publishAssessment(archive, manifest, declaration) {
       criticalMismatches: [],
     },
   });
-  await archive.createAssessment({ runId: manifest.runId, ...assessment });
+  return archive.createAssessment({ runId: manifest.runId, ...assessment });
+}
+
+async function publishReview(archive, manifest, declaration, locale, comment) {
+  return archive.createReview(
+    {
+      runId: manifest.runId,
+      caseId: declaration.caseId,
+      targetId: declaration.targetId,
+      capturePointId: declaration.capturePointId,
+      profileId: declaration.scoreProfile,
+      locale,
+      decision: "approved",
+      comment,
+    },
+    { subject: `${locale}-fixture-reviewer` },
+  );
+}
+
+async function publishCalibration(archive, runId, assessment, review, locale) {
+  const calibrationKey = {
+    scorerId: assessment.scorer.id,
+    scorerVersion: assessment.scorer.version,
+    scorerModel: assessment.scorer.model,
+    profileId: assessment.profileId,
+    contractHash: assessment.contractHash,
+    rubricVersion: assessment.rubricVersion,
+    labelPolicyVersion: "locale-review-v1",
+    locale,
+  };
+  const observation = {
+    sourceAssessmentId: assessment.assessmentId,
+    sourceRunId: runId,
+    reviewId: review.reviewId,
+    reviewerId: `${locale}-fixture-reviewer`,
+    locale,
+    siteSha256: assessment.imageHashes.site,
+    referenceSha256: assessment.imageHashes.reference,
+    split: "held-out",
+    independent: true,
+    humanApproved: true,
+    similarity: assessment.similarity,
+    criticalVeto: assessment.criticalVeto,
+    unknownCategory: assessment.unknownCategory,
+    provenanceVerified: assessment.provenanceVerified,
+    captureStatus: "captured",
+  };
+  return archive.createCalibration({
+    runId,
+    assessmentId: assessment.assessmentId,
+    locale,
+    calibration: {
+      schemaVersion: 1,
+      key: calibrationKey,
+      observations: [observation],
+    },
+    policy: { labelPolicyVersion: "locale-review-v1" },
+  });
 }
 
 function mimeType(pathname) {
@@ -451,6 +563,7 @@ async function startWorkbenchServer(root, archive) {
   const indexPath = join(realRoot, "index.html");
   await stat(indexPath);
   const apiRequests = [];
+  const reviewRequests = [];
   let archiveHandler;
   const server = createServer(async (request, response) => {
     try {
@@ -462,6 +575,13 @@ async function startWorkbenchServer(root, archive) {
         const chunks = [];
         for await (const chunk of request) chunks.push(Buffer.from(chunk));
         const body = Buffer.concat(chunks);
+        if (
+          request.method === "POST" &&
+          url.pathname === "/api/reviews" &&
+          body.length > 0
+        ) {
+          reviewRequests.push(JSON.parse(body.toString("utf8")));
+        }
         const headers = new Headers();
         for (const [name, value] of Object.entries(request.headers)) {
           if (Array.isArray(value)) {
@@ -531,6 +651,7 @@ async function startWorkbenchServer(root, archive) {
   return {
     origin,
     apiRequests,
+    reviewRequests,
     close: () =>
       new Promise((resolveClose, rejectClose) => {
         server.close((error) => (error ? rejectClose(error) : resolveClose()));
@@ -744,6 +865,535 @@ test("the central workbench uses its local archive and reviews versioned story h
   await page
     .getByText("The archived page target is approved.", { exact: true })
     .waitFor();
+  await page.close();
+});
+
+test("locale and viewport selection show the exact localized evidence and histories", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-locales-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  const manifest = await publishRun(archive, browser, {
+    runId: "locale-matrix-history-0001",
+    createdAt: "2026-10-10T10:01:00.000Z",
+    storyId: STORY_ID,
+    locales: GRADE10_LOCALES,
+    referenceEveryProfile: true,
+  });
+  assert.equal(manifest.captures.length, 18);
+  for (const declaration of DECLARATIONS) {
+    for (const locale of GRADE10_LOCALES) {
+      for (const profileId of Object.keys(PROFILE_SIZES)) {
+        const capture = manifest.captures.find(
+          (entry) =>
+            entry.caseId === declaration.caseId &&
+            entry.targetId === declaration.targetId &&
+            entry.capturePointId === declaration.capturePointId &&
+            entry.locale === locale &&
+            entry.profileId === profileId,
+        );
+        assert(
+          capture?.reference,
+          `${locale}/${profileId} needs paired images`,
+        );
+      }
+    }
+  }
+
+  const declaration = DECLARATIONS[0];
+  const englishAssessment = await publishAssessment(
+    archive,
+    manifest,
+    declaration,
+    "en",
+  );
+  const traditionalAssessment = await publishAssessment(
+    archive,
+    manifest,
+    declaration,
+    "zh-Hant",
+  );
+  const englishReview = await publishReview(
+    archive,
+    manifest,
+    declaration,
+    "en",
+    "English-only review history.",
+  );
+  const traditionalReview = await publishReview(
+    archive,
+    manifest,
+    declaration,
+    "zh-Hant",
+    "繁體中文審查紀錄。",
+  );
+  await publishCalibration(
+    archive,
+    manifest.runId,
+    englishAssessment,
+    englishReview,
+    "en",
+  );
+  await publishCalibration(
+    archive,
+    manifest.runId,
+    traditionalAssessment,
+    traditionalReview,
+    "zh-Hant",
+  );
+  assert.equal(
+    (await archive.listReviews({ runId: manifest.runId, locale: "en" }))
+      .reviews[0]?.comment,
+    "English-only review history.",
+  );
+  assert.equal(
+    (await archive.listReviews({ runId: manifest.runId, locale: "zh-Hant" }))
+      .reviews[0]?.comment,
+    "繁體中文審查紀錄。",
+  );
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: "Verification" }).click();
+  const targetSelect = page.getByRole("combobox", {
+    name: "Verification target",
+  });
+  await targetSelect.waitFor({ state: "visible" });
+  await targetSelect.selectOption(
+    `${declaration.caseId}::${declaration.targetId}::${declaration.capturePointId}`,
+  );
+  await page
+    .getByRole("combobox", { name: "Archived run" })
+    .selectOption(manifest.runId);
+  await page.getByRole("region", { name: "Run provenance" }).waitFor();
+
+  const localeTabs = page.getByRole("tablist", { name: "Capture locale" });
+  const localeTabCount = await localeTabs.getByRole("tab").count();
+  if (localeTabCount !== 3) {
+    t.diagnostic(
+      `Expected locale tabs for ${manifest.locales?.join(", ")}; visible panel text: ${(await page.locator("body").innerText()).slice(0, 3000)}`,
+    );
+  }
+  assert.equal(localeTabCount, 3);
+  assert.equal(
+    await page
+      .getByRole("tab", { name: "English (en)" })
+      .getAttribute("aria-selected"),
+    "true",
+  );
+  await waitForCondition(
+    () =>
+      server.apiRequests.some((entry) => {
+        if (!entry.startsWith("GET /api/reviews?")) return false;
+        const url = new URL(entry.slice("GET ".length), "http://localhost");
+        return (
+          url.searchParams.get("runId") === manifest.runId &&
+          url.searchParams.get("locale") === "en"
+        );
+      }),
+    "the English review-history query",
+  );
+  try {
+    await page
+      .getByText("English-only review history.", { exact: true })
+      .waitFor({ timeout: 15_000 });
+  } catch (error) {
+    const [englishReviews, traditionalReviews] = await Promise.all([
+      archive.listReviews({ runId: manifest.runId, locale: "en" }),
+      archive.listReviews({ runId: manifest.runId, locale: "zh-Hant" }),
+    ]);
+    console.error(
+      "Localized review history diagnostics:\n" +
+        JSON.stringify(
+          {
+            panelText: await page
+              .locator(".verification-panel")
+              .innerText()
+              .then((text) => text.slice(-3000))
+              .catch(() => "unavailable"),
+            reviewRequests: server.apiRequests.filter((entry) =>
+              entry.startsWith("GET /api/reviews?"),
+            ),
+            englishReviewComments: englishReviews.reviews.map(
+              (review) => review.comment,
+            ),
+            traditionalReviewComments: traditionalReviews.reviews.map(
+              (review) => review.comment,
+            ),
+          },
+          null,
+          2,
+        ),
+    );
+    throw error;
+  }
+  assert.equal(
+    await page.getByText("繁體中文審查紀錄。", { exact: true }).count(),
+    0,
+  );
+  await page.getByText(/Image similarity: 99/).waitFor();
+
+  const objectKeys = () =>
+    server.apiRequests
+      .filter((entry) => entry.startsWith("GET /api/objects?"))
+      .map((entry) =>
+        new URL(
+          entry.slice("GET ".length),
+          "http://localhost",
+        ).searchParams.get("key"),
+      );
+  for (const locale of GRADE10_LOCALES) {
+    const localeName = `${LOCALE_LABELS[locale]} (${locale})`;
+    const localeTab = page.getByRole("tab", { name: localeName });
+    await localeTab.click();
+    await waitForCondition(
+      async () => (await localeTab.getAttribute("aria-selected")) === "true",
+      `${localeName} locale selection`,
+    );
+    assert.equal(await localeTab.getAttribute("aria-selected"), "true");
+    await waitForCondition(
+      async () =>
+        (await page.getByText(`Selected locale: ${localeName}`).count()) === 1,
+      `${localeName} locale metadata`,
+    );
+    for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
+      await page
+        .getByRole("tab", {
+          name: {
+            desktop: "Desktop 1440x900",
+            tablet: "Tablet 768x1024",
+            mobile: "Mobile 390x844",
+          }[profileId],
+        })
+        .click();
+      const siteImage = page.getByRole("img", {
+        name: "Site full viewport",
+      });
+      const referenceImage = page.getByRole("img", {
+        name: "Reference capture region",
+      });
+      const expectedCapture = manifest.captures.find(
+        (capture) =>
+          capture.caseId === declaration.caseId &&
+          capture.targetId === declaration.targetId &&
+          capture.capturePointId === declaration.capturePointId &&
+          capture.locale === locale &&
+          capture.profileId === profileId,
+      );
+      assert(expectedCapture?.reference);
+      await page
+        .getByRole("link", {
+          name: `Download original Site PNG · SHA-256 ${expectedCapture.site.sha256}`,
+        })
+        .waitFor();
+      await page
+        .getByRole("link", {
+          name: `Download original Reference PNG · SHA-256 ${expectedCapture.reference.sha256}`,
+        })
+        .waitFor();
+      await siteImage.waitFor();
+      await referenceImage.waitFor();
+      assert.deepEqual(
+        await siteImage.evaluate((image) => [
+          image.naturalWidth,
+          image.naturalHeight,
+        ]),
+        [viewport.width, viewport.height],
+      );
+      assert.deepEqual(
+        await referenceImage.evaluate((image) => [
+          image.naturalWidth,
+          image.naturalHeight,
+        ]),
+        [viewport.width, viewport.height],
+      );
+      const expectedPrefix = `ui-verification/${manifest.runId}/${declaration.caseId}/${declaration.targetId}/${declaration.capturePointId}/${locale}/${profileId}/`;
+      await waitForCondition(() => {
+        const fetchedKeys = objectKeys();
+        return (
+          fetchedKeys.includes(`${expectedPrefix}site.png`) &&
+          fetchedKeys.includes(`${expectedPrefix}reference.png`)
+        );
+      }, `${locale}/${profileId} localized image requests`);
+      const fetchedKeys = objectKeys();
+      assert(fetchedKeys.includes(`${expectedPrefix}site.png`));
+      assert(fetchedKeys.includes(`${expectedPrefix}reference.png`));
+    }
+  }
+
+  const traditionalTab = page.getByRole("tab", {
+    name: "Traditional Chinese (zh-Hant)",
+  });
+  await traditionalTab.click();
+  await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
+  await page.getByText("Image similarity: 98").waitFor();
+  assert.equal(
+    await page.getByText("Image similarity: 98").count(),
+    1,
+    "the assessment must come from the selected locale",
+  );
+  await page.getByText("繁體中文審查紀錄。", { exact: true }).waitFor();
+  assert.equal(
+    await page
+      .getByText("English-only review history.", { exact: true })
+      .count(),
+    0,
+    "English review history must not appear for a Chinese capture",
+  );
+  await page.getByLabel("Review comment").fill("繁體中文審查已更新。 ");
+  await page.getByRole("button", { name: "Submit review" }).click();
+  await page.getByText("繁體中文審查已更新。", { exact: true }).waitFor();
+  assert(
+    server.reviewRequests.some(
+      (review) =>
+        review.runId === manifest.runId &&
+        review.locale === "zh-Hant" &&
+        review.comment === "繁體中文審查已更新。",
+    ),
+    "the review request must retain the selected locale",
+  );
+  assert(
+    server.apiRequests.some(
+      (entry) =>
+        entry.startsWith("GET /api/reviews?") &&
+        entry.includes("locale=zh-Hant"),
+    ),
+  );
+  assert(
+    server.apiRequests.some(
+      (entry) =>
+        entry.startsWith("GET /api/assessments?") &&
+        entry.includes("locale=zh-Hant"),
+    ),
+  );
+  assert(
+    server.apiRequests.some(
+      (entry) =>
+        entry.startsWith("GET /api/calibrations?") &&
+        entry.includes("locale=zh-Hant"),
+    ),
+  );
+  assert(
+    server.apiRequests.some(
+      (entry) =>
+        entry.startsWith("GET /api/runs?") && !entry.includes("locale="),
+    ),
+    "run discovery must include manifests with non-English-only matrices",
+  );
+
+  await page.getByRole("tab", { name: "English (en)" }).click();
+  await page
+    .getByText("English-only review history.", { exact: true })
+    .waitFor();
+  assert.equal(
+    await page.getByText("繁體中文審查紀錄。", { exact: true }).count(),
+    0,
+  );
+  await page.close();
+});
+
+test("new locale subsets stay exact while legacy English runs show missing evidence", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(
+    join(tmpdir(), "ui-verification-legacy-locales-"),
+  );
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  const legacy = await publishRun(archive, browser, {
+    runId: "legacy-english-history-0001",
+    createdAt: "2026-10-08T10:01:00.000Z",
+    storyId: STORY_ID,
+    appCommit: "e".repeat(40),
+    referenceCommit: "f".repeat(40),
+    referenceEveryProfile: false,
+  });
+  const requestedEnglish = await publishRun(archive, browser, {
+    runId: "requested-english-only-0001",
+    createdAt: "2026-10-09T10:01:00.000Z",
+    storyId: STORY_ID,
+    locales: ["en"],
+  });
+  assert.equal("locales" in legacy, false);
+  assert.equal(
+    legacy.captures.filter((capture) => !capture.reference).length,
+    4,
+    "legacy manifests may omit references for unscored viewport captures",
+  );
+  assert.deepEqual(requestedEnglish.locales, ["en"]);
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: "Verification" }).click();
+  await page
+    .getByRole("combobox", { name: "Verification target" })
+    .waitFor({ state: "visible" });
+  await page
+    .getByRole("combobox", { name: "Verification target" })
+    .selectOption(
+      `${DECLARATIONS[0].caseId}::${DECLARATIONS[0].targetId}::${DECLARATIONS[0].capturePointId}`,
+    );
+  await page
+    .getByRole("combobox", { name: "Archived run" })
+    .selectOption(requestedEnglish.runId);
+  await page.getByRole("region", { name: "Run provenance" }).waitFor();
+  await page
+    .getByRole("tab", { name: "English (en)" })
+    .waitFor({ state: "visible" });
+  assert.equal(
+    await page
+      .getByRole("tablist", { name: "Capture locale" })
+      .getByRole("tab")
+      .count(),
+    1,
+    "a declared English-only locale matrix must not show Chinese options",
+  );
+  assert.equal(
+    await page
+      .getByRole("tab", { name: "English (en)" })
+      .getAttribute("aria-selected"),
+    "true",
+  );
+  await page.getByRole("img", { name: "Site full viewport" }).waitFor();
+
+  await page
+    .getByRole("combobox", { name: "Selected version" })
+    .selectOption(JSON.stringify(["e".repeat(40), "f".repeat(40)]));
+  await page
+    .getByRole("combobox", { name: "Archived run" })
+    .selectOption(legacy.runId);
+  const traditionalTab = page.getByRole("tab", {
+    name: "Traditional Chinese (zh-Hant)",
+  });
+  await traditionalTab.waitFor({ state: "visible" });
+  assert.equal(
+    await page
+      .getByRole("tablist", { name: "Capture locale" })
+      .getByRole("tab")
+      .count(),
+    3,
+    "legacy English-only manifests must offer the Grade10 locale choices",
+  );
+  await traditionalTab.click();
+  await page
+    .getByText(
+      "No archived evidence for Traditional Chinese (zh-Hant) in this run. The panel does not substitute another locale.",
+      { exact: true },
+    )
+    .waitFor();
+  assert.equal(
+    await page.getByRole("img", { name: "Site full viewport" }).count(),
+    0,
+    "the panel must not reuse the English image for a missing locale",
+  );
+  await page.getByRole("tab", { name: "English (en)" }).click();
+  await page.getByRole("img", { name: "Site full viewport" }).waitFor();
+  assert(
+    server.apiRequests.some(
+      (entry) =>
+        entry.startsWith("GET /api/runs?") && !entry.includes("locale="),
+    ),
+  );
+  await page.close();
+});
+
+test("run discovery includes a manifest whose only locale is Traditional Chinese", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(
+    join(tmpdir(), "ui-verification-chinese-only-"),
+  );
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  const manifest = await publishRun(archive, browser, {
+    runId: "traditional-chinese-only-0001",
+    createdAt: "2026-10-10T10:01:00.000Z",
+    storyId: STORY_ID,
+    locales: ["zh-Hant"],
+    referenceEveryProfile: true,
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: "Verification" }).click();
+  await page
+    .getByRole("combobox", { name: "Verification target" })
+    .waitFor({ state: "visible" });
+  await page
+    .getByRole("combobox", { name: "Verification target" })
+    .selectOption(
+      `${DECLARATIONS[0].caseId}::${DECLARATIONS[0].targetId}::${DECLARATIONS[0].capturePointId}`,
+    );
+  const runSelect = page.getByRole("combobox", { name: "Archived run" });
+  await runSelect.waitFor({ state: "visible" });
+  await page.getByRole("region", { name: "Run provenance" }).waitFor();
+  assert.equal(await runSelect.inputValue(), manifest.runId);
+  assert.equal(
+    await runSelect.locator(`option[value="${manifest.runId}"]`).count(),
+    1,
+  );
+  assert.equal(
+    await page
+      .getByRole("tablist", { name: "Capture locale" })
+      .getByRole("tab")
+      .count(),
+    1,
+  );
+  const traditionalTab = page.getByRole("tab", {
+    name: "Traditional Chinese (zh-Hant)",
+  });
+  await waitForCondition(
+    async () => (await traditionalTab.getAttribute("aria-selected")) === "true",
+    "the only requested Chinese locale selection",
+  );
+  assert.equal(await traditionalTab.getAttribute("aria-selected"), "true");
+  assert.equal(
+    await page
+      .getByText("Selected locale: Traditional Chinese (zh-Hant)")
+      .count(),
+    1,
+  );
+  await page.getByRole("img", { name: "Site full viewport" }).waitFor();
+  assert(
+    server.apiRequests.some(
+      (entry) =>
+        entry.startsWith("GET /api/runs?") && !entry.includes("locale="),
+    ),
+  );
   await page.close();
 });
 
