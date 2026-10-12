@@ -19,7 +19,8 @@ internal bid under `grade10-admin/auction/internal-bid`. Grade10 SHALL NOT
 configure, store, return, or evaluate a reserve amount, reserve state, or
 reserve-based no-sale outcome. An internal bid is a house maximum, not a
 reserve: no public fact names it, and a lot the house wins closes as
-"A lot the house leads at its close is bought in" sets out.
+"A lot the house leads at its close is sold to its internal bidder" sets
+out.
 
 All money facts SHALL be an integer count of minor units paired with an ISO
 4217 currency code. A listing's applicable fee, currency, region, and deadline
@@ -55,15 +56,16 @@ the listing becomes available for bidding.
 
 ## ADDED Requirements
 
-### Requirement: A lot the house leads at its close is bought in
+### Requirement: A lot the house leads at its close is sold to its internal bidder
 
 When a listing's leading bid at its effective close is the house's, Grade10
-SHALL close it **bought in**:
+SHALL close it sold, and the winner SHALL be the internal bidder of
+`grade10-admin/auction/internal-bid` that the listing's internal bid names:
 
 | Reader | What the close reads as |
 | --- | --- |
 | A collector, and every public listing fact | Ended, sold at the current bid to the house's listing pseudonym, as any sold lot reads |
-| Grade10's records | No winner order, no invoice and no charge to anyone; the stock is released per `grade10-admin/auction/listing` |
+| Grade10's records | The lot's one winner order, opened for the internal bidder and flagged internal, per `grade10-site/auction/winner-order`; no invoice at the close and no charge to any card |
 
 Everything else about the close SHALL be as "A due lot is settled at its
 close" sets out: the same deadline, the same settlers, and settling twice
@@ -80,25 +82,7 @@ changing nothing. The letters the close owes are
 - **THEN** it reads Ended, sold at 31000 HKD minor units
 - **AND** the public history marks Bidder 2's bid at 31000 as the winning bid
 
-<!-- trace:scenario id=g10.auction-auction.SC-6am rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-104 - A lot the house wins creates no order
-**Serves:** `Closing a lot the house leads` - the settle finds the house on top
-
-- **GIVEN** the listing of `grade10-site-auction-auction-SC-103`
-- **WHEN** it closes
-- **THEN** Grade10 creates no winner order and no invoice for it
-- **AND** nothing is charged to any bidder's card
-
-<!-- trace:scenario id=g10.auction-auction.SC-wqr rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-105 - Settling a house win twice still creates no order
-**Serves:** `Closing a lot the house leads` - the timer and a read reach the close together
-
-- **GIVEN** an `HKD` listing past its effective close with the house leading
-- **WHEN** its timer and a read settle it at the same moment
-- **THEN** it is closed once, sold at its current bid to the house's
-  pseudonym, with no winner order
-
-<!-- trace:scenario id=g10.auction-auction.SC-cqt rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-cqt rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-106 - A lot only the house bid on closes sold at the opening price
 **Serves:** grade10-site-auction-auction-US-01 - a collector reads a lot only the house bid on as any lone-bid close
 
@@ -108,4 +92,26 @@ changing nothing. The letters the close owes are
 - **WHEN** the scheduled close arrives and extended bidding ends with no other
   bid
 - **THEN** a collector reads it Ended, sold at 20000 HKD minor units
-- **AND** Grade10 closes it bought in, with no winner order
+- **AND** Grade10 opens the internal bidder's order at a winning bid of 20000
+  HKD minor units
+
+<!-- trace:scenario id=g10.auction-auction.SC-14a rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-107 - A lot the house wins opens its internal bidder's order
+**Serves:** `Closing a lot the house leads` - the settle finds the house on top
+
+- **GIVEN** the listing of `grade10-site-auction-auction-SC-103`, whose
+  internal bid names Harbour Cards
+- **WHEN** it closes
+- **THEN** Grade10 opens one winner order for Harbour Cards, flagged
+  internal, at a winning bid of 31000 HKD minor units, with no invoice
+- **AND** nothing is charged to any bidder's card
+
+<!-- trace:scenario id=g10.auction-auction.SC-msc rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-108 - Settling a house win twice opens one order
+**Serves:** `Closing a lot the house leads` - the timer and a read reach the close together
+
+- **GIVEN** an `HKD` listing past its effective close with the house leading
+- **WHEN** its timer and a read settle it at the same moment
+- **THEN** it is closed once, sold at its current bid to the house's
+  pseudonym
+- **AND** Grade10 holds one winner order for its internal bidder

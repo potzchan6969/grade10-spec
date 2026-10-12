@@ -744,61 +744,160 @@ bid", with that bid.
 - **AND** the internal bid reads Placed at 80000 HKD minor units as Harbour
   Cards
 
-### Requirement: An admin reads a lot the house bought in
+### Requirement: An internal bidder wins a lot the house leads at its close
 
-When a listing closes with the house leading, the admin SHALL see it Bought
-in, per `grade10-admin/auction/listing`, with the internal bid Placed at its
-last amount. The listing SHALL have no order to open, its stock SHALL be
-released as at an Unsold close, and it SHALL offer Relist, per
-`grade10-admin/auction/listing`. The close itself is
-`grade10-site/auction/auction`'s.
+When a listing closes with the house leading, per
+`grade10-site/auction/auction`, the internal bidder its internal bid names
+SHALL be the lot's winner for `grade10-site/auction/winner-order`,
+`grade10-site/auction/notifications-order` and
+`grade10-admin/auction/post-sale`, with the differences below. Collectors
+still read the lot sold to the house's listing pseudonym.
 
-The house SHALL never be a lot's winner for the rules of
-`grade10-site/auction/winner-order`, `grade10-site/auction/notifications-order`
-and `grade10-admin/auction/post-sale`, though collectors read it as the
-winning bidder. For a bought-in lot Grade10 SHALL:
+At the close Grade10 SHALL open the lot's one auction order for that internal
+bidder, per `grade10-site/auction/winner-order`, flagged **internal**:
 
-| Capability | What a bought-in lot gets |
+| Order fact | For an internal bidder's order |
 | --- | --- |
-| `grade10-site/auction/winner-order` | No auction order and no invoice |
-| `grade10-site/auction/notifications-order` | No won, address or other order letter, to anyone |
-| `grade10-admin/auction/post-sale` | No row or outcome in the post-sale queue, and no Open order on its Listings row |
+| Delivery address and billing address | The internal bidder's billing address as it stands at the close, kept as the order's snapshot; a later change to the profile does not rewrite the order |
+| Setup | Confirmed at the close: the order reads Preparing Invoice, never Awaiting Setup or Setup Overdue |
+| Payment method | Bank transfer |
+| Invoice | None at the close; an operator sends it, as for any order |
+| Internal flag | Set at the close; it never changes |
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-hat rev=1 -->
-#### Scenario: grade10-admin-auction-internal-bid-SC-17 - A house win reads Bought in with no order
-**Serves:** grade10-admin-auction-internal-bid-US-06 - the admin tells a bought-in lot from a sale
+An operator SHALL then run the order by hand, through the flows of
+`grade10-admin/auction/post-sale`, as for any unpaid order:
+
+1. Quote and send the invoice. Its payment deadline is 7 calendar days from
+   the send.
+2. Let the deadline pass. The invoice expires, per
+   `grade10-site/auction/winner-order`.
+3. Cancel the order with a category and a note. The lot returns to stock.
+
+Grade10 SHALL take none of these steps on its own. For an internal bidder's
+order Grade10 SHALL also:
+
+| Capability | What differs |
+| --- | --- |
+| `grade10-site/auction/notifications-order` | No letter of any kind - won, setup, invoice-sent, reminder, overdue, expiry, reissue, payment, shipping or cancelled - to the internal bidder or to anyone |
+| `grade10-site/auction/bidder-suspension` | No suspension when its invoice expires: an internal bidder has no site account |
+| `grade10-admin/auction/post-sale` | The cancel confirmation says no letter is sent, in place of the winner being emailed |
+
+Every other fact of the order - its status, segment, addresses, invoice, logs
+and timeline - SHALL read as for any order. What each operator reads of the
+buyer and the listing:
+
+| Operator | Orders worklist and the order's page | The listing's Listings row and own page |
+| --- | --- | --- |
+| Holds `auction:reserve` | Flagged internal; the buyer reads House, with the internal bidder's name and email label | Flagged as won by its internal bidder, naming it; the internal bid reads Placed at its last amount |
+| Does not | Flagged internal; the buyer reads House, with no name, email or email label | As any won lot, with Open order |
+
+A search of Orders by an email SHALL NOT match an internal bidder's email
+label, for any operator.
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-nl0 rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-71 - A lot an internal bidder wins opens its internal order
+**Serves:** grade10-admin-auction-internal-bid-US-06 - the house's win opens an order the admin can run
 
 - **GIVEN** an `HKD` listing where the house leads at 31000 HKD minor units
-  with a Placed internal bid of 50000
-- **WHEN** the listing closes and an admin opens it
-- **THEN** it reads Bought in, with the internal bid Placed at 50000 HKD minor
-  units
-- **AND** no order exists for it, and its stock is released
+  with a Placed internal bid of 50000 as Harbour Cards, whose billing address
+  is in Hong Kong
+- **WHEN** the listing closes
+- **THEN** Grade10 opens one auction order for Harbour Cards, flagged
+  internal, at a winning bid of 31000 HKD minor units
+- **AND** the order holds Harbour Cards's billing address as its delivery and
+  billing address, with bank transfer, and reads Preparing Invoice
+- **AND** no invoice is issued and no letter is sent
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-80a rev=1 -->
-#### Scenario: grade10-admin-auction-internal-bid-SC-49 - A bought-in lot reaches no order, order letter or post-sale queue
-**Serves:** grade10-admin-auction-internal-bid-US-06 - the admin finds no order work for a lot the house won
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-l6i rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-72 - A later change to the internal bidder's address leaves its order as it was
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin changes an internal bidder's address after it has won
 
-- **GIVEN** an `HKD` listing that closed with the house leading at 31000 HKD
-  minor units, and a second listing that closed with collector A winning
-- **WHEN** an admin holding `auction:reserve` opens the post-sale queue and
-  the Listings table
-- **THEN** the post-sale queue holds the collector's lot and no row for the
-  house's lot
-- **AND** the house's Listings row offers no Open order
-- **AND** Grade10 sent no won or address letter for the house's lot
+- **GIVEN** the order of `grade10-admin-auction-internal-bid-SC-71`
+- **WHEN** the admin changes Harbour Cards's billing address
+- **THEN** Grade10 accepts it and Internal bidders shows the new address
+- **AND** the order still holds the billing address Harbour Cards had at the
+  close
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6fc rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-73 - An operator sends the internal order's invoice and nobody is mailed
+**Serves:** grade10-admin-auction-internal-bid-US-06 - the admin sends the invoice of the house's win
+
+- **GIVEN** the order of `grade10-admin-auction-internal-bid-SC-71`, and an
+  operator holding payment-processing
+- **WHEN** they enter Shipping & Handling of 0 and a bank transfer fee of 0
+  HKD minor units and send the invoice at 2026-11-03T09:00:00Z
+- **THEN** the invoice is `pending` with a payment deadline of
+  2026-11-10T09:00:00Z, and the order reads Pending Payment
+- **AND** no invoice-sent letter is sent
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-77a rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-74 - The internal order's invoice expires with no letter and no suspension
+**Serves:** grade10-admin-auction-internal-bid-US-06 - the admin lets the invoice of the house's win expire
+
+- **GIVEN** the invoice of `grade10-admin-auction-internal-bid-SC-73`, unpaid
+- **WHEN** 2026-11-10T09:00:00Z passes
+- **THEN** the invoice is `expired` and the order reads Payment Overdue
+- **AND** no reminder, overdue or expiry letter was sent for the order
+- **AND** no account is suspended
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-jzh rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-75 - An operator cancels the expired internal order and the lot returns to stock
+**Serves:** grade10-admin-auction-internal-bid-US-06 - the admin closes the house's win as any unpaid order
+
+- **GIVEN** the order of `grade10-admin-auction-internal-bid-SC-74`
+- **WHEN** an operator opens Cancel
+- **THEN** the confirmation says no letter is sent
+- **AND** once they cancel with a category and a note, the order reads
+  Cancelled, the lot's inventory status is available, and no cancelled letter
+  is sent
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-rrc rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-76 - Staff read an internal order's buyer as House
+**Serves:** grade10-admin-auction-internal-bid-US-07 - an operator without secret-floor access works the house's order
+
+- **GIVEN** the order of `grade10-admin-auction-internal-bid-SC-71`
+- **WHEN** an operator whose roles are exactly `staff`, and an admin holding
+  `auction:reserve`, each read it in the Orders worklist and on its page
+- **THEN** both see it flagged internal, with its buyer read as House
+- **AND** the admin also reads Harbour Cards and
+  harbour@internal.grade10.example
+- **AND** the staff operator reads no name, email or email label for the
+  buyer
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-u1p rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-77 - Only a reserve holder sees the listing flagged as the internal bidder's win
+**Serves:** grade10-admin-auction-internal-bid-US-07 - operators read a closed lot the house won
+
+- **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-71` after
+  its close, and a second listing collector A won
+- **WHEN** an admin holding `auction:reserve`, and an operator whose roles are
+  exactly `staff`, each read both on the Listings table and on their own pages
+- **THEN** the admin sees the first flagged as won by Harbour Cards, and the
+  second not flagged
+- **AND** the staff operator sees both as won lots, each offering Open order,
+  and no flag on either
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-on5 rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-78 - An internal bidder's email label matches no Orders search
+**Serves:** grade10-admin-auction-internal-bid-US-07 - an operator looks for the house's order by its email label
+
+- **GIVEN** the order of `grade10-admin-auction-internal-bid-SC-71`
+- **WHEN** an admin holding `auction:reserve`, and an operator whose roles
+  are exactly `staff`, each search Orders by harbour@internal.grade10.example
+- **THEN** the search finds no order for either
 
 ### Requirement: An admin keeps internal bidder profiles
 
-An **internal bidder** is a profile an internal bid bids as. It has a name
-and an email label, and no site account behind it. An admin holding
-`auction:reserve` SHALL:
+An **internal bidder** is a profile an internal bid bids as. It has a name,
+an email label and a billing address, and no site account behind it. An
+admin holding `auction:reserve` SHALL:
 
 1. Open Internal bidders in auction admin and read every profile with its
-   name, its email label and its state.
-2. Add a profile with a name and an email label. It is Active.
-3. Rename a profile at any time, or change its email label until a bid has
-   been placed for it on any listing.
+   name, its email label, its billing address and its state.
+2. Add a profile with a name, an email label and a billing address. It is
+   Active.
+3. Rename a profile or change its billing address at any time, or change its
+   email label until a bid has been placed for it on any listing.
 4. Retire a profile that no Scheduled internal bid names, and no Not placed
    internal bid on a listing that has not passed its effective close.
 
@@ -806,6 +905,7 @@ and an email label, and no site account behind it. An admin holding
 | --- | --- |
 | Name | Required; may change at any time |
 | Email label | Required; an email address, unique among every profile, Retired ones included, compared without regard to letter case; fixed once a bid has been placed for the profile on any listing |
+| Billing address | Required; the fields and field rules of a billing address in `grade10-site/auction/winner-order`; may change at any time. It becomes the address of an order the internal bidder wins, under "An internal bidder wins a lot the house leads at its close"; a later change does not rewrite that order |
 
 | State | Offered at Save | Can be named by a new or changed internal bid | History |
 | --- | --- | --- | --- |
@@ -817,7 +917,8 @@ and SHALL change nothing:
 
 | Refused when | Refusal |
 | --- | --- |
-| The name or the email label is missing | Required |
+| The name, the email label or the billing address is missing | Required |
+| A billing address field breaks its rule | Naming the field |
 | The email label is not an email address | Not an email address |
 | Another profile has the email label | Email label in use |
 | The email label is changed after a bid has been placed for the profile | Email label is fixed |
@@ -833,15 +934,15 @@ create no site account, and no site bid panel SHALL accept a bid for it. Its
 email label is a label only: Grade10 SHALL address no letter to an internal
 bidder, per `grade10-site/auction/notifications`.
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-piq rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-piq rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-60 - An admin adds an internal bidder
 **Serves:** grade10-admin-auction-internal-bid-US-09 - the admin adds an internal bidder to bid as
 
 - **GIVEN** an admin holding `auction:reserve`
 - **WHEN** they add an internal bidder named Harbour Cards with the email
-  label harbour@internal.grade10.example
+  label harbour@internal.grade10.example and a billing address in Hong Kong
 - **THEN** Grade10 accepts it and Internal bidders lists Harbour Cards as
-  Active, with that email label
+  Active, with that email label and billing address
 - **AND** Harbour Cards is offered as the internal bidder when the admin sets
   an internal bid on a listing
 - **AND** no site account exists for harbour@internal.grade10.example
@@ -900,8 +1001,7 @@ bidder, per `grade10-site/auction/notifications`.
 **Serves:** grade10-admin-auction-internal-bid-US-09 - the admin retires an internal bidder whose lots have closed
 
 - **GIVEN** an internal bidder named Harbour Cards whose only internal bid is
-  on a listing that closed bought in, the house leading at 31000 HKD minor
-  units
+  on a listing that closed with the house leading at 31000 HKD minor units
 - **WHEN** the admin retires Harbour Cards
 - **THEN** Grade10 accepts it and Internal bidders lists Harbour Cards as
   Retired
@@ -923,6 +1023,16 @@ bidder, per `grade10-site/auction/notifications`.
 - **AND** an admin holding `auction:reserve` still reads L3's internal bid as
   Not placed at 50000 HKD minor units, as Kowloon Vault
 
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-tj3 rev=1 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-79 - An internal bidder with no billing address is refused
+**Serves:** grade10-admin-auction-internal-bid-US-09 - the admin adds an internal bidder without an address
+
+- **GIVEN** an admin holding `auction:reserve`
+- **WHEN** they add an internal bidder named Kowloon Vault with the email
+  label kowloon@internal.grade10.example and no billing address
+- **THEN** Grade10 refuses it, asking for the billing address
+- **AND** Internal bidders lists no Kowloon Vault
+
 ### Requirement: Only secret-floor access reaches an internal bid
 
 Only an operator holding `auction:reserve` SHALL set, change, remove or read
@@ -931,10 +1041,11 @@ Only such an operator SHALL open, add, rename, change or retire an internal
 bidder profile. For any other operator:
 
 - Auction admin SHALL show no Internal bidders page, and the listing editor
-  SHALL show no internal bid section. Until the listing
-  closes it SHALL show nothing that says the listing has, had or may have
-  one; once a lot closes bought in, it reads Bought in, per
-  `grade10-admin/auction/listing`, and still shows no amount, time or state.
+  SHALL show no internal bid section. It SHALL show nothing that says the
+  listing has, had or may have one. Once a lot closes with the house leading,
+  its order reads House, flagged internal, under "An internal bidder wins a
+  lot the house leads at its close", and still shows no amount, time or
+  state.
 - Grade10 SHALL refuse a set, change, remove or read of an internal bid, and
   any read or act on an internal bidder profile, and change nothing.
 - No operator read SHALL show that a listing has an internal bid before a bid
@@ -945,9 +1056,10 @@ bidder profile. For any other operator:
 The audit trail SHALL record each set, change and removal with the operator,
 the listing and the time it was made, and SHALL NOT record the internal bid's
 amount, its internal bidder or its time. It SHALL record each add, rename,
-email label change and retirement of an internal bidder profile with the
-operator, the profile and the time it was made, and SHALL NOT record a
-listing or an internal bid amount with it. An operator holding audit access without
+email label change, billing address change and retirement of an internal
+bidder profile with the operator, the profile and the time it was made, and
+SHALL NOT record a listing, an internal bid amount or the billing address
+with it. An operator holding audit access without
 `auction:reserve` MAY learn from it that a listing's internal bid was set,
 changed or removed, never its amount or its time. `auction:reserve` SHALL read, in the roles list, as the
 grant that sets and reads a listing's internal bid and keeps the internal
@@ -1021,7 +1133,8 @@ without `auction:reserve`:
 | Bid ledger and listing activity | Each bid placed for the house that the public history records, as House, with its amount, its Accepted At and that Grade10 placed it; no account, email, name or maximum, and no row for a raise or a lower that records no public bid |
 | Bidder summaries | House and its bid count; no account, email, name or maximum |
 | Stats | The house counted in the bidder count, and its bids in the bid count |
-| Listings table and the listing's own page | The listing as any listing with its bids until the close, then Bought in, per `grade10-admin/auction/listing` |
+| Listings table and the listing's own page | The listing as any listing with its bids; after a close with the house leading, as any won lot, with Open order |
+| Orders worklist and the order's page | The buyer of an internal bidder's order as House, under "An internal bidder wins a lot the house leads at its close" |
 
 No read open to them SHALL show the house's maximum, any commitment, raise or
 lower of it, or the internal bid's time before the house bids. A house bid's

@@ -6,8 +6,9 @@
   start
 - An admin can change the internal bid as the sale runs, without moving a
   price or a lead that collectors have already seen
-- Operators can tell a lot the house bought in from a sale and from a lot
-  nobody bid on
+- A lot an internal bidder wins is settled through the normal order flow,
+  and operators can tell its order is internal
+- An admin chooses which internal bidder an internal bid bids as
 
 ## Non-Goals
 
@@ -15,10 +16,11 @@
 - A collector-facing reserve price, or a "reserve met" signal
 - More than one internal bid on a listing
 - Lowering or withdrawing a collector's maximum
-- An order, invoice or settlement for a lot the house wins
+- Taking payment or moving money for a lot an internal bidder wins
+- Running the internal bidder's invoice, expiry or cancel automatically
 - Carrying an internal bid to a relisted lot
 - An internal bid on a campaign, or set once for many listings
-- Reporting beyond the Bought in label and the existing Stats dialog
+- Reporting beyond the internal flag and the existing Stats dialog
 
 ## Decisions
 
@@ -36,7 +38,7 @@
 | Q14 | Which bidder checks apply to the house? | Ceiling and minimum next bid only; no card, enrollment, verified-identity or suspension check. Agent default, not asked; open to override | Holding the house to collector checks it cannot meet, such as a linked card |
 | Q15 | What happens to an internal bid on Relist or call-off? | Relist starts without one; call-off drops it with the listing. Agent default, following the existing rule that a relisted draft starts its reserve as a new draft does | Carrying it to the relisted draft, which commits a floor the admin did not choose again |
 | Q16 | Do collectors outbid by the house get the ordinary letters? | Yes, the same outbid, new-bid and lost letters, following Q1. Agent default, not asked | Holding letters back for house bids, which reveals the house through a missing letter |
-| Q9 | What do operators without `auction:reserve` see? | The house's bids labelled House in operator reads (revised by Q25), and Bought in after the close so they can Relist; never the amount, the time, or that a lot has an internal bid before the house bids. Collectors still see only the listing pseudonym (Q1). Revises Q6's "never learns a lot has one" | Hiding a bought-in lot as Unsold from staff, which miscounts sales for them; and showing staff which lots are protected before the house bids, which drops most of the secrecy |
+| Q9 | What do operators without `auction:reserve` see? | The house's bids and the internal bidder's orders labelled House in operator reads (revised by Q25 and Q49); never the amount, the time, or that a lot has an internal bid before the house bids. Collectors still see only the listing pseudonym (Q1). Revises Q6's "never learns a lot has one"; the Bought in read is dropped with Q5 | Hiding a bought-in lot as Unsold from staff, which miscounts sales for them; and showing staff which lots are protected before the house bids, which drops most of the secrecy |
 | Q10 | On which listing statuses can an internal bid be set? | Created and Published. A window change on a Created listing that leaves the commit time outside the window clears the internal bid, and a reserve holder sees that it was cleared | Published only, the interview's recommendation, which keeps the window fixed but stops the admin preparing a bid before publishing; and refusing the window change, which tells staff the lot is protected |
 | Q11 | What is checked at Save, and what at the commit time? | Refused at Save: above the currency ceiling, below the starting price, a commit time already past. The minimum next bid is judged at the commit time. A raise still short of the minimum next bid is refused. A Not placed internal bid can be lowered or removed (recommended) | Judging everything at the commit time, which leaves more internal bids Not placed for reasons known at Save |
 | Q12 | Optional: a Bought in filter on the Listings table? | No Bought in filter: Bought in is dropped (Q5) | A Bought in filter beside Unsold and Won, dropped with Bought in |
@@ -75,6 +77,13 @@
 | Q49 | How do operators read that order and invoice? | In Orders like any order, flagged internal; a staff operator reads the buyer as House, a reserve holder also reads the internal bidder (recommended) | Leaving those orders out of every view staff can open |
 | Q50 | Where does that order's address come from? | The internal bidder's billing address fills the order's address at the close, so the order does not wait on a winner's setup. Agent default, open to override | Leaving the order in Awaiting Setup, which no one can confirm |
 | Q51 | Are any order letters sent for that order? | No: no won, address, invoice, reminder or expiry letter goes to an internal bidder. Agent default, following Q38 and Q16, open to override | Sending them to the email label, which reaches no real buyer |
+| Q52 | Which payment method does an internal bidder's order carry? | Bank transfer; the operator enters the fee at send and may enter 0. Agent default, open to override | Card, which a currency with no card rule refuses at send; and no method, which needs a post-sale change |
+| Q53 | What does an internal bidder's order read at the close? | Preparing Invoice: setup counts as confirmed at the close, and both its delivery and billing address are the profile's billing address as it stands then. Agent default, open to override | Awaiting Setup, which no one can confirm |
+| Q54 | What does that order's expiry and cancel do? | Expiry suspends no account; the cancel confirmation says no letter is sent; the cancel returns the stock as any cancel does. Agent default, open to override | Suspending the winner at expiry, which has no account to act on |
+| Q55 | Do staff read that order's addresses? | Yes, as the order holds them; the buyer reads House. Agent default, open to override | Hiding them, which needs post-sale changes |
+| Q56 | Does an Orders search match an internal bidder's email label? | Never, for any operator, as in Q44. Agent default, open to override | Matching it for reserve holders |
+| Q57 | Profile billing address | Required when a profile is added and editable any time; a change is audited without the address and never rewrites an order already opened. Agent default, open to override | Rewriting open orders when the profile changes |
+| Q58 | Where the internal-bidder-win flag shows, and relisting after the cancel | On the listing's page and its Listings row, for reserve holders only; after the cancel the lot returns as the durable cancel rules return any lot. Agent default, open to override | Showing the flag to every operator; and a Relist rule of its own |
 
 ## Raised
 
@@ -114,3 +123,12 @@
 | grade10-admin/auction/internal-bid | Does the listing-edit cleared notice name the cleared profile? | Q39 |
 | grade10-site/auction/auto-bidding | Does the reserve holder's committed-maximum trace name the profile? | Q39 |
 | grade10-admin/auction/internal-bid | Can a collector register a site account whose email is a profile's label? | Q42 |
+| grade10-admin/auction/internal-bid | What status does an internal bidder's order read at the close, and does the billing address also fill the delivery address? | Q53 |
+| grade10-admin/auction/internal-bid | Which payment method does an internal bidder's order carry? | Q52 |
+| grade10-admin/auction/internal-bid | Is "flagged internal" the existing Orders flag or a separate label? | Q49 |
+| grade10-admin/auction/internal-bid | Does the expiry suspend anything, and what does the cancel dialog say? | Q54 |
+| grade10-admin/auction/internal-bid | Does an Orders search by email match an internal bidder's label? | Q56 |
+| grade10-admin/auction/internal-bid | Does a staff operator read the internal order's address? | Q55 |
+| grade10-admin/auction/internal-bid | Is a profile's billing address required, editable, audited, and does a change rewrite an open order? | Q57 |
+| grade10-admin/auction/internal-bid | Where does the internal-bidder-win flag show? | Q58 |
+| grade10-admin/auction/internal-bid | Can the lot of a cancelled internal order be relisted? | Q58 |

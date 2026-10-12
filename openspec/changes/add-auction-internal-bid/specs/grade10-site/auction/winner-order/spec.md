@@ -7,31 +7,9 @@
 
 ## MODIFIED Requirements
 
-### Requirement: One invoice and one auction order per lot
-
-Grade10 SHALL issue exactly one invoice and create exactly one auction order
-per lot that closes with a winner other than the house, and SHALL NOT
-combine lots won by the same winner into one invoice, one deadline, or one
-shipment. Each order SHALL carry its own delivery address, its own quote, its
-own payment deadline, and its own fulfilment lifecycle. For a lot the house
-leads at its close, under `grade10-site/auction/auction`, Grade10 SHALL issue
-no invoice and create no auction order.
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-a2i rev=1 -->
-#### Scenario: winner-order-SC-06 - Two lots won together stay two orders
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** one winner who wins two lots in the same auction, closing at
-  different times
-- **WHEN** both lots close and an operator sends each invoice
-- **THEN** Grade10 has created two auction orders and sent two invoices
-- **AND** each carries its own payment deadline measured from its own
-  invoice's send
-- **AND** each is charged its own shipping
-
 ### Requirement: A lot close opens an order that waits for the winner's address
 
-At lot close Grade10 SHALL, for a winner other than the house:
+At lot close Grade10 SHALL, for the winner:
 
 1. Create one auction order for the lot, with invoice status `not_issued` and
    fulfilment status `unfulfilled`, per `grade10-site/auction/order-status`.
@@ -46,10 +24,18 @@ an operator to quote, per `grade10-admin/auction/post-sale`. From then on the
 winner SHALL NOT change the address, per "The delivery address locks when the
 invoice is sent".
 
-The house is never a lot's winner here. When a lot's leading bid at its
-close is the house's, under `grade10-site/auction/auction`, Grade10 SHALL
-create no auction order for it and SHALL send no won or address letter for
-it, to the house or to anyone else.
+When a lot's leading bid at its close is the house's, under
+`grade10-site/auction/auction`, the winner is the internal bidder of
+`grade10-admin/auction/internal-bid` that the lot's internal bid names.
+Grade10 SHALL create its one auction order in step 1, flagged internal, and
+SHALL, in place of step 2 and the winner's setup:
+
+- Take the internal bidder's billing address as it stands at the close as
+  the order's delivery address and billing address, and bank transfer as its
+  payment method, all confirmed at the close, so the order is ready for an
+  operator to quote and never waits on an address deadline.
+- Send no letter of `grade10-site/auction/notifications-order` for the order,
+  at the close or after it, to the internal bidder or to anyone.
 
 Order creation and the winner notice SHALL be idempotent. A lot
 close delivered more than once SHALL produce one auction order.
@@ -83,12 +69,16 @@ close delivered more than once SHALL produce one auction order.
 - **THEN** the order's derived status is Preparing Invoice
 - **AND** the winner is offered no way to pay yet
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=1 -->
-#### Scenario: winner-order-SC-277 - A lot the house wins opens no order
-**Serves:** A lot the house won - the close finds the house on top and opens nothing
+<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=2 -->
+#### Scenario: winner-order-SC-277 - A lot an internal bidder wins opens its order with the internal bidder's address
+**Serves:** A lot an internal bidder won - the close finds the house on top and opens the internal bidder's order
 
 - **GIVEN** an `HKD` lot where the house leads at 31000 HKD minor units over
-  collector A
+  collector A, its internal bid naming an internal bidder whose billing
+  address is in Hong Kong
 - **WHEN** the lot closes
-- **THEN** Grade10 creates no auction order and issues no invoice for it
-- **AND** sends no won or address letter for it
+- **THEN** Grade10 creates one auction order for the internal bidder, flagged
+  internal, with invoice status `not_issued`
+- **AND** the order holds that billing address as its delivery and billing
+  address, with bank transfer, and derives as Preparing Invoice
+- **AND** issues no invoice and sends no won, address or other letter for it

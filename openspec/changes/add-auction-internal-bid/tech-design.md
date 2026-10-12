@@ -16,9 +16,21 @@ the internal bidders the house bids as. Motivation is in [proposal.md](proposal.
   one alarm at `nextDeadlineAt` and calls `ROOM_WORK.settle`; a read or a
   refused late bid defers a settle; the five-minute sweep (`sweeps/close.ts`,
   `sweeps/publish.ts`) is the net
-- **Close** - `applyClose` moves the top bid to `won`, issues the winner order
-  and its mail, then `markUnsoldStockDue` marks the release owed only when
-  `isUnsoldForRelease()` holds (no `won` bid, no top bid)
+- **Close** - `closeListing` moves the top bid to `won`, calls
+  `issueWinnerOrder` (which copies the bid's `(storefront, user_id)` and the
+  bidder's email and name onto `auction_orders`), enqueues `auction_won`,
+  `setup_reminder` and `setup_overdue` through `enqueueOrderNotification`,
+  and records Auction Won; `markUnsoldStockDue` marks a release owed only
+  when there is no `won` bid
+- **Orders** - every order letter is one `auction_order_notification_work`
+  row written by `enqueueOrderNotification`, from the close, the send
+  (`services/orders/quote.ts`), reminders, expiry, payments, fulfilment and
+  cancel. Expiry calls `suspendForExpiredInvoice` and throws when no
+  suspension results. A cancel stores `cancellationConsequences` with
+  `winnerEmailed: true` as a literal. The worklist row and the order view
+  (`services/orders/queue.ts`, `operatorView.ts`) return `winner { email,
+  name }` from the order and already carry one derived flag, `testWinner`;
+  the worklist `search` matches `winner_email`
 - **Listing edits** - only `draft` and `created` listings change their window,
   starting price or currency, through `listings.save`
   (`services/listings/draft.ts`, which refuses them as `FLOOR_LOCKED` once
@@ -59,14 +71,19 @@ the internal bidders the house bids as. Motivation is in [proposal.md](proposal.
 - The internal bid's amount, time and internal bidder never reach a public
   read, a listing version, or an operator read without `auction:reserve`; no such read
   shows that a lot has an internal bid before the house has bid, and
-  afterwards it shows the house's public bids as House and nothing more
+  afterwards it shows the house's public bids, and its order, as House and
+  nothing more
+- An internal bidder's win runs the existing order flow by hand, with no
+  letter to anyone and nothing a collector reads
 - The commit is deterministic: whichever writer reaches the lot first, the
   house's commitment lands at its set time, before anything accepted after it
 
 **Non-Goals:**
 
 - A second resolution engine, or a house bid outside `auction.bids`
-- Reporting or exports beyond the Bought in label, its view and Stats
+- A second order flow for the house: its order runs the post-sale flow
+  unchanged, by hand
+- Reporting beyond the internal flag on orders and Stats
 
 ## Decisions
 
@@ -77,12 +94,14 @@ the bidding rules and the trace,
 the admin flow, its states, the listing-edit clear and what each operator reads,
 [`grade10-site/auction/auction`](specs/grade10-site/auction/auction/spec.md)
 the close,
+[`grade10-site/auction/winner-order`](specs/grade10-site/auction/winner-order/spec.md)
+the internal bidder's order at the close, and
 [`grade10-site/auction/notifications`](specs/grade10-site/auction/notifications/spec.md)
-the letters, and
-[`grade10-admin/auction/listing`](specs/grade10-admin/auction/listing/spec.md)
-the Listings table, its Bought in view, stock and Relist. The internal bidder
-profiles, their pick at Save and who reads them are internal-bid's too. These
-are the implementation choices.
+the letters. The internal bidder profiles, their pick at Save, their billing
+address, the by-hand order flow and what each operator reads of that order
+and its listing are internal-bid's too; it states the post-sale and order
+letter rules by reference, with no delta on those capabilities. These are
+the implementation choices.
 
 1. **Each internal bidder is a bidder row, not a second engine.** A profile
    lives in `auction.internal_bidders`, and adding one inserts, in the same
@@ -206,34 +225,49 @@ are the implementation choices.
    - Rejected: judging the amount at the commit time. An over-ceiling
      amount would stay stored and readable until then.
 
-9. **Bought in is derived, not stored.** A closed listing whose `won` bid is
-   the house's is bought in. `applyClose` moves the house bid to `won` as for
-   any winner, which keeps every public reader on its sold path, and skips
-   `issueWinnerOrder`, its order mail and Auction Won analytics.
-   `isUnsoldForRelease()` widens to "no `won` bid, or the `won` bid is the
-   house's", with release reason `bought-in close` and remark "Released by
-   bought-in listing". Relist's source check accepts either, with the same
-   campaign, relisted and release checks. `LISTING_VIEWS` gains `bought_in`;
-   `listingViewOf` and `listingViewSql` take a server-side `houseTop` input
-   and return `bought_in` only for an ended lot whose top bid is the house's,
-   so `won` and `unsold` never hold one. The admin listing item and the
-   listing's own read carry `boughtIn`, so the row and the page both read
-   Bought in. No order row is written, so every order-driven read - the
-   post-sale queue, Open order, order letters - holds nothing for the lot;
-   the unused `adminListingOutcomeSchema` gains no value.
-   - Rejected: a `bought_in` listing status. It would fork every public
-     reader that maps status to Ended and sold.
-   - Rejected: shipping `houseTop` on the admin listing item. A live row
-     would say who leads, which the Listings table keeps off its rows.
+9. **The internal order is an ordinary order whose bidder is internal.**
+   `closeListing` moves the house bid to `won` and calls `issueWinnerOrder`
+   as for any winner. The order row already copies the bid's
+   `(storefront, user_id)`, so it is internal exactly when `storefront =
+   'internal'`; `isHouseOrder(order)` beside `isHouseBid` is the one
+   predicate, and no flag column is stored. For an internal bid the issuer
+   reads the profile `FOR SHARE` and writes, in the same insert:
+   `winner_email` the bidder row's `<id>@internal.invalid`, `winner_name`
+   `House`, `delivery_address` and `billing_address` the profile's
+   `billing_address`, `payment_method` `{ type: 'bank_transfer' }`, and
+   `delivery_address_confirmed_at`, `billing_address_confirmed_at`,
+   `payment_method_confirmed_at` and `delivery_address_locked_at` all the
+   close time, so `orderStatusSql` derives Preparing Invoice with no change.
+   `address_deadline_at` keeps its usual value; it never matters once
+   confirmed. The close then enqueues no order letter and records no Auction
+   Won event. The stock stays held, as for any won lot, until the cancel
+   returns it through the existing cancel path; `isUnsoldForRelease`,
+   `LISTING_VIEWS` and Relist are unchanged, and the lot sits in the Won view.
+   - Rejected: an `internal` column on `auction_orders`. It restates what
+     `storefront` already holds and can drift from it.
+   - Rejected: no order, the earlier Bought in design. Q5 now has the order
+     run the normal flow.
+   - Rejected: Grade10 sending, expiring and cancelling on its own. Q48 has
+     an operator do each by hand.
 
 10. **The house is never a recipient.** Every mail and push claim joins
     `bidders` and excludes `storefront = 'internal'` through one SQL fragment.
-    The mail dispatcher throws on an `internal` recipient or an address
-    ending `@internal.invalid`, so a missed claim fails
-    loudly instead of sending. House bid rows are written with push and mail
-    stamps already set, so the partial notify indexes never hold them.
-    Collectors' letters use their existing claims unchanged, which already
-    send nothing for a write with no public bid record.
+    `enqueueOrderNotification` reads the order's `storefront` and writes no
+    work row for an internal order, so every order letter - won, setup,
+    invoice-sent, reminders, overdue, expiry, reissue, payment, shipping,
+    cancelled - is dropped at its one door. The mail dispatcher throws on an
+    `internal` recipient or an address ending `@internal.invalid`, so a
+    missed claim fails loudly instead of sending. House bid rows are written
+    with push and mail stamps already set, so the partial notify indexes
+    never hold them. Collectors' letters use their existing claims unchanged,
+    which already send nothing for a write with no public bid record.
+    - Expiry on an internal order skips `suspendForExpiredInvoice` - the
+      profile has no site account - and the expiry's "not suspended" throw
+      holds only for a collector's order
+    - A cancel stores `winnerEmailed: false` for an internal order, and the
+      cancel dialog reads it to say no letter is sent
+    - Rejected: writing internal order work rows parked. A row that must
+      never send is not a due side effect, and parked rows page operators
 
 11. **One door, one redaction.** `listings.internalBid.{get,save,remove}` are
     `listingProcedure("auction:reserve")`. Their `auditDetails` file
@@ -300,12 +334,36 @@ are the implementation choices.
     - Rejected: the listing lock for a retirement. It would take one lock per
       listing naming the profile, in no fixed order.
 
+14. **Orders read the buyer through one redaction.** The worklist row and
+    the order view pass the order through `redactOrderBuyer(caller)` in
+    `services/orders`, beside `redactHouse`. An internal order carries
+    `internal: true` for every caller and `winner { email: null, name: null,
+    phone }`, so the console reads House; an `auction:reserve` caller also
+    gets `internalBidder { id, name, emailLabel }`, joined live from the
+    profile. Every other fact - status, segment, addresses, invoice, logs -
+    is the order's own. The worklist `search` never matches an internal
+    order's `winner_email` or the profile's label. Finance tells internal
+    orders apart by `internal` on every order read, the same predicate the
+    worklist uses.
+    - Rejected: hiding internal orders from staff. Q49 shows them in Orders
+      like any order.
+
+15. **The listing's win flag is read, not stored, and only for the grant.**
+    The admin listing item and the listing read gain `internalWin {
+    internalBidderId, name } | null`, set only for an `auction:reserve`
+    caller and only once the listing is closed with a house `won` bid. Any
+    other caller gets `null` on every listing, so a staff answer for a house
+    win equals one for a collector's win.
+    - Rejected: a listing view or status. It would show staff which won lots
+      were the house's, which Q32 keeps to reserve holders.
+
 ## Database Schema
 
 Owning tables: `auction.internal_bidders` and
 `auction.auction_listing_internal_bids`. Affected: `auction.bidders` (one
-`internal` row per profile), `auction.auction_listings` (stock release reason
-check), `auction.bids` (no column change).
+`internal` row per profile), `auction.auction_orders` (an internal order's
+rows, no column change; the `cancellation_consequences` json may hold
+`winnerEmailed: false`), `auction.bids` (no column change).
 
 `auction.internal_bidders`:
 
@@ -314,6 +372,7 @@ check), `auction.bids` (no column change).
 | `id` | `text` | No | - | Primary key, a generated id; also the `user_id` of its `bidders` row |
 | `name` | `text` | No | - | Trimmed, non-empty |
 | `email_label` | `text` | No | - | As entered; an email address, checked by the service |
+| `billing_address` | `jsonb` | No | - | An address snapshot in the order's `AddressSnapshot` shape, checked by the same address schema as a winner's billing address; copied onto an order at the close |
 | `retired_at` | `timestamptz(3)` | Yes | - | Set once, by `retire`; null is Active |
 | `created_by` | `text` | No | - | Operator user id |
 | `updated_by` | `text` | No | - | Operator user id of the last act |
@@ -354,7 +413,6 @@ check), `auction.bids` (no column change).
   `not_placed` row past its listing's effective close
 - **No version trigger** - deliberately; a save before the time must not
   relay to open pages
-- **`ck_auction_listings_stock_release`** - reason set gains `bought-in close`
 - **No seed** - a profile's `bidders` row is written by `create`, with
   `email` `<id>@internal.invalid`, `name` null and alerts off
 - **Removal** - removing a `scheduled` or `not_placed` row deletes it; a
@@ -366,8 +424,10 @@ check), `auction.bids` (no column change).
 
 Authoritative: the profile row for name, label and Active or Retired; the
 internal bid row for amount, time, state and which profile; the house's bid
-rows for what was placed. Derived: Bought in (closed, `won` bid is the
-house's), whether a profile has bid (any `bids` row for its bidder), the
+rows for what was placed; the order row for an internal order's addresses
+and lifecycle. Derived: internal order (`storefront = 'internal'`), the
+listing's internal win (closed, `won` bid is the house's), whether a profile
+has bid (any `bids` row for its bidder), the
 minimum next bid shown beside Not placed (from the listing at read time), the
 house's standing (bid states).
 
@@ -376,13 +436,19 @@ erDiagram
   auction_listings ||--o| auction_listing_internal_bids : "protected by"
   internal_bidders ||--o{ auction_listing_internal_bids : "bids as"
   internal_bidders ||--|| bidders : "is"
+  bidders ||--o{ auction_orders : "wins"
   auction_listings ||--o{ bids : takes
   bidders ||--o{ bids : places
   internal_bidders {
     text id PK
     text name
     text email_label "unique, any case"
+    jsonb billing_address
     timestamptz retired_at
+  }
+  auction_orders {
+    text storefront "internal for a house win"
+    jsonb delivery_address "the profile's billing address"
   }
   bidders {
     text storefront "internal for a profile"
@@ -413,8 +479,10 @@ on the listing named, in one transaction; a refusal returns before any write.
 | `raiseHouseMaximum` | `(tx, listing, row, maximumMinor, now)` | the resolution | `AMOUNT_TOO_LOW` with `minimumNextAmount`, `NOT_BIDDABLE` |
 | `lowerHouseMaximum` | `(tx, listing, row, maximumMinor, now)` | `{ lowered: true }` | `BELOW_HOUSE_BID` with `floorMinor`, checked first; then `MOVES_LEAD_OR_PRICE` |
 | `listInternalBidders` | `{}` | `{ items: [{ id, name, emailLabel, retired, hasBid }] }` | Never refuses |
-| `createInternalBidder` | `{ name, emailLabel, actorId }` | `{ id }` | `REQUIRED`, `LABEL_INVALID`, `LABEL_IN_USE` |
-| `updateInternalBidder` | `{ id, name?, emailLabel?, actorId }` | `{ id }` | `NOT_FOUND`, `REQUIRED`, `LABEL_INVALID`, `LABEL_IN_USE`, `LABEL_FIXED` |
+| `createInternalBidder` | `{ name, emailLabel, billingAddress, actorId }` | `{ id }` | `REQUIRED`, `LABEL_INVALID`, `LABEL_IN_USE`, `ADDRESS_INVALID` with the field |
+| `updateInternalBidder` | `{ id, name?, emailLabel?, billingAddress?, actorId }` | `{ id }` | `NOT_FOUND`, `REQUIRED`, `LABEL_INVALID`, `LABEL_IN_USE`, `LABEL_FIXED`, `ADDRESS_INVALID` with the field |
+| `issueWinnerOrder` (changed) | `{ listing, winningBid, issuedAt }` | the order; for a house bid, internal with the profile's address, bank transfer and setup confirmed at the close | Never refuses; throws when the profile is missing |
+| `redactOrderBuyer` | `(caller, order rows)` | rows with `internal`, a House buyer and `internalBidder` for `auction:reserve` | Never refuses |
 | `retireInternalBidder` | `{ id, actorId }` | `{ id, retired: true }` | `NOT_FOUND`, `IN_USE` with `listingIds` |
 
 The profile functions own their transaction and lock only the profile row
@@ -475,6 +543,21 @@ close from `20:00Z` to `17:00Z`; its internal bid sits at `18:00Z`:
 | `internal_bidders` | none | `id ibd_harbour`, `name Harbour Cards`, `email_label harbour@internal.grade10.example`, `retired_at` null |
 | Audit row | - | `{ internalBidderId: ibd_harbour, act: added }` |
 
+**Mutation order for an internal bidder's win** - HKD listing `auc_7f`
+closes at `2026-11-02T20:00:00.000Z` with the house leading at 31000 as
+`ibd_harbour`; one transaction under the listing lock:
+
+| Row | Before | After |
+| --- | --- | --- |
+| `bids` (house) | `top`, 31000 | `won` |
+| `auction_orders` | none | `id ord_auc_7f`, `storefront internal`, `user_id ibd_harbour`, `winner_email ibd_harbour@internal.invalid`, `winner_name House`, `delivery_address` and `billing_address` the profile's, `payment_method { type: bank_transfer }`, every confirmed-at and `delivery_address_locked_at` `20:00:00.000Z` |
+| `auction_order_notification_work` | none | none |
+| `auction_listings` | `published` | `closed`, `closed_at 20:00:00.000Z`; no stock release owed |
+
+An operator then sends, the expiry sweep expires the invoice with no
+suspension and no work row, and an operator cancels with
+`winnerEmailed: false`, which releases the stock as any cancel does.
+
 **Identity across the boundary** - admin browser → `auction-admin` tRPC with
 the operator session → `listingProcedure` checks `auction:reserve` and
 writes the redacted audit row → `saveInternalBid` → repositories. Operator
@@ -491,8 +574,10 @@ a storefront; no storefront backend can name `storefront 'internal'`, and
   maximumMinor, commitAt }`, `listings.internalBid.remove` `{ listingId }`,
   all `auction:reserve`
 - **Internal bidders** - `internalBidders.list` `{} → { items: [{ id, name,
-  emailLabel, retired, hasBid }] }`, `internalBidders.create` `{ name,
-  emailLabel }`, `internalBidders.update` `{ id, name?, emailLabel? }`,
+  emailLabel, billingAddress, retired, hasBid }] }`, `internalBidders.create`
+  `{ name, emailLabel, billingAddress }`, `internalBidders.update` `{ id,
+  name?, emailLabel?, billingAddress? }`, `billingAddress` in the winner's
+  billing address input schema,
   `internalBidders.retire` `{ id }`, all `auction:reserve`; the editor's pick
   lists the items with `retired: false`
 - **Operator bid reads** - `bidHistory` and `bidderSummaries` items and the
@@ -501,13 +586,19 @@ a storefront; no storefront backend can name `storefront 'internal'`, and
   are added; `house` is true on every house row for every caller, and
   `internalBidder` is set only for an `auction:reserve` caller, per
   Decision 11. Breaking for the admin frontend only
-- **Listings table and listing page** - `LISTING_VIEWS` gains `bought_in`;
-  the admin listing item and the admin listing read gain `boughtIn: boolean`,
-  true only once the lot has ended with the house's bid on top
+- **Listings table and listing page** - the admin listing item and the admin
+  listing read gain `internalWin: { internalBidderId, name } | null`, set only
+  for an `auction:reserve` caller, per Decision 15; `LISTING_VIEWS` is
+  unchanged
+- **Orders** - the worklist row and the order view gain `internal: boolean`
+  and `internalBidder: { id, name, emailLabel } | null`; `winner.email` and
+  `winner.name` become nullable, null on an internal order. The cancellation
+  consequences' `winnerEmailed` widens from the literal `true` to a boolean.
+  Breaking for the admin frontend only
 - **Auth contracts** - `auction:reserve`'s description becomes "Set and read
   a listing's internal bid, and keep the internal bidders." No grant moves
 - **Public contracts** - unchanged; the house's bids and win read as a
-  collector's
+  collector's, and an internal bidder has no site account to read its order
 
 ## Risks / Trade-offs
 
@@ -516,6 +607,23 @@ a storefront; no storefront backend can name `storefront 'internal'`, and
   `bidders.email` that is never its label and never deliverable, a
   dispatcher assertion that throws on an `internal` recipient, and a backend
   test walking every mail claim with a house bid present
+- **[An internal order sends an order letter]** → `enqueueOrderNotification`
+  is the one door and drops an internal order; a backend test drives an
+  internal order through close, send, reminders, expiry, reissue and cancel
+  and finds no work row for any `AUCTION_ORDER_NOTIFICATION_TYPES` value
+- **[The expiry sweep stops on an internal order]** → its suspension throw is
+  scoped to a collector's order, and a test expires an internal invoice
+- **[Staff learn the internal bidder from an order]** → `redactOrderBuyer` is
+  the only path from order rows to worklist and order view answers, and a
+  test compares the `staff` answer with the reserve holder's; the order's
+  addresses stay readable to staff, the open question below
+- **[A bank transfer invoice in a currency with no bank details]** - an
+  internal order opens on bank transfer whatever its currency → send prices
+  it as any bank transfer invoice, with the operator's fee; the order is
+  never paid, so no rail is used, the open question below
+- **[Finance counts an internal order as a sale]** → `internal` on every
+  order read; an internal invoice is never paid, so no receipt or payout
+  exists for it
 - **[A profile is retired while a save names it]** → the save holds the
   profile `FOR SHARE` and the retirement takes it `FOR UPDATE`, so either
   the save sees `retired_at` and refuses, or the retirement sees the
@@ -555,19 +663,25 @@ a storefront; no storefront backend can name `storefront 'internal'`, and
 
 ## Migration Plan
 
-1. Migration: create `internal_bidders` and `auction_listing_internal_bids`,
-   widen the stock release reason check. Additive; old code ignores all
-   three, and no row exists until an admin adds a profile
-2. Deploy the backend with the commit, close, mail, listing-edit clear and
-   redaction paths. No internal bid exists yet, so behaviour is unchanged
-3. Deploy the admin frontend section, the Bought in view and the auth
-   description
+1. Migration: create `internal_bidders`, with `billing_address`, and
+   `auction_listing_internal_bids`. Additive; old code ignores both, and no
+   row exists until an admin adds a profile
+2. Deploy the backend with the commit, close, internal order, mail guard,
+   expiry, listing-edit clear and redaction paths. No internal bid exists
+   yet, so behaviour is unchanged
+3. Deploy the admin frontend section, the Internal bidders page, the House
+   reads in Orders, the internal win flag and the auth description
 4. Rollback: revert the frontend and backend. Rows already `placed` keep
-   their house bids, which old code closes as an ordinary winner and would
-   issue an order for; before rolling back, call off or hand-resolve any
-   protected published lot. Drop the table only after none remain
+   their house bids, and old code would close them into an order whose
+   letters it mails to an undeliverable address and whose expiry suspends
+   the profile's bidder row; before rolling back, call off any protected
+   published lot and cancel any open internal order. Drop the tables only
+   after none remain
 
 ## Open Questions
 
 - The `commit_lag_ms` page threshold of 30 seconds is a first guess, tuned
   after a week of real commits
+- An internal order's payment method (bank transfer here) and whether staff
+  read its addresses are agent defaults awaiting the author; see the
+  change's open questions

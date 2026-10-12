@@ -24,10 +24,11 @@ a lot that closes with a winner who is not the recipient:
   when it is supplied.
 - **No public bid, no letter** - a lower of the house maximum, and a house
   maximum that is not placed, write no public bid and SHALL send no letter.
-- **The house** - Grade10 SHALL address no letter of this capability, and no
-  winner letter of `grade10-site/auction/notifications-order`, to the house:
-  to no internal bidder of `grade10-admin/auction/internal-bid`, at its email
-  label or anywhere else.
+- **The house** - Grade10 SHALL address no letter of this capability to the
+  house: to no internal bidder of `grade10-admin/auction/internal-bid`, at its
+  email label or anywhere else. The order a house win opens for its internal
+  bidder sends no letter of `grade10-site/auction/notifications-order` either,
+  per `grade10-site/auction/winner-order`.
 
 No letter SHALL say or imply that a bid, a lead or a win was the house's.
 
@@ -68,8 +69,9 @@ No letter SHALL say or imply that a bid, a lead or a win was the house's.
 #### Scenario: grade10-site-auction-notifications-SC-52 - No letter is addressed to the house
 **Serves:** House participation - every letter a lot owes is sent and none reaches the house
 
-- **GIVEN** a lot where the house was outbid, then led, then won at its close
-- **WHEN** Grade10 sends every bid-activity, close-outcome and winner letter
+- **GIVEN** a lot where the house was outbid, then led, then won at its close,
+  which opened its internal bidder's order
+- **WHEN** Grade10 sends every bid-activity, close-outcome and order letter
   that lot owes
 - **THEN** no letter is addressed to the house
 - **AND** no auction-won or setup letter is sent for the lot
