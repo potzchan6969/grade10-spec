@@ -49,7 +49,7 @@ In Your Orders.
 
 🚧 **Checkout integration** - The drawer sends the reviewed lines, the accepted promo code and points through the store's checkout request, and shows its answer.
 
-🚧 **One Pay at a time** - While a Pay is starting, the drawer accepts no second Pay. An answer for an older cart, tender or member opens nothing.
+🚧 **One Pay at a time** - While a Pay is starting, drawer actions wait as the [Cart Drawer](/p/grade10-site/store/cart#pending-operations) describes. An answer for an older cart, tender or member opens nothing.
 
 🚧 **Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
 

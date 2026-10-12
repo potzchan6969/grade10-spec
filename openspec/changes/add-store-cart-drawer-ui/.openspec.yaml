@@ -3,3 +3,6 @@ created: 2026-09-02
 promoted_by: "@kinisworking"
 depends_on:
   - add-store-product-status
+awaiting:
+  specs: "planning-dev: derive the pending-operations contract and reconcile its journeys with scenarios and blind cases; the existing deltas predate this increment."
+  ui-design: "planning-design: align pending states across body, footer and an open promo sheet with dismissal still available."

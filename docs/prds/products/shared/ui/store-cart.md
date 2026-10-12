@@ -53,6 +53,10 @@ with its one toast.
 🚧 **Only sold-out lines** - not empty: the lines show marked sold out, with
 the footer and no count on the drawer title.
 
+## Pending Operations
+
+🚧 **Waiting for an answer** - the drawer disables its actions while the application reads or saves the cart or starts checkout; clearing that wait restores only actions whose current state permits them. Closing remains available.
+
 ## Tender Actions
 
 🚧 **Unresolved choice** - tender actions and Checkout wait while the

@@ -4,6 +4,8 @@
 - Keep global Cart availability with durable `grade10-site/site/page-shell`
 - Keep signed-out Cart access with `require-sign-in-from-nav-cart`
 - Show current product pictures so collectors can recognise the cart lines
+- Prevent another drawer action while a drawer read, write or checkout creation is pending
+- Keep dismissal available while waiting and recovery available after a failed operation
 
 ## Non-Goals
 
@@ -15,6 +17,22 @@
 - Variant-specific pictures, picture metadata in stored cart intent, separate picture requests or a picture cache
 - Shared UI redesign, database migrations, new production dependencies or changes to checkout amounts and readiness
 - Enabling a guest cart or guest checkout; existing guest review transport remains a compatibility check only
+- Rebuilding `shared/ui/store-cart` components or changing their layout.
+  It extends pending interaction guards without rebuilding the block.
+- Any backend implementation or contract change: no Worker, API procedure,
+  provider read, database/schema, webhook, or checkout-creation
+  work.
+- Adding or removing promo-code editing, or calculating shipping, tax, or discounts locally.
+  The existing combined basket quote owns tender amounts and totals.
+- Changing Figma annotations, components, or tokens.
+- Adding a dedicated `/cart` route or changing the existing checkout page.
+- A Browse More or catalogue handoff from the drawer (removed with
+  `CartItemSlot` in `cart-drawer-empty-state`).
+- Deciding when Cart appears or what a signed-out Cart press does; those rules
+  belong to durable `grade10-site/site/page-shell` and
+  `require-sign-in-from-nav-cart`.
+
+- **Pending scope** - No unrelated page refreshes, automatic action replay, new request timeout, cross-tab lock, telemetry implementation or backend cancellation behavior. Existing cart, tender and checkout failure treatments remain.
 
 ## Decisions
 
@@ -57,6 +75,9 @@ The approved [thumbnail brief](../../../docs/references/store-cart-thumbnails.md
 | Q17 | Where is picture data kept? | In current reviewed display facts only; restored image-free intent obtains pictures through review again | Persisting picture metadata in member or guest cart intent |
 | Q18 | Does the approved guest-route coverage change who can open the drawer? | No; keep Q1 and Q3. Check existing guest and member response paths for compatible optional enrichment | Reintroducing guest cart or checkout journeys from an implementation test checklist |
 | Q19 | Who owns shared regression coverage? | grade10-spec owns controlled-asset picture stories using existing props; grade10 owns the review-to-drawer integration | Editing the application's pinned submodule or copying the shared renderer into the application |
+
+| Q20 | Does pending work disable only Checkout and tender actions? | Disable drawer actions while it is pending, retrieving or loading something. Requested by @kinisworking on 2026-10-12 and carried into this PM update on 2026-10-13; dismissal is settled separately in Q21 | Leaving quantity, removal, product navigation or a nested promo sheet interactive while the drawer waits |
+| Q21 | Should Close, backdrop click and Escape also be disabled while pending? | Keep dismissal available (recommended). Confirmed by @kinisworking on 2026-10-13, so a slow or failed request cannot trap the collector; a close does not mean a sent operation was canceled | Disabling dismissal until all pending work finishes, which reverses the shared dismissal contract |
 
 ## Raised
 
