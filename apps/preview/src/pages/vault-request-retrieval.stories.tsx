@@ -58,16 +58,40 @@ export const Default: Story = {
     expect(modal.getByText(SHOP_NAME)).toBeVisible();
     expect(modal.getByText(SHOP_ADDRESS)).toBeVisible();
     expect(modal.getByText("Pickup location")).toBeVisible();
+    expect(modal.getByText("What happens next")).toBeVisible();
+    expect(modal.getByText("We review your request")).toBeVisible();
+    expect(modal.getByText("We confirm your pickup window")).toBeVisible();
+    expect(modal.getByText("Collect it in store")).toBeVisible();
     expect(modal.queryByText("Ship to me")).not.toBeInTheDocument();
     expect(modal.queryByText("Grade10 Kowloon")).not.toBeInTheDocument();
     expect(modal.queryByText("Pickup only")).not.toBeInTheDocument();
+    // Screen-reader-only DialogDescription mirrors the subtext — match the visible one.
     expect(
-      modal.getByText(
-        "Review the item and pickup details before sending your request.",
-      ),
+      modal.getAllByText(
+        "We’ll release this item from storage for pickup in store.",
+      )[0],
     ).toBeVisible();
     expect(
       modal.getByRole("button", { name: "Submit retrieval request" }),
     ).toBeVisible();
+  },
+};
+
+/**
+ * 390px phone — the body scrolls but every block keeps its full size, so the
+ * item row and the last step stay readable instead of clipping.
+ */
+export const Narrow: Story = {
+  globals: { viewport: { value: "mobile1" } },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "Request Retrieval" });
+      expect(found).toBeVisible();
+      return found;
+    });
+    const modal = within(dialog);
+    expect(modal.getByText("1999 Charizard")).toBeVisible();
+    expect(modal.getByText("Collect it in store")).toBeVisible();
   },
 };

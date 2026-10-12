@@ -51,9 +51,11 @@ function VaultAssetDetails({
   const isGraded = asset.condition === "Graded";
   const conditionDisplay = asset.conditionDescription ?? asset.condition;
   // A listed or auctioned asset is locked — retrieval only resumes if it
-  // delists back to In Vault.
+  // delists back to In Vault; a request already in flight hides the link.
   const retrievable =
-    asset.status !== "Listed" && asset.status !== "Live Auction";
+    asset.status !== "Listed" &&
+    asset.status !== "Live Auction" &&
+    asset.status !== "Retrieval Pending";
 
   return (
     <VStack className={className} gap="none" hAlign="stretch">

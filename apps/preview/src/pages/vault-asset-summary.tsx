@@ -10,7 +10,13 @@ import {
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { Gavel, ShieldCheck, Storefront, TrendUp } from "@phosphor-icons/react";
+import {
+  Gavel,
+  HourglassMedium,
+  ShieldCheck,
+  Storefront,
+  TrendUp,
+} from "@phosphor-icons/react";
 import {
   assetPrice,
   formatHkd,
@@ -57,9 +63,9 @@ function VaultAssetSummary({
   const valuePotential = asset.valuePotential;
   const liveListing =
     asset.status === "Live Auction" || asset.status === "Listed";
+  const locked = liveListing || asset.status === "Retrieval Pending";
   const price = assetPrice(asset);
-  const showListings =
-    !liveListing && Boolean(onListForAuction || onListForSale);
+  const showListings = !locked && Boolean(onListForAuction || onListForSale);
   const valuePotentialDescription = valuePotential
     ? `Est. Graded PSA Value: ${formatHkd(valuePotential.gradedEstimateHkd)} (+${valuePotential.upsidePercent}%)`
     : undefined;
@@ -74,7 +80,12 @@ function VaultAssetSummary({
               : statusBadgeVariant(asset.status)
           }
         >
-          {liveListing ? null : <ShieldCheck aria-hidden weight="bold" />}
+          {asset.status === "In Vault" ? (
+            <ShieldCheck aria-hidden weight="bold" />
+          ) : null}
+          {asset.status === "Retrieval Pending" ? (
+            <HourglassMedium aria-hidden weight="bold" />
+          ) : null}
           {statusLabel(asset.status)}
         </Badge>
         <h1 className="font-heading text-3xl font-semibold tracking-tight text-balance md:text-4xl">
