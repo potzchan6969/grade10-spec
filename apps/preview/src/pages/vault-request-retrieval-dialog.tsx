@@ -13,7 +13,6 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { MapPin } from "@phosphor-icons/react";
-import { DetailRow } from "./vault-asset-details";
 import { SHOP_ADDRESS, SHOP_NAME, type VaultAsset } from "./vault-content";
 
 type VaultRequestRetrievalDialogProps = {
@@ -58,34 +57,34 @@ function VaultRequestRetrievalDialog({
           <DialogDescription className="sr-only">
             We’ll release this item from storage for pickup in store.
           </DialogDescription>
-          {/* Recap mirrors the detail page's rows — same fields, same labels. */}
-          <div className="shrink-0 rounded-(--radius-2xl) bg-background-subtle p-3">
-            <div className="flex items-center gap-4">
-              <div className="flex size-16 shrink-0 items-center justify-center rounded-(--radius-xl) bg-background">
-                <img
-                  alt=""
-                  className="max-h-full max-w-full object-contain"
-                  src={asset.imageSrc}
-                />
-              </div>
-              <Text className="line-clamp-2 min-w-0" weight="medium">
-                {asset.name}
-              </Text>
-            </div>
-            <div className="mt-2 flex flex-col [&>div:last-child]:border-b-0">
-              {asset.condition === "Graded" ? (
-                <>
-                  <DetailRow label="Grade" value={asset.grade} />
-                  <DetailRow label="Cert Number" value={asset.cert} />
-                </>
-              ) : null}
-              <DetailRow label="Vault Storage ID" value={asset.vaultId} />
-              <DetailRow label="Location" value={asset.location} />
-              <DetailRow
-                label="Condition"
-                value={asset.conditionDescription ?? asset.condition}
+          <div className="flex shrink-0 items-center gap-4 rounded-(--radius-2xl) bg-background-subtle p-3">
+            <div className="flex size-16 shrink-0 items-center justify-center rounded-(--radius-xl) bg-background">
+              <img
+                alt=""
+                className="max-h-full max-w-full object-contain"
+                src={asset.imageSrc}
               />
             </div>
+            <VStack className="min-w-0" gap="xs" hAlign="start">
+              <Text className="line-clamp-2" weight="medium">
+                {asset.name}
+              </Text>
+              {/* Recap only fields the detail page shows: grade + cert, then
+                  the vault storage ID. */}
+              <Text className="text-secondary-foreground" size="sm">
+                {asset.condition === "Graded" && asset.cert
+                  ? `${asset.grade} · Cert ${asset.cert}`
+                  : (asset.conditionDescription ?? asset.condition)}
+              </Text>
+              {asset.vaultId ? (
+                <Text
+                  className="text-secondary-foreground tabular-nums"
+                  size="xs"
+                >
+                  {asset.vaultId}
+                </Text>
+              ) : null}
+            </VStack>
           </div>
 
           <section

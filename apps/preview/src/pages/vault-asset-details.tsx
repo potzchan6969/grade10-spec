@@ -107,5 +107,5 @@ function VaultAssetDetails({
   );
 }
 
-export type { DetailRowProps, VaultAssetDetailsProps };
-export { DetailRow, VaultAssetDetails };
+export type { VaultAssetDetailsProps };
+export { VaultAssetDetails };
