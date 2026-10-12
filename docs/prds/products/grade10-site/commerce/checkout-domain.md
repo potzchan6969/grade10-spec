@@ -144,7 +144,9 @@ Status: 302
 The Thank you page's Continue button goes to the bare host, and Shopify gives
 no way to change it. `/orders/latest` sends the buyer on to the order this
 browser last checked out, or to their order list or the store when it holds
-none. The path match is exact, so rule 4 still owns every other path.
+none. The path match is exact, so rule 4 still owns every other path. A
+dashboard that adds rules at the bottom puts this one below the catch-all,
+where it never fires: drag it above rule 4 in the list.
 
 Rule 4 — everything else → our store:
 
@@ -183,6 +185,10 @@ settled — browsers cache a 301 hard and you cannot take it back. Rule 5 is a
 Nothing else goes on this host.
 
 ## *Operator* — **Verify** the host end to end
+
+A rule change takes up to a minute to reach the edge; a check run sooner
+still sees the old answer.
+
 ```bash
 host=checkout.grade10-stg.com
 
