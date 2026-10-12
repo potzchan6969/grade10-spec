@@ -27,7 +27,7 @@ when the consumer's operation finishes.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-9yi rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-37 - Pending tender prevents a second action
-**Serves:** shared-ui-store-cart-US-18 - Shopper waits for the current choice to finish
+**Serves:** shared-ui-store-cart-US-19 - Shopper waits for the current choice to finish
 
 - **GIVEN** supplied action callbacks and an existing accepted summary
 - **WHEN** the consumer sets tenderPending true, including with the promo sheet open
@@ -36,7 +36,7 @@ when the consumer's operation finishes.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-nty rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-38 - Clearing pending restores existing availability
-**Serves:** shared-ui-store-cart-US-18 - Shopper continues after the consumer answers
+**Serves:** shared-ui-store-cart-US-19 - Shopper continues after the consumer answers
 
 - **GIVEN** the drawer was pending with some action callbacks absent
 - **WHEN** the consumer clears tenderPending
@@ -45,7 +45,7 @@ when the consumer's operation finishes.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-x24 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-39 - Existing consumers keep their behavior
-**Serves:** shared-ui-store-cart-US-18 - Shopper uses a drawer whose consumer supplies no pending state
+**Serves:** shared-ui-store-cart-US-19 - Shopper uses a drawer whose consumer supplies no pending state
 
 - **WHEN** a consumer omits tenderPending or supplies false
 - **THEN** the existing layout and callback-gated availability remain unchanged

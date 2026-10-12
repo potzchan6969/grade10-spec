@@ -160,14 +160,14 @@ Runs once per row of **Test data**.
 * Name, quantity and removal actions call supplied callbacks with their existing arguments.
 * The shared surface stores no picture metadata.
 
-## shared-ui-store-cart-US18: Shopper waits for an accepted tender choice
+## shared-ui-store-cart-US19: Shopper waits for an accepted tender choice
 
 **As a** shopper,
 **I want** accepted figures held while tender finishes,
 **so that** I cannot submit conflicting changes or continue unresolved.
 
 <!-- trace:case id=g10.shared-store-cart.TC-cxw rev=1 covers=g10.shared-store-cart.SC-9yi,g10.shared-store-cart.SC-nty,g10.shared-store-cart.SC-x24 -->
-### shared-ui-store-cart-US18-TC1-1: Pending tender blocks every entry point
+### shared-ui-store-cart-US19-TC1-1: Pending tender blocks every entry point
 
 **Classification:**
 
@@ -180,7 +180,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-18
+* **Trace:** shared-ui-store-cart-US-19
 
 **Pre-conditions:**
 
@@ -195,7 +195,7 @@ Runs once per row of **Test data**.
 * Points and promo inputs, Apply, Use max, both Remove actions, held-code selection and Checkout are disabled and invoke no callbacks. Accepted figures and draft 120 persist.
 
 <!-- trace:case id=g10.shared-store-cart.TC-sxg rev=1 covers=g10.shared-store-cart.SC-9yi,g10.shared-store-cart.SC-nty,g10.shared-store-cart.SC-x24 -->
-### shared-ui-store-cart-US18-TC2-1: Clearing pending restores guarded availability
+### shared-ui-store-cart-US19-TC2-1: Clearing pending restores guarded availability
 
 **Classification:**
 
@@ -208,7 +208,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-18
+* **Trace:** shared-ui-store-cart-US-19
 
 **Pre-conditions:**
 
@@ -223,7 +223,7 @@ Runs once per row of **Test data**.
 * Clearing itself invokes no callbacks. Existing callback-presence and validation constraints still apply. Available actions work; draft and accepted figures stay unchanged.
 
 <!-- trace:case id=g10.shared-store-cart.TC-swe rev=1 covers=g10.shared-store-cart.SC-9yi,g10.shared-store-cart.SC-nty,g10.shared-store-cart.SC-x24 -->
-### shared-ui-store-cart-US18-TC3-1: Omitting pending preserves consumer behavior
+### shared-ui-store-cart-US19-TC3-1: Omitting pending preserves consumer behavior
 
 **Classification:**
 
@@ -236,7 +236,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-18
+* **Trace:** shared-ui-store-cart-US-19
 
 **Pre-conditions:**
 

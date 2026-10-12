@@ -10,7 +10,7 @@ holds nothing,
 
 ## User journeys
 
-### shared-ui-store-cart-US-18: Shopper waits for an accepted tender choice
+### shared-ui-store-cart-US-19: Shopper waits for an accepted tender choice
 
 **As a** shopper,
 **I want** the drawer to hold my accepted figures while a tender change finishes,
