@@ -368,7 +368,7 @@ export const RequestRetrieval: Story = {
     });
     await userEvent.click(
       within(dialog).getByRole("button", {
-        name: "Submit retrieval request",
+        name: "Submit Request",
       }),
     );
     await waitFor(() => {

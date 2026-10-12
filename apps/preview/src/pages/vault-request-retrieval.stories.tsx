@@ -72,7 +72,7 @@ export const Default: Story = {
       )[0],
     ).toBeVisible();
     expect(
-      modal.getByRole("button", { name: "Submit retrieval request" }),
+      modal.getByRole("button", { name: "Submit Request" }),
     ).toBeVisible();
   },
 };

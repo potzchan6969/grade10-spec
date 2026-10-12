@@ -181,7 +181,7 @@ function VaultRequestRetrievalDialog({
               />
             }
           >
-            Submit retrieval request
+            Submit Request
           </DialogClose>
         </DialogFooter>
       </DialogContent>
