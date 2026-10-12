@@ -26,6 +26,10 @@ locks the page behind it while it is open. Pressing checkout puts the button
 into a redirecting state and hands the intent to the application, which is what
 actually creates the checkout session.
 
+## Product Pictures
+
+🚧 **Product pictures** - the drawer shows the picture the application supplies, helping the shopper recognise each item
+
 ## Empty Cart
 
 🚧 **Empty** - when the cart holds nothing, the design-system empty state: a
@@ -155,6 +159,7 @@ line: in every outcome here, the code's discount shows in the summary.
 | Empty cart action | Decided | None. The drawer offers no Browse More, so no host has to build a way into the catalogue that an empty cart cannot complete | Product |
 | Few items | Decided | The drawer lists only what the cart holds and scrolls what does not fit, instead of filling five rows with placeholders | Product |
 | Look | Decided | The block's stories are the agreed look; the Figma cart frames are historical | Design |
+| Product pictures | Decided | Keep the existing picture and placeholder presentation. The application supplies the catalogue picture; the shared block acquires and stores none. | Product |
 | Combine rules | Decided | The drawer shows the outcome the quote returns. Whether a code stacks, is refused or replaces the sale, including a product sale that refuses every code, is the shop's pricing - [Discounts · One discount at a time](/p/grade10-site/store/discounts#one-discount-at-a-time). Chosen over encoding those rules in the drawer. | Product |
 | No sale row | Decided | A site sale shows only on the lines it cuts, so each cut appears once; the summary names no site sale. | Product |
 | Order discount row | Decided | A cut off the whole order is a row of its own after the Subtotal, with no Remove, because the shop's checkout prints it on the order, not the lines. Chosen over spreading it over the lines or leaving it to the invoice. | Product |
