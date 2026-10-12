@@ -17,22 +17,26 @@ reminder runs.
 ## What Changes
 
 - **Daily dialog** - on the first entry of each Hong Kong day, a dialog lists
-  what is new and what is waiting on the operator. It does not open when
+  what is new and what is still waiting on the operator. It does not open when
   neither list has a row for them.
 - **What's New** - each listing that closed on the previous Hong Kong day, one
   row by outcome: a sold listing opens its winner order, an unsold one opens
   the listing.
-- **Waiting on You** - each order that has waited 48 hours in Preparing
+- **Still Waiting** - each order that has waited 48 hours in Preparing
   Invoice, Payment Verifying or Preparing Shipment, longest first, every day
-  until it moves on.
-- **Same lists on Today** - an operator who closed the dialog finds the lists
-  again on Today.
-- **By grant** - an operator sees only the rows whose action their grants let
-  them take.
-- **Nothing stored** - both lists are read from current listings and orders;
-  the only memory is the browser's closed mark for the day. Chosen over a
-  notification table with read state per operator, which could disagree with
-  the worklist.
+  until it moves on. Overdue and flagged orders stay in Needs you.
+- **Three columns on Today** - What's New, Still Waiting and Needs you, so an
+  operator who closed the dialog finds the lists again. Needs you holds the
+  section cards it holds now, in one column; Approvals, Recent and All
+  sections stay below.
+- **Slack message** - at 08:00 Hong Kong time every day, both lists post to one
+  Slack channel with a link on each row. The channel is shared, so it carries
+  every row and no customer names.
+- **By grant** - in the console, an operator sees only the rows whose action
+  their grants let them take.
+- **No messages stored** - both lists are read from current listings and
+  orders; there is no bell or read state. Chosen over a notification table,
+  which could disagree with the worklist.
 
 ## Non-Goals
 
@@ -42,8 +46,9 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### New Capabilities
 
-- `grade10-admin/console/daily-reminder`: the two lists, who sees a row, and
-  when the dialog opens, with auction as the first source.
+- `grade10-admin/console/daily-reminder`: the two lists, who sees a row, the
+  dialog, the three Today columns and the daily Slack message, with auction as
+  the first source.
 
 ### Modified Capabilities
 
@@ -51,30 +56,32 @@ None.
 
 ## Impact
 
-- Console: a dialog on first entry of the day, and a section on Today.
+- Console: a dialog on first entry of the day, and Today in three columns.
 - Auction backend: one read for new listings and orders, one for orders
-  waiting past the threshold, each scoped to the caller's grants.
+  waiting past the threshold, each scoped to the caller's grants for the
+  console and unscoped for Slack.
+- Slack: one daily post to a channel. The channel and token are environment
+  settings, so staging and production can differ.
 - PRDs: Daily Reminder carries 🚧 for every outcome above; Auction Management
   carries one 🚧 line pointing at it.
 - Does not change any order status, worklist row, order page or the Needs you
-  count.
+  counts.
 
 ## Open Questions
 
-- ❓ **Their waits** - which wait, if any, Setup Overdue, Payment Overdue and
-  flagged payments carry. Owed by Product; the first version leaves them out.
+None.
 
 ## Follow-on changes
 
 - Inventory and vault add their own rows to the same two lists.
-- Setup Overdue, Payment Overdue and flagged payments join Waiting on You once
-  Product sets their waits.
 
 ## References
 
 - [Daily Reminder · Rules](../../../docs/prds/products/grade10-admin/console/daily-reminder.md#rules)
 - [Daily Reminder · What's New](../../../docs/prds/products/grade10-admin/console/daily-reminder.md#what-s-new)
-- [Daily Reminder · Waiting on You](../../../docs/prds/products/grade10-admin/console/daily-reminder.md#waiting-on-you)
+- [Daily Reminder · Still Waiting](../../../docs/prds/products/grade10-admin/console/daily-reminder.md#still-waiting)
 - [Daily Reminder · Who Sees a Row](../../../docs/prds/products/grade10-admin/console/daily-reminder.md#who-sees-a-row)
 - [Daily Reminder · Opening](../../../docs/prds/products/grade10-admin/console/daily-reminder.md#opening)
+- [Daily Reminder · Today](../../../docs/prds/products/grade10-admin/console/daily-reminder.md#today)
+- [Daily Reminder · Slack](../../../docs/prds/products/grade10-admin/console/daily-reminder.md#slack)
 - [Auction Management · Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/management.md#post-sale-queue)
