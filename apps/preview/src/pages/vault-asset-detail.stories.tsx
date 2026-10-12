@@ -4,10 +4,11 @@ import {
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import { LISTING_LOT_SIDEBAR_CLASS, ListingLotGallery } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 import { VaultAssetCustodyDocuments } from "./vault-asset-custody-documents";
 import { VaultAssetDetails } from "./vault-asset-details";
 import type { VaultAssetSummaryProps } from "./vault-asset-summary";
@@ -21,7 +22,7 @@ import {
   VAULT_PORTFOLIO_HREF,
 } from "./vault-content";
 import { VaultRequestRetrievalDialog } from "./vault-request-retrieval-dialog";
-import { VaultItemDetailPageShell } from "./vault-shared";
+import { PAGE_ENTER_CLASS, VaultItemDetailPageShell } from "./vault-shared";
 import { navigateToStory } from "./workbench-story-nav";
 
 function VaultAssetDetailPage({
@@ -57,51 +58,61 @@ function VaultAssetDetailPage({
   return (
     <VaultItemDetailPageShell
       header={
-        <Breadcrumbs>
-          <BreadcrumbItem href={VAULT_PORTFOLIO_HREF}>Vault</BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem current>{asset.name}</BreadcrumbItem>
-        </Breadcrumbs>
+        <div className={PAGE_ENTER_CLASS}>
+          <Breadcrumbs>
+            <BreadcrumbItem href={VAULT_PORTFOLIO_HREF}>Vault</BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem current>{asset.name}</BreadcrumbItem>
+          </Breadcrumbs>
+        </div>
       }
     >
-      <ListingLotGallery
-        copy={{
-          zoom: "Zoom image",
-          previous: "Previous image",
-          next: "Next image",
-          images: "Item images",
-        }}
-        images={galleryImages}
-      />
+      <div className={cn(PAGE_ENTER_CLASS, "delay-[30ms]")}>
+        <ListingLotGallery
+          copy={{
+            zoom: "Zoom image",
+            previous: "Previous image",
+            next: "Next image",
+            images: "Item images",
+          }}
+          images={galleryImages}
+        />
+      </div>
 
       <VStack className={LISTING_LOT_SIDEBAR_CLASS} gap="lg" hAlign="stretch">
-        <VaultAssetSummary
-          asset={asset}
-          showEstimateChange={showEstimateChange}
-          onListForAuction={onListForAuction}
-          onListForSale={onListForSale}
-          onSubmitForGrading={() => {}}
-          onViewAuction={
-            asset.status === "Live Auction"
-              ? () => navigateToStory(AUCTION_LOT_LIVE_STORY_ID)
-              : undefined
-          }
-          onViewListing={
-            asset.status === "Listed"
-              ? () => navigateToStory(STORE_PRODUCT_DETAIL_STORY_ID)
-              : undefined
-          }
-        />
-        <VaultAssetDetails
-          asset={asset}
-          onRequestRetrieval={() => setRetrievalOpen(true)}
-          verifyHref={
-            asset.cert
-              ? `https://www.psacard.com/cert/${asset.cert}`
-              : undefined
-          }
-        />
-        <VaultAssetCustodyDocuments asset={asset} />
+        <div className={cn(PAGE_ENTER_CLASS, "delay-[60ms]")}>
+          <VaultAssetSummary
+            asset={asset}
+            showEstimateChange={showEstimateChange}
+            onListForAuction={onListForAuction}
+            onListForSale={onListForSale}
+            onSubmitForGrading={() => {}}
+            onViewAuction={
+              asset.status === "Live Auction"
+                ? () => navigateToStory(AUCTION_LOT_LIVE_STORY_ID)
+                : undefined
+            }
+            onViewListing={
+              asset.status === "Listed"
+                ? () => navigateToStory(STORE_PRODUCT_DETAIL_STORY_ID)
+                : undefined
+            }
+          />
+        </div>
+        <div className={cn(PAGE_ENTER_CLASS, "delay-[90ms]")}>
+          <VaultAssetDetails
+            asset={asset}
+            onRequestRetrieval={() => setRetrievalOpen(true)}
+            verifyHref={
+              asset.cert
+                ? `https://www.psacard.com/cert/${asset.cert}`
+                : undefined
+            }
+          />
+        </div>
+        <div className={cn(PAGE_ENTER_CLASS, "delay-[120ms]")}>
+          <VaultAssetCustodyDocuments asset={asset} />
+        </div>
       </VStack>
 
       <VaultRequestRetrievalDialog
@@ -148,25 +159,29 @@ export const Graded: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", {
-        level: 1,
-        name: VAULT_ASSET_DETAILS[0].name,
-      }),
-    ).toBeVisible();
-    expect(canvas.getByText("Estimated value since intake")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "List for Auction" }),
-    ).toBeVisible();
-    expect(canvas.getByRole("button", { name: "List for Sale" })).toBeVisible();
-    expect(canvas.getByText("Grade")).toBeVisible();
-    expect(canvas.getByText("PSA 10 Gem Mint")).toBeVisible();
-    expect(canvas.getByRole("link", { name: "Verify" })).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: "Request Retrieval" }),
-    ).toBeVisible();
-    expect(canvas.getByRole("tab", { name: "Custody Log" })).toBeVisible();
-    expect(canvas.getByRole("tab", { name: "Documents" })).toBeVisible();
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("heading", {
+          level: 1,
+          name: VAULT_ASSET_DETAILS[0].name,
+        }),
+      ).toBeVisible();
+      expect(canvas.getByText("Estimated value since intake")).toBeVisible();
+      expect(
+        canvas.getByRole("button", { name: "List for Auction" }),
+      ).toBeVisible();
+      expect(
+        canvas.getByRole("button", { name: "List for Sale" }),
+      ).toBeVisible();
+      expect(canvas.getByText("Grade")).toBeVisible();
+      expect(canvas.getByText("PSA 10 Gem Mint")).toBeVisible();
+      expect(canvas.getByRole("link", { name: "Verify" })).toBeVisible();
+      expect(
+        canvas.getByRole("link", { name: "Request Retrieval" }),
+      ).toBeVisible();
+      expect(canvas.getByRole("tab", { name: "Custody Log" })).toBeVisible();
+      expect(canvas.getByRole("tab", { name: "Documents" })).toBeVisible();
+    });
     expect(
       within(canvasElement.ownerDocument.body).queryByRole("dialog", {
         name: "Request Retrieval",
@@ -182,26 +197,30 @@ export const Raw: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", {
-        level: 1,
-        name: VAULT_ASSET_DETAILS[1].name,
-      }),
-    ).toBeVisible();
-    expect(canvas.getByText("Value Potential")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Submit for Grading" }),
-    ).toBeVisible();
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("heading", {
+          level: 1,
+          name: VAULT_ASSET_DETAILS[1].name,
+        }),
+      ).toBeVisible();
+      expect(canvas.getByText("Value Potential")).toBeVisible();
+      expect(
+        canvas.getByRole("button", { name: "Submit for Grading" }),
+      ).toBeVisible();
+      expect(
+        canvas.getByRole("button", { name: "List for Auction" }),
+      ).toBeVisible();
+      expect(
+        canvas.getByRole("button", { name: "List for Sale" }),
+      ).toBeVisible();
+      expect(
+        canvas.getByRole("link", { name: "Request Retrieval" }),
+      ).toBeVisible();
+      expect(canvas.getByText("Raw, Lightly Played")).toBeVisible();
+    });
     expect(canvas.queryByText("Grade")).toBeNull();
     expect(canvas.queryByText("Verify")).toBeNull();
-    expect(
-      canvas.getByRole("button", { name: "List for Auction" }),
-    ).toBeVisible();
-    expect(canvas.getByRole("button", { name: "List for Sale" })).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: "Request Retrieval" }),
-    ).toBeVisible();
-    expect(canvas.getByText("Raw, Lightly Played")).toBeVisible();
   },
 };
 
@@ -214,14 +233,18 @@ export const Listed: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Listed price")).toBeVisible();
-    expect(canvas.getByText("120,000")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "View Listing" })).toBeVisible();
+    await waitFor(() => {
+      expect(canvas.getByText("Listed price")).toBeVisible();
+      expect(canvas.getByText("120,000")).toBeVisible();
+      expect(
+        canvas.getByRole("button", { name: "View Listing" }),
+      ).toBeVisible();
+      expect(canvas.getByText("Listed")).toBeVisible();
+      expect(canvas.getByText("Listed in the Grade10 Store")).toBeVisible();
+    });
     expect(
       canvas.queryByRole("button", { name: "List for Auction" }),
     ).toBeNull();
-    expect(canvas.getByText("Listed")).toBeVisible();
-    expect(canvas.getByText("Listed in the Grade10 Store")).toBeVisible();
     // Locked while listed — retrieval resumes only after delisting.
     expect(
       canvas.queryByRole("link", { name: "Request Retrieval" }),
@@ -238,11 +261,15 @@ export const LiveAuction: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Bid price")).toBeVisible();
-    expect(canvas.getByText("110,000")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "View Auction" })).toBeVisible();
-    expect(canvas.getByText("Live Auction")).toBeVisible();
-    expect(canvas.getByText("Listed for auction")).toBeVisible();
+    await waitFor(() => {
+      expect(canvas.getByText("Bid price")).toBeVisible();
+      expect(canvas.getByText("110,000")).toBeVisible();
+      expect(
+        canvas.getByRole("button", { name: "View Auction" }),
+      ).toBeVisible();
+      expect(canvas.getByText("Live Auction")).toBeVisible();
+      expect(canvas.getByText("Listed for auction")).toBeVisible();
+    });
     // Locked while bidding is live — no retrieval until it settles.
     expect(
       canvas.queryByRole("link", { name: "Request Retrieval" }),
@@ -267,8 +294,10 @@ export const GradedSoftLaunch: Story = {
     ).toBeNull();
     expect(canvas.queryByRole("button", { name: "List for Sale" })).toBeNull();
     expect(canvas.queryByText("▲ 12.4%")).toBeNull();
-    expect(
-      canvas.getByRole("link", { name: "Request Retrieval" }),
-    ).toBeVisible();
+    await waitFor(() =>
+      expect(
+        canvas.getByRole("link", { name: "Request Retrieval" }),
+      ).toBeVisible(),
+    );
   },
 };

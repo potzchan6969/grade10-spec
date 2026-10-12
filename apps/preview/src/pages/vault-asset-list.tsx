@@ -18,6 +18,11 @@ import { ArrowsDownUp, CaretDown, Check } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { VaultAssetCard } from "./vault-asset-card";
 import type { VaultAsset } from "./vault-content";
+import { PAGE_ENTER_CLASS } from "./vault-shared";
+
+/** Per-card enter stagger — 40ms, capped so long lists don't drag. */
+const REVEAL_STAGGER_MS = 30;
+const REVEAL_STAGGER_CAP = 8;
 
 type ListTab = "all" | "in-vault" | "live-auction" | "listed";
 
@@ -155,10 +160,13 @@ function StickyTabBar({ children }: { children: ReactNode }) {
 function VaultAssetList({
   assets,
   onOpenAsset,
+  loading = false,
   className,
 }: {
   assets: VaultAsset[];
   onOpenAsset?: (asset: VaultAsset) => void;
+  /** Boneyard card skeletons while the holdings fetch settles. */
+  loading?: boolean;
   className?: string;
 }) {
   const visibleTabs = TABS.filter(
@@ -197,7 +205,12 @@ function VaultAssetList({
       onValueChange={(value) => setTab(value as ListTab)}
     >
       <StickyTabBar>
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div
+          className={cn(
+            PAGE_ENTER_CLASS,
+            "flex flex-wrap items-center justify-between gap-3 delay-[90ms]",
+          )}
+        >
           <TabsList aria-label="Filter holdings" variant="list">
             {visibleTabs.map((t) => (
               <TabsTrigger key={t.key} value={t.key}>
@@ -244,15 +257,29 @@ function VaultAssetList({
 
       {visibleTabs.map((t) => (
         <TabsContent key={t.key} className="mt-0 outline-none" value={t.key}>
-          <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {(t.key === activeTab ? filtered : []).map((asset) => (
-              <VaultAssetCard
-                key={asset.id}
-                asset={asset}
-                onOpen={() => onOpenAsset?.(asset)}
-              />
+          <ul
+            aria-busy={loading || undefined}
+            aria-label={loading ? "Loading vault assets" : undefined}
+            className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          >
+            {(t.key === activeTab ? filtered : []).map((asset, index) => (
+              <li
+                className={loading ? undefined : PAGE_ENTER_CLASS}
+                key={loading ? `skeleton-${index}` : asset.id}
+                style={{
+                  animationDelay: loading
+                    ? undefined
+                    : `${Math.min(index, REVEAL_STAGGER_CAP) * REVEAL_STAGGER_MS + 120}ms`,
+                }}
+              >
+                <VaultAssetCard
+                  asset={asset}
+                  loading={loading}
+                  onOpen={loading ? undefined : () => onOpenAsset?.(asset)}
+                />
+              </li>
             ))}
-          </div>
+          </ul>
         </TabsContent>
       ))}
     </Tabs>

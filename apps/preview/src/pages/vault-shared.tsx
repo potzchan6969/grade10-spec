@@ -8,6 +8,14 @@ import { Package, Vault } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { VAULT_FOOTER, VAULT_SITE_HEADER } from "./vault-content";
 
+/**
+ * Mount-time page entrance — sections rise 8px, cross-blur 2px and fade in
+ * over 300ms on the smooth-out ease (transitions.dev tokens), staggered by
+ * `delay-*` per section. Mount-only; reduced-motion renders instantly.
+ */
+const PAGE_ENTER_CLASS =
+  "animate-in fade-in-0 slide-in-from-bottom-2 blur-in-[2px] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] fill-mode-backwards motion-reduce:animate-none";
+
 function VaultPageShell({
   children,
   wide = false,
@@ -212,6 +220,7 @@ function FactRow({
 export {
   AppointmentPageShell,
   FactRow,
+  PAGE_ENTER_CLASS,
   PageHeader,
   PageSection,
   ProposalBanner,
