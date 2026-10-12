@@ -3,11 +3,11 @@
 **Status:** pending-review · 0/24
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-## Walk 1: Receive auction opening, close and bidding alerts
+## Walk 1: Collector hears a watched lot is opening
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -17,42 +17,82 @@
 
 1. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC1`
 2. Open the letter. `g10.auction-notifications.US1-TC2`
-3. Click the listing action.
-4. Back in the letter, click Manage alerts.
-5. Complete sign-in from the offer.
+3. Click the listing action. `g10.auction-notifications.US1-TC2`
+4. Back in the letter, click Manage alerts. `g10.auction-notifications.US1-TC2`
+5. Complete sign-in from the offer. `g10.auction-notifications.US1-TC2`
 6. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC3`
-7. Read the collector's My Auctions.
+7. Read the collector's My Auctions. `g10.auction-notifications.US1-TC3`
 8. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC4`
-9. Move the clock to 86400s (24 hours) before the scheduled close. `g10.auction-notifications.US2-TC5`
-10. Move the clock to 3600s (1 hour) before the scheduled close.
-11. Read the mail sent to customer A.
-12. Move the clock to 86400s (24 hours) before the scheduled close. `g10.auction-notifications.US2-TC6`
-13. Read the mail sent to customer A.
-14. Move the clock to 3600s (1 hour) before the moved close. `g10.auction-notifications.US2-TC9`
-15. Read the mail sent to customer A.
-16. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC11`
-17. As customer B, place <late bid>. `g10.auction-notifications.US2-TC12`
-18. Move the clock to 86400s (24 hours) before the moved close.
-19. Read the mail sent to customer A.
-20. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC13`
-21. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC1`
-22. Read the mail sent to customer A.
-23. Read the mail sent to customer B.
-24. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC2`
-25. Read the mail sent to customer A.
-26. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC3`
-27. Read the mail sent to customer A.
-28. Open customer A's My Auctions.
-29. As customer C, place <customer C bid>. `g10.auction-notifications.US4-TC1`
-30. Read the mail sent to customers A, B, C and D.
-31. Place <bids> in turn. `g10.auction-notifications.US4-TC2`
-32. Release sending.
-33. Read the mail sent to customer A.
-## Walk 2: Inspect notification delivery records
+
+## Walk 2: Collector returns before a lot closes
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Move the clock to 86400s (24 hours) before the scheduled close. `g10.auction-notifications.US2-TC5`
+2. Move the clock to 3600s (1 hour) before the scheduled close. `g10.auction-notifications.US2-TC5`
+3. Read the mail sent to customer A. `g10.auction-notifications.US2-TC5`
+4. Move the clock to 86400s (24 hours) before the scheduled close. `g10.auction-notifications.US2-TC6`
+5. Read the mail sent to customer A. `g10.auction-notifications.US2-TC6`
+6. Move the clock to 3600s (1 hour) before the moved close. `g10.auction-notifications.US2-TC9`
+7. Read the mail sent to customer A. `g10.auction-notifications.US2-TC9`
+8. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC11`
+9. As customer B, place <late bid>. `g10.auction-notifications.US2-TC12`
+10. Move the clock to 86400s (24 hours) before the moved close. `g10.auction-notifications.US2-TC12`
+11. Read the mail sent to customer A. `g10.auction-notifications.US2-TC12`
+12. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC13`
+
+## Walk 3: Collector raises after being outbid
+
+**Starting state:**
+
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC1`
+2. Read the mail sent to customer A. `g10.auction-notifications.US3-TC1`
+3. Read the mail sent to customer B. `g10.auction-notifications.US3-TC1`
+4. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC2`
+5. Read the mail sent to customer A. `g10.auction-notifications.US3-TC2`
+6. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC3`
+7. Read the mail sent to customer A. `g10.auction-notifications.US3-TC3`
+8. Open customer A's My Auctions. `g10.auction-notifications.US3-TC3`
+
+## Walk 4: Collector hears a new bid on a lot they bid on
+
+**Starting state:**
+
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. As customer C, place <customer C bid>. `g10.auction-notifications.US4-TC1`
+2. Read the mail sent to customers A, B, C and D. `g10.auction-notifications.US4-TC1`
+3. Place <bids> in turn. `g10.auction-notifications.US4-TC2`
+4. Release sending. `g10.auction-notifications.US4-TC2`
+5. Read the mail sent to customer A. `g10.auction-notifications.US4-TC2`
+
+## Walk 5: Operator looks up what a collector was sent
+
+**Starting state:**
+
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -61,13 +101,14 @@
 ### Route
 
 1. Filter by <customer A email>. `g10.auction-notifications.US5-TC1`
-2. Read each row.
+2. Read each row. `g10.auction-notifications.US5-TC1`
 3. Filter by <customer C email>. `g10.auction-notifications.US5-TC2`
-## Walk 3: Receive close-result alerts
+
+## Walk 6: Collector who lost hears the lot closed
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -76,19 +117,46 @@
 ### Route
 
 1. Let <lot_6> close with customer B winning. `g10.auction-notifications.US6-TC1`
-2. Read the mail sent to customer A.
+2. Read the mail sent to customer A. `g10.auction-notifications.US6-TC1`
 3. Let <lot_6> close with customer B winning. `g10.auction-notifications.US6-TC2`
-4. Read the mail sent to customer A.
+4. Read the mail sent to customer A. `g10.auction-notifications.US6-TC2`
 5. Let <lot_6> close with customer B winning. `g10.auction-notifications.US6-TC3`
-6. Read the mail sent to customer B.
-7. Let <lot_7> close with customer B winning. `g10.auction-notifications.US7-TC1`
-8. Read the mail sent to customer D.
-9. Let <lot_7> close with customer B winning. `g10.auction-notifications.US7-TC2`
-10. Read the mail sent to customer D.
-11. Let <lot_8> close with no bids. `g10.auction-notifications.US8-TC1`
-12. Read the mail sent to customer D.
-13. Let <lot_8> close with no bids. `g10.auction-notifications.US8-TC2`
-14. Read every letter sent for <lot_8>.
+6. Read the mail sent to customer B. `g10.auction-notifications.US6-TC3`
+
+## Walk 7: Watcher hears a sold lot ended
+
+**Starting state:**
+
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Let <lot_7> close with customer B winning. `g10.auction-notifications.US7-TC1`
+2. Read the mail sent to customer D. `g10.auction-notifications.US7-TC1`
+3. Let <lot_7> close with customer B winning. `g10.auction-notifications.US7-TC2`
+4. Read the mail sent to customer D. `g10.auction-notifications.US7-TC2`
+
+## Walk 8: Collector hears a no-bids close as ended only
+
+**Starting state:**
+
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Let <lot_8> close with no bids. `g10.auction-notifications.US8-TC1`
+2. Read the mail sent to customer D. `g10.auction-notifications.US8-TC1`
+3. Let <lot_8> close with no bids. `g10.auction-notifications.US8-TC2`
+4. Read every letter sent for <lot_8>. `g10.auction-notifications.US8-TC2`
+
 ## g10.auction-notifications.US1: Collector hears a watched lot is opening
 
 **As a** collector,
@@ -795,7 +863,6 @@ Runs once per row of **Test data**.
 * No rows show; the log says nothing was sent.
 
 ---
-
 
 ## g10.auction-notifications.US6: Collector who lost hears the lot closed
 

@@ -3,16 +3,11 @@
 **Status:** pending-review · 0/15
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-**Out of suite:** none of this change's scenarios; the scenarios it restates unchanged keep their durable cases.
-`add-winner-bank-transfer`. Receipt PDF on payment-received —
-`add-winner-bank-transfer`. Setup letter bullets (address, method, billing) —
-`add-winner-setup-overdue-mail` (`order-mail-SC-55`, `order-mail-SC-56`).
-
-## Walk 1: Follow post-close order letters
+## Walk 1: Post-close letters
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -21,41 +16,42 @@
 ### Route
 
 1. Close <lot_1> with this winner. `g10.auction-notifications-order.US1-TC1`
-2. Open the winner's inbox.
+2. Open the winner's inbox. `g10.auction-notifications-order.US1-TC1`
 3. admin(operator) sends the invoice for <lot_1> with <total>. `g10.auction-notifications-order.US1-TC2`
-4. Open the winner's inbox.
+4. Open the winner's inbox. `g10.auction-notifications-order.US1-TC2`
 5. admin(operator) reissues the invoice for <lot_1>. `g10.auction-notifications-order.US1-TC3`
-6. Open the winner's inbox and the send log.
+6. Open the winner's inbox and the send log. `g10.auction-notifications-order.US1-TC3`
 7. Wait until 24 hours before the payment deadline. `g10.auction-notifications-order.US1-TC4`
-8. Open the winner's inbox.
+8. Open the winner's inbox. `g10.auction-notifications-order.US1-TC4`
 9. Wait until day 3 after invoice issue. `g10.auction-notifications-order.US1-TC5`
-10. Open the winner's inbox for reminder kinds.
+10. Open the winner's inbox for reminder kinds. `g10.auction-notifications-order.US1-TC5`
 11. Deliver the payment confirmation webhook again. `g10.auction-notifications-order.US1-TC6`
-12. Open the winner's inbox and the send log.
+12. Open the winner's inbox and the send log. `g10.auction-notifications-order.US1-TC6`
 13. Wait for the setup overdue letter for <lot_1>. `g10.auction-notifications-order.US1-TC7`
-14. Open the letter.
-15. Read the letter body and the Contact Us link.
+14. Open the letter. `g10.auction-notifications-order.US1-TC7`
+15. Read the letter body and the Contact Us link. `g10.auction-notifications-order.US1-TC7`
 16. Wait for the payment overdue letter for <lot_1>. `g10.auction-notifications-order.US1-TC8`
-17. Open the letter.
-18. Read the letter body and the Contact Us link.
+17. Open the letter. `g10.auction-notifications-order.US1-TC8`
+18. Read the letter body and the Contact Us link. `g10.auction-notifications-order.US1-TC8`
 19. Wait for the order cancelled letter for <lot_1>. `g10.auction-notifications-order.US1-TC9`
-20. Open the letter.
-21. Read the letter body and the Contact Us link.
+20. Open the letter. `g10.auction-notifications-order.US1-TC9`
+21. Read the letter body and the Contact Us link. `g10.auction-notifications-order.US1-TC9`
 22. Wait for the delivered letter for <lot_1>. `g10.auction-notifications-order.US1-TC10`
-23. Open the letter.
-24. Read the letter body and the Contact Us link.
+23. Open the letter. `g10.auction-notifications-order.US1-TC10`
+24. Read the letter body and the Contact Us link. `g10.auction-notifications-order.US1-TC10`
 25. Open the payment overdue letter for <lot_1> and read the Contact Us `mailto:` subject and body. `g10.auction-notifications-order.US1-TC11`
-26. Open <the winner's auction order url> for that order.
-27. Click Contact Us and read Subject and Message.
+26. Open <the winner's auction order url> for that order. `g10.auction-notifications-order.US1-TC11`
+27. Click Contact Us and read Subject and Message. `g10.auction-notifications-order.US1-TC11`
 28. Open the payment overdue letter for <lot_1>. `g10.auction-notifications-order.US1-TC12`
-29. Read the letter body without activating Contact Us.
+29. Read the letter body without activating Contact Us. `g10.auction-notifications-order.US1-TC12`
 30. Open the letter named in the row for <lot_1>. `g10.auction-notifications-order.US1-TC13`
-31. Inspect the Contact Us href.
+31. Inspect the Contact Us href. `g10.auction-notifications-order.US1-TC13`
 32. Wait for the partial-payment letter for <lot_1>. `g10.auction-notifications-order.US1-TC14`
-33. Open the letter.
-34. Read the letter body and the Contact Us link.
+33. Open the letter. `g10.auction-notifications-order.US1-TC14`
+34. Read the letter body and the Contact Us link. `g10.auction-notifications-order.US1-TC14`
 35. Dispatch <lot_1>'s order with a carrier and a tracking number, and no tracker link. `g10.auction-notifications-order.US1-TC55`
-36. Open the winner's inbox and read the shipped letter.
+36. Open the winner's inbox and read the shipped letter. `g10.auction-notifications-order.US1-TC55`
+
 ## g10.auction-notifications-order.US1: Post-close letters
 
 **As a** customer(winner),
@@ -630,6 +626,19 @@ Runs once per row of **Test data**.
 * The letter offers no track-and-trace action.
 
 ## Settled
+
+- Cancelled and delivered subject reason fragments are `cancelled` and `delivered`
+- Partial-payment letter Contact Us is in scope with the same ready mailto
+- Subject uses the order's current invoice id after a reissue
+- Delivered letter names the address and time recorded on the order at carrier confirmation
+- One payment reminder per reissue; a repeated confirmation of the same reissue sends nothing twice
+- Reissue parks superseded reminders and starts the day-3 / day-6 sequence for the new invoice — durable Reminder cadence; not restated as a new root here
+- Mute applies to listing alert mail in `notifications`, not to winner order letters
+- Contact Us uses the same ready email as Winner Order: letters prefill
+  `mailto:support@grade10.com` and name that address in the body
+
+## Settled
+
 
 - Cancelled and delivered subject reason fragments are `cancelled` and `delivered`
 - Partial-payment letter Contact Us is in scope with the same ready mailto

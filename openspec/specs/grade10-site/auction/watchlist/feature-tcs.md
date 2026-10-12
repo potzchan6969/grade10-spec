@@ -3,11 +3,11 @@
 **Status:** pending-review · 0/12
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-## Walk 1: Watch, unwatch and read watched lots
+## Walk 1: Collector watches a listing to come back to it
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -16,27 +16,54 @@
 ### Route
 
 1. Open the listing page. `g10.auction-watchlist.US1-TC1`
-2. Watch the listing.
-3. Reload the page.
+2. Watch the listing. `g10.auction-watchlist.US1-TC1`
+3. Reload the page. `g10.auction-watchlist.US1-TC1`
 4. Submit a second watch for the same listing. `g10.auction-watchlist.US1-TC2`
-5. Read the collector's watches ordered by Watched At.
+5. Read the collector's watches ordered by Watched At. `g10.auction-watchlist.US1-TC2`
 6. Attempt to watch the listing from the listing page or catalogue. `g10.auction-watchlist.US1-TC3`
-7. Open the listing page. `g10.auction-watchlist.US2-TC1`
-8. Unwatch the listing.
-9. Open My Auctions / Watching. `g10.auction-watchlist.US2-TC2`
-10. Unwatch a row from the list.
-11. Open My Auctions / Watching. `g10.auction-watchlist.US2-TC3`
-12. Unwatch the closed listing.
-13. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC1`
-14. Read the Watching rows in order.
-15. Open My Auctions. `g10.auction-watchlist.US3-TC2`
-16. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC3`
-17. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC4`
-## Walk 2: Read operator watch counts
+
+## Walk 2: Collector unwatches a listing they no longer follow
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Open the listing page. `g10.auction-watchlist.US2-TC1`
+2. Unwatch the listing. `g10.auction-watchlist.US2-TC1`
+3. Open My Auctions / Watching. `g10.auction-watchlist.US2-TC2`
+4. Unwatch a row from the list. `g10.auction-watchlist.US2-TC2`
+5. Open My Auctions / Watching. `g10.auction-watchlist.US2-TC3`
+6. Unwatch the closed listing. `g10.auction-watchlist.US2-TC3`
+
+## Walk 3: Collector reads the listings they watch
+
+**Starting state:**
+
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC1`
+2. Read the Watching rows in order. `g10.auction-watchlist.US3-TC1`
+3. Open My Auctions. `g10.auction-watchlist.US3-TC2`
+4. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC3`
+5. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC4`
+
+## Walk 4: Operator judges interest from the watch count
+
+**Starting state:**
+
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -45,11 +72,12 @@
 ### Route
 
 1. As an operator, read the watch count for that listing. `g10.auction-watchlist.US4-TC1`
-## Walk 3: Mute alerts without removing a watch
+
+## Walk 5: Collector mutes email alerts without unwatching
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -58,7 +86,8 @@
 ### Route
 
 1. Open My Auctions / Watching. `g10.auction-watchlist.US5-TC1`
-2. Turn email alerts off for that listing.
+2. Turn email alerts off for that listing. `g10.auction-watchlist.US5-TC1`
+
 ## g10.auction-watchlist.US1: Collector watches a listing to come back to it
 
 **As a** signed-in collector,
@@ -457,5 +486,10 @@ to buy.
 * Confirmation says the watch stayed.
 
 ## Settled
+
+*None yet — suite pending review.*
+
+## Settled
+
 
 *None yet — suite pending review.*

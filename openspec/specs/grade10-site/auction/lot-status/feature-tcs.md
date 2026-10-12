@@ -3,11 +3,11 @@
 **Status:** pending-review · 3/7
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-## Walk 1: Close and read the lot state
+## Walk 1: Collector sees whether a lot can still be bid on
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -17,14 +17,13 @@
 
 1. Read external lot status. `g10.auction-lot-status.US1-TC1`
 2. Navigate to <grade10 my auctions url>. `g10.auction-lot-status.US1-TC2`
-3. Read the row for <lot_1>.
----
+3. Read the row for <lot_1>. `g10.auction-lot-status.US1-TC2`
 
-## Walk 2: Follow hidden and called-off lots
+## Walk 2: Collector does not find draft or called-off lots in browse or search
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
 
 **Shared test data:**
 
@@ -33,18 +32,31 @@
 ### Route
 
 1. Navigate to <grade10 auction catalogue url>. `g10.auction-lot-status.US2-TC1`
-2. Read the All auctions list.
-3. Search the catalogue for the title of <lot>.
+2. Read the All auctions list. `g10.auction-lot-status.US2-TC1`
+3. Search the catalogue for the title of <lot>. `g10.auction-lot-status.US2-TC1`
 4. Navigate to <grade10 my auctions url>. `g10.auction-lot-status.US2-TC2`
-5. Read the list.
+5. Read the list. `g10.auction-lot-status.US2-TC2`
 6. Read the API response for the public listing data. `g10.auction-lot-status.US2-TC3`
 7. Call the listing off. `g10.auction-lot-status.US2-TC4`
-8. Search the catalogue and browse for the listing.
-9. Open `<listing_url>` directly.
-10. Try `<listing_code>` as an address.
-11. In customer A's session, navigate to <grade10 my auctions url>. `g10.auction-lot-status.US3-TC1`
-12. In customer B's session, navigate to <grade10 my auctions url>.
----
+8. Search the catalogue and browse for the listing. `g10.auction-lot-status.US2-TC4`
+9. Open `<listing_url>` directly. `g10.auction-lot-status.US2-TC4`
+10. Try `<listing_code>` as an address. `g10.auction-lot-status.US2-TC4`
+
+## Walk 3: Bidder sees what happened to a called-off lot
+
+**Starting state:**
+
+- Reset the fixture to each case's declared **Pre-conditions** before running it.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. In customer A's session, navigate to <grade10 my auctions url>. `g10.auction-lot-status.US3-TC1`
+2. In customer B's session, navigate to <grade10 my auctions url>. `g10.auction-lot-status.US3-TC1`
+
 ## g10.auction-lot-status.US1: Collector sees whether a lot can still be bid on
 
 **As a** collector,
