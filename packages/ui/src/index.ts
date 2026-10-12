@@ -405,58 +405,6 @@ export {
   type ConsignmentSellerLineCopy,
   type ConsignmentSellerLineProps,
 } from "./blocks/consignment-mine/consignment-seller-line";
-export {
-  MyConsignmentCard,
-  type MyConsignmentCardCopy,
-  type MyConsignmentCardProps,
-} from "./blocks/consignment-mine/my-consignment-card";
-export {
-  MyConsignmentDetail,
-  type MyConsignmentDetailCopy,
-  type MyConsignmentDetailProps,
-} from "./blocks/consignment-mine/my-consignment-detail";
-export {
-  MyConsignmentItem,
-  type MyConsignmentItemCopy,
-  type MyConsignmentItemProps,
-} from "./blocks/consignment-mine/my-consignment-item";
-export {
-  MyConsignmentList,
-  type MyConsignmentListCopy,
-  type MyConsignmentListProps,
-} from "./blocks/consignment-mine/my-consignment-list";
-export {
-  MyConsignmentRecord,
-  type MyConsignmentRecordCopy,
-  type MyConsignmentRecordProps,
-} from "./blocks/consignment-mine/my-consignment-record";
-export {
-  MyConsignmentTerms,
-  type MyConsignmentTermsCopy,
-  type MyConsignmentTermsProps,
-} from "./blocks/consignment-mine/my-consignment-terms";
-export {
-  MyConsignmentsFailed,
-  type MyConsignmentsFailedCopy,
-  type MyConsignmentsFailedProps,
-} from "./blocks/consignment-mine/my-consignments-failed";
-export {
-  MyConsignmentsSignIn,
-  type MyConsignmentsSignInCopy,
-  type MyConsignmentsSignInProps,
-} from "./blocks/consignment-mine/my-consignments-sign-in";
-export type {
-  MyConsignmentChannelValue,
-  MyConsignmentDetailView,
-  MyConsignmentDocumentView,
-  MyConsignmentItemView,
-  MyConsignmentMessageView,
-  MyConsignmentPayoutView,
-  MyConsignmentState,
-  MyConsignmentSummary,
-  MyConsignmentsState,
-  MyConsignmentTermsView,
-} from "./blocks/consignment-mine/types";
 // shared-ui/loyalty-membership
 export {
   ActivityList,

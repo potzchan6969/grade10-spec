@@ -86,7 +86,7 @@ A collector who books once comes back to one link for everything about that visi
 | No QR | Decided | The pass carries no QR; a phone or an email finds the visit, so neither the collector nor staff need a camera. | Product |
 | No visit code | Decided | Nobody is shown a visit code; a phone, an email or a name finds the visit. The system still issues one, and a typed code still finds the visit, as a backup. | Product |
 | After-visit mail | ❓ Open | Thanks and We missed you, 2 hours after the shop next opens. | Product |
-| Manage link | ❓ Open | Derived from a server key, so every message can carry it while the record keeps only a hash. | Engineering |
+| Manage link | Decided | Derived from a server key, so every message can carry it while the record keeps only a hash. It rides the address's fragment, which no server or `Referer` sees, and the site sends no `Referer` at all. A paid booking's return address carries it too, so Stripe keeps it; the risk is accepted, since the same link is already in the confirmation mail and opens only that one visit - decided by the owner, 2026-10-12 | Engineering |
 
 The risk is a pass nobody opens; the desk finds the visit by name, phone or email. Design: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd). Benchmarks: [Genius Bar and cal.com](/references/appointment-benchmarks). The desk's side: [Front Desk](/p/grade10-admin/appointment/front-desk).
 :::
