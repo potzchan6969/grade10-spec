@@ -37,7 +37,7 @@ close first.
 - **Closed** - a listing that reached its close; one called off before it is
   not listed, and one that closed with no bids is Unsold
 - **Row** - the listing code and lot, and for a sold listing the winner and
-  the order's status
+  the order's status; equal closes list by listing code, A to Z
 
 ## Still Waiting
 
@@ -51,11 +51,11 @@ longest wait first. It stays on the list every day until the order moves on.
 | Dispatch | Preparing Shipment | The payment that paid it | Shipment processing |
 
 - **Row** - the listing code, lot and winner, the action, and how long the
-  order has waited; it opens the order
+  order has waited, as days and hours such as `3d 5h`; it opens the order
 - **A reminder, not a status** - no status, worklist row or order page is
   marked by it. Every row is also in
   [Orders · Needs action](/p/grade10-admin/auction/management#post-sale-queue)
-- **Order** - equal waits list the oldest first, then by listing code, A to Z
+- **Order** - the longest wait first, and equal waits by listing code, A to Z
 - **Flagged payments** - an order with an open payment flag is listed like any
   other, by its own wait; the flag does not start a second clock, and the order
   page still holds what finance must clear first
@@ -80,7 +80,8 @@ longest wait first. It stays on the list every day until the order moves on.
 - 🚧 **Closing** - the close control, Escape, a click outside, and following a
   row all close it
 - 🚧 **When it opens again** - in another browser, after the operator signs out
-  and in, and where the browser keeps nothing between loads
+  of the console and in, and where the browser keeps nothing between loads. A
+  session that ends any other way keeps the mark until the Hong Kong day ends
 - 🚧 **Only a full load** - returning to the tab or moving between pages does
   not open it
 - 🚧 **A list that fails to load** - says so beside the list that loaded, with a
@@ -103,6 +104,8 @@ read them.
   Recent and All sections under the three columns; the card is unchanged
 - 🚧 **Refresh** - Today's Refresh reads all three columns again; the dialog
   reads when it opens
+- **Counts** - the Needs you total and Today's summary line keep counting
+  Approvals
 - **Narrow screens** - the columns stack, Needs you last
 
 ## Slack
@@ -117,8 +120,8 @@ Slack channel.
   and days waited, and never a winner's name, email or phone
 - 🚧 **Quiet day** - nothing posts when both lists are empty; a list with no
   row is left out of a message that has rows
-- 🚧 **Long lists** - each list shows its first 10 rows, then a link to Today
-  that says how many more
+- 🚧 **Long lists** - each list shows its first 10 rows by exact wait or close,
+  then a link to Today that says how many more
 - 🚧 **Titles** - a lot title over 60 characters is cut to 59 and an ellipsis
 - 🚧 **One attempt** - the message is sent once; a failure is logged and that
   day's message is not sent later
