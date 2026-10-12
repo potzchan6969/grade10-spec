@@ -69,9 +69,11 @@
 * **Type:** acceptance
 * **Suites:** smoke, release
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
 
 **Pre-conditions:**
 
@@ -525,9 +527,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-02
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
 
 **Pre-conditions:**
 
@@ -653,9 +657,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-02
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/pg/catalogueBatch1.spec.ts`
 
 **Pre-conditions:**
 
@@ -2222,9 +2228,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
 
 **Pre-conditions:**
 
@@ -2265,9 +2273,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
 
 **Pre-conditions:**
 
@@ -2318,9 +2328,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
 
 **Pre-conditions:**
 
@@ -2354,9 +2366,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
 
 **Pre-conditions:**
 
@@ -2393,9 +2407,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
 
 **Pre-conditions:**
 
@@ -2434,9 +2450,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression, release
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
 
 **Pre-conditions:**
 
@@ -2477,9 +2495,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`, `grade10:apps/backend/grade10/auction/test/worker/routes.spec.ts`
 
 **Pre-conditions:**
 

@@ -242,9 +242,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-01
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
 
 **Pre-conditions:**
 
@@ -285,9 +287,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-01
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
 
 **Pre-conditions:**
 
@@ -936,9 +940,11 @@ customer A(leads with an authorized maximum matching the row) while the current 
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-05
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
 
 **Pre-conditions:**
 Grade10 has raised a bidder's bid on their behalf.
@@ -965,9 +971,11 @@ Grade10 has raised a bidder's bid on their behalf.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-05
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
 
 **Pre-conditions:**
 Two bidders have committed maxima and the listing has been resolved to the two-maximum price.
@@ -994,9 +1002,11 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * **Type:** acceptance
 * **Suites:** smoke, release
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-05
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
 
 **Pre-conditions:**
 
@@ -1085,9 +1095,11 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-05
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
 
 **Pre-conditions:**
 

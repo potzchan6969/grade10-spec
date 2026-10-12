@@ -347,6 +347,8 @@ to buy.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-04
 
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/watches/listingStats.spec.ts`
+
 **Pre-conditions:**
 
 * One Grade10 collector and one ZZZ collector each watch the same listing.

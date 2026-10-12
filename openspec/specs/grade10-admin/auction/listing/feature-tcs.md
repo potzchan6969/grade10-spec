@@ -1239,9 +1239,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
 
 **Pre-conditions:**
 
@@ -1277,9 +1279,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
 
 **Pre-conditions:**
 
@@ -1366,9 +1370,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
 
 **Pre-conditions:**
 
@@ -1410,9 +1416,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
 
 **Pre-conditions:**
 
@@ -1494,9 +1502,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
 
 **Pre-conditions:**
 
@@ -4864,9 +4874,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/draft.spec.ts`
 
 **Pre-conditions:**
 
