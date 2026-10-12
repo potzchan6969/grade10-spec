@@ -234,6 +234,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-02, grade10-site-auction-listing-page-US-03, grade10-site-auction-listing-page-US-05
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
+
 **Pre-conditions:**
 
 * <listing_2> is published and the catalogue lists it.
@@ -724,9 +726,11 @@ from my card until I win.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auction-US-12, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-listing-page-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -771,9 +775,11 @@ from my card until I win.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-12, grade10-site-auction-listing-page-US-13
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -912,9 +918,11 @@ it.
 * **Type:** integration
 * **Suites:** smoke, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bid-panel-enrollment-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -1233,9 +1241,11 @@ finds it.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14, grade10-site-auction-account-record-US-10, grade10-site-auction-account-record-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -1281,9 +1291,11 @@ finds it.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 

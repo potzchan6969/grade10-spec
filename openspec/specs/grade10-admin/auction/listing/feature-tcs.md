@@ -23,9 +23,11 @@
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -893,9 +895,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1529,9 +1533,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2626,9 +2632,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2995,9 +3003,11 @@ surface for the same figure.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3610,6 +3620,8 @@ document the unit I selected.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -3694,6 +3706,8 @@ document the unit I selected.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -3736,6 +3750,8 @@ selected unit's normal media.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -3777,6 +3793,8 @@ selected unit's normal media.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3864,6 +3882,8 @@ copy's photographs apply.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-13
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -3913,6 +3933,8 @@ changes later.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3997,6 +4019,8 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Inventory operator with existing Inventory media-management authority) is on <grade10 Inventory media manager url>.
@@ -4042,6 +4066,8 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Inventory operator with existing Inventory media-management authority) is on <grade10 Inventory media manager url>.
@@ -4083,6 +4109,8 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Inventory operator with existing Inventory media-management authority) is on <grade10 Inventory media manager url>.
@@ -4121,6 +4149,8 @@ changes later.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4165,6 +4195,8 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -4202,6 +4234,8 @@ changes later.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4282,6 +4316,8 @@ changes later.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4669,9 +4705,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4699,9 +4737,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4727,9 +4767,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4757,9 +4799,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4786,9 +4830,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 

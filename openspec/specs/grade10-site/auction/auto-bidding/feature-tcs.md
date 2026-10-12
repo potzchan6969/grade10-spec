@@ -327,9 +327,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 
@@ -382,9 +384,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer(committed a maximum matching the row) is on a listing whose current bid matches the row.
@@ -419,9 +423,11 @@ customer(committed a maximum matching the row) is on a listing whose current bid
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer(has been overtaken on an open listing) is on that listing's page.
@@ -449,9 +455,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer A(leads with a committed maximum matching the row) is on a listing whose current bid matches the row.
@@ -486,9 +494,11 @@ customer A(leads with a committed maximum matching the row) is on a listing whos
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer B(leads an HKD listing with a committed maximum of 60000 minor units).
@@ -534,9 +544,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 An open HKD listing where customer A leads with a committed maximum of 1000 minor units, the current bid is 400 minor units, and the applicable increment is 100 minor units.
@@ -575,9 +587,11 @@ An open HKD listing where customer A leads with a committed maximum of 1000 mino
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer A(leads an HKD listing at a current bid of 23500 minor units), and customer B's existing maximum is 22500 minor units.
@@ -610,9 +624,11 @@ customer A(leads an HKD listing at a current bid of 23500 minor units), and cust
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer B(leads an HKD listing with a committed maximum of 50000 minor units), having overtaken customer A.
@@ -645,9 +661,11 @@ customer B(leads an HKD listing with a committed maximum of 50000 minor units), 
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer B(leads an HKD listing with a committed maximum of 50000 minor units), having overtaken customer A.
@@ -680,9 +698,11 @@ customer B(leads an HKD listing with a committed maximum of 50000 minor units), 
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer A(leads an HKD listing with a committed maximum of 800000 minor units).
@@ -715,9 +735,11 @@ customer A(leads an HKD listing with a committed maximum of 800000 minor units).
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer B(leads with a committed maximum of 60000 minor units).
@@ -1018,9 +1040,11 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 

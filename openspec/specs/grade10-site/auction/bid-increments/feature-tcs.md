@@ -24,9 +24,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/opening-price.spec.ts`
 
 **Pre-conditions:**
 
@@ -69,9 +71,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
 An open USD listing has current public price `<current public price>`.
@@ -105,9 +109,11 @@ The collector is enrolled and can bid.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
 The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
@@ -139,9 +145,11 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
 The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
@@ -360,9 +368,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
 The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
