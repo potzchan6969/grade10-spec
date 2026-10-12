@@ -27,7 +27,7 @@ Both kinds state:
   beside them
 - **Combines with** — which of the shop's own product, order and
   shipping discounts the coupon stacks with; the store default where the
-  reward states none — [Discounts](/p/grade10-site/store/discounts)
+  reward states none — [Discounts](/p/grade10-site/store/discounts#authoring-rules)
 
 | Reward | Discount | Scope | Minimum spend |
 | --- | --- | --- | --- |

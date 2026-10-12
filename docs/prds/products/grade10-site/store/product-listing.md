@@ -35,10 +35,8 @@ The product listing lets collectors browse the catalogue and open a product.
 - 🚧 **Worlds and Types as tabs on a small screen** — inside the filter drawer
   the two facet groups sit as tabs so expanding worlds does not push types
   down the scroll; the wide sidebar still stacks them
-- **Site discounts** — a card that one of the shop's own automatic discounts
-  cuts with no condition shows the lower price, with the price before it
-  struck through; where two would, the larger cut shows, never their sum —
-  [Discounts](/p/grade10-site/store/discounts#site-discounts)
+- **Sale** — a card on sale shows the lower price with the higher struck
+  through — [Discounts](/p/grade10-site/store/discounts#where-each-shows)
 - ❓ **A conditional offer on the tile** — a spend threshold, a quantity or a
   buy-x-get-y has no price to show, and the tile does not yet draw an offer's
   name; until Design draws one, the product page names it. Design confirms
@@ -221,7 +219,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Utility row | Decided | Help, Shipping and Orders & Returns do not sit under the filter. Where Help and store or auction documentation live is still open on [Page Shell](/p/grade10-site/site/page-shell). | Product |
 | Sign-in to add | Decided | A signed-out Add to cart opens the sign-in dialog. There is no guest cart and no guest checkout. After sign-in the add completes when practical. | Product |
 | Sign-in title from add | Decided | The dialog title is **Sign In to Add to Cart** (Title Case, as Modal titles are) — why, not the bare **Sign In to Grade10**. Header Sign In and other entry points keep **Sign In to Grade10**. Cart, not bag. | Product |
-| Site discounts on the tile | Decided | The shop's own automatic discounts are read from the shop and shown on the cards they reach, refreshed every minute. Only one with no condition prices a card; a discount that waits on a basket is the cart's to price. A discount an app computes is not shown, because what it reaches cannot be read. | Product |
+| Site discounts on the tile | Decided | The shop's own automatic discounts are read from the shop, refreshed every minute, and shown as [Discounts](/p/grade10-site/store/discounts#where-each-shows) sets out; a discount that waits on a basket is the cart's to price. A discount an app computes is not shown, because what it reaches cannot be read. | Product |
 | No stock on browse | Decided | The listing and the product page show no remaining count, no scarcity cue and no cap on a requested quantity from a stock count. The cart's review is the only authority for a quantity, and Cart explains a short fill. | Product |
 | Links the site owes | ❓ Open | The footer still draws destinations the site does not yet answer. Settling that departure belongs to page-shell; the listing no longer adds a second one. | Product |
 | Search stays on the listing | Decided | The field lives with the listing filters, not in the site header. Auction has no search surface yet, and a nav search would read as site-wide find. | Design |
