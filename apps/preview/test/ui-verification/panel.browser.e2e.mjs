@@ -101,6 +101,7 @@ async function publishRun(
     runId,
     createdAt,
     storyId,
+    referenceStoryId = STORY_ID,
     appCommit = "a".repeat(40),
     referenceCommit = "b".repeat(40),
     appRef = "fixture-app-checkpoint",
@@ -111,6 +112,7 @@ async function publishRun(
   const catalogue = DECLARATIONS.map((declaration) => ({
     ...declaration,
     storyId,
+    reference: { ...declaration.reference, storyId: referenceStoryId },
     status: "active",
   }));
   const captures = [];
@@ -886,7 +888,9 @@ test("an explicit historical story stays selected while Storybook navigation cha
   const versionSelect = page.getByRole("combobox", {
     name: "Selected version",
   });
-  await versionSelect.selectOption(`${"f".repeat(40)}::${"1".repeat(40)}`);
+  await versionSelect.selectOption(
+    JSON.stringify(["f".repeat(40), "1".repeat(40)]),
+  );
   const storyChoice = page.getByRole("button", {
     name: /Components\/Breadcrumbs\/Previous name/,
   });
@@ -939,6 +943,111 @@ test("an explicit historical story stays selected while Storybook navigation cha
   );
   await page
     .getByText("reference-story-history-0001", { exact: true })
+    .waitFor();
+  await page.close();
+});
+
+test("renamed recorded story IDs resolve through a unique current case-only mapping", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(
+    join(tmpdir(), "ui-verification-renamed-story-selection-"),
+  );
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "renamed-story-identity-0001",
+    createdAt: "2026-10-08T10:01:00.000Z",
+    storyId: "removed-app-story--default",
+    referenceStoryId: "removed-reference-story--default",
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("button", { name: "All recordings" }).click();
+  await page
+    .getByRole("combobox", { name: "Selected version" })
+    .selectOption(JSON.stringify(["a".repeat(40), "b".repeat(40)]));
+
+  assert.equal(
+    await page.locator(".verification-story-choice").count(),
+    2,
+    "both archived targets should be visible for the selected version",
+  );
+  const componentSearch = page.getByPlaceholder("Find components");
+  await componentSearch.fill("Breadcrumbs Default");
+  await page
+    .locator('.search-result-item[data-id="components-breadcrumbs--default"]')
+    .click();
+  await page.waitForFunction(() => {
+    const heading = [...document.querySelectorAll("h3")].find(
+      (candidate) =>
+        candidate.textContent?.trim() === "Current Storybook story",
+    );
+    return (
+      heading?.nextElementSibling?.textContent?.trim() ===
+      "components-breadcrumbs--default"
+    );
+  });
+
+  const archivedStory = page.getByRole("button", {
+    name: /Pages\/Not Found\/Default page/,
+  });
+  await archivedStory.click();
+  await page
+    .getByText(
+      "Recorded story IDs are unavailable; opened the unique Storybook story mapped to this case.",
+      { exact: true },
+    )
+    .waitFor();
+  await page.waitForFunction(() => {
+    const heading = [...document.querySelectorAll("h3")].find(
+      (candidate) =>
+        candidate.textContent?.trim() === "Current Storybook story",
+    );
+    return (
+      heading?.nextElementSibling?.textContent?.trim() ===
+      "pages-not-found--default"
+    );
+  });
+  assert.equal(await archivedStory.getAttribute("aria-pressed"), "true");
+  await page
+    .getByText("renamed-story-identity-0001", { exact: true })
+    .waitFor();
+
+  await componentSearch.fill("Breadcrumbs Default");
+  await page
+    .locator('.search-result-item[data-id="components-breadcrumbs--default"]')
+    .click();
+  await page.waitForFunction(() => {
+    const heading = [...document.querySelectorAll("h3")].find(
+      (candidate) =>
+        candidate.textContent?.trim() === "Current Storybook story",
+    );
+    return (
+      heading?.nextElementSibling?.textContent?.trim() ===
+      "components-breadcrumbs--default"
+    );
+  });
+  assert.equal(
+    await archivedStory.getAttribute("aria-pressed"),
+    "true",
+    "the live story parameters must not replace the selected historical identity",
+  );
+  await page
+    .getByText("renamed-story-identity-0001", { exact: true })
     .waitFor();
   await page.close();
 });

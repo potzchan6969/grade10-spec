@@ -170,6 +170,15 @@ function runHasIdentity(
   });
 }
 
+function isCaseOnlyVerification(value: unknown, caseId: string): boolean {
+  return (
+    isRecord(value) &&
+    caseIdOf(value) === caseId &&
+    !("targetId" in value) &&
+    !("capturePointId" in value)
+  );
+}
+
 async function listAllRuns(
   base: string,
   caseId: string,
@@ -1030,28 +1039,72 @@ export function VerificationPanel({ active }: { active: boolean }) {
   );
   const relevantReviews = selectedReview ? [selectedReview] : [];
   const selectedAssessmentDetails = scoreDetails(selectedAssessment);
-  const selectedStoryNavigationTarget = selectedStoryChoice
-    ? ([selectedStoryChoice.storyId, selectedStoryChoice.referenceStoryId].find(
-        (storyId) => Boolean(storyId && managerApi.resolveStory(storyId)),
-      ) ?? "")
-    : "";
-  const selectedStoryUnavailableNotice = selectedStoryChoice
-    ? !managerApi.resolveStory(selectedStoryChoice.storyId) &&
-      selectedStoryChoice.referenceStoryId &&
-      managerApi.resolveStory(selectedStoryChoice.referenceStoryId)
-      ? "Recorded story unavailable; the reference story is available in this Storybook."
-      : !selectedStoryNavigationTarget
-        ? "The recorded story is no longer in this Storybook. Historical evidence remains available."
-        : ""
-    : "";
+  function storyNavigation(choice: IdentityOption) {
+    if (choice.storyId && managerApi.resolveStory(choice.storyId)) {
+      return { target: choice.storyId, notice: "" };
+    }
+    if (
+      choice.referenceStoryId &&
+      managerApi.resolveStory(choice.referenceStoryId)
+    ) {
+      return {
+        target: choice.referenceStoryId,
+        notice:
+          "Recorded story unavailable; the reference story is available in this Storybook.",
+      };
+    }
+
+    const exactMatches: string[] = [];
+    const caseOnlyMatches: string[] = [];
+    for (const indexedEntry of Object.values(managerState.index ?? {})) {
+      if (indexedEntry.type !== "story") continue;
+      const indexedStory = managerApi.getData(indexedEntry.id);
+      if (indexedStory?.type !== "story") continue;
+      const verification = indexedStory.parameters?.verification;
+      const indexedIdentity = verificationIdentity(verification);
+      if (indexedIdentity && sameIdentity(indexedIdentity, choice.identity)) {
+        exactMatches.push(indexedStory.id);
+      } else if (isCaseOnlyVerification(verification, choice.identity.caseId)) {
+        caseOnlyMatches.push(indexedStory.id);
+      }
+    }
+    if (exactMatches.length === 1) {
+      return {
+        target: exactMatches[0],
+        notice:
+          "Recorded story IDs are unavailable; opened the unique Storybook story with the matching verification identity.",
+      };
+    }
+    if (exactMatches.length === 0 && caseOnlyMatches.length === 1) {
+      return {
+        target: caseOnlyMatches[0],
+        notice:
+          "Recorded story IDs are unavailable; opened the unique Storybook story mapped to this case.",
+      };
+    }
+    if (exactMatches.length > 1 || caseOnlyMatches.length > 1) {
+      return {
+        target: "",
+        notice:
+          "Recorded story IDs are unavailable, and the current Storybook mapping is ambiguous. Historical evidence remains available.",
+      };
+    }
+    return {
+      target: "",
+      notice:
+        "The recorded story is no longer in this Storybook. Historical evidence remains available.",
+    };
+  }
+
+  const selectedStoryNavigation = selectedStoryChoice
+    ? storyNavigation(selectedStoryChoice)
+    : null;
 
   function selectArchivedStory(choice: IdentityOption) {
     setSelectedIdentityKey(identityKey(choice.identity));
     setSelectedRunId("");
-    const navigationTarget = [choice.storyId, choice.referenceStoryId].find(
-      (storyId) => Boolean(storyId && managerApi.resolveStory(storyId)),
-    );
-    if (navigationTarget) managerApi.selectStory(navigationTarget);
+    const navigation = storyNavigation(choice);
+    if (navigation.target) managerApi.selectStory(navigation.target);
   }
 
   return (
@@ -1218,9 +1271,9 @@ export function VerificationPanel({ active }: { active: boolean }) {
                 )}
               </div>
             </fieldset>
-            {selectedStoryChoice && selectedStoryUnavailableNotice ? (
+            {selectedStoryNavigation?.notice ? (
               <p className="verification-notice">
-                {selectedStoryUnavailableNotice}
+                {selectedStoryNavigation.notice}
               </p>
             ) : null}
           </>
