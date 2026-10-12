@@ -336,9 +336,11 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/src/serving/sitemap.test.tsx`
 
 **Pre-conditions:**
 The catalogue holds `<a published lot>`.
@@ -1409,9 +1411,11 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-12
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/live.spec.ts`
 
 **Pre-conditions:**
 
