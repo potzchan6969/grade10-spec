@@ -41,7 +41,7 @@ Builds against the contracts and fixtures of group 2, never a running backend.
 - [ ] 4.6 Change `pages/dashboard/TodayPage.tsx` and `routes/dashboard.tsx` to three columns, with Needs you unchanged inside its column, `ApprovalsCard` moved into a section under the columns beside Recent and All sections, and the columns stacked on a narrow screen with Needs you last (`grade10-admin-console-daily-reminder-SC-36`, `grade10-admin-console-daily-reminder-SC-37`, `grade10-admin-console-daily-reminder-SC-40`, `grade10-admin-console-daily-reminder-SC-42`, `grade10-admin-console-daily-reminder-SC-43`, `grade10-admin-console-daily-reminder-SC-44`); each product's list folds to one line on Today behind a chevron (`grade10-admin-console-daily-reminder-SC-83`)
 - [ ] 4.7 Verify: the console's own suites, `pnpm run test:stories`, `pnpm run check:app-bundles`, `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
-## 5. The walk (grade10)
+## 5. The walk (grade10) (owner: @mason5991)
 
 Uses draft `feature-tcs.md` as its planning input, and the groups it walks landed.
 
