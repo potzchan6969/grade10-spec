@@ -4,5 +4,3 @@ depends_on:
   - clarify-auction-shipping-progress-copy
 hands:
   pm: "@htonyl"
-awaiting:
-  specs: "Independent Dev design, scenarios and tasks are complete; planning-dev owes QA2 reconciliation and acceptance review."

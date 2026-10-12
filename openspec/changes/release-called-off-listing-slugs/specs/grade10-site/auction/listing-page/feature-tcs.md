@@ -72,7 +72,7 @@ The catalogue publishes two lots.
 * Each response carries its own lot's name and standing.
 * Each response carries its own title, meta description and `og:url`.
 
-<!-- trace:case id=g10.auction-listing-page.TC-2it rev=3 -->
+<!-- trace:case id=g10.auction-listing-page.TC-2it rev=3 covers=g10.auction-listing-page.SC-l9n -->
 ### grade10-site-auction-listing-page-US1-TC3-3: Reused address serves only its eligible current holder
 
 **Classification:**
@@ -294,7 +294,7 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The page is that lot's page.
 
-<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=4 -->
+<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=4 covers=g10.auction-listing-page.SC-c13 -->
 ### grade10-site-auction-listing-page-US3-TC3-4: Unavailable original address serves Page not found
 
 **Classification:**
@@ -356,7 +356,7 @@ Runs once per row of **Test data**.
 * An unpublished replacement does not appear there either.
 
 
-<!-- trace:case id=g10.auction-listing-page.TC-x03 rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-x03 rev=2 covers=g10.auction-listing-page.SC-b49,g10.auction-listing-page.SC-w3i -->
 ### grade10-site-auction-listing-page-US3-TC4-2: Client navigation refuses an ineligible released address
 
 Runs once per row of **Test data**.
@@ -887,7 +887,7 @@ Runs once per row of **Test data**.
 * The source names the lot by its title.
 * The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
 
-<!-- trace:case id=g10.auction-listing-page.TC-87q rev=3 -->
+<!-- trace:case id=g10.auction-listing-page.TC-87q rev=3 covers=g10.auction-listing-page.SC-57v -->
 ### grade10-site-auction-listing-page-US10-TC2-3: Listing code absent from the page once scripts finish running
 
 **Classification:**
@@ -927,7 +927,7 @@ Runs once per row of **Test data**.
 * No separate listing-code or payment-reference field appears.
 * A code occurs only within the full canonical address.
 
-<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=3 -->
+<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=3 covers=g10.auction-listing-page.SC-oq9 -->
 ### grade10-site-auction-listing-page-US10-TC3-3: Listing code absent from the shared-link preview
 
 **Classification:**
@@ -1121,7 +1121,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix.
 * The title and address shown are identical in both views.
 
-<!-- trace:case id=g10.auction-listing-page.TC-6de rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-6de rev=2 covers=g10.auction-listing-page.SC-dc3 -->
 ### grade10-site-auction-listing-page-US10-TC9-2: Listing code stays absent once an order exists on the lot
 
 **Classification:**
@@ -1156,7 +1156,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Title and description contain no listing code or payment reference.
 * Embedded and network data contain no separate code or payment reference.
 
-<!-- trace:case id=g10.auction-listing-page.TC-y7l rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-y7l rev=2 covers=g10.auction-listing-page.SC-suj -->
 ### grade10-site-auction-listing-page-US10-TC10-2: An address naming no lot carries no listing code
 
 **Classification:**
@@ -1265,7 +1265,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **I want** support to quickly identify which lot I'm referring to,
 **so that** my inquiry is resolved faster without having to copy listing URLs or titles.
 
-<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=3 -->
+<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=3 covers=g10.auction-listing-page.SC-51n -->
 ### grade10-site-auction-listing-page-US11-TC1-3: No listing code available on the page for the collector to send
 
 **Classification:**
@@ -2389,7 +2389,7 @@ initial while the label stays Bidder N,
 
 **Run:** QA2, 2026-10-12. QA1 used frozen bundle `02ba99d366a1f619b3df386916067b23a31ec77462132a92d7eddd4bd474713f`. QA2 read both independent readings, all 3 deltas, the complete feature maps, current and durable journeys, durable context, and the linked owner decisions. Case dispositions were recorded before scenario links.
 
-- **Disposition** - The unchanged refusal and identifier cases plus the independent refusal cases fully assert 7 delta scenarios. TC-x03 checks client refusal and the served 404 after reload for the unused address. That order fully checks SC54 outcomes; it makes no claim about a transition between the two reads. SC55-SC56 remain uncovered. Inherited SC21, SC23-SC25 and SC27 also lack a fully asserting single case. TC-sa9 remains deprecated under Q2; no case links the retired SC28.
+- **Disposition** - All 14 listing-page scenarios have complete routes. TC-2it@3 fetches the replacement without scripts, checks served metadata, then reads hydrated/client data for published, closed and settled holders. TC-x03@2 checks private draft/created client refusal and served 404 on reload. TC-5rp@3, TC-du4@3, TC-y7l@2, TC-87q@3 and TC-6de@2 close the five inherited identifier gaps through preview/document metadata, support lookup, not-found response, hydration continuity and order-existing client data. TC-sa9 remains deprecated under Q2; no case links the retired SC28.
 - **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
 - **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
 - **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.

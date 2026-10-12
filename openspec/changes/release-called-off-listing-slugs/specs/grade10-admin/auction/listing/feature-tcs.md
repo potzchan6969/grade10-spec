@@ -1027,7 +1027,7 @@ Runs once per row of **Test data**.
 * Step 1 accepts the save.
 * Step 2 shows neither draft occupying a slug.
 
-<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=4 -->
+<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=4 covers=g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-yml -->
 ### grade10-admin-auction-listing-US3-TC13-4: Create can reuse a canceled listing's original slug
 
 **Classification:**
@@ -2636,7 +2636,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the cancel.
 * Step 3 still shows the listing as canceled.
 
-<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=4 -->
+<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=4 covers=g10adm.auction-listing.SC-xck,g10adm.auction-listing.SC-ysx -->
 ### grade10-admin-auction-listing-US5-TC7-4: Call off releases the original slug for saving
 
 **Classification:**
@@ -4888,7 +4888,7 @@ changes later.
 * Save is refused with an unavailable-slug result.
 * The draft's stored slug remains unchanged.
 
-<!-- trace:case id=g10adm.auction-listing.TC-wrn rev=2 -->
+<!-- trace:case id=g10adm.auction-listing.TC-wrn rev=2 covers=g10adm.auction-listing.SC-ejg -->
 ### grade10-admin-auction-listing-US73-TC7-2: Competing reuse saves leave only one slug holder
 
 **Classification:**
@@ -4954,7 +4954,7 @@ changes later.
 
 **Run:** QA2, 2026-10-12. QA1 used frozen bundle `02ba99d366a1f619b3df386916067b23a31ec77462132a92d7eddd4bd474713f`. QA2 read both independent readings, all 3 deltas, the complete feature maps, current and durable journeys, durable context, and the linked owner decisions. Case dispositions were recorded before scenario links.
 
-- **Disposition** - The inherited slug and cancellation cases fully assert 16 delta scenarios. TC-z2r checks call off, field exit and Save, but does not check the public refusal, browse/search removal or bidder record. TC-1jo preserves the code after reuse. SC42 and SC155-SC158 remain uncovered as complete routes. Do not combine partial cases into a covers claim.
+- **Disposition** - All 21 listing scenarios have complete routes. TC-z2r@4 drives call off, released-slug field exit/Save, public refusal, browse/search removal and retained code/history. TC-yjr@4 saves and creates from earlier and current called-off rows, then checks the original code/history and public refusal. TC-wrn@2 submits both Saves concurrently, checks one holder and preserves the refused draft's stored slug. The campaign route TC-t49@4 covers SC157. Each covers link asserts the whole scenario without combining cases.
 - **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
 - **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
 - **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.

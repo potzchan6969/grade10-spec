@@ -70,7 +70,7 @@
 **I want** cancelling a campaign to take its listings with it,
 **so that** a called-off event leaves nothing a collector can still reach.
 
-<!-- trace:case id=g10adm.auction-domain.TC-t49 rev=4 -->
+<!-- trace:case id=g10adm.auction-domain.TC-t49 rev=4 covers=g10adm.auction-listing.SC-euk -->
 ### grade10-admin-auction-e2e-US2-TC1-4: Campaign cancellation releases addresses for later lots
 
 **Classification:**
@@ -250,7 +250,7 @@
 
 **Run:** QA2, 2026-10-12. QA1 used frozen bundle `02ba99d366a1f619b3df386916067b23a31ec77462132a92d7eddd4bd474713f`. QA2 read both independent readings, all 3 deltas, the complete feature maps, current and durable journeys, durable context, and the linked owner decisions. Case dispositions were recorded before scenario links.
 
-- **Disposition** - TC-t49 remains the independent campaign cancellation and reuse route. It checks 2 published lots, released slugs, draft refusal and public replacement. It does not drive the draft/created/closed campaign composition in SC157, so it receives no covers claim for that scenario. The other 3 inherited cases retain their identities, bodies and classifications.
+- **Disposition** - TC-t49@4 fully asserts SC157 on one campaign route with draft, created and published siblings plus a closed control. Every canceled sibling releases its slug; the closed control retains its result and reserved slug. The other 3 inherited cases retain their identities, bodies and classifications.
 - **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
 - **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
 - **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
