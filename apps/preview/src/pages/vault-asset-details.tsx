@@ -50,6 +50,10 @@ function VaultAssetDetails({
 }: VaultAssetDetailsProps) {
   const isGraded = asset.condition === "Graded";
   const conditionDisplay = asset.conditionDescription ?? asset.condition;
+  // A listed or auctioned asset is locked — retrieval only resumes if it
+  // delists back to In Vault.
+  const retrievable =
+    asset.status !== "Listed" && asset.status !== "Live Auction";
 
   return (
     <VStack className={className} gap="none" hAlign="stretch">
@@ -82,7 +86,7 @@ function VaultAssetDetails({
       <DetailRow label="Location" value={asset.location} />
       <DetailRow label="Condition" value={conditionDisplay} />
 
-      {onRequestRetrieval ? (
+      {retrievable && onRequestRetrieval ? (
         <div className="pt-2">
           <Link
             href="#"

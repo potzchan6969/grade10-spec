@@ -12,9 +12,17 @@ import { VaultAssetCustodyDocuments } from "./vault-asset-custody-documents";
 import { VaultAssetDetails } from "./vault-asset-details";
 import type { VaultAssetSummaryProps } from "./vault-asset-summary";
 import { VaultAssetSummary } from "./vault-asset-summary";
-import { VAULT_ASSET_DETAILS, VAULT_PORTFOLIO_HREF } from "./vault-content";
+import {
+  AUCTION_LOT_LIVE_STORY_ID,
+  STORE_PRODUCT_DETAIL_STORY_ID,
+  VAULT_ASSET_DETAILS,
+  VAULT_LISTED_ASSET_DETAIL,
+  VAULT_LIVE_AUCTION_ASSET_DETAIL,
+  VAULT_PORTFOLIO_HREF,
+} from "./vault-content";
 import { VaultRequestRetrievalDialog } from "./vault-request-retrieval-dialog";
 import { VaultItemDetailPageShell } from "./vault-shared";
+import { navigateToStory } from "./workbench-story-nav";
 
 function VaultAssetDetailPage({
   asset,
@@ -73,6 +81,16 @@ function VaultAssetDetailPage({
           onListForAuction={onListForAuction}
           onListForSale={onListForSale}
           onSubmitForGrading={() => {}}
+          onViewAuction={
+            asset.status === "Live Auction"
+              ? () => navigateToStory(AUCTION_LOT_LIVE_STORY_ID)
+              : undefined
+          }
+          onViewListing={
+            asset.status === "Listed"
+              ? () => navigateToStory(STORE_PRODUCT_DETAIL_STORY_ID)
+              : undefined
+          }
         />
         <VaultAssetDetails
           asset={asset}
@@ -184,6 +202,51 @@ export const Raw: Story = {
       canvas.getByRole("link", { name: "Request Retrieval" }),
     ).toBeVisible();
     expect(canvas.getByText("Raw, Lightly Played")).toBeVisible();
+  },
+};
+
+/** Store-listed holding — LISTED PRICE plus a View Listing link to the product page. */
+export const Listed: Story = {
+  args: {
+    asset: VAULT_LISTED_ASSET_DETAIL,
+    listForAuction: false,
+    listForSale: false,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Listed price")).toBeVisible();
+    expect(canvas.getByText("120,000")).toBeVisible();
+    expect(canvas.getByRole("button", { name: "View Listing" })).toBeVisible();
+    expect(
+      canvas.queryByRole("button", { name: "List for Auction" }),
+    ).toBeNull();
+    expect(canvas.getByText("Listed")).toBeVisible();
+    expect(canvas.getByText("Listed in the Grade10 Store")).toBeVisible();
+    // Locked while listed — retrieval resumes only after delisting.
+    expect(
+      canvas.queryByRole("link", { name: "Request Retrieval" }),
+    ).toBeNull();
+  },
+};
+
+/** Auction-bound holding — BID PRICE plus a View Auction link to the lot. */
+export const LiveAuction: Story = {
+  args: {
+    asset: VAULT_LIVE_AUCTION_ASSET_DETAIL,
+    listForAuction: false,
+    listForSale: false,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Bid price")).toBeVisible();
+    expect(canvas.getByText("110,000")).toBeVisible();
+    expect(canvas.getByRole("button", { name: "View Auction" })).toBeVisible();
+    expect(canvas.getByText("Live Auction")).toBeVisible();
+    expect(canvas.getByText("Listed for auction")).toBeVisible();
+    // Locked while bidding is live — no retrieval until it settles.
+    expect(
+      canvas.queryByRole("link", { name: "Request Retrieval" }),
+    ).toBeNull();
   },
 };
 
