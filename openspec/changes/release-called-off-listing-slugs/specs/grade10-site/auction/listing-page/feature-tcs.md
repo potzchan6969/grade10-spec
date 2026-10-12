@@ -72,8 +72,8 @@ The catalogue publishes two lots.
 * Each response carries its own lot's name and standing.
 * Each response carries its own title, meta description and `og:url`.
 
-<!-- trace:case id=g10.auction-listing-page.TC-2it rev=2 -->
-### grade10-site-auction-listing-page-US1-TC3-2: Reused address serves only its eligible current holder
+<!-- trace:case id=g10.auction-listing-page.TC-2it rev=3 -->
+### grade10-site-auction-listing-page-US1-TC3-3: Reused address serves only its eligible current holder
 
 **Classification:**
 
@@ -91,7 +91,8 @@ The catalogue publishes two lots.
 **Pre-conditions:**
 
 * customer has `<reused_address>` saved before `<old_lot>` was called off.
-* `<new_lot>` is public and holds that released slug.
+* `<new_lot>` is the eligible current holder in `<replacement_state>`.
+* No bid or standing change occurs during this pass.
 * The browser runs no client-side scripts.
 
 **Test data:**
@@ -99,8 +100,14 @@ The catalogue publishes two lots.
 | Field | Value |
 | --- | --- |
 | old_lot | A called-off listing with a different title and description |
-| new_lot | The eligible current holder, with its own title and description |
+| new_lot | The eligible current holder, with its own title, description and bidding standing |
 | reused_address | The original address shared by both listings |
+
+| `<replacement_state>` |
+| --- |
+| Published, open to collectors |
+| Closed, retained by public lookup |
+| Settled, retained by public lookup |
 
 **Steps:**
 
@@ -108,6 +115,8 @@ The catalogue publishes two lots.
 2. Read the served page.
 3. Inspect its title, description and Open Graph metadata.
 4. Inspect embedded data and fresh share-preview metadata.
+5. Enable scripts on this same address.
+6. Read the hydrated page and client lookup data.
 
 **Expected Results:**
 
@@ -120,6 +129,11 @@ The catalogue publishes two lots.
 * Preview title, description and URL identify `<new_lot>`.
 * No separate listing-code or payment-reference field appears.
 * A code appears only within the full canonical address.
+* The served document title and meta description name `<new_lot>`.
+* Its canonical address and og:url equal `<reused_address>`.
+* og:title and og:description name `<new_lot>`.
+* Step 6 keeps the same `<new_lot>`, title, description and bidding standing.
+* No placeholder, old-lot content or separate code field replaces served content.
 
 
 <!-- trace:case id=g10.auction-listing-page.TC-tof rev=2 -->
@@ -280,8 +294,8 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The page is that lot's page.
 
-<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=3 -->
-### grade10-site-auction-listing-page-US3-TC3-3: Unavailable original address serves Page not found
+<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=4 -->
+### grade10-site-auction-listing-page-US3-TC3-4: Unavailable original address serves Page not found
 
 **Classification:**
 
@@ -305,6 +319,7 @@ Runs once per row of **Test data**.
 * The original listing is in `<state>`.
 * No eligible public listing holds its original slug.
 * The browser runs no client-side scripts.
+* For called-off rows, the collector watched the original before call off.
 
 **Test data:**
 
@@ -324,6 +339,8 @@ Runs once per row of **Test data**.
 4. Inspect its response body and embedded data.
 5. Open the original listing code alone as the lot address.
 6. Inspect that response and page.
+7. Open the original collector's watchlist.
+8. Search for the called-off original listing.
 
 **Expected Results:**
 
@@ -335,6 +352,8 @@ Runs once per row of **Test data**.
 * Step 4 contains no listing code or payment reference.
 * Step 5 returns 404.
 * Step 6 shows Page not found with no lot data or code.
+* Step 8 does not show the called-off original in the watchlist.
+* An unpublished replacement does not appear there either.
 
 
 <!-- trace:case id=g10.auction-listing-page.TC-x03 rev=2 -->
@@ -868,8 +887,8 @@ Runs once per row of **Test data**.
 * The source names the lot by its title.
 * The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
 
-<!-- trace:case id=g10.auction-listing-page.TC-87q rev=2 -->
-### grade10-site-auction-listing-page-US10-TC2-2: Listing code absent from the page once scripts finish running
+<!-- trace:case id=g10.auction-listing-page.TC-87q rev=3 -->
+### grade10-site-auction-listing-page-US10-TC2-3: Listing code absent from the page once scripts finish running
 
 **Classification:**
 
@@ -888,23 +907,28 @@ Runs once per row of **Test data**.
 
 * A published lot exists at its own address.
 * The lot's listing code is known from the admin listing screen.
+* Its bidding standing stays unchanged during the pass.
+* The browser initially runs no scripts.
 
 **Steps:**
 
-1. Open `<a published lot's address>` and let the page finish loading its scripts.
-2. View the rendered page and its current source.
-3. Identify each occurrence of the lot's listing code in both.
-4. Inspect the hydrated DOM and document metadata.
+1. Open `<a published lot's address>` with scripts disabled.
+2. Record its served title, description and bidding standing.
+3. Enable scripts on the same address.
+4. Read the hydrated page, DOM, source and document metadata.
+5. Inspect every listing-code occurrence.
 
 **Expected Results:**
 
-* The rendered page has no labelled listing-code or payment-reference field.
-* Every code occurrence in the source is the lower-case suffix of the canonical address.
-* The DOM and metadata still identify the addressed lot by title.
-* No separate listing-code or payment-reference field appears in either.
+* Step 2 provides the addressed lot's title, description and bidding standing.
+* Step 4 keeps those same served values after hydration.
+* No placeholder replaces served content.
+* Hydrated DOM and document metadata name the same lot.
+* No separate listing-code or payment-reference field appears.
+* A code occurs only within the full canonical address.
 
-<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=2 -->
-### grade10-site-auction-listing-page-US10-TC3-2: Listing code absent from the shared-link preview
+<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=3 -->
+### grade10-site-auction-listing-page-US10-TC3-3: Listing code absent from the shared-link preview
 
 **Classification:**
 
@@ -929,6 +953,7 @@ Runs once per row of **Test data**.
 1. Fetch the share-preview metadata for `<a published lot's address>`.
 2. Search the preview's title, description and url for the lot's listing code.
 3. Inspect the preview image and embedded metadata.
+4. Read the same address's document title and meta description.
 
 **Expected Results:**
 
@@ -939,6 +964,8 @@ Previously cached preview content may persist; the test does not require a
 purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The preview identifies the public lot by title and full address.
 * Image and embedded metadata expose no separate code or payment reference.
+* Step 4 identifies the same public lot by title and description.
+* Neither document field contains a listing code or payment reference.
 
 <!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=2 -->
 ### grade10-site-auction-listing-page-US10-TC4-2: Listing code absent from the page title and meta description
@@ -1238,8 +1265,8 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **I want** support to quickly identify which lot I'm referring to,
 **so that** my inquiry is resolved faster without having to copy listing URLs or titles.
 
-<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=2 -->
-### grade10-site-auction-listing-page-US11-TC1-2: No listing code available on the page for the collector to send
+<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=3 -->
+### grade10-site-auction-listing-page-US11-TC1-3: No listing code available on the page for the collector to send
 
 **Classification:**
 
@@ -1272,7 +1299,9 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Step 2 provides the public title and full address.
 * Step 3 offers no separate code or payment reference.
 * Step 4 finds the lot without a listing code.
+* Support lookup shows no separate listing-code or payment-reference field.
 * Step 5 identifies the same lot by title and full address.
+* The opened public lot shows no separate code to support.
 
 <!-- trace:case id=g10.auction-listing-page.TC-wxd rev=1 -->
 ### grade10-site-auction-listing-page-US11-TC2-1: A listing code known from elsewhere gives no working link

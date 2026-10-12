@@ -1027,8 +1027,8 @@ Runs once per row of **Test data**.
 * Step 1 accepts the save.
 * Step 2 shows neither draft occupying a slug.
 
-<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=2 -->
-### grade10-admin-auction-listing-US3-TC13-2: Create can reuse a canceled listing's original slug
+<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=4 -->
+### grade10-admin-auction-listing-US3-TC13-4: Create can reuse a canceled listing's original slug
 
 **Classification:**
 
@@ -1050,6 +1050,8 @@ Runs once per row of **Test data**.
 * `<original_listing>` is called off, previously used `<released_slug>`, and retains `<original_code>`.
 * `<replacement>` is a complete saved draft with a different slug.
 * admin(holds auction:operate) is on the Listings page.
+* `<original_bidder>` placed accepted bids on `<original_listing>` before call off.
+* Its original bidder history was recorded before replacement Save/Create.
 
 Runs once per row of **Test data**.
 
@@ -1069,6 +1071,10 @@ Runs once per row of **Test data**.
 5. Create the replacement.
 6. Open `<original_listing>` in Listings.
 7. Read its status and code.
+8. As `<original_bidder>`, open My Auctions.
+9. Read `<original_listing>`'s row and bid history.
+10. Open the public address for `<released_slug>`.
+11. Inspect its response and page.
 
 **Expected Results:**
 
@@ -1078,6 +1084,13 @@ Runs once per row of **Test data**.
 * Step 7 shows canceled and `<original_code>`.
 * `<original_listing>` no longer holds `<released_slug>`.
 * The replacement's code differs from `<original_code>`.
+* Step 9 retains the original listing identity and accepted bid history.
+* The row says the original bidder's card was not charged.
+* The original row has no navigation to `<replacement>`.
+* Save/Create did not move history to the replacement.
+* Step 10 returns 404 while the created replacement is unpublished.
+* Step 11 shows Page not found with no original-lot data.
+* The canceled original is not publicly exposed by Save/Create.
 
 <!-- trace:case id=g10adm.auction-listing.TC-xtt rev=1 covers=g10adm.auction-listing.SC-4kw -->
 ### grade10-admin-auction-listing-US3-TC14-1: Create cannot reuse a closed listing's slug
@@ -2623,8 +2636,8 @@ Runs once per row of **Test data**.
 * Step 2 refuses the cancel.
 * Step 3 still shows the listing as canceled.
 
-<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=3 -->
-### grade10-admin-auction-listing-US5-TC7-3: Call off releases the original slug for saving
+<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=4 -->
+### grade10-admin-auction-listing-US5-TC7-4: Call off releases the original slug for saving
 
 **Classification:**
 
@@ -2644,6 +2657,8 @@ Runs once per row of **Test data**.
 * admin(holds the grant to call off listings) is on `<grade10 auction admin listings url>`.
 * `<cancel_slug_listing>` is published, has not closed, and holds `<reserved_slug>`.
 * `<reuse_slug_draft>` is a separate editable draft with a different saved slug.
+* `<original_bidder>` has recorded accepted bids on `<cancel_slug_listing>`.
+* `<original_code>` and the original account history were recorded before call off.
 
 **Test data:**
 
@@ -2661,12 +2676,23 @@ Runs once per row of **Test data**.
 4. Enter `<reserved_slug>` in its slug field.
 5. Leave the slug field.
 6. Click Save.
+7. Open the original public address for `<reserved_slug>`.
+8. Search the auction catalogue for the original listing title.
+9. Reopen `<cancel_slug_listing>` in admin.
+10. As `<original_bidder>`, open My Auctions.
+11. Read the original listing's row and bid history.
 
 **Expected Results:**
 
 * Step 2 shows `<cancel_slug_listing>` as canceled.
 * Step 5 reports no unavailable-slug error.
 * Step 6 saves `<reserved_slug>` on `<reuse_slug_draft>`.
+* Step 7 returns 404 with Page not found, never the canceled lot.
+* Step 8 finds no canceled lot in browse or search.
+* Step 9 shows canceled with `<original_code>` unchanged and reserved.
+* Step 11 retains the original listing and accepted bid history.
+* The row says the card was not charged.
+* The original account row has no link to the new holder.
 * `<cancel_slug_listing>` stays canceled.
 
 <!-- trace:case id=g10adm.auction-listing.TC-uyd rev=1 covers=g10adm.auction-listing.SC-lj7 -->
@@ -4862,8 +4888,8 @@ changes later.
 * Save is refused with an unavailable-slug result.
 * The draft's stored slug remains unchanged.
 
-<!-- trace:case id=g10adm.auction-listing.TC-wrn rev=1 -->
-### grade10-admin-auction-listing-US73-TC7-1: Competing reuse saves leave only one slug holder
+<!-- trace:case id=g10adm.auction-listing.TC-wrn rev=2 -->
+### grade10-admin-auction-listing-US73-TC7-2: Competing reuse saves leave only one slug holder
 
 **Classification:**
 
@@ -4875,7 +4901,7 @@ changes later.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-73
 
 **Pre-conditions:**
@@ -4884,6 +4910,7 @@ changes later.
 * A called-off listing has released `<original_slug>`.
 * `<draft_a>` and `<draft_b>` are saved complete drafts with different slugs.
 * Each admin is editing one draft, before either Save occurs.
+* Both Save actions can be submitted concurrently in the two independent contexts.
 
 **Test data:**
 
@@ -4894,23 +4921,24 @@ changes later.
 
 **Steps:**
 
-1. In both sessions, enter `<original_slug>`.
-2. In both sessions, leave the slug field.
-3. As admin A, click Save.
-4. As admin B, click Save without repeating availability checking.
+1. In both contexts, enter `<original_slug>`.
+2. In both contexts, leave the slug field.
+3. Submit both Save actions concurrently, without awaiting either response.
+4. Read both Save results.
 5. Reopen both drafts.
-6. Create `<draft_a>`.
-7. Publish `<draft_a>`.
-8. Open its public address.
+6. Create the draft whose Save succeeded.
+7. Publish that draft.
+8. Open the address for `<original_slug>`.
 
 **Expected Results:**
 
-* Step 2 reports the slug available in both sessions.
-* Step 3 saves `<original_slug>` on `<draft_a>`.
-* Step 4 refuses the stale reuse attempt.
-* Step 5 shows `<draft_b>`'s original saved slug unchanged.
-* Only `<draft_a>` holds `<original_slug>`.
-* Step 8 returns `<draft_a>`, never `<draft_b>` or the canceled lot.
+* Step 2 reports the released slug available in both contexts.
+* Step 4 contains exactly one successful Save and one unavailable-slug refusal.
+* Either draft can succeed; exactly one holds `<original_slug>`.
+* Step 5 keeps the refused draft's original saved slug unchanged.
+* The called-off listing stays canceled with its original code.
+* Step 8 returns the successful holder only.
+* It returns neither the refused draft nor the called-off listing.
 
 ## Settled
 
