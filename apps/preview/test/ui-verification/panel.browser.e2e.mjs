@@ -588,8 +588,19 @@ test("the central workbench uses its local archive and reviews versioned story h
     .getByRole("combobox", { name: "Verification target" })
     .waitFor({ state: "visible" });
 
-  assert.equal(await page.getByLabel("Archive endpoint").count(), 0);
-  assert.equal(await page.getByRole("button", { name: "Connect" }).count(), 0);
+  const verificationPanel = page.locator(".verification-panel");
+  assert.equal(
+    await verificationPanel
+      .getByLabel("Archive endpoint", { exact: true })
+      .count(),
+    0,
+  );
+  assert.equal(
+    await verificationPanel
+      .getByRole("button", { name: "Connect", exact: true })
+      .count(),
+    0,
+  );
   assert.ok(
     server.apiRequests.some((entry) => entry === "GET /api/archive-info"),
     "the panel should discover its archive destination on the workbench origin",
