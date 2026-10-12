@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react-vite";
 import basePreview from "../.storybook/preview";
+import { ManualDocsContainer } from "./manual-link";
 
 /* Themes, frames, and decorators come from the base preview. The sidebar reads
  * like the manual (`docs/governance/storybook.md`): Start Here, the manual's
@@ -12,6 +13,7 @@ const preview: Preview = {
   ...basePreview,
   parameters: {
     ...basePreview.parameters,
+    docs: { ...basePreview.parameters?.docs, container: ManualDocsContainer },
     options: {
       ...basePreview.parameters?.options,
       storySort: (a, b) => {

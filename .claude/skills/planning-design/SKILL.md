@@ -18,7 +18,7 @@ pnpm openspec instructions ui-design --change <change>
 
 ## Design Reference
 
-- **Inventory** - Check Storybook, `packages/design-system`, `packages/ui` and `packages/i18n` before naming components, tokens or copy. The design reference grounds the outline and requirements in what exists.
+- **Inventory** - Check Storybook (`pnpm storybook` files a feature's screens and blocks under its manual page; drawing states there is the `storybook-workbench` skill), `packages/design-system`, `packages/ui` and `packages/i18n` before naming components, tokens or copy. The design reference grounds the outline and requirements in what exists.
 - **Citations** - Cite the relevant inventory in `ui-design.md` wherever a reader would otherwise have to guess. Use exact component export names from the capability contract.
 - **Missing work** - Flag each missing primitive variant, token, compound component or message key so the task plan can carry it. Use the [repository layer owners](../../../AGENTS.md#sources-of-truth); invoke `design-system-primitives` for primitive work and `design-tokens` for token work.
 - **Design parity** - A primitive may not add a variant or size the Figma component set lacks. Record a real code/design disagreement as an OpenSpec change; follow [Design Code Sync](../../../docs/governance/design-code-sync.md).
