@@ -51,9 +51,7 @@ const SCENARIO_HEADING = new RegExp(
 const MODERN_JOURNEY_ID = "[a-z0-9][a-z0-9.-]*\\.US\\d+";
 const LEGACY_JOURNEY_ID = "[a-z0-9][a-z0-9-]*-US-\\d+";
 const JOURNEY_ID_SOURCE = `(?:${MODERN_JOURNEY_ID}|${LEGACY_JOURNEY_ID})`;
-const JOURNEY_HEADING = new RegExp(
-  `^(${JOURNEY_ID_SOURCE}):\\s*(.+)$`,
-);
+const JOURNEY_HEADING = new RegExp(`^(${JOURNEY_ID_SOURCE}):\\s*(.+)$`);
 /** A case heading displays its stable marker id and suite-local reference.
  * Older headings stay readable during migration. */
 const MODERN_CASE_HEADING = /^(\S+)\s+\(US-?\d+-TC-?\d+\):\s*(.+)$/;

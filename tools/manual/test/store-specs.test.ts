@@ -270,10 +270,7 @@ describe("the shape a change's journeys file is written in", () => {
       [
         "## User journeys",
         "",
-        story(
-          "g10.auction-bidder-suspension.US1",
-          "A modern journey",
-        ),
+        story("g10.auction-bidder-suspension.US1", "A modern journey"),
         story("alpha-US-02", "A legacy journey"),
       ].join("\n"),
     );
