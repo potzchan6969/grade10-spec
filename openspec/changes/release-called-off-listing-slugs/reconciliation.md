@@ -20,3 +20,5 @@
 2. `release-called-off-listing-slugs` is afterward. Its `depends_on` edge records this order and permits the narrow shared-requirement refinement.
 
 Each change keeps its own scope and acceptance. Shipping retains the status mapping. This change preserves that mapping and supplies the valid hidden-lot reference.
+
+- **Scenario Migration** - Both successor requirements use `RENAMED Requirements` with FROM/TO and complete target blocks, as the native acceptance fold requires. This transfers existing scenario identities instead of issuing them again under ADDED. All retained scenarios keep their headings and markers. The listing-page target omits only SC28, as the owner decided; the hidden-lot target revises SC13 under its existing marker. This representation changes no behavior or QA assertion.

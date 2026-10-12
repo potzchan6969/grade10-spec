@@ -118,15 +118,14 @@ lot status.
 - **AND** their order status is shown separately
 
 
-## REMOVED Requirements
+## RENAMED Requirements
 
-### Requirement: Collectors never see hidden lots
+- FROM: `### Requirement: Collectors never see hidden lots`
+- TO: `### Requirement: Hidden lots have no public address`
 
 **Reason** - The [owner's address decision](../../../../decisions.md#decisions) removes the called-off lot's permanent direct-address exception. The former requirement combines that exception with browse removal and bidder history.
 
-**Migration** - Replace this requirement with "Hidden lots have no public address" below. Retain browse, search, watchlist and public-data removal and the bidder's My Auctions exception. Preserve the existing scenario trace identities; revise the direct-address scenario to assert not found when no eligible current holder exists.
-
-## ADDED Requirements
+**Migration** - Rename this requirement to "Hidden lots have no public address" below. Retain browse, search, watchlist and public-data removal and the bidder's My Auctions exception. Preserve the existing scenario trace identities; revise the direct-address scenario to assert not found when no eligible current holder exists. The complete target block below is the native rename replacement; its existing scenarios retain their permanent identities.
 
 ### Requirement: Hidden lots have no public address
 

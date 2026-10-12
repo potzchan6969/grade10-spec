@@ -129,15 +129,14 @@ responses and client-fetched listing data.
 - **WHEN** the address is fetched and its client-fetched lot data is requested
 - **THEN** the response is 404 with Page not found and no public lot data; neither the new private listing nor the called-off lot is exposed
 
-## REMOVED Requirements
+## RENAMED Requirements
 
-### Requirement: The listing code is only exposed through the canonical address
+- FROM: `### Requirement: The listing code is only exposed through the canonical address`
+- TO: `### Requirement: Listing code remains separate from public address lookup`
 
 **Reason** - The [owner's address decision](../../../../decisions.md#decisions), confirmed in [issue 956](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504), retires permanent direct access to the called-off lot. This requirement included that exception and its canonical-retention scenario.
 
-**Migration** - Replace this requirement with "Listing code remains separate from public address lookup" below. Preserve its code visibility, metadata, support-reference and code-only refusal rules, and the existing scenario identities that prove them. Retire only the called-off canonical-retention scenario; former addresses follow current-holder lookup.
-
-## ADDED Requirements
+**Migration** - Rename this requirement to "Listing code remains separate from public address lookup" below. Preserve its code visibility, metadata, support-reference and code-only refusal rules, and the existing scenario identities that prove them. Retire only the called-off canonical-retention scenario; former addresses follow current-holder lookup. The complete target block below is the native rename replacement; its existing scenarios retain their permanent identities.
 
 ### Requirement: Listing code remains separate from public address lookup
 
