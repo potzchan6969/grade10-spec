@@ -1,11 +1,11 @@
 import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import {
+  type Brand,
   brands,
   defaultLocaleOf,
   getMessages,
   isLocale,
   localesOf,
-  type Brand,
 } from "@grade10/i18n";
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { type ReactNode, useEffect } from "react";

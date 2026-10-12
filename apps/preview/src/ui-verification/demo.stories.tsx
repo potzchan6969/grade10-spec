@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { Brand, LocaleOf } from "@grade10/i18n";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 type DemoLocale = LocaleOf<"grade10">;
 type DemoCopy = {
@@ -244,9 +244,7 @@ function UiVerificationDemoShell({
             <div>
               <p className="eyebrow">{copy.syntheticPageFixture}</p>
               <h1>{copy.overview}</h1>
-              <p className="intro-copy">
-                {copy.pageIntro}
-              </p>
+              <p className="intro-copy">{copy.pageIntro}</p>
             </div>
             <span className="range">{copy.last7Days}</span>
           </div>
@@ -308,9 +306,7 @@ function UiVerificationDemoShell({
               <span>{copy.updatedJustNow}</span>
             </div>
           </main>
-          <p className="page-footnote">
-            {copy.pageFootnote}
-          </p>
+          <p className="page-footnote">{copy.pageFootnote}</p>
         </div>
       </div>
     </div>
