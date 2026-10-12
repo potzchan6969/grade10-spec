@@ -156,7 +156,8 @@ combines with order discounts. The coupon comes off first, the goods left
 | Estimated Total | $1,150 |
 
 **(d) A code that does not combine** — the same basket and order discount;
-the order coupon `VIP-7K2M9QXA`, $80 off the order, on the store default.
+the order coupon `VIP-7K2M9QXA`, $80 off the order, set not to combine
+with order discounts.
 The two cannot stack, and $100 is larger, so the shop keeps the order
 discount. The code's field reads *A site discount takes more off this
 basket, so the shop applies it instead. This promo code stays in your
@@ -364,7 +365,7 @@ price already lives.
 | Struck price on a cart line | Decided | A line strikes one higher price: the price before a reprice, else its compare-at above the price, else the unit price before a product cut the shop applied. The line strikes what the listing struck. An order discount strikes no line: it is a row of its own after the subtotal, named by its title in the shop, with no Remove, because Shopify's checkout prints it on the order, not the lines. | Design |
 | Points beside a site discount | Decided | Points always redeem — points is a payment method, not a merchandising discount. | Product |
 | Points beside an automatic at the till | Settled | Points are the sale's one custom order discount, which the shop's offer never takes, so the two stack. A spend is capped at what the offers leave, because POS cuts a fixed order discount to fit. | Engineering |
-| A code beside an order discount | ❓ Open | The store default refuses order discounts, so under it a code competes with an order discount rather than stacking, as in example (d). Whether the default allows order discounts, so the authoring rule holds for every code. | Product |
+| A code beside an order discount | Decided, 2026-10-12 | 🚧 A member's coupon combines with order discounts by default, so a code stacks with an automatic order discount authored to combine. A coupon set otherwise competes with it, and the shop keeps the larger, as in example (d). | Product |
 | A tier ladder | ❓ Open | Shopify holds a ladder as one order discount per tier, and tiers authored to combine with order discounts add up on a basket that clears two. Whether a ladder combines with order discounts at all. | Product |
 | A public code beside the cart's code | ❓ Open | Whether the invoice takes a second code beside the cart's, or replaces it. | Product |
 | Combining is two-sided | Settled | A site discount authored not to combine excludes at the whole cart. Both sides have to allow the other, so the automatic alone decides it and a minted code's own combine setting cannot get past one. | Engineering |
