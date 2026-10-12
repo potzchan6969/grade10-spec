@@ -1,5 +1,7 @@
 schema: grade10-planning
 created: 2026-10-12
+depends_on:
+  - clarify-auction-shipping-progress-copy
 hands:
   pm: "@htonyl"
 awaiting:
