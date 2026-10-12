@@ -13,7 +13,7 @@ Depends on group 1's authorized landing and shared submodule update.
 - [ ] 2.2 Update the shared pin and collector bid-view consumers from bidCeiling(currency); return no copy for AMOUNT_TOO_HIGH and finish bid status without a message, reset props or retry (`shared-ui-auction-listing-SC-58`, `grade10-site-auction-auction-SC-91`, `grade10-site-auction-auction-SC-92`, `grade10-site-auction-auction-SC-103`)
 - [ ] 2.3 Verify focused adapter/mapper/view tests, package/app type checks, required change-sensitive checks and unchanged floor/identity refusal behavior
 
-## 3. Neighbor Ceiling Verification (grade10)
+## 3. Neighbor Ceiling Verification (grade10) (owner: @htonyl)
 
 The backend contract stays unchanged.
 
