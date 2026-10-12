@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import {
   GRADING_IN_PROGRESS_ITEMS,
   VAULT_COMPLETED_ITEMS,
@@ -27,12 +27,10 @@ export const InScanning: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("ITM-99482-01")).toBeVisible();
-    expect(canvas.getByText("In Scanning")).toBeVisible();
+    expect(canvas.getByText("Vault – In Scanning")).toBeVisible();
     expect(canvas.getByText("PSA 10 (#63261275)")).toBeVisible();
-    expect(canvas.getByText("Declared value")).toBeVisible();
-    expect(canvas.getByText("HK$85,000")).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Vault receipt" }),
+      canvas.getByRole("button", { name: "View in Vault" }),
     ).toBeDisabled();
 
     expect(
@@ -49,12 +47,23 @@ export const Vaulted: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Vaulted")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Vault receipt" })).toBeEnabled();
-    expect(
-      canvas.getByRole("button", { name: "View in vault portfolio" }),
-    ).toBeVisible();
+    expect(canvas.getByText("Vault – Vaulted")).toBeVisible();
+    expect(canvas.getByRole("button", { name: "View in Vault" })).toBeEnabled();
   },
+};
+
+/**
+ * Boneyard skeleton while the submissions fetch settles — also the capture
+ * target for `boneyard-js build` (story id `submissions-item-card--loading`,
+ * at the card's full page width).
+ */
+export const Loading: Story = {
+  args: { item: VAULT_IN_PROGRESS_ITEMS[0], loading: true },
+  render: ({ item }) => (
+    <div className="w-full max-w-5xl">
+      <IntakeItemCard item={item} loading />
+    </div>
+  ),
 };
 
 export const GradingInTransit: Story = {
@@ -64,23 +73,7 @@ export const GradingInTransit: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("ITM-99110-01")).toBeVisible();
-    expect(canvas.getByText("In Transit")).toBeVisible();
-    expect(canvas.queryByRole("button", { name: "Vault receipt" })).toBeNull();
-  },
-};
-
-export const Interactive: Story = {
-  args: {
-    item: VAULT_IN_PROGRESS_ITEMS[0],
-    onOpen: fn(),
-  },
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    const cardLink = canvas.getByRole("link", {
-      name: /1997 Pocket Monsters Carddass Charizard/,
-    });
-    cardLink.focus();
-    await userEvent.keyboard("{Enter}");
-    expect(args.onOpen).toHaveBeenCalledTimes(1);
+    expect(canvas.getByText("Grading – In Transit")).toBeVisible();
+    expect(canvas.queryByRole("button", { name: "View in Vault" })).toBeNull();
   },
 };

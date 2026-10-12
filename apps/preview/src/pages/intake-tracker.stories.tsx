@@ -1,4 +1,5 @@
 import { formatMediumDay } from "@grade10/date";
+import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Tabs,
   TabsContent,
@@ -6,9 +7,10 @@ import {
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
 import { Text } from "@grade10/design-system/components/display/text";
+import { cn } from "@grade10/design-system/lib/utils";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMemo, useState } from "react";
-import { expect, within } from "storybook/test";
+import { useEffect, useMemo, useState } from "react";
+import { expect, waitFor, within } from "storybook/test";
 import {
   COMPLETED_ITEMS,
   filterItems,
@@ -17,19 +19,32 @@ import {
   IN_PROGRESS_ITEMS,
   type IntakeItemRow,
   type IntakeListFilter,
-  intakeItemCardStoryId,
   LIST_FILTER_LABELS,
 } from "./intake-content";
 import { IntakeItemCard } from "./intake-item-card";
-import { PageHeader, VaultPageShell } from "./vault-shared";
-import { navigateToStory } from "./workbench-story-nav";
+import {
+  PAGE_ENTER_CLASS,
+  PageHeader,
+  StickyTabBar,
+  VaultPageShell,
+} from "./vault-shared";
 
 const FILTERS: IntakeListFilter[] = ["in-progress", "completed", "all"];
+
+/** Simulated submissions fetch — mirrors the portfolio's ready beat. */
+const SUBMISSIONS_LOAD_MS = 350;
+/** Per-card enter stagger — 30ms, capped so long lists don't drag. */
+const REVEAL_STAGGER_MS = 30;
+const REVEAL_STAGGER_CAP = 8;
+
+function revealDelay(index: number): string {
+  return `${Math.min(index, REVEAL_STAGGER_CAP) * REVEAL_STAGGER_MS + 120}ms`;
+}
 
 const HAND_IN_CLOCK = { locale: "en-HK", timeZone: "Asia/Hong_Kong" };
 
 function formatHandInDate(ms: number): string {
-  return formatMediumDay(ms, HAND_IN_CLOCK);
+  return formatMediumDay(ms, HAND_IN_CLOCK).replace("Sept", "Sep");
 }
 
 function BatchDivider({
@@ -42,22 +57,25 @@ function BatchDivider({
   count: number;
 }) {
   return (
-    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-      <Text className="text-secondary-foreground" size="xs" weight="medium">
+    <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border pb-2.5">
+      <Text size="xs" weight="medium">
         Handed in {formatHandInDate(handedInAt)}
       </Text>
-      <Text className="text-secondary-foreground" face="mono" size="xs">
-        {submissionId}
-        <span className="font-sans">
-          {" "}
-          · {count} {count === 1 ? "item" : "items"}
-        </span>
+      <Text className="text-secondary-foreground" size="xs">
+        {submissionId} · {count} {count === 1 ? "item" : "items"}
       </Text>
     </div>
   );
 }
 
-function IntakeItemList({ items }: { items: readonly IntakeItemRow[] }) {
+function IntakeItemList({
+  items,
+  loading = false,
+}: {
+  items: readonly IntakeItemRow[];
+  /** Boneyard card skeletons while the submissions fetch settles. */
+  loading?: boolean;
+}) {
   const groups = useMemo(() => groupBySubmission(items), [items]);
 
   if (items.length === 0) {
@@ -68,24 +86,50 @@ function IntakeItemList({ items }: { items: readonly IntakeItemRow[] }) {
     );
   }
 
+  const groupOffsets: number[] = [];
+  let total = 0;
+  for (const group of groups) {
+    groupOffsets.push(total);
+    total += group.items.length;
+  }
+
   return (
-    <ul className="flex flex-col gap-8">
-      {groups.map((group) => (
+    <ul
+      aria-busy={loading || undefined}
+      aria-label={loading ? "Loading submissions" : undefined}
+      className="flex flex-col gap-8"
+    >
+      {groups.map((group, groupIndex) => (
         <li key={group.submissionId} className="flex flex-col gap-3">
-          <BatchDivider
-            count={group.items.length}
-            handedInAt={group.handedInAt}
-            submissionId={group.submissionId}
-          />
+          <div
+            className={loading ? undefined : PAGE_ENTER_CLASS}
+            style={{
+              animationDelay: loading
+                ? undefined
+                : revealDelay(groupOffsets[groupIndex] ?? 0),
+            }}
+          >
+            <BatchDivider
+              count={group.items.length}
+              handedInAt={group.handedInAt}
+              submissionId={group.submissionId}
+            />
+          </div>
           <ul className="flex flex-col gap-3">
-            {group.items.map((item) => (
-              <li key={item.itemId}>
-                <IntakeItemCard
-                  item={item}
-                  onOpen={() => navigateToStory(intakeItemCardStoryId(item))}
-                />
-              </li>
-            ))}
+            {group.items.map((item, itemIndex) => {
+              const index = (groupOffsets[groupIndex] ?? 0) + itemIndex;
+              return (
+                <li
+                  className={loading ? undefined : PAGE_ENTER_CLASS}
+                  key={loading ? `skeleton-${item.itemId}` : item.itemId}
+                  style={{
+                    animationDelay: loading ? undefined : revealDelay(index),
+                  }}
+                >
+                  <IntakeItemCard item={item} loading={loading} />
+                </li>
+              );
+            })}
           </ul>
         </li>
       ))}
@@ -96,21 +140,37 @@ function IntakeItemList({ items }: { items: readonly IntakeItemRow[] }) {
 function IntakeTrackerPage({
   items,
   initialFilter = "in-progress",
+  loading = false,
 }: {
   items: readonly IntakeItemRow[];
   initialFilter?: IntakeListFilter;
+  /** Hold the list in skeletons to exercise the loading state. */
+  loading?: boolean;
 }) {
   const [filter, setFilter] = useState<IntakeListFilter>(initialFilter);
+  const [fetching, setFetching] = useState(true);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(
+      () => setFetching(false),
+      SUBMISSIONS_LOAD_MS,
+    );
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  const listLoading = loading || fetching;
 
   return (
     <VaultPageShell>
-      <PageHeader
-        title="Submissions"
-        description="Items from counter hand-in through vaulting or the next service."
-      />
+      <div className={PAGE_ENTER_CLASS}>
+        <PageHeader
+          title="Submissions"
+          description="Items from counter hand-in through vaulting or the next service."
+        />
+      </div>
 
       <Tabs
-        className="gap-6"
+        className="gap-8"
         value={filter}
         onValueChange={(value) => {
           if (
@@ -122,19 +182,27 @@ function IntakeTrackerPage({
           }
         }}
       >
-        <div className="sticky top-0 z-10 -mx-4 border-b border-border bg-background/95 px-4 py-3 backdrop-blur-sm supports-backdrop-filter:bg-background/90 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8">
-          <TabsList aria-label="Filter intake items" size="sm" variant="pill">
-            {FILTERS.map((key) => (
-              <TabsTrigger key={key} value={key}>
-                {LIST_FILTER_LABELS[key]}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </div>
+        <StickyTabBar className="-mt-8">
+          <div className={cn(PAGE_ENTER_CLASS, "delay-[90ms]")}>
+            <TabsList aria-label="Filter intake items" variant="list">
+              {FILTERS.filter(
+                (key) => key === "all" || filterItems(items, key).length > 0,
+              ).map((key) => (
+                <TabsTrigger key={key} value={key}>
+                  {LIST_FILTER_LABELS[key]}
+                  <Badge size="sm">{filterItems(items, key).length}</Badge>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+        </StickyTabBar>
 
         {FILTERS.map((key) => (
           <TabsContent key={key} className="mt-0 outline-none" value={key}>
-            <IntakeItemList items={filterItems(items, key)} />
+            <IntakeItemList
+              items={filterItems(items, key)}
+              loading={key === filter ? listLoading : false}
+            />
           </TabsContent>
         ))}
       </Tabs>
@@ -163,25 +231,39 @@ export const InProgress: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", { level: 1, name: "Submissions" }),
-    ).toBeVisible();
-    expect(canvas.getByRole("tab", { name: "In progress" })).toHaveAttribute(
-      "aria-selected",
-      "true",
+    // Cards enter after the simulated fetch — wait for skeletons to resolve.
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("heading", { level: 1, name: "Submissions" }),
+      ).toBeVisible();
+      expect(canvas.getByRole("tab", { name: /^In Progress/ })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(canvas.getByText("ITM-99482-01")).toBeVisible();
+      expect(canvas.getByText("ITM-99110-01")).toBeVisible();
+      expect(
+        canvas.getAllByRole("button", { name: "View Agreement" }).length,
+      ).toBeGreaterThan(0);
+      expect(
+        canvas.getAllByRole("button", { name: "View in Vault" })[0],
+      ).toBeDisabled();
+    });
+  },
+};
+
+/** Submissions fetch in flight — Boneyard card skeletons under the tab bar. */
+export const Loading: Story = {
+  args: { loading: true },
+  play: async ({ canvasElement }) => {
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelector('[aria-label="Loading submissions"]'),
+      ).not.toBeNull(),
     );
-    expect(canvas.getByText("ITM-99482-01")).toBeVisible();
-    expect(canvas.getByText("ITM-99110-01")).toBeVisible();
-    expect(canvas.getAllByRole("link").length).toBeGreaterThan(0);
     expect(
-      canvas.getAllByRole("button", { name: "Custody agreement · PDF" }).length,
+      canvasElement.querySelectorAll('[data-slot="card"]').length,
     ).toBeGreaterThan(0);
-    expect(
-      canvas.getAllByRole("button", { name: "View in vault portfolio" }).length,
-    ).toBeGreaterThan(0);
-    expect(
-      canvas.getAllByRole("button", { name: "Vault receipt" })[0],
-    ).toBeDisabled();
   },
 };
 
@@ -192,15 +274,17 @@ export const Completed: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("tab", { name: "Completed" })).toHaveAttribute(
-      "aria-selected",
-      "true",
-    );
-    expect(canvas.getByText("ITM-99482-01")).toBeVisible();
-    expect(canvas.getAllByText("Vaulted").length).toBeGreaterThan(0);
-    expect(
-      canvas.getAllByRole("button", { name: "Vault receipt" })[0],
-    ).toBeEnabled();
+    await waitFor(() => {
+      expect(canvas.getByRole("tab", { name: /^Completed/ })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      expect(canvas.getByText("ITM-99482-01")).toBeVisible();
+      expect(canvas.getAllByText("Vault – Vaulted").length).toBeGreaterThan(0);
+      expect(
+        canvas.getAllByRole("button", { name: "View in Vault" })[0],
+      ).toBeEnabled();
+    });
   },
 };
 
@@ -211,8 +295,12 @@ export const GradingInProgress: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("ITM-99110-01")).toBeVisible();
-    expect(canvas.getByText("ITM-99110-04")).toBeVisible();
-    expect(canvas.queryByRole("button", { name: "Vault receipt" })).toBeNull();
+    await waitFor(() => {
+      expect(canvas.getByText("ITM-99110-01")).toBeVisible();
+      expect(canvas.getByText("ITM-99110-04")).toBeVisible();
+      expect(
+        canvas.queryByRole("button", { name: "View in Vault" }),
+      ).toBeNull();
+    });
   },
 };

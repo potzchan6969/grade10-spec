@@ -28,22 +28,6 @@ type IntakeItemRow = {
   completed: boolean;
 };
 
-/** Storybook ids for intake item-card assemblies (workbench deep links). */
-const INTAKE_ITEM_CARD_IN_SCANNING_STORY_ID =
-  "pages-submissions-item-card--in-scanning";
-const INTAKE_ITEM_CARD_VAULTED_STORY_ID =
-  "pages-submissions-item-card--vaulted";
-const INTAKE_ITEM_CARD_GRADING_STORY_ID =
-  "pages-submissions-item-card--grading-in-transit";
-
-function intakeItemCardStoryId(item: IntakeItemRow): string {
-  if (item.service === "grading") return INTAKE_ITEM_CARD_GRADING_STORY_ID;
-  if (item.completed || item.status === "Vaulted") {
-    return INTAKE_ITEM_CARD_VAULTED_STORY_ID;
-  }
-  return INTAKE_ITEM_CARD_IN_SCANNING_STORY_ID;
-}
-
 const SERVICE_LABELS: Record<IntakeService, string> = {
   vault: "Vault",
   grading: "Grading",
@@ -52,7 +36,7 @@ const SERVICE_LABELS: Record<IntakeService, string> = {
 };
 
 const LIST_FILTER_LABELS: Record<IntakeListFilter, string> = {
-  "in-progress": "In progress",
+  "in-progress": "In Progress",
   completed: "Completed",
   all: "All",
 };
@@ -274,10 +258,6 @@ export {
   groupBySubmission,
   handInLine,
   IN_PROGRESS_ITEMS,
-  INTAKE_ITEM_CARD_GRADING_STORY_ID,
-  INTAKE_ITEM_CARD_IN_SCANNING_STORY_ID,
-  INTAKE_ITEM_CARD_VAULTED_STORY_ID,
-  intakeItemCardStoryId,
   isVaulted,
   LIST_FILTER_LABELS,
   SERVICE_LABELS,
