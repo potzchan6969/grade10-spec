@@ -7,3 +7,5 @@ depends_on:
   - add-winner-refund
 hands:
   dev: "@htonyl"
+reviewed:
+  user-journeys: 1e5c047f
