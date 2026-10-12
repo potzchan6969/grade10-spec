@@ -2218,7 +2218,7 @@ initial while the label stays Bidder N,
 | `grade10-site-auction-listing-page-SC-46`: a lone first bid confirming at the scheduled close; no blind case walked the pending bid | **Added:** `grade10-site-auction-listing-page-US14-TC5-1`. It also answers QA1's third raised question on the lot page: Ended with No bids, neither Won nor Did not win (Q1) |
 | `grade10-site-auction-listing-page-SC-42`: a later recorded close returns a Closed page to Extended bidding; no blind case reached it | **Added:** `grade10-site-auction-listing-page-US14-TC6-1` |
 
-- **Covered at domain** — `grade10-site-auction-e2e-US07-TC03-2` walks `grade10-site-auction-listing-page-SC-30`: a price-moving bid in extended bidding restarts the open page's countdown, labelled Extended bidding, without a reload
+- **Covered at domain** — `g10.auction-dmn.US7-TC3` walks `grade10-site-auction-listing-page-SC-30`: a price-moving bid in extended bidding restarts the open page's countdown, labelled Extended bidding, without a reload
 
 **Uncovered anchors:** none. `grade10-site-auction-listing-page-US-04` is a context journey; this change adds no scenario serving it, and its durable cases stand.
 
