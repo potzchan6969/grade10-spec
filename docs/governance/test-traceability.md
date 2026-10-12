@@ -11,7 +11,7 @@ Place each marker immediately above the heading or test line it belongs to:
 #### Scenario: The gallery refuses a ninth media item
 
 <!-- trace:case id=g10.auction-listing-media.TC-c94 rev=2 covers=g10.auction-listing-media.SC-c93 -->
-### g10.auction-listing-media.TC-c94 (US1-TC1): The gallery refuses a ninth media item
+### g10.auction-listing-media.US1-TC1: The gallery refuses a ninth media item
 ```
 
 ```ts
@@ -22,7 +22,7 @@ test("the gallery refuses a ninth media item", () => {});
 test("supporting gallery behavior", () => {});
 ```
 
-- **Reference** - Feature markers use `<app>.<product>-<capability>.<US|SC|TC>-<seq>`. Domain markers use `<app>.<domain>-dmn.<SC|TC>-<seq>`, product markers use `<app>-pdt.<SC|TC>-<seq>`, and platform markers use `platform.<SC|TC>-<seq>`. Apps are `g10`, `zzz`, `g10adm`, and `zzzadm`. `US` identifies a journey, `SC` a scenario, and `TC` a test case. The CLI creates `SC` and `TC` markers.
+- **Reference** - Existing trace markers keep their issued machine ids. Human-facing journey and case headings use `<app>.<domain>-<capability>.US<n>` and `<app>.<domain>-<capability>.US<n>-TC<m>`; composed headings use the same suffix under their level scope. Apps are `g10`, `zzz`, `g10adm`, `zzzadm`, and future `g10str`. `US` identifies a journey, `SC` a scenario, and `TC` a test case.
 - **Casing** - App, product, capability, and sequence are stored in lowercase. Product and capability are lowercase hyphenated slugs. The kind token is uppercase. CLI inputs are case-insensitive and are written in canonical casing. A stored marker with different casing fails validation as `noncanonical-id`.
 - **Capability slug** - The capability slug stays stable across its journeys, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.
 - **Sequence** - Exactly three Base36 characters (`000` to `zzz`), stored in lowercase. Initialization derives a non-numeric candidate from the scope, kind, and exact heading, then advances only to avoid an existing scenario or case marker in that app, product, and capability. The sequence is shared by `SC` and `TC` markers. The scan includes durable specs, active changes, and archived changes so an archived marker does not free its suffix.
@@ -54,7 +54,7 @@ An anchor-only case during blind generation therefore carries no `covers` field:
 
 ```md
 <!-- trace:case id=g10.auction-listing-media.TC-c94 rev=1 -->
-### g10.auction-listing-media.TC-c94 (US1-TC1): Upload a supported image
+### g10.auction-listing-media.US1-TC1: Upload a supported image
 ```
 
 After QA2 confirms the post-hoc relationship, the same marker keeps its stable
@@ -84,18 +84,20 @@ that app and product with the display level `dmn`. A product suite under
 The platform suite uses the display scope `platform`. Active change copies use
 the same scope as their durable suite.
 
-The case heading displays the stable marker id and the suite-local reference:
-`### <scope>.TC-<sequence> (US<n>-TC<m>): <title>`. The marker's `rev` is the
-version source. Start at `1`. When product behavior changes what the case
-verifies, increment `rev` in the same reviewed edit. A walk-route optimization,
-restyle or wording-only edit that preserves the purpose keeps `rev`. A changed
-`covers` set is a traceability change and is reviewed with the case. Do not
-change an ID to represent a new revision.
+The case heading displays the human-facing route id:
+`### <app>.<domain>-<capability>.US<n>-TC<m>: <title>`. The adjacent marker's
+machine id is the immutable case identity and its `rev` is the version source.
+Start at `1`. When product behavior changes what the case verifies, increment
+`rev` in the same reviewed edit. A walk-route optimization, restyle, wording
+change or journey move that preserves the purpose keeps `rev`. A changed
+`covers` set is a traceability change and is reviewed with the case. Never
+change an existing trace marker id.
 
-New cases receive a marker when they are written. A modified case keeps its ID
-and updates its revision and coverage as needed. Review migration adds missing
-markers and rewrites legacy case headings to the stable display form without
-rewriting their purpose, title, steps, results or `rev`, except where
+New cases receive a marker when they are written. A modified case keeps its
+marker id and updates its revision and coverage as needed. Review migration
+adds missing markers and rewrites legacy case headings to the human-facing
+display form without rewriting their marker, purpose, title, steps, results or
+`rev`, except where
 unresolved or conflicting coverage must first be settled by the suite owner.
 Use
 the repository CLI to allocate every new scenario ID needed by `covers`; keep

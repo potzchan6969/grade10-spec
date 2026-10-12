@@ -4,11 +4,12 @@
      them, across a product's domains is <product>/product-tcs.md, and across
      products is platform-tcs.md. Above feature level a case composes two or
      more journeys and its **Trace:** names each of them, the heading id is
-     <brand>.<domain>-dmn.US<n> (product: <brand>-pdt.US<n>; platform:
+     <app>.<domain>-dmn.US<n> (product: <app>-pdt.US<n>; platform:
      platform.US<n>), and product and platform carry no coverage
      obligation - they are smoke passes. Case headings use
-     <brand>.<domain>-<capability>.TC-<xxx>, <brand>.<domain>-dmn.TC-<xxx>,
-     <brand>-pdt.TC-<xxx> or platform.TC-<xxx>, followed by (US<n>-TC<m>).
+     <app>.<domain>-<capability>.US<n>-TC<m>,
+     <app>.<domain>-dmn.US<n>-TC<m>, <app>-pdt.US<n>-TC<m> or
+     platform.US<n>-TC<m>.
 
      An INDEPENDENT reading of the user-journeys.md and feature set beside this
      file, written without sight of the spec's ## Requirements — never derived
@@ -20,8 +21,9 @@
      Human QA uses tcs-review after implementation is deployed and available. -->
 
 <!-- <scope> is the stable marker prefix, for example
-     g10.auction-account-record. The suite-local reference remains in
-     parentheses: TC-s25 (US1-TC2). -->
+     g10.auction-account-record. The human-facing heading uses the journey and
+     case numbers: g10.auction-account-record.US1-TC2. The trace:case marker
+     above it keeps its own immutable machine id. -->
 
 # <product>/<domain>/<capability> Test Cases
 
@@ -48,22 +50,22 @@
 ### Route
 
 1. <action that moves the tester to the next route point>.
-   - <observation to record> `TC-<sequence> (US1-TC1)`
+   - <observation to record> `g10.<domain>-<capability>.US1-TC1`
 2. <action that opens an alternative route>.
-   a. <condition and observation> `TC-<sequence> (US1-TC2)`
-   b. <condition and observation> `TC-<sequence> (US1-TC3)`
+   a. <condition and observation> `g10.<domain>-<capability>.US1-TC2`
+   b. <condition and observation> `g10.<domain>-<capability>.US1-TC3`
 
 <!-- Cases referenced by a walk are printed once under their owning journey.
      A case referenced only by a higher-level walk is printed under Ungrouped,
      grouped by journey. -->
 
-## <capability>-US<n>: <!-- journey title, copied from user-journeys.md -->
+## <app>.<domain>-<capability>.US<n>: <!-- journey title, copied from user-journeys.md -->
 
 **As a** <role>,
 **I want** <goal>,
 **so that** <reason>.
 
-### <scope>.TC-<sequence> (US<n>-TC<m>): <!-- clean descriptive title -->
+### <app>.<domain>-<capability>.US<n>-TC<m>: <!-- clean descriptive title -->
 
 **Classification:**
 
@@ -76,7 +78,7 @@
 * **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
-* **Trace:** <capability>-US-<n>
+* **Trace:** <app>.<domain>-<capability>.US<n>
 <!-- or, for a capability whose journeys file says **Walked by:** nobody, a
      ## Feature set root group name matched verbatim. Never a scenario id. -->
 
@@ -99,9 +101,9 @@
 
 ## Ungrouped
 
-### <capability>-US<n>: <!-- journey title -->
+### <app>.<domain>-<capability>.US<n>: <!-- journey title -->
 
-#### <scope>.TC-<sequence> (US<n>-TC<m>): <!-- clean descriptive title -->
+#### <app>.<domain>-<capability>.US<n>-TC<m>: <!-- clean descriptive title -->
 
 **Classification:**
 
@@ -114,7 +116,7 @@
 * **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
-* **Trace:** <capability>-US-<n>
+* **Trace:** <app>.<domain>-<capability>.US<n>
 
 **Pre-conditions:**
 

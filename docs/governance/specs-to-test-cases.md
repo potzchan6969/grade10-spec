@@ -11,7 +11,7 @@ A **feature** suite is written **blind**: by a fresh reader who cannot see the s
 ## The Rule
 
 - **The spec is correct** — once the scenarios exist and the two readings are reconciled, a suite that disagrees with the spec is regenerated. Before reconciliation there is nothing to disagree with: the suite is the only reading there is, and it is provisional. A proposal never links a suite in place of a spec delta
-- **Anchors are given** — every section is one `user-journeys.md` journey. A capability nobody walks carries one section instead, `## <capability>-US-<n>`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued case id is permanent. There is no cap on the number of journeys. A suite never invents a flow, and splitting or merging journeys is an edit to the journeys file
+- **Anchors are given** — every section is one `user-journeys.md` journey. A capability nobody walks carries one section instead, `## <app>.<domain>-<capability>.US<n>`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued journey anchor is permanent. There is no cap on the number of journeys. A suite never invents a flow, and splitting or merging journeys is an edit to the journeys file
 - **A case comes from an anchor** — never from a scenario, which on a feature run does not exist yet. A case that carries behaviour no anchor implies is a product decision in disguise, and reconciliation is where it is settled
 - **A hole is reported** — an anchor no case covers, a case tracing an anchor nothing defines: report it, never close it by inventing a case or a journey
 - **Coverage is an observable outcome** — count distinct outcomes a tester can observe, not every input value, row, actor or combination. Values that preserve the same route, checking and expected result stay rows in one case
@@ -84,27 +84,22 @@ The suite has two different coverage relationships. They must not be collapsed i
 
 ## Naming
 
-| Id | Lives in | Example |
-| --- | --- | --- |
-| `<capability>-US-<n>` | `user-journeys.md` journey | `grade10-site-store-product-listing-US-01` |
-| `<capability>-SC-<n>` | `spec.md` scenario | `grade10-site-store-product-listing-SC-01` |
-| `<capability>-US-<n>` | `feature-tcs.md` journey heading | `grade10-site-store-product-listing-US-01` |
-| `<brand>.<domain>-<capability>.TC-<xxx> (US<n>-TC<m>)` | feature case heading | `g10.auction-account-record.TC-s25 (US1-TC2)` |
-| `<brand>.<domain>-dmn.US<n>` | `domain-tcs.md` journey heading | `g10.auction-dmn.US1` |
-| `<brand>.<domain>-dmn.TC-<xxx> (US<n>-TC<m>)` | domain case heading | `g10.auction-dmn.TC-2hq (US1-TC1)` |
-| `<brand>-pdt.US<n>` | `product-tcs.md` journey heading | `g10adm-pdt.US1` |
-| `<brand>-pdt.TC-<xxx> (US<n>-TC<m>)` | product case heading | `g10adm-pdt.TC-2hq (US1-TC1)` |
-| `platform.US<n>` | `platform-tcs.md` journey heading | `platform.US1` |
-| `platform.TC-<xxx> (US<n>-TC<m>)` | platform case heading | `platform.TC-2hq (US1-TC1)` |
+| Kind | Human-facing form | Lives in or means | Example |
+| --- | --- | --- | --- |
+| Journey anchor | `<app>.<domain>-<capability>.US<n>` | `user-journeys.md`, the feature suite heading and `**Trace:**` | `g10.auction-bidder-suspension.US1` |
+| Scenario id | `<app>.<domain>-<capability>.SC<n>` | `spec.md`; a scenario marker's existing id never changes | `g10.auction-bidder-suspension.SC1` |
+| Feature case heading | `<app>.<domain>-<capability>.US<n>-TC<m>` | `feature-tcs.md`; the display id may change when the case moves journey | `g10.auction-bidder-suspension.US1-TC1` |
+| Domain journey and case | `<app>.<domain>-dmn.US<n>` and `<app>.<domain>-dmn.US<n>-TC<m>` | `domain-tcs.md`; composed suite headings | `g10.auction-dmn.US1`, `g10.auction-dmn.US1-TC1` |
+| Product journey and case | `<app>-pdt.US<n>` and `<app>-pdt.US<n>-TC<m>` | `product-tcs.md`; composed suite headings | `g10-pdt.US1`, `g10-pdt.US1-TC1` |
+| Platform journey and case | `platform.US<n>` and `platform.US<n>-TC<m>` | `platform-tcs.md`; composed suite headings | `platform.US1`, `platform.US1-TC1` |
 
-- **`<capability>`** — the full path with slashes as hyphens, `<product>-<domain>-<capability>`, so two capabilities of one name stay apart. Feature journey headings copy the user-journey id; composed levels use their brand and level slug
-- **A scenario added beside one takes a letter** — `<n>` may carry one lower-case letter, `…-SC-07a`, so a scenario placed beside `…-SC-07` renumbers no other; the letter is part of the id
-- **Level slugs identify composed suites** — `dmn` joins capabilities in one domain, `pdt` joins domains in one product, and `platform` joins products. A composed case's `**Trace:**` names every capability journey it crosses
-- **A prefix never moves** — fixed at a capability's first ids; a renamed or moved capability goes on issuing what it issued. Read the ids that exist before issuing one; only a first id derives the prefix from the path
-- **Local case references stay compact** — `(US<n>-TC<m>)` drops the hyphen and zero-padding from the journey and case numbers. Feature journey headings copy the canonical user-journey id; domain, product and platform headings use `g10.auction-dmn.US1`, `g10adm-pdt.US1` and `platform.US1`
-- **Cases number per journey from 1** — an issued id is permanent; a retired case is `deprecated`, never renumbered away; a new case takes the next unused `TC<m>`
-- **The display id is stable** — `<scope>.TC-<sequence>` is the marker's case id, and `(US<n>-TC<m>)` is the suite-local journey and case reference. The heading carries the title after the closing parenthesis
-- **`rev` tracks behaviour, not prose** — `rev=1` is the first written version. It is bumped only when product behaviour changes what the case verifies, and the marker is the sole version source for both human and automated readers. Walk-route optimization, restyling, and purpose-preserving wording changes do not bump it
+- **`<product>` remains the path owner** — a capability still lives under `openspec/specs/<product>/<domain>/<capability>/`. `<app>` is its stable display code: `grade10-site` → `g10`, `grade10-admin` → `g10adm`, future `grade10-store` → `g10str`, `zzz-site` → `zzz`, and `zzz-admin` → `zzzadm`
+- **Trace marker ids are immutable** — never change the `id`, `rev` or `covers` text inside an existing `trace:case` marker. The marker id is the machine identity; the heading id is the human-facing route reference
+- **Scenario marker ids are immutable** — never change the `id` inside an existing `trace:scenario` marker. New scenario headings use the current human-facing form; the CLI may allocate a separate machine marker id, and old marker ids remain valid evidence for existing case markers
+- **A case heading may move** — when a case moves from `US1-TC1` to `US2-TC4`, change only the heading and its suite references. Keep the adjacent case marker unchanged. Bump `rev` only when the behaviour changes
+- **No local case reference** — the full heading id is the case reference in a walk, report, manual row or higher-level suite. Do not add a second `(US<n>-TC<m>)` suffix
+- **Numbers are permanent within a suite** — a new case takes the next unused `TC<m>` for its journey. A deprecated case keeps its heading history and number; the number is never reused
+- **`rev` tracks behaviour, not prose** — `rev=1` is the first written version. It is bumped only when product behaviour changes what the case verifies. Walk-route optimization, restyling and purpose-preserving heading changes do not bump it
 
 | What happened | `rev` | `Status` |
 | --- | --- | --- |
@@ -144,7 +139,7 @@ The suite has two different coverage relationships. They must not be collapsed i
 - **Pairing checks stay lightweight** — a higher-level walk may add continuity checks beside lower-level case references, but it does not copy their Expected Results or record pass/fail in `*-tcs.md`. A tester-only shortcut belongs in the downstream case's own steps and carries no automation reference
 - **A pairing walk may defer promotion** — add a `**Remarks:**` note when the seam may become a composed case in a later revision; the note records a future design choice, not a case, an observation or an execution result
 - **Out-of-scope cases do not change a walk** — a tester follows the same route and skips checking or recording a case outside the test run's scope. The walk is not rewritten to help the scope filter
-- **Walk references are checked** — `pnpm run tcs:validate` requires every compact `TC-<sequence> (US<n>-TC<m>)` route reference to resolve to one case definition in the same suite. A domain, product or platform walk may instead use the full stable id, such as `g10adm.auction-listing.TC-2hq (US1-TC1)`, to reference a lower-level case in its owning suite; the referenced case's own journey and case number must match. A feature walk cannot reference another suite. The validator does not infer whether the prose repeats an observation; the referenced case's Expected Results remain the authority
+- **Walk references are checked** — `pnpm run tcs:validate` requires every human-facing `<scope>.US<n>-TC<m>` route reference to resolve to one case definition in the same suite. A domain, product or platform walk may reference a lower-level case in its owning suite; the referenced case's own journey and case number must match. A feature walk cannot reference another suite. The validator does not infer whether the prose repeats an observation; the referenced case's Expected Results remain the authority
 
 ### One purpose, one case
 
@@ -286,11 +281,11 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 - **Read the store's context** — `openspec/config.yaml`'s `context` for the brands, products and conventions (money is minor units plus an ISO 4217 code): `<grade10 store url>`, never `<store front door URL>`
 - **Read the cross-cutting specs the Purpose names** — `crawlable-pages`, `localization`, `money-amounts`, `dates-and-times`. Their facts are checked on the way past (`URL contains <lang>`), never set up as a pre-condition
 - **Write missing journeys first** — to `rules.user-journeys`: from the feature set and the PRD, adding no behaviour, with permanent ids and `**As a** / **I want** / **so that**`. There is no `**Accepted by:**` list — a scenario points up at its journey through its own `**Serves:**`, and tooling joins on that; `pnpm run validate:changes <change>`
-- **Confirm the ids** — `### <capability>-US-<n>: …`; older files get an ids-only upgrade
+- **Confirm the ids** — `### <app>.<domain>-<capability>.US<n>: …`; older files get a human-facing heading upgrade only. Existing trace markers never change
 
 ## Step 2: Journeys Become Sections
 
-- **One `##` per journey** — `## <capability>-US<n>: <title copied unchanged>`, in the journeys file's order, carrying the same three-line statement; the actor resolves to `customer` or `admin`
+- **One `##` per journey** — `## <app>.<domain>-<capability>.US<n>: <title copied unchanged>`, in the journeys file's order, carrying the same three-line statement; the actor resolves to `customer` or `admin`
 - **Nothing else** — no `**Covers:**` list, no description, summary or count
 - **`---` between journeys** — on its own line
 
@@ -298,7 +293,7 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 
 | Component | Rule |
 | --- | --- |
-| Id | `<scope>.TC-<sequence> (US<n>-TC<m>)` |
+| Id | `<app>.<domain>-<capability>.US<n>-TC<m>` |
 | Title | a clean descriptive title naming the behaviour or condition; its wording is **How a Case Reads** |
 | Classification | `**Classification:**`, a blank line, then the ten properties as `*` bullets in Step 5 order, directly under the title |
 | Pre-conditions | `**Pre-conditions:**`, the condition on the line below: one sentence, or short bullets when several are independent; `None.` when nothing is needed |
@@ -397,7 +392,7 @@ Ten properties, in this order, on every case. Where a value usually starts is **
 | Testability | `automation` | deterministic; a script asserts it exactly |
 | | `manual` | a judgment a script cannot reliably make |
 | | `automation, manual` | both |
-| Trace | `<capability>-US-<n>` | the journey, canonical form; composed levels list every journey walked, comma-separated, in the order reached |
+| Trace | `<app>.<domain>-<capability>.US<n>` | the journey, canonical form; composed levels list every journey walked, comma-separated, in the order reached |
 
 - **Severity** — a refusal that protects money or permission is `critical` even when nothing happens
 - **Priority** — the schedule, where severity is the failure: a `trivial` bug on the first screen can be `high`
@@ -440,13 +435,13 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 **Status:** pending-review · 0/<number of draft cases>
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
 
-## <capability>-US<n>: <journey title, copied from the spec heading>
+## <app>.<domain>-<capability>.US<n>: <journey title, copied from the spec heading>
 
 **As a** <role>,
 **I want** <goal>,
 **so that** <reason>.
 
-### <scope>.TC-<sequence> (US<n>-TC<m>): <clean descriptive title>
+### <app>.<domain>-<capability>.US<n>-TC<m>: <clean descriptive title>
 
 **Classification:**
 
@@ -459,7 +454,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 * **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
-* **Trace:** <capability>-US-<n>
+* **Trace:** <app>.<domain>-<capability>.US<n>
 
 **Pre-conditions:**
 
@@ -481,19 +476,19 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 * <from THEN>
 * <from AND following THEN>
 
-### <scope>.TC-<next-sequence> (US<n>-TC<m+1>): <the next case under this journey>
+### <app>.<domain>-<capability>.US<n>-TC<m+1>: <the next case under this journey>
 
 …
 
 ---
 
-## <capability>-US<n+1>: <the next journey>
+## <app>.<domain>-<capability>.US<n+1>: <the next journey>
 ````
 
 - **Fixed points** — header lines computed; journey heading and its three-line statement copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
 - **Decided by** — ``**Decided by:** `<path>`[, `<path>`]*``, the first line after the classification block and before `**Pre-conditions:**`, one or more repository-relative paths, comma-separated. It names what decides the case: a store unit or script test, or the end-to-end walk that drives it. One rule — an automated case of an in-flight change names what decides it, in its place, once; nothing else may — which `pnpm run tcs:validate` reads as three verdicts: no line is refused, a line anywhere but there or a second line is refused, and a line on a case that is not `automated` is a warning. A path to a store test resolves inside the store, to a file that exists; a test or a walk in the application repository is named by its tag, `grade10:<path>`, which the store checks for form and resolves only when `--app-root` or the clone it is a submodule of holds the application repository, and which that repository's own `check:decided-by` holds to a file on every push. A durable suite under `openspec/specs/` owes no line yet; the fold carries across every line the change wrote. Archive compares only accepted claim targets, so a suite target that changed needs a compatibility acknowledgement
 - **No execution record** — no actual result, no pass/fail column; a run lives in the run sheet against a snapshot of the case
-- **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, approved under r3; its `g10.auction-auction.TC-s25 (US2-TC1)` is a case at the right size. A case pasted here would drift; an approved case is validator-held
+- **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, approved under r3; its `g10.auction-auction.US2-TC1` is a case at the right size. A case pasted here would drift; an approved case is validator-held
 - **Deltas use the same format** — under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`
 
 ## The Tools
