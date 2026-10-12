@@ -1,6 +1,6 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { Hourglass } from "@phosphor-icons/react";
+import { HourglassMedium } from "@phosphor-icons/react";
 
 /**
  * Portfolio banner when collectibles are still in intake. Track Progress opens
@@ -31,9 +31,9 @@ function ActiveIntakeAlert({
       }
       data-slot="active-intake-alert"
       dismissible={false}
-      icon={<Hourglass aria-hidden size={16} weight="bold" />}
+      icon={<HourglassMedium aria-hidden size={16} weight="bold" />}
       layout="inline"
-      status="default"
+      status="warning"
       title={`${submissionCount} ${noun} currently in intake`}
     />
   );
