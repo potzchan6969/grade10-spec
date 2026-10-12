@@ -1,16 +1,18 @@
 ---
 name: tcs-review
-description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite one user journey at a time - first preparing it (regenerate or restyle, cover every scenario by claim, fill in how to run each case, propose test data), then every draft case in a journey together, with the spec's scenarios quoted on request - record each verdict as actual, deprecated, or still draft, and end by offering the writing rules the review taught as conventions. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
+description: Review or walk a feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite. Review is journey-led: prepare the suite, give product and walk context, present draft cases, and record human verdicts. Walk mode is read-only and shows walks one by one, then ungrouped cases. Use when QA asks to review, approve, sign off, understand, or manually walk test cases. Invoke as /tcs-review [walk] <capability-or-change|domain|journey|tc>.
 ---
 
 # Reviewing Test Cases With QA
 
-Follow `docs/governance/specs-to-test-cases.md` — **The Review Lane** is this
-skill's rule book; **Step 5**, **The File Header** and **How a Case Reads** hold the
+Follow `docs/governance/specs-to-test-cases.md` — **Review Contract** is the
+invariant rule book; **Step 5**, **The File Header** and **How a Case Reads** hold the
 properties, the statuses, and the house style
 (`docs/governance/tcs-conventions.md`); a bold name below is a heading there.
 
-Invoke as `/tcs-review [<capability-or-change>]`. Generating or updating a suite is `/spec-to-tcs` (`.cursor/skills/spec-to-tcs/SKILL.md`).
+Invoke as `/tcs-review [<capability-or-change>]` for verdict review or
+`/tcs-review walk <capability-or-domain-or-journey-or-tc>` for read-only manual
+walk orientation. Generating or updating a suite is `/spec-to-tcs` (`.cursor/skills/spec-to-tcs/SKILL.md`).
 The reviewer decides, never this skill: present the case beside the spec, answer
 what they ask, and record their words untidied — generation copies what they approve.
 
@@ -27,11 +29,11 @@ execution; a review classification is not a pass or fail result.
    `docs/governance/tcs-conventions.md`, one read each, before anything else
    on every run.
 
-1. **Get on a review branch before the first verdict.** Names are the table in
-   **The Review Lane**: `git switch -c tcs-review/<level>-<target>` from
-   `main` whatever the suite holds, `<level>` one of `feature`, `domain`,
-   `product`, `platform`; commits, pushes and the one pull request as that
-   table says, label `documentation`. Push the branch before the first verdict:
+1. **Get on a review branch before the first verdict.** Use
+   `git switch -c tcs-review/<level>-<target>` from `main` whatever the suite
+   holds, with `<level>` one of `feature`, `domain`, `product`, `platform`.
+   Use this skill's preparation and landing sequence, label the pull request
+   `documentation`, and push the branch before the first verdict:
    the remote branch or its open pull request is the `in-review` signal. Never
    write `in-review` into the file, and never write verdicts on `main`.
 
@@ -45,8 +47,9 @@ execution; a review classification is not a pass or fail result.
    --heads origin "tcs-review/*-<target>"` and report who is in it and on
    which journey — information, never a refusal.
 
-3. **Complete the level stack first.** Levels run top down — **Levels** and
-   **Top down** under **The Review Lane** — so look at what sits above the suite named:
+3. **Complete the level stack first.** Levels run top down — see **Levels** and
+   **Review Contract** in the governance document — so look at what sits above
+   the suite named:
 
    | Level above | The suite itself | Do |
    | --- | --- | --- |
@@ -55,8 +58,9 @@ execution; a review classification is not a pass or fail result.
    | present | missing | Offer to derive it, covering what the level above does not own |
    | present | present | Review it, once both are current (step 5) |
 
-   A `product` or `platform` suite is a smoke pass, every case `**Suites:**
-   smoke`: review whether the seam holds, not coverage. When a domain's last
+   A `product` or `platform` suite is a curated seam pass, not a fixed-size
+   inventory: review whether each important seam and critical path has a
+   representative case. When a domain's last
    feature suite reaches `approved` and its `domain-tcs.md` still holds
    drafts, offer it next, and the same upward.
    **Never derive silently** — say which file, level, journeys and roughly
@@ -75,17 +79,29 @@ execution; a review classification is not a pass or fail result.
 
 5. **Prepare before you present anything,** as `## Preparing the Suite` below
    lays out, in its order, each part its own commit, and one push when it is
-   all done, before the first journey. **Prepare first** under **The Review Lane** and the `rev` table
-   under **Naming** say what each status allows: `draft` freely, `actual`
+   all done, before the first journey. The `rev` table under **Naming** says
+   what each status allows: `draft` freely, `actual`
    still `manual` on the reviewer's yes, `automated` and `deprecated` never.
 
 6. **Open the suite and its journeys together.** Read the whole suite and the
    `spec.md` beside it end to end — above feature level, every `user-journeys.md`
-   its traces name and the matching `docs/prds/` pages — then orient the
-   reviewer: capability, journeys, cases per journey, drafts.
+   its traces name and the matching `docs/prds/` pages. Determine the review
+   mode from the suite, not the person's identity: a suite without a current
+   `**Reviewed:**` line needs a full orientation; a previously reviewed suite
+   needs a delta walkthrough for changed journeys and a short refresher. The
+   repository cannot prove whether the same human is reviewing again.
+   Give the reviewer a suite-level product walkthrough before the first
+   verdict: who is acting, where the journey starts, what the product is
+   expected to do, which outcome ends it, and which higher or lower suite owns
+   the adjacent path. Explain TCS concepts just in time — anchor, outcome
+   grouping, partition, row, formal `Trace`, post-hoc `covers`, and status —
+   using the current suite. Prefer a narrated route from product documents;
+   a live route is orientation only and never changes the requirement or
+   produces a test result.
 
-7. **Walk the suite one journey at a time,** in file order, as **The Review
-   Lane** describes: the journey, every `draft` case in full — id and title,
+7. **Review one journey at a time,** in file order: explain the product route
+   for that journey, show all walk context
+   that references it, then present every `draft` case in full — id and title,
    classification block, pre-conditions, test data, steps, expected results —
    and `actual` or `deprecated` cases by id and title only. A case preparation
    changed carries a one-line note of what changed — steps filled, a result
@@ -142,8 +158,11 @@ execution; a review classification is not a pass or fail result.
    styled:**` dropped once no draft is left. Never type the status.
 
 11. **Close the run and land the work.** Offer what the review taught, as
-   `## What the Review Taught` below lays out, and commit what follows from
-   it. Run `pnpm run tcs:validate` and fix what it names. Then push once and
+   `## What the Review Taught` below lays out. Before offering a convention,
+   run `tcs-conventions.md`'s **Before Adding a Convention** gate; a conflict
+   with the creation contract is reported as a core-rule finding, not written
+   as a convention. Commit what follows from the accepted verdicts. Run
+   `pnpm run tcs:validate` and fix what it names. Then push once and
    open the one pull request (`/pr-push`), titled with the range that has
    verdicts — `test(<domain>): approve <target> US<n>–<m> test cases` — its
    description listing every case the follow-ups changed, file by file. The
@@ -159,11 +178,24 @@ execution; a review classification is not a pass or fail result.
    what is done, push, and open the pull request with the journeys that have
    verdicts, then stop.
 
+## Walk Mode
+
+Invoke `/tcs-review walk <target>` when the goal is to help a human tester
+understand or manually walk the suite rather than approve it. Walk mode is
+read-only: it does not create a review branch, change a case status, or write a
+run sheet.
+
+- **Resolve the target** — accept a capability, domain, journey, or stable case id. A case target shows its owning journey and every walk that references it; a journey or broader target shows the matching suites in file order
+- **Walk the product first** — give the same narrated product orientation as a first review, then explain only the TCS concepts needed by the selected material
+- **Show walks one by one** — for each `## Walk`, show its starting state, shared test data, route, referenced case title and the complete result the tester must observe. Keep the case definition in its owning suite; the walk supplies the route, not a new assertion
+- **Finish with ungrouped cases** — list the ungrouped case headers after the walks, state which have no walk reference, and ask which case or cases the tester wants to walk next. Do not silently invent a route
+- **Keep the mode separate** — after the tester chooses an ungrouped case, show its own pre-conditions, data, steps and Expected Results; do not turn that choice into a verdict or add a walk without consent
+
 ## Preparing the Suite
 
 Before the first journey, in this order. Each part is its own commit, named in
-**The Review Lane**'s table; the branch is pushed once, when every part is
-done, so the verdict commits hold only the reviewer's decisions.
+the review steps above; the branch is pushed once, when every part is done, so
+the verdict commits hold only the reviewer's decisions.
 
 1. **Migrate legacy case headings.** Before restyling or presenting a case,
    convert every legacy case heading in the selected suite to
@@ -171,9 +203,11 @@ done, so the verdict commits hold only the reviewer's decisions.
    trace marker id, `rev`, local journey number, case number, title and case
    content unchanged. A case with no marker receives one through the trace
    CLI or a validated batch manifest; preserve its current `Trace` journey and
-   resolve `covers` from existing scenario markers, never from title similarity.
-   If its coverage cannot be resolved, record the case as a preparation
-   blocker for the suite owner rather than inventing a marker. After migration,
+   preserve any existing `covers` links. If no links are present, leave the
+   marker anchor-only for QA2; never derive links from scenario text or title
+   similarity. If its formal anchor cannot be resolved, record the case as a
+   preparation blocker for the suite owner rather than inventing a marker.
+   After migration,
    within every journey group, including groups under `## Ungrouped`, preserve
    the order of non-deprecated cases and move every `deprecated` case to the
    bottom. This is a presentation-only reorder: it changes no purpose, status,
@@ -188,17 +222,22 @@ done, so the verdict commits hold only the reviewer's decisions.
    revision has its drafts restyled to `docs/governance/tcs-conventions.md`
    instead.
 
-3. **Check coverage by claim.** **Coverage is checked by claim** holds the
-   rule. Read every scenario serving the suite's journeys and find the case
-   whose expected results assert its THEN; a case that only traces the
-   journey does not count. A scenario no case asserts gets a new `draft` at
-   the journey's next unused `TC<m>`, `rev=1`, without asking — it is
-   walked like any other draft. A journey with no case at all is covered the
-   same way. List the scenarios under `**Out of suite:**` and ask whether to
-   write a case for each; write one only on a yes, and take its id off the
-   list.
+3. **Check formal coverage by anchor.** Read every journey serving the suite
+   and verify that each anchor has an asserting case or an explicit higher-level
+   owner. A case that only names a journey without asserting an outcome does not
+   count. Do not create a Cartesian product of values or add a case only because
+   a scenario has a different input. Record same-purpose values as rows and
+   report unresolved anchor gaps.
 
-4. **Fill in the mechanism.** Read the spec's flow requirement,
+4. **Reconcile scenario links only after the independent readings.** When QA2
+   material is present, compare each scenario's THEN with the reviewed case's
+   Expected Results and add `covers` links through the trace workflow. One case
+   may link several scenarios only when one route and one checking fully assert
+   each. A case with no link remains anchor-covered and scenario-link-pending;
+   never invent a link by title similarity. Record uncovered scenarios,
+   over-claimed cases and contradictions for the spec owner.
+
+5. **Fill in the mechanism.** Read the spec's flow requirement,
    `ui-design.md`, the PRD pages, and the conventions' `## Setup Recipes` and
    `## Where Things Are`. Bring every `draft` to **Executable without
    asking**: where to go, which control, what goes in, how a state is
@@ -213,7 +252,7 @@ done, so the verdict commits hold only the reviewer's decisions.
    Testability plans no `automation`. An `actual` case still `manual` is
    filled only on the reviewer's yes.
 
-5. **Propose test data.** Rows the rule implies, as **Rows may add what the
+6. **Propose test data.** Rows the rule implies, as **Rows may add what the
    rule implies** says, each with the rule it traces. The reviewer takes or
    refuses each row; a taken row is written in. A row added to an `actual`
    case changes what it verifies: `rev` bumped, back to `draft`.
@@ -230,30 +269,30 @@ done, so the verdict commits hold only the reviewer's decisions.
 
 When the verdicts are done, and before the pull request is marked ready:
 
-- **Only a writing rule is a candidate** — each Change the reviewer asked
-  for, each "how do I run this" answer written into a case, each row taken or
-  refused, is read for the rule it suggests about how a case is written: a
-  title, a step, a result, a pre-condition, a placeholder, a test-data value,
-  an actor, the case's shape. One line each: what changed, and the rule
+- **Convention follow-up is conditional** — offer a convention only when a
+  confirmed, reusable writing rule emerged. A case-specific edit, product fact,
+  or style change with no reusable rule produces no candidate and no convention
+  commit. A rule that changes coverage, ownership, traceability, lifecycle or
+  validation is reported as a governance finding instead
 - **A fact is not a candidate** — an edit that names one product's page,
   control, label, status value or behaviour, where a value is read, or how a
   state is reached stays in the case it was made to. It is not offered, and
   not mentioned; `## Setup Recipes` and `## Where Things Are` take no line
   from a review
-- **One at a time** — the reviewer confirms, rewords or refuses each. A
-  confirmed line applies everywhere and lands under `## Store-wide` as
+- **One at a time** — the reviewer confirms, rewords or refuses each candidate.
+  A confirmed line lands under `## Store-wide` as
   `- <YYYY-MM-DD>, <suite path>: <the rule>`; only a line worded in one
   domain's vocabulary is scoped narrower, saying why, and then the reviewer is
   asked which scope. A refused line lands under `## Refused` with the
   reviewer's reason
 - **Never offered twice** — a candidate matching a `## Refused` line is not
   offered again; one that contradicts the rulebook is reported, not offered
-- **Applied at once** — as the conventions file's rule on applying a
-  confirmed line says: the reviewed file's remaining drafts and its `actual`
-  cases still `manual`, then the `actual` cases still `manual` in every other
-  suite in the same domain folder, skipping one with an open `tcs-review/*`
-  branch or pull request. Unasked, and not narrated in the conversation: the
-  pull request's description lists what changed
+- **Applied at once** — apply a confirmed line to the reviewed suite's
+  remaining drafts and manual `actual` cases. A same-domain propagation may be
+  a separately listed style-only follow-up, preserving purpose, Expected
+  Results, Trace, status, test-data meaning and automation links; a semantic
+  change waits for that suite's review. The pull request's description lists
+  every propagated case
 - **Follow-up commits** — `docs(governance): conventions from the <target>
   review`, then `test(<domain>): apply conventions from the <target>
   review`, batched by purpose; committed only, pushed with the rest when the

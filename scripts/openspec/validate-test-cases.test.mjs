@@ -110,6 +110,44 @@ function store(story, manual = MANUAL) {
   return root;
 }
 
+test("an anchor-only active case is a non-blocking QA2 warning before approval", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8").replace(
+    "### demo-alpha-US1-TC1-1: The thing happens, 1",
+    "<!-- trace:case id=demo.alpha.TC-001 rev=1 -->\n### demo-alpha-US1-TC1-1: The thing happens, 1",
+  );
+  writeFileSync(file, text);
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.equal(result.status, 0, out);
+  assert.match(out, /no post-hoc scenario links/);
+});
+
+test("an approved actual anchor-only case is not export-eligible", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8")
+    .replace("**Status:** pending-review · 0/3", "**Status:** approved · 3/3")
+    .replace("**Drafts styled:** 2026-09-01, tcs-rules r3.0\n", "")
+    .replaceAll("**Status:** draft", "**Status:** actual");
+  const withReview = text.replace(
+    "**Status:** approved · 3/3\n",
+    "**Status:** approved · 3/3\n**Reviewed:** 2026-09-01, tcs-rules r5\n",
+  );
+  writeFileSync(
+    file,
+    withReview.replace(
+      "### demo-alpha-US1-TC1-1: The thing happens, 1",
+      "<!-- trace:case id=demo.alpha.TC-001 rev=1 -->\n### demo-alpha-US1-TC1-1: The thing happens, 1",
+    ),
+  );
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.notEqual(result.status, 0, out);
+  assert.match(out, /not export-eligible/);
+});
+
 const run = runValidator;
 
 // Product and platform suites have no adjacent spec.md: their traces resolve
@@ -297,6 +335,31 @@ test("a walk cannot reference a missing stable case id", () => {
   const out = result.stdout + result.stderr;
   assert.notEqual(result.status, 0, out);
   assert.match(out, /walk `Walk 1: Complete the thing` references `tc-zzz`/);
+});
+
+test("a feature walk may reference a full case id from its own suite", () => {
+  const root = store("", []);
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  const original = readFileSync(suite, "utf8")
+    .replace("## demo-alpha-US1: Collector does the thing", "## demo-alpha.US1: Collector does the thing")
+    .replace("### demo-alpha-US1-TC1-1: The thing happens, 1", "### demo-alpha.US1-TC1: The thing happens, 1");
+  writeFileSync(
+    suite,
+    original.replace(
+      "## demo-alpha.US1: Collector does the thing",
+      [
+        "## Walk 1: Complete the thing",
+        "",
+        "### Route",
+        "",
+        "1. Open the thing. `demo-alpha.US1-TC1`",
+        "",
+        "## demo-alpha.US1: Collector does the thing",
+      ].join("\n"),
+    ),
+  );
+  const result = run(root);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 
 test("a platform walk resolves a full lower-level feature case id", () => {
@@ -738,7 +801,7 @@ test("a retired journey holds only deprecated cases, which may still trace it", 
   const live = at("draft");
   assert.match(
     live,
-    /journey `demo-alpha-US-02` is retired, so every case under it is deprecated/,
+    /journey `demo-alpha-US2` is retired, so every case under it is deprecated/,
   );
   assert.match(live, /traces `demo-alpha-US-02`, which is neither a journey/);
 });

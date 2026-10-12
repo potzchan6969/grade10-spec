@@ -1,19 +1,29 @@
 # Test Case Conventions
 
-How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.md) holds the contract — ids, properties, levels, what a case may claim — and this file holds the house style that sits on top of it. `/spec-to-tcs` writes every draft to it; `/tcs-review` restyles drafts to it before a review starts, and adds to it when a review ends.
+How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.md) holds creation, coverage, traceability, lifecycle and validation; this is the one shared file for writing style. `/spec-to-tcs` writes every draft to it; `/tcs-review` restyles drafts to it before a review starts, and adds to it when a review ends. No other file may define a competing writing convention.
 
 ## How This File Grows
 
-- **Only a writing rule is a candidate** — when a `/tcs-review` ends, each change the reviewer made to a case is read for the rule it suggests about how a case is written, and that rule is offered back as one line: what was changed, and the rule. The reviewer confirms, rewords or refuses each one; nothing lands unasked
+- **Only a reusable writing rule is a candidate** — when a `/tcs-review` ends, offer a convention only when a confirmed, reusable rule about how a case is written emerged. A case-specific edit, product fact, or style change with no reusable rule produces no candidate and no convention follow-up
 - **A fact is not a candidate** — a change naming one product's page, control, label, status value or behaviour, where a value is read, or how a state is reached stays in the case it was made to, and is not offered. `## Setup Recipes` and `## Where Things Are` take no line from a review
-- **A confirmed line applies everywhere** — it lands under `## Store-wide` by default. Only a line worded in one domain's vocabulary is scoped narrower, and then the review says why and asks the reviewer which scope
+- **A confirmed line has store-wide scope by default** — it lands under `## Store-wide` unless its wording is explicitly domain-specific. How that scope is applied to existing cases follows **A confirmed line applies at once** below
 - **Refused lines land under `## Refused`** — the next review reads that section and does not offer the same pattern again
 - **One line per convention** — `- <YYYY-MM-DD>, <suite path>: <the pattern, as a rule>`. A line that needs an example names an approved case id rather than pasting one
 - **Narrower wins** — a capability line beats a store-wide one for that capability's suites
 - **It refines how, never what** — a convention cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule the contract; a line that contradicts [`specs-to-test-cases.md`](specs-to-test-cases.md) is reported and the contract followed
 - **A convention that must hold everywhere is a contract** — it moves to `specs-to-test-cases.md` with a rules revision, and leaves this file
-- **A confirmed line applies at once** — when the review that confirmed it ends: to the reviewed file, its remaining drafts and its `actual` cases still `manual`; and to every other suite in the same domain folder, its `actual` cases still `manual`, unasked, in its own commit, skipping a suite with an open `tcs-review/*` branch or pull request. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
+- **A confirmed line applies at once** — when the review that confirmed it ends, apply it to the reviewed suite's remaining drafts and its manual `actual` cases. A same-domain propagation may update other cases in a separately listed style-only follow-up, preserving purpose, expected results, trace, status, test-data meaning and automation links; a semantic change waits for that suite's review. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
 - **`automated` and `deprecated` cases are never restyled to it** — an `automated` case changes only with its behaviour, a `deprecated` one never
+
+## Before Adding a Convention
+
+Every candidate from a review passes this gate before it is offered to the reviewer.
+
+1. **Classify the candidate** — confirm that it changes only how a case is written: title, wording, step shape, result shape, pre-condition, placeholder, test-data presentation, actor wording or layout
+2. **Check the core rulebook** — compare it with [`specs-to-test-cases.md`](specs-to-test-cases.md). A candidate that changes anchors, formal coverage, scenario links, case ownership, suite levels, lifecycle, export eligibility, validation or the number of cases is a core-rule change, not a convention
+3. **Check existing conventions** — search `## Store-wide`, the applicable scope under `## Domains, Products and Capabilities`, and `## Refused`. A duplicate, narrower conflict or refused pattern is not offered silently
+4. **Resolve conflicts explicitly** — a direct contradiction is reported to the reviewer with both rules named. The existing core rule wins; no new convention is written until the core rule is changed through its governance path
+5. **Record one line only after consent** — confirmed rules use the existing dated-line format, with the scope and reason when narrower than store-wide
 
 ## Store-wide
 
@@ -37,9 +47,9 @@ The lines below came across from `tcs-rules` r3 when this file was split from it
 ### Walks
 
 - **Walk shape** — `## Walk <n>: <title>`, followed by `**Starting state:**`, optional `**Shared test data:**`, and `### Route`
-- **Route checks** — use a `-` bullet for a normal validation and put its compact case reference at the end: `TC-nsg (US1-TC12)`
+- **Route checks** — use a `-` bullet for a normal validation and put the full case heading reference at the end: `g10.auction-bidder-suspension.US1-TC1`
 - **Route branches** — use `a.` and `b.` for actual alternative conditions, with the expected result and case reference on the same line; do not use a branch to create a new observation
-- **Case references** — use `TC-<sequence> (US<n>-TC<m>)` in a walk; the full case definition remains in its owning suite
+- **Case references** — use the full human-facing case heading id, such as `g10.auction-bidder-suspension.US1-TC1`, in a walk; the full case definition remains in its owning suite
 - **No walk description** — a `*-tcs.md` walk carries setup, data and route only; generic explanation belongs in this file or its template
 - **Complete case results** — the case definition remains the complete record of its Expected Results. A walk may repeat the result needed at that route point so a human knows what to record, but may not add or remove an assertion
 - **Shared setup** — shared walk data saves human tester effort; it never makes a case depend on another case's result
@@ -74,7 +84,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 
 ### Placeholders
 
-- **Self-describing, in the store's words** — `<grade10 browse listing url>`, `<a collection with no artwork>`; never `<url1>`, `<TBD>`, or a bare `<store url>` where the store runs more than one brand
+- **Self-describing, in the store's words** — `<g10 auction url>`, `<g10adm url>`, `<a collection with no artwork>`; never `<url1>`, `<TBD>`, or an undeclared abbreviation
 - **For the value, not the thing** — where the spec names a control, name what the tester clicks
 - **Consistent within a suite** — one surface, one placeholder
 - **Never capitalised** — rewrite a sentence that would put a placeholder first
@@ -86,7 +96,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - **Rows with one checking** — keep one row when values share the same purpose, route and expected checking. Use separate rows when the expected provider answer or checking differs; use separate cases when the purpose differs
 - 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: In a `Field | Value` table, `Field` is a plain name such as `lot_1`. `Value` states the exact value or the conditions a fixture must meet. A test walk binds the name to a concrete value meeting that row, and expected results refer to the binding rather than pasting the row's description.
 - 2026-09-25, grade10-site/auction/domain-tcs.md: A value that is not a boundary states an assumption and the range the requirement accepts, for example `HKD 800.00 or JPY 8000 or USD 8.00 (any price > 500 minor units)`. A boundary keeps its exact number and adds a readable reading. An exact reading has no tilde: `1800s (30mins)`. Use `~` only when that reading has a remainder: `1024b (1KiB or ~1KB)`. The exact number stays, so the reading never moves the bound.
-- 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `g10.auction-auction.TC-xxx (US2-TC12)` does. The expected result states the formula that equals it. A step does not state the outcome.
+- 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `g10.auction-auction.US2-TC12` does. The expected result states the formula that equals it. A step does not state the outcome.
 - 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: Rows for a refusal take one value per distinct answer the provider gives, not several values that produce the same answer.
 - 2026-10-06, shared/auth/users/feature-tcs.md: When a rule names a class of values, for example any role other than `user`, the test data takes two members of the class as rows; two are enough.
 - 2026-10-07, shared/auth/audit/feature-tcs.md: A case manual QA can run walks the product flow that reaches the write, such as a guest checkout for a trusted-product create, not the call behind it.

@@ -47,6 +47,7 @@ import {
   caseRow,
   caseRows,
   inReadingOrder,
+  matchesChangedScope,
   selectCases,
   surfacePrefill,
   walkBand,
@@ -242,6 +243,31 @@ test("a modern case heading and an ungrouped case keep their references", () => 
     modern.journeys[1].cases[0].id,
     "g10.auction-account-record.TC-k8m",
   );
+});
+
+test("the human-facing US/TC case heading parses without a duplicate local reference", () => {
+  const parsed = parseSuite(
+    [
+      "## g10.auction-bidder-suspension.US1: A bidder is suspended",
+      "",
+      "### g10.auction-bidder-suspension.US1-TC1: An expired invoice suspends bidding",
+      "",
+      "**Steps:**",
+      "",
+      "1. Open the auction.",
+      "",
+      "**Expected Results:**",
+      "",
+      "* Bidding is suspended.",
+    ].join("\n"),
+  );
+  assert.equal(parsed.journeys[0].raw, "g10.auction-bidder-suspension.US1");
+  assert.equal(
+    parsed.journeys[0].cases[0].id,
+    "g10.auction-bidder-suspension.US1-TC1",
+  );
+  assert.equal(parsed.journeys[0].cases[0].journeyNum, 1);
+  assert.equal(parsed.journeys[0].cases[0].tcNum, 1);
 });
 
 test("walk parsing keeps stable case refs and their local US/TC references", () => {
@@ -666,6 +692,23 @@ test("a durable suite wins when a change repeats the case id", () => {
   });
   assert.equal(picked[0].read.rel, base.read.rel);
   assert.equal(picked[0].tc.title, base.tc.title);
+});
+
+test("changed-since selection follows the suite scope without selecting by scenario text", () => {
+  const feature = candidates[0].read;
+  assert.equal(
+    matchesChangedScope(feature, [
+      "docs/prds/products/demo/thing/widget.md",
+    ]),
+    true,
+  );
+  assert.equal(
+    matchesChangedScope(feature, [
+      "docs/prds/products/demo/other-capability.md",
+    ]),
+    false,
+  );
+  assert.equal(matchesChangedScope(feature, []), true);
 });
 
 test("shared-planning-agent-rounds-SC-61 - an automated case is left out by default, and reported", () => {
