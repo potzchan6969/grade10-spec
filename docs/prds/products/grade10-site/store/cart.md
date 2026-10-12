@@ -24,8 +24,9 @@ back to that page.
 - **Current read** — every line is read against the shop on open; the
   price and the stock are the shop's own —
   [Cart Validation](/p/grade10-site/store/cart-validation)
-- **Unresolved** — while the read is pending or failed the lines, the
-  totals and Checkout wait; nothing held is shown as current
+- **Unresolved** — while the read is pending or failed the lines, each
+  line's price, the totals and Checkout wait; nothing held is shown as
+  current, since the read may bring a sale or a new price
 - **Lines whose product left the shop** — leave the cart on open, with one
   notice; a sold-out line stays, marked, until the collector removes it —
   [Cart Validation](/p/grade10-site/store/cart-validation)
@@ -87,6 +88,9 @@ The refusals are the coupon's own —
 - 🚧 **Sent** — the order is promised with the same code and points the
   drawer shows —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
+- **Leaving for Shopify** - after Proceed to Checkout the drawer stays open
+  on Redirecting… until Shopify's page opens, and the cart cannot be
+  changed meanwhile
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 
