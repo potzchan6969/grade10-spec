@@ -15,6 +15,7 @@ import {
   SAMPLE_HELD_PROMO_CODES,
   STORY_POINTS_MAX_HKD,
   storyCartEstimatedTotal,
+  storyPromoLabel,
 } from "./fixtures";
 import type {
   CartItemSummary,
@@ -134,7 +135,7 @@ export const Default: Story = {
           setSelectedHeldId(id);
           setPromo({
             status: "applied",
-            code: code.label,
+            label: storyPromoLabel(code.label),
             discountAmount: discount.amount,
           });
           setTotal(
@@ -147,7 +148,7 @@ export const Default: Story = {
             setSelectedHeldId(result.heldId);
             setPromo({
               status: "applied",
-              code: result.label,
+              label: storyPromoLabel(result.label),
               discountAmount: result.amount,
             });
             setTotal(

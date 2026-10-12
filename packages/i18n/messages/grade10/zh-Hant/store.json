@@ -35,6 +35,7 @@
       "useMaxPoints": "全部使用",
       "pointsRateLabel": "1 積分 = HK$1",
       "removePoints": "移除",
+      "discountLabel": "優惠 ({name})",
       "pointsLabel": "積分",
       "checkoutButton": "前往結帳",
       "checkoutRedirecting": "重新導向中…",

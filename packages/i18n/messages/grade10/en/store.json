@@ -35,6 +35,7 @@
       "useMaxPoints": "Use max",
       "pointsRateLabel": "1 pt = HK$1",
       "removePoints": "Remove",
+      "discountLabel": "Discount ({name})",
       "pointsLabel": "Points",
       "checkoutButton": "Proceed to Checkout",
       "checkoutRedirecting": "Redirecting…",

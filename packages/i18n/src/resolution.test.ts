@@ -165,6 +165,7 @@ const CART_DRAWER_KEYS = [
   "footer.useMaxPoints",
   "footer.pointsRateLabel",
   "footer.removePoints",
+  "footer.discountLabel",
   "footer.pointsLabel",
   "footer.checkoutButton",
   "footer.checkoutRedirecting",

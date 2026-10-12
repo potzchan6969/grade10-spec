@@ -520,6 +520,7 @@ export type {
   CartItemStatus,
   CartItemSummary,
   HeldPromoCode,
+  OrderDiscountRow,
   PointsState,
   PromoNotice,
   PromoState,

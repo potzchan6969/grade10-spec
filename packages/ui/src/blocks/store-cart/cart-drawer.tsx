@@ -41,6 +41,7 @@ import type {
   CartItemCopy,
   CartItemSummary,
   HeldPromoCode,
+  OrderDiscountRow,
   PointsState,
   PromoNotice,
   PromoState,
@@ -66,8 +67,8 @@ function promoNoticeKey(notice: PromoNotice): string {
     : notice.title;
 }
 
-/** Height + opacity reveal for promo discount ↔ “Use promo code” swap. */
-function PromoSectionReveal({
+/** Height + opacity reveal for a footer row that comes and goes. */
+function FooterSectionReveal({
   open,
   children,
 }: {
@@ -584,6 +585,7 @@ type CartDrawerFooterProps = {
   /** Disable tender controls and checkout while a tender choice is saving. */
   tenderPending?: boolean;
   checkoutDisabled?: boolean;
+  orderDiscounts?: readonly OrderDiscountRow[];
   promoState?: PromoState;
   /**
    * When set, shown once as a toast (e.g. promo cleared after the cart
@@ -624,10 +626,10 @@ type CartDrawerFooterProps = {
 /**
  * Product / Cart / Cart Drawer Footer (`4791:2773`).
  *
- * Renders subtotal, applied promo/points lines, compact promo-code and Use
- * points rows (typed amount — partial redeem so promo codes can still use
- * points), shipping, estimated total, and checkout. Enter/held-list UI lives
- * in `CartPromoSheet`, not inline here.
+ * Renders subtotal, order discount rows, applied promo/points lines, compact
+ * promo-code and Use points rows (typed amount — partial redeem so promo codes
+ * can still use points), shipping, estimated total, and checkout.
+ * Enter/held-list UI lives in `CartPromoSheet`, not inline here.
  */
 function CartDrawerFooter({
   subtotal,
@@ -637,6 +639,7 @@ function CartDrawerFooter({
   summaryLoading = false,
   tenderPending = false,
   checkoutDisabled = false,
+  orderDiscounts = [],
   promoState = { status: "collapsed" },
   promoNotice,
   pointsState = null,
@@ -682,6 +685,11 @@ function CartDrawerFooter({
     lastAppliedPointsRef.current = pointsState;
   }
   const appliedView = isApplied ? promoState : lastAppliedRef.current;
+  const hasOrderDiscounts = orderDiscounts.length > 0;
+  const lastOrderDiscountsRef = useRef(orderDiscounts);
+  if (hasOrderDiscounts) {
+    lastOrderDiscountsRef.current = orderDiscounts;
+  }
   const appliedPointsView = isPointsApplied
     ? pointsState
     : lastAppliedPointsRef.current;
@@ -821,7 +829,7 @@ function CartDrawerFooter({
       className={cn("w-full shrink-0 border-t border-border p-6", className)}
       data-slot="cart-drawer-footer"
     >
-      {/* Line items: subtotal → promo slot → points slot → shipping */}
+      {/* Lines: subtotal → order discounts → promo → points → shipping */}
       <VStack gap="none" className="w-full">
         <HStack
           gap="none"
@@ -839,11 +847,34 @@ function CartDrawerFooter({
           </CartAmountSkeleton>
         </HStack>
 
+        <FooterSectionReveal open={hasOrderDiscounts}>
+          {lastOrderDiscountsRef.current.map((row, index) => (
+            <HStack
+              // biome-ignore lint/suspicious/noArrayIndexKey: two discounts may share a title
+              key={index}
+              gap="none"
+              vAlign="center"
+              className="w-full justify-between pb-2"
+              data-slot="cart-order-discount"
+            >
+              <span className="text-sm font-normal leading-5 text-foreground">
+                {row.label}
+              </span>
+              <CartAmountSkeleton loading={amountsLoading}>
+                {rollValue(row.amount, {
+                  className: "text-sm font-medium leading-5 text-success",
+                  loading: amountsLoading,
+                })}
+              </CartAmountSkeleton>
+            </HStack>
+          ))}
+        </FooterSectionReveal>
+
         {/* Promo slot — trigger or applied Discount; always above points */}
         {discountMounted || promoTriggerMounted ? (
           <VStack gap="none" className="w-full">
             {discountMounted && appliedView ? (
-              <PromoSectionReveal open={isApplied}>
+              <FooterSectionReveal open={isApplied}>
                 <HStack
                   gap="none"
                   vAlign="center"
@@ -851,7 +882,7 @@ function CartDrawerFooter({
                 >
                   <HStack gap="xs" vAlign="center">
                     <span className="text-sm font-normal leading-5 text-foreground">
-                      Discount ({appliedView.code})
+                      {appliedView.label}
                     </span>
                     {onRemovePromo ? (
                       <Link
@@ -873,11 +904,11 @@ function CartDrawerFooter({
                     </span>
                   </CartAmountSkeleton>
                 </HStack>
-              </PromoSectionReveal>
+              </FooterSectionReveal>
             ) : null}
 
             {promoTriggerMounted && onPromoStateChange ? (
-              <PromoSectionReveal open={!isApplied}>
+              <FooterSectionReveal open={!isApplied}>
                 <VStack gap="none" className="w-full pb-2">
                   <button
                     type="button"
@@ -896,7 +927,7 @@ function CartDrawerFooter({
                     </span>
                   </button>
                 </VStack>
-              </PromoSectionReveal>
+              </FooterSectionReveal>
             ) : null}
           </VStack>
         ) : null}
@@ -905,7 +936,7 @@ function CartDrawerFooter({
         {showPoints && (pointsCreditMounted || pointsTriggerMounted) ? (
           <VStack gap="none" className="w-full">
             {pointsCreditMounted && appliedPointsView ? (
-              <PromoSectionReveal open={isPointsApplied}>
+              <FooterSectionReveal open={isPointsApplied}>
                 <HStack
                   gap="none"
                   vAlign="center"
@@ -935,11 +966,11 @@ function CartDrawerFooter({
                     </span>
                   </CartAmountSkeleton>
                 </HStack>
-              </PromoSectionReveal>
+              </FooterSectionReveal>
             ) : null}
 
             {pointsTriggerMounted ? (
-              <PromoSectionReveal open={!isPointsApplied}>
+              <FooterSectionReveal open={!isPointsApplied}>
                 <VStack gap="none" className="w-full pb-2">
                   {onPointsStateChange ? (
                     <button
@@ -968,7 +999,7 @@ function CartDrawerFooter({
                     </button>
                   ) : null}
 
-                  <PromoSectionReveal open={!!isPointsExpanded}>
+                  <FooterSectionReveal open={!!isPointsExpanded}>
                     {onApplyPoints ? (
                       <HStack gap="sm" vAlign="start" className="w-full pt-2">
                         <div className="flex-1">
@@ -1023,9 +1054,9 @@ function CartDrawerFooter({
                     ) : (
                       pointsContext
                     )}
-                  </PromoSectionReveal>
+                  </FooterSectionReveal>
                 </VStack>
-              </PromoSectionReveal>
+              </FooterSectionReveal>
             ) : null}
           </VStack>
         ) : null}
@@ -1307,6 +1338,7 @@ type CartDrawerProps = {
   /** Keep the cart visible while the consumer confirms an update. */
   checkoutDisabled?: boolean;
   onFetchStatusAndPrice?: () => Promise<void> | void;
+  orderDiscounts?: readonly OrderDiscountRow[];
   promoState?: PromoState;
   /** Live held codes only — omit expired/void; filtering is consumer-owned. */
   heldPromoCodes?: readonly HeldPromoCode[] | null;
@@ -1345,11 +1377,11 @@ type CartDrawerProps = {
  * - On cart open: fetches product status and price info via `onFetchStatusAndPrice` or controlled `loading`.
  *   During loading, each cart item, header count badge, subtotal, discount amount, points amount, and estimated total
  *   display as Boneyard skeleton; the empty-cart empty state is hidden; checkout is disabled.
- * - Footer: after subtotal (and any applied Discount / Points lines), compact
- *   **Promo code · Select or enter code ›** and **Use points** rows align like
- *   shipping. Promo opens a nested sheet; points stay typed amount on this layer
- *   (partial redeem). Shopper copy never says “coupon”. Checkout attaches both
- *   to the Shopify draft.
+ * - Footer: after subtotal (and any order discount, applied Discount / Points
+ *   lines), compact **Promo code · Select or enter code ›** and **Use points**
+ *   rows align like shipping. Promo opens a nested sheet; points stay typed
+ *   amount on this layer (partial redeem). Shopper copy never says “coupon”.
+ *   Checkout attaches both to the Shopify draft.
  * - Scroll-fade: body displays shadcn scroll-fade top/bottom masks when items overflow.
  * - Dismissal: Closes via ✕ button, clicking dimmed backdrop overlay, or pressing Esc.
  *   When the nested promo sheet is open, Esc and backdrop collapse the sheet first;
@@ -1374,6 +1406,7 @@ function CartDrawer({
   tenderPending = false,
   onFetchStatusAndPrice,
   checkoutDisabled,
+  orderDiscounts,
   promoState,
   heldPromoCodes,
   selectedHeldPromoId,
@@ -1529,6 +1562,7 @@ function CartDrawer({
               summaryLoading={isSummaryLoading}
               tenderPending={tenderPending}
               checkoutDisabled={checkoutDisabled}
+              orderDiscounts={orderDiscounts}
               promoState={promoState}
               promoNotice={promoNotice}
               pointsState={pointsState}

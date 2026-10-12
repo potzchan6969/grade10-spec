@@ -90,3 +90,10 @@ the sale from and show only that code's Discount in the footer,
 **I want** removing the promo to drop its discount and, where it had replaced
 the site sale, put the sale back on the lines while the sale still runs,
 **so that** I am not left at full list price after clearing a code.
+
+### shared-ui-store-cart-US-18: Shopper reads an order discount in the summary
+
+**As a** shopper,
+**I want** a cut the shop takes off the whole order to show as its own row
+after the Subtotal, with no line struck and no Remove,
+**so that** the cart reads the way the shop's checkout prints it.

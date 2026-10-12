@@ -35,6 +35,7 @@
       "useMaxPoints": "全部使用",
       "pointsRateLabel": "1 积分 = HK$1",
       "removePoints": "移除",
+      "discountLabel": "优惠 ({name})",
       "pointsLabel": "积分",
       "checkoutButton": "前往结账",
       "checkoutRedirecting": "正在跳转…",

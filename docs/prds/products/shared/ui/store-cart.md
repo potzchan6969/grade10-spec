@@ -60,13 +60,18 @@ show current tender context without offering an action that cannot change it.
 
 ## Site Sale and Promo Codes
 
-A site sale is a storewide cut the shop applies with no code. The
-application's quote decides whether a promo code stacks on it, is refused, or
+A site sale is a cut the shop applies to products or collections with no code.
+The application's quote decides whether a promo code stacks on it, is refused, or
 replaces it; the drawer shows that outcome and works out no amount.
 
 🚧 **On sale** - a line on the sale shows the sale price with the list price
 struck through, even a list price equal to the sale price. The summary adds no
 Store sale row.
+
+🚧 **Order discount** - a cut the shop takes off the whole order with no code,
+such as a spend threshold, is a row of its own after the Subtotal, with the
+name the application gives it and no Remove. No line is struck for it, and
+the Subtotal reads before it.
 
 🚧 **Which price is charged** - hidden words the application supplies, such
 as Sale price and Was, tell a screen reader which price is charged.
@@ -103,6 +108,10 @@ listed apart from the ones that can, muted with its reason and no Apply.
 
 ::story{id="store-cart-cartdrawer-auto-discount--fallback-after-remove" title="The site sale back after the promo is removed"}
 
+::story{id="store-cart-cartdrawer-auto-discount--product-sale-with-order-discount" title="A site sale on one line beside an order discount"}
+
+::story{id="store-cart-cartdrawerfooter--order-discount" title="An order discount under the Subtotal"}
+
 ::story{id="store-cart-promoticket--not-applicable" title="A held code that cannot apply"}
 
 ::story{id="store-cart-cartdrawer--default" title="The drawer with items"}
@@ -128,9 +137,7 @@ sale back. The drawer shows one shape per outcome, from the amounts the
 application supplies.
 
 **Not in scope.** A cart page of its own. Brand words for the empty cart beyond
-its title and the line under it. An automatic cut off the whole order, such as
-a spend threshold: the drawer shows sales that sit on lines, and the invoice
-prices the rest. Pricing the shop's sale in Grade10's drawer, which leaves it
+its title and the line under it. Pricing the shop's sale in Grade10's drawer, which leaves it
 to the invoice - [Cart Drawer](/p/grade10-site/store/cart). A code shown on a
 line: in every outcome here, the code's discount shows in the summary.
 
@@ -139,7 +146,7 @@ line: in every outcome here, the code's discount shows in the summary.
 | Signal | Definition | Owner |
 | --- | --- | --- |
 | Empty cart | The CartDrawer Empty State, Empty State Without Description, Loading No Lines, Only Delisted Lines and Only Sold Out Lines stories and the CartDrawerBody Empty story each show their state, and their play tests pass. | Engineering |
-| Outcome stories | The CartItem Sale Price and Product Coupon stories, the four Auto Discount stories and the PromoTicket Not Applicable story each show their outcome, and their play tests pass. | Engineering |
+| Outcome stories | The CartItem Sale Price and Product Coupon stories, the five Auto Discount stories, the CartDrawerFooter Order Discount stories and the PromoTicket Not Applicable story each show their outcome, and their play tests pass. | Engineering |
 
 **Decisions.**
 
@@ -149,7 +156,8 @@ line: in every outcome here, the code's discount shows in the summary.
 | Few items | Decided | The drawer lists only what the cart holds and scrolls what does not fit, instead of filling five rows with placeholders | Product |
 | Look | Decided | The block's stories are the agreed look; the Figma cart frames are historical | Design |
 | Combine rules | Decided | The drawer shows the outcome the quote returns. Whether a code stacks, is refused or replaces the sale, including a product sale that refuses every code, is the shop's pricing - [Discounts · One discount at a time](/p/grade10-site/store/discounts#one-discount-at-a-time). Chosen over encoding those rules in the drawer. | Product |
-| No sale row | Decided | A site sale shows only on the lines it cuts, so each cut appears once; the summary names no automatic cut. | Product |
+| No sale row | Decided | A site sale shows only on the lines it cuts, so each cut appears once; the summary names no site sale. | Product |
+| Order discount row | Decided | A cut off the whole order is a row of its own after the Subtotal, with no Remove, because the shop's checkout prints it on the order, not the lines. Chosen over spreading it over the lines or leaving it to the invoice. | Product |
 | Picked code refused | Decided | Its ticket moves apart, muted, with the refusal as its reason, so the shopper is never offered an Apply that fails again. Chosen over keeping it among the ones that can apply, or leaving it to each application. | Design |
 | Struck price read aloud | Decided | Hidden words the application supplies, such as Sale price and Was, read before each price, so a screen reader says which price is charged. Every struck price needs them - the product tile, the product page, the order line and the cart - so one change adds them to all. Chosen over a strike with no words, which some screen readers read as nothing. | Design |
 :::

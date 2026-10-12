@@ -13,9 +13,10 @@
   sale that refuses every code: the shop's pricing,
   `grade10-site/store/site-discounts` and
   [Discounts · One discount at a time](../../../docs/prds/products/grade10-site/store/discounts.md#one-discount-at-a-time).
-- A summary row naming a Store sale or any other automatic cut.
-- An order-level automatic cut, such as a spend threshold off the whole order:
-  the drawer shows line-level site sales only, and the invoice prices the rest.
+- A summary row naming a Store sale or any other automatic cut on the lines.
+- An order-level automatic cut, such as a spend threshold off the whole order.
+  Amended 2026-10-12: it now has its own summary row outside this change —
+  [Cart Drawer · Reviewing the Cart](../../../docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart).
 - Points tender, free shipping, or a second order-level promo beside the one
   code slot.
 - Admin authoring of site discounts.

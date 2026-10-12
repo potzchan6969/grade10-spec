@@ -41,7 +41,7 @@ collapsible promo code redemption and a checkout CTA.
   - Supplied remaining count: the line displays how many are left, in the consumer's own words
   - Consumer decides when: the line shows what it is given and judges nothing about scarcity
 - Site sale and promo outcomes
-  - On sale: a site sale shows on the lines it cuts as the sale price beside the struck list price, never as a summary row
+  - On sale: a site sale shows on the lines it cuts as the sale price beside the struck list price, never as a summary row; an order discount shows as its own summary row instead
   - Subtotal: the sum of each line's price times its quantity, leaving out sold-out and unavailable lines
   - Stacked: the lines keep the sale and the summary shows only the code's discount
   - Refused: the lines and totals stay on the sale and the promo sheet says why
@@ -60,8 +60,8 @@ components for the store cart surface: `CartDrawer`, `CartDrawerHeader`,
 `CartDrawerHeaderProps`, `CartDrawerHeaderCopy`, `CartDrawerBodyProps`,
 `CartDrawerFooterProps`, `CartDrawerFooterCopy`, `CartItemProps`,
 `CartItemCopy`, `CartItemStatus`, `CartItemSummary`, `CartPromoSheetProps`,
-`PromoTicketProps`, `HeldPromoCode`, `PointsState`, `PromoNotice`, and
-`PromoState`.
+`PromoTicketProps`, `HeldPromoCode`, `OrderDiscountRow`, `PointsState`,
+`PromoNotice`, and `PromoState`.
 
 The package SHALL NOT export `CartItemSlot` or `CartItemSlotProps`.
 
@@ -499,9 +499,31 @@ empty state.
 - **AND** the item count badge in the header is hidden
 - **AND** the footer is shown
 
+### Requirement: An order discount has its own summary row
+
+**Consumer supplies** - The consumer SHALL supply each of the shop's order
+discounts as an `OrderDiscountRow`, its `label` and signed `amount` already
+formatted, and SHALL NOT spread it over the lines. The `subtotal` reads before
+these rows.
+
+**Drawer renders** - The footer SHALL render each row after the Subtotal and
+before the promo slot, with the amount in the success colour and no Remove.
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-lum rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-63 - An order discount sits under the Subtotal
+**Serves:** shared-ui-store-cart-US-18 - Shopper reads an order discount in the summary
+
+- **GIVEN** `orderDiscounts` with one row
+- **WHEN** the footer is shown
+- **THEN** the row's label and amount appear after the Subtotal and before
+  the promo slot
+- **AND** the row offers no Remove
+
 ### Requirement: A site sale reaches the drawer only on its lines
 
-The consumer's quote owns every amount; the drawer computes none.
+The consumer's quote owns every amount; the drawer computes none. A site sale
+here is the shop's automatic discount on products or collections; a discount
+off the whole order is an order discount, which has its own summary row.
 
 **Consumer supplies** - The consumer SHALL supply a site sale only on the lines
 it cuts, as each line's `price` (the sale price) and `originalPrice` (the list
@@ -542,8 +564,9 @@ render the price alone. It SHALL render the supplied Subtotal.
 
 Given lines on the site sale and `PromoState` `applied` with the code and its
 discount amount, the drawer SHALL render each line on the site sale with its
-sale price and its list price struck through, and exactly one discount row, for
-that code, with its amount.
+sale price and its list price struck through, and exactly one code discount
+row, for that code, with its amount. Any order discount row is separate from
+it.
 
 <!-- trace:scenario id=g10.shared-store-cart.SC-zxr rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-27 - Stacked code appears only as the footer discount on sale lines
@@ -554,7 +577,7 @@ that code, with its amount.
 - **THEN** each line on the sale still shows the sale price and the struck
   list price, a line off the sale shows its price alone, the Subtotal matches
   the sum of each line's price times its quantity, and the footer shows
-  exactly one discount row, for the code, with its amount
+  exactly one code discount row, for the code, with its amount
 
 ### Requirement: A refused promo leaves the site sale in place and names the refusal
 

@@ -1,5 +1,10 @@
 import { getMessages } from "@grade10/i18n";
-import type { CartDrawerCopy, CartItemSummary, HeldPromoCode } from "./types";
+import type {
+  CartDrawerCopy,
+  CartItemSummary,
+  HeldPromoCode,
+  OrderDiscountRow,
+} from "./types";
 
 const { common } = getMessages("grade10", "en");
 
@@ -7,7 +12,7 @@ const { common } = getMessages("grade10", "en");
 const STORY_CART_SUBTOTAL_HKD = 42700;
 /** Max points bill-credit in Storybook stubs (1 pt = HK$1). */
 const STORY_POINTS_MAX_HKD = 1200;
-/** Sale subtotal after the storewide −10% special sale. */
+/** Sale subtotal after the −10% collection sale on every line. */
 const STORY_SPECIAL_SALE_SUBTOTAL_HKD = 38430;
 /** Extra cut when SAVE20 stacks on the sale subtotal (折上折). */
 const STORY_STACKED_PROMO_CUT_HKD = 7686;
@@ -30,6 +35,11 @@ function formatStoryCreditHkd(amount: number): string {
   return `−${formatStoryHkd(amount)}`;
 }
 
+/** The consumer's label for an applied code or an order discount row. */
+function storyPromoLabel(name: string): string {
+  return `Discount (${name})`;
+}
+
 /**
  * Storybook estimated total: subtotal minus applied promo discount and points
  * credit. Keeps remove/apply handlers consistent across held codes and SAVE10.
@@ -48,10 +58,23 @@ function storyCartEstimatedTotal(
   return formatStoryHkd(total);
 }
 
-/** Cut when the storewide −10% special sale is named in the footer. */
-const STORY_SITE_SALE_CUT_HKD = 4270;
-const STORY_SITE_SALE_AMOUNT = formatStoryCreditHkd(STORY_SITE_SALE_CUT_HKD);
-const STORY_SITE_SALE_LABEL = "Store sale (−10%)";
+/** An order-class site discount — 10% off the whole order over HK$10,000. */
+const STORY_ORDER_DISCOUNT: OrderDiscountRow = {
+  label: storyPromoLabel("Spend 10k 10% off"),
+  amount: formatStoryCreditHkd(4270),
+};
+
+function orderDiscountRows(root: ParentNode): HTMLElement[] {
+  return [
+    ...root.querySelectorAll<HTMLElement>('[data-slot="cart-order-discount"]'),
+  ];
+}
+
+function follows(earlier: Node, later: Node): boolean {
+  return Boolean(
+    earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING,
+  );
+}
 const STORY_LIST_SUBTOTAL = formatStoryHkd(STORY_CART_SUBTOTAL_HKD);
 const STORY_SPECIAL_SALE_SUBTOTAL = formatStoryHkd(
   STORY_SPECIAL_SALE_SUBTOTAL_HKD,
@@ -165,7 +188,7 @@ const SAMPLE_HELD_WITH_SITE_SALE_BLOCK: readonly HeldPromoCode[] = [
     title: "20% off order",
     detailLabel: "Use by 31 Dec 2026",
     applicable: false,
-    inapplicableReason: "Cannot combine with the store sale on this order",
+    inapplicableReason: "Cannot combine with the sale on this order",
   },
   ...SAMPLE_HELD_PROMO_CODES.filter((c) => c.id !== "held-stack"),
 ];
@@ -206,8 +229,8 @@ const SAMPLE_CART_ITEMS: CartItemSummary[] = [
 ];
 
 /**
- * Storewide product special sale (−10%) on every line — compare-at is list
- * price. List subtotal HK$42,700 → sale subtotal HK$38,430.
+ * A product-class collection sale (−10%) on every line of this basket —
+ * compare-at is list price. List subtotal HK$42,700 → sale subtotal HK$38,430.
  */
 const SPECIAL_SALE_CART_ITEMS: CartItemSummary[] = [
   {
@@ -350,7 +373,7 @@ function applySiteSalePromoInStories(
   if (mode === "refuse") {
     return {
       ok: false,
-      error: "Cannot combine with the store sale on this order",
+      error: "Cannot combine with the sale on this order",
     };
   }
   if (mode === "stack") {
@@ -377,10 +400,12 @@ export {
   applySiteSalePromoInStories,
   applyTypedPromoInStories,
   DEFAULT_CART_COPY,
+  follows,
   formatStoryCreditHkd,
   formatStoryHkd,
   LIST_PRICE_CART_ITEMS,
   OVERFLOW_CART_ITEMS,
+  orderDiscountRows,
   parseStoryMoney,
   SAMPLE_CART_ITEMS,
   SAMPLE_HELD_DISCOUNTS,
@@ -391,13 +416,13 @@ export {
   SPECIAL_SALE_CART_ITEMS,
   STORY_CART_SUBTOTAL_HKD,
   STORY_LIST_SUBTOTAL,
+  STORY_ORDER_DISCOUNT,
   STORY_POINTS_MAX_HKD,
   STORY_REPLACE_PROMO_AMOUNT,
   STORY_REPLACE_TOTAL,
-  STORY_SITE_SALE_AMOUNT,
-  STORY_SITE_SALE_LABEL,
   STORY_SPECIAL_SALE_SUBTOTAL,
   STORY_STACKED_PROMO_AMOUNT,
   STORY_STACKED_TOTAL,
   storyCartEstimatedTotal,
+  storyPromoLabel,
 };

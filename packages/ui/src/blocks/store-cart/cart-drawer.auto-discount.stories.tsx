@@ -5,26 +5,31 @@ import { CartDrawer } from "./cart-drawer";
 import {
   applySiteSalePromoInStories,
   DEFAULT_CART_COPY,
+  follows,
+  formatStoryCreditHkd,
+  formatStoryHkd,
+  orderDiscountRows,
   SAMPLE_HELD_WITH_SITE_SALE_BLOCK,
   SAMPLE_HELD_WITH_SITE_SALE_STACKABLE,
   SPECIAL_SALE_CART_ITEMS,
   STORY_LIST_SUBTOTAL,
   STORY_REPLACE_PROMO_AMOUNT,
   STORY_REPLACE_TOTAL,
-  STORY_SITE_SALE_LABEL,
   STORY_SPECIAL_SALE_SUBTOTAL,
   STORY_STACKED_PROMO_AMOUNT,
   STORY_STACKED_TOTAL,
+  storyPromoLabel,
 } from "./fixtures";
 import type { CartItemSummary, HeldPromoCode, PromoState } from "./types";
 
 type SiteSaleCombineMode = "refuse" | "stack" | "replace";
 
 /**
- * Interactive host for storewide special sale × SAVE20 combine modes.
- * Shopify rules decide refuse / stack / replace; removing the code always
- * restores the auto −10% site sale on the lines when the promotion is still
- * active. The site cut is never repeated as a footer “Store sale” row.
+ * Interactive host for a −10% collection sale × SAVE20 combine modes. The
+ * sale is product class, so it shows on the lines. Shopify rules decide
+ * refuse / stack / replace; removing the code always restores the sale on the
+ * lines when the promotion is still active. The sale is never repeated as a
+ * footer row.
  */
 function SiteSalePromoHost({
   mode,
@@ -62,7 +67,7 @@ function SiteSalePromoHost({
     appliedOk
       ? {
           status: "applied",
-          code: appliedOk.label,
+          label: storyPromoLabel(appliedOk.label),
           discountAmount: appliedOk.amount,
         }
       : { status: "collapsed" },
@@ -88,7 +93,7 @@ function SiteSalePromoHost({
       setSelectedHeldId("held-save20");
       setPromo({
         status: "applied",
-        code: result.label,
+        label: storyPromoLabel(result.label),
         discountAmount: result.amount,
       });
       return true;
@@ -135,8 +140,9 @@ function SiteSalePromoHost({
 /**
  * Site-sale × promo combine modes on the composed cart drawer.
  *
- * Site sale shows as line sale + compare-at; the code is the only footer
- * Discount row when it stacks. Core drawer states stay under
+ * A product-class site sale shows as line sale + compare-at; the code is the
+ * only footer Discount row when it stacks. An order-class site discount shows
+ * as its own footer row instead. Core drawer states stay under
  * [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs).
  */
 const meta = {
@@ -168,7 +174,7 @@ type Story = StoryObj<typeof meta>;
  */
 const drawer = () => within(document.body);
 
-/** Storewide −10% on lines; SAVE20 refused — no code row. */
+/** Collection sale −10% on the lines; SAVE20 refused — no code row. */
 export const Refuse: Story = {
   render: () => <SiteSalePromoHost mode="refuse" />,
   play: async () => {
@@ -178,14 +184,14 @@ export const Refuse: Story = {
     expect(
       canvas.getAllByText(STORY_SPECIAL_SALE_SUBTOTAL).length,
     ).toBeGreaterThanOrEqual(1);
-    expect(canvas.queryByText(STORY_SITE_SALE_LABEL)).not.toBeInTheDocument();
+    expect(orderDiscountRows(document.body)).toHaveLength(0);
 
     await userEvent.click(
       canvas.getByRole("button", { name: /Select or enter code/i }),
     );
     const sheet = within(canvas.getByRole("dialog", { name: "Promo code" }));
     expect(
-      sheet.getByText("Cannot combine with the store sale on this order"),
+      sheet.getByText("Cannot combine with the sale on this order"),
     ).toBeInTheDocument();
 
     await userEvent.type(
@@ -194,8 +200,7 @@ export const Refuse: Story = {
     );
     await userEvent.keyboard("{Enter}");
     expect(
-      sheet.getAllByText("Cannot combine with the store sale on this order")
-        .length,
+      sheet.getAllByText("Cannot combine with the sale on this order").length,
     ).toBeGreaterThanOrEqual(1);
     expect(canvas.queryByText(/Discount \(SAVE20\)/)).not.toBeInTheDocument();
     expect(canvas.getByText("HK$22,050.00")).toBeInTheDocument();
@@ -215,7 +220,7 @@ export const Stack: Story = {
     expect(
       canvas.getAllByText(STORY_SPECIAL_SALE_SUBTOTAL).length,
     ).toBeGreaterThanOrEqual(1);
-    expect(canvas.queryByText(STORY_SITE_SALE_LABEL)).not.toBeInTheDocument();
+    expect(orderDiscountRows(document.body)).toHaveLength(0);
     expect(canvas.queryByText(/Discount \(SAVE20\)/)).not.toBeInTheDocument();
 
     await userEvent.click(
@@ -233,7 +238,7 @@ export const Stack: Story = {
     });
     expect(canvas.getByText("HK$22,050.00")).toBeInTheDocument();
     expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
-    expect(canvas.queryByText(STORY_SITE_SALE_LABEL)).not.toBeInTheDocument();
+    expect(orderDiscountRows(document.body)).toHaveLength(0);
     expect(canvas.getByText(STORY_STACKED_PROMO_AMOUNT)).toBeInTheDocument();
     expect(canvas.getByText(STORY_STACKED_TOTAL)).toBeInTheDocument();
 
@@ -255,7 +260,7 @@ export const Replace: Story = {
     const canvas = drawer();
     expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
     expect(canvas.queryByText("HK$22,050.00")).not.toBeInTheDocument();
-    expect(canvas.queryByText(STORY_SITE_SALE_LABEL)).not.toBeInTheDocument();
+    expect(orderDiscountRows(document.body)).toHaveLength(0);
     expect(canvas.getByText(/Discount \(SAVE20\)/)).toBeInTheDocument();
     expect(canvas.getByText(STORY_REPLACE_PROMO_AMOUNT)).toBeInTheDocument();
     expect(canvas.getByText(STORY_REPLACE_TOTAL)).toBeInTheDocument();
@@ -279,12 +284,72 @@ export const FallbackAfterRemove: Story = {
     });
     expect(canvas.getByText("HK$22,050.00")).toBeInTheDocument();
     expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
-    expect(canvas.queryByText(STORY_SITE_SALE_LABEL)).not.toBeInTheDocument();
+    expect(orderDiscountRows(document.body)).toHaveLength(0);
     expect(
       canvas.getAllByText(STORY_SPECIAL_SALE_SUBTOTAL).length,
     ).toBeGreaterThanOrEqual(1);
     expect(
       canvas.getByRole("button", { name: /Select or enter code/i }),
     ).toBeInTheDocument();
+  },
+};
+
+const MIXED_SUBTOTAL_HKD = 22050 + 18200;
+const MIXED_ORDER_CUT_HKD = 4025;
+const MIXED_ORDER_DISCOUNT = {
+  label: storyPromoLabel("Spend 10k 10% off"),
+  amount: formatStoryCreditHkd(MIXED_ORDER_CUT_HKD),
+};
+
+/**
+ * A product sale on one line beside an order discount: the sale line is
+ * struck, the other line is not, and the order discount is its own footer row
+ * after the Subtotal, with no Remove.
+ */
+export const ProductSaleWithOrderDiscount: Story = {
+  name: "Product sale with order discount",
+  args: {
+    items: [
+      {
+        id: "item-1",
+        name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
+        price: "HK$22,050.00",
+        originalPrice: "HK$24,500.00",
+        quantity: 1,
+        maxQuantity: 1,
+        status: "default",
+      },
+      {
+        id: "item-2",
+        name: "2000 Neo Genesis 1st Edition Lugia Holo #9 BGS 9.5",
+        price: "HK$18,200.00",
+        quantity: 1,
+        maxQuantity: 3,
+        status: "default",
+      },
+    ],
+    subtotal: formatStoryHkd(MIXED_SUBTOTAL_HKD),
+    orderDiscounts: [MIXED_ORDER_DISCOUNT],
+    estimatedTotal: formatStoryHkd(MIXED_SUBTOTAL_HKD - MIXED_ORDER_CUT_HKD),
+    onPromoStateChange: () => {},
+  },
+  play: async () => {
+    const canvas = drawer();
+    expect(canvas.getByText("HK$22,050.00")).toBeInTheDocument();
+    expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
+    expect(canvas.getAllByText("HK$18,200.00")).toHaveLength(1);
+
+    const [row] = orderDiscountRows(document.body);
+    expect(within(row).getByText(MIXED_ORDER_DISCOUNT.label)).toBeVisible();
+    expect(within(row).getByText(MIXED_ORDER_DISCOUNT.amount)).toBeVisible();
+    expect(within(row).queryByRole("button")).not.toBeInTheDocument();
+    expect(follows(canvas.getByText("Subtotal"), row)).toBe(true);
+    expect(
+      follows(
+        row,
+        canvas.getByRole("button", { name: /Select or enter code/i }),
+      ),
+    ).toBe(true);
+    expect(canvas.getByText("HK$36,225.00")).toBeInTheDocument();
   },
 };
