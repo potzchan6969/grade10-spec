@@ -1,6 +1,10 @@
 import { ItemLetter } from "@/emails/vault/_components/item-letter";
-import { footerLines } from "@/emails/vault/fixtures";
-import { previewItem, previewItemLine } from "@/emails/vault/item-fixtures";
+
+import {
+  previewItem,
+  previewItemFooterLines,
+  previewItemLine,
+} from "@/emails/vault/item-fixtures";
 
 export type RetrievalDeclinedProps = {
   reason?: string;
@@ -25,7 +29,7 @@ export default function RetrievalDeclinedEmail({
       }}
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
-        lines: footerLines("custodian"),
+        lines: [...previewItemFooterLines],
         whyYouGotThis: `We could not approve your request to take ${itemTitle} out of the vault.`,
       }}
       heading="We could not approve this retrieval"

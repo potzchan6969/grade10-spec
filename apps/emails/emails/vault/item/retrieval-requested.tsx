@@ -1,7 +1,11 @@
 import { hkDate } from "@/emails/_components/format";
 import { ItemLetter, Note } from "@/emails/vault/_components/item-letter";
-import { footerLines } from "@/emails/vault/fixtures";
-import { previewItem, previewItemLine } from "@/emails/vault/item-fixtures";
+
+import {
+  previewItem,
+  previewItemFooterLines,
+  previewItemLine,
+} from "@/emails/vault/item-fixtures";
 
 export type RetrievalRequestedProps = {
   requestedAt?: string;
@@ -30,7 +34,7 @@ export default function RetrievalRequestedEmail({
       }}
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
-        lines: footerLines("custodian"),
+        lines: [...previewItemFooterLines],
         whyYouGotThis: `You asked for ${itemTitle} back from the vault.`,
       }}
       heading="Retrieval request received"

@@ -11,6 +11,8 @@
  * the letters take them as props and these values need confirming before a
  * backend renders them.
  */
+import { previewCase } from "@/emails/vault/fixtures";
+
 const itemUrl = "https://grade10.com/vault/items/va-004821";
 
 export const previewItem = {
@@ -47,3 +49,14 @@ export const previewItemLine = {
   vaultId: previewItem.vaultId,
   itemTitle: previewItem.itemTitle,
 } as const;
+
+/**
+ * The footer's own lines. The item letters leave the shop address out — the
+ * letter already names where to collect — so they carry the custodian, the
+ * complaints contact and the time-zone note.
+ */
+export const previewItemFooterLines = [
+  `${previewCase.custodianName}, trading as Grade10.`,
+  `Complaints: ${previewCase.complaintsContact}.`,
+  "Dates and times are in Hong Kong time (GMT+8).",
+] as const;

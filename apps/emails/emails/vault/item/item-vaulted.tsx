@@ -1,7 +1,11 @@
 import { hkDate } from "@/emails/_components/format";
 import { ItemLetter } from "@/emails/vault/_components/item-letter";
-import { footerLines } from "@/emails/vault/fixtures";
-import { previewItem, previewItemLine } from "@/emails/vault/item-fixtures";
+
+import {
+  previewItem,
+  previewItemFooterLines,
+  previewItemLine,
+} from "@/emails/vault/item-fixtures";
 
 export type ItemVaultedProps = {
   vaultedAt?: string;
@@ -24,7 +28,7 @@ export default function ItemVaultedEmail({
       }}
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
-        lines: footerLines("custodian"),
+        lines: [...previewItemFooterLines],
         whyYouGotThis: `${itemTitle} is now in our vault.`,
       }}
       heading="Safely stored"

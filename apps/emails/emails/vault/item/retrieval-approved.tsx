@@ -1,7 +1,11 @@
 import { hkDate, hkDateTime, hkTime } from "@/emails/_components/format";
 import { ItemLetter, Note } from "@/emails/vault/_components/item-letter";
-import { footerLines } from "@/emails/vault/fixtures";
-import { previewItem, previewItemLine } from "@/emails/vault/item-fixtures";
+
+import {
+  previewItem,
+  previewItemFooterLines,
+  previewItemLine,
+} from "@/emails/vault/item-fixtures";
 
 export type RetrievalApprovedProps = {
   pickupFrom?: string;
@@ -35,7 +39,7 @@ export default function RetrievalApprovedEmail({
       }}
       cta={{ href: previewItem.url, label: "See your item" }}
       footer={{
-        lines: footerLines("custodian"),
+        lines: [...previewItemFooterLines],
         whyYouGotThis: `We approved your request to take ${itemTitle} out of the vault.`,
       }}
       heading="Your retrieval is approved"
