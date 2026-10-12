@@ -42,6 +42,9 @@ or log sees it.
 - **Wrong link** - an unknown order, a member's order or a wrong secret all
   show not-found
 - **Not indexed** - search engines are told not to index the address
+- **On Shopify's pages** - the order carries the same link for Shopify's
+  thank-you page and order confirmation email to show. ❓ Neither shows it
+  yet: the thank-you extension and the email template are set in Shopify
 
 ## Order Summary
 
