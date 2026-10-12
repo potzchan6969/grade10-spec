@@ -47,9 +47,10 @@ The lines below came across from `tcs-rules` r3 when this file was split from it
 ### Walks
 
 - **Walk shape** — `## Walk <n>: <title>`, followed by `**Starting state:**`, optional `**Shared test data:**`, and `### Route`
-- **Route checks** — use a `-` bullet for a normal validation and put the full case heading reference at the end: `g10.auction-bidder-suspension.US1-TC1`
-- **Route branches** — use `a.` and `b.` for actual alternative conditions, with the expected result and case reference on the same line; do not use a branch to create a new observation
-- **Case references** — use the full human-facing case heading id, such as `g10.auction-bidder-suspension.US1-TC1`, in a walk; the full case definition remains in its owning suite
+- **Numbered route steps** — use a numbered item for each action the tester performs or reads; keep the action separate from the result it produces
+- **Route observations** — nest `-` bullets under the numbered step where the tester records an existing case's observation; end every observation with that case's full human-facing heading id, such as `g10.auction-bidder-suspension.US1-TC1`
+- **Route branches** — use `a.` and `b.` under the preceding numbered step only for actual alternative routes; each branch carries its own nested observations and case references, and a branch never creates a new observation
+- **Case references** — use the full human-facing case heading id in a walk; the full case definition remains in its owning suite
 - **No walk description** — a `*-tcs.md` walk carries setup, data and route only; generic explanation belongs in this file or its template
 - **Complete case results** — the case definition remains the complete record of its Expected Results. A walk may repeat the result needed at that route point so a human knows what to record, but may not add or remove an assertion
 - **Shared setup** — shared walk data saves human tester effort; it never makes a case depend on another case's result
