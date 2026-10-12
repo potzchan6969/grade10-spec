@@ -3624,6 +3624,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * Step 2 ends on <grade10 admin console url>, not on <site location>.
 * The site has no signed-in person.
 
+<!-- trace:case id=g10.shared-sign-in.TC-7cx rev=1 -->
 ### shared-auth-sign-in-US12-TC13-1: Console session as a different account is kept when a console link is followed
 
 **Classification:**
@@ -3856,6 +3857,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * Step 6 shows tab B still on Check Your Email, with no such message.
 * Step 7 shows tab A no longer waiting, with the message that sign-in completed on another device.
 
+<!-- trace:case id=g10.shared-sign-in.TC-xvi rev=1 -->
 ### shared-auth-sign-in-US12-TC19-1: A failed console link lands on the console's sign-in page with an inline message
 
 **Classification:**
@@ -3893,6 +3895,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * No toast shows.
 * Nobody is signed in on the console or the site.
 
+<!-- trace:case id=g10.shared-sign-in.TC-25q rev=1 -->
 ### shared-auth-sign-in-US12-TC20-1: A banned account's console link says inline that they cannot sign in
 
 **Classification:**
@@ -3930,6 +3933,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * No toast shows.
 * Nobody is signed in on the console or the site.
 
+<!-- trace:case id=g10.shared-sign-in.TC-v30 rev=1 -->
 ### shared-auth-sign-in-US12-TC21-1: Stay on the console's inline choice keeps the console session
 
 **Classification:**

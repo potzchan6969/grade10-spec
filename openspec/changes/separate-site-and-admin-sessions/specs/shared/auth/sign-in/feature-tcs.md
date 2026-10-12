@@ -523,6 +523,7 @@ Runs once per row of **Test data**.
 * Step 2 ends on <grade10 admin console url>, not on <site location>.
 * The site has no signed-in person.
 
+<!-- trace:case id=g10.shared-sign-in.TC-7cx rev=1 -->
 ### shared-auth-sign-in-US12-TC13-1: Console session as a different account is kept when a console link is followed
 
 **Classification:**
@@ -534,9 +535,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`
 
 **Pre-conditions:**
 
@@ -755,6 +758,7 @@ Runs once per row of **Test data**.
 * Step 6 shows tab B still on Check Your Email, with no such message.
 * Step 7 shows tab A no longer waiting, with the message that sign-in completed on another device.
 
+<!-- trace:case id=g10.shared-sign-in.TC-xvi rev=1 -->
 ### shared-auth-sign-in-US12-TC19-1: A failed console link lands on the console's sign-in page with an inline message
 
 **Classification:**
@@ -766,9 +770,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`
 
 **Pre-conditions:**
 
@@ -792,6 +798,7 @@ Runs once per row of **Test data**.
 * No toast shows.
 * Nobody is signed in on the console or the site.
 
+<!-- trace:case id=g10.shared-sign-in.TC-25q rev=1 -->
 ### shared-auth-sign-in-US12-TC20-1: A banned account's console link says inline that they cannot sign in
 
 **Classification:**
@@ -803,9 +810,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`
 
 **Pre-conditions:**
 
@@ -829,6 +838,7 @@ Runs once per row of **Test data**.
 * No toast shows.
 * Nobody is signed in on the console or the site.
 
+<!-- trace:case id=g10.shared-sign-in.TC-v30 rev=1 -->
 ### shared-auth-sign-in-US12-TC21-1: Stay on the console's inline choice keeps the console session
 
 **Classification:**
@@ -840,9 +850,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`
 
 **Pre-conditions:**
 

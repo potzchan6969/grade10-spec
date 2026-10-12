@@ -250,6 +250,7 @@
 * Tab B still names <site account>, with <cart item> in its cart.
 * Tab B shows no signed-out message.
 
+<!-- trace:case id=g10.shared-sign-out.TC-vnx rev=1 -->
 ### shared-auth-sign-out-US3-TC2-1: Site sign-out leaves the console session open
 
 **Classification:**
