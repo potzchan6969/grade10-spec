@@ -1153,7 +1153,7 @@ const summaries = suites.map((p) =>
       }
       const ids = [
         ...body.matchAll(
-          /`((?:[\w-]+-e2e-US\d+-TC\d+-\d+)|(?:[\w.-]+\.TC-[0-9a-z]+))`/gi,
+          /`((?:[\w-]+-e2e-US\d+-TC\d+-\d+)|(?:[\w.-]+\.TC-[0-9a-z]+)|(?:[\w.-]+\.US-?\d+-TC-?\d+))`/gi,
         ),
       ].map((m) => m[1]);
       if (ids.length === 0) {
