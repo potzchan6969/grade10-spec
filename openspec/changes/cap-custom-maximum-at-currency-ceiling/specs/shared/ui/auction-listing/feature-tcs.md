@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/8
 **Drafts styled:** 2026-10-09, tcs-rules r4
 
-## shared-ui-auction-listing-US1: The listing surface's rendering contract
+## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
 
@@ -12,7 +12,7 @@
 **so that** the collector reviews a usable amount before committing.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### shared-ui-auction-listing-US1-TC19-2: Draft at the currency ceiling is accepted
+### g10.shared-auction-listing.US1-TC19-2: Draft at the currency ceiling is accepted
 
 Runs once per row of **Test data**, in both set and raise modes.
 
@@ -58,7 +58,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 * No ceiling message appears.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### shared-ui-auction-listing-US1-TC20-2: Typed digit past the ceiling retains the draft
+### g10.shared-auction-listing.US1-TC20-2: Typed digit past the ceiling retains the draft
 
 Runs once per row of **Test data**, in both set and raise modes.
 
@@ -104,7 +104,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 * No ceiling message appears.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-35i rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### shared-ui-auction-listing-US1-TC21-2: Oversized paste into empty field becomes the ceiling
+### g10.shared-auction-listing.US1-TC21-2: Oversized paste into empty field becomes the ceiling
 
 Runs once per row of **Test data**, in both set and raise modes.
 
@@ -146,7 +146,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 * No ceiling message appears.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### shared-ui-auction-listing-US1-TC22-2: Oversized replacement of a draft becomes the ceiling
+### g10.shared-auction-listing.US1-TC22-2: Oversized replacement of a draft becomes the ceiling
 
 Runs once per row of **Test data**, in both set and raise modes.
 
@@ -195,7 +195,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 * No ceiling message appears.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-bfp rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### shared-ui-auction-listing-US1-TC23-2: Oversized fractional paste becomes the ceiling after cleaning
+### g10.shared-auction-listing.US1-TC23-2: Oversized fractional paste becomes the ceiling after cleaning
 
 Runs once per row of **Test data**, in both set and raise modes.
 
@@ -241,7 +241,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 * No ceiling message appears.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### shared-ui-auction-listing-US1-TC24-2: Raise field retains typed draft and clamps replacement
+### g10.shared-auction-listing.US1-TC24-2: Raise field retains typed draft and clamps replacement
 
 Runs once per row of **Test data**.
 
@@ -292,7 +292,7 @@ Runs once per row of **Test data**.
 * No ceiling message appears in either mode.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### shared-ui-auction-listing-US1-TC25-2: Ceiling correction shows no maximum or invalid amount message
+### g10.shared-auction-listing.US1-TC25-2: Ceiling correction shows no maximum or invalid amount message
 
 Runs once per row of **Test data**, in both set and raise modes.
 
@@ -337,7 +337,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 * No ceiling message appears.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### shared-ui-auction-listing-US1-TC26-2: Fractional paste at the currency ceiling is accepted
+### g10.shared-auction-listing.US1-TC26-2: Fractional paste at the currency ceiling is accepted
 
 Runs once per row of **Test data**, in both set and raise modes.
 
