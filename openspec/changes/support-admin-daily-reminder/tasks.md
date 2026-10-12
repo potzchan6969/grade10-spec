@@ -15,7 +15,7 @@
 - [ ] 2.7 Regenerate the API docs and the roles and permissions document (`pnpm --dir packages/api-docs run generate`, `pnpm --dir packages/grade10-auth/contracts run generate:rbac-docs`) and commit the output
 - [ ] 2.8 Verify: `pnpm run test:backend`, `pnpm run typecheck`, `pnpm run lint`
 
-## 3. The daily Slack post (grade10)
+## 3. The daily Slack post (grade10) (owner: @mason5991)
 
 Needs the reads of group 2 landed. No table and no migration: nothing records a send.
 
