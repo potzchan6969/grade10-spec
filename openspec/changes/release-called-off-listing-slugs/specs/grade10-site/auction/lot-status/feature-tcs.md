@@ -206,8 +206,8 @@ Runs once per row of **Test data**.
 * `<lot_3>` is not included.
 * `<lot_2>` is included, external lot status Ended.
 
-<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=3 -->
-### grade10-site-auction-lot-status-US2-TC4-3: Called-off address disappears without a code-only alternate
+<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=4 -->
+### grade10-site-auction-lot-status-US2-TC4-4: Called-off address disappears without a code-only alternate
 
 Runs once per row of **Test data**.
 
@@ -226,7 +226,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer has a published lot's `<listing_url>` and `<listing_code>` saved.
+* customer(signed in) has the lot's `<listing_url>` and `<listing_code>` saved.
+* The customer watched the lot before it was called off.
 * The lot has been called off and no eligible holder uses its slug.
 
 **Test data:**
@@ -238,19 +239,23 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Search the catalogue for the listing.
-2. Open `<listing_url>` directly.
-3. Inspect the original-address response body.
-4. Open `<grade10 auction url>/listings/<listing_code>`.
+1. Open the auction catalogue and read its listings.
+2. Search the catalogue for the called-off lot's title.
+3. Open the customer's watchlist and find the original lot.
+4. Open `<listing_url>` directly.
 5. Inspect its response body and page.
+6. Open `<grade10 auction url>/listings/<listing_code>`.
+7. Inspect its response body and page.
 
 **Expected Results:**
 
-* Catalogue and search do not return the listing.
-* `<listing_url>` returns 404 with Page not found.
-* The listing code does not resolve as an address.
-* Steps 3 and 5 contain no original-lot data or code.
-* Step 4 returns 404 and Step 5 shows Page not found.
+* Step 1 does not list the called-off original.
+* Step 2 does not find it in search.
+* Step 3 does not include it in the watchlist.
+* Step 4 returns 404.
+* Step 5 shows Page not found with no original-lot data or code.
+* Step 6 returns 404 for either code casing.
+* Step 7 shows Page not found with no original-lot data or code.
 * No alternate called-off page appears.
 
 

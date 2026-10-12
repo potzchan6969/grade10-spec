@@ -70,8 +70,8 @@
 **I want** cancelling a campaign to take its listings with it,
 **so that** a called-off event leaves nothing a collector can still reach.
 
-<!-- trace:case id=g10adm.auction-domain.TC-t49 rev=3 -->
-### grade10-admin-auction-e2e-US2-TC1-3: Campaign cancellation releases addresses for later lots
+<!-- trace:case id=g10adm.auction-domain.TC-t49 rev=4 -->
+### grade10-admin-auction-e2e-US2-TC1-4: Campaign cancellation releases addresses for later lots
 
 **Classification:**
 
@@ -89,7 +89,9 @@
 **Pre-conditions:**
 
 * admin(holds auction:operate) is on <grade10 auction admin campaigns url>.
-* <campaign_2> is published, with <listing_3> and <listing_4> published under it.
+* <campaign_2> is published and contains draft, created, published and already closed listings.
+* Its draft, created and published listings have not closed.
+* The already closed control's status, result, code and slug were recorded.
 * <replacement_3> and <replacement_4> are complete editable drafts outside <campaign_2>.
 * Both original listing codes were recorded before cancellation.
 
@@ -99,7 +101,11 @@
 | --- | --- |
 | `<campaign_2>` | A published campaign |
 | `<listing_3>` | A published listing under `<campaign_2>`, slug `<slug_3>` |
-| `<listing_4>` | A second published listing under `<campaign_2>`, slug `<slug_4>` |
+| `<listing_4>` | A created unpublished listing under `<campaign_2>`, slug `<slug_4>` |
+| `<draft_sibling>` | A saved draft under `<campaign_2>`, with `<draft_slug>` |
+| `<draft_slug>` | A distinct valid slug held by `<draft_sibling>` |
+| `<closed_control>` | An already closed listing under `<campaign_2>`, with a recorded result and retained slug |
+| `<replacement_draft>` | A complete saved draft outside the campaign, for another available inventory unit |
 | `<slug_4>` | called-off-second-lot (any distinct valid slug) |
 | `<replacement_3>` and `<replacement_4>` | Drafts for separate available inventory units, with different titles from the canceled listings |
 | `<slug_3>` | called-off-lot (any unique slug, 1 to 64 lower-case words joined by hyphens) |
@@ -108,34 +114,37 @@
 
 1. Open <campaign_2>.
 2. Cancel <campaign_2>.
-3. Open <listing_3> from <grade10 auction admin listings url>.
-4. Open <listing_4> from <grade10 auction admin listings url>.
-5. Open /auction/listings/<slug_3>.
-6. Open <grade10 auction url>.
-7. Save <replacement_3> with <slug_3>.
-8. Save <replacement_4> with <slug_4>.
-9. Create <replacement_3>.
-10. Publish <replacement_3>.
-11. Open /auction/listings/<slug_3>.
-12. Open /auction/listings/<slug_4>.
-13. Reopen both canceled listings in admin.
+3. Open <listing_3> in Listings.
+4. Open <listing_4> in Listings.
+5. Open `<draft_sibling>` in Listings.
+6. Open `<closed_control>` in Listings.
+7. Open /auction/listings/<slug_3>.
+8. Open the auction catalogue.
+9. Save <replacement_3> with <slug_3>.
+10. Save <replacement_4> with <slug_4>.
+11. Save `<replacement_draft>` with `<draft_slug>`.
+12. Create <replacement_3>.
+13. Publish <replacement_3>.
+14. Open /auction/listings/<slug_3>.
+15. Open /auction/listings/<slug_4>.
+16. Reopen all original siblings in Listings.
 
 **Expected Results:**
 
-* Step 2 shows <campaign_2> moved to canceled.
-* Step 3 shows <listing_3> as canceled under the listing cancel rules.
-* Step 4 shows <listing_4> as canceled under the listing cancel rules.
-* Step 5 returns 404 and Page not found.
-* Step 6 shows neither the cover nor the canceled lots.
-* Both canceled listing codes remain their original codes.
-* Steps 7 and 8 save both released slugs.
-* Step 9 creates <replacement_3> without a slug collision.
-* Step 11 returns <replacement_3>, not <listing_3>.
-* Step 12 returns 404 while <replacement_4> remains unpublished.
-* <campaign_2> and its canceled listings stay canceled.
-* Canceled lots remain absent from public browse/search after reuse.
-* Replacement codes differ from the canceled lot codes.
-* Step 13 keeps both original codes and canceled status.
+* Step 2 shows <campaign_2> canceled.
+* Steps 3 to 5 show the published, created and draft siblings canceled.
+* Step 6 keeps the closed control's recorded status and result.
+* The control's slug and code remain unchanged and reserved.
+* Step 7 returns 404 with Page not found.
+* Step 8 shows neither the campaign cover nor canceled siblings.
+* Steps 9 to 11 save each canceled sibling's released slug.
+* Step 12 creates <replacement_3> without collision.
+* Step 14 returns <replacement_3>, never <listing_3>.
+* Step 15 returns 404 while <replacement_4> remains unpublished.
+* Step 16 keeps each canceled sibling's original code and canceled status.
+* The closed control is still unchanged.
+* Replacement codes differ from the original sibling codes.
+* Canceled siblings remain absent from public browse and search.
 
 
 ---
