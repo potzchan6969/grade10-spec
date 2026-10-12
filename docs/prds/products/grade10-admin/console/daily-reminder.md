@@ -84,6 +84,8 @@ longest wait first. It stays on the list every day until the order moves on.
   session that ends any other way keeps the mark until the Hong Kong day ends
 - 🚧 **Only a full load** - returning to the tab or moving between pages does
   not open it
+- 🚧 **Long lists in the dialog** - each product's list shows about four and a
+  half rows and scrolls inside itself; the dialog keeps its size
 - 🚧 **A list that fails to load** - says so beside the list that loaded, with a
   Retry; when the other list is empty the dialog still opens for the failure,
   so it never reads as nothing waiting
@@ -98,7 +100,8 @@ read them.
   with the counts and links unchanged; a failed list shows the same notice and
   Retry in its column
 - 🚧 **Inner groups** - What's New and Still Waiting group their rows by
-  product, Auction first, so another product adds a group and no column
+  product, Auction first. Each group shows as one line with its count until
+  the operator opens it with its chevron, and closes again the same way
 - 🚧 **Empty list** - a column with no row for the operator stays and says so
 - 🚧 **Below the columns** - Approvals leaves the Needs you column and sits with
   Recent and All sections under the three columns; the card is unchanged
@@ -148,6 +151,7 @@ operator, in the console and in the team's Slack.
 | Three columns on Today | 🚧 In flight | What's New, Still Waiting and Needs you side by side; Approvals, Recent and All sections stay below, unchanged. Chosen over folding Approvals into the Needs you column, which squeezes its approve and decline controls. | Product |
 | One attempt, no record | 🚧 In flight | The message is tried once and nothing records the send; a failure is logged and that day's message is lost. Chosen over retries through the day with a record of each day's send, which needs a table and a rule against posting twice. | Product |
 | Flagged orders are listed | 🚧 In flight | An order in a waiting status is listed by its own wait even with an open payment flag. Chosen over leaving it to Needs you, which would hide a forgotten dispatch behind a flag. | Product |
+| Folded on Today, scrolled in the dialog | 🚧 In flight | Today shows each product's list as one line until it is opened, so the page stays short; the dialog shows about four and a half rows of each and scrolls the rest inside the list. Chosen over full lists in both, which push Needs you and Approvals down the page and grow the dialog past the screen. | Product |
 | Slack, one channel | 🚧 In flight | One message at 08:00 Hong Kong time every day to one channel. Chosen over email or a message to each operator, which needs an address or a Slack account for every operator. | Product |
 | Slack carries everyone's rows, no customer names | 🚧 In flight | A shared channel cannot be scoped to one operator's grants, and a customer's name does not belong in it; the link carries the identity. Chosen over per-grant filtering and over naming the winner. | Product |
 :::

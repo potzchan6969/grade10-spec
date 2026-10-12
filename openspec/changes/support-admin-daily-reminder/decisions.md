@@ -74,6 +74,8 @@
 | Q45 | Do Approvals still count in the Needs you total and the summary line? | Yes, both stay as they are. The card sits below the columns, and its count still counts - decided by the round | Dropping approvals from the total: it changes what Today already says |
 | Q46 | How does a wait of whole days read in the console? | `5d`, with no `0h`. Under an hour it never shows, since the list starts at 48 hours - decided by the round | `5d 0h`: noise on a round figure |
 | Q47 | Does opening a row in a new tab close the dialog? | No. A middle click, or a click with Ctrl or Cmd held, opens the order in a new tab and leaves the dialog open with no mark set; a plain click closes it (Q33) - decided by the round | Closing on any click: the operator loses the reminder while reading the order in the new tab |
+| Q48 | How do long lists show on Today and in the dialog? | Today shows each product's list as one line with its count until its chevron opens it, and folds back the same way. The dialog shows about four and a half rows of each list and scrolls the rest inside it. The column captions name neither the day nor the 48 hours - decided by the owner after the first look | Full lists in both: they push Needs you and Approvals down the page and grow the dialog past the screen |
+| Q49 | Does the suite go through `/tcs-review`? | No. The automated tests of tasks 4.1 and 3.1 and the walk of group 5 decide its cases, and no human review of the suite is planned - decided by the owner | A human review of all 80 draft cases after deployment |
 
 ## Raised
 
