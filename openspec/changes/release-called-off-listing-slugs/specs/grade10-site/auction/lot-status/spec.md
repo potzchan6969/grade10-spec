@@ -16,9 +16,17 @@
 - Listing data
   - Status in the listing data: every page uses the same value
 
-## MODIFIED Requirements
+## REMOVED Requirements
 
 ### Requirement: Collectors never see hidden lots
+
+**Reason** - The [owner's address decision](../../../../decisions.md#decisions) removes the called-off lot's permanent direct-address exception. The former requirement combines that exception with browse removal and bidder history.
+
+**Migration** - Replace this requirement with "Hidden lots have no public address" below. Retain browse, search, watchlist and public-data removal and the bidder's My Auctions exception. Preserve the existing scenario trace identities; revise the direct-address scenario to assert not found when no eligible current holder exists.
+
+## ADDED Requirements
+
+### Requirement: Hidden lots have no public address
 
 A draft lot is absent from every collector page. A called-off lot is absent
 from browse, search, watchlist and public listing data. A collector who bid on
@@ -38,7 +46,7 @@ it in My Auctions, where the row says their card was not charged, per
 `grade10-site/auction/account-record`. No other collector SHALL see it.
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-me0 rev=1 -->
-#### Scenario: g10.auction-lot-status.SC6 - A draft lot is not in the catalogue, but an unsold lot is
+#### Scenario: grade10-site-auction-lot-status-SC-06 - A draft lot is not in the catalogue, but an unsold lot is
 **Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
 
 - **GIVEN** a draft lot, and a published lot whose bidding ended with no winner
@@ -47,7 +55,7 @@ it in My Auctions, where the row says their card was not charged, per
 - **AND** the unsold lot is listed as Ended
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-pe2 rev=1 -->
-#### Scenario: g10.auction-lot-status.SC7 - A called-off lot is removed from the catalogue
+#### Scenario: grade10-site-auction-lot-status-SC-07 - A called-off lot is removed from the catalogue
 **Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
 
 - **GIVEN** a published lot that an operator then calls off
@@ -55,7 +63,7 @@ it in My Auctions, where the row says their card was not charged, per
 - **THEN** the lot is not listed
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-cox rev=1 -->
-#### Scenario: g10.auction-lot-status.SC8 - A called-off lot is removed from the watchlist
+#### Scenario: grade10-site-auction-lot-status-SC-08 - A called-off lot is removed from the watchlist
 **Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
 
 - **GIVEN** a collector watching one lot that ends with no winner and one lot
@@ -65,7 +73,7 @@ it in My Auctions, where the row says their card was not charged, per
 - **AND** the unsold lot is listed as Ended
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-yoe rev=1 -->
-#### Scenario: g10.auction-lot-status.SC9 - A bidder still sees a called-off lot
+#### Scenario: grade10-site-auction-lot-status-SC-09 - A bidder still sees a called-off lot
 **Serves:** grade10-site-auction-lot-status-US-03 - Bidder sees what happened to a called-off lot
 
 - **GIVEN** a collector who bid on a lot that an operator then called off

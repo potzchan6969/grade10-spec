@@ -91,7 +91,7 @@ listing's public address `/auction/listings/<slug>`.
   answer at that address.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-9oe rev=1 -->
-#### Scenario: g10adm.auction-listing.SC16 - Collector opens a listing by slug
+#### Scenario: grade10-admin-auction-listing-SC-16 - Collector opens a listing by slug
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing whose slug is `charizard-psa-9`
@@ -99,7 +99,7 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 returns that listing
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-4f0 rev=1 -->
-#### Scenario: g10adm.auction-listing.SC17 - Unknown slug is not found
+#### Scenario: grade10-admin-auction-listing-SC-17 - Unknown slug is not found
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** no published, closed, or settled listing with slug `no-such-lot`
@@ -107,7 +107,7 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 answers as not found
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-ng3 rev=1 -->
-#### Scenario: g10adm.auction-listing.SC18 - Duplicate slug is refused
+#### Scenario: grade10-admin-auction-listing-SC-18 - Duplicate slug is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a listing that is not canceled whose slug is `charizard-psa-9`
@@ -116,7 +116,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** the second listing's slug is unchanged
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-g0h rev=1 -->
-#### Scenario: g10adm.auction-listing.SC19 - Two drafts cannot share a slug
+#### Scenario: grade10-admin-auction-listing-SC-19 - Two drafts cannot share a slug
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft whose slug is `charizard-psa-9`
@@ -125,7 +125,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** the second draft's slug is unchanged
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-hp2 rev=1 -->
-#### Scenario: g10adm.auction-listing.SC20 - Empty slugs on drafts are not a collision
+#### Scenario: grade10-admin-auction-listing-SC-20 - Empty slugs on drafts are not a collision
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft with no slug
@@ -134,7 +134,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** neither draft occupies a slug
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-jx5 rev=1 -->
-#### Scenario: g10adm.auction-listing.SC21 - Create can reuse a canceled listing's original slug
+#### Scenario: grade10-admin-auction-listing-SC-21 - Create can reuse a canceled listing's original slug
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a canceled listing that previously used slug `charizard-psa-9`
@@ -145,7 +145,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** the canceled listing still does not hold `charizard-psa-9`
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-4kw rev=1 -->
-#### Scenario: g10adm.auction-listing.SC22 - Create cannot reuse a closed listing's slug
+#### Scenario: grade10-admin-auction-listing-SC-22 - Create cannot reuse a closed listing's slug
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a closed listing whose slug is `charizard-psa-9`
@@ -157,7 +157,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** `/auction/listings/charizard-psa-9` still returns the closed listing
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-2d5 rev=1 -->
-#### Scenario: g10adm.auction-listing.SC23 - Published slug cannot change
+#### Scenario: grade10-admin-auction-listing-SC-23 - Published slug cannot change
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing whose slug is `charizard-psa-9`
@@ -215,7 +215,7 @@ Cancel from an operator who is not authorized to call a listing off SHALL
 be refused, and the listing and slug SHALL be unchanged.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-pfl rev=1 -->
-#### Scenario: g10adm.auction-listing.SC36 - Operator calls off a draft
+#### Scenario: grade10-admin-auction-listing-SC-36 - Operator calls off a draft
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a draft listing
@@ -224,7 +224,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** it stays absent from the public catalogue
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-2px rev=1 -->
-#### Scenario: g10adm.auction-listing.SC37 - Operator calls off a created listing before publish at
+#### Scenario: grade10-admin-auction-listing-SC-37 - Operator calls off a created listing before publish at
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a created listing with a publish at still in the future
@@ -234,7 +234,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** it stays absent from the public catalogue
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-oc9 rev=1 -->
-#### Scenario: g10adm.auction-listing.SC38 - Operator calls off a published listing that has bids
+#### Scenario: grade10-admin-auction-listing-SC-38 - Operator calls off a published listing that has bids
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a published listing with a leading bid, an outbid bid and stock
@@ -246,7 +246,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** it is absent from the public catalogue
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-e1b rev=1 -->
-#### Scenario: g10adm.auction-listing.SC39 - Closed listing cannot be called off
+#### Scenario: grade10-admin-auction-listing-SC-39 - Closed listing cannot be called off
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a closed listing
@@ -255,7 +255,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing remains closed
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-f4v rev=1 -->
-#### Scenario: g10adm.auction-listing.SC40 - Settled listing cannot be called off
+#### Scenario: grade10-admin-auction-listing-SC-40 - Settled listing cannot be called off
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a settled listing
@@ -264,7 +264,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing remains settled
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-j48 rev=1 -->
-#### Scenario: g10adm.auction-listing.SC41 - Already canceled listing cannot be called off again
+#### Scenario: grade10-admin-auction-listing-SC-41 - Already canceled listing cannot be called off again
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a canceled listing
@@ -273,7 +273,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing remains canceled
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-ysx rev=2 -->
-#### Scenario: g10adm.auction-listing.SC42 - Cancel releases the original slug
+#### Scenario: grade10-admin-auction-listing-SC-42 - Cancel rewrites the slug and frees the original
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a published listing whose slug is charizard-psa-9
@@ -284,7 +284,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** its listing code and bidder history are retained
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-lj7 rev=1 -->
-#### Scenario: g10adm.auction-listing.SC43 - Cancel of a draft with no slug does not invent one
+#### Scenario: grade10-admin-auction-listing-SC-43 - Cancel of a draft with no slug does not invent one
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a draft listing with no slug
@@ -293,7 +293,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing still has no slug
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-tjj rev=1 -->
-#### Scenario: g10adm.auction-listing.SC44 - Unauthorized cancel is refused
+#### Scenario: grade10-admin-auction-listing-SC-44 - Unauthorized cancel is refused
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a published listing

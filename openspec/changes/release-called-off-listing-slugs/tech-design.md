@@ -19,7 +19,7 @@ The [decisions](decisions.md#decisions) govern the address outcome. Application 
 - **Public Visibility** - The [listing-page contract](specs/grade10-site/auction/listing-page/spec.md) governs not found and the eligible holder. Refuse every canceled row in the shared public projection before completeness checks. Apply the same hidden policy to public live readers. A null slug alone is insufficient because internal-id public readers also exist.
 - **Bidder Identity** - Preserve the listing row, listing code, permanent code reservation, bid rows and bidder standings. Account reads stay keyed by listing id. Retain existing handling for nullable account-record addresses so a called-off history row cannot navigate to an unrelated lot that reuses its former slug.
 - **Status Derivation** - Keep the bidder and admin clock rules needed to classify a canceled record. Remove the public visibility exception at the public boundary; changing all canceled-clock derivations would unnecessarily change bidder history and admin counts.
-- **Overlap** - This change owns `Collectors never see hidden lots`. `clarify-auction-shipping-progress-copy` owns `Every visible lot has one external lot status`. The inspected delta changes that other requirement only. Neither change replaces the other's requirement or order-status mapping.
+- **Overlap** - This change replaces `Collectors never see hidden lots` with `Hidden lots have no public address`. `clarify-auction-shipping-progress-copy` owns `Every visible lot has one external lot status`. The inspected delta changes that other requirement only. Neither change replaces the other's requirement or order-status mapping.
 
 ## Database Schema
 

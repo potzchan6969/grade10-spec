@@ -80,7 +80,7 @@ and canonical metadata. The same outcome SHALL apply to server-rendered
 responses and client-fetched listing data.
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-s88 rev=1 -->
-#### Scenario: g10.auction-listing-page.SC4 - An id the catalogue publishes no lot for
+#### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
 - **WHEN** an address under the auction's lots naming no published lot is
@@ -89,7 +89,7 @@ responses and client-fetched listing data.
 - **AND** a collector opening it sees the site's Page not found screen
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-jj1 rev=1 -->
-#### Scenario: g10.auction-listing-page.SC5 - A lot the catalogue publishes answers
+#### Scenario: grade10-site-auction-listing-page-SC-05 - A lot the catalogue publishes answers
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
 - **GIVEN** a lot the catalogue publishes
@@ -97,7 +97,7 @@ responses and client-fetched listing data.
 - **THEN** the response has status 200 and carries that lot's page
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-c13 rev=1 -->
-#### Scenario: g10.auction-listing-page.SC19 - A hidden lot's address shows Page not found
+#### Scenario: grade10-site-auction-listing-page-SC-19 - A hidden lot's address shows Page not found
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
 - **GIVEN** a draft lot that is not published
@@ -129,8 +129,17 @@ responses and client-fetched listing data.
 - **WHEN** the address is fetched and its client-fetched lot data is requested
 - **THEN** the response is 404 with Page not found and no public lot data; neither the new private listing nor the called-off lot is exposed
 
+## REMOVED Requirements
 
 ### Requirement: The listing code is only exposed through the canonical address
+
+**Reason** - The [owner's address decision](../../../../decisions.md#decisions), confirmed in [issue 956](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504), retires permanent direct access to the called-off lot. This requirement included that exception and its canonical-retention scenario.
+
+**Migration** - Replace this requirement with "Listing code remains separate from public address lookup" below. Preserve its code visibility, metadata, support-reference and code-only refusal rules, and the existing scenario identities that prove them. Retire only the called-off canonical-retention scenario; former addresses follow current-holder lookup.
+
+## ADDED Requirements
+
+### Requirement: Listing code remains separate from public address lookup
 
 Every listing carries a stable opaque listing code, allocated on its first
 saved draft. A generated canonical address ends with that code in lower case;
@@ -161,7 +170,7 @@ the public page does not make the code a separate field or an alternate route.
   expose it only through the canonical URL suffix.
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-rop rev=1 -->
-#### Scenario: g10.auction-listing-page.SC20 - The served response uses the generated canonical address
+#### Scenario: grade10-site-auction-listing-page-SC-20 - The served response uses the generated canonical address
 **Serves:** Public identifier - the collector opens the code-backed canonical address without receiving a separate identifier field
 
 - **GIVEN** a published lot with generated slug `charizard-psa-10-lk423`
@@ -170,7 +179,7 @@ the public page does not make the code a separate field or an alternate route.
 - **AND** the response exposes no labelled listing-code or payment-reference field
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-oq9 rev=1 -->
-#### Scenario: g10.auction-listing-page.SC21 - A shared lot preview uses the canonical address
+#### Scenario: grade10-site-auction-listing-page-SC-21 - A shared lot preview uses the canonical address
 **Serves:** grade10-site-auction-listing-page-US-10 - Collector shares the lot by its title and canonical URL
 
 - **GIVEN** a published lot with generated slug `charizard-psa-10-lk423`
@@ -179,7 +188,7 @@ the public page does not make the code a separate field or an alternate route.
 - **AND** `og:title`, `og:description`, the page title and meta description contain no labelled listing-code or payment-reference field
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-2d9 rev=1 -->
-#### Scenario: g10.auction-listing-page.SC22 - Client-fetched lot data carries no separate listing code
+#### Scenario: grade10-site-auction-listing-page-SC-22 - Client-fetched lot data carries no separate listing code
 **Serves:** Public identifier - the page does not expose the code as data apart from its canonical address
 
 - **GIVEN** a published lot with its listing code allocated
@@ -188,7 +197,7 @@ the public page does not make the code a separate field or an alternate route.
 - **THEN** no response body carries a separate listing-code or payment-reference field
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-51n rev=1 -->
-#### Scenario: g10.auction-listing-page.SC23 - Support resolves a lot from its title alone
+#### Scenario: grade10-site-auction-listing-page-SC-23 - Support resolves a lot from its title alone
 **Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a lot and is identified by title, not a code neither of them has
 
 - **GIVEN** a collector contacting support about a published lot
@@ -198,7 +207,7 @@ the public page does not make the code a separate field or an alternate route.
   code to do so
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-suj rev=1 -->
-#### Scenario: g10.auction-listing-page.SC24 - A not-found response carries no listing code
+#### Scenario: grade10-site-auction-listing-page-SC-24 - A not-found response carries no listing code
 **Serves:** Public identifier - the guard extending to the refusal path, not only lots that resolve
 
 - **GIVEN** an address under the auction's lots naming no published lot
@@ -208,7 +217,7 @@ the public page does not make the code a separate field or an alternate route.
   listing code
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-57v rev=1 -->
-#### Scenario: g10.auction-listing-page.SC25 - The page does not display the listing code once scripts run
+#### Scenario: grade10-site-auction-listing-page-SC-25 - The page does not display the listing code once scripts run
 **Serves:** Public identifier - the page keeps the code out of labelled collector-facing fields after scripts finish
 
 - **GIVEN** a published lot's generated canonical address
@@ -218,7 +227,7 @@ the public page does not make the code a separate field or an alternate route.
 - **AND** neither the rendered page nor its current source contains a labelled listing-code or payment-reference field
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-kfl rev=1 -->
-#### Scenario: g10.auction-listing-page.SC26 - A listing code does not resolve as a lot address
+#### Scenario: grade10-site-auction-listing-page-SC-26 - A listing code does not resolve as a lot address
 **Serves:** Public identifier - the guard against the code working as another way to reach or identify a lot
 
 - **GIVEN** a published lot with its listing code allocated
@@ -229,7 +238,7 @@ the public page does not make the code a separate field or an alternate route.
 - **AND** the site's not-found screen is shown, not that lot's page
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-dc3 rev=1 -->
-#### Scenario: g10.auction-listing-page.SC27 - A public listing keeps the code out of labelled fields once an order exists
+#### Scenario: grade10-site-auction-listing-page-SC-27 - A public listing keeps the code out of labelled fields once an order exists
 **Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a won lot without a separate code field on the listing page
 
 - **GIVEN** a lot whose auction closed with a winning bid, so an order now
