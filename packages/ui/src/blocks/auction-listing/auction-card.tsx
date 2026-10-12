@@ -5,7 +5,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { formatMoney } from "../../lib/format-money";
+import { formatLotMoney } from "../../lib/format-money";
 import type { WatchButtonCopy } from "../auction-record/types";
 import { WatchButton } from "../auction-record/watch-button";
 
@@ -41,7 +41,7 @@ type AuctionCardProps = {
   imageAlt?: string;
   /** Current or starting price in minor units. */
   currentBidMinor: number;
-  /** ISO 4217 code. Stories use HKD, the listing default. */
+  /** ISO 4217 code. Stories use USD, the listing default. */
   currency: string;
   /**
    * Price caption, already chosen: "Current bid" once bids exist, "Starting
@@ -130,7 +130,7 @@ function AuctionCard({
 }: AuctionCardProps) {
   const showWatch = !closed && onWatchToggle != null;
   const timeLabel = scheduleLabel(when, locale, timeZone);
-  const price = formatMoney(currentBidMinor, currency, { locale });
+  const price = formatLotMoney(currentBidMinor, currency, { locale });
 
   const photoClassName = cn(
     "size-full rounded-(--radius-3xl) object-contain",

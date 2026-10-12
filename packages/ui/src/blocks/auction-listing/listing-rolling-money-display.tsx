@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef } from "react";
 import {
-  formatMoney,
+  formatLotMoney,
   formatMoneyNumeric,
-  formatMoneyPrefix,
+  formatLotMoneyPrefix,
 } from "../../lib/format-money";
 import { RollingDigit } from "./listing-countdown-digit";
 
@@ -19,11 +19,11 @@ function ListingRollingMoneyDisplay({
 }: ListingRollingMoneyDisplayProps) {
   const prevMinorRef = useRef(amountMinor);
   const shouldAnimate = amountMinor > prevMinorRef.current;
-  const prefix = formatMoneyPrefix(currency, { locale });
+  const prefix = formatLotMoneyPrefix(currency, { locale });
   const cells = formatMoneyNumeric(amountMinor, currency, locale)
     .split("")
     .map((char, index, all) => ({ char, place: all.length - index }));
-  const accessibleText = formatMoney(amountMinor, currency, { locale });
+  const accessibleText = formatLotMoney(amountMinor, currency, { locale });
 
   useLayoutEffect(() => {
     prevMinorRef.current = amountMinor;

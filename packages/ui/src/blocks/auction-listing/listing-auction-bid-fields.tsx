@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { Info } from "@phosphor-icons/react";
-import { formatMoney } from "../../lib/format-money";
+import { formatLotMoney } from "../../lib/format-money";
 import {
   elapsedDurationParts,
   formatAccessibleText,
@@ -201,7 +201,7 @@ function StandingStatusBadge({
     return (
       <Badge variant="warning">
         {outbidAmountMinor != null
-          ? `${copy.outbid} · ${formatMoney(outbidAmountMinor, view.currency, { locale })}`
+          ? `${copy.outbid} · ${formatLotMoney(outbidAmountMinor, view.currency, { locale })}`
           : copy.outbid}
       </Badge>
     );
@@ -210,7 +210,7 @@ function StandingStatusBadge({
   if (view.standing === "leading-max" || view.standing === "leading-manual") {
     return (
       <Badge variant="success">
-        {`${copy.highestBid} · ${formatMoney(view.currentBidMinor, view.currency, { locale })}`}
+        {`${copy.highestBid} · ${formatLotMoney(view.currentBidMinor, view.currency, { locale })}`}
       </Badge>
     );
   }

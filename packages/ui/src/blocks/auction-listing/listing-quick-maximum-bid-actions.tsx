@@ -21,9 +21,9 @@ import {
   useState,
 } from "react";
 import {
-  formatMoney,
+  formatLotMoney,
   formatMoneyNumeric,
-  formatMoneyPrefix,
+  formatLotMoneyPrefix,
 } from "../../lib/format-money";
 import {
   type CustomMaximumEditOrigin,
@@ -144,7 +144,7 @@ function ListingQuickMaximumBidActions({
 
   const presets = useMemo((): MaximumPreset[] => {
     const formatDelta = (deltaMinor: number) =>
-      `${formatMoneyPrefix(view.currency, { locale })}${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
+      `${formatLotMoneyPrefix(view.currency, { locale })}${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
     const raiseDeltaTemplate = isLeadingWithMaximum
       ? copy.amountAboveMaximum
       : copy.amountAboveCurrent;
@@ -256,7 +256,7 @@ function ListingQuickMaximumBidActions({
     hasCommittedMaximum && view.viewerMaximumMinor != null
       ? copy.currentMaximum.replace(
           "{amount}",
-          formatMoney(view.viewerMaximumMinor, view.currency, { locale }),
+          formatLotMoney(view.viewerMaximumMinor, view.currency, { locale }),
         )
       : null;
 
@@ -274,7 +274,7 @@ function ListingQuickMaximumBidActions({
     commitMinor != null
       ? actionTemplate.replace(
           "{amount}",
-          formatMoney(commitMinor, view.currency, { locale }),
+          formatLotMoney(commitMinor, view.currency, { locale }),
         )
       : actionTemplate
           .replace(" to {amount}", "")
@@ -282,7 +282,7 @@ function ListingQuickMaximumBidActions({
           .replace(" · {amount}", "")
           .replace("{amount}", "");
 
-  const floorAmountLabel = formatMoney(floorMaximumMinor, view.currency, {
+  const floorAmountLabel = formatLotMoney(floorMaximumMinor, view.currency, {
     locale,
   });
   const customPlaceholder = copy.customAmountPlaceholder.replace(
@@ -469,7 +469,7 @@ function ListingQuickMaximumBidActions({
           role="group"
         >
           {presets.map((preset) => {
-            const amountLabel = formatMoney(preset.amountMinor, view.currency, {
+            const amountLabel = formatLotMoney(preset.amountMinor, view.currency, {
               locale,
             });
             const selected =
@@ -525,7 +525,7 @@ function ListingQuickMaximumBidActions({
           onPaste={handleCustomPaste}
           onKeyDown={handleCustomKeyDown}
           placeholder={customPlaceholder}
-          prefix={formatMoneyPrefix(view.currency, { locale })}
+          prefix={formatLotMoneyPrefix(view.currency, { locale })}
           status={amountEntryLocked || !customInvalid ? "default" : "error"}
           value={customDraft}
         />
