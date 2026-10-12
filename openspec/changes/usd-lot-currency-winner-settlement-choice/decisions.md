@@ -25,3 +25,8 @@
 | Q4 | ❓ HKD/JPY schedules? | Pending PM — retire or keep for live lots | — |
 | Q5 | ❓ Verified-bidder bar in USD? | Pending PM (today HKD 120,000) | — |
 | Q6 | ❓ Invoice discloses USD bid / rate? | Pending PM | — |
+
+## Raised
+
+| Capability | Raised | Landed |
+| --- | --- | --- |
