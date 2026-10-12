@@ -1,0 +1,66 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "81d78a6d3ff31ba8b5ae671ec9e8f803d93ada97c6c9bfb3e902069233e4814f"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "4e95fb4f3d077b753f14a933cf50ba3a6468953a",
+    "capturedAt": "2026-10-12T05:02:22.046Z",
+    "targets": [
+      {
+        "path": "openspec/changes/cap-custom-maximum-at-currency-ceiling/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A refused bid places nothing"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A bid never exceeds its currency's ceiling"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Custom maximum entry respects a major-unit ceiling"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
