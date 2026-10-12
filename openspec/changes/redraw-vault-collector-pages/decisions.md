@@ -16,6 +16,9 @@
 | --- | --- | --- | --- |
 | Q1 | Which collector surfaces does the change cover? | The portfolio surfaces in the workbench — Portfolio, Asset Detail, Request Retrieval, Intake Tracker, Book a Visit - decided by the round | The loan-case screens on `collector-pages.md`, which stay open pending their own design |
 | Q2 | Where does the asset detail contract live? | New capability `grade10-site/vault/portfolio` - decided by the round | Folding holdings reads into `case-lifecycle`, which describes loan cases, not held assets |
+| Q3 | What does a portfolio card open? | The item's page for every status — a listed item's page reads its listed price and links out to the store listing or auction lot | Routing Listed or Live Auction cards to management surfaces that do not exist, or keeping the retrieval-dialog exception for Retrieval Pending |
+| Q4 | Can a listed or auctioned item be retrieved? | No — retrieval hides until the item delists or settles | Blocking the whole detail page, or rendering the link disabled |
+| Q5 | How do the tabs sort? | Each tab owns a sort set remembered for the session; Live Auction defaults to ending soonest because the portfolio does not live-update bids | One shared sort, or defaulting the auction tab to highest bid |
 
 ## Raised
 
