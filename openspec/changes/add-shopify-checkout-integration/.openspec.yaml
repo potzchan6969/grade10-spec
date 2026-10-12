@@ -3,5 +3,3 @@ created: 2026-09-28
 promoted_by: "@kinisworking"
 hands:
   dev: "@kinisworking"
-awaiting:
-  specs: "planning-dev: reconcile pending Pay scenarios and cases with add-store-cart-drawer-ui's disabled-action scope; keep stale-answer protection for another tab or session and preserve historical acceptance snapshots."

@@ -1,173 +1,16 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review · 0/6
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Status:** pending-review · 0/7
+**Drafts styled:** 2026-10-13, tcs-rules r5
 
-## shared.ui-store-cart.US2: Shopper reviews what the cart holds
+## g10.shared-store-cart.US19: Shopper waits before another drawer action
 
-**As a** shopper,
-**I want** the drawer to show my items with a count that ignores sold-out
-items, an edge fade when there are more, and an empty state when the cart
-holds nothing,
-**so that** I can see what I am buying, or that there is nothing to buy yet.
+**As a** shopper whose drawer is waiting for an answer,
+**I want** the item controls, tender controls and navigation actions to wait together,
+**so that** no remaining control can start a conflicting action.
 
-<!-- trace:case id=g10.shared-store-cart.TC-rni rev=1 covers=g10.shared-store-cart.SC-3aw -->
-### shared.ui-store-cart.US2-TC1: Existing cart surfaces render the supplied picture
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-02
-
-**Pre-conditions:**
-
-* A controlled story supplies `<picture_url>` and `<picture_alt>` to both items through existing optional props.
-* The story’s image asset is served to the browser.
-* The story includes a sold-out item and records supplied action callbacks.
-
-**Test data:**
-
-| `<cart_surface>` | `<picture_url>` | `<picture_alt>` |
-| --- | --- | --- |
-| CartItem | Controlled local product picture | Product picture description |
-| CartDrawerBody | Same controlled picture | Same description |
-| CartDrawer | Same controlled picture | Same description |
-
-**Steps:**
-
-1. Open the controlled `<cart_surface>` story.
-2. Inspect the item’s thumbnail source and alt attribute.
-3. Wait for the picture asset to load.
-4. Inspect the sold-out item's picture and status.
-5. Click the sold-out item's name.
-6. Remove the sold-out item using the existing control.
-
-**Expected Results:**
-
-* The thumbnail source equals the supplied `<picture_url>`.
-* The image alt attribute equals `<picture_alt>`.
-* The image completes loading with naturalWidth greater than zero.
-* The picture appears inside the existing thumbnail frame.
-* The sold-out picture loads inside the existing dimmed frame.
-* The sold-out marker and removal control keep their existing presentation.
-* The name and removal actions call the supplied callbacks with their existing arguments.
-
-<!-- trace:case id=g10.shared-store-cart.TC-6if rev=1 covers=g10.shared-store-cart.SC-p71 -->
-### shared.ui-store-cart.US2-TC2: Missing picture alt text uses the item name
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-02
-
-**Pre-conditions:**
-
-* A controlled CartItem story supplies a loadable picture URL.
-* The item has `<item_name>` and `<image_alt>` from Test data.
-
-**Test data:**
-
-| `<item_name>` | `<image_alt>` |
-| --- | --- |
-| Gengar VMAX | Optional alt text omitted |
-| Demo booster box | Empty string |
-
-**Steps:**
-
-1. Open the controlled CartItem story.
-2. Wait for the picture asset to load.
-3. Inspect the item’s image alt attribute.
-4. Compare its copy and layout with the same item supplying alt text.
-
-**Expected Results:**
-
-* The picture loads with naturalWidth greater than zero.
-* The image alt attribute equals `<item_name>`.
-* The same copy and layout remain.
-
-<!-- trace:case id=g10.shared-store-cart.TC-t2q rev=1 covers=g10.shared-store-cart.SC-du1 -->
-### shared.ui-store-cart.US2-TC3: Missing pictures retain the existing cart placeholder
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-02
-
-**Pre-conditions:**
-
-* A controlled story supplies a named item with `<picture_props>`.
-* The browser records requests made by `<cart_surface>`.
-* The story records storage writes and supplied action callbacks.
-* The same item's picture-bearing story supplies the display baseline.
-
-**Test data:**
-
-| `<cart_surface>` | `<picture_props>` |
-| --- | --- |
-| CartItem | Picture source and alt omitted |
-| CartDrawerBody | Picture source and alt omitted |
-| CartDrawer | Picture source and alt omitted |
-| CartItem | Empty picture source |
-| CartDrawerBody | Empty picture source |
-| CartDrawer | Empty picture source |
-
-**Steps:**
-
-1. Open the controlled `<cart_surface>` story.
-2. Inspect the item’s thumbnail frame.
-3. Inspect requests triggered by the missing picture.
-4. Compare supplied display facts with the picture-bearing baseline.
-5. Click the item's name.
-6. Increase the item's quantity.
-7. Remove the item using the existing control.
-8. Inspect callback arguments and recorded storage writes.
-
-**Expected Results:**
-
-* The existing placeholder remains in the thumbnail frame.
-* The shared surface makes no product-data request for a picture.
-* Supplied name, quantity, price and status remain unchanged.
-* Name, quantity and removal actions call supplied callbacks with their existing arguments.
-* The shared surface stores no picture metadata.
-
-## shared-ui-store-cart-US19: Shopper waits for an accepted tender choice
-
-**As a** shopper,
-**I want** accepted figures held while tender finishes,
-**so that** I cannot submit conflicting changes or continue unresolved.
-
-<!-- trace:case id=g10.shared-store-cart.TC-cxw rev=1 covers=g10.shared-store-cart.SC-9yi,g10.shared-store-cart.SC-nty,g10.shared-store-cart.SC-x24 -->
-### shared-ui-store-cart-US19-TC1-1: Pending tender blocks every entry point
+<!-- trace:case id=g10.shared-store-cart.TC-cxw rev=1 -->
+### shared-ui-store-cart-US18-TC1-1: Pending tender blocks every entry point
 
 **Classification:**
 
@@ -180,7 +23,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-19
+* **Trace:** g10.shared-store-cart.US19
 
 **Pre-conditions:**
 
@@ -194,8 +37,8 @@ Runs once per row of **Test data**.
 
 * Points and promo inputs, Apply, Use max, both Remove actions, held-code selection and Checkout are disabled and invoke no callbacks. Accepted figures and draft 120 persist.
 
-<!-- trace:case id=g10.shared-store-cart.TC-sxg rev=1 covers=g10.shared-store-cart.SC-9yi,g10.shared-store-cart.SC-nty,g10.shared-store-cart.SC-x24 -->
-### shared-ui-store-cart-US19-TC2-1: Clearing pending restores guarded availability
+<!-- trace:case id=g10.shared-store-cart.TC-ja3 rev=1 -->
+### g10.shared-store-cart.US19-TC1: Pending blocks item, tender and navigation controls
 
 **Classification:**
 
@@ -208,7 +51,150 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-19
+* **Trace:** g10.shared-store-cart.US19
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| drawer | Controlled shared drawer with an active line, editable quantity, accepted figures, points draft and selected promo code; each listed callback supplied and recorded |
+| points_state | Applied points with Remove; unapplied points with Apply and Use max, run separately |
+| item_actions | Quantity decrease, quantity increase, line removal and product link |
+| tender_actions | Existing points input, points disclosure, Apply, Use max, points Remove, promo disclosure and selected-code Remove |
+| navigation_actions | Existing account or loyalty link and Checkout |
+
+**Pre-conditions:**
+
+* The tester is on the shared drawer fixture.
+* `<drawer>` is open with the consumer pending input false.
+* Each action is otherwise available in its `<points_state>` row.
+
+**Steps:**
+
+1. Record the visible accepted figures and entered points.
+2. Set the consumer pending input true.
+3. Attempt each listed action with the pointer.
+4. Attempt each listed action with the keyboard.
+5. Inspect the displayed values and callback record.
+
+**Expected Results:**
+
+* Item, tender and navigation actions are disabled while pending.
+* The points input cannot change its entered value.
+* Quantity, selected code and accepted figures remain unchanged.
+* No listed action invokes its callback.
+* Disclosures remain closed; links and Checkout start no navigation.
+
+<!-- trace:case id=g10.shared-store-cart.TC-cpt rev=1 -->
+### g10.shared-store-cart.US19-TC2: Pending protects editing in an open promo sheet
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.shared-store-cart.US19
+
+**Test data:**
+
+| Field | Value |
+| promo_sheet | Existing open promo sheet with an entered code, eligible held codes and enough content to scroll; supplied callbacks recorded |
+| sheet_actions | Promo input, typed-code Apply and held-code selection |
+| dismissal | Sheet Close, sheet backdrop click and Escape, run separately |
+
+**Pre-conditions:**
+
+* The tester is on the shared drawer fixture.
+* `<promo_sheet>` is open with the consumer pending input false.
+* Each `<sheet_actions>` control is otherwise available.
+
+**Steps:**
+
+1. Record the entered code and accepted drawer figures.
+2. Set the consumer pending input true.
+3. Attempt each sheet action with the pointer.
+4. Attempt each sheet action with the keyboard.
+5. Scroll the sheet content.
+6. Use `<dismissal>`.
+
+**Expected Results:**
+
+* The promo input cannot change its entered code.
+* Apply and held-code selection remain disabled.
+* No sheet action invokes its callback.
+* Entered code and accepted figures remain unchanged.
+* The sheet content scrolls while pending.
+* Each dismissal route closes the existing sheet.
+
+<!-- trace:case id=g10.shared-store-cart.TC-d72 rev=1 -->
+### g10.shared-store-cart.US19-TC3: Pending allows reading, scrolling and drawer dismissal
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.shared-store-cart.US19, shared-ui-store-cart-US-04
+
+**Test data:**
+
+| Field | Value |
+| drawer | Open shared drawer with accepted cart content exceeding its viewport and recorded action and dismissal callbacks |
+| dismissal | Drawer Close, drawer backdrop click and Escape, run separately |
+
+**Pre-conditions:**
+
+* The tester is on the shared drawer fixture.
+* `<drawer>` has its consumer pending input true.
+
+**Steps:**
+
+1. Read the visible cart content.
+2. Scroll the drawer to its remaining lines.
+3. Use `<dismissal>`.
+4. Inspect the dismissal and action callback records.
+
+**Expected Results:**
+
+* Accepted cart content remains readable while pending.
+* The drawer content scrolls while pending.
+* Each dismissal route closes the drawer.
+* Dismissal invokes its callback once.
+* No item, tender or navigation callback runs through dismissal.
+
+## g10.shared-store-cart.US20: Shopper resumes after the drawer receives an answer
+
+**As a** shopper whose drawer is no longer waiting,
+**I want** only currently available actions to return without repeating an earlier action,
+**so that** I decide what happens next from the accepted cart or its failure feedback.
+
+<!-- trace:case id=g10.shared-store-cart.TC-sxg rev=1 -->
+### shared-ui-store-cart-US18-TC2-1: Clearing pending restores guarded availability
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.shared-store-cart.US20
 
 **Pre-conditions:**
 
@@ -222,8 +208,8 @@ Runs once per row of **Test data**.
 
 * Clearing itself invokes no callbacks. Existing callback-presence and validation constraints still apply. Available actions work; draft and accepted figures stay unchanged.
 
-<!-- trace:case id=g10.shared-store-cart.TC-swe rev=1 covers=g10.shared-store-cart.SC-9yi,g10.shared-store-cart.SC-nty,g10.shared-store-cart.SC-x24 -->
-### shared-ui-store-cart-US19-TC3-1: Omitting pending preserves consumer behavior
+<!-- trace:case id=g10.shared-store-cart.TC-swe rev=1 -->
+### shared-ui-store-cart-US18-TC3-1: Omitting pending preserves consumer behavior
 
 **Classification:**
 
@@ -236,19 +222,83 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-19
+* **Trace:** g10.shared-store-cart.US20
+
+**Test data:**
+
+| Field | Value |
+| pending_inputs | Consumer pending input omitted and tenderPending omitted; consumer pending input false and tenderPending false, run separately |
+| interactive | Full drawer and standalone footer with their existing action callbacks supplied |
+| existing_guards | Read-only, verifying, redirecting, loading and checkoutDisabled states, run separately on the applicable existing surface |
 
 **Pre-conditions:**
 
-* A consumer supplies the existing drawer content and optional action callbacks.
+* The tester is on the existing shared consumer fixtures.
+* The consumer supplies its existing drawer content and optional callbacks.
 
 **Steps:**
 
-1. Open the full-drawer and standalone-footer stories with tenderPending omitted and false, in interactive, read-only, verifying, redirecting, loading and checkoutDisabled states.
+1. Open each `<interactive>` surface with `<pending_inputs>`.
+2. Inspect its existing appearance and available controls.
+3. Activate available item, tender and navigation actions separately.
+4. Inspect callback counts after each activation.
+5. Open each surface with its applicable `<existing_guards>`.
+6. Attempt its guarded controls by pointer and keyboard.
 
 **Expected Results:**
 
-* Existing appearance and availability remain. Explicit false overrides none of the existing disabled reasons.
+* Existing appearance and availability remain.
+* Available item, tender and navigation actions invoke their callbacks once.
+* Explicit false overrides none of the existing disabled reasons.
+* Existing guarded controls remain unavailable and invoke no callbacks.
+<!-- trace:case id=g10.shared-store-cart.TC-wru rev=1 -->
+### g10.shared-store-cart.US20-TC1: Clearing pending restores only currently permitted actions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.shared-store-cart.US20
+
+**Test data:**
+
+| Field | Value |
+| drawer | Controlled shared drawer with accepted figures, entered values and recorded callbacks |
+| available | Supplied item, tender and navigation callbacks; editable quantity and valid tender inputs |
+| quantity_limit | An active line at its consumer-supplied maximum; decrease permitted |
+| unavailable_action | Missing action callback, invalid promo code, zero points, or existing loading, verifying, redirecting or checkout-disabled state; run each relevant control separately |
+| legacy_pending | Existing tenderPending true when the consumer pending input clears |
+
+**Pre-conditions:**
+
+* The tester is on the shared drawer fixture.
+* `<drawer>` is open with the consumer pending input true.
+* The consumer supplies the current availability in each test-data row.
+
+**Steps:**
+
+1. Record accepted figures, entered values and callback counts.
+2. Set the consumer pending input false.
+3. Inspect values, callbacks and action availability.
+4. Attempt the row's blocked actions by pointer and keyboard.
+5. Activate each currently permitted action separately.
+6. Inspect callback counts after each activation.
+
+**Expected Results:**
+
+* Clearing pending invokes no action callback.
+* Accepted figures and entered values persist until explicit interaction.
+* Each `<unavailable_action>` remains unavailable and invokes no callback.
+* At `<quantity_limit>`, increase stays disabled; decrease becomes available.
+* With `<legacy_pending>`, tender actions and Checkout remain disabled.
+* Each currently permitted action invokes its callback once when activated.
 
 ## Reconciliation
 
@@ -266,40 +316,3 @@ independent points QA supplies the consumer pending-operation coverage.
   product behavior.
 - **Raised** — no unanswered product decision; this is a missing presentation
   prop for the approved pending behavior, with default-false compatibility.
-
-### Thumbnail Reconciliation (2026-10-13)
-
-**Run:** Bounded QA2 for existing optional picture props only. QA1 read the
-allowlisted snapshot at `/tmp/store-cart-thumbnails-planning/qa1`, including
-the shared product-picture PRD, journeys, Purpose, Feature set, decisions,
-UI states, approved reference and prior suite without Reconciliation.
-Requirements, scenarios and technical design were excluded. Input identities
-are recorded in `/tmp/store-cart-thumbnails-planning/input-identities.json`;
-the prompt allowlist was not enforced filesystem isolation. Dev wrote the
-shared scenarios without reading QA1 cases. This fresh QA2 reader authored
-neither reading. All 3 new cases remain draft.
-
-| Case | Disposition | Fully Asserted Scenario |
-| --- | --- | --- |
-| shared.ui-store-cart.US2-TC1 | Corrected; standalone item, body and drawer load controlled bytes, retaining sold-out treatment and callbacks | shared-ui-store-cart-SC-64 |
-| shared.ui-store-cart.US2-TC2 | Corrected; omitted and empty alt text use the item name with unchanged copy and layout | shared-ui-store-cart-SC-65 |
-| shared.ui-store-cart.US2-TC3 | Corrected; omitted and empty source retain the placeholder, supplied facts and callbacks, without product reads or picture storage | shared-ui-store-cart-SC-66 |
-
-- **Coverage** - Each new scenario's full outcome has one asserting case. No
-  new outcome remains uncovered, and no product contradiction or question
-  remains in this bounded reading. Coverage links are planning evidence;
-  Group 10's controlled-asset browser regressions still need implementation
-  and execution.
-- **Preserved** - Earlier cases and reconciliation are unchanged. The inherited
-  pending-state journey collision lies outside this picture extension.
-
-## Settled
-
-- **Existing props** - Q19 uses `CartItemSummary` as the existing item type;
-  `CartItem`, `CartDrawerBody` and `CartDrawer` are the rendered story surfaces.
-- **Pictures** - The application supplies source and alt text. Shared blocks
-  acquire and persist no product picture data, retaining their existing frame,
-  placeholder, status treatment and callbacks.
-- **Loaded bytes** - Controlled Storybook assets prove browser image loading;
-  positive natural width is checked inside the matching item, including the
-  existing hidden thumbnail container.

@@ -51,6 +51,8 @@ In Your Orders.
 
 🚧 **One Pay at a time** - While a Pay is starting, drawer actions wait as the [Cart Drawer](/p/grade10-site/store/cart#pending-operations) describes. An answer for an older cart, tender or member opens nothing.
 
+🚧 **Closing during Pay** - The collector can close the drawer while checkout starts. A successful reply still opens Shopify if the submitted cart, tender and member remain current. Closing does not cancel the request.
+
 🚧 **Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
 
 - **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload or a lost answer
@@ -113,6 +115,7 @@ page asks for the email address, and the order belongs to no account.
 | Current decision | Decided | Cart open provides the early review; Pay makes its own current decision, including when it resumes an invoice. An earlier drawer quote never replaces that decision. | Product |
 | Frontend scope | Decided | The drawer uses the store's current checkout request and changes no backend. Invoice reuse, recovery and durable retirement are a separate backend change. Decided 2026-10-09. | @kinisworking |
 | Repeated purchase | Decided | The store owns invoice reuse and recovery. The drawer holds no purchase identity; it accepts one Pay at a time. | @kinisworking |
+| Reply after closing | Decided | A still-current successful checkout reply opens Shopify after dismissal. Chosen over ignoring navigation on 2026-10-13. | @kinisworking |
 | Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
 | Invoice retirement | Decided | Only the member's own line or tender edit retires an open invoice. The shop's stock or price review leaves it for the next Pay to replace. Decided 2026-10-08. | Product |
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |

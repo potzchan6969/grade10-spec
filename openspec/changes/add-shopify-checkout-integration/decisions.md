@@ -51,11 +51,13 @@
 | Q32 | Does a canceled older order belong to this change? | No. An order read shows canceled through the existing order-status labels; when the backend cancels is `add-checkout-purchase-safety`. This change's suite does not test it | A drawer or order-page state owned by this change |
 | Q33 | Does this suite keep the settlement, notification and ownership cases? | Yes. "Shopify payment settles one Grade10 order" stays in this change's delta for its cart release paragraph, so its existing backend tests are linked without backend changes | Moving them to `add-checkout-purchase-safety` |
 | Q34 | What happens to drawer answer kinds the current request never returns? | Remove `settled`, `terminal`, `intentConflict` and `recoveryRequired` from the frontend resolution; they belonged to the removed v2 transport. Follows Q25 | Keeping unreachable branches |
+| Q35 | What does a successful Pay reply do after the collector closes the drawer? | Open Shopify for a still-current successful reply, even after dismissal. Chosen by @kinisworking on 2026-10-13 (option B). Closing does not cancel the request; changed cart, tender or member still makes the answer stale under Q28 | Ignoring a current successful reply solely because the drawer closed |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| `grade10-site/store/checkout` | After the collector closes pending Pay, does a still-current successful answer open Shopify or leave the collector on the page? | Q35; cart drawer Q16 |
 | `grade10-site/store/checkout` | Retain every durable safety requirement despite branch gaps? | Q20 |
 | `grade10-site/store/checkout` | Introduce a new unpaid badge? | Q21 |
 | `grade10-site/store/checkout` | Does the shop's review of the cart retire an open invoice? | Q23 |

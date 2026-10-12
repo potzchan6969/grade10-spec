@@ -29,7 +29,7 @@ The spec governs what Pay sends, one Pay at a time, older and lost answers, and 
 - **Lines** - A copy of each `review.items` entry: `productHandle`, `variantId`, `quantity`, `seenUnitPriceMinor`. Pay stays disabled while any reviewed item lacks `seenUnitPriceMinor`.
 - **Tender** - `sendableTender(quoted)` from `BasketQuote.ts`: `couponCodes: [code]` for a store code, `couponId` for a wallet coupon, and `spendPoints` only when the quote applied more than 0 points. No points sends no field (Q25).
 - **Device** - `deviceId` only when tracking holds one.
-- **Readiness** - Pay is disabled while the mutation is pending, a cart or tender write is unacknowledged, the review or quote is not ready, or the tender read failed. The `@grade10/ui` CartDrawer adds its own Redirecting guard.
+- **Readiness** - Pay is disabled while the mutation is pending, a cart or tender write is unacknowledged, the review or quote is not ready, or the tender read failed. The `@grade10/ui` CartDrawer adds its own Redirecting guard. Actual checkout mutation lifetime also enters the drawer-wide `interactionPending` input owned by [Pending Operation Delivery](../add-store-cart-drawer-ui/tech-design.md#pending-operation-delivery); a failed-data guard is separate from that input.
 
 | Rejected | Why |
 | --- | --- |
@@ -37,6 +37,14 @@ The spec governs what Pay sends, one Pay at a time, older and lost answers, and 
 | Sending `spendPoints: 0` | `spendPointsSchema` refuses 0 |
 
 ### Pay Guards
+
+Pending Pay holds the shared interaction guard across item, tender, disclosure,
+promo-sheet and navigation callbacks; Close, sheet Back, backdrop and Escape
+keep their existing behavior. Its token begins synchronously before dispatch
+and ends only when the promise settles. The current member's other active
+reads or writes can keep the drawer pending after Pay ends. Failure ends this
+operation without an automatic new Pay. Available actions then follow the
+current review, quote and existing callback guards.
 
 | Guard | Holds | Ends the request when |
 | --- | --- | --- |
@@ -46,6 +54,9 @@ The spec governs what Pay sends, one Pay at a time, older and lost answers, and 
 | Mounted ref | The drawer is mounted | It unmounts |
 
 - **Older answer** - When any guard fails, the answer is dropped: no `leaveFor`, no navigation, no toast. `checkoutHandled` pulses `summaryLoading` for one render so the CartDrawer leaves Redirecting and the current cart stays (Q28).
+- **External change** - While this drawer is pending, cart or tender changes in another tab/session or a changed member still invalidate its request key. The sent lines and tender stay fixed. The stale answer is ignored, and a later deliberate Pay waits for every active operation to end and current facts to be ready (Q31).
+- **Close and reopen** - Closing does not cancel a sent request. A same-member reopen still observes its active checkout mutation and cannot submit another Pay before it settles; current reads then decide readiness.
+- **Closed drawer answer** - Q35 keeps current successful hosted navigation after dismissal. The checkout request key uses submitted intent and member identity, not drawer open state or presentation generation. Keep the host and mutation owner alive on drawer close. Plain close/reopen does not invalidate that request; genuine cart, tender, member or request changes still do. Tender-view publication retains its separate opening guard.
 - **Lost answer** - A transport or decode error rejects `mutateAsync`. For the current request the host rethrows and the CartDrawer shows `checkoutFailed`. TanStack mutations default to no retry, and the app's `QueryClient` sets none. A later Pay is a new request (Q27, Q29).
 - **Rejected** - A request key kept in `sessionStorage` across reload: Q29 leaves repeated Pay to the backend.
 

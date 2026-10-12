@@ -103,7 +103,10 @@ The user-approved Storybook plan supersedes the read-only points scope in
 completed Group 4; Group 5 delivers only the new points integration. The
 shared `CartDrawer` export already supports these actions; optional
 `tenderPending` on its existing props supplies the missing pending guard.
-The pending-operations increment extends the body and nested-sheet guards as well as tender actions. Delivery planning settles the prop contract; existing read-only callback guards stay intact.
+The pending-operations increment adds optional `interactionPending` to the
+existing drawer, body, item, footer and promo-sheet props. It extends body, navigation and
+nested-sheet guards while keeping `tenderPending` compatibility and existing
+read-only callback guards. The shared delta owns the public contract.
 The application owner archives after deployment acceptance.
 
 ## References

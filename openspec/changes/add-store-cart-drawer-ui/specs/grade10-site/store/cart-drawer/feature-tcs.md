@@ -1,12 +1,12 @@
 # grade10-site/store/cart-drawer Test Cases
 
-**Status:** pending-review · 0/41
-**Drafts styled:** 2026-09-29, tcs-rules r3.0
+**Status:** pending-review · 0/42
+**Drafts styled:** 2026-10-13, tcs-rules r5
 
 ## grade10-site-store-cart-drawer-US01: Signed-in collector opens the current cart over the page
 
 **As a** signed-in collector,
-**I want** my current cart to open over the page I am on with current facts and recognisable product pictures,
+**I want** my current cart to open over the page I am on with current facts,
 **so that** I can review what the shop can sell without losing my place.
 
 <!-- trace:case id=g10.store-cart-drawer.TC-5he rev=1 covers=g10.store-cart-drawer.SC-omn,g10.store-cart-drawer.SC-za5,g10.store-cart-drawer.SC-a52,g10.store-cart-drawer.SC-tv2,g10.store-cart-drawer.SC-ti9,g10.store-cart-drawer.SC-0og,g10.store-cart-drawer.SC-lrr,g10.store-cart-drawer.SC-8ln,g10.store-cart-drawer.SC-33u -->
@@ -208,377 +208,6 @@ Runs once per row of **Test data**.
 * After step 3, the collector remains at <surface address>.
 
 ---
-
-<!-- trace:case id=g10.store-cart-drawer.TC-5x2 rev=1 covers=g10.store-cart-drawer.SC-0d6 -->
-### g10.store-cart-drawer.US1-TC6: Current thumbnails load the first product pictures
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-01
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on `<grade10 collection url>`.
-* The member cart holds `<product_a>` and `<product_b>` in reverse catalogue order.
-* The catalogue and batched review supply controlled, browser-loadable picture assets.
-* The fixture records catalogue adapter calls made during review.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 collection url | Pokemon collection in the seeded browser fixture |
-| product_a | Available product with distinct first and second pictures; cart holds a non-default variant with a different variant picture |
-| product_b | Another available product with distinct first and second pictures; its first picture differs from product_a |
-| first_picture_a | First catalogue picture URL, including nonempty catalogue query parameters |
-| first_picture_b | First catalogue picture URL for product_b |
-| picture_alt_a | Nonempty catalogue alt text for first_picture_a |
-| viewport | 541 × 741 pixels, the reported drawer viewport |
-
-**Steps:**
-
-1. Set the browser to `<viewport>`.
-2. Inspect both collection-card pictures.
-3. Open Cart from the header.
-4. Wait for the live cart review to finish.
-5. Inspect each thumbnail URL, alt text and loaded image.
-6. Inspect the instrumented catalogue adapter log for this review.
-
-**Expected Results:**
-
-* Each line shows its own first product picture.
-* Neither the later picture nor variant picture replaces it.
-* Thumbnail sources preserve catalogue URLs and query parameters.
-* The picture for `<product_a>` retains `<picture_alt_a>`.
-* Each image completes loading with naturalWidth greater than zero.
-* Visible image content matches its product’s collection card.
-* The adapter log records one batch read carrying pictures.
-* The adapter log records no extra per-line catalogue reads.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-ngm rev=1 covers=g10.store-cart-drawer.SC-gzj -->
-### g10.store-cart-drawer.US1-TC7: Sold-out lines retain their loaded product pictures
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-01
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on `<grade10 store url>`.
-* The reviewed cart holds `<sold_out_product>` beside one available line.
-* The live review supplies `<sold_out_picture>` as a browser-loadable asset.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| sold_out_product | Retained product whose variant is sold out; confirmed quantity 1 |
-| sold_out_picture | Its first catalogue picture, distinct from the available line’s picture |
-| baseline_facts | Same basket reviewed without picture fields: recorded prices, quantities, statuses, title count, subtotal, estimated total and Checkout availability |
-
-**Steps:**
-
-1. Open Cart from the header.
-2. Wait for the live cart review to finish.
-3. Inspect the sold-out line’s thumbnail and status.
-4. Compare displayed cart facts with `<baseline_facts>`.
-
-**Expected Results:**
-
-* The sold-out line remains, marked sold out.
-* Its own first picture loads with naturalWidth greater than zero.
-* The picture retains the existing sold-out presentation.
-* Prices, quantities, counts, totals and Checkout availability match `<baseline_facts>`.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-56a rev=1 covers=g10.store-cart-drawer.SC-ier -->
-### g10.store-cart-drawer.US1-TC8: Review decoding accepts legacy and enriched responses
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** compatibility
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-01
-
-**Pre-conditions:**
-
-* The existing review transport is exercised with controlled payloads.
-* Each response contains the same valid non-picture reviewed facts.
-* Both current and previous production response decoders are available.
-
-**Test data:**
-
-| `<response_path>` | `<picture_shape>` |
-| --- | --- |
-| Existing member review | Legacy response with picture fields omitted |
-| Existing member review | Enriched response with picture URL and nonempty alt text |
-| Existing guest review transport | Legacy response with picture fields omitted |
-| Existing guest review transport | Enriched response with picture URL and nonempty alt text |
-| Existing basket quote | Legacy response with picture fields omitted |
-| Existing basket quote | Enriched response with picture URL and nonempty alt text |
-| Existing checkout result containing reviewed lines | Legacy response with picture fields omitted |
-| Existing checkout result containing reviewed lines | Enriched response with picture URL and nonempty alt text |
-
-**Steps:**
-
-1. Read the controlled API response through `<response_path>`.
-2. Decode `<picture_shape>` with each production response decoder.
-3. Inspect the decoded line facts.
-
-**Expected Results:**
-
-* The response decodes without rejecting valid reviewed lines.
-* Omitted picture fields remain optional.
-* The current decoder retains the supplied picture URL and alt text.
-* The previous decoder need not retain added picture fields.
-* Existing outcomes, prices, quantities, statuses, totals and readiness remain unchanged.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-86a rev=1 covers=g10.store-cart-drawer.SC-vq6 -->
-### g10.store-cart-drawer.US1-TC9: Missing pictures preserve cart facts and readiness
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-01
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on `<grade10 store url>`.
-* The member cart holds one available line.
-* The controlled review returns current facts with no product picture.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| baseline_facts | Same basket reviewed with a loadable picture: recorded price, quantity, status, subtotal, estimated total, badge count and enabled Checkout |
-| no_picture_review | Valid reviewed line with optional picture fields omitted because the product has no pictures |
-
-**Steps:**
-
-1. Open Cart from the header.
-2. Wait for `<no_picture_review>` to finish.
-3. Inspect the line’s picture frame.
-4. Compare displayed cart facts with `<baseline_facts>`.
-
-**Expected Results:**
-
-* The existing picture placeholder appears.
-* Price, quantity, status, totals and badge count match `<baseline_facts>`.
-* Checkout remains available.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-fos rev=1 covers=g10.store-cart-drawer.SC-0wy -->
-### g10.store-cart-drawer.US1-TC10: Catalogue alt text preserves supplied words and fallback
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-01
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on `<grade10 store url>`.
-* The controlled review returns a loadable picture for `<pictured_item>`.
-
-**Test data:**
-
-| `<pictured_item>` | `<catalogue_alt>` |
-| --- | --- |
-| Current item named Gengar VMAX | Alt text omitted |
-| Current item named Demo booster box | Empty alt text |
-| Current item named Gengar VMAX | Null catalogue alt text |
-| Current item named Demo booster box | Nonempty catalogue alt text: Booster box front |
-
-**Steps:**
-
-1. Open Cart from the header.
-2. Wait for the live cart review to finish.
-3. Inspect `<pictured_item>`’s image alt attribute.
-
-**Expected Results:**
-
-* The supplied picture loads with naturalWidth greater than zero.
-* Nonempty catalogue alt text reaches the image unchanged.
-* Omitted, null or empty catalogue alt uses `<pictured_item>`’s current name.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-3nr rev=1 covers=g10.store-cart-drawer.SC-4fw -->
-### g10.store-cart-drawer.US1-TC11: Reload restores intent and rereads current pictures
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-01
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on `<grade10 store url>`.
-* The saved member cart holds `<reload_product>` without picture metadata.
-* The fixture supplies `<old_picture>` initially and `<new_picture>` after reload.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| reload_product | Available product retained across reload with the same variant and quantity |
-| old_picture | Loadable first product picture in the initial review |
-| new_picture | Different loadable first product picture in the review after reload |
-
-**Steps:**
-
-1. Open Cart from the header.
-2. Wait for `<old_picture>` to load.
-3. Close the drawer.
-4. Reload the page.
-5. Open Cart from the header.
-6. Wait for the fresh live review to finish.
-
-**Expected Results:**
-
-* The first open shows `<old_picture>` with naturalWidth greater than zero.
-* The reload restores the same variant and quantity.
-* The second open starts a fresh review.
-* The restored line shows `<new_picture>` with naturalWidth greater than zero.
-* The restored line does not reuse `<old_picture>` as current.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-37q rev=1 covers=g10.store-cart-drawer.SC-8ty -->
-### g10.store-cart-drawer.US1-TC12: Picture enrichment leaves persisted cart intent unchanged
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** compatibility
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-01
-
-**Pre-conditions:**
-
-* The existing cart transport is exercised with controlled cart intent.
-* A successful live review returns a picture URL and alt text.
-
-**Test data:**
-
-| `<intent_path>` | `<stored_intent>` | `<quantity_after_edit>` |
-| --- | --- | --- |
-| Existing member cart persistence | Variant and quantity 1 intent without picture metadata | 2, within available stock |
-| Existing guest cart compatibility path | Existing image-free variant and quantity 1 intent | 2, within available stock |
-
-**Steps:**
-
-1. Read `<stored_intent>` through `<intent_path>`.
-2. Run the enriched live review.
-3. Read the saved intent and recorded write inputs.
-4. Set the retained variant's quantity to `<quantity_after_edit>`.
-5. Read the saved intent and quantity-write input.
-
-**Expected Results:**
-
-* Review keeps the saved variant and quantity facts unchanged.
-* Review adds no picture metadata to saved intent or write inputs.
-* The quantity write saves only the changed quantity and existing intent facts.
-* The saved intent and quantity-write input contain no picture URL or alt text.
-* Picture facts remain in reviewed display data only.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-o82 rev=1 covers=g10.store-cart-drawer.SC-h93 -->
-### g10.store-cart-drawer.US1-TC13: Failed picture loading preserves accepted cart readiness
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-01
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on `<grade10 store url>`.
-* The live review succeeds for one available, pictured line.
-* The browser is configured to block only `<picture_resource>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| picture_resource | Current first catalogue picture URL supplied by the successful review |
-| accepted_facts | Confirmed price, quantity, status, subtotal, estimated total and enabled Checkout for that reviewed basket |
-
-**Steps:**
-
-1. Open Cart from the header.
-2. Wait for the live cart review to finish.
-3. Wait for `<picture_resource>` to fail loading.
-4. Inspect the line, totals and Checkout.
-
-**Expected Results:**
-
-* The image resource fails while the cart review remains accepted.
-* Price, quantity, status and totals retain `<accepted_facts>`.
-* Checkout remains available.
 
 ## grade10-site-store-cart-drawer-US02: Signed-in collector edits the reviewed cart
 
@@ -1128,10 +757,11 @@ Runs once per row of **Test data**.
 
 * A signed-in programme member has opened a successfully reviewed drawer.
 * A points change against the original basket is pending.
+* Another tab holds the same member cart and can save a later line edit.
 
 **Steps:**
 
-1. Change a cart line before the points response arrives.
+1. Change a cart line in another tab before the points response arrives.
 2. Wait for the changed basket review and quote.
 3. Deliver the earlier points response.
 4. Inspect the points choice and summary.
@@ -1611,6 +1241,446 @@ Runs once per row of **Test data**.
 * No checkout page opens at that address.
 * Checkout is reachable only from Proceed to Checkout in the cart drawer.
 
+## g10.store-cart-drawer.US7: Collector waits for the current drawer operation
+
+**As a** signed-in collector whose cart drawer is reading, saving or starting checkout,
+**I want** its actions to wait until that work finishes,
+**so that** another cart change or checkout cannot start before its current answer is ready.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-zg3 rev=1 -->
+### g10.store-cart-drawer.US7-TC1: Every current drawer read blocks another action
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US7
+
+**Pre-conditions:**
+
+* customer(member) is on `<grade10 store url>`.
+* The member cart contains an available line and accepted tender.
+* All drawer answers except `<held read>` can complete.
+* The answer to `<held read>` is mocked to remain pending.
+
+**Test data:**
+
+| held read |
+| --- |
+| Current cart lines |
+| Current price and stock |
+| Saved tender |
+| Held promo-code eligibility |
+| Member points and basket ceiling |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the other drawer reads to finish.
+3. Attempt enabled-looking drawer actions by pointer and keyboard.
+4. Read the current figures and browser destination.
+
+**Expected Results:**
+
+* Item, tender and navigation actions remain unavailable.
+* No attempted action starts a write, checkout or navigation.
+* Unconfirmed prices and stock remain unchecked.
+* Existing loading treatments remain until the current answer arrives.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-sn0 rev=1 -->
+### g10.store-cart-drawer.US7-TC2: Sent writes keep all drawer actions unavailable
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US7
+
+**Pre-conditions:**
+
+* customer(member) has an open, successfully reviewed cart drawer.
+* The drawer contains an available line and accepted tender.
+* The selected `<operation>` is mocked to pause at `<held stage>`.
+
+**Test data:**
+
+| operation | held stage |
+| --- | --- |
+| Increase quantity | Cart write |
+| Remove a line | Cart write |
+| Apply a typed promo code | Tender quote |
+| Pick a held code | Tender persistence |
+| Remove the accepted code | Confirming refresh |
+| Apply a new points amount | Tender quote |
+| Use max | Tender persistence |
+| Remove applied points | Confirming refresh |
+| Proceed to Checkout | Checkout creation |
+
+**Steps:**
+
+1. Perform `<operation>` in the drawer.
+2. Wait until `<held stage>` is pending.
+3. Attempt item, tender and navigation actions by pointer and keyboard.
+4. Read the accepted figures and entered values.
+5. Finish `<held stage>` without starting another action.
+
+**Expected Results:**
+
+* All drawer actions wait while the selected stage runs.
+* Attempts send no additional operation or navigation.
+* Accepted figures and entered values remain until an answer.
+* Finishing the stage replays no attempted action.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-xlq rev=1 -->
+### g10.store-cart-drawer.US7-TC3: Unrelated page reads leave drawer actions available
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US7
+
+**Pre-conditions:**
+
+* customer(member) has an open, successfully reviewed cart drawer.
+* All drawer operations have completed.
+* An unrelated catalogue refresh is mocked to remain pending.
+
+**Steps:**
+
+1. Increase an available line from quantity 1 to 2.
+2. Wait for the cart write and confirming review.
+3. Read the updated drawer.
+
+**Expected Results:**
+
+* The quantity action starts despite the unrelated refresh.
+* Current review shows quantity 2.
+* The unrelated refresh does not hold drawer actions disabled.
+
+## g10.store-cart-drawer.US8: Collector continues after a drawer operation ends
+
+**As a** signed-in collector whose drawer operation succeeds or fails,
+**I want** the drawer to offer the actions its current facts allow, including recovery when needed,
+**so that** I can continue or retry without a completed request leaving the drawer stuck.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-voa rev=1 -->
+### g10.store-cart-drawer.US8-TC1: One completed read cannot unlock another pending read
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US8
+
+**Pre-conditions:**
+
+* customer(member) is on `<grade10 store url>`.
+* Current cart review and member tender reads are independently delayed.
+* All other drawer answers are available.
+
+**Test data:**
+
+| first read | first outcome |
+| --- | --- |
+| Cart review | Success |
+| Member tender | Success |
+| Member tender | Failure |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Finish `<first read>` with `<first outcome>`.
+3. Attempt a drawer action before the other read finishes.
+4. Finish the remaining read successfully.
+5. Read available drawer actions without clicking them.
+
+**Expected Results:**
+
+* Actions remain unavailable after only the first answer.
+* The attempted action starts no operation.
+* Only currently permitted actions return after both reads end.
+* No attempted action runs when the remaining read ends.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-dvl rev=1 -->
+### g10.store-cart-drawer.US8-TC2: Failed reads end waiting and leave Retry usable
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US8
+
+**Pre-conditions:**
+
+* customer(member) is on `<grade10 store url>`.
+* The current cart read or price review is mocked to fail.
+* No other drawer operation remains pending.
+* The next read can return current cart facts.
+
+**Test data:**
+
+| failed read |
+| --- |
+| First cart read, lines unknown |
+| Price and stock review, held lines known |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the failed read.
+3. Read error feedback and current-data availability.
+4. Click Retry.
+5. Wait for the successful current read.
+
+**Expected Results:**
+
+* The drawer shows its existing read failure feedback.
+* Held facts do not become current after the failure.
+* Retry is available after the failed request ends.
+* Retry starts one read and waits while it runs.
+* Successful review restores currently permitted actions.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-w4l rev=1 -->
+### g10.store-cart-drawer.US8-TC3: Tender refusal releases waiting without replaying actions
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US8
+
+**Pre-conditions:**
+
+* customer(member) has an open, successfully reviewed cart drawer.
+* An accepted code, points choice and total are present.
+* The next tender change is mocked to return `<answer>`.
+* All other drawer operations have completed.
+
+**Test data:**
+
+| answer |
+| --- |
+| Named tender refusal |
+| Request failure |
+
+**Steps:**
+
+1. Apply a different points amount.
+2. Attempt another drawer action before the answer.
+3. Release `<answer>`.
+4. Read the feedback, accepted tender and available actions.
+5. Perform one currently permitted action deliberately.
+
+**Expected Results:**
+
+* No second action starts while the answer is pending.
+* The existing refusal or failure feedback appears.
+* The accepted same-basket tender and total remain.
+* Currently permitted actions return without automatic replay.
+* The deliberate action starts once.
+
+## g10.store-cart-drawer.US9: Collector leaves a pending drawer
+
+**As a** signed-in collector whose drawer is waiting for an operation,
+**I want** Close, backdrop click and Escape to keep working,
+**so that** I can return to the page without waiting for that operation to finish.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-sxn rev=1 -->
+### g10.store-cart-drawer.US9-TC1: Pending reads allow dismissal and preserve the page
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US9
+
+**Pre-conditions:**
+
+* customer(member) is on `<grade10 store url>` at a recorded scroll position.
+* The cart contains enough lines for drawer overflow.
+* A current drawer read is mocked to remain pending.
+
+**Test data:**
+
+| dismissal |
+| --- |
+| Click Close |
+| Click the dimmed backdrop |
+| Press Escape |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Scroll the drawer content.
+3. Dismiss the drawer using `<dismissal>`.
+4. Read the underlying page and browser address.
+
+**Expected Results:**
+
+* Drawer content scrolls while the read remains pending.
+* The page behind the open drawer stays still.
+* The selected dismissal closes the drawer immediately.
+* The original address and page position remain.
+* The underlying page can scroll after dismissal.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-hi9 rev=1 -->
+### g10.store-cart-drawer.US9-TC2: Closing a pending write preserves its saved result
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US9
+
+**Pre-conditions:**
+
+* customer(member) has an open, successfully reviewed cart drawer.
+* The next `<write>` is sent before its answer is held.
+* The sent write is mocked to finish successfully after dismissal.
+
+**Test data:**
+
+| write |
+| --- |
+| Increase an available line from quantity 1 to 2 |
+| Remove an available line |
+| Apply a new valid points amount |
+
+**Steps:**
+
+1. Perform `<write>`.
+2. Dismiss the drawer while its answer is pending.
+3. Allow the sent write to complete.
+4. Open the cart drawer again.
+5. Wait for current authoritative reads.
+
+**Expected Results:**
+
+* The drawer closes immediately.
+* Dismissal claims no cancellation or rollback.
+* Reopening reads the current cart and saved tender.
+* Current reads show the accepted sent change.
+* No dismissed action is automatically repeated.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-n8k rev=2 -->
+### g10.store-cart-drawer.US9-TC3: Pending checkout can close before its answer arrives
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US9
+
+**Pre-conditions:**
+
+* customer(member) has an open, successfully reviewed cart drawer.
+* The checkout answer is mocked to remain pending after submission.
+
+**Test data:**
+
+| dismissal |
+| --- |
+| Click Close |
+| Click the dimmed backdrop |
+| Press Escape |
+
+**Steps:**
+
+1. Click Proceed to Checkout.
+2. Dismiss the drawer using `<dismissal>`.
+3. Read the underlying page before the answer arrives.
+4. Release the successful hosted-invoice answer.
+5. Read the browser destination.
+
+**Expected Results:**
+
+* The selected dismissal closes the drawer immediately.
+* The original page remains visible before the answer arrives.
+* The successful current reply then opens Shopify.
+* Closing claims no invoice cancellation or rollback.
+* The sent checkout request is not automatically repeated.
+* Closing alone does not make its successful reply stale.
+
 ## Reconciliation
 
 **Run:** Update on 2026-10-07, from `add-store-product-status`'s sixth
@@ -1724,73 +1794,3 @@ were excluded. The coordinator supplied dispositions after both readings.
 | grade10-site-store-cart-drawer-SC-19 | US04-TC04-1 |
 | Uncovered anchors | none |
 | Contradicted readings | none |
-
-### Thumbnail Reconciliation (2026-10-13)
-
-**Run:** Bounded QA2 for the picture extension only. QA1 read the allowlisted
-snapshot at `/tmp/store-cart-thumbnails-planning/qa1`: Purpose, Feature set,
-journeys, proposal, decisions Q14-Q19, UI states, linked PRDs, the approved
-picture reference and prior suites with Reconciliation removed. Requirements,
-scenarios and technical design were excluded. The coordinator recorded input
-digests in `/tmp/store-cart-thumbnails-planning/input-identities.json`; the
-allowlist was prompt-based, not enforced filesystem isolation. Dev independently
-wrote scenarios, technical design and Groups 10-14 without reading QA1 cases.
-This fresh QA2 reader authored neither reading. All new cases remain draft.
-
-| Case | Disposition | Fully Asserted Scenario |
-| --- | --- | --- |
-| g10.store-cart-drawer.US1-TC6 | Retained; both products have several pictures, and instrumented server adapter logs prove batching | grade10-site-store-cart-drawer-SC-34 |
-| g10.store-cart-drawer.US1-TC7 | Retained; sold-out display and unchanged accepted facts form their own route | grade10-site-store-cart-drawer-SC-42 |
-| g10.store-cart-drawer.US1-TC8 | Corrected; review, quote and checkout responses run through current and previous production decoders | grade10-site-store-cart-drawer-SC-39 |
-| g10.store-cart-drawer.US1-TC9 | Corrected; the no-picture comparison includes badge count | grade10-site-store-cart-drawer-SC-35 |
-| g10.store-cart-drawer.US1-TC10 | Corrected; nonempty, omitted, null and empty catalogue alt text share one route | grade10-site-store-cart-drawer-SC-41 |
-| g10.store-cart-drawer.US1-TC11 | Retained; reload obtains the current picture through fresh review | grade10-site-store-cart-drawer-SC-37 |
-| g10.store-cart-drawer.US1-TC12 | Corrected; review and quantity writes inspect persisted intent and write inputs | grade10-site-store-cart-drawer-SC-44 |
-| g10.store-cart-drawer.US1-TC13 | Retained; failed image bytes leave the successful review accepted | grade10-site-store-cart-drawer-SC-45 |
-
-- **Source repairs** - Separate sold-out display, unavailable cleanup and
-  persistence routes now have their own scenarios. Decoder compatibility names
-  decoder outcomes alone. Picture-byte failure has its own outcome, distinct
-  from catalogue failure. These repairs preserve Q14-Q19 and the frozen anchors.
-- **Out of suite:** `grade10-site-store-cart-drawer-SC-36` is verified by planned
-  assertions in `packages/grade10-store/frontend/src/features/orders/cart/domain/models/Cart.test.ts`
-  and `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx` in the application
-  repository, under Group 13.1. Reordered, removed and unconfirmed review lines
-  need direct join and quantity/readiness checks; the browser picture-selection
-  case does not exercise all those states.
-- **Out of suite:** `grade10-site-store-cart-drawer-SC-38` is verified by planned
-  assertions in `packages/grade10-store/backend/test/services/cart/review.test.ts`
-  and `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx` in the application
-  repository, under Groups 12.1 and 13.1. They drive a catalogue refusal through
-  unresolved feedback, retry and Checkout guarding; image-resource failure is
-  a different route.
-- **Out of suite:** `grade10-site-store-cart-drawer-SC-40` is verified by planned
-  assertions in `packages/grade10-store/contracts/test/cartReview.test.ts` in
-  the application repository, under Group 11.1. The production decoder refuses
-  null and representative non-string values for each supplied picture field.
-  UI rendering cannot decide this response-boundary refusal.
-- **Out of suite:** `grade10-site-store-cart-drawer-SC-43` is verified by planned
-  assertions in `packages/grade10-store/backend/test/services/cart/review.test.ts`
-  and `apps/frontend/grade10/src/chrome/CartDrawer.test.tsx` in the application
-  repository, under Groups 12.1 and 13.1. The response omits both fields, then
-  the drawer performs existing unavailable cleanup. A retained no-picture line
-  cannot verify that removal route.
-- **Preserved** - The prior cases, scenario identities and reconciliation stay
-  intact. The old neutral-summary scenario retains its no-image result; the new
-  placeholder scenarios state the shared placeholder explicitly. Historical
-  coverage links outside the picture extension were not revalidated here.
-- **Coverage** - Every new picture scenario has a full asserting case or a named
-  planned verifier. No unresolved product question or contradiction remains in
-  this bounded reading. These links record planning evidence, not execution.
-
-## Settled
-
-- **Picture selection** - Q14 uses the first current product picture through
-  the existing batch, preserving the catalogue URL and query parameters.
-- **Picture absence** - Q15-Q16 keep the existing placeholder and accepted cart
-  facts. Catalogue null or empty alt text uses the item name; null wire fields
-  are malformed. Failed picture bytes add no new placeholder substitution.
-- **Picture ownership** - Q17 keeps picture facts in reviewed display data;
-  restored intent and cart writes contain no picture metadata.
-- **Guest compatibility** - Q18 checks existing guest transports only. Q1 and Q3
-  still govern member-only drawer access.

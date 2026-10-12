@@ -1,18 +1,18 @@
 # grade10-site/store/checkout Test Cases
 
 **Status:** pending-review · 0/45
-**Drafts styled:** 2026-10-09, tcs-rules r4
+**Drafts styled:** 2026-10-13, tcs-rules r5
 
 **Out of suite:** grade10-site-store-checkout-SC-08
 
 ## grade10-site-store-checkout-US5: Collector starts one payment at a time
 
-**As a** signed-in collector who presses Pay again or changes the cart while a payment is starting,
+**As a** signed-in collector whose payment is starting,
 **I want** the drawer to accept one Pay at a time and open only the answer for my current cart,
 **so that** I do not leave for a payment I did not mean to start.
 
-<!-- trace:case id=g10.store-checkout.TC-x86 rev=1 covers=g10.store-checkout.SC-5x2 -->
-### grade10-site-store-checkout-US5-TC1-1: A pending Pay accepts no second Pay in the drawer
+<!-- trace:case id=g10.store-checkout.TC-x86 rev=2 covers=g10.store-checkout.SC-5x2 -->
+### grade10-site-store-checkout-US5-TC1-2: A pending Pay accepts no second Pay in the drawer
 
 **Classification:**
 
@@ -37,13 +37,16 @@
 
 1. Open the cart drawer.
 2. Click Proceed to Checkout.
-3. Click Proceed to Checkout again before the answer.
-4. Release the hosted-invoice answer.
+3. Attempt Proceed to Checkout again by pointer and keyboard.
+4. Attempt item, tender and navigation actions before the answer.
+5. Release the hosted-invoice answer.
 
 **Expected Results:**
 
 * Proceed to Checkout shows loading until the answer arrives.
 * The drawer sends one checkout request.
+* Item, tender and navigation actions remain unavailable during Pay.
+* Attempting those actions starts no write or navigation.
 * The supplied hosted invoice opens.
 
 
@@ -128,7 +131,7 @@ Runs once per row of **Test data**.
 * The existing purchase is recovered or remains visibly settling.
 * No second order or payable invoice is created.
 
-**Deprecated:** Q27 limits the drawer to failure feedback without retry; recovering the purchase behind a lost answer is add-checkout-purchase-safety (Q24). Replaced by `grade10-site-store-checkout-US5-TC13-1`.
+**Deprecated:** Q27 limits the drawer to failure feedback without retry; recovering the purchase behind a lost answer is add-checkout-purchase-safety (Q24). Replaced by `grade10-site-store-checkout-US5-TC13-2`.
 
 <!-- trace:case id=g10.store-checkout.TC-9sb rev=1 covers=g10.store-checkout.SC-cbb -->
 ### grade10-site-store-checkout-US5-TC5-1: A settling answer opens Your Orders and polls the purchase
@@ -297,8 +300,8 @@ Runs once per row of **Test data**.
 
 **Deprecated:** Q25 sends the existing checkout request with no context read or protocol envelope, so there is no protocol to fall back from.
 
-<!-- trace:case id=g10.store-checkout.TC-yly rev=1 covers=g10.store-checkout.SC-8hm -->
-### grade10-site-store-checkout-US5-TC13-1: A lost Pay answer ends the pending Pay without retry
+<!-- trace:case id=g10.store-checkout.TC-yly rev=2 covers=g10.store-checkout.SC-8hm -->
+### grade10-site-store-checkout-US5-TC13-2: A lost Pay answer ends the pending Pay without retry
 
 Runs once per row of **Test data**.
 
@@ -339,6 +342,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Proceed to Checkout stops loading after the lost answer.
+* Currently permitted drawer actions return after the request ends.
 * The drawer shows the existing failure feedback.
 * The feedback says neither that no invoice exists nor that one was canceled.
 * No hosted payment page opens.
@@ -349,7 +353,7 @@ Runs once per row of **Test data**.
 
 ## grade10-site-store-checkout-US6: Collector keeps the cart built after Pay
 
-**As a** signed-in collector who changes the cart or tender after starting payment,
+**As a** signed-in collector who changes the cart or tender in another tab or after leaving hosted payment,
 **I want** my later cart and choices kept when the earlier payment settles,
 **so that** a delayed purchase cannot remove my later choices.
 
@@ -416,6 +420,7 @@ Runs once per row of **Test data**.
 * customer(member) is on `<grade10 store url>`.
 * The drawer holds variant A, quantity 1, an accepted code and 10 accepted points.
 * The checkout answer for that cart is mocked to stay pending.
+* Another tab holds the same member cart and can save `<later edit>`.
 
 **Test data:**
 
@@ -429,7 +434,7 @@ Runs once per row of **Test data**.
 
 1. Open the cart drawer.
 2. Click Proceed to Checkout.
-3. Make `<later edit>` before the answer arrives.
+3. Make `<later edit>` in another tab before the answer arrives.
 4. Wait for the edit to be saved.
 5. Release the earlier hosted-invoice answer.
 6. Read the current drawer and browser destination.
@@ -1160,7 +1165,7 @@ Runs once per row of **Test data**.
 
 **Deprecated:** The pending-control run belongs to the new safe-resumption journey.
 
-**Replaced by:** `grade10-site-store-checkout-US5-TC1-1`.
+**Replaced by:** `grade10-site-store-checkout-US5-TC1-2`.
 
 <!-- trace:case id=g10.store-checkout.TC-w15 rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC23-1: A later Pay creates a fresh submission
@@ -1665,10 +1670,11 @@ Runs once per row of **Test data**.
 
 1. Open the cart drawer.
 2. Increase variant A to `<edited quantity>`.
-3. Enter `<edited points>` in the points control.
-4. Wait for both writes and the current review.
-5. Click Proceed to Checkout in the drawer.
-6. Read the opened hosted invoice.
+3. Wait for the quantity write and current review.
+4. Apply `<edited points>` through the points control.
+5. Wait for the tender write and current quote.
+6. Click Proceed to Checkout in the drawer.
+7. Read the opened hosted invoice.
 
 **Expected Results:**
 
@@ -3206,7 +3212,7 @@ Runs once per row of **Test data**.
 
 | Case | Status | Disposition | Scenarios |
 | --- | --- | --- | --- |
-| `grade10-site-store-checkout-US5-TC1-1` | draft | Kept draft; covers verified against the frontend delta | `grade10-site-store-checkout-SC-34` |
+| `grade10-site-store-checkout-US5-TC1-2` | draft | Kept draft; covers verified against the frontend delta | `grade10-site-store-checkout-SC-34` |
 | `grade10-site-store-checkout-US5-TC2-1` | deprecated | QA1 deprecation confirmed: Q24 invoice reuse; dropped ids removed from covers | `grade10-site-store-checkout-SC-09` |
 | `grade10-site-store-checkout-US5-TC3-1` | deprecated | QA1 deprecation confirmed: Q29 reload is a new request; dropped ids removed from covers | None |
 | `grade10-site-store-checkout-US5-TC4-1` | deprecated | QA1 deprecation confirmed: Q27 lost answer has no recovery in the drawer; replaced by US5-TC13-1; dropped ids removed from covers | `grade10-site-store-checkout-SC-38` |
@@ -3218,7 +3224,7 @@ Runs once per row of **Test data**.
 | `grade10-site-store-checkout-US5-TC10-1` | deprecated | QA1 deprecation confirmed: Q24 lost Shopify answer recovery; dropped ids removed from covers | `grade10-site-store-checkout-SC-10` |
 | `grade10-site-store-checkout-US5-TC11-1` | deprecated | QA1 deprecation confirmed: Q29/Q34 conflict; stale answer is US6-TC3-1 and US4-TC6-1; dropped ids removed from covers | None |
 | `grade10-site-store-checkout-US5-TC12-1` | deprecated | QA1 deprecation confirmed: Q25 no protocol to fall back from; dropped ids removed from covers | None |
-| `grade10-site-store-checkout-US5-TC13-1` | draft | QA1 new case folded; marker allocated | `grade10-site-store-checkout-SC-38` |
+| `grade10-site-store-checkout-US5-TC13-2` | draft | QA1 new case folded; marker allocated | `grade10-site-store-checkout-SC-38` |
 | `grade10-site-store-checkout-US6-TC1-1` | deprecated | QA1 deprecation confirmed: Q24 invoice retirement; edited request is US1-TC35-1; dropped ids removed from covers | `grade10-site-store-checkout-SC-11` |
 | `grade10-site-store-checkout-US6-TC2-1` | deprecated | QA1 deprecation confirmed: Q24 retirement uncertainty; dropped ids removed from covers | None |
 | `grade10-site-store-checkout-US6-TC3-1` | draft | Kept draft; covers verified against the frontend delta | `grade10-site-store-checkout-SC-35` |
@@ -3331,9 +3337,9 @@ Runs once per row of **Test data**.
 | `grade10-site-store-checkout-SC-56` | Covered by active cases | `grade10-site-store-checkout-US1-TC32-1` |
 | `grade10-site-store-checkout-SC-63` | Covered at the visible boundary; rev 2 dropped its purchase key, cart id and version line, which no case asserted; request shape by task 11.6 tests | `grade10-site-store-checkout-US1-TC1-2`, `grade10-site-store-checkout-US1-TC35-1` |
 | `grade10-site-store-checkout-SC-58` | Covered by active cases | `grade10-site-store-checkout-US1-TC27-1` |
-| `grade10-site-store-checkout-SC-34` | Covered by active cases | `grade10-site-store-checkout-US5-TC1-1` |
+| `grade10-site-store-checkout-SC-34` | Covered by active cases | `grade10-site-store-checkout-US5-TC1-2` |
 | `grade10-site-store-checkout-SC-35` | Covered by active cases | `grade10-site-store-checkout-US6-TC3-1`, `grade10-site-store-checkout-US4-TC6-1` |
-| `grade10-site-store-checkout-SC-38` | Covered by active cases | `grade10-site-store-checkout-US5-TC13-1` |
+| `grade10-site-store-checkout-SC-38` | Covered by active cases | `grade10-site-store-checkout-US5-TC13-2` |
 | `grade10-site-store-checkout-SC-64` | Folded by QA2 from the ADDED requirement Answers paragraph | `grade10-site-store-checkout-US5-TC5-1` |
 | `grade10-site-store-checkout-SC-65` | Folded by QA2 from the ADDED requirement Answers paragraph | `grade10-site-store-checkout-US2-TC8-1` |
 | `grade10-site-store-checkout-SC-37` | Covered by active cases | `grade10-site-store-checkout-US1-TC13-3`, `grade10-site-store-checkout-US1-TC26-2` |
@@ -3436,7 +3442,7 @@ Runs once per row of **Test data**.
 
 | Case | Disposition | Numbered Scenarios |
 | --- | --- | --- |
-| `grade10-site-store-checkout-US5-TC1-1` | Reconciled draft; exact observed outcome only | `grade10-site-store-checkout-SC-34` |
+| `grade10-site-store-checkout-US5-TC1-2` | Reconciled draft; exact observed outcome only | `grade10-site-store-checkout-SC-34` |
 | `grade10-site-store-checkout-US5-TC2-1` | Reconciled draft; exact observed outcome only | `grade10-site-store-checkout-SC-09`, SC-33 (dropped) |
 | `grade10-site-store-checkout-US5-TC3-1` | Reconciled draft; exact observed outcome only | SC-33 (dropped) |
 | `grade10-site-store-checkout-US5-TC4-1` | Reconciled draft; exact observed outcome only | `grade10-site-store-checkout-SC-38` |
@@ -3552,7 +3558,7 @@ Runs once per row of **Test data**.
 | `grade10-site-store-checkout-SC-20` | Reconciled draft behavior | `grade10-site-store-checkout-US5-TC8-1` |
 | `grade10-site-store-checkout-SC-21` | Reconciled draft behavior | `grade10-site-store-checkout-US5-TC9-1` |
 | SC-33 (dropped) | Reconciled draft behavior | `grade10-site-store-checkout-US5-TC2-1`, `grade10-site-store-checkout-US5-TC3-1` |
-| `grade10-site-store-checkout-SC-34` | Reconciled draft behavior | `grade10-site-store-checkout-US5-TC1-1` |
+| `grade10-site-store-checkout-SC-34` | Reconciled draft behavior | `grade10-site-store-checkout-US5-TC1-2` |
 | `grade10-site-store-checkout-SC-35` | Reconciled draft behavior | `grade10-site-store-checkout-US6-TC3-1`, `grade10-site-store-checkout-US4-TC6-1` |
 | `grade10-site-store-checkout-SC-36` | Reconciled draft behavior | `grade10-site-store-checkout-US6-TC4-1` |
 | `grade10-site-store-checkout-SC-37` | Reconciled draft behavior | `grade10-site-store-checkout-US1-TC13-2`, `grade10-site-store-checkout-US1-TC26-1` |
@@ -3665,9 +3671,9 @@ Runs once per row of **Test data**.
 
 | Manual | Why |
 | --- | --- |
-| `grade10-site-store-checkout-US5-TC1-1` | to be walked in the Group 13 actor walk through the cart drawer and Your Orders with the case's mocked or delayed answer; planning grants no execution credit |
+| `grade10-site-store-checkout-US5-TC1-2` | to be walked in the Group 13 actor walk through the cart drawer and Your Orders with the case's mocked or delayed answer; planning grants no execution credit |
 | `grade10-site-store-checkout-US5-TC5-1` | to be walked in the Group 13 actor walk through the cart drawer and Your Orders with the case's mocked or delayed answer; planning grants no execution credit |
-| `grade10-site-store-checkout-US5-TC13-1` | to be walked in the Group 13 actor walk through the cart drawer and Your Orders with the case's mocked or delayed answer; planning grants no execution credit |
+| `grade10-site-store-checkout-US5-TC13-2` | to be walked in the Group 13 actor walk through the cart drawer and Your Orders with the case's mocked or delayed answer; planning grants no execution credit |
 | `grade10-site-store-checkout-US6-TC3-1` | to be walked in the Group 13 actor walk through the cart drawer and Your Orders with the case's mocked or delayed answer; planning grants no execution credit |
 | `grade10-site-store-checkout-US6-TC4-1` | to be walked in the Group 13 actor walk through the cart drawer and Your Orders with the case's mocked or delayed answer; planning grants no execution credit |
 | `grade10-site-store-checkout-US6-TC5-2` | to be walked with an unpaid hosted invoice beside a second Grade10 tab in the Group 13 walk and task 5.6; planning grants no execution credit |

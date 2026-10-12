@@ -1,110 +1,112 @@
-## Current Product Picture Delivery
+## Pending Operation Delivery
 
-The approved thumbnail extension supersedes the image exclusion and the
-backend/wire-change exclusions in Original Delivery Notes. It adds Groups
-10-14 without changing the completed or in-flight group addresses. Existing
-points, promo, verification, checkout and signed-in-only access decisions stay
-in force. The [picture requirements](specs/grade10-site/store/cart-drawer/spec.md)
-and [shared picture contract](specs/shared/ui/store-cart/spec.md) own the outcome;
-the approved brief owns the selected scope.
+The [pending contract](specs/grade10-site/store/cart-drawer/spec.md) follows
+[Q14-Q15](decisions.md). This section governs the pending increment; the
+completed delivery notes below retain their earlier task scope.
 
-- **Read shape** - Extend `GET_VARIANTS` with
-  `product.images(first: 1) { nodes { url altText width height } }`. Reuse the
-  existing image codec and mapper, require the requested connection on a
-  returned product, and normalize `CatalogVariant.product.images` to
-  `ProductImage[]` with at most its first image. Preserve null nodes,
-  non-variant nodes and existing malformed-identity refusal. This retains the
-  single batched variant read rather than loading full products or requesting
-  a picture per line.
-- **Fact ownership** - Add optional picture fields to the reviewed response
-  schema, then enrich `reviewCatalogLines` from `live?.product.images[0]`
-  after existing classification. `toReviewedLineWire` strips only internal
-  `live`, so picture fields reach the response. No image modifies
-  classification, pricing, stock limits or readiness. `CartLine`, cart rows,
-  browser intent, add/set/merge inputs and `applyReview` remain image-free.
-- **Application join** - Add optional fields to `ReviewedCartLine` and copy
-  them explicitly in the confirmed branch of `reviewedLines`, keyed by
-  variant ID with its existing quantity guard. Forward them in
-  `toCartItemSummary`. The unreviewed branch supplies no picture. Existing
-  scope and refetch rules discard earlier review facts; `CartDrawerHost`
-  adds neither a query nor an image cache.
-- **URL and alt** - Pass the catalogue URL through unchanged, including its
-  query parameters. Copy non-empty catalogue alt text; omit null, absent or
-  empty alt text and let the existing `imageAlt || item.name` renderer answer
-  it. The thumbnail button remains `aria-hidden` and outside the tab order;
-  the adjacent name button remains the accessible product action. Browser
-  assertions locate the image within its item instead of depending on an
-  accessible image role.
-- **Fixtures** - `FixtureCatalog.getVariants` supplies
-  `product.images.slice(0, 1)`. The frontend transport fixture enriches its
-  `reviewLine` result after classification from its matching product. Update
-  hand-built variant values and raw query fixtures to carry the requested
-  connection. Shared presentation fixtures use deterministic assets served
-  by Storybook rather than a Shopify CDN dependency.
-- **Ownership** - Shared image, missing-alt and placeholder browser stories
-  land in grade10-spec through an upstream PR. Select a published main SHA
-  containing that merge before updating the application gitlink. Data-flow
-  work and fixture tests in grade10 can proceed independently; application
-  integration and final browser evidence consume the selected upstream SHA.
-  Existing public exports and thumbnail presentation need no redesign.
-- **Alternatives** - Variant-specific pictures disagree with the approved
-  first-product-picture choice. Pictures stored in cart intent become stale.
-  Full product reads, per-line reads and an image cache add unnecessary
-  request or state ownership. All are excluded from this extension.
+### Context
 
-## Product Picture Service Interfaces
+The application sources were read on 2026-10-13 in the Grade10 workspace.
 
-| Boundary | Input | Success | Refusal And Side Effects |
-| --- | --- | --- | --- |
-| Shopify variant batch | Existing variant IDs | Existing normalized variants with product images, empty array for no images | Existing catalogue faults; no new request, writes, lock or transaction |
-| Cart review | Existing cart intents and currency configuration | Existing classified lines plus optional picture fields joined to live variant IDs | Existing catalogue/currency outcomes; no picture persistence or new outcome |
-| Wire serialization | Existing internal reviewed line | Reviewed line retaining pictures and excluding internal live variant | Shared by member review, guest review, basket quote and checkout result adapters |
-| Frontend join | Current cart lines and current decoded review | Confirmed matching lines with picture props forwarded to shared UI | Existing unreviewed/quantity/scope guards; no write of picture facts |
+| Source | Finding |
+| --- | --- |
+| `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx` | `tenderPending` mixes actual tender work with `tenderReadFailed`, `awaitingConfirmation` and summary presentation. Quantity, removal and product handlers do not share its guard. |
+| `useCart` and `useCartReview` | Cart reads expose `isFetching`; cart writes expose `isUpdating`; review exposes checking and failed states. Review checking can also mean a disabled first query. Cached lines can stay visible during a read. |
+| `useCartTender` | Serialized member writes expose `persistencePending`. The saved-choice query does not expose its fetching flag to the host. `ready` alone cannot distinguish an active read from a failed first read. |
+| `useBasketQuote` | A cached quote can remain ready while fetching, and `stale` can mean fetching, placeholder data or failure. The host needs the actual fetching flag separately. |
+| Host tender mapping | The current host obtains held-code eligibility and member points/basket ceiling from `useBasketQuote`. It does not mount separate eligibility/points reads. No `useSpendableCoupons` symbol remains; retained `usePointsTender` returns a full query with `isFetching`. |
+| `packages/ui/src/blocks/store-cart/cart-drawer.tsx` | The body and `CartItem` lack a pending prop. Footer and nested sheet accept `tenderPending`; the drawer forwards it there. Removal has a delayed presentation callback. The header and nested-sheet Back remain dismissal controls. |
 
-For variant `gid://shopify/ProductVariant/41`, a catalogue first image
-`https://cdn.example.test/card.jpg?v=7` with alt `Card front` becomes optional
-review fields `imageSrc` and `imageAlt` with those values, then the same props
-on the item whose ID is that variant. Another variant in the batch never
-receives this picture. An unavailable variant or an empty image array omits
-both fields. The service changes no transaction or mutation ordering.
+### Decisions
 
-## Product Picture API Contracts
+- **Shared input** - Add optional `interactionPending?: boolean`, default
+  false, to `CartDrawerProps`, `CartDrawerBodyProps`, `CartItemProps` and
+  `CartDrawerFooterProps`, plus the already-exported `CartPromoSheetProps`.
+  The compound forwards it to the body, items, footer and promo sheet;
+  standalone consumers pass it to the existing public parts. No new export,
+  variant, token or dependency. The header receives no pending prop because
+  its only action dismisses the drawer.
+- **Compatibility** - Keep `tenderPending` and its existing tender-only
+  meaning. Footer and sheet use `interactionPending || tenderPending` in
+  addition to their existing local verifying and redirecting guards. Body
+  actions use `interactionPending`; existing callers that omit the new prop
+  retain their behavior. `loading` and `summaryLoading` still choose bones,
+  and `checkoutDisabled` still withholds payment for unresolved facts.
+- **Actual work** - Derive Grade10's interaction input from current-member
+  cart fetching and updating, review fetching, saved-tender fetching, basket
+  quote fetching (including its held-code eligibility and points/ceiling
+  answers), imperative open/Retry refreshes, tender proposal/persistence/
+  confirmation and checkout creation. Expose additive `isFetching` from
+  `useCartReview`, `useCartTender` and `useBasketQuote`, preserving existing callers. Count
+  explicit operations until their promises settle; query failure and stale
+  data or disabled queries alone do not count. A separately mounted optional
+  eligibility/points read, if a consumer already has one, contributes its
+  actual fetching flag; this host adds none. Unrelated page queries do not
+  enter this input.
+- **Overlaps** - OR independent active signals rather than clearing one
+  common boolean when the first promise ends. Imperative action tokens hold
+  the guard continuously across quote, persistence and confirming read;
+  release each in `finally`. A rejected confirming read ends its token while
+  the existing failed-data guard continues withholding unsupported actions.
+- **Same-turn activation** - Guard each host action before changing
+  disclosure state, cart intent or navigation. Set an immediate ref before
+  dispatch as well as publishing pending for the component; mutation/query
+  state alone appears too late to reject two callbacks in one turn.
+- **Controls** - Use native disabled semantics on buttons and inputs, and
+  guard callback entry points for pointer, Enter, Space, value-change and
+  delayed removal in both compound and standalone parts. Check the current
+  pending input before local edit state changes as well as before action
+  callbacks. On pending updates, clear undispatched removal timers and exit
+  bookkeeping; the timer also checks the latest pending input before dispatch.
+  A retained row returns from its removal animation, with no queued retry.
+  Preserve the immediate reduced-motion path and existing timer cleanup on
+  row removal and unmount. These refs and timers own presentation only;
+  operation state and completion remain consumer-owned.
+  Keep the existing delisted cleanup as read-driven work, distinct from user
+  removal; begin it only after read work finishes and include its writes in
+  the host's actual pending state.
+- **Dismissal** - Keep the header, nested-sheet Back, outside press and
+  Escape outside the interaction guard. Preserve sheet-first dismissal,
+  focus handling and scrolling. The existing
+  `onPromoStateChange({ status: "collapsed" })` transition from Back,
+  outside press or Escape is dismissal and remains callable; suppress edit,
+  opening and action proposals rather than every call to this callback.
+  Standalone `CartPromoSheet.onClose` also remains callable. Do not make the
+  entire Drawer inert.
+- **Context** - Retain member, basket and open-generation guards on tender answers.
+  Closing invalidates tender-view publication but does not release a sent operation's
+  token early. A same-member reopen observes outstanding writes or checkout
+  work and reads the persisted choice again; a different member never
+  inherits the earlier member's results. No action is replayed on clearing.
+  Q16 remains open for a successful checkout answer after dismissal; the
+  checkout owner finalizes that answer treatment before acceptance.
+- **Checkout owner** - This change builds the shared guard and host mapping.
+  `add-shopify-checkout-integration` retains checkout request/answer ownership
+  and verifies that its pending Pay joins this input. Its stale-answer tests
+  change cart/tender from another tab or session while this drawer is pending.
 
-| Field On Reviewed Lines | Wire Shape | Default |
-| --- | --- | --- |
-| imageSrc | Optional string | Omitted without a picture or live variant |
-| imageAlt | Optional string | Omitted without non-empty catalogue alt text |
+| Rejected | Reason |
+| --- | --- |
+| Treating `loading`, missing data or a failed read as actual pending | A terminal failure would keep Retry and dismissal-independent actions blocked |
+| Expanding legacy `tenderPending` to every item action | Existing consumers would receive an unrelated behavior change |
+| Overlay, pointer-only mask or inert drawer | Keyboard callbacks or dismissal would not satisfy the contract |
+| New busy service, data client or persistence state | Existing hooks and local promise lifetimes provide the needed facts |
 
-These additive fields apply wherever the existing reviewed-line schema is
-used: member `cart.review`, existing guest `quote.reviewItems`, basket quote
-and checkout outcomes containing lines. Production decoder tests prove
-legacy responses decode with the new schema and enriched responses decode
-with the previous schema, including its handling of extra fields. Null or
-non-string supplied fields fail the current schema. Guest compatibility tests
-exercise transport only; Q1 and Q3 still forbid guest drawer journeys.
-Regenerate API references through the existing generator when this shape
-affects them.
+### Delivery Order
 
-## Product Picture Risks / Trade-offs
+Land shared tests and the optional contract in this store first. Grade10
+advances its gitlink, then maps actual operations and guards host callbacks.
+The checkout increment consumes that same guard; it adds no competing pending
+state. The final walks exercise pending, overlaps, recovery and dismissal.
 
-- **[Risk] A display join drops the fields or assigns a different variant's picture.** - Explicit copy in the existing ID join and presentation mapper; regression fixtures reverse response order and include removed, unmatched and unreviewed lines.
-- **[Risk] Optional enrichment breaks an older consumer.** - Exercise both production schemas against legacy and enriched review, quote and checkout payloads before rollout.
-- **[Risk] Fixture behavior hides a missing query or decoding step.** - Assert the query selection and raw-response decoding separately; align normalized backend and frontend fixtures with that shape.
-- **[Risk] Picture bytes fail independently of review.** - Preserve the existing browser image rendering and checkout behavior; this extension adds no image-error substitution. Controlled Storybook assets prove rendering, and seeded application browser checks prove complete images with positive natural width.
-- **[Risk] Shared work is absent from the consumed pin.** - Record the merged upstream PR and published SHA, inspect the application gitlink and rerun application build/browser checks after consumption.
+### Risks / Trade-offs
 
-## Product Picture Migration Plan
-
-1. Land shared controlled-asset stories and verify them upstream before the
-   application consumes the published main SHA.
-2. Deliver the optional backend response and aligned fixtures, then the
-   frontend consumer. Decoder compatibility permits either deployment order
-   once tests establish both combinations.
-3. Verify a restored image-free member cart through real review and loaded
-   thumbnails at narrow and wide viewports. Prove image-free intent and the
-   single catalogue batch in runtime tests separately from image-byte loading.
-4. Roll back either application side without a database migration or storage
-   clearing. An older response or consumer returns to placeholder pictures.
+- **False busy** - Verify terminal errors clear actual pending with deferred
+  reads, while `checkoutDisabled` and absent callbacks retain data safety
+- **Early release** - Hold tokens through chained reads and preserve query/
+  mutation signals when another operation settles or the drawer closes
+- **Missed activation** - Exercise keyboard, open promo sheet, delayed removal
+  and same-turn calls at both shared and host boundaries
 
 ## Current Checkout Delivery
 
@@ -347,7 +349,7 @@ adding a backend enrichment read:
 | subtotal | reviewed lines | Sum current minor-unit price × quantity, excluding sold-out and unavailable lines. |
 | shipping | copy only | Omit `shippingEstimate` so the localized `Calculated at checkout` copy renders. |
 | estimated total | reviewed subtotal | Use the same formatted amount as subtotal; no shipping/tax/discount calculation. |
-| image | current review enrichment | Populate existing `imageSrc` / `imageAlt` from the first current product picture; use the shared fallback when absent. |
+| image | unavailable | Do not populate `imageSrc` or `imageAlt`; the current reviewed contract does not provide them. |
 
 The host keeps `PromoState` as local disclosure state, not applied tender. It
 passes held codes only after a successful member review, leaves
@@ -357,7 +359,7 @@ disclosure state; it never becomes `applied`. The shared UI must hide or make
 inert any action control whose mutation callback is absent, so the read-only
 surface cannot present a no-op Apply action.
 
-**Alternative rejected:** infer pictures, shipping, or totals from product-page
+**Alternative rejected:** infer images, shipping, or totals from product-page
 or held-cart data. Those values are not part of the existing reviewed backend
 contract and would reintroduce stale or invented facts.
 
@@ -456,7 +458,10 @@ require a running backend because no backend code changes. Coverage must prove:
 - **[Risk] Review failure leaves old values visible.** → Replace each read
   line's price, stock and status with the unchecked label, keep `loading` over
   an unread basket, emit one failure toast per open, and recheck on reopen.
-- **[Risk] Picture facts drift from the current cart.** - Enrich the existing live review, join by variant identity and retain image-free stored intent; Current Product Picture Delivery owns this extension.
+- **[Risk] The drawer's no-image and display-only tender decisions differ from
+  a future applied quote contract.** → Keep images absent, keep tender reads
+  optional, and add applied values only through a separate approved quote
+  change.
 - **[Risk] An optional read fails after the cart review succeeds.** → Treat
   promo and points context as non-blocking; pass `null`, keep the reviewed
   subtotal, and let Checkout perform its own reads.

@@ -5,8 +5,8 @@
 - **Design reference** - Existing `@grade10/ui` CartDrawer, its item rows, tender controls, loading button and feedback; no block replacement, new badge, export or token.
 - **Current facts** - Opening refreshes member cart and tender; Pay waits for cart and tender writes and the current review and quote.
 - **No points** - Existing tender controls show no points spent as a valid choice, with or without an accepted store code; Pay sends no points field.
-- **Submission** - One pending Pay per drawer, with the submitted lines and tender fixed. Edits use existing controls; an answer for an older basket, tender or member opens nothing.
-- **Lost answer** - Existing failure feedback; no automatic retry. The drawer claims neither that no invoice exists nor that one was canceled.
+- **Submission** - One pending Pay per drawer, with the submitted lines and tender fixed. Drawer actions wait under the cart drawer pending guard; dismissal remains available. An answer for an older basket, tender or member opens nothing.
+- **Lost answer** - Existing failure feedback; pending ends and permitted actions return without automatic retry. The drawer claims neither that no invoice exists nor that one was canceled.
 - **Settling** - A settling answer opens Your Orders, which polls the open purchase.
 
 ### Grade10 Orders
@@ -36,16 +36,24 @@
 | --- | --- | --- | --- |
 | Opening drawer | Existing loaders until current cart, tender and live facts answer | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-49`; current read before ready, empty cart starts no payment |
 | Ready basket | Current lines, accepted tender including no points, estimate; shipping/tax left to Shopify | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-02`, `grade10-site-store-checkout-SC-50`, `grade10-site-store-checkout-SC-63`; accepted tender and estimate, no points field when none are spent |
-| Pending cart or tender write | Unavailable Pay and current-value treatment | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-53`, `grade10-site-store-checkout-SC-58`; Pay waits for acknowledged writes and the current review and quote |
-| Pending Pay response | Loading Pay; no duplicate submission | grade10-site-store-checkout-US-05 | `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-38`; one pending Pay, lost answer ends it with existing failure feedback and no retry |
+| Pending cart or tender write | Drawer actions wait; accepted values retained | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-53`, `grade10-site-store-checkout-SC-58`; Pay waits for acknowledged writes and the current review and quote |
+| Pending Pay response | Loading Pay; drawer actions wait; dismissal available | grade10-site-store-checkout-US-05 | `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-38`, `g10.store-checkout.SC66`, `g10.store-checkout.SC67`; one pending Pay, other active work retains the guard and dismissal cancels no sent request |
+| Failed or unreadable Pay answer | Existing failure feedback; currently permitted actions return | grade10-site-store-checkout-US-02 | `grade10-site-store-checkout-SC-65`, `g10.store-checkout.SC68`; pending ends without replay and current-data guards still apply |
 | Changed line or failed read | Named refusal or unchecked facts and Retry | grade10-site-store-checkout-US-02 | `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`, `grade10-site-store-checkout-SC-51`, `grade10-site-store-checkout-SC-52`, `grade10-site-store-checkout-SC-53`; named refusal, unchecked held facts and Retry |
 | Verification required | Existing threshold feedback, and the account action where the profile page is enabled | grade10-site-store-checkout-US-01 | `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-57`; existing gross-goods threshold after Pay, with the account action where the profile page is enabled |
-| Hosted invoice ready | Open the supplied hosted URL only for the current request | grade10-site-store-checkout-US-05 | `grade10-site-store-checkout-SC-05`, `grade10-site-store-checkout-SC-35`; only the current request's answer opens Shopify |
+| Hosted invoice ready | Open the current hosted URL, including after drawer dismissal | grade10-site-store-checkout-US-05 | `grade10-site-store-checkout-SC-05`, `grade10-site-store-checkout-SC-35`; only the current request's answer opens Shopify |
 | Settling | Existing order surface; poll open orders only | grade10-site-store-checkout-US-05 | `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-64`; settling answer opens Your Orders, which polls the open order |
-| Changed cart during Pay | Keep the current drawer; no stale redirect or automatic new Pay | grade10-site-store-checkout-US-06 | `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-60`; older answer ignored; later edits never rewrite the sent invoice, and whether it stays payable is the store's answer |
+| Cart or session changed elsewhere during Pay | Keep the current drawer; no stale redirect or automatic new Pay | grade10-site-store-checkout-US-06 | `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-60`; older answer ignored; later edits never rewrite the sent invoice, and whether it stays payable is the store's answer |
 | Paid cart without later member edits | Empty drawer and default tender after authoritative reads, including a shop price or stock review | grade10-site-store-checkout-US-03 | `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-47`, `grade10-site-store-checkout-SC-62`; shop review alone allows conversion |
 | Paid older cart version | Later lines and tender preserved after authoritative reads | grade10-site-store-checkout-US-06 | `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-45`; later lines and tender remain |
 | Canceled older invoice | Canceled state from backend order read | grade10-site-store-checkout-US-06 | **Out of suite:** existing order-status labels render a canceled order read; retiring an older invoice is `add-checkout-purchase-safety` |
 | Signed-out collector | Existing sign-in action; no checkout creation | grade10-site-store-checkout-US-04 | `grade10-site-store-checkout-SC-06`, `grade10-site-store-checkout-SC-54`, `grade10-site-store-checkout-SC-55`; existing sign-in action, no order creation |
 | Shopify confirmation | Static orders link | grade10-site-store-checkout-US-03 | `grade10-site-store-checkout-SC-15`; both static orders links |
 | Loading, failed or empty orders | Existing loading, error/Retry, empty/Shop now | **Out of suite:** existing order-page contract and Grade10 OrderHistoryPage tests | **Out of suite:** existing customer order-page contract and Grade10 OrderHistoryPage tests; no order is invented by recovery |
+
+### Reply After Dismissal
+
+| State | Shows | Anchor | Scenario / Disposition |
+| --- | --- | --- | --- |
+| Pending Pay dismissed | Underlying page; sent Pay continues | `grade10-site-store-checkout-US-05` | `g10.store-checkout.SC67`; no cancellation or second Pay on reopen |
+| Current successful reply after dismissal | Shopify hosted invoice opens | `grade10-site-store-checkout-US-05` | `g10.store-checkout.SC67`; Q35 preserves current successful navigation after close |
