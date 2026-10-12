@@ -646,15 +646,15 @@ Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** low
+* **Severity:** blocker
+* **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** exploratory
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
 **Pre-conditions:**

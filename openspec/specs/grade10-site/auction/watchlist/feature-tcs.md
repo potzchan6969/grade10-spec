@@ -1,7 +1,65 @@
 # grade10-site/auction/watchlist Test Cases
 
 **Status:** pending-review · 0/12
-**Drafts styled:** 2026-09-17, tcs-rules r3.0
+**Drafts styled:** 2026-10-12, tcs-rules r5
+
+
+## Walk 1: Watch, unwatch and read watched lots
+
+**Starting state:**
+
+- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Run the route for **Watch from the listing page records one watch**. `TC-pvl (US1-TC1)`
+2. Run the route for **Watching twice leaves the original Watched At**. `TC-eyd (US1-TC2)`
+3. Run the route for **Signed-out viewer is offered sign-in**. `TC-jxa (US1-TC3)`
+4. Run the route for **Unwatch from the listing page clears the watch and alerts**. `TC-oxt (US2-TC1)`
+5. Run the route for **Unwatch from the watched list without opening the listing**. `TC-o95 (US2-TC2)`
+6. Run the route for **Unwatch remains available on a closed listing**. `TC-jf6 (US2-TC3)`
+7. Run the route for **Watches read newest first with bid and close**. `TC-5sc (US3-TC1)`
+8. Run the route for **Watching nothing is an explained empty state**. `TC-ady (US3-TC2)`
+9. Run the route for **A closed listing stays and is labelled closed**. `TC-a43 (US3-TC3)`
+10. Run the route for **A called-off listing is labelled called off**. `TC-cfv (US3-TC4)`
+
+---
+
+## Walk 2: Read operator watch counts
+
+**Starting state:**
+
+- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Run the route for **Operator count includes both brands and no names**. `TC-bma (US4-TC1)`
+
+---
+
+## Walk 3: Mute alerts without removing a watch
+
+**Starting state:**
+
+- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Run the route for **Mute leaves the watch and turns alerts off**. `TC-y61 (US5-TC1)`
+
+---
 
 ## grade10-site-auction-watchlist-US1: Collector watches a listing to come back to it
 
@@ -10,7 +68,7 @@
 **so that** I can leave the page and find it again without searching.
 
 <!-- trace:case id=g10.auction-watchlist.TC-pvl rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
-### grade10-site-auction-watchlist-US1-TC1-1: Watch from the listing page records one watch
+### g10.auction-watchlist.TC-pvl (US1-TC1): Watch from the listing page records one watch
 
 **Classification:**
 
@@ -43,7 +101,7 @@
 * The watch is still present after reload.
 
 <!-- trace:case id=g10.auction-watchlist.TC-eyd rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
-### grade10-site-auction-watchlist-US1-TC2-1: Watching twice leaves the original Watched At
+### g10.auction-watchlist.TC-eyd (US1-TC2): Watching twice leaves the original Watched At
 
 **Classification:**
 
@@ -73,7 +131,7 @@
 * Watched At matches the first watch.
 
 <!-- trace:case id=g10.auction-watchlist.TC-jxa rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
-### grade10-site-auction-watchlist-US1-TC3-1: Signed-out viewer is offered sign-in
+### g10.auction-watchlist.TC-jxa (US1-TC3): Signed-out viewer is offered sign-in
 
 **Classification:**
 
@@ -111,7 +169,7 @@ called off,
 alerts for that listing stop with the watch.
 
 <!-- trace:case id=g10.auction-watchlist.TC-oxt rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
-### grade10-site-auction-watchlist-US2-TC1-1: Unwatch from the listing page clears the watch and alerts
+### g10.auction-watchlist.TC-oxt (US2-TC1): Unwatch from the listing page clears the watch and alerts
 
 **Classification:**
 
@@ -141,7 +199,7 @@ alerts for that listing stop with the watch.
 * Email alerts for that listing are off.
 
 <!-- trace:case id=g10.auction-watchlist.TC-o95 rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
-### grade10-site-auction-watchlist-US2-TC2-1: Unwatch from the watched list without opening the listing
+### g10.auction-watchlist.TC-o95 (US2-TC2): Unwatch from the watched list without opening the listing
 
 **Classification:**
 
@@ -172,7 +230,7 @@ alerts for that listing stop with the watch.
 * The listing page was not opened.
 
 <!-- trace:case id=g10.auction-watchlist.TC-jf6 rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
-### grade10-site-auction-watchlist-US2-TC3-1: Unwatch remains available on a closed listing
+### g10.auction-watchlist.TC-jf6 (US2-TC3): Unwatch remains available on a closed listing
 
 **Classification:**
 
@@ -208,7 +266,7 @@ enough to decide whether to act,
 **so that** I can return to a listing from one place.
 
 <!-- trace:case id=g10.auction-watchlist.TC-5sc rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
-### grade10-site-auction-watchlist-US3-TC1-1: Watches read newest first with bid and close
+### g10.auction-watchlist.TC-5sc (US3-TC1): Watches read newest first with bid and close
 
 **Classification:**
 
@@ -238,7 +296,7 @@ enough to decide whether to act,
 * Each row shows identity, current bid, and close.
 
 <!-- trace:case id=g10.auction-watchlist.TC-ady rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
-### grade10-site-auction-watchlist-US3-TC2-1: Watching nothing is an explained empty state
+### g10.auction-watchlist.TC-ady (US3-TC2): Watching nothing is an explained empty state
 
 **Classification:**
 
@@ -267,7 +325,7 @@ enough to decide whether to act,
 * A path to the catalogue is offered.
 
 <!-- trace:case id=g10.auction-watchlist.TC-a43 rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
-### grade10-site-auction-watchlist-US3-TC3-1: A closed listing stays and is labelled closed
+### g10.auction-watchlist.TC-a43 (US3-TC3): A closed listing stays and is labelled closed
 
 **Classification:**
 
@@ -296,7 +354,7 @@ enough to decide whether to act,
 * It is shown as closed, not as open.
 
 <!-- trace:case id=g10.auction-watchlist.TC-cfv rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
-### grade10-site-auction-watchlist-US3-TC4-1: A called-off listing is labelled called off
+### g10.auction-watchlist.TC-cfv (US3-TC4): A called-off listing is labelled called off
 
 **Classification:**
 
@@ -332,7 +390,7 @@ enough to decide whether to act,
 to buy.
 
 <!-- trace:case id=g10.auction-watchlist.TC-bma rev=1 covers=g10.auction-watchlist.SC-x1c -->
-### grade10-site-auction-watchlist-US4-TC1-1: Operator count includes both brands and no names
+### g10.auction-watchlist.TC-bma (US4-TC1): Operator count includes both brands and no names
 
 **Classification:**
 
@@ -370,7 +428,7 @@ to buy.
 **so that** it stays on Watching without filling my inbox.
 
 <!-- trace:case id=g10.auction-watchlist.TC-y61 rev=1 covers=g10.auction-watchlist.SC-ntf -->
-### grade10-site-auction-watchlist-US5-TC1-1: Mute leaves the watch and turns alerts off
+### g10.auction-watchlist.TC-y61 (US5-TC1): Mute leaves the watch and turns alerts off
 
 **Classification:**
 

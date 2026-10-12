@@ -1,7 +1,45 @@
 # grade10-site/auction/lot-status Test Cases
 
 **Status:** pending-review · 3/7
-**Drafts styled:** 2026-09-30, tcs-rules r3.0
+**Drafts styled:** 2026-10-12, tcs-rules r5
+
+
+## Walk 1: Close and read the lot state
+
+**Starting state:**
+
+- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Run the route for **Preparing Shipment maps to Ended**. `TC-1ik (US1-TC1)`
+2. Run the route for **Winner sees their order status separately**. `TC-bfm (US1-TC2)`
+
+---
+
+## Walk 2: Follow hidden and called-off lots
+
+**Starting state:**
+
+- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+
+**Shared test data:**
+
+- Use each case's declared **Test data**. No case depends on another case's result.
+
+### Route
+
+1. Run the route for **Hidden lots are not in the catalogue**. `TC-22a (US2-TC1)`
+2. Run the route for **Called-off lot leaves the watchlist, unsold lot stays**. `TC-wlb (US2-TC2)`
+3. Run the route for **Listing data leaves out called-off lots**. `TC-k90 (US2-TC3)`
+4. Run the route for **A called-off lot stays reachable at its canonical address**. `TC-7m2 (US2-TC4)`
+5. Run the route for **Only the bidder still sees a called-off lot**. `TC-byf (US3-TC1)`
+
+---
 
 ## grade10-site-auction-lot-status-US1: Collector sees whether a lot can still be bid on
 
@@ -10,7 +48,7 @@
 **so that** the lot status stays separate from the winner's order status.
 
 <!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
-### grade10-site-auction-lot-status-US1-TC1-1: Preparing Shipment maps to Ended
+### g10.auction-lot-status.TC-1ik (US1-TC1): Preparing Shipment maps to Ended
 
 **Classification:**
 
@@ -33,12 +71,12 @@
 
 1. Read external lot status.
 
-**Expected result:**
+**Expected Results:**
 
 * External lot status is Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-bfm rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
-### grade10-site-auction-lot-status-US1-TC2-1: Winner sees their order status separately
+### g10.auction-lot-status.TC-bfm (US1-TC2): Winner sees their order status separately
 
 **Classification:**
 
@@ -83,7 +121,7 @@
 **so that** I can use a called-off lot's original address directly without it appearing as an available auction.
 
 <!-- trace:case id=g10.auction-lot-status.TC-22a rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw -->
-### grade10-site-auction-lot-status-US2-TC1-1: Hidden lots are not in the catalogue
+### g10.auction-lot-status.TC-22a (US2-TC1): Hidden lots are not in the catalogue
 
 Runs once per row of **Test data**.
 
@@ -131,7 +169,7 @@ Runs once per row of **Test data**.
 * <lot_5> is in All auctions, status Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-wlb rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
-### grade10-site-auction-lot-status-US2-TC2-1: Called-off lot leaves the watchlist, unsold lot stays
+### g10.auction-lot-status.TC-wlb (US2-TC2): Called-off lot leaves the watchlist, unsold lot stays
 
 **Classification:**
 
@@ -170,7 +208,7 @@ Runs once per row of **Test data**.
 * <lot_2> is in the list, status Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-k90 rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
-### grade10-site-auction-lot-status-US2-TC3-1: Listing data leaves out called-off lots
+### g10.auction-lot-status.TC-k90 (US2-TC3): Listing data leaves out called-off lots
 
 **Classification:**
 
@@ -209,7 +247,7 @@ Runs once per row of **Test data**.
 * `<lot_2>` is included, external lot status Ended.
 
 <!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=1 covers=g10.auction-lot-status.SC-w9d -->
-### grade10-site-auction-lot-status-US2-TC4-1: A called-off lot stays reachable at its canonical address
+### g10.auction-lot-status.TC-7m2 (US2-TC4): A called-off lot stays reachable at its canonical address
 
 **Classification:**
 
@@ -253,7 +291,7 @@ Runs once per row of **Test data**.
 **so that** I can see my card was not charged.
 
 <!-- trace:case id=g10.auction-lot-status.TC-byf rev=2 covers=g10.auction-lot-status.SC-yoe -->
-### grade10-site-auction-lot-status-US3-TC1-2: Only the bidder still sees a called-off lot
+### g10.auction-lot-status.TC-byf (US3-TC1): Only the bidder still sees a called-off lot
 
 **Classification:**
 
