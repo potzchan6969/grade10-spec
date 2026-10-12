@@ -114,6 +114,25 @@ async function screenshot(browser, viewport, text, background, locale = "en") {
       { waitUntil: "load" },
     );
     await page.evaluate(() => document.fonts.ready);
+    await page.waitForFunction(() => {
+      const main = document.querySelector("main");
+      const heading = main?.querySelector("h1");
+      const paragraph = main?.querySelector("p");
+      const bounds = main?.getBoundingClientRect();
+      return (
+        document.readyState === "complete" &&
+        document.fonts.status === "loaded" &&
+        Boolean(heading?.textContent?.trim()) &&
+        Boolean(paragraph?.textContent?.trim()) &&
+        Boolean(bounds && bounds.width > 0 && bounds.height > 0)
+      );
+    });
+    await page.evaluate(
+      () =>
+        new Promise((resolvePaint) => {
+          requestAnimationFrame(() => requestAnimationFrame(resolvePaint));
+        }),
+    );
     return await page.screenshot({ type: "png" });
   } finally {
     await page.close();
