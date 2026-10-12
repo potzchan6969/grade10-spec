@@ -40,11 +40,13 @@ pnpm storybook:workbench
 
 ## Capture And Review
 
-- **Recording** - Applications capture a full site viewport at desktop, tablet, and mobile sizes, and score only the declared comparison size.
+- **Recording** - Applications capture reference and full-site viewport images at desktop, tablet, and mobile sizes for every requested content locale. Scoring remains limited to the declared comparison size in each locale.
+- **Locales** - New Grade10 runs use the canonical English, Traditional Chinese, and Simplified Chinese locale set. The panel combines locale and viewport controls to select the exact recorded pair. Recipes select translated app routes, and reference stories read the locale global.
+- **History** - Older English-only runs keep their original images and coverage. Missing locale or viewport evidence remains unavailable; the panel does not substitute a different pair.
 - **Checkpoints** - Tags are preferred labels; resolved app and reference commits remain authoritative provenance.
 - **Selection** - The panel resolves the current story's permanent case ID and offers its application targets. All recordings opens the story list for a selected app/reference commit pair, with tags as version labels and a separate selector for repeated runs. Selection uses a recorded locator first, then a unique current verification identity. A generic story can match by case ID alone. Missing or ambiguous matches retain the archived evidence without navigation.
 - **Images** - The reference preview fits its recorded comparison region; the site preview always shows the full viewport. Original PNGs remain immutable and downloadable.
 - **Review destination** - The form displays the storage destination reported by the archive API. Local reviews use `local-development`; deployed reviews use the authenticated person.
-- **Demo assessments** - Each synthetic demo run has a marked shadow assessment at its declared score profile. Real captures require an external evaluator report; capture does not imply assessment.
-- **Assessment** - Model similarity remains advisory until independently labelled human evidence meets the archive's calibration policy; human review decisions are append-only records.
+- **Demo assessments** - Each synthetic demo run has a marked shadow assessment at its declared score profile in each recorded locale. Real captures require an external evaluator report; capture does not imply assessment.
+- **Assessment** - Model similarity remains advisory until independently labelled human evidence meets the archive's calibration policy; human review decisions are append-only records. Reviews, assessments, and calibration remain bound to their recorded locale.
 - **Protocol** - The application's pinned spec commit supplies the shared protocol. Consumers update that pin only after the upstream implementation is merged.
