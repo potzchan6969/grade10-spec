@@ -28,7 +28,7 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 | Automatic amount off products, variants or collections | **No** | · — the shop drops it when a code joins, and one set not to combine refuses every product coupon in the cart |
 | Automatic amount off order | **Yes**, a spend threshold included | **Product and order discounts**, so a code stacks with it |
 | Automatic buy X get Y | **Yes** | **Order discounts and codes** — its order and product boxes |
-| Order coupon | **Yes** | What its mint states, else the store default: product and shipping discounts, never order discounts |
+| Order coupon | **Yes** | What its mint states, else the store default: 🚧 product, order and shipping discounts |
 | Product coupon, gift | **Yes** | The reward's Combines with, else the store default |
 | Points | **Always** | Every discount — a payment, outside the count |
 
