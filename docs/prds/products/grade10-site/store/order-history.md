@@ -48,5 +48,5 @@ points and belongs to no account -
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Guest orders after sign-in | Decided | List a paid guest order under the member whose sign-in proves its email, with no points; the order stays a guest order. Shopify customer accounts and WooCommerce both match past guest orders by a proven email, and the guest's own order link already went to that inbox. Confirmed by the owner 2026-10-12. | Product |
+| Guest orders after sign-in | Decided | List a paid guest order under the member whose sign-in proves its email, with no points; the order stays a guest order. Shopify customer accounts and WooCommerce both match past guest orders by a proven email, and Shopify's confirmation with the order link already went to that inbox. Confirmed by the owner 2026-10-12. | Product |
 :::

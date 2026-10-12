@@ -31,9 +31,10 @@ distinct at the same address
 
 ## Guest Order Link
 
-A guest order opens at `grade10.com/orders/<order-id>`, from the link Grade10
-emails once it is paid. The link carries its secret after `#`, so no server
-or log sees it.
+A guest order opens at `grade10.com/orders/<order-id>`, from the link in
+Shopify's order confirmation email and on its thank-you page. Grade10 sends
+no email of its own. The link carries its secret after `#`, so no server or
+log sees it.
 
 - **No account** - the link opens the order for whoever holds it; nothing
   asks them to sign in
@@ -42,9 +43,9 @@ or log sees it.
 - **Wrong link** - an unknown order, a member's order or a wrong secret all
   show not-found
 - **Not indexed** - search engines are told not to index the address
-- **On Shopify's pages** - the order carries the same link for Shopify's
-  thank-you page and order confirmation email to show. ❓ Neither shows it
-  yet: the thank-you extension and the email template are set in Shopify
+- **Where the link comes from** - the order carries it for Shopify to show.
+  ❓ Shopify shows it nowhere yet: the confirmation email template and the
+  thank-you extension are set in Shopify
 
 ## Order Summary
 
