@@ -1,0 +1,9 @@
+schema: grade10-planning
+created: 2026-10-09
+hands:
+  pm: "@htonyl"
+  design: "@htonyl"
+  tech: "@htonyl"
+  qa: "@htonyl"
+  dev: "@htonyl"
+  release: "@htonyl"
