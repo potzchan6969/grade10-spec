@@ -3,125 +3,162 @@
 **Status:** pending-review · 0/12
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-## Walk 1: Collector watches a listing to come back to it
+## Walk 1: Watch from the listing page records one watch
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
-
-**Shared test data:**
-
-- Use each case's declared **Test data**. No case depends on another case's result.
+- Collector is signed in.
+- An open listing is not watched by that collector.
 
 ### Route
 
 1. Open the listing page.
-   - The listing shows as watched. `g10.auction-watchlist.US1-TC1`
 2. Watch the listing.
-   - Email alerts for that listing are on. `g10.auction-watchlist.US1-TC1`
 3. Reload the page.
-   - The watch is still present after reload. `g10.auction-watchlist.US1-TC1`
-4. Submit a second watch for the same listing.
-   - Exactly one watch exists for that collector and listing. `g10.auction-watchlist.US1-TC2`
-5. Read the collector's watches ordered by Watched At.
-   - Watched At matches the first watch. `g10.auction-watchlist.US1-TC2`
-6. Attempt to watch the listing from the listing page or catalogue.
-   - Sign-in is offered. `g10.auction-watchlist.US1-TC3`
-   - No watch is stored in the browser. `g10.auction-watchlist.US1-TC3`
+   - The listing shows as watched. g10.auction-watchlist.US1-TC1
+   - Email alerts for that listing are on. g10.auction-watchlist.US1-TC1
+   - The watch is still present after reload. g10.auction-watchlist.US1-TC1
 
-## Walk 2: Collector unwatches a listing they no longer follow
+## Walk 2: Watching twice leaves the original Watched At
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- Collector already watches a listing.
 
-**Shared test data:**
+### Route
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+1. Submit a second watch for the same listing.
+2. Read the collector's watches ordered by Watched At.
+   - Exactly one watch exists for that collector and listing. g10.auction-watchlist.US1-TC2
+   - Watched At matches the first watch. g10.auction-watchlist.US1-TC2
+
+## Walk 3: Signed-out viewer is offered sign-in
+
+**Starting state:**
+
+- Viewer is signed out.
+- An open listing is shown.
+
+### Route
+
+1. Attempt to watch the listing from the listing page or catalogue.
+   - Sign-in is offered. g10.auction-watchlist.US1-TC3
+   - No watch is stored in the browser. g10.auction-watchlist.US1-TC3
+
+## Walk 4: Unwatch from the listing page clears the watch and alerts
+
+**Starting state:**
+
+- Collector watches an open listing with email alerts on.
 
 ### Route
 
 1. Open the listing page.
-   - The listing shows as not watched. `g10.auction-watchlist.US2-TC1`
 2. Unwatch the listing.
-   - Email alerts for that listing are off. `g10.auction-watchlist.US2-TC1`
-3. Open My Auctions / Watching.
-4. Unwatch a row from the list.
-   - The row leaves Watching. `g10.auction-watchlist.US2-TC2`
-   - Email alerts for that listing are off. `g10.auction-watchlist.US2-TC2`
-   - The listing page was not opened. `g10.auction-watchlist.US2-TC2`
-5. Open My Auctions / Watching.
-6. Unwatch the closed listing.
-   - The closed listing leaves Watching. `g10.auction-watchlist.US2-TC3`
+   - The listing shows as not watched. g10.auction-watchlist.US2-TC1
+   - Email alerts for that listing are off. g10.auction-watchlist.US2-TC1
 
-## Walk 3: Collector reads the listings they watch
+## Walk 5: Unwatch from the watched list without opening the listing
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
-
-**Shared test data:**
-
-- Use each case's declared **Test data**. No case depends on another case's result.
+- Collector watches at least one listing.
 
 ### Route
 
 1. Open My Auctions / Watching.
-   - The more recently watched listing appears first. `g10.auction-watchlist.US3-TC1`
-2. Read the Watching rows in order.
-   - Each row shows identity, current bid, and close. `g10.auction-watchlist.US3-TC1`
-3. Open My Auctions.
-   - An explained empty state is shown, not an error. `g10.auction-watchlist.US3-TC2`
-   - A path to the catalogue is offered. `g10.auction-watchlist.US3-TC2`
-4. Open My Auctions / Watching.
-   - The listing is still listed. `g10.auction-watchlist.US3-TC3`
-   - It is shown as closed, not as open. `g10.auction-watchlist.US3-TC3`
-5. Open My Auctions / Watching.
-   - The listing is still listed. `g10.auction-watchlist.US3-TC4`
-   - It is shown as called off, not as open. `g10.auction-watchlist.US3-TC4`
+2. Unwatch a row from the list.
+   - The row leaves Watching. g10.auction-watchlist.US2-TC2
+   - Email alerts for that listing are off. g10.auction-watchlist.US2-TC2
+   - The listing page was not opened. g10.auction-watchlist.US2-TC2
 
-## Walk 4: Operator judges interest from the watch count
+## Walk 6: Unwatch remains available on a closed listing
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- Collector watches a listing that has since closed.
 
-**Shared test data:**
+### Route
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+1. Open My Auctions / Watching.
+2. Unwatch the closed listing.
+   - The closed listing leaves Watching. g10.auction-watchlist.US2-TC3
+
+## Walk 7: Watches read newest first with bid and close
+
+**Starting state:**
+
+- Collector watches two open listings at different times.
+
+### Route
+
+1. Open My Auctions / Watching.
+2. Read the Watching rows in order.
+   - The more recently watched listing appears first. g10.auction-watchlist.US3-TC1
+   - Each row shows identity, current bid, and close. g10.auction-watchlist.US3-TC1
+
+## Walk 8: Watching nothing is an explained empty state
+
+**Starting state:**
+
+- Collector watches no listings and has no bids.
+
+### Route
+
+1. Open My Auctions.
+   - An explained empty state is shown, not an error. g10.auction-watchlist.US3-TC2
+   - A path to the catalogue is offered. g10.auction-watchlist.US3-TC2
+
+## Walk 9: A closed listing stays and is labelled closed
+
+**Starting state:**
+
+- Collector watches a listing that then closes.
+
+### Route
+
+1. Open My Auctions / Watching.
+   - The listing is still listed. g10.auction-watchlist.US3-TC3
+   - It is shown as closed, not as open. g10.auction-watchlist.US3-TC3
+
+## Walk 10: A called-off listing is labelled called off
+
+**Starting state:**
+
+- Collector watches a listing an operator then calls off.
+
+### Route
+
+1. Open My Auctions / Watching.
+   - The listing is still listed. g10.auction-watchlist.US3-TC4
+   - It is shown as called off, not as open. g10.auction-watchlist.US3-TC4
+
+## Walk 11: Operator count includes both brands and no names
+
+**Starting state:**
+
+- One Grade10 collector and one ZZZ collector each watch the same listing.
 
 ### Route
 
 1. As an operator, read the watch count for that listing.
-   - The count is 2. `g10.auction-watchlist.US4-TC1`
-   - No watcher identity is disclosed. `g10.auction-watchlist.US4-TC1`
-   - Public listing facts still carry no watch count. `g10.auction-watchlist.US4-TC1`
+   - The count is 2. g10.auction-watchlist.US4-TC1
+   - No watcher identity is disclosed. g10.auction-watchlist.US4-TC1
+   - Public listing facts still carry no watch count. g10.auction-watchlist.US4-TC1
 
-## Walk 5: Collector mutes email alerts without unwatching
+## Walk 12: Mute leaves the watch and turns alerts off
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
-
-**Shared test data:**
-
-- Use each case's declared **Test data**. No case depends on another case's result.
+- Collector watches a listing with email alerts on.
 
 ### Route
 
 1. Open My Auctions / Watching.
 2. Turn email alerts off for that listing.
-   - The listing remains watched. `g10.auction-watchlist.US5-TC1`
-   - Email alerts for that listing are off. `g10.auction-watchlist.US5-TC1`
-   - Confirmation says the watch stayed. `g10.auction-watchlist.US5-TC1`
-
-## g10.auction-watchlist.US1: Collector watches a listing to come back to it
-
-**As a** signed-in collector,
-**I want** to mark a listing to come back to without bidding on it,
-**so that** I can leave the page and find it again without searching.
-
-`<!-- trace:case id=g10.auction-watchlist.TC-pvl rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->`
+   - The listing remains watched. g10.auction-watchlist.US5-TC1
+   - Email alerts for that listing are off. g10.auction-watchlist.US5-TC1
+   - Confirmation says the watch stayed. g10.auction-watchlist.US5-TC1
 ### g10.auction-watchlist.US1-TC1: Watch from the listing page records one watch
 
 **Classification:**

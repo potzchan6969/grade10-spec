@@ -4,157 +4,521 @@
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 **Drafts styled:** 2026-10-10, tcs-rules r5
 
-## Walk 1: Execute every domain case independently
+## Walk 1: Confirmed gallery image reaches the catalogue card
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- An admin holds the catalogue grant.
+- The admin is on `<grade10 auction admin listings url>`.
+- `<listing_1>` exists with an empty gallery.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<listing_1>` | A draft auction listing with an empty gallery |
+| `<product>` | charizard-front.jpg, JPEG, 4.2 MB |
+| `<alt text>` | 1999 Charizard PSA 10, front, shadowless 1st edition |
 
 ### Route
 
 1. Open the media manager for `<listing_1>`.
 2. Select `<product>` for a gallery slot.
-   - shows a preview of `<product>` and stores nothing until step 3. `g10.auction-dmn.US1-TC1`
 3. Confirm the upload and enter `<alt text>`.
 4. Publish `<listing_1>`.
 5. Navigate to `<grade10 auction url>` and find `<listing_1>`.
-   - `<product>` is stored as the gallery's first item and shows at card size in the media manager. `g10.auction-dmn.US1-TC1`
-   - The catalogue card for `<listing_1>` shows `<product>` at card size, with `<alt text>` as its accessible name. `g10.auction-dmn.US1-TC1`
-6. Check the listing cards for `<listing_2>` and `<listing_3>`.
-7. Open the card for `<listing_2>`.
-   - Each card carries a card-size image, its title and its current standing, with money as minor units and its currency code. `g10.auction-dmn.US2-TC1`
-   - No card offers Buy Now or a stock count. `g10.auction-dmn.US2-TC1`
-   - opens `<listing_2>`'s own address without a page load, showing that lot. `g10.auction-dmn.US2-TC1`
-8. Navigate to `<an open listing url>` for `<listing_4>`.
-   - `<listing_4>`'s name, description, sale and current standing are in the response HTML. `g10.auction-dmn.US2-TC2`
-9. Check the served page.
-   - Money reads as minor units with its currency code, and no reserve or Buy Now price appears. `g10.auction-dmn.US2-TC2`
-10. Fetch `<surface>`.
-   - The head names `<identity>`, and names no other auction surface in its place. `g10.auction-dmn.US2-TC3`
-11. Inspect the head for its title, meta description and Open Graph tags.
-   - The response status is `<status>`. `g10.auction-dmn.US2-TC3`
-12. Check the response status.
-   - Every lot the catalogue holds is listed as an absolute URL of the serving environment. `g10.auction-dmn.US2-TC3`
-13. Navigate to `<grade10 sitemap url>`.
-   - No sitemap entry carries an unfilled parameter in place of a lot. `g10.auction-dmn.US2-TC3`
-14. Step through the gallery thumbnails and open one image at zoom size.
-   - The gallery walks in order at thumb, detail and zoom sizes. `g10.auction-dmn.US3-TC1`
-15. Enter `<bid amount>` in the bid field and select **Place Bid**.
-   - The bid is accepted in the one answer, with no Authorizing state before it. `g10.auction-dmn.US3-TC1`
-16. Read Time left, Highest bid and Recent Bids.
-   - Highest bid reads `<bid amount>`, the bid count reads 1, and Recent Bids shows the user's own bid as You. `g10.auction-dmn.US3-TC1`
-17. Read `<card>`'s activity at the card provider.
-   - shows nothing held or charged on `<card>`. `g10.auction-dmn.US3-TC1`
-18. Enter `<bid amount>` in the bid field.
-19. Read the bid form.
-   - reads Min, naming `<current bid>` plus `<increment>`, and **Place Bid** is disabled, so nothing is sent. `g10.auction-dmn.US3-TC2`
-20. Reload `<listing_4>` and read Highest bid, the bid count and Recent Bids.
-   - reads Highest bid `<current bid>`, bid count `<bid count>`, and no row of the user's in Recent Bids. `g10.auction-dmn.US3-TC2`
-21. Navigate to `<grade10 bids url>` and look for `<listing_4>`.
-   - shows no entry for `<listing_4>`. `g10.auction-dmn.US3-TC2`
-22. Navigate to `<my auctions url>` and look for `<listing_4>`.
-   - shows no row for `<listing_4>`. `g10.auction-dmn.US3-TC2`
-23. As user A, select **Set maximum**, enter `<user A maximum>` and **Confirm**.
-   - After step 1 User A leads at `<starting price>`. `g10.auction-dmn.US4-TC1`
-24. As user B, set a maximum of `<user B maximum>` and **Confirm**.
-   - After step 2 user A still leads and Highest bid reads `<user B maximum>` plus `<increment>`. `g10.auction-dmn.US4-TC1`
-25. As user A, reload `<listing_5>` and read Your maximum, Highest bid and standing.
-   - User A reads Your maximum, Highest bid and their standing as three separate facts. `g10.auction-dmn.US4-TC1`
-26. As user B, select **Raise**, enter `<user B raise>` and confirm.
-   - After step 4 user B leads at `<user A maximum>` plus `<increment>`, with no bids recorded at the amounts in between. `g10.auction-dmn.US4-TC1`
-27. As user B, set a maximum of `<user B maximum>` and confirm.
-28. As user A, open `<listing_6>` and read the bid panel.
-29. As user A, navigate to `<grade10 bids url>` and read the Active list.
-   - User A reads Outbid, with Your maximum still `<user A maximum>` and Highest bid at `<user A maximum>` plus `<increment>`. `g10.auction-dmn.US5-TC1`
-   - `<listing_6>` appears once under Active with outbid standing, its price and currency code, and its latest activity time. `g10.auction-dmn.US5-TC1`
-30. Expand `<listing_10>`'s history.
-31. Open `<listing_10>` from its summary.
-   - User B's accepted bid and the user's own standing change sit in one order. `g10.auction-dmn.US5-TC2`
-   - The user's own rows read as You and user B stays a listing pseudonym with no maximum shown. `g10.auction-dmn.US5-TC2`
-   - lands on `<listing_10>`'s own page. `g10.auction-dmn.US5-TC2`
-32. Fetch `<an open listing url>` for `<listing_7>` with client-side scripts disabled.
-33. Open the same address with scripts enabled and watch Time left and Highest bid as scripts finish loading.
-   - The served gallery, description and standing stay on screen, with no loading placeholder over them. `g10.auction-dmn.US6-TC1`
-   - Time left counts on from the served value rather than jumping or blanking. `g10.auction-dmn.US6-TC1`
-   - Highest bid still reads `<current bid>` once scripts have finished loading. `g10.auction-dmn.US6-TC1`
-34. Submit a bid of `<bid amount>` at `<bid time>`.
-   - The bid is accepted and Highest bid reads `<bid amount>`. `g10.auction-dmn.US7-TC2`
-35. Read Time left and the recorded close.
-   - Time left reads `<new time left>` and the recorded close does not move past the cap. `g10.auction-dmn.US7-TC2`
-36. Navigate to `<grade10 bids url>` and expand `<listing_9>`.
-   - The history shows the accepted bid beside an unchanged close. `<!-- archive fold: g10.auction-dmn.TC-wh3@2 (2026-09-17-revise-auction-extended-bidding) replaced the earlier extended-bidding case -->` `g10.auction-dmn.US7-TC2`
-37. As customer A, read Time left on the lot page.
-38. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
-39. As customer A, without reloading, read Highest bid and Time left on the open lot page.
-   - reads Highest bid `<user B maximum>` plus `<increment>`, and customer A still leads. `g10.auction-dmn.US7-TC3`
-   - reads Time left `<extension duration>`, labelled Extended bidding, with no reload. `g10.auction-dmn.US7-TC3`
-40. Wait `<extension duration>` with no further bid.
-   - The lot closes after step 4, and no further bid is placed. `g10.auction-dmn.US7-TC3`
-41. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
-42. As customer C, without reloading, read `<listing_8>`'s All auctions card and Featured slide.
-43. As customer A, without reloading, read Highest bid and Time left at the same moment.
-   - The card, the slide and the lot page's Highest bid all read `<user A maximum>` plus `<increment>`. `g10.auction-dmn.US7-TC4`
-   - The card's and the slide's Ends in and the lot page's Time left agree to the second. `g10.auction-dmn.US7-TC4`
-   - The slide still reads LIVE BIDDING, with no Extended label. `g10.auction-dmn.US7-TC4`
-   - Neither reads `<device skew>` off, and neither page reloaded. `g10.auction-dmn.US7-TC4`
-44. Read the bid panel and Recent Bids.
-   - Highest bid reads `<leader price>` and `<user A maximum>` is neither shown nor derivable from any public fact. `g10.auction-dmn.US8-TC1`
-45. Read the public listing contract `<listing_6>`'s page is served from.
-   - Recent Bids names other users by listing pseudonym only, with no card facts. `g10.auction-dmn.US8-TC1`
-46. Sign out and open the same address.
-   - The signed-out reader gets no private history and no maximum. `g10.auction-dmn.US8-TC1`
-47. Navigate to `<grade10 bids url>`.
-   - No private history is shown before sign-in. `g10.auction-dmn.US8-TC2`
-48. Sign in as that user.
-   - lands back on the bids index, showing that account's Active list with `<listing_11>` in it. `<!-- archive fold: g10.auction-dmn.TC-fp8@2 (2026-09-16-default-auction-bid-holds-off) replaced the earlier linked-card bid case -->` `g10.auction-dmn.US8-TC2`
-49. As customer A, enter `<user A maximum>` in the custom maximum on the bid panel and confirm the bid.
-   - accepts the bid at `<price after A>` in the one answer, and Change is unavailable. `g10.auction-dmn.US8-TC3`
-50. As customer B, enter `<user B maximum>` in the custom maximum on the same lot and confirm the bid.
-51. Read the bid panel.
-52. Read both customers' card activity at the card provider.
-   - Highest bid reads `<price after B>`, and customer B leads. `g10.auction-dmn.US8-TC3`
-   - shows nothing held or charged on either card. `g10.auction-dmn.US8-TC3`
-53. Navigate to `<no lot address>`.
-   - The response has status 404 and the site's not-found surface is shown. `g10.auction-dmn.US9-TC1`
-54. Check the response status.
-   - Neither an empty lot page nor the catalogue is shown in its place. `g10.auction-dmn.US9-TC1`
-55. Navigate to `<grade10 auction url>`.
-56. Search the catalogue for the title of `<lot_1>`.
-   - `<lot_1>` does not appear in the catalogue. `g10.auction-dmn.US11-TC1`
-57. Navigate to `<lot_1 address>`.
-   - response status is 200 and `<lot_1>`'s public listing page is on screen. `<!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->` `g10.auction-dmn.US11-TC1`
-58. Wait through the recorded close on both pages, without reloading.
-   - Once the close passes, both pages read Closed with no result until the close is recorded. `g10.auction-dmn.US12-TC1`
-59. As customer A, read the lot's state.
-   - reads Won and step 3 reads Did not win, with Highest bid `<final price>` on both. `g10.auction-dmn.US12-TC1`
-60. As customer B, read the lot's state.
-61. As customer A, navigate to `<my auctions url>`, select the Ended tab and find `<listing_15>`'s row.
-   - 's row reads Won, with Current bid `<final price>`. `g10.auction-dmn.US12-TC1`
-62. As customer B, navigate to `<my auctions url>`, select the Ended tab and find `<listing_15>`'s row.
-   - 's row reads Didn't win, with Current bid `<final price>`, not `<user B maximum>`. `g10.auction-dmn.US12-TC1`
-   - 's row reads "Your card was not charged.". `g10.auction-dmn.US12-TC1`
-63. Wait through the recorded close on both pages, without reloading.
-64. As customer A, read the lot's state once the result shows.
-   - reads Won, with Highest bid `<final price>`. `g10.auction-dmn.US12-TC2`
-65. As customer C, read `<listing_16>`'s card.
-   - Once the close passes, customer A's page reads Closed with no result until the close is recorded. `g10.auction-dmn.US12-TC2`
-   - Until then, customer C's card shows its existing closed state with `<final price>` and no result. `g10.auction-dmn.US12-TC2`
-   - 's card reads Ended and names when it ended, with no watch control. `g10.auction-dmn.US12-TC2`
-   - Neither page reloaded. `g10.auction-dmn.US12-TC2`
+   - Step 2 shows a preview of `<product>` and stores nothing until step 3. g10.auction-dmn.US1-TC1
+   - `<product>` is stored as the gallery's first item and shows at card size in the media manager. g10.auction-dmn.US1-TC1
+   - The catalogue card for `<listing_1>` shows `<product>` at card size, with `<alt text>` as its accessible name. g10.auction-dmn.US1-TC1
 
-## g10.auction-dmn.US1: Operator publishes a gallery a collector can shop
+## Walk 2: Catalogue card opens its own lot page
 
-**As an** operator with catalogue grant,
-**I want** the images and alt text I confirm on a draft listing to be what the
-catalogue and the listing page show,
-**so that** a collector shops the card I photographed rather than a placeholder.
+**Starting state:**
 
+- A user is on `<grade10 auction url>`.
+- `<listing_2>` and `<listing_3>` are published in different categories.
+- Each of them has an image as its first gallery item.
 
-`<!-- trace:case id=g10.auction-dmn.TC-5l7 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j,g10.auction-listing-media.SC-41j,g10.auction-listing-media.SC-j5f,g10.auction-listing-media.SC-1mk,g10.auction-listing-media.SC-su1,g10.auction-listing-media.SC-y9i,g10.auction-listing-media.SC-dva,g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->`
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_2>` | A published listing in Pokémon, gallery of three images |
+| `<listing_3>` | A published listing in another category, first gallery item an image |
+
+### Route
+
+1. Check the listing cards for `<listing_2>` and `<listing_3>`.
+2. Open the card for `<listing_2>`.
+   - Each card carries a card-size image, its title and its current standing, with money as minor units and its currency code. g10.auction-dmn.US2-TC1
+   - No card offers Buy Now or a stock count. g10.auction-dmn.US2-TC1
+   - Step 2 opens `<listing_2>`'s own address without a page load, showing that lot. g10.auction-dmn.US2-TC1
+
+## Walk 3: Lot page answers whole before scripts run
+
+**Starting state:**
+
+- `<listing_4>` is live and its current bid is `<current bid>`.
+- The user's browser runs no client-side scripts.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_4>` | A live listing with bids, in HKD |
+| `<current bid>` | 480000 minor units |
+
+### Route
+
+1. Navigate to `<an open listing url>` for `<listing_4>`.
+2. Check the served page.
+   - `<listing_4>`'s name, description, sale and current standing are in the response HTML. g10.auction-dmn.US2-TC2
+   - Money reads as minor units with its currency code, and no reserve or Buy Now price appears. g10.auction-dmn.US2-TC2
+
+## Walk 4: Each auction surface names itself and is discoverable
+
+**Starting state:**
+
+- `<listing_2>` is published and the catalogue lists it.
+- The catalogue publishes no lot under `<no lot address>`.
+- The reader's browser runs no client-side scripts.
+
+**Test data:**
+
+| `<surface>` | `<identity>` | `<status>` |
+| --- | --- | --- |
+| The auction catalogue at `<grade10 auction url>` | the catalogue's own title and description | 200 |
+| `<listing_2>`'s own address | `<listing_2>`'s title, description and canonical address, in `og:title`, `og:description` and `og:url` | 200 |
+| `<no lot address>` | the site's not-found surface | 404 |
+
+### Route
+
+1. Fetch `<surface>`.
+2. Inspect the head for its title, meta description and Open Graph tags.
+3. Check the response status.
+4. Navigate to `<grade10 sitemap url>`.
+   - The head names `<identity>`, and names no other auction surface in its place. g10.auction-dmn.US2-TC3
+   - The response status is `<status>`. g10.auction-dmn.US2-TC3
+   - Every lot the catalogue holds is listed as an absolute URL of the serving environment. g10.auction-dmn.US2-TC3
+   - No sitemap entry carries an unfilled parameter in place of a lot. g10.auction-dmn.US2-TC3
+
+## Walk 5: Gallery study leads to an accepted first bid
+
+**Starting state:**
+
+- A user is signed in with `<card>` saved and is on `<listing_5>`.
+- `<listing_5>` is live, holds no bids, and its starting price is `<starting price>`.
+- `<listing_5>` holds more than one gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<card>` | Visa ending 4242 |
+| `<listing_5>` | A live listing with no bids, several gallery images, in HKD |
+| `<starting price>` | 120000 minor units |
+| `<bid amount>` | 120000 minor units, equal to `<starting price>` |
+
+### Route
+
+1. Step through the gallery thumbnails and open one image at zoom size.
+2. Enter `<bid amount>` in the bid field and select **Place Bid**.
+3. Read Time left, Highest bid and Recent Bids.
+4. Read `<card>`'s activity at the card provider.
+   - The gallery walks in order at thumb, detail and zoom sizes. g10.auction-dmn.US3-TC1
+   - The bid is accepted in the one answer, with no Authorizing state before it. g10.auction-dmn.US3-TC1
+   - Highest bid reads `<bid amount>`, the bid count reads 1, and Recent Bids shows the user's own bid as You. g10.auction-dmn.US3-TC1
+   - Step 4 shows nothing held or charged on `<card>`. g10.auction-dmn.US3-TC1
+
+## Walk 6: Bid below the next increment is refused on the bid form and recorded nowhere
+
+**Starting state:**
+
+- A user is signed in with `<card>` saved and is on `<listing_4>`.
+- `<listing_4>` is live, its current bid is `<current bid>` and its increment is `<increment>`.
+- The user holds no bid on `<listing_4>` and does not watch it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<card>` | Visa ending 4242 |
+| `<listing_4>` | A live listing with bids from other users, in HKD, bid count `<bid count>` |
+| `<current bid>` | 480000 minor units (HKD 4,800.00) |
+| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
+| `<bid amount>` | 487900 minor units (HKD 4,879), one major unit below `<current bid>` plus `<increment>` |
+| `<bid count>` | 2 |
+
+### Route
+
+1. Enter `<bid amount>` in the bid field.
+2. Read the bid form.
+3. Reload `<listing_4>` and read Highest bid, the bid count and Recent Bids.
+4. Navigate to `<grade10 bids url>` and look for `<listing_4>`.
+5. Navigate to `<my auctions url>` and look for `<listing_4>`.
+   - Step 2 reads Min, naming `<current bid>` plus `<increment>`, and **Place Bid** is disabled, so nothing is sent. g10.auction-dmn.US3-TC2
+   - Step 3 reads Highest bid `<current bid>`, bid count `<bid count>`, and no row of the user's in Recent Bids. g10.auction-dmn.US3-TC2
+   - Step 4 shows no entry for `<listing_4>`. g10.auction-dmn.US3-TC2
+   - Step 5 shows no row for `<listing_4>`. g10.auction-dmn.US3-TC2
+
+## Walk 7: Two maxima settle at the second-highest plus one increment
+
+**Starting state:**
+
+- User A and user B are signed in on separate sessions with `<card>` saved, both on `<listing_5>`.
+- `<listing_5>` is live, holds no bids, its starting price is `<starting price>` and its increment is `<increment>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_5>` | A live listing with no bids, in HKD |
+| `<starting price>` | 120000 minor units |
+| `<increment>` | 25000 minor units |
+| `<user A maximum>` | 800000 minor units |
+| `<user B maximum>` | 505000 minor units, below `<user A maximum>` |
+| `<user B raise>` | 900000 minor units, above `<user A maximum>` |
+
+### Route
+
+1. As user A, select **Set maximum**, enter `<user A maximum>` and **Confirm**.
+2. As user B, set a maximum of `<user B maximum>` and **Confirm**.
+3. As user A, reload `<listing_5>` and read Your maximum, Highest bid and standing.
+4. As user B, select **Raise**, enter `<user B raise>` and confirm.
+   - After step 1 User A leads at `<starting price>`. g10.auction-dmn.US4-TC1
+   - After step 2 user A still leads and Highest bid reads `<user B maximum>` plus `<increment>`. g10.auction-dmn.US4-TC1
+   - User A reads Your maximum, Highest bid and their standing as three separate facts. g10.auction-dmn.US4-TC1
+   - After step 4 user B leads at `<user A maximum>` plus `<increment>`, with no bids recorded at the amounts in between. g10.auction-dmn.US4-TC1
+
+## Walk 8: Outbid standing reaches the lot page and the bids index
+
+**Starting state:**
+
+- `<listing_6>` is live and its current bid is `<leader price>`.
+- User A leads `<listing_6>` with a committed maximum of `<user A maximum>`.
+- User B is signed in with a card saved and is on `<listing_6>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_6>` | A live listing led by user A, in HKD |
+| `<leader price>` | 530000 minor units (HKD 5,300.00) |
+| `<increment>` | 20000 minor units (HKD 200.00), the HK$8,000 tier at `<user A maximum>` |
+| `<user A maximum>` | 800000 minor units (HKD 8,000.00) |
+| `<user B maximum>` | 900000 minor units (HKD 9,000.00), above `<user A maximum>` |
+
+### Route
+
+1. As user B, set a maximum of `<user B maximum>` and confirm.
+2. As user A, open `<listing_6>` and read the bid panel.
+3. As user A, navigate to `<grade10 bids url>` and read the Active list.
+   - User A reads Outbid, with Your maximum still `<user A maximum>` and Highest bid at `<user A maximum>` plus `<increment>`. g10.auction-dmn.US5-TC1
+   - `<listing_6>` appears once under Active with outbid standing, its price and currency code, and its latest activity time. g10.auction-dmn.US5-TC1
+
+## Walk 9: Outbid summary opens its explanation and its lot
+
+**Starting state:**
+
+- A user is signed in and is on `<grade10 bids url>`.
+- `<listing_10>` is live, the user holds one accepted manual bid and one auto-bid on it, and user B now leads it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_10>` | A live listing the user has bid on manually and automatically, now led by user B |
+
+### Route
+
+1. Expand `<listing_10>`'s history.
+2. Open `<listing_10>` from its summary.
+   - User B's accepted bid and the user's own standing change sit in one order. g10.auction-dmn.US5-TC2
+   - The user's own rows read as You and user B stays a listing pseudonym with no maximum shown. g10.auction-dmn.US5-TC2
+   - Step 2 lands on `<listing_10>`'s own page. g10.auction-dmn.US5-TC2
+
+## Walk 10: Shared link unfurls as the lot and stays put on hydration
+
+**Starting state:**
+
+- `<listing_7>` is live, its current bid is `<current bid>`, and `<time left>` remains until its close.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_7>` | A live listing with bids and a close approaching |
+| `<current bid>` | 480000 minor units |
+| `<time left>` | 6 minutes |
+
+### Route
+
+1. Fetch `<an open listing url>` for `<listing_7>` with client-side scripts disabled.
+2. Open the same address with scripts enabled and watch Time left and Highest bid as scripts finish loading.
+   - The served gallery, description and standing stay on screen, with no loading placeholder over them. g10.auction-dmn.US6-TC1
+   - Time left counts on from the served value rather than jumping or blanking. g10.auction-dmn.US6-TC1
+   - Highest bid still reads `<current bid>` once scripts have finished loading. g10.auction-dmn.US6-TC1
+
+## Walk 11: Extension cap holds while the bid is still accepted
+
+**Starting state:**
+
+- A user is signed in with `<card>` saved and is on `<listing_9>`.
+- `<listing_9>` is live, carries an extension cap, and its recorded close already stands at that cap.
+- Its recorded close is `<bid time>` away.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_9>` | A live listing with an extension cap, its close already at the cap |
+| `<extension window>` / `<extension duration>` | 1800 seconds (30 minutes) each |
+| `<bid time>` | 2 minutes before the recorded close, inside `<extension window>` |
+| `<new time left>` | Unchanged — the close stays at the cap |
+| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+
+### Route
+
+1. Submit a bid of `<bid amount>` at `<bid time>`.
+2. Read Time left and the recorded close.
+3. Navigate to `<grade10 bids url>` and expand `<listing_9>`.
+   - The bid is accepted and Highest bid reads `<bid amount>`. g10.auction-dmn.US7-TC2
+   - Time left reads `<new time left>` and the recorded close does not move past the cap. g10.auction-dmn.US7-TC2
+   - The history shows the accepted bid beside an unchanged close. g10.auction-dmn.US7-TC2
+
+## Walk 12: Price-moving auto-bid in extended bidding restarts the timer on the open page
+
+**Starting state:**
+
+- customer A leads `<listing_8>` with maximum `<user A maximum>` and is on its lot page.
+- customer B is signed in with a linked card, on a separate session, on the same lot page.
+- `<listing_8>` is in extended bidding, and the recorded close is `<time left before bid>` away.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
+| `<extension duration>` | 1800 seconds |
+| `<time left before bid>` | 5 minutes |
+| `<leader price>` | 530000 HKD minor units |
+| `<increment>` | 8000 HKD minor units (HKD 80.00), the HK$4,000 tier at `<user B maximum>` |
+| `<user A maximum>` | 800000 HKD minor units |
+| `<user B maximum>` | 555000 HKD minor units, below `<user A maximum>` |
+
+### Route
+
+1. As customer A, read Time left on the lot page.
+2. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+3. As customer A, without reloading, read Highest bid and Time left on the open lot page.
+4. Wait `<extension duration>` with no further bid.
+   - Step 3 reads Highest bid `<user B maximum>` plus `<increment>`, and customer A still leads. g10.auction-dmn.US7-TC3
+   - Step 3 reads Time left `<extension duration>`, labelled Extended bidding, with no reload. g10.auction-dmn.US7-TC3
+   - The lot closes after step 4, and no further bid is placed. g10.auction-dmn.US7-TC3
+
+## Walk 13: Catalogue card and open lot page agree after an extension
+
+**Starting state:**
+
+- `<listing_8>` is in extended bidding, led by customer A, and the recorded close is `<time left before bid>` away.
+- customer A is on the lot page for `<listing_8>`.
+- `<listing_8>` is set as a Featured slide.
+- customer C is on `<grade10 auction url>` with `<listing_8>`'s Featured slide and All auctions card in view, on a device whose clock is `<device skew>`.
+- customer B is signed in with a linked card, on a separate session, on the lot page for `<listing_8>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
+| `<time left before bid>` | 5 minutes |
+| `<leader price>` | 530000 HKD minor units |
+| `<user A maximum>` | 800000 HKD minor units |
+| `<user B maximum>` | 900000 HKD minor units, above `<user A maximum>` |
+| `<increment>` | 20000 HKD minor units (HKD 200.00), the HK$8,000 tier at `<user A maximum>` |
+| `<device skew>` | 3 minutes behind |
+
+### Route
+
+1. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+2. As customer C, without reloading, read `<listing_8>`'s All auctions card and Featured slide.
+3. As customer A, without reloading, read Highest bid and Time left at the same moment.
+   - The card, the slide and the lot page's Highest bid all read `<user A maximum>` plus `<increment>`. g10.auction-dmn.US7-TC4
+   - The card's and the slide's Ends in and the lot page's Time left agree to the second. g10.auction-dmn.US7-TC4
+   - The slide still reads LIVE BIDDING, with no Extended label. g10.auction-dmn.US7-TC4
+   - Neither reads `<device skew>` off, and neither page reloaded. g10.auction-dmn.US7-TC4
+
+## Walk 14: Rival reads the price but never the leader's maximum
+
+**Starting state:**
+
+- `<listing_6>` is live and its current bid is `<leader price>`.
+- User A leads `<listing_6>` with a committed maximum of `<user A maximum>`.
+- User B is signed in, holds no bid on `<listing_6>`, and is on it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_6>` | A live listing led by user A, in HKD |
+| `<leader price>` | 530000 minor units |
+| `<user A maximum>` | 800000 minor units |
+
+### Route
+
+1. Read the bid panel and Recent Bids.
+2. Read the public listing contract `<listing_6>`'s page is served from.
+3. Sign out and open the same address.
+   - Highest bid reads `<leader price>` and `<user A maximum>` is neither shown nor derivable from any public fact. g10.auction-dmn.US8-TC1
+   - Recent Bids names other users by listing pseudonym only, with no card facts. g10.auction-dmn.US8-TC1
+   - The signed-out reader gets no private history and no maximum. g10.auction-dmn.US8-TC1
+
+## Walk 15: Signed-out visitor keeps their destination
+
+**Starting state:**
+
+- No user is signed in.
+- A user account holds an accepted bid on `<listing_11>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_11>` | A live listing the user holds an accepted bid on |
+
+### Route
+
+1. Navigate to `<grade10 bids url>`.
+2. Sign in as that user.
+   - No private history is shown before sign-in. g10.auction-dmn.US8-TC2
+   - Step 2 lands back on the bids index, showing that account's Active list with `<listing_11>` in it. g10.auction-dmn.US8-TC2
+
+## Walk 16: A linked collector's bid stands at once on the card on file
+
+**Starting state:**
+
+- customer A is signed in with a linked card and is on the lot page for `<listing_14>`.
+- customer B is signed in with a linked card, on a separate session, and can bid on `<listing_14>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_14>` | An open HKD listing with no bids, starting price `<starting price>` |
+| `<starting price>` | 20000 minor units (HKD 200.00) |
+| `<increment>` | 1000 minor units (HKD 10.00), the HKD step at `<user A maximum>` |
+| `<user A maximum>` | 50000 minor units (HKD 500.00) |
+| `<user B maximum>` | 80000 minor units (HKD 800.00), above `<user A maximum>` |
+| `<price after A>` | `<starting price>` |
+| `<price after B>` | `<user A maximum>` plus `<increment>` |
+
+### Route
+
+1. As customer A, enter `<user A maximum>` in the custom maximum on the bid panel and confirm the bid.
+2. As customer B, enter `<user B maximum>` in the custom maximum on the same lot and confirm the bid.
+3. Read the bid panel.
+4. Read both customers' card activity at the card provider.
+   - Step 1 accepts the bid at `<price after A>` in the one answer, and Change is unavailable. g10.auction-dmn.US8-TC3
+   - Highest bid reads `<price after B>`, and customer B leads. g10.auction-dmn.US8-TC3
+   - Step 4 shows nothing held or charged on either card. g10.auction-dmn.US8-TC3
+
+## Walk 17: Address naming no published lot answers not found
+
+**Starting state:**
+
+- The catalogue publishes no lot under `<no lot address>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<no lot address>` | An address under the auction's lots naming no published lot |
+
+### Route
+
+1. Navigate to `<no lot address>`.
+2. Check the response status.
+   - The response has status 404 and the site's not-found surface is shown. g10.auction-dmn.US9-TC1
+   - Neither an empty lot page nor the catalogue is shown in its place. g10.auction-dmn.US9-TC1
+
+## Walk 18: Called-off lot leaves the catalogue and keeps its address
+
+**Starting state:**
+
+- `<lot_1>` was published and listed in the catalogue, then an operator called it off.
+- customer has `<lot_1 address>` saved from when `<lot_1>` was published.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| lot_1 | A lot that was published, listed in the catalogue, then called off by an operator |
+| lot_1 address | The address of `<lot_1>` from when it was published |
+
+### Route
+
+1. Navigate to `<grade10 auction url>`.
+2. Search the catalogue for the title of `<lot_1>`.
+   - `<lot_1>` does not appear in the catalogue. g10.auction-dmn.US11-TC1
+3. Navigate to `<lot_1 address>`.
+   - response status is 200 and `<lot_1>`'s public listing page is on screen. `<!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->` g10.auction-dmn.US11-TC1
+
+## Walk 19: Winner and losing bidder read one result on the lot and My Auctions
+
+**Starting state:**
+
+- customer A leads `<listing_15>` at `<final price>` with maximum `<user A maximum>`.
+- customer B committed `<user B maximum>` on `<listing_15>` and was outbid.
+- customer A and customer B are signed in on separate sessions, both on the lot page for `<listing_15>`.
+- `<listing_15>`'s recorded close is under a minute away, and no further bid will be placed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_15>` | An HKD listing in extended bidding, led by customer A |
+| `<final price>` | 513000 minor units, `<user B maximum>` plus its 8000 increment |
+| `<user A maximum>` | 800000 minor units, above `<final price>` |
+| `<user B maximum>` | 505000 minor units, below `<final price>` |
+
+### Route
+
+1. Wait through the recorded close on both pages, without reloading.
+2. As customer A, read the lot's state.
+3. As customer B, read the lot's state.
+4. As customer A, navigate to `<my auctions url>`, select the Ended tab and find `<listing_15>`'s row.
+5. As customer B, navigate to `<my auctions url>`, select the Ended tab and find `<listing_15>`'s row.
+   - Once the close passes, both pages read Closed with no result until the close is recorded. g10.auction-dmn.US12-TC1
+   - Step 2 reads Won and step 3 reads Did not win, with Highest bid `<final price>` on both. g10.auction-dmn.US12-TC1
+   - Step 4's row reads Won, with Current bid `<final price>`. g10.auction-dmn.US12-TC1
+   - Step 5's row reads Didn't win, with Current bid `<final price>`, not `<user B maximum>`. g10.auction-dmn.US12-TC1
+   - Step 5's row reads "Your card was not charged.". g10.auction-dmn.US12-TC1
+
+## Walk 20: Catalogue card and lot page turn at the close without a reload
+
+**Starting state:**
+
+- customer A leads `<listing_16>` at `<final price>`, and is on its lot page.
+- customer C is on `<grade10 auction url>` with `<listing_16>`'s card in All auctions.
+- `<listing_16>`'s recorded close is under a minute away, and no further bid will be placed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_16>` | An HKD listing in extended bidding, led by customer A |
+| `<final price>` | 513000 minor units |
+
+### Route
+
+1. Wait through the recorded close on both pages, without reloading.
+2. As customer A, read the lot's state once the result shows.
+3. As customer C, read `<listing_16>`'s card.
+   - Once the close passes, customer A's page reads Closed with no result until the close is recorded. g10.auction-dmn.US12-TC2
+   - Until then, customer C's card shows its existing closed state with `<final price>` and no result. g10.auction-dmn.US12-TC2
+   - Step 2 reads Won, with Highest bid `<final price>`. g10.auction-dmn.US12-TC2
+   - Step 3's card reads Ended and names when it ended, with no watch control. g10.auction-dmn.US12-TC2
+   - Neither page reloaded. g10.auction-dmn.US12-TC2
 ### g10.auction-dmn.US1-TC1: Confirmed gallery image reaches the catalogue card
 
 **Classification:**

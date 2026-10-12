@@ -7,99 +7,292 @@
 
 
 
-## Walk 1: Collector places a bid across a price tier
+## Walk 1: Minimum before any bid is the opening price
 
 **Starting state:**
 
-- Reset the fixture to each case's own **Pre-conditions** before running that case.
+- An open listing in the row's currency, starting price the row's starting price, with no accepted bid.
+- customer is signed in with a card linked and is on that listing's page.
+
+**Test data:**
+
+| Currency | Starting price | Why this row | Minimum next amount |
+| --- | --- | --- | --- |
+| USD | 0 | Zero start | 100 minor units (USD 1.00), the lowest USD increment |
+| HKD | 0 | Zero start | 1000 minor units (HKD 10.00), the lowest HKD increment |
+| JPY | 0 | Zero start | 100 minor units (JPY 100), the lowest JPY increment |
+| HKD | 20000 minor units (HKD 200.00) | Positive start inside the HKD 0 tier | 20000 minor units (HKD 200.00), the starting price |
+| HKD | 500 minor units (HKD 5.00) | Positive start below the lowest HKD increment | 500 minor units (HKD 5.00), the starting price |
+| USD | 10000 minor units (USD 100.00) | Positive start on the USD 100 tier boundary | 10000 minor units (USD 100.00), the starting price |
 
 ### Route
 
 1. Open the bid panel on the listing.
 2. Read the minimum next amount.
-   - The minimum next amount is the row's minimum next amount. `g10.auction-bid-increments.US1-TC1`
-   - On a positive start it is the starting price, not the starting price plus its increment. `g10.auction-bid-increments.US1-TC1`
-   - On a HKD 500 start it is not raised to the lowest increment. `g10.auction-bid-increments.US1-TC1`
-   - On a zero start it is the currency's lowest increment, never 0. `g10.auction-bid-increments.US1-TC1`
-3. Open the listing bid panel.
-4. Place a bid of `<current public price>` plus `<increment>`.
-   - The new public price is `<minimum next amount>`. `g10.auction-bid-increments.US1-TC2`
-5. Open the listing bid panel.
-6. Enter `<bid amount>` as the bid amount.
-7. Confirm the bid.
-   - The bid is accepted. `g10.auction-bid-increments.US1-TC3`
-8. Open the listing bid panel.
-9. Enter `<bid amount>` as the bid amount.
-10. Confirm the bid.
-   - The bid is refused. `g10.auction-bid-increments.US1-TC4`
-   - The refusal names `<minimum>` as the minimum. `g10.auction-bid-increments.US1-TC4`
-11. Open the listing.
-12. Read the minimum next amount.
-   - The minimum next amount is shown in `<listing currency>`. **Out of suite:** - `grade10-site-auction-bid-increments-SC-06` — API and operator-form currency refusal is covered by the backend and admin verification lanes. - `grade10-site-auction-bid-increments-SC-07` — Manual-floor calculation is covered by the backend auction test lane. `g10.auction-bid-increments.US1-TC5`
-13. Enter the row's bid amount in the custom maximum on the bid panel.
-14. Confirm the bid.
-   - the bid is accepted. `g10.auction-bid-increments.US1-TC6`
-15. Read the minimum next amount on the bid panel.
-   - the minimum next amount is the opening price plus the increment at the opening price, the row's next minimum after. `g10.auction-bid-increments.US1-TC6`
-   - On the USD 10000 row the USD 100 tier applies, not the USD 0 tier. `g10.auction-bid-increments.US1-TC6`
-16. Enter the row's bid amount in the custom maximum on the bid panel.
-17. Confirm the bid.
-   - the bid is refused, naming the row's opening price as the minimum. `g10.auction-bid-increments.US1-TC7`
-18. Read the bid panel.
-   - the listing still has no accepted bid. `g10.auction-bid-increments.US1-TC7`
-   - the minimum next amount is still the row's opening price. `g10.auction-bid-increments.US1-TC7`
-19. As customer A, submit a bid of `<ceiling>` on `<listing_1>`.
-20. Read the API response.
-   - customer A's bid is accepted at `<ceiling>`. `g10.auction-bid-increments.US1-TC8`
-21. As customer B, submit a bid of `<ceiling>` plus the increment at it.
-22. Read the API response.
-   - customer B's bid is refused, naming the ceiling. `g10.auction-bid-increments.US1-TC8`
-23. Read `<listing_1>`'s current bid, leader and bid count.
-   - current bid `<ceiling>`, customer A leads, bid count 1. `g10.auction-bid-increments.US1-TC8`
+   - The minimum next amount is the row's minimum next amount. g10.auction-bid-increments.US1-TC1
+   - On a positive start it is the starting price, not the starting price plus its increment. g10.auction-bid-increments.US1-TC1
+   - On a HKD 500 start it is not raised to the lowest increment. g10.auction-bid-increments.US1-TC1
+   - On a zero start it is the currency's lowest increment, never 0. g10.auction-bid-increments.US1-TC1
 
-## Walk 2: Collector bids up to the currency ceiling
+## Walk 2: Boundary price takes the higher tier
 
 **Starting state:**
+An open USD listing has current public price `<current public price>`.
+The collector is enrolled and can bid.
 
-- Reset the fixture to each case's own **Pre-conditions** before running that case.
+**Test data:**
+
+| current public price | increment | minimum next amount |
+| --- | ---: | ---: |
+| 10000 USD minor units | 500 | 10500 |
+| 9999 USD minor units | 100 | 10099 |
+| 50000 USD minor units | 1000 | 51000 |
+
+### Route
+
+1. Open the listing bid panel.
+2. Place a bid of `<current public price>` plus `<increment>`.
+   - The new public price is `<minimum next amount>`. g10.auction-bid-increments.US1-TC2
+
+## Walk 3: Amount above the minimum is accepted
+
+**Starting state:**
+The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
+
+**Test data:**
+
+| minimum | bid amount |
+| --- | ---: |
+| 10500 USD minor units | 12000 |
 
 ### Route
 
 1. Open the listing bid panel.
 2. Enter `<bid amount>` as the bid amount.
 3. Confirm the bid.
-   - The bid is accepted. `g10.auction-bid-increments.US2-TC1`
+   - The bid is accepted. g10.auction-bid-increments.US1-TC3
+
+## Walk 4: Amount below the minimum is refused
+
+**Starting state:**
+The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
+
+**Test data:**
+
+| minimum | bid amount |
+| --- | ---: |
+| 10500 USD minor units | 10499 |
+
+### Route
+
+1. Open the listing bid panel.
+2. Enter `<bid amount>` as the bid amount.
+3. Confirm the bid.
+   - The bid is refused. g10.auction-bid-increments.US1-TC4
+   - The refusal names `<minimum>` as the minimum. g10.auction-bid-increments.US1-TC4
+
+## Walk 5: Listing publishes the next minimum
+
+**Starting state:**
+An open listing is available in `<listing currency>`.
+
+**Test data:**
+
+| listing currency |
+| --- |
+| USD |
+| HKD |
+| JPY |
+
+### Route
+
+1. Open the listing.
+2. Read the minimum next amount.
+   - The minimum next amount is shown in `<listing currency>`. **Out of suite:** - `grade10-site-auction-bid-increments-SC-06` — API and operator-form currency refusal is covered by the backend and admin verification lanes. - `grade10-site-auction-bid-increments-SC-07` — Manual-floor calculation is covered by the backend auction test lane. g10.auction-bid-increments.US1-TC5
+
+## Walk 6: First bid at the opening price is accepted, then one increment applies
+
+**Starting state:**
+
+- An open listing in the row's currency, starting price the row's starting price, with no accepted bid.
+- customer is signed in with a card linked and is on that listing's page.
+
+**Test data:**
+
+| Currency | Starting price | Opening price, the bid amount | Increment at the opening price | Next minimum after |
+| --- | --- | --- | --- | --- |
+| USD | 0 | 100 minor units (USD 1.00) | 100 (USD 0 tier) | 200 minor units (USD 2.00) |
+| HKD | 0 | 1000 minor units (HKD 10.00) | 1000 (HKD 0 tier) | 2000 minor units (HKD 20.00) |
+| JPY | 0 | 100 minor units (JPY 100) | 100 (JPY 0 tier) | 200 minor units (JPY 200) |
+| HKD | 500 minor units (HKD 5.00) | 500 minor units (HKD 5.00) | 1000 (HKD 0 tier) | 1500 minor units (HKD 15.00) |
+| USD | 10000 minor units (USD 100.00) | 10000 minor units (USD 100.00) | 500 (USD 100 tier) | 10500 minor units (USD 105.00) |
+
+### Route
+
+1. Fill the form for one Test data row.
+   a. Use Starting price "0"; Opening price, the bid amount "100 minor units (USD 1.00)"; Increment at the opening price "100 (USD 0 tier)"; Next minimum after "200 minor units (USD 2.00)".
+   b. Use Starting price "0"; Opening price, the bid amount "1000 minor units (HKD 10.00)"; Increment at the opening price "1000 (HKD 0 tier)"; Next minimum after "2000 minor units (HKD 20.00)".
+   c. Use Starting price "0"; Opening price, the bid amount "100 minor units (JPY 100)"; Increment at the opening price "100 (JPY 0 tier)"; Next minimum after "200 minor units (JPY 200)".
+   d. Use Starting price "500 minor units (HKD 5.00)"; Opening price, the bid amount "500 minor units (HKD 5.00)"; Increment at the opening price "1000 (HKD 0 tier)"; Next minimum after "1500 minor units (HKD 15.00)".
+   e. Use Starting price "10000 minor units (USD 100.00)"; Opening price, the bid amount "10000 minor units (USD 100.00)"; Increment at the opening price "500 (USD 100 tier)"; Next minimum after "10500 minor units (USD 105.00)".
+2. Confirm the bid.
+   - the bid is accepted. g10.auction-bid-increments.US1-TC6
+3. Read the minimum next amount on the bid panel.
+   - the minimum next amount is the opening price plus the increment at the opening price, the row's next minimum after. g10.auction-bid-increments.US1-TC6
+   - On the USD 10000 row the USD 100 tier applies, not the USD 0 tier. g10.auction-bid-increments.US1-TC6
+
+## Walk 7: First bid below the opening price is refused
+
+**Starting state:**
+
+- An open listing in the row's currency, starting price the row's starting price, with no accepted bid.
+- customer is signed in with a card linked and is on that listing's page.
+
+**Test data:**
+
+| Currency | Starting price | Opening price | Bid amount |
+| --- | --- | --- | --- |
+| HKD | 0 | 1000 minor units (HKD 10.00) | 900 minor units (HKD 9.00) |
+| JPY | 0 | 100 minor units (JPY 100) | 99 minor units (JPY 99) |
+| HKD | 500 minor units (HKD 5.00) | 500 minor units (HKD 5.00) | 400 minor units (HKD 4.00) |
+| USD | 10000 minor units (USD 100.00) | 10000 minor units (USD 100.00) | 9900 minor units (USD 99.00) |
+
+### Route
+
+1. Fill the form for one Test data row.
+   a. Use Starting price "0"; Opening price "1000 minor units (HKD 10.00)"; Bid amount "900 minor units (HKD 9.00)".
+   b. Use Starting price "0"; Opening price "100 minor units (JPY 100)"; Bid amount "99 minor units (JPY 99)".
+   c. Use Starting price "500 minor units (HKD 5.00)"; Opening price "500 minor units (HKD 5.00)"; Bid amount "400 minor units (HKD 4.00)".
+   d. Use Starting price "10000 minor units (USD 100.00)"; Opening price "10000 minor units (USD 100.00)"; Bid amount "9900 minor units (USD 99.00)".
+2. Confirm the bid.
+   - the bid is refused, naming the row's opening price as the minimum. g10.auction-bid-increments.US1-TC7
+3. Read the bid panel.
+   - the listing still has no accepted bid. g10.auction-bid-increments.US1-TC7
+   - the minimum next amount is still the row's opening price. g10.auction-bid-increments.US1-TC7
+
+## Walk 8: Lot starting at the ceiling takes one first bid there
+
+**Starting state:**
+
+- `<listing_1>` is open in the row's currency, starting price the row's `<ceiling>`, with no accepted bid.
+- customer A and customer B are signed in with cards linked, on separate sessions.
+
+**Test data:**
+
+| Currency | `<ceiling>` |
+| --- | --- |
+| USD | 1000000000 minor units (USD 10,000,000.00) |
+| HKD | 8000000000 minor units (HKD 80,000,000.00) |
+| JPY | 5000000000 minor units (JPY 5,000,000,000) |
+
+### Route
+
+1. As customer A, submit a bid of `<ceiling>` on `<listing_1>`.
+2. Read the API response.
+   - customer A's bid is accepted at `<ceiling>`. g10.auction-bid-increments.US1-TC8
+3. As customer B, submit a bid of `<ceiling>` plus the increment at it.
+4. Read the API response.
+   - customer B's bid is refused, naming the ceiling. g10.auction-bid-increments.US1-TC8
+5. Read `<listing_1>`'s current bid, leader and bid count.
+   - current bid `<ceiling>`, customer A leads, bid count 1. g10.auction-bid-increments.US1-TC8
+
+## Walk 9: Bid equal to the ceiling is accepted
+
+**Starting state:**
+The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
+
+**Test data:**
+
+| minimum | ceiling | bid amount |
+| --- | ---: | ---: |
+| 999990000 USD minor units | 1000000000 | 1000000000 |
+
+### Route
+
+1. Open the listing bid panel.
+2. Enter `<bid amount>` as the bid amount.
+3. Confirm the bid.
+   - The bid is accepted. g10.auction-bid-increments.US2-TC1
+
+## Walk 10: Direct bid above the ceiling is refused without effects
+
+**Starting state:**
+
+- customer(card linked, account in good standing) can bid on an open listing in the row's currency.
+- The listing's minimum is below the ceiling.
+- The request is sent directly, bypassing the custom maximum field.
+
+**Test data:**
+
+| Currency | Ceiling | Bid amount |
+| --- | --- | --- |
+| USD | 1000000000 minor units (USD 10,000,000.00) | 1000000001 minor units |
+| HKD | 8000000000 minor units (HKD 80,000,000.00) | 8000000001 minor units |
+| JPY | 5000000000 minor units (JPY 5,000,000,000) | 5000000001 minor units |
+
+### Route
+
+1. Read the listing's price, leader, bid count and maximums.
+2. Follow one Test data row.
+   a. Use Ceiling "1000000000 minor units (USD 10,000,000.00)"; Bid amount "1000000001 minor units".
+   b. Use Ceiling "8000000000 minor units (HKD 80,000,000.00)"; Bid amount "8000000001 minor units".
+   c. Use Ceiling "5000000000 minor units (JPY 5,000,000,000)"; Bid amount "5000000001 minor units".
+3. Read the API response.
+   - the service refuses with `AMOUNT_TOO_HIGH`. g10.auction-bid-increments.US2-TC2
+   - `ceilingMinor` equals the row's ceiling. g10.auction-bid-increments.US2-TC2
 4. Read the listing's price, leader, bid count and maximums.
-5. Submit the row's bid amount through the authenticated auction API.
-6. Read the API response.
-   - the service refuses with `AMOUNT_TOO_HIGH`. `g10.auction-bid-increments.US2-TC2`
-   - `ceilingMinor` equals the row's ceiling. `g10.auction-bid-increments.US2-TC2`
-7. Read the listing's price, leader, bid count and maximums.
-   - price, leader, bid count and maximums remain unchanged. `g10.auction-bid-increments.US2-TC2`
-8. Read the operational refusal entry for this attempt.
-   - one entry names bidder, listing, code, amount and ceiling. `g10.auction-bid-increments.US2-TC2`
-9. As the collector, submit `<maximum>` through the authenticated auction API.
-   - The maximum is refused and the refusal names `<ceiling>` as the ceiling. `g10.auction-bid-increments.US2-TC3`
-10. Read the response and the collector's maximums on the listing.
-   - No maximum is recorded for the collector. `g10.auction-bid-increments.US2-TC3`
-11. Read the listing's bid count and maximums.
-12. As customer B, submit the amount through the authenticated auction API.
-13. Read the API response.
-   - the service refuses with `AMOUNT_TOO_HIGH`. `g10.auction-bid-increments.US2-TC4`
-   - `ceilingMinor` equals the row's ceiling. `g10.auction-bid-increments.US2-TC4`
-14. Read the listing's price, leader, bid count and maximums.
-   - price remains the ceiling and customer A leads. `g10.auction-bid-increments.US2-TC4`
-   - bid count and maximums remain unchanged. `g10.auction-bid-increments.US2-TC4`
-15. Read the operational refusal entry for this attempt.
-   - one entry names bidder, listing, code, amount and ceiling. `g10.auction-bid-increments.US2-TC4`
+   - price, leader, bid count and maximums remain unchanged. g10.auction-bid-increments.US2-TC2
+5. Read the operational refusal entry for this attempt.
+   - one entry names bidder, listing, code, amount and ceiling. g10.auction-bid-increments.US2-TC2
 
-## g10.auction-bid-increments.US1: Collector places a bid across a price tier
+## Walk 11: Auto-bid maximum above the ceiling is refused
 
-**As a** collector,
-**I want** the minimum next bid to scale with the lot's price,
-**so that** I can enter an affordable opening bid and a sensible later bid.
+**Starting state:**
 
-<!-- trace:case id=g10.auction-bid-increments.TC-8e2 rev=2 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
+- The collector is enrolled on an open JPY listing whose minimum bid is `<minimum>`.
+- The maximum is sent directly to the auction service.
+
+**Test data:**
+
+| `<minimum>` | `<ceiling>` | `<maximum>` |
+| --- | ---: | ---: |
+| 150000 JPY minor units | 5000000000 | 5000000001 |
+
+### Route
+
+1. As the collector, submit `<maximum>` through the authenticated auction API.
+2. Read the response and the collector's maximums on the listing.
+   - The maximum is refused and the refusal names `<ceiling>` as the ceiling. g10.auction-bid-increments.US2-TC3
+   - No maximum is recorded for the collector. g10.auction-bid-increments.US2-TC3
+
+## Walk 12: Listing at the ceiling refuses a further direct bid
+
+**Starting state:**
+
+- customer A leads the open listing at the row's ceiling.
+- customer B(card linked, account in good standing) can bid on the listing.
+- The request is sent directly, bypassing the custom maximum field.
+
+**Test data:**
+
+| Currency | Ceiling | Bid amount |
+| --- | --- | --- |
+| USD | 1000000000 minor units (USD 10,000,000.00) | 1000000001 minor units |
+| HKD | 8000000000 minor units (HKD 80,000,000.00) | 8000000001 minor units |
+| JPY | 5000000000 minor units (JPY 5,000,000,000) | 5000000001 minor units |
+
+### Route
+
+1. Read the listing's bid count and maximums.
+2. As customer B, submit the amount through the authenticated auction API.
+3. Read the API response.
+   - the service refuses with `AMOUNT_TOO_HIGH`. g10.auction-bid-increments.US2-TC4
+   - `ceilingMinor` equals the row's ceiling. g10.auction-bid-increments.US2-TC4
+4. Read the listing's price, leader, bid count and maximums.
+   - price remains the ceiling and customer A leads. g10.auction-bid-increments.US2-TC4
+   - bid count and maximums remain unchanged. g10.auction-bid-increments.US2-TC4
+5. Read the operational refusal entry for this attempt.
+   - one entry names bidder, listing, code, amount and ceiling. g10.auction-bid-increments.US2-TC4
 ### g10.auction-bid-increments.US1-TC1: Minimum before any bid is the opening price
 
 Runs once per row of **Test data**.

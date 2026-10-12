@@ -4,1098 +4,3455 @@
 **Drafts styled:** 2026-10-12, tcs-rules r5
 **Out of suite:** none.
 
-## Walk 1: Winner settles a won lot
+## Walk 1: A lot closing with a winner opens one order whose quoted charges read TBD
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(signed in, holds a default shipping address) leads `<lot_1>`.
+- ❓ The spec does not identify the surface where the tester waits for `<lot_1>` to close.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A lot taking bids, led by this collector, closing within a minute |
 
 ### Route
 
 1. Wait for `<lot_1>` to close.
 2. Navigate to `<winner order url>` for `<lot_1>`.
-   - one Winner Order exists for `<lot_1>`. `g10.auction-winner-order.US1-TC1`
+   - one Winner Order exists for `<lot_1>`. g10.auction-winner-order.US1-TC1
 3. Read Order Summary.
-   - Shipping & Handling, Insurance and Tax read TBD. `g10.auction-winner-order.US1-TC1`
-   - no charge is marked as an estimate. `g10.auction-winner-order.US1-TC1`
-4. Wait for `<lot_1>` to close.
-5. Navigate to `<winner order url>` for `<lot_1>`.
-   - the winning bid and buyer's premium show. `g10.auction-winner-order.US1-TC2`
-   - Shipping & Handling, Insurance and Tax read TBD. `g10.auction-winner-order.US1-TC2`
-6. Try to pay.
-   - payment is refused until a delivery address is given. `g10.auction-winner-order.US1-TC2`
-7. Try to pay without confirming the delivery address.
-   - Payment is refused. `g10.auction-winner-order.US1-TC3`
-   - The order asks the winner to confirm the delivery address. `g10.auction-winner-order.US1-TC3`
-8. Change the delivery address to `<address_far>`.
-9. Read the totals before paying.
-   - The new total reads `<total after>`, equal to `<total before>` plus `<difference>`. `g10.auction-winner-order.US1-TC4`
-   - Both `<total before>` and `<total after>` show before payment. `g10.auction-winner-order.US1-TC4`
-   - No separate charge of `<difference>` is raised. `g10.auction-winner-order.US1-TC4`
-10. Wait for `<lot_1>` to close.
-11. Read customer A's authorizations and charges for `<lot_1>` at the card provider.
-   - shows no authorization and no charge for `<lot_1>`. `g10.auction-winner-order.US1-TC5`
-12. Once the invoice for `<lot_1>` is sent, pay it by card through hosted Checkout with `<card>`.
-   - opens hosted Checkout for the invoice total. `g10.auction-winner-order.US1-TC5`
-13. Read customer A's card transactions for `<lot_1>` again.
-   - shows one charge, for the invoice total. `g10.auction-winner-order.US1-TC5`
-14. Pay with `<card_declining>`.
-   - the invoice stays unpaid and payable. `g10.auction-winner-order.US1-TC6`
-15. Pay with `<card_good>`.
-   - payment is accepted; the order reads paid. `g10.auction-winner-order.US1-TC6`
-16. Read the payment deadline on `<lot_2>`'s invoice.
-   - the deadline is `<deadline>` and the PDF shows it as 2026-09-10 20:00 `GMT+8`. `g10.auction-winner-order.US1-TC7`
-17. Open `<winner order url>` in a browser set to America/New_York.
-   - Winner Order shows the same instant in the viewer's local zone as 08:00 `EDT`. `g10.auction-winner-order.US1-TC7`
-18. Save `<address_home>` and `<address_work>` to the account address book.
-   - both addresses are in the address book, each under its name. `g10.auction-winner-order.US1-TC8`
-19. Navigate to `<winner order url>` for `<order_unpaid>`.
-20. Open the delivery address picker.
-   - both are offered for the order. `g10.auction-winner-order.US1-TC8`
-21. Set `<address_work>` as the default.
-   - only `<address_work>` is marked default. `g10.auction-winner-order.US1-TC9`
-22. Navigate to `<winner order url>` for `<order_new>`.
-   - the delivery address is pre-filled with `<address_work>`. `g10.auction-winner-order.US1-TC9`
-23. Edit `<address_home>`'s address line 1 to `<new street>` in the address book.
-   - the address book shows `<new street>`. `g10.auction-winner-order.US1-TC10`
-24. Navigate to `<winner order url>` for `<order_unpaid>`.
-   - the order still shows the original address line 1. `g10.auction-winner-order.US1-TC10`
-25. Archive `<address_work>` in the address book.
-   - The winner is asked to choose another address for `<order_unpaid>`. `g10.auction-winner-order.US1-TC11`
-   - `<address_work>` stays available while the order uses it. `g10.auction-winner-order.US1-TC11`
-26. Open Complete Order Setup.
-   - Phone shows a globe only: no flag, no calling-code divider. `g10.auction-winner-order.US1-TC12`
-27. Open Add Address for delivery.
-   - The placeholder shows an example with a calling code, `+852 12345678`. `g10.auction-winner-order.US1-TC12`
-28. Look at the Phone field.
-   - No calling country is chosen. `g10.auction-winner-order.US1-TC12`
-29. Open Add Address for delivery.
-   - Personal is selected. `g10.auction-winner-order.US1-TC13`
-30. Read the Personal / Company control and the fields below it.
-   - Company Name is not shown. `g10.auction-winner-order.US1-TC13`
-31. Click Company on the Personal / Company control.
-   - Company is selected. `g10.auction-winner-order.US1-TC14`
-32. Read the fields below it.
-   - Company Name shows, marked required. `g10.auction-winner-order.US1-TC14`
-33. Fill the fields from **Test data**.
-   - The confirm is refused, with a message beside the missing field. `g10.auction-winner-order.US1-TC16`
-34. Click confirm.
-   - No address is saved or applied to the order. `g10.auction-winner-order.US1-TC16`
-35. Fill the fields from **Test data**.
-   - The confirm is accepted; no phone-format refusal shows. `g10.auction-winner-order.US1-TC18`
-36. Click confirm.
-   - The address is applied to the order. `g10.auction-winner-order.US1-TC18`
-37. Fill the fields from **Test data**.
-38. Click confirm.
-   - the confirm is accepted. `g10.auction-winner-order.US1-TC19`
-39. Read the phone on the order's delivery address.
-   - the phone reads `<stored phone>`. `g10.auction-winner-order.US1-TC19`
-40. Fill the fields from **Test data**.
-41. Click confirm.
-   - the confirm is accepted. `g10.auction-winner-order.US1-TC20`
-42. Read the order's delivery address.
-   - line 1 and postal code show; line 2 and state are empty. `g10.auction-winner-order.US1-TC20`
-43. Read every field label on the form.
-   - No Apt., Suite or Building field shows. `g10.auction-winner-order.US1-TC21`
-   - Address line 2 shows as the optional second line. `g10.auction-winner-order.US1-TC21`
-44. Open the delivery address picker.
-45. Read the address card from **Test data**.
-   - The title matches the row's expected address type. `g10.auction-winner-order.US1-TC22`
-   - The body shows street, city or region, and country. `g10.auction-winner-order.US1-TC22`
-   - The body shows no postal code and no phone. `g10.auction-winner-order.US1-TC22`
-46. Click Company.
-47. Fill the fields from **Test data**.
-48. Click confirm.
-   - the order's delivery address carries Northwind Collectibles, Alex Chen, phone and 94105. `g10.auction-winner-order.US1-TC24`
-49. Reopen the delivery address picker.
-   - the card reads Northwind Collectibles, with no phone or postal code. `g10.auction-winner-order.US1-TC24`
-50. Open Complete Order Setup.
-51. Enter the delivery address from **Test data**.
-52. Confirm setup.
-53. Read Delivery and Billing on Order Summary.
-   - Delivery shows company, recipient, phone, 100 Market St, San Francisco 94105 and United States. `g10.auction-winner-order.US1-TC25`
-   - Billing shows the same as Delivery. `g10.auction-winner-order.US1-TC25`
-54. Find Insurance on Order Summary.
-   - Insurance reads `<insurance_amount>`, not TBD. `g10.auction-winner-order.US1-TC26`
-55. Hover the Insurance info tooltip.
-   - the tooltip reads `0.9% of the order value during transit.` `g10.auction-winner-order.US1-TC26`
-56. Read the fee rows on Order Summary.
-   - Insurance shows with the other fee rows, reading TBD. `g10.auction-winner-order.US1-TC27`
-57. Hover the Insurance info tooltip.
-   - the tooltip reads `0.9% of the order value during transit.` `g10.auction-winner-order.US1-TC27`
-58. Read Order Summary.
-   - No Insurance row and no Insurance tooltip show. `g10.auction-winner-order.US1-TC28`
-59. Publish `<listing_3>`.
-60. Read `<listing_3>`'s listing code.
-   - `<listing_3>` holds a code other than `<code_1>`, hashed again with a counter. `g10.auction-winner-order.US1-TC29`
-   - `L` and 5 characters; no `0`, `O`, `1`, `I` or lower case. `g10.auction-winner-order.US1-TC29`
-61. Change the hash method, then read both listing codes.
-   - both listings keep their codes. `g10.auction-winner-order.US1-TC29`
-62. Reload the order.
-   - the order shows `<address_work>` and bank transfer, still Preparing Invoice. `g10.auction-winner-order.US1-TC34`
-63. Look for address and payment-method controls.
-   - no control changes either. `g10.auction-winner-order.US1-TC34`
-64. Archive `<address_work>` in the address book.
-   - `<address_work>` is archived. `g10.auction-winner-order.US1-TC35`
-65. Navigate to `<winner order url>` for `<order_preparing>`.
-   - the order still shows `<address_work>`. `g10.auction-winner-order.US1-TC35`
-66. Open the Country/Region picker.
-   - opens a popup listing every country and region A–Z, not a short designated set. `g10.auction-winner-order.US1-TC36`
-67. Scroll the popup from the first option to the last.
-   - keeps the full catalogue available inside the capped-height popup. `g10.auction-winner-order.US1-TC36`
-68. Look at the country or region field label beside the picker.
-   - The label reads Country/Region. `g10.auction-winner-order.US1-TC37`
-69. Read the Country/Region field without opening the popup.
-   - The field shows Hong Kong. `g10.auction-winner-order.US1-TC38`
-   - Country/Region options are not in the tree. `g10.auction-winner-order.US1-TC38`
-70. Open the Country/Region picker.
-   - shows every country and region A–Z in the popup. `g10.auction-winner-order.US1-TC39`
-71. Scroll within the popup to a mid-alphabet name and to a late-alphabet name.
-   - scrolls the long list inside a capped height without truncating the catalogue to a short set. `g10.auction-winner-order.US1-TC39`
-72. Focus the open Country/Region picker.
-73. Type the query from **Test data**.
-   - shows only country or region names that match the query. `g10.auction-winner-order.US1-TC40`
-   - Names that do not match (for example Australia) are not shown. `g10.auction-winner-order.US1-TC40`
-74. Open the Autocomplete.
-   - The list shows only options whose labels match the query. `g10.auction-winner-order.US1-TC41`
-75. Type the query from **Test data**.
-   - Non-matching options are not shown. `g10.auction-winner-order.US1-TC41`
-76. Type the query from **Test data**.
-   - The list shows no country or region options. `g10.auction-winner-order.US1-TC42`
-77. Type the query from **Test data**.
-   - The matching country appears in the filtered list. `g10.auction-winner-order.US1-TC43`
-   - Unrelated country names outside the query are not shown. `g10.auction-winner-order.US1-TC43`
-78. Open the Country/Region picker.
-79. Type the query from **Test data**.
-   - The field shows United Kingdom. `g10.auction-winner-order.US1-TC45`
-80. Select United Kingdom from the filtered matches.
-   - closes the popup. `g10.auction-winner-order.US1-TC45`
-   - Options are no longer in the tree. `g10.auction-winner-order.US1-TC45`
-81. Activate Confirm or Use This Address with Country/Region empty.
-   - A field refusal appears beside Country/Region. `g10.auction-winner-order.US1-TC46`
-   - The address is not applied with an empty country or region. `g10.auction-winner-order.US1-TC46`
-82. Open the Country/Region picker.
-   - The open list includes names from the start of the A–Z range and from near the end. `g10.auction-winner-order.US1-TC47`
-83. Note whether an early-alphabet name and a late-alphabet name both appear in the list.
-   - The set is not limited to a short designated sample. `g10.auction-winner-order.US1-TC47`
-84. Open Winner Order.
-85. Read Tax in Order Summary and open its info tip.
-   - Tax reads TBD with the other fee rows. `g10.auction-winner-order.US1-TC30`
-   - No calculated Tax amount is shown. `g10.auction-winner-order.US1-TC30`
-   - The tip reads `Set by Grade10 for where your order ships. Some orders have none.` `g10.auction-winner-order.US1-TC30`
-86. Open Winner Order and read Order Summary.
-87. Open the invoice PDF.
-88. Open the receipt PDF.
-   - Order Summary shows Tax of 6000 minor units in HKD between Insurance and Payment Processing Fee. `g10.auction-winner-order.US1-TC31`
-   - Order Summary offers the Tax info tip with the stated copy. `g10.auction-winner-order.US1-TC31`
-   - The invoice PDF and the receipt PDF each show Tax of 6000 minor units in HKD between Insurance and Subtotal. `g10.auction-winner-order.US1-TC31`
-   - Each PDF's Subtotal includes the 6000 minor units in HKD. `g10.auction-winner-order.US1-TC31`
-89. Open Winner Order and read Order Summary.
-90. Open the invoice PDF.
-91. Open the receipt PDF.
-   - No surface shows a Tax line. `g10.auction-winner-order.US1-TC32`
-   - Order Summary offers no Tax info tip. `g10.auction-winner-order.US1-TC32`
-92. Add Tax of 6000 minor units in HKD.
-93. Send the invoice.
-94. Read its Subtotal and payment processing fee inputs.
-   - The Subtotal is 318000 minor units in HKD. `g10.auction-winner-order.US1-TC33`
-   - Grade10 computes the payment processing fee from that Subtotal. `g10.auction-winner-order.US1-TC33`
-95. Start setup, choose the home address and reach the payment method choice.
-   - Only card is offered. `g10.auction-winner-order.US1-TC48`
-96. Send Grade10 a setup confirmation carrying the home address and bank transfer.
-   - Grade10 refuses the confirmation. `g10.auction-winner-order.US1-TC48`
-97. Reload the order.
-   - The order is still Awaiting Setup, with no delivery address and no method recorded. `g10.auction-winner-order.US1-TC48`
-98. Change the choice to bank transfer.
-99. Confirm the home address.
-100. Reload the order.
-   - The order records bank transfer, not card. `g10.auction-winner-order.US1-TC50`
-   - The order reads Preparing Invoice. `g10.auction-winner-order.US1-TC50`
-101. Choose the home address, choose no payment method, and confirm.
-   - Grade10 refuses the confirmation. `g10.auction-winner-order.US1-TC51`
-102. Reload the order.
-   - The order is still Awaiting Setup. `g10.auction-winner-order.US1-TC51`
-103. Choose the home address and reach the payment method choice.
-   - Card reads that it is not yet available in HKD, and cannot be chosen. `g10.auction-winner-order.US1-TC52`
-104. Try to choose card.
-   - Bank transfer is offered. `g10.auction-winner-order.US1-TC52`
-105. Send Grade10 a setup confirmation carrying the home address and card.
-   - Grade10 refuses the confirmation. `g10.auction-winner-order.US1-TC52`
-106. Reload the order.
-   - The order holds no delivery address and no method. `g10.auction-winner-order.US1-TC52`
-107. Choose the home address and reach the payment method choice.
-   - The page says payment is not yet available in USD and offers Contact Us. `g10.auction-winner-order.US1-TC53`
-108. Try to choose card, then bank transfer, then confirm.
-   - Neither method can be chosen, and Grade10 refuses the confirmation. `g10.auction-winner-order.US1-TC53`
-109. Reload the order.
-   - The order is still Awaiting Setup, holding no delivery address and no method. `g10.auction-winner-order.US1-TC53`
-110. Open the Country/Region picker and read the names.
-   - The names read in Traditional Chinese. `g10.auction-winner-order.US1-TC56`
-111. Type `日本`.
-   - The list narrows to `日本`. `g10.auction-winner-order.US1-TC56`
+   - Shipping & Handling, Insurance and Tax read TBD. g10.auction-winner-order.US1-TC1
+   - no charge is marked as an estimate. g10.auction-winner-order.US1-TC1
 
-## Walk 2: Winner follows a settled lot to delivery
+## Walk 2: With no delivery address the invoice cannot be paid
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(signed in, no default shipping address) leads `<lot_1>`.
+- ❓ The spec does not identify the surface where the tester waits for `<lot_1>` to close.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A lot taking bids, led by this collector, closing within a minute |
+
+### Route
+
+1. Wait for `<lot_1>` to close.
+2. Navigate to `<winner order url>` for `<lot_1>`.
+   - the winning bid and buyer's premium show. g10.auction-winner-order.US1-TC2
+   - Shipping & Handling, Insurance and Tax read TBD. g10.auction-winner-order.US1-TC2
+3. Try to pay.
+   - payment is refused until a delivery address is given. g10.auction-winner-order.US1-TC2
+
+## Walk 3: A pre-filled default address must still be confirmed before paying
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_prefilled>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_prefilled>` | An unpaid order whose delivery address is pre-filled from the account default, not confirmed |
+
+### Route
+
+1. Try to pay without confirming the delivery address.
+   - Payment is refused. g10.auction-winner-order.US1-TC3
+   - The order asks the winner to confirm the delivery address. g10.auction-winner-order.US1-TC3
+
+## Walk 4: Changing the address shows the old and new totals before paying
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_unpaid>`.
+- `<address_far>` is saved on the account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_unpaid>` | An unpaid HKD order, total `<total before>` |
+| `<address_far>` | A saved address whose shipping and insurance cost `<difference>` more |
+| `<total before>` | HKD 3,120.00 (312000 minor units) |
+| `<difference>` | HKD 40.00 (4000 minor units) |
+| `<total after>` | HKD 3,160.00: `<total before>` plus `<difference>` |
+
+### Route
+
+1. Change the delivery address to `<address_far>`.
+2. Read the totals before paying.
+   - The new total reads `<total after>`, equal to `<total before>` plus `<difference>`. g10.auction-winner-order.US1-TC4
+   - Both `<total before>` and `<total after>` show before payment. g10.auction-winner-order.US1-TC4
+   - No separate charge of `<difference>` is raised. g10.auction-winner-order.US1-TC4
+
+## Walk 5: The winner's card holds nothing from bidding and one fresh charge settles
+
+**Starting state:**
+
+- customer A(card linked) leads `<lot_1>`, bidding on the card on file.
+- ❓ The spec does not identify the surface where the tester waits for `<lot_1>` to close.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A lot taking bids, led by customer A, closing within a minute |
+| `<card>` | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
+
+### Route
+
+1. Wait for `<lot_1>` to close.
+2. Read customer A's authorizations and charges for `<lot_1>` at the card provider.
+3. Once the invoice for `<lot_1>` is sent, pay it by card through hosted Checkout with `<card>`.
+4. Read customer A's card transactions for `<lot_1>` again.
+   - Step 2 shows no authorization and no charge for `<lot_1>`. g10.auction-winner-order.US1-TC5
+   - Step 3 opens hosted Checkout for the invoice total. g10.auction-winner-order.US1-TC5
+   - Step 4 shows one charge, for the invoice total. g10.auction-winner-order.US1-TC5
+
+## Walk 6: A declined card leaves the invoice payable
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_unpaid>`.
+- `<card_declining>` is mocked to decline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_unpaid>` | An unpaid order inside its payment deadline |
+| `<card_declining>` | A card the provider declines |
+| `<card_good>` | A card the provider accepts |
+
+### Route
+
+1. Pay with `<card_declining>`.
+   - the invoice stays unpaid and payable. g10.auction-winner-order.US1-TC6
+2. Pay with `<card_good>`.
+   - payment is accepted; the order reads paid. g10.auction-winner-order.US1-TC6
+
+## Walk 7: The payment deadline is seven days from the recorded close
+
+**Starting state:**
+
+- `<lot_2>` was extended twice and closed with a winner at `<close>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_2>` | A lot whose close moved twice under extended bidding |
+| `<close>` | 2026-09-03T12:00:00Z, the recorded (moved) close |
+| `<deadline>` | 2026-09-10T12:00:00Z: `<close>` plus 604800s (7 days) |
+
+### Route
+
+1. Read the payment deadline on `<lot_2>`'s invoice.
+   - the deadline is `<deadline>` and the PDF shows it as 2026-09-10 20:00 `GMT+8`. g10.auction-winner-order.US1-TC7
+2. Open `<winner order url>` in a browser set to America/New_York.
+   - Winner Order shows the same instant in the viewer's local zone as 08:00 `EDT`. g10.auction-winner-order.US1-TC7
+
+## Walk 8: Two named saved addresses are both offered on an order
+
+**Starting state:**
+
+- customer(signed in, no saved shipping address) won `<order_unpaid>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_unpaid>` | An unpaid order inside its setup window |
+| `<address_home>` | A shipping address named Home |
+| `<address_work>` | A shipping address named Work |
+
+### Route
+
+1. Save `<address_home>` and `<address_work>` to the account address book.
+   - both addresses are in the address book, each under its name. g10.auction-winner-order.US1-TC8
+2. Navigate to `<winner order url>` for `<order_unpaid>`.
+3. Open the delivery address picker.
+   - both are offered for the order. g10.auction-winner-order.US1-TC8
+
+## Walk 9: One default address pre-fills a new order
+
+**Starting state:**
+
+- customer(signed in) has `<address_home>` as default and `<address_work>` saved.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<address_home>` | A saved shipping address named Home |
+| `<address_work>` | A saved shipping address named Work |
+| `<order_new>` | An order opened after step 1 |
+
+### Route
+
+1. Set `<address_work>` as the default.
+   - only `<address_work>` is marked default. g10.auction-winner-order.US1-TC9
+2. Navigate to `<winner order url>` for `<order_new>`.
+   - the delivery address is pre-filled with `<address_work>`. g10.auction-winner-order.US1-TC9
+
+## Walk 10: Editing a saved address leaves the order's snapshot
+
+**Starting state:**
+
+- customer(winner) confirmed `<address_home>` on `<order_unpaid>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_unpaid>` | An unpaid order whose delivery address is `<address_home>` |
+| `<address_home>` | A saved shipping address named Home |
+| `<new street>` | A different address line 1 |
+
+### Route
+
+1. Edit `<address_home>`'s address line 1 to `<new street>` in the address book.
+   - the address book shows `<new street>`. g10.auction-winner-order.US1-TC10
+2. Navigate to `<winner order url>` for `<order_unpaid>`.
+   - the order still shows the original address line 1. g10.auction-winner-order.US1-TC10
+
+## Walk 11: An address an unpaid order uses cannot be archived
+
+**Starting state:**
+
+- customer(winner) confirmed `<address_work>` on `<order_unpaid>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_unpaid>` | An unpaid order whose delivery address is `<address_work>` |
+| `<address_work>` | A saved shipping address named Work |
+
+### Route
+
+1. Archive `<address_work>` in the address book.
+   - The winner is asked to choose another address for `<order_unpaid>`. g10.auction-winner-order.US1-TC11
+   - `<address_work>` stays available while the order uses it. g10.auction-winner-order.US1-TC11
+
+## Walk 12: Add Address opens with no phone country chosen
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+
+### Route
+
+1. Open Complete Order Setup.
+2. Open Add Address for delivery.
+3. Look at the Phone field.
+   - Phone shows a globe only: no flag, no calling-code divider. g10.auction-winner-order.US1-TC12
+   - The placeholder shows an example with a calling code, `+852 12345678`. g10.auction-winner-order.US1-TC12
+   - No calling country is chosen. g10.auction-winner-order.US1-TC12
+
+## Walk 13: Add Address opens on Personal with Company Name hidden
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_setup>`, Complete Order Setup open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+
+### Route
+
+1. Open Add Address for delivery.
+2. Read the Personal / Company control and the fields below it.
+   - Personal is selected. g10.auction-winner-order.US1-TC13
+   - Company Name is not shown. g10.auction-winner-order.US1-TC13
+
+## Walk 14: Choosing Company shows a required Company Name
+
+**Starting state:**
+
+- customer(winner) is on delivery Add Address for `<order_setup>`, Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+
+### Route
+
+1. Click Company on the Personal / Company control.
+2. Read the fields below it.
+   - Company is selected. g10.auction-winner-order.US1-TC14
+   - Company Name shows, marked required. g10.auction-winner-order.US1-TC14
+
+## Walk 15: Missing required address field is refused
+
+**Starting state:**
+
+- customer(winner) is on delivery Add Address for `<order_setup>`, with the form mode and missing field in the row.
+
+**Test data:**
+
+| Form mode | Missing field | Phone country | Phone digits | Company Name |
+| --- | --- | --- | --- | --- |
+| Company | Company Name | United States | 4155550100 | (empty) |
+| Personal | Phone | United States | (empty) | Not shown |
+| Personal | Phone | (not chosen) | 4155550100 | Not shown |
+
+### Route
+
+1. Fill the form for one Test data row.
+   a. Use Form mode "Company"; Missing field "Company Name"; Phone country "United States"; Phone digits "4155550100"; leave Company Name empty.
+   b. Use Form mode "Personal"; Missing field "Phone"; Phone country "United States"; leave Phone digits empty; leave Company Name hidden.
+   c. Use Form mode "Personal"; Missing field "Phone"; leave Phone country unselected; Phone digits "4155550100"; leave Company Name hidden.
+2. Click confirm.
+   - The confirm is refused, with a message beside the missing field. g10.auction-winner-order.US1-TC16
+   - No address is saved or applied to the order. g10.auction-winner-order.US1-TC16
+
+## Walk 16: An unusual phone format is accepted
+
+**Starting state:**
+
+- customer(winner) is on delivery Add Address for `<order_setup>`, Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United Kingdom |
+| Phone digits | +44 (0)20 7946 0958 |
+| Country or region | United Kingdom |
+| Town or city | London |
+| Address line 1 | 10 Downing St |
+| Postal code | SW1A 2AA |
+
+### Route
+
+1. Fill the form: First name "Alex"; Last name "Chen"; Phone country "United Kingdom"; Phone digits "+44 (0)20 7946 0958"; Country or region "United Kingdom"; Town or city "London"; Address line 1 "10 Downing St"; Postal code "SW1A 2AA".
+2. Click confirm.
+   - The confirm is accepted; no phone-format refusal shows. g10.auction-winner-order.US1-TC18
+   - The address is applied to the order. g10.auction-winner-order.US1-TC18
+
+## Walk 17: A parseable phone is stored in E.164
+
+**Starting state:**
+
+- customer(winner) is on delivery Add Address for `<order_setup>`, Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United States |
+| Phone digits | (415) 555-0100 |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Postal code | 94105 |
+| `<stored phone>` | +14155550100 |
+
+### Route
+
+1. Fill the form: First name "Alex"; Last name "Chen"; Phone country "United States"; Phone digits "(415) 555-0100"; Country or region "United States"; Town or city "San Francisco"; Address line 1 "100 Market St"; Postal code "94105"; <stored phone> "+14155550100".
+2. Click confirm.
+   - the confirm is accepted. g10.auction-winner-order.US1-TC19
+3. Read the phone on the order's delivery address.
+   - the phone reads `<stored phone>`. g10.auction-winner-order.US1-TC19
+
+## Walk 18: Address line 2 and state may be left empty
+
+**Starting state:**
+
+- customer(winner) is on delivery Add Address for `<order_setup>`, Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United States |
+| Phone digits | 4155550100 |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Address line 2 | (empty) |
+| State or province | (empty) |
+| Postal code | 94105 |
+
+### Route
+
+1. Fill the form: First name "Alex"; Last name "Chen"; Phone country "United States"; Phone digits "4155550100"; Country or region "United States"; Town or city "San Francisco"; Address line 1 "100 Market St"; leave Address line 2 empty; leave State or province empty; Postal code "94105".
+2. Click confirm.
+   - the confirm is accepted. g10.auction-winner-order.US1-TC20
+3. Read the order's delivery address.
+   - line 1 and postal code show; line 2 and state are empty. g10.auction-winner-order.US1-TC20
+
+## Walk 19: Add Address has no Apt, Suite or Building field
+
+**Starting state:**
+
+- customer(winner) is on delivery Add Address for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+
+### Route
+
+1. Read every field label on the form.
+   - No Apt., Suite or Building field shows. g10.auction-winner-order.US1-TC21
+   - Address line 2 shows as the optional second line. g10.auction-winner-order.US1-TC21
+
+## Walk 20: Address card title follows its address type
+
+**Starting state:**
+
+- customer(winner, has an address in the row) is on `<winner order url>` for `<order_setup>`, Complete Order Setup open.
+
+**Test data:**
+
+| Address type | Title | Address fixture |
+| --- | --- | --- |
+| Personal | Alex Chen | Saved personal address with street, city or region, country, phone and postal code |
+| Company | Northwind Collectibles | Saved company address with recipient Alex Chen, street, city or region, country, phone and postal code |
+
+### Route
+
+1. Open the delivery address picker.
+2. Type the value for one Test data row.
+   a. Use Address type "Personal"; Title "Alex Chen"; Address fixture "Saved personal address with street, city or region, country, phone and postal code".
+   b. Use Address type "Company"; Title "Northwind Collectibles"; Address fixture "Saved company address with recipient Alex Chen, street, city or region, country, phone and postal code".
+   - The title matches the row's expected address type. g10.auction-winner-order.US1-TC22
+   - The body shows street, city or region, and country. g10.auction-winner-order.US1-TC22
+   - The body shows no postal code and no phone. g10.auction-winner-order.US1-TC22
+
+## Walk 21: A company delivery address with phone confirms onto the order
+
+**Starting state:**
+
+- customer(winner) is on delivery Add Address for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| Kind | Company |
+| Company Name | Northwind Collectibles |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United States |
+| Phone digits | 4155550100 |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Postal code | 94105 |
+
+### Route
+
+1. Click Company.
+2. Fill the form: Kind "Company"; Company Name "Northwind Collectibles"; First name "Alex"; Last name "Chen"; Phone country "United States"; Phone digits "4155550100"; Country or region "United States"; Town or city "San Francisco"; Address line 1 "100 Market St"; Postal code "94105".
+3. Click confirm.
+   - the order's delivery address carries Northwind Collectibles, Alex Chen, phone and 94105. g10.auction-winner-order.US1-TC24
+4. Reopen the delivery address picker.
+   - the card reads Northwind Collectibles, with no phone or postal code. g10.auction-winner-order.US1-TC24
+
+## Walk 22: Order Summary shows the full delivery and billing addresses after setup
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_setup>`, reading Awaiting Setup.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| Kind | Company |
+| Company Name | Northwind Collectibles |
+| First name | Alex |
+| Last name | Chen |
+| Phone | +14155550100 |
+| Address line 1 | 100 Market St |
+| Town or city | San Francisco |
+| Postal code | 94105 |
+| Country or region | United States |
+| Billing | Same as delivery, left ticked |
+
+### Route
+
+1. Open Complete Order Setup.
+2. Enter the delivery address: Kind "Company"; Company Name "Northwind Collectibles"; First name "Alex"; Last name "Chen"; Phone "+14155550100"; Address line 1 "100 Market St"; Town or city "San Francisco"; Postal code "94105"; Country or region "United States"; Billing "Same as delivery, left ticked".
+3. Confirm setup.
+4. Read Delivery and Billing on Order Summary.
+   - Delivery shows company, recipient, phone, 100 Market St, San Francisco 94105 and United States. g10.auction-winner-order.US1-TC25
+   - Billing shows the same as Delivery. g10.auction-winner-order.US1-TC25
+
+## Walk 23: A sent invoice with Insurance shows the amount and its tip
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_with_insurance>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_with_insurance>` | An order whose sent invoice includes Insurance |
+| `<insurance_amount>` | The Insurance amount on that invoice |
+
+### Route
+
+1. Find Insurance on Order Summary.
+   - Insurance reads `<insurance_amount>`, not TBD. g10.auction-winner-order.US1-TC26
+2. Hover the Insurance info tooltip.
+   - the tooltip reads `0.9% of the order value during transit.` g10.auction-winner-order.US1-TC26
+
+## Walk 24: Before the invoice is sent, Insurance reads TBD
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_pre_invoice>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_pre_invoice>` | An order whose invoice is not yet sent |
+
+### Route
+
+1. Read the fee rows on Order Summary.
+   - Insurance shows with the other fee rows, reading TBD. g10.auction-winner-order.US1-TC27
+2. Hover the Insurance info tooltip.
+   - the tooltip reads `0.9% of the order value during transit.` g10.auction-winner-order.US1-TC27
+
+## Walk 25: A sent invoice without Insurance shows no Insurance row
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_without_insurance>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_without_insurance>` | An order whose sent invoice has no Insurance |
+
+### Route
+
+1. Read Order Summary.
+   - No Insurance row and no Insurance tooltip show. g10.auction-winner-order.US1-TC28
+
+## Walk 26: A listing code already held is replaced before publish
+
+**Starting state:**
+
+- `<listing_2>` holds listing code `<code_1>`.
+- `<listing_3>` is a draft whose internal id hashes to `<code_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<code_1>` | A listing code in use |
+
+### Route
+
+1. Publish `<listing_3>`.
+2. Read `<listing_3>`'s listing code.
+   - `<listing_3>` holds a code other than `<code_1>`, hashed again with a counter. g10.auction-winner-order.US1-TC29
+   - `L` and 5 characters; no `0`, `O`, `1`, `I` or lower case. g10.auction-winner-order.US1-TC29
+3. Change the hash method, then read both listing codes.
+   - both listings keep their codes. g10.auction-winner-order.US1-TC29
+
+## Walk 27: The winner sees an operator's edit before send, and cannot change it
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_preparing>`.
+- An operator changed `<order_preparing>` to `<address_work>` and bank transfer.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_preparing>` | An HKD order reading Preparing Invoice, home address and card confirmed |
+| `<address_work>` | A saved address named Work |
+
+### Route
+
+1. Reload the order.
+   - the order shows `<address_work>` and bank transfer, still Preparing Invoice. g10.auction-winner-order.US1-TC34
+2. Look for address and payment-method controls.
+   - no control changes either. g10.auction-winner-order.US1-TC34
+
+## Walk 28: Archiving an address a confirmed order uses leaves the order's copy
+
+**Starting state:**
+
+- customer(winner) confirmed `<address_work>` on `<order_preparing>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_preparing>` | An order reading Preparing Invoice, `<address_work>` confirmed |
+| `<address_work>` | A saved address named Work |
+
+### Route
+
+1. Archive `<address_work>` in the address book.
+   - `<address_work>` is archived. g10.auction-winner-order.US1-TC35
+2. Navigate to `<winner order url>` for `<order_preparing>`.
+   - the order still shows `<address_work>`. g10.auction-winner-order.US1-TC35
+
+## Walk 29: Delivery Add Address offers a complete A–Z country catalogue
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+- The Country/Region picker is closed.
+
+### Route
+
+1. Open the Country/Region picker.
+2. Scroll the popup from the first option to the last.
+   - Step 1 opens a popup listing every country and region A–Z, not a short designated set. g10.auction-winner-order.US1-TC36
+   - Step 2 keeps the full catalogue available inside the capped-height popup. g10.auction-winner-order.US1-TC36
+
+## Walk 30: Country/Region field label matches the manual wording
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+
+### Route
+
+1. Look at the country or region field label beside the picker.
+   - The label reads Country/Region. g10.auction-winner-order.US1-TC37
+
+## Walk 31: Closed field shows the selected or default country
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+- The Country/Region picker is closed with the fixture default Hong Kong selected.
+
+### Route
+
+1. Read the Country/Region field without opening the popup.
+   - The field shows Hong Kong. g10.auction-winner-order.US1-TC38
+   - Country/Region options are not in the tree. g10.auction-winner-order.US1-TC38
+
+## Walk 32: Open catalogue lists every country inside a scrollable popup
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+
+### Route
+
+1. Open the Country/Region picker.
+2. Scroll within the popup to a mid-alphabet name and to a late-alphabet name.
+   - Step 1 shows every country and region A–Z in the popup. g10.auction-winner-order.US1-TC39
+   - Step 2 scrolls the long list inside a capped height without truncating the catalogue to a short set. g10.auction-winner-order.US1-TC39
+
+## Walk 33: Typing filters the list to matching country names
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+- The Country/Region picker is open on a long A–Z list.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Typed query | hong |
+
+### Route
+
+1. Focus the open Country/Region picker.
+2. Typed query "hong".
+   - Step 2 shows only country or region names that match the query. g10.auction-winner-order.US1-TC40
+   - Names that do not match (for example Australia) are not shown. g10.auction-winner-order.US1-TC40
+
+## Walk 34: Autocomplete filter works in isolation on a long list
+
+**Starting state:**
+
+- A design-system Autocomplete is rendered with a long option list taller than its capped popup height.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Typed query | uni |
+
+### Route
+
+1. Open the Autocomplete.
+2. Typed query "uni".
+   - The list shows only options whose labels match the query. g10.auction-winner-order.US1-TC41
+   - Non-matching options are not shown. g10.auction-winner-order.US1-TC41
+
+## Walk 35: A query with no match leaves the list empty
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+- The Country/Region picker is open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Typed query | zzzz-not-a-country |
+
+### Route
+
+1. Typed query "zzzz-not-a-country".
+   - The list shows no country or region options. g10.auction-winner-order.US1-TC42
+
+## Walk 36: Country filter returns the matching name
+
+**Starting state:**
+
+- customer(winner) is on Winner Order setup with delivery Add Address open.
+- The Country/Region picker is open.
+
+**Test data:**
+
+| Query partition | Typed query | Matching result |
+| --- | --- | --- |
+| Early alphabet | afg | Afghanistan, or the catalogue name that matches |
+| Late alphabet | zim | Zimbabwe, or the catalogue name that matches |
+
+### Route
+
+1. Follow one Test data row.
+   a. Use Typed query "afg".
+   b. Use Typed query "zim".
+   - The matching country appears in the filtered list. g10.auction-winner-order.US1-TC43
+   - Unrelated country names outside the query are not shown. g10.auction-winner-order.US1-TC43
+
+## Walk 37: Choosing a filtered country closes the picker on that selection
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+- The Country/Region picker is closed on the fixture default.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Typed query | united king |
+| Country or region | United Kingdom |
+
+### Route
+
+1. Open the Country/Region picker.
+2. Typed query "united king"; Country or region "United Kingdom".
+3. Select United Kingdom from the filtered matches.
+   - Step 3 closes the popup. g10.auction-winner-order.US1-TC45
+   - The field shows United Kingdom. g10.auction-winner-order.US1-TC45
+   - Options are no longer in the tree. g10.auction-winner-order.US1-TC45
+
+## Walk 38: Empty Country/Region is refused beside the field
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+- Country/Region has no value selected.
+- Other required address fields that the form needs are filled.
+
+### Route
+
+1. Activate Confirm or Use This Address with Country/Region empty.
+   - A field refusal appears beside Country/Region. g10.auction-winner-order.US1-TC46
+   - The address is not applied with an empty country or region. g10.auction-winner-order.US1-TC46
+
+## Walk 39: Catalogue includes both early and late alphabet partitions
+
+**Starting state:**
+
+- `customer(winner)` is on Winner Order setup with delivery Add Address open.
+
+### Route
+
+1. Open the Country/Region picker.
+2. Note whether an early-alphabet name and a late-alphabet name both appear in the list.
+   - The open list includes names from the start of the A–Z range and from near the end. g10.auction-winner-order.US1-TC47
+   - The set is not limited to a short designated sample. g10.auction-winner-order.US1-TC47
+
+## Walk 40: Tax is pending before the invoice is sent
+
+**Starting state:**
+
+- customer(winner) holds an auction order whose invoice has not been sent.
+
+### Route
+
+1. Open Winner Order.
+2. Read Tax in Order Summary and open its info tip.
+   - Tax reads TBD with the other fee rows. g10.auction-winner-order.US1-TC30
+   - No calculated Tax amount is shown. g10.auction-winner-order.US1-TC30
+   - The tip reads `Set by Grade10 for where your order ships. Some orders have none.` g10.auction-winner-order.US1-TC30
+
+## Walk 41: Sent tax is itemised throughout the order record
+
+**Starting state:**
+
+- customer(winner) holds a paid auction order whose invoice includes Tax of 6000 minor units in HKD.
+
+### Route
+
+1. Open Winner Order and read Order Summary.
+2. Open the invoice PDF.
+3. Open the receipt PDF.
+   - Order Summary shows Tax of 6000 minor units in HKD between Insurance and Payment Processing Fee. g10.auction-winner-order.US1-TC31
+   - Order Summary offers the Tax info tip with the stated copy. g10.auction-winner-order.US1-TC31
+   - The invoice PDF and the receipt PDF each show Tax of 6000 minor units in HKD between Insurance and Subtotal. g10.auction-winner-order.US1-TC31
+   - Each PDF's Subtotal includes the 6000 minor units in HKD. g10.auction-winner-order.US1-TC31
+
+## Walk 42: An untaxed invoice leaves Tax out
+
+**Starting state:**
+
+- customer(winner) holds a paid auction order whose operator added no Tax.
+
+### Route
+
+1. Open Winner Order and read Order Summary.
+2. Open the invoice PDF.
+3. Open the receipt PDF.
+   - No surface shows a Tax line. g10.auction-winner-order.US1-TC32
+   - Order Summary offers no Tax info tip. g10.auction-winner-order.US1-TC32
+
+## Walk 43: Card fee is grossed up on tax
+
+**Starting state:**
+
+- admin(operator with payment-processing) is on a card order in Preparing Invoice.
+- The order's lines before Tax total 312000 minor units in HKD.
+
+### Route
+
+1. Add Tax of 6000 minor units in HKD.
+2. Send the invoice.
+3. Read its Subtotal and payment processing fee inputs.
+   - The Subtotal is 318000 minor units in HKD. g10.auction-winner-order.US1-TC33
+   - Grade10 computes the payment processing fee from that Subtotal. g10.auction-winner-order.US1-TC33
+
+## Walk 44: A currency without bank details offers card only
+
+**Starting state:**
+
+- Grade10 holds no bank details for the currency in the row.
+- customer(winner) holds an auction order in that currency in Awaiting Setup.
+
+### Route
+
+1. Start setup, choose the home address and reach the payment method choice.
+2. Send Grade10 a setup confirmation carrying the home address and bank transfer.
+3. Reload the order.
+   - Only card is offered. g10.auction-winner-order.US1-TC48
+   - Grade10 refuses the confirmation. g10.auction-winner-order.US1-TC48
+   - The order is still Awaiting Setup, with no delivery address and no method recorded. g10.auction-winner-order.US1-TC48
+
+## Walk 45: The method can change until the winner confirms
+
+**Starting state:**
+
+- Grade10 holds HKD bank details, and Payment Settings holds an HKD card fee rule.
+- customer(winner) holds an auction order in HKD in Awaiting Setup, with card chosen and not yet confirmed.
+
+### Route
+
+1. Change the choice to bank transfer.
+2. Confirm the home address.
+3. Reload the order.
+   - The order records bank transfer, not card. g10.auction-winner-order.US1-TC50
+   - The order reads Preparing Invoice. g10.auction-winner-order.US1-TC50
+
+## Walk 46: A confirmation with no method is refused
+
+**Starting state:**
+
+- Grade10 holds HKD bank details, and Payment Settings holds an HKD card fee rule.
+- customer(winner) holds an auction order in HKD in Awaiting Setup.
+
+### Route
+
+1. Choose the home address, choose no payment method, and confirm.
+2. Reload the order.
+   - Grade10 refuses the confirmation. g10.auction-winner-order.US1-TC51
+   - The order is still Awaiting Setup. g10.auction-winner-order.US1-TC51
+
+## Walk 47: A currency with no card fee rule reads card as not yet available
+
+**Starting state:**
+
+- Outside production, Grade10 holds the sample HKD bank details, and Payment Settings holds no HKD card fee rule.
+- customer(winner) holds an auction order in HKD in Awaiting Setup.
+
+### Route
+
+1. Choose the home address and reach the payment method choice.
+2. Try to choose card.
+3. Send Grade10 a setup confirmation carrying the home address and card.
+4. Reload the order.
+   - Card reads that it is not yet available in HKD, and cannot be chosen. g10.auction-winner-order.US1-TC52
+   - Bank transfer is offered. g10.auction-winner-order.US1-TC52
+   - Grade10 refuses the confirmation. g10.auction-winner-order.US1-TC52
+   - The order holds no delivery address and no method. g10.auction-winner-order.US1-TC52
+
+## Walk 48: With neither method the winner reads payment is not yet available
+
+**Starting state:**
+
+- Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
+- customer(winner) holds an auction order in USD in Awaiting Setup.
+
+### Route
+
+1. Choose the home address and reach the payment method choice.
+2. Try to choose card, then bank transfer, then confirm.
+3. Reload the order.
+   - The page says payment is not yet available in USD and offers Contact Us. g10.auction-winner-order.US1-TC53
+   - Neither method can be chosen, and Grade10 refuses the confirmation. g10.auction-winner-order.US1-TC53
+   - The order is still Awaiting Setup, holding no delivery address and no method. g10.auction-winner-order.US1-TC53
+
+## Walk 49: A Traditional Chinese account reads and searches Country/Region in Traditional Chinese
+
+**Starting state:**
+
+- customer(winner) whose account language is Traditional Chinese is on delivery Add Address of an auction order in Awaiting Setup.
+
+### Route
+
+1. Open the Country/Region picker and read the names.
+2. Type `日本`.
+   - The names read in Traditional Chinese. g10.auction-winner-order.US1-TC56
+   - The list narrows to `日本`. g10.auction-winner-order.US1-TC56
+
+## Walk 50: The receipt itemises what was paid and sums to the total
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_paid>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_paid>` | An HKD order paid in full at `<final amount>` |
+| `<final amount>` | HKD 3,160.00 (316000 minor units) |
 
 ### Route
 
 1. Download the receipt PDF.
 2. Read its lines.
-   - Winning bid, buyer's premium, shipping, insurance when added, Tax when added and final amount show. `g10.auction-winner-order.US2-TC1`
-   - The lines sum to `<final amount>`. `g10.auction-winner-order.US2-TC1`
-   - It names how it was paid. `g10.auction-winner-order.US2-TC1`
-3. Download the receipt PDF.
-   - Original Invoice Total `<total>`; Previous Payments 0. `g10.auction-winner-order.US2-TC4`
-   - Current Payment Received `<total>`; Remaining Balance Due 0. `g10.auction-winner-order.US2-TC4`
-4. Open the Receipt PDF row.
-   - both receipts are listed on one row, oldest first. `g10.auction-winner-order.US2-TC5`
-5. Open the first receipt, then the second.
-   - each shows Original Invoice Total `<total>` and its row's values. `g10.auction-winner-order.US2-TC5`
-6. Open the receipt for `<closing payment>`.
-   - Original Invoice Total `<total>`; Previous Payments `<paid before>`. `g10.auction-winner-order.US2-TC6`
-   - Current Payment Received `<closing payment>`; Remaining Balance Due 0. `g10.auction-winner-order.US2-TC6`
-   - No shortfall or write-off line shows. `g10.auction-winner-order.US2-TC6`
-7. Open the receipt.
-   - Original Invoice Total `<total>`; Previous Payments 0. `g10.auction-winner-order.US2-TC7`
-   - Current Payment Received `<payment>`; Remaining Balance Due 0. `g10.auction-winner-order.US2-TC7`
-   - No negative balance or credit line shows. `g10.auction-winner-order.US2-TC7`
-8. Open each receipt in turn.
-   - Each still shows its row's values. `g10.auction-winner-order.US2-TC8`
-   - No receipt was reissued. `g10.auction-winner-order.US2-TC8`
-9. Read the shipment section of `<order_shipped>`.
-   - `<tracking number>` shows as a link, with no separate carrier name. `g10.auction-winner-order.US2-TC2`
-10. Click `<tracking number>`.
-   - the tracker link opens. `g10.auction-winner-order.US2-TC2`
-11. Read the shipment section of `<order_shipped_no_link>`.
-   - `<tracking number>` shows as plain text, with no carrier name and no Track shipment control. `g10.auction-winner-order.US2-TC2`
-12. Wait for the delivery report to be processed.
-13. Navigate to `<winner order url>` for `<order_shipped>`.
-14. Open the delivery proof.
-   - `<handover time>` and `<signature>` show, not only a delivered flag. `g10.auction-winner-order.US2-TC3`
-15. Download the receipt PDF.
-   - The receipt ID is `<receipt id>`. `g10.auction-winner-order.US2-TC9`
-   - Original Invoice Total `<total>`; Previous Payments 0. `g10.auction-winner-order.US2-TC9`
-   - Current Payment Received `<total>`; Remaining Balance Due 0. `g10.auction-winner-order.US2-TC9`
-16. Retrieve `<order_paid>`'s documents from the archive.
-   - The replaced invoice, current invoice and receipt PDFs are all returned. `g10.auction-winner-order.US2-TC10`
-17. Deliver the same payment confirmation for `<order_paid>` again.
-   - The receipt ID is still `<receipt id>`. `g10.auction-winner-order.US2-TC11`
-18. Open the receipt on `<winner order url>` for `<order_paid>`.
-   - No second receipt ID or audit number exists for `<order_paid>`. `g10.auction-winner-order.US2-TC11`
-19. Read Order Progress.
-20. Open `<tracking number>`.
-   - Order Progress shows `<tracking number>` as an external link with an arrow icon. `g10.auction-winner-order.US2-TC12`
-   - Order Progress shows no Track shipment button or carrier name. `g10.auction-winner-order.US2-TC12`
-   - opens `<carrier tracking URL>` in a new tab. `g10.auction-winner-order.US2-TC12`
-21. Read the status badge.
-22. Read Order Progress.
-   - Badge reads Preparing Shipment. `g10.auction-winner-order.US2-TC55`
-   - Badge uses `default`. `g10.auction-winner-order.US2-TC55`
-   - Shipping is the current (progress) progress step — not incomplete. `g10.auction-winner-order.US2-TC55`
-   - Shipping subtext reads Preparing to ship. `g10.auction-winner-order.US2-TC55`
-   - No step is labelled Preparing Shipment. `g10.auction-winner-order.US2-TC55`
-23. Read the status badge and Order Progress.
-   - Badge reads Shipped and uses `default`. `g10.auction-winner-order.US2-TC20`
-   - Shipping is the current progress step with the day-only ship date. `g10.auction-winner-order.US2-TC20`
-   - The tracking number is the external carrier link. `g10.auction-winner-order.US2-TC20`
-   - Order Progress adds no separate Track shipment control and no separate carrier name. `g10.auction-winner-order.US2-TC20`
-24. Read Order Progress.
-25. Select `<tracking number>`.
-   - Order Progress shows `<tracking number>` as plain text, not a link. `g10.auction-winner-order.US2-TC14`
-   - Order Progress shows no carrier name and no Track shipment control. `g10.auction-winner-order.US2-TC14`
-   - opens nothing. `g10.auction-winner-order.US2-TC14`
-26. Read Order Progress.
-   - Shipping is the current progress step with the day-only ship date. `g10.auction-winner-order.US2-TC56`
-   - The tracking number reads as plain text, not a link. `g10.auction-winner-order.US2-TC56`
-   - Order Progress shows no carrier name and no Track shipment control. `g10.auction-winner-order.US2-TC56`
+   - Winning bid, buyer's premium, shipping, insurance when added, Tax when added and final amount show. g10.auction-winner-order.US2-TC1
+   - The lines sum to `<final amount>`. g10.auction-winner-order.US2-TC1
+   - It names how it was paid. g10.auction-winner-order.US2-TC1
 
-## Walk 3: Winner checks the buyer's premium on an invoice
+## Walk 51: A single full payment's receipt reads zero before and zero left
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on `<winner order url>` for `<order_paid>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order_paid>` | An HKD order with invoice total `<total>`, paid by one payment of `<total>` |
+| `<total>` | HKD 1,000.00 (100000 minor units) |
+
+### Route
+
+1. Download the receipt PDF.
+   - Original Invoice Total `<total>`; Previous Payments 0. g10.auction-winner-order.US2-TC4
+   - Current Payment Received `<total>`; Remaining Balance Due 0. g10.auction-winner-order.US2-TC4
+
+## Walk 52: Receipts for part payments carry the running history in order
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_parts>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_parts>` | An HKD order with invoice total `<total>`, paid `<payment 1>` then `<payment 2>` |
+| `<total>` | HKD 1,000.00 |
+| `<payment 1>` | HKD 400.00 |
+| `<payment 2>` | HKD 300.00 |
+| Receipt | Previous Payments | Current Payment Received | Remaining Balance Due |
+| --- | --- | --- | --- |
+| First | 0 | HKD 400.00 | HKD 600.00: `<total>` − `<payment 1>` |
+| Second | HKD 400.00 | HKD 300.00 | HKD 300.00: `<total>` − `<payment 1>` − `<payment 2>` |
+
+### Route
+
+1. Open the Receipt PDF row.
+   - both receipts are listed on one row, oldest first. g10.auction-winner-order.US2-TC5
+2. Open the first receipt, then the second.
+   - each shows Original Invoice Total `<total>` and its row's values. g10.auction-winner-order.US2-TC5
+
+## Walk 53: A receipt that closes within tolerance reads zero left
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_tolerance>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_tolerance>` | An HKD order, total `<total>`, paid `<paid before>`, then closed Paid by an operator recording `<closing payment>` within the closing tolerance |
+| `<total>` | HKD 1,000.00 |
+| `<paid before>` | HKD 900.00 |
+| `<closing payment>` | HKD 50.00 |
+
+### Route
+
+1. Open the receipt for `<closing payment>`.
+   - Original Invoice Total `<total>`; Previous Payments `<paid before>`. g10.auction-winner-order.US2-TC6
+   - Current Payment Received `<closing payment>`; Remaining Balance Due 0. g10.auction-winner-order.US2-TC6
+   - No shortfall or write-off line shows. g10.auction-winner-order.US2-TC6
+
+## Walk 54: An overpayment's receipt records the whole payment and zero left
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_over>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_over>` | An HKD order, total `<total>`, with an operator-confirmed payment of `<payment>` |
+| `<total>` | HKD 1,000.00 |
+| `<payment>` | HKD 1,100.00 |
+
+### Route
+
+1. Open the receipt.
+   - Original Invoice Total `<total>`; Previous Payments 0. g10.auction-winner-order.US2-TC7
+   - Current Payment Received `<payment>`; Remaining Balance Due 0. g10.auction-winner-order.US2-TC7
+   - No negative balance or credit line shows. g10.auction-winner-order.US2-TC7
+
+## Walk 55: A later refund or reversal leaves issued receipts unchanged
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_three>`.
+- The second payment was later refunded or reversed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_three>` | An HKD order, total HKD 1,000.00, paid HKD 200.00, HKD 300.00, HKD 100.00 in that order, one receipt each |
+| Receipt | Previous Payments | Current Payment Received | Remaining Balance Due |
+| --- | --- | --- | --- |
+| First | 0 | HKD 200.00 | HKD 800.00 |
+| Second | HKD 200.00 | HKD 300.00 | HKD 500.00 |
+| Third | HKD 500.00 | HKD 100.00 | HKD 400.00 |
+
+### Route
+
+1. Open each receipt in turn.
+   - Each still shows its row's values. g10.auction-winner-order.US2-TC8
+   - No receipt was reissued. g10.auction-winner-order.US2-TC8
+
+## Walk 56: A dispatched lot shows the tracking number as the carrier link only with a tracker link
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_shipped>` and `<order_shipped_no_link>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_shipped>` | A paid order dispatched with a carrier, `<tracking number>` and a recorded tracker link |
+| `<order_shipped_no_link>` | A paid order dispatched with a carrier and `<tracking number>`, and no tracker link |
+
+### Route
+
+1. Read the shipment section of `<order_shipped>`.
+   - `<tracking number>` shows as a link, with no separate carrier name. g10.auction-winner-order.US2-TC2
+2. Click `<tracking number>`.
+   - the tracker link opens. g10.auction-winner-order.US2-TC2
+3. Read the shipment section of `<order_shipped_no_link>`.
+   - `<tracking number>` shows as plain text, with no carrier name and no Track shipment control. g10.auction-winner-order.US2-TC2
+
+## Walk 57: Delivery proof keeps the carrier's timestamp and signature
+
+**Starting state:**
+
+- `<order_shipped>` is dispatched.
+- The carrier delivery feed is mocked to report delivery with `<handover time>` and `<signature>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_shipped>` | A paid, dispatched order |
+| `<handover time>` | The handover timestamp in the carrier's report |
+| `<signature>` | The signature image in the carrier's report |
+
+### Route
+
+1. Wait for the delivery report to be processed.
+2. Navigate to `<winner order url>` for `<order_shipped>`.
+3. Open the delivery proof.
+   - `<handover time>` and `<signature>` show, not only a delivered flag. g10.auction-winner-order.US2-TC3
+
+## Walk 58: A receipt ID takes the payment month and the receipt shows the breakdown
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_verifying>`.
+- admin(holds payment-processing) confirms its proof at `<confirm time>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | An HKD order, invoice `INV-202609-LK7P2Q-02`, total `<total>`, reading Payment Verifying |
+| `<total>` | HKD 3,170.00 (317000 minor units) |
+| `<confirm time>` | 2026-09-30T16:30:00Z, October in Hong Kong |
+| `<receipt id>` | `REC-202610-LK7P2Q-02-P1` |
+
+### Route
+
+1. Download the receipt PDF.
+   - The receipt ID is `<receipt id>`. g10.auction-winner-order.US2-TC9
+   - Original Invoice Total `<total>`; Previous Payments 0. g10.auction-winner-order.US2-TC9
+   - Current Payment Received `<total>`; Remaining Balance Due 0. g10.auction-winner-order.US2-TC9
+
+## Walk 59: Invoice and receipt PDFs outlive a deleted account
+
+**Starting state:**
+
+- `<order_paid>` is paid, with a replaced invoice, a current invoice and a receipt.
+- Its winner deleted the account a year after payment.
+- The clock is 6 years after payment, inside the 7-year retention.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_paid>` | A paid order whose invoice was once reissued |
+
+### Route
+
+1. Retrieve `<order_paid>`'s documents from the archive.
+   - The replaced invoice, current invoice and receipt PDFs are all returned. g10.auction-winner-order.US2-TC10
+
+## Walk 60: A repeated payment confirmation keeps one receipt ID
+
+**Starting state:**
+
+- `<order_paid>` was paid by card; its receipt ID is `<receipt id>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_paid>` | A card-paid order |
+| `<receipt id>` | `REC-202609-LK7P2Q-01-P1` |
+
+### Route
+
+1. Deliver the same payment confirmation for `<order_paid>` again.
+2. Open the receipt on `<winner order url>` for `<order_paid>`.
+   - The receipt ID is still `<receipt id>`. g10.auction-winner-order.US2-TC11
+   - No second receipt ID or audit number exists for `<order_paid>`. g10.auction-winner-order.US2-TC11
+
+## Walk 61: A shipped or delivered order keeps the carrier tracker
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for the order in the row.
+
+**Test data:**
+
+| Order state | Fixture |
+| --- | --- |
+| Shipped | Paid, fulfilment fulfilled, delivery not confirmed, tracker link present |
+| Delivered | Paid, fulfilment fulfilled, delivery confirmed, tracker link present |
+
+### Route
+
+1. Read Order Progress.
+2. Open `<tracking number>`.
+   - Order Progress shows `<tracking number>` as an external link with an arrow icon. g10.auction-winner-order.US2-TC12
+   - Order Progress shows no Track shipment button or carrier name. g10.auction-winner-order.US2-TC12
+   - Step 2 opens `<carrier tracking URL>` in a new tab. g10.auction-winner-order.US2-TC12
+
+## Walk 62: Preparing Shipment pings Shipping with Preparing to ship
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_preparing_shipment>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_preparing_shipment>` | A paid order with fulfilment `unfulfilled` |
+
+### Route
+
+1. Read the status badge.
+2. Read Order Progress.
+   - Badge reads Preparing Shipment. g10.auction-winner-order.US2-TC55
+   - Badge uses `default`. g10.auction-winner-order.US2-TC55
+   - Shipping is the current (progress) progress step — not incomplete. g10.auction-winner-order.US2-TC55
+   - Shipping subtext reads Preparing to ship. g10.auction-winner-order.US2-TC55
+   - No step is labelled Preparing Shipment. g10.auction-winner-order.US2-TC55
+
+## Walk 63: Shipped keeps Shipping current
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_shipped>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_shipped>` | A paid, fulfilled order with a ship date, a tracking number and a recorded tracker link |
+
+### Route
+
+1. Read the status badge and Order Progress.
+   - Badge reads Shipped and uses `default`. g10.auction-winner-order.US2-TC20
+   - Shipping is the current progress step with the day-only ship date. g10.auction-winner-order.US2-TC20
+   - The tracking number is the external carrier link. g10.auction-winner-order.US2-TC20
+   - Order Progress adds no separate Track shipment control and no separate carrier name. g10.auction-winner-order.US2-TC20
+
+## Walk 64: Shipped order without a tracker link shows the number as plain text
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<untracked-link order>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<untracked-link order>` | A paid order with fulfilment fulfilled and a tracking number, where the operator recorded no tracker link |
+| `<tracking number>` | The tracking number recorded for `<untracked-link order>` |
+
+### Route
+
+1. Read Order Progress.
+2. Select `<tracking number>`.
+   - Order Progress shows `<tracking number>` as plain text, not a link. g10.auction-winner-order.US2-TC14
+   - Order Progress shows no carrier name and no Track shipment control. g10.auction-winner-order.US2-TC14
+   - Step 2 opens nothing. g10.auction-winner-order.US2-TC14
+
+## Walk 65: A shipped order with no tracker link shows the number as plain text
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_shipped_no_link>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_shipped_no_link>` | A paid, fulfilled order with a ship date and a tracking number, and no recorded tracker link |
+
+### Route
+
+1. Read Order Progress.
+   - Shipping is the current progress step with the day-only ship date. g10.auction-winner-order.US2-TC56
+   - The tracking number reads as plain text, not a link. g10.auction-winner-order.US2-TC56
+   - Order Progress shows no carrier name and no Track shipment control. g10.auction-winner-order.US2-TC56
+
+## Walk 66: The invoice's Buyer's Premium follows the published rule
+
+**Starting state:**
+
+- customer(winner) won a lot at `<winning bid>`, and its invoice was sent.
+- The currency's premium minimum in Auction Payment settings is `<minimum>` at send.
+- customer is on the order's Winner Order page.
+
+**Test data:**
+
+| Winning bid | Minimum | Buyer's Premium | Rule |
+| --- | --- | --- | --- |
+| HKD 10,000.00 (1000000 minor units) | HKD 0.00 | HKD 2,000.00 | 20% of the winning bid |
+| JPY 1003 | JPY 0 | JPY 201 | 20% is 200.6, rounded half up |
+| JPY 1002 | JPY 0 | JPY 200 | 20% is 200.4, rounded half up |
+| HKD 500.00 (50000 minor units) | HKD 200.00 (20000 minor units) | HKD 200.00 | The minimum, higher than 20% (HKD 100.00) |
 
 ### Route
 
 1. Read Order Summary.
-   - the winning bid line reads `<winning bid>`. `g10.auction-winner-order.US3-TC5`
-   - Buyer's Premium reads the row's value. `g10.auction-winner-order.US3-TC5`
-   - the total equals the sum of the lines shown. `g10.auction-winner-order.US3-TC5`
+   - the winning bid line reads `<winning bid>`. g10.auction-winner-order.US3-TC5
+   - Buyer's Premium reads the row's value. g10.auction-winner-order.US3-TC5
+   - the total equals the sum of the lines shown. g10.auction-winner-order.US3-TC5
 2. Hover the Buyer's Premium info tooltip.
-   - a brief tooltip explains Buyer's Premium. `g10.auction-winner-order.US3-TC5`
+   - a brief tooltip explains Buyer's Premium. g10.auction-winner-order.US3-TC5
 
-## Walk 4: Winner pays an invoice by card
+## Walk 67: An unpaid order shows invoice, Pay with Card, address and lot
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
-
-**Shared test data:**
-
-- Use each case's declared **Test data**. Each case remains independently runnable.
+- customer(winner) holds an order in Pending Payment, with invoice status.
+`pending` or `expired`.
 
 ### Route
 
 1. Navigate to `<grade10 auction order url>`.
-   - Every invoice line and Pay with Card are shown in the order summary. `g10.auction-winner-order.US4-TC1`
-   - The confirmed delivery address and the lot are shown. `g10.auction-winner-order.US4-TC1`
-   - An expired invoice still reads Pending Payment and offers Contact Us instead. of Pay with Card. `g10.auction-winner-order.US4-TC1`
-2. Navigate to `<grade10 auction order url>`.
-3. Click Pay Now.
-4. Wait until the payment session times out.
-5. Return to `<grade10 auction order url>`.
-   - The page says payment was not completed. `g10.auction-winner-order.US4-TC3`
-   - The order still reads Pending Payment. `g10.auction-winner-order.US4-TC3`
-   - Pay Now is available. `g10.auction-winner-order.US4-TC3`
-6. Navigate to `<grade10 auction order url>`.
-   - A new payment session opens. `g10.auction-winner-order.US4-TC4`
-7. Click Pay Now.
-   - It charges the same invoice amount. `g10.auction-winner-order.US4-TC4`
-8. Navigate to `<grade10 auction order url>`.
-   - The page shows Confirming payment. `g10.auction-winner-order.US4-TC5`
-   - The order does not read Preparing Shipment. `g10.auction-winner-order.US4-TC5`
-9. Navigate to `<grade10 auction order url>`.
-   - The order status reads Preparing Shipment. `g10.auction-winner-order.US4-TC6`
-10. Navigate to `<grade10 auction order url>`.
-11. Read the alerts under the lot.
-12. Choose Pay what is owed.
-   - An alert under the lot says bidding is suspended and payment does not lift it. `g10.auction-winner-order.US4-TC7`
-   - Choosing Pay what is owed brings the order summary's pay control into view. `g10.auction-winner-order.US4-TC7`
+   - Every invoice line and Pay with Card are shown in the order summary. g10.auction-winner-order.US4-TC1
+   - The confirmed delivery address and the lot are shown. g10.auction-winner-order.US4-TC1
+   - An expired invoice still reads Pending Payment and offers Contact Us instead. of Pay with Card. g10.auction-winner-order.US4-TC1
 
-## Walk 5: Winner misses the payment deadline
+## Walk 68: A timed-out payment session leaves the invoice payable
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) holds an order in Pending Payment.
 
-**Shared test data:**
+### Route
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+1. Navigate to `<grade10 auction order url>`.
+2. Click Pay Now.
+3. Wait until the payment session times out.
+4. Return to `<grade10 auction order url>`.
+   - The page says payment was not completed. g10.auction-winner-order.US4-TC3
+   - The order still reads Pending Payment. g10.auction-winner-order.US4-TC3
+   - Pay Now is available. g10.auction-winner-order.US4-TC3
+
+## Walk 69: Pay Now after an abandoned session starts a fresh one
+
+**Starting state:**
+
+- customer(winner) holds a Pending Payment order whose last payment session was abandoned.
+
+### Route
+
+1. Navigate to `<grade10 auction order url>`.
+2. Click Pay Now.
+   - A new payment session opens. g10.auction-winner-order.US4-TC4
+   - It charges the same invoice amount. g10.auction-winner-order.US4-TC4
+
+## Walk 70: A completed payment shows Confirming payment before Preparing Shipment
+
+**Starting state:**
+
+- customer(winner) completed a hosted card session, but the authenticated.
+auction-order read model has not yet recorded the invoice as paid.
+
+### Route
+
+1. Navigate to `<grade10 auction order url>`.
+   - The page shows Confirming payment. g10.auction-winner-order.US4-TC5
+   - The order does not read Preparing Shipment. g10.auction-winner-order.US4-TC5
+
+## Walk 71: A recorded payment reads Preparing Shipment
+
+**Starting state:**
+
+- customer(winner) holds an order whose authenticated auction-order read model.
+returns invoice status `paid` and fulfilment status `unfulfilled`.
+
+### Route
+
+1. Navigate to `<grade10 auction order url>`.
+   - The order status reads Preparing Shipment. g10.auction-winner-order.US4-TC6
+
+## Walk 72: A suspended winner reads the suspension under the lot
+
+**Starting state:**
+
+- customer(winner) is suspended from bidding and holds an order whose invoice.
+is `pending`.
+
+### Route
+
+1. Navigate to `<grade10 auction order url>`.
+2. Read the alerts under the lot.
+3. Choose Pay what is owed.
+   - An alert under the lot says bidding is suspended and payment does not lift it. g10.auction-winner-order.US4-TC7
+   - Choosing Pay what is owed brings the order summary's pay control into view. g10.auction-winner-order.US4-TC7
+
+## Walk 73: Past the payment deadline the order reads Payment Overdue with Contact Us
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
 
 ### Route
 
 1. Read the status and the inline alert.
-   - the order reads Payment Overdue, with Contact Us. `g10.auction-winner-order.US5-TC1`
+   - the order reads Payment Overdue, with Contact Us. g10.auction-winner-order.US5-TC1
 2. Look for payment controls.
-   - no card Pay is offered and no payment deadline shows. `g10.auction-winner-order.US5-TC1`
-3. Read the page.
-   - No progress stepper shows. `g10.auction-winner-order.US5-TC2`
-   - No invoice PDF control shows. `g10.auction-winner-order.US5-TC2`
+   - no card Pay is offered and no payment deadline shows. g10.auction-winner-order.US5-TC1
 
-## Walk 6: Winner misses the address deadline
+## Walk 74: A cancelled order shows no stepper and no invoice PDF
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on `<winner order url>` for `<order_cancelled>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order_cancelled>` | An unpaid order an operator cancelled |
+
+### Route
+
+1. Read the page.
+   - No progress stepper shows. g10.auction-winner-order.US5-TC2
+   - No invoice PDF control shows. g10.auction-winner-order.US5-TC2
+
+## Walk 75: Past the setup deadline the order reads Setup Overdue with Contact Us
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_setup_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup_overdue>` | An order whose setup deadline, 172800s (48 hours) after the close, passed with setup incomplete |
 
 ### Route
 
 1. Read the status and the inline alert.
-   - the order reads Setup Overdue, with Contact Us. `g10.auction-winner-order.US7-TC1`
+   - the order reads Setup Overdue, with Contact Us. g10.auction-winner-order.US7-TC1
 2. Look for setup controls.
-   - no Confirm and no address editing are offered. `g10.auction-winner-order.US7-TC1`
-3. As the winner, open the order.
-   - The winner's order reads Setup Overdue. `g10.auction-winner-order.US7-TC5`
-4. As the operator, open the order and read what it offers.
-   - The operator can reopen or record its setup. `g10.auction-winner-order.US7-TC5`
-5. As the winner, open the order and read the address picker.
-   - The picker does not offer the one-time address. `g10.auction-winner-order.US7-TC6`
+   - no Confirm and no address editing are offered. g10.auction-winner-order.US7-TC1
 
-## Walk 7: Winner pays an invoice with a policy premium
+## Walk 76: The setup deadline still runs where no method is offered
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
+- customer(winner) holds an auction order in USD in Awaiting Setup, whose lot closed 48 hours ago, with setup not confirmed.
+- admin(operator with payment processing).
 
-**Shared test data:**
+### Route
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+1. As the winner, open the order.
+2. As the operator, open the order and read what it offers.
+   - The winner's order reads Setup Overdue. g10.auction-winner-order.US7-TC5
+   - The operator can reopen or record its setup. g10.auction-winner-order.US7-TC5
+
+## Walk 77: The one-time address is gone once the setup deadline passes
+
+**Starting state:**
+
+- customer(winner) added a one-time delivery address to an auction order without saving it and did not confirm before the setup deadline.
+- admin(operator with payment processing) reopened its setup after the deadline passed.
+
+### Route
+
+1. As the winner, open the order and read the address picker.
+   - The picker does not offer the one-time address. g10.auction-winner-order.US7-TC6
+
+## Walk 78: The invoice charges 20% of the winning bid as premium
+
+**Starting state:**
+
+- The HKD premium minimum is 0.
+- An invoice is created for `<order_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_1>` | An HKD order won at `<winning bid>` |
+| `<winning bid>` | HKD 2,500.00 (250000 minor units) |
+| `<premium>` | HKD 500.00: 20% of `<winning bid>` |
 
 ### Route
 
 1. Read the API response for `<order_1>`'s invoice.
-   - Buyer's premium is `<premium>`. `g10.auction-winner-order.US8-TC1`
-   - The total includes `<premium>`. `g10.auction-winner-order.US8-TC1`
-2. Compute the premium for `<winning bid>`.
-   - The premium is `<minimum>`, not 20% of `<winning bid>`. `g10.auction-winner-order.US8-TC2`
-3. Compute the premium for `<winning bid>`.
-   - The premium is `<premium>`. `g10.auction-winner-order.US8-TC3`
-4. Set the HKD premium minimum to `<new minimum>`.
-5. Read the API response for `<order_2>`'s sent invoice.
-   - the premium is still HKD 1.00. `g10.auction-winner-order.US8-TC4`
-6. Reissue `<order_2>`'s invoice.
-7. Read the API response for the reissued invoice.
-   - the premium is `<new minimum>`. `g10.auction-winner-order.US8-TC4`
+   - Buyer's premium is `<premium>`. g10.auction-winner-order.US8-TC1
+   - The total includes `<premium>`. g10.auction-winner-order.US8-TC1
 
-## Walk 8: Winner pays an invoice by bank transfer
+## Walk 79: A currency minimum above 20% becomes the premium
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- The HKD premium minimum is `<minimum>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<minimum>` | HKD 200.00 (20000 minor units) |
+| `<winning bid>` | HKD 5.00 (500 minor units) |
+| 20% of `<winning bid>` | HKD 1.00 (100 minor units) |
+
+### Route
+
+1. Compute the premium for `<winning bid>`.
+   - The premium is `<minimum>`, not 20% of `<winning bid>`. g10.auction-winner-order.US8-TC2
+
+## Walk 80: With a zero minimum, 20% is rounded half up
+
+**Starting state:**
+
+- The JPY premium minimum is 0.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<winning bid>` | JPY 1003 |
+| `<premium>` | JPY 201: 20% is 200.6, rounded half up |
+
+### Route
+
+1. Compute the premium for `<winning bid>`.
+   - The premium is `<premium>`. g10.auction-winner-order.US8-TC3
+
+## Walk 81: A sent invoice keeps its premium when the minimum changes
+
+**Starting state:**
+
+- `<order_2>`'s invoice was sent while the HKD minimum was 0.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_2>` | An HKD order won at HKD 5.00, invoice sent with premium HKD 1.00 |
+| `<new minimum>` | HKD 200.00 |
+
+### Route
+
+1. Set the HKD premium minimum to `<new minimum>`.
+2. Read the API response for `<order_2>`'s sent invoice.
+   - the premium is still HKD 1.00. g10.auction-winner-order.US8-TC4
+3. Reissue `<order_2>`'s invoice.
+4. Read the API response for the reissued invoice.
+   - the premium is `<new minimum>`. g10.auction-winner-order.US8-TC4
+
+## Walk 82: A bank-transfer invoice shows three ways to pay and the reference
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_bt>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
 
 ### Route
 
 1. Open the payment area.
 2. Read the payment instructions.
-   - SWIFT, FPS and Hong Kong local transfer details show. `g10.auction-winner-order.US9-TC1`
-   - The bank reference shows, with a copy control and a request to quote it. `g10.auction-winner-order.US9-TC1`
-   - No card Pay is offered. `g10.auction-winner-order.US9-TC1`
-3. Click Submit Payment Proof.
-4. Choose `<proof>`.
-5. Submit the proof.
-   - A toast reads Proof submitted and We'll verify your payment shortly. `g10.auction-winner-order.US9-TC2`
-   - The order reads Payment Verifying. `g10.auction-winner-order.US9-TC2`
-   - The deadline stops with `<time left>` kept. `g10.auction-winner-order.US9-TC2`
-   - A default inline Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed: under Order progress on small viewports and under the lot from `lg` up. `g10.auction-winner-order.US9-TC2`
-   - Card Pay, Submit Payment Proof, View Bank Details and further uploads are hidden. `g10.auction-winner-order.US9-TC2`
-   - `<proof>` and its file name are not shown. `g10.auction-winner-order.US9-TC2`
-6. Click Submit Payment Proof.
-7. Choose the row's files.
-8. Submit, then accept the confirm step.
-   - The upload is accepted, every file kept (HEIC stored as JPEG). `g10.auction-winner-order.US9-TC3`
-   - The order reads Payment Verifying. `g10.auction-winner-order.US9-TC3`
-9. Click Submit Payment Proof.
-10. Choose the row's files.
-11. Submit.
-   - The upload is refused and says why. `g10.auction-winner-order.US9-TC4`
-   - The order still reads Pending Payment; the deadline runs. `g10.auction-winner-order.US9-TC4`
-12. Click Submit Payment Proof.
-13. Choose `<proof>`.
-14. Submit, then accept the confirm step.
-   - The upload is accepted. `g10.auction-winner-order.US9-TC5`
-   - The order reads Payment Verifying. `g10.auction-winner-order.US9-TC5`
-15. Click Submit Payment Proof.
-16. Choose the row's files.
-17. Submit.
-   - The whole upload is refused, naming the allowed types. `g10.auction-winner-order.US9-TC6`
-   - Nothing is stored; the order still reads Pending Payment. `g10.auction-winner-order.US9-TC6`
-18. Click Submit Payment Proof.
-   - No second confirm screen is shown. `g10.auction-winner-order.US9-TC7`
-19. Choose `<proof>`.
-   - No proof is stored. `g10.auction-winner-order.US9-TC7`
-20. Read the inline warning that files cannot be added or changed after submission.
-   - The order still reads Pending Payment; the deadline runs. `g10.auction-winner-order.US9-TC7`
-21. Cancel without submitting.
-   - Submit Payment Proof is still offered. `g10.auction-winner-order.US9-TC7`
-22. Read the progress stepper's Payment step and the deadline.
-   - Payment is the current step, its subtext naming no date. `g10.auction-winner-order.US9-TC8`
-   - No payment deadline shows as running. `g10.auction-winner-order.US9-TC8`
-23. As customer A, send a second proof upload for `<order_verifying>` through the API.
-   - The upload is refused. `g10.auction-winner-order.US9-TC9`
-   - The first proof set is unchanged. `g10.auction-winner-order.US9-TC9`
-24. As customer A, send a card payment for the order through the API.
-   - The payment is refused; no charge is made. `g10.auction-winner-order.US9-TC10`
-   - The order still reads the state named in the row. `g10.auction-winner-order.US9-TC10`
-25. Open the payment area.
-   - No proof upload is offered. `g10.auction-winner-order.US9-TC11`
-26. Open the payment area.
-   - no proof upload is offered; the overdue alert shows Contact Us. `g10.auction-winner-order.US9-TC12`
-27. Send a proof upload for `<order_bt_overdue>` through the API.
-   - the upload is refused; the order still reads Payment Overdue. `g10.auction-winner-order.US9-TC12`
-28. As customer B, send a proof upload for `<order_bt>` through the API.
-   - Both requests are refused. `g10.auction-winner-order.US9-TC13`
-29. As customer B, request `<order_bt>`'s proof.
-   - `<order_bt>` still reads Pending Payment. `g10.auction-winner-order.US9-TC13`
-30. Click Submit Payment Proof.
-31. Choose `<proof>` and submit.
-32. Let the connection drop during upload.
-   - Submit Payment Proof stays open with `<proof>` selected. `g10.auction-winner-order.US9-TC14`
-   - a toast reads Proof not submitted and Nothing was saved. Try again. `g10.auction-winner-order.US9-TC14`
-   - the order reads Pending Payment; the deadline runs; nothing is stored. `g10.auction-winner-order.US9-TC14`
-33. Restore the connection and submit `<proof>` again.
-   - the upload is accepted. `g10.auction-winner-order.US9-TC14`
-34. Read `<order_bt>`'s bank reference.
-   - It reads `<reference>`. `g10.auction-winner-order.US9-TC15`
-   - 8 characters, capitals and digits only, no hyphen, space or symbol. `g10.auction-winner-order.US9-TC15`
-   - It fits one 35-character SWIFT remittance line. `g10.auction-winner-order.US9-TC15`
-35. Click Submit Payment Proof.
-36. Choose `<proof>`.
-37. Submit.
-   - The whole upload is refused, naming the 5 MB limit. `g10.auction-winner-order.US9-TC16`
-   - None of the three files is stored; the order still reads Pending Payment. `g10.auction-winner-order.US9-TC16`
-38. As customer A, send `<proof>` as a proof upload through the API.
-   - The whole upload is refused. `g10.auction-winner-order.US9-TC17`
-   - Nothing is stored; the order still reads Pending Payment. `g10.auction-winner-order.US9-TC17`
-39. Move the clock past the original payment deadline.
-40. Open `<winner order url>` for `<order_verifying>` as its winner.
-   - The order still reads Payment Verifying, not Payment Overdue. `g10.auction-winner-order.US9-TC19`
-41. Open `<winner order url>` for `<order_bt>`.
-42. Click the copy control beside the bank reference, then paste.
-   - pastes exactly `<reference>`, no space. `g10.auction-winner-order.US9-TC20`
-43. Open `<winner order url>` for `<order_card>`.
-   - shows no bank reference and no copy control. `g10.auction-winner-order.US9-TC20`
-44. Start `<busy work>`.
-   - Submit Payment Proof stays open. `g10.auction-winner-order.US9-TC30`
-45. Use `<leave route>`.
-   - The form remains locked until `<busy work>` finishes. `g10.auction-winner-order.US9-TC30`
-46. Confirm a delivery address with bank transfer.
-   - Card and bank transfer were both offered, neither selected. `g10.auction-winner-order.US9-TC22`
-47. Reload the order.
-   - The order records bank transfer and reads Preparing Invoice. `g10.auction-winner-order.US9-TC22`
-48. Choose the home address and reach the payment method choice.
-49. Read each method.
-   - Card reads `Card fee about 3.4% + a fixed amount`. `g10.auction-winner-order.US9-TC23`
-   - Bank transfer reads `Bank fee set on your invoice`, naming no amount. `g10.auction-winner-order.US9-TC23`
-   - Neither method is selected. `g10.auction-winner-order.US9-TC23`
-50. Open `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
-51. Read Order summary.
-52. Choose View Bank Details.
-53. Close View Bank Details.
-54. Choose Submit Payment Proof.
-   - Order summary shows Submit Payment Proof with View Bank Details under it. `g10.auction-winner-order.US9-TC21`
-   - View Bank Details opens the View Bank Details dialog. `g10.auction-winner-order.US9-TC21`
-   - Submit Payment Proof opens the Submit Payment Proof dialog. `g10.auction-winner-order.US9-TC21`
-55. Open View Bank Details from Order summary.
-   - The FPS tab is selected. `g10.auction-winner-order.US9-TC32`
-   - FPS ID, account name and an FPS QR are shown. `g10.auction-winner-order.US9-TC32`
-   - Amount due is shown without Copy. `g10.auction-winner-order.US9-TC32`
-   - The bank reference is shown as a detail row without Copy at the bottom of the FPS tab. `g10.auction-winner-order.US9-TC32`
-56. Choose HK Local.
-   - HK Local shows bank name, bank code, branch code, full account number including bank and branch code, then payment reference. `g10.auction-winner-order.US9-TC24`
-57. Choose International (SWIFT).
-   - SWIFT shows beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account or IBAN, then payment reference, then the OUR charges note after the reference. `g10.auction-winner-order.US9-TC24`
-58. Set `<narrow_viewport>` and scroll the tab track to International.
-   - At `<narrow_viewport>`, each tab label stays readable and the tab track scrolls horizontally. `g10.auction-winner-order.US9-TC24`
-59. Set `<wide_viewport>`.
-   - At `<wide_viewport>`, the three tabs share the full-width track. `g10.auction-winner-order.US9-TC24`
-60. Choose Submit Payment Proof.
-   - The dialog title is Submit Payment Proof. `g10.auction-winner-order.US9-TC25`
-   - Amount due and transfer reference are not shown. `g10.auction-winner-order.US9-TC25`
-   - No FPS, HK Local or SWIFT tab is shown. `g10.auction-winner-order.US9-TC25`
+   - SWIFT, FPS and Hong Kong local transfer details show. g10.auction-winner-order.US9-TC1
+   - The bank reference shows, with a copy control and a request to quote it. g10.auction-winner-order.US9-TC1
+   - No card Pay is offered. g10.auction-winner-order.US9-TC1
 
-## Walk 9: Winner's payment proof is not accepted
+## Walk 83: Uploading proof stops the deadline and reads Payment Verifying
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on `<winner order url>` for `<order bt>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| `<time left>` | 3 days 4 hours (273600s) before the payment deadline |
+| `<proof>` | One PDF under 5 MB |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Choose `<proof>`.
+3. Submit the proof.
+   - A toast reads Proof submitted and We'll verify your payment shortly. g10.auction-winner-order.US9-TC2
+   - The order reads Payment Verifying. g10.auction-winner-order.US9-TC2
+   - The deadline stops with `<time left>` kept. g10.auction-winner-order.US9-TC2
+   - A default inline Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed: under Order progress on small viewports and under the lot from `lg` up. g10.auction-winner-order.US9-TC2
+   - Card Pay, Submit Payment Proof, View Bank Details and further uploads are hidden. g10.auction-winner-order.US9-TC2
+   - `<proof>` and its file name are not shown. g10.auction-winner-order.US9-TC2
+
+## Walk 84: One to three files of each allowed type are accepted
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_bt>`.
+
+**Test data:**
+
+| Files |
+| --- |
+| 1 JPEG (lower limit) |
+| 1 PNG |
+| 1 HEIC |
+| 3 files mixing PDF, JPEG and PNG (upper limit) |
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Follow one Test data row.
+   a. Use Files "1 JPEG (lower limit)".
+   b. Use Files "1 PNG".
+   c. Use Files "1 HEIC".
+   d. Use Files "3 files mixing PDF, JPEG and PNG (upper limit)".
+   e. Use Files "Field".
+   f. Use Files "---".
+   g. Use Files "`<order_bt>`".
+3. Submit, then accept the confirm step.
+   - The upload is accepted, every file kept (HEIC stored as JPEG). g10.auction-winner-order.US9-TC3
+   - The order reads Payment Verifying. g10.auction-winner-order.US9-TC3
+
+## Walk 85: Too few or too many files are refused
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_bt>`.
+
+**Test data:**
+
+| Files |
+| --- |
+| 0 files |
+| 4 files, each allowed and under 5 MB |
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Follow one Test data row.
+   a. Use Files "0 files".
+   b. Use Files "4 files, each allowed and under 5 MB".
+   c. Use Files "Field".
+   d. Use Files "---".
+   e. Use Files "`<order_bt>`".
+3. Submit.
+   - The upload is refused and says why. g10.auction-winner-order.US9-TC4
+   - The order still reads Pending Payment; the deadline runs. g10.auction-winner-order.US9-TC4
+
+## Walk 86: A file of exactly 5 MB is accepted
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_bt>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| `<proof>` | One PDF of 5242880 bytes (5 MiB), at the limit |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Choose `<proof>`.
+3. Submit, then accept the confirm step.
+   - The upload is accepted. g10.auction-winner-order.US9-TC5
+   - The order reads Payment Verifying. g10.auction-winner-order.US9-TC5
+
+## Walk 87: A file of another type refuses the whole upload
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_bt>`.
+
+**Test data:**
+
+| Files |
+| --- |
+| A GIF image |
+| A Word document |
+| Four PDFs and one HEIC image |
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Follow one Test data row.
+   a. Use Files "A GIF image".
+   b. Use Files "A Word document".
+   c. Use Files "Four PDFs and one HEIC image".
+   d. Use Files "Field".
+   e. Use Files "---".
+   f. Use Files "`<order_bt>`".
+3. Submit.
+   - The whole upload is refused, naming the allowed types. g10.auction-winner-order.US9-TC6
+   - Nothing is stored; the order still reads Pending Payment. g10.auction-winner-order.US9-TC6
+
+## Walk 88: Backing out of the confirm step uploads nothing
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order bt>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| `<proof>` | Two PNG files |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Choose `<proof>`.
+3. Read the inline warning that files cannot be added or changed after submission.
+4. Cancel without submitting.
+   - No second confirm screen is shown. g10.auction-winner-order.US9-TC7
+   - No proof is stored. g10.auction-winner-order.US9-TC7
+   - The order still reads Pending Payment; the deadline runs. g10.auction-winner-order.US9-TC7
+   - Submit Payment Proof is still offered. g10.auction-winner-order.US9-TC7
+
+## Walk 89: While proof is checked, no deadline runs
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_verifying>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | An order reading Payment Verifying |
+
+### Route
+
+1. Read the progress stepper's Payment step and the deadline.
+   - Payment is the current step, its subtext naming no date. g10.auction-winner-order.US9-TC8
+   - No payment deadline shows as running. g10.auction-winner-order.US9-TC8
+
+## Walk 90: A second upload is refused while Payment Verifying
+
+**Starting state:**
+
+- `<order_verifying>` reads Payment Verifying for customer A.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | customer A's order, proof uploaded, reading Payment Verifying |
+
+### Route
+
+1. As customer A, send a second proof upload for `<order_verifying>` through the API.
+   - The upload is refused. g10.auction-winner-order.US9-TC9
+   - The first proof set is unchanged. g10.auction-winner-order.US9-TC9
+
+## Walk 91: Card payment is refused for an ineligible order
+
+**Starting state:**
+
+- customer A's order is in the state named in the row.
+
+**Test data:**
+
+| Order state | Fixture |
+| --- | --- |
+| Payment Verifying | Proof uploaded, order reads Payment Verifying |
+| Pending Payment | Sent bank-transfer invoice, order reads Pending Payment |
+
+### Route
+
+1. As customer A, send a card payment for the order through the API.
+   - The payment is refused; no charge is made. g10.auction-winner-order.US9-TC10
+   - The order still reads the state named in the row. g10.auction-winner-order.US9-TC10
+
+## Walk 92: Proof upload is not offered where it does not apply
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order>`.
+
+**Test data:**
+
+| Order state |
+| --- |
+| Preparing Invoice, bank transfer chosen |
+| Card invoice sent, unpaid |
+| Bank-transfer invoice paid |
+
+### Route
+
+1. Open the payment area.
+   - No proof upload is offered. g10.auction-winner-order.US9-TC11
+
+## Walk 93: An expired bank-transfer invoice takes no proof
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_bt_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bt_overdue>` | A bank-transfer order past its payment deadline, unpaid |
+
+### Route
+
+1. Open the payment area.
+   - no proof upload is offered; the overdue alert shows Contact Us. g10.auction-winner-order.US9-TC12
+2. Send a proof upload for `<order_bt_overdue>` through the API.
+   - the upload is refused; the order still reads Payment Overdue. g10.auction-winner-order.US9-TC12
+
+## Walk 94: Another collector can neither upload nor read the proof
+
+**Starting state:**
+
+- `<order_bt>` belongs to customer A.
+- customer B is signed in, in a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+
+### Route
+
+1. As customer B, send a proof upload for `<order_bt>` through the API.
+2. As customer B, request `<order_bt>`'s proof.
+   - Both requests are refused. g10.auction-winner-order.US9-TC13
+   - `<order_bt>` still reads Pending Payment. g10.auction-winner-order.US9-TC13
+
+## Walk 95: An upload cut off part-way leaves the invoice pending
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order bt>`.
+- The connection is set to drop during upload.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| `<proof>` | Three allowed files under 5 MB |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Choose `<proof>` and submit.
+3. Let the connection drop during upload.
+   - Submit Payment Proof stays open with `<proof>` selected. g10.auction-winner-order.US9-TC14
+   - a toast reads Proof not submitted and Nothing was saved. Try again. g10.auction-winner-order.US9-TC14
+   - the order reads Pending Payment; the deadline runs; nothing is stored. g10.auction-winner-order.US9-TC14
+4. Restore the connection and submit `<proof>` again.
+   - the upload is accepted. g10.auction-winner-order.US9-TC14
+
+## Walk 96: The bank reference fits every way to pay
+
+**Starting state:**
+
+- `<order_bt>`'s invoice is sent.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| `<listing code>` | LK7P2Q, the listing's code |
+| `<reference>` | LK7P2Q01: `<listing code>` then the two-digit invoice count |
+
+### Route
+
+1. Read `<order_bt>`'s bank reference.
+   - It reads `<reference>`. g10.auction-winner-order.US9-TC15
+   - 8 characters, capitals and digits only, no hyphen, space or symbol. g10.auction-winner-order.US9-TC15
+   - It fits one 35-character SWIFT remittance line. g10.auction-winner-order.US9-TC15
+
+## Walk 97: A file over 5 MB refuses the whole upload
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_bt>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| `<proof>` | One PDF of 5242881 bytes (5 MiB + 1 byte) with two small PNGs |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Choose `<proof>`.
+3. Submit.
+   - The whole upload is refused, naming the 5 MB limit. g10.auction-winner-order.US9-TC16
+   - None of the three files is stored; the order still reads Pending Payment. g10.auction-winner-order.US9-TC16
+
+## Walk 98: A file whose content is not its extension is refused
+
+**Starting state:**
+
+- customer A's `<order_bt>` reads Pending Payment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| `<proof>` | An executable renamed to .pdf |
+
+### Route
+
+1. As customer A, send `<proof>` as a proof upload through the API.
+   - The whole upload is refused. g10.auction-winner-order.US9-TC17
+   - Nothing is stored; the order still reads Pending Payment. g10.auction-winner-order.US9-TC17
+
+## Walk 99: The old deadline passing during the check expires nothing
+
+**Starting state:**
+
+- `<order_verifying>` reached Payment Verifying before its payment deadline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | An order reading Payment Verifying, no operator action yet |
+
+### Route
+
+1. Move the clock past the original payment deadline.
+2. Open `<winner order url>` for `<order_verifying>` as its winner.
+   - The order still reads Payment Verifying, not Payment Overdue. g10.auction-winner-order.US9-TC19
+
+## Walk 100: The reference copy control copies it exactly, on bank transfer only
+
+**Starting state:**
+
+- customer(winner of `<order_bt>` and `<order_card>`) is signed in.
+- The browser may use the clipboard.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| `<reference>` | LK7P2Q01, `<order_bt>`'s bank reference |
+| `<order_card>` | An order with a sent card invoice, unpaid |
+
+### Route
+
+1. Open `<winner order url>` for `<order_bt>`.
+2. Click the copy control beside the bank reference, then paste.
+3. Open `<winner order url>` for `<order_card>`.
+   - Step 2 pastes exactly `<reference>`, no space. g10.auction-winner-order.US9-TC20
+   - Step 3 shows no bank reference and no copy control. g10.auction-winner-order.US9-TC20
+
+## Walk 101: Busy proof form blocks every leave route
+
+**Starting state:**
+
+- customer(winner) is signed in on `<winner order url>` for `<pending bank-transfer order>`.
+- Submit Payment Proof is open.
+
+**Test data:**
+
+| `<busy work>` | `<leave route>` |
+| --- | --- |
+| Proof submission in progress | Cancel |
+| HEIC conversion in progress | Escape |
+| Proof submission in progress | Overlay dismiss |
+
+### Route
+
+1. Start `<busy work>`.
+2. Use `<leave route>`.
+   - Submit Payment Proof stays open. g10.auction-winner-order.US9-TC30
+   - The form remains locked until `<busy work>` finishes. g10.auction-winner-order.US9-TC30
+
+## Walk 102: Bank transfer is recorded with the address where Grade10 holds bank details
+
+**Starting state:**
+
+- Grade10 holds HKD bank details, as outside production.
+- customer(winner) holds an auction order in HKD in Awaiting Setup.
+
+### Route
+
+1. Confirm a delivery address with bank transfer.
+2. Reload the order.
+   - Card and bank transfer were both offered, neither selected. g10.auction-winner-order.US9-TC22
+   - The order records bank transfer and reads Preparing Invoice. g10.auction-winner-order.US9-TC22
+
+## Walk 103: The choice shows each method's fee wording, neither selected
+
+**Starting state:**
+
+- Grade10 holds HKD bank details, and Payment Settings holds an HKD card fee rule.
+- customer(winner) holds an auction order in HKD in Awaiting Setup.
+
+### Route
+
+1. Choose the home address and reach the payment method choice.
+2. Read each method.
+   - Card reads `Card fee about 3.4% + a fixed amount`. g10.auction-winner-order.US9-TC23
+   - Bank transfer reads `Bank fee set on your invoice`, naming no amount. g10.auction-winner-order.US9-TC23
+   - Neither method is selected. g10.auction-winner-order.US9-TC23
+
+## Walk 104: Order summary offers Submit Payment Proof and View Bank Details
+
+**Starting state:**
+
+- customer(winner) is signed in on `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<pending_bank_transfer_order>` | An auction order whose invoice was sent for bank transfer and is pending |
+
+### Route
+
+1. Open `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
+2. Read Order summary.
+3. Choose View Bank Details.
+4. Close View Bank Details.
+5. Choose Submit Payment Proof.
+   - Order summary shows Submit Payment Proof with View Bank Details under it. g10.auction-winner-order.US9-TC21
+   - View Bank Details opens the View Bank Details dialog. g10.auction-winner-order.US9-TC21
+   - Submit Payment Proof opens the Submit Payment Proof dialog. g10.auction-winner-order.US9-TC21
+
+## Walk 105: View Bank Details opens on FPS with QR
+
+**Starting state:**
+
+- customer(winner) is signed in on `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<pending_bank_transfer_order>` | An auction order whose invoice was sent for bank transfer and is pending |
+
+### Route
+
+1. Open View Bank Details from Order summary.
+   - The FPS tab is selected. g10.auction-winner-order.US9-TC32
+   - FPS ID, account name and an FPS QR are shown. g10.auction-winner-order.US9-TC32
+   - Amount due is shown without Copy. g10.auction-winner-order.US9-TC32
+   - The bank reference is shown as a detail row without Copy at the bottom of the FPS tab. g10.auction-winner-order.US9-TC32
+
+## Walk 106: HK Local and SWIFT tabs show expanded fields and stay readable
+
+**Starting state:**
+
+- customer(winner) has View Bank Details open for `<pending_bank_transfer_order>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<narrow_viewport>` | A viewport below `sm` |
+| `<wide_viewport>` | A viewport at `sm` or wider |
+
+### Route
+
+1. Choose HK Local.
+2. Choose International (SWIFT).
+3. Set `<narrow_viewport>` and scroll the tab track to International.
+4. Set `<wide_viewport>`.
+   - HK Local shows bank name, bank code, branch code, full account number including bank and branch code, then payment reference. g10.auction-winner-order.US9-TC24
+   - SWIFT shows beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account or IBAN, then payment reference, then the OUR charges note after the reference. g10.auction-winner-order.US9-TC24
+   - At `<narrow_viewport>`, each tab label stays readable and the tab track scrolls horizontally. g10.auction-winner-order.US9-TC24
+   - At `<wide_viewport>`, the three tabs share the full-width track. g10.auction-winner-order.US9-TC24
+
+## Walk 107: Submit Payment Proof is proof-only
+
+**Starting state:**
+
+- customer(winner) is signed in on `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
+
+### Route
+
+1. Choose Submit Payment Proof.
+   - The dialog title is Submit Payment Proof. g10.auction-winner-order.US9-TC25
+   - Amount due and transfer reference are not shown. g10.auction-winner-order.US9-TC25
+   - No FPS, HK Local or SWIFT tab is shown. g10.auction-winner-order.US9-TC25
+
+## Walk 108: The operator's internal reason never reaches the winner
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_returned>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_returned>` | A bank-transfer order whose proof an operator returned with `<external reason>` and `<internal reason>` |
+| `<external reason>` | Amount received does not match |
+| `<internal reason>` | A note for operators only |
 
 ### Route
 
 1. Read the order.
-   - `<external reason>` shows. `g10.auction-winner-order.US10-TC2`
 2. Download the invoice PDF and read it.
-   - `<internal reason>` appears on neither. `g10.auction-winner-order.US10-TC2`
-3. Click Submit Payment Proof.
-   - The order reads Payment Verifying again. `g10.auction-winner-order.US10-TC3`
-4. Choose `<proof>`, submit and accept the confirm step.
-   - The deadline stops with the time then left. `g10.auction-winner-order.US10-TC3`
-5. Return the proof at `<return time>`.
-6. Read the API response for the new deadline.
-   - The deadline is `<return time>` plus the row's time left. `g10.auction-winner-order.US10-TC4`
-7. Read the status and the payment area.
-   - The order reads Payment Overdue. `g10.auction-winner-order.US10-TC5`
-   - Proof upload is hidden; the overdue alert shows Contact Us. `g10.auction-winner-order.US10-TC5`
-8. Return the proof again at `<return time>`.
-9. Read the API response for the new deadline.
-   - The deadline is `<return time>` plus `<time left 2>`. `g10.auction-winner-order.US10-TC6`
-10. Read the order status and the alert.
-   - the order no longer reads Payment Verifying. `g10.auction-winner-order.US10-TC8`
-   - `<return reason>` is shown to the winner. `g10.auction-winner-order.US10-TC8`
-11. Read the payment deadline.
-   - Pay by reads `<return time>` plus `<time left>`. `g10.auction-winner-order.US10-TC8`
-   - Submit Payment Proof and View Bank Details are offered again. `g10.auction-winner-order.US10-TC8`
-12. Read the page.
-   - `<second reason>` is shown. `g10.auction-winner-order.US10-TC9`
-   - `<first reason>` is not shown. `g10.auction-winner-order.US10-TC9`
-   - No proof file or file name is shown. `g10.auction-winner-order.US10-TC9`
-13. Have an operator return the proof with `<return reason>`.
-14. Read the mail sent to the winner's registered email.
-   - One Proof not accepted letter carrying `<return reason>`. `g10.auction-winner-order.US10-TC10`
-   - Its Pay by equals the return time plus `<time left>`. `g10.auction-winner-order.US10-TC10`
-   - No payment reminder was sent while the proof was under check. `g10.auction-winner-order.US10-TC10`
+   - `<external reason>` shows. g10.auction-winner-order.US10-TC2
+   - `<internal reason>` appears on neither. g10.auction-winner-order.US10-TC2
 
-## Walk 10: Winner bills a won lot to a different address
+## Walk 109: After a return the winner can upload again
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on `<winner order url>` for `<order_returned>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order_returned>` | A bank-transfer order whose proof was returned, inside its deadline |
+| `<proof>` | One new PDF under 5 MB |
+
+### Route
+
+1. Click Submit Payment Proof.
+2. Choose `<proof>`, submit and accept the confirm step.
+   - The order reads Payment Verifying again. g10.auction-winner-order.US10-TC3
+   - The deadline stops with the time then left. g10.auction-winner-order.US10-TC3
+
+## Walk 110: Time left at the edges survives a return
+
+**Starting state:**
+
+- `<order_verifying>` reads Payment Verifying with the row's `<time left>` kept.
+
+**Test data:**
+
+| Time left |
+| --- |
+| 60s (1 minute) |
+| 604740s (6 days 23 hours 59 minutes) |
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | A bank-transfer order reading Payment Verifying |
+
+### Route
+
+1. Return the proof at `<return time>`.
+2. Read the API response for the new deadline.
+   - The deadline is `<return time>` plus the row's time left. g10.auction-winner-order.US10-TC4
+
+## Walk 111: A return adds no grace once the time left runs out
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_returned_late>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_returned_late>` | A bank-transfer order returned with 60s left, and that minute has passed |
+
+### Route
+
+1. Read the status and the payment area.
+   - The order reads Payment Overdue. g10.auction-winner-order.US10-TC5
+   - Proof upload is hidden; the overdue alert shows Contact Us. g10.auction-winner-order.US10-TC5
+
+## Walk 112: A second return keeps the time left at the second upload
+
+**Starting state:**
+
+- `<order_verifying>` was returned once, uploaded again with `<time left 2>` kept, and reads Payment Verifying.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | A bank-transfer order on its second check |
+| `<time left 2>` | The time left at the second upload |
+
+### Route
+
+1. Return the proof again at `<return time>`.
+2. Read the API response for the new deadline.
+   - The deadline is `<return time>` plus `<time left 2>`. g10.auction-winner-order.US10-TC6
+
+## Walk 113: Returned proof shows the reason and the deadline resumes
+
+**Starting state:**
+
+- customer(winner) chose bank transfer and uploaded proof for `<order_verifying>`.
+- An operator returned the proof with `<return reason>`.
+- customer is on `<order_verifying>`'s Winner Order page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline |
+| `<time left>` | 3 days (259200s), a time inside the 7-day payment window |
+| `<return reason>` | The reason text the operator entered for the winner |
+| `<return time>` | 1 day after the upload |
+
+### Route
+
+1. Read the order status and the alert.
+   - the order no longer reads Payment Verifying. g10.auction-winner-order.US10-TC8
+   - `<return reason>` is shown to the winner. g10.auction-winner-order.US10-TC8
+2. Read the payment deadline.
+   - Pay by reads `<return time>` plus `<time left>`. g10.auction-winner-order.US10-TC8
+   - Submit Payment Proof and View Bank Details are offered again. g10.auction-winner-order.US10-TC8
+
+## Walk 114: Only the latest return reason is shown
+
+**Starting state:**
+
+- customer(winner)'s proof for `<order_verifying>` was returned with `<first reason>`.
+- The winner uploaded proof again, and it was returned with `<second reason>`.
+- customer is on `<order_verifying>`'s Winner Order page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | An order paid by bank transfer, inside its payment window |
+| `<first reason>` | Amount does not match |
+| `<second reason>` | Reference missing from the transfer |
+
+### Route
+
+1. Read the page.
+   - `<second reason>` is shown. g10.auction-winner-order.US10-TC9
+   - `<first reason>` is not shown. g10.auction-winner-order.US10-TC9
+   - No proof file or file name is shown. g10.auction-winner-order.US10-TC9
+
+## Walk 115: Returned proof sends Proof not accepted with the new Pay by
+
+**Starting state:**
+
+- customer(winner) uploaded proof for `<order_verifying>`; no letter was sent on upload.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_verifying>` | An order paid by bank transfer, `<time left>` before its payment deadline at upload |
+| `<time left>` | 3 days (259200s) |
+| `<return reason>` | The reason text the operator enters for the winner |
+
+### Route
+
+1. Have an operator return the proof with `<return reason>`.
+2. Read the mail sent to the winner's registered email.
+   - One Proof not accepted letter carrying `<return reason>`. g10.auction-winner-order.US10-TC10
+   - Its Pay by equals the return time plus `<time left>`. g10.auction-winner-order.US10-TC10
+   - No payment reminder was sent while the proof was under check. g10.auction-winner-order.US10-TC10
+
+## Walk 116: Billing Add Address has phone and Personal or Company
+
+**Starting state:**
+
+- customer(winner) is on Complete Order Setup for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
 
 ### Route
 
 1. Untick Same as delivery address.
 2. Open Add Address for billing.
-   - The Personal / Company control shows above the fields, Personal selected. `g10.auction-winner-order.US11-TC1`
-   - Phone shows a country selector, starting empty with a globe only. `g10.auction-winner-order.US11-TC1`
-   - Company Name is hidden. `g10.auction-winner-order.US11-TC1`
-3. Fill the fields from **Test data**.
-   - The confirm is refused, with a message beside the missing field. `g10.auction-winner-order.US11-TC2`
-4. Click confirm.
-   - The order's billing address is unchanged. `g10.auction-winner-order.US11-TC2`
-5. Untick Same as delivery address.
-6. Open billing Add Address.
-7. Fill the billing fields from **Test data**.
-8. Confirm billing.
-   - Delivery still reads `<address_sf>`. `g10.auction-winner-order.US11-TC4`
-   - Billing reads Northwind Billing Ltd, Toronto, with the phone. `g10.auction-winner-order.US11-TC4`
-9. Open the Country/Region picker and read the list.
-10. Open delivery Add Address's picker and read its list.
-11. Back on billing, type `Jap`.
-   - The billing list holds every country and region in A-Z order, the same list as delivery. `g10.auction-winner-order.US11-TC5`
-   - Typing leaves only the names that match `Jap`, Japan among them. `g10.auction-winner-order.US11-TC5`
-12. Leave the order for another page, then return to it.
-13. Read the billing addresses offered.
-14. Open the account address book.
-   - The one-time billing address is still offered for billing. `g10.auction-winner-order.US11-TC6`
-   - The address book does not hold the one-time billing address. `g10.auction-winner-order.US11-TC6`
+   - The Personal / Company control shows above the fields, Personal selected. g10.auction-winner-order.US11-TC1
+   - Phone shows a country selector, starting empty with a globe only. g10.auction-winner-order.US11-TC1
+   - Company Name is hidden. g10.auction-winner-order.US11-TC1
 
-## Walk 11: Winner confirms delivery when five addresses are already saved
+## Walk 117: Missing billing address field is refused
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on billing Add Address for `<order_setup>`, with the form mode and missing field in the row.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Form mode | Missing field | Phone country | Phone digits | Company Name |
+| --- | --- | --- | --- | --- |
+| Personal | Phone | Canada | (empty) | Not shown |
+| Company | Company Name | Canada | 4165550100 | (empty) |
+
+### Route
+
+1. Fill the form for one Test data row.
+   a. Use Form mode "Personal"; Missing field "Phone"; Phone country "Canada"; leave Phone digits empty; leave Company Name hidden.
+   b. Use Form mode "Company"; Missing field "Company Name"; Phone country "Canada"; Phone digits "4165550100"; leave Company Name empty.
+2. Click confirm.
+   - The confirm is refused, with a message beside the missing field. g10.auction-winner-order.US11-TC2
+   - The order's billing address is unchanged. g10.auction-winner-order.US11-TC2
+
+## Walk 118: A company billing address applies apart from delivery
+
+**Starting state:**
+
+- customer(winner) is on Complete Order Setup for `<order_setup>`, delivery confirmed to `<address_sf>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| `<address_sf>` | A personal address for Alex Chen, 100 Market St, San Francisco |
+| Kind | Company |
+| Company Name | Northwind Billing Ltd |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | Canada |
+| Phone digits | 4165550199 |
+| Country or region | Canada |
+| Town or city | Toronto |
+| Address line 1 | 1 Front St |
+| Postal code | M5E 1B2 |
+
+### Route
+
+1. Untick Same as delivery address.
+2. Open billing Add Address.
+3. Fill billing: Kind "Company"; Company Name "Northwind Billing Ltd"; First name "Alex"; Last name "Chen"; Phone country "Canada"; Phone digits "4165550199"; Country or region "Canada"; Town or city "Toronto"; Address line 1 "1 Front St"; Postal code "M5E 1B2".
+4. Confirm billing.
+   - Delivery still reads `<address_sf>`. g10.auction-winner-order.US11-TC4
+   - Billing reads Northwind Billing Ltd, Toronto, with the phone. g10.auction-winner-order.US11-TC4
+
+## Walk 119: Billing Add Address lists and filters the delivery Country/Region catalogue
+
+**Starting state:**
+
+- customer(winner) is on billing Add Address of an auction order in Awaiting Setup, after unticking Same as delivery address.
+
+### Route
+
+1. Open the Country/Region picker and read the list.
+2. Open delivery Add Address's picker and read its list.
+3. Back on billing, type `Jap`.
+   - The billing list holds every country and region in A-Z order, the same list as delivery. g10.auction-winner-order.US11-TC5
+   - Typing leaves only the names that match `Jap`, Japan among them. g10.auction-winner-order.US11-TC5
+
+## Walk 120: An unsaved one-time billing address is there on return
+
+**Starting state:**
+
+- customer(winner) holds an auction order in Awaiting Setup, its setup deadline not passed.
+- On it, after unticking Same as delivery address, they added a one-time billing address without saving it, and have not confirmed.
+
+### Route
+
+1. Leave the order for another page, then return to it.
+2. Read the billing addresses offered.
+3. Open the account address book.
+   - The one-time billing address is still offered for billing. g10.auction-winner-order.US11-TC6
+   - The address book does not hold the one-time billing address. g10.auction-winner-order.US11-TC6
+
+## Walk 121: Add Address at the five-address cap shows phone and kind
+
+**Starting state:**
+
+- customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
 
 ### Route
 
 1. Open the delivery address picker.
-   - The Personal / Company control shows, Personal selected, Company Name hidden. `g10.auction-winner-order.US12-TC1`
 2. Click Add new address.
-   - Phone shows a country selector and number input, no country chosen. `g10.auction-winner-order.US12-TC1`
-3. Open the delivery address picker.
-4. Click Add new address.
-5. Fill the fields from **Test data**, Save this address for future orders unticked.
-6. Confirm the address for this order.
-   - the order's delivery address is the entered address, with phone. `g10.auction-winner-order.US12-TC2`
-7. Open the account address book.
-   - the book still holds five addresses. `g10.auction-winner-order.US12-TC2`
-8. Click Company.
-   - The confirm is refused, with messages beside Company Name and Phone. `g10.auction-winner-order.US12-TC3`
-9. Fill the fields from **Test data**, Save this address for future orders unticked.
-   - The order's delivery address is unchanged. `g10.auction-winner-order.US12-TC3`
-10. Click confirm.
-   - The book still holds five addresses. `g10.auction-winner-order.US12-TC3`
-11. Open the delivery address picker.
-12. Click Add new address.
-   - The address form opens; no message blocks it. `g10.auction-winner-order.US12-TC4`
-13. Open the delivery address picker.
-14. Click Add new address.
-15. Enter `<address_new>`, Save this address for future orders unticked.
-16. Confirm the address for this order.
-   - the order's delivery address is `<address_new>`. `g10.auction-winner-order.US12-TC5`
-17. Open the account address book.
-   - the book still holds five addresses. `g10.auction-winner-order.US12-TC5`
-18. Open the delivery address picker.
-19. Click Add new address and enter `<address_new>`.
-20. Click Use this address.
-   - `<address_new>` shows as a draft entry at the top of the picker. `g10.auction-winner-order.US12-TC6`
-   - The five saved addresses list below it. `g10.auction-winner-order.US12-TC6`
-21. Open the delivery address picker.
-22. Click Add new address and enter `<address_new>`.
-23. Click Save this address for future orders.
-   - the checkbox is disabled and stays unticked. `g10.auction-winner-order.US12-TC7`
-24. Hover the info icon beside it.
-   - a short reason says the book is full. `g10.auction-winner-order.US12-TC7`
-25. Open the delivery address picker.
-26. Click Add new address and enter `<address_new>`.
-27. Tick Save this address for future orders.
-   - the checkbox is enabled and ticks. `g10.auction-winner-order.US12-TC8`
-28. Confirm the address for this order.
-29. Open the account address book.
-   - the book holds five, including `<address_new>`. `g10.auction-winner-order.US12-TC8`
-30. Remove `<address_home>` from the address book.
-   - the book holds four addresses. `g10.auction-winner-order.US12-TC9`
-31. Navigate to `<winner order url>` for `<order_setup>`.
-32. Click Add new address in the delivery picker and enter `<address_new>`.
-33. Click Save this address for future orders.
-   - the checkbox is enabled and ticks. `g10.auction-winner-order.US12-TC9`
-34. Open `<address_home>` for editing.
-35. Change address line 1 to `<new street>`.
-36. Save.
-   - The book still holds five addresses. `g10.auction-winner-order.US12-TC10`
-   - `<address_home>` shows once, with `<new street>`. `g10.auction-winner-order.US12-TC10`
-37. Open the account address book in a new tab.
-   - all six addresses are listed. `g10.auction-winner-order.US12-TC11`
-38. On the order, click Add new address in the delivery picker and enter `<address_new>`.
-39. Click Save this address for future orders.
-   - the checkbox is disabled and stays unticked. `g10.auction-winner-order.US12-TC11`
-40. Leave the order for another page, then return to it.
-41. Read the delivery address picker.
-42. Open the account address book.
-43. Back on the order, select the one-time delivery address, a payment method, and confirm.
-   - The delivery picker lists the one-time address ahead of the saved addresses. `g10.auction-winner-order.US12-TC12`
-   - The address book does not hold the one-time address. `g10.auction-winner-order.US12-TC12`
-   - The confirmation is accepted with the one-time delivery address. `g10.auction-winner-order.US12-TC12`
+   - The Personal / Company control shows, Personal selected, Company Name hidden. g10.auction-winner-order.US12-TC1
+   - Phone shows a country selector and number input, no country chosen. g10.auction-winner-order.US12-TC1
 
-## Walk 12: Winner learns their order was cancelled
+## Walk 122: At the cap a one-time personal address confirms without saving
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| First name | Jordan |
+| Last name | Lee |
+| Phone country | United States |
+| Phone digits | 2125550147 |
+| Country or region | United States |
+| Town or city | New York |
+| Address line 1 | 350 5th Ave |
+| Postal code | 10118 |
+
+### Route
+
+1. Open the delivery address picker.
+2. Click Add new address.
+3. Fill the form: First name "Jordan"; Last name "Lee"; Phone country "United States"; Phone digits "2125550147"; Country or region "United States"; Town or city "New York"; Address line 1 "350 5th Ave"; Postal code "10118", Save this address for future orders unticked.
+4. Confirm the address for this order.
+   - the order's delivery address is the entered address, with phone. g10.auction-winner-order.US12-TC2
+5. Open the account address book.
+   - the book still holds five addresses. g10.auction-winner-order.US12-TC2
+
+## Walk 123: At the cap a company address without Company Name or phone is refused
+
+**Starting state:**
+
+- customer(winner, five saved shipping addresses) is on delivery Add new address for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| Kind | Company |
+| Company Name | (empty) |
+| First name | Jordan |
+| Last name | Lee |
+| Phone country | (not chosen) |
+| Phone digits | (empty) |
+| Country or region | United States |
+| Town or city | New York |
+| Address line 1 | 350 5th Ave |
+| Postal code | 10118 |
+
+### Route
+
+1. Click Company.
+2. Fill the form: Kind "Company"; leave Company Name empty; First name "Jordan"; Last name "Lee"; leave Phone country unselected; leave Phone digits empty; Country or region "United States"; Town or city "New York"; Address line 1 "350 5th Ave"; Postal code "10118", Save this address for future orders unticked.
+3. Click confirm.
+   - The confirm is refused, with messages beside Company Name and Phone. g10.auction-winner-order.US12-TC3
+   - The order's delivery address is unchanged. g10.auction-winner-order.US12-TC3
+   - The book still holds five addresses. g10.auction-winner-order.US12-TC3
+
+## Walk 124: At the cap, Add new address still opens
+
+**Starting state:**
+
+- customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+
+### Route
+
+1. Open the delivery address picker.
+2. Click Add new address.
+   - The address form opens; no message blocks it. g10.auction-winner-order.US12-TC4
+
+## Walk 125: At the cap a one-time address sets the order's delivery and saves nothing
+
+**Starting state:**
+
+- customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| `<address_new>` | A complete personal shipping address not in the book |
+
+### Route
+
+1. Open the delivery address picker.
+2. Click Add new address.
+3. Enter `<address_new>`, Save this address for future orders unticked.
+4. Confirm the address for this order.
+   - the order's delivery address is `<address_new>`. g10.auction-winner-order.US12-TC5
+5. Open the account address book.
+   - the book still holds five addresses. g10.auction-winner-order.US12-TC5
+
+## Walk 126: A one-time address sits as a draft at the top of the picker
+
+**Starting state:**
+
+- customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| `<address_new>` | A complete personal shipping address not in the book |
+
+### Route
+
+1. Open the delivery address picker.
+2. Click Add new address and enter `<address_new>`.
+3. Click Use this address.
+   - `<address_new>` shows as a draft entry at the top of the picker. g10.auction-winner-order.US12-TC6
+   - The five saved addresses list below it. g10.auction-winner-order.US12-TC6
+
+## Walk 127: At the cap, saving a new address is refused with a reason
+
+**Starting state:**
+
+- customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| `<address_new>` | A complete personal shipping address not in the book |
+
+### Route
+
+1. Open the delivery address picker.
+2. Click Add new address and enter `<address_new>`.
+3. Click Save this address for future orders.
+   - the checkbox is disabled and stays unticked. g10.auction-winner-order.US12-TC7
+4. Hover the info icon beside it.
+   - a short reason says the book is full. g10.auction-winner-order.US12-TC7
+
+## Walk 128: Below the cap, a new address can be saved
+
+**Starting state:**
+
+- customer(winner, four saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| `<address_new>` | A complete personal shipping address not in the book |
+
+### Route
+
+1. Open the delivery address picker.
+2. Click Add new address and enter `<address_new>`.
+3. Tick Save this address for future orders.
+   - the checkbox is enabled and ticks. g10.auction-winner-order.US12-TC8
+4. Confirm the address for this order.
+5. Open the account address book.
+   - the book holds five, including `<address_new>`. g10.auction-winner-order.US12-TC8
+
+## Walk 129: Removing a saved address frees a slot for saving
+
+**Starting state:**
+
+- customer(winner, five saved shipping addresses including `<address_home>`) is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<address_home>` | A saved address named Home, used by no unpaid order |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| `<address_new>` | A complete personal shipping address not in the book |
+
+### Route
+
+1. Remove `<address_home>` from the address book.
+   - the book holds four addresses. g10.auction-winner-order.US12-TC9
+2. Navigate to `<winner order url>` for `<order_setup>`.
+3. Click Add new address in the delivery picker and enter `<address_new>`.
+4. Click Save this address for future orders.
+   - the checkbox is enabled and ticks. g10.auction-winner-order.US12-TC9
+
+## Walk 130: Editing a saved address at the cap takes no extra slot
+
+**Starting state:**
+
+- customer(winner, five saved shipping addresses including `<address_home>`) is on the account address book.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<address_home>` | A saved address named Home |
+| `<new street>` | A different address line 1 |
+
+### Route
+
+1. Open `<address_home>` for editing.
+2. Change address line 1 to `<new street>`.
+3. Save.
+   - The book still holds five addresses. g10.auction-winner-order.US12-TC10
+   - `<address_home>` shows once, with `<new street>`. g10.auction-winner-order.US12-TC10
+
+## Walk 131: A book already over the cap keeps every address and still refuses saves
+
+**Starting state:**
+
+- customer(winner) holds six saved shipping addresses, seeded from before the cap.
+- customer is on `<winner order url>` for `<order_setup>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup>` | An order inside its setup window, setup incomplete |
+| `<address_new>` | A complete personal shipping address not in the book |
+
+### Route
+
+1. Open the account address book in a new tab.
+   - all six addresses are listed. g10.auction-winner-order.US12-TC11
+2. On the order, click Add new address in the delivery picker and enter `<address_new>`.
+3. Click Save this address for future orders.
+   - the checkbox is disabled and stays unticked. g10.auction-winner-order.US12-TC11
+
+## Walk 132: An unsaved one-time delivery address is there on return
+
+**Starting state:**
+
+- customer(winner) holds an auction order in Awaiting Setup, its setup deadline not passed.
+- On it, they added a one-time delivery address without saving it, and have not confirmed.
+
+### Route
+
+1. Leave the order for another page, then return to it.
+2. Read the delivery address picker.
+3. Open the account address book.
+4. Back on the order, select the one-time delivery address, a payment method, and confirm.
+   - The delivery picker lists the one-time address ahead of the saved addresses. g10.auction-winner-order.US12-TC12
+   - The address book does not hold the one-time address. g10.auction-winner-order.US12-TC12
+   - The confirmation is accepted with the one-time delivery address. g10.auction-winner-order.US12-TC12
+
+## Walk 133: Cancelled keeps the lot and winning bid visible
+
+**Starting state:**
+
+- customer(winner of `<cancelled order>`) is on Winner Order.
 
 ### Route
 
 1. Read the status, lot, winning bid and actions.
-   - The page says Cancelled on the cancellation day, as a day-only date in the winner's local zone. `g10.auction-winner-order.US13-TC1`
-   - The lot and winning bid remain visible. `g10.auction-winner-order.US13-TC1`
-   - Contact Us is the only action. `g10.auction-winner-order.US13-TC1`
-   - No cancellation reason is shown. `g10.auction-winner-order.US13-TC1`
+   - The page says Cancelled on the cancellation day, as a day-only date in the winner's local zone. g10.auction-winner-order.US13-TC1
+   - The lot and winning bid remain visible. g10.auction-winner-order.US13-TC1
+   - Contact Us is the only action. g10.auction-winner-order.US13-TC1
+   - No cancellation reason is shown. g10.auction-winner-order.US13-TC1
 
-## Walk 13: Winner sees a refunded order as Refunded
+## Walk 134: A card-refunded order reads Refunded and keeps its records
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on `<winner order url>` for `<order_refunded>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order_refunded>` | A paid order refunded to the card, with an operator note |
+| `<refund amount>` | The amount returned |
 
 ### Route
 
 1. Read the status, actions and receipt links.
-   - the order reads Refunded; no stepper, Pay, address or shipment action. `g10.auction-winner-order.US14-TC1`
-   - the invoice and every receipt still download. `g10.auction-winner-order.US14-TC1`
+   - the order reads Refunded; no stepper, Pay, address or shipment action. g10.auction-winner-order.US14-TC1
+   - the invoice and every receipt still download. g10.auction-winner-order.US14-TC1
 2. Read below Order Total.
-   - `<refund amount>` shows below Order Total. `g10.auction-winner-order.US14-TC1`
+   - `<refund amount>` shows below Order Total. g10.auction-winner-order.US14-TC1
 3. Open the refund details from the inline alert.
-   - Amount, Transfer to, Reason, then Note, in that order. `g10.auction-winner-order.US14-TC1`
-   - Transfer to shows the card brand and last four only; no Reference. `g10.auction-winner-order.US14-TC1`
+   - Amount, Transfer to, Reason, then Note, in that order. g10.auction-winner-order.US14-TC1
+   - Transfer to shows the card brand and last four only; no Reference. g10.auction-winner-order.US14-TC1
 
-## Walk 14: Winner sees an overpayment returned
+## Walk 135: A returned overpayment leaves the order and invoice standing
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on `<winner order url>` for `<order_overpaid>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order_overpaid>` | A paid order where the difference over the total was returned |
+| `<difference>` | The amount returned |
 
 ### Route
 
 1. Read the status and invoice lines.
-   - status and invoice lines are unchanged; it does not read Refunded. `g10.auction-winner-order.US15-TC1`
+   - status and invoice lines are unchanged; it does not read Refunded. g10.auction-winner-order.US15-TC1
 2. Read below Order Total.
-   - only `<difference>` shows as returned. `g10.auction-winner-order.US15-TC1`
+   - only `<difference>` shows as returned. g10.auction-winner-order.US15-TC1
 3. Open the refund details.
-   - the details open, showing no proof and no provider reference. `g10.auction-winner-order.US15-TC1`
+   - the details open, showing no proof and no provider reference. g10.auction-winner-order.US15-TC1
 
-## Walk 15: Winner emails Grade10 from a locked order
+## Walk 136: Contact Us opens the copy-first email dialog
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
 
 ### Route
 
 1. Click Contact Us on the inline alert.
-   - A dialog opens with To, Subject and Message. `g10.auction-winner-order.US16-TC1`
-   - No mail app opens, and no toast naming only the address replaces the dialog. `g10.auction-winner-order.US16-TC1`
-2. Click Contact Us.
-3. Read To.
-   - To reads `support@grade10.com`. `g10.auction-winner-order.US16-TC2`
-4. Click Contact Us.
-5. Read Subject.
-   - Subject reads `Auction lot `<lot_title>`: setup overdue`, with no invoice id. `g10.auction-winner-order.US16-TC3`
-6. Click Contact Us.
-7. Read Subject.
-   - Subject reads `Auction order `<invoice_id>`: payment overdue`. `g10.auction-winner-order.US16-TC4`
-8. Click Contact Us.
-9. Read Subject and Message.
-   - Subject reads `Auction order `<invoice_id>`: partial payment`. `g10.auction-winner-order.US16-TC5`
-   - Message lists `<receipt_ids>`. `g10.auction-winner-order.US16-TC5`
-   - Message shows no remaining balance. `g10.auction-winner-order.US16-TC5`
-10. Click Contact Us.
-   - Message lists every id in `<receipt_ids>`. `g10.auction-winner-order.US16-TC6`
-11. Read Message.
-   - Message shows no remaining balance. `g10.auction-winner-order.US16-TC6`
-12. Search the page for `support@grade10.com`.
-   - the address is not on the page. `g10.auction-winner-order.US16-TC7`
-13. Click Contact Us.
-   - To shows `support@grade10.com`. `g10.auction-winner-order.US16-TC7`
-14. Click Contact Us.
-   - Copy Message is the primary action, first. `g10.auction-winner-order.US16-TC8`
-15. Read the dialog footer.
-   - Open Mail App is the secondary action, second. `g10.auction-winner-order.US16-TC8`
-16. Click Contact Us.
-   - Message is a multi-line field, order facts prefilled. `g10.auction-winner-order.US16-TC9`
-17. Look at the copy controls beside To, Subject and Message.
-   - To and Subject each have a copy control; Message has none. `g10.auction-winner-order.US16-TC9`
-18. Type `<winner_question>` into Message, below the prefilled facts.
-   - Message keeps `<winner_question>`. `g10.auction-winner-order.US16-TC9`
-19. Click Contact Us.
-20. Type `<winner_question>` into Message.
-21. Click Copy Message.
-22. Paste into a plain-text field.
-   - The paste holds To `support@grade10.com`. `g10.auction-winner-order.US16-TC10`
-   - It holds Subject `Auction order `<invoice_id>`: payment overdue`. `g10.auction-winner-order.US16-TC10`
-   - It holds Message with `<winner_question>`. `g10.auction-winner-order.US16-TC10`
-23. Click Contact Us.
-   - It is a `mailto:` to `support@grade10.com`. `g10.auction-winner-order.US16-TC11`
-24. Type `<winner_question>` into Message.
-   - Its subject is `Auction order `<invoice_id>`: payment overdue`. `g10.auction-winner-order.US16-TC11`
-25. Read the Open Mail App link target.
-   - Its body includes `<winner_question>`. `g10.auction-winner-order.US16-TC11`
-26. Click Contact Us.
-27. Click the copy control beside To, then paste.
-   - pastes only `support@grade10.com`. `g10.auction-winner-order.US16-TC12`
-28. Click the copy control beside Subject, then paste.
-   - pastes only the Subject. `g10.auction-winner-order.US16-TC12`
-   - Copy Message stays in the footer. `g10.auction-winner-order.US16-TC12`
-29. Click Contact Us.
-   - Subject reads `Auction order `<current_invoice_id>`: payment overdue`. `g10.auction-winner-order.US16-TC13`
-30. Read Subject.
-   - It does not name `<replaced_invoice_id>`. `g10.auction-winner-order.US16-TC13`
-31. Click Contact Us.
-32. Read Subject and Message.
-   - Subject reads `Auction lot `<lot_title>`: order cancelled`. `g10.auction-winner-order.US16-TC14`
-   - Message names `<lot_title>`, `<invoice_id>` and status Cancelled. `g10.auction-winner-order.US16-TC14`
-   - Neither names the operator's category or note. `g10.auction-winner-order.US16-TC14`
-33. Open the order and choose Contact Us.
-34. Read the Subject and the Message.
-35. Read the order status.
-   - The Subject and Message are those of the `setup overdue` reason. `g10.auction-winner-order.US16-TC15`
-   - The order status still reads Awaiting Setup. `g10.auction-winner-order.US16-TC15`
-36. Open the order and choose Contact Us.
-   - The button reads Copied for a moment, then Copy Message again. `g10.auction-winner-order.US16-TC16`
-37. Choose Copy Message.
-   - No toast appears. `g10.auction-winner-order.US16-TC16`
-38. Watch the button and the page for a few seconds.
-   - The To and Subject controls are unchanged. `g10.auction-winner-order.US16-TC16`
+   - A dialog opens with To, Subject and Message. g10.auction-winner-order.US16-TC1
+   - No mail app opens, and no toast naming only the address replaces the dialog. g10.auction-winner-order.US16-TC1
 
-## Walk 16: Winner matches a bank refund against their own statement
+## Walk 137: The dialog addresses support@grade10.com
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
 
-**Shared test data:**
+**Test data:**
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+
+### Route
+
+1. Click Contact Us.
+2. Read To.
+   - To reads `support@grade10.com`. g10.auction-winner-order.US16-TC2
+
+## Walk 138: A setup-overdue Subject names the lot and no invoice
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_setup_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_setup_overdue>` | An order past its setup deadline, no invoice issued |
+| `<lot_title>` | The lot title on that order |
+
+### Route
+
+1. Click Contact Us.
+2. Read Subject.
+   - Subject reads `Auction lot `<lot_title>`: setup overdue`, with no invoice id. g10.auction-winner-order.US16-TC3
+
+## Walk 139: A payment-overdue Subject names the invoice
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| `<invoice_id>` | That order's invoice id |
+
+### Route
+
+1. Click Contact Us.
+2. Read Subject.
+   - Subject reads `Auction order `<invoice_id>`: payment overdue`. g10.auction-winner-order.US16-TC4
+
+## Walk 140: A partial-payment email lists receipts and never the balance
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_partially_paid>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_partially_paid>` | An order reading Partially Paid, with one receipt |
+| `<invoice_id>` | That order's invoice id |
+| `<receipt_ids>` | That invoice's receipt ids |
+
+### Route
+
+1. Click Contact Us.
+2. Read Subject and Message.
+   - Subject reads `Auction order `<invoice_id>`: partial payment`. g10.auction-winner-order.US16-TC5
+   - Message lists `<receipt_ids>`. g10.auction-winner-order.US16-TC5
+   - Message shows no remaining balance. g10.auction-winner-order.US16-TC5
+
+## Walk 141: With several receipts, each receipt id is listed
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_partially_paid_many>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_partially_paid_many>` | An order reading Partially Paid, with three receipts |
+| `<receipt_ids>` | Every receipt id on that invoice, oldest first |
+
+### Route
+
+1. Click Contact Us.
+2. Read Message.
+   - Message lists every id in `<receipt_ids>`. g10.auction-winner-order.US16-TC6
+   - Message shows no remaining balance. g10.auction-winner-order.US16-TC6
+
+## Walk 142: The support address is hidden until Contact Us opens
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+
+### Route
+
+1. Search the page for `support@grade10.com`.
+   - the address is not on the page. g10.auction-winner-order.US16-TC7
+2. Click Contact Us.
+   - To shows `support@grade10.com`. g10.auction-winner-order.US16-TC7
+
+## Walk 143: Copy Message comes first, Open Mail App second
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+
+### Route
+
+1. Click Contact Us.
+2. Read the dialog footer.
+   - Copy Message is the primary action, first. g10.auction-winner-order.US16-TC8
+   - Open Mail App is the secondary action, second. g10.auction-winner-order.US16-TC8
+
+## Walk 144: Message is editable; only the footer copies the whole email
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| `<winner_question>` | A short question typed into Message |
+
+### Route
+
+1. Click Contact Us.
+   - Message is a multi-line field, order facts prefilled. g10.auction-winner-order.US16-TC9
+2. Look at the copy controls beside To, Subject and Message.
+   - To and Subject each have a copy control; Message has none. g10.auction-winner-order.US16-TC9
+3. Type `<winner_question>` into Message, below the prefilled facts.
+   - Message keeps `<winner_question>`. g10.auction-winner-order.US16-TC9
+
+## Walk 145: Copy Message copies To, Subject and the edited Message
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+- The browser may use the clipboard.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| `<invoice_id>` | That order's invoice id |
+| `<winner_question>` | A short question typed into Message |
+
+### Route
+
+1. Click Contact Us.
+2. Type `<winner_question>` into Message.
+3. Click Copy Message.
+4. Paste into a plain-text field.
+   - The paste holds To `support@grade10.com`. g10.auction-winner-order.US16-TC10
+   - It holds Subject `Auction order `<invoice_id>`: payment overdue`. g10.auction-winner-order.US16-TC10
+   - It holds Message with `<winner_question>`. g10.auction-winner-order.US16-TC10
+
+## Walk 146: Open Mail App carries the current Subject and Message
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| `<invoice_id>` | That order's invoice id |
+| `<winner_question>` | A short question typed into Message |
+
+### Route
+
+1. Click Contact Us.
+2. Type `<winner_question>` into Message.
+3. Read the Open Mail App link target.
+   - It is a `mailto:` to `support@grade10.com`. g10.auction-winner-order.US16-TC11
+   - Its subject is `Auction order `<invoice_id>`: payment overdue`. g10.auction-winner-order.US16-TC11
+   - Its body includes `<winner_question>`. g10.auction-winner-order.US16-TC11
+
+## Walk 147: The To and Subject copy controls copy only their field
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+- The browser may use the clipboard.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+
+### Route
+
+1. Click Contact Us.
+2. Click the copy control beside To, then paste.
+3. Click the copy control beside Subject, then paste.
+   - Step 2 pastes only `support@grade10.com`. g10.auction-winner-order.US16-TC12
+   - Step 3 pastes only the Subject. g10.auction-winner-order.US16-TC12
+   - Copy Message stays in the footer. g10.auction-winner-order.US16-TC12
+
+## Walk 148: After a reissue, Subject names the current invoice
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_payment_overdue_reissued>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_payment_overdue_reissued>` | An order payment-overdue after its invoice was reissued |
+| `<current_invoice_id>` | The current invoice id |
+| `<replaced_invoice_id>` | The replaced invoice id |
+
+### Route
+
+1. Click Contact Us.
+2. Read Subject.
+   - Subject reads `Auction order `<current_invoice_id>`: payment overdue`. g10.auction-winner-order.US16-TC13
+   - It does not name `<replaced_invoice_id>`. g10.auction-winner-order.US16-TC13
+
+## Walk 149: Contact Us on a cancelled order reads order cancelled
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_cancelled>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_cancelled>` | An order an operator cancelled, with a category and note |
+| `<lot_title>` | That order's lot title |
+| `<invoice_id>` | That order's invoice id |
+
+### Route
+
+1. Click Contact Us.
+2. Read Subject and Message.
+   - Subject reads `Auction lot `<lot_title>`: order cancelled`. g10.auction-winner-order.US16-TC14
+   - Message names `<lot_title>`, `<invoice_id>` and status Cancelled. g10.auction-winner-order.US16-TC14
+   - Neither names the operator's category or note. g10.auction-winner-order.US16-TC14
+
+## Walk 150: Contact Us on an order with no method asks about setup
+
+**Starting state:**
+
+- Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
+- customer(winner) holds an auction order in USD in Awaiting Setup.
+
+### Route
+
+1. Open the order and choose Contact Us.
+2. Read the Subject and the Message.
+3. Read the order status.
+   - The Subject and Message are those of the `setup overdue` reason. g10.auction-winner-order.US16-TC15
+   - The order status still reads Awaiting Setup. g10.auction-winner-order.US16-TC15
+
+## Walk 151: Copy Message confirms through its own state on a locked order
+
+**Starting state:**
+
+- customer(winner) holds an auction order in Setup Overdue, whose payment access is closed.
+- The browser may use the clipboard.
+
+### Route
+
+1. Open the order and choose Contact Us.
+2. Choose Copy Message.
+3. Watch the button and the page for a few seconds.
+   - The button reads Copied for a moment, then Copy Message again. g10.auction-winner-order.US16-TC16
+   - No toast appears. g10.auction-winner-order.US16-TC16
+   - The To and Subject controls are unchanged. g10.auction-winner-order.US16-TC16
+
+## Walk 152: A bank refund shows the masked destination and its reference
+
+**Starting state:**
+
+- customer(winner) is on `<winner order url>` for `<order_bank_refunded>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<order_bank_refunded>` | A paid order refunded by bank transfer, no operator note |
+| `<bank reference>` | The provider reference the operator recorded |
 
 ### Route
 
 1. Open the refund details from the inline alert.
-   - Amount, Transfer to, Reference, then Reason, in that order; no Note. `g10.auction-winner-order.US17-TC1`
-   - Transfer to shows a bank icon, masked destination, bank name beneath. `g10.auction-winner-order.US17-TC1`
-   - Reference reads `<bank reference>`. `g10.auction-winner-order.US17-TC1`
-   - No proof and no full account number show. `g10.auction-winner-order.US17-TC1`
+   - Amount, Transfer to, Reference, then Reason, in that order; no Note. g10.auction-winner-order.US17-TC1
+   - Transfer to shows a bank icon, masked destination, bank name beneath. g10.auction-winner-order.US17-TC1
+   - Reference reads `<bank reference>`. g10.auction-winner-order.US17-TC1
+   - No proof and no full account number show. g10.auction-winner-order.US17-TC1
 
-## Walk 17: Winner confirms where a won lot ships
+## Walk 153: The page shows the lot once and none of the old sections
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
-
-**Shared test data:**
-
-- Use each case's declared **Test data**. Each case remains independently runnable.
+- customer(winner) holds an order in Awaiting Setup.
 
 ### Route
 
 1. Navigate to `<grade10 auction order url>`.
 2. Read the page from the header to the sidebar.
-   - The header shows Winner Order and the status badge. `g10.auction-winner-order.US19-TC1`
-   - Order Progress shows Address current, then Invoice, Payment, Shipping and. Completed. `g10.auction-winner-order.US19-TC1`
-   - The lot's title shows in the lot card only. `g10.auction-winner-order.US19-TC1`
-   - No Order Information, Collection Method, Order Status list or Lots section. shows. `g10.auction-winner-order.US19-TC1`
-3. Navigate to `<grade10 auction order url>`.
-   - The confirmed address is shown. `g10.auction-winner-order.US19-TC2`
-   - No invoice and no Pay Now are shown. `g10.auction-winner-order.US19-TC2`
-4. Navigate to `<grade10 auction order url>`.
-5. Fill the address form with **Test data**.
-6. Click Confirm.
-   - The address is accepted. `g10.auction-winner-order.US19-TC3`
-   - The order status reads Preparing Invoice. `g10.auction-winner-order.US19-TC3`
-7. Navigate to `<grade10 auction order url>`.
-   - The address is refused. `g10.auction-winner-order.US19-TC4`
-8. Fill every required field except Town/City and Postal Code.
-   - An error shows on Town/City and on Postal Code. `g10.auction-winner-order.US19-TC4`
-9. Click Confirm.
-   - The order status still reads Awaiting Setup. `g10.auction-winner-order.US19-TC4`
+   - The header shows Winner Order and the status badge. g10.auction-winner-order.US19-TC1
+   - Order Progress shows Address current, then Invoice, Payment, Shipping and. Completed. g10.auction-winner-order.US19-TC1
+   - The lot's title shows in the lot card only. g10.auction-winner-order.US19-TC1
+   - No Order Information, Collection Method, Order Status list or Lots section. shows. g10.auction-winner-order.US19-TC1
 
-## Walk 18: Winner waits out a partial payment an operator is collecting
+## Walk 154: Preparing Invoice shows the address and no payment
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(winner) holds an order in Preparing Invoice.
 
-**Shared test data:**
+### Route
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+1. Navigate to `<grade10 auction order url>`.
+   - The confirmed address is shown. g10.auction-winner-order.US19-TC2
+   - No invoice and no Pay Now are shown. g10.auction-winner-order.US19-TC2
+
+## Walk 155: A complete address with optional fields empty is accepted
+
+**Starting state:**
+
+- customer(winner) holds an order in Awaiting Setup.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First Name, Last Name, Country/Region, Town/City, Address Line 1, State/Province/Region, Postal Code | Filled |
+| Phone | `<a phone number of unusual length and format>` |
+| Company Name, Address Line 2, Apt./Suite/Building | Empty |
+
+### Route
+
+1. Navigate to `<grade10 auction order url>`.
+2. Fill the address form with **Test data**.
+3. Click Confirm.
+   - The address is accepted. g10.auction-winner-order.US19-TC3
+   - The order status reads Preparing Invoice. g10.auction-winner-order.US19-TC3
+
+## Walk 156: Empty required fields are refused with field errors
+
+**Starting state:**
+
+- customer(winner) holds an order in Awaiting Setup.
+
+### Route
+
+1. Navigate to `<grade10 auction order url>`.
+2. Fill every required field except Town/City and Postal Code.
+3. Click Confirm.
+   - The address is refused. g10.auction-winner-order.US19-TC4
+   - An error shows on Town/City and on Postal Code. g10.auction-winner-order.US19-TC4
+   - The order status still reads Awaiting Setup. g10.auction-winner-order.US19-TC4
+
+## Walk 157: The partially paid order is locked
+
+**Starting state:**
+
+- customer(winner of `<partially-paid order>`) is on Winner Order.
 
 ### Route
 
 1. Read the payment step, settlement alert and receipt area.
-   - The page reads Partially Paid. `g10.auction-winner-order.US20-TC1`
-   - Pay, Submit Payment Proof, View Bank Details and a payment deadline are absent. `g10.auction-winner-order.US20-TC1`
-   - The page offers Contact Us, shows the full invoice amount and no remaining balance. `g10.auction-winner-order.US20-TC1`
-   - Each recorded payment has a separate receipt link, oldest first. `g10.auction-winner-order.US20-TC1`
+   - The page reads Partially Paid. g10.auction-winner-order.US20-TC1
+   - Pay, Submit Payment Proof, View Bank Details and a payment deadline are absent. g10.auction-winner-order.US20-TC1
+   - The page offers Contact Us, shows the full invoice amount and no remaining balance. g10.auction-winner-order.US20-TC1
+   - Each recorded payment has a separate receipt link, oldest first. g10.auction-winner-order.US20-TC1
 
-## Walk 19: Winner quotes their order
+## Walk 158: Invoice and payment references appear on both invoice methods
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
-
-**Shared test data:**
-
-- Use each case's declared **Test data**. Each case remains independently runnable.
+- One winning order has a card invoice and another has a bank-transfer invoice.
 
 ### Route
 
 1. Open each invoice and its order.
 2. Read the invoice ID and payment reference.
-   - Each order and invoice shows its invoice ID and unchanged payment reference. `g10.auction-winner-order.US21-TC1`
-   - The card invoice and bank-transfer invoice use the same reference rules. `g10.auction-winner-order.US21-TC1`
-   - No receipt breakdown or receipt amount is asserted here. `g10.auction-winner-order.US21-TC1`
-3. Reissue the invoice.
-   - The new invoice ID is `IN-LK423100`. `g10.auction-winner-order.US21-TC2`
-4. Read the new invoice ID.
-   - The payment reference remains `LK423`. `g10.auction-winner-order.US21-TC2`
-5. Create the listing.
-   - Allocation retries and stores a distinct valid code. `g10.auction-winner-order.US21-TC3`
-6. Read the stored listing/payment reference.
-   - The code is not treated as collision-free merely because its source is a UUID or listing ID. `g10.auction-winner-order.US21-TC3`
-7. Change the allocator implementation.
-   - Both continue to use `LK423`. `g10.auction-winner-order.US21-TC4`
-8. Read the listing and order references.
-   - No new listing receives a retained code. `g10.auction-winner-order.US21-TC4`
-9. Fetch the public listing page and its shared preview.
-10. Inspect server HTML, embedded state and preview metadata.
-   - The payment reference has no labelled public field and appears only as the lower-case suffix of the canonical address. `g10.auction-winner-order.US21-TC5`
+   - Each order and invoice shows its invoice ID and unchanged payment reference. g10.auction-winner-order.US21-TC1
+   - The card invoice and bank-transfer invoice use the same reference rules. g10.auction-winner-order.US21-TC1
+   - No receipt breakdown or receipt amount is asserted here. g10.auction-winner-order.US21-TC1
 
-## Walk 20: Winner reviews invoice and payment details
+## Walk 159: Invoice numbering continues after 99
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- The latest invoice for payment reference `LK423` is `IN-LK42399`.
 
-**Shared test data:**
+### Route
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+1. Reissue the invoice.
+2. Read the new invoice ID.
+   - The new invoice ID is `IN-LK423100`. g10.auction-winner-order.US21-TC2
+   - The payment reference remains `LK423`. g10.auction-winner-order.US21-TC2
+
+## Walk 160: Listing-code allocation retries a projection collision
+
+**Starting state:**
+
+- A new listing's 5-character candidate collides with an active code or retained reservation.
+
+### Route
+
+1. Create the listing.
+2. Read the stored listing/payment reference.
+   - Allocation retries and stores a distinct valid code. g10.auction-winner-order.US21-TC3
+   - The code is not treated as collision-free merely because its source is a UUID or listing ID. g10.auction-winner-order.US21-TC3
+
+## Walk 161: A stored payment reference survives allocator changes
+
+**Starting state:**
+
+- A listing and its order already store payment reference `LK423`.
+
+### Route
+
+1. Change the allocator implementation.
+2. Read the listing and order references.
+   - Both continue to use `LK423`. g10.auction-winner-order.US21-TC4
+   - No new listing receives a retained code. g10.auction-winner-order.US21-TC4
+
+## Walk 162: The public listing page withholds the payment reference
+
+**Starting state:**
+
+- A listing has payment reference `LK423`.
+
+### Route
+
+1. Fetch the public listing page and its shared preview.
+2. Inspect server HTML, embedded state and preview metadata.
+   - The payment reference has no labelled public field and appears only as the lower-case suffix of the canonical address. g10.auction-winner-order.US21-TC5
+
+## Walk 163: Reissued invoice IDs still find the order
+
+**Starting state:**
+
+- An order has invoice `IN-LK42301`, then reissued invoice `IN-LK42302`, with payment reference `LK423`.
 
 ### Route
 
 1. Look up the order by each invoice ID and by `LK423`.
-   - Each lookup finds the same order. `g10.auction-winner-order.US22-TC1`
 2. Open both invoice PDFs.
-   - The replacement invoice names the replaced invoice and keeps `LK423`. `g10.auction-winner-order.US22-TC1`
-3. Open the receipt.
-4. Read its identifier.
-   - The first receipt ID is `RC-LK42302P1`. `g10.auction-winner-order.US22-TC2`
-   - A later finalized payment for that invoice receives `P2`, then `P10` without padding. `g10.auction-winner-order.US22-TC2`
-   - A receipt for another invoice starts at `P1` for that invoice. `g10.auction-winner-order.US22-TC2`
-5. Open the historical receipt after the new identifier ships.
-   - The historical receipt ID remains `REC-202609-LK7P2Q-01-P1`. `g10.auction-winner-order.US22-TC3`
-6. Record a refund, reversal or void.
-   - No receipt ID is created for the refund, reversal or void. `g10.auction-winner-order.US22-TC3`
-7. Read Stripe metadata and the winner-facing order and invoice.
-   - Stripe metadata carries the Grade10 payment reference. `g10.auction-winner-order.US22-TC4`
-   - The provider reference appears on no winner-facing surface. `g10.auction-winner-order.US22-TC4`
+   - Each lookup finds the same order. g10.auction-winner-order.US22-TC1
+   - The replacement invoice names the replaced invoice and keeps `LK423`. g10.auction-winner-order.US22-TC1
 
-## Walk 21: Winner gets the address form back
+## Walk 164: A finalized payment receives the new receipt identifier
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- An invoice is `IN-LK42302` for payment reference `LK423`.
+- A full or partial payment for that invoice has finalized.
 
-**Shared test data:**
+### Route
 
-- Use each case's declared **Test data**. Each case remains independently runnable.
+1. Open the receipt.
+2. Read its identifier.
+   - The first receipt ID is `RC-LK42302P1`. g10.auction-winner-order.US22-TC2
+   - A later finalized payment for that invoice receives `P2`, then `P10` without padding. g10.auction-winner-order.US22-TC2
+   - A receipt for another invoice starts at `P1` for that invoice. g10.auction-winner-order.US22-TC2
+
+## Walk 165: Historical receipt identifiers stay unchanged
+
+**Starting state:**
+
+- A historical receipt ID is `REC-202609-LK7P2Q-01-P1`.
+
+### Route
+
+1. Open the historical receipt after the new identifier ships.
+2. Record a refund, reversal or void.
+   - The historical receipt ID remains `REC-202609-LK7P2Q-01-P1`. g10.auction-winner-order.US22-TC3
+   - No receipt ID is created for the refund, reversal or void. g10.auction-winner-order.US22-TC3
+
+## Walk 166: Provider references stay internal
+
+**Starting state:**
+
+- A card payment has a Grade10 payment reference and a provider reference.
+
+### Route
+
+1. Read Stripe metadata and the winner-facing order and invoice.
+   - Stripe metadata carries the Grade10 payment reference. g10.auction-winner-order.US22-TC4
+   - The provider reference appears on no winner-facing surface. g10.auction-winner-order.US22-TC4
+
+## Walk 167: Address confirmed a minute inside the window is accepted
+
+**Starting state:**
+
+- `<lot_1>` closed at its recorded close and no delivery address is confirmed on its order.
+- customer(winner of `<lot_1>`) is on `<the winner's auction order url>` at `<one minute before close>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| Entrance closes | 2026-09-05T12:00:00Z |
+| `<one minute before close>` | 2026-09-05T11:59:00Z |
 
 ### Route
 
 1. Choose the account's saved home address.
 2. Confirm the delivery address.
-   - The confirmation is accepted. `g10.auction-winner-order.US23-TC1`
-   - The order reads Preparing Invoice. `g10.auction-winner-order.US23-TC1`
-   - No invoice is issued by the confirmation itself. `g10.auction-winner-order.US23-TC1`
-3. Attempt to confirm the account's saved home address.
-4. Read the order's delivery address.
-   - The confirmation is refused. `g10.auction-winner-order.US23-TC2`
-   - The order holds no confirmed delivery address. `g10.auction-winner-order.US23-TC2`
-   - The order still reads Setup Overdue. `g10.auction-winner-order.US23-TC2`
-5. Read the delivery address area.
-6. Confirm the account's saved home address.
-   - The address deadline reads 2026-09-09T09:00:00Z, measured from the reopen. `g10.auction-winner-order.US23-TC4`
-   - The confirmation is accepted. `g10.auction-winner-order.US23-TC4`
-   - The order reads Preparing Invoice. `g10.auction-winner-order.US23-TC4`
-7. Read the delivery address area for a reopen or extend control.
-8. Submit a reopen of the address form as the winner.
-   - No reopen or extend control is offered to the winner. `g10.auction-winner-order.US23-TC5`
-   - The reopen is refused. `g10.auction-winner-order.US23-TC5`
-   - The address deadline is unchanged. `g10.auction-winner-order.US23-TC5`
-9. Open each of the three auction orders.
-   - Three separate orders exist, one per lot. `g10.auction-winner-order.US23-TC6`
-10. Read each order's address deadline.
-   - The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z. `g10.auction-winner-order.US23-TC6`
-11. Confirm a different delivery address on each order.
-   - Each order keeps the address confirmed on it and awaits its own invoice. `g10.auction-winner-order.US23-TC6`
-12. Attempt to change the delivery address to the account's work address.
-13. Read the delivery address area.
-   - The change is refused even though the 48 hours have not elapsed. `g10.auction-winner-order.US23-TC7`
-   - The order still shows the address the invoice was quoted for. `g10.auction-winner-order.US23-TC7`
-   - The area points the winner at Grade10 for a change. `g10.auction-winner-order.US23-TC7`
-14. Read the delivery address area.
-15. Attempt to change the delivery address to the account's work address.
-   - No address form is offered. `g10.auction-winner-order.US23-TC8`
-   - The change is refused. `g10.auction-winner-order.US23-TC8`
-   - The overdue alert carries Contact Us and no card Pay control is shown. `g10.auction-winner-order.US23-TC8`
-16. Open the account address book.
-   - Both address-book writes are accepted. `g10.auction-winner-order.US23-TC9`
-17. Edit the saved home address and save a new work address.
-   - Neither reaches the auction order. `g10.auction-winner-order.US23-TC9`
-18. Return to `<the winner's auction order url>`.
-   - The order still has no confirmed delivery address and still offers no address form. `g10.auction-winner-order.US23-TC9`
-19. The operator reopens the address form with a reason.
-   - The order offers the address form again. `g10.auction-winner-order.US23-TC10`
-20. Read the winner's post-close letters for that lot.
-   - No letter about the reopen reaches the winner. `g10.auction-winner-order.US23-TC10`
-21. Read the address deadline under Confirm delivery address.
-   - The deadline reads 2026-09-14T09:00:00Z, counted from the actual close. `g10.auction-winner-order.US23-TC11`
-22. Confirm the account's saved home address at 2026-09-14T08:50:00Z, ten minutes before that deadline and after 48 hours from the scheduled close.
-   - The confirmation is accepted and the order reads Preparing Invoice. `g10.auction-winner-order.US23-TC11`
+   - The confirmation is accepted. g10.auction-winner-order.US23-TC1
+   - The order reads Preparing Invoice. g10.auction-winner-order.US23-TC1
+   - No invoice is issued by the confirmation itself. g10.auction-winner-order.US23-TC1
 
-## g10.auction-winner-order.US1: Winner settles a won lot
+## Walk 168: First confirmation is refused at the 48-hour mark
 
-**As a** winner,
-**I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
-**so that** the lot I won becomes mine inside a deadline I can see, priced for where it is actually going.
+**Starting state:**
 
-`<!-- trace:case id=g10.auction-winner-order.TC-8q4 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->`
+- `<lot_1>` closed at its recorded close and no delivery address is confirmed on its order.
+- customer(winner of `<lot_1>`) is on `<the winner's auction order url>` at `<the address deadline>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| `<the address deadline>` | 2026-09-05T12:00:00Z |
+
+### Route
+
+1. Attempt to confirm the account's saved home address.
+2. Read the order's delivery address.
+   - The confirmation is refused. g10.auction-winner-order.US23-TC2
+   - The order holds no confirmed delivery address. g10.auction-winner-order.US23-TC2
+   - The order still reads Setup Overdue. g10.auction-winner-order.US23-TC2
+
+## Walk 169: A reopened address form runs a fresh 48 hours from the reopen
+
+**Starting state:**
+
+- `<lot_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
+has invoice status `not_issued`, and its address deadline passed on 2026-09-05T12:00:00Z.
+- An operator reopened the address form at `<the reopen>`.
+- customer(winner of `<lot_1>`) is on `<the winner's auction order url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<the reopen>` | 2026-09-07T09:00:00Z |
+| New address deadline | 2026-09-09T09:00:00Z |
+
+### Route
+
+1. Read the delivery address area.
+2. Confirm the account's saved home address.
+   - The address deadline reads 2026-09-09T09:00:00Z, measured from the reopen. g10.auction-winner-order.US23-TC4
+   - The confirmation is accepted. g10.auction-winner-order.US23-TC4
+   - The order reads Preparing Invoice. g10.auction-winner-order.US23-TC4
+
+## Walk 170: Winner has no way to reopen the address form
+
+**Starting state:**
+
+- `<lot_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
+- customer(winner of `<lot_1>`) is signed in.
+
+### Route
+
+1. Read the delivery address area for a reopen or extend control.
+2. Submit a reopen of the address form as the winner.
+   - No reopen or extend control is offered to the winner. g10.auction-winner-order.US23-TC5
+   - The reopen is refused. g10.auction-winner-order.US23-TC5
+   - The address deadline is unchanged. g10.auction-winner-order.US23-TC5
+
+## Walk 171: Three won lots open three orders with their own address deadlines
+
+**Starting state:**
+
+- customer(winner of `<lot_1>`, `<lot_3>` and `<lot_4>`) won three lots that closed at different datetimes.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| `<lot_3>` recorded close | 2026-09-03T18:30:00Z |
+| `<lot_4>` recorded close | 2026-09-04T09:15:00Z |
+
+### Route
+
+1. Open each of the three auction orders.
+2. Read each order's address deadline.
+3. Confirm a different delivery address on each order.
+   - Three separate orders exist, one per lot. g10.auction-winner-order.US23-TC6
+   - The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z. g10.auction-winner-order.US23-TC6
+   - Each order keeps the address confirmed on it and awaits its own invoice. g10.auction-winner-order.US23-TC6
+
+## Walk 172: Sent invoice stops the winner changing the address
+
+**Starting state:**
+
+- `<sent-invoice order>` carries a confirmed delivery address and an invoice sent at 2026-09-05T09:00:00Z, inside the address window.
+- customer(winner of `<sent-invoice order>`) is on `<the winner's auction order url>`.
+
+### Route
+
+1. Attempt to change the delivery address to the account's work address.
+2. Read the delivery address area.
+   - The change is refused even though the 48 hours have not elapsed. g10.auction-winner-order.US23-TC7
+   - The order still shows the address the invoice was quoted for. g10.auction-winner-order.US23-TC7
+   - The area points the winner at Grade10 for a change. g10.auction-winner-order.US23-TC7
+
+## Walk 173: Expired invoice does not reopen the address form
+
+**Starting state:**
+
+- `<expired-invoice order>`'s invoice is `expired` and its address was confirmed and is locked.
+- customer(winner of `<expired-invoice order>`) is on `<the winner's auction order url>`.
+
+### Route
+
+1. Read the delivery address area.
+2. Attempt to change the delivery address to the account's work address.
+   - No address form is offered. g10.auction-winner-order.US23-TC8
+   - The change is refused. g10.auction-winner-order.US23-TC8
+   - The overdue alert carries Contact Us and no card Pay control is shown. g10.auction-winner-order.US23-TC8
+
+## Walk 174: A missed address deadline leaves the account address book alone
+
+**Starting state:**
+
+- `<missed-deadline order>`'s address deadline has passed with no address confirmed.
+- customer(winner of `<missed-deadline order>`) is signed in.
+
+### Route
+
+1. Open the account address book.
+2. Edit the saved home address and save a new work address.
+3. Return to `<the winner's auction order url>`.
+   - Both address-book writes are accepted. g10.auction-winner-order.US23-TC9
+   - Neither reaches the auction order. g10.auction-winner-order.US23-TC9
+   - The order still has no confirmed delivery address and still offers no address form. g10.auction-winner-order.US23-TC9
+
+## Walk 175: A reopen sends the winner no letter
+
+**Starting state:**
+
+- `<missed-deadline order>`'s address deadline has passed.
+- An operator holds payment-processing.
+
+### Route
+
+1. The operator reopens the address form with a reason.
+2. Read the winner's post-close letters for that lot.
+   - The order offers the address form again. g10.auction-winner-order.US23-TC10
+   - No letter about the reopen reaches the winner. g10.auction-winner-order.US23-TC10
+
+## Walk 176: The address deadline counts from the extended close
+
+**Starting state:**
+
+- `<extended lot>` was scheduled to close at 2026-09-12T08:45:00Z, took a late bid, and closed at 2026-09-12T09:00:00Z after extended bidding.
+- customer(winner of `<extended lot>`) is on `<the winner's auction order url>`.
+
+### Route
+
+1. Read the address deadline under Confirm delivery address.
+2. Confirm the account's saved home address at 2026-09-14T08:50:00Z, ten minutes before that deadline and after 48 hours from the scheduled close.
+   - The deadline reads 2026-09-14T09:00:00Z, counted from the actual close. g10.auction-winner-order.US23-TC11
+   - The confirmation is accepted and the order reads Preparing Invoice. g10.auction-winner-order.US23-TC11
 ### g10.auction-winner-order.US1-TC1: A lot closing with a winner opens one order whose quoted charges read TBD
 
 **Classification:**
