@@ -34,6 +34,10 @@ collector's own pages.
   including the store or auction listing
 - 🚧 **Locked while listed** — an item on the shelves or at auction cannot
   be requested back until it delists or settles
+- 🚧 **Retrieval requested** — sending the request confirms it, turns the
+  item Retrieval Pending and adds the request to the custody log; the item
+  cannot be listed or requested again while the operator's approval is
+  pending
 - ❓ **Listing** — what `List for Auction` and `List for Sale` start; the
   request flow is not drawn yet
 - ❓ **Retrieval** — what asking for an item back commits to; fees, timing and
@@ -46,6 +50,7 @@ collector's own pages.
 | Portfolio statuses | Decided | In Vault (no badge), Listed, Live Auction, Retrieval Pending; Retrieval Pending sits in the In Vault tab while the operator's approval is pending | @tangconst |
 | Intake on the portfolio | Decided | Items in submission or intake never appear in holdings until vaulted; the intake banner stays a separate alert | @tangconst |
 | Retrieval while listed | Decided | A listed or auctioned item cannot be requested back until it delists or settles | @tangconst |
+| Retrieval Pending | Decided | A pending item hides `List for Auction`, `List for Sale` and `Request Retrieval` until the operator decides | @tangconst |
 | Sorting | Decided | Each tab carries its own sort set and remembers the pick for the session; Live Auction defaults to ending soonest, Listed to recently listed | @tangconst |
 | Stats card | 🚧 | Drawn provisional at `7102:1514` — total estimated value and storage fees only; the item count lives on the tab badges | @tangconst |
 :::
