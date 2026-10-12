@@ -73,5 +73,17 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@tangconst",
+    "reviewedAt": "2026-10-12T00:00:00.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "cc6b564bd renames suite headings to the issued identities (shared-ui-site-chrome-US1-TC1-1 to g10.shared-site-chrome.US1-TC1) across the whole file; no case, step or expected result changed."
+      }
+    ]
+  }
 }
