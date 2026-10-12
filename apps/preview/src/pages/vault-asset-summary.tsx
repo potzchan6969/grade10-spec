@@ -19,7 +19,11 @@ import {
 
 type VaultAssetSummaryProps = {
   asset: VaultAsset;
+  /** Feature flag: show the change-since-intake figure. Soft launch leaves it off even when the data exists. */
+  showEstimateChange?: boolean;
+  /** Feature flag + handler: listing for auction is available. */
   onListForAuction?: () => void;
+  /** Feature flag + handler: listing for sale is available. */
   onListForSale?: () => void;
   onSubmitForGrading?: () => void;
   className?: string;
@@ -37,12 +41,14 @@ function statusLabel(status: VaultAsset["status"]): string {
  */
 function VaultAssetSummary({
   asset,
+  showEstimateChange = false,
   onListForAuction,
   onListForSale,
   onSubmitForGrading,
   className,
 }: VaultAssetSummaryProps) {
   const valuePotential = asset.valuePotential;
+  const showListings = Boolean(onListForAuction || onListForSale);
   const valuePotentialDescription = valuePotential
     ? `Est. Graded PSA Value: ${formatHkd(valuePotential.gradedEstimateHkd)} (+${valuePotential.upsidePercent}%)`
     : undefined;
@@ -77,7 +83,7 @@ function VaultAssetSummary({
             <CardTitle className="font-heading text-3xl font-medium tabular-nums">
               {asset.estimateHkd.toLocaleString("en-HK")}
             </CardTitle>
-            {asset.estimateChangePercent != null ? (
+            {showEstimateChange && asset.estimateChangePercent != null ? (
               <Text
                 className="font-heading font-semibold"
                 size="sm"
@@ -112,27 +118,33 @@ function VaultAssetSummary({
         ) : null}
       </Card>
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        <Button
-          className="w-full sm:flex-1"
-          leading={<Gavel aria-hidden weight="bold" />}
-          size="md"
-          type="button"
-          onClick={onListForAuction}
-        >
-          List for Auction
-        </Button>
-        <Button
-          className="w-full sm:flex-1"
-          leading={<Storefront aria-hidden weight="bold" />}
-          size="md"
-          type="button"
-          variant="outline"
-          onClick={onListForSale}
-        >
-          List for Sale
-        </Button>
-      </div>
+      {showListings ? (
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          {onListForAuction ? (
+            <Button
+              className="w-full sm:flex-1"
+              leading={<Gavel aria-hidden weight="bold" />}
+              size="md"
+              type="button"
+              onClick={onListForAuction}
+            >
+              List for Auction
+            </Button>
+          ) : null}
+          {onListForSale ? (
+            <Button
+              className="w-full sm:flex-1"
+              leading={<Storefront aria-hidden weight="bold" />}
+              size="md"
+              type="button"
+              variant="outline"
+              onClick={onListForSale}
+            >
+              List for Sale
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
     </VStack>
   );
 }

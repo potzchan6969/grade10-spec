@@ -55,3 +55,6 @@ Flagged work, already landed in this repo pending this change's tasks:
 | Documents | One `Alert` row per document; external report opens a new tab, downloads use `PDF`/`ZIP` actions | `grade10-site-vault-portfolio-US-02` |
 | Request retrieval | `Request Retrieval` link opens the retrieval dialog | `grade10-site-vault-portfolio-US-06` |
 | Listing | `List for Auction` and `List for Sale` fill the row evenly | `grade10-site-vault-portfolio-US-04` |
+| Soft launch | No compare figure (`showEstimateChange` off), no listing CTAs | `grade10-site-vault-portfolio-US-02` |
+| Auction unavailable | `List for Auction` hidden while `List for Sale` stays; each listing flag ships on its own timeline | `grade10-site-vault-portfolio-US-04` |
+| Sale unavailable | `List for Sale` hidden while `List for Auction` stays | `grade10-site-vault-portfolio-US-04` |

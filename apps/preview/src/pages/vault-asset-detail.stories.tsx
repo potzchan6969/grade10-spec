@@ -10,6 +10,7 @@ import { useState } from "react";
 import { expect, within } from "storybook/test";
 import { VaultAssetCustodyDocuments } from "./vault-asset-custody-documents";
 import { VaultAssetDetails } from "./vault-asset-details";
+import type { VaultAssetSummaryProps } from "./vault-asset-summary";
 import { VaultAssetSummary } from "./vault-asset-summary";
 import { VAULT_ASSET_DETAILS, VAULT_PORTFOLIO_HREF } from "./vault-content";
 import { VaultRequestRetrievalDialog } from "./vault-request-retrieval-dialog";
@@ -17,9 +18,15 @@ import { VaultItemDetailPageShell } from "./vault-shared";
 
 function VaultAssetDetailPage({
   asset,
+  showEstimateChange,
+  onListForAuction,
+  onListForSale,
 }: {
   asset: (typeof VAULT_ASSET_DETAILS)[number];
-}) {
+} & Pick<
+  VaultAssetSummaryProps,
+  "showEstimateChange" | "onListForAuction" | "onListForSale"
+>) {
   const [retrievalOpen, setRetrievalOpen] = useState(false);
   const galleryImages = [
     {
@@ -62,8 +69,9 @@ function VaultAssetDetailPage({
       <VStack className={LISTING_LOT_SIDEBAR_CLASS} gap="lg" hAlign="stretch">
         <VaultAssetSummary
           asset={asset}
-          onListForAuction={() => {}}
-          onListForSale={() => {}}
+          showEstimateChange={showEstimateChange}
+          onListForAuction={onListForAuction}
+          onListForSale={onListForSale}
           onSubmitForGrading={() => {}}
         />
         <VaultAssetDetails
@@ -87,6 +95,12 @@ function VaultAssetDetailPage({
   );
 }
 
+/** Controls-panel flags mapped to the page's callback props. */
+type DetailFlags = {
+  listForAuction: boolean;
+  listForSale: boolean;
+};
+
 const meta = {
   title: "Pages/Vault/Asset Detail",
   component: VaultAssetDetailPage,
@@ -94,8 +108,17 @@ const meta = {
   parameters: { layout: "fullscreen" },
   args: {
     asset: VAULT_ASSET_DETAILS[0],
+    listForAuction: true,
+    listForSale: true,
   },
-} satisfies Meta<typeof VaultAssetDetailPage>;
+  render: ({ listForAuction, listForSale, ...args }) => (
+    <VaultAssetDetailPage
+      {...args}
+      onListForAuction={listForAuction ? () => {} : undefined}
+      onListForSale={listForSale ? () => {} : undefined}
+    />
+  ),
+} satisfies Meta<Parameters<typeof VaultAssetDetailPage>[0] & DetailFlags>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -103,6 +126,7 @@ type Story = StoryObj<typeof meta>;
 export const Graded: Story = {
   args: {
     asset: VAULT_ASSET_DETAILS[0],
+    showEstimateChange: true,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -136,6 +160,7 @@ export const Graded: Story = {
 export const Raw: Story = {
   args: {
     asset: VAULT_ASSET_DETAILS[1],
+    showEstimateChange: true,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -159,5 +184,28 @@ export const Raw: Story = {
       canvas.getByRole("link", { name: "Request Retrieval" }),
     ).toBeVisible();
     expect(canvas.getByText("Raw, Lightly Played")).toBeVisible();
+  },
+};
+
+/**
+ * Soft launch — compare figure and listing CTAs hidden; each launches on its
+ * own timeline via `showEstimateChange`, `onListForAuction`, `onListForSale`.
+ */
+export const GradedSoftLaunch: Story = {
+  args: {
+    asset: VAULT_ASSET_DETAILS[0],
+    listForAuction: false,
+    listForSale: false,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.queryByRole("button", { name: "List for Auction" }),
+    ).toBeNull();
+    expect(canvas.queryByRole("button", { name: "List for Sale" })).toBeNull();
+    expect(canvas.queryByText("▲ 12.4%")).toBeNull();
+    expect(
+      canvas.getByRole("link", { name: "Request Retrieval" }),
+    ).toBeVisible();
   },
 };
