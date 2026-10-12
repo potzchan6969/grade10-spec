@@ -3,8 +3,8 @@ import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import {
   currencyExponent,
   formatLotMoney,
-  formatMoneyNumeric,
   formatLotMoneyPrefix,
+  formatMoneyNumeric,
 } from "../../lib/format-money";
 
 type ListingManualBidControlsCopy = {

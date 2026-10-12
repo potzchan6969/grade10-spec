@@ -22,8 +22,8 @@ import {
 } from "react";
 import {
   formatLotMoney,
-  formatMoneyNumeric,
   formatLotMoneyPrefix,
+  formatMoneyNumeric,
 } from "../../lib/format-money";
 import {
   type CustomMaximumEditOrigin,
@@ -469,9 +469,13 @@ function ListingQuickMaximumBidActions({
           role="group"
         >
           {presets.map((preset) => {
-            const amountLabel = formatLotMoney(preset.amountMinor, view.currency, {
-              locale,
-            });
+            const amountLabel = formatLotMoney(
+              preset.amountMinor,
+              view.currency,
+              {
+                locale,
+              },
+            );
             const selected =
               !amountEntryLocked && selectedPreset?.key === preset.key;
             const accessibleName = (

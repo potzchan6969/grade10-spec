@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef } from "react";
 import {
   formatLotMoney,
-  formatMoneyNumeric,
   formatLotMoneyPrefix,
+  formatMoneyNumeric,
 } from "../../lib/format-money";
 import { RollingDigit } from "./listing-countdown-digit";
 
