@@ -136,7 +136,7 @@ function StickyTabBar({ children }: { children: ReactNode }) {
       />
       <div
         className={cn(
-          "sticky top-0 z-10 -mx-4 bg-background/95 px-4 backdrop-blur-sm supports-backdrop-filter:bg-background/90 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8",
+          "sticky top-0 z-10 -mx-4 bg-background/95 px-4 py-3 backdrop-blur-sm supports-backdrop-filter:bg-background/90 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8",
           stuck && "border-b border-border",
         )}
       >

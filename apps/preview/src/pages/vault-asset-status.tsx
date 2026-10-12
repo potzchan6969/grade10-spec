@@ -4,9 +4,9 @@ import { statusBadgeVariant, type VaultAsset } from "./vault-content";
 
 /**
  * Listing-state badge overlaid on the vault asset card image. Figma
- * `Vault Asset status` (`7068:9960`): Live Auction, Listed and Retrieval
- * Pending surface a brand badge; In Vault shows nothing — the card itself
- * is the state.
+ * `Vault Asset status` (`7068:9960`): Live Auction and Listed surface a
+ * brand badge, Retrieval Pending an outlined one; In Vault shows nothing —
+ * the card itself is the state.
  */
 function VaultAssetStatus({
   status,
@@ -21,7 +21,9 @@ function VaultAssetStatus({
     <Badge
       className={cn("absolute top-3 left-3", className)}
       size="sm"
-      variant={statusBadgeVariant(status)}
+      variant={
+        status === "Retrieval Pending" ? "outline" : statusBadgeVariant(status)
+      }
     >
       {status}
     </Badge>

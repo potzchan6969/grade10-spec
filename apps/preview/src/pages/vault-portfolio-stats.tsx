@@ -68,7 +68,11 @@ function VaultPortfolioStats({
             </span>
           </span>
         </Stat>
-        <Stat hint={feeHint} label="Storage fees">
+        <Stat
+          className="bg-background-subtle"
+          hint={feeHint}
+          label="Storage fees"
+        >
           <span className="text-2xl leading-8 sm:text-3xl sm:leading-9">
             {feeLabel}
           </span>
