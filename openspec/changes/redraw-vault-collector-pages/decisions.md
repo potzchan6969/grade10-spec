@@ -19,6 +19,7 @@
 | Q3 | What does a portfolio card open? | The item's page for every status — a listed item's page reads its listed price and links out to the store listing or auction lot | Routing Listed or Live Auction cards to management surfaces that do not exist, or keeping the retrieval-dialog exception for Retrieval Pending |
 | Q4 | Can a listed or auctioned item be retrieved? | No — retrieval hides until the item delists or settles | Blocking the whole detail page, or rendering the link disabled |
 | Q5 | How do the tabs sort? | Each tab owns a sort set remembered for the session; Live Auction defaults to ending soonest because the portfolio does not live-update bids | One shared sort, or defaulting the auction tab to highest bid |
+| Q6 | What can a collector do with an item pending retrieval? | Nothing on the item — listing and a second request hide until the operator approves or declines; the request shows as the latest custody entry | Keeping the link to re-open the dialog, or letting the item list while the request waits |
 
 ## Raised
 
