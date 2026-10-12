@@ -47,6 +47,22 @@ log sees it.
   ❓ Shopify shows it nowhere yet: the confirmation email template and the
   thank-you extension are set in Shopify
 
+## Back From Checkout
+
+The Continue button on Shopify's Thank you page always goes to the bare
+checkout host, which sends it to `grade10.com/orders/latest`. That page opens
+the order this browser last sent to Shopify.
+
+- **Guest** - their private order page, link and secret included
+- **Member** - the order under their profile
+- **Nothing remembered** - a signed-in member sees their order list; anyone
+  else sees the store
+- **One day** - the browser forgets the order a day after checkout, and as
+  soon as Continue has used it; a new checkout replaces it
+- **Another device** - a buyer who pays on a different device lands on the
+  fallback. A guest's link still arrives in Shopify's confirmation email
+- **Not indexed** - search engines are told not to index the address
+
 ## Order Summary
 
 🚧 **Points** — when the shop names the settled order's points discount, under
