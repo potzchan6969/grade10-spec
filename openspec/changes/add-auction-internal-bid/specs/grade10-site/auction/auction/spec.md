@@ -4,7 +4,7 @@
 
 - Closing a lot the house leads
   - Reads sold: the public facts read sold at the current bid, to the house's pseudonym
-  - No order: the close creates no winner order and charges nobody
+  - Winner's order: the close opens the order for the internal bidder as for any winner, and charges nobody
 
 ## MODIFIED Requirements
 

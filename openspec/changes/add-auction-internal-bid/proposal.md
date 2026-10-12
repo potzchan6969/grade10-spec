@@ -9,8 +9,8 @@ nothing. Admins need to protect the final price without raising the opening
 price.
 
 **Metric** - protected lots that close sold below their internal amount: 0.
-Bought-in share of protected lots, tracked against the starting prices on
-lots with no internal bid.
+Share of protected lots an internal bidder wins, tracked against the
+starting prices on lots with no internal bid.
 
 ## What Changes
 
@@ -29,15 +29,16 @@ lots with no internal bid.
   maximums stay raise-only
 - **Too late is visible** - an internal bid that is already short of the next
   bid at its time is not placed. The admin sees that and can still raise it
-- **Bought in** - a lot the house wins reads sold to collectors and in their
-  letters. For operators it closes with no order and no winner letters,
-  releases its stock as an Unsold close does, offers Relist, and reads Bought
-  in on the Listings table
+- **Internal bidder win** - a lot an internal bidder wins reads sold to
+  collectors. Its order and invoice go to that internal bidder, flagged
+  internal; an operator sends the invoice, lets it expire after 7 days and
+  cancels the order, as for any unpaid order. Only a reserve holder sees the
+  listing flagged as the internal bidder's win
 - **Internal bidders** - an admin keeps several internal bidder profiles in
   auction admin, and picks one for each listing's internal bid
 - **Secret to staff** - only `auction:reserve` (admin) sets an internal bid or
   sees its amount, time or state. Other operators see nothing of it until the
-  house bids, then its bids labelled House and Bought in after the close,
+  house bids, then its bids and orders labelled House,
   never the amount or the time. The audit trail records each set, change and
   removal without the amount or the time, so an operator with audit access
   may learn that a lot has one
@@ -51,7 +52,7 @@ See [Non-Goals](decisions.md#non-goals).
 ### New Capabilities
 
 - `grade10-admin/auction/internal-bid`: setting, scheduling, editing and
-  reading a listing's house maximum, its access, and the bought-in result as
+  reading a listing's house maximum, its access, and the internal bidder's order as
   operators see it
 
 ### Modified Capabilities
@@ -59,21 +60,19 @@ See [Non-Goals](decisions.md#non-goals).
 - `grade10-site/auction/auto-bidding`: the house maximum takes part in the
   two-maximum rule, is committed at a set time rather than by a bidder, and
   is the one maximum that may be lowered
-- `grade10-site/auction/auction`: a lot settled with the house leading closes
-  bought in, with no order, while its public facts read sold
+- `grade10-site/auction/auction`: a lot an internal bidder leads at the close
+  reads sold, and its order is the internal bidder's
 - `grade10-site/auction/notifications`: a house win sends the ordinary lost
   and watched-sold letters and no winner letter, and the house is never
   mailed
-- `grade10-site/auction/winner-order`: a close with the house leading opens no
-  order, because the house is never the winner of a lot
-- `grade10-admin/auction/listing`: the Listings table reads Bought in, and
-  Relist is offered on a bought-in lot and never carries the internal bid
+- `grade10-site/auction/winner-order`: the order a close opens for an internal
+  bidder takes its billing address and sends no letter
 
 ## Impact
 
 - **Auction service** - a house maximum per listing, its commit at a set time
-  on the lot's own clock, the lowering rule, and a bought-in close that skips
-  order creation
+  on the lot's own clock, the lowering rule, and an internal bidder's order
+  that takes the profile's address and sends no letters
 - **Auth contracts** - `auction:reserve` comes into use, and its description
   changes from a seller's reserve to the internal bid
 - **Admin listing editor** - an internal bid section shown only under

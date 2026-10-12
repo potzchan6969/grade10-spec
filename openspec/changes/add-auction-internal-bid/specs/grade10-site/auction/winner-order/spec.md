@@ -2,8 +2,8 @@
 
 ## Feature set
 
-- A lot the house won
-  - No order: a close with the house leading creates no auction order and sends no won letter
+- A lot an internal bidder won
+  - Internal bidder order: a close with an internal bidder leading opens its order with the internal bidder's billing address and sends no letter
 
 ## MODIFIED Requirements
 

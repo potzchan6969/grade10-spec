@@ -15,8 +15,8 @@ highest accepted bid at the close wins it.
 
 🚧 An admin may protect a lot with an internal bid: a house maximum, hidden
 from collectors, that Grade10 commits at a set time and then bids like any
-other maximum. A lot the house wins reads sold to collectors and closes
-bought in for operators - [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+other maximum. A lot an internal bidder wins reads sold to collectors, and its
+order is the internal bidder's - [Internal Bid](/p/grade10-admin/auction/internal-bid)
 
 | Rule | Value |
 | --- | --- |

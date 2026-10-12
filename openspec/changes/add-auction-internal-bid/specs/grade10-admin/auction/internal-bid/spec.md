@@ -22,15 +22,16 @@ any collector's maximum - [Internal Bid](/p/grade10-admin/auction/internal-bid).
   - Raise: any time the lot takes a bid, as a new commitment
   - Lower: only when the leader and the current bid stay the same, never below a bid already placed for the house
   - Fixed time: the commit time no longer changes
-- Bought in
-  - House win: a lot the house leads at the close closes Bought in, with no order, stock released and Relist offered
-  - Never a winner: the house is never the winner of a lot for orders, order letters or post-sale work
-  - Read after the close: the listing's own page and its Listings table row read Bought in
+- Internal bidder win
+  - Order: a lot an internal bidder leads at the close opens its order and invoice for that internal bidder, flagged internal, with the internal bidder's billing address
+  - By hand: an operator sends the invoice, lets it expire and cancels the order, as for any unpaid order
+  - Flag: a reserve holder reads the listing flagged as won by its internal bidder; other operators read the buyer as House
+  - No letters: no order letter goes to an internal bidder
 - Internal bidders
-  - Profiles: internal bidder profiles, each a name and a unique email label, kept in auction admin with no site account behind them
+  - Profiles: internal bidder profiles, each a name, a unique email label and a billing address, kept in auction admin with no site account behind them
   - Rename and retire: a label is fixed once the profile has bid; a profile is retired only when no Scheduled internal bid, and no Not placed internal bid on a listing before its effective close, uses it, and keeps its history
 - Access
-  - Secret floor: only `auction:reserve` sets or reads an internal bid; reserve holders see which internal bidder bid; other operators see the house's bids labelled House, and Bought in after the close; the audit trail never records the amount or the time
+  - Secret floor: only `auction:reserve` sets or reads an internal bid; reserve holders see which internal bidder bid; other operators see the house's bids and orders labelled House; the audit trail never records the amount or the time
 
 ## ADDED Requirements
 

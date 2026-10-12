@@ -30,11 +30,11 @@
 **I want** to see that an internal bid was not placed because the price had already passed it,
 **so that** I can raise it or let the lot sell.
 
-### grade10-admin-auction-internal-bid-US-06: Admin reads a lot the house bought in
+### grade10-admin-auction-internal-bid-US-06: Admin settles the order of a lot an internal bidder won
 
 **As an** auction admin,
-**I want** a lot the house won to read Bought in, with no order and its stock released,
-**so that** I can tell it from a sale and from a lot nobody bid on, and decide what to do with the card.
+**I want** the order and invoice of a lot an internal bidder won to be issued to that internal bidder and flagged internal,
+**so that** I can let the invoice expire and cancel the order as I do any unpaid order, while knowing it was the house's win.
 
 ### grade10-admin-auction-internal-bid-US-07: Admin keeps protected lots secret from staff
 

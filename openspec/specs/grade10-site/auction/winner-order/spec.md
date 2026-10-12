@@ -119,8 +119,6 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Card fee base: Tax is part of the Subtotal the payment fee grosses up
 - Card payment
   - No start once closed: no card payment starts on an expired or checked invoice, and one that completes anyway is recorded
-- A lot the house won
-  - No order: a close with the house leading creates no auction order and sends no won letter
 
 ## Requirements
 
@@ -435,12 +433,10 @@ SHALL keep its amounts.
 ### Requirement: One invoice and one auction order per lot
 
 Grade10 SHALL issue exactly one invoice and create exactly one auction order
-per lot that closes with a winner other than the house, and SHALL NOT
-combine lots won by the same winner into one invoice, one deadline, or one
-shipment. Each order SHALL carry its own delivery address, its own quote, its
-own payment deadline, and its own fulfilment lifecycle. For a lot the house
-leads at its close, under `grade10-site/auction/auction`, Grade10 SHALL issue
-no invoice and create no auction order.
+per lot, and SHALL NOT combine lots won by the same winner into one invoice,
+one deadline, or one shipment. Each order SHALL carry its own delivery
+address, its own quote, its own payment deadline, and its own fulfilment
+lifecycle.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-a2i rev=1 -->
 #### Scenario: winner-order-SC-06 - Two lots won together stay two orders
@@ -842,7 +838,7 @@ SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
 
 ### Requirement: A lot close opens an order that waits for the winner's address
 
-At lot close Grade10 SHALL, for a winner other than the house:
+At lot close Grade10 SHALL, for the winner:
 
 1. Create one auction order for the lot, with invoice status `not_issued` and
    fulfilment status `unfulfilled`, per `grade10-site/auction/order-status`.
@@ -856,11 +852,6 @@ When the winner confirms a delivery address, the order SHALL become ready for
 an operator to quote, per `grade10-admin/auction/post-sale`. From then on the
 winner SHALL NOT change the address, per "The delivery address locks when the
 invoice is sent".
-
-The house is never a lot's winner here. When a lot's leading bid at its
-close is the house's, under `grade10-site/auction/auction`, Grade10 SHALL
-create no auction order for it and SHALL send no won or address letter for
-it, to the house or to anyone else.
 
 Order creation and the winner notice SHALL be idempotent. A lot
 close delivered more than once SHALL produce one auction order.
@@ -893,16 +884,6 @@ close delivered more than once SHALL produce one auction order.
 - **WHEN** the winner confirms a delivery address
 - **THEN** the order's derived status is Preparing Invoice
 - **AND** the winner is offered no way to pay yet
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=1 -->
-#### Scenario: winner-order-SC-277 - A lot the house wins opens no order
-**Serves:** A lot the house won - the close finds the house on top and opens nothing
-
-- **GIVEN** an `HKD` lot where the house leads at 31000 HKD minor units over
-  collector A
-- **WHEN** the lot closes
-- **THEN** Grade10 creates no auction order and issues no invoice for it
-- **AND** sends no won or address letter for it
 
 ### Requirement: The delivery address locks when the invoice is sent
 
