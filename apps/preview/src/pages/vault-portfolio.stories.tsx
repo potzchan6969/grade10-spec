@@ -1,111 +1,19 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
-import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { cn } from "@grade10/design-system/lib/utils";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { type ReactNode, useEffect, useRef, useState } from "react";
 import { expect, within } from "storybook/test";
 import { ActiveIntakeAlert } from "./active-intake-alert";
 import { activeIntakeSubmissionCount } from "./intake-content";
+import { VaultAssetList } from "./vault-asset-list";
 import {
-  formatHkd,
   INTAKE_TRACKER_STORY_ID,
   PORTFOLIO_ASSETS,
   PORTFOLIO_SUMMARY,
   VAULT_BOOK_VISIT_STORY_ID,
-  type VaultAsset,
   vaultItemRelatedStoryId,
 } from "./vault-content";
-import { VaultItemCard } from "./vault-item-card";
-import {
-  PageHeader,
-  PortfolioSummary,
-  VaultEmptyState,
-  VaultPageShell,
-} from "./vault-shared";
+import { VaultPortfolioStats } from "./vault-portfolio-stats";
+import { PageHeader, VaultEmptyState, VaultPageShell } from "./vault-shared";
 import { navigateToStory } from "./workbench-story-nav";
-
-/** Bottom rule only while stuck — at rest the bar sits flush with the page. */
-function StickyFilterBar({ children }: { children: ReactNode }) {
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const [stuck, setStuck] = useState(false);
-
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry) return;
-      setStuck(!entry.isIntersecting);
-    });
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <>
-      <div
-        aria-hidden
-        className="pointer-events-none h-px w-full"
-        ref={sentinelRef}
-      />
-      <div
-        className={cn(
-          "sticky top-0 z-10 -mx-4 bg-background/95 px-4 py-3 backdrop-blur-sm supports-backdrop-filter:bg-background/90 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8",
-          stuck && "border-b border-border",
-        )}
-      >
-        {children}
-      </div>
-    </>
-  );
-}
-
-type FilterKey = "all" | "vaulted" | "retrieval";
-
-const FILTERS: { key: FilterKey; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "vaulted", label: "In Vault" },
-  { key: "retrieval", label: "Retrieval" },
-];
-
-function isFilterKey(value: string): value is FilterKey {
-  return FILTERS.some((f) => f.key === value);
-}
-
-function matchesFilter(asset: VaultAsset, filter: FilterKey): boolean {
-  if (filter === "all") return true;
-  if (filter === "vaulted") {
-    return asset.status === "In Vault" || asset.status === "Listed on Auction";
-  }
-  return asset.status === "Retrieval pending";
-}
-
-function HoldingsPanel({ assets }: { assets: VaultAsset[] }) {
-  if (assets.length === 0) {
-    return (
-      <Text className="text-secondary-foreground">
-        No items match this filter.
-      </Text>
-    );
-  }
-
-  return (
-    <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-      {assets.map((asset) => (
-        <VaultItemCard
-          key={asset.id}
-          asset={asset}
-          onOpen={() => navigateToStory(vaultItemRelatedStoryId(asset))}
-        />
-      ))}
-    </div>
-  );
-}
 
 function VaultPortfolioPage({
   empty = false,
@@ -115,7 +23,6 @@ function VaultPortfolioPage({
   /** Open intake submissions — omit to use the live intake fixture count. */
   intakeSubmissionCount?: number;
 }) {
-  const [filter, setFilter] = useState<FilterKey>("all");
   const assets = empty ? [] : PORTFOLIO_ASSETS;
 
   return (
@@ -128,20 +35,18 @@ function VaultPortfolioPage({
               type="button"
               onClick={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
             >
-              Vault Collectibles
+              Submit to Vault
             </Button>
           )
         }
       />
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         {!empty && (
-          <PortfolioSummary
-            itemCount={PORTFOLIO_SUMMARY.itemCount}
-            estimate={formatHkd(PORTFOLIO_SUMMARY.totalEstimateHkd)}
-            feeLabel="Launch free"
-            feeHint={PORTFOLIO_SUMMARY.feeStatus}
-            valuationHint={PORTFOLIO_SUMMARY.valuationNote}
+          <VaultPortfolioStats
+            feeHint={PORTFOLIO_SUMMARY.feeHint}
+            feeLabel={PORTFOLIO_SUMMARY.feeLabel}
+            totalEstimateHkd={PORTFOLIO_SUMMARY.totalEstimateHkd}
           />
         )}
 
@@ -154,39 +59,16 @@ function VaultPortfolioPage({
           <VaultEmptyState
             title="No items in your vault"
             description="Book a store visit to vault your collectibles. Your items will appear here once verified and stored."
-            actionLabel="Vault Collectibles"
+            actionLabel="Submit to Vault"
             onAction={() => navigateToStory(VAULT_BOOK_VISIT_STORY_ID)}
           />
         ) : (
-          <Tabs
-            className="gap-4"
-            value={filter}
-            onValueChange={(value) => {
-              if (isFilterKey(value)) setFilter(value);
-            }}
-          >
-            <StickyFilterBar>
-              <TabsList aria-label="Filter holdings" size="sm" variant="pill">
-                {FILTERS.map((f) => (
-                  <TabsTrigger key={f.key} value={f.key}>
-                    {f.label}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </StickyFilterBar>
-
-            {FILTERS.map((f) => (
-              <TabsContent
-                key={f.key}
-                className="mt-0 outline-none"
-                value={f.key}
-              >
-                <HoldingsPanel
-                  assets={assets.filter((a) => matchesFilter(a, f.key))}
-                />
-              </TabsContent>
-            ))}
-          </Tabs>
+          <VaultAssetList
+            assets={assets}
+            onOpenAsset={(asset) =>
+              navigateToStory(vaultItemRelatedStoryId(asset))
+            }
+          />
         )}
       </div>
     </VaultPageShell>
@@ -209,20 +91,25 @@ export const Filled: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "Vault Portfolio" }),
     ).toBeVisible();
-    expect(canvas.getByText("Total Item Count")).toBeVisible();
-    expect(canvas.getByText("Total Estimated Value")).toBeVisible();
-    expect(canvas.getByText("Storage Fees")).toBeVisible();
-    expect(canvas.getByText("Launch free")).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "Submit to Vault" }),
+    ).toBeVisible();
+    expect(canvas.getByText("Total estimated value")).toBeVisible();
+    expect(canvas.getByText("Storage fees")).toBeVisible();
+    expect(canvas.getByText("Complimentary")).toBeVisible();
     expect(canvas.getByText("2 submissions currently in intake")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Track Progress" }),
     ).toBeVisible();
+    expect(canvas.getByRole("tab", { name: /All Assets 6/ })).toBeVisible();
+    expect(canvas.getByRole("tab", { name: /In Vault 2/ })).toBeVisible();
+    expect(canvas.getByRole("tab", { name: /Live Auction 2/ })).toBeVisible();
+    expect(canvas.getByRole("tab", { name: /Listed 2/ })).toBeVisible();
     expect(
-      canvasElement.querySelectorAll('[data-slot="vault-item-card"]').length,
-    ).toBeGreaterThan(0);
-    expect(
-      canvas.getByRole("button", { name: /1999 Charizard/i }),
-    ).toBeVisible();
+      canvasElement.querySelectorAll('[data-slot="vault-asset-card"]').length,
+    ).toBe(6);
+    // Intake-stage assets never appear in holdings.
+    expect(canvas.queryByText("Pre-check")).toBeNull();
   },
 };
 
@@ -232,9 +119,8 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("No items in your vault")).toBeVisible();
     expect(canvas.queryByText(/currently in intake/)).toBeNull();
-    expect(canvas.queryByText("Total Item Count")).toBeNull();
-    expect(canvas.queryByText("Total Estimated Value")).toBeNull();
-    expect(canvas.queryByText("Storage Fees")).toBeNull();
+    expect(canvas.queryByText("Total estimated value")).toBeNull();
+    expect(canvas.queryByText("Storage fees")).toBeNull();
   },
 };
 
@@ -245,8 +131,7 @@ export const EmptyWithIntake: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("No items in your vault")).toBeVisible();
     expect(canvas.getByText("2 submissions currently in intake")).toBeVisible();
-    expect(canvas.queryByText("Total Item Count")).toBeNull();
-    expect(canvas.queryByText("Total Estimated Value")).toBeNull();
-    expect(canvas.queryByText("Storage Fees")).toBeNull();
+    expect(canvas.queryByText("Total estimated value")).toBeNull();
+    expect(canvas.queryByText("Storage fees")).toBeNull();
   },
 };

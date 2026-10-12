@@ -8,8 +8,12 @@ What a collector holds in the vault and what they do with it. The portfolio
 is the custody half of the vault — items held, not loans — drawn on the
 collector's own pages.
 
-- **Your items** — everything the collector holds in the vault in one list,
-  with each item's estimate and status
+- 🚧 **Your items** — everything the collector holds in the vault in one
+  list, tabbed by state — All Assets, In Vault, Live Auction, Listed — with
+  a sort the tab defines and a count on each tab
+- 🚧 **Four states** — In Vault, Listed, Live Auction, Retrieval Pending; an
+  item awaiting a retrieval decision still counts as in the vault, and a
+  tab with nothing in it is hidden
 - 🚧 **One item** — its gallery, status, estimated value since intake, grade
   and certification, storage location, condition, custody history and
   documents; graded and raw items read differently
@@ -22,10 +26,14 @@ collector's own pages.
 ## The item's page
 
 - 🚧 **Estimated value since intake** — the intake figure and how far it has
-  moved
+  moved; a listed or auctioned item instead reads its listed price or
+  current bid and links out to its listing
 - 🚧 **Value potential** — a raw item shows its graded estimate and the
   upside, with `Submit for Grading` inside the callout
-- **Custody log** — where the item has been and when, latest first
+- **Custody log** — where the item has been and when, latest first,
+  including the store or auction listing
+- 🚧 **Locked while listed** — an item on the shelves or at auction cannot
+  be requested back until it delists or settles
 - ❓ **Listing** — what `List for Auction` and `List for Sale` start; the
   request flow is not drawn yet
 - ❓ **Retrieval** — what asking for an item back commits to; fees, timing and
@@ -34,5 +42,10 @@ collector's own pages.
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The portfolio's screens | Decided | Drawn by @tangconst in `Grade10-DS-2026` — asset detail graded `7029:2`, raw `7054:7072`; the first surface is the item's own page | Owner |
+| The portfolio's screens | Decided | Drawn by @tangconst in `Grade10-DS-2026` — portfolio `7068:7718`, asset detail graded `7029:2`, raw `7054:7072` | Owner |
+| Portfolio statuses | Decided | In Vault (no badge), Listed, Live Auction, Retrieval Pending; Retrieval Pending sits in the In Vault tab while the operator's approval is pending | @tangconst |
+| Intake on the portfolio | Decided | Items in submission or intake never appear in holdings until vaulted; the intake banner stays a separate alert | @tangconst |
+| Retrieval while listed | Decided | A listed or auctioned item cannot be requested back until it delists or settles | @tangconst |
+| Sorting | Decided | Each tab carries its own sort set and remembers the pick for the session; Live Auction defaults to ending soonest, Listed to recently listed | @tangconst |
+| Stats card | 🚧 | Drawn provisional at `7102:1514` — total estimated value and storage fees only; the item count lives on the tab badges | @tangconst |
 :::
