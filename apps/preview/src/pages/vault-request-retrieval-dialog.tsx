@@ -60,7 +60,7 @@ function VaultRequestRetrievalDialog({
           <div className="flex shrink-0 items-center gap-4 overflow-clip rounded-(--radius-2xl) border border-border bg-background-subtle p-3">
             <img
               alt=""
-              className="size-16 shrink-0 rounded-(--radius-xl) object-cover"
+              className="size-16 shrink-0 rounded-(--radius-xl) bg-background object-contain"
               src={asset.imageSrc}
             />
             <VStack className="min-w-0" gap="xs" hAlign="start">
@@ -69,7 +69,7 @@ function VaultRequestRetrievalDialog({
               </Text>
               {/* Recap only fields the detail page shows: grade, then the
                   vault storage ID, each led by its icon on one row. */}
-              <div className="flex items-center gap-3 text-secondary-foreground">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-secondary-foreground">
                 <span className="flex min-w-0 items-center gap-1">
                   {asset.condition === "Graded" && asset.cert ? (
                     <SealCheck aria-hidden size={16} weight="regular" />
