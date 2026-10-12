@@ -32,6 +32,7 @@ config — every step is the Cloudflare dashboard or the Shopify admin.
 | Shopify shop | `grade10-staging.myshopify.com` | `grade10-2698.myshopify.com` |
 | Everything → | `https://grade10-stg.com/store` | `https://grade10.com/store` |
 | Accounts → | `https://grade10-stg.com/profile` | `https://grade10.com/profile` |
+| Continue → | `https://grade10-stg.com/orders/latest` | `https://grade10.com/orders/latest` |
 
 ZZZ takes the same shape once its shops exist — base `zzz.9jokes.com` /
 `zzz.com`, storefront at `store.zzz.*`.
@@ -91,7 +92,7 @@ without O2O is a plain origin fetch and the shop breaks.
 **SSL/TLS → Edge Certificates → Always Use HTTPS** stays **off**. It redirects
 every request including `/.well-known/acme-challenge/*`, the path Shopify
 renews the certificate over, so turning it on kills renewal quietly, weeks
-later. Rule 4 below enforces HTTPS without touching that path.
+later. Rule 5 below enforces HTTPS without touching that path.
 
 ## *Operator* — **Create the redirect rules**
 **Rules → Overview → Create rule → Redirect Rule** (newer dashboards list
@@ -131,7 +132,21 @@ The exclusion is not optional — see the table above. This rule sends buyers to
 the same place the catch-all does; it stays separate so the cart can be given
 its own destination later without anyone touching the catch-all.
 
-Rule 3 — everything else → our store:
+Rule 3 — the bare host → the buyer's last order:
+
+```
+When:   http.host eq "checkout.grade10-stg.com"
+        and http.request.uri.path eq "/"
+Then:   static redirect → https://grade10-stg.com/orders/latest
+Status: 302
+```
+
+The Thank you page's Continue button goes to the bare host, and Shopify gives
+no way to change it. `/orders/latest` sends the buyer on to the order this
+browser last checked out, or to their order list or the store when it holds
+none. The path match is exact, so rule 4 still owns every other path.
+
+Rule 4 — everything else → our store:
 
 ```
 When:   http.host eq "checkout.grade10-stg.com"
@@ -151,7 +166,7 @@ Status: 302
 `starts_with`, never `contains`: a collection called `checkouts-hoodie` would
 match `contains "checkouts"` and leak the page this rule exists to hide.
 
-Rule 4 — HTTPS for what is left, minus the validation path:
+Rule 5 — HTTPS for what is left, minus the validation path:
 
 ```
 When:   not ssl
@@ -161,8 +176,8 @@ Then:   dynamic redirect → concat("https://", http.host, http.request.uri)
 Status: 301
 ```
 
-Ship rules 1–3 as **302** and promote to 301 only once the destinations have
-settled — browsers cache a 301 hard and you cannot take it back. Rule 4 is a
+Ship rules 1–4 as **302** and promote to 301 only once the destinations have
+settled — browsers cache a 301 hard and you cannot take it back. Rule 5 is a
 301 from the start; the host will never stop being HTTPS.
 
 Nothing else goes on this host.
@@ -171,7 +186,7 @@ Nothing else goes on this host.
 ```bash
 host=checkout.grade10-stg.com
 
-curl -sI "https://$host/" | head -3                              # 302 → /store
+curl -sI "https://$host/" | head -3                              # 302 → /orders/latest
 curl -sI "https://$host/collections/all" | head -3               # 302 → /store
 curl -sI "https://$host/products/anything" | head -3             # 302 → /store
 curl -sI "https://$host/cart" | head -3                          # 302 → /store
@@ -183,7 +198,7 @@ curl -sI "http://$host/.well-known/acme-challenge/x" | head -3   # must NOT redi
 
 Then buy something end to end — staging pays through Bogus Gateway. Watch the
 network tab for any request to this host that answers 302 to `/store`; each
-one is a keep-list row missing from rule 3. Confirm the thank-you page renders
+one is a keep-list row missing from rule 4. Confirm the thank-you page renders
 with the order-link extension on it, and that the link it shows goes to
 `/profile/orders/<id>` on our site.
 
