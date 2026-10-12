@@ -13,10 +13,10 @@ reviewed: 2026-09-15
 | Rate | **1 point pays $1** — earning is $10 a point, on [Points](/p/grade10-site/loyalty/points) |
 | Pays for | **Qualifying goods only** — the same basis as earning: never gift cards, credit top-ups, or grading fees |
 | Never pays for | **Shipping or tax** |
-| Cap | **Goods total minus coupons and discount codes** — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused |
+| Cap | **Qualifying goods minus the site discounts and the code**, and the balance — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused — [Discounts](/p/grade10-site/store/discounts#order-of-application) |
 | Earns | **Nothing** — the part of the bill paid with points earns no points |
 | Available | **On**, online and at the till — a manager can turn off the till's points spending, or just typed-email spending, within seconds; a sale never waits on it |
-| Discount | 🚧 **One order-level discount titled "Deduction from Points"**, outside the order's one-coupon count, so a coupon and points can be used on the same order; "Points", the title older orders carry, counts as the same discount — [Discounts](/p/grade10-site/store/discounts) |
+| Discount | 🚧 **One order-level discount titled "Deduction from Points"**, outside the order's one-coupon count, so a coupon and points can be used on the same order; "Points", the title older orders carry, counts as the same discount — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time) |
 
 ## Online
 

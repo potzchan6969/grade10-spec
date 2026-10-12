@@ -61,10 +61,10 @@ action, since a reward coupon carries none
   on the plan after a refused one; a sale the shop collected never does
 - **A sale that beats it** — where the two cannot stack the shop keeps the
   larger cut and the coupon goes back to the wallet —
-  [Discounts](/p/grade10-site/store/discounts)
+  [Discounts](/p/grade10-site/store/discounts#order-of-application)
 - **The order's one discount** — a reward coupon is in that count; points
   paid against the bill, free shipping and the site's own discounts sit
-  outside it — [Discounts](/p/grade10-site/store/discounts)
+  outside it — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time)
 
 :::detail{title="One coupon, two sales" for="engineer"}
 - **One conditional write decides it** — the claim lands only where the coupon
