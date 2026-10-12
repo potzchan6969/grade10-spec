@@ -4,7 +4,7 @@
 - [ ] 1.4 Update `docs/prds/platform/multi-product.md` and `docs/prds/platform/e2e.md`: one session cookie scope per brand holds two cookie names, one for the site and one for the console, and the isolated stack's shared jar tells them apart by name
 - [ ] 1.5 Verify: `pnpm check:manual`
 
-## 2. Surface registry and contracts (grade10)
+## 2. Surface registry and contracts (grade10) (owner: @seankcw)
 
 Lands first. Groups 3 to 6 depend on it, not on each other.
 
