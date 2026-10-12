@@ -38,9 +38,7 @@ cancelled notice in `winner-order-SC-143`.
 - **Application assembly:** a post-sale cancellation dialog and queue/detail
   fields are admin application work; no reusable `@grade10/ui` export exists
   for this workflow
-- **i18n:** cancellation categories, required-field errors, consequence
-  preview, Paid after cancel flag, Finance return direction and the payment-processing clear action are new catalog work in the appropriate admin or
-  shared layer, answered in every locale that layer serves
+- **Copy:** cancellation categories, required-field errors, consequence preview, Paid after cancel flag, Finance return direction and the payment-processing clear action use English literals in the admin application, following the application's "The admin panels are outside the localization scope" convention in `docs/conventions/code-layout.md`.
 
 ### Winner Order
 
