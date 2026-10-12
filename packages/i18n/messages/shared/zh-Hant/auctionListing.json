@@ -48,7 +48,7 @@
   "currentBidAmount": "目前出價 {amount}",
   "currentMaximum": "最高：{amount}",
   "customAmount": "自訂出價金額",
-  "customAmountPlaceholder": "自訂出價金額（最低 {amount}）",
+  "customAmountPlaceholder": "最低 {amount}",
   "description": "描述",
   "emailAlertsEnabledToast": "已開啟此拍品的電郵提醒",
   "endsLabel": "截止",

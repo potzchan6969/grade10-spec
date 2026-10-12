@@ -220,7 +220,6 @@ export {
 } from "./blocks/auction-listing/listing-bid-enrollment";
 export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
 export {
-  CUSTOM_MAXIMUM_MAJOR_CEILING,
   formatMinimumMaximumCaption,
   isMaximumBelowFloor,
   minNextBidMinor,

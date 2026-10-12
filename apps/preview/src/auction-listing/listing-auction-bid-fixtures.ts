@@ -54,6 +54,7 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
 /** Numeric lot facts shared by bid-card fixtures and preview page content. */
 export const BID_FIXTURE_LOT = {
   currency: DEFAULT_LISTING_CURRENCY,
+  ceilingMinor: 8_000_000_000,
   /** Near the low end of the lot's historical comps. */
   startingBidMinor: 4_800_000,
   /** Live mid-ladder current bid (a few increments above start). */
@@ -544,6 +545,7 @@ export function buildListingAuctionBidView(
 
   return {
     currency: BID_FIXTURE_LOT.currency,
+    ceilingMinor: BID_FIXTURE_LOT.ceilingMinor,
     headerLabel: auctionHeaderLabel(state),
     live: meta.live,
     opens: meta.opens,

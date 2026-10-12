@@ -60,6 +60,8 @@ export type ListingAuctionStanding =
 export type ListingAuctionBidView = {
   /** ISO 4217 currency for every amount on this listing. */
   currency: string;
+  /** Consumer-owned maximum in integer minor units for this listing currency. */
+  ceilingMinor: number;
   headerLabel: string;
   live: boolean;
   opens: boolean;

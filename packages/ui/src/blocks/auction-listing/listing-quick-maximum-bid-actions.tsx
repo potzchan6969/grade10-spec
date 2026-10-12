@@ -12,13 +12,21 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
-import { type FormEvent, type KeyboardEvent, useMemo, useState } from "react";
+import {
+  type ClipboardEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   formatMoney,
   formatMoneyNumeric,
   formatMoneyPrefix,
 } from "../../lib/format-money";
 import {
+  type CustomMaximumEditOrigin,
   isMaximumBelowFloor,
   parseExactMoneyDraftToMinor,
   quickMaximumPresetAmount,
@@ -129,6 +137,10 @@ function ListingQuickMaximumBidActions({
     null,
   );
   const [customDraft, setCustomDraft] = useState("");
+  const pendingPasteRef = useRef<{
+    raw: string;
+    origin: "paste";
+  } | null>(null);
 
   const presets = useMemo((): MaximumPreset[] => {
     const formatDelta = (deltaMinor: number) =>
@@ -285,18 +297,50 @@ function ListingQuickMaximumBidActions({
     setCustomDraft("");
   }
 
+  function handleCustomPaste(event: ClipboardEvent<HTMLInputElement>) {
+    if (amountEntryLocked) return;
+    const pending = {
+      origin: "paste" as const,
+      raw: event.clipboardData.getData("text"),
+    };
+    pendingPasteRef.current = pending;
+    window.setTimeout(() => {
+      if (pendingPasteRef.current === pending) {
+        pendingPasteRef.current = null;
+      }
+    }, 0);
+  }
+
   function handleCustomChange(event: FormEvent<HTMLInputElement>) {
     if (amountEntryLocked) return;
     const target = event.currentTarget;
+    const pendingPaste = pendingPasteRef.current;
+    pendingPasteRef.current = null;
+    const raw =
+      target.value === "" && pendingPaste?.raw
+        ? pendingPaste.raw
+        : target.value;
+    const nativeEvent = event.nativeEvent as InputEvent;
+    const data = nativeEvent.data;
+    const editOrigin: CustomMaximumEditOrigin =
+      pendingPaste?.origin ??
+      (nativeEvent.inputType === "insertText" &&
+      data != null &&
+      /^[0-9]$/.test(data) &&
+      raw === `${customDraft}${data}`
+        ? "typed-append"
+        : "replacement");
     const sanitized = sanitizeCustomMaximumDraft(
-      target.value,
+      raw,
       view.currency,
       customDraft,
+      view.ceilingMinor,
+      editOrigin,
     );
     // Ceiling refuse leaves React state unchanged. A controlled type=number
     // input will keep painting the rejected value unless we reset the DOM.
     if (sanitized === customDraft) {
-      target.value = customDraft;
+      target.value = sanitized;
       return;
     }
     setCustomDraft(sanitized);
@@ -322,7 +366,10 @@ function ListingQuickMaximumBidActions({
       event.preventDefault();
       return;
     }
-    const data = (event.nativeEvent as InputEvent).data;
+    const nativeEvent = event.nativeEvent as InputEvent;
+    if (nativeEvent.inputType === "insertFromPaste") return;
+    pendingPasteRef.current = null;
+    const data = nativeEvent.data;
     if (data === "." || data === ",") {
       event.preventDefault();
     }
@@ -475,6 +522,7 @@ function ListingQuickMaximumBidActions({
           onClear={
             amountEntryLocked || !customActive ? undefined : handleClearCustom
           }
+          onPaste={handleCustomPaste}
           onKeyDown={handleCustomKeyDown}
           placeholder={customPlaceholder}
           prefix={formatMoneyPrefix(view.currency, { locale })}
