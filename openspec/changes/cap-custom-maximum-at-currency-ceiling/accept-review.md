@@ -1,21 +1,23 @@
-reviewed: 3f3a01e04257a280ebf96e44161982ddea207f0d
-source-identity: add7376da4c86ad6b5d0a8e8a68e6bac8cfebb3999647dd01f5d18b09c0fedfd
+reviewed: cffc7786b1eb9d64f1b29a6f4fb0db3082746d22
+source-identity: d4d06aeaf884cf1bf85ff978e6aa03ed6cae226f69b8cab94e08129e52a96baf
 baseline-identity: 4b7f51071df9b6da40e9029a25e60514bb0a4b8bc7f419c50a57a7f22b7f5a24
-verdict: Not ready - 1 blockers
+verdict: Ready to accept
 
 | # | Severity | Where | Finding | Owner | Fix in | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | blocker | [SC-92](specs/grade10-site/auction/auction/spec.md#scenario-grade10-site-auction-auction-sc-92---the-servers-words-never-reach-the-bid-form), lines 98-101; [SC-103](specs/grade10-site/auction/auction/spec.md#scenario-grade10-site-auction-auction-sc-103---a-defensive-above-ceiling-answer-shows-no-message), lines 120-122 | SC-92 requires generic refusal copy when a refusal contains a server message. SC-103 explicitly includes an AMOUNT_TOO_HIGH response with a server message and prohibits that copy. The fold retains both outcomes for the same response. | Dev, then QA2 | Scope SC-92 to exclude AMOUNT_TOO_HIGH, preserve its trace identity and advance its revision. Confirm the existing ordinary-code behavior in its QA2 disposition and focused mapper/view tests. Q3 and the pages already settle the exception; no new product decision is needed. | open |
+| 1 | blocker | [SC-92](specs/grade10-site/auction/auction/spec.md#scenario-grade10-site-auction-auction-sc-92---the-servers-words-never-reach-the-bid-form), lines 98-101; [SC-103](specs/grade10-site/auction/auction/spec.md#scenario-grade10-site-auction-auction-sc-103---a-defensive-above-ceiling-answer-shows-no-message), lines 120-122 | The original SC-92 server-message fallback contradicted the silent AMOUNT_TOO_HIGH outcome. Revision 2 now limits SC-92 to codes other than AMOUNT_TOO_HIGH. The repair preserves ordinary fallback behavior and SC-103's silent exception. | Dev, then QA2 | Repaired in SC-92 and its QA2 disposition; focused mapper/view implementation tests remain planned by tasks 2.1 and 2.3. | fixed cffc7786b1eb9d64f1b29a6f4fb0db3082746d22 |
 
 ## Evidence
 
-- **Conflict** - For `{ code: AMOUNT_TOO_HIGH, message: server text }`, SC-92's second WHEN branch requires `Your bid did not go through.` SC-103 requires no generic refusal message. The [requirement and refusal table](specs/grade10-site/auction/auction/spec.md), lines 26-38, also require silence.
-- **Settled source** - [Q3](decisions.md#decisions) and [Bidding Rules - Refusals](../../../docs/prds/products/grade10-site/auction/bidding.md#refusals) agree on silence. [QA2](specs/grade10-site/auction/auction/feature-tcs.md#reconciliation), line 168, names AMOUNT_TOO_HIGH as the exception, but the retained scenario does not state it. A reconciliation note cannot narrow a contradictory scenario in the accepted contract.
-- **Fold** - Read-only `prepareAcceptance` produced the nine durable outputs without writing them. It reproduced fingerprint `785c314a24843f29ac16778576418290ba45fe18e38c71c87595165c8b6f1968` and the baseline above. The folded auction requirement still contains SC-92 and SC-103 as quoted.
+- **Repair** - SC-92 retains trace id `g10.auction-auction.SC-nh5` at revision 2 and explicitly requires a code other than AMOUNT_TOO_HIGH. Its ordinary-code fallback still shows `Your bid did not go through.` and suppresses server text. SC-103 still covers AMOUNT_TOO_HIGH with or without ceiling data or server text and requires no generic copy, toast, reset or retry.
+- **Settled source** - [Q3](decisions.md#decisions), [Bidding Rules - Refusals](../../../docs/prds/products/grade10-site/auction/bidding.md#refusals), the requirement table and [QA2](specs/grade10-site/auction/auction/feature-tcs.md#reconciliation), line 168, now agree. TC4's four server-message/ceiling combinations still verify the exception; ordinary-code coverage remains with the named mapper/view regressions.
+- **Fold** - Read-only `prepareAcceptance` reproduced fingerprint `81d78a6d3ff31ba8b5ae671ec9e8f803d93ada97c6c9bfb3e902069233e4814f` and the unchanged baseline above. The folded auction requirement contains the repaired SC-92 and unchanged SC-103. No contract file was written by the reviewer.
 
 ## Coverage
 
-**Review mode** - Full independent review. No prior substantive ledger supplies reusable coverage. The clean source revision includes published main `0b3d74bf7a7eb63adc4e47d7fe7bdb8c6e5e34a3`. Historical QA1/Dev/QA2 records were treated as reconciliation evidence, not a prior acceptance verdict.
+**Review mode** - Scoped independent rerun after the full review at `3f3a01e04257a280ebf96e44161982ddea207f0d`. The clean source revision includes published main `0b3d74bf7a7eb63adc4e47d7fe7bdb8c6e5e34a3`. Diff `536964294..cffc7786b` changes only SC-92 and its QA2 disposition. The diff from the full review adds that same repair and the previous review ledger. No journey, feature anchor, page, design, task, dependency or durable baseline changed.
+
+**Carried coverage** - In the table below, `Reviewed SHA` means the original full-review SHA `3f3a01e04257a280ebf96e44161982ddea207f0d`; those checks are carried from that review. The affected refusal scenario, disposition, cases and folded result were checked again at the current reviewed SHA as recorded above. There are no remaining open findings.
 
 | Source or dependency | Checked identity | Checks applied | Carried from |
 | --- | --- | --- | --- |
@@ -35,13 +37,13 @@ verdict: Not ready - 1 blockers
 
 - **Review preflight** - `/private/tmp/issue-1008-review-preflight.json`: ready, validation exit 0, blockers empty; source identity above. Scoped expansion for bid-increments was checked through both linked PRDs.
 - **Acceptance preflight** - `/private/tmp/issue-1008-accept-preflight.log`: ready to fold, nine outputs, matching fingerprint and baseline. Its Purpose-drift note reflects the recovered delta rename. The read-only fold check independently confirms that each Purpose retains the durable scope.
-- **Current manual** - `/private/tmp/issue-1008-current-manual.log`: 0 failures, 283 warnings. No `changed meaning` warning appears. Relevant warnings concern existing prose density, a gallery mark and suite indexing/coverage. They do not resolve or detect finding 1.
-- **Receipt hashes** - SHA-256: review preflight `9ca6ba0c826014753c2c433434a069c9d0d9bfe5078621a7f9d78fbb12da9f16`; acceptance preflight `565a91428768e1db2b76e9500f7c058543783a171c19381ee065ea7623a10302`; current manual `26c7da498d2bb5548e420fa64388a03ab38daf8ae373a1323f2ff333de4b6bbb`.
+- **Current manual** - `/private/tmp/issue-1008-current-manual.log`: refreshed at the repaired revision, 0 failures, 283 warnings. No `changed meaning` warning appears. Relevant warnings concern existing prose density, a gallery mark and suite indexing/coverage. Their content is unchanged.
+- **Receipt hashes** - SHA-256: review preflight `4f6db5af168033ad871c57a10e03b59156dc16603430389877177be6618710da`; acceptance preflight `8a457d35cfa00c03035912ec75f44471e94f387ca2bcaa5f2421e7f027df5244`; current manual `26c7da498d2bb5548e420fa64388a03ab38daf8ae373a1323f2ff333de4b6bbb`.
 - **Limit** - Gate receipts prove structural readiness. This independent source review supplies the semantic verdict. No implementation or browser execution is claimed by these planning records.
 
 ## Questions And Blockers
 
-- **Human input** - None. Finding 1 has a clear source repair under the settled Q3 decision.
-- **Rerun** - After the source repair and QA2 update, an independent reviewer must check SC-92, SC-103, their refusal table, affected cases and folded result. Unchanged coverage above can be carried from this revision when dependencies remain unchanged.
+- **Human input** - None. Finding 1 is fixed under the settled Q3 decision.
+- **Rerun** - Complete. SC-92, SC-103, the refusal table, TC4, QA2 disposition and affected folded result agree. No further acceptance review repair is required.
 
-Not ready - 1 blockers
+Ready to accept
