@@ -12,6 +12,12 @@
 **I want** to withdraw a lot at any point up to its close,
 **so that** a consignor who pulls out or a card that fails authentication leaves the sale cleanly.
 
+### grade10-admin-auction-listing-US-72: Operator reads a listing's code to act on a quoted reference
+
+**As an** auction operator,
+**I want** to see a listing's code on its admin screen,
+**so that** I can match a support, finance or reconciliation request that quotes the code (or the payment reference built from it) back to the right listing and order.
+
 ### grade10-admin-auction-listing-US-73: Operator keeps a usable listing address while drafting
 
 **As an** auction operator,
