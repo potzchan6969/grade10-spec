@@ -4,22 +4,26 @@ import {
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { LISTING_LOT_SIDEBAR_CLASS, ListingLotGallery } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, waitFor, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { VaultAssetCustodyDocuments } from "./vault-asset-custody-documents";
 import { VaultAssetDetails } from "./vault-asset-details";
 import type { VaultAssetSummaryProps } from "./vault-asset-summary";
 import { VaultAssetSummary } from "./vault-asset-summary";
 import {
   AUCTION_LOT_LIVE_STORY_ID,
+  RETRIEVAL_REQUESTED_TOAST,
   STORE_PRODUCT_DETAIL_STORY_ID,
   VAULT_ASSET_DETAILS,
   VAULT_LISTED_ASSET_DETAIL,
   VAULT_LIVE_AUCTION_ASSET_DETAIL,
   VAULT_PORTFOLIO_HREF,
+  VAULT_RETRIEVAL_PENDING_ASSET_DETAIL,
+  withRetrievalRequested,
 } from "./vault-content";
 import { VaultRequestRetrievalDialog } from "./vault-request-retrieval-dialog";
 import { PAGE_ENTER_CLASS, VaultItemDetailPageShell } from "./vault-shared";
@@ -37,20 +41,21 @@ function VaultAssetDetailPage({
   "showEstimateChange" | "onListForAuction" | "onListForSale"
 >) {
   const [retrievalOpen, setRetrievalOpen] = useState(false);
+  const [current, setCurrent] = useState(asset);
   const galleryImages = [
     {
-      src: asset.imageSrc,
-      alt: `Front scan of ${asset.name}`,
+      src: current.imageSrc,
+      alt: `Front scan of ${current.name}`,
       label: "Front",
     },
     {
-      src: asset.imageSrc,
-      alt: `Back scan of ${asset.name}`,
+      src: current.imageSrc,
+      alt: `Back scan of ${current.name}`,
       label: "Back",
     },
     {
-      src: asset.imageSrc,
-      alt: `Label of ${asset.name}`,
+      src: current.imageSrc,
+      alt: `Label of ${current.name}`,
       label: "Label",
     },
   ];
@@ -62,7 +67,7 @@ function VaultAssetDetailPage({
           <Breadcrumbs>
             <BreadcrumbItem href={VAULT_PORTFOLIO_HREF}>Vault</BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem current>{asset.name}</BreadcrumbItem>
+            <BreadcrumbItem current>{current.name}</BreadcrumbItem>
           </Breadcrumbs>
         </div>
       }
@@ -82,18 +87,18 @@ function VaultAssetDetailPage({
       <VStack className={LISTING_LOT_SIDEBAR_CLASS} gap="lg" hAlign="stretch">
         <div className={cn(PAGE_ENTER_CLASS, "delay-[60ms]")}>
           <VaultAssetSummary
-            asset={asset}
+            asset={current}
             showEstimateChange={showEstimateChange}
             onListForAuction={onListForAuction}
             onListForSale={onListForSale}
             onSubmitForGrading={() => {}}
             onViewAuction={
-              asset.status === "Live Auction"
+              current.status === "Live Auction"
                 ? () => navigateToStory(AUCTION_LOT_LIVE_STORY_ID)
                 : undefined
             }
             onViewListing={
-              asset.status === "Listed"
+              current.status === "Listed"
                 ? () => navigateToStory(STORE_PRODUCT_DETAIL_STORY_ID)
                 : undefined
             }
@@ -101,25 +106,32 @@ function VaultAssetDetailPage({
         </div>
         <div className={cn(PAGE_ENTER_CLASS, "delay-[90ms]")}>
           <VaultAssetDetails
-            asset={asset}
+            asset={current}
             onRequestRetrieval={() => setRetrievalOpen(true)}
             verifyHref={
-              asset.cert
-                ? `https://www.psacard.com/cert/${asset.cert}`
+              current.cert
+                ? `https://www.psacard.com/cert/${current.cert}`
                 : undefined
             }
           />
         </div>
         <div className={cn(PAGE_ENTER_CLASS, "delay-[120ms]")}>
-          <VaultAssetCustodyDocuments asset={asset} />
+          <VaultAssetCustodyDocuments asset={current} />
         </div>
       </VStack>
 
       <VaultRequestRetrievalDialog
-        asset={asset}
+        asset={current}
         onOpenChange={setRetrievalOpen}
+        onSubmit={() => {
+          setCurrent((a) => withRetrievalRequested(a));
+          toast.success(RETRIEVAL_REQUESTED_TOAST.title, {
+            description: RETRIEVAL_REQUESTED_TOAST.description,
+          });
+        }}
         open={retrievalOpen}
       />
+      <Toast position="bottom-right" />
     </VaultItemDetailPageShell>
   );
 }
@@ -143,6 +155,7 @@ const meta = {
   render: ({ listForAuction, listForSale, ...args }) => (
     <VaultAssetDetailPage
       {...args}
+      key={args.asset.id}
       onListForAuction={listForAuction ? () => {} : undefined}
       onListForSale={listForSale ? () => {} : undefined}
     />
@@ -301,5 +314,79 @@ export const GradedSoftLaunch: Story = {
         canvas.getByRole("link", { name: "Request Retrieval" }),
       ).toBeVisible(),
     );
+  },
+};
+
+/**
+ * Retrieval Pending — the request is in flight: the lock wins over the list
+ * flags, the custody log leads with the request, and retrieval is not offered
+ * a second time.
+ */
+export const RetrievalPending: Story = {
+  args: {
+    asset: VAULT_RETRIEVAL_PENDING_ASSET_DETAIL,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => {
+      expect(canvas.getByText("Retrieval Pending")).toBeVisible();
+      expect(canvas.getByText("Retrieval requested")).toBeVisible();
+    });
+    expect(
+      canvas.queryByRole("button", { name: "List for Auction" }),
+    ).toBeNull();
+    expect(canvas.queryByRole("button", { name: "List for Sale" })).toBeNull();
+    expect(
+      canvas.queryByRole("link", { name: "Request Retrieval" }),
+    ).toBeNull();
+  },
+};
+
+/**
+ * Request Retrieval flow — open the dialog, submit, and the page flips to
+ * Retrieval Pending with a success toast while the list CTAs lock.
+ */
+export const RequestRetrieval: Story = {
+  args: {
+    asset: VAULT_ASSET_DETAILS[0],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    await waitFor(() =>
+      expect(
+        canvas.getByRole("link", { name: "Request Retrieval" }),
+      ).toBeVisible(),
+    );
+    await userEvent.click(
+      canvas.getByRole("link", { name: "Request Retrieval" }),
+    );
+    const dialog = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "Request Retrieval" });
+      expect(found).toBeVisible();
+      return found;
+    });
+    await userEvent.click(
+      within(dialog).getByRole("button", {
+        name: "Submit Request",
+      }),
+    );
+    await waitFor(() => {
+      const toastEl = canvasElement.ownerDocument.body.querySelector(
+        "[data-sonner-toast]",
+      );
+      expect(toastEl).not.toBeNull();
+      expect(
+        within(toastEl as HTMLElement).getByText("Retrieval requested"),
+      ).toBeVisible();
+      expect(canvas.getByText("Retrieval Pending")).toBeVisible();
+    });
+    expect(
+      canvas.queryByRole("button", { name: "List for Auction" }),
+    ).toBeNull();
+    expect(canvas.queryByRole("button", { name: "List for Sale" })).toBeNull();
+    expect(
+      canvas.queryByRole("link", { name: "Request Retrieval" }),
+    ).toBeNull();
   },
 };

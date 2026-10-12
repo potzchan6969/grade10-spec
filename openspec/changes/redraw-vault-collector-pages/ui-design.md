@@ -21,7 +21,7 @@ The design reference is the Figma file `Grade10-DS-2026` and the Storybook workb
 
 ### Request Retrieval
 
-`awaiting:` figma — the dialog frame has not been drawn; the workbench story `pages-vault-request-retrieval--*` stands in until it is.
+`awaiting:` figma — the dialog frame has not been drawn; the workbench story `vault-request-retrieval-dialog--*` stands in until it is: the item row, the pickup location, and three next steps — review, pickup window, collect in store with matching ID.
 
 ### Intake Tracker
 
@@ -61,7 +61,8 @@ Flagged work, already landed in this repo pending this change's tasks:
 | Cert verification | `Verify` link opens the institute's cert page in a new tab | `grade10-site-vault-portfolio-US-03` |
 | Custody log | Vertical `Stepper`; latest entry `completed`, history `upcoming`; the store listing or auction listing date appears as the latest entry on `Listed`/`Live Auction` assets | `grade10-site-vault-portfolio-US-02` |
 | Documents | One `Alert` row per document; external report opens a new tab, downloads use `PDF`/`ZIP` actions | `grade10-site-vault-portfolio-US-02` |
-| Request retrieval | `Request Retrieval` link opens the retrieval dialog | `grade10-site-vault-portfolio-US-06` |
+| Request retrieval | `Request Retrieval` link opens the retrieval dialog; submitting raises a success `Toast` (`Retrieval requested`) and turns the page Retrieval Pending | `grade10-site-vault-portfolio-US-06` |
+| Retrieval pending | `Retrieval Pending` outlined `Badge`, no icon — same treatment as the card overlay; `Retrieval requested` leads the custody log; list CTAs and `Request Retrieval` hidden until the operator decides (extrapolated — no Figma frame) | `grade10-site-vault-portfolio-US-06` |
 | Listing | `List for Auction` and `List for Sale` fill the row evenly | `grade10-site-vault-portfolio-US-04` |
 | Soft launch | No compare figure (`showEstimateChange` off), no listing CTAs | `grade10-site-vault-portfolio-US-02` |
 | Auction unavailable | `List for Auction` hidden while `List for Sale` stays; each listing flag ships on its own timeline | `grade10-site-vault-portfolio-US-04` |

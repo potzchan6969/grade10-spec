@@ -60,6 +60,8 @@ const VAULT_ASSET_CARD_RETRIEVAL_STORY_ID =
 const VAULT_ITEM_DETAIL_LISTED_STORY_ID = "pages-vault-asset-detail--listed";
 const VAULT_ITEM_DETAIL_LIVE_AUCTION_STORY_ID =
   "pages-vault-asset-detail--live-auction";
+const VAULT_ITEM_DETAIL_RETRIEVAL_PENDING_STORY_ID =
+  "pages-vault-asset-detail--retrieval-pending";
 /** Workbench destinations the detail page links out to for live holdings. */
 const AUCTION_LOT_LIVE_STORY_ID =
   "pages-auction-auction-lot-details--live-auto-leading";
@@ -618,6 +620,35 @@ const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
 const SHOP_NAME = "Hong Kong Grade10 Store";
 const SHOP_ADDRESS = "13 Pak Sha Road, Causeway Bay, Hong Kong";
 
+/** The holding after a retrieval request — pending admin approval, listing and retrieval locked. */
+function withRetrievalRequested(asset: VaultAsset): VaultAsset {
+  return {
+    ...asset,
+    status: "Retrieval Pending",
+    custodyLog: [
+      {
+        label: "Retrieval requested",
+        description: `Awaiting approval, pickup at ${SHOP_NAME}, 24 Oct 2026`,
+        state: "completed",
+      },
+      ...(asset.custodyLog ?? []).map((step) => ({
+        ...step,
+        state: "upcoming" as const,
+      })),
+    ],
+  };
+}
+
+const VAULT_RETRIEVAL_PENDING_ASSET_DETAIL = withRetrievalRequested({
+  ...VAULT_ASSET_DETAILS[0],
+  id: "va-detail-retrieval-pending",
+});
+
+const RETRIEVAL_REQUESTED_TOAST = {
+  title: "Retrieval requested",
+  description: `We’ll confirm your pickup window at ${SHOP_NAME}.`,
+};
+
 const GRADING_VISIT_SERVICE: BookingService = {
   id: "svc_grading",
   slug: "grading",
@@ -933,6 +964,9 @@ function vaultItemRelatedStoryId(asset: VaultAsset): string {
   if (asset.status === "Live Auction") {
     return VAULT_ITEM_DETAIL_LIVE_AUCTION_STORY_ID;
   }
+  if (asset.status === "Retrieval Pending") {
+    return VAULT_ITEM_DETAIL_RETRIEVAL_PENDING_STORY_ID;
+  }
   return VAULT_ITEM_DETAIL_STORY_ID;
 }
 
@@ -995,6 +1029,7 @@ export {
   PORTFOLIO_SUMMARY,
   prepTipsForService,
   REGISTER_CATEGORIES,
+  RETRIEVAL_REQUESTED_TOAST,
   SCAN_IMAGE,
   SERVICE_PICKER_COPY,
   SHOP_ADDRESS,
@@ -1020,6 +1055,7 @@ export {
   VAULT_ITEM_DETAIL_HREF,
   VAULT_ITEM_DETAIL_LISTED_STORY_ID,
   VAULT_ITEM_DETAIL_LIVE_AUCTION_STORY_ID,
+  VAULT_ITEM_DETAIL_RETRIEVAL_PENDING_STORY_ID,
   VAULT_ITEM_DETAIL_STORY_ID,
   VAULT_LISTED_ASSET_DETAIL,
   VAULT_LIVE_AUCTION_ASSET_DETAIL,
@@ -1030,6 +1066,7 @@ export {
   VAULT_PORTFOLIO_HREF,
   VAULT_PORTFOLIO_STORY_ID,
   VAULT_RETRIEVAL_HREF,
+  VAULT_RETRIEVAL_PENDING_ASSET_DETAIL,
   VAULT_RETRIEVAL_STORY_ID,
   VAULT_SITE_HEADER,
   VAULT_SUBMIT_HREF,
@@ -1047,4 +1084,5 @@ export {
   VISIT_TODAY_DATE,
   vaultItemCardStoryId,
   vaultItemRelatedStoryId,
+  withRetrievalRequested,
 };
