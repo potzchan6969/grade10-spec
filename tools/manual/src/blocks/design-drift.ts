@@ -80,6 +80,13 @@ export function setForStory(
     key: parts.slice(i).join(""),
     ahead: i,
   }));
+  // The workbench names the component right after `Blocks`, `Parts` or a
+  // design-system group (`docs/governance/storybook.md`), so the run that
+  // starts there is the name, however deep the title.
+  const named =
+    parts[0] === "design" && parts[1] === "system"
+      ? 3
+      : Math.max(parts.lastIndexOf("blocks"), parts.lastIndexOf("parts")) + 1;
 
   let best: string | undefined;
   for (const name of Object.keys(report.sets)) {
@@ -92,7 +99,7 @@ export function setForStory(
       // name is a word like `Page`, `Card` or `List` — half a design system is
       // called that, and letting one reach across a path it says nothing about
       // is how a set named `Page` badged three unrelated whole-page cards.
-      return run.ahead <= 1 || words(form) >= 2;
+      return run.ahead <= 1 || run.ahead === named || words(form) >= 2;
     });
     if (!hit) continue;
     if (best === undefined || RANK[report.sets[name]] > RANK[report.sets[best]])

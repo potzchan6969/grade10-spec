@@ -446,21 +446,23 @@ export function slackPayload({
   };
 }
 
-async function changedFiles(base, head) {
+export async function changedFiles(base, head, cwd = rootDirectory) {
   const { stdout } = await exec(
     "git",
     ["diff", "--name-status", "--find-renames", `${base}...${head}`],
-    { cwd: rootDirectory, maxBuffer: Infinity },
+    { cwd, maxBuffer: Infinity },
   );
   return stdout
     .split("\n")
     .filter(Boolean)
     .flatMap((line) => {
       const [status, ...paths] = line.split("\t");
+      // A moved story file is the same stories at a new path: neither removed
+      // nor new, so a reorganisation reports what changed, not every story.
       if (status.startsWith("R")) {
         return [
-          { path: paths[0], status: "D" },
-          { path: paths[1], status: "A" },
+          { path: paths[0], status: "R" },
+          { path: paths[1], status: "M" },
         ];
       }
       return [{ path: paths[0], status: status[0] }];
