@@ -1,4 +1,12 @@
 import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
+import {
+  brands,
+  defaultLocaleOf,
+  getMessages,
+  isLocale,
+  localesOf,
+  type Brand,
+} from "@grade10/i18n";
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { type ReactNode, useEffect } from "react";
 import "@grade10/ui/bones/registry";
@@ -58,6 +66,65 @@ const withTheme: Decorator = (Story, context) => {
   return <Story />;
 };
 
+const grade10LocaleNames = getMessages("grade10", "en").locale;
+const grade10LocaleItems = localesOf("grade10").map((value) => ({
+  value,
+  title: grade10LocaleNames[value],
+}));
+
+function resolveStoryBrand(value: unknown): Brand {
+  return typeof value === "string" && Object.hasOwn(brands, value)
+    ? (value as Brand)
+    : "grade10";
+}
+
+function StoryLocaleDocument({
+  enabled,
+  locale,
+  children,
+}: {
+  enabled: boolean;
+  locale?: string;
+  children: ReactNode;
+}) {
+  useEffect(() => {
+    const root = document.documentElement;
+    if (enabled && locale) {
+      root.lang = locale;
+      root.setAttribute("data-ui-verification-locale", locale);
+    } else {
+      root.lang = "en";
+      root.removeAttribute("data-ui-verification-locale");
+    }
+  }, [enabled, locale]);
+
+  return children;
+}
+
+const withLocale: Decorator = (Story, context) => {
+  if (context.parameters.localeAware !== true) {
+    return (
+      <StoryLocaleDocument enabled={false}>
+        <Story />
+      </StoryLocaleDocument>
+    );
+  }
+
+  const brand = resolveStoryBrand(
+    context.parameters.localeBrand ?? context.globals.brand,
+  );
+  const requestedLocale = context.globals.locale;
+  const locale =
+    typeof requestedLocale === "string" && isLocale(brand, requestedLocale)
+      ? requestedLocale
+      : defaultLocaleOf(brand);
+  return (
+    <StoryLocaleDocument enabled locale={locale}>
+      <Story args={{ ...context.args, brand, locale }} />
+    </StoryLocaleDocument>
+  );
+};
+
 const preview: Preview = {
   parameters: {
     /* Matches both package workbenches, so a primitive or compound component
@@ -92,6 +159,8 @@ const preview: Preview = {
   },
   initialGlobals: {
     colorTheme: "grade10",
+    brand: "grade10",
+    locale: "en",
   },
   globalTypes: {
     colorTheme: {
@@ -106,9 +175,22 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+    locale: {
+      description: "Content language for locale-aware stories",
+      toolbar: {
+        title: "Locale",
+        icon: "globe",
+        items: grade10LocaleItems,
+        dynamicTitle: true,
+      },
+    },
   },
   decorators: [
     withTheme,
+    /* Only stories that opt in with `parameters.localeAware: true` receive
+     * the active brand and a locale supported by that brand. Other stories
+     * must opt in and render localized content before claiming locale support. */
+    withLocale,
     (Story, context) => (
       <IconProvider>
         <MotionBoundary paused={context.parameters.pauseMotion === true}>

@@ -14,6 +14,7 @@
   "dependencies": {
     "@grade10/date": "workspace:*",
     "@grade10/design-system": "workspace:*",
+    "@grade10/i18n": "workspace:*",
     "@grade10/test": "workspace:*",
     "@grade10/ui": "workspace:*",
     "@grade10/ui-verification": "workspace:*",

@@ -1,6 +1,160 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Brand, LocaleOf } from "@grade10/i18n";
 
-function UiVerificationDemoShell() {
+type DemoLocale = LocaleOf<"grade10">;
+type DemoCopy = {
+  demoTag: string;
+  primaryNavigation: string;
+  workspaceNavigation: string;
+  overview: string;
+  reports: string;
+  activity: string;
+  workspace: string;
+  projects: string;
+  settings: string;
+  demoWorkspace: string;
+  exampleContent: string;
+  breadcrumb: string;
+  syntheticPageFixture: string;
+  pageIntro: string;
+  last7Days: string;
+  performancePanel: string;
+  performance: string;
+  exampleActivity: string;
+  demoData: string;
+  activeProjects: string;
+  projectChange: string;
+  tasksCompleted: string;
+  tasksChange: string;
+  teamMembers: string;
+  allUpToDate: string;
+  weeklyActivity: string;
+  exampleValues: string;
+  chartDescription: string;
+  days: readonly string[];
+  exampleWorkspace: string;
+  syntheticValues: string;
+  updatedJustNow: string;
+  pageFootnote: string;
+};
+
+const DEMO_COPY = {
+  en: {
+    demoTag: "DEMO",
+    primaryNavigation: "Primary navigation",
+    workspaceNavigation: "Workspace navigation",
+    overview: "Overview",
+    reports: "Reports",
+    activity: "Activity",
+    workspace: "Workspace",
+    projects: "Projects",
+    settings: "Settings",
+    demoWorkspace: "Demo workspace",
+    exampleContent: "Example content for local UI verification runs.",
+    breadcrumb: "Workspace / Overview",
+    syntheticPageFixture: "Synthetic page fixture",
+    pageIntro: "A clear view of the example workspace and recent activity.",
+    last7Days: "Last 7 days",
+    performancePanel: "Workspace performance panel",
+    performance: "Workspace performance",
+    exampleActivity: "Example activity from the last seven days",
+    demoData: "Demo data",
+    activeProjects: "Active projects",
+    projectChange: "+2 this week",
+    tasksCompleted: "Tasks completed",
+    tasksChange: "+12% this week",
+    teamMembers: "Team members",
+    allUpToDate: "All up to date",
+    weeklyActivity: "Weekly activity",
+    exampleValues: "Example values",
+    chartDescription:
+      "Example activity rises through the week and peaks on Friday",
+    days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    exampleWorkspace: "Example workspace",
+    syntheticValues: "All values are synthetic",
+    updatedJustNow: "Updated just now",
+    pageFootnote:
+      "This synthetic fixture demonstrates full-page capture with a focused comparison panel.",
+  },
+  "zh-Hant": {
+    demoTag: "示範",
+    primaryNavigation: "主要導覽",
+    workspaceNavigation: "工作區導覽",
+    overview: "概覽",
+    reports: "報告",
+    activity: "活動",
+    workspace: "工作區",
+    projects: "專案",
+    settings: "設定",
+    demoWorkspace: "示範工作區",
+    exampleContent: "此內容供本機介面驗證使用。",
+    breadcrumb: "工作區 / 概覽",
+    syntheticPageFixture: "合成頁面範例",
+    pageIntro: "清楚呈現範例工作區與近期活動。",
+    last7Days: "最近 7 天",
+    performancePanel: "工作區效能面板",
+    performance: "工作區效能",
+    exampleActivity: "過去七天的範例活動",
+    demoData: "示範資料",
+    activeProjects: "進行中的專案",
+    projectChange: "本週 +2",
+    tasksCompleted: "已完成工作",
+    tasksChange: "本週 +12%",
+    teamMembers: "團隊成員",
+    allUpToDate: "全部已更新",
+    weeklyActivity: "每週活動",
+    exampleValues: "範例數值",
+    chartDescription: "範例活動在一週內逐漸增加，並於星期五達到高峰",
+    days: ["一", "二", "三", "四", "五", "六", "日"],
+    exampleWorkspace: "範例工作區",
+    syntheticValues: "所有數值皆為合成資料",
+    updatedJustNow: "剛剛更新",
+    pageFootnote: "此合成範例展示全頁擷取與聚焦比對面板。",
+  },
+  "zh-Hans": {
+    demoTag: "演示",
+    primaryNavigation: "主导航",
+    workspaceNavigation: "工作区导航",
+    overview: "概览",
+    reports: "报告",
+    activity: "活动",
+    workspace: "工作区",
+    projects: "项目",
+    settings: "设置",
+    demoWorkspace: "演示工作区",
+    exampleContent: "此内容供本地界面验证使用。",
+    breadcrumb: "工作区 / 概览",
+    syntheticPageFixture: "合成页面示例",
+    pageIntro: "清晰展示示例工作区和近期活动。",
+    last7Days: "最近 7 天",
+    performancePanel: "工作区表现面板",
+    performance: "工作区表现",
+    exampleActivity: "过去七天的示例活动",
+    demoData: "演示数据",
+    activeProjects: "活跃项目",
+    projectChange: "本周 +2",
+    tasksCompleted: "已完成任务",
+    tasksChange: "本周 +12%",
+    teamMembers: "团队成员",
+    allUpToDate: "全部已更新",
+    weeklyActivity: "每周活动",
+    exampleValues: "示例数值",
+    chartDescription: "示例活动在一周内逐渐增加，并在周五达到峰值",
+    days: ["一", "二", "三", "四", "五", "六", "日"],
+    exampleWorkspace: "示例工作区",
+    syntheticValues: "所有数值均为合成数据",
+    updatedJustNow: "刚刚更新",
+    pageFootnote: "此合成示例展示整页截图与聚焦比对面板。",
+  },
+} satisfies Record<DemoLocale, DemoCopy>;
+
+function UiVerificationDemoShell({
+  locale = "en",
+}: {
+  brand?: Brand;
+  locale?: DemoLocale;
+}) {
+  const copy = DEMO_COPY[locale];
   return (
     <div className="verification-demo">
       <style>{`
@@ -54,14 +208,14 @@ function UiVerificationDemoShell() {
         <span className="brand">
           <span className="brand-mark">A</span>
           <span>Aster</span>
-          <span className="tag">DEMO</span>
+          <span className="tag">{copy.demoTag}</span>
         </span>
-        <nav className="primary-nav" aria-label="Primary navigation">
+        <nav className="primary-nav" aria-label={copy.primaryNavigation}>
           <span className="active" aria-current="page">
-            Overview
+            {copy.overview}
           </span>
-          <span>Reports</span>
-          <span>Activity</span>
+          <span>{copy.reports}</span>
+          <span>{copy.activity}</span>
         </nav>
         <div className="account">
           <span className="avatar" aria-hidden="true">
@@ -71,73 +225,73 @@ function UiVerificationDemoShell() {
         </div>
       </header>
       <div className="frame">
-        <aside aria-label="Workspace navigation">
-          <p className="sidebar-label">Workspace</p>
+        <aside aria-label={copy.workspaceNavigation}>
+          <p className="sidebar-label">{copy.workspace}</p>
           <span className="sidebar-link active" aria-current="page">
-            Overview
+            {copy.overview}
           </span>
-          <span className="sidebar-link">Projects</span>
-          <span className="sidebar-link">Reports</span>
-          <span className="sidebar-link">Settings</span>
+          <span className="sidebar-link">{copy.projects}</span>
+          <span className="sidebar-link">{copy.reports}</span>
+          <span className="sidebar-link">{copy.settings}</span>
           <div className="sidebar-note">
-            <strong>Demo workspace</strong>
-            Example content for local UI verification runs.
+            <strong>{copy.demoWorkspace}</strong>
+            {copy.exampleContent}
           </div>
         </aside>
         <div className="page-area">
-          <p className="breadcrumb">Workspace / Overview</p>
+          <p className="breadcrumb">{copy.breadcrumb}</p>
           <div className="page-intro">
             <div>
-              <p className="eyebrow">Synthetic page fixture</p>
-              <h1>Overview</h1>
+              <p className="eyebrow">{copy.syntheticPageFixture}</p>
+              <h1>{copy.overview}</h1>
               <p className="intro-copy">
-                A clear view of the example workspace and recent activity.
+                {copy.pageIntro}
               </p>
             </div>
-            <span className="range">Last 7 days</span>
+            <span className="range">{copy.last7Days}</span>
           </div>
-          <main aria-label="Workspace performance panel">
+          <main aria-label={copy.performancePanel}>
             <div className="panel-heading">
               <div>
-                <h2>Workspace performance</h2>
-                <p>Example activity from the last seven days</p>
+                <h2>{copy.performance}</h2>
+                <p>{copy.exampleActivity}</p>
               </div>
-              <span className="demo-label">Demo data</span>
+              <span className="demo-label">{copy.demoData}</span>
             </div>
             <div className="metrics">
               <div className="metric">
-                <span className="metric-label">Active projects</span>
+                <span className="metric-label">{copy.activeProjects}</span>
                 <strong className="metric-value">08</strong>
-                <span className="metric-change">+2 this week</span>
+                <span className="metric-change">{copy.projectChange}</span>
               </div>
               <div className="metric">
-                <span className="metric-label">Tasks completed</span>
+                <span className="metric-label">{copy.tasksCompleted}</span>
                 <strong className="metric-value">124</strong>
-                <span className="metric-change">+12% this week</span>
+                <span className="metric-change">{copy.tasksChange}</span>
               </div>
               <div className="metric">
-                <span className="metric-label">Team members</span>
+                <span className="metric-label">{copy.teamMembers}</span>
                 <strong className="metric-value">06</strong>
-                <span className="metric-change">All up to date</span>
+                <span className="metric-change">{copy.allUpToDate}</span>
               </div>
             </div>
             <div className="chart-heading">
-              <strong>Weekly activity</strong>
-              <span>Example values</span>
+              <strong>{copy.weeklyActivity}</strong>
+              <span>{copy.exampleValues}</span>
             </div>
             <div
               className="chart"
               role="img"
-              aria-label="Example activity rises through the week and peaks on Friday"
+              aria-label={copy.chartDescription}
             >
               {[
-                ["Mon", 38],
-                ["Tue", 55],
-                ["Wed", 47],
-                ["Thu", 72],
-                ["Fri", 88],
-                ["Sat", 62],
-                ["Sun", 45],
+                [copy.days[0], 38],
+                [copy.days[1], 55],
+                [copy.days[2], 47],
+                [copy.days[3], 72],
+                [copy.days[4], 88],
+                [copy.days[5], 62],
+                [copy.days[6], 45],
               ].map(([day, height], index) => (
                 <span className="bar-column" data-day={day} key={day}>
                   <i
@@ -148,13 +302,14 @@ function UiVerificationDemoShell() {
               ))}
             </div>
             <div className="panel-footer">
-              <span>Example workspace - All values are synthetic</span>
-              <span>Updated just now</span>
+              <span>
+                {copy.exampleWorkspace} - {copy.syntheticValues}
+              </span>
+              <span>{copy.updatedJustNow}</span>
             </div>
           </main>
           <p className="page-footnote">
-            This synthetic fixture demonstrates full-page capture with a focused
-            comparison panel.
+            {copy.pageFootnote}
           </p>
         </div>
       </div>
@@ -167,6 +322,8 @@ const meta = {
   component: UiVerificationDemoShell,
   parameters: {
     layout: "fullscreen",
+    localeAware: true,
+    localeBrand: "grade10",
     verification: { caseId: "vc_demo-shell" },
   },
 } satisfies Meta<typeof UiVerificationDemoShell>;

@@ -68,6 +68,9 @@ importers:
       '@grade10/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
+      '@grade10/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@grade10/test':
         specifier: workspace:*
         version: link:../../packages/test
