@@ -1119,6 +1119,7 @@ console has no toasts.
 
 - **GIVEN** a sign-in link asked from the console that is expired, used,
   superseded or invalid
+- **AND** nobody is signed in to the console
 - **WHEN** anyone follows that link
 - **THEN** no session is created
 - **AND** they are on the console's own sign-in page
@@ -1134,6 +1135,18 @@ console has no toasts.
 - **THEN** no session is created
 - **AND** they are on the console's own sign-in page
 - **AND** the page states inline that they cannot sign in
+
+#### Scenario: shared-auth-sign-in-SC-115 - A failed console-asked link leaves a signed-in operator in the console
+**Serves:** shared-auth-sign-in-US-12 - Operator follows a sign-in link and only the console is signed in
+
+- **GIVEN** a sign-in link asked from the console that is expired, used,
+  superseded or invalid
+- **AND** an operator signed in to the console
+- **WHEN** the operator follows that link
+- **THEN** no session is created or changed
+- **AND** they are in the console, signed in as before
+- **AND** the reason is not left on the address
+- **AND** no toast is shown
 
 ### Requirement: A sign-in signs in the surface that asked for it
 
