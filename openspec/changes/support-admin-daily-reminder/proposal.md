@@ -24,14 +24,15 @@ reminder runs.
   the listing.
 - **Still Waiting** - each order that has waited 48 hours in Preparing
   Invoice, Payment Verifying or Preparing Shipment, longest first, every day
-  until it moves on. Overdue and flagged orders stay in Needs you.
+  until it moves on. Overdue orders stay in Needs you; a flagged order is listed
+  by its own wait.
 - **Three columns on Today** - What's New, Still Waiting and Needs you, so an
   operator who closed the dialog finds the lists again. Needs you holds the
   section cards it holds now, in one column; Approvals, Recent and All
-  sections stay below.
+  sections sit below.
 - **Slack message** - at 08:00 Hong Kong time every day, both lists post to one
-  Slack channel with a link on each row. The channel is shared, so it carries
-  every row and no customer names.
+  Slack channel with a link on each row, sent once with no retry and no record.
+  The channel is shared, so it carries every row and no customer names.
 - **By grant** - in the console, an operator sees only the rows whose action
   their grants let them take.
 - **No messages stored** - both lists are read from current listings and
