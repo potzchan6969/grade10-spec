@@ -35,7 +35,7 @@ const SLIDES: FeaturedAuctionsBannerSlide[] = [
       "Front page image for 1997 Pocket Monsters Carddass Checklist, PSA 10",
     href: "https://grade10.com/auction/listings/carddass-checklist",
     currentBidMinor: 8_216_000,
-    currency: "HKD",
+    currency: "USD",
     countdown: { kind: "ends", atMs: CLOSE_MS },
   },
   {
@@ -47,7 +47,7 @@ const SLIDES: FeaturedAuctionsBannerSlide[] = [
       "Front page image for 1997 Pocket Monsters Carddass 000 Bandai Starters, PSA 10",
     href: "https://grade10.com/auction/listings/63261275",
     currentBidMinor: 14_706_400,
-    currency: "HKD",
+    currency: "USD",
     countdown: { kind: "ends", atMs: CLOSE_MS + 86_400_000 },
   },
   {
@@ -59,7 +59,7 @@ const SLIDES: FeaturedAuctionsBannerSlide[] = [
       "Front page image for 2025 Pokemon Simplified Chinese Mew Ex, PSA 10",
     href: "https://grade10.com/auction/listings/mew-upcoming",
     currentBidMinor: 36_505_723,
-    currency: "HKD",
+    currency: "USD",
     countdown: { kind: "opens", atMs: OPEN_MS },
   },
 ];

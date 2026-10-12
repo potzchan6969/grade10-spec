@@ -599,7 +599,7 @@ export const AlertsPending: Story = {
         title: "1999 Base Set Charizard PSA 9",
         state: "leading",
         stateLabel: "Leading",
-        currentBid: "HK$12,800",
+        currentBid: "US$12,800",
         closesAt: "Closes 17 Sep 2026, 21:00 HKT",
         href: "#lot-charizard",
         emailAlertsPending: true,

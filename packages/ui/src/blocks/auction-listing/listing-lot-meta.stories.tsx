@@ -28,7 +28,7 @@ const VAULT_SHIPPING_BODY =
 
 const MARKET_COMPS = {
   title: "Market Price",
-  range: "HK$46,800–HK$171,600",
+  range: "US$46,800–US$171,600",
 } as const;
 
 const COPY = {
