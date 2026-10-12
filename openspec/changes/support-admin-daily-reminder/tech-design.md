@@ -126,7 +126,7 @@ The window test makes a list lie about what it is, and its silent failure is the
 
 **One attempt.** `postDailyReminder(db, deps, clock)`:
 
-1. `deps.slack` is null when `SLACK_BOT_TOKEN` or `SLACK_REMINDER_CHANNEL` is unset (`isSet` from `@grade10/utils/config`). Log a warning that the reminder is not configured, count `not_configured`, return (Q37).
+1. `deps.slack` is null when `SLACK_BOT_TOKEN` or `SLACK_ALERTS_CHANNEL` is unset (`isSet` from `@grade10/utils/config`). Log a warning that the reminder is not configured, count `not_configured`, return (Q37).
 2. Read both lists with the channel audience for `now`. A database error propagates and fails the invocation visibly; there is no retry.
 3. Both empty - count `empty`, post nothing.
 4. Build the message and call the port with the 10 second deadline (`fetchWithDeadline`, `VENDOR_DEADLINE_MS` in `packages/utils/src/deadline.ts`).
@@ -147,7 +147,7 @@ Row text: `<link|CODE> Title` with a title over 60 characters cut to its first 5
 | Name | Where | Declared |
 | --- | --- | --- |
 | `SLACK_BOT_TOKEN` | `.dev.vars` locally, `wrangler secret` per env via `pnpm run secrets` | `AUCTION_SECRETS` in `packages/grade10-auction/backend/src/secrets.ts`, `optional: "an environment with no Slack workspace posts nothing; the daily trigger logs that it is not configured"` |
-| `SLACK_REMINDER_CHANNEL` | the same | the same, same reason; a channel id such as `C0123456789`, never a name |
+| `SLACK_ALERTS_CHANNEL` | the same | the same, same reason; a channel id such as `C0123456789`, never a name |
 
 The apps' `src/secrets.ts` re-exports `AUCTION_SECRETS`, so the app changes nothing. Neither is read by the console. `pnpm run secrets --check` (the deploy workflow) skips optional entries; the daily warning is the signal.
 
@@ -185,7 +185,7 @@ One counter, `auction.reminder.post`, tagged `result` (`sent`, `failed`, `empty`
 
 1. Merge the store change, bump the submodule.
 2. Deploy the worker. With no Slack secret set the 00:00 UTC cron logs that the reminder is not configured and posts nothing. No migration runs.
-3. Set `SLACK_BOT_TOKEN` and `SLACK_REMINDER_CHANNEL` on staging, invite the bot to the channel, and watch the next 08:00 post.
+3. Set `SLACK_BOT_TOKEN` and `SLACK_ALERTS_CHANNEL` on staging, invite the bot to the channel, and watch the next 08:00 post.
 4. Set them on production.
 
 Rollback: unset the secrets to stop posts; the cron line stays harmless. The console lists have no server state to unwind.
