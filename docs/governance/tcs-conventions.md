@@ -47,6 +47,10 @@ The lines below came across from `tcs-rules` r3 when this file was split from it
 ### Walks
 
 - **Walk shape** — `## Walk <n>: <title>`, followed by `**Starting state:**`, optional `**Shared test data:**`, and `### Route`
+- **Concrete starting state** — name the actor, the surface or URL, and the seeded state the tester needs; never write only `Reset the fixture to each case's Pre-conditions` or another instruction to look elsewhere
+- **Bound test data** — put the values or the exact fixture descriptions the route uses in the walk; never write only `Use each case's Test data` or `Type the query from Test data`
+- **Executable waiting point** — when a route waits for a state change, the starting state names the surface where the tester waits; if the spec does not name that surface, mark the gap with `❓` and leave the source step unchanged
+- **Independent short route** — group cases only when they share a starting state and one continuous route; split a walk when a case needs a different state, data setup or page path, and split a route before it becomes a long mixed-case checklist
 - **Numbered route steps** — use a numbered item for each action the tester performs or reads; keep the action separate from the result it produces
 - **Route observations** — nest `-` bullets under the numbered step where the tester records an existing case's observation; end every observation with that case's full human-facing heading id, such as `g10.auction-bidder-suspension.US1-TC1`
 - **Route branches** — use `a.` and `b.` under the preceding numbered step only for actual alternative routes; each branch carries its own nested observations and case references, and a branch never creates a new observation
