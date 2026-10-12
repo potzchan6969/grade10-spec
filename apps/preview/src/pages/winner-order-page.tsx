@@ -213,7 +213,7 @@ function currentStepFor(
 
 /** Order Summary line money: `$` prefix, at least two decimals; `$0` stays bare. */
 function summaryLineAmount(value: string): string {
-  const withDollar = value.replaceAll("HK$", "$");
+  const withDollar = value.replaceAll(/(?:HK|US)\$/g, "$");
   return withDollar.replace(
     /^(−?)\$([\d,]+)(?:\.(\d+))?$/,
     (_match, sign: string, intPart: string, frac: string | undefined) => {
@@ -303,7 +303,7 @@ function paymentMethodFor(
 function summaryLinesFor(
   content: WinnerOrderContent,
 ): WinnerOrderInvoiceLine[] {
-  // Lot card keeps HK$; Order Summary line amounts use `$` with two decimals.
+  // Lot card keeps the lot currency; Order Summary line amounts use `$` with two decimals.
   const winningBidLine = summaryLineAmount(content.winningBid);
   if (content.invoiceLines?.length) {
     return [...content.invoiceLines];

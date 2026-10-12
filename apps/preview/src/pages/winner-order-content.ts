@@ -117,7 +117,7 @@ export type WinnerOrderContent = {
 
 const LOT = {
   lotTitle: "1999 Pokémon Base Set Charizard PSA 9",
-  winningBid: "HK$12,800",
+  winningBid: "US$12,800",
   endedAt: "Ended 17 Sep 2026, 21:30 HKT",
 } as const;
 

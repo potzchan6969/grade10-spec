@@ -18,7 +18,7 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { CrownSimple, Info } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { formatMoney } from "../../lib/format-money";
+import { formatLotMoney } from "../../lib/format-money";
 import { useClockNow } from "./listing-clock";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
@@ -111,7 +111,7 @@ function BidHistoryRowContent({
           tone={recessed ? "secondary" : "primary"}
           weight={recessed ? "regular" : "medium"}
         >
-          {formatMoney(row.amountMinor, currency, { locale })}
+          {formatLotMoney(row.amountMinor, currency, { locale })}
           {row.samePricePriority && copy.samePricePriorityTip ? (
             <Tooltip>
               <TooltipTrigger

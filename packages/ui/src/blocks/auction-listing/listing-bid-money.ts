@@ -1,7 +1,7 @@
 import {
   currencyExponent,
   DEFAULT_LISTING_CURRENCY,
-  formatMoney,
+  formatLotMoney,
   parseMoneyInputToMinor,
   toMinorUnits,
 } from "../../lib/format-money";
@@ -126,9 +126,9 @@ export function formatMinimumMaximumCaption(
   currency: string,
   locale?: string,
 ): string {
-  const amount = formatMoney(floor.floorMinor, currency, { locale });
-  const increment = formatMoney(incrementMinor, currency, { locale });
-  const minimumRaise = formatMoney(MINIMUM_MAXIMUM_RAISE_MINOR, currency, {
+  const amount = formatLotMoney(floor.floorMinor, currency, { locale });
+  const increment = formatLotMoney(incrementMinor, currency, { locale });
+  const minimumRaise = formatLotMoney(MINIMUM_MAXIMUM_RAISE_MINOR, currency, {
     locale,
   });
 

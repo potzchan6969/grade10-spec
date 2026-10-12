@@ -84,27 +84,27 @@ export const Bidding: Story = {
     await userEvent.click(canvas.getByRole("button", { name: /^Set maximum/ }));
 
     await userEvent.click(next);
-    expect(canvas.getAllByText(/HK\$48,000/).length).toBeGreaterThan(0);
+    expect(canvas.getAllByText(/US\$48,000/).length).toBeGreaterThan(0);
 
     await userEvent.click(next);
-    expect(canvas.getAllByText(/HK\$50,500/).length).toBeGreaterThan(0);
+    expect(canvas.getAllByText(/US\$50,500/).length).toBeGreaterThan(0);
     expect(canvas.getByText("2 bids")).toBeVisible();
 
     await userEvent.click(next);
     expect(getStandingText(canvas, "Leading")).toBeVisible();
-    expect(canvas.getAllByText(/HK\$53,000/).length).toBeGreaterThan(0);
+    expect(canvas.getAllByText(/US\$53,000/).length).toBeGreaterThan(0);
     expect(canvas.getByText("You")).toBeVisible();
 
     await userEvent.click(next);
     expect(getStandingText(canvas, "Outbid")).toBeVisible();
-    expect(canvas.getAllByText(/HK\$55,500/).length).toBeGreaterThan(0);
+    expect(canvas.getAllByText(/US\$55,500/).length).toBeGreaterThan(0);
 
     await userEvent.click(next);
     expect(getStandingText(canvas, "Leading")).toBeVisible();
 
     await userEvent.click(next);
     expect(getStandingText(canvas, "Outbid")).toBeVisible();
-    expect(canvas.getAllByText(/HK\$60,500/).length).toBeGreaterThan(0);
+    expect(canvas.getAllByText(/US\$60,500/).length).toBeGreaterThan(0);
     expect(canvas.getByText("6 bids")).toBeVisible();
 
     await userEvent.click(next);

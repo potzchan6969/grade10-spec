@@ -16,7 +16,7 @@ const meta = {
     copy: { viewLot: "View lot", nextAction: "Pay Invoice" },
     title: "1999 Base Set Charizard PSA 9",
     auction: "September Collectors Auction",
-    winningBid: "HK$12,800",
+    winningBid: "US$12,800",
     status: "Pending Payment",
     imageSrc: IMAGE,
     imageAlt: "1999 Base Set Charizard PSA 9",

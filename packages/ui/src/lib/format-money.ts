@@ -95,7 +95,7 @@ function getFormatter(
 }
 
 /** Default listing currency per grade10-auction admin-listing create defaults. */
-export const DEFAULT_LISTING_CURRENCY = "HKD";
+export const DEFAULT_LISTING_CURRENCY = "USD";
 
 export function currencyExponent(code: string): number {
   const exponent = CURRENCY_EXPONENT[code.toUpperCase()];
@@ -166,6 +166,42 @@ export function formatMoney(
   const exponent = currencyExponent(code);
   const major = minor / 10 ** exponent;
   return getFormatter(locale, code, currencyDisplay).format(major);
+}
+
+/**
+ * A lot amount reads `US$` for USD wherever the locale's own symbol is a
+ * bare `$` — auction surfaces disambiguate the dollar. Every other currency
+ * keeps the locale's symbol.
+ */
+export function formatLotMoney(
+  minor: number,
+  code: string,
+  options: FormatMoneyOptions = {},
+): string {
+  const locale = resolveLocale(options.locale);
+  const exponent = currencyExponent(code);
+  const major = minor / 10 ** exponent;
+  const disambiguateUsd = code.toUpperCase() === "USD";
+  return getFormatter(locale, code, "symbol")
+    .formatToParts(major)
+    .map((part) =>
+      part.type === "currency" && disambiguateUsd && part.value === "$"
+        ? "US$"
+        : part.value,
+    )
+    .join("");
+}
+
+/** Input prefix for a lot amount — `US$` where the locale's symbol is `$`. */
+export function formatLotMoneyPrefix(
+  code: string,
+  options: FormatMoneyOptions = {},
+): string {
+  const prefix = formatMoneyPrefix(code, {
+    ...options,
+    currencyDisplay: "symbol",
+  });
+  return code.toUpperCase() === "USD" && prefix === "$" ? "US$" : prefix;
 }
 
 /** Numeric portion only — grouping and fraction digits, no currency symbol. */

@@ -102,7 +102,7 @@ function responseStory(
 /**
  * Finds the element whose own text opens with a scenario's expected text.
  *
- * A standing badge reads `Leading · HK$58,000` — the label names the state and
+ * A standing badge reads `Leading · $58,000` — the label names the state and
  * the amount qualifies it, so an exact match would tie every standing scenario
  * to a fixture's money. Leaves only, so an ancestor carrying the same text is
  * never a second match.

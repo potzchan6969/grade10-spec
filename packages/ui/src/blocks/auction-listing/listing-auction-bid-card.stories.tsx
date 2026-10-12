@@ -312,7 +312,7 @@ export const Outbid: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/Outbid · HK\$95,000/)).toBeInTheDocument();
+    expect(canvas.getByText(/Outbid · US\$95,000/)).toBeInTheDocument();
   },
 };
 
@@ -325,22 +325,22 @@ export const Leading: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/Leading · HK\$58,000/)).toBeInTheDocument();
+    expect(canvas.getByText(/Leading · US\$58,000/)).toBeInTheDocument();
     expect(canvas.getByText("Raise your private maximum")).toBeInTheDocument();
-    expect(canvas.getByText(/Max: HK\$95,000/)).toBeInTheDocument();
+    expect(canvas.getByText(/Max: US\$95,000/)).toBeInTheDocument();
     expect(canvas.queryByText("Min. bid")).not.toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeInTheDocument();
     expect(canvas.getAllByText(/vs max/)).toHaveLength(3);
     expect(canvas.queryByText(/vs current/)).not.toBeInTheDocument();
-    expect(canvas.getByText("HK$97,500")).toBeInTheDocument();
-    expect(canvas.getByText("HK$100,000")).toBeInTheDocument();
-    expect(canvas.getByText("HK$105,000")).toBeInTheDocument();
-    expect(canvas.queryByText("HK$95,001")).not.toBeInTheDocument();
+    expect(canvas.getByText("US$97,500")).toBeInTheDocument();
+    expect(canvas.getByText("US$100,000")).toBeInTheDocument();
+    expect(canvas.getByText("US$105,000")).toBeInTheDocument();
+    expect(canvas.queryByText("US$95,001")).not.toBeInTheDocument();
     expect(canvas.getByPlaceholderText("95,001 min.")).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: /^Raise maximum to HK\$100,000/ }),
+      canvas.getByRole("button", { name: /^Raise maximum to US\$100,000/ }),
     ).toBeInTheDocument();
   },
 };
@@ -427,7 +427,7 @@ export const LiveNoBids: Story = {
     expect(canvas.getByText("Starting bid")).toBeInTheDocument();
     expect(canvas.getAllByText("No bids yet").length).toBeGreaterThan(0);
     expect(canvas.getByText("Min. bid").closest("button")).toHaveTextContent(
-      "HK$48,000",
+      "US$48,000",
     );
   },
 };

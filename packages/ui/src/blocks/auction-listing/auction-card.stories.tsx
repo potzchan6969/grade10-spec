@@ -28,7 +28,7 @@ const meta = {
     },
     name: "1999 Base Set Charizard PSA 9",
     currentBidMinor: 12_800_000,
-    currency: "HKD",
+    currency: "USD",
     priceLabel: "Current bid",
     bidCountLabel: "6 bids",
     when: { kind: "ends", at: CLOSE_MS },

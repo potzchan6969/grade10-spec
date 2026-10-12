@@ -35,7 +35,7 @@ const STORY_NOW_MS = Date.now();
 const SINGLE_MAXIMUM: ListingUserMaximumHistoryRow[] = [
   {
     id: "max-1",
-    amountLabel: "HK$5,200",
+    amountLabel: "US$5,200",
     acceptedAtMs: STORY_NOW_MS - 5 * 60_000,
   },
 ];
@@ -43,17 +43,17 @@ const SINGLE_MAXIMUM: ListingUserMaximumHistoryRow[] = [
 const RAISED_MAXIMUMS: ListingUserMaximumHistoryRow[] = [
   {
     id: "max-3",
-    amountLabel: "HK$6,000",
+    amountLabel: "US$6,000",
     acceptedAtMs: STORY_NOW_MS - 8 * 60_000,
   },
   {
     id: "max-2",
-    amountLabel: "HK$5,500",
+    amountLabel: "US$5,500",
     acceptedAtMs: STORY_NOW_MS - 45 * 60_000,
   },
   {
     id: "max-1",
-    amountLabel: "HK$5,200",
+    amountLabel: "US$5,200",
     acceptedAtMs: STORY_NOW_MS - 3 * 60 * 60_000,
   },
 ];
@@ -61,17 +61,17 @@ const RAISED_MAXIMUMS: ListingUserMaximumHistoryRow[] = [
 const SEVERAL_BIDS: ListingUserBidHistoryRow[] = [
   {
     id: "bid-1",
-    amountLabel: "HK$4,800",
+    amountLabel: "US$4,800",
     acceptedAtMs: STORY_NOW_MS - 2 * 60_000,
   },
   {
     id: "bid-2",
-    amountLabel: "HK$4,550",
+    amountLabel: "US$4,550",
     acceptedAtMs: STORY_NOW_MS - 18 * 60_000,
   },
   {
     id: "bid-3",
-    amountLabel: "HK$4,300",
+    amountLabel: "US$4,300",
     acceptedAtMs: STORY_NOW_MS - 60 * 60_000,
   },
 ];
@@ -131,7 +131,7 @@ export const OneMaxSeveralBids: Story = {
         selected: true,
       }),
     ).toBeVisible();
-    expect(within(dialog).getByText("HK$4,800")).toBeVisible();
+    expect(within(dialog).getByText("US$4,800")).toBeVisible();
     expect(within(dialog).queryByText("Type")).not.toBeInTheDocument();
   },
 };
@@ -158,9 +158,9 @@ export const MaxRaisedOverTime: Story = {
     await userEvent.click(
       within(dialog).getByRole("tab", { name: "Your maximums" }),
     );
-    expect(within(dialog).getByText("HK$6,000")).toBeVisible();
-    expect(within(dialog).getByText("HK$5,500")).toBeVisible();
-    expect(within(dialog).getByText("HK$5,200")).toBeVisible();
+    expect(within(dialog).getByText("US$6,000")).toBeVisible();
+    expect(within(dialog).getByText("US$5,500")).toBeVisible();
+    expect(within(dialog).getByText("US$5,200")).toBeVisible();
     expect(within(dialog).queryByText("Raised")).not.toBeInTheDocument();
     expect(within(dialog).queryByText("Set")).not.toBeInTheDocument();
   },
@@ -195,7 +195,7 @@ export const EmptyBidsFrameless: Story = {
     await userEvent.click(
       within(dialog).getByRole("tab", { name: "Your maximums" }),
     );
-    expect(within(dialog).getByText("HK$5,200")).toBeVisible();
+    expect(within(dialog).getByText("US$5,200")).toBeVisible();
     const shell = dialog.querySelector(
       '[data-slot="listing-user-bid-history-empty-bids"]',
     );
@@ -219,7 +219,7 @@ export const FollowsTheClock: Story = {
     bidRows: [
       {
         id: "bid-clock",
-        amountLabel: "HK$4,800",
+        amountLabel: "US$4,800",
         acceptedAtMs: CLOCK_START_MS - 2 * 60_000,
       },
     ],

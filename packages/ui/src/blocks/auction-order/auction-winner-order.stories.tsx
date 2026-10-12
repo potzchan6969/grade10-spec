@@ -51,7 +51,7 @@ const meta = {
     progress: { current: "payment", steps: STEPS },
     lot: {
       title: "1999 Pokémon Base Set Charizard PSA 9",
-      winningBid: "HK$12,800",
+      winningBid: "US$12,800",
       imageSrc: IMAGE,
       href: "#lot",
       ariaLabel: "1999 Pokémon Base Set Charizard PSA 9 — open lot details",
