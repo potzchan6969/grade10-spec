@@ -32,7 +32,7 @@ distinct at the same address
 ## Guest Order Link
 
 A guest order opens at `grade10.com/orders/<order-id>`, from the link in
-Shopify's order confirmation email and on its thank-you page. Grade10 sends
+Shopify's order confirmation email or Continue on its thank-you page. Grade10 sends
 no email of its own. The link carries its secret after `#`, so no server or
 log sees it.
 
@@ -43,9 +43,9 @@ log sees it.
 - **Wrong link** - an unknown order, a member's order or a wrong secret all
   show not-found
 - **Not indexed** - search engines are told not to index the address
-- **Where the link comes from** - the order carries it for Shopify to show.
-  ❓ Shopify shows it nowhere yet: the confirmation email template and the
-  thank-you extension are set in Shopify
+- **Where the link comes from** - the order carries it, and the View order
+  button in Shopify's order emails opens it. Thank you's Continue reaches it
+  through [Back From Checkout](#back-from-checkout)
 
 ## Back From Checkout
 
