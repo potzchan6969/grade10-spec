@@ -84,12 +84,12 @@ function UiVerificationDemoShell() {
             Example content for local UI verification runs.
           </div>
         </aside>
-        <section className="page-area" aria-labelledby="demo-title">
+        <div className="page-area">
           <p className="breadcrumb">Workspace / Overview</p>
           <div className="page-intro">
             <div>
               <p className="eyebrow">Synthetic page fixture</p>
-              <h1 id="demo-title">Overview</h1>
+              <h1>Overview</h1>
               <p className="intro-copy">
                 A clear view of the example workspace and recent activity.
               </p>
@@ -156,7 +156,7 @@ function UiVerificationDemoShell() {
             This synthetic fixture demonstrates full-page capture with a focused
             comparison panel.
           </p>
-        </section>
+        </div>
       </div>
     </div>
   );
