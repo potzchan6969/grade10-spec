@@ -11,7 +11,13 @@ test("planning text lands on main and owes the planning checks", () => {
     "openspec/changes/add-x/proposal.md",
     "docs/prds/products/grade10/x.md",
   ];
-  assert.deepEqual(ids(paths), ["biome", "changes", "test-cases", "manual"]);
+  assert.deepEqual(ids(paths), [
+    "biome",
+    "changes",
+    "test-cases",
+    "manual",
+    "stories",
+  ]);
 });
 
 test("a status-only push validates just the changes it moved", () => {
@@ -26,7 +32,7 @@ test("a status-only push validates just the changes it moved", () => {
 test("an archived change's status file is not a status-only push", () => {
   assert.deepEqual(
     ids(["openspec/changes/archive/2026-10-01-add-x/tasks.md"]),
-    ["biome", "changes", "test-cases", "manual"],
+    ["biome", "changes", "test-cases", "manual", "stories"],
   );
 });
 
@@ -41,12 +47,13 @@ test("a shared surface owes the fast checks and the agent parity check", () => {
     "changes",
     "test-cases",
     "manual",
+    "stories",
     "parity",
   ]);
 });
 
 test("a durable spec, a schema and root config owe the checks their paths carry", () => {
-  const planning = ["biome", "changes", "test-cases", "manual"];
+  const planning = ["biome", "changes", "test-cases", "manual", "stories"];
   assert.deepEqual(ids(["openspec/specs/grade10/a/b/spec.md"]), planning);
   assert.deepEqual(
     ids(["openspec/schemas/grade10-planning/schema.yaml"]),
@@ -68,7 +75,24 @@ test("anything outside planning text owes at least the formatter, a new path inc
 
 test("every page, reference and governance doc owes the planning checks", () => {
   const paths = ["docs/references/a.md", "docs/governance/b.md"];
-  assert.deepEqual(ids(paths), ["biome", "changes", "test-cases", "manual"]);
+  assert.deepEqual(ids(paths), [
+    "biome",
+    "changes",
+    "test-cases",
+    "manual",
+    "stories",
+  ]);
+});
+
+test("a story or a block owes the story check", () => {
+  assert.deepEqual(
+    ids(["apps/preview/src/pages/store/cart/cart.stories.tsx"]),
+    ["biome", "stories"],
+  );
+  assert.deepEqual(ids(["packages/ui/src/blocks/store-cart/cart-item.tsx"]), [
+    "biome",
+    "stories",
+  ]);
 });
 
 test("changesOf names each active change once", () => {
