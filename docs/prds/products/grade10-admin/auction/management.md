@@ -79,11 +79,10 @@ the card is in the winner's hands. The collector's half is
   has passed still saves
 - **Publish still needs** — a created listing with a Publish at names under
   it each field its publish still needs
-- **Call off** — any time before the close, bids or not; the stock is
-  released, the listing leaves browse and search, and its canonical
-  slug remains reserved and directly accessible. Its listing code stays
-  reserved and never resolves as a route; explicit hard deletion is outside
-  this rule
+- 🚧 **Call off** - any time before the close, bids or not; the stock is
+  released and the listing leaves browse and search. Its former address is
+  available for another listing. Its listing code stays reserved and never
+  resolves as a route; explicit hard deletion is outside this rule
 - **Unsold close** — a listing that closes with no winner releases its
   stock hold at that moment, and the units are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and
@@ -541,6 +540,7 @@ settings.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Called-off address reuse | 🚧 In flight | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |

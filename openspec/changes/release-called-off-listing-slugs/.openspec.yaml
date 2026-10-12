@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-10-12
+hands:
+  pm: "@htonyl"
+awaiting:
+  specs: "Frozen anchor outlines are ready; planning-dev owes independent technical design, scenarios and QA reconciliation."
