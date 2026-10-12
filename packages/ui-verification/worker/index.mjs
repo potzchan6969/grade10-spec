@@ -293,6 +293,7 @@ export function createWorker({ fetcher = globalThis.fetch } = {}) {
       const handler = createArchiveHandler(archive, {
         authorize: createRemoteAuthorizer(env, fetcher),
         allowedOrigins: allowedOriginsFromEnv(env),
+        storage: { kind: "r2", location: "Storybook archive" },
       });
       return handler(request);
     },

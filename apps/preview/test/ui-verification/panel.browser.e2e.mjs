@@ -94,9 +94,20 @@ async function screenshot(browser, viewport, text, background) {
   }
 }
 
-async function publishRun(archive, browser, { runId, createdAt, storyId }) {
-  const appCommit = "a".repeat(40);
-  const referenceCommit = "b".repeat(40);
+async function publishRun(
+  archive,
+  browser,
+  {
+    runId,
+    createdAt,
+    storyId,
+    appCommit = "a".repeat(40),
+    referenceCommit = "b".repeat(40),
+    appRef = "fixture-app-checkpoint",
+    referenceRef = "fixture-reference-checkpoint",
+    includeReferenceRegion = true,
+  },
+) {
   const catalogue = DECLARATIONS.map((declaration) => ({
     ...declaration,
     storyId,
@@ -135,6 +146,12 @@ async function publishRun(archive, browser, { runId, createdAt, storyId }) {
           capturedAt: createdAt,
         },
         site,
+        siteRegion: {
+          x: 12,
+          y: 16,
+          width: Math.floor(viewport.width / 2),
+          height: Math.floor(viewport.height / 2),
+        },
       };
       if (profileId === declaration.scoreProfile) {
         const referenceBytes = await screenshot(
@@ -149,6 +166,14 @@ async function publishRun(archive, browser, { runId, createdAt, storyId }) {
           ...viewport,
         };
         capture.reference = reference;
+        if (includeReferenceRegion) {
+          capture.referenceRegion = {
+            x: 120,
+            y: 80,
+            width: viewport.width - 240,
+            height: viewport.height - 160,
+          };
+        }
         objects.push({ key: reference.key, bytes: referenceBytes });
       }
       captures.push(capture);
@@ -160,9 +185,9 @@ async function publishRun(archive, browser, { runId, createdAt, storyId }) {
     runId,
     createdAt,
     checkpoint: {
-      app: { ref: "fixture-app-checkpoint", commit: appCommit },
+      app: { ref: appRef, commit: appCommit },
       reference: {
-        ref: "fixture-reference-checkpoint",
+        ref: referenceRef,
         commit: referenceCommit,
       },
     },
@@ -479,7 +504,7 @@ async function startWorkbenchServer(root, archive) {
   };
 }
 
-test("the central workbench connects on cold load and reviews story history by case and target", {
+test("the central workbench uses its local archive and reviews versioned story history", {
   timeout: 180_000,
 }, async (t) => {
   const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-preview-"));
@@ -497,11 +522,15 @@ test("the central workbench connects on cold load and reviews story history by c
     runId: "preview-history-0001",
     createdAt: "2026-10-08T10:01:00.000Z",
     storyId: "pages-not-found--renamed",
+    appRef: "app-release-old",
+    referenceRef: "reference-release-old",
   });
   await publishRun(archive, browser, {
     runId: "preview-history-0002",
     createdAt: "2026-10-09T10:01:00.000Z",
     storyId: STORY_ID,
+    appRef: "app-release-new",
+    referenceRef: "reference-release-new",
   });
   await publishAssessment(archive, oldRun, DECLARATIONS[0]);
   server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
@@ -525,11 +554,18 @@ test("the central workbench connects on cold load and reviews story history by c
     .getByRole("combobox", { name: "Verification target" })
     .waitFor({ state: "visible" });
 
-  const endpoint = page.getByLabel("Archive endpoint");
-  assert.equal(await endpoint.inputValue(), server.origin);
+  assert.equal(await page.getByLabel("Archive endpoint").count(), 0);
+  assert.equal(await page.getByRole("button", { name: "Connect" }).count(), 0);
+  await page
+    .getByText(`Review saves to local archive: ${archiveRoot}`, { exact: true })
+    .waitFor();
+  assert.ok(
+    server.apiRequests.some((entry) => entry === "GET /api/archive-info"),
+    "the panel should discover its archive destination on the workbench origin",
+  );
   assert.ok(
     server.apiRequests.some((entry) => entry.startsWith("GET /api/runs?")),
-    "the panel should request archive runs without pressing Connect",
+    "the panel should request archive runs on cold load",
   );
   assert.equal(
     requestOrigins.has("http://localhost:4466"),
@@ -546,8 +582,25 @@ test("the central workbench connects on cold load and reviews story history by c
   assert.equal(await targetSelect.locator('option[value=""]').count(), 1);
   assert.equal(await targetSelect.locator('option:not([value=""])').count(), 2);
 
+  const versionSelect = page.getByRole("combobox", {
+    name: "Selected version",
+  });
+  await versionSelect.waitFor();
+  assert.equal(
+    await versionSelect.locator("option").count(),
+    1,
+    "different tag labels for the same commit pair should remain one version",
+  );
+
   const runSelect = page.getByRole("combobox", { name: "Archived run" });
   await runSelect.waitFor({ state: "visible" });
+  assert.deepEqual(
+    await runSelect
+      .locator("option")
+      .evaluateAll((options) => options.map((option) => option.value)),
+    ["preview-history-0002", "preview-history-0001"],
+    "repeat runs for the selected commit pair should be newest first",
+  );
   await runSelect.selectOption("preview-history-0001");
   await page.getByText("Model decision: shadow", { exact: true }).waitFor();
   await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
@@ -560,14 +613,61 @@ test("the central workbench connects on cold load and reviews story history by c
     ]),
     [1440, 900],
   );
+  assert.equal(
+    await siteImage
+      .locator(
+        "xpath=ancestor::div[contains(@class, 'verification-image-frame')]",
+      )
+      .getAttribute("style"),
+    "aspect-ratio: 1440 / 900;",
+    "a recorded site region must not crop the full viewport image",
+  );
+  const referenceImage = page.getByRole("img", {
+    name: "Reference capture region",
+  });
+  await referenceImage.waitFor();
+  assert.equal(
+    await referenceImage
+      .locator(
+        "xpath=ancestor::div[contains(@class, 'verification-image-frame')]",
+      )
+      .getAttribute("style"),
+    "aspect-ratio: 1200 / 740;",
+    "the reference image should display the recorded crop region",
+  );
+  assert.equal(
+    await page
+      .getByRole("link", { name: /Download original Reference PNG/ })
+      .getAttribute("download"),
+    "reference.png",
+    "the full original reference PNG should remain downloadable",
+  );
   await page.getByRole("tab", { name: "Tablet 768x1024" }).click();
   await page
-    .getByText("No model assessment recorded", { exact: true })
+    .getByText(
+      "The selected target is scored at the desktop profile. No assessment is expected for tablet.",
+      { exact: true },
+    )
     .waitFor();
+  assert.deepEqual(
+    await page
+      .getByRole("img", { name: "Site full viewport" })
+      .evaluate((image) => [image.naturalWidth, image.naturalHeight]),
+    [768, 1024],
+  );
   await page.getByRole("tab", { name: "Mobile 390x844" }).click();
   await page
-    .getByText("No model assessment recorded", { exact: true })
+    .getByText(
+      "The selected target is scored at the desktop profile. No assessment is expected for mobile.",
+      { exact: true },
+    )
     .waitFor();
+  assert.deepEqual(
+    await page
+      .getByRole("img", { name: "Site full viewport" })
+      .evaluate((image) => [image.naturalWidth, image.naturalHeight]),
+    [390, 844],
+  );
 
   await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
   await page.getByLabel("Review decision").selectOption("approved");
@@ -747,6 +847,98 @@ test("a shared story without a verification parameter finds its reference case a
     .selectOption("reference-story-history-0001");
   await page
     .getByText("components-breadcrumbs--previous-name", { exact: true })
+    .waitFor();
+  await page
+    .getByText(
+      "No reference region was recorded; showing the full reference image.",
+      { exact: true },
+    )
+    .waitFor();
+  await page.close();
+});
+
+test("an explicit historical story stays selected while Storybook navigation changes", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(
+    join(tmpdir(), "ui-verification-history-selection-"),
+  );
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishReferenceStoryRun(archive, browser);
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: "Verification" }).click();
+  await page.getByRole("button", { name: "All recordings" }).click();
+
+  const versionSelect = page.getByRole("combobox", {
+    name: "Selected version",
+  });
+  await versionSelect.selectOption(`${"f".repeat(40)}::${"1".repeat(40)}`);
+  const storyChoice = page.getByRole("button", {
+    name: /Components\/Breadcrumbs\/Previous name/,
+  });
+  assert.equal(
+    await page.locator(".verification-story-choice").count(),
+    1,
+    "the story list should contain only entries from the selected version",
+  );
+  await storyChoice.click();
+  assert.equal(await storyChoice.getAttribute("aria-pressed"), "true");
+  await page
+    .getByText(
+      "Recorded story unavailable; the reference story is available in this Storybook.",
+      { exact: true },
+    )
+    .waitFor();
+  await page.waitForFunction(() => {
+    const heading = [...document.querySelectorAll("h3")].find(
+      (candidate) =>
+        candidate.textContent?.trim() === "Current Storybook story",
+    );
+    return (
+      heading?.nextElementSibling?.textContent?.trim() ===
+      "components-breadcrumbs--default"
+    );
+  });
+  await page
+    .getByText("reference-story-history-0001", { exact: true })
+    .waitFor();
+
+  const componentSearch = page.getByPlaceholder("Find components");
+  await componentSearch.fill("Not Found Default page");
+  await page
+    .locator('.search-result-item[data-id="pages-not-found--default"]')
+    .click();
+  await page.waitForFunction(() => {
+    const heading = [...document.querySelectorAll("h3")].find(
+      (candidate) =>
+        candidate.textContent?.trim() === "Current Storybook story",
+    );
+    return (
+      heading?.nextElementSibling?.textContent?.trim() ===
+      "pages-not-found--default"
+    );
+  });
+  assert.equal(
+    await storyChoice.getAttribute("aria-pressed"),
+    "true",
+    "live verification parameters must not replace an explicit historical selection",
+  );
+  await page
+    .getByText("reference-story-history-0001", { exact: true })
     .waitFor();
   await page.close();
 });

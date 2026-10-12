@@ -9,9 +9,14 @@ import type { FormEvent } from "react";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { useStorybookApi, useStorybookState } from "storybook/manager-api";
-import type { ArchiveRecord, VerificationIdentity } from "./archive-client";
+import type {
+  ArchiveRecord,
+  ArchiveStorage,
+  VerificationIdentity,
+} from "./archive-client";
 import {
   createReview,
+  getArchiveInfo,
   getImageObject,
   getRun,
   identityKey,
@@ -19,7 +24,6 @@ import {
   listCalibrations,
   listRecords,
   listRuns,
-  normalizeArchiveBase,
   sameIdentity,
   verificationIdentity,
 } from "./archive-client";
@@ -29,7 +33,7 @@ import "./verification-panel.css";
 // The Storybook manager builder compiles this TSX with React.createElement.
 void React;
 
-const DEFAULT_ARCHIVE_URL =
+const ARCHIVE_BASE =
   typeof window === "undefined" ? "" : window.location.origin;
 const PROFILE_TABS: readonly { id: ProfileId; label: string; size: string }[] =
   [
@@ -43,8 +47,19 @@ interface IdentityOption {
   label: string;
   status: string;
   storyId: string;
+  referenceStoryId: string;
   storyIds: string[];
   createdAt: string;
+}
+
+interface VersionOption {
+  key: string;
+  appRef: string;
+  appCommit: string;
+  referenceRef: string;
+  referenceCommit: string;
+  runs: VerificationManifest[];
+  latestCreatedAt: string;
 }
 
 interface ImageUrls {
@@ -78,16 +93,15 @@ function identityOptions(runs: VerificationManifest[]): IdentityOption[] {
       if (!identity) continue;
       const key = identityKey(identity);
       const prior = latest.get(key);
+      const referenceStoryId =
+        isRecord(entry.reference) && typeof entry.reference.storyId === "string"
+          ? entry.reference.storyId
+          : "";
       const storyIds = [
         ...new Set(
-          [
-            ...(prior?.storyIds ?? []),
-            entry.storyId,
-            isRecord(entry.reference) &&
-            typeof entry.reference.storyId === "string"
-              ? entry.reference.storyId
-              : "",
-          ].filter(Boolean),
+          [...(prior?.storyIds ?? []), entry.storyId, referenceStoryId].filter(
+            Boolean,
+          ),
         ),
       ];
       if (prior && prior.createdAt >= run.createdAt) {
@@ -99,6 +113,7 @@ function identityOptions(runs: VerificationManifest[]): IdentityOption[] {
         label: entry.label,
         status: entry.status,
         storyId: entry.storyId,
+        referenceStoryId,
         storyIds,
         createdAt: run.createdAt,
       });
@@ -107,6 +122,52 @@ function identityOptions(runs: VerificationManifest[]): IdentityOption[] {
   return [...latest.values()].sort((left, right) =>
     left.label.localeCompare(right.label),
   );
+}
+
+function versionKeyOf(run: VerificationManifest): string {
+  return JSON.stringify([
+    run.checkpoint.app.commit,
+    run.checkpoint.reference.commit,
+  ]);
+}
+
+function versionOptions(runs: VerificationManifest[]): VersionOption[] {
+  const versions = new Map<string, VersionOption>();
+  const newestFirst = [...runs].sort((left, right) =>
+    right.createdAt.localeCompare(left.createdAt),
+  );
+  for (const run of newestFirst) {
+    const key = versionKeyOf(run);
+    const prior = versions.get(key);
+    if (prior) {
+      prior.runs.push(run);
+      continue;
+    }
+    versions.set(key, {
+      key,
+      appRef: run.checkpoint.app.ref,
+      appCommit: run.checkpoint.app.commit,
+      referenceRef: run.checkpoint.reference.ref,
+      referenceCommit: run.checkpoint.reference.commit,
+      runs: [run],
+      latestCreatedAt: run.createdAt,
+    });
+  }
+  return [...versions.values()];
+}
+
+function versionLabel(version: VersionOption): string {
+  return `${version.appRef} ${version.appCommit.slice(0, 12)} / ${version.referenceRef} ${version.referenceCommit.slice(0, 12)} · ${version.runs.length} run${version.runs.length === 1 ? "" : "s"}`;
+}
+
+function runHasIdentity(
+  run: VerificationManifest,
+  identity: VerificationIdentity,
+): boolean {
+  return run.catalogue.some((entry) => {
+    const entryId = entryIdentity(entry);
+    return entryId !== null && sameIdentity(entryId, identity);
+  });
 }
 
 async function listAllRuns(
@@ -165,8 +226,32 @@ function latestRecord(values: ArchiveRecord[]): ArchiveRecord | null {
   );
 }
 
-function automaticStatus(value: ArchiveRecord | null): string {
-  if (!value) return "No model assessment recorded";
+function isSyntheticShadowAssessment(value: ArchiveRecord | null): boolean {
+  return Boolean(
+    value?.decision === "shadow" &&
+      (value.synthetic === true ||
+        value.source === "synthetic" ||
+        value.rubricVersion === "demo-only" ||
+        (isRecord(value.scorer) &&
+          value.scorer.id === "synthetic-demo" &&
+          value.scorer.model === "fixture-only")),
+  );
+}
+
+function automaticStatus(
+  value: ArchiveRecord | null,
+  scoringProfile: ProfileId | undefined,
+  selectedProfile: ProfileId,
+): string {
+  if (!value) {
+    if (scoringProfile && selectedProfile !== scoringProfile) {
+      return `The selected target is scored at the ${scoringProfile} profile. No assessment is expected for ${selectedProfile}.`;
+    }
+    return `No external model assessment is recorded for the ${selectedProfile} scoring profile in this run.`;
+  }
+  if (isSyntheticShadowAssessment(value)) {
+    return "Synthetic shadow assessment (not produced by an external model)";
+  }
   if (typeof value.decision === "string") {
     return `Model decision: ${value.decision}`;
   }
@@ -450,13 +535,21 @@ function ImageEvidence({
   title,
   artifact,
   imageUrl,
-  region,
+  cropRegion,
 }: {
   title: string;
   artifact: ImageArtifact;
   imageUrl: string | undefined;
-  region: ImageRegion | undefined;
+  cropRegion?: ImageRegion;
 }) {
+  const imageStyle = cropRegion
+    ? {
+        left: `${(-cropRegion.x / cropRegion.width) * 100}%`,
+        top: `${(-cropRegion.y / cropRegion.height) * 100}%`,
+        width: `${(artifact.width / cropRegion.width) * 100}%`,
+        height: `${(artifact.height / cropRegion.height) * 100}%`,
+      }
+    : undefined;
   return (
     <section
       className="verification-image-card"
@@ -469,34 +562,37 @@ function ImageEvidence({
         </span>
       </div>
       <div
-        className="verification-image-frame"
-        style={{ aspectRatio: `${artifact.width} / ${artifact.height}` }}
+        className={`verification-image-frame${cropRegion ? " verification-image-frame--crop" : ""}`}
+        style={{
+          aspectRatio: cropRegion
+            ? `${cropRegion.width} / ${cropRegion.height}`
+            : `${artifact.width} / ${artifact.height}`,
+        }}
       >
         {imageUrl ? (
-          <img src={imageUrl} alt={`${title} full viewport`} />
+          <img
+            src={imageUrl}
+            alt={
+              cropRegion ? `${title} capture region` : `${title} full viewport`
+            }
+            style={imageStyle}
+          />
         ) : (
           <p role="status">Loading original PNG…</p>
         )}
-        {imageUrl && region ? (
-          <span
-            className="verification-image-region"
-            aria-hidden="true"
-            style={{
-              left: `${(region.x / artifact.width) * 100}%`,
-              top: `${(region.y / artifact.height) * 100}%`,
-              width: `${(region.width / artifact.width) * 100}%`,
-              height: `${(region.height / artifact.height) * 100}%`,
-            }}
-          />
-        ) : null}
       </div>
       {imageUrl ? (
-        <a href={imageUrl} target="_blank" rel="noreferrer">
-          Open original PNG · SHA-256 {artifact.sha256}
+        <a href={imageUrl} download={`${title.toLocaleLowerCase()}.png`}>
+          Download original {title} PNG · SHA-256 {artifact.sha256}
         </a>
       ) : (
         <span>SHA-256 {artifact.sha256}</span>
       )}
+      {title === "Reference" && !cropRegion ? (
+        <p className="verification-notice">
+          No reference region was recorded; showing the full reference image.
+        </p>
+      ) : null}
     </section>
   );
 }
@@ -514,11 +610,16 @@ export function VerificationPanel({ active }: { active: boolean }) {
     [verificationParameter],
   );
 
-  const [archiveDraft, setArchiveDraft] = useState(DEFAULT_ARCHIVE_URL);
-  const [archiveBase, setArchiveBase] = useState(DEFAULT_ARCHIVE_URL);
-  const [browseAll, setBrowseAll] = useState(false);
+  const archiveBase = ARCHIVE_BASE;
+  const [archiveStorage, setArchiveStorage] = useState<ArchiveStorage | null>(
+    null,
+  );
+  const [archiveInfoError, setArchiveInfoError] = useState("");
+  const [loadingArchiveInfo, setLoadingArchiveInfo] = useState(false);
+  const [storyListOpen, setStoryListOpen] = useState(false);
   const [identitySearch, setIdentitySearch] = useState("");
   const [selectedIdentityKey, setSelectedIdentityKey] = useState("");
+  const [selectedVersionKey, setSelectedVersionKey] = useState("");
   const [selectedCurrentCaseId, setSelectedCurrentCaseId] = useState("");
   const [selectedCurrentIdentityKey, setSelectedCurrentIdentityKey] =
     useState("");
@@ -547,24 +648,6 @@ export function VerificationPanel({ active }: { active: boolean }) {
   >("approved");
   const [reviewComment, setReviewComment] = useState("");
   const identityChoices = useMemo(() => identityOptions(runs), [runs]);
-  const filteredIdentityChoices = useMemo(() => {
-    const query = identitySearch.trim().toLocaleLowerCase();
-    if (!query) return identityChoices;
-    return identityChoices.filter((choice) =>
-      [
-        choice.label,
-        choice.identity.caseId,
-        choice.identity.targetId,
-        choice.identity.capturePointId,
-        choice.storyId,
-        ...choice.storyIds,
-        choice.status,
-      ]
-        .join(" ")
-        .toLocaleLowerCase()
-        .includes(query),
-    );
-  }, [identityChoices, identitySearch]);
   const currentIdentityChoices = useMemo(() => {
     if (caseIdHint) {
       const choices = identityChoices.filter(
@@ -581,6 +664,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
           label: currentStoryId || exactIdentityHint.caseId,
           status: "current, not archived",
           storyId: currentStoryId || "Current story",
+          referenceStoryId: "",
           storyIds: [currentStoryId || "Current story"],
           createdAt: "",
         });
@@ -629,36 +713,68 @@ export function VerificationPanel({ active }: { active: boolean }) {
     currentTargetChoices.find(
       (choice) => identityKey(choice.identity) === effectiveCurrentIdentityKey,
     )?.identity ?? null;
-  const effectiveIdentityKey = browseAll
-    ? filteredIdentityChoices.some(
+  const currentVersionRuns = currentIdentity
+    ? runs.filter((run) => runHasIdentity(run, currentIdentity))
+    : runs;
+  const availableVersions = useMemo(
+    () => versionOptions(storyListOpen ? runs : currentVersionRuns),
+    [currentVersionRuns, runs, storyListOpen],
+  );
+  const effectiveVersionKey = availableVersions.some(
+    (version) => version.key === selectedVersionKey,
+  )
+    ? selectedVersionKey
+    : (availableVersions[0]?.key ?? "");
+  const selectedVersion =
+    availableVersions.find((version) => version.key === effectiveVersionKey) ??
+    null;
+  const versionIdentityChoices = useMemo(
+    () => identityOptions(selectedVersion?.runs ?? []),
+    [selectedVersion],
+  );
+  const filteredVersionIdentityChoices = useMemo(() => {
+    const query = identitySearch.trim().toLocaleLowerCase();
+    if (!query) return versionIdentityChoices;
+    return versionIdentityChoices.filter((choice) =>
+      [
+        choice.label,
+        choice.identity.caseId,
+        choice.identity.targetId,
+        choice.identity.capturePointId,
+        choice.storyId,
+        ...choice.storyIds,
+        choice.status,
+      ]
+        .join(" ")
+        .toLocaleLowerCase()
+        .includes(query),
+    );
+  }, [identitySearch, versionIdentityChoices]);
+  const effectiveIdentityKey = storyListOpen
+    ? versionIdentityChoices.some(
         (choice) => identityKey(choice.identity) === selectedIdentityKey,
       )
       ? selectedIdentityKey
       : ""
     : effectiveCurrentIdentityKey;
-  const selectedIdentity = browseAll
-    ? (filteredIdentityChoices.find(
+  const selectedStoryChoice = storyListOpen
+    ? (versionIdentityChoices.find(
         (choice) => identityKey(choice.identity) === effectiveIdentityKey,
-      )?.identity ?? null)
+      ) ?? null)
+    : null;
+  const selectedIdentity = storyListOpen
+    ? (selectedStoryChoice?.identity ?? null)
     : currentIdentity;
-  const listFilterCaseId = browseAll ? "" : caseIdHint;
+  const listFilterCaseId = storyListOpen ? "" : caseIdHint;
+  const listStoryScope = storyListOpen ? "" : (currentStoryId ?? "");
   const matchingRuns = useMemo(
     () =>
-      selectedIdentity
-        ? runs
-            .filter((run) =>
-              run.catalogue.some((entry) => {
-                const entryId = entryIdentity(entry);
-                return (
-                  entryId !== null && sameIdentity(entryId, selectedIdentity)
-                );
-              }),
-            )
-            .sort((left, right) =>
-              right.createdAt.localeCompare(left.createdAt),
-            )
+      selectedIdentity && selectedVersion
+        ? selectedVersion.runs.filter((run) =>
+            runHasIdentity(run, selectedIdentity),
+          )
         : [],
-    [runs, selectedIdentity],
+    [selectedIdentity, selectedVersion],
   );
   const effectiveRunId = matchingRuns.some((run) => run.runId === selectedRunId)
     ? selectedRunId
@@ -695,7 +811,25 @@ export function VerificationPanel({ active }: { active: boolean }) {
     PROFILE_TABS.find((item) => item.id === profileId) ?? PROFILE_TABS[0];
 
   useEffect(() => {
-    if (!active || !archiveBase || (!browseAll && !currentStoryId)) {
+    if (!active || !archiveBase) return;
+    const controller = new AbortController();
+    setLoadingArchiveInfo(true);
+    setArchiveInfoError("");
+    void getArchiveInfo(archiveBase, controller.signal)
+      .then((storage) => {
+        if (!controller.signal.aborted) setArchiveStorage(storage);
+      })
+      .catch((error: unknown) => {
+        if (!controller.signal.aborted) setArchiveInfoError(messageOf(error));
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoadingArchiveInfo(false);
+      });
+    return () => controller.abort();
+  }, [active]);
+
+  useEffect(() => {
+    if (!active || !archiveBase || (!storyListOpen && !listStoryScope)) {
       setRuns([]);
       setLoadingRuns(false);
       return;
@@ -717,14 +851,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
         if (!controller.signal.aborted) setLoadingRuns(false);
       });
     return () => controller.abort();
-  }, [
-    active,
-    archiveBase,
-    browseAll,
-    currentStoryId,
-    listFilterCaseId,
-    refreshVersion,
-  ]);
+  }, [active, listFilterCaseId, listStoryScope, refreshVersion, storyListOpen]);
 
   useEffect(() => {
     if (!active || !archiveBase || !effectiveRunId || !selectedIdentity) {
@@ -782,7 +909,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
       }
     });
     return () => controller.abort();
-  }, [active, archiveBase, effectiveRunId, refreshVersion, selectedIdentity]);
+  }, [active, effectiveRunId, refreshVersion, selectedIdentity]);
 
   useEffect(() => {
     if (!active || !archiveBase || !selectedAssessment) {
@@ -806,7 +933,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
         if (!controller.signal.aborted) setLoadingCalibrations(false);
       });
     return () => controller.abort();
-  }, [active, archiveBase, selectedAssessment]);
+  }, [active, selectedAssessment]);
 
   useEffect(() => {
     const capture = selectedCapture;
@@ -853,25 +980,13 @@ export function VerificationPanel({ active }: { active: boolean }) {
       controller.abort();
       for (const url of createdUrls) URL.revokeObjectURL(url);
     };
-  }, [active, archiveBase, selectedCapture]);
-
-  async function connect() {
-    try {
-      const normalized = normalizeArchiveBase(archiveDraft);
-      setArchiveDraft(normalized);
-      setArchiveBase(normalized);
-      setHistoryError("");
-      setManifestError("");
-      setRefreshVersion((value) => value + 1);
-    } catch (error) {
-      setHistoryError(messageOf(error));
-    }
-  }
+  }, [active, selectedCapture]);
 
   async function submitReview(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (
       !archiveBase ||
+      !archiveStorage ||
       !effectiveRunId ||
       !selectedIdentity ||
       !isProfileId(profileId)
@@ -915,6 +1030,29 @@ export function VerificationPanel({ active }: { active: boolean }) {
   );
   const relevantReviews = selectedReview ? [selectedReview] : [];
   const selectedAssessmentDetails = scoreDetails(selectedAssessment);
+  const selectedStoryNavigationTarget = selectedStoryChoice
+    ? ([selectedStoryChoice.storyId, selectedStoryChoice.referenceStoryId].find(
+        (storyId) => Boolean(storyId && managerApi.resolveStory(storyId)),
+      ) ?? "")
+    : "";
+  const selectedStoryUnavailableNotice = selectedStoryChoice
+    ? !managerApi.resolveStory(selectedStoryChoice.storyId) &&
+      selectedStoryChoice.referenceStoryId &&
+      managerApi.resolveStory(selectedStoryChoice.referenceStoryId)
+      ? "Recorded story unavailable; the reference story is available in this Storybook."
+      : !selectedStoryNavigationTarget
+        ? "The recorded story is no longer in this Storybook. Historical evidence remains available."
+        : ""
+    : "";
+
+  function selectArchivedStory(choice: IdentityOption) {
+    setSelectedIdentityKey(identityKey(choice.identity));
+    setSelectedRunId("");
+    const navigationTarget = [choice.storyId, choice.referenceStoryId].find(
+      (storyId) => Boolean(storyId && managerApi.resolveStory(storyId)),
+    );
+    if (navigationTarget) managerApi.selectStory(navigationTarget);
+  }
 
   return (
     <div className="verification-panel">
@@ -937,49 +1075,27 @@ export function VerificationPanel({ active }: { active: boolean }) {
 
       <section
         className="verification-section"
-        aria-labelledby="verification-connection-heading"
-      >
-        <h3 id="verification-connection-heading">Archive connection</h3>
-        <label className="verification-field">
-          Archive endpoint
-          <input
-            type="url"
-            value={archiveDraft}
-            onChange={(event) => setArchiveDraft(event.currentTarget.value)}
-            placeholder={DEFAULT_ARCHIVE_URL}
-            autoComplete="url"
-          />
-        </label>
-        <div className="verification-inline-actions">
-          <button type="button" onClick={() => void connect()}>
-            Connect
-          </button>
-          {archiveBase ? (
-            <span>Connected to {archiveBase}</span>
-          ) : (
-            <span>Enter an archive endpoint to connect.</span>
-          )}
-        </div>
-      </section>
-
-      <section
-        className="verification-section"
         aria-labelledby="verification-story-heading"
       >
         <h3 id="verification-story-heading">Current Storybook story</h3>
         <p>{currentStoryId || "No story is selected"}</p>
         {caseIdHint ? (
-          <p className="verification-metadata">Mapped case: {caseIdHint}</p>
+          <p className="verification-metadata">
+            {storyListOpen ? "Current live case: " : "Mapped case: "}
+            {caseIdHint}
+          </p>
         ) : currentIdentityChoices.length > 0 ? (
           <p className="verification-metadata">
-            Archived entries match this story ID or its reference story ID.
+            {storyListOpen
+              ? "The current live story matches an archived entry."
+              : "Archived entries match this story ID or its reference story ID."}
           </p>
         ) : currentStoryId ? (
           <p className="verification-muted">
             No archived verification entries match this story.
           </p>
         ) : null}
-        {!browseAll && currentCaseIds.length > 1 ? (
+        {!storyListOpen && currentCaseIds.length > 1 ? (
           <label className="verification-field">
             Current verification case
             <select
@@ -998,7 +1114,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
             </select>
           </label>
         ) : null}
-        {!browseAll && currentTargetChoices.length > 0 ? (
+        {!storyListOpen && currentTargetChoices.length > 0 ? (
           <label className="verification-field">
             Verification target
             <select
@@ -1025,27 +1141,43 @@ export function VerificationPanel({ active }: { active: boolean }) {
         ) : null}
         {currentIdentity ? (
           <p className="verification-metadata">
-            Mapped identity: {formatIdentity(currentIdentity)}
+            {storyListOpen ? "Current live identity: " : "Mapped identity: "}
+            {formatIdentity(currentIdentity)}
           </p>
         ) : null}
-        <label className="verification-check">
-          <input
-            type="checkbox"
-            checked={browseAll}
-            onChange={(event) => {
-              const checked = event.currentTarget.checked;
-              setBrowseAll(checked);
-              if (currentIdentity)
-                setSelectedIdentityKey(identityKey(currentIdentity));
-              else setSelectedIdentityKey("");
-            }}
-          />
-          Browse all recordings
-        </label>
-        {browseAll ? (
+        {availableVersions.length > 0 ? (
+          <label className="verification-field">
+            Selected version
+            <select
+              value={effectiveVersionKey}
+              onChange={(event) => {
+                setSelectedVersionKey(event.currentTarget.value);
+                setSelectedIdentityKey("");
+                setSelectedRunId("");
+              }}
+            >
+              {availableVersions.map((version) => (
+                <option key={version.key} value={version.key}>
+                  {versionLabel(version)}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+        {storyListOpen ? (
           <>
+            <div className="verification-inline-actions">
+              <button
+                type="button"
+                onClick={() => {
+                  setStoryListOpen(false);
+                }}
+              >
+                Return to current story
+              </button>
+            </div>
             <label className="verification-field">
-              Search archived cases
+              Search archived stories
               <input
                 type="search"
                 value={identitySearch}
@@ -1055,40 +1187,73 @@ export function VerificationPanel({ active }: { active: boolean }) {
                 placeholder="Label, case ID, target, capture point, or story ID"
               />
             </label>
-            <label className="verification-field">
-              Verification case
-              <select
-                value={effectiveIdentityKey}
-                onChange={(event) =>
-                  setSelectedIdentityKey(event.currentTarget.value)
-                }
-              >
-                <option value="">
-                  {filteredIdentityChoices.length === 0
-                    ? "No matching archived targets"
-                    : "Choose an archived target"}
-                </option>
-                {filteredIdentityChoices.map((choice) => (
-                  <option
-                    key={identityKey(choice.identity)}
-                    value={identityKey(choice.identity)}
-                  >
-                    {choice.label} · {choice.status} · {choice.storyId}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <fieldset className="verification-story-field">
+              <legend>Archived stories</legend>
+              <div className="verification-story-list">
+                {filteredVersionIdentityChoices.length > 0 ? (
+                  filteredVersionIdentityChoices.map((choice) => {
+                    const key = identityKey(choice.identity);
+                    const isSelected = key === effectiveIdentityKey;
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        aria-pressed={isSelected}
+                        className="verification-story-choice"
+                        onClick={() => selectArchivedStory(choice)}
+                      >
+                        <span>{choice.label}</span>
+                        <span className="verification-metadata">
+                          {choice.identity.targetId} ·{" "}
+                          {choice.identity.capturePointId} · {choice.status} ·{" "}
+                          {choice.storyId}
+                        </span>
+                      </button>
+                    );
+                  })
+                ) : (
+                  <p className="verification-muted">
+                    No archived stories in this version.
+                  </p>
+                )}
+              </div>
+            </fieldset>
+            {selectedStoryChoice && selectedStoryUnavailableNotice ? (
+              <p className="verification-notice">
+                {selectedStoryUnavailableNotice}
+              </p>
+            ) : null}
           </>
+        ) : null}
+        {!storyListOpen ? (
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedVersionKey(effectiveVersionKey);
+              setSelectedIdentityKey(
+                currentIdentity &&
+                  versionIdentityChoices.some((choice) =>
+                    sameIdentity(choice.identity, currentIdentity),
+                  )
+                  ? identityKey(currentIdentity)
+                  : "",
+              );
+              setIdentitySearch("");
+              setStoryListOpen(true);
+            }}
+          >
+            All recordings
+          </button>
         ) : null}
       </section>
 
-      {!browseAll && !currentStoryId ? (
+      {!storyListOpen && !currentStoryId ? (
         <p className="verification-empty">
-          Select a story with a verification mapping or enable Browse all
-          recordings.
+          Select a story with a verification mapping or open a story list for a
+          selected version.
         </p>
       ) : null}
-      {!browseAll &&
+      {!storyListOpen &&
       currentStoryId &&
       currentIdentityChoices.length > 0 &&
       !currentIdentity ? (
@@ -1096,7 +1261,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
           Choose a verification case and target to view its archived history.
         </p>
       ) : null}
-      {!browseAll &&
+      {!storyListOpen &&
       currentStoryId &&
       caseIdHint &&
       currentIdentityChoices.length === 0 &&
@@ -1114,7 +1279,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
       ) : null}
       {loadingRuns ? <p role="status">Loading archived runs…</p> : null}
       {archiveBase &&
-      (browseAll || selectedIdentity) &&
+      selectedIdentity &&
       !loadingRuns &&
       matchingRuns.length === 0 &&
       !historyError ? (
@@ -1266,13 +1431,12 @@ export function VerificationPanel({ active }: { active: boolean }) {
                         title="Reference"
                         artifact={selectedCapture.reference}
                         imageUrl={imageUrls.reference}
-                        region={selectedCapture.referenceRegion}
+                        cropRegion={selectedCapture.referenceRegion}
                       />
                       <ImageEvidence
                         title="Site"
                         artifact={selectedCapture.site}
                         imageUrl={imageUrls.site}
-                        region={selectedCapture.siteRegion}
                       />
                     </div>
                   ) : (
@@ -1288,7 +1452,6 @@ export function VerificationPanel({ active }: { active: boolean }) {
                           title="Site"
                           artifact={selectedCapture.site}
                           imageUrl={imageUrls.site}
-                          region={selectedCapture.siteRegion}
                         />
                       </div>
                     </>
@@ -1311,7 +1474,19 @@ export function VerificationPanel({ active }: { active: boolean }) {
             aria-label="Assessment and review status"
           >
             <h3>Assessment</h3>
-            <p>{automaticStatus(selectedAssessment)}</p>
+            <p>
+              {automaticStatus(
+                selectedAssessment,
+                selectedDeclaration?.scoreProfile,
+                profileId,
+              )}
+            </p>
+            {isSyntheticShadowAssessment(selectedAssessment) ? (
+              <p className="verification-notice">
+                This synthetic shadow assessment does not evaluate visual
+                quality. No external model produced this result.
+              </p>
+            ) : null}
             {selectedAssessmentDetails.length > 0 ? (
               <ul className="verification-details">
                 {selectedAssessmentDetails.map((detail) => (
@@ -1408,10 +1583,32 @@ export function VerificationPanel({ active }: { active: boolean }) {
                   maxLength={4000}
                 />
               </label>
+              {loadingArchiveInfo ? (
+                <p role="status" className="verification-metadata">
+                  Checking archive destination…
+                </p>
+              ) : archiveStorage ? (
+                <p className="verification-metadata">
+                  Review saves to{" "}
+                  {archiveStorage.kind === "filesystem"
+                    ? "local archive"
+                    : "R2 archive"}
+                  : {archiveStorage.location}
+                </p>
+              ) : archiveInfoError ? (
+                <p role="alert" className="verification-error">
+                  Archive destination: {archiveInfoError}
+                </p>
+              ) : (
+                <p role="status" className="verification-metadata">
+                  Archive destination is unavailable.
+                </p>
+              )}
               <button
                 type="submit"
                 disabled={
                   !archiveBase ||
+                  !archiveStorage ||
                   !manifest ||
                   !selectedIdentity ||
                   !selectedCapture ||

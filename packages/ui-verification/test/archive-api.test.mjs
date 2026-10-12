@@ -32,3 +32,39 @@ test("Access service-token headers are accepted on same-origin preflight", async
   assert.match(allowedHeaders, /cf-access-client-id/);
   assert.match(allowedHeaders, /cf-access-client-secret/);
 });
+
+test("archive info reports configured storage metadata to authenticated readers", async () => {
+  const storage = {
+    kind: "filesystem",
+    location: "/tmp/ui-verification",
+  };
+  const handler = createArchiveHandler(
+    {},
+    {
+      authorize: async (_request, scope) =>
+        scope === "read" ? { kind: "publisher" } : null,
+      storage,
+    },
+  );
+  const response = await handler(
+    new Request("http://localhost:6006/api/archive-info"),
+  );
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { storage });
+});
+
+test("archive info requires read authorization", async () => {
+  const handler = createArchiveHandler(
+    {},
+    {
+      authorize: async () => null,
+      storage: { kind: "r2", location: "Storybook archive" },
+    },
+  );
+  const response = await handler(
+    new Request("http://localhost:6006/api/archive-info"),
+  );
+
+  assert.equal(response.status, 401);
+});

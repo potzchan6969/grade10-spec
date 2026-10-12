@@ -25,7 +25,7 @@ pnpm storybook:workbench
 ```
 
 - **Endpoint** - The Verification panel connects to the Storybook origin automatically; the deployment serves the archive API and static workbench on that origin.
-- **Development** - A Storybook development server serves stories only. Use the panel's endpoint override to connect to a deployed archive, or to an optional filesystem archive server started by the application capture tool.
+- **Development** - Storybook development mounts the filesystem archive at its own origin automatically. The default is `.cache/ui-verification` in this checkout, or in the consuming app root when this checkout is its submodule. Set `UI_VERIFICATION_ARCHIVE` to an absolute directory before startup to select another archive.
 - **Worker preview** - Build the workbench and run Wrangler with `apps/preview/wrangler.storybook.jsonc` to exercise the combined static and API deployment locally.
 - **Pairing** - The Not Found story carries a permanent case ID. Its consuming app declaration selects `pages-not-found--default`; site routes and state setup stay with the application recipe.
 
@@ -42,6 +42,9 @@ pnpm storybook:workbench
 
 - **Recording** - Applications capture a full site viewport at desktop, tablet, and mobile sizes, and score only the declared comparison size.
 - **Checkpoints** - Tags are preferred labels; resolved app and reference commits remain authoritative provenance.
-- **Selection** - The panel resolves the selected story's permanent case ID and offers its application targets. It can also browse archived stories that have moved or been removed.
+- **Selection** - The panel resolves the current story's permanent case ID and offers its application targets. All recordings opens the story list for a selected app/reference commit pair, with tags as version labels and a separate selector for repeated runs. Selecting an available locator opens that story; removed stories retain their archived evidence.
+- **Images** - The reference preview fits its recorded comparison region; the site preview always shows the full viewport. Original PNGs remain immutable and downloadable.
+- **Review destination** - The form displays the storage destination reported by the archive API. Local reviews use `local-development`; deployed reviews use the authenticated person.
+- **Demo assessments** - Each synthetic demo run has a marked shadow assessment at its declared score profile. Real captures require an external evaluator report; capture does not imply assessment.
 - **Assessment** - Model similarity remains advisory until independently labelled human evidence meets the archive's calibration policy; human review decisions are append-only records.
 - **Protocol** - The application's pinned spec commit supplies the shared protocol. Consumers update that pin only after the upstream implementation is merged.

@@ -69,3 +69,6 @@ tools/manual/.vitest-attachments/
 
 # Downloaded or generated run receipts are not finalized run manifests.
 /.run-sheet-output/
+
+# Local UI verification recordings and reviews
+.cache/ui-verification*/

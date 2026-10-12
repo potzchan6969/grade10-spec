@@ -19,6 +19,11 @@ export interface ArchiveRunPage {
   cursor?: string;
 }
 
+export interface ArchiveStorage {
+  kind: "filesystem" | "r2";
+  location: string;
+}
+
 export type ArchiveRecord = Record<string, unknown>;
 
 export function isRecord(value: unknown): value is ArchiveRecord {
@@ -49,27 +54,6 @@ export function sameIdentity(
   right: VerificationIdentity,
 ): boolean {
   return identityKey(left) === identityKey(right);
-}
-
-export function normalizeArchiveBase(input: string): string {
-  let parsed: URL;
-  try {
-    parsed = new URL(input.trim());
-  } catch {
-    throw new Error("Enter a valid archive URL.");
-  }
-  if (
-    (parsed.protocol !== "http:" && parsed.protocol !== "https:") ||
-    parsed.username !== "" ||
-    parsed.password !== "" ||
-    parsed.search !== "" ||
-    parsed.hash !== ""
-  ) {
-    throw new Error(
-      "Use an HTTP or HTTPS archive URL without credentials or query parameters.",
-    );
-  }
-  return `${parsed.origin}${parsed.pathname.replace(/\/+$/, "")}`;
 }
 
 function apiUrl(base: string, pathname: string, query?: URLSearchParams): URL {
@@ -130,6 +114,27 @@ function requireObject(value: unknown, label: string): ArchiveRecord {
   if (!isRecord(value))
     throw new Error(`The archive response ${label} is invalid.`);
   return value;
+}
+
+export async function getArchiveInfo(
+  base: string,
+  signal: AbortSignal,
+): Promise<ArchiveStorage> {
+  const payload = requireObject(
+    await requestJson(apiUrl(base, "/api/archive-info"), { signal }),
+    "for its storage destination",
+  );
+  const storage = requireObject(payload.storage, "for its storage destination");
+  if (
+    (storage.kind !== "filesystem" && storage.kind !== "r2") ||
+    typeof storage.location !== "string" ||
+    storage.location.trim() === ""
+  ) {
+    throw new Error(
+      "The archive response for its storage destination is invalid.",
+    );
+  }
+  return { kind: storage.kind, location: storage.location };
 }
 
 export async function listRuns(

@@ -240,6 +240,17 @@ test("Worker rejects untrusted readers and reviewer headers, while publisher Bea
     publisherRead.headers.get("access-control-allow-origin"),
     "https://storybook.example.test",
   );
+
+  const archiveInfo = await worker.fetch(
+    new Request("https://archive.example.test/api/archive-info", {
+      headers: { Authorization: `Bearer ${PUBLISHER_TOKEN}` },
+    }),
+    env,
+  );
+  assert.equal(archiveInfo.status, 200);
+  assert.deepEqual(await archiveInfo.json(), {
+    storage: { kind: "r2", location: "Storybook archive" },
+  });
 });
 
 test("Worker publishes immutable PNG objects and seals a run only after verifying every reference", async (_t) => {

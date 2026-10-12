@@ -10,13 +10,13 @@ const METHODS = "GET, POST, PUT, OPTIONS";
 const HEADERS =
   "Authorization, Content-Type, Cf-Access-Jwt-Assertion, Cf-Access-Client-Id, Cf-Access-Client-Secret";
 
-function responseHeaders(origin, allowedOrigin) {
+function responseHeaders(origin, allowedOrigin, includeCors = true) {
   const headers = new Headers({
     "Cache-Control": "no-store",
     "X-Content-Type-Options": "nosniff",
     Vary: "Origin",
   });
-  if (origin && allowedOrigin) {
+  if (origin && allowedOrigin && includeCors) {
     headers.set("Access-Control-Allow-Origin", origin);
     headers.set("Access-Control-Allow-Credentials", "true");
     headers.set("Access-Control-Allow-Methods", METHODS);
@@ -176,15 +176,23 @@ function pathRunId(pathname) {
 
 export function createArchiveHandler(
   archive,
-  { authorize = async () => null, allowedOrigins = DEFAULT_LOCAL_ORIGINS } = {},
+  {
+    authorize = async () => null,
+    allowedOrigins = DEFAULT_LOCAL_ORIGINS,
+    sameOrigin = false,
+    storage = archive?.root
+      ? { kind: "filesystem", location: archive.root }
+      : { kind: "r2", location: "Storybook archive" },
+  } = {},
 ) {
   const origins = new Set(allowedOrigins);
 
   return async function handleArchiveRequest(request) {
     const url = new URL(request.url);
     const origin = request.headers.get("origin");
-    const originAllowed = !origin || origins.has(origin);
-    const headers = responseHeaders(origin, originAllowed);
+    const originAllowed =
+      !origin || (sameOrigin ? origin === url.origin : origins.has(origin));
+    const headers = responseHeaders(origin, originAllowed, !sameOrigin);
     if (!originAllowed)
       return jsonResponse(
         { error: "origin is not allowed", code: "ORIGIN_NOT_ALLOWED" },
@@ -225,6 +233,10 @@ export function createArchiveHandler(
     }
 
     try {
+      if (request.method === "GET" && url.pathname === "/api/archive-info") {
+        return jsonResponse({ storage }, 200, headers);
+      }
+
       if (request.method === "PUT" && url.pathname === "/api/objects") {
         const key = url.searchParams.get("key");
         if (!key) throw new TypeError("key query parameter is required");
