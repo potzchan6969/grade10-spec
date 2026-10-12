@@ -1,39 +1,6 @@
 import type { ReactNode } from "react";
 import type { OrderDetailsPaymentBrand } from "../store-order-detail/types";
 
-type AuctionOrderRowCopy = {
-  viewLot: string;
-  nextAction: string;
-};
-
-type AuctionOrderRowProps = {
-  copy: AuctionOrderRowCopy;
-  title: ReactNode;
-  auction: ReactNode;
-  winningBid: ReactNode;
-  status: ReactNode;
-  imageSrc?: string;
-  imageAlt?: string;
-  lotHref?: string;
-  onViewLot?: () => void;
-  onAction: () => void;
-  className?: string;
-};
-
-type AuctionOrderEmptyProps = {
-  title: ReactNode;
-  description?: ReactNode;
-  actionLabel?: string;
-  onAction?: () => void;
-  className?: string;
-};
-
-type AuctionOrderListProps = {
-  items: readonly AuctionOrderRowProps[];
-  empty: AuctionOrderEmptyProps;
-  className?: string;
-};
-
 type AuctionWinnerOrderStep =
   | "address"
   | "invoice"
@@ -201,10 +168,6 @@ export type {
   AuctionAddressFormProps,
   AuctionAddressFormValues,
   AuctionAddressKind,
-  AuctionOrderEmptyProps,
-  AuctionOrderListProps,
-  AuctionOrderRowCopy,
-  AuctionOrderRowProps,
   AuctionWinnerOrderAction,
   AuctionWinnerOrderAlert,
   AuctionWinnerOrderCopy,
