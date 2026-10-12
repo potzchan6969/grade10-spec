@@ -29,9 +29,8 @@ export default function RetrievalApprovedEmail({
           {
             label: "Where",
             value: previewItem.shopName,
-            subtext: previewItem.shopAddress,
+            subtext: `${previewItem.shopAddress}\nOpen ${previewItem.openingHours}`,
           },
-          { label: "Open", value: previewItem.openingHours },
         ],
       }}
       cta={{ href: previewItem.url, label: "See your item" }}
