@@ -126,8 +126,8 @@ execution; a review classification is not a pass or fail result.
    **Executable without asking**: answer from the spec's flow, `ui-design.md`,
    the PRD and the conventions' `## Setup Recipes`, and offer the answer as
    an edit to the case — a Change verdict like any other. A doubt about the
-   journey itself is a finding for the spec's author, as **Journeys are the
-   author's** says; never edit `user-journeys.md`.
+   journey itself is a finding for the spec's author under **Coverage and
+   findings**; never edit `user-journeys.md`.
 
 9. **Add a case the reviewer asks for** only where the anchor it traces already
    carries the behaviour — otherwise it is a new requirement, routed to the
@@ -159,7 +159,7 @@ execution; a review classification is not a pass or fail result.
 
 11. **Close the run and land the work.** Offer what the review taught, as
    `## What the Review Taught` below lays out. Before offering a convention,
-   run `tcs-conventions.md`'s **Before Adding a Convention** gate; a conflict
+   run the [Before Adding a Convention](../../../docs/governance/tcs-conventions.md#before-adding-a-convention) gate; a conflict
    with the creation contract is reported as a core-rule finding, not written
    as a convention. Commit what follows from the accepted verdicts. Run
    `pnpm run tcs:validate` and fix what it names. Then push once and
@@ -174,9 +174,8 @@ execution; a review classification is not a pass or fail result.
    gaps and journey findings for the spec's author, and any other suite still
    awaiting review.
 
-   **A reviewer who leaves midway** — **Leaving midway still lands**: commit
-   what is done, push, and open the pull request with the journeys that have
-   verdicts, then stop.
+   **A reviewer who leaves midway** - commit what is done, push, and open the
+   pull request with the journeys that have verdicts, then stop.
 
 ## Walk Mode
 
@@ -247,8 +246,8 @@ the verdict commits hold only the reviewer's decisions.
    allows. Never the trace, never an assertion added or removed, never an
    outcome, never a value that is the rule. Where the spec gives no flow,
    leave the step and list it as a question for the reviewer. Where the flow
-   disagrees with the case, classify it as **A flow that disagrees is
-   classified, not fixed** says. List every case needing a mocked state whose
+   disagrees with the case, classify and report the contradiction under
+   **Coverage and findings**; never silently fix it. List every case needing a mocked state whose
    Testability plans no `automation`. An `actual` case still `manual` is
    filled only on the reviewer's yes.
 

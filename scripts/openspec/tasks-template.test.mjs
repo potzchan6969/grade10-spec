@@ -74,7 +74,7 @@ test("shared-planning-agent-rounds-SC-57 - every group of the tasks template but
     );
     assert.match(
       tasks[0],
-      /`<capability>-SC-\d+`/,
+      /`<app>\.<domain>-<capability>\.SC\d+`/,
       `group \`${heading}\`'s test task carries no scenario id hint`,
     );
     // The clause an engineer copies into a real plan: the order the tests
