@@ -44,7 +44,7 @@
 6. Move the clock to 3600s (1 hour) before the moved close. `g10.auction-notifications.US2-TC9`
 7. Read the mail sent to customer A. `g10.auction-notifications.US2-TC9`
 8. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC11`
-9. As customer B, place <late bid>. `g10.auction-notifications.US2-TC12`
+9. As customer B, place `<late bid>`. `g10.auction-notifications.US2-TC12`
 10. Move the clock to 86400s (24 hours) before the moved close. `g10.auction-notifications.US2-TC12`
 11. Read the mail sent to customer A. `g10.auction-notifications.US2-TC12`
 12. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC13`
@@ -61,12 +61,12 @@
 
 ### Route
 
-1. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC1`
+1. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC1`
 2. Read the mail sent to customer A. `g10.auction-notifications.US3-TC1`
 3. Read the mail sent to customer B. `g10.auction-notifications.US3-TC1`
-4. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC2`
+4. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC2`
 5. Read the mail sent to customer A. `g10.auction-notifications.US3-TC2`
-6. As customer B, place <customer B bid>. `g10.auction-notifications.US3-TC3`
+6. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC3`
 7. Read the mail sent to customer A. `g10.auction-notifications.US3-TC3`
 8. Open customer A's My Auctions. `g10.auction-notifications.US3-TC3`
 
@@ -82,9 +82,9 @@
 
 ### Route
 
-1. As customer C, place <customer C bid>. `g10.auction-notifications.US4-TC1`
+1. As customer C, place `<customer C bid>`. `g10.auction-notifications.US4-TC1`
 2. Read the mail sent to customers A, B, C and D. `g10.auction-notifications.US4-TC1`
-3. Place <bids> in turn. `g10.auction-notifications.US4-TC2`
+3. Place `<bids>` in turn. `g10.auction-notifications.US4-TC2`
 4. Release sending. `g10.auction-notifications.US4-TC2`
 5. Read the mail sent to customer A. `g10.auction-notifications.US4-TC2`
 
@@ -100,9 +100,9 @@
 
 ### Route
 
-1. Filter by <customer A email>. `g10.auction-notifications.US5-TC1`
+1. Filter by `<customer A email>`. `g10.auction-notifications.US5-TC1`
 2. Read each row. `g10.auction-notifications.US5-TC1`
-3. Filter by <customer C email>. `g10.auction-notifications.US5-TC2`
+3. Filter by `<customer C email>`. `g10.auction-notifications.US5-TC2`
 
 ## Walk 6: Collector who lost hears the lot closed
 
@@ -116,11 +116,11 @@
 
 ### Route
 
-1. Let <lot_6> close with customer B winning. `g10.auction-notifications.US6-TC1`
+1. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC1`
 2. Read the mail sent to customer A. `g10.auction-notifications.US6-TC1`
-3. Let <lot_6> close with customer B winning. `g10.auction-notifications.US6-TC2`
+3. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC2`
 4. Read the mail sent to customer A. `g10.auction-notifications.US6-TC2`
-5. Let <lot_6> close with customer B winning. `g10.auction-notifications.US6-TC3`
+5. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC3`
 6. Read the mail sent to customer B. `g10.auction-notifications.US6-TC3`
 
 ## Walk 7: Watcher hears a sold lot ended
@@ -135,9 +135,9 @@
 
 ### Route
 
-1. Let <lot_7> close with customer B winning. `g10.auction-notifications.US7-TC1`
+1. Let `<lot_7>` close with customer B winning. `g10.auction-notifications.US7-TC1`
 2. Read the mail sent to customer D. `g10.auction-notifications.US7-TC1`
-3. Let <lot_7> close with customer B winning. `g10.auction-notifications.US7-TC2`
+3. Let `<lot_7>` close with customer B winning. `g10.auction-notifications.US7-TC2`
 4. Read the mail sent to customer D. `g10.auction-notifications.US7-TC2`
 
 ## Walk 8: Collector hears a no-bids close as ended only
@@ -152,10 +152,10 @@
 
 ### Route
 
-1. Let <lot_8> close with no bids. `g10.auction-notifications.US8-TC1`
+1. Let `<lot_8>` close with no bids. `g10.auction-notifications.US8-TC1`
 2. Read the mail sent to customer D. `g10.auction-notifications.US8-TC1`
-3. Let <lot_8> close with no bids. `g10.auction-notifications.US8-TC2`
-4. Read every letter sent for <lot_8>. `g10.auction-notifications.US8-TC2`
+3. Let `<lot_8>` close with no bids. `g10.auction-notifications.US8-TC2`
+4. Read every letter sent for `<lot_8>`. `g10.auction-notifications.US8-TC2`
 
 ## g10.auction-notifications.US1: Collector hears a watched lot is opening
 
@@ -163,7 +163,7 @@
 **I want** to be emailed as a watched lot opens,
 **so that** I can come back and bid without sitting on the page.
 
-<!-- trace:case id=g10.auction-notifications.TC-b0t rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->
+`<!-- trace:case id=g10.auction-notifications.TC-b0t rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->`
 ### g10.auction-notifications.US1-TC1: Watcher is mailed 24 hours before and at the opening
 
 Runs once per row of **Test data**.
@@ -183,20 +183,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches <lot_1> with email alerts on.
+* customer(signed in) watches `<lot_1>` with email alerts on.
 * The account's Auction email alerts master is on.
-* The clock is moved to <moment>.
+* The clock is moved to `<moment>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | A published lot whose bidding has not started |
-| <opening warning> | 86400s (24 hours) before the scheduled start |
+| `<lot_1>` | A published lot whose bidding has not started |
+| `<opening warning>` | 86400s (24 hours) before the scheduled start |
 
 | Moment | Letter |
 | --- | --- |
-| <opening warning> | Bidding opens in 24 hours |
+| `<opening warning>` | Bidding opens in 24 hours |
 | The scheduled start | Bidding has opened |
 
 **Steps:**
@@ -205,10 +205,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Exactly one copy of the row's letter, about <lot_1>.
+* Exactly one copy of the row's letter, about `<lot_1>`.
 * It goes to the account's registered email.
 
-<!-- trace:case id=g10.auction-notifications.TC-jca rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->
+`<!-- trace:case id=g10.auction-notifications.TC-jca rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->`
 ### g10.auction-notifications.US1-TC2: The opening letter says alerts are on and links to My Auctions
 
 **Classification:**
@@ -226,13 +226,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out in this browser) has received Bidding has opened for <lot_1>.
+* customer(signed out in this browser) has received Bidding has opened for `<lot_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | A lot taking bids, watched by this collector with email alerts on |
+| `<lot_1>` | A lot taking bids, watched by this collector with email alerts on |
 
 **Steps:**
 
@@ -243,13 +243,13 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: subject, heading, lot block and footer name <lot_1>.
+* Step 1: subject, heading, lot block and footer name `<lot_1>`.
 * Step 1: the footer says email alerts are on for this auction.
-* Step 2: <lot_1 url> opens; the link carries `utm_source=email` and `utm_medium=auction_notification`.
+* Step 2: `<lot_1 url>` opens; the link carries `utm_source=email` and `utm_medium=auction_notification`.
 * Step 3: sign-in is offered first; no alert is changed.
-* Step 4: My Auctions opens; <lot_1> is still watched, alerts on.
+* Step 4: My Auctions opens; `<lot_1>` is still watched, alerts on.
 
-<!-- trace:case id=g10.auction-notifications.TC-pk7 rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->
+`<!-- trace:case id=g10.auction-notifications.TC-pk7 rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->`
 ### g10.auction-notifications.US1-TC3: No opening mail when alerts are off for the lot or the account
 
 Runs once per row of **Test data**.
@@ -269,14 +269,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches <lot_1>, with alerts as the row gives.
-* The clock is moved past <lot_1>'s scheduled start.
+* customer(signed in) watches `<lot_1>`, with alerts as the row gives.
+* The clock is moved past `<lot_1>`'s scheduled start.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | A published lot whose bidding has not started |
+| `<lot_1>` | A published lot whose bidding has not started |
 
 | Lot email alerts | Auction email alerts master |
 | --- | --- |
@@ -290,10 +290,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: neither opening letter was sent for <lot_1>.
-* Step 2: <lot_1> is still watched.
+* Step 1: neither opening letter was sent for `<lot_1>`.
+* Step 2: `<lot_1>` is still watched.
 
-<!-- trace:case id=g10.auction-notifications.TC-10a rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->
+`<!-- trace:case id=g10.auction-notifications.TC-10a rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->`
 ### g10.auction-notifications.US1-TC4: A lot called off before it opens sends nothing further
 
 **Classification:**
@@ -311,15 +311,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches <lot_1> with email alerts on.
-* <lot_1> was called off after Bidding opens in 24 hours was sent.
-* The clock is moved past <lot_1>'s scheduled start.
+* customer(signed in) watches `<lot_1>` with email alerts on.
+* `<lot_1>` was called off after Bidding opens in 24 hours was sent.
+* The clock is moved past `<lot_1>`'s scheduled start.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | A lot called off before its scheduled start |
+| `<lot_1>` | A lot called off before its scheduled start |
 
 **Steps:**
 
@@ -327,18 +327,17 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Bidding has opened was not sent for <lot_1>.
+* Bidding has opened was not sent for `<lot_1>`.
 
 ---
 
 ## g10.auction-notifications.US2: Collector returns before a lot closes
 
 **As a** collector,
-**I want** to be emailed when a lot I watch or bid on is a day from its
-scheduled close,
+**I want** to be emailed when a lot I watch or bid on is a day from its scheduled close,
 **so that** a moving deadline does not pass without me.
 
-<!-- trace:case id=g10.auction-notifications.TC-tbm rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->
+`<!-- trace:case id=g10.auction-notifications.TC-tbm rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->`
 ### g10.auction-notifications.US2-TC5: A muted watcher gets no closing warnings
 
 **Classification:**
@@ -356,13 +355,13 @@ scheduled close,
 
 **Pre-conditions:**
 
-* customer A watches <lot_2>, email alerts off for <lot_2>, master on.
+* customer A watches `<lot_2>`, email alerts off for `<lot_2>`, master on.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_2> | A lot taking bids, scheduled to close more than 24 hours away |
+| `<lot_2>` | A lot taking bids, scheduled to close more than 24 hours away |
 
 **Steps:**
 
@@ -372,10 +371,10 @@ scheduled close,
 
 **Expected Results:**
 
-* No Bidding closes in 24 hours letter for <lot_2>.
+* No Bidding closes in 24 hours letter for `<lot_2>`.
 * No closing reminder at the one-hour mark.
 
-<!-- trace:case id=g10.auction-notifications.TC-v00 rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->
+`<!-- trace:case id=g10.auction-notifications.TC-v00 rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->`
 ### g10.auction-notifications.US2-TC6: The account master off blocks the closing warning
 
 **Classification:**
@@ -393,13 +392,13 @@ scheduled close,
 
 **Pre-conditions:**
 
-* customer A watches <lot_2>, email alerts on for <lot_2>, Auction email alerts master off.
+* customer A watches `<lot_2>`, email alerts on for `<lot_2>`, Auction email alerts master off.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_2> | A lot taking bids, scheduled to close more than 24 hours away |
+| `<lot_2>` | A lot taking bids, scheduled to close more than 24 hours away |
 
 **Steps:**
 
@@ -408,9 +407,9 @@ scheduled close,
 
 **Expected Results:**
 
-* No Bidding closes in 24 hours letter for <lot_2>.
+* No Bidding closes in 24 hours letter for `<lot_2>`.
 
-<!-- trace:case id=g10.auction-notifications.TC-n1b rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->
+`<!-- trace:case id=g10.auction-notifications.TC-n1b rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->`
 ### g10.auction-notifications.US2-TC9: No one-hour reminder before a moved close
 
 **Classification:**
@@ -428,14 +427,14 @@ scheduled close,
 
 **Pre-conditions:**
 
-* customer A watches or bid on <lot_3>, email alerts on.
-* <lot_3> is in extended bidding, its moved close more than an hour away.
+* customer A watches or bid on `<lot_3>`, email alerts on.
+* `<lot_3>` is in extended bidding, its moved close more than an hour away.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_3> | A lot in extended bidding |
+| `<lot_3>` | A lot in extended bidding |
 
 **Steps:**
 
@@ -446,7 +445,7 @@ scheduled close,
 
 * No closing reminder at the one-hour mark before the moved close.
 
-<!-- trace:case id=g10.auction-notifications.TC-lk4 rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->
+`<!-- trace:case id=g10.auction-notifications.TC-lk4 rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->`
 ### g10.auction-notifications.US2-TC11: Closes in 24 hours reaches watchers and bidders
 
 Runs once per row of **Test data**.
@@ -466,15 +465,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) relates to <lot_2> as the row gives, email alerts on.
-* The clock is moved to <closing warning>.
+* customer(signed in) relates to `<lot_2>` as the row gives, email alerts on.
+* The clock is moved to `<closing warning>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_2> | A lot taking bids, not in extended bidding |
-| <closing warning> | 86400s (24 hours) before the scheduled close |
+| `<lot_2>` | A lot taking bids, not in extended bidding |
+| `<closing warning>` | 86400s (24 hours) before the scheduled close |
 
 | Relationship | Letters |
 | --- | --- |
@@ -489,9 +488,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The row's letters, about <lot_2>, and no other copy.
+* The row's letters, about `<lot_2>`, and no other copy.
 
-<!-- trace:case id=g10.auction-notifications.TC-o3h rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->
+`<!-- trace:case id=g10.auction-notifications.TC-o3h rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->`
 ### g10.auction-notifications.US2-TC12: Extension sends its own letter, not a second closing warning
 
 **Classification:**
@@ -509,28 +508,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A watches <lot_3> with email alerts on and has received Bidding closes in 24 hours.
-* customer B(enrolled to bid) is ready to bid on <lot_3>.
+* customer A watches `<lot_3>` with email alerts on and has received Bidding closes in 24 hours.
+* customer B(enrolled to bid) is ready to bid on `<lot_3>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_3> | A lot taking bids, inside its last minutes before the scheduled close |
-| <late bid> | The next valid bid, placed inside the extension window |
+| `<lot_3>` | A lot taking bids, inside its last minutes before the scheduled close |
+| `<late bid>` | The next valid bid, placed inside the extension window |
 
 **Steps:**
 
-1. As customer B, place <late bid>.
+1. As customer B, place `<late bid>`.
 2. Move the clock to 86400s (24 hours) before the moved close.
 3. Read the mail sent to customer A.
 
 **Expected Results:**
 
-* One Extended bidding has started letter for <lot_3>.
+* One Extended bidding has started letter for `<lot_3>`.
 * No second Bidding closes in 24 hours letter.
 
-<!-- trace:case id=g10.auction-notifications.TC-7q5 rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->
+`<!-- trace:case id=g10.auction-notifications.TC-7q5 rev=1 covers=g10.auction-notifications.SC-dit,g10.auction-notifications.SC-cq8,g10.auction-notifications.SC-e4m,g10.auction-notifications.SC-2oz,g10.auction-notifications.SC-w1b,g10.auction-notifications.SC-9om,g10.auction-notifications.SC-q6j,g10.auction-notifications.SC-rc3,g10.auction-notifications.SC-66z,g10.auction-notifications.SC-w78 -->`
 ### g10.auction-notifications.US2-TC13: No one-hour reminder is sent
 
 **Classification:**
@@ -548,14 +547,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer watches <lot_2> with email alerts on.
+* customer watches `<lot_2>` with email alerts on.
 * The clock is moved to 3600s (1 hour) before the scheduled close.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_2> | A lot taking bids, not in extended bidding |
+| `<lot_2>` | A lot taking bids, not in extended bidding |
 
 **Steps:**
 
@@ -563,7 +562,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No closing reminder was sent for <lot_2> at the one-hour mark.
+* No closing reminder was sent for `<lot_2>` at the one-hour mark.
 
 ---
 
@@ -573,7 +572,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when I lose the lead on a lot I bid on,
 **so that** I can raise my maximum while the lot still takes bids.
 
-<!-- trace:case id=g10.auction-notifications.TC-sdf rev=1 covers=g10.auction-notifications.SC-ga4,g10.auction-notifications.SC-vsu,g10.auction-notifications.SC-7rk,g10.auction-notifications.SC-yky,g10.auction-notifications.SC-02a -->
+`<!-- trace:case id=g10.auction-notifications.TC-sdf rev=1 covers=g10.auction-notifications.SC-ga4,g10.auction-notifications.SC-vsu,g10.auction-notifications.SC-7rk,g10.auction-notifications.SC-yky,g10.auction-notifications.SC-02a -->`
 ### g10.auction-notifications.US3-TC1: Displaced leader gets outbid, not also new bid
 
 **Classification:**
@@ -591,29 +590,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads <lot_4> with email alerts on, maximum equal to the current bid.
+* customer A leads `<lot_4>` with email alerts on, maximum equal to the current bid.
 * customer B(enrolled to bid) uses a separate session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_4> | A lot taking bids, led by customer A |
-| <customer B bid> | The next valid bid on <lot_4> |
+| `<lot_4>` | A lot taking bids, led by customer A |
+| `<customer B bid>` | The next valid bid on `<lot_4>` |
 
 **Steps:**
 
-1. As customer B, place <customer B bid>.
+1. As customer B, place `<customer B bid>`.
 2. Read the mail sent to customer A.
 3. Read the mail sent to customer B.
 
 **Expected Results:**
 
-* Step 2: one You have been outbid letter for <lot_4>.
+* Step 2: one You have been outbid letter for `<lot_4>`.
 * Step 2: no New bid letter for this bid.
 * Step 3: no letter about customer B's own bid.
 
-<!-- trace:case id=g10.auction-notifications.TC-0tc rev=1 covers=g10.auction-notifications.SC-ga4,g10.auction-notifications.SC-vsu,g10.auction-notifications.SC-7rk,g10.auction-notifications.SC-yky,g10.auction-notifications.SC-02a -->
+`<!-- trace:case id=g10.auction-notifications.TC-0tc rev=1 covers=g10.auction-notifications.SC-ga4,g10.auction-notifications.SC-vsu,g10.auction-notifications.SC-7rk,g10.auction-notifications.SC-yky,g10.auction-notifications.SC-02a -->`
 ### g10.auction-notifications.US3-TC2: A raise absorbed by the leader's maximum sends no outbid
 
 **Classification:**
@@ -631,27 +630,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads <lot_4> with email alerts on and a maximum above <customer B bid>.
+* customer A leads `<lot_4>` with email alerts on and a maximum above `<customer B bid>`.
 * customer B(enrolled to bid) uses a separate session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_4> | A lot taking bids, led by customer A |
-| <customer B bid> | The next valid bid on <lot_4>, below customer A's maximum |
+| `<lot_4>` | A lot taking bids, led by customer A |
+| `<customer B bid>` | The next valid bid on `<lot_4>`, below customer A's maximum |
 
 **Steps:**
 
-1. As customer B, place <customer B bid>.
+1. As customer B, place `<customer B bid>`.
 2. Read the mail sent to customer A.
 
 **Expected Results:**
 
-* customer A still leads <lot_4>.
+* customer A still leads `<lot_4>`.
 * No You have been outbid letter was sent to customer A.
 
-<!-- trace:case id=g10.auction-notifications.TC-4q8 rev=1 covers=g10.auction-notifications.SC-ga4,g10.auction-notifications.SC-vsu,g10.auction-notifications.SC-7rk,g10.auction-notifications.SC-yky,g10.auction-notifications.SC-02a -->
+`<!-- trace:case id=g10.auction-notifications.TC-4q8 rev=1 covers=g10.auction-notifications.SC-ga4,g10.auction-notifications.SC-vsu,g10.auction-notifications.SC-7rk,g10.auction-notifications.SC-yky,g10.auction-notifications.SC-02a -->`
 ### g10.auction-notifications.US3-TC3: A muted bidder is not told they were outbid
 
 **Classification:**
@@ -669,26 +668,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads <lot_4>, with email alerts off for <lot_4>.
+* customer A leads `<lot_4>`, with email alerts off for `<lot_4>`.
 * customer B(enrolled to bid) uses a separate session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_4> | A lot taking bids, led by customer A |
-| <customer B bid> | The next valid bid on <lot_4> |
+| `<lot_4>` | A lot taking bids, led by customer A |
+| `<customer B bid>` | The next valid bid on `<lot_4>` |
 
 **Steps:**
 
-1. As customer B, place <customer B bid>.
+1. As customer B, place `<customer B bid>`.
 2. Read the mail sent to customer A.
 3. Open customer A's My Auctions.
 
 **Expected Results:**
 
-* Step 2: no letter was sent for <lot_4>.
-* Step 3: <lot_4> reads Outbid; the bid stands.
+* Step 2: no letter was sent for `<lot_4>`.
+* Step 3: `<lot_4>` reads Outbid; the bid stands.
 
 ---
 
@@ -698,7 +697,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when someone else bids on a lot I already bid on,
 **so that** I know the lot moved without being mailed on every increment.
 
-<!-- trace:case id=g10.auction-notifications.TC-qvy rev=1 covers=g10.auction-notifications.SC-rk1,g10.auction-notifications.SC-ktw,g10.auction-notifications.SC-xzz,g10.auction-notifications.SC-gn8 -->
+`<!-- trace:case id=g10.auction-notifications.TC-qvy rev=1 covers=g10.auction-notifications.SC-rk1,g10.auction-notifications.SC-ktw,g10.auction-notifications.SC-xzz,g10.auction-notifications.SC-gn8 -->`
 ### g10.auction-notifications.US4-TC1: Other bidders hear of a new bid, watchers do not
 
 **Classification:**
@@ -716,31 +715,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A bid on <lot_5> earlier, was outbid and told so, email alerts on.
-* customer B leads <lot_5>.
-* customer D watches <lot_5> without bidding, email alerts on.
+* customer A bid on `<lot_5>` earlier, was outbid and told so, email alerts on.
+* customer B leads `<lot_5>`.
+* customer D watches `<lot_5>` without bidding, email alerts on.
 * customer C(enrolled to bid) uses a separate session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_5> | A lot taking bids, with bids from customer A and customer B |
-| <customer C bid> | The next valid bid on <lot_5>, above customer B's maximum |
+| `<lot_5>` | A lot taking bids, with bids from customer A and customer B |
+| `<customer C bid>` | The next valid bid on `<lot_5>`, above customer B's maximum |
 
 **Steps:**
 
-1. As customer C, place <customer C bid>.
+1. As customer C, place `<customer C bid>`.
 2. Read the mail sent to customers A, B, C and D.
 
 **Expected Results:**
 
-* customer A: one New bid letter naming <customer C bid>.
+* customer A: one New bid letter naming `<customer C bid>`.
 * customer B: You have been outbid only.
 * customer C: no letter about their own bid.
 * customer D: no New bid letter.
 
-<!-- trace:case id=g10.auction-notifications.TC-ozl rev=1 covers=g10.auction-notifications.SC-rk1,g10.auction-notifications.SC-ktw,g10.auction-notifications.SC-xzz,g10.auction-notifications.SC-gn8 -->
+`<!-- trace:case id=g10.auction-notifications.TC-ozl rev=1 covers=g10.auction-notifications.SC-rk1,g10.auction-notifications.SC-ktw,g10.auction-notifications.SC-xzz,g10.auction-notifications.SC-gn8 -->`
 ### g10.auction-notifications.US4-TC2: Several bids before a send make one letter at the leading bid
 
 **Classification:**
@@ -758,36 +757,36 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A bid on <lot_5> earlier, was outbid and told so, email alerts on.
+* customer A bid on `<lot_5>` earlier, was outbid and told so, email alerts on.
 * New-bid sending is held until the steps below finish.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_5> | A lot taking bids, with an earlier bid from customer A |
-| <bids> | Three accepted bids from customers B and C, each the next valid bid |
+| `<lot_5>` | A lot taking bids, with an earlier bid from customer A |
+| `<bids>` | Three accepted bids from customers B and C, each the next valid bid |
 
 **Steps:**
 
-1. Place <bids> in turn.
+1. Place `<bids>` in turn.
 2. Release sending.
 3. Read the mail sent to customer A.
 
 **Expected Results:**
 
-* One New bid letter for <lot_5>.
-* It names the leading bid after the last of <bids>.
+* One New bid letter for `<lot_5>`.
+* It names the leading bid after the last of `<bids>`.
 
 ---
 
 ## g10.auction-notifications.US5: Operator looks up what a collector was sent
 
-**As an** auction operator,
+**As a** auction operator,
 **I want** to filter sent auction mail by a collector's email,
 **so that** I can answer a collector who says they were never told.
 
-<!-- trace:case id=g10.auction-notifications.TC-x00 rev=1 covers=g10.auction-notifications.SC-h7t,g10.auction-notifications.SC-2mh,g10.auction-notifications.SC-48j,g10.auction-notifications.SC-9al -->
+`<!-- trace:case id=g10.auction-notifications.TC-x00 rev=1 covers=g10.auction-notifications.SC-h7t,g10.auction-notifications.SC-2mh,g10.auction-notifications.SC-48j,g10.auction-notifications.SC-9al -->`
 ### g10.auction-notifications.US5-TC1: Send log filtered by email lists type, lot and time, never body
 
 **Classification:**
@@ -805,29 +804,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A was sent Bidding has opened and Bidding closes in 24 hours for <lot_1>.
-* customer B was sent Bidding has opened for <lot_1>.
-* admin(auction operator) is on <grade10 auction send log url>.
+* customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_1>`.
+* customer B was sent Bidding has opened for `<lot_1>`.
+* admin(auction operator) is on `<grade10 auction send log url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | A lot customer A and customer B watch |
-| <customer A email> | customer A's registered email |
+| `<lot_1>` | A lot customer A and customer B watch |
+| `<customer A email>` | customer A's registered email |
 
 **Steps:**
 
-1. Filter by <customer A email>.
+1. Filter by `<customer A email>`.
 2. Read each row.
 
 **Expected Results:**
 
 * Step 1: two rows, both customer A's; none of customer B's.
-* Step 2: each row shows message type, recipient email, <lot_1> and Sent At.
+* Step 2: each row shows message type, recipient email, `<lot_1>` and Sent At.
 * Step 2: no row shows or opens the letter body.
 
-<!-- trace:case id=g10.auction-notifications.TC-axs rev=1 covers=g10.auction-notifications.SC-h7t,g10.auction-notifications.SC-2mh,g10.auction-notifications.SC-48j,g10.auction-notifications.SC-9al -->
+`<!-- trace:case id=g10.auction-notifications.TC-axs rev=1 covers=g10.auction-notifications.SC-h7t,g10.auction-notifications.SC-2mh,g10.auction-notifications.SC-48j,g10.auction-notifications.SC-9al -->`
 ### g10.auction-notifications.US5-TC2: An email with no mail shows an empty log
 
 **Classification:**
@@ -846,17 +845,17 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer C was never sent auction mail.
-* admin(auction operator) is on <grade10 auction send log url>.
+* admin(auction operator) is on `<grade10 auction send log url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <customer C email> | customer C's registered email |
+| `<customer C email>` | customer C's registered email |
 
 **Steps:**
 
-1. Filter by <customer C email>.
+1. Filter by `<customer C email>`.
 
 **Expected Results:**
 
@@ -870,7 +869,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when someone else wins it,
 **so that** I know the outcome without reopening the lot.
 
-<!-- trace:case id=g10.auction-notifications.TC-gqc rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
+`<!-- trace:case id=g10.auction-notifications.TC-gqc rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->`
 ### g10.auction-notifications.US6-TC1: A losing bidder gets one You did not win letter
 
 **Classification:**
@@ -888,28 +887,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A bid on <lot_6>, email alerts on, and does not lead.
-* customer B leads <lot_6>.
+* customer A bid on `<lot_6>`, email alerts on, and does not lead.
+* customer B leads `<lot_6>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_6> | A lot taking bids, with bids from customer A and customer B, about to close |
-| <customer A bid> | customer A's highest bid on <lot_6> |
-| <winning bid> | customer B's winning bid at the close |
+| `<lot_6>` | A lot taking bids, with bids from customer A and customer B, about to close |
+| `<customer A bid>` | customer A's highest bid on `<lot_6>` |
+| `<winning bid>` | customer B's winning bid at the close |
 
 **Steps:**
 
-1. Let <lot_6> close with customer B winning.
+1. Let `<lot_6>` close with customer B winning.
 2. Read the mail sent to customer A.
 
 **Expected Results:**
 
-* One You did not win letter for <lot_6>.
-* It names Winning bid as <winning bid> and Their bid as <customer A bid>.
+* One You did not win letter for `<lot_6>`.
+* It names Winning bid as `<winning bid>` and Their bid as `<customer A bid>`.
 
-<!-- trace:case id=g10.auction-notifications.TC-ris rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
+`<!-- trace:case id=g10.auction-notifications.TC-ris rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->`
 ### g10.auction-notifications.US6-TC2: A losing bidder who also watched gets only the bidder letter
 
 **Classification:**
@@ -927,18 +926,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A watched <lot_6>, then bid on it, email alerts on, and does not lead.
-* customer B leads <lot_6>.
+* customer A watched `<lot_6>`, then bid on it, email alerts on, and does not lead.
+* customer B leads `<lot_6>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_6> | A lot taking bids, watched and bid on by customer A, led by customer B, about to close |
+| `<lot_6>` | A lot taking bids, watched and bid on by customer A, led by customer B, about to close |
 
 **Steps:**
 
-1. Let <lot_6> close with customer B winning.
+1. Let `<lot_6>` close with customer B winning.
 2. Read the mail sent to customer A.
 
 **Expected Results:**
@@ -946,7 +945,7 @@ Runs once per row of **Test data**.
 * Exactly one close letter: You did not win.
 * No Lot watched, sold letter.
 
-<!-- trace:case id=g10.auction-notifications.TC-ua3 rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
+`<!-- trace:case id=g10.auction-notifications.TC-ua3 rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->`
 ### g10.auction-notifications.US6-TC3: The winner gets no close-outcome letter from this capability
 
 **Classification:**
@@ -964,17 +963,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer B watches <lot_6>, email alerts on, and leads it.
+* customer B watches `<lot_6>`, email alerts on, and leads it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_6> | A lot taking bids, watched and led by customer B, about to close |
+| `<lot_6>` | A lot taking bids, watched and led by customer B, about to close |
 
 **Steps:**
 
-1. Let <lot_6> close with customer B winning.
+1. Let `<lot_6>` close with customer B winning.
 2. Read the mail sent to customer B.
 
 **Expected Results:**
@@ -990,7 +989,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when that lot ends with a winner,
 **so that** I know bidding is over on a lot I followed.
 
-<!-- trace:case id=g10.auction-notifications.TC-gz5 rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->
+`<!-- trace:case id=g10.auction-notifications.TC-gz5 rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->`
 ### g10.auction-notifications.US7-TC1: A watch-only collector hears Sold for at the close
 
 **Classification:**
@@ -1008,27 +1007,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer D watches <lot_7>, email alerts on, and never bid on it.
-* customer B leads <lot_7>.
+* customer D watches `<lot_7>`, email alerts on, and never bid on it.
+* customer B leads `<lot_7>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_7> | A lot taking bids, led by customer B, about to close |
-| <winning bid> | customer B's winning bid at the close |
+| `<lot_7>` | A lot taking bids, led by customer B, about to close |
+| `<winning bid>` | customer B's winning bid at the close |
 
 **Steps:**
 
-1. Let <lot_7> close with customer B winning.
+1. Let `<lot_7>` close with customer B winning.
 2. Read the mail sent to customer D.
 
 **Expected Results:**
 
-* One Lot watched, sold letter for <lot_7>.
-* It names Sold for as <winning bid>.
+* One Lot watched, sold letter for `<lot_7>`.
+* It names Sold for as `<winning bid>`.
 
-<!-- trace:case id=g10.auction-notifications.TC-icj rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->
+`<!-- trace:case id=g10.auction-notifications.TC-icj rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->`
 ### g10.auction-notifications.US7-TC2: A watcher with alerts off hears nothing at the close
 
 Runs once per row of **Test data**.
@@ -1048,8 +1047,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer D watches <lot_7>, never bid on it, with alerts as the row gives.
-* customer B leads <lot_7>.
+* customer D watches `<lot_7>`, never bid on it, with alerts as the row gives.
+* customer B leads `<lot_7>`.
 
 **Test data:**
 
@@ -1060,11 +1059,11 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <lot_7> | A lot taking bids, led by customer B, about to close |
+| `<lot_7>` | A lot taking bids, led by customer B, about to close |
 
 **Steps:**
 
-1. Let <lot_7> close with customer B winning.
+1. Let `<lot_7>` close with customer B winning.
 2. Read the mail sent to customer D.
 
 **Expected Results:**
@@ -1079,7 +1078,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed that the lot ended when nobody bid,
 **so that** I learn the close without being told the lot did not sell.
 
-<!-- trace:case id=g10.auction-notifications.TC-uzv rev=1 covers=g10.auction-notifications.SC-hf1,g10.auction-notifications.SC-lbn -->
+`<!-- trace:case id=g10.auction-notifications.TC-uzv rev=1 covers=g10.auction-notifications.SC-hf1,g10.auction-notifications.SC-lbn -->`
 ### g10.auction-notifications.US8-TC1: A no-bids close tells the watcher it ended, and nothing more
 
 **Classification:**
@@ -1097,27 +1096,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer D watches <lot_8>, email alerts on, and never bid on it.
+* customer D watches `<lot_8>`, email alerts on, and never bid on it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_8> | A lot taking bids with no bids, about to close |
+| `<lot_8>` | A lot taking bids with no bids, about to close |
 
 **Steps:**
 
-1. Let <lot_8> close with no bids.
+1. Let `<lot_8>` close with no bids.
 2. Read the mail sent to customer D.
 
 **Expected Results:**
 
-* One Lot watched, ended letter for <lot_8>.
+* One Lot watched, ended letter for `<lot_8>`.
 * Subject, preheader and body say the lot ended.
 * None says unsold, did not sell or no sale.
 * No Sold for, Winning bid or Highest bid shows.
 
-<!-- trace:case id=g10.auction-notifications.TC-7zp rev=1 covers=g10.auction-notifications.SC-hf1,g10.auction-notifications.SC-lbn -->
+`<!-- trace:case id=g10.auction-notifications.TC-7zp rev=1 covers=g10.auction-notifications.SC-hf1,g10.auction-notifications.SC-lbn -->`
 ### g10.auction-notifications.US8-TC2: A no-bids close sends no bidder letter to anyone
 
 **Classification:**
@@ -1135,21 +1134,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer D and customer E watch <lot_8>, email alerts on, and never bid on it.
+* customer D and customer E watch `<lot_8>`, email alerts on, and never bid on it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_8> | A lot taking bids with no bids, about to close |
+| `<lot_8>` | A lot taking bids with no bids, about to close |
 
 **Steps:**
 
-1. Let <lot_8> close with no bids.
-2. Read every letter sent for <lot_8>.
+1. Let `<lot_8>` close with no bids.
+2. Read every letter sent for `<lot_8>`.
 
 **Expected Results:**
 
 * Only Lot watched, ended letters, one each to customer D and customer E.
 * No You did not win letter.
 * No Lot watched, sold letter.
+
+## Settled
+
+- **Archived fold records — 2026-10-12 suite rewrite** —
+  - **2026-09-17-add-auction-close-outcome-emails** — `grade10-site-auction-notifications-US6-TC1-1` → `g10.auction-notifications.US6-TC1`; `grade10-site-auction-notifications-US6-TC2-1` → `g10.auction-notifications.US6-TC2`; `grade10-site-auction-notifications-US6-TC3-1` → `g10.auction-notifications.US6-TC3`; `grade10-site-auction-notifications-US7-TC1-1` → `g10.auction-notifications.US7-TC1`; `grade10-site-auction-notifications-US7-TC2-1` → `g10.auction-notifications.US7-TC2`; `grade10-site-auction-notifications-US8-TC1-1` → `g10.auction-notifications.US8-TC1`; `grade10-site-auction-notifications-US8-TC2-1` → `g10.auction-notifications.US8-TC2`.
+  - **2026-09-18-email-trigger-revision** — `grade10-site-auction-notifications-US2-TC1-1` → current journey cases are the replacement record; `grade10-site-auction-notifications-US2-TC2-1` → current journey cases are the replacement record; `grade10-site-auction-notifications-US2-TC3-1` → current journey cases are the replacement record; `grade10-site-auction-notifications-US2-TC4-1` → current journey cases are the replacement record; `grade10-site-auction-notifications-US2-TC5-1` → `g10.auction-notifications.US2-TC5`; `grade10-site-auction-notifications-US2-TC6-1` → `g10.auction-notifications.US2-TC6`; `grade10-site-auction-notifications-US2-TC7-1` → current journey cases are the replacement record; `grade10-site-auction-notifications-US2-TC8-1` → current journey cases are the replacement record; `grade10-site-auction-notifications-US2-TC9-1` → `g10.auction-notifications.US2-TC9`; `grade10-site-auction-notifications-US2-TC10-1` → current journey cases are the replacement record.
