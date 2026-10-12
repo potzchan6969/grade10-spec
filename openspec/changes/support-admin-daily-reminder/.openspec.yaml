@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-10-12
+hands:
+  pm: "@mason5991"
+awaiting:
+  specs: "spec.md, feature-tcs.md, tech-design.md and tasks.md come from /planning-dev"
