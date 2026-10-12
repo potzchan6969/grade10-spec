@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  CUSTOM_MAXIMUM_MAJOR_CEILING,
   moneyDraftFromMinor,
   parseExactMoneyDraftToMinor,
   quickMaximumPresetAmount,
@@ -12,6 +11,12 @@ import {
 } from "./listing-bid-money";
 
 const FLOOR = 20_800_000; // HK$208,000
+
+const CURRENCY_CEILINGS = {
+  USD: 1_000_000_000,
+  HKD: 8_000_000_000,
+  JPY: 5_000_000_000,
+} as const;
 
 describe("sanitizeMoneyDraft", () => {
   it("strips non-digits and discards any decimal fraction", () => {
@@ -26,35 +31,164 @@ describe("sanitizeMoneyDraft", () => {
 });
 
 describe("sanitizeCustomMaximumDraft", () => {
-  const ceiling = String(CUSTOM_MAXIMUM_MAJOR_CEILING);
+  it.each([
+    ["USD", CURRENCY_CEILINGS.USD, "10000000"],
+    ["HKD", CURRENCY_CEILINGS.HKD, "80000000"],
+    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000"],
+  ] as const)(
+    "accepts the supplied %s ceiling after whole-major conversion (shared-ui-auction-listing-SC-38, shared-ui-auction-listing-SC-58)",
+    (currency, ceilingMinor, ceilingMajor) => {
+      expect(
+        sanitizeCustomMaximumDraft(
+          ceilingMajor,
+          currency,
+          "",
+          ceilingMinor,
+          "replacement",
+        ),
+      ).toBe(ceilingMajor);
+    },
+  );
 
-  it("accepts drafts at and below the major-unit ceiling (shared-ui-auction-listing-SC-38)", () => {
-    expect(sanitizeCustomMaximumDraft(ceiling, "HKD", "")).toBe(ceiling);
-    expect(sanitizeCustomMaximumDraft("500", "HKD", "")).toBe("500");
-    expect(sanitizeCustomMaximumDraft("9999999998", "JPY", "1")).toBe(
-      "9999999998",
-    );
+  it("accepts a value below the supplied ceiling", () => {
+    expect(
+      sanitizeCustomMaximumDraft(
+        "500",
+        "HKD",
+        "",
+        CURRENCY_CEILINGS.HKD,
+        "replacement",
+      ),
+    ).toBe("500");
   });
 
-  it("restores the previous draft when sanitized major units exceed the ceiling (shared-ui-auction-listing-SC-39, shared-ui-auction-listing-SC-40, shared-ui-auction-listing-SC-41)", () => {
-    expect(sanitizeCustomMaximumDraft(`${ceiling}0`, "HKD", ceiling)).toBe(
-      ceiling,
-    );
-    expect(sanitizeCustomMaximumDraft("10000000000", "HKD", "")).toBe("");
-    expect(sanitizeCustomMaximumDraft("99999999999", "HKD", "500")).toBe("500");
-  });
+  it.each([
+    ["USD", CURRENCY_CEILINGS.USD, "10000000", "9000000"],
+    ["HKD", CURRENCY_CEILINGS.HKD, "80000000", "79000000"],
+    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000", "4900000000"],
+  ] as const)(
+    "restores a previous valid draft for a genuine typed append above the supplied ceiling (shared-ui-auction-listing-SC-39, shared-ui-auction-listing-SC-43)",
+    (currency, ceilingMinor, ceilingMajor, previousDraft) => {
+      expect(
+        sanitizeCustomMaximumDraft(
+          `${previousDraft}1`,
+          currency,
+          previousDraft,
+          ceilingMinor,
+          "typed-append",
+        ),
+      ).toBe(previousDraft);
+      expect(
+        sanitizeCustomMaximumDraft(
+          `${ceilingMajor}1`,
+          currency,
+          ceilingMajor,
+          ceilingMinor,
+          "typed-append",
+        ),
+      ).toBe(ceilingMajor);
+    },
+  );
 
-  it("applies whole-major sanitize before the ceiling check (shared-ui-auction-listing-SC-42, shared-ui-auction-listing-SC-53)", () => {
-    expect(sanitizeCustomMaximumDraft("10000000000.99", "HKD", "500")).toBe(
-      "500",
-    );
-    expect(sanitizeCustomMaximumDraft("9999999999.99", "HKD", "")).toBe(
-      ceiling,
-    );
+  it.each([
+    ["USD", CURRENCY_CEILINGS.USD, "10000000"],
+    ["HKD", CURRENCY_CEILINGS.HKD, "80000000"],
+    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000"],
+  ] as const)(
+    "clamps an oversized paste or replacement to the supplied ceiling, including an empty previous draft (shared-ui-auction-listing-SC-40, shared-ui-auction-listing-SC-41, shared-ui-auction-listing-SC-59)",
+    (currency, ceilingMinor, ceilingMajor) => {
+      for (const editOrigin of ["paste", "replacement"] as const) {
+        expect(
+          sanitizeCustomMaximumDraft(
+            `${ceilingMajor}1`,
+            currency,
+            "",
+            ceilingMinor,
+            editOrigin,
+          ),
+        ).toBe(ceilingMajor);
+        expect(
+          sanitizeCustomMaximumDraft(
+            `${ceilingMajor}1`,
+            currency,
+            "500",
+            ceilingMinor,
+            editOrigin,
+          ),
+        ).toBe(ceilingMajor);
+      }
+    },
+  );
+
+  it.each([
+    ["USD", CURRENCY_CEILINGS.USD, "10000000"],
+    ["HKD", CURRENCY_CEILINGS.HKD, "80000000"],
+    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000"],
+  ] as const)(
+    "clamps an appended paste and a cleaned fractional overshoot (shared-ui-auction-listing-SC-42, shared-ui-auction-listing-SC-60)",
+    (currency, ceilingMinor, ceilingMajor) => {
+      expect(
+        sanitizeCustomMaximumDraft(
+          `500${ceilingMajor}1`,
+          currency,
+          "500",
+          ceilingMinor,
+          "paste",
+        ),
+      ).toBe(ceilingMajor);
+      expect(
+        sanitizeCustomMaximumDraft(
+          `${ceilingMajor}1.99`,
+          currency,
+          "500",
+          ceilingMinor,
+          "paste",
+        ),
+      ).toBe(ceilingMajor);
+    },
+  );
+
+  it.each([
+    ["USD", CURRENCY_CEILINGS.USD, "10000000"],
+    ["HKD", CURRENCY_CEILINGS.HKD, "80000000"],
+    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000"],
+  ] as const)(
+    "uses exact string comparison for very large cleaned digits (shared-ui-auction-listing-SC-42)",
+    (currency, ceilingMinor, ceilingMajor) => {
+      expect(
+        sanitizeCustomMaximumDraft(
+          "999999999999999999999999999999.99",
+          currency,
+          "500",
+          ceilingMinor,
+          "paste",
+        ),
+      ).toBe(ceilingMajor);
+    },
+  );
+
+  it("accepts a fractional paste when whole-major cleaning reaches the ceiling (shared-ui-auction-listing-SC-53)", () => {
+    expect(
+      sanitizeCustomMaximumDraft(
+        "80000000.99",
+        "HKD",
+        "500",
+        CURRENCY_CEILINGS.HKD,
+        "paste",
+      ),
+    ).toBe("80000000");
   });
 
   it("still accepts clearing to empty", () => {
-    expect(sanitizeCustomMaximumDraft("", "HKD", "500")).toBe("");
+    expect(
+      sanitizeCustomMaximumDraft(
+        "",
+        "HKD",
+        "500",
+        CURRENCY_CEILINGS.HKD,
+        "paste",
+      ),
+    ).toBe("");
   });
 });
 
