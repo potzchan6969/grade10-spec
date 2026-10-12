@@ -214,7 +214,11 @@ function claimsFeatureSet(sections) {
 }
 
 function usId(heading) {
-  return /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(heading)?.[1] ?? null;
+  return (
+    /([a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?)/i.exec(
+      heading,
+    )?.[1] ?? null
+  );
 }
 
 function journeyIds(text) {
@@ -334,7 +338,12 @@ function mergeJourneys(
       oldRetired?.raw.split("\n").filter((line) => line.trim() !== "") ?? [];
     const known = new Set(
       priorLines
-        .map((line) => /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(line)?.[1])
+        .map(
+          (line) =>
+            /([a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?)/i.exec(
+              line,
+            )?.[1],
+        )
         .filter(Boolean),
     );
     for (const id of retired)
@@ -347,7 +356,11 @@ function mergeJourneys(
 
 function readRetiredIds(sections) {
   const retired = sectionByName(sections, "Retired");
-  return [...(retired?.raw.match(/[a-z0-9][a-z0-9-]*-US-\d+[a-z]?/gi) ?? [])];
+  return [
+    ...(retired?.raw.match(
+      /[a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?/gi,
+    ) ?? []),
+  ];
 }
 
 function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
@@ -528,7 +541,8 @@ const SUITE_SECTIONS = new Set([
   "Ungrouped",
   ...SUITE_LISTS,
 ]);
-const JOURNEY_GROUP = /^(.+?-US-?(\d+)([a-z]?))\b/i;
+const JOURNEY_GROUP =
+  /^((?:.+?\.US-?(\d+)([a-z]?)|.+?-US-?(\d+)([a-z]?)))\b/i;
 const WALK_SECTION = /^Walk\b/i;
 
 function paragraphs(text) {
@@ -693,9 +707,18 @@ function withTransitionStatus(text, foldedOn, previousText = null) {
 }
 
 const MODERN_CASE_HEADING = /^(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):/i;
+const DISPLAY_CASE_HEADING = /^(\S+\.US-?(\d+)-TC-?(\d+)):/i;
 const LEGACY_CASE_HEADING = /(\S+-TC\d+)-(\d+)\b/i;
 
 function caseHeading(heading) {
+  const display = DISPLAY_CASE_HEADING.exec(heading);
+  if (display)
+    return {
+      id: display[1],
+      tc: Number(display[3]),
+      revision: null,
+      modern: true,
+    };
   const modern = MODERN_CASE_HEADING.exec(heading);
   if (modern)
     return {
@@ -802,6 +825,15 @@ function refuseRepeatedCases(text, capability, where, remedy) {
       );
     seenModern.add(number);
   }
+  for (const [, id] of text.matchAll(
+    /^#{3,4}\s+(\S+\.US-?\d+-TC-?\d+):/gim,
+  )) {
+    if (seenModern.has(id))
+      throw new Error(
+        `${capability}: test case ${id} appears more than once in ${where}; ${remedy}`,
+      );
+    seenModern.add(id);
+  }
   for (const [, number] of text.matchAll(/^###\s+(\S+-TC\d+)-\d+\b/gim)) {
     if (seen.has(number))
       throw new Error(
@@ -907,7 +939,9 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
     );
   }
   const usOrder = (section) => {
-    const [, , number, letter] = JOURNEY_GROUP.exec(section.heading);
+    const match = JOURNEY_GROUP.exec(section.heading);
+    const number = match[2] ?? match[4];
+    const letter = match[3] ?? match[5];
     return Number(number) + (letter ? letter.charCodeAt(0) / 1000 : 0);
   };
   const orderedGroups = [...currentGroups.values()].sort(

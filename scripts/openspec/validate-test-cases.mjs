@@ -263,16 +263,19 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       const modern = /^(?:###|####)\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):/.exec(
         lines[i],
       );
-      const legacy = !modern
+      const display = !modern
+        ? /^(?:###|####)\s+(\S+\.US-?(\d+)-TC-?(\d+)):\s*/.exec(lines[i])
+        : null;
+      const legacy = !modern && !display
         ? /^###\s+\S+-US-?(\d+)-TC-?(\d+)(?:-\d+)?:/.exec(lines[i])
         : null;
-      if (!modern && !legacy) continue;
-      const id = modern?.[1] ?? pendingMarker;
+      if (!modern && !display && !legacy) continue;
+      const id = modern?.[1] ?? display?.[1] ?? pendingMarker;
       if (id) {
         const stable = id.slice(id.lastIndexOf(".") + 1).toLowerCase();
         walkCases.set(stable, {
-          journeyNum: Number(modern?.[2] ?? legacy?.[1]),
-          tcNum: Number(modern?.[3] ?? legacy?.[2]),
+          journeyNum: Number(modern?.[2] ?? display?.[2] ?? legacy?.[1]),
+          tcNum: Number(modern?.[3] ?? display?.[3] ?? legacy?.[2]),
           line: i + 1,
         });
       }
@@ -474,26 +477,29 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     if (level !== "feature" && j.hyphenated)
       warn(
         j.line,
-        `journey heading \`${j.raw}\` uses the spec's hyphenated id; suite headings are compact (e.g. \`${j.capability}-US${j.num}\`)`,
+        `journey heading \`${j.raw}\` uses the spec's hyphenated id; suite headings use the display form (e.g. \`${j.capability}.US${j.num}\`)`,
       );
     if (!capabilities.has(j.capability))
       err(
         j.line,
         `journey heading names capability \`${j.capability}\`, but this suite accepts \`${[...capabilities].join("` or `")}\``,
       );
-    const canonical = `${j.capability}-US-${String(j.num).padStart(2, "0")}`;
-    const alternate = `${j.capability}-US-${j.num}`;
+    const journeyIds = [
+      j.raw,
+      `${j.capability}-US-${String(j.num).padStart(2, "0")}`,
+      `${j.capability}-US-${j.num}`,
+      `${j.capability}.US${j.num}`,
+    ];
     if (!j.ungrouped) {
       if (seenJourneys.has(j.num))
         err(j.line, `journey ${j.num} appears more than once`);
       seenJourneys.add(j.num);
     }
-    const retired =
-      spec?.retired?.has(canonical) || spec?.retired?.has(alternate);
+    const retired = journeyIds.some((id) => spec?.retired?.has(id));
     if (retired && statusCounts(j.cases).deprecated !== j.cases.length)
       err(
         j.line,
-        `journey \`${canonical}\` is retired, so every case under it is deprecated`,
+        `journey \`${j.raw}\` is retired, so every case under it is deprecated`,
       );
     else if (
       level === "feature" &&
@@ -501,12 +507,11 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       !retired &&
       !spec.unwalked &&
       spec.journeys.size > 0 &&
-      !spec.journeys.has(canonical) &&
-      !spec.journeys.has(alternate)
+      !journeyIds.some((id) => spec.journeys.has(id))
     )
       err(
         j.line,
-        `journey \`${canonical}\` is not defined in the spec beside it`,
+        `journey \`${j.raw}\` is not defined in the spec beside it`,
       );
     // A capability nobody walks carries exactly one section. More than one
     // would have to be numbered by a feature set group's position, and an
@@ -514,7 +519,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     if (level === "feature" && spec?.unwalked && j.num !== 1)
       err(
         j.line,
-        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US-01\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
+        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}.US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
       );
     const story = new Set(j.story);
     if (
@@ -554,7 +559,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
         if (tc.hyphenated)
           warn(
             at,
-            `case id \`${tc.id}\` uses the legacy hyphenated form; current is \`<scope>.TC-<sequence> (US<n>-TC<m>)\``,
+            `case id \`${tc.id}\` uses the legacy hyphenated form; current is \`<scope>.US<n>-TC<m>\``,
           );
         if (!capabilities.has(tc.capability))
           err(
@@ -717,7 +722,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
           if (spec.scenarios.has(id)) {
             warn(
               at,
-              `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the anchor the case walks — a journey id (\`${capability}-US-<n>\`), or a \`## Feature set\` root group where nobody walks the capability`,
+              `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the anchor the case walks — a journey id (\`${capability}.US<n>\`), or a \`## Feature set\` root group where nobody walks the capability`,
             );
             continue;
           }
@@ -768,7 +773,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
   if (spec && level === "feature") {
     for (const [id] of spec.journeys) {
       if (spec.context.has(id)) continue;
-      const num = Number(id.match(/-US-(\d+)$/)?.[1]);
+      const num = Number(id.match(/(?:\.US-?|-US-?)(\d+)$/)?.[1]);
       if (!seenJourneys.has(num))
         warn(1, `spec journey \`${id}\` has no section in this suite`);
     }
@@ -807,8 +812,8 @@ const rulesRev = currentRulesRev();
 const inScope = (d) =>
   args.scope ? relative(ROOT, d).includes(args.scope) : true;
 /** Every `<product>` and `<product>/<domain>` the store actually has, so a
- *  trace id can be read back to the product and domain that issued it. Ids are
- *  `<product>-<domain>-<capability>-US-<n>` and every segment may itself hold a
+ *  trace id can be read back to the product and domain that issued it. Human
+ *  ids are `<app>.<domain>-<capability>.US<n>` and every segment may itself hold a
  *  hyphen, so the only safe parse is the longest known prefix. */
 const specsRoot = join(ROOT, "openspec", "specs");
 const specScopes = [specsRoot, ...activeChangeSpecRoots(ROOT)].filter(
@@ -1170,8 +1175,11 @@ for (const p of suites) {
     const modern = /^(?:###|####)\s+(\S+)\s+\(US-?\d+-TC-?\d+\):/.exec(
       lines[j] ?? "",
     );
+    const display = /^(?:###|####)\s+(\S+\.US-?\d+-TC-?\d+):/.exec(
+      lines[j] ?? "",
+    );
     const legacy = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
-    if (modern) continue;
+    if (modern || display) continue;
     if (!legacy || legacy[2] === marker[1]) continue;
     record(
       "error",

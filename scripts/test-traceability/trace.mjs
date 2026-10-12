@@ -210,6 +210,7 @@ function caseHeadingRevision(heading) {
 function isCaseHeading(heading) {
   return (
     /^\s*#{3,4}\s+\S+\s+\(US-?\d+-TC-?\d+\):/.test(heading) ||
+    /^\s*#{3,4}\s+\S+\.US-?\d+-TC-?\d+:/.test(heading) ||
     /^\s*#{3,4}\s+\S/.test(heading)
   );
 }
@@ -295,7 +296,12 @@ function caseHeadings(lines) {
       inUngrouped = false;
     }
     if (inWalk) continue;
-    if (inUngrouped && /^\s*###\s+\S+-US-?\d+[a-z]?:/.test(lines[index]))
+    if (
+      inUngrouped &&
+      /^\s*###\s+\S+(?:-US-?\d+[a-z]?|\.US-?\d+[a-z]?):/.test(
+        lines[index],
+      )
+    )
       continue;
     const revision = caseHeadingRevision(lines[index]);
     if (revision || isCaseHeading(lines[index]))

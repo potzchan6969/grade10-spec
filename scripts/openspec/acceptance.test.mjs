@@ -774,7 +774,7 @@ const TEMPLATE_FILL = [
   ["requirement name", "Search results"],
   ["requirement text", "The system SHALL return the items the query matches."],
   ["scenario name", "Results match"],
-  ["<capability>-US-<n>", "Search"],
+  ["<app>.<domain>-<capability>.US<n>", "site.search-search.US1"],
   ["the walk this rule sits on", "a reader searches"],
   ["condition", "a reader searches"],
   ["expected outcome", "matching items appear"],
@@ -794,7 +794,9 @@ function deltaFromTemplate() {
       assert.ok(fill || alone, `fill the template placeholder "${lead}"`);
       return fill?.[1] ?? "";
     })
-    .replaceAll("<capability>", "site-search");
+    .replaceAll("<app>", "site")
+    .replaceAll("<domain>", "search")
+    .replaceAll("<capability>", "search");
 }
 
 test("a change written from the spec template folds into a new durable spec", () => {
@@ -806,7 +808,7 @@ test("a change written from the spec template folds into a new durable spec", ()
   assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
   assert.match(durable, /## Feature set\n\n- Search\n {2}- Query: find/);
   assert.match(durable, /### Requirement: Search results/);
-  assert.match(durable, /#### Scenario: site-search-SC-01 - Results match/);
+  assert.match(durable, /#### Scenario: site.search-search.SC1 - Results match/);
   assert.deepEqual(
     prepared.contractTargets.find(
       (one) => one.path === "openspec/specs/site/search/spec.md",

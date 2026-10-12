@@ -776,7 +776,7 @@ test("a retired journey holds only deprecated cases, which may still trace it", 
   const live = at("draft");
   assert.match(
     live,
-    /journey `demo-alpha-US-02` is retired, so every case under it is deprecated/,
+    /journey `demo-alpha-US2` is retired, so every case under it is deprecated/,
   );
   assert.match(live, /traces `demo-alpha-US-02`, which is neither a journey/);
 });

@@ -568,12 +568,12 @@ const issuedBy = (root, dir) => {
         return;
       }
       const id =
-        /^(?:Scenario:\s+)?([a-z0-9][a-z0-9-]*?-(?:US-?\d+[a-z]?(?:-TC\d+-\d+)?|SC-\d+[a-z]?))\b/.exec(
+        /^(?:Scenario:\s+)?((?:[a-z0-9][a-z0-9.-]*\.(?:US-?\d+[a-z]?(?:-TC-?\d+)?|SC-?\d+[a-z]?)|[a-z0-9][a-z0-9-]*?-(?:US-?\d+[a-z]?(?:-TC\d+-\d+)?|SC-\d+[a-z]?)))\b/.exec(
           head.heading,
         )?.[1];
       if (!id) return;
       opens(index);
-      if (/-SC-/.test(id)) {
+      if (/(?:\.SC-?|-SC-)/.test(id)) {
         const at = (level) =>
           heads.findLastIndex((one, j) => j < index && one.level === level);
         const requirement = at(3);

@@ -222,17 +222,22 @@ export function productPrefix(root, dir) {
 
 /** Display prefixes for composed-suite headings and markers. Legacy prefixes
  * remain accepted while suites migrate to these level-separated forms. */
+function appDisplayCode(product) {
+  return {
+    "grade10-site": "g10",
+    "grade10-admin": "g10adm",
+    "grade10-store": "g10str",
+    "zzz-site": "zzz",
+    "zzz-admin": "zzzadm",
+  }[product] ?? product;
+}
+
 export function modernDomainPrefix(root, dir) {
   const rel = relative(root, dir)
     .replace(/^openspec\/specs\//, "")
     .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
   const [product, domain] = rel.split("/");
-  const app =
-    product === "grade10-site"
-      ? "g10"
-      : product === "grade10-admin"
-        ? "g10adm"
-        : product;
+  const app = appDisplayCode(product);
   return `${app}.${domain}-dmn`;
 }
 
@@ -242,12 +247,7 @@ export function modernProductPrefix(root, dir) {
     .replace(/^openspec\/specs\//, "")
     .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
   const product = rel.split("/")[0];
-  const app =
-    product === "grade10-site"
-      ? "g10"
-      : product === "grade10-admin"
-        ? "g10adm"
-        : product;
+  const app = appDisplayCode(product);
   return `${app}-pdt`;
 }
 
@@ -314,19 +314,34 @@ export function readSpecIds(specPath) {
   // it; the change's suite owes a section to the journeys it adds or modifies.
   const context = new Set();
   let section = "";
+  let previousLine = "";
+  const journeyHeading =
+    /^###\s+([A-Za-z0-9][A-Za-z0-9.-]*\.(?:US-?\d+[a-z]?)|[\w-]+-US-?\d+[a-z]?)\b:\s*(.+?)\s*$/;
+  const scenarioDisplayHeading =
+    /^####\s+Scenario:\s+([A-Za-z0-9][A-Za-z0-9.-]*\.SC-?\d+[a-z]?)\b/;
+  const scenarioMarker = /^<!--\s*trace:scenario\s+id=(\S+)/;
   for (const line of `${text}\n${stories}`.split("\n")) {
     const h = line.match(/^##\s+(.+?)\s*$/);
     if (h) section = h[1];
-    const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
+    const j = line.match(journeyHeading);
     if (j && section === "REMOVED User journeys") retired.add(j[1]);
     else if (j) journeys.set(j[1], j[2]);
     if (j && section === "Context user journeys") context.add(j[1]);
-    const r = section === "Retired" && line.match(/^[-*]\s+`([\w-]+-US-\d+)`/);
+    const r =
+      section === "Retired" &&
+      line.match(
+        /^[-*]\s+`([A-Za-z0-9][A-Za-z0-9.-]*\.(?:US-?\d+[a-z]?)|[\w-]+-US-?\d+[a-z]?)`/,
+      );
     if (r) retired.add(r[1]);
+    const marker = line.match(scenarioMarker);
+    if (marker) scenarios.add(marker[1]);
     const s = line.match(SCENARIO_HEADING);
     if (s) scenarios.add(s[1]);
+    const display = line.match(scenarioDisplayHeading);
+    if (display && !previousLine.match(scenarioMarker)) scenarios.add(display[1]);
     const inline = line.match(SCENARIO_BULLET);
     if (inline) scenarios.add(inline[1]);
+    previousLine = line;
   }
   return {
     journeys,
@@ -460,7 +475,11 @@ export function readPlatformIds(dir, root = null) {
 export function issuedPrefix(spec) {
   if (!spec) return null;
   const [id] = [...spec.journeys.keys(), ...spec.scenarios];
-  return id ? id.replace(/-(?:US|SC)-\d+$/, "") : null;
+  return id
+    ? id
+        .replace(/\.(?:US|SC)-?[0-9a-z]+$/i, "")
+        .replace(/-(?:US|SC)-?[0-9a-z]+$/i, "")
+    : null;
 }
 
 // --- the suite itself ------------------------------------------------------
@@ -546,6 +565,8 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
 
 const WALK_CASE_REFERENCE =
   /(?:^|[`\s])((?:[a-z0-9][\w.-]*\.)?TC-([0-9a-z]{3}))\s*\(\s*US-?(\d+)\s*-\s*TC-?(\d+)\s*\)/gi;
+const DISPLAY_CASE_REFERENCE =
+  /(?:^|[`\s])([a-z0-9][\w.-]*\.US-?(\d+)-TC-?(\d+))(?=[`\s.,;)]|$)/gi;
 
 /** Read only the executable references in `## Walk` sections. Walk prose is
  * deliberately not interpreted here: the validator can prove that a route
@@ -570,6 +591,17 @@ export function parseWalks(text) {
       continue;
     }
     if (!current) continue;
+    DISPLAY_CASE_REFERENCE.lastIndex = 0;
+    for (const match of line.matchAll(DISPLAY_CASE_REFERENCE)) {
+      const fullId = match[1].toLowerCase();
+      walks.at(-1).refs.push({
+        id: fullId.slice(fullId.lastIndexOf(".") + 1),
+        caseId: fullId,
+        journeyNum: Number(match[2]),
+        tcNum: Number(match[3]),
+        line: i + 1,
+      });
+    }
     WALK_CASE_REFERENCE.lastIndex = 0;
     for (const match of line.matchAll(WALK_CASE_REFERENCE)) {
       const fullId = match[1];
@@ -747,21 +779,28 @@ export function parseSuite(text) {
     const modern = line.match(
       /^(###|####)\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):\s*(.+?)\s*$/,
     );
-    const legacy = !modern
+    const display = !modern
+      ? line.match(
+          /^(###|####)\s+(\S+\.US-?(\d+)-TC-?(\d+)):\s*(.+?)\s*$/,
+        )
+      : null;
+    const legacy = !modern && !display
       ? ungrouped
         ? line.match(/^####\s+(\S+):\s*(.+?)\s*$/)
         : line.match(/^###\s+(\S+):\s*(.+?)\s*$/)
       : null;
-    const ch = modern ?? legacy;
+    const ch = modern ?? display ?? legacy;
     if (ch) {
       pushCase();
-      const id = modern ? modern[2] : legacy[1];
+      const id = modern ? modern[2] : display ? display[2] : legacy[1];
       const journeyScoped = modern
         ? [modern[0], journey?.capability ?? null, modern[3], modern[4]]
+        : display
+          ? [display[0], display[2].replace(/\.US-?\d+-TC-?\d+$/, ""), display[3], display[4]]
         : id.match(/^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/);
       if (!journeyScoped)
         suite.legacy.add(
-          "case ids that are not `<scope>.TC-<sequence> (US<n>-TC<m>)`",
+          "case ids that are not `<scope>.US<n>-TC<m>`",
         );
       tc = {
         id,
@@ -773,10 +812,10 @@ export function parseSuite(text) {
           : journeyScoped?.[4]
             ? Number(journeyScoped[4])
             : null,
-        modern: Boolean(modern),
+        modern: Boolean(modern || display),
         journeyScoped: Boolean(journeyScoped),
-        hyphenated: !modern && /-US-\d+-TC-\d+/.test(id),
-        title: modern ? modern[5] : legacy[2],
+        hyphenated: !modern && !display && /-US-\d+-TC-\d+/.test(id),
+        title: modern ? modern[5] : display ? display[5] : legacy[2],
         line: i + 1,
         props: new Map(),
         propOrder: [],
@@ -1101,7 +1140,7 @@ export function caseIndex(root, paths) {
     for (const line of readFileSync(p, "utf8").split("\n")) {
       lineNo += 1;
       const h = line.match(
-        /^(?:###|####)\s+((?:\S+\.TC-[0-9a-z]+)|(?:\S+-TC\d+(?:-\d+)?))(?:\s+\(US-?(\d+)-TC-?(\d+)\))?:/,
+        /^(?:###|####)\s+((?:\S+\.US-?\d+-TC-?\d+)|(?:\S+\.TC-[0-9a-z]+)|(?:\S+-TC\d+(?:-\d+)?))(?:\s+\(US-?(\d+)-TC-?(\d+)\))?:/,
       );
       if (h) {
         id = h[1];
@@ -1110,8 +1149,16 @@ export function caseIndex(root, paths) {
             level,
             rel,
             line: lineNo,
-            journeyNum: h[2] ? Number(h[2]) : null,
-            tcNum: h[3] ? Number(h[3]) : null,
+            journeyNum: h[2]
+              ? Number(h[2])
+              : /\.US-?(\d+)-TC-?\d+$/.exec(h[1])
+                ? Number(/\.US-?(\d+)-TC-?\d+$/.exec(h[1])[1])
+                : null,
+            tcNum: h[3]
+              ? Number(h[3])
+              : /\.US-?\d+-TC-?(\d+)$/.exec(h[1])
+                ? Number(/\.US-?\d+-TC-?(\d+)$/.exec(h[1])[1])
+                : null,
             traces: [],
             status: null,
           });
