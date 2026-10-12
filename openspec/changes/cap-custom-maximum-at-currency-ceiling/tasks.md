@@ -5,7 +5,7 @@
 - [ ] 1.3 Update shared fixtures, preview and existing ceiling/leading stories with supplied ceilings and native interactions; align the existing customAmountPlaceholder catalog key with the agreed {amount} min. story treatment in English and equivalent short minimum wording in the other locales; preserve the numeric formatter and backend policy
 - [ ] 1.4 Verify focused money/component tests, catalog validation, UI/preview type checks, browser story evidence and the rendered English placeholder against the owner's example, formatting and manual checks; prepare a reviewable shared-source PR with merge left to coordinator authorization
 
-## 2. Collector Ceiling Wiring And Refusal Presentation (grade10)
+## 2. Collector Ceiling Wiring And Refusal Presentation (grade10) (owner: @htonyl)
 
 Depends on group 1's authorized landing and shared submodule update.
 
