@@ -35,8 +35,8 @@ Restart the preview server after pulling so discovery refreshes.
 | Auction close | `/preview/auction/close/lot-closed-didnt-win` |
 | Auction order | `/preview/auction/order/auction-won` |
 | Grading | `/preview/grading/checked-in` |
-| Vault | `/preview/vault/offer-made` |
-| Vault items | `/preview/vault/item-vaulted` |
+| Vault case | `/preview/vault/case/offer-made` |
+| Vault item | `/preview/vault/item/item-vaulted` |
 
 This same preview app — sidebar, linter, spam/compatibility checks — is
 published as a static site on every push to `main` (and on demand) to
@@ -82,13 +82,14 @@ emails/
                            the uncollected rungs, collected
   vault/                   the collector's letters about a case or an item
     _components/           VaultLetter, CaseLine, ItemLetter, ItemLine,
-                           HowToPay, NoticeClause, ReminderSchedule,
-                           preview fixtures
-                           the offer's two, custody's three, the loan's
+                           HowToPay, NoticeClause, ReminderSchedule
+    fixtures.ts            case preview fixture, NotifyKind table
+    item-fixtures.ts       item preview fixture
+    case/                  the offer's two, custody's three, the loan's
                            five, falling due's three, the end of a case's
-                           four, the paper, the identity check, the item's
-                           four (vaulted, retrieval requested / approved /
-                           declined)
+                           four, the paper, the identity check
+    item/                  the item's four — vaulted, retrieval
+                           requested / approved / declined
 ```
 
 `LetterShell` is the one shell both products write in: heading, greeting,
