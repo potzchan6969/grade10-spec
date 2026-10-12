@@ -1,15 +1,15 @@
 # shared/ui/auction-order Test Cases
 
 **Status:** pending-review · 0/22
-**Drafts styled:** 2026-09-22, tcs-rules r3
+**Drafts styled:** 2026-10-12, tcs-rules r4
 
 ## g10.shared-auction-order.US1: Address form component contract
 
-**Walked by:** nobody on their own — a component contract; phone and address kind on the form are walked through `grade10-site/auction/winner-order`, which composes the block
+**Walked by:** nobody on their own — a component contract; the order detail is walked through `grade10-site/auction/winner-order`, which composes the block
 
 **As a** customer,
-**I want** the shared address form to collect personal or company addresses with a country-aware phone,
-**so that** Winner Order setup can confirm delivery and billing through one contract.
+**I want** the shared blocks to render what the application supplies,
+**so that** Winner Order composes one contract instead of drawing its own.
 
 <!-- trace:case id=g10.shared-auction-order.TC-g8b rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
 ### g10.shared-auction-order.US1-TC1: Personal is selected and Company Name is hidden
@@ -635,7 +635,7 @@ Runs once per row of **Test data**.
 
 * Each supplied error appears beside its named field.
 
-<!-- trace:case id=g10.shared-auction-order.TC-1f8 rev=1 covers=g10.shared-auction-order.SC-qy4 -->
+<!-- trace:case id=g10.shared-auction-order.TC-1f8 rev=2 covers=g10.shared-auction-order.SC-i3e -->
 ### g10.shared-auction-order.US1-TC21: The current step decides every step's state
 
 **Classification:**
@@ -665,7 +665,7 @@ Runs once per row of **Test data**.
 * Payment reads current.
 * Shipping and Completed read upcoming.
 
-<!-- trace:case id=g10.shared-auction-order.TC-fjf rev=1 covers=g10.shared-auction-order.SC-ofq -->
+<!-- trace:case id=g10.shared-auction-order.TC-fjf rev=2 covers=g10.shared-auction-order.SC-qb6 -->
 ### g10.shared-auction-order.US1-TC22: A press is reported, never acted on
 
 **Classification:**
@@ -720,3 +720,11 @@ Runs once per row of **Test data**.
 | Same-as-delivery billing payload omit vs repeat | **Raised, folded into spec** lightly via the matching scenario (same kind and phone for billing when Same as delivery) |
 
 **Uncovered anchors:** none for feature set groups `Address form fields`, `Address form export`. Billing address form behaviour for this change is covered by modified the matching scenario and durable SC-05/SC-06.
+
+**Run:** removal reconciliation, 2026-10-12, for `remove-my-auction-orders`, `shared/ui/auction-order`. The exports requirement is removed and restated as "The winner-order surface exports" with fresh scenario ids; `TC-1f8` and `TC-fjf` move `covers` from the retired `g10.shared-auction-order.SC-qy4`/`SC-ofq` to `SC-i3e`/`SC-qb6` at rev 2. Every other case stays — none names the list, row or empty blocks.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `shared-ui-auction-order-SC-01` to `SC-04`, `SC-13`, `SC-14` | Retired with their requirement | Restated as `SC-15` to `SC-20` under "The winner-order surface exports"; `SC-02`'s row assertion becomes the non-export check `SC-16` |
+| `g10.shared-auction-order.TC-1f8`, `TC-fjf` | Kept, re-linked | Same steps and results; `covers` moves to the restated scenarios |
+| The list, row and empty blocks | No case | No durable case covered them; the public-exports test and task 1.1's expectation cover the removal |

@@ -27,7 +27,7 @@ it.
   - Account menu: signed in, the sign-in email with its initial avatar above
     My Auctions and Sign Out; Profile joins first wherever the account page is
     carried, and My Orders ahead of My Auctions once Store answers; Sign Out
-    stays last; KYC, My Auction Orders and any item whose page the site
+    stays last; KYC and any item whose page the site
     withholds stay out
   - Account page sign-out: the account page offers Sign Out wherever it is
     carried
@@ -595,9 +595,9 @@ SHALL start sign-out.
 
 **Sign Out label** - The menu's sign-out item SHALL read "Sign Out".
 
-**Not offered** - The menu SHALL NOT offer KYC or My Auction Orders.
+**Not offered** - The menu SHALL NOT offer KYC.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-y2l rev=2 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-y2l rev=3 -->
 #### Scenario: grade10-site-site-page-shell-SC-56 - Account menu once Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu once Store answers
 
@@ -605,7 +605,7 @@ SHALL start sign-out.
 - **WHEN** they activate the account control
 - **THEN** My Orders comes immediately before My Auctions
 - **AND** Sign Out is the last item
-- **AND** the menu does not offer KYC or My Auction Orders
+- **AND** the menu does not offer KYC
 
 <!-- trace:scenario id=g10.site-page-shell.SC-04a rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-57 - Sign out from the menu
