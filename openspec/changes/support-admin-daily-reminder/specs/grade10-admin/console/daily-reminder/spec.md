@@ -41,6 +41,7 @@ What's New SHALL list each listing that closed on the previous Hong Kong day, la
 | Sold | The listing code, the lot, the winner and the order's status as it stands now | The listing's winner order |
 | Unsold | The listing code and the lot | The listing |
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-t4n rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-01 - A listing closed yesterday has a row
 **Serves:** grade10-admin-console-daily-reminder-US-01 - the operator starts the day with what closed yesterday
 
@@ -48,6 +49,7 @@ What's New SHALL list each listing that closed on the previous Hong Kong day, la
 - **WHEN** an operator who may open it reads What's New
 - **THEN** the list holds one row for AU-1038
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-tp9 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-02 - The day is the Hong Kong day at both edges
 **Serves:** grade10-admin-console-daily-reminder-US-01 - two operators in different zones read one list
 
@@ -56,6 +58,7 @@ What's New SHALL list each listing that closed on the previous Hong Kong day, la
 - **WHEN** the operator reads What's New
 - **THEN** only the listing that closed at 23:59:59 on 11 October has a row
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-xv5 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-03 - A sold listing is its winner order
 **Serves:** grade10-admin-console-daily-reminder-US-01 - the operator goes from the row to the order that needs them
 
@@ -65,6 +68,7 @@ What's New SHALL list each listing that closed on the previous Hong Kong day, la
 - **AND** the row opens the winner's order
 - **AND** no second row names the same listing
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-53i rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-04 - An unsold listing opens the listing
 **Serves:** grade10-admin-console-daily-reminder-US-01 - the operator sees a lot that found no buyer
 
@@ -73,6 +77,7 @@ What's New SHALL list each listing that closed on the previous Hong Kong day, la
 - **THEN** the listing has one row, showing its code and its lot with no winner
 - **AND** the row opens the listing
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-7xm rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-05 - A cancelled order keeps its row with its status now
 **Serves:** grade10-admin-console-daily-reminder-US-01 - the operator still learns the lot closed
 
@@ -80,6 +85,7 @@ What's New SHALL list each listing that closed on the previous Hong Kong day, la
 - **WHEN** an operator reads What's New
 - **THEN** the listing keeps its row, and the row shows the order's status as Cancelled
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-zy5 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-06 - The latest close leads
 **Serves:** grade10-admin-console-daily-reminder-US-01 - the operator reads yesterday's evening closes first
 
@@ -87,6 +93,7 @@ What's New SHALL list each listing that closed on the previous Hong Kong day, la
 - **WHEN** an operator reads What's New
 - **THEN** the rows read in the order 21:30, 15:00, 10:00
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-evg rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-07 - A test lot is listed like any other
 **Serves:** grade10-admin-console-daily-reminder-US-01 - a rehearsal sale appears as the real ones do
 
@@ -106,6 +113,7 @@ Still Waiting SHALL list each order that has waited 48 hours or more in one of t
 
 An order SHALL be listed from the instant 48 hours have elapsed and on every day after, until it leaves the status. No other order status SHALL be listed, and an order with a payment flag not yet cleared SHALL NOT be listed. A row shows the listing code, the lot, the winner, the action and how long the order has waited, and opens the order.
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-v0i rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-08 - An invoice not sent for 48 hours is listed
 **Serves:** grade10-admin-console-daily-reminder-US-02 - an order awaiting an invoice is not forgotten
 
@@ -113,6 +121,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **WHEN** an operator with payment processing reads Still Waiting
 - **THEN** the list holds a Send invoice row for the order, showing the listing code, the lot, the winner and 3 days
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-q0x rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-09 - A proof not checked for 48 hours is listed
 **Serves:** grade10-admin-console-daily-reminder-US-02 - a proof waiting to be checked is not forgotten
 
@@ -120,6 +129,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **WHEN** an operator with payment processing reads Still Waiting
 - **THEN** the list holds a Check proof row for the order
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-06a rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-10 - The proof clock is the latest proof
 **Serves:** grade10-admin-console-daily-reminder-US-02 - a winner who uploads again restarts the wait
 
@@ -127,6 +137,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **WHEN** an operator with payment processing reads Still Waiting
 - **THEN** the order has no row
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-bs5 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-11 - A card not dispatched for 48 hours is listed
 **Serves:** grade10-admin-console-daily-reminder-US-02 - a paid order awaiting dispatch is not forgotten
 
@@ -134,6 +145,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **WHEN** an operator with shipment processing reads Still Waiting
 - **THEN** the list holds a Dispatch row for the order, showing 5 days
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-r85 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-12 - Exactly 48 hours is listed and one second less is not
 **Serves:** grade10-admin-console-daily-reminder-US-02 - the threshold is elapsed time
 
@@ -141,6 +153,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **WHEN** an operator with payment processing reads Still Waiting
 - **THEN** the first order has a row and the second has none
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-b1n rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-13 - The longest wait leads across the three actions
 **Serves:** grade10-admin-console-daily-reminder-US-02 - the oldest job is read first
 
@@ -149,6 +162,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **WHEN** they read Still Waiting
 - **THEN** the rows read Dispatch, Check proof, Send invoice
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-89a rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-14 - An order stays listed every day until it moves on
 **Serves:** grade10-admin-console-daily-reminder-US-02 - an order nobody got to is listed again tomorrow
 
@@ -157,6 +171,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **THEN** the order has a row on both days
 - **AND** once the invoice is sent, the order has no row
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-n5c rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-15 - No other status is listed however long it waits
 **Serves:** grade10-admin-console-daily-reminder-US-02 - Needs you keeps counting the overdue and the waiting on winner
 
@@ -164,6 +179,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **WHEN** an operator holding every grant reads Still Waiting
 - **THEN** none of those orders has a row
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-x5d rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-16 - A flagged order is not listed
 **Serves:** grade10-admin-console-daily-reminder-US-02 - a flagged payment is read in Needs you
 
@@ -171,6 +187,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 - **WHEN** an operator with shipment processing reads Still Waiting
 - **THEN** the order has no row
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-juj rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-17 - A row opens its order
 **Serves:** grade10-admin-console-daily-reminder-US-02 - the operator goes from the reminder to the work
 
@@ -182,6 +199,7 @@ An order SHALL be listed from the instant 48 hours have elapsed and on every day
 
 Every Still Waiting row SHALL be an order the Orders worklist lists under Needs action, and the Needs you counts SHALL be unchanged by the lists. Reading either list, or posting it to Slack, SHALL NOT change any order status, worklist row, order page or listing, and no screen SHALL carry the word overdue because of it.
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-no9 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-18 - Still Waiting is inside Needs action
 **Serves:** Still Waiting list - the worklist and the reminder derive one status
 
@@ -190,6 +208,7 @@ Every Still Waiting row SHALL be an order the Orders worklist lists under Needs 
 - **THEN** all three orders are in Needs action
 - **AND** the Needs action count is the same as it is with no reminder read
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-6zm rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-19 - A reminder marks no status
 **Serves:** Still Waiting list - the order an operator opens after a reminder
 
@@ -210,6 +229,7 @@ The console SHALL show an operator only the rows whose action their grants allow
 
 A list that has no row for the operator SHALL read as empty, and SHALL NOT be a refusal.
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-22e rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-20 - Finance sees invoices and proofs and not dispatches
 **Serves:** grade10-admin-console-daily-reminder-US-02 - finance is not reminded about dispatch
 
@@ -218,6 +238,7 @@ A list that has no row for the operator SHALL read as empty, and SHALL NOT be a 
 - **THEN** the list holds the Send invoice and Check proof rows
 - **AND** it holds no Dispatch row
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-vpd rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-21 - Shipping staff see dispatches and not invoices
 **Serves:** grade10-admin-console-daily-reminder-US-02 - shipping staff are not reminded about invoices
 
@@ -225,6 +246,7 @@ A list that has no row for the operator SHALL read as empty, and SHALL NOT be a 
 - **WHEN** an operator holding reading and shipment processing, and not payment processing, reads Still Waiting
 - **THEN** the list holds the Dispatch row only
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-gjm rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-22 - An admin sees every row
 **Serves:** grade10-admin-console-daily-reminder-US-02 - the operator who holds every grant reads every wait
 
@@ -232,6 +254,7 @@ A list that has no row for the operator SHALL read as empty, and SHALL NOT be a 
 - **WHEN** an admin reads Still Waiting
 - **THEN** the list holds all three rows
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-4ql rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-23 - A reader sees what closed and no waits
 **Serves:** grade10-admin-console-daily-reminder-US-01 - an operator who can only read still learns what closed
 
@@ -240,6 +263,7 @@ A list that has no row for the operator SHALL read as empty, and SHALL NOT be a 
 - **THEN** What's New holds the listing's row
 - **AND** Still Waiting is empty, with no refusal
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-ml9 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-24 - An operator who cannot open Auction has no auction rows
 **Serves:** grade10-admin-console-daily-reminder-US-01 - a vault operator is not shown auction work
 
@@ -260,6 +284,7 @@ The console SHALL open the daily dialog over whichever page the operator lands o
 
 The mark SHALL be kept in the browser, per operator and per Hong Kong day. A browser that cannot keep it SHALL show the dialog once per tab session instead. The console SHALL check the day on entry and not while the operator works.
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-4zv rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-25 - The dialog opens over the page the operator lands on
 **Serves:** grade10-admin-console-daily-reminder-US-01 - a link to one order does not skip the reminder
 
@@ -267,6 +292,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **WHEN** they enter the console by a link to an order's page
 - **THEN** the order's page loads, and the dialog opens over it
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-5n3 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-26 - The dialog carries both lists
 **Serves:** grade10-admin-console-daily-reminder-US-02 - the new and the waiting are read together
 
@@ -274,6 +300,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **WHEN** they enter the console
 - **THEN** the dialog holds What's New and Still Waiting, in that order, each with its rows
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-qy6 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-27 - An empty list is left out of the dialog
 **Serves:** grade10-admin-console-daily-reminder-US-01 - the dialog says only what there is
 
@@ -281,6 +308,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **WHEN** they enter the console
 - **THEN** the dialog holds What's New and does not hold Still Waiting
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-81m rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-28 - Nothing for the operator, no dialog
 **Serves:** grade10-admin-console-daily-reminder-US-01 - a quiet morning is not interrupted
 
@@ -288,6 +316,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **WHEN** they enter the console
 - **THEN** no dialog opens
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-0so rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-29 - Closing keeps it closed for the Hong Kong day
 **Serves:** grade10-admin-console-daily-reminder-US-01 - the operator is not asked twice in a day
 
@@ -295,6 +324,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **WHEN** they enter the console again at 15:00 the same Hong Kong day, in the same browser
 - **THEN** no dialog opens
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-iu6 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-30 - The next Hong Kong day opens it again
 **Serves:** grade10-admin-console-daily-reminder-US-01 - each Hong Kong morning has its own reminder
 
@@ -303,6 +333,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **WHEN** they enter the console at 00:10 Hong Kong time the next day, which is still the same day in London
 - **THEN** the dialog opens
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-xp0 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-31 - The mark belongs to the operator
 **Serves:** grade10-admin-console-daily-reminder-US-01 - a shared counter browser reminds each operator
 
@@ -310,6 +341,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **WHEN** operator B, with a row in a list, signs in on the same browser and enters the console
 - **THEN** the dialog opens for B
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-cer rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-32 - The mark belongs to the browser
 **Serves:** grade10-admin-console-daily-reminder-US-01 - no server memory of what was seen
 
@@ -317,6 +349,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **WHEN** they enter the console in a second browser the same day
 - **THEN** the dialog opens
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-z0d rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-33 - A session across midnight checks again on the next entry
 **Serves:** grade10-admin-console-daily-reminder-US-01 - the dialog never appears under the operator's hands
 
@@ -325,6 +358,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **THEN** no dialog opens during that session
 - **AND** it opens on their next entry, if a list has a row for them
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-rzr rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-34 - Blocked storage opens it once per tab session
 **Serves:** grade10-admin-console-daily-reminder-US-01 - a locked-down browser is reminded, not nagged
 
@@ -333,6 +367,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 - **THEN** the dialog opened once and does not open again in that tab
 - **AND** it opens in a new tab
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-5sd rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-35 - A list that fails to load says so
 **Serves:** grade10-admin-console-daily-reminder-US-01 - a failure never reads as nothing waiting
 
@@ -345,6 +380,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day. A bro
 
 Today SHALL show What's New, Still Waiting and Needs you as three columns, in that order, with the lists the dialog holds. Needs you SHALL hold the section cards it holds now, one under another, with the counts and links unchanged. What's New and Still Waiting SHALL group their rows by product, Auction first. Approvals, Recent and All sections SHALL stay below the columns, as they are. The lists SHALL be read when Today loads, when the operator comes back to the tab and on Refresh, and never on a timer.
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-v91 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-36 - Three columns side by side
 **Serves:** grade10-admin-console-daily-reminder-US-03 - the lists are on Today after the dialog is closed
 
@@ -353,6 +389,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **THEN** What's New, Still Waiting and Needs you stand side by side, in that order
 - **AND** the first two hold the rows the dialog held
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-ojd rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-37 - Needs you keeps its cards
 **Serves:** grade10-admin-console-daily-reminder-US-03 - what needs the operator is where it was
 
@@ -360,6 +397,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **WHEN** they open Today
 - **THEN** the Needs you column holds the same section cards, one under another, with the same counts and links as before
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-5yn rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-38 - Rows group by product with Auction first
 **Serves:** grade10-admin-console-daily-reminder-US-03 - another product adds a group and no column
 
@@ -367,6 +405,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **WHEN** an operator opens Today
 - **THEN** each column holds its rows under an Auction group
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-pck rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-39 - An empty list stays and says so
 **Serves:** grade10-admin-console-daily-reminder-US-03 - the page does not shift between operators
 
@@ -375,6 +414,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **THEN** all three columns show
 - **AND** What's New and Still Waiting each say they have nothing for the operator
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-75f rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-40 - A list that fails to load says so on Today
 **Serves:** grade10-admin-console-daily-reminder-US-03 - a failure never reads as nothing waiting
 
@@ -382,6 +422,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **WHEN** an operator opens Today
 - **THEN** the Still Waiting column says it failed to load, and What's New shows its rows
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-pbn rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-41 - A row on Today opens its order or listing
 **Serves:** grade10-admin-console-daily-reminder-US-03 - the operator goes from the column to the work
 
@@ -389,6 +430,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **WHEN** an operator follows each on Today
 - **THEN** the sold row opens the winner order and the unsold row opens the listing
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-1qd rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-42 - The rest of Today stays below the columns
 **Serves:** Today columns - the page below the three columns is the page the operator knows
 
@@ -396,6 +438,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **WHEN** they open Today
 - **THEN** Approvals, Recent and All sections show below the three columns, with the content they show without this change
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-vn1 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-43 - Narrow screens stack the columns with Needs you last
 **Serves:** grade10-admin-console-daily-reminder-US-03 - the operator on a phone reads the lists first
 
@@ -403,6 +446,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **WHEN** an operator opens Today
 - **THEN** the columns stack in the order What's New, Still Waiting, Needs you
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-x3y rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-44 - The lists are read on arrival, on return and on Refresh only
 **Serves:** grade10-admin-console-daily-reminder-US-03 - Today does not move while the operator reads
 
@@ -421,6 +465,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 4. Each row names the listing code, the lot, the outcome or the action, and whole days waited, and links to its listing or order in the console of the environment that posts. It never names the winner, and never carries a winner's email or phone.
 5. A lot title longer than 60 characters is cut to no more than 60.
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-kf7 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-45 - The message posts at 08:00 Hong Kong time
 **Serves:** grade10-admin-console-daily-reminder-US-04 - the team starts the morning with the lists
 
@@ -429,6 +474,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 - **THEN** nothing has posted at 07:59:59
 - **AND** one message with both lists has posted by the run that begins at 08:00:00
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-99q rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-46 - Each row links to its order or listing
 **Serves:** grade10-admin-console-daily-reminder-US-04 - the team opens the work from the channel
 
@@ -437,6 +483,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 - **THEN** each row links to its order's page or its listing's page on the staging console
 - **AND** no row links to the production console
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-oce rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-47 - The message carries every row
 **Serves:** grade10-admin-console-daily-reminder-US-04 - a shared channel cannot be scoped to one operator
 
@@ -444,6 +491,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 - **WHEN** the message posts
 - **THEN** all three rows are in it
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-alf rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-48 - No winner name, email or phone reaches the channel
 **Serves:** grade10-admin-console-daily-reminder-US-04 - the link carries the identity
 
@@ -451,6 +499,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 - **WHEN** the message posts
 - **THEN** none of the three appears anywhere in the post, links and notification text included
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-4d8 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-49 - A row names its outcome or action and whole days
 **Serves:** grade10-admin-console-daily-reminder-US-04 - the team reads what each row asks
 
@@ -459,6 +508,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 - **THEN** the rows read Sold, Unsold and Dispatch with 3 days
 - **AND** each row names its listing code and lot
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-odp rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-50 - A long lot title is cut to 60 characters
 **Serves:** grade10-admin-console-daily-reminder-US-04 - one long title does not fill the channel
 
@@ -467,6 +517,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 - **THEN** the first title shows in no more than 60 characters
 - **AND** the second shows whole
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-oxw rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-51 - A list of 10 posts whole
 **Serves:** grade10-admin-console-daily-reminder-US-04 - a short list needs no link
 
@@ -475,6 +526,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 - **THEN** all 10 rows are in it
 - **AND** it carries no link to Today for more
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-nyt rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-52 - A longer list stops at 10 and says how many more
 **Serves:** grade10-admin-console-daily-reminder-US-04 - the channel stays readable
 
@@ -483,6 +535,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 - **THEN** Still Waiting shows its first 10 rows, longest wait first, then a link to Today saying 15 more
 - **AND** What's New shows its first 10 rows, then a link to Today saying 1 more
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-4mh rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-53 - A quiet day posts nothing
 **Serves:** Slack message - the 08:00 run that finds both lists empty
 
@@ -494,6 +547,7 @@ At 08:00 Hong Kong time every day, including weekends, the lists SHALL post as o
 
 When the post fails, it SHALL be tried again through the same Hong Kong day, and each failed attempt SHALL be logged as an error naming the day and the reason. The day's message SHALL post once at most. A message that did not post by midnight Hong Kong time SHALL NOT post on the next day. Each attempt SHALL read the lists as they stand.
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-s95 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-54 - A failed send is tried again and posts once
 **Serves:** grade10-admin-console-daily-reminder-US-04 - a Slack outage at 08:00 does not lose the morning
 
@@ -501,6 +555,7 @@ When the post fails, it SHALL be tried again through the same Hong Kong day, and
 - **WHEN** the runs go on from 08:00 to 08:10
 - **THEN** one message has posted, at 08:05
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-fbm rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-55 - A day's message never posts twice
 **Serves:** Slack message - runs that overlap or repeat
 
@@ -508,6 +563,7 @@ When the post fails, it SHALL be tried again through the same Hong Kong day, and
 - **WHEN** further runs follow, or two run at once, through the rest of that Hong Kong day
 - **THEN** no second message posts
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-6kr rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-56 - Each failed attempt is logged as an error
 **Serves:** Slack message - the run that cannot reach Slack
 
@@ -515,6 +571,7 @@ When the post fails, it SHALL be tried again through the same Hong Kong day, and
 - **WHEN** the runs go on
 - **THEN** an error is logged for each attempt, naming the Hong Kong day and Slack's reason
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-07a rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-57 - A message that missed its day is not posted the next day
 **Serves:** Slack message - the run after midnight
 
@@ -523,6 +580,7 @@ When the post fails, it SHALL be tried again through the same Hong Kong day, and
 - **THEN** nothing posts for Monday
 - **AND** Tuesday's message posts at 08:00, naming Tuesday's lists
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-ogm rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-58 - A retry reads the lists as they stand
 **Serves:** grade10-admin-console-daily-reminder-US-04 - the channel is not told of work already done
 
@@ -534,6 +592,7 @@ When the post fails, it SHALL be tried again through the same Hong Kong day, and
 
 The Slack access token and the channel SHALL be set per environment, so staging and production can differ, and never from the console. When either is not set, nothing SHALL post.
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-hb6 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-59 - The post goes to the environment's channel
 **Serves:** Slack message - staging and production post to their own channels
 
@@ -541,6 +600,7 @@ The Slack access token and the channel SHALL be set per environment, so staging 
 - **WHEN** each posts its message
 - **THEN** each uses its own token and channel
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-f3g rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-60 - Without a token or a channel nothing posts and the log says so
 **Serves:** Slack message - an environment with no Slack set up
 

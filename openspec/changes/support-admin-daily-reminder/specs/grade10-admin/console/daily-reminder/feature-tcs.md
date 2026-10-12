@@ -9,6 +9,7 @@
 **I want** a list of the listings that closed yesterday when I first open the console, each opening the order or listing it belongs to,
 **so that** I begin with the lots that need my attention without searching for them.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ue2 rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-ue2 (US1-TC1): First entry of the day opens the dialog with both lists
 
 **Classification:**
@@ -42,6 +43,7 @@
 * What's New lists a row for `<listing_1>` and a row for `<listing_2>`.
 * Still Waiting lists a row for `<order_2>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-rz8 rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-rz8 (US1-TC2): A sold listing is one row that opens its winner order
 
 **Classification:**
@@ -74,6 +76,7 @@
 * The row shows the listing code and lot, `<winner_1>` and the status Preparing Invoice.
 * Step 3 opens the page of `<order_1>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-u6q rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-u6q (US1-TC3): An unsold listing is one row that opens the listing
 
 **Classification:**
@@ -105,6 +108,7 @@
 * What's New holds exactly one row for `<listing_2>`, showing its listing code and lot and no winner.
 * Step 3 opens the page of `<listing_2>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-jod rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-jod (US1-TC4): What's New lists the latest close first
 
 **Classification:**
@@ -134,6 +138,7 @@
 
 * The rows read `<listing_c>`, `<listing_b>`, `<listing_a>` from top to bottom.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-5cx rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-5cx (US1-TC5): Listings closed at either edge of yesterday are listed
 
 **Classification:**
@@ -165,6 +170,7 @@
 * What's New holds a row for `<listing_first>`.
 * What's New holds a row for `<listing_last>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-pk3 rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-pk3 (US1-TC6): The previous day follows Hong Kong, not the browser zone
 
 Runs once per row of **Test data**.
@@ -205,6 +211,7 @@ Runs once per row of **Test data**.
 * What's New holds a row for `<listing_1>`.
 * What's New holds no row for `<listing_2>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7l8 rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-7l8 (US1-TC7): Closing the dialog keeps it closed for the rest of the Hong Kong day
 
 **Classification:**
@@ -238,6 +245,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the page with no dialog.
 * Step 4 shows the page with no dialog.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-zgt rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-zgt (US1-TC8): A new Hong Kong day opens the dialog again whatever the browser zone
 
 Runs once per row of **Test data**.
@@ -276,6 +284,7 @@ Runs once per row of **Test data**.
 
 * The dialog opens over the page.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-6qf rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-6qf (US1-TC9): The dialog opens over the console page the operator lands on
 
 **Classification:**
@@ -306,6 +315,7 @@ Runs once per row of **Test data**.
 * Step 1 loads the page of `<order_1>` with the dialog open over it.
 * Step 2 leaves the page of `<order_1>` showing, not another page.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-xds rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-xds (US1-TC10): Closing the dialog does not close it for another operator
 
 **Classification:**
@@ -336,6 +346,7 @@ Runs once per row of **Test data**.
 
 * The dialog opens for admin B.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-1g3 rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-1g3 (US1-TC11): Closing the dialog does not close it in another browser
 
 **Classification:**
@@ -364,6 +375,7 @@ Runs once per row of **Test data**.
 
 * The dialog opens in browser B.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-twg rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-twg (US1-TC12): A session crossing midnight opens no dialog until the next entry
 
 **Classification:**
@@ -394,6 +406,7 @@ Runs once per row of **Test data**.
 * Step 1 shows no dialog.
 * Step 2 opens the dialog.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-323 rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-323 (US1-TC13): A list with no row for the operator is left out of the dialog
 
 **Classification:**
@@ -426,6 +439,7 @@ Runs once per row of **Test data**.
 * The dialog shows Still Waiting with the row for `<order_2>`.
 * The dialog shows no What's New list and no empty message for it.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ffo rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-ffo (US1-TC14): A browser that blocks storage opens the dialog once per tab session
 
 **Classification:**
@@ -459,6 +473,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the page with no dialog.
 * Step 4 opens the dialog.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-4no rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-4no (US1-TC15): A sold listing whose order is cancelled keeps its row with the current status
 
 **Classification:**
@@ -489,6 +504,7 @@ Runs once per row of **Test data**.
 * What's New holds a row for `<listing_1>`.
 * The row shows the status Cancelled.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ogw rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-ogw (US1-TC16): The dialog lists every row without a cap
 
 **Classification:**
@@ -518,6 +534,7 @@ Runs once per row of **Test data**.
 
 * What's New holds 12 rows.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-9en rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-9en (US1-TC17): Listings closed outside the previous day are not listed
 
 **Classification:**
@@ -550,6 +567,7 @@ Runs once per row of **Test data**.
 * What's New holds no row for `<listing_now>`.
 * What's New holds no row for `<listing_later>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-n3a rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-n3a (US1-TC18): An operator with no row in either list gets no dialog
 
 **Classification:**
@@ -579,6 +597,7 @@ Runs once per row of **Test data**.
 
 * The console page loads with no dialog.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-z6w rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-z6w (US1-TC19): A list that fails to load says so beside the list that loaded
 
 Runs once per row of **Test data**.
@@ -621,6 +640,7 @@ Runs once per row of **Test data**.
 * The dialog does not show `<failing_list>` as empty.
 * The other list shows its rows.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-nb8 rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-nb8 (US1-TC20): What's New shows a sold row only to an operator who can open the order
 
 Runs once per row of **Test data**.
@@ -660,6 +680,7 @@ Runs once per row of **Test data**.
 
 * What's New `<shows>` a row for `<listing_1>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-atu rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-evg,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd -->
 ### g10adm.console-daily-reminder.TC-atu (US1-TC21): An operator with no auction grant gets no dialog from auction rows
 
 **Classification:**
@@ -696,6 +717,7 @@ Runs once per row of **Test data**.
 **I want** the orders that have waited 48 hours for me to send an invoice, check a proof or dispatch listed every day until I act, longest wait first,
 **so that** an order I could not get to does not stay forgotten behind newer work.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ivd rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-ivd (US2-TC1): An order past 48 hours is a row saying the action it waits for
 
 Runs once per row of **Test data**.
@@ -737,6 +759,7 @@ Runs once per row of **Test data**.
 * The row shows the listing code, lot, winner, `<action>` and how long the order has waited.
 * Step 3 opens the page of `<order_w>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-fbu rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-fbu (US2-TC2): An order at exactly 48 hours is listed
 
 **Classification:**
@@ -766,6 +789,7 @@ Runs once per row of **Test data**.
 
 * Still Waiting holds a row for `<order_w>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ala rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-ala (US2-TC3): Still Waiting lists the longest wait first
 
 **Classification:**
@@ -795,6 +819,7 @@ Runs once per row of **Test data**.
 
 * The rows read `<order_b>`, `<order_c>`, `<order_a>` from top to bottom.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-eba rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-eba (US2-TC4): An order stays listed every day until it moves on
 
 **Classification:**
@@ -826,6 +851,7 @@ Runs once per row of **Test data**.
 * Step 1 lists `<order_w>` in Still Waiting.
 * Step 3 opens the dialog again, listing `<order_w>` with a longer wait.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-aah rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-aah (US2-TC5): An order that moves on leaves Still Waiting
 
 **Classification:**
@@ -857,6 +883,7 @@ Runs once per row of **Test data**.
 
 * Step 4 shows Still Waiting with no row for `<order_w>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-5ri rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-5ri (US2-TC6): An operator with no Still Waiting row sees no such list in the dialog
 
 **Classification:**
@@ -887,6 +914,7 @@ Runs once per row of **Test data**.
 * The dialog opens with What's New and its row for `<listing_1>`.
 * The dialog shows no Still Waiting list.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-t7x rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-t7x (US2-TC7): An order short of 48 elapsed hours is not listed
 
 Runs once per row of **Test data**.
@@ -925,6 +953,7 @@ Runs once per row of **Test data**.
 
 * Still Waiting holds no row for `<order_w>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-to3 rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-to3 (US2-TC8): A wait runs from its status clock, not from the order's age
 
 Runs once per row of **Test data**.
@@ -964,6 +993,7 @@ Runs once per row of **Test data**.
 
 * Still Waiting holds no row for `<order_w>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-xga rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-xga (US2-TC9): Other statuses are not listed however long they wait
 
 Runs once per row of **Test data**.
@@ -1006,6 +1036,7 @@ Runs once per row of **Test data**.
 
 * Still Waiting holds no row for `<order_w>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-1iy rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-no9,g10adm.console-daily-reminder.SC-6zm,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-1iy (US2-TC10): Still Waiting marks no status, worklist row or order page
 
 **Classification:**
@@ -1039,6 +1070,7 @@ Runs once per row of **Test data**.
 * The row of `<order_w>` is in Needs action with its status Preparing Invoice and no added mark or word.
 * The order page header reads Preparing Invoice with no overdue word or mark.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-kp9 rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-kp9 (US2-TC11): Rows follow the operator's grants
 
 Runs once per row of **Test data**.
@@ -1080,6 +1112,7 @@ Runs once per row of **Test data**.
 
 * Still Waiting holds `<rows>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-xnm rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-xnm (US2-TC12): The Still Waiting read leaves out rows the caller's grants do not allow
 
 **Classification:**
@@ -1117,6 +1150,7 @@ Runs once per row of **Test data**.
 **I want** the same two lists on Today, beside what needs me,
 **so that** I can come back to them later in the day without the dialog.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-64m rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-64m (US3-TC1): Today shows What's New, Still Waiting and Needs you side by side
 
 **Classification:**
@@ -1148,6 +1182,7 @@ Runs once per row of **Test data**.
 * What's New holds the row for `<listing_1>`.
 * Still Waiting holds the row for `<order_2>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ja5 rev=1 covers=g10adm.console-daily-reminder.SC-no9,g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-ja5 (US3-TC2): Needs you keeps its cards in one column with counts and links unchanged
 
 **Classification:**
@@ -1179,6 +1214,7 @@ Runs once per row of **Test data**.
 * The Orders count in Needs you equals the Needs action count from Step 2.
 * Each card link opens the page it opened before the reminder.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-z2e rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-1qd,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-z2e (US3-TC3): Approvals, Recent and All sections stay below the columns
 
 **Classification:**
@@ -1206,6 +1242,7 @@ Runs once per row of **Test data**.
 
 * The Approvals, Recent and All sections show below the columns, in their own layout.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ges rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-ges (US3-TC4): Rows group by product with Auction first
 
 **Classification:**
@@ -1235,6 +1272,7 @@ Runs once per row of **Test data**.
 
 * Each list holds its rows under an Auction group.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-0rq rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-0rq (US3-TC5): A list with no row stays as a column and says so
 
 Runs once per row of **Test data**.
@@ -1275,6 +1313,7 @@ Runs once per row of **Test data**.
 * All three columns show.
 * Each empty list says it has no rows.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-mgn rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-mgn (US3-TC6): The columns stack on a narrow screen with Needs you last
 
 **Classification:**
@@ -1302,6 +1341,7 @@ Runs once per row of **Test data**.
 
 * The lists stack in one column: What's New, Still Waiting, Needs you.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-y84 rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-y84 (US3-TC7): Today reads the lists on load, tab return and Refresh, never on a timer
 
 **Classification:**
@@ -1335,6 +1375,7 @@ Runs once per row of **Test data**.
 * Step 3 reads the lists.
 * Step 4 reads the lists.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-tl6 rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-tl6 (US3-TC8): Today lists every row without a cap
 
 **Classification:**
@@ -1365,6 +1406,7 @@ Runs once per row of **Test data**.
 * What's New holds 12 rows.
 * Still Waiting holds 12 rows.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-c2l rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-c2l (US3-TC9): A row on Today opens its order or listing
 
 **Classification:**
@@ -1397,6 +1439,7 @@ Runs once per row of **Test data**.
 * Step 2 opens the page of `<listing_2>`.
 * Step 3 opens the page of `<order_2>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-554 rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-554 (US3-TC10): Today shows an operator only the rows their grants allow
 
 **Classification:**
@@ -1435,6 +1478,7 @@ Runs once per row of **Test data**.
 **I want** the day's new listings and the orders still waiting posted to our channel each morning, every row a link,
 **so that** the team sees what is waiting, and opens it, without first opening the console.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-gqc rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-gqc (US4-TC1): Both lists post as one message at 08:00 Hong Kong time
 
 **Classification:**
@@ -1467,6 +1511,7 @@ Runs once per row of **Test data**.
 * The message holds a What's New list and a Still Waiting list.
 * Rows for `<listing_1>`, `<listing_2>` and `<order_2>` show.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ark rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-ark (US4-TC2): Every row links to its listing or order in the console
 
 **Classification:**
@@ -1498,6 +1543,7 @@ Runs once per row of **Test data**.
 * Step 2 opens the page of `<listing_2>` in the console.
 * Step 3 opens the page of `<order_2>` in the console.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-wlt rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-wlt (US4-TC3): A row names the listing code, lot, outcome or action and days waited
 
 **Classification:**
@@ -1527,6 +1573,7 @@ Runs once per row of **Test data**.
 * The `<listing_2>` row shows its listing code, lot and the outcome unsold.
 * The `<order_2>` row shows its listing code, lot, the action Send invoice and its days waited.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-x2r rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-x2r (US4-TC4): The message carries everyone's rows whatever an operator's grants
 
 **Classification:**
@@ -1557,6 +1604,7 @@ Runs once per row of **Test data**.
 * The message holds a row for `<order_i>`.
 * The message holds a row for `<order_s>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-kgn rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-kgn (US4-TC5): Each list stops at 10 rows with a link to Today for the rest
 
 Runs once per row of **Test data**.
@@ -1597,6 +1645,7 @@ Runs once per row of **Test data**.
 * The list holds `<rows>` rows.
 * The end of the list shows `<more>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7zn rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-7zn (US4-TC6): The 10 rows are the longest waits and each list is counted alone
 
 **Classification:**
@@ -1627,6 +1676,7 @@ Runs once per row of **Test data**.
 * Still Waiting shows 10 rows without `<order_last>` and a link to Today saying 1 more.
 * What's New shows 3 rows and no link to Today.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-12f rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-12f (US4-TC7): A long lot title is cut to 60 characters after the listing code
 
 Runs once per row of **Test data**.
@@ -1664,6 +1714,7 @@ Runs once per row of **Test data**.
 
 * The row shows the listing code, then the lot title `<shown>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-31k rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-31k (US4-TC8): The post follows the Hong Kong day on every day of the week
 
 Runs once per row of **Test data**.
@@ -1703,6 +1754,7 @@ Runs once per row of **Test data**.
 * One message posts for `<day>`.
 * It holds a row for `<listing_y>` and none for `<listing_t>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-5hn rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-5hn (US4-TC9): A day with rows in one list only still posts
 
 **Classification:**
@@ -1732,6 +1784,7 @@ Runs once per row of **Test data**.
 
 * One message from today shows the row for `<listing_1>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-swg rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm,g10adm.console-daily-reminder.SC-hb6 -->
 ### g10adm.console-daily-reminder.TC-swg (US4-TC10): Each environment posts to its own channel
 
 **Classification:**
@@ -1763,6 +1816,7 @@ Runs once per row of **Test data**.
 * The staging channel holds the message.
 * The production channel holds no message from staging.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ne7 rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-ne7 (US4-TC11): The message carries no winner name, email or phone
 
 **Classification:**
@@ -1795,6 +1849,7 @@ Runs once per row of **Test data**.
 * No winner's email appears.
 * No winner's phone appears.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-g54 rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-4mh,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-g54 (US4-TC12): Nothing posts when both lists are empty
 
 **Classification:**
@@ -1824,6 +1879,7 @@ Runs once per row of **Test data**.
 
 * The channel holds no message from today.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-ymo rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-6kr,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-ymo (US4-TC13): A failed send is tried again and posts once
 
 **Classification:**
@@ -1855,6 +1911,7 @@ Runs once per row of **Test data**.
 * The channel holds one message for `<day>`.
 * Each failed attempt is logged as an error.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-e7e rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-e7e (US4-TC14): A lost reply does not post the day's message twice
 
 **Classification:**
@@ -1885,6 +1942,7 @@ Runs once per row of **Test data**.
 
 * The channel holds exactly one message for `<day>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-rvs rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-fbm,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-rvs (US4-TC15): A second trigger the same day posts nothing more
 
 **Classification:**
@@ -1913,6 +1971,7 @@ Runs once per row of **Test data**.
 
 * The channel still holds one message for today.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7fe rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-07a,g10adm.console-daily-reminder.SC-ogm -->
 ### g10adm.console-daily-reminder.TC-7fe (US4-TC16): A message that never sent is not posted on the next day
 
 **Classification:**
@@ -1944,6 +2003,7 @@ Runs once per row of **Test data**.
 * The channel holds no message for `<day_1>`.
 * The channel holds one message for `<day_2>` with the lists of `<day_2>`.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7e7 rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-ogm,g10adm.console-daily-reminder.SC-f3g -->
 ### g10adm.console-daily-reminder.TC-7e7 (US4-TC17): Nothing posts without a channel or a token
 
 Runs once per row of **Test data**.
@@ -1983,3 +2043,87 @@ Runs once per row of **Test data**.
 
 * No message posts.
 * The run does not post to any other channel.
+
+## Settled
+
+- **An order at exactly 48 hours** - listed. The wait is 48 hours elapsed from the clock the Orders table names, and an order is listed from the instant the 48th hour has passed, then every day until it moves on
+
+## Reconciliation
+
+**Run:** QA1 blind feature pass, 2026-10-12, tcs-rules r5, in a fresh context. Read `## Purpose` and `## Feature set` of the change's `daily-reminder` `spec.md`, its `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised`, the pages Daily Reminder and Auction Management under `docs/prds/products/grade10-admin/`, and `openspec/config.yaml`'s `context`. Denied every `## Requirements` section and scenario, `tech-design.md`, `tasks.md`, QA2 material and `openspec/changes/archive/`. No `ui-design.md`, earlier suite or `domain-tcs.md` sat above the capability. It raised 17 questions.
+
+**Run:** QA2 reconciliation, 2026-10-12, in a fresh context. Joined the 60 blind cases and the delta's 60 scenarios on the four journeys and the six root groups of the Feature set. Read the cases above, `spec.md` whole, `user-journeys.md`, `proposal.md`, `decisions.md`, `tech-design.md`, `tasks.md` and the two PRD pages. The application repository was not read; what `tech-design.md` says of it is taken as stated. `R<n>` below is the nth row of `decisions.md`'s `## Raised` in table order; R18 to R21 were added by this run from the technical design's own questions. Every case stays `draft`, and no scenario, requirement or page line moved.
+
+| Case | Anchor | Disposition |
+| --- | --- | --- |
+| `g10adm.console-daily-reminder.TC-ue2` (US1-TC1) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-01`, `grade10-admin-console-daily-reminder-SC-03`, `grade10-admin-console-daily-reminder-SC-04`, `grade10-admin-console-daily-reminder-SC-08`, `grade10-admin-console-daily-reminder-SC-25`, `grade10-admin-console-daily-reminder-SC-26`. Rows, the dialog over the landing page, both lists |
+| `g10adm.console-daily-reminder.TC-rz8` (US1-TC2) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-03` |
+| `g10adm.console-daily-reminder.TC-u6q` (US1-TC3) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-04` |
+| `g10adm.console-daily-reminder.TC-jod` (US1-TC4) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-06`. Equal close times are R14 |
+| `g10adm.console-daily-reminder.TC-5cx` (US1-TC5) | US-01 | Folded in part: `grade10-admin-console-daily-reminder-SC-02`. The scenario states the upper edge, 23:59:59; the lower edge, a close at 00:00:00 yesterday, is listed by the requirement sentence and no scenario names it |
+| `g10adm.console-daily-reminder.TC-pk3` (US1-TC6) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-02`. Both zone rows reach the rule that the day is the Hong Kong day |
+| `g10adm.console-daily-reminder.TC-7l8` (US1-TC7) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-29`. The reload and the address in steps 3 and 4 count as entries, which R2 leaves open |
+| `g10adm.console-daily-reminder.TC-zgt` (US1-TC8) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-30`. The London row is the scenario; the Hong Kong row is the plain next day |
+| `g10adm.console-daily-reminder.TC-6qf` (US1-TC9) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-25`. Closing leaves the same page showing: implied by "over it", stated nowhere |
+| `g10adm.console-daily-reminder.TC-xds` (US1-TC10) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-31` |
+| `g10adm.console-daily-reminder.TC-1g3` (US1-TC11) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-32` |
+| `g10adm.console-daily-reminder.TC-twg` (US1-TC12) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-33`. Step 2 treats a reload as the next entry, which R2 leaves open |
+| `g10adm.console-daily-reminder.TC-323` (US1-TC13) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-27`. The scenario is the mirror, What's New shown and Still Waiting left out; requirement step 3 states the rule both ways |
+| `g10adm.console-daily-reminder.TC-ffo` (US1-TC14) | US-01 | Raised: `grade10-admin-console-daily-reminder-SC-34`. R4: the scenario states the dialog opening once and again in a new tab, and says "move to another page in the same tab"; step 3 loads an address, and tech-design.md:95 keeps the mark in memory when both stores throw, which a full load clears |
+| `g10adm.console-daily-reminder.TC-4no` (US1-TC15) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-05` |
+| `g10adm.console-daily-reminder.TC-ogw` (US1-TC16) | US-01 | Uncovered. No scenario states that the console lists every row; decisions.md:52 (Q23) decides it, so a scenario is owed |
+| `g10adm.console-daily-reminder.TC-9en` (US1-TC17) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-02`. The two-days-earlier and 00:00:00-today edges are the scenario's; a close at 08:30 today is outside the window by the requirement sentence |
+| `g10adm.console-daily-reminder.TC-n3a` (US1-TC18) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-28` |
+| `g10adm.console-daily-reminder.TC-z6w` (US1-TC19) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-35`. The scenario fails What's New; the Still Waiting row follows the requirement's step 3; the other list always has a row, so R9 stays untouched |
+| `g10adm.console-daily-reminder.TC-nb8` (US1-TC20) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-23`, `grade10-admin-console-daily-reminder-SC-24`. The sold row only; R6 asks who sees an unsold row |
+| `g10adm.console-daily-reminder.TC-atu` (US1-TC21) | US-01 | Folded: `grade10-admin-console-daily-reminder-SC-24`. R10 asks what the read answers a caller with no auction grant |
+| `g10adm.console-daily-reminder.TC-ivd` (US2-TC1) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-08`, `grade10-admin-console-daily-reminder-SC-09`, `grade10-admin-console-daily-reminder-SC-11`, `grade10-admin-console-daily-reminder-SC-17` |
+| `g10adm.console-daily-reminder.TC-fbu` (US2-TC2) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-12`. R1 settled: listed at 48:00 |
+| `g10adm.console-daily-reminder.TC-ala` (US2-TC3) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-13`. Equal waits are R14 |
+| `g10adm.console-daily-reminder.TC-eba` (US2-TC4) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-14`, `grade10-admin-console-daily-reminder-SC-30` |
+| `g10adm.console-daily-reminder.TC-aah` (US2-TC5) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-14`, `grade10-admin-console-daily-reminder-SC-44`. The Refresh control is R17 |
+| `g10adm.console-daily-reminder.TC-5ri` (US2-TC6) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-23`, `grade10-admin-console-daily-reminder-SC-27` |
+| `g10adm.console-daily-reminder.TC-t7x` (US2-TC7) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-12`. The 25-hour row is decisions.md:41 (Q12); no scenario names it |
+| `g10adm.console-daily-reminder.TC-to3` (US2-TC8) | US-02 | Folded in part: `grade10-admin-console-daily-reminder-SC-10`. Row 2 is the scenario; rows 1 and 3, a recent setup under an old close and a paying payment after a part payment, follow the requirement's Waited since column and no scenario states them |
+| `g10adm.console-daily-reminder.TC-xga` (US2-TC9) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-15` |
+| `g10adm.console-daily-reminder.TC-1iy` (US2-TC10) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-18`, `grade10-admin-console-daily-reminder-SC-19`. The case does not post to Slack, which the scenario also names |
+| `g10adm.console-daily-reminder.TC-kp9` (US2-TC11) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-20`, `grade10-admin-console-daily-reminder-SC-21`, `grade10-admin-console-daily-reminder-SC-22`, `grade10-admin-console-daily-reminder-SC-23` |
+| `g10adm.console-daily-reminder.TC-xnm` (US2-TC12) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-21`. The same rule read at the API; R10 asks the no-grant answer |
+| `g10adm.console-daily-reminder.TC-64m` (US3-TC1) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-36` |
+| `g10adm.console-daily-reminder.TC-ja5` (US3-TC2) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-37`, `grade10-admin-console-daily-reminder-SC-18` |
+| `g10adm.console-daily-reminder.TC-z2e` (US3-TC3) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-42`. The Approvals card sits in the Needs you grid today: R21 |
+| `g10adm.console-daily-reminder.TC-ges` (US3-TC4) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-38` |
+| `g10adm.console-daily-reminder.TC-0rq` (US3-TC5) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-39`. The scenario empties both lists; rows 1 and 2 empty one |
+| `g10adm.console-daily-reminder.TC-mgn` (US3-TC6) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-43` |
+| `g10adm.console-daily-reminder.TC-y84` (US3-TC7) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-44`. The Refresh control is R17 |
+| `g10adm.console-daily-reminder.TC-tl6` (US3-TC8) | US-03 | Uncovered. No scenario states that Today lists every row; decisions.md:52 (Q23) decides it, so a scenario is owed |
+| `g10adm.console-daily-reminder.TC-c2l` (US3-TC9) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-41`, `grade10-admin-console-daily-reminder-SC-17` |
+| `g10adm.console-daily-reminder.TC-554` (US3-TC10) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-20`. The scenario reads Still Waiting for finance without naming the surface |
+| `g10adm.console-daily-reminder.TC-gqc` (US4-TC1) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-45`. The case does not read the channel at 07:59:59 |
+| `g10adm.console-daily-reminder.TC-ark` (US4-TC2) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-46`. The case opens each link; the staging-not-production half is not asserted |
+| `g10adm.console-daily-reminder.TC-wlt` (US4-TC3) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-49`. The case does not pin the days: R11 |
+| `g10adm.console-daily-reminder.TC-x2r` (US4-TC4) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-47` |
+| `g10adm.console-daily-reminder.TC-kgn` (US4-TC5) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-51`, `grade10-admin-console-daily-reminder-SC-52` |
+| `g10adm.console-daily-reminder.TC-7zn` (US4-TC6) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-52` |
+| `g10adm.console-daily-reminder.TC-12f` (US4-TC7) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-50`. The case expects the first 60 characters, which decisions.md:59 (Q30) says; the scenario says "no more than 60", so R13 stays open |
+| `g10adm.console-daily-reminder.TC-31k` (US4-TC8) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-45` |
+| `g10adm.console-daily-reminder.TC-5hn` (US4-TC9) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-45`. What the message shows for the empty list is R12 |
+| `g10adm.console-daily-reminder.TC-swg` (US4-TC10) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-59` |
+| `g10adm.console-daily-reminder.TC-ne7` (US4-TC11) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-48` |
+| `g10adm.console-daily-reminder.TC-g54` (US4-TC12) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-53` |
+| `g10adm.console-daily-reminder.TC-ymo` (US4-TC13) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-54`, `grade10-admin-console-daily-reminder-SC-56`. How long and how many retries is R15 |
+| `g10adm.console-daily-reminder.TC-e7e` (US4-TC14) | US-04 | Raised. R18: a lost reply is the window tech-design.md:127 says no design closes; no scenario states the case and the design says the opposite |
+| `g10adm.console-daily-reminder.TC-rvs` (US4-TC15) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-55` |
+| `g10adm.console-daily-reminder.TC-7fe` (US4-TC16) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-57` |
+| `g10adm.console-daily-reminder.TC-7e7` (US4-TC17) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-60`. The case does not read the log, which the scenario does; R16 |
+
+- **Counts** - 54 folded, 2 folded in part, 2 raised, 2 uncovered, 0 rejected. No blind case was a misreading of the anchors. A QA1 question was: R1 quoted the proposal as "more than 48 hours", and it says "48 hours or more" (`proposal.md:13`), so R1 is settled above
+- **Scenarios no case reaches** - `grade10-admin-console-daily-reminder-SC-07` (a test lot listed like any other), `grade10-admin-console-daily-reminder-SC-16` (a flagged order is not listed; R7 is open on the same rule), `grade10-admin-console-daily-reminder-SC-40` (a list that fails to load says so on Today) and `grade10-admin-console-daily-reminder-SC-58` (a retry reads the lists as they stand). Each needs a case from a blind pass, or a verifier named as Out of suite; none is added here, because a case written from a scenario is not a blind reading. Their `covers` still carry them through the journey they serve
+- **Scenarios reached in part** - `grade10-admin-console-daily-reminder-SC-45` (no case reads the channel at 07:59:59), `grade10-admin-console-daily-reminder-SC-46` (no case checks that a staging post links nowhere to production), `grade10-admin-console-daily-reminder-SC-19` (no case posts the order to Slack and reads it back unmarked) and `grade10-admin-console-daily-reminder-SC-02` (no case lists a close at 00:00:00 yesterday)
+- **Cases no scenario states** - `g10adm.console-daily-reminder.TC-ogw` and `g10adm.console-daily-reminder.TC-tl6` (the console lists every row, decided as Q23, `decisions.md:52`), the lower edge of `g10adm.console-daily-reminder.TC-5cx`, rows 1 and 3 of `g10adm.console-daily-reminder.TC-to3`, and the 25-hour row of `g10adm.console-daily-reminder.TC-t7x` (Q12). Each is a real behaviour with a decision behind it, so the fold is a scenario for each, not a rejection
+- **Contradicted** - no case and scenario state opposite things. Three pairs come closest and go to the author. First, `g10adm.console-daily-reminder.TC-ffo` step 3 expects no dialog after loading an address in the same tab with storage blocked, `grade10-admin-console-daily-reminder-SC-34` says the same of a move to another page, and `tech-design.md:95` keeps the mark in a variable that a full load clears, so a load opens it again (R4). Second, `g10adm.console-daily-reminder.TC-e7e` expects one message after a lost reply, `grade10-admin-console-daily-reminder-SC-55` is silent on that case, and `tech-design.md:127` says a second post cannot be ruled out there while `decisions.md:51` (Q22) and the page say it never posts twice (R18). Third, `g10adm.console-daily-reminder.TC-12f` expects the first 60 characters of a 61-character title, `grade10-admin-console-daily-reminder-SC-50` says no more than 60, and the design's open question is whether an ellipsis counts toward the 60 (R13)
+- **Where the artifacts disagree** - the dialog's blocked-storage reload (`tech-design.md:95` against `daily-reminder.md:71` and `decisions.md:31`, Q2); the duplicate post (`tech-design.md:127` against `daily-reminder.md:102` and `decisions.md:51`); the Approvals card (`tech-design.md:96` and `tasks.md` 4.5 lift it out of the Needs you grid, `daily-reminder.md:87` and `:123` and `decisions.md:46`, Q17, say it stays below unchanged; R21); a failed list beside an empty one, which the requirement leaves closed while `daily-reminder.md:73` and `decisions.md:44` (Q15) say a failure never reads as empty (R9); the log line of `grade10-admin-console-daily-reminder-SC-60`, which `daily-reminder.md:104` and the requirement do not state (R16); and who may open an unsold listing, where the Requirements table says Reading while `auction/management.md:453` lists listing work under `auction:write` and `auction:operate` (R6). The technical design and scenarios were written after both pages and the decisions
+- **Raised** - R2, R4, R6, R9, R10, R11, R12, R13, R14, R15, R16 and R17 each touch cases above and stay open in `decisions.md`; R3, R5, R7 and R8 touch no case, so their answers owe cases, `grade10-admin-console-daily-reminder-SC-16` among them for R7. The design and scenarios answer R7 (a flagged order is not listed) and R8 (a called-off listing has no close time and is not listed) with no decision row behind either. R18 to R21 are new: R18 touches `g10adm.console-daily-reminder.TC-e7e`, R21 `g10adm.console-daily-reminder.TC-z2e`, and R19 and R20 touch no case
+- **Dev's questions** - 11 came with the design, and 4 are new rows. The flagged order is R7, whole days R11, a failed list beside an empty one R9 (the Retry control it asks for is in no anchor, so it waits on that answer), the empty Slack list R12, the cut title R13, whether following a row closes the dialog R5, and the not-configured log R16. The duplicate-post window is R18, link previews R19, an empty first entry then rows later R20, and the Approvals card R21
+- **Uncovered anchors** - none. US-01 to US-04 each have cases (21, 12, 10 and 17), and every root group of the Feature set is walked: What's New list by US-01, Still Waiting list by US-02, Row access by `g10adm.console-daily-reminder.TC-nb8`, `g10adm.console-daily-reminder.TC-kp9` and `g10adm.console-daily-reminder.TC-554`, Daily dialog by US-01, Today columns by US-03, Slack message by US-04
+- **Markers** - `covers` lists every scenario serving the case's `Trace` journey, in spec order, as `docs/governance/test-traceability.md` requires, plus the scenarios that serve a Feature set group and are reached by the case: `grade10-admin-console-daily-reminder-SC-18` and `grade10-admin-console-daily-reminder-SC-19` by `g10adm.console-daily-reminder.TC-1iy`, `grade10-admin-console-daily-reminder-SC-18` by `g10adm.console-daily-reminder.TC-ja5`, `grade10-admin-console-daily-reminder-SC-42` by `g10adm.console-daily-reminder.TC-z2e`, and `grade10-admin-console-daily-reminder-SC-53`, `grade10-admin-console-daily-reminder-SC-55`, `grade10-admin-console-daily-reminder-SC-56`, `grade10-admin-console-daily-reminder-SC-57`, `grade10-admin-console-daily-reminder-SC-59`, `grade10-admin-console-daily-reminder-SC-60` by the US-04 cases that walk each. Because `covers` follows the journey, the four scenarios above that no case reaches are still named by the markers of the journey they serve. The scenario markers were added to `spec.md` by `pnpm run trace -- init batch`, and the case markers keep the ids their headings already carried
