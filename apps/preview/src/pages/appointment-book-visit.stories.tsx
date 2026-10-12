@@ -6,6 +6,7 @@ import {
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   BookingDetailsForm,
@@ -48,12 +49,20 @@ const READY_SERVICES = {
 const CONTACT_SEED = {
   name: "Alex Chan",
   email: ACCOUNT_EMAIL,
-  phoneCountry: "HK",
+  phone: "+85291234567",
+};
+
+const ACCOUNT_LINE_COPY = {
+  signedIn: `Signed in as ${CONTACT_SEED.name}.`,
+  notYou: "Not you?",
+  signInLine: "Have an account? Sign in and we fill this in.",
+  signIn: "Sign in",
 };
 
 type BookVisitView = "service" | "slot" | "details";
 
-function BookVisitPage() {
+function BookVisitPage({ signedIn: signedInAtStart = true }) {
+  const [signedIn, setSignedIn] = useState(signedInAtStart);
   const [view, setView] = useState<BookVisitView>("service");
   const [serviceId, setServiceId] = useState<string | undefined>();
   const [selectedDate, setSelectedDate] = useState<string | undefined>();
@@ -213,14 +222,29 @@ function BookVisitPage() {
           </div>
         ) : (
           <VStack className="p-5 md:p-6" gap="lg" hAlign="stretch">
+            <HStack gap="sm" vAlign="center" wrap>
+              <Text as="span" size="sm">
+                {signedIn
+                  ? ACCOUNT_LINE_COPY.signedIn
+                  : ACCOUNT_LINE_COPY.signInLine}
+              </Text>
+              <Button
+                onClick={() => setSignedIn(!signedIn)}
+                size="sm"
+                type="button"
+                variant="ghost"
+              >
+                {signedIn ? ACCOUNT_LINE_COPY.notYou : ACCOUNT_LINE_COPY.signIn}
+              </Button>
+            </HStack>
             {service ? (
               <BookingDetailsForm
-                key={service.id}
+                key={`${service.id}:${signedIn}`}
                 copy={DETAILS_FORM_COPY}
                 questions={service.questions}
                 description={service.description}
-                emailDisabled
-                initialValues={CONTACT_SEED}
+                initialValues={signedIn ? CONTACT_SEED : undefined}
+                summarized={signedIn}
                 onSubmit={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
               />
             ) : null}
@@ -359,5 +383,48 @@ export const Slot: Story = {
     expect(
       canvas.getByRole("button", { name: /December 2nd, 2026/ }),
     ).toBeDisabled();
+  },
+};
+
+/** The details step books under the account: its name, email and phone read
+ * as a summary, and only the service's questions and notes are asked. */
+export const Details: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    );
+    await userEvent.click(
+      canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "10:00" }));
+    expect(canvas.getByText(ACCOUNT_LINE_COPY.signedIn)).toBeVisible();
+    expect(canvas.getByText("Alex Chan")).toBeVisible();
+    expect(canvas.getByText(ACCOUNT_EMAIL)).toBeVisible();
+    expect(canvas.queryByRole("textbox", { name: "Name" })).toBeNull();
+    expect(canvas.queryByRole("textbox", { name: /Email/ })).toBeNull();
+  },
+};
+
+/** A guest books without an account: the details step asks for a name and an
+ * email, and offers a sign-in that fills them in. */
+export const Guest: Story = {
+  args: { signedIn: false },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    );
+    await userEvent.click(
+      canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "10:00" }));
+    expect(canvas.getByText(ACCOUNT_LINE_COPY.signInLine)).toBeVisible();
+    expect(canvas.getByRole("textbox", { name: "Name" })).toHaveValue("");
+    await userEvent.click(
+      canvas.getByRole("button", { name: ACCOUNT_LINE_COPY.signIn }),
+    );
+    expect(canvas.getByText("Alex Chan")).toBeVisible();
+    expect(canvas.queryByRole("textbox", { name: "Name" })).toBeNull();
   },
 };

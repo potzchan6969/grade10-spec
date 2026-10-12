@@ -256,7 +256,6 @@ const CANCEL_PANEL_COPY: VisitCancelPanelCopy = {
   reasons: {
     cant: "I can’t make it",
     wrong: "I booked the wrong time",
-    walk: "I’ll walk in instead",
     other: "Something else",
   },
   more: "Tell us more (optional)",

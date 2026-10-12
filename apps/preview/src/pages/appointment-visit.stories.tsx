@@ -1,3 +1,4 @@
+import { formatWeekdayMoment } from "@grade10/date";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
@@ -69,15 +70,6 @@ type VisitState =
   | "linkOpensNothing";
 
 type Panel = "move" | "cancel";
-
-const TIME_WORDS = new Intl.DateTimeFormat("en-GB", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  hour: "2-digit",
-  minute: "2-digit",
-  timeZone: VISIT_TIME_ZONE,
-});
 
 function VisitShell({ children }: { children: ReactNode }) {
   return (
@@ -158,7 +150,7 @@ function BookedVisit({ offline }: { offline: boolean }) {
             copy={{
               ...MOVE_PANEL_COPY,
               confirm: pick
-                ? `Move to ${TIME_WORDS.format(pick.start)}`
+                ? `Move to ${formatWeekdayMoment(pick.start, { timeZone: VISIT_TIME_ZONE })}`
                 : MOVE_PANEL_COPY.confirm,
             }}
             onClose={() => setPanel(null)}
@@ -166,7 +158,7 @@ function BookedVisit({ offline }: { offline: boolean }) {
               if (!pick) return;
               setPanel(null);
               setSaid(
-                `Moved to ${TIME_WORDS.format(pick.start)}. We emailed ${EMAIL}.`,
+                `Moved to ${formatWeekdayMoment(pick.start, { timeZone: VISIT_TIME_ZONE })}. We emailed ${EMAIL}.`,
               );
             }}
             pending={false}
