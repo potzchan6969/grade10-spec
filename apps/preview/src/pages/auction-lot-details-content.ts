@@ -107,7 +107,7 @@ export const AUCTION_LOT = {
     },
   ],
   ...BID_FIXTURE_LOT,
-  currency: "HKD",
+  currency: "USD",
 };
 
 export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [

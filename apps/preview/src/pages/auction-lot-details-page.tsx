@@ -46,7 +46,7 @@ const LIVE_BID_INTERVAL_MS = 8_000;
 
 const AUCTION_LOT_MARKET_COMPS = {
   title: "Market Price",
-  range: "HK$46,800–HK$171,600",
+  range: "US$46,800–US$171,600",
 };
 
 type AuctionLotDetailsPageProps = {

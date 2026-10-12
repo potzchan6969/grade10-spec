@@ -71,9 +71,9 @@ function lot(
     startsAt: partial.startsAt ?? partial.closesAt,
     closeLabel:
       partial.closeLabel ?? partial.closesAt.slice(0, 16).replace("T", " "),
-    bidLabel: partial.bidLabel ?? "HK$1,200.00",
+    bidLabel: partial.bidLabel ?? "US$1,200.00",
     currentBidMinor: partial.currentBidMinor ?? 120_000,
-    currency: partial.currency ?? "HKD",
+    currency: partial.currency ?? "USD",
     bidCount: partial.bidCount ?? 0,
     imageAlt: partial.imageAlt ?? partial.title,
     imageSrc: partial.imageSrc ?? CATALOGUE_IMAGE,
@@ -223,12 +223,12 @@ export const COLLECTION_LOTS: CatalogueLot[] = COLLECTION.map((item, index) => {
     category: item.category,
     closesAt: `2026-10-${String(day).padStart(2, "0")}T18:00:00+08:00`,
     closeLabel: `${day} Oct 2026, 6:00 pm`,
-    bidLabel: `HK$${(1200 + index * 350).toLocaleString("en-HK", {
+    bidLabel: `US$${(1200 + index * 350).toLocaleString("en-HK", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`,
     currentBidMinor: (1200 + index * 350) * 100,
-    currency: "HKD",
+    currency: "USD",
     bidCount: 3 + index * 2,
   });
 });
@@ -261,9 +261,9 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     category: "Pokémon",
     closesAt: "2026-10-01T18:00:00+08:00",
     closeLabel: "1 Oct 2026, 6:00 pm",
-    bidLabel: "HK$82,160.00",
+    bidLabel: "US$82,160.00",
     currentBidMinor: 8_216_000,
-    currency: "HKD",
+    currency: "USD",
     bidCount: 12,
   }),
   lot({
@@ -277,9 +277,9 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     category: "Pokémon",
     closesAt: "2026-10-02T18:00:00+08:00",
     closeLabel: "2 Oct 2026, 6:00 pm",
-    bidLabel: "HK$147,064.00",
+    bidLabel: "US$147,064.00",
     currentBidMinor: 14_706_400,
-    currency: "HKD",
+    currency: "USD",
     bidCount: 18,
   }),
   lot({
@@ -294,9 +294,9 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     category: "Pokémon",
     closesAt: "2026-10-03T18:00:00+08:00",
     closeLabel: "3 Oct 2026, 6:00 pm",
-    bidLabel: "HK$365,057.23",
+    bidLabel: "US$365,057.23",
     currentBidMinor: 36_505_723,
-    currency: "HKD",
+    currency: "USD",
     bidCount: 27,
   }),
 ];

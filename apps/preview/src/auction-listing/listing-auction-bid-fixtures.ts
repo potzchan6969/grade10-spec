@@ -59,7 +59,7 @@ export const BID_FIXTURE_LOT = {
   startingBidMinor: 4_800_000,
   /** Live mid-ladder current bid (a few increments above start). */
   currentBidMinor: 5_800_000,
-  /** Step sized for a mid–six-figure HKD lot. */
+  /** Step sized for a mid–six-figure USD lot. */
   incrementMinor: 250_000,
   bidCount: 6,
   /** Private maximum below the high comps band while still leading. */
