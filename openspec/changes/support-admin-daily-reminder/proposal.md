@@ -66,6 +66,8 @@ None.
   carries one 🚧 line pointing at it.
 - Does not change any order status, worklist row, order page or the Needs you
   counts.
+- No domain impact: the reminder reads auction orders and moves no auction
+  rule. No platform impact: no sign-in, role or date rule changes.
 
 ## Open Questions
 

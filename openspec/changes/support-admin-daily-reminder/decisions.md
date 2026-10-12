@@ -49,6 +49,14 @@
 | Q20 | Does Slack post on a day with no rows? | No - decided by the round | An all-clear post each day, which is noise |
 | Q21 | How long is each list in Slack? | The first 10 rows, then a link to Today saying how many more - decided by the round | Every row: a long message is hard to read and Slack caps its size |
 | Q22 | What if the send fails? | It is tried again and the day's message never posts twice - decided by the round | Posting on every attempt: the channel would see duplicates |
+| Q23 | How many rows does the console show? | All of them, in each list. Only Slack stops at 10 - decided by the round | A cap in the console: a row the operator cannot see is a forgotten job |
+| Q24 | Where does the dialog open, and when is the day checked? | Over whichever console page the operator lands on, once, when they enter. A session that crosses midnight checks again on the next entry, not mid-session - decided by the round | Opening only on Today: a link to an order would skip it; checking on a timer: a dialog appearing under the operator's hands |
+| Q25 | What does Today show for an operator with no rows? | All three columns stay, and an empty list says so. Only the dialog leaves an empty list out - decided by the round | Hiding a column: the page would shift between operators and between days |
+| Q26 | What does a sold listing's row show if its order is already Cancelled? | The row stays, with the order's status as it is now - decided by the round | Dropping the row: the operator would not learn the lot closed |
+| Q27 | Are test lots treated differently? | No. They are listed like any other lot; production has none - decided by the round | Hiding them: a second rule for something production never meets |
+| Q28 | When is the lists' data read? | When Today loads, when the operator comes back to the tab, and on Refresh; never on a timer. The dialog reads when it opens - decided by the round | Polling: Today already refuses it |
+| Q29 | What if the 08:00 Slack post fails? | It is tried again through the same Hong Kong day and logged loudly each time, and it is never posted on the next day, when "yesterday" has moved - decided by the round | Posting late the next day: its What's New list would name the wrong day; giving up silently |
+| Q30 | How is a long lot title shown in Slack? | The listing code, then the lot title cut to 60 characters - decided by the round | The full title: a long title pushes a row over several lines |
 
 ## Raised
 

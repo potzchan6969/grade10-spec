@@ -60,13 +60,13 @@ longest wait first. It stays on the list every day until the order moves on.
 - 🚧 **By grant** - an operator sees a Still Waiting row only if they hold the
   grant its action needs; a What's New row only if they can open the page it
   links to - [Grants](/p/grade10-admin/auction/management#grants)
-- 🚧 **No row, no list** - a list with no row for the operator is not shown,
-  and the dialog does not open when neither has one
+- 🚧 **No row, no list in the dialog** - a list with no row for the operator is
+  left out of the dialog, and the dialog does not open when neither has one
 
 ## Opening
 
-- 🚧 **First entry of the day** - a dialog opens over the console with both
-  lists. Closing it keeps it closed for the rest of that Hong Kong day, for
+- 🚧 **First entry of the day** - a dialog opens over whichever console page
+  the operator lands on, with both lists. Closing it keeps it closed for the rest of that Hong Kong day, for
   that operator, in that browser
 - 🚧 **Blocked storage** - a browser that cannot keep the closed mark opens the
   dialog once per tab session
@@ -83,6 +83,7 @@ read them.
   with the counts and links unchanged
 - 🚧 **Inner groups** - What's New and Still Waiting group their rows by
   product, Auction first, so another product adds a group and no column
+- 🚧 **Empty list** - a column with no row for the operator stays and says so
 - **Below the columns** - Approvals, Recent and All sections stay as they are
 - **Narrow screens** - the columns stack, Needs you last
 
@@ -98,8 +99,8 @@ Slack channel.
 - 🚧 **Quiet day** - nothing posts when both lists are empty
 - 🚧 **Long lists** - each list shows its first 10 rows, then a link to Today
   that says how many more
-- 🚧 **Once a day** - a failed send is tried again and never posts the day's
-  message twice
+- 🚧 **Once a day** - a failed send is tried again through the same Hong Kong
+  day and never posts the day's message twice, nor on the next day
 - 🚧 **Set per environment** - the channel and the access token come from the
   environment, never from the console; without them nothing posts
 
