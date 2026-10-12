@@ -2,6 +2,7 @@
 
 import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { within } from "storybook/test";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   ListingQuickMaximumBidActions,
@@ -34,87 +35,46 @@ const COPY: ListingQuickMaximumBidActionsCopy = {
   linkACardToBid: "Link a card to bid",
 };
 
-const CASES = [
+type CeilingCase = {
+  currency: "USD" | "HKD" | "JPY";
+  ceilingMinor: number;
+  ceilingMajor: string;
+};
+
+const CASES: readonly CeilingCase[] = [
   { currency: "USD", ceilingMinor: 1_000_000_000, ceilingMajor: "10000000" },
   { currency: "HKD", ceilingMinor: 8_000_000_000, ceilingMajor: "80000000" },
   { currency: "JPY", ceilingMinor: 5_000_000_000, ceilingMajor: "5000000000" },
+];
+
+const BELOW_CEILING_CASES = [
+  {
+    currency: "USD",
+    ceilingMinor: 1_000_000_000,
+    ceilingMajor: "10000000",
+    belowCeilingMinor: 999_999_900,
+    belowCeilingMajor: "9999999",
+  },
+  {
+    currency: "HKD",
+    ceilingMinor: 8_000_000_000,
+    ceilingMajor: "80000000",
+    belowCeilingMinor: 7_999_999_900,
+    belowCeilingMajor: "79999999",
+  },
+  {
+    currency: "JPY",
+    ceilingMinor: 5_000_000_000,
+    ceilingMajor: "5000000000",
+    belowCeilingMinor: 4_999_999_999,
+    belowCeilingMajor: "4999999999",
+  },
 ] as const;
 
-type CeilingCase = (typeof CASES)[number];
 type RenderOptions = CeilingCase & {
   standing?: ListingAuctionBidView["standing"];
   viewerMaximumMinor?: number;
 };
-
-type RoleQueryOptions = { name?: string | RegExp };
-
-function implicitRole(element: HTMLElement): string | null {
-  const explicitRole = element.getAttribute("role");
-  if (explicitRole != null) return explicitRole;
-  if (element instanceof HTMLButtonElement) return "button";
-  if (element instanceof HTMLInputElement) {
-    return element.type === "number" ? "spinbutton" : "textbox";
-  }
-  return null;
-}
-
-function accessibleName(element: HTMLElement): string {
-  return (
-    element.getAttribute("aria-label") ??
-    element.textContent?.replace(/\s+/g, " ").trim() ??
-    ""
-  );
-}
-
-function matchesName(element: HTMLElement, name: string | RegExp | undefined) {
-  if (name == null) return true;
-  const value = accessibleName(element);
-  return typeof name === "string" ? value === name : name.test(value);
-}
-
-function getByRole<T extends HTMLElement = HTMLElement>(
-  container: HTMLElement,
-  role: string,
-  options: RoleQueryOptions = {},
-): T {
-  const element = Array.from(
-    container.querySelectorAll<HTMLElement>("[role], button, input"),
-  ).find(
-    (candidate) =>
-      implicitRole(candidate) === role && matchesName(candidate, options.name),
-  );
-  if (!element) {
-    throw new Error(`No ${role} with the requested accessible name was found`);
-  }
-  return element as T;
-}
-
-function queryByRole(
-  container: HTMLElement,
-  role: string,
-  options: RoleQueryOptions = {},
-): HTMLElement | null {
-  return (
-    Array.from(
-      container.querySelectorAll<HTMLElement>("[role], button, input"),
-    ).find(
-      (candidate) =>
-        implicitRole(candidate) === role &&
-        matchesName(candidate, options.name),
-    ) ?? null
-  );
-}
-
-function within(container: HTMLElement) {
-  return {
-    getByRole: <T extends HTMLElement = HTMLElement>(
-      role: string,
-      options?: RoleQueryOptions,
-    ) => getByRole<T>(container, role, options),
-    queryByRole: (role: string, options?: RoleQueryOptions) =>
-      queryByRole(container, role, options),
-  };
-}
 
 const roots: Array<{ root: Root; container: HTMLDivElement }> = [];
 
@@ -236,6 +196,14 @@ function primaryButton(container: HTMLDivElement): HTMLButtonElement {
   });
 }
 
+function expectNoFieldMessage(
+  container: HTMLDivElement,
+  field: HTMLInputElement,
+) {
+  expect(container.querySelector('[data-slot="input-message"]')).toBeNull();
+  expect(field.getAttribute("aria-invalid")).not.toBe("true");
+}
+
 describe("ListingQuickMaximumBidActions currency ceiling", () => {
   it.each(
     CASES.flatMap((entry) =>
@@ -259,10 +227,48 @@ describe("ListingQuickMaximumBidActions currency ceiling", () => {
         Number(ceilingMajor).toLocaleString("en-US"),
       );
       expect(within(container).queryByRole("alert")).toBeNull();
+      expectNoFieldMessage(container, field);
 
       act(() => primaryButton(container).click());
       expect(onCommitMaximum).toHaveBeenCalledOnce();
       expect(onCommitMaximum).toHaveBeenCalledWith(ceilingMinor);
+    },
+  );
+
+  it.each(
+    BELOW_CEILING_CASES.flatMap((entry) =>
+      ["set", "raise"].map((mode) => ({ ...entry, mode })),
+    ),
+  )(
+    "retains a below-ceiling draft after a genuine typed append in $currency $mode mode and commits it (shared-ui-auction-listing-SC-39, shared-ui-auction-listing-SC-43)",
+    ({
+      currency,
+      ceilingMinor,
+      ceilingMajor,
+      belowCeilingMinor,
+      belowCeilingMajor,
+      mode,
+    }) => {
+      const { container, field, onCommitMaximum } = mount({
+        currency,
+        ceilingMinor,
+        standing: mode === "raise" ? "leading-max" : "none",
+        viewerMaximumMinor: mode === "raise" ? 500 : undefined,
+        ceilingMajor,
+      });
+
+      input(field, belowCeilingMajor, "insertText", belowCeilingMajor);
+      input(field, `${belowCeilingMajor}1`, "insertText", "1");
+
+      expect(field.value).toBe(belowCeilingMajor);
+      expect(primaryButton(container).textContent).toContain(
+        Number(belowCeilingMajor).toLocaleString("en-US"),
+      );
+      expectNoFieldMessage(container, field);
+
+      act(() => primaryButton(container).click());
+      expect(onCommitMaximum).toHaveBeenCalledOnce();
+      expect(onCommitMaximum).toHaveBeenCalledWith(belowCeilingMinor);
     },
   );
 
@@ -284,13 +290,16 @@ describe("ListingQuickMaximumBidActions currency ceiling", () => {
       input(field, ceilingMajor, "insertText", ceilingMajor);
       input(field, `${ceilingMajor}1`, "insertText", "1");
       expect(field.value).toBe(ceilingMajor);
+      expectNoFieldMessage(container, field);
 
       paste(field, `${ceilingMajor}1`);
       expect(field.value).toBe(ceilingMajor);
+      expectNoFieldMessage(container, field);
 
       input(field, "500", "insertText", "500");
       input(field, `${ceilingMajor}1`, "insertText", `${ceilingMajor}1`);
       expect(field.value).toBe(ceilingMajor);
+      expectNoFieldMessage(container, field);
 
       expect(within(container).queryByRole("alert")).toBeNull();
     },
@@ -302,10 +311,15 @@ describe("ListingQuickMaximumBidActions currency ceiling", () => {
       standing: "none",
     });
 
+    paste(field, "80000000.99");
+    expect(field.value).toBe("80000000");
+    expectNoFieldMessage(container, field);
     paste(field, "80000001.99");
     expect(field.value).toBe("80000000");
+    expectNoFieldMessage(container, field);
     paste(field, "999999999999999999999999999999.99");
     expect(field.value).toBe("80000000");
+    expectNoFieldMessage(container, field);
     expect(within(container).queryByRole("alert")).toBeNull();
   });
 });
