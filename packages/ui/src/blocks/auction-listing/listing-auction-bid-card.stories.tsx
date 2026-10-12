@@ -144,6 +144,7 @@ function liveView(
     minBidMinor: 6_050_000,
     incrementMinor: 250_000,
     suggestedMaxMinor: 9_500_000,
+    ceilingMinor: 8_000_000_000,
     ...overrides,
     currency: overrides.currency ?? DEFAULT_LISTING_CURRENCY,
   };
@@ -432,16 +433,14 @@ export const LiveNoBids: Story = {
 };
 
 /**
- * Seeds the custom field at 500. Paste (or select-all + paste) a value above
- * 9,999,999,999 — the draft restores to 500. Typing digit-by-digit restores
- * one keystroke at a time (e.g. 10000000000 → 1000000000), not the seed.
+ * Exercises the supplied HKD ceiling through native typing and paste.
  */
 export const CustomMaximumCeiling: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          "Custom amount starts at 500. Paste above 9,999,999,999 to see restore to 500. Digit-by-digit typing restores the previous keystroke only.",
+          "Custom amount accepts the supplied HKD ceiling. A typed digit beyond it restores the previous draft, while paste clamps to the ceiling.",
       },
     },
   },
@@ -453,6 +452,15 @@ export const CustomMaximumCeiling: Story = {
     await userEvent.clear(field);
     await userEvent.type(field, "500");
     expect(field).toHaveValue(500);
+    await userEvent.clear(field);
+    await userEvent.type(field, "80000000");
+    await userEvent.type(field, "1");
+    expect(field).toHaveValue(80000000);
+    await userEvent.clear(field);
+    field.focus();
+    await userEvent.paste("80000001");
+    expect(field).toHaveValue(80000000);
+    expect(canvas.queryByText(/^Min\.:/)).not.toBeInTheDocument();
   },
 };
 

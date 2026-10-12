@@ -48,7 +48,7 @@
   "currentBidAmount": "当前出价 {amount}",
   "currentMaximum": "最高：{amount}",
   "customAmount": "自定义出价金额",
-  "customAmountPlaceholder": "自定义出价金额（最低 {amount}）",
+  "customAmountPlaceholder": "最低 {amount}",
   "description": "描述",
   "emailAlertsEnabledToast": "已开启此拍品的电邮提醒",
   "endsLabel": "截止",

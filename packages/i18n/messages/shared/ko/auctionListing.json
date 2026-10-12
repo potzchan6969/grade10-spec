@@ -48,7 +48,7 @@
   "currentBidAmount": "현재 입찰가 {amount}",
   "currentMaximum": "최고: {amount}",
   "customAmount": "입찰 금액 직접 입력",
-  "customAmountPlaceholder": "입찰 금액 직접 입력 (최소 {amount})",
+  "customAmountPlaceholder": "최소 {amount}",
   "description": "설명",
   "emailAlertsEnabledToast": "이 출품작의 이메일 알림이 켜졌습니다",
   "endsLabel": "마감",

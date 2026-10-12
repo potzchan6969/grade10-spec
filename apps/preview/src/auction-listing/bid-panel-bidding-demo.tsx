@@ -116,6 +116,7 @@ function liveView(
   const currentBidMinor = overrides.currentBidMinor;
   return {
     currency: BID_FIXTURE_LOT.currency,
+    ceilingMinor: BID_FIXTURE_LOT.ceilingMinor,
     headerLabel: "Auction",
     live: true,
     opens: false,
