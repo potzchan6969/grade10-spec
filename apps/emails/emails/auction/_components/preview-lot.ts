@@ -66,11 +66,11 @@ export const previewLot = {
   paymentDeadline: "24 Sep 2026, 21:30 GMT+8",
   /** The operator's reason for the winner when payment proof is returned. */
   proofReturnReason: "Amount does not match",
-  currentBid: "HK$12,800",
+  currentBid: "US$12,800",
   /** Hammer / winning bid at close. */
-  winningBid: "HK$12,800",
+  winningBid: "US$12,800",
   /** Order Total / Invoice total on a sent invoice (includes fees). */
-  orderTotal: "HK$16,896",
+  orderTotal: "HK$124,028",
   /** When payment was confirmed (winner's zone). */
   paidAt: "20 Sep 2026, 14:22 GMT+8",
   /** Card: brand + masked number. Bank transfer letters use `Bank Transfer` only. */
@@ -94,5 +94,5 @@ export const previewLot = {
   /** Confirmed delivery address on the Winner Order. */
   deliveryAddress: "Jane Collector\n12 Example Street\nCentral, Hong Kong",
   /** Standing amount when the reader lost the lead (outbid / non-winner). */
-  yourBid: "HK$12,400",
+  yourBid: "US$12,400",
 } as const;
