@@ -212,7 +212,7 @@ JavaScript disabled in the browser.
 answer with the site's not-found surface,
 **so that** I am never shown an empty lot page or the catalogue in its place.
 
-<!-- trace:case id=g10.auction-listing-page.TC-3xv rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-3xv rev=1 covers=g10.auction-listing-page.SC-s88 -->
 ### grade10-site-auction-listing-page-US3-TC1-1: Unknown lot address returns not-found
 
 **Classification:**
@@ -242,7 +242,7 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * Response status is 404.
 * The site's not-found surface is on screen.
 
-<!-- trace:case id=g10.auction-listing-page.TC-6r8 rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-6r8 rev=1 covers=g10.auction-listing-page.SC-jj1 -->
 ### grade10-site-auction-listing-page-US3-TC2-1: Published lot address returns the lot page
 
 **Classification:**
@@ -271,7 +271,7 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The page is that lot's page.
 
-<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=2 covers=g10.auction-listing-page.SC-c13 -->
 ### grade10-site-auction-listing-page-US3-TC3-2: Unavailable original address serves Page not found
 
 **Classification:**
@@ -320,7 +320,7 @@ Runs once per row of **Test data**.
 * No empty lot page, redirect or catalogue replaces it.
 
 
-<!-- trace:case id=g10.auction-listing-page.TC-x03 rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-x03 rev=1 covers=g10.auction-listing-page.SC-b49 -->
 ### g10.auction-listing-page.US3-TC4: Client navigation refuses an ineligible released address
 
 Runs once per row of **Test data**.
@@ -812,7 +812,7 @@ Runs once per row of **Test data**.
 **I want** to reference and share a lot by its title and URL,
 **so that** I can discuss it with others and return to it easily.
 
-<!-- trace:case id=g10.auction-listing-page.TC-nis rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-nis rev=1 covers=g10.auction-listing-page.SC-rop -->
 ### grade10-site-auction-listing-page-US10-TC1-1: Listing code absent from the response before scripts run
 
 **Classification:**
@@ -971,7 +971,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * No field in the embedded data carries the listing code.
 
-<!-- trace:case id=g10.auction-listing-page.TC-yjo rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-yjo rev=1 covers=g10.auction-listing-page.SC-2d9 -->
 ### grade10-site-auction-listing-page-US10-TC6-1: Listing code absent from the page's own network responses
 
 **Classification:**
@@ -1002,7 +1002,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * No page response contains a separate listing-code or payment-reference field.
 
-<!-- trace:case id=g10.auction-listing-page.TC-cbx rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-cbx rev=1 covers=g10.auction-listing-page.SC-kfl -->
 ### grade10-site-auction-listing-page-US10-TC7-1: Listing code does not resolve as a lot address
 
 **Classification:**
@@ -1289,7 +1289,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The title and canonical address are unchanged by the order.
 * The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix.
 
-<!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=2 covers=none -->
 ### grade10-site-auction-listing-page-US11-TC4-2: Called-off listing remains directly accessible
 
 **Classification:**
@@ -2307,4 +2307,13 @@ initial while the label stays Bidder N,
 - A bid refused past the close is not a bid: the bid form says "Your bid did not go through." and the lot's result is decided as if it was never sent (decisions Q6).
 - A row tied on amount with a row above it carries the earlier-leads tip at any older tie lower down Recent bids, not only at the current price; the row above carries none (`bid-history-winner-priority` Q4).
 - Rows tied on amount are listed the leading or won row first, then the row of the bidder who set that maximum earlier, and keep that order once both are outbid; the tip goes on the row of the later maximum (`bid-history-winner-priority` Q6).
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-12. QA1 used frozen bundle `02ba99d366a1f619b3df386916067b23a31ec77462132a92d7eddd4bd474713f`. QA2 read both independent readings, all 3 deltas, the complete feature maps, current and durable journeys, durable context, and the linked owner decisions. Case dispositions were recorded before scenario links.
+
+- **Disposition** - The unchanged refusal and identifier cases plus the independent refusal cases fully assert 7 delta scenarios. TC-x03 checks client refusal and the served 404 after reload for the unused address. That order fully checks SC54 outcomes; it makes no claim about a transition between the two reads. SC55-SC56 remain uncovered. Inherited SC21, SC23-SC25 and SC27 also lack a fully asserting single case. TC-sa9 remains deprecated under Q2; no case links the retired SC28.
+- **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
+- **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
+- **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
 

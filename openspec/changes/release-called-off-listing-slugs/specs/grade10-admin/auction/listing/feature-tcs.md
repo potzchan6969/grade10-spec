@@ -912,7 +912,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the write.
 * Step 3 shows the listing's sale unchanged.
 
-<!-- trace:case id=g10adm.auction-listing.TC-b59 rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-b59 rev=1 covers=g10adm.auction-listing.SC-ng3 -->
 ### grade10-admin-auction-listing-US3-TC10-1: Duplicate slug is refused
 
 **Classification:**
@@ -953,7 +953,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the write.
 * Step 3 shows the second listing's slug unchanged.
 
-<!-- trace:case id=g10adm.auction-listing.TC-3s0 rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-3s0 rev=1 covers=g10adm.auction-listing.SC-g0h -->
 ### grade10-admin-auction-listing-US3-TC11-1: Two drafts cannot share a slug
 
 **Classification:**
@@ -994,7 +994,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the write.
 * Step 3 shows the second draft's slug unchanged.
 
-<!-- trace:case id=g10adm.auction-listing.TC-ohw rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-ohw rev=1 covers=g10adm.auction-listing.SC-hp2 -->
 ### grade10-admin-auction-listing-US3-TC12-1: Empty slugs on drafts are not a collision
 
 **Classification:**
@@ -1027,7 +1027,7 @@ Runs once per row of **Test data**.
 * Step 1 accepts the save.
 * Step 2 shows neither draft occupying a slug.
 
-<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=1 covers=g10adm.auction-listing.SC-jx5 -->
 ### grade10-admin-auction-listing-US3-TC13-1: Create can reuse a canceled listing's original slug
 
 **Classification:**
@@ -1067,7 +1067,7 @@ Runs once per row of **Test data**.
 * Step 2 shows the draft as created.
 * Step 3 shows the canceled listing still without charizard-psa-9.
 
-<!-- trace:case id=g10adm.auction-listing.TC-xtt rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-xtt rev=1 covers=g10adm.auction-listing.SC-4kw -->
 ### grade10-admin-auction-listing-US3-TC14-1: Create cannot reuse a closed listing's slug
 
 **Classification:**
@@ -1742,7 +1742,7 @@ Runs once per row of **Test data**.
 * Step 3 shows it on the public catalogue.
 * Step 2 needed no further operator action.
 
-<!-- trace:case id=g10adm.auction-listing.TC-4ju rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-4ju rev=1 covers=g10adm.auction-listing.SC-9oe -->
 ### grade10-admin-auction-listing-US4-TC3-1: Collector opens a listing by slug
 
 **Classification:**
@@ -1778,7 +1778,7 @@ Runs once per row of **Test data**.
 
 * Step 1 returns that listing.
 
-<!-- trace:case id=g10adm.auction-listing.TC-h6l rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-h6l rev=1 covers=g10adm.auction-listing.SC-4f0 -->
 ### grade10-admin-auction-listing-US4-TC4-1: Unknown slug is not found
 
 **Classification:**
@@ -1858,7 +1858,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the collector the new copy.
 * Steps 4 to 6 show the same title, prices and window.
 
-<!-- trace:case id=g10adm.auction-listing.TC-mj0 rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-mj0 rev=1 covers=g10adm.auction-listing.SC-2d5 -->
 ### grade10-admin-auction-listing-US4-TC6-1: Published slug cannot change
 
 **Classification:**
@@ -2400,7 +2400,7 @@ Runs once per row of **Test data**.
 **I want** to withdraw a lot at any point up to its close,
 **so that** a consignor who pulls out or a card that fails authentication leaves the sale cleanly.
 
-<!-- trace:case id=g10adm.auction-listing.TC-k37 rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-k37 rev=1 covers=g10adm.auction-listing.SC-pfl -->
 ### grade10-admin-auction-listing-US5-TC1-1: Operator calls off a draft
 
 **Classification:**
@@ -2434,7 +2434,7 @@ Runs once per row of **Test data**.
 * Step 2 shows the listing as canceled.
 * Step 3 does not list that listing.
 
-<!-- trace:case id=g10adm.auction-listing.TC-gw7 rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-gw7 rev=1 covers=g10adm.auction-listing.SC-2px -->
 ### grade10-admin-auction-listing-US5-TC2-1: Operator calls off a created listing before publish at
 
 **Classification:**
@@ -2471,7 +2471,7 @@ Runs once per row of **Test data**.
 * Step 4 does not show it as published.
 * Step 5 does not list that listing.
 
-<!-- trace:case id=g10adm.auction-listing.TC-s7i rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-s7i rev=1 covers=g10adm.auction-listing.SC-oc9 -->
 ### grade10-admin-auction-listing-US5-TC3-1: Operator calls off a published listing that has bids
 
 **Classification:**
@@ -2509,7 +2509,7 @@ Runs once per row of **Test data**.
 * Step 4 shows the held stock released.
 * Step 5 does not list that listing.
 
-<!-- trace:case id=g10adm.auction-listing.TC-32t rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-32t rev=1 covers=g10adm.auction-listing.SC-e1b -->
 ### grade10-admin-auction-listing-US5-TC4-1: Closed listing cannot be called off
 
 **Classification:**
@@ -2543,7 +2543,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the cancel.
 * Step 3 still shows the listing as closed.
 
-<!-- trace:case id=g10adm.auction-listing.TC-zkl rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-zkl rev=1 covers=g10adm.auction-listing.SC-f4v -->
 ### grade10-admin-auction-listing-US5-TC5-1: Settled listing cannot be called off
 
 **Classification:**
@@ -2577,7 +2577,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the cancel.
 * Step 3 still shows the listing as settled.
 
-<!-- trace:case id=g10adm.auction-listing.TC-uba rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-uba rev=1 covers=g10adm.auction-listing.SC-j48 -->
 ### grade10-admin-auction-listing-US5-TC6-1: Already canceled listing cannot be called off again
 
 **Classification:**
@@ -2657,7 +2657,7 @@ Runs once per row of **Test data**.
 * Step 6 saves `<reserved_slug>` on `<reuse_slug_draft>`.
 * `<cancel_slug_listing>` stays canceled.
 
-<!-- trace:case id=g10adm.auction-listing.TC-uyd rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-uyd rev=1 covers=g10adm.auction-listing.SC-lj7 -->
 ### grade10-admin-auction-listing-US5-TC8-1: Cancel of a draft with no slug does not invent one
 
 **Classification:**
@@ -2691,7 +2691,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the listing as canceled.
 * Step 3 still shows no slug.
 
-<!-- trace:case id=g10adm.auction-listing.TC-u5z rev=1 -->
+<!-- trace:case id=g10adm.auction-listing.TC-u5z rev=1 covers=g10adm.auction-listing.SC-tjj -->
 ### grade10-admin-auction-listing-US5-TC9-1: Unauthorized cancel is refused
 
 **Classification:**
@@ -4858,4 +4858,13 @@ changes later.
 - `grade10-admin-auction-listing-US-08-TC4` is `grade10-admin-auction-listing-US8-TC4`: renamed to the compact id form while still draft.
 - **Refused relist Save** - the editor shows the refusal's name inline, such as Already relisted (Q15)
 - **Relisted for good** - once a draft is saved from its Relist, the listing offers no second Relist, even if that draft is called off (Q18)
+
+## Reconciliation
+
+**Run:** QA2, 2026-10-12. QA1 used frozen bundle `02ba99d366a1f619b3df386916067b23a31ec77462132a92d7eddd4bd474713f`. QA2 read both independent readings, all 3 deltas, the complete feature maps, current and durable journeys, durable context, and the linked owner decisions. Case dispositions were recorded before scenario links.
+
+- **Disposition** - The inherited slug and cancellation cases fully assert 16 delta scenarios. TC-z2r checks call off, field exit and Save, but does not check the public refusal, browse/search removal or bidder record. TC-1jo preserves the code after reuse. SC42 and SC155-SC158 remain uncovered as complete routes. Do not combine partial cases into a covers claim.
+- **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
+- **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
+- **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
 

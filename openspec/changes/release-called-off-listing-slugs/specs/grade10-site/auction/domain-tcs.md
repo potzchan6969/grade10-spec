@@ -1328,3 +1328,12 @@ finds it.
 - A losing row on My Auctions reads "Your card was not charged." (decision Q2).
 - HKD increments follow the Bidding page's schedule: HK$80 from HK$4,000 and HK$200 from HK$8,000.
 
+## Reconciliation
+
+**Run:** QA2, 2026-10-12. QA1 used frozen bundle `02ba99d366a1f619b3df386916067b23a31ec77462132a92d7eddd4bd474713f`. QA2 read both independent readings, all 3 deltas, the complete feature maps, current and durable journeys, durable context, and the linked owner decisions. Case dispositions were recorded before scenario links.
+
+- **Disposition** - TC-dw9 remains the independent call-off, private replacement, public replacement and bidder-history route. It checks the original no-charge record after reuse. It does not check the non-bidder session after reuse or the full metadata/hydration route; SC14 and SC55 receive no covers claim from it. The other 26 inherited cases retain their identities, bodies and classifications.
+- **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
+- **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
+- **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
+
