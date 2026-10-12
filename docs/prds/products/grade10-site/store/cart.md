@@ -12,7 +12,7 @@ back to that page.
 
 | Rule | Value |
 | --- | --- |
-| Who | A signed-in member; a signed-out session holds no lines |
+| Who | A signed-in member, at the store; a guest, in this browser |
 | Promo codes | **1 per cart** — a second replaces the first |
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Estimated total | **Goods − code − points** — before shipping, tax and the shop's own sale, which the invoice prices |
@@ -29,8 +29,9 @@ back to that page.
 - **Lines whose product left the shop** — leave the cart on open, with one
   notice; a sold-out line stays, marked, until the collector removes it —
   [Cart Validation](/p/grade10-site/store/cart-validation)
-- **One scope** — the member cart of the signed-in session; a signed-out
-  session holds no lines and builds none
+- **Whose cart** - a signed-in member's cart is kept at the store; a guest's
+  is kept in this browser. Signing in moves the browser's lines into the
+  member's cart
 - **Edits** — quantity and removal write to the same cart the page holds
 - **The choice follows the cart** — the code and the points the member
   chose are held with the lines, so both are still there after a reload and
@@ -87,6 +88,9 @@ The refusals are the coupon's own —
 - 🚧 **Sent** — the order is promised with the same code and points the
   drawer shows —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
+- **Guest** - a guest's drawer offers no code and no points; Proceed to
+  Checkout sends the lines alone, and goods at the bar ask the guest to sign
+  in - [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 
@@ -116,7 +120,7 @@ considering. Its value is a total they can trust before they go to pay.
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Signed-in collector | Opens Cart from the header on any surface | Sees what a code and points take off, and carries the choice to checkout. |
-| Signed-out collector | Presses Add to cart on the listing or product page | Meets the sign-in dialog; no guest cart is built. |
+| Signed-out collector | Presses Add to cart, then Cart | Builds a cart in this browser and checks out as a guest. |
 | Collector whose cart moved | Opens Cart before checkout | Sees current facts or a clear unresolved state, never a stale claim. |
 
 **Not in scope.** A dedicated cart page. Product-image enrichment. Shipping
@@ -137,7 +141,7 @@ and tax before the invoice. A second code on one cart.
 | Overlay, not page | Decided | Cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything. | Product |
 | Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store and checkout — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
-| One session scope | Decided | The cart is the signed-in member's. A signed-out session holds no lines; there is no guest checkout and no guest cart to merge. | Product |
+| Guest cart | Decided | A signed-out collector's cart is kept in this browser and checked out as a guest; signing in moves its lines into the member's cart. Supersedes one session scope. | Product |
 | One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
 | Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |

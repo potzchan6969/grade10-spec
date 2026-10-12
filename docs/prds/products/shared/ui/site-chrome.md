@@ -66,8 +66,8 @@ utility strip / compact utility list.
 🚧 **Cart count** - when the cart control is present and the cart holds active
 lines, `SiteHeader` shows a round count on the cart icon, the same number as
 the cart drawer title badge, in full, never `99+`. An empty, omitted, or
-unknown count hides it. Signed-out visitors have no guest cart, so they
-receive no count. Design-system `Nav` stays
+unknown count hides it. A signed-out visitor's count is the cart their
+browser holds. Design-system `Nav` stays
 count-agnostic: a header that shows a count hands `Nav` its own cart control
 through an optional cart slot, as it does for account.
 
