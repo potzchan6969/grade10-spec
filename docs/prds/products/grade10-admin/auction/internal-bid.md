@@ -14,7 +14,7 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
 | Rule | Value |
 | --- | --- |
 | Per listing | **One**, on a created or published listing, bidding as one internal bidder |
-| Internal bidders | Profiles kept in auction admin: a name, a unique email label and a billing address, no site account |
+| Internal bidders | Profiles kept in auction admin: a name, a unique email label and a billing address with a neutral recipient, no site account |
 | Amount | Whole major units, from the starting price to the currency's ceiling |
 | Commit time | Required; from the start to the scheduled close, both included |
 | Who | `auction:reserve` only |

@@ -84,6 +84,7 @@
 | Q56 | Does an Orders search match an internal bidder's email label? | Never, for any operator, as in Q44. Agent default, open to override | Matching it for reserve holders |
 | Q57 | Profile billing address | Required when a profile is added and editable any time; a change is audited without the address and never rewrites an order already opened. Agent default, open to override | Rewriting open orders when the profile changes |
 | Q58 | Where the internal-bidder-win flag shows, and relisting after the cancel | On the listing's page and its Listings row, for reserve holders only; after the cancel the lot returns as the durable cancel rules return any lot. Agent default, open to override | Showing the flag to every operator; and a Relist rule of its own |
+| Q59 | May a profile's billing address name the profile as its recipient, when staff read the internal order's addresses? | The recipient is a free field staff read as held; admins enter a neutral recipient, never the profile's name. Agent default, open to override | Hiding the address name line from staff, which needs a post-sale redaction |
 
 ## Raised
 

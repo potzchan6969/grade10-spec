@@ -119,6 +119,7 @@
 
 - **Folded in** - `grade10-site-auction-e2e-US13-TC01-1` walks the house's commit, the outbid letter, extended bidding and the close, asserting `grade10-site-auction-auto-bidding-SC-33`, `grade10-site-auction-notifications-SC-49`, `grade10-site-auction-auction-SC-103`, `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-51`; `grade10-site-auction-e2e-US13-TC02-1` walks a collector beating the house in extended bidding, asserting `grade10-site-auction-auction-SC-02` and the durable extended-bidding rule
 - **Anchors** - QA2 round 4: `grade10-site-auction-auction-SC-02` and `grade10-site-auction-auction-SC-103` now serve `grade10-site-auction-auction-US-01`, so both traces gain that journey; the paths and assertions are unchanged
+- **Round 6** - QA2, 2026-10-12: Dev's round-6 reading opens the internal bidder's order at a house win and sends it no letter. `grade10-site-auction-e2e-US13-TC01-1` and `grade10-site-auction-e2e-US13-TC02-1` assert only collector reads and letters, which that leaves unchanged, so both keep their version; the internal order is walked by `grade10-admin-auction-e2e-US4-TC2-1`
 - **Rejected** - none
 - **Raised** - none
 - **Uncovered anchors** - none

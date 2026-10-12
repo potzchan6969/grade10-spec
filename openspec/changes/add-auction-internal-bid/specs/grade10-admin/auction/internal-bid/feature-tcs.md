@@ -1,6 +1,6 @@
 # grade10-admin/auction/internal-bid Test Cases
 
-**Status:** pending-review · 0/63
+**Status:** pending-review · 0/69
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
 ## Background
@@ -14,7 +14,8 @@
 | Field | Value |
 | --- | --- |
 | `<starting price>` | 400000 minor units (HK$4,000.00) |
-| `<internal bidder>` | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test |
+| `<internal bidder>` | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test, billing address `<house billing address>` |
+| `<house billing address>` | A Hong Kong address with every required field: name "Grade10 Stock Room", 1 Test Road, Central, Hong Kong |
 
 ## grade10-admin-auction-internal-bid-US1: Admin protects a lot with an internal bid at a set time
 
@@ -1500,8 +1501,8 @@ Runs once per row of **Test data**.
 * Step 3 shows the internal bid placed.
 * Step 4: the house leads at `<price after raise>`; customer A reads Outbid.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-2dl rev=1 covers=g10adm.auction-internal-bid.SC-11v -->
-### grade10-admin-auction-internal-bid-US5-TC3-1: A not-placed internal bid lets the lot sell to the collector
+<!-- trace:case id=g10adm.auction-internal-bid.TC-2dl rev=2 covers=g10adm.auction-internal-bid.SC-11v -->
+### grade10-admin-auction-internal-bid-US5-TC3-2: A not-placed internal bid lets the lot sell to the collector
 
 **Classification:**
 
@@ -1520,7 +1521,7 @@ Runs once per row of **Test data**.
 
 * `<listing_20>` is led by customer A at `<final price>`, its close a few minutes away, no further bid coming.
 * `<listing_20>`'s internal bid of `<short amount>` was not placed at its time and was never raised.
-* admin(holds auction:reserve) is on <grade10 auction admin listings url>.
+* admin(holds auction:reserve and auction:payment) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -1533,13 +1534,15 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Wait until `<listing_20>`'s close passes.
-2. Read `<listing_20>`'s row in the Listings table.
-3. Open Orders and search for `<listing_20>`'s listing code.
+2. Open `<listing_20>` and read it.
+3. Open Orders, select All and search for `<listing_20>`'s listing code.
+4. Open the order and read its buyer and flags.
 
 **Expected Results:**
 
-* Step 2: the row does not read Bought in and offers no Relist.
-* Step 3 finds customer A's order for `<listing_20>`, at winning bid `<final price>`.
+* Step 2: the listing is not flagged as won by an internal bidder.
+* Step 3 finds one order for `<listing_20>`, at winning bid `<final price>`.
+* Step 4: the buyer is customer A; the order is not flagged internal and names no internal bidder.
 
 <!-- trace:case id=g10adm.auction-internal-bid.TC-kew rev=1 covers=g10adm.auction-internal-bid.SC-ujg -->
 ### grade10-admin-auction-internal-bid-US5-TC4-1: A not-placed internal bid can be lowered
@@ -1789,14 +1792,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-admin-auction-internal-bid-US6: Admin reads a lot the house bought in
+## grade10-admin-auction-internal-bid-US6: Admin settles the order of a lot an internal bidder won
 
 **As an** auction admin,
-**I want** a lot the house won to read Bought in, with no order and its stock released,
-**so that** I can tell it from a sale and from a lot nobody bid on, and decide what to do with the card.
+**I want** the order and invoice of a lot an internal bidder won to be issued to that internal bidder and flagged internal,
+**so that** I can let the invoice expire and cancel the order as I do any unpaid order, while knowing it was the house's win.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-rzs rev=1 covers=g10adm.auction-internal-bid.SC-hat,g10.auction-auction.SC-6am,g10.auction-auction.SC-cqt -->
-### grade10-admin-auction-internal-bid-US6-TC1-1: A house win opens no order, a collector win over the house does
+<!-- trace:case id=g10adm.auction-internal-bid.TC-rzs rev=2 covers=g10adm.auction-internal-bid.SC-nl0,g10.auction-auction.SC-cqt,g10.auction-auction.SC-14a -->
+### grade10-admin-auction-internal-bid-US6-TC1-2: A house win opens one order for its internal bidder, flagged internal
 
 Runs once per row of **Test data**.
 
@@ -1806,7 +1809,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -1815,8 +1818,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_21>`'s internal bid of `<house maximum>` is committed, and the bidding is as the row states, its close a few minutes away, no further bid coming.
-* admin(holds auction:reserve and auction:payment) is on `<grade10 auction admin orders url>`.
+* `<listing_21>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, and the bidding is as the row states, its close a few minutes away, no further bid coming.
+* admin(holds auction:reserve and auction:payment) is on <grade10 auction admin orders url>.
 
 **Test data:**
 
@@ -1825,25 +1828,27 @@ Runs once per row of **Test data**.
 | `<listing_21>` | A published HKD listing in no campaign |
 | `<house maximum>` | 600000 minor units (HK$6,000.00) |
 
-| Row | Leader at the close | Orders after the close | customer A's row on My Auctions |
+| Row | Bidding at the close | Order for `<listing_21>` after the close | customer A's row on My Auctions |
 | --- | --- | --- | --- |
-| House wins | The house, at 508000 over customer A's maximum of 500000 | No order for `<listing_21>` in any segment | Didn't win, card not charged |
-| Collector beats the house | customer A, at 608000 with maximum 700000 | customer A's order, winning bid 608000 | Won, with View order |
-| House alone | The house, at `<starting price>`, with no collector bid | No order for `<listing_21>` in any segment | No row; customer A never bid |
+| House wins | The house leads at 508000 over customer A's maximum of 500000 | One order, flagged internal, buyer House with `<internal bidder>`'s name and email label, winning bid 508000 | Didn't win, card not charged |
+| House alone | The house leads at `<starting price>`, with no collector bid | One order, flagged internal, buyer House with `<internal bidder>`'s name and email label, winning bid `<starting price>` | No row; customer A never bid |
+| Collector beats the house | customer A leads at 608000 with maximum 700000 | One order, customer A's, not flagged internal, winning bid 608000 | Won, with View order |
 
 **Steps:**
 
 1. Wait until `<listing_21>`'s close passes.
 2. Select All and search for `<listing_21>`'s listing code.
-3. As customer A, open `<grade10 my auctions url>` and read `<listing_21>`'s row.
+3. Open the order and read its buyer, flags and winning bid.
+4. As customer A, open <grade10 my auctions url> and read `<listing_21>`'s row.
 
 **Expected Results:**
 
-* Step 2 reads the row's Orders outcome.
-* Step 3 reads the row's My Auctions outcome.
+* Step 2 lists exactly one order for `<listing_21>`.
+* Step 3 reads the row's order.
+* Step 4 reads the row's My Auctions outcome.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-17a rev=1 covers=g10adm.auction-internal-bid.SC-hat,g10adm.auction-listing.SC-qgd -->
-### grade10-admin-auction-internal-bid-US6-TC2-1: The listing's own page and its Listings row read Bought in once the lot closes
+<!-- trace:case id=g10adm.auction-internal-bid.TC-17a rev=2 covers=g10adm.auction-internal-bid.SC-u1p -->
+### grade10-admin-auction-internal-bid-US6-TC2-2: Only a reserve holder reads the listing flagged as its internal bidder's win
 
 Runs once per row of **Test data**.
 
@@ -1853,7 +1858,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -1863,7 +1868,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_45>` is published in no campaign and is bid on as the row states, its close a few minutes away, no further bid coming.
-* admin(holds auction:reserve and auction:operate) is on <grade10 auction admin listings url>.
+* The row's admin is on <grade10 auction admin listings url>.
 
 **Test data:**
 
@@ -1872,32 +1877,34 @@ Runs once per row of **Test data**.
 | `<listing_45>` | A published HKD listing in no campaign |
 | `<house maximum>` | 600000 minor units (HK$6,000.00) |
 
-| Row | Bidding | Wait | Listing page and Listings row |
-| --- | --- | --- | --- |
-| House wins | The house leads at 508000 under its committed internal bid of `<house maximum>`, over customer A's maximum of 500000 | Until the close passes | Both read Bought in |
-| House leads, not yet closed | As House wins | None; the lot is still taking bids | Neither reads Bought in |
-| Collector beats the house | customer A leads at 608000 with maximum 700000, over the house's committed internal bid of `<house maximum>` | Until the close passes | Neither reads Bought in |
-| Nobody bids | No bid and no internal bid | Until the close passes | Neither reads Bought in; the Listings row reads Unsold |
+| Row | admin | Bidding | Wait | `<listing_45>`'s Listings row and page |
+| --- | --- | --- | --- | --- |
+| House wins, reserve holder | admin(holds auction:reserve and auction:operate) | The house leads at 508000 under its committed internal bid of `<house maximum>` as `<internal bidder>`, over customer A's maximum of 500000 | Until the close passes | Flagged as won by its internal bidder, naming `<internal bidder>` |
+| House wins, staff | admin(staff, holds auction:operate, not auction:reserve) | As House wins, reserve holder | Until the close passes | Not flagged; reads as any won lot, offering Open order |
+| House leads, not yet closed | admin(holds auction:reserve and auction:operate) | As House wins, reserve holder | None; the lot is still taking bids | Not flagged |
+| Collector beats the house | admin(holds auction:reserve and auction:operate) | customer A leads at 608000 with maximum 700000, over the house's committed internal bid of `<house maximum>` | Until the close passes | Not flagged; reads as any won lot, offering Open order |
+| Nobody bids | admin(holds auction:reserve and auction:operate) | No bid and no internal bid | Until the close passes | Not flagged; reads Unsold |
 
 **Steps:**
 
 1. Wait as the row states.
-2. Open `<listing_45>` and read its status.
-3. Return to the Listings table and read `<listing_45>`'s row.
+2. Reload <grade10 auction admin listings url> and read `<listing_45>`'s row.
+3. Open `<listing_45>` and read its status and flags.
 
 **Expected Results:**
 
-* Step 2 and step 3 read the row's outcome.
+* Steps 2 and 3 each read the row's outcome.
+* Steps 2 and 3 read Bought in in no row.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-vuc rev=1 covers=g10adm.auction-internal-bid.SC-80a,g10.auction-winner-order.SC-los -->
-### grade10-admin-auction-internal-bid-US6-TC3-1: A house win puts nothing in the post-sale queue and sends no order letter
+<!-- trace:case id=g10adm.auction-internal-bid.TC-vuc rev=2 covers=g10adm.auction-internal-bid.SC-nl0,g10.auction-winner-order.SC-los,g10.auction-notifications.SC-9dh -->
+### grade10-admin-auction-internal-bid-US6-TC3-2: A house win's order enters Orders and sends no order letter
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
@@ -1907,7 +1914,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The house leads `<listing_46>` at `<final price>` under its committed internal bid, over customer A, its close a few minutes away, no further bid coming.
+* The house leads `<listing_46>` at `<final price>` under its committed internal bid as `<internal bidder>`, over customer A, its close a few minutes away, no further bid coming.
 * customer B leads `<listing_51>`, closing a minute before `<listing_46>`, no further bid coming.
 * No other lot closes before step 5.
 * admin(holds auction:reserve, auction:operate and auction:payment) is on <grade10 auction admin orders url>.
@@ -1926,14 +1933,205 @@ Runs once per row of **Test data**.
 1. Read the count on each Orders segment: Needs action, Waiting on winner, In transit, Closed and All.
 2. Wait until `<listing_46>`'s close passes.
 3. Reload Orders and read each segment's count, and the orders All adds.
-4. Open <grade10 auction admin listings url> and read `<listing_46>`'s row.
-5. Open <grade10 auction send log url>, filter by `<listing_46>` and read the rows from the close.
+4. Open <grade10 auction send log url>, filter by `<listing_46>` and read the rows from the close.
 
 **Expected Results:**
 
-* Step 3: All holds one order more than at step 1, customer B's for `<listing_51>`; no order is `<listing_46>`'s.
-* Step 4: the row offers no Open order.
-* Step 5 holds no auction-won letter and no other order letter, to anyone.
+* Step 3: All holds two orders more than at step 1: customer B's for `<listing_51>`, and `<listing_46>`'s, flagged internal, buyer House.
+* Step 3: the segment counts still add up to All.
+* Step 4 holds no auction-won letter and no other order letter, to anyone.
+* Step 4 holds no row addressed to `<internal bidder>`'s email label.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-cww rev=1 covers=g10adm.auction-internal-bid.SC-nl0,g10.auction-winner-order.SC-los -->
+### grade10-admin-auction-internal-bid-US6-TC4-1: At the close the internal order takes the internal bidder's billing address and waits on no one
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Pre-conditions:**
+
+* The house leads `<listing_70>` at `<final price>` under its committed internal bid as `<internal bidder>`, over customer A, its close a few minutes away, no further bid coming.
+* `<internal bidder>` holds `<house billing address>`.
+* The environment's clock can be moved past the 48-hour setup window.
+* admin(holds auction:reserve and auction:payment) is on <grade10 auction admin orders url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_70>` | A published HKD listing in no campaign, protected by a committed internal bid of 600000 minor units |
+| `<final price>` | 508000 minor units: customer A's maximum of 500000 plus its 8000 increment |
+
+**Steps:**
+
+1. Wait until `<listing_70>`'s close passes.
+2. Select All, search for `<listing_70>`'s listing code and open the order.
+3. Read the order's status, its addresses and the actions it offers.
+4. Move the clock 48 hours past the close, taking no action on the order.
+5. Reload the order and read its status and invoice.
+6. Open <grade10 auction send log url>, filter by `<listing_70>` and read the rows from the close.
+
+**Expected Results:**
+
+* Step 3: the delivery address and the billing address each read `<house billing address>`, and the payment method reads bank transfer.
+* Step 3: the status is Preparing Invoice, and Send invoice is offered.
+* Step 5: the status is the one step 3 read, not Setup Overdue; the invoice reads Not issued.
+* Step 6 holds no setup reminder, setup overdue or other order letter.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-dqh rev=1 covers=g10adm.auction-internal-bid.SC-6fc -->
+### grade10-admin-auction-internal-bid-US6-TC5-1: An operator sends the internal order's invoice by hand, and no invoice letter goes out
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Pre-conditions:**
+
+* `<listing_71>` closed with the house winning at `<final price>` as `<internal bidder>`; its order, flagged internal, has no invoice sent.
+* admin(holds auction:reserve and auction:payment) is on `<listing_71>`'s order page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_71>` | An HKD listing in no campaign, closed with the house winning |
+| `<final price>` | 508000 minor units (HK$5,080.00) |
+| `<shipping>` | 0 minor units (HK$0.00), Shipping & Handling |
+| `<transfer fee>` | 0 minor units (HK$0.00), bank transfer fee |
+
+**Steps:**
+
+1. Open Send invoice and read the quote.
+2. Enter `<shipping>` as Shipping & Handling and `<transfer fee>` as the bank transfer fee, leaving Insurance and Tax empty.
+3. Send the invoice.
+4. Read the order's status, its invoice and the payment deadline.
+5. Open <grade10 auction send log url>, filter by `<listing_71>` and read the rows from the send.
+
+**Expected Results:**
+
+* Step 1: the quote shows winning bid `<final price>`, billing address `<house billing address>` and payment method bank transfer.
+* Step 4: the order reads Pending Payment, the invoice Pending.
+* Step 4: the deadline is 7 calendar days after the send.
+* Step 5 holds no invoice-sent letter and no payment reminder, to anyone.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-kgs rev=1 covers=g10adm.auction-internal-bid.SC-77a -->
+### grade10-admin-auction-internal-bid-US6-TC6-1: The internal invoice expires after its 7 days, silently, and the order waits for the operator
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Pre-conditions:**
+
+* `<listing_72>` closed with the house winning as `<internal bidder>`; its order's invoice was sent at `<sent at>` and nothing was paid.
+* The environment's clock can be moved past the payment deadline.
+* admin(holds auction:reserve and auction:payment) is on `<listing_72>`'s order page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_72>` | An HKD listing in no campaign, closed with the house winning at 508000 minor units |
+| `<sent at>` | The time the invoice was sent; its deadline is 7 calendar days later |
+
+**Steps:**
+
+1. Move the clock past the deadline, 7 calendar days after `<sent at>`.
+2. Reload the order and read its status and invoice.
+3. Move the clock one more day, taking no action.
+4. Reload the order and read its status.
+5. Open <grade10 auction send log url>, filter by `<listing_72>` and read the rows since `<sent at>`.
+
+**Expected Results:**
+
+* Step 2: the order reads Payment Overdue, the invoice Expired.
+* Step 4: the order still reads Payment Overdue; nothing cancelled it.
+* Step 5 holds no day-3, day-6, final notice or payment overdue letter, to anyone.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-2d2 rev=1 covers=g10adm.auction-internal-bid.SC-jzh -->
+### grade10-admin-auction-internal-bid-US6-TC7-1: An operator cancels the internal order by hand and the lot goes back to stock
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Pre-conditions:**
+
+* `<listing_74>` held `<held quantity>` units of `<product_74>` and closed with the house winning as `<internal bidder>`; its order, flagged internal, is in the row's state.
+* admin(holds auction:reserve and auction:payment) is on `<listing_74>`'s order page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_74>` | An HKD listing in no campaign, closed with the house winning at 508000 minor units |
+| `<product_74>` | A product with `<available before>` units available beside the hold |
+| `<held quantity>` | 1 unit (any quantity from 1 to 500) |
+| `<available before>` | 3 units (any count) |
+| `<note>` | "QA internal order, house win" |
+
+| Row | Order state |
+| --- | --- |
+| Expired | Payment Overdue: the invoice was sent and its 7 days passed unpaid |
+| Never sent | The invoice was never sent |
+
+**Steps:**
+
+1. Read `<product_74>`'s available count on its product page.
+2. On the order page, open Cancel.
+3. Pick Non-payment and enter `<note>`.
+4. Confirm the cancel.
+5. Read the order's status and invoice.
+6. Read `<product_74>`'s available count again.
+7. Open <grade10 auction send log url>, filter by `<listing_74>` and read the rows from the cancel.
+
+**Expected Results:**
+
+* Step 1 reads `<available before>`.
+* Step 2: the confirmation says no letter is sent.
+* Step 4 is accepted.
+* Step 5: the order reads Cancelled, the invoice Cancelled.
+* Step 6 reads `<available before>` plus `<held quantity>`.
+* Step 7 holds no cancellation letter or other order letter, to anyone.
 
 ---
 
@@ -2106,8 +2304,8 @@ Runs once per row of **Test data**.
 * Step 3: no entry shows `<commit time>`.
 * Step 3: no entry shows `<internal bidder>`'s or `<bidder Q>`'s name or email label.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-rfj rev=1 covers=g10adm.auction-internal-bid.SC-ftu,g10adm.auction-listing.SC-qgd,g10adm.auction-listing.SC-l2y -->
-### grade10-admin-auction-internal-bid-US7-TC4-1: After the close staff see Bought in, never the amount or time
+<!-- trace:case id=g10adm.auction-internal-bid.TC-rfj rev=2 covers=g10adm.auction-internal-bid.SC-ftu,g10adm.auction-internal-bid.SC-rrc -->
+### grade10-admin-auction-internal-bid-US7-TC4-2: After the close staff read the lot sold and its buyer as House, never the amount, time or internal bidder
 
 **Classification:**
 
@@ -2124,14 +2322,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_34>` closed with the house leading under its internal bid of `<house maximum>` at `<commit time>`, over customer A.
+* `<listing_34>` closed with the house winning under its internal bid of `<house maximum>` at `<commit time>` as `<internal bidder>`, over customer A; its order is open.
 * admin(staff, holds auction:operate, not auction:reserve) is on <grade10 auction admin listings url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_34>` | An HKD listing in no campaign, closed Bought in |
+| `<listing_34>` | An HKD listing in no campaign, closed with the house winning |
 | `<house maximum>` | 612300 minor units (HK$6,123.00), an amount the lot's bids never reached |
 | `<commit time>` | The internal bid's set time |
 
@@ -2139,14 +2337,17 @@ Runs once per row of **Test data**.
 
 1. Read `<listing_34>`'s row in the Listings table.
 2. Open `<listing_34>` and read it, its bids included.
+3. Open Orders, select All and search for `<listing_34>`'s listing code.
+4. Open the order and read it.
 
 **Expected Results:**
 
-* Step 1: the row reads Bought in and offers Relist.
-* Step 2: the listing's page reads Closed and Bought in, with no order to open.
-* Step 2 shows no Internal bid section.
+* Step 1: the row reads as any won lot, offering Open order; nothing reads Bought in.
+* Step 2 shows no Internal bid section, and no flag of an internal bidder's win.
 * Step 2: the house's bids read House, each with its own Accepted At, as Recent bids shows it.
-* Step 2 shows `<house maximum>` nowhere, and no internal bid time or state.
+* Step 3 lists one order, buyer House, flagged internal.
+* Step 4: the buyer reads House; nothing shows `<internal bidder>`'s name or email label.
+* Steps 2 to 4 show `<house maximum>` nowhere, and no internal bid time or state.
 
 <!-- trace:case id=g10adm.auction-internal-bid.TC-net rev=2 covers=g10adm.auction-internal-bid.SC-rzd,g10adm.auction-internal-bid.SC-36t,g10adm.auction-internal-bid.SC-wib,g10adm.auction-internal-bid.SC-n08 -->
 ### grade10-admin-auction-internal-bid-US7-TC5-2: A staff listing edit that clears the internal bid tells staff nothing
@@ -2238,7 +2439,7 @@ Runs once per row of **Test data**.
 * Step 1 counts `<bidder count>` bidders, the house included.
 * Step 1's bid count equals step 2's, the house's bids included.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-g02 rev=1 covers=g10adm.auction-internal-bid.SC-ftu,g10adm.auction-listing.SC-cvx -->
+<!-- trace:case id=g10adm.auction-internal-bid.TC-g02 rev=1 covers=g10adm.auction-internal-bid.SC-ftu -->
 ### grade10-admin-auction-internal-bid-US7-TC7-1: Once the house bids staff see House, never the amount or time
 
 Runs once per row of **Test data**.
@@ -2285,7 +2486,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the row reads as any published listing with a leading bid; nothing reads Bought in, House or an internal bid.
+* Step 1: the row reads as any published listing with a leading bid; nothing reads House, an internal bid or an internal bidder's win.
 * Step 2: the house's bids read House, with no account and no maximum.
 * Step 2: each House bid shows its own Accepted At, the same time Recent bids shows for it.
 * Step 2: no bid reads the house's listing pseudonym, or `<internal bidder>`'s name or email label.
@@ -2487,6 +2688,55 @@ Runs once per row of **Test data**.
 * Step 1 matches no listing.
 * Step 2 matches `<listing_64>`.
 * Step 3 lists no row for `<internal bidder>`.
+
+<!-- trace:case id=g10adm.auction-internal-bid.TC-81p rev=1 covers=g10adm.auction-internal-bid.SC-rrc,g10adm.auction-internal-bid.SC-u1p,g10adm.auction-internal-bid.SC-on5 -->
+### grade10-admin-auction-internal-bid-US7-TC12-1: After the close only a reserve holder's reads carry the internal bidder and its win
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Pre-conditions:**
+
+* `<listing_73>` closed with the house winning at 508000 under its internal bid of `<house maximum>` as `<internal bidder>`, over customer A; its order is open.
+* The row's admin is signed in to the admin.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_73>` | An HKD listing in no campaign, closed with the house winning |
+| `<house maximum>` | 612300 minor units (HK$6,123.00), an amount the lot's bids never reached |
+
+| Row | admin | `<listing_73>`'s read | The order's read |
+| --- | --- | --- | --- |
+| Reserve holder | admin(holds auction:reserve, auction:operate and auction:payment) | Flagged as won by its internal bidder, naming `<internal bidder>` | Flagged internal, buyer House, naming `<internal bidder>` |
+| Staff | admin(staff, holds auction:operate, not auction:reserve) | No internal-bidder win flag, no internal bidder | Flagged internal, buyer House, no internal bidder name, email label or id |
+
+**Steps:**
+
+1. Open `<listing_73>` in the admin.
+2. Open `<listing_73>`'s order from Orders.
+3. Read the API responses behind steps 1 and 2.
+4. Search Orders, with All selected, by `<internal bidder>`'s email label.
+
+**Expected Results:**
+
+* Step 3: the listing read carries the row's listing outcome.
+* Step 3: the order read carries the row's order outcome.
+* Step 3: in the Staff row, neither read carries `<house maximum>`, the commit time or the internal bid's state.
+* Step 4 finds no order in either row.
 
 ---
 
@@ -2746,8 +2996,8 @@ Runs once per row of **Test data**.
 **I want** to add, rename and retire internal bidder profiles in auction admin,
 **so that** each listing's internal bid can bid as the internal bidder I choose for it.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-wkj rev=1 covers=g10adm.auction-internal-bid.SC-piq -->
-### grade10-admin-auction-internal-bid-US9-TC1-1: An added internal bidder is offered at Save and has no site account
+<!-- trace:case id=g10adm.auction-internal-bid.TC-wkj rev=2 covers=g10adm.auction-internal-bid.SC-piq -->
+### grade10-admin-auction-internal-bid-US9-TC1-2: An added internal bidder keeps its billing address, is offered at Save and has no site account
 
 **Classification:**
 
@@ -2775,24 +3025,27 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<new name>` | "QA House New" |
 | `<new label>` | qa-house-new@internal.test, carried by no profile and no account |
+| `<new billing address>` | A Hong Kong address with every required field: name "QA House New", 2 Test Road, Central, Hong Kong |
 | `<listing_58>` | A published HKD listing, scheduled start an hour away, scheduled close a day later |
 
 **Steps:**
 
-1. Add an internal bidder with `<new name>` and `<new label>`.
+1. Add an internal bidder with `<new name>`, `<new label>` and `<new billing address>`.
 2. Save the new internal bidder.
 3. Read the internal bidders list.
-4. Open `<listing_58>`'s editor and open the internal bidder pick in the Internal bid section.
-5. As the admin holding `user:list`, open <grade10 admin users url> and search for `<new label>`.
+4. Open the new internal bidder and read its billing address.
+5. Open `<listing_58>`'s editor and open the internal bidder pick in the Internal bid section.
+6. As the admin holding `user:list`, open <grade10 admin users url> and search for `<new label>`.
 
 **Expected Results:**
 
 * Step 2 is accepted.
 * Step 3 lists `<new name>` with `<new label>`, active.
-* Step 4 offers `<new name>`.
-* Step 5 finds no account for `<new label>`.
+* Step 4 reads `<new billing address>`.
+* Step 5 offers `<new name>`.
+* Step 6 finds no account for `<new label>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-kg8 rev=1 covers=g10adm.auction-internal-bid.SC-h93 -->
+<!-- trace:case id=g10adm.auction-internal-bid.TC-kg8 rev=1 covers=g10adm.auction-internal-bid.SC-h93,g10adm.auction-internal-bid.SC-tj3 -->
 ### grade10-admin-auction-internal-bid-US9-TC2-1: A new internal bidder without a name or with a label already used is refused
 
 Runs once per row of **Test data**.
@@ -2822,19 +3075,21 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<bidder P>` | An active internal bidder profile: name "QA House P", email label qa-house-p@internal.test |
 | `<bidder R>` | A retired internal bidder profile: name "QA House R", email label qa-house-r@internal.test |
+| `<copy address>` | A Hong Kong address with every required field: name "QA House Copy", 3 Test Road, Central, Hong Kong |
 
-| Row | Name | Email label |
-| --- | --- | --- |
-| Label in use | "QA House Copy" | qa-house-p@internal.test, `<bidder P>`'s label |
-| Label in use, other letter case | "QA House Copy" | QA-House-P@internal.test, `<bidder P>`'s label in other letter case |
-| Label of a retired profile | "QA House Copy" | qa-house-r@internal.test, `<bidder R>`'s label |
-| Not an email address | "QA House Copy" | qa-house-copy |
-| No name | Empty | qa-house-blank@internal.test |
-| No label | "QA House No Label" | Empty |
+| Row | Name | Email label | Billing address |
+| --- | --- | --- | --- |
+| Label in use | "QA House Copy" | qa-house-p@internal.test, `<bidder P>`'s label | `<copy address>` |
+| Label in use, other letter case | "QA House Copy" | QA-House-P@internal.test, `<bidder P>`'s label in other letter case | `<copy address>` |
+| Label of a retired profile | "QA House Copy" | qa-house-r@internal.test, `<bidder R>`'s label | `<copy address>` |
+| Not an email address | "QA House Copy" | qa-house-copy | `<copy address>` |
+| No name | Empty | qa-house-blank@internal.test | `<copy address>` |
+| No label | "QA House No Label" | Empty | `<copy address>` |
+| No billing address | "QA House No Address" | qa-house-no-address@internal.test | Empty |
 
 **Steps:**
 
-1. Add an internal bidder with the row's name and email label.
+1. Add an internal bidder with the row's name, email label and billing address.
 2. Save the new internal bidder.
 3. Reload <grade10 auction admin internal bidders url> and read the list.
 
@@ -2948,8 +3203,8 @@ Runs once per row of **Test data**.
 * Step 3 shows the row's label for `<bidder P>`, its name unchanged.
 * Step 4 shows the internal bid Scheduled, still as `<bidder P>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-8at rev=1 covers=g10adm.auction-internal-bid.SC-bio -->
-### grade10-admin-auction-internal-bid-US9-TC5-1: A retired internal bidder is no longer offered and keeps its history
+<!-- trace:case id=g10adm.auction-internal-bid.TC-8at rev=2 covers=g10adm.auction-internal-bid.SC-bio -->
+### grade10-admin-auction-internal-bid-US9-TC5-2: A retired internal bidder is no longer offered and keeps its history
 
 Runs once per row of **Test data**.
 
@@ -2970,7 +3225,7 @@ Runs once per row of **Test data**.
 
 * `<bidder P>` is an active internal bidder profile, in use as the row states.
 * `<listing_61>` is published and Upcoming, with no internal bid.
-* admin(holds auction:reserve) is on <grade10 auction admin internal bidders url>.
+* admin(holds auction:reserve and auction:payment) is on <grade10 auction admin internal bidders url>.
 
 **Test data:**
 
@@ -2984,7 +3239,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | Never used | Named on no internal bid; `<listing_60>` unused |
 | Placed, lot taking bids | Named only on `<listing_60>`'s internal bid, committed, the house leading at 508000 over customer A's maximum of 500000 |
-| Bought in | Named only on `<listing_60>`'s internal bid, the lot closed Bought in at 508000 |
+| Won, order open | Named only on `<listing_60>`'s internal bid; the lot closed with the house winning at 508000, its order flagged internal and not cancelled |
 
 **Steps:**
 
@@ -2992,6 +3247,7 @@ Runs once per row of **Test data**.
 2. Reload the list and read `<bidder P>`'s row.
 3. Open `<listing_61>`'s editor and open the internal bidder pick in the Internal bid section.
 4. Outside the Never used row, open `<listing_60>` and read its bids.
+5. In the Won, order open row, open `<listing_60>`'s order from Orders and read its buyer.
 
 **Expected Results:**
 
@@ -2999,6 +3255,7 @@ Runs once per row of **Test data**.
 * Step 2 shows `<bidder P>` retired, its name and email label kept.
 * Step 3 does not offer `<bidder P>`.
 * Step 4: the house's bid at 508000 still names `<bidder P>`.
+* Step 5: the order still names `<bidder P>` beside House.
 
 <!-- trace:case id=g10adm.auction-internal-bid.TC-skz rev=1 covers=g10adm.auction-internal-bid.SC-9ng -->
 ### grade10-admin-auction-internal-bid-US9-TC6-1: An internal bidder named on a Scheduled or Not placed internal bid cannot be retired
@@ -3079,9 +3336,10 @@ Runs once per row of **Test data**.
 | Row | Call |
 | --- | --- |
 | List | Read the internal bidders list |
-| Add | Add an internal bidder named "QA House Staff", email label qa-house-staff@internal.test |
+| Add | Add an internal bidder named "QA House Staff", email label qa-house-staff@internal.test, with a complete Hong Kong billing address |
 | Rename | Change `<bidder P>`'s name to "QA House P Staff" |
 | Change label | Change `<bidder P>`'s email label to qa-house-p-staff@internal.test |
+| Change address | Change `<bidder P>`'s billing address to another complete Hong Kong address |
 | Retire | Retire `<bidder P>` |
 
 **Steps:**
@@ -3128,12 +3386,14 @@ Runs once per row of **Test data**.
 | `<bidder S>` | An active internal bidder profile: name "QA House S", email label qa-house-s@internal.test |
 | `<listing_65>` | A published HKD listing, scheduled close a day away |
 | `<house maximum>` | 612300 minor units (HK$6,123.00), an amount no other entry carries |
+| `<audit address>` | A Hong Kong address with every required field: name "QA House Audit", 77 Audit Road, Central, Hong Kong |
 
 | Row | Act | Entry records |
 | --- | --- | --- |
-| Add | Add an internal bidder named "QA House Audit", email label qa-house-audit@internal.test | An internal bidder was added |
+| Add | Add an internal bidder named "QA House Audit", email label qa-house-audit@internal.test, with `<audit address>` | An internal bidder was added |
 | Rename | Change `<bidder P>`'s name to "QA House P Renamed" | An internal bidder was renamed |
 | Change label | Change `<bidder P>`'s email label to qa-house-p2@internal.test | An internal bidder's email label was changed |
+| Change address | Change `<bidder S>`'s billing address to `<audit address>` | An internal bidder's billing address was changed |
 | Retire | Retire `<bidder S>` | An internal bidder was retired |
 
 **Steps:**
@@ -3146,6 +3406,7 @@ Runs once per row of **Test data**.
 * Step 1 is accepted.
 * Step 2 shows one entry recording the row's act on that internal bidder, by the admin who made it, at Grade10's time.
 * Step 2: the entry names no listing, and shows `<house maximum>` in no form, such as 612300 or 6,123.
+* Step 2: the entry shows no part of `<audit address>`.
 
 <!-- trace:case id=g10adm.auction-internal-bid.TC-nbx rev=1 covers=g10adm.auction-internal-bid.SC-uem -->
 ### grade10-admin-auction-internal-bid-US9-TC9-1: An internal bidder whose only Not placed internal bid is on a closed lot can be retired
@@ -3190,6 +3451,46 @@ Runs once per row of **Test data**.
 * Step 2 shows `<bidder P>` retired, its name and email label kept.
 * Step 3 shows the internal bid Not placed at `<short amount>`, as `<bidder P>`.
 
+<!-- trace:case id=g10adm.auction-internal-bid.TC-2nf rev=1 covers=g10adm.auction-internal-bid.SC-l6i -->
+### grade10-admin-auction-internal-bid-US9-TC10-1: A billing address change after a win leaves the internal order's address as it was
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Pre-conditions:**
+
+* `<listing_75>` closed with the house winning at 508000 minor units as `<internal bidder>`, which held `<house billing address>` at the close; its order, flagged internal, has no invoice sent.
+* admin(holds auction:reserve and auction:payment) is on <grade10 auction admin internal bidders url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_75>` | An HKD listing in no campaign, closed with the house winning |
+| `<changed address>` | A Hong Kong address with every required field: name "Grade10 Stock Room", 9 Moved Road, Wan Chai, Hong Kong |
+
+**Steps:**
+
+1. Open `<internal bidder>`, change its billing address to `<changed address>` and save.
+2. Reload <grade10 auction admin internal bidders url> and read `<internal bidder>`'s billing address.
+3. Open `<listing_75>`'s order from Orders and read its delivery and billing address.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 reads `<changed address>`.
+* Step 3: the delivery address and the billing address each still read `<house billing address>`.
+
 ## Settled
 
 - An internal bid can be set on a Created or a Published listing, never on a Draft; a window change on a Created listing that leaves its time outside the window clears it, and only a reserve holder sees that (Q10)
@@ -3203,12 +3504,12 @@ Runs once per row of **Test data**.
 - A save on a listing that has an internal bid changes that one; a listing never carries two (Q18)
 - A lower is accepted whoever leads, when the leader and the current bid stay the same and it is not below a bid already placed for the house (Q3)
 - A lower that both moves the lead or the current bid and falls below a bid already placed for the house is refused naming only the house's bid (Q30)
-- Staff without `auction:reserve` read the house's bids as House, each with its own Accepted At even where it equals the commit time, and Bought in after the close; never the amount, the commit time, or that a lot has an internal bid before the house bids (Q9, Q25, Q26)
+- Staff without `auction:reserve` read the house's bids as House, each with its own Accepted At even where it equals the commit time, and after the close a won lot whose order reads buyer House, flagged internal; never the amount, the commit time, the internal bidder, or that a lot has an internal bid before the house bids (Q9, Q25, Q26, Q49)
 - The audit trail records each set, change and removal without the amount or the time; an operator with audit access only may learn from it that a lot has an internal bid (Q6, Q29)
 - Once the lot takes bids, a re-save of a Not placed internal bid at its own amount, still below the minimum next bid, is refused naming the minimum next bid; only a lower is accepted below it (Q34)
 - A lower of a Not placed internal bid that still reaches the minimum next bid places it at once (Q35)
-- A bought-in listing's own page and its Listings table row read Bought in once the lot closes, for every operator (Q32)
-- The house is never a lot's winner for orders, order letters or post-sale work: a bought-in lot opens no order and enters no post-sale queue (Q33)
+- Only a reserve holder reads a closed listing flagged as won by its internal bidder, on its own page and its Listings row; other operators read it as any won lot, with Open order. No listing reads Bought in (Q5, Q32, Q58)
+- The internal bidder is the winner, for orders and post-sale work, of a lot the house leads at its close: the close opens its one order, flagged internal, and no letter goes to it (Q5, Q33)
 - A reserve holder reads which internal bidder bid on each listing, and the cleared notice names the internal bidder it cleared; other operators read House with no name or email label, and collectors read the listing pseudonym (Q39)
 - A Placed or Not placed internal bid keeps its internal bidder once that profile is retired, and a Placed one still raises and lowers as it (Q41)
 - An email label is an email address, unique across every profile, Retired ones included, compared ignoring letter case; it may equal a collector's email and is never mailed (Q42)
@@ -3218,10 +3519,37 @@ Runs once per row of **Test data**.
 - An operator without `auction:reserve` sees no Internal bidders page and no internal bidder in any read (Q46)
 - The audit trail records each add, rename, email label change and retirement of an internal bidder with the operator and the time; no audit row links an internal bidder to a listing (Q47)
 - An internal bidder is retired only when no Scheduled internal bid, and no Not placed internal bid on a listing before its effective close, names it; a Not placed internal bid on a closed lot does not keep it in use (Q40)
+- Operators send the internal order's invoice, let it expire after its 7 days and cancel the order by hand; Grade10 takes none of these steps on its own (Q5, Q48)
+- The internal order is flagged internal in Orders for every operator; staff read its buyer as House with no name, email or email label, and a reserve holder also reads the internal bidder (Q49)
+- At the close the internal order reads Preparing Invoice, its delivery and billing address both the internal bidder's billing address as it stood then; it never reads Awaiting Setup or Setup Overdue (Q50, Q53)
+- No won, address, invoice, reminder, overdue, expiry or cancelled letter goes to an internal bidder, or to anyone, for its order (Q51)
+- The internal order carries bank transfer; the operator enters the fee at send and may enter 0 (Q52)
+- The internal order's expiry suspends no account; its cancel confirmation says no letter is sent, and the cancel returns the stock as any cancel does (Q54)
+- Staff read the internal order's addresses as the order holds them; the buyer still reads House (Q55)
+- An Orders search by email never matches an internal bidder's email label, for any operator (Q56)
+- A profile's billing address is required when it is added and may change at any time; a change is audited without the address and never rewrites an order already opened (Q57)
+- After the cancel the lot returns as the durable cancel rules return any lot; no Relist rule is its own (Q58)
 
 ## Reconciliation
 
-**Run:** QA2 round 5, 2026-10-12. QA1's round-5 blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md` with `grade10-admin-auction-internal-bid-US-09`, `proposal.md`, `decisions.md` with its `## Raised` table through Q40, the linked pages under `docs/prds/`, this suite with `## Reconciliation` stripped and its `## Settled`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-5 reading added `grade10-admin-auction-internal-bid-SC-54` to `grade10-admin-auction-internal-bid-SC-67`, `grade10-site-auction-auto-bidding-SC-47` and the internal bidder requirement without QA1's cases. QA2 read QA1's blocks, the delta specs, `decisions.md` through Q47, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. The round-4 dispositions below the round-5 bullets stand where not restated. It is a statement, not proof.
+**Run:** QA2 round 6, 2026-10-12, over the round-5 run below. QA1's round-6 blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md` with the revised `grade10-admin-auction-internal-bid-US-06`, `proposal.md`, `decisions.md` with its `## Raised` table through Q58, the linked pages under `docs/prds/`, this suite with `## Reconciliation` stripped and its `## Settled`, and the change's domain draft above the capability; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-6 reading replaced Bought in with the internal bidder's order: it added `grade10-admin-auction-internal-bid-SC-71` to `grade10-admin-auction-internal-bid-SC-79`, raised `grade10-admin-auction-internal-bid-SC-60` to revision 2, retired two Bought in scenarios, and the listing capability left the change. QA2 read QA1's blocks, the delta specs, `decisions.md` through Q58, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. It is a statement, not proof.
+
+- **Round 6, revised** - `grade10-admin-auction-internal-bid-US5-TC3-1` to `grade10-admin-auction-internal-bid-US5-TC3-2`: no Bought in, the collector's order not flagged internal, by `grade10-admin-auction-internal-bid-SC-09`; `grade10-admin-auction-internal-bid-US6-TC1-1` to `grade10-admin-auction-internal-bid-US6-TC1-2`: a house win opens one order for its internal bidder, by `grade10-admin-auction-internal-bid-SC-71`, `grade10-site-auction-auction-SC-106` and `grade10-site-auction-auction-SC-107`; `grade10-admin-auction-internal-bid-US6-TC2-1` to `grade10-admin-auction-internal-bid-US6-TC2-2`: only a reserve holder reads the listing flagged as the internal bidder's win, by `grade10-admin-auction-internal-bid-SC-77`; `grade10-admin-auction-internal-bid-US6-TC3-1` to `grade10-admin-auction-internal-bid-US6-TC3-2`: the internal order enters Orders and no order letter goes out, by `grade10-admin-auction-internal-bid-SC-71`, `winner-order-SC-277` and `grade10-site-auction-notifications-SC-52`; `grade10-admin-auction-internal-bid-US7-TC4-1` to `grade10-admin-auction-internal-bid-US7-TC4-2`: staff read the lot sold and its buyer as House, by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-internal-bid-SC-76`; `grade10-admin-auction-internal-bid-US9-TC1-1` to `grade10-admin-auction-internal-bid-US9-TC1-2`: a profile is added with its billing address, by `grade10-admin-auction-internal-bid-SC-60`; `grade10-admin-auction-internal-bid-US9-TC5-1` to `grade10-admin-auction-internal-bid-US9-TC5-2`: the Bought in row becomes a Won row, by `grade10-admin-auction-internal-bid-SC-65`. Each marker's revision rises to 2
+- **Round 6, re-worded** - `grade10-admin-auction-internal-bid-US7-TC7-1`: its first result names the win flag in place of Bought in; version kept, covering `grade10-admin-auction-internal-bid-SC-32` alone now that the listing scenario left the change
+- **Round 6, folded in** - `grade10-admin-auction-internal-bid-US6-TC4-1` (new) by `grade10-admin-auction-internal-bid-SC-71` and `winner-order-SC-277`; `grade10-admin-auction-internal-bid-US6-TC5-1` (new) by `grade10-admin-auction-internal-bid-SC-73`; `grade10-admin-auction-internal-bid-US6-TC6-1` (new) by `grade10-admin-auction-internal-bid-SC-74`; `grade10-admin-auction-internal-bid-US6-TC7-1` (new) by `grade10-admin-auction-internal-bid-SC-75`; `grade10-admin-auction-internal-bid-US7-TC12-1` (new) by `grade10-admin-auction-internal-bid-SC-76` and `grade10-admin-auction-internal-bid-SC-77`
+- **Round 6, corrected to the requirement** - `grade10-admin-auction-internal-bid-US6-TC4-1` read the order not Awaiting Setup and only its billing address; it now reads Preparing Invoice, both addresses `<house billing address>` and bank transfer, as `grade10-admin-auction-internal-bid-SC-71` states (Q52, Q53). `grade10-admin-auction-internal-bid-US6-TC5-1` held a card rule for HKD and entered only Shipping & Handling; it now enters a bank transfer fee of 0 and reads bank transfer on the quote, as `grade10-admin-auction-internal-bid-SC-73` states (Q52). `grade10-admin-auction-internal-bid-US6-TC7-1` now reads the cancel confirmation saying no letter is sent, as `grade10-admin-auction-internal-bid-SC-75` states (Q54). `grade10-admin-auction-internal-bid-US6-TC2-2` read only the listing's page; it now reads the Listings row too, and staff read Open order, as `grade10-admin-auction-internal-bid-SC-77` states (Q58). QA1's `<listing_65>` to `<listing_69>` are renumbered `<listing_70>` to `<listing_74>`, since `<listing_65>` and `<listing_66>` were already in use. Each stays a draft at its version
+- **Round 6, test data** - `<house billing address>` named "QA House One" as its recipient, the internal bidder's own name, so a staff operator reading the order's address (Q55) would read that name against the result of `grade10-admin-auction-internal-bid-US7-TC4-2` that nothing shows it. The address now names "Grade10 Stock Room"; whether a profile's billing name may equal its own name is returned to the author
+- **Round 6, joined to the run they share** - `grade10-admin-auction-internal-bid-US7-TC12-1` gains an Orders search by the email label in both rows, for `grade10-admin-auction-internal-bid-SC-78` (Q56); `grade10-admin-auction-internal-bid-US9-TC2-1` gains a No billing address row, every other row entering a complete address, for `grade10-admin-auction-internal-bid-SC-79` (Q57); `grade10-admin-auction-internal-bid-US9-TC7-1` gains a Change address row, and `grade10-admin-auction-internal-bid-US9-TC8-1` a Change address row reading no part of the address, for the requirement's billing address change under the secret floor and in the audit trail (Q57). Every case keeps its version as a draft
+- **Round 6, added by QA2** - `grade10-admin-auction-internal-bid-US9-TC10-1`: a billing address change after a win leaves the internal order's address, for `grade10-admin-auction-internal-bid-SC-72`, which no blind case reached
+- **Round 6, anchors** - `grade10-admin-auction-internal-bid-SC-76` to `grade10-admin-auction-internal-bid-SC-78` serve `grade10-admin-auction-internal-bid-US-07` and `grade10-admin-auction-internal-bid-SC-72` serves `grade10-admin-auction-internal-bid-US-09`; `grade10-admin-auction-internal-bid-US6-TC2-2` traces `grade10-admin-auction-internal-bid-US-06` and covers `grade10-admin-auction-internal-bid-SC-77`, joined on the behaviour, as QA1 placed the flag under the journey that settles the order
+- **Round 6, out of suite** - the no-suspension result of `grade10-admin-auction-internal-bid-SC-74` is decided by task 4.1's backend test of an expiry with no suspension: an internal bidder has no account a person could read as suspended; `grade10-admin-auction-internal-bid-US6-TC6-1` walks the rest
+- **Round 6, covered at domain** - `grade10-admin-auction-e2e-US4-TC2-1` also walks `grade10-admin-auction-internal-bid-SC-01`, `grade10-admin-auction-internal-bid-SC-71`, `grade10-admin-auction-internal-bid-SC-73`, `grade10-admin-auction-internal-bid-SC-74` and `grade10-admin-auction-internal-bid-SC-75` from the set to the cancel; the feature cases above stay, since that path asserts none of their rows
+- **Round 6, deprecated** - none here: every Bought in result was revised in place
+- **Round 6, rejected** - none
+- **Round 6, raised** - QA1's round-6 questions landed as Q49 and Q52 to Q58 before this run. One question is returned to the author: the internal bidder's billing name, under Round 6, test data
+- **Round 6, contradicted** - none
+
+**Run, round 5:** QA2 round 5, 2026-10-12. QA1's round-5 blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md` with `grade10-admin-auction-internal-bid-US-09`, `proposal.md`, `decisions.md` with its `## Raised` table through Q40, the linked pages under `docs/prds/`, this suite with `## Reconciliation` stripped and its `## Settled`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-5 reading added `grade10-admin-auction-internal-bid-SC-54` to `grade10-admin-auction-internal-bid-SC-67`, `grade10-site-auction-auto-bidding-SC-47` and the internal bidder requirement without QA1's cases. QA2 read QA1's blocks, the delta specs, `decisions.md` through Q47, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. The round-4 dispositions below the round-5 bullets stand where not restated. It is a statement, not proof.
 
 - **Accept review, revised Q40** - finding 28: a Not placed internal bid on a listing past its effective close no longer keeps its internal bidder in use. `grade10-admin-auction-internal-bid-US9-TC9-1` (new, draft) by `grade10-admin-auction-internal-bid-SC-70`; `grade10-admin-auction-internal-bid-US9-TC6-1` keeps its Not placed row, whose lot still takes bids, and its version
 - **Accept review, call-off** - finding 29: a called-off listing has no internal bid, and the design stores no fifth state. `grade10-admin-auction-internal-bid-US2-TC4-1` already expects no internal bid held after the call-off; it keeps its version
@@ -3238,18 +3566,17 @@ Runs once per row of **Test data**.
 - **Folded in** - `grade10-admin-auction-internal-bid-US3-TC1-1` by `grade10-admin-auction-internal-bid-SC-13`; `grade10-admin-auction-internal-bid-US3-TC2-1` by `grade10-site-auction-auto-bidding-SC-41`; `grade10-admin-auction-internal-bid-US3-TC3-1` by `grade10-admin-auction-internal-bid-SC-45`; `grade10-admin-auction-internal-bid-US3-TC4-1` by `grade10-admin-auction-internal-bid-SC-12`; `grade10-admin-auction-internal-bid-US3-TC5-1` by `grade10-admin-auction-internal-bid-SC-44`
 - **Folded in** - `grade10-admin-auction-internal-bid-US4-TC1-1` by `grade10-admin-auction-internal-bid-SC-47`; `grade10-admin-auction-internal-bid-US4-TC2-2` by `grade10-admin-auction-internal-bid-SC-15`, `grade10-admin-auction-internal-bid-SC-50` and `grade10-site-auction-auto-bidding-SC-43`; `grade10-admin-auction-internal-bid-US4-TC3-1` by `grade10-admin-auction-internal-bid-SC-46`; `grade10-admin-auction-internal-bid-US4-TC4-1` by `grade10-admin-auction-internal-bid-SC-14`, `grade10-admin-auction-internal-bid-SC-16`, `grade10-site-auction-auto-bidding-SC-42` and `grade10-site-auction-auto-bidding-SC-44`
 - **Folded in** - `grade10-admin-auction-internal-bid-US5-TC1-1` by `grade10-admin-auction-internal-bid-SC-09`, `grade10-admin-auction-internal-bid-SC-27` and `grade10-site-auction-auto-bidding-SC-38`; `grade10-admin-auction-internal-bid-US5-TC2-1` by `grade10-admin-auction-internal-bid-SC-10`; `grade10-admin-auction-internal-bid-US5-TC3-1` by `grade10-admin-auction-internal-bid-SC-09`; `grade10-admin-auction-internal-bid-US5-TC4-1` by `grade10-admin-auction-internal-bid-SC-30`; `grade10-admin-auction-internal-bid-US5-TC5-1` by `grade10-admin-auction-internal-bid-SC-31`; `grade10-admin-auction-internal-bid-US5-TC6-1` by `grade10-admin-auction-internal-bid-SC-11` and `grade10-admin-auction-internal-bid-SC-52`; `grade10-admin-auction-internal-bid-US5-TC7-1` by `grade10-admin-auction-internal-bid-SC-37`, `grade10-admin-auction-internal-bid-SC-38`, `grade10-admin-auction-internal-bid-SC-53` and `grade10-site-auction-auto-bidding-SC-46`; `grade10-admin-auction-internal-bid-US5-TC8-1` (new, Q28) by `grade10-admin-auction-internal-bid-SC-38`, its Lowered rows further members of the class the requirement's item 2 states
-- **Folded in** - `grade10-admin-auction-internal-bid-US6-TC1-1` by `grade10-admin-auction-internal-bid-SC-17`, `grade10-site-auction-auction-SC-104` and `grade10-site-auction-auction-SC-106`; `grade10-admin-auction-internal-bid-US6-TC2-1` (new, Q32) by `grade10-admin-auction-internal-bid-SC-17`, `grade10-admin-auction-listing-SC-158` and `grade10-admin-auction-listing-SC-155`; `grade10-admin-auction-internal-bid-US6-TC3-1` (new, Q33) by `grade10-admin-auction-internal-bid-SC-49` and `winner-order-SC-277`
-- **Folded in** - `grade10-admin-auction-internal-bid-US7-TC1-1` by `grade10-admin-auction-internal-bid-SC-18` and `grade10-admin-auction-internal-bid-SC-39`; `grade10-admin-auction-internal-bid-US7-TC2-1` by `grade10-admin-auction-internal-bid-SC-19`; `grade10-admin-auction-internal-bid-US7-TC3-1` by `grade10-admin-auction-internal-bid-SC-20`; `grade10-admin-auction-internal-bid-US7-TC4-1` by `grade10-admin-auction-internal-bid-SC-32`, `grade10-admin-auction-listing-SC-158` and `grade10-admin-auction-listing-SC-155`, its new result that the listing's page reads Bought in joined to the same run (Q32), version kept; `grade10-admin-auction-internal-bid-US7-TC5-2` by `grade10-admin-auction-internal-bid-SC-18`, `grade10-admin-auction-internal-bid-SC-28`, `grade10-admin-auction-internal-bid-SC-34` and `grade10-admin-auction-internal-bid-SC-35`; `grade10-admin-auction-internal-bid-US7-TC6-1` by `grade10-admin-auction-internal-bid-SC-33`; `grade10-admin-auction-internal-bid-US7-TC7-1` by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-listing-SC-160`; `grade10-admin-auction-internal-bid-US7-TC8-1` by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-internal-bid-SC-39`; `grade10-admin-auction-internal-bid-US7-TC9-1` by `grade10-admin-auction-internal-bid-SC-40`
+- **Folded in** - round 5's three US6 cases read Bought in and no order; round 6 revised each, below
+- **Folded in** - `grade10-admin-auction-internal-bid-US7-TC1-1` by `grade10-admin-auction-internal-bid-SC-18` and `grade10-admin-auction-internal-bid-SC-39`; `grade10-admin-auction-internal-bid-US7-TC2-1` by `grade10-admin-auction-internal-bid-SC-19`; `grade10-admin-auction-internal-bid-US7-TC3-1` by `grade10-admin-auction-internal-bid-SC-20`; `grade10-admin-auction-internal-bid-US7-TC4-1` by `grade10-admin-auction-internal-bid-SC-32`, revised in round 6; `grade10-admin-auction-internal-bid-US7-TC5-2` by `grade10-admin-auction-internal-bid-SC-18`, `grade10-admin-auction-internal-bid-SC-28`, `grade10-admin-auction-internal-bid-SC-34` and `grade10-admin-auction-internal-bid-SC-35`; `grade10-admin-auction-internal-bid-US7-TC6-1` by `grade10-admin-auction-internal-bid-SC-33`; `grade10-admin-auction-internal-bid-US7-TC7-1` by `grade10-admin-auction-internal-bid-SC-32`; `grade10-admin-auction-internal-bid-US7-TC8-1` by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-internal-bid-SC-39`; `grade10-admin-auction-internal-bid-US7-TC9-1` by `grade10-admin-auction-internal-bid-SC-40`
 - **Folded in** - `grade10-admin-auction-internal-bid-US8-TC1-1` by `grade10-admin-auction-internal-bid-SC-28` and `grade10-admin-auction-internal-bid-SC-29`; `grade10-admin-auction-internal-bid-US8-TC2-1` by `grade10-admin-auction-internal-bid-SC-34` and `grade10-admin-auction-internal-bid-SC-36`; `grade10-admin-auction-internal-bid-US8-TC3-1` by `grade10-admin-auction-internal-bid-SC-35`, `grade10-admin-auction-internal-bid-SC-42` and `grade10-admin-auction-internal-bid-SC-43`; `grade10-admin-auction-internal-bid-US8-TC4-1` by `grade10-admin-auction-internal-bid-SC-28`, a clear read by a reserve holder other than the editor; `grade10-admin-auction-internal-bid-US8-TC5-1` by `grade10-admin-auction-internal-bid-SC-51`
 - **Deprecated** - `grade10-admin-auction-internal-bid-US1-TC10-1`: QA1 moved its rows to `grade10-admin-auction-internal-bid-US8-TC1-1`, `grade10-admin-auction-internal-bid-US8-TC2-1` and `grade10-admin-auction-internal-bid-US8-TC3-1` once `grade10-admin-auction-internal-bid-SC-28` to `grade10-admin-auction-internal-bid-SC-43` served `grade10-admin-auction-internal-bid-US-08`. It was never accepted, but its id was issued in this change, so it is kept `deprecated` with `covers=none` rather than deleted, and `TC10` is not reissued under US1
 - **Revised** - `grade10-admin-auction-internal-bid-US4-TC2-1` to `grade10-admin-auction-internal-bid-US4-TC2-2` (Q30): both House leads rows now also refuse naming the lead or the price; `grade10-admin-auction-internal-bid-US7-TC5-1` to `grade10-admin-auction-internal-bid-US7-TC5-2`: the reserve holder's cleared notice moved to `grade10-admin-auction-internal-bid-US8-TC4-1`, and staff re-open both listings instead
 - **Scenarios added from cases** - `grade10-admin-auction-internal-bid-SC-50` from the House leads rows of `grade10-admin-auction-internal-bid-US4-TC2-2`: the requirement names only the house's bid when a lower both moves the price and falls below it (Q30), and no scenario stated it; `grade10-admin-auction-internal-bid-SC-51` from `grade10-admin-auction-internal-bid-US8-TC5-1`: a new save replaces a cleared internal bid and ends the cleared notice, which the states table and the clear requirement state and no scenario did
 - **Settled questions applied** - Q34 and Q35, raised by earlier blind passes, landed with no scenario stating either; QA2 added `grade10-admin-auction-internal-bid-SC-52` (a re-save at the same short amount is refused) with a Same amount row on `grade10-admin-auction-internal-bid-US5-TC6-1`, and `grade10-admin-auction-internal-bid-SC-53` (a lower still at or above the minimum next bid places it) with a Lowered row on `grade10-admin-auction-internal-bid-US5-TC7-1`; both cases keep their version as drafts
 - **Added by QA2** - a Past its close row on `grade10-admin-auction-internal-bid-US1-TC5-1`, with the refusal named Not editable, for `grade10-admin-auction-internal-bid-SC-48`, which no blind case reached
-- **Joined to the run they share** - `grade10-admin-auction-internal-bid-US6-TC3-1` gains a collector-won lot whose order does show, and the bought-in row's missing Open order, so it asserts every THEN of `grade10-admin-auction-internal-bid-SC-49`; `grade10-admin-auction-internal-bid-US7-TC4-1` reads Closed and Bought in with no order to open, as `grade10-admin-auction-listing-SC-155` states; `grade10-admin-auction-internal-bid-US8-TC1-1` to `grade10-admin-auction-internal-bid-US8-TC4-1` read the cleared amount and time beside the notice, and `grade10-admin-auction-internal-bid-US8-TC5-1` reads the notice gone, as `grade10-admin-auction-internal-bid-SC-28` and the clear requirement state
+- **Joined to the run they share** - `grade10-admin-auction-internal-bid-US8-TC1-1` to `grade10-admin-auction-internal-bid-US8-TC4-1` read the cleared amount and time beside the notice, and `grade10-admin-auction-internal-bid-US8-TC5-1` reads the notice gone, as `grade10-admin-auction-internal-bid-SC-28` and the clear requirement state
 - **Rejected** - the House second row of QA1's `grade10-admin-auction-internal-bid-US4-TC2-2` took `<house maximum>` as a bid placed for the house when customer A outbid it, and so expected the refusal to name the house's bid. The durable two-maximum record rule records only the challenger's bid when it passes the leader's maximum, and the auto-bidding worked example keeps the house's bid at its first amount after step 2. The row now leads with the house's first bid at `<starting price>` and expects the lead-or-price refusal, which `grade10-admin-auction-internal-bid-SC-15` and `grade10-site-auction-auto-bidding-SC-43` state
 - **Anchors** - `grade10-admin-auction-internal-bid-SC-21` serves `grade10-admin/auction/listing#grade10-admin-auction-listing-US-05`, and `grade10-admin-auction-internal-bid-US2-TC4-1` keeps its trace to `grade10-admin-auction-internal-bid-US-02`; `grade10-admin-auction-internal-bid-US7-TC5-2` traces `grade10-admin-auction-internal-bid-US-07` and covers `grade10-admin-auction-internal-bid-SC-28`, `grade10-admin-auction-internal-bid-SC-34` and `grade10-admin-auction-internal-bid-SC-35` for the staff answer they state, beside `grade10-admin-auction-internal-bid-SC-18`; cases covering auto-bidding, auction, listing and winner-order scenarios keep their own journey's trace. Joined on the behaviour
-- **Covered at domain** - `grade10-admin-auction-e2e-US4-TC1-1` also walks `grade10-admin-auction-internal-bid-SC-01`, `grade10-admin-auction-internal-bid-SC-08` and `grade10-admin-auction-internal-bid-SC-17` into Relist; the feature cases above stay, since that path asserts none of the refusals
 - **Out of suite** - none
 - **Raised** - none. Q31 changes no case
 - **Contradicted** - none
