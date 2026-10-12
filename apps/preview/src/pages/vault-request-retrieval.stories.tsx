@@ -71,9 +71,7 @@ export const Default: Story = {
         "We’ll release this item from storage for pickup in store.",
       )[0],
     ).toBeVisible();
-    expect(
-      modal.getByRole("button", { name: "Submit Request" }),
-    ).toBeVisible();
+    expect(modal.getByRole("button", { name: "Submit Request" })).toBeVisible();
   },
 };
 
