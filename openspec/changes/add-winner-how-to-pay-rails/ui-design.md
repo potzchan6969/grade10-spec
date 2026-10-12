@@ -4,7 +4,7 @@
 
 Layout SoT: Storybook `My Auctions/Winner Order/Payment` —
 `Pending Payment — Bank Transfer` and related payment stories in
-`apps/preview/src/pages/winner-order.payment.stories.tsx`.
+`apps/preview/src/pages/auction/post-bidding/winner-order.payment.stories.tsx`.
 
 Primary full-width **Submit Payment Proof**; secondary full-width outline
 **View Bank Details** immediately beneath (≥8px gap). Secondary hides whenever the

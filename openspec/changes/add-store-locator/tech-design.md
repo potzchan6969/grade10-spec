@@ -26,7 +26,7 @@
   (order details, order history, auction record, winner order) are session
   surfaces, so nobody has met it on a public page yet. The preview's Store
   Locator page story is a fifth user, importing the hook and its classes by
-  relative path (`apps/preview/src/pages/store-locator-page.stories.tsx:8-15`),
+  relative path (`apps/preview/src/pages/store/store-locator/store-locator-page.stories.tsx:8-15`),
   and the preview's order history, order details, winner order and My Auctions
   page stories wait on the blocks' `data-revealed`
 - **No source holds the shop's facts** — the app repository names neither

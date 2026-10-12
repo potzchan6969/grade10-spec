@@ -69,7 +69,7 @@
 ## 9. Letter Template (grade10-spec) (owner: @htonyl)
 
 - [ ] 9.2 The Proof not accepted letter under `apps/emails/emails/auction/order/`; `pnpm --dir apps/emails run typecheck`
-- [ ] 9.3 The Contact Us preview `apps/preview/src/pages/winner-order-contact-dialog.tsx`: Copy Message reads Copied for a moment and fires no toast, as SC-250 states; the To and Subject controls are unchanged; `pnpm --dir apps/preview run lint`, `pnpm --dir apps/preview run build-storybook`
+- [ ] 9.3 The Contact Us preview `apps/preview/src/pages/auction/post-bidding/winner-order-contact-dialog.tsx`: Copy Message reads Copied for a moment and fires no toast, as SC-250 states; the To and Subject controls are unchanged; `pnpm --dir apps/preview run lint`, `pnpm --dir apps/preview run build-storybook`
 - [ ] 9.4 The Shipped letter under `apps/emails/emails/auction/order/` takes the tracker link only when the operator recorded one: with none, its primary action is View order, opening Winner Order, and the tracking number reads as plain text (`order-mail-SC-62`, `order-mail-US1-TC55-1`); `pnpm --dir apps/emails run typecheck`
 
 ## 10. E2E and Docs (grade10) (owner: @htonyl)

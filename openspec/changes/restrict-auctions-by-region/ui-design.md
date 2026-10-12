@@ -4,7 +4,7 @@
 
 The page a direct auction address answers for a collector in a restricted
 region. Same surface family as the site's not-found page —
-`apps/preview/src/pages/not-found-page.tsx`, story
+`apps/preview/src/pages/site/navigation/not-found-page.tsx`, story
 `pages-not-found-page--default`: `SiteHeader` with no current nav item, a
 centered title and description, one action, `Footer`. The Figma frame for
 this page is still owed; until it lands, the not-found page is the agreed
