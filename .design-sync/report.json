@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-12T14:16:14.435Z",
+  "generatedAt": "2026-10-12T16:58:25.488Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -92,6 +92,7 @@
     "Step Indicator": "ok",
     "Stepper": "skipped",
     "Stepper Input": "ok",
+    "Submission Item Card": "warn",
     "Switch": "ok",
     "Tab": "warn",
     "Tab List": "warn",
@@ -868,8 +869,7 @@
     "7006-5190": "Tab List",
     "7006-5204": "Tab List",
     "7021-1379": "---",
-    "7021-1380": "/ VAULT",
-    "7025-2": "Page",
+    "7025-2": "Vault",
     "7025-2927": "Detail Row",
     "7029-2": "Vaulted Asset",
     "7035-268": "Detail row",
@@ -914,6 +914,10 @@
     "7077-11303": "Vault Asset List",
     "7077-11880": "Vault Asset List",
     "7077-12136": "Vault Asset Card",
+    "7115-4101": "Submission",
+    "7115-4309": "Submission Item Card",
+    "7115-4594": "Submission Item Card",
+    "7115-4595": "Submission Item Card",
     "7117-1554": "Vaulted Asset / Request Retrieval",
     "86-3366": "Button",
     "86-3459": "Button",
@@ -1061,6 +1065,9 @@
     ],
     "Stat": [
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
+    ],
+    "Submission Item Card": [
+      "Submission Item Card: no code component (looked for src/components/**/submissionitemcard.tsx or submissionitemcard.tsx)"
     ],
     "Tab": [
       "Tab: no code component (looked for src/components/**/tab.tsx or tab.tsx)"
