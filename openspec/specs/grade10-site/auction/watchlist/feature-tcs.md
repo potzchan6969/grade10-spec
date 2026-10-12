@@ -15,12 +15,19 @@
 
 ### Route
 
-1. Open the listing page. `g10.auction-watchlist.US1-TC1`
-2. Watch the listing. `g10.auction-watchlist.US1-TC1`
-3. Reload the page. `g10.auction-watchlist.US1-TC1`
-4. Submit a second watch for the same listing. `g10.auction-watchlist.US1-TC2`
-5. Read the collector's watches ordered by Watched At. `g10.auction-watchlist.US1-TC2`
-6. Attempt to watch the listing from the listing page or catalogue. `g10.auction-watchlist.US1-TC3`
+1. Open the listing page.
+   - The listing shows as watched. `g10.auction-watchlist.US1-TC1`
+2. Watch the listing.
+   - Email alerts for that listing are on. `g10.auction-watchlist.US1-TC1`
+3. Reload the page.
+   - The watch is still present after reload. `g10.auction-watchlist.US1-TC1`
+4. Submit a second watch for the same listing.
+   - Exactly one watch exists for that collector and listing. `g10.auction-watchlist.US1-TC2`
+5. Read the collector's watches ordered by Watched At.
+   - Watched At matches the first watch. `g10.auction-watchlist.US1-TC2`
+6. Attempt to watch the listing from the listing page or catalogue.
+   - Sign-in is offered. `g10.auction-watchlist.US1-TC3`
+   - No watch is stored in the browser. `g10.auction-watchlist.US1-TC3`
 
 ## Walk 2: Collector unwatches a listing they no longer follow
 
@@ -34,12 +41,18 @@
 
 ### Route
 
-1. Open the listing page. `g10.auction-watchlist.US2-TC1`
-2. Unwatch the listing. `g10.auction-watchlist.US2-TC1`
-3. Open My Auctions / Watching. `g10.auction-watchlist.US2-TC2`
-4. Unwatch a row from the list. `g10.auction-watchlist.US2-TC2`
-5. Open My Auctions / Watching. `g10.auction-watchlist.US2-TC3`
-6. Unwatch the closed listing. `g10.auction-watchlist.US2-TC3`
+1. Open the listing page.
+   - The listing shows as not watched. `g10.auction-watchlist.US2-TC1`
+2. Unwatch the listing.
+   - Email alerts for that listing are off. `g10.auction-watchlist.US2-TC1`
+3. Open My Auctions / Watching.
+4. Unwatch a row from the list.
+   - The row leaves Watching. `g10.auction-watchlist.US2-TC2`
+   - Email alerts for that listing are off. `g10.auction-watchlist.US2-TC2`
+   - The listing page was not opened. `g10.auction-watchlist.US2-TC2`
+5. Open My Auctions / Watching.
+6. Unwatch the closed listing.
+   - The closed listing leaves Watching. `g10.auction-watchlist.US2-TC3`
 
 ## Walk 3: Collector reads the listings they watch
 
@@ -53,11 +66,19 @@
 
 ### Route
 
-1. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC1`
-2. Read the Watching rows in order. `g10.auction-watchlist.US3-TC1`
-3. Open My Auctions. `g10.auction-watchlist.US3-TC2`
-4. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC3`
-5. Open My Auctions / Watching. `g10.auction-watchlist.US3-TC4`
+1. Open My Auctions / Watching.
+   - The more recently watched listing appears first. `g10.auction-watchlist.US3-TC1`
+2. Read the Watching rows in order.
+   - Each row shows identity, current bid, and close. `g10.auction-watchlist.US3-TC1`
+3. Open My Auctions.
+   - An explained empty state is shown, not an error. `g10.auction-watchlist.US3-TC2`
+   - A path to the catalogue is offered. `g10.auction-watchlist.US3-TC2`
+4. Open My Auctions / Watching.
+   - The listing is still listed. `g10.auction-watchlist.US3-TC3`
+   - It is shown as closed, not as open. `g10.auction-watchlist.US3-TC3`
+5. Open My Auctions / Watching.
+   - The listing is still listed. `g10.auction-watchlist.US3-TC4`
+   - It is shown as called off, not as open. `g10.auction-watchlist.US3-TC4`
 
 ## Walk 4: Operator judges interest from the watch count
 
@@ -71,7 +92,10 @@
 
 ### Route
 
-1. As an operator, read the watch count for that listing. `g10.auction-watchlist.US4-TC1`
+1. As an operator, read the watch count for that listing.
+   - The count is 2. `g10.auction-watchlist.US4-TC1`
+   - No watcher identity is disclosed. `g10.auction-watchlist.US4-TC1`
+   - Public listing facts still carry no watch count. `g10.auction-watchlist.US4-TC1`
 
 ## Walk 5: Collector mutes email alerts without unwatching
 
@@ -85,8 +109,11 @@
 
 ### Route
 
-1. Open My Auctions / Watching. `g10.auction-watchlist.US5-TC1`
-2. Turn email alerts off for that listing. `g10.auction-watchlist.US5-TC1`
+1. Open My Auctions / Watching.
+2. Turn email alerts off for that listing.
+   - The listing remains watched. `g10.auction-watchlist.US5-TC1`
+   - Email alerts for that listing are off. `g10.auction-watchlist.US5-TC1`
+   - Confirmation says the watch stayed. `g10.auction-watchlist.US5-TC1`
 
 ## g10.auction-watchlist.US1: Collector watches a listing to come back to it
 

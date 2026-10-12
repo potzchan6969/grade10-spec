@@ -18,27 +18,44 @@
 1. Navigate to <grade10 auction admin listings url>.
 2. Open <listing_1>.
 3. Create <listing_1>, then publish it.
-4. Navigate to <listing_1 public url>. `g10.auction-listing-media.US1-TC1`
+4. Navigate to <listing_1 public url>.
+   - <listing_1> is published. `g10.auction-listing-media.US1-TC1`
+   - The details page shows that one image. `g10.auction-listing-media.US1-TC1`
+   - No empty gallery slots are invented. `g10.auction-listing-media.US1-TC1`
 5. Navigate to <grade10 auction admin listings url>.
 6. Open <listing_2>.
 7. Upload <jpeg_ok> into the gallery and confirm.
-8. Check <listing_2> on the admin listings surface. `g10.auction-listing-media.US1-TC2`
+8. Check <listing_2> on the admin listings surface.
+   - <jpeg_ok> is stored in gallery order. `g10.auction-listing-media.US1-TC2`
+   - The admin listings surface can show it on <listing_2>. `g10.auction-listing-media.US1-TC2`
 9. Navigate to <grade10 auction admin listings url>.
 10. Open the media manager for `<listing_3>`.
 11. Choose `<jpeg_ok>`.
-12. Check the gallery. `g10.auction-listing-media.US1-TC3`
+12. Check the gallery.
+   - `<jpeg_ok>` is stored in the gallery immediately. `g10.auction-listing-media.US1-TC3`
+   - No preview, confirm or discard step is required. `g10.auction-listing-media.US1-TC3`
 13. Navigate to <grade10 auction admin listings url>.
 14. Open <listing_6>.
-15. Upload <jpeg_ok> as a ninth image. `g10.auction-listing-media.US1-TC6`
-16. Upload <pdf_file> as gallery media. `g10.auction-listing-media.US1-TC7`
-17. Upload `<oversized_image>`. `g10.auction-listing-media.US1-TC8`
+15. Upload <jpeg_ok> as a ninth image.
+   - The upload is refused. `g10.auction-listing-media.US1-TC6`
+   - The gallery still has eight items. `g10.auction-listing-media.US1-TC6`
+16. Upload <pdf_file> as gallery media.
+   - The upload is refused. `g10.auction-listing-media.US1-TC7`
+   - The gallery is unchanged. `g10.auction-listing-media.US1-TC7`
+17. Upload `<oversized_image>`.
+   - The upload is refused. `g10.auction-listing-media.US1-TC8`
+   - The gallery is unchanged. `g10.auction-listing-media.US1-TC8`
 18. Navigate to <grade10 auction admin listings url>.
 19. Open <listing_9>.
 20. Upload <jpeg_second> and confirm.
-21. Navigate to <listing_9 public url>. `g10.auction-listing-media.US1-TC9`
+21. Navigate to <listing_9 public url>.
+   - The details page shows both images in gallery order. `g10.auction-listing-media.US1-TC9`
+   - The first image is unchanged. `g10.auction-listing-media.US1-TC9`
 22. Navigate to <grade10 auction admin listings url>.
 23. Open <listing_10>.
-24. Upload <jpeg_ok>. `g10.auction-listing-media.US1-TC10`
+24. Upload <jpeg_ok>.
+   - The upload is refused. `g10.auction-listing-media.US1-TC10`
+   - The gallery is unchanged. `g10.auction-listing-media.US1-TC10`
 
 ## Walk 2: Operator attaches an image to a listing gallery
 
@@ -51,19 +68,31 @@
 1. Navigate to <grade10 auction admin listings url>.
 2. Open the media manager for `<listing_7>`.
 3. Drop `<batch_images>` together.
-4. Check the gallery order. `g10.auction-listing-media.US1-TC11`
+4. Check the gallery order.
+   - Each image stores without a confirm step. `g10.auction-listing-media.US1-TC11`
+   - The images appear after `<existing_image>` in selection order. `g10.auction-listing-media.US1-TC11`
 5. Open the media manager for `<listing_8>`.
+   - The two supported images are stored. `g10.auction-listing-media.US1-TC12`
 6. Choose `<mixed_files>` together.
-7. Read the gallery and each refusal result. `g10.auction-listing-media.US1-TC12`
+   - The PDF, oversized image and over-cap file remain unstored. `g10.auction-listing-media.US1-TC12`
+7. Read the gallery and each refusal result.
+   - Each refused file is named with its refusal reason. `g10.auction-listing-media.US1-TC12`
 8. Open the media manager for `<listing_9>`.
+   - `<replacement_image>` is stored immediately at the selected position. `g10.auction-listing-media.US1-TC13`
 9. Choose `<replacement_image>` for one stored image.
-10. Check that position and the other gallery items. `g10.auction-listing-media.US1-TC13`
+   - No confirm step appears. `g10.auction-listing-media.US1-TC13`
+10. Check that position and the other gallery items.
+   - Other gallery items retain their positions. `g10.auction-listing-media.US1-TC13`
 11. Open the media manager for `<listing_10>`.
 12. Drag C before A and drop it.
-13. Leave and reopen the media manager. `g10.auction-listing-media.US1-TC14`
+13. Leave and reopen the media manager.
+   - The gallery order is C, A, B after the drop. `g10.auction-listing-media.US1-TC14`
+   - The order remains C, A, B after reopening without a separate Save action. `g10.auction-listing-media.US1-TC14`
 14. Reorder the staged inventory assets.
 15. Leave the listing without saving.
-16. Reopen the listing. `g10.auction-listing-media.US1-TC15`
+16. Reopen the listing.
+   - The stored listing retains its prior inventory order. `g10.auction-listing-media.US1-TC15`
+   - The reordered inventory assets apply only after the listing is saved. `g10.auction-listing-media.US1-TC15`
 
 ## Walk 3: Operator inspects a stored image at zoom size
 
@@ -75,10 +104,14 @@
 
 1. Navigate to <grade10 auction admin listings url>.
 2. Open the media manager for <listing_11>.
-3. Check the stored image. `g10.auction-listing-media.US2-TC1`
+3. Check the stored image.
+   - That image shows at card size. `g10.auction-listing-media.US2-TC1`
 4. Hover the magnify control on that image.
-5. Check the zoom preview. `g10.auction-listing-media.US2-TC2`
-6. Move the pointer off the magnify control. `g10.auction-listing-media.US2-TC3`
+   - A zoom-size preview of that image is shown. `g10.auction-listing-media.US2-TC2`
+5. Check the zoom preview.
+   - That preview is at least three-quarters of the viewport height. `g10.auction-listing-media.US2-TC2`
+6. Move the pointer off the magnify control.
+   - The zoom-size preview is hidden. `g10.auction-listing-media.US2-TC3`
 
 ## Walk 4: Operator corrects a listing's gallery images
 
@@ -91,14 +124,19 @@
 1. Navigate to <grade10 auction admin listings url>.
 2. Open <listing_12>.
 3. Replace that image with <jpeg_replacement> and confirm.
-4. Check that position and the other gallery items. `g10.auction-listing-media.US3-TC1`
+4. Check that position and the other gallery items.
+   - That position holds <jpeg_replacement>. `g10.auction-listing-media.US3-TC1`
+   - Other gallery items are unchanged. `g10.auction-listing-media.US3-TC1`
 5. Navigate to <grade10 auction admin listings url>.
 6. Open <listing_13>.
-7. Remove that JPEG. `g10.auction-listing-media.US3-TC2`
+7. Remove that JPEG.
+   - The removal is refused. `g10.auction-listing-media.US3-TC2`
+   - The gallery still has that JPEG. `g10.auction-listing-media.US3-TC2`
 8. Navigate to <grade10 auction admin listings url>.
 9. Open <listing_14>.
 10. Replace the gallery image with <jpeg_replacement> and confirm.
-11. Remove it. `g10.auction-listing-media.US3-TC3`
+11. Remove it.
+   - <listing_14> has no gallery images. `g10.auction-listing-media.US3-TC3`
 
 ## Walk 5: Operator describes a gallery image with alt text
 
@@ -109,14 +147,20 @@
 ### Route
 
 1. Navigate to <listing_15 public url>.
-2. Check the first gallery image's accessible name. `g10.auction-listing-media.US4-TC1`
+2. Check the first gallery image's accessible name.
+   - That image's accessible name is <listing title>. `g10.auction-listing-media.US4-TC1`
 3. Navigate to <listing_16 public url>.
-4. Check the first gallery image's accessible name. `g10.auction-listing-media.US4-TC2`
+4. Check the first gallery image's accessible name.
+   - That image's accessible name is <alt text>. `g10.auction-listing-media.US4-TC2`
 5. Navigate to <grade10 auction admin listings url>.
 6. Open <listing_17>.
 7. Change only that image's alt text to <alt text>.
-8. Check the image bytes and <listing_17 public url>. `g10.auction-listing-media.US4-TC3`
-9. Set alt text to <alt text>. `g10.auction-listing-media.US4-TC4`
+8. Check the image bytes and <listing_17 public url>.
+   - The image bytes are unchanged. `g10.auction-listing-media.US4-TC3`
+   - The details page uses <alt text>. `g10.auction-listing-media.US4-TC3`
+9. Set alt text to <alt text>.
+   - The edit is refused. `g10.auction-listing-media.US4-TC4`
+   - The stored alt remains <previous alt>. `g10.auction-listing-media.US4-TC4`
 
 ## Walk 6: Collector views a listing's gallery images
 
@@ -127,22 +171,37 @@
 ### Route
 
 1. Navigate to <grade10 auction url>.
+   - The listing row shows image A at card size. `g10.auction-listing-media.US5-TC1`
 2. Find <listing_19>'s row.
-3. Check which image is requested and shown. `g10.auction-listing-media.US5-TC1`
+   - It does not show image B on the card. `g10.auction-listing-media.US5-TC1`
+3. Check which image is requested and shown.
+   - That listing's card image is requested at size `card`. `g10.auction-listing-media.US5-TC1`
 4. Navigate to <listing_20 public url>.
-5. Check the thumbnail rail, the main frame, and zoom. `g10.auction-listing-media.US5-TC2`
+5. Check the thumbnail rail, the main frame, and zoom.
+   - The thumbnail rail requests size `thumb`. `g10.auction-listing-media.US5-TC2`
+   - The main frame requests size `detail`. `g10.auction-listing-media.US5-TC2`
+   - Zoom requests size `zoom`. `g10.auction-listing-media.US5-TC2`
 6. Request that image at `<unknown size>`.
-7. Request an image that does not exist. `g10.auction-listing-media.US5-TC3`
+7. Request an image that does not exist.
+   - The unknown-size response matches a missing image. `g10.auction-listing-media.US5-TC3`
 8. Navigate to <grade10 auction url>.
-9. Find <listing_22>'s row. `g10.auction-listing-media.US5-TC4`
+   - The listing appears with its title and price. `g10.auction-listing-media.US5-TC4`
+9. Find <listing_22>'s row.
+   - No image is shown for it by this capability. `g10.auction-listing-media.US5-TC4`
 10. Navigate to <listing_23 public url>.
-11. Check the gallery. `g10.auction-listing-media.US5-TC5`
+11. Check the gallery.
+   - The gallery shows three images in the order A, B, C. `g10.auction-listing-media.US5-TC5`
 12. Navigate to <listing_24 public url>.
-13. Check the gallery controls. `g10.auction-listing-media.US5-TC6`
+   - The image is shown. `g10.auction-listing-media.US5-TC6`
+13. Check the gallery controls.
+   - No thumbnail rail, previous control, or next control is shown. `g10.auction-listing-media.US5-TC6`
 14. Navigate to <listing_25 public url>.
-15. Check the gallery and the listing page. `g10.auction-listing-media.US5-TC7`
+   - The gallery has no image and no previous or next control. `g10.auction-listing-media.US5-TC7`
+15. Check the gallery and the listing page.
+   - The listing title and bid panel remain visible. `g10.auction-listing-media.US5-TC7`
 16. Navigate to <listing_28 public url>.
-17. Check the gallery for a thumbnail rail beside the main frame. `g10.auction-listing-media.US5-TC8`
+17. Check the gallery for a thumbnail rail beside the main frame.
+   - A thumbnail rail is shown beside the main frame. `g10.auction-listing-media.US5-TC8`
 
 ## Walk 7: Collector views a listing's gallery images
 
@@ -153,9 +212,10 @@
 ### Route
 
 1. Navigate to <listing_29 public url> at a stacked gallery width.
-2. Check for a thumbnail rail, previous/next. `g10.auction-listing-media.US5-TC9`
-
-## Walk 1: Operator attaches an image to a listing gallery
+2. Check for a thumbnail rail, previous/next.
+   - No thumbnail rail is shown. `g10.auction-listing-media.US5-TC9`
+   - Previous and next remain available. `g10.auction-listing-media.US5-TC9`
+   - Carousel progress remains available. `g10.auction-listing-media.US5-TC9`
 
 ## g10.auction-listing-media.US1: Operator attaches an image to a listing gallery
 

@@ -16,21 +16,113 @@
 
 ### Route
 
-1. Read the signed-out bid action on `<listing_1 url>`. `g10.auction-bid-panel-enrollment.US1-TC1`
-2. Read standing badges and recent bids on `<listing_1 url>`. `g10.auction-bid-panel-enrollment.US1-TC2`
-3. Read the disabled amount controls → Click the primary bid action on `<listing_2 url>`. `g10.auction-bid-panel-enrollment.US2-TC1`
-4. Leave card entry and age attestation incomplete → Read Continue → Enter `<the successful Visa>` → Check age attestation. `g10.auction-bid-panel-enrollment.US2-TC2`
-5. Submit Link Card → Read the linking state while the provider request is in flight. `g10.auction-bid-panel-enrollment.US2-TC3`
-6. Open setup → Close it without continuing → Read the empty linked-card slot and disabled amount controls. `g10.auction-bid-panel-enrollment.US2-TC4`
-7. Complete setup with `<the successful Visa>` → Read the linked-card slot and enabled amount controls. `g10.auction-bid-panel-enrollment.US2-TC5`
-8. Click a disabled amount control → Click the empty linked-card slot. `g10.auction-bid-panel-enrollment.US2-TC6`
-9. Submit `<the refused card>` → Retry with `<the successful Visa>` → Read the linked-card slot. `g10.auction-bid-panel-enrollment.US2-TC12`
-10. Submit `<the declining Visa>` → Replace it with `<the successful Visa>` → Read the linked-card slot and enabled amount controls. `g10.auction-bid-panel-enrollment.US2-TC13`
-11. Submit each `<the brand card>` row → Read the provider outcome and linked-card slot. `g10.auction-bid-panel-enrollment.US2-TC14`
-12. Open setup → Read its title, description and continue control. `g10.auction-bid-panel-enrollment.US2-TC15`
-13. Open a new lot with the card already on file → Read the card row and amount controls. `g10.auction-bid-panel-enrollment.US5-TC1`
-
----
+1. Read the bid panel on <listing_1 url>.
+   - The primary action offers sign-in to bid. `g10.auction-bid-panel-enrollment.US1-TC1`
+2. Read the primary bid action.
+   - Place bid and link a card are not offered. `g10.auction-bid-panel-enrollment.US1-TC1`
+3. Read standing badges on the bid panel.
+   - Highest-bid and outbid badges are not shown. `g10.auction-bid-panel-enrollment.US1-TC2`
+4. Read the recent-bids section.
+   - Recent bids stay visible. `g10.auction-bid-panel-enrollment.US1-TC2`
+5. Read the quick-bid presets and the custom maximum.
+6. Read the primary bid action.
+7. Click the primary bid action.
+   - Quick-bid presets and the custom maximum are visible and disabled. `g10.auction-bid-panel-enrollment.US2-TC1`
+   - The primary bid action reads "Link a card to bid". `g10.auction-bid-panel-enrollment.US2-TC1`
+   - The setup modal opens. `g10.auction-bid-panel-enrollment.US2-TC1`
+   - No bid is placed. `g10.auction-bid-panel-enrollment.US2-TC1`
+8. Leave the provider card field empty.
+9. Leave age attestation unchecked.
+10. Read the continue control.
+11. Enter <the successful Visa> in the provider-hosted field.
+12. Check age attestation.
+13. Read the continue control.
+   - Continue stays disabled while the card or attestation is missing. `g10.auction-bid-panel-enrollment.US2-TC2`
+   - Continue reads "Link Card", not "Authorize". `g10.auction-bid-panel-enrollment.US2-TC2`
+   - Continue enables once the card and attestation are both set. `g10.auction-bid-panel-enrollment.US2-TC2`
+14. Read the continue control.
+   - Continue reads "Linking" and is busy. `g10.auction-bid-panel-enrollment.US2-TC3`
+15. Read the provider field and age attestation.
+   - The provider field and age attestation are not interactive. `g10.auction-bid-panel-enrollment.US2-TC3`
+16. Try to close the setup modal.
+   - The setup modal cannot be dismissed. `g10.auction-bid-panel-enrollment.US2-TC3`
+17. Click the primary bid action.
+18. Close the setup modal without continuing.
+19. Read the linked-card slot.
+20. Read the quick-bid presets and the custom maximum.
+   - No linked card is on file for bidding. `g10.auction-bid-panel-enrollment.US2-TC4`
+   - The empty link prompt is shown. `g10.auction-bid-panel-enrollment.US2-TC4`
+   - Amount controls stay visible and disabled. `g10.auction-bid-panel-enrollment.US2-TC4`
+21. Click the primary bid action.
+22. Enter `<the successful Visa>` in the provider-hosted field.
+23. Check age attestation.
+24. Click Link Card.
+25. Read the linked-card slot.
+26. Read the quick-bid presets and the custom maximum.
+27. Read the primary bid action.
+28. Check the card's activity at the card provider.
+   - The setup modal closes. `g10.auction-bid-panel-enrollment.US2-TC5`
+   - The linked-card slot shows the linked card, with Change available. `g10.auction-bid-panel-enrollment.US2-TC5`
+   - Quick-bid presets and the custom maximum are enabled at once. `g10.auction-bid-panel-enrollment.US2-TC5`
+   - The primary bid action offers set or raise maximum. `g10.auction-bid-panel-enrollment.US2-TC5`
+   - Setup takes nothing from the card. `g10.auction-bid-panel-enrollment.US2-TC5`
+29. Click a disabled quick-bid preset.
+   - The disabled preset does not open setup. `g10.auction-bid-panel-enrollment.US2-TC6`
+30. Try to type in the custom maximum.
+   - The custom maximum does not open setup. `g10.auction-bid-panel-enrollment.US2-TC6`
+31. Click the empty card slot.
+   - The empty card slot opens the setup modal. `g10.auction-bid-panel-enrollment.US2-TC6`
+32. Click the primary bid action.
+33. Enter <the refused card> in the provider-hosted field.
+34. Check age attestation.
+35. Click Link Card.
+36. Read the setup modal.
+   - the setup modal stays open, and a failure is shown. `g10.auction-bid-panel-enrollment.US2-TC12`
+37. Click into the provider-hosted field.
+   - the provider field accepts focus. `g10.auction-bid-panel-enrollment.US2-TC12`
+38. Uncheck age attestation.
+   - age attestation unchecks. `g10.auction-bid-panel-enrollment.US2-TC12`
+39. Close the setup modal.
+40. Read the linked-card slot.
+   - the empty link prompt is shown. `g10.auction-bid-panel-enrollment.US2-TC12`
+41. Read the quick-bid presets and the custom maximum.
+   - presets and the custom maximum are visible and disabled. `g10.auction-bid-panel-enrollment.US2-TC12`
+42. Read the primary bid action.
+   - the primary bid action reads "Link a card to bid". `g10.auction-bid-panel-enrollment.US2-TC12`
+43. Click the primary bid action.
+44. Enter `<the declining Visa>` in the provider-hosted field.
+45. Check age attestation.
+46. Click Link Card.
+47. Replace the card with `<the successful Visa>`.
+48. Click Link Card.
+49. Read the linked-card slot.
+50. Read the quick-bid presets and the custom maximum.
+   - The first link attempt shows a failure and leaves the setup modal open. `g10.auction-bid-panel-enrollment.US2-TC13`
+   - The successful retry closes the setup modal. `g10.auction-bid-panel-enrollment.US2-TC13`
+   - The linked-card slot shows the successful card, with Change available. `g10.auction-bid-panel-enrollment.US2-TC13`
+   - Quick-bid presets and the custom maximum are enabled. `g10.auction-bid-panel-enrollment.US2-TC13`
+51. Click the primary bid action.
+52. Enter `<the brand card>` in the provider-hosted field.
+53. Check age attestation.
+54. Click Link Card.
+   - the link completes, or a failure is shown; note which per brand. `g10.auction-bid-panel-enrollment.US2-TC14`
+55. Read the setup modal and the linked-card slot.
+   - a linked brand shows in the linked-card slot. `g10.auction-bid-panel-enrollment.US2-TC14`
+   - Any refused brand is reported to the spec's author, not failed. `g10.auction-bid-panel-enrollment.US2-TC14`
+56. Click the primary bid action.
+   - The title reads "Link a card to bid". `g10.auction-bid-panel-enrollment.US2-TC15`
+57. Read the setup title.
+   - The description says the card is charged only on a win. `g10.auction-bid-panel-enrollment.US2-TC15`
+58. Read the setup description.
+   - The description names no hold or authorization. `g10.auction-bid-panel-enrollment.US2-TC15`
+59. Read the continue control.
+   - Continue reads "Link Card". `g10.auction-bid-panel-enrollment.US2-TC15`
+60. Read the linked-card slot.
+   - The linked-card slot shows the card on file, with Change available. `g10.auction-bid-panel-enrollment.US5-TC1`
+61. Read the quick-bid presets and the custom maximum.
+   - Quick-bid presets and the custom maximum are enabled. `g10.auction-bid-panel-enrollment.US5-TC1`
+62. Check whether the setup modal is open.
+   - The setup modal does not open. `g10.auction-bid-panel-enrollment.US5-TC1`
 
 ## Walk 2: Change or lock the linked card before bidding
 
@@ -44,15 +136,44 @@
 
 ### Route
 
-1. Enter `<maximum>` → Submit the bid → Read the linked-card row after acceptance. `g10.auction-bid-panel-enrollment.US2-TC8`
-2. Enter each `<maximum>` row → Submit the bid → Read the standing once the panel settles. `g10.auction-bid-panel-enrollment.US2-TC16`
-3. Read the linked-card row → Click Change. `g10.auction-bid-panel-enrollment.US3-TC1`
-4. Click Change → Read the modal title, description and provider field. `g10.auction-bid-panel-enrollment.US3-TC2`
-5. Click Change → Read age attestation → Enter `<the other card>` → Read Continue. `g10.auction-bid-panel-enrollment.US3-TC3`
-6. Read the linked-card slot after an accepted bid. `g10.auction-bid-panel-enrollment.US4-TC1`
-7. Enter `<maximum>` → Submit the first bid → Read whether setup opens and read the panel. `g10.auction-bid-panel-enrollment.US4-TC2`
-
----
+1. Enter `<maximum>` in the custom maximum.
+   - The bid panel shows the accepted bid's standing without an Authorizing state between the click and the answer. `g10.auction-bid-panel-enrollment.US2-TC8`
+2. Click the bid action.
+   - The linked card remains visible. `g10.auction-bid-panel-enrollment.US2-TC8`
+3. Read the linked-card slot after the bid is accepted.
+   - Change is not offered for this listing. `g10.auction-bid-panel-enrollment.US2-TC8`
+4. Enter `<maximum>` in the custom maximum.
+5. Click the bid action.
+6. Watch the bid panel until it settles.
+   - The bid panel shows the row's expected standing in one answer: Leading or Outbid. `g10.auction-bid-panel-enrollment.US2-TC16`
+   - No Authorizing or other in-between state shows between the click and the standing. `g10.auction-bid-panel-enrollment.US2-TC16`
+7. Read the linked-card row.
+   - The setup modal opens. `g10.auction-bid-panel-enrollment.US3-TC1`
+8. Click Change on the linked card.
+   - The linked-card row stays visible behind the modal. `g10.auction-bid-panel-enrollment.US3-TC1`
+9. Click Change on the linked card.
+   - The title reads "Link a card to bid". `g10.auction-bid-panel-enrollment.US3-TC2`
+10. Read the modal title.
+   - The description says the card is charged only on a win. `g10.auction-bid-panel-enrollment.US3-TC2`
+11. Read the modal description.
+   - The description names no hold or authorization. `g10.auction-bid-panel-enrollment.US3-TC2`
+12. Read the provider-hosted field.
+   - The provider-hosted field indicates the card already on file. `g10.auction-bid-panel-enrollment.US3-TC2`
+13. Click Change on the linked card.
+14. Read age attestation.
+15. Enter <the other card> in the provider-hosted field.
+16. Read the continue control.
+   - Age attestation is already checked. `g10.auction-bid-panel-enrollment.US3-TC3`
+   - Continue reads "Link Card" and enables once <the other card> is entered. `g10.auction-bid-panel-enrollment.US3-TC3`
+17. Read the linked-card slot on the bid panel.
+   - The linked card is shown. `g10.auction-bid-panel-enrollment.US4-TC1`
+   - Change is not offered. `g10.auction-bid-panel-enrollment.US4-TC1`
+18. Enter `<maximum>` in the custom maximum.
+19. Click the bid action.
+20. Check whether the setup modal is open.
+21. Read the bid panel.
+   - The setup modal does not open. `g10.auction-bid-panel-enrollment.US4-TC2`
+   - The panel shows Leading with the collector's maximum and current bid. `g10.auction-bid-panel-enrollment.US4-TC2`
 
 ## g10.auction-bid-panel-enrollment.US1: Collector signs in to bid on a lot
 

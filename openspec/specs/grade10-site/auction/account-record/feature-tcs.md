@@ -16,19 +16,64 @@
 
 ### Route
 
-1. Click the Watch control → Navigate to `<my auctions url>` → Wait until `<lot_5>`'s bidding starts, then reload `<my auctions url>` → Click `<lot_5>`'s row. `g10.auction-account-record.US1-TC1`
-2. Navigate to `<my auctions url>`. `g10.auction-account-record.US1-TC2`
-3. Navigate to `<my auctions url>` → Click the catalogue offer. `g10.auction-account-record.US1-TC3`
-4. Navigate to `<my auctions url>` → Click retry. `g10.auction-account-record.US1-TC4`
-5. Navigate to `<my auctions url>` → Complete sign-in from the offer. `g10.auction-account-record.US1-TC5`
-6. Navigate to `<my auctions url>` → Find `<lot>`'s row. `g10.auction-account-record.US2-TC1`
-7. As customer B, place `<customer B bid>` → As customer A, reload `<my auctions url>`. `g10.auction-account-record.US2-TC2`
-8. Wait for the next refresh of `<lot_6>`'s row. `g10.auction-account-record.US2-TC3`
-9. Place `<low raise>` → Note `<lot_7>`'s current bid on its page → Navigate to `<my auctions url>` → Find `<lot_7>`'s row. `g10.auction-account-record.US2-TC4`
-10. Navigate to `<my auctions url>` and note the title count → Navigate to `<lot_8 url>` and place `<low bid>` → Navigate to `<my auctions url>` → Open the Active, Upcoming and Ended tabs in turn. `g10.auction-account-record.US2-TC5`
-11. Type `<refused bid>` into the custom maximum on the bid panel → Confirm the bid → Navigate to `<my auctions url>` → Find `<lot_6>`'s row in the Active tab. `g10.auction-account-record.US2-TC6`
-
----
+1. Click the Watch control.
+2. Navigate to `<my auctions url>`.
+   - `<lot_5>` shows once, Your Standing `--`. `g10.auction-account-record.US1-TC1`
+3. Wait until `<lot_5>`'s bidding starts, then reload `<my auctions url>`.
+   - `<lot_5>` is still listed. `g10.auction-account-record.US1-TC1`
+4. Click `<lot_5>`'s row.
+   - `<lot_5 url>` opens, taking bids. `g10.auction-account-record.US1-TC1`
+5. Navigate to `<my auctions url>`.
+   - The title count reads 5. `g10.auction-account-record.US1-TC2`
+   - Rows read, top down: `<lot_b>`, `<lot_a>`, `<lot_d>`, `<lot_c>`, `<lot_e>`. `g10.auction-account-record.US1-TC2`
+   - Each lot shows once. `g10.auction-account-record.US1-TC2`
+6. Navigate to `<my auctions url>`.
+   - the page says nothing is bookmarked; no error shows. `g10.auction-account-record.US1-TC3`
+7. Click the catalogue offer.
+   - the auction catalogue opens. `g10.auction-account-record.US1-TC3`
+8. Navigate to `<my auctions url>`.
+   - the page says the read failed; it does not read as empty. `g10.auction-account-record.US1-TC4`
+   - no catalogue offer shows. `g10.auction-account-record.US1-TC4`
+9. Click retry.
+   - `<lot_1>` is listed. `g10.auction-account-record.US1-TC4`
+10. Navigate to `<my auctions url>`.
+   - sign-in is offered; no bookmarked lot shows. `g10.auction-account-record.US1-TC5`
+11. Complete sign-in from the offer.
+   - the collector returns to My Auctions, showing their own lots. `g10.auction-account-record.US1-TC5`
+12. Navigate to `<my auctions url>`.
+13. Find `<lot>`'s row.
+   - Your Standing reads the row's value. `g10.auction-account-record.US2-TC1`
+   - Current bid reads `<lot>`'s current bid. `g10.auction-account-record.US2-TC1`
+   - For Outbid, the next valid bid equals current bid plus its increment. `g10.auction-account-record.US2-TC1`
+14. As customer B, place `<customer B bid>`.
+   - `<lot_6>` reads Outbid, with the next valid bid. `g10.auction-account-record.US2-TC2`
+15. As customer A, reload `<my auctions url>`.
+   - Current bid reads `<customer B bid>`. `g10.auction-account-record.US2-TC2`
+16. Wait for the next refresh of `<lot_6>`'s row.
+   - `<lot_6>`'s current bid and close are shown as not current. `g10.auction-account-record.US2-TC3`
+17. Place `<low raise>`.
+   - shows the refusal on the bid panel. `g10.auction-account-record.US2-TC4`
+18. Note `<lot_7>`'s current bid on its page.
+19. Navigate to `<my auctions url>`.
+20. Find `<lot_7>`'s row.
+   - Your Standing reads the row's value. `g10.auction-account-record.US2-TC4`
+   - Current bid reads the bid noted at step 2, never `<low raise>`. `g10.auction-account-record.US2-TC4`
+21. Navigate to `<my auctions url>` and note the title count.
+22. Navigate to `<lot_8 url>` and place `<low bid>`.
+   - shows the refusal on the bid panel. `g10.auction-account-record.US2-TC5`
+23. Navigate to `<my auctions url>`.
+24. Open the Active, Upcoming and Ended tabs in turn.
+   - No tab holds a row for `<lot_8>`. `g10.auction-account-record.US2-TC5`
+   - The title count equals the count noted at step 1. `g10.auction-account-record.US2-TC5`
+25. Type `<refused bid>` into the custom maximum on the bid panel.
+26. Confirm the bid.
+   - the bid form says Minimum bid is `<next minimum>`. `g10.auction-account-record.US2-TC6`
+27. Navigate to `<my auctions url>`.
+28. Find `<lot_6>`'s row in the Active tab.
+   - Your Standing reads Outbid, with the next valid bid `<next minimum>`. `g10.auction-account-record.US2-TC6`
+   - Current bid reads `<current bid>`. `g10.auction-account-record.US2-TC6`
+   - `<lot_6>` still sits below `<lot_7>`, as before step 1. `g10.auction-account-record.US2-TC6`
+   - No row reads Bid submitted or Bid not accepted. `g10.auction-account-record.US2-TC6`
 
 ## Walk 2: Follow a won or lost lot
 
@@ -42,13 +87,23 @@
 
 ### Route
 
-1. Navigate to `<my auctions url>` → Read `<lot>`'s row. `g10.auction-account-record.US3-TC2`
-2. As customer B, navigate to `<my auctions url>`. `g10.auction-account-record.US3-TC4`
-3. Navigate to `<my auctions url>` → Find `<lot>`'s row. `g10.auction-account-record.US3-TC5`
-4. Read Status on each row. `g10.auction-account-record.US3-TC20`
-5. Navigate to `<my auctions url>` → Select the Ended tab and find `<lot>`'s row. `g10.auction-account-record.US4-TC1`
-
----
+1. Navigate to `<my auctions url>`.
+2. Read `<lot>`'s row.
+   - Your Standing reads the row's value. `g10.auction-account-record.US3-TC2`
+3. As customer B, navigate to `<my auctions url>`.
+   - No `<lot_12>` row shows. `g10.auction-account-record.US3-TC4`
+4. Navigate to `<my auctions url>`.
+   - Your Standing reads the row's value. `g10.auction-account-record.US3-TC5`
+5. Find `<lot>`'s row.
+   - The row offers View order. `g10.auction-account-record.US3-TC5`
+6. Read Status on each row.
+   - `<won_preparing_shipment>` reads Preparing Shipment with the `default` status badge. `g10.auction-account-record.US3-TC20`
+   - `<won_shipped>` reads Shipped with the `default` status badge. `g10.auction-account-record.US3-TC20`
+7. Navigate to `<my auctions url>`.
+8. Select the Ended tab and find `<lot>`'s row.
+   - Your Standing reads the row's value. `g10.auction-account-record.US4-TC1`
+   - The row says the card was not charged. `g10.auction-account-record.US4-TC1`
+   - No amount is shown as charged. `g10.auction-account-record.US4-TC1`
 
 ## Walk 3: Watch and bid from auction surfaces
 
@@ -62,14 +117,43 @@
 
 ### Route
 
-1. Click the Watch control → Click View My Auctions in the toast → Find the `<lot_1>` row. `g10.auction-account-record.US5-TC1`
-2. Click the watch control on `<lot_1>`'s card, bottom right of the image → Navigate to `<my auctions url>`. `g10.auction-account-record.US5-TC2`
-3. As customer B, navigate to `<my auctions url>` → As customer B, navigate to `<lot_1 url>` → As customer B, open the page source of `<lot_1 url>`. `g10.auction-account-record.US5-TC3`
-4. Place `<first bid>` from the bid panel → Reload `<lot_2 url>` → Navigate to `<my auctions url>`. `g10.auction-account-record.US6-TC1`
-5. Place `<first bid>` from the bid panel → Navigate to `<my auctions url>`. `g10.auction-account-record.US6-TC2`
-6. Type `<typed bid>` into the custom maximum on the bid panel → Confirm the bid → Reload `<lot_5 url>` → Navigate to `<my auctions url>`. `g10.auction-account-record.US6-TC3`
-
----
+1. Click the Watch control.
+   - a toast says email alerts are on, with View My Auctions. `g10.auction-account-record.US5-TC1`
+2. Click View My Auctions in the toast.
+   - My Auctions opens; the title count includes `<lot_1>`. `g10.auction-account-record.US5-TC1`
+3. Find the `<lot_1>` row.
+   - `<lot_1>` shows once, with key image, title and close. `g10.auction-account-record.US5-TC1`
+   - Your Standing reads `--`. `g10.auction-account-record.US5-TC1`
+   - Email alerts switch is on; Unwatch is offered. `g10.auction-account-record.US5-TC1`
+4. Click the watch control on `<lot_1>`'s card, bottom right of the image.
+   - the card's control reads Watching. `g10.auction-account-record.US5-TC2`
+5. Navigate to `<my auctions url>`.
+   - `<lot_1>` shows once, Your Standing `--`, email alerts on. `g10.auction-account-record.US5-TC2`
+6. As customer B, navigate to `<my auctions url>`.
+   - `<lot_1>` is not listed. `g10.auction-account-record.US5-TC3`
+7. As customer B, navigate to `<lot_1 url>`.
+   - the control reads Watch; no watch count shows. `g10.auction-account-record.US5-TC3`
+8. As customer B, open the page source of `<lot_1 url>`.
+   - no watch count and no watcher's identity appear. `g10.auction-account-record.US5-TC3`
+9. Place `<first bid>` from the bid panel.
+   - one toast says email alerts are on. `g10.auction-account-record.US6-TC1`
+10. Reload `<lot_2 url>`.
+   - no alerts toast shows. `g10.auction-account-record.US6-TC1`
+11. Navigate to `<my auctions url>`.
+   - `<lot_2>` shows once, Your Standing Leading. `g10.auction-account-record.US6-TC1`
+   - Email alerts switch is on; no Unwatch is offered. `g10.auction-account-record.US6-TC1`
+12. Place `<first bid>` from the bid panel.
+   - `<lot_3>` shows once, Your Standing Leading, no Unwatch. `g10.auction-account-record.US6-TC2`
+13. Navigate to `<my auctions url>`.
+   - `<lot_3>` sits above `<lot_4>`: bid rows before watch-only. `g10.auction-account-record.US6-TC2`
+14. Type `<typed bid>` into the custom maximum on the bid panel.
+15. Confirm the bid.
+   - the bid form says the row's words, and no alerts toast shows. `g10.auction-account-record.US6-TC3`
+16. Reload `<lot_5 url>`.
+   - the watch control offers Watch, not locked to watching. `g10.auction-account-record.US6-TC3`
+17. Navigate to `<my auctions url>`.
+   - `<lot_5>` is not listed in any tab. `g10.auction-account-record.US6-TC3`
+   - the title count is the one noted. `g10.auction-account-record.US6-TC3`
 
 ## Walk 4: Filter rows and read close results
 
@@ -83,19 +167,59 @@
 
 ### Route
 
-1. Navigate to `<grade10 my auctions url>` → Open the Upcoming tab → Open the Ended tab. `g10.auction-account-record.US7-TC1`
-2. Navigate to `<grade10 my auctions url>` → Wait until `<listing_1>` bidding opens → Reload `<grade10 my auctions url>`. `g10.auction-account-record.US7-TC2`
-3. Navigate to `<grade10 my auctions url>` → Open the Upcoming tab. `g10.auction-account-record.US7-TC3`
-4. Navigate to `<grade10 my auctions url>` → Open the Ended tab → Click the Email alerts control on `<listing_3>`. `g10.auction-account-record.US7-TC4`
-5. Navigate to `<grade10 my auctions url>` → Select the order entry point on the Won row. `g10.auction-account-record.US7-TC5`
-6. Open My Auctions and read the Won row → Select View order. `g10.auction-account-record.US8-TC1`
-7. Navigate to `<my auctions url>` → Read `<lot_9>`'s row. `g10.auction-account-record.US8-TC2`
-8. Navigate to `<my auctions url>` → Read `<lot_10>` and `<lot_11>`'s rows. `g10.auction-account-record.US8-TC3`
-9. Navigate to `<my auctions url>` → Read `<lot>`'s row. `g10.auction-account-record.US9-TC1`
-10. Navigate to `<grade10 my auctions url>` → Find `<lot_2>`'s row and read its tab and Your Standing → Let recording the close resume → Reload `<grade10 my auctions url>` → Find `<lot_2>`'s row and read Your Standing. `g10.auction-account-record.US10-TC2`
-11. As customer B, navigate to `<grade10 my auctions url>` → Find `<lot_3>`'s row in the Active tab. `g10.auction-account-record.US10-TC3`
-
----
+1. Navigate to `<grade10 my auctions url>`.
+   - shows the Active tab, listing only `<listing_2>`. `g10.auction-account-record.US7-TC1`
+2. Open the Upcoming tab.
+   - Title badge shows 3. `g10.auction-account-record.US7-TC1`
+   - lists only `<listing_1>`; step 3 lists only `<listing_3>`. `g10.auction-account-record.US7-TC1`
+3. Open the Ended tab.
+4. Navigate to `<grade10 my auctions url>`.
+5. Wait until `<listing_1>` bidding opens.
+6. Reload `<grade10 my auctions url>`.
+   - `<listing_1>` is listed in the Active tab. `g10.auction-account-record.US7-TC2`
+   - `<listing_1>` is not listed in the Upcoming tab. `g10.auction-account-record.US7-TC2`
+7. Navigate to `<grade10 my auctions url>`.
+8. Open the Upcoming tab.
+   - The Upcoming tab shows its no-lots empty state. `g10.auction-account-record.US7-TC3`
+9. Navigate to `<grade10 my auctions url>`.
+10. Open the Ended tab.
+11. Click the Email alerts control on `<listing_3>`.
+   - The Email alerts control is disabled. `g10.auction-account-record.US7-TC4`
+   - The alert setting for `<listing_3>` is unchanged. `g10.auction-account-record.US7-TC4`
+12. Navigate to `<grade10 my auctions url>`.
+   - The matching auction order opens. `g10.auction-account-record.US7-TC5`
+13. Select the order entry point on the Won row.
+   - My Auctions performs no payment, address, or order-status write. `g10.auction-account-record.US7-TC5`
+14. Open My Auctions and read the Won row.
+   - The row status is Partially Paid with its warning treatment. `g10.auction-account-record.US8-TC1`
+15. Select View order.
+   - View order opens the Partially Paid Winner Order. `g10.auction-account-record.US8-TC1`
+16. Navigate to `<my auctions url>`.
+   - Your Standing reads Didn't win, and the row says the card was not charged. `g10.auction-account-record.US8-TC2`
+17. Read `<lot_9>`'s row.
+   - No View order is offered. `g10.auction-account-record.US8-TC2`
+18. Navigate to `<my auctions url>`.
+19. Read `<lot_10>` and `<lot_11>`'s rows.
+   - `<lot_10>` reads Won, Payment Overdue, and offers View order. `g10.auction-account-record.US8-TC3`
+   - `<lot_10>` has no helper line and no way to reach Grade10 on the row. `g10.auction-account-record.US8-TC3`
+   - `<lot_11>` reads Won, Awaiting Setup, and offers View order. `g10.auction-account-record.US8-TC3`
+   - `<lot_11>` has no confirm-address helper line on the row. `g10.auction-account-record.US8-TC3`
+20. Navigate to `<my auctions url>`.
+21. Read `<lot>`'s row.
+   - Your Standing reads the row's value, never the Not column. `g10.auction-account-record.US9-TC1`
+   - The row offers View order. `g10.auction-account-record.US9-TC1`
+   - Lot, close and current bid read as on any Won row. `g10.auction-account-record.US9-TC1`
+22. Navigate to `<grade10 my auctions url>`.
+23. Find `<lot_2>`'s row and read its tab and Your Standing.
+24. Let recording the close resume.
+25. Reload `<grade10 my auctions url>`.
+26. Find `<lot_2>`'s row and read Your Standing.
+   - At step 2 the row is in the Active tab, and Your Standing reads Leading with no next valid bid, neither Won nor Didn't win. `g10.auction-account-record.US10-TC2`
+   - At step 5 the row is in the Ended tab and Your Standing reads Won. `g10.auction-account-record.US10-TC2`
+27. As customer B, navigate to `<grade10 my auctions url>`.
+   - Current bid reads `<current bid>`, not `<customer B bid>`. `g10.auction-account-record.US10-TC3`
+28. Find `<lot_3>`'s row in the Active tab.
+   - Your Standing reads Outbid, with the next valid bid. `g10.auction-account-record.US10-TC3`
 
 ## g10.auction-account-record.US1: Mark a listing now and find it again later
 

@@ -15,30 +15,48 @@
 ### Route
 
 1. Wait for `<invoice_1>`'s payment deadline to pass.
+   - The raise at step 3 is refused. `g10.auction-bidder-suspension.US1-TC1`
 2. Open <g10 auction url>.
+   - The bid at step 4 is refused. `g10.auction-bidder-suspension.US1-TC1`
 3. Try to raise `<maximum_1>` on `<lot_1>`.
+   - The collector sees the outstanding amount and how to resolve the suspension. `g10.auction-bidder-suspension.US1-TC1`
 4. Try to place a bid on `<lot_2>`.
-5. Open <g10 auction account record url>. `g10.auction-bidder-suspension.US1-TC1`
+   - The account record shows the suspension, its reason and `<invoice_1>`. `g10.auction-bidder-suspension.US1-TC1`
+5. Open <g10 auction account record url>.
+   - The account record matches the row's `Account record` value. `g10.auction-bidder-suspension.US1-TC1`
 6. Sign in as `customer`.
 7. Open the auction order for `<invoice_1>`.
 8. Pay `<invoice_1>` in full.
 9. Open <g10 auction url>.
 10. Try to commit a maximum on `<lot_4>`.
-11. Open <g10 auction account record url>. `g10.auction-bidder-suspension.US1-TC2`
+11. Open <g10 auction account record url>.
+   - The payment is accepted and the invoice becomes `paid`. `g10.auction-bidder-suspension.US1-TC2`
+   - The maximum at step 5 is refused. `g10.auction-bidder-suspension.US1-TC2`
+   - The account record still shows the suspension and its reason. `g10.auction-bidder-suspension.US1-TC2`
 12. As `admin`, open `<expired_invoice_1>`.
 13. Reissue `<expired_invoice_1>` as `<reissued_invoice_1>` with a new payment deadline.
 14. As `customer`, open `<reissued_invoice_1>` and pay it in full.
 15. Open <g10 auction url>.
 16. Try to commit a maximum on `<open_lot_1>`.
-17. Open <g10 auction account record url>. `g10.auction-bidder-suspension.US1-TC7`
+17. Open <g10 auction account record url>.
+   - The reissued invoice is payable and the payment is accepted. `g10.auction-bidder-suspension.US1-TC7`
+   - The maximum at step 5 is refused. `g10.auction-bidder-suspension.US1-TC7`
+   - The account record still shows the suspension and its reason after the invoice is paid. `g10.auction-bidder-suspension.US1-TC7`
 18. Sign in as `customer`.
+   - Sign-in is accepted. `g10.auction-bidder-suspension.US1-TC8`
 19. Open <g10 store url>, browse `<store_item_1>` and complete its purchase.
+   - The store item can be browsed and purchased. `g10.auction-bidder-suspension.US1-TC8`
 20. Open <g10 loyalty url> and complete `<loyalty_action_1>`.
+   - The loyalty action is accepted. `g10.auction-bidder-suspension.US1-TC8`
 21. Open <g10 auction account record url> and read `<account_record_1>`.
-22. Open <g10 auction url> and try to commit a maximum on an open lot. `g10.auction-bidder-suspension.US1-TC8`
+   - The account record remains readable. `g10.auction-bidder-suspension.US1-TC8`
+22. Open <g10 auction url> and try to commit a maximum on an open lot.
+   - The maximum at step 5 is refused; the suspension does not block non-auction account access. `g10.auction-bidder-suspension.US1-TC8`
 23. Open <g10 auction url>.
 24. Open `<won_lot_1>`.
-25. Open its auction order. `g10.auction-bidder-suspension.US1-TC4`
+25. Open its auction order.
+   - `<won_lot_1>` is still won by `customer`. `g10.auction-bidder-suspension.US1-TC4`
+   - Its invoice remains payable. `g10.auction-bidder-suspension.US1-TC4`
 
 ## Walk 2: Bidder competes on a lot whose leader is suspended
 
@@ -51,10 +69,14 @@
 1. Open `<lot_3>` and note its bid history.
 2. Wait for `customer A`'s payment deadline to pass.
 3. Perform the row's `Event after suspension`.
-4. Reload `<lot_3>`. `g10.auction-bidder-suspension.US2-TC1`
+4. Reload `<lot_3>`.
+   - `customer A` still leads `<lot_3>` at 30000 HKD minor units. `g10.auction-bidder-suspension.US2-TC1`
+   - The leader, price and bid history match the row's `Expected lot state` value. `g10.auction-bidder-suspension.US2-TC1`
 5. Wait for `<lot_5>` to close.
 6. Sign in as `customer A`.
-7. Open the auction order for `<lot_5>`. `g10.auction-bidder-suspension.US2-TC3`
+7. Open the auction order for `<lot_5>`.
+   - `customer A` wins `<lot_5>`. `g10.auction-bidder-suspension.US2-TC3`
+   - The auction order has its own invoice and payment deadline. `g10.auction-bidder-suspension.US2-TC3`
 
 ## Walk 3: Collector suspended by an operator learns they can no longer bid
 
@@ -68,16 +90,24 @@
 2. Suspend `customer` with `<operator_reason>`.
 3. As `customer`, open the suspension notice.
 4. Open <g10 auction account record url>.
-5. Open <g10 auction url> and try to commit a maximum. `g10.auction-bidder-suspension.US3-TC1`
+5. Open <g10 auction url> and try to commit a maximum.
+   - The account record matches the row's `Operator record` value. `g10.auction-bidder-suspension.US3-TC1`
+   - The notice and collector account record say `customer` cannot bid and how to contact Grade10. `g10.auction-bidder-suspension.US3-TC1`
+   - Neither collector-facing surface shows `<operator_reason>`. `g10.auction-bidder-suspension.US3-TC1`
+   - The maximum at step 5 is refused. `g10.auction-bidder-suspension.US3-TC1`
 6. Wait for `<invoice_3>`'s payment deadline to pass.
-7. Open <g10 auction account record url>. `g10.auction-bidder-suspension.US3-TC2`
+   - The account remains one suspension. `g10.auction-bidder-suspension.US3-TC2`
+7. Open <g10 auction account record url>.
+   - The account record shows both causes. `g10.auction-bidder-suspension.US3-TC2`
 8. As `admin`, open <g10adm users url>.
 9. Reinstate `customer`.
 10. As `customer`, open <g10 auction url>.
 11. Commit a maximum on `<reopen_lot_1>`.
-12. Open <g10 auction account record url>. `g10.auction-bidder-suspension.US3-TC3`
-
-## Walk 1: Collector who misses a deadline loses their auction standing
+12. Open <g10 auction account record url>.
+   - The operator can reinstate `customer`. `g10.auction-bidder-suspension.US3-TC3`
+   - Grade10 accepts the maximum at step 4. `g10.auction-bidder-suspension.US3-TC3`
+   - The account record no longer blocks bidding for the reinstated account. `g10.auction-bidder-suspension.US3-TC3`
+   - The suspension and its reason remain as history. `g10.auction-bidder-suspension.US3-TC3`
 
 ## g10.auction-bidder-suspension.US1: Collector who misses a deadline loses their auction standing
 

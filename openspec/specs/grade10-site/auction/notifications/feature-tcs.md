@@ -15,14 +15,24 @@
 
 ### Route
 
-1. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC1`
-2. Open the letter. `g10.auction-notifications.US1-TC2`
-3. Click the listing action. `g10.auction-notifications.US1-TC2`
-4. Back in the letter, click Manage alerts. `g10.auction-notifications.US1-TC2`
-5. Complete sign-in from the offer. `g10.auction-notifications.US1-TC2`
-6. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC3`
-7. Read the collector's My Auctions. `g10.auction-notifications.US1-TC3`
-8. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC4`
+1. Read the mail sent to the collector's registered email.
+   - Exactly one copy of the row's letter, about `<lot_1>`. `g10.auction-notifications.US1-TC1`
+   - It goes to the account's registered email. `g10.auction-notifications.US1-TC1`
+2. Open the letter.
+   - subject, heading, lot block and footer name `<lot_1>`. `g10.auction-notifications.US1-TC2`
+   - the footer says email alerts are on for this auction. `g10.auction-notifications.US1-TC2`
+3. Click the listing action.
+   - `<lot_1 url>` opens; the link carries `utm_source=email` and `utm_medium=auction_notification`. `g10.auction-notifications.US1-TC2`
+4. Back in the letter, click Manage alerts.
+   - sign-in is offered first; no alert is changed. `g10.auction-notifications.US1-TC2`
+5. Complete sign-in from the offer.
+   - My Auctions opens; `<lot_1>` is still watched, alerts on. `g10.auction-notifications.US1-TC2`
+6. Read the mail sent to the collector's registered email.
+   - neither opening letter was sent for `<lot_1>`. `g10.auction-notifications.US1-TC3`
+7. Read the collector's My Auctions.
+   - `<lot_1>` is still watched. `g10.auction-notifications.US1-TC3`
+8. Read the mail sent to the collector's registered email.
+   - Bidding has opened was not sent for `<lot_1>`. `g10.auction-notifications.US1-TC4`
 
 ## Walk 2: Collector returns before a lot closes
 
@@ -36,18 +46,26 @@
 
 ### Route
 
-1. Move the clock to 86400s (24 hours) before the scheduled close. `g10.auction-notifications.US2-TC5`
-2. Move the clock to 3600s (1 hour) before the scheduled close. `g10.auction-notifications.US2-TC5`
-3. Read the mail sent to customer A. `g10.auction-notifications.US2-TC5`
-4. Move the clock to 86400s (24 hours) before the scheduled close. `g10.auction-notifications.US2-TC6`
-5. Read the mail sent to customer A. `g10.auction-notifications.US2-TC6`
-6. Move the clock to 3600s (1 hour) before the moved close. `g10.auction-notifications.US2-TC9`
-7. Read the mail sent to customer A. `g10.auction-notifications.US2-TC9`
-8. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC11`
-9. As customer B, place `<late bid>`. `g10.auction-notifications.US2-TC12`
-10. Move the clock to 86400s (24 hours) before the moved close. `g10.auction-notifications.US2-TC12`
-11. Read the mail sent to customer A. `g10.auction-notifications.US2-TC12`
-12. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC13`
+1. Move the clock to 86400s (24 hours) before the scheduled close.
+2. Move the clock to 3600s (1 hour) before the scheduled close.
+3. Read the mail sent to customer A.
+   - No Bidding closes in 24 hours letter for `<lot_2>`. `g10.auction-notifications.US2-TC5`
+   - No closing reminder at the one-hour mark. `g10.auction-notifications.US2-TC5`
+4. Move the clock to 86400s (24 hours) before the scheduled close.
+5. Read the mail sent to customer A.
+   - No Bidding closes in 24 hours letter for `<lot_2>`. `g10.auction-notifications.US2-TC6`
+6. Move the clock to 3600s (1 hour) before the moved close.
+7. Read the mail sent to customer A.
+   - No closing reminder at the one-hour mark before the moved close. `g10.auction-notifications.US2-TC9`
+8. Read the mail sent to the collector's registered email.
+   - The row's letters, about `<lot_2>`, and no other copy. `g10.auction-notifications.US2-TC11`
+9. As customer B, place `<late bid>`.
+10. Move the clock to 86400s (24 hours) before the moved close.
+11. Read the mail sent to customer A.
+   - One Extended bidding has started letter for `<lot_3>`. `g10.auction-notifications.US2-TC12`
+   - No second Bidding closes in 24 hours letter. `g10.auction-notifications.US2-TC12`
+12. Read the mail sent to the collector's registered email.
+   - No closing reminder was sent for `<lot_2>` at the one-hour mark. `g10.auction-notifications.US2-TC13`
 
 ## Walk 3: Collector raises after being outbid
 
@@ -61,14 +79,21 @@
 
 ### Route
 
-1. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC1`
-2. Read the mail sent to customer A. `g10.auction-notifications.US3-TC1`
-3. Read the mail sent to customer B. `g10.auction-notifications.US3-TC1`
-4. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC2`
-5. Read the mail sent to customer A. `g10.auction-notifications.US3-TC2`
-6. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC3`
-7. Read the mail sent to customer A. `g10.auction-notifications.US3-TC3`
-8. Open customer A's My Auctions. `g10.auction-notifications.US3-TC3`
+1. As customer B, place `<customer B bid>`.
+2. Read the mail sent to customer A.
+   - one You have been outbid letter for `<lot_4>`. `g10.auction-notifications.US3-TC1`
+   - no New bid letter for this bid. `g10.auction-notifications.US3-TC1`
+3. Read the mail sent to customer B.
+   - no letter about customer B's own bid. `g10.auction-notifications.US3-TC1`
+4. As customer B, place `<customer B bid>`.
+   - customer A still leads `<lot_4>`. `g10.auction-notifications.US3-TC2`
+5. Read the mail sent to customer A.
+   - No You have been outbid letter was sent to customer A. `g10.auction-notifications.US3-TC2`
+6. As customer B, place `<customer B bid>`.
+7. Read the mail sent to customer A.
+   - no letter was sent for `<lot_4>`. `g10.auction-notifications.US3-TC3`
+8. Open customer A's My Auctions.
+   - `<lot_4>` reads Outbid; the bid stands. `g10.auction-notifications.US3-TC3`
 
 ## Walk 4: Collector hears a new bid on a lot they bid on
 
@@ -82,11 +107,17 @@
 
 ### Route
 
-1. As customer C, place `<customer C bid>`. `g10.auction-notifications.US4-TC1`
-2. Read the mail sent to customers A, B, C and D. `g10.auction-notifications.US4-TC1`
-3. Place `<bids>` in turn. `g10.auction-notifications.US4-TC2`
-4. Release sending. `g10.auction-notifications.US4-TC2`
-5. Read the mail sent to customer A. `g10.auction-notifications.US4-TC2`
+1. As customer C, place `<customer C bid>`.
+2. Read the mail sent to customers A, B, C and D.
+   - customer A: one New bid letter naming `<customer C bid>`. `g10.auction-notifications.US4-TC1`
+   - customer B: You have been outbid only. `g10.auction-notifications.US4-TC1`
+   - customer C: no letter about their own bid. `g10.auction-notifications.US4-TC1`
+   - customer D: no New bid letter. `g10.auction-notifications.US4-TC1`
+3. Place `<bids>` in turn.
+4. Release sending.
+5. Read the mail sent to customer A.
+   - One New bid letter for `<lot_5>`. `g10.auction-notifications.US4-TC2`
+   - It names the leading bid after the last of `<bids>`. `g10.auction-notifications.US4-TC2`
 
 ## Walk 5: Operator looks up what a collector was sent
 
@@ -100,9 +131,13 @@
 
 ### Route
 
-1. Filter by `<customer A email>`. `g10.auction-notifications.US5-TC1`
-2. Read each row. `g10.auction-notifications.US5-TC1`
-3. Filter by `<customer C email>`. `g10.auction-notifications.US5-TC2`
+1. Filter by `<customer A email>`.
+   - two rows, both customer A's; none of customer B's. `g10.auction-notifications.US5-TC1`
+2. Read each row.
+   - each row shows message type, recipient email, `<lot_1>` and Sent At. `g10.auction-notifications.US5-TC1`
+   - no row shows or opens the letter body. `g10.auction-notifications.US5-TC1`
+3. Filter by `<customer C email>`.
+   - No rows show; the log says nothing was sent. `g10.auction-notifications.US5-TC2`
 
 ## Walk 6: Collector who lost hears the lot closed
 
@@ -116,12 +151,18 @@
 
 ### Route
 
-1. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC1`
-2. Read the mail sent to customer A. `g10.auction-notifications.US6-TC1`
-3. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC2`
-4. Read the mail sent to customer A. `g10.auction-notifications.US6-TC2`
-5. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC3`
-6. Read the mail sent to customer B. `g10.auction-notifications.US6-TC3`
+1. Let `<lot_6>` close with customer B winning.
+   - One You did not win letter for `<lot_6>`. `g10.auction-notifications.US6-TC1`
+2. Read the mail sent to customer A.
+   - It names Winning bid as `<winning bid>` and Their bid as `<customer A bid>`. `g10.auction-notifications.US6-TC1`
+3. Let `<lot_6>` close with customer B winning.
+   - Exactly one close letter: You did not win. `g10.auction-notifications.US6-TC2`
+4. Read the mail sent to customer A.
+   - No Lot watched, sold letter. `g10.auction-notifications.US6-TC2`
+5. Let `<lot_6>` close with customer B winning.
+   - No You did not win, Lot watched, sold or Lot watched, ended letter. `g10.auction-notifications.US6-TC3`
+6. Read the mail sent to customer B.
+   - Only the auction-won order letter arrives. `g10.auction-notifications.US6-TC3`
 
 ## Walk 7: Watcher hears a sold lot ended
 
@@ -135,10 +176,13 @@
 
 ### Route
 
-1. Let `<lot_7>` close with customer B winning. `g10.auction-notifications.US7-TC1`
-2. Read the mail sent to customer D. `g10.auction-notifications.US7-TC1`
-3. Let `<lot_7>` close with customer B winning. `g10.auction-notifications.US7-TC2`
-4. Read the mail sent to customer D. `g10.auction-notifications.US7-TC2`
+1. Let `<lot_7>` close with customer B winning.
+   - One Lot watched, sold letter for `<lot_7>`. `g10.auction-notifications.US7-TC1`
+2. Read the mail sent to customer D.
+   - It names Sold for as `<winning bid>`. `g10.auction-notifications.US7-TC1`
+3. Let `<lot_7>` close with customer B winning.
+4. Read the mail sent to customer D.
+   - No Lot watched, sold letter was sent. `g10.auction-notifications.US7-TC2`
 
 ## Walk 8: Collector hears a no-bids close as ended only
 
@@ -152,10 +196,17 @@
 
 ### Route
 
-1. Let `<lot_8>` close with no bids. `g10.auction-notifications.US8-TC1`
-2. Read the mail sent to customer D. `g10.auction-notifications.US8-TC1`
-3. Let `<lot_8>` close with no bids. `g10.auction-notifications.US8-TC2`
-4. Read every letter sent for `<lot_8>`. `g10.auction-notifications.US8-TC2`
+1. Let `<lot_8>` close with no bids.
+2. Read the mail sent to customer D.
+   - One Lot watched, ended letter for `<lot_8>`. `g10.auction-notifications.US8-TC1`
+   - Subject, preheader and body say the lot ended. `g10.auction-notifications.US8-TC1`
+   - None says unsold, did not sell or no sale. `g10.auction-notifications.US8-TC1`
+   - No Sold for, Winning bid or Highest bid shows. `g10.auction-notifications.US8-TC1`
+3. Let `<lot_8>` close with no bids.
+4. Read every letter sent for `<lot_8>`.
+   - Only Lot watched, ended letters, one each to customer D and customer E. `g10.auction-notifications.US8-TC2`
+   - No You did not win letter. `g10.auction-notifications.US8-TC2`
+   - No Lot watched, sold letter. `g10.auction-notifications.US8-TC2`
 
 ## g10.auction-notifications.US1: Collector hears a watched lot is opening
 

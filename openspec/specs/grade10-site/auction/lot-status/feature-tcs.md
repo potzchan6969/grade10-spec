@@ -15,9 +15,12 @@
 
 ### Route
 
-1. Read external lot status. `g10.auction-lot-status.US1-TC1`
-2. Navigate to `<grade10 my auctions url>`. `g10.auction-lot-status.US1-TC2`
-3. Read the row for `<lot_1>`. `g10.auction-lot-status.US1-TC2`
+1. Read external lot status.
+   - External lot status is Ended. `g10.auction-lot-status.US1-TC1`
+2. Navigate to `<grade10 my auctions url>`.
+   - The lot status is Ended. `g10.auction-lot-status.US1-TC2`
+3. Read the row for `<lot_1>`.
+   - Your Standing shows the order status. `g10.auction-lot-status.US1-TC2`
 
 ## Walk 2: Collector does not find draft or called-off lots in browse or search
 
@@ -31,16 +34,27 @@
 
 ### Route
 
-1. Navigate to `<grade10 auction catalogue url>`. `g10.auction-lot-status.US2-TC1`
-2. Read the All auctions list. `g10.auction-lot-status.US2-TC1`
-3. Search the catalogue for the title of `<lot>`. `g10.auction-lot-status.US2-TC1`
-4. Navigate to `<grade10 my auctions url>`. `g10.auction-lot-status.US2-TC2`
-5. Read the list. `g10.auction-lot-status.US2-TC2`
-6. Read the API response for the public listing data. `g10.auction-lot-status.US2-TC3`
-7. Call the listing off. `g10.auction-lot-status.US2-TC4`
-8. Search the catalogue and browse for the listing. `g10.auction-lot-status.US2-TC4`
-9. Open `<listing_url>` directly. `g10.auction-lot-status.US2-TC4`
-10. Try `<listing_code>` as an address. `g10.auction-lot-status.US2-TC4`
+1. Navigate to `<grade10 auction catalogue url>`.
+   - `<lot>` is not in All auctions. `g10.auction-lot-status.US2-TC1`
+2. Read the All auctions list.
+   - Search does not find `<lot>`. `g10.auction-lot-status.US2-TC1`
+3. Search the catalogue for the title of `<lot>`.
+   - `<lot_5>` is in All auctions, status Ended. `g10.auction-lot-status.US2-TC1`
+4. Navigate to `<grade10 my auctions url>`.
+   - `<lot_3>` is not in the list. `g10.auction-lot-status.US2-TC2`
+5. Read the list.
+   - `<lot_2>` is in the list, status Ended. `g10.auction-lot-status.US2-TC2`
+6. Read the API response for the public listing data.
+   - `<lot_3>` is not included. `g10.auction-lot-status.US2-TC3`
+   - `<lot_2>` is included, external lot status Ended. `g10.auction-lot-status.US2-TC3`
+7. Call the listing off.
+   - Catalogue and search do not return the listing. `g10.auction-lot-status.US2-TC4`
+8. Search the catalogue and browse for the listing.
+   - `<listing_url>` still serves the public listing page. `g10.auction-lot-status.US2-TC4`
+9. Open `<listing_url>` directly.
+   - The listing code does not resolve as an address. `g10.auction-lot-status.US2-TC4`
+10. Try `<listing_code>` as an address.
+   - The canonical URL and code remain reserved. `g10.auction-lot-status.US2-TC4`
 
 ## Walk 3: Bidder sees what happened to a called-off lot
 
@@ -54,8 +68,11 @@
 
 ### Route
 
-1. In customer A's session, navigate to `<grade10 my auctions url>`. `g10.auction-lot-status.US3-TC1`
-2. In customer B's session, navigate to `<grade10 my auctions url>`. `g10.auction-lot-status.US3-TC1`
+1. In customer A's session, navigate to `<grade10 my auctions url>`.
+   - lists `<lot_4>`, and the row says Your card was not charged. `g10.auction-lot-status.US3-TC1`
+   - 's row names no card hold, release or authorization. `g10.auction-lot-status.US3-TC1`
+2. In customer B's session, navigate to `<grade10 my auctions url>`.
+   - does not list `<lot_4>`. `g10.auction-lot-status.US3-TC1`
 
 ## g10.auction-lot-status.US1: Collector sees whether a lot can still be bid on
 

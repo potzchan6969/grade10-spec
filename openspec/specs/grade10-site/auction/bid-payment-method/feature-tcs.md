@@ -15,29 +15,45 @@
 ### Route
 
 1. Read the amount controls on the bid panel.
+   - the quick bids and the custom maximum show, disabled. `g10.auction-bid-payment-method.US1-TC1`
 2. Click the bid action.
+   - opens card-link setup, the bid form asks for a card, and no bid is placed. `g10.auction-bid-payment-method.US1-TC1`
 3. Close the setup modal without linking a card.
 4. Reload <listing_1 url> and read Highest bid and the bid count.
-5. Navigate to <my auctions url> and look for <listing_1>. `g10.auction-bid-payment-method.US1-TC1`
+   - Highest bid and the bid count are unchanged, and no bid of this collector's is on <listing_1>. `g10.auction-bid-payment-method.US1-TC1`
+5. Navigate to <my auctions url> and look for <listing_1>.
+   - shows no row for <listing_1>. `g10.auction-bid-payment-method.US1-TC1`
 6. Enter <maximum> in the custom maximum on the bid panel.
 7. Click the bid action.
+   - no confirmation or payment-method modal opens. `g10.auction-bid-payment-method.US1-TC2`
 8. Read the bid panel.
-9. Read the linked card's activity at the card provider. `g10.auction-bid-payment-method.US1-TC2`
+   - the panel shows the collector leading at <maximum>, in the one answer, with no authorizing state before it. `g10.auction-bid-payment-method.US1-TC2`
+9. Read the linked card's activity at the card provider.
+   - nothing is held or charged on <the successful Visa>. `g10.auction-bid-payment-method.US1-TC2`
 10. Enter <next bid> in the bid panel.
 11. Click the bid action.
 12. Read the bid panel's linked card.
-13. Read the linked card's activity at the card provider. `g10.auction-bid-payment-method.US1-TC6`
+   - shows <the successful Visa>, with Change no longer offered. `g10.auction-bid-payment-method.US1-TC6`
+13. Read the linked card's activity at the card provider.
+   - No card choice is asked for, and the bid is accepted. `g10.auction-bid-payment-method.US1-TC6`
+   - nothing is held or charged on <the successful Visa> for <listing_2>. `g10.auction-bid-payment-method.US1-TC6`
 14. Wait until <listing_8> is recorded closed with customer A winning.
 15. Read customer A's and customer B's card activity at the card provider.
+   - nothing is held or charged on either card, by the bids or by the close. `g10.auction-bid-payment-method.US1-TC7`
 16. As customer A, open <listing_8>'s order from View order on My Auctions.
-17. Start paying the invoice by card. `g10.auction-bid-payment-method.US1-TC7`
+17. Start paying the invoice by card.
+   - opens the provider's hosted Checkout for the winner order's invoice. `g10.auction-bid-payment-method.US1-TC7`
 18. Submit <other-card maximum> on <listing_10> with <the other card>.
 19. Read the API response.
-20. Read <listing_10>'s current bid, the leader and the collector's maximum. `g10.auction-bid-payment-method.US1-TC9`
+   - refuses the bid because the listing's card is locked. `g10.auction-bid-payment-method.US1-TC9`
+20. Read <listing_10>'s current bid, the leader and the collector's maximum.
+   - the current bid and leader are unchanged, and the collector's maximum stays <locked maximum> on <the successful Visa>. `g10.auction-bid-payment-method.US1-TC9`
 21. Enter <low maximum> in the custom maximum on the bid panel.
 22. Click the bid action.
 23. Read the bid form and the linked card on the bid panel.
-24. Click Change on the linked card. `g10.auction-bid-payment-method.US1-TC10`
+   - the bid form names the minimum next bid, 21000 minor units (HKD 210.00), and Change is still offered on the linked card. `g10.auction-bid-payment-method.US1-TC10`
+24. Click Change on the linked card.
+   - opens card-link setup. `g10.auction-bid-payment-method.US1-TC10`
 
 ## Walk 2: Collector raises a bid on the same card
 
@@ -49,8 +65,11 @@
 
 1. Enter <raised maximum> in the bid panel.
 2. Click the bid action.
+   - no card choice is asked for. `g10.auction-bid-payment-method.US2-TC1`
 3. Read the bid panel.
-4. Read the collector's card activity at the card provider. `g10.auction-bid-payment-method.US2-TC1`
+   - the panel shows <raised maximum> at once, with no authorizing state before it. `g10.auction-bid-payment-method.US2-TC1`
+4. Read the collector's card activity at the card provider.
+   - nothing is held or charged on <the successful Visa> for <listing_12>. `g10.auction-bid-payment-method.US2-TC1`
 
 ## Walk 3: Collector understands the buyer-premium rate before bidding
 
@@ -61,10 +80,12 @@
 ### Route
 
 1. Read the bid panel, under the bid action.
-2. Enter <next bid> in the bid panel without placing it. `g10.auction-bid-payment-method.US4-TC1`
-3. Render the premium disclosure for <currency>. `g10.auction-bid-payment-method.US4-TC2`
-
-## Walk 1: Collector bids on the card already linked
+   - the buyer's premium reads 20% of the winning bid, not behind a tooltip. `g10.auction-bid-payment-method.US4-TC1`
+2. Enter <next bid> in the bid panel without placing it.
+   - no premium amount and no invoice total show. `g10.auction-bid-payment-method.US4-TC1`
+3. Render the premium disclosure for <currency>.
+   - It reads the row's disclosure. `g10.auction-bid-payment-method.US4-TC2`
+   - No currency amount appears in it. `g10.auction-bid-payment-method.US4-TC2`
 
 ## g10.auction-bid-payment-method.US1: Collector bids on the card already linked
 

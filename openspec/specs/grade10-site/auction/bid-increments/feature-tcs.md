@@ -16,28 +16,46 @@
 ### Route
 
 1. Open the bid panel on the listing.
-2. Read the minimum next amount. `g10.auction-bid-increments.US1-TC1`
+2. Read the minimum next amount.
+   - The minimum next amount is the row's minimum next amount. `g10.auction-bid-increments.US1-TC1`
+   - On a positive start it is the starting price, not the starting price plus its increment. `g10.auction-bid-increments.US1-TC1`
+   - On a HKD 500 start it is not raised to the lowest increment. `g10.auction-bid-increments.US1-TC1`
+   - On a zero start it is the currency's lowest increment, never 0. `g10.auction-bid-increments.US1-TC1`
 3. Open the listing bid panel.
-4. Place a bid of `<current public price>` plus `<increment>`. `g10.auction-bid-increments.US1-TC2`
+4. Place a bid of `<current public price>` plus `<increment>`.
+   - The new public price is `<minimum next amount>`. `g10.auction-bid-increments.US1-TC2`
 5. Open the listing bid panel.
 6. Enter `<bid amount>` as the bid amount.
-7. Confirm the bid. `g10.auction-bid-increments.US1-TC3`
+7. Confirm the bid.
+   - The bid is accepted. `g10.auction-bid-increments.US1-TC3`
 8. Open the listing bid panel.
 9. Enter `<bid amount>` as the bid amount.
-10. Confirm the bid. `g10.auction-bid-increments.US1-TC4`
+10. Confirm the bid.
+   - The bid is refused. `g10.auction-bid-increments.US1-TC4`
+   - The refusal names `<minimum>` as the minimum. `g10.auction-bid-increments.US1-TC4`
 11. Open the listing.
-12. Read the minimum next amount. `g10.auction-bid-increments.US1-TC5`
+12. Read the minimum next amount.
+   - The minimum next amount is shown in `<listing currency>`. **Out of suite:** - `grade10-site-auction-bid-increments-SC-06` — API and operator-form currency refusal is covered by the backend and admin verification lanes. - `grade10-site-auction-bid-increments-SC-07` — Manual-floor calculation is covered by the backend auction test lane. `g10.auction-bid-increments.US1-TC5`
 13. Enter the row's bid amount in the custom maximum on the bid panel.
 14. Confirm the bid.
-15. Read the minimum next amount on the bid panel. `g10.auction-bid-increments.US1-TC6`
+   - the bid is accepted. `g10.auction-bid-increments.US1-TC6`
+15. Read the minimum next amount on the bid panel.
+   - the minimum next amount is the opening price plus the increment at the opening price, the row's next minimum after. `g10.auction-bid-increments.US1-TC6`
+   - On the USD 10000 row the USD 100 tier applies, not the USD 0 tier. `g10.auction-bid-increments.US1-TC6`
 16. Enter the row's bid amount in the custom maximum on the bid panel.
 17. Confirm the bid.
-18. Read the bid panel. `g10.auction-bid-increments.US1-TC7`
+   - the bid is refused, naming the row's opening price as the minimum. `g10.auction-bid-increments.US1-TC7`
+18. Read the bid panel.
+   - the listing still has no accepted bid. `g10.auction-bid-increments.US1-TC7`
+   - the minimum next amount is still the row's opening price. `g10.auction-bid-increments.US1-TC7`
 19. As customer A, submit a bid of `<ceiling>` on `<listing_1>`.
 20. Read the API response.
+   - customer A's bid is accepted at `<ceiling>`. `g10.auction-bid-increments.US1-TC8`
 21. As customer B, submit a bid of `<ceiling>` plus the increment at it.
 22. Read the API response.
-23. Read `<listing_1>`'s current bid, leader and bid count. `g10.auction-bid-increments.US1-TC8`
+   - customer B's bid is refused, naming the ceiling. `g10.auction-bid-increments.US1-TC8`
+23. Read `<listing_1>`'s current bid, leader and bid count.
+   - current bid `<ceiling>`, customer A leads, bid count 1. `g10.auction-bid-increments.US1-TC8`
 
 ## Walk 2: Collector bids up to the currency ceiling
 
@@ -49,21 +67,31 @@
 
 1. Open the listing bid panel.
 2. Enter `<bid amount>` as the bid amount.
-3. Confirm the bid. `g10.auction-bid-increments.US2-TC1`
+3. Confirm the bid.
+   - The bid is accepted. `g10.auction-bid-increments.US2-TC1`
 4. Read the listing's price, leader, bid count and maximums.
 5. Submit the row's bid amount through the authenticated auction API.
 6. Read the API response.
+   - the service refuses with `AMOUNT_TOO_HIGH`. `g10.auction-bid-increments.US2-TC2`
+   - `ceilingMinor` equals the row's ceiling. `g10.auction-bid-increments.US2-TC2`
 7. Read the listing's price, leader, bid count and maximums.
-8. Read the operational refusal entry for this attempt. `g10.auction-bid-increments.US2-TC2`
+   - price, leader, bid count and maximums remain unchanged. `g10.auction-bid-increments.US2-TC2`
+8. Read the operational refusal entry for this attempt.
+   - one entry names bidder, listing, code, amount and ceiling. `g10.auction-bid-increments.US2-TC2`
 9. As the collector, submit `<maximum>` through the authenticated auction API.
-10. Read the response and the collector's maximums on the listing. `g10.auction-bid-increments.US2-TC3`
+   - The maximum is refused and the refusal names `<ceiling>` as the ceiling. `g10.auction-bid-increments.US2-TC3`
+10. Read the response and the collector's maximums on the listing.
+   - No maximum is recorded for the collector. `g10.auction-bid-increments.US2-TC3`
 11. Read the listing's bid count and maximums.
 12. As customer B, submit the amount through the authenticated auction API.
 13. Read the API response.
+   - the service refuses with `AMOUNT_TOO_HIGH`. `g10.auction-bid-increments.US2-TC4`
+   - `ceilingMinor` equals the row's ceiling. `g10.auction-bid-increments.US2-TC4`
 14. Read the listing's price, leader, bid count and maximums.
-15. Read the operational refusal entry for this attempt. `g10.auction-bid-increments.US2-TC4`
-
-## Walk 1: Collector places a bid across a price tier
+   - price remains the ceiling and customer A leads. `g10.auction-bid-increments.US2-TC4`
+   - bid count and maximums remain unchanged. `g10.auction-bid-increments.US2-TC4`
+15. Read the operational refusal entry for this attempt.
+   - one entry names bidder, listing, code, amount and ceiling. `g10.auction-bid-increments.US2-TC4`
 
 ## g10.auction-bid-increments.US1: Collector places a bid across a price tier
 
