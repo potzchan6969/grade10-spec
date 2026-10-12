@@ -99,6 +99,25 @@ async function waitForCondition(check, description) {
   assert.fail(`Timed out waiting for ${description}.`);
 }
 
+async function waitForImageDimensions(page, alt, viewport) {
+  const image = page.getByRole("img", { name: alt });
+  await image.waitFor({ state: "visible" });
+  await page.waitForFunction(
+    ({ expectedAlt, width, height }) => {
+      const element = Array.from(document.images).find(
+        (candidate) => candidate.alt === expectedAlt,
+      );
+      return (
+        element?.complete === true &&
+        element.naturalWidth === width &&
+        element.naturalHeight === height
+      );
+    },
+    { expectedAlt: alt, ...viewport },
+  );
+  return image;
+}
+
 async function screenshot(browser, viewport, text, background, locale = "en") {
   const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
   try {
@@ -789,8 +808,12 @@ test("the central workbench uses its local archive and reviews versioned story h
     .getByText(`Review saves to local archive: ${archiveRoot}`, { exact: true })
     .waitFor();
   await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
-  const siteImage = page.getByRole("img", { name: "Site full viewport" });
-  await siteImage.waitFor();
+  const desktopViewport = PROFILE_SIZES.desktop;
+  const siteImage = await waitForImageDimensions(
+    page,
+    "Site full viewport",
+    desktopViewport,
+  );
   assert.deepEqual(
     await siteImage.evaluate((image) => [
       image.naturalWidth,
@@ -807,10 +830,11 @@ test("the central workbench uses its local archive and reviews versioned story h
     "aspect-ratio: 1440 / 900;",
     "a recorded site region must not crop the full viewport image",
   );
-  const referenceImage = page.getByRole("img", {
-    name: "Reference capture region",
-  });
-  await referenceImage.waitFor();
+  const referenceImage = await waitForImageDimensions(
+    page,
+    "Reference capture region",
+    desktopViewport,
+  );
   assert.equal(
     await referenceImage
       .locator(
@@ -834,6 +858,11 @@ test("the central workbench uses its local archive and reviews versioned story h
       { exact: true },
     )
     .waitFor();
+  await waitForImageDimensions(
+    page,
+    "Site full viewport",
+    PROFILE_SIZES.tablet,
+  );
   assert.deepEqual(
     await page
       .getByRole("img", { name: "Site full viewport" })
@@ -847,6 +876,11 @@ test("the central workbench uses its local archive and reviews versioned story h
       { exact: true },
     )
     .waitFor();
+  await waitForImageDimensions(
+    page,
+    "Site full viewport",
+    PROFILE_SIZES.mobile,
+  );
   assert.deepEqual(
     await page
       .getByRole("img", { name: "Site full viewport" })
@@ -855,6 +889,11 @@ test("the central workbench uses its local archive and reviews versioned story h
   );
 
   await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
+  await waitForImageDimensions(
+    page,
+    "Site full viewport",
+    PROFILE_SIZES.desktop,
+  );
   await page.getByLabel("Review decision").selectOption("approved");
   await page
     .getByLabel("Review comment")
@@ -1122,8 +1161,8 @@ test("locale and viewport selection show the exact localized evidence and histor
           name: `Download original Reference PNG · SHA-256 ${expectedCapture.reference.sha256}`,
         })
         .waitFor();
-      await siteImage.waitFor();
-      await referenceImage.waitFor();
+      await waitForImageDimensions(page, "Site full viewport", viewport);
+      await waitForImageDimensions(page, "Reference capture region", viewport);
       assert.deepEqual(
         await siteImage.evaluate((image) => [
           image.naturalWidth,
