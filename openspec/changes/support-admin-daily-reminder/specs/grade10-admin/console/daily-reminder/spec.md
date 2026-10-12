@@ -120,6 +120,14 @@ What's New SHALL list each listing that closed on the previous Hong Kong day, la
 - **WHEN** an operator who may open listings reads What's New
 - **THEN** the listing has no row
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-qq1 rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-77 - Equal closes list by listing code
+**Serves:** grade10-admin-console-daily-reminder-US-01 - the same listings read in the same order every time
+
+- **GIVEN** three listings that closed at the same instant yesterday, coded AU-1003, AU-1001 and AU-1002
+- **WHEN** What's New is read twice
+- **THEN** both reads list AU-1001, AU-1002, AU-1003
+
 ### Requirement: Still Waiting lists the orders that have waited 48 hours for an operator action
 
 Still Waiting SHALL list each order that has waited 48 hours or more in one of three statuses, longest wait first, and equal waits by listing code, A to Z. The status is the one the Orders worklist derives, and the wait counts from the clock the worklist names under Waited since:
@@ -316,6 +324,14 @@ A list that has no row for an operator who holds reading SHALL read as empty, an
 - **WHEN** they ask for What's New or for Still Waiting
 - **THEN** each read is refused and returns no row
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-e3n rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-76 - The console lists every row
+**Serves:** grade10-admin-console-daily-reminder-US-02 - an operator sees every forgotten job
+
+- **GIVEN** an operator holding payment processing and 14 orders that have waited 48 hours or more to have an invoice sent
+- **WHEN** they open Today and the dialog
+- **THEN** Still Waiting shows all 14 rows in each place
+
 ### Requirement: The daily dialog opens once on the first entry of each Hong Kong day
 
 An entry is a full page load of the console by a signed-in operator, or a sign-in that finishes on a console page; returning to the tab and moving between pages are not entries. On an entry the console SHALL open the daily dialog over whichever page the operator lands on, once, in this order:
@@ -480,6 +496,24 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day, and S
 - **THEN** neither list is read again
 - **AND** the dialog carries no Refresh
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-3gx rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-79 - A session that ends elsewhere keeps the closed mark
+**Serves:** grade10-admin-console-daily-reminder-US-01 - the mark follows the browser, not the session
+
+- **GIVEN** an operator who closed the dialog at 09:00 Hong Kong time, and whose session then expires
+- **WHEN** they sign in again in the same browser at 10:00 the same day
+- **THEN** the dialog does not open
+- **AND** it opens on the next Hong Kong day when a list has a row for them
+
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-czj rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-81 - A click that opens a row in a new tab leaves the dialog open
+**Serves:** grade10-admin-console-daily-reminder-US-01 - the operator can read the order beside the reminder
+
+- **GIVEN** the dialog is open with a Dispatch row
+- **WHEN** the operator middle-clicks the row, or clicks it with Ctrl or Cmd held
+- **THEN** the order opens in a new tab
+- **AND** the dialog stays open and the day's mark is not set
+
 ### Requirement: Today reads in three columns
 
 Today SHALL show What's New, Still Waiting and Needs you as three columns, in that order, with the lists the dialog holds. Needs you SHALL hold the section cards it holds now, one under another, with the counts and links unchanged. What's New and Still Waiting SHALL group their rows by product, Auction first. A list that fails to load SHALL say so in its own column, with a Retry. The Approvals card SHALL leave the Needs you column and sit with the Recent and All sections under the three columns, otherwise unchanged. Today's Refresh SHALL read all three columns again. The lists SHALL also be read when Today loads and when the operator comes back to the tab, and never on a timer.
@@ -560,6 +594,14 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **THEN** no list is read again
 - **AND** all three columns are read again when they return to the tab after leaving it, and when they press Refresh
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-jr3 rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-80 - Approvals still count in the Needs you total
+**Serves:** grade10-admin-console-daily-reminder-US-03 - Today's totals say what they said before
+
+- **GIVEN** two Approvals asks and an Auction card with 3 orders
+- **WHEN** Today loads
+- **THEN** the Needs you total and the summary sentence both count the two asks
+
 ### Requirement: Slack posts the day's lists at 08:00 Hong Kong time
 
 At 08:00 Hong Kong time every day, including weekends, one trigger SHALL post the lists as one message to one Slack channel:
@@ -578,7 +620,7 @@ At 08:00 Hong Kong time every day, including weekends, one trigger SHALL post th
 - **GIVEN** a Saturday with a row in What's New
 - **WHEN** the clock passes 07:59:59 and then 08:00:00 Hong Kong time
 - **THEN** nothing has posted at 07:59:59
-- **AND** one message with both lists posts when the daily trigger fires at 08:00:00
+- **AND** one message with What's New posts when the daily trigger fires at 08:00:00
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-99q rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-46 - Each row links to its order or listing
@@ -673,6 +715,15 @@ At 08:00 Hong Kong time every day, including weekends, one trigger SHALL post th
 - **GIVEN** a sold row and a Send invoice row
 - **WHEN** the message posts
 - **THEN** the post asks Slack to unfurl neither links nor media
+
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-aco rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-78 - Slack's first 10 rows follow the exact wait
+**Serves:** grade10-admin-console-daily-reminder-US-04 - the longest waits lead the message
+
+- **GIVEN** 11 Still Waiting orders: AU-1000 has waited 49 hours and AU-1001 to AU-1010 have waited 70 hours
+- **WHEN** the message posts
+- **THEN** the first 10 rows are AU-1001 to AU-1010
+- **AND** the link to Today says 1 more
 
 ### Requirement: The day's message is sent once and a failure is logged
 

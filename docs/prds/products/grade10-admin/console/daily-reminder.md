@@ -78,7 +78,7 @@ longest wait first. It stays on the list every day until the order moves on.
   console page the operator loads, with both lists. Closing it keeps it closed
   for the rest of that Hong Kong day, for that operator, in that browser
 - 🚧 **Closing** - the close control, Escape, a click outside, and following a
-  row all close it
+  row all close it; a row opened in a new tab leaves it open
 - 🚧 **When it opens again** - in another browser, after the operator signs out
   of the console and in, and where the browser keeps nothing between loads. A
   session that ends any other way keeps the mark until the Hong Kong day ends
