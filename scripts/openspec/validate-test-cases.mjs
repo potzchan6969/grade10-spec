@@ -293,10 +293,14 @@ function checkSuite(root, filePath, rulesRev, allCases) {
           );
           continue;
         }
-        if (ref.caseId && level === "feature")
+        if (
+          ref.caseId &&
+          level === "feature" &&
+          (found.level !== level || found.rel !== rel)
+        )
           err(
             ref.line,
-            `feature walk \`${walk.title}\` cannot reference lower-level case \`${ref.caseId}\`; keep the route within this capability`,
+            `feature walk \`${walk.title}\` references a case outside this capability: \`${ref.caseId}\``,
           );
         if (ref.caseId && found.level !== level) {
           const rank = { feature: 0, domain: 1, product: 2, platform: 3 };

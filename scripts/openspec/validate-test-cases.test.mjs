@@ -337,6 +337,31 @@ test("a walk cannot reference a missing stable case id", () => {
   assert.match(out, /walk `Walk 1: Complete the thing` references `tc-zzz`/);
 });
 
+test("a feature walk may reference a full case id from its own suite", () => {
+  const root = store("", []);
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  const original = readFileSync(suite, "utf8")
+    .replace("## demo-alpha-US1: Collector does the thing", "## demo-alpha.US1: Collector does the thing")
+    .replace("### demo-alpha-US1-TC1-1: The thing happens, 1", "### demo-alpha.US1-TC1: The thing happens, 1");
+  writeFileSync(
+    suite,
+    original.replace(
+      "## demo-alpha.US1: Collector does the thing",
+      [
+        "## Walk 1: Complete the thing",
+        "",
+        "### Route",
+        "",
+        "1. Open the thing. `demo-alpha.US1-TC1`",
+        "",
+        "## demo-alpha.US1: Collector does the thing",
+      ].join("\n"),
+    ),
+  );
+  const result = run(root);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
 test("a platform walk resolves a full lower-level feature case id", () => {
   const root = mkdtempSync(join(tmpdir(), "cross-suite-walk-"));
   for (const [name, content] of Object.entries(
