@@ -16,7 +16,7 @@ Reminds an operator, once a day, which listings closed yesterday and which order
   - By grant: the console shows an operator only the rows whose action their grants allow
   - Empty lists: an empty list is left out of the dialog and said so on Today
 - Daily dialog
-  - Until closed: opens over the page the operator lands on, on each entry with a row, until they close it that Hong Kong day
+  - Until closed: opens over the page the operator lands on, on each entry with a row or a failed list, until they close it that Hong Kong day
   - Closed mark: kept in the browser per operator and Hong Kong day, cleared at sign-out, and once per page load where storage is blocked
   - Failed read: a list that fails to load says so and never reads as empty
   - Long lists: each product's list scrolls inside itself past about four and a half rows

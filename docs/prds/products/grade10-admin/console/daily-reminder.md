@@ -16,7 +16,7 @@ Slack. Auction is the first source; each product adds its own rows later.
 | Lists | **What's New** and **Still Waiting** |
 | What's New window | The previous Hong Kong day |
 | Still Waiting threshold | **48 hours** since the order's wait began |
-| Dialog opens | Each entry with a row for the operator, until they close it that Hong Kong day |
+| Dialog opens | Each entry with a row for the operator or a list that failed, until they close it that Hong Kong day |
 | Slack message | **08:00** Hong Kong time, every day, to one channel |
 | Slack list length | **10** rows a list, then a link to Today |
 | Slack wait | Whole days, rounded down |
@@ -71,6 +71,7 @@ longest wait first. It stays on the list every day until the order moves on.
   Orders workspace does
 - 🚧 **No row, no list in the dialog** - a list with no row for the operator is
   left out of the dialog, and the dialog does not open when neither has one
+  and neither failed to load
 
 ## Opening
 
