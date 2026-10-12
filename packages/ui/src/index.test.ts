@@ -95,14 +95,6 @@ const VISIT_AND_CONSIGNMENT_BLOCKS = [
   "VisitTicketBody",
   "VisitWaitBody",
   "ConsignmentSellerLine",
-  "MyConsignmentCard",
-  "MyConsignmentDetail",
-  "MyConsignmentItem",
-  "MyConsignmentList",
-  "MyConsignmentRecord",
-  "MyConsignmentTerms",
-  "MyConsignmentsFailed",
-  "MyConsignmentsSignIn",
 ];
 
 const VISIT_AND_CONSIGNMENT_TYPES = [
@@ -151,32 +143,6 @@ const VISIT_AND_CONSIGNMENT_TYPES = [
   "VisitWaitShop",
   "ConsignmentSellerLineCopy",
   "ConsignmentSellerLineProps",
-  "MyConsignmentCardCopy",
-  "MyConsignmentCardProps",
-  "MyConsignmentChannelValue",
-  "MyConsignmentDetailCopy",
-  "MyConsignmentDetailProps",
-  "MyConsignmentDetailView",
-  "MyConsignmentDocumentView",
-  "MyConsignmentItemCopy",
-  "MyConsignmentItemProps",
-  "MyConsignmentItemView",
-  "MyConsignmentListCopy",
-  "MyConsignmentListProps",
-  "MyConsignmentMessageView",
-  "MyConsignmentPayoutView",
-  "MyConsignmentRecordCopy",
-  "MyConsignmentRecordProps",
-  "MyConsignmentState",
-  "MyConsignmentSummary",
-  "MyConsignmentTermsCopy",
-  "MyConsignmentTermsProps",
-  "MyConsignmentTermsView",
-  "MyConsignmentsFailedCopy",
-  "MyConsignmentsFailedProps",
-  "MyConsignmentsSignInCopy",
-  "MyConsignmentsSignInProps",
-  "MyConsignmentsState",
 ];
 
 /* The collector's vault screens left the site for a new design, and the
@@ -239,7 +205,7 @@ describe("the package entry", () => {
 
     expect(blocks).not.toContain("vault-case");
   });
-  it("exports the visit and my-consignment blocks and their types", () => {
+  it("exports the visit and consignment blocks and their types", () => {
     expect(
       VISIT_AND_CONSIGNMENT_BLOCKS.filter((name) => !(name in publicEntry)),
     ).toEqual([]);
