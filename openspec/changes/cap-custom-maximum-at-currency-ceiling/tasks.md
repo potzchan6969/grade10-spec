@@ -21,7 +21,7 @@ The backend contract stays unchanged.
 - [ ] 3.2 Adapt neighboring ceiling execution and trace support to direct authenticated oversized requests; retain refusal code/ceiling, no maximum, unchanged price/leader and operational-log assertions; keep eligible exact-ceiling acceptance through UI (`grade10-site-auction-bid-increments-SC-08`, `grade10-site-auction-bid-increments-SC-09`, `grade10-site-auction-bid-increments-SC-10`, `grade10-site-auction-bid-increments-SC-11`)
 - [ ] 3.3 Verify neighboring ceiling tests and unchanged backend contract tests independently; record proof without changing validation or logs
 
-## 4. The walk (grade10)
+## 4. The walk (grade10) (owner: @htonyl)
 
 Uses draft capability suites as planning input after groups 1 to 3 land. QA integration supplies exact case identifiers.
 
