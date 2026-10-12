@@ -79,6 +79,20 @@ That module holds one predicate per decision, because a single "is this dev?" bo
 - A delivery log carries the provider's own message id, the sender, and the recipient's DOMAIN — never the address, and never the subject, because these subjects name the item somebody pawned (`packages/email/src/send.ts`)
 - A push delivery log carries the push service's host, never the endpoint: an endpoint is a bearer address anyone holding it can push to
 
+## The console holds a session of its own
+
+### Signing in on the site never opens the console
+
+- A brand's site and its admin console each hold a session of their own, as the same account or two, and each expires and ends on its own. Signing in on one does not sign in the other, and signing out of one leaves the other
+- An account that holds an operator role is no more an operator on the site than anyone else: the console accepts only a session the console made, and refuses one made on the site even when the account holds the role that grants the action
+- Revoking every session of an account, like a ban, ends both. The operator's session list names which surface each session belongs to
+- At release the console stops honouring the site's session, so operators sign in to it once more, with their second factor as usual; customer sessions are untouched
+
+### The surface is chosen by what the browser sets, and a forged choice gains nothing
+
+- The browser's `Origin` picks which of the two sessions a call is answered on; it authorises nothing. A session carries the surface it was made on and is refused under the other's name, the site serves no admin or two-factor path, and an elevated read never looks at the `Origin` at all
+- One request is named by the caller: an operator action on the console may send a customer a sign-in link that signs in the site, and only an elevated console session holding `user:create` may ask for it
+
 ## Elevated procedures and routes
 
 ### `elevatedProcedure` and `elevatedRoute` are the only doors to an admin operation
@@ -86,7 +100,7 @@ That module holds one predicate per decision, because a single "is this dev?" bo
 - A backend exposes an admin operation as `elevatedProcedure("store:write")` — never `authedProcedure` plus a role check in the resolver
 - A raw byte route — identity capture, sealed document, item photo — mounts through `elevatedRoute` and climbs the same ladder, written once so the two cannot drift
 - It enforces, in order:
-  1. A fresh session straight from the auth worker — no cookie cache, so a ban or role change acts immediately
+  1. A fresh session straight from the auth worker — no cookie cache, so a ban or role change acts immediately — and the console's own: the read is elevated, which selects the console whatever the request says, so a site session never passes, even for an account that holds the role
   2. Every named permission; with none named, the blanket `admin` role
   3. 2FA enrollment and a live step-up stamp where enforced
   4. Audit-by-construction: the mutation lands in the app's audit log
@@ -108,12 +122,13 @@ That module holds one predicate per decision, because a single "is this dev?" bo
 - A successful TOTP or backup-code verification stamps the session: strongly consistent `auth_kv`, 12-hour cap
 - Every `/admin/*` call, elevated procedure, and elevated byte route walks the ladder: under `required` an operator who has not enrolled is refused until they enroll, and an enrolled operator needs a live stamp under any policy but `off`
 - Changing the factor — enabling or disabling — walks it too, below
+- The stamp belongs to the console session. A site sign-in is a different session with a different token, so it carries no stamp and never stands in for the factor a console session has not proved
 
 ### Changing the factor costs what the factor is worth
 
 - `/two-factor/enable` and `/two-factor/disable` both walk the gate, because both CHANGE the second factor
 - An operator who already has one proves it either way — a live step-up stamp. Enrolling over an existing factor is a replacement, and a replacement nobody proved is a takeover
-- An operator who has none proves the sign-in instead: the session has to be under 15 minutes old. Enrolling is the one admin operation that cannot demand a second factor — it is how you get one — so what it demands is the channel, and a stolen cookie is old by the time it is used. Refused as `RECENT_SIGN_IN_REQUIRED`; the answer is to sign in again
+- An operator who has none proves the sign-in instead: the console session has to be under 15 minutes old, and a site sign-in a minute ago does not count. Enrolling is the one admin operation that cannot demand a second factor — it is how you get one — so what it demands is the channel, and a stolen cookie is old by the time it is used. Refused as `RECENT_SIGN_IN_REQUIRED`; the answer is to sign in again
 - Sign-in here is passwordless, so better-auth runs the two-factor plugin with `allowPasswordless`. Without this rung `/two-factor/enable` asked for nothing at all, and a stolen but un-enrolled admin session could mint its own authenticator and satisfy the gate that had just stopped it
 
 ### Required in production only
