@@ -722,12 +722,17 @@ export function VerificationPanel({ active }: { active: boolean }) {
     currentTargetChoices.find(
       (choice) => identityKey(choice.identity) === effectiveCurrentIdentityKey,
     )?.identity ?? null;
-  const currentVersionRuns = currentIdentity
-    ? runs.filter((run) => runHasIdentity(run, currentIdentity))
-    : runs;
+  const currentVersionRuns = useMemo(
+    () =>
+      currentIdentity
+        ? runs.filter((run) => runHasIdentity(run, currentIdentity))
+        : runs,
+    [currentIdentity, runs],
+  );
+  const versionRuns = storyListOpen ? runs : currentVersionRuns;
   const availableVersions = useMemo(
-    () => versionOptions(storyListOpen ? runs : currentVersionRuns),
-    [currentVersionRuns, runs, storyListOpen],
+    () => versionOptions(versionRuns),
+    [versionRuns],
   );
   const effectiveVersionKey = availableVersions.some(
     (version) => version.key === selectedVersionKey,

@@ -42,7 +42,7 @@ pnpm storybook:workbench
 
 - **Recording** - Applications capture a full site viewport at desktop, tablet, and mobile sizes, and score only the declared comparison size.
 - **Checkpoints** - Tags are preferred labels; resolved app and reference commits remain authoritative provenance.
-- **Selection** - The panel resolves the current story's permanent case ID and offers its application targets. All recordings opens the story list for a selected app/reference commit pair, with tags as version labels and a separate selector for repeated runs. Selecting an available locator opens that story; removed stories retain their archived evidence.
+- **Selection** - The panel resolves the current story's permanent case ID and offers its application targets. All recordings opens the story list for a selected app/reference commit pair, with tags as version labels and a separate selector for repeated runs. Selection uses a recorded locator first, then a unique current verification identity. A generic story can match by case ID alone. Missing or ambiguous matches retain the archived evidence without navigation.
 - **Images** - The reference preview fits its recorded comparison region; the site preview always shows the full viewport. Original PNGs remain immutable and downloadable.
 - **Review destination** - The form displays the storage destination reported by the archive API. Local reviews use `local-development`; deployed reviews use the authenticated person.
 - **Demo assessments** - Each synthetic demo run has a marked shadow assessment at its declared score profile. Real captures require an external evaluator report; capture does not imply assessment.

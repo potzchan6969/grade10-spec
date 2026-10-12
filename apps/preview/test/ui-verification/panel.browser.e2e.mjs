@@ -94,6 +94,38 @@ async function screenshot(browser, viewport, text, background) {
   }
 }
 
+async function assertSelectedRunVisible(page, runId) {
+  const runSelect = page.getByRole("combobox", { name: "Archived run" });
+  await runSelect.waitFor({ state: "visible" });
+  assert.equal(await runSelect.inputValue(), runId);
+  const runHeading = page.getByRole("heading", { name: runId, exact: true });
+  try {
+    await runHeading.waitFor({ timeout: 5000 });
+  } catch (error) {
+    const screenshotPath = join(
+      tmpdir(),
+      `ui-verification-${runId}-failure.png`,
+    );
+    const diagnostic = {
+      selectedRun: await runSelect.inputValue().catch(() => "unavailable"),
+      panelText: await page
+        .locator(".verification-panel")
+        .innerText()
+        .then((text) => text.slice(-2500))
+        .catch(() => "unavailable"),
+      screenshotPath,
+    };
+    await page
+      .screenshot({ path: screenshotPath, fullPage: true })
+      .catch(() => {});
+    console.error(
+      "Selected archived run diagnostics:\n" +
+        JSON.stringify(diagnostic, null, 2),
+    );
+    throw error;
+  }
+}
+
 async function publishRun(
   archive,
   browser,
@@ -558,9 +590,6 @@ test("the central workbench uses its local archive and reviews versioned story h
 
   assert.equal(await page.getByLabel("Archive endpoint").count(), 0);
   assert.equal(await page.getByRole("button", { name: "Connect" }).count(), 0);
-  await page
-    .getByText(`Review saves to local archive: ${archiveRoot}`, { exact: true })
-    .waitFor();
   assert.ok(
     server.apiRequests.some((entry) => entry === "GET /api/archive-info"),
     "the panel should discover its archive destination on the workbench origin",
@@ -605,6 +634,9 @@ test("the central workbench uses its local archive and reviews versioned story h
   );
   await runSelect.selectOption("preview-history-0001");
   await page.getByText("Model decision: shadow", { exact: true }).waitFor();
+  await page
+    .getByText(`Review saves to local archive: ${archiveRoot}`, { exact: true })
+    .waitFor();
   await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
   const siteImage = page.getByRole("img", { name: "Site full viewport" });
   await siteImage.waitFor();
@@ -917,9 +949,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
       "components-breadcrumbs--default"
     );
   });
-  await page
-    .getByText("reference-story-history-0001", { exact: true })
-    .waitFor();
+  await assertSelectedRunVisible(page, "reference-story-history-0001");
 
   const componentSearch = page.getByPlaceholder("Find components");
   await componentSearch.fill("Not Found Default page");
@@ -941,9 +971,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
     "true",
     "live verification parameters must not replace an explicit historical selection",
   );
-  await page
-    .getByText("reference-story-history-0001", { exact: true })
-    .waitFor();
+  await assertSelectedRunVisible(page, "reference-story-history-0001");
   await page.close();
 });
 
@@ -978,6 +1006,9 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
   await page.getByRole("tab", { name: "Verification" }).click();
   await page.getByRole("button", { name: "All recordings" }).click();
   await page
+    .getByText(`Current live case: ${CASE_ID}`, { exact: true })
+    .waitFor();
+  await page
     .getByRole("combobox", { name: "Selected version" })
     .selectOption(JSON.stringify(["a".repeat(40), "b".repeat(40)]));
 
@@ -1006,12 +1037,47 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
     name: /Pages\/Not Found\/Default page/,
   });
   await archivedStory.click();
-  await page
-    .getByText(
-      "Recorded story IDs are unavailable; opened the unique Storybook story mapped to this case.",
-      { exact: true },
-    )
-    .waitFor();
+  const uniqueCaseMappingNotice = page.getByText(
+    "Recorded story IDs are unavailable; opened the unique Storybook story mapped to this case.",
+    { exact: true },
+  );
+  try {
+    await uniqueCaseMappingNotice.waitFor({ timeout: 5000 });
+  } catch (error) {
+    const screenshotPath = join(
+      tmpdir(),
+      "ui-verification-renamed-story-failure.png",
+    );
+    const diagnostic = {
+      currentStory: await page
+        .getByRole("heading", { name: "Current Storybook story" })
+        .locator("xpath=following-sibling::p[1]")
+        .innerText()
+        .catch(() => "unavailable"),
+      selectedArchivedStory: await page
+        .locator('.verification-story-choice[aria-pressed="true"]')
+        .innerText()
+        .catch(() => "unavailable"),
+      notices: await page
+        .locator(".verification-notice")
+        .allTextContents()
+        .catch(() => []),
+      panelText: await page
+        .locator(".verification-panel")
+        .innerText()
+        .then((text) => text.slice(-2500))
+        .catch(() => "unavailable"),
+      screenshotPath,
+    };
+    await page
+      .screenshot({ path: screenshotPath, fullPage: true })
+      .catch(() => {});
+    console.error(
+      "Renamed Storybook ID fallback diagnostics:\n" +
+        JSON.stringify(diagnostic, null, 2),
+    );
+    throw error;
+  }
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
       (candidate) =>
