@@ -148,12 +148,6 @@ async function publishRun(
           capturedAt: createdAt,
         },
         site,
-        siteRegion: {
-          x: 12,
-          y: 16,
-          width: Math.floor(viewport.width / 2),
-          height: Math.floor(viewport.height / 2),
-        },
       };
       if (profileId === declaration.scoreProfile) {
         const referenceBytes = await screenshot(
@@ -169,6 +163,12 @@ async function publishRun(
         };
         capture.reference = reference;
         if (includeReferenceRegion) {
+          capture.siteRegion = {
+            x: 12,
+            y: 16,
+            width: Math.floor(viewport.width / 2),
+            height: Math.floor(viewport.height / 2),
+          };
           capture.referenceRegion = {
             x: 120,
             y: 80,
