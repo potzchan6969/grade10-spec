@@ -293,7 +293,9 @@ export function createArchiveHandler(
 
       if (request.method === "GET" && url.pathname === "/api/runs") {
         return jsonResponse(
-          await archive.listRuns(queryOptions(url, ["caseId", "cursor"])),
+          await archive.listRuns(
+            queryOptions(url, ["caseId", "cursor", "locale"]),
+          ),
           200,
           headers,
         );
@@ -314,7 +316,7 @@ export function createArchiveHandler(
       if (request.method === "GET" && url.pathname === "/api/reviews") {
         return jsonResponse(
           await archive.listReviews(
-            queryOptions(url, ["runId", "caseId", "cursor"]),
+            queryOptions(url, ["runId", "caseId", "cursor", "locale"]),
           ),
           200,
           headers,
@@ -332,7 +334,7 @@ export function createArchiveHandler(
       if (request.method === "GET" && url.pathname === "/api/assessments") {
         return jsonResponse(
           await archive.listAssessments(
-            queryOptions(url, ["runId", "caseId", "cursor"]),
+            queryOptions(url, ["runId", "caseId", "cursor", "locale"]),
           ),
           200,
           headers,
@@ -351,6 +353,7 @@ export function createArchiveHandler(
           await archive.listCalibrations(
             queryOptions(url, [
               "assessmentId",
+              "locale",
               "profileId",
               "scorerId",
               "scorerVersion",

@@ -1,4 +1,10 @@
 export type ProfileId = "desktop" | "tablet" | "mobile";
+export type LocaleTag = string;
+
+export function captureLocale(
+  value: { locale?: string | null } | null | undefined,
+): string;
+export function validateLocale(value: unknown, path?: string): LocaleTag;
 
 export interface ViewportSize {
   readonly width: number;
@@ -76,6 +82,7 @@ interface CaptureBase {
   capturePointId: string;
   profileId: ProfileId;
   inputFingerprint: string;
+  locale?: LocaleTag;
 }
 
 export type CaptureOutcome =
@@ -124,6 +131,7 @@ export interface VerificationManifest {
   checkpoint: Checkpoint;
   catalogue: CatalogueEntry[];
   captures: CaptureOutcome[];
+  locales?: LocaleTag[];
 }
 
 export function validateDeclaration(value: unknown): CaseDeclaration;

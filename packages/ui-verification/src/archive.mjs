@@ -1,7 +1,9 @@
 import { calibrateAssessment } from "./calibration.mjs";
 import {
   canonicalJson,
+  captureLocale,
   PROFILES,
+  validateLocale,
   validateManifest,
   validateObjectKey,
 } from "./model.mjs";
@@ -18,6 +20,40 @@ const MAX_OBJECT_BYTES = 20 * 1024 * 1024;
 const MAX_RECORD_BYTES = 1 * 1024 * 1024;
 const MAX_LIST_LIMIT = 100;
 const DIMENSIONS = ["layout", "typography", "color", "imagery", "content"];
+
+function localeValue(value, path) {
+  return value === undefined ? "en" : validateLocale(value, path);
+}
+
+function localeKey(value) {
+  return validateLocale(value).toLowerCase();
+}
+
+function sameLocale(left, right) {
+  return localeKey(left) === localeKey(right);
+}
+
+function runLocales(manifest) {
+  return (
+    manifest.locales ?? [
+      ...new Set(manifest.captures.map((capture) => captureLocale(capture))),
+    ]
+  );
+}
+
+function localeMatrix(manifest) {
+  return [
+    ...new Set(runLocales(manifest).map((locale) => localeKey(locale))),
+  ].sort();
+}
+
+function carriesLocale(manifest, capture, input) {
+  return (
+    manifest.locales !== undefined ||
+    capture.locale !== undefined ||
+    input.locale !== undefined
+  );
+}
 
 export class ArchiveError extends Error {
   constructor(status, code, message, options) {
@@ -362,7 +398,8 @@ function captureForIdentity(manifest, identity) {
       entry.caseId === identity.caseId &&
       entry.targetId === identity.targetId &&
       entry.capturePointId === identity.capturePointId &&
-      entry.profileId === identity.profileId,
+      entry.profileId === identity.profileId &&
+      sameLocale(captureLocale(entry), captureLocale(identity)),
   );
 }
 
@@ -388,6 +425,16 @@ async function validateReuse(manifest, getRun) {
         409,
         "MISSING_REUSE_SOURCE",
         `reused capture source ${sourceRunId} is not archived`,
+      );
+    }
+    if (
+      canonicalJson(localeMatrix(source)) !==
+      canonicalJson(localeMatrix(manifest))
+    ) {
+      fail(
+        409,
+        "INVALID_REUSE_SOURCE",
+        "reused captures require the same locale matrix as their source run",
       );
     }
     for (const reused of manifest.captures.filter(
@@ -612,15 +659,21 @@ function storeFactory(createStore) {
       return result;
     }
 
-    async function listRuns({ caseId, cursor, limit } = {}) {
+    async function listRuns({ caseId, locale, cursor, limit } = {}) {
       if (caseId !== undefined) assertId(caseId, "caseId");
+      const requestedLocale =
+        locale === undefined ? undefined : localeValue(locale, "locale");
       return listJson({
         prefix: RUNS_PREFIX,
         cursor,
         limit,
         resultName: "runs",
         filter: (run) =>
-          !caseId || run.catalogue.some((entry) => entry.caseId === caseId),
+          (!caseId || run.catalogue.some((entry) => entry.caseId === caseId)) &&
+          (requestedLocale === undefined ||
+            runLocales(run).some((value) =>
+              sameLocale(value, requestedLocale),
+            )),
       });
     }
 
@@ -630,6 +683,7 @@ function storeFactory(createStore) {
       targetId,
       capturePointId,
       profileId,
+      locale = "en",
     ) {
       const manifest = await getRun(runId);
       if (!manifest) fail(404, "RUN_NOT_FOUND", `run ${runId} was not found`);
@@ -638,12 +692,14 @@ function storeFactory(createStore) {
       assertId(capturePointId, "capturePointId");
       if (!Object.hasOwn(PROFILES, profileId))
         throw new TypeError("profileId must be a known viewport profile");
+      const requestedLocale = localeValue(locale, "locale");
       const capture = manifest.captures.find(
         (entry) =>
           entry.caseId === caseId &&
           entry.targetId === targetId &&
           entry.capturePointId === capturePointId &&
-          entry.profileId === profileId,
+          entry.profileId === profileId &&
+          sameLocale(captureLocale(entry), requestedLocale),
       );
       if (!capture)
         fail(
@@ -670,17 +726,22 @@ function storeFactory(createStore) {
           "targetId",
           "capturePointId",
           "profileId",
+          "locale",
           "decision",
           "comment",
         ],
         "review",
       );
+      const requestedLocale = Object.hasOwn(input, "locale")
+        ? localeValue(input.locale, "review.locale")
+        : "en";
       const { manifest, capture } = await getCapture(
         input.runId,
         input.caseId,
         input.targetId,
         input.capturePointId,
         input.profileId,
+        requestedLocale,
       );
       if (!["approved", "changes-requested"].includes(input.decision)) {
         throw new TypeError(
@@ -707,6 +768,9 @@ function storeFactory(createStore) {
         targetId: capture.targetId,
         capturePointId: capture.capturePointId,
         profileId: capture.profileId,
+        ...(carriesLocale(manifest, capture, input)
+          ? { locale: captureLocale(capture) }
+          : {}),
         capture: {
           inputFingerprint: capture.inputFingerprint,
           siteHash: capture.site.sha256.toLowerCase(),
@@ -722,15 +786,20 @@ function storeFactory(createStore) {
       return review;
     }
 
-    async function listReviews({ runId, caseId, cursor, limit } = {}) {
+    async function listReviews({ runId, caseId, locale, cursor, limit } = {}) {
       if (runId !== undefined) assertId(runId, "runId");
       if (caseId !== undefined) assertId(caseId, "caseId");
+      const requestedLocale =
+        locale === undefined ? undefined : localeValue(locale, "locale");
       return listJson({
         prefix: runId === undefined ? REVIEWS_PREFIX : reviewPrefix(runId),
         cursor,
         limit,
         resultName: "reviews",
-        filter: (review) => !caseId || review.caseId === caseId,
+        filter: (review) =>
+          (!caseId || review.caseId === caseId) &&
+          (requestedLocale === undefined ||
+            sameLocale(captureLocale(review), requestedLocale)),
       });
     }
 
@@ -744,6 +813,7 @@ function storeFactory(createStore) {
         "targetId",
         "capturePointId",
         "profileId",
+        "locale",
         "scorer",
         "rubricVersion",
         "contractHash",
@@ -763,15 +833,28 @@ function storeFactory(createStore) {
         "decision",
       ];
       assertOnlyKeys(input, fields, "assessment");
+      const requestedLocale = localeValue(input.locale, "assessment.locale");
       if (
         input.runId !== manifest.runId ||
         input.caseId !== capture.caseId ||
         input.targetId !== capture.targetId ||
         input.capturePointId !== capture.capturePointId ||
-        input.profileId !== capture.profileId
+        input.profileId !== capture.profileId ||
+        !sameLocale(requestedLocale, captureLocale(capture))
       ) {
         throw new TypeError(
           "assessment identity does not match the exact archived capture",
+        );
+      }
+      const definition = manifest.catalogue.find(
+        (entry) =>
+          entry.caseId === capture.caseId &&
+          entry.targetId === capture.targetId &&
+          entry.capturePointId === capture.capturePointId,
+      );
+      if (input.profileId !== definition.scoreProfile) {
+        throw new TypeError(
+          "assessment.profileId must match the catalogue scoreProfile",
         );
       }
       if (input.schemaVersion !== 1)
@@ -961,6 +1044,9 @@ function storeFactory(createStore) {
         targetId: capture.targetId,
         capturePointId: capture.capturePointId,
         profileId: capture.profileId,
+        ...(carriesLocale(manifest, capture, input)
+          ? { locale: captureLocale(capture) }
+          : {}),
         scorer: normalizedScorer,
         rubricVersion,
         contractHash,
@@ -985,12 +1071,16 @@ function storeFactory(createStore) {
       const input = record(inputValue, "assessment");
       if (input.createdAt !== undefined)
         throw new TypeError("assessment.createdAt is server-owned");
+      const requestedLocale = Object.hasOwn(input, "locale")
+        ? localeValue(input.locale, "assessment.locale")
+        : "en";
       const { manifest, capture } = await getCapture(
         input.runId,
         input.caseId,
         input.targetId,
         input.capturePointId,
         input.profileId,
+        requestedLocale,
       );
       const assessment = normalizeAssessment(input, manifest, capture);
       const key = `${assessmentPrefix(manifest.runId)}${assessment.assessmentId}.json`;
@@ -1014,15 +1104,26 @@ function storeFactory(createStore) {
       return stored;
     }
 
-    async function listAssessments({ runId, caseId, cursor, limit } = {}) {
+    async function listAssessments({
+      runId,
+      caseId,
+      locale,
+      cursor,
+      limit,
+    } = {}) {
       if (runId !== undefined) assertId(runId, "runId");
       if (caseId !== undefined) assertId(caseId, "caseId");
+      const requestedLocale =
+        locale === undefined ? undefined : localeValue(locale, "locale");
       return listJson({
         prefix: assessmentPrefix(runId),
         cursor,
         limit,
         resultName: "assessments",
-        filter: (assessment) => !caseId || assessment.caseId === caseId,
+        filter: (assessment) =>
+          (!caseId || assessment.caseId === caseId) &&
+          (requestedLocale === undefined ||
+            sameLocale(captureLocale(assessment), requestedLocale)),
       });
     }
 
@@ -1030,7 +1131,7 @@ function storeFactory(createStore) {
       const input = record(inputValue, "calibration");
       assertOnlyKeys(
         input,
-        ["runId", "assessmentId", "calibration", "policy"],
+        ["runId", "assessmentId", "locale", "calibration", "policy"],
         "calibration",
       );
       assertId(input.runId, "calibration.runId");
@@ -1038,6 +1139,9 @@ function storeFactory(createStore) {
         input.assessmentId,
         "calibration.assessmentId",
       );
+      const requestedLocale = Object.hasOwn(input, "locale")
+        ? localeValue(input.locale, "calibration.locale")
+        : "en";
       const calibrationInput = record(
         input.calibration,
         "calibration.calibration",
@@ -1058,7 +1162,27 @@ function storeFactory(createStore) {
           "calibration.calibration.observations must be an array of at most 10000 rows",
         );
       }
-      const targetAssessment = await findAssessment(input.runId, assessmentId);
+      const suppliedCalibrationKey = record(
+        calibrationInput.key,
+        "calibration.calibration.key",
+      );
+      if (
+        !sameLocale(
+          localeValue(suppliedCalibrationKey.locale, "calibration.key.locale"),
+          requestedLocale,
+        )
+      ) {
+        fail(
+          400,
+          "CALIBRATION_KEY_LOCALE_MISMATCH",
+          "calibration key locale does not match the requested locale",
+        );
+      }
+      const targetAssessment = await findAssessment(
+        input.runId,
+        assessmentId,
+        requestedLocale,
+      );
       if (!targetAssessment)
         fail(
           404,
@@ -1071,6 +1195,7 @@ function storeFactory(createStore) {
         targetAssessment.targetId,
         targetAssessment.capturePointId,
         targetAssessment.profileId,
+        requestedLocale,
       );
       if (
         targetAssessment.caseId !== capture.caseId ||
@@ -1092,7 +1217,9 @@ function storeFactory(createStore) {
       const recipe = JSON.parse(
         canonicalJson({ calibration: calibrationInput, policy }),
       );
-      const allAssessments = await allRecords(listAssessments, "assessments");
+      const allAssessments = await allRecords(listAssessments, "assessments", {
+        locale: requestedLocale,
+      });
       const rows = [];
       const reviewsByRun = new Map();
       const capturesByIdentity = new Map();
@@ -1105,6 +1232,7 @@ function storeFactory(createStore) {
             "sourceRunId",
             "reviewId",
             "reviewerId",
+            "locale",
             "siteSha256",
             "referenceSha256",
             "split",
@@ -1122,8 +1250,20 @@ function storeFactory(createStore) {
           observation.sourceAssessmentId,
           "observation.sourceAssessmentId",
         );
+        const observationLocale = Object.hasOwn(observation, "locale")
+          ? localeValue(observation.locale, "observation.locale")
+          : "en";
+        if (!sameLocale(observationLocale, requestedLocale)) {
+          fail(
+            400,
+            "CALIBRATION_OBSERVATION_LOCALE_MISMATCH",
+            "calibration observation locale does not match the requested locale",
+          );
+        }
         const source = allAssessments.find(
-          (assessment) => assessment.assessmentId === sourceAssessmentId,
+          (assessment) =>
+            assessment.assessmentId === sourceAssessmentId &&
+            sameLocale(captureLocale(assessment), requestedLocale),
         );
         if (!source)
           fail(
@@ -1147,6 +1287,7 @@ function storeFactory(createStore) {
           source.scorer.version !== recipe.calibration.key?.scorerVersion ||
           source.scorer.model !== recipe.calibration.key?.scorerModel ||
           source.profileId !== recipe.calibration.key?.profileId ||
+          !sameLocale(captureLocale(source), requestedLocale) ||
           source.contractHash !==
             recipe.calibration.key?.contractHash?.toLowerCase() ||
           source.rubricVersion !== recipe.calibration.key?.rubricVersion
@@ -1163,6 +1304,7 @@ function storeFactory(createStore) {
           targetId: source.targetId,
           capturePointId: source.capturePointId,
           profileId: source.profileId,
+          locale: captureLocale(source),
         });
         let sourceCapture = capturesByIdentity.get(sourceCaptureKey);
         if (!sourceCapture) {
@@ -1173,6 +1315,7 @@ function storeFactory(createStore) {
               source.targetId,
               source.capturePointId,
               source.profileId,
+              requestedLocale,
             )
           ).capture;
           capturesByIdentity.set(sourceCaptureKey, sourceCapture);
@@ -1193,6 +1336,11 @@ function storeFactory(createStore) {
         }
         const normalizedObservation = {
           ...observation,
+          ...(suppliedCalibrationKey.locale === undefined &&
+          observation.locale === undefined &&
+          requestedLocale.toLowerCase() === "en"
+            ? {}
+            : { locale: requestedLocale }),
           sourceAssessmentId,
           ...(observation.sourceRunId === undefined
             ? {}
@@ -1238,22 +1386,27 @@ function storeFactory(createStore) {
             "calibration observation does not match its archived assessment and capture",
           );
         }
-        let sourceReviews = reviewsByRun.get(source.runId);
+        const reviewsKey = `${source.runId}:${localeKey(requestedLocale)}`;
+        let sourceReviews = reviewsByRun.get(reviewsKey);
         if (!sourceReviews) {
           sourceReviews = (
-            await allRecords(listReviews, "reviews", { runId: source.runId })
+            await allRecords(listReviews, "reviews", {
+              runId: source.runId,
+              locale: requestedLocale,
+            })
           ).filter(
             (review) =>
               review.caseId === source.caseId &&
               review.targetId === source.targetId &&
               review.capturePointId === source.capturePointId &&
               review.profileId === source.profileId &&
+              sameLocale(captureLocale(review), requestedLocale) &&
               review.capture.inputFingerprint ===
                 sourceCapture.inputFingerprint &&
               review.capture.siteHash === source.imageHashes.site &&
               review.capture.referenceHash === source.imageHashes.reference,
           );
-          reviewsByRun.set(source.runId, sourceReviews);
+          reviewsByRun.set(reviewsKey, sourceReviews);
         }
         const reviewerReviews = sourceReviews
           .filter(
@@ -1333,20 +1486,30 @@ function storeFactory(createStore) {
       return value;
     }
 
-    async function findAssessment(runId, id) {
+    async function findAssessment(runId, id, locale = "en") {
       const page = await listAssessments({
         runId,
         caseId: undefined,
+        locale,
         limit: 100,
       });
       let found = page.assessments.find(
-        (assessment) => assessment.assessmentId === id,
+        (assessment) =>
+          assessment.assessmentId === id &&
+          sameLocale(captureLocale(assessment), locale),
       );
       let cursor = page.cursor;
       while (!found && cursor) {
-        const next = await listAssessments({ runId, limit: 100, cursor });
+        const next = await listAssessments({
+          runId,
+          locale,
+          limit: 100,
+          cursor,
+        });
         found = next.assessments.find(
-          (assessment) => assessment.assessmentId === id,
+          (assessment) =>
+            assessment.assessmentId === id &&
+            sameLocale(captureLocale(assessment), locale),
         );
         cursor = next.cursor;
       }
@@ -1430,6 +1593,7 @@ function storeFactory(createStore) {
 
     async function listCalibrations({
       assessmentId,
+      locale,
       profileId,
       scorerId,
       scorerVersion,
@@ -1441,6 +1605,8 @@ function storeFactory(createStore) {
       limit,
     } = {}) {
       if (assessmentId !== undefined) assertHash(assessmentId, "assessmentId");
+      const requestedLocale =
+        locale === undefined ? undefined : localeValue(locale, "locale");
       if (profileId !== undefined && !Object.hasOwn(PROFILES, profileId))
         throw new TypeError("profileId must be a known viewport profile");
       for (const [name, value] of Object.entries({
@@ -1464,6 +1630,11 @@ function storeFactory(createStore) {
         limit,
         resultName: "calibrations",
         filter: (calibration) =>
+          (requestedLocale === undefined ||
+            sameLocale(
+              captureLocale(calibration.calibrationKey ?? calibration),
+              requestedLocale,
+            )) &&
           (!assessmentId ||
             calibration.assessmentId === assessmentId.toLowerCase()) &&
           (!profileId || calibration.calibrationKey?.profileId === profileId) &&

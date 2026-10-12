@@ -68,3 +68,31 @@ test("archive info requires read authorization", async () => {
 
   assert.equal(response.status, 401);
 });
+
+test("API list requests preserve omitted locales and pass explicit locales", async () => {
+  const calls = [];
+  const archive = {
+    async listReviews(options) {
+      calls.push(options);
+      return { reviews: [] };
+    },
+  };
+  const handler = createArchiveHandler(archive, {
+    authorize: async () => ({ kind: "publisher" }),
+  });
+
+  const english = await handler(
+    new Request("http://localhost:6006/api/reviews"),
+  );
+  const chinese = await handler(
+    new Request("http://localhost:6006/api/reviews?locale=zh-Hant"),
+  );
+
+  assert.equal(english.status, 200);
+  assert.equal(chinese.status, 200);
+  assert.equal(Object.hasOwn(calls[0], "locale"), false);
+  assert.deepEqual(
+    calls.map(({ locale }) => locale),
+    [undefined, "zh-Hant"],
+  );
+});

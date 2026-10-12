@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { canonicalJson } from "./model.mjs";
+import { canonicalJson, validateLocale } from "./model.mjs";
 
 const HASH = /^[a-f0-9]{64}$/i;
 const CALIBRATION_KEY_FIELDS = [
@@ -52,7 +52,7 @@ function boundedNumber(value, path, min, max) {
   return value;
 }
 
-function exactCalibrationKey(assessment, labelPolicyVersion) {
+function exactCalibrationKey(assessment, labelPolicyVersion, includeLocale) {
   return {
     scorerId: assessment.scorer.id,
     scorerVersion: assessment.scorer.version,
@@ -61,6 +61,14 @@ function exactCalibrationKey(assessment, labelPolicyVersion) {
     contractHash: assessment.contractHash,
     rubricVersion: assessment.rubricVersion,
     labelPolicyVersion,
+    ...(includeLocale
+      ? {
+          locale:
+            assessment.locale === undefined
+              ? "en"
+              : validateLocale(assessment.locale, "assessment.locale"),
+        }
+      : {}),
   };
 }
 
@@ -73,6 +81,8 @@ function validateKey(value) {
     key.contractHash,
     "calibration.key.contractHash",
   );
+  if (key.locale !== undefined)
+    normalized.locale = validateLocale(key.locale, "calibration.key.locale");
   return normalized;
 }
 
@@ -110,11 +120,19 @@ function validateObservation(value, index) {
     unknownCategory: row.unknownCategory,
     provenanceVerified: row.provenanceVerified,
     captureStatus: row.captureStatus,
+    ...(row.locale === undefined
+      ? {}
+      : { locale: validateLocale(row.locale, `${path}.locale`) }),
   };
 }
 
 function pairKey(row) {
-  return `${row.siteSha256}:${row.referenceSha256}`;
+  return `${localeKey(row)}:${row.siteSha256}:${row.referenceSha256}`;
+}
+
+function localeKey(value) {
+  const locale = value?.locale ?? "en";
+  return validateLocale(locale).toLowerCase();
 }
 
 function countsBy(values, keyOf) {
@@ -198,17 +216,30 @@ export function calibrateAssessment({
   if (calibration.schemaVersion !== 1)
     throw new TypeError("calibration.schemaVersion must be 1");
   const policy = resolvePolicy(rawPolicy);
-  const key = exactCalibrationKey(assessment, policy.labelPolicyVersion);
-  const suppliedKey = validateKey(calibration.key);
-  const keyMatches = CALIBRATION_KEY_FIELDS.every(
-    (field) => suppliedKey[field] === key[field],
-  );
   if (!Array.isArray(calibration.observations))
     throw new TypeError("calibration.observations must be an array");
   const rows = calibration.observations.map(validateObservation);
+  const localeTagged =
+    assessment.locale !== undefined ||
+    calibration.key?.locale !== undefined ||
+    rows.some((row) => row.locale !== undefined);
+  const currentLocale = localeKey(assessment);
+  const key = exactCalibrationKey(
+    assessment,
+    policy.labelPolicyVersion,
+    localeTagged,
+  );
+  const suppliedKey = validateKey(calibration.key);
+  const keyMatches =
+    CALIBRATION_KEY_FIELDS.every(
+      (field) => suppliedKey[field] === key[field],
+    ) && localeKey(suppliedKey) === currentLocale;
   const pairCounts = countsBy(rows, pairKey);
-  const assessmentCounts = countsBy(rows, (row) => row.sourceAssessmentId);
-  const currentPair = `${digest(assessment.imageHashes.site, "assessment.imageHashes.site")}:${digest(assessment.imageHashes.reference, "assessment.imageHashes.reference")}`;
+  const assessmentCounts = countsBy(
+    rows,
+    (row) => `${localeKey(row)}:${row.sourceAssessmentId}`,
+  );
+  const currentPair = `${currentLocale}:${digest(assessment.imageHashes.site, "assessment.imageHashes.site")}:${digest(assessment.imageHashes.reference, "assessment.imageHashes.reference")}`;
   const excludedCounts = {
     training: 0,
     notIndependent: 0,
@@ -220,6 +251,7 @@ export function calibrateAssessment({
     unknownCategory: 0,
     unverifiedProvenance: 0,
     captureFailed: 0,
+    ...(localeTagged ? { localeMismatch: 0 } : {}),
   };
   const eligible = [];
 
@@ -231,12 +263,18 @@ export function calibrateAssessment({
         excluded = true;
       };
       if (row.split !== "held-out") exclude("training");
+      if (localeKey(row) !== currentLocale && localeTagged)
+        exclude("localeMismatch");
       if (!row.independent) exclude("notIndependent");
       if (pairCounts.get(pairKey(row)) !== 1) exclude("duplicateImagePair");
-      if (assessmentCounts.get(row.sourceAssessmentId) !== 1)
+      if (
+        assessmentCounts.get(`${localeKey(row)}:${row.sourceAssessmentId}`) !==
+        1
+      )
         exclude("duplicateAssessment");
       if (
-        row.sourceAssessmentId === assessment.assessmentId ||
+        (row.sourceAssessmentId === assessment.assessmentId &&
+          localeKey(row) === currentLocale) ||
         pairKey(row) === currentPair
       )
         exclude("selfLabel");

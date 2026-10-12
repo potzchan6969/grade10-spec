@@ -19,6 +19,35 @@ const SAFE_OBJECT_KEY_PART = /^[A-Za-z0-9._-]+$/;
 const SHA256 = /^[a-f0-9]{64}$/i;
 const FULL_COMMIT = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
 const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?Z$/;
+const LANGUAGE = /^[A-Za-z]{2,8}$/;
+const GRANDFATHERED_LOCALES = new Set([
+  "en-gb-oed",
+  "i-ami",
+  "i-bnn",
+  "i-default",
+  "i-enochian",
+  "i-hak",
+  "i-klingon",
+  "i-lux",
+  "i-mingo",
+  "i-navajo",
+  "i-pwn",
+  "i-tao",
+  "i-tay",
+  "i-tsu",
+  "sgn-be-fr",
+  "sgn-be-nl",
+  "sgn-ch-de",
+  "art-lojban",
+  "cel-gaulish",
+  "no-bok",
+  "no-nyn",
+  "zh-guoyu",
+  "zh-hakka",
+  "zh-min",
+  "zh-min-nan",
+  "zh-xiang",
+]);
 
 function fail(path, message) {
   throw new TypeError(`${path} ${message}`);
@@ -52,6 +81,98 @@ function requireText(value, path) {
   if (typeof value !== "string" || value.trim() === "")
     fail(path, "must be a non-empty string");
   return value;
+}
+
+export function captureLocale(value) {
+  return value?.locale ?? "en";
+}
+
+export function validateLocale(value, path = "locale") {
+  if (typeof value !== "string" || value.length > 255) {
+    fail(path, "must be a valid BCP 47 language tag");
+  }
+  if (GRANDFATHERED_LOCALES.has(value.toLowerCase())) return value;
+  const parts = value.split("-");
+  if (parts.some((part) => part === ""))
+    fail(path, "must be a valid BCP 47 language tag");
+
+  let index = 0;
+  if (parts[0].toLowerCase() === "x") {
+    if (
+      parts.length < 2 ||
+      parts.slice(1).some((part) => !/^[A-Za-z0-9]{1,8}$/.test(part))
+    )
+      fail(path, "must be a valid BCP 47 language tag");
+    return value;
+  }
+  if (!LANGUAGE.test(parts[index]))
+    fail(path, "must be a valid BCP 47 language tag");
+  const languageLength = parts[index].length;
+  index += 1;
+
+  if (languageLength <= 3) {
+    let extlangs = 0;
+    while (
+      extlangs < 3 &&
+      parts[index] !== undefined &&
+      /^[A-Za-z]{3}$/.test(parts[index])
+    ) {
+      index += 1;
+      extlangs += 1;
+    }
+  }
+  if (parts[index] !== undefined && /^[A-Za-z]{4}$/.test(parts[index]))
+    index += 1;
+  if (
+    parts[index] !== undefined &&
+    (/^[A-Za-z]{2}$/.test(parts[index]) || /^[0-9]{3}$/.test(parts[index]))
+  ) {
+    index += 1;
+  }
+  while (
+    parts[index] !== undefined &&
+    (/^[A-Za-z0-9]{5,8}$/.test(parts[index]) ||
+      /^[0-9][A-Za-z0-9]{3}$/.test(parts[index]))
+  ) {
+    index += 1;
+  }
+
+  const extensions = new Set();
+  while (
+    parts[index] !== undefined &&
+    /^[0-9A-WY-Za-wy-z]$/.test(parts[index])
+  ) {
+    const singleton = parts[index].toLowerCase();
+    if (extensions.has(singleton))
+      fail(path, "must be a valid BCP 47 language tag");
+    extensions.add(singleton);
+    index += 1;
+    const firstExtensionPart = index;
+    while (
+      parts[index] !== undefined &&
+      /^[A-Za-z0-9]{2,8}$/.test(parts[index])
+    )
+      index += 1;
+    if (firstExtensionPart === index)
+      fail(path, "must be a valid BCP 47 language tag");
+  }
+  if (parts[index]?.toLowerCase() === "x") {
+    index += 1;
+    const firstPrivatePart = index;
+    while (
+      parts[index] !== undefined &&
+      /^[A-Za-z0-9]{1,8}$/.test(parts[index])
+    )
+      index += 1;
+    if (firstPrivatePart === index)
+      fail(path, "must be a valid BCP 47 language tag");
+  }
+  if (index !== parts.length) fail(path, "must be a valid BCP 47 language tag");
+  return value;
+}
+
+function localeKey(value) {
+  return validateLocale(value).toLowerCase();
 }
 
 function assertJsonValue(value, path, seen = new Set()) {
@@ -314,6 +435,9 @@ function validateFailure(value, path) {
 
 function validateCapture(value, path, manifest, definitions) {
   const capture = requireRecord(value, path);
+  if (Object.hasOwn(capture, "locale") && capture.locale !== undefined) {
+    validateLocale(capture.locale, `${path}.locale`);
+  }
   const identity = {
     caseId: requireId(capture.caseId, `${path}.caseId`),
     targetId: requireId(capture.targetId, `${path}.targetId`),
@@ -334,13 +458,33 @@ function validateCapture(value, path, manifest, definitions) {
     capture.status,
   );
   const size = PROFILES[capture.profileId];
+  if (
+    manifest.locales === undefined &&
+    capture.locale !== undefined &&
+    localeKey(capture.locale) !== "en"
+  ) {
+    fail(
+      `${path}.locale`,
+      "requires manifest.locales for a non-English capture",
+    );
+  }
+  if (
+    manifest.locales !== undefined &&
+    !manifest.locales.some(
+      (locale) => localeKey(locale) === localeKey(captureLocale(capture)),
+    )
+  ) {
+    fail(`${path}.locale`, "must match one of manifest.locales");
+  }
   if (definition.status === "retired" && capture.status !== "not-selected") {
     fail(`${path}.status`, "must be not-selected for a retired catalogue case");
   }
 
   if (capture.status === "captured") {
     const site = validateImage(capture.site, `${path}.site`, size);
-    if (capture.profileId === definition.scoreProfile) {
+    if (manifest.locales !== undefined) {
+      validateImage(capture.reference, `${path}.reference`, size);
+    } else if (capture.profileId === definition.scoreProfile) {
       validateImage(capture.reference, `${path}.reference`, size);
     } else if (capture.reference !== undefined) {
       validateImage(capture.reference, `${path}.reference`, size);
@@ -350,14 +494,8 @@ function validateCapture(value, path, manifest, definitions) {
     if (hasSiteRegion !== hasReferenceRegion)
       fail(path, "must provide both score regions or neither");
     if (hasSiteRegion) {
-      if (
-        capture.profileId !== definition.scoreProfile ||
-        capture.reference === undefined
-      ) {
-        fail(
-          path,
-          "score regions are allowed only on the scored profile with a reference image",
-        );
+      if (capture.reference === undefined) {
+        fail(path, "paired regions require a reference image");
       }
       validateRegion(capture.siteRegion, `${path}.siteRegion`, site);
       validateRegion(
@@ -395,6 +533,18 @@ export function validateManifest(value) {
   requireId(manifest.runId, "manifest.runId");
   requireInstant(manifest.createdAt, "manifest.createdAt");
   validateCheckpoint(manifest.checkpoint);
+  if (manifest.locales !== undefined) {
+    if (!Array.isArray(manifest.locales) || manifest.locales.length === 0)
+      fail("manifest.locales", "must be a non-empty array of language tags");
+    const seenLocales = new Set();
+    for (const [index, locale] of manifest.locales.entries()) {
+      validateLocale(locale, `manifest.locales[${index}]`);
+      const key = localeKey(locale);
+      if (seenLocales.has(key))
+        fail(`manifest.locales[${index}]`, "duplicates a locale");
+      seenLocales.add(key);
+    }
+  }
   if (!Array.isArray(manifest.catalogue))
     fail("manifest.catalogue", "must be an array");
   if (!Array.isArray(manifest.captures))
@@ -412,24 +562,30 @@ export function validateManifest(value) {
     definitions.set(identity, entry);
   }
 
-  if (manifest.captures.length !== definitions.size * PROFILE_IDS.length) {
+  const localeCount = manifest.locales?.length ?? 1;
+  if (
+    manifest.captures.length !==
+    definitions.size * localeCount * PROFILE_IDS.length
+  ) {
     fail(
       "manifest.captures",
-      `must contain exactly 3 outcomes for each catalogue case`,
+      manifest.locales === undefined
+        ? "must contain exactly 3 outcomes for each catalogue case"
+        : "must contain exactly 3 outcomes for each catalogue case and locale",
     );
   }
-  const profilesByCase = new Map();
+  const profilesByCaseAndLocale = new Map();
   for (const [index, capture] of manifest.captures.entries()) {
     const path = `manifest.captures[${index}]`;
     validateCapture(capture, path, manifest, definitions);
-    const identity = declarationIdentity(capture);
-    const profiles = profilesByCase.get(identity) ?? new Set();
+    const identity = `${declarationIdentity(capture)}\u0000${localeKey(captureLocale(capture))}`;
+    const profiles = profilesByCaseAndLocale.get(identity) ?? new Set();
     if (profiles.has(capture.profileId))
       fail(path, "duplicates a viewport outcome for its catalogue case");
     profiles.add(capture.profileId);
-    profilesByCase.set(identity, profiles);
+    profilesByCaseAndLocale.set(identity, profiles);
   }
-  for (const [identity, profiles] of profilesByCase) {
+  for (const [identity, profiles] of profilesByCaseAndLocale) {
     if (
       profiles.size !== PROFILE_IDS.length ||
       PROFILE_IDS.some((profile) => !profiles.has(profile))

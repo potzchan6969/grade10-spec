@@ -106,6 +106,7 @@ test("autoaccept requires 400 exact-key held-out approvals and uses a Wilson low
   assert.equal(result.sampleSize, 400);
   assert.equal(result.approvedCount, 400);
   assert.equal(result.method, "wilson-lower-95");
+  assert.equal(Object.hasOwn(result.calibrationKey, "locale"), false);
   assert.ok(result.confidenceLowerBound >= 0.99);
   assert.equal(result.decision, "autoaccept");
   assert.equal(wilsonLowerBound(400, 400), result.confidenceLowerBound);
@@ -125,6 +126,38 @@ test("training labels and every duplicate image pair are excluded from calibrati
   assert.equal(result.sampleSize, 397);
   assert.equal(result.decision, "shadow");
   assert.ok(result.reasons.includes("insufficient-held-out-sample"));
+});
+
+test("calibration keys and duplicate image pairs are isolated by locale", () => {
+  const current = assessment({
+    expected: { locale: "zh-Hant" },
+    report: { locale: "zh-Hant" },
+  });
+  const rows = observations(2, { locale: "zh-Hant" });
+  rows[0].siteSha256 = "1".repeat(64);
+  rows[0].referenceSha256 = "2".repeat(64);
+  rows[1].locale = "en";
+  rows[1].siteSha256 = rows[0].siteSha256;
+  rows[1].referenceSha256 = rows[0].referenceSha256;
+  const recipe = calibration(current, rows);
+  recipe.key.locale = "zh-Hant";
+
+  const result = calibrateAssessment({
+    assessment: current,
+    calibration: recipe,
+    policy,
+  });
+  assert.equal(result.calibrationKey.locale, "zh-Hant");
+  assert.equal(result.sampleSize, 1);
+
+  recipe.key.locale = "en";
+  const mismatched = calibrateAssessment({
+    assessment: current,
+    calibration: recipe,
+    policy,
+  });
+  assert.equal(mismatched.sampleSize, 0);
+  assert.ok(mismatched.reasons.includes("calibration-key-mismatch"));
 });
 
 test("a mismatched scorer key, unknown assessment category, or one failed label remains in shadow", () => {

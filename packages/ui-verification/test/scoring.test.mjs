@@ -62,6 +62,31 @@ test("assessment ingestion pins identity, scorer, rubric and both image hashes w
   assert.match(assessment.assessmentId, /^[a-f0-9]{64}$/);
   assert.equal(assessment.autoAcceptCandidate, true);
   assert.equal(assessment.confidence, null);
+  assert.equal(Object.hasOwn(assessment, "locale"), false);
+});
+
+test("assessment locale is pinned even when locale images have identical hashes", () => {
+  const english = input();
+  const traditionalChinese = input({
+    expected: { locale: "zh-Hant" },
+    report: { locale: "zh-Hant" },
+  });
+  const englishAssessment = assessReport(english);
+  const chineseAssessment = assessReport(traditionalChinese);
+
+  assert.equal(chineseAssessment.locale, "zh-Hant");
+  assert.notEqual(
+    chineseAssessment.assessmentId,
+    englishAssessment.assessmentId,
+  );
+  assert.throws(
+    () =>
+      assessReport({
+        ...traditionalChinese,
+        report: { ...traditionalChinese.report, locale: "en" },
+      }),
+    /locale/i,
+  );
 });
 
 test("critical mismatches veto a high-similarity assessment and unknown categories block acceptance", () => {

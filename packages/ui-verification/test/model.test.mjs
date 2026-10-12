@@ -2,10 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   canonicalJson,
+  captureLocale,
   fingerprint,
   PROFILES,
   validateDeclaration,
   validateDeclarations,
+  validateLocale,
   validateManifest,
   validateObjectKey,
 } from "../src/model.mjs";
@@ -125,6 +127,75 @@ test("a manifest records all three site viewports and the scored reference viewp
   const value = manifest();
 
   assert.deepEqual(validateManifest(value), value);
+});
+
+test("locale defaults to English and locale manifests require a complete reference matrix", () => {
+  const value = manifest();
+  assert.equal(captureLocale(value.captures[0]), "en");
+  assert.equal(captureLocale({ locale: "zh-Hant" }), "zh-Hant");
+
+  value.locales = ["en", "zh-Hant"];
+  const english = value.captures.map((capture) => ({ ...capture }));
+  const traditionalChinese = value.captures.map((capture) => ({
+    ...capture,
+    locale: "zh-Hant",
+    site: { ...capture.site, key: capture.site.key.replace("run-1", "run-zh") },
+    ...(capture.reference
+      ? {
+          reference: {
+            ...capture.reference,
+            key: capture.reference.key.replace("run-1", "run-zh"),
+          },
+        }
+      : {}),
+  }));
+  for (const capture of [...english, ...traditionalChinese]) {
+    const dimensions = PROFILES[capture.profileId];
+    if (!capture.reference) {
+      capture.reference = {
+        key: capture.site.key.replace("-site.png", "-reference.png"),
+        sha256: "e".repeat(64),
+        ...dimensions,
+      };
+    }
+  }
+  value.captures = [...english, ...traditionalChinese];
+
+  assert.deepEqual(validateManifest(value), value);
+
+  const missingReference = structuredClone(value);
+  delete missingReference.captures.find(
+    (capture) => capture.locale === "zh-Hant" && capture.profileId === "mobile",
+  ).reference;
+  assert.throws(() => validateManifest(missingReference), /reference/);
+
+  const missingLocale = structuredClone(value);
+  missingLocale.captures = missingLocale.captures.filter(
+    (capture) => capture.locale !== "zh-Hant" || capture.profileId !== "tablet",
+  );
+  assert.throws(() => validateManifest(missingLocale), /outcomes|locale/i);
+});
+
+test("historical manifests stay byte-for-byte unchanged and reject explicit null locales", () => {
+  const value = manifest();
+  const before = JSON.stringify(value);
+
+  assert.deepEqual(validateManifest(value), value);
+  assert.equal(JSON.stringify(value), before);
+  const explicitNull = manifest();
+  explicitNull.captures[0].locale = null;
+  assert.throws(() => validateManifest(explicitNull), /locale/);
+
+  const nonEnglishWithoutMatrix = manifest();
+  for (const capture of nonEnglishWithoutMatrix.captures)
+    capture.locale = "zh-Hant";
+  assert.throws(
+    () => validateManifest(nonEnglishWithoutMatrix),
+    /manifest.locales/,
+  );
+  assert.equal(validateLocale("fr-CA"), "fr-CA");
+  assert.equal(validateLocale("i-klingon"), "i-klingon");
+  assert.throws(() => validateLocale("en_US"), /BCP 47/);
 });
 
 test("a manifest rejects missing viewport outcomes and a missing scored reference", () => {

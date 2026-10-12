@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { canonicalJson, PROFILES } from "./model.mjs";
+import { canonicalJson, PROFILES, validateLocale } from "./model.mjs";
 
 const HASH = /^[a-f0-9]{64}$/i;
 const DIMENSIONS = ["layout", "typography", "color", "imagery", "content"];
@@ -105,6 +105,21 @@ export function assessReport({
         `report.${field} does not match the expected capture`,
       );
   }
+  const reportLocale =
+    report.locale === undefined
+      ? "en"
+      : validateLocale(report.locale, "report.locale");
+  const expectedLocale =
+    expected.locale === undefined
+      ? "en"
+      : validateLocale(expected.locale, "expected.locale");
+  if (reportLocale.toLowerCase() !== expectedLocale.toLowerCase()) {
+    throw new TypeError(
+      "report.locale does not match the expected capture locale",
+    );
+  }
+  const localeTagged =
+    report.locale !== undefined || expected.locale !== undefined;
   if (!Object.hasOwn(PROFILES, report.profileId))
     throw new TypeError("report.profileId is unknown");
   const scorer = record(report.scorer, "report.scorer");
@@ -196,6 +211,7 @@ export function assessReport({
           provenanceVerified: expected.provenanceVerified,
           failureCount: expected.failureCount,
           similarityThreshold,
+          ...(localeTagged ? { locale: expectedLocale.toLowerCase() } : {}),
         },
       }),
     )
@@ -208,6 +224,7 @@ export function assessReport({
     targetId: report.targetId,
     capturePointId: report.capturePointId,
     profileId: report.profileId,
+    ...(localeTagged ? { locale: expectedLocale } : {}),
     scorer: { id: scorer.id, version: scorer.version, model: scorer.model },
     rubricVersion: report.rubricVersion,
     contractHash: report.contractHash.toLowerCase(),
