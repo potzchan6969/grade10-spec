@@ -52,7 +52,7 @@ Both take `now` and an audience. An audience is either `{ roles }` for the conso
 - **Called off** - `cancel` in `services/admin/admin.ts` refuses a lot past its effective close and writes `status = 'canceled'`, `canceled_at` and no `closed_at`, so the `status` and `closed_at` predicates leave it out (Q34).
 - **No bids** - `closeListing` takes the same path with no `current_top_bid_id`: it writes `status = 'closed'` and `closed_at` and issues no order. The listing is listed, Unsold (Q34).
 - **Sold or not** - a listing is sold when its `auction_orders` row exists (`uq_auction_orders_listing_id`); the close writes the order in the same transaction. Sold rows join the order and its current invoice, and read the status with `orderStatusSql(now)` as it stands now (Q26). Unsold rows carry the listing's `slug`.
-- **Order** - `closed_at desc, listing_code asc, id`. The tie on equal closes is not in a decision row; Q36 orders ties for waits only. Raised in the Open Questions. No cap in the console (Q23). Test lots are not filtered (Q27).
+- **Order** - `closed_at desc, listing_code asc, id`. Equal closes order by listing code (Q42). No cap in the console (Q23). Test lots are not filtered (Q27).
 
 **Still Waiting.** One statement over `auction_orders` joined to `auction_invoices` on `current_invoice_id`, with:
 
@@ -75,7 +75,7 @@ Every clock exists. Three points are worth saying plainly:
 - The proof clock falls back to the invoice's `sent_at` when a Payment Verifying order has no proof row. The worklist does the same.
 - "The payment that paid it" is `paid_at`, the instant the invoice closed as paid. There is no payment-row clock for Preparing Shipment; `lastPaymentAt` in `orderQueue.ts` belongs to Partially Paid.
 
-**Wait shown.** The server returns `since`; the console shows `duration(now - since)` from `packages/frontend-console/src/time.ts` (two largest units, `3d 5h`), which is exact. The worklist's `ago` is not used: it answers "Yesterday" or "9 Oct" past a day. Slack shows `floor((now - since) / 24h)` whole days, so 48 to 71 hours reads 2 days (Q36). The `3d 5h` shape is the helper's own, not a designed one; no `ui-design.md` exists for this change.
+**Wait shown.** The server returns `since`; the console shows `duration(now - since)` from `packages/frontend-console/src/time.ts` (two largest units, `3d 5h`), which prints `5d` on a whole day and no `0h` (Q43, Q46). The worklist's `ago` is not used: it answers "Yesterday" or "9 Oct" past a day. Slack shows `floor((now - since) / 24h)` whole days, so 48 to 71 hours reads 2 days (Q36). No `ui-design.md` exists for this change; the `3d 5h` form is the helper's, settled in Q43.
 
 **Grant scoping.** The console procedures sit on `elevatedProcedure("auction:read")` and filter by `hasPermission(session.roles, ...)`. Every What's New page, an order or a listing, opens on `auction:read`, so What's New, unsold rows included, needs the floor and nothing more (Q34). Still Waiting is narrowed:
 
@@ -99,7 +99,7 @@ An entry is the mount of `DailyReminder` (Q32): a page load, or the gate letting
 - **Deciding** - the dialog opens, as a boolean the caller holds (`docs/conventions/dialogs.md`, "nothing, but it has content"), when at least one list that loaded has a row or a list failed (Q35). A list that loaded with no row is left out; a failed list shows its failure beside the other, with a Retry that reads that list again. An entry that opens nothing sets nothing, so a later entry that has rows opens it (Q40).
 - **Closing** - the dialog's `onOpenChange(false)` covers the close control, Escape and a click outside; following a row is a link click that also calls the close. Each writes today's Hong Kong day under `grade10.console.dailyReminder.<operatorId>` in `localStorage` (Q33).
 - **Storage** - reads and writes are wrapped in `try/catch`, as in `chrome/recent.ts`, and the page renders without them. When `localStorage` throws, the mark lives in a module variable: the dialog opens once per page load (Q2). There is no `sessionStorage` step, since it survives a reload and Q2 asks for once per page load.
-- **Sign-out** - `reminderClosedMark.ts` exports `forgetClosedMark(operatorId)`. `routes/settings.tsx` wraps the command it already has: `onSignOut={async () => { const signedOut = await signOut.run(); if (signedOut) forgetClosedMark(operator.id); return signedOut; }}`. That is the one place `grade10` signs out. A session that ends any other way (expiry, "Sign out everywhere", another device) leaves the mark; raised in the Open Questions. Another browser keeps its own mark because the key is local to the browser.
+- **Sign-out** - `reminderClosedMark.ts` exports `forgetClosedMark(operatorId)`. `routes/settings.tsx` wraps the command it already has: `onSignOut={async () => { const signedOut = await signOut.run(); if (signedOut) forgetClosedMark(operator.id); return signedOut; }}`. That is the one place `grade10` signs out. A session that ends any other way (expiry, "Sign out everywhere", another device) leaves the mark until the Hong Kong day ends (Q44). Another browser keeps its own mark because the key is local to the browser.
 
 ### Today
 
@@ -107,7 +107,8 @@ The registry is `Partial<Record<SectionId, ReminderHook>>`, `{ auction: useAucti
 
 - **Reads** - `useAuctionReminder` runs two `useQuery`s with the shared `LIST_QUERY`, `refetchOnWindowFocus: true` and no interval, as `useOrdersNeedingAction.ts` does (Q28). Today's Refresh bumps the provider's `generation`, the remount Needs you uses, so all three columns read again (Q39).
 - **Columns** - `TodayPage` takes a `reminder` prop and renders `ReminderColumn` for What's New, for Still Waiting, then the existing Needs you section, each always shown (Q25). A failed list shows the notice and Retry in its column (Q35), as Needs you shows `ReadFailureNotice` today. Below the narrow breakpoint the columns stack with Needs you last (`useNarrow` already exists in `frontend-console`).
-- **Approvals** - today `ApprovalsCard` is a child of the Needs you grid (`TodayPage.tsx`, the `approvals ? <ApprovalsCard …>` child). It moves into its own section under the three columns beside Recent and All sections (Q41); the card and its props are unchanged. Two things still read `approvals` for the Needs you column and are not decided by Q41: the total pill ("approvals included") and `todaySummary`'s sentence. Left as they are, and raised in the Open Questions.
+- **Fold and scroll** - one list block, `ReminderListView` in `chrome/ReminderList.tsx`, draws both places with a `layout` (Q48). On Today (`collapsible`) each product group is one line with its count and a chevron button carrying `aria-expanded`; ChevronDown opens it, ChevronUp folds it, and it starts folded on every load. In the dialog (`scroll`) each group's rows sit in a box with a fixed `max-height` of about four and a half rows and `overflow-y: auto`, so the dialog keeps its size and its close control stays in view.
+- **Approvals** - today `ApprovalsCard` is a child of the Needs you grid (`TodayPage.tsx`, the `approvals ? <ApprovalsCard …>` child). It moves into its own section under the three columns beside Recent and All sections (Q41); the card and its props are unchanged. The total pill ("approvals included") and `todaySummary`'s sentence keep counting Approvals (Q45).
 
 ### The Slack post
 
@@ -192,6 +193,6 @@ Rollback: unset the secrets to stop posts; the cron line stays harmless. The con
 
 ## Open Questions
 
-None for the product: the tie on equal closes, a session that ends without the console's sign-out, Approvals in the Needs you total and the shape of the exact wait are settled as Q42 to Q45 in `decisions.md`.
+None for the product: the tie on equal closes, a session that ends without the console's sign-out, Approvals in the Needs you total and the wait's form are settled as Q42 to Q46 in `decisions.md`, and the fold and scroll as Q48.
 
 The Slack app's scopes (`chat:write`, and `chat:write.public` if the bot is not invited) are the operator's to grant when the app is created; no task depends on them.

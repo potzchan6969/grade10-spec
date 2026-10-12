@@ -16,7 +16,7 @@ Slack. Auction is the first source; each product adds its own rows later.
 | Lists | **What's New** and **Still Waiting** |
 | What's New window | The previous Hong Kong day |
 | Still Waiting threshold | **48 hours** since the order's wait began |
-| Dialog opens | The first entry on a Hong Kong day, when a list has a row for the operator |
+| Dialog opens | Each entry with a row for the operator, until they close it that Hong Kong day |
 | Slack message | **08:00** Hong Kong time, every day, to one channel |
 | Slack list length | **10** rows a list, then a link to Today |
 | Slack wait | Whole days, rounded down |
@@ -74,9 +74,13 @@ longest wait first. It stays on the list every day until the order moves on.
 
 ## Opening
 
-- 🚧 **First entry of the day** - a dialog opens over the first signed-in
-  console page the operator loads, with both lists. Closing it keeps it closed
-  for the rest of that Hong Kong day, for that operator, in that browser
+- 🚧 **Until closed for the day** - a dialog opens over each signed-in console
+  page the operator loads, with both lists, until they close it. Closing it
+  keeps it closed for the rest of that Hong Kong day, for that operator, in
+  that browser
+- 🚧 **Nothing to show** - an entry with no row and no failed list opens
+  nothing and keeps nothing, so a row that turns up later that day opens it on
+  the next load
 - 🚧 **Closing** - the close control, Escape, a click outside, and following a
   row all close it; a row opened in a new tab leaves it open
 - 🚧 **When it opens again** - in another browser, after the operator signs out

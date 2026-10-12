@@ -261,8 +261,8 @@ on winner, In transit, Closed and All, opening on Needs action.
   the status at the 48-hour address deadline and nothing else is marked:
   Preparing Invoice carries no mark, and no wait changes a status
 - 🚧 **Daily reminder** - an order that has waited 48 hours for an invoice,
-  a proof check or a dispatch is listed on the operator's first entry each
-  day and in Slack at 08:00, with the day's new listings - [Daily
+  a proof check or a dispatch is listed in a dialog until the operator closes
+  it for the day, and in Slack at 08:00, with the day's new listings - [Daily
   Reminder](/p/grade10-admin/console/daily-reminder)
 - 🚧 **Search and filters** - by the start of a listing code, any invoice ID
   the order held, the winner's email or a payment's reference; one status of

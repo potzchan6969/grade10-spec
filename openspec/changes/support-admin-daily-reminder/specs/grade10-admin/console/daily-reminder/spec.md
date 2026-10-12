@@ -1,6 +1,6 @@
 ## Purpose
 
-Reminds an operator, once a day, which listings closed yesterday and which orders are still waiting on them, in a dialog on first entry, in three columns on Today and in a Slack message each morning.
+Reminds an operator, once a day, which listings closed yesterday and which orders are still waiting on them, in a dialog until they close it for the day, in three columns on Today and in a Slack message each morning.
 
 ## Feature set
 
@@ -16,7 +16,7 @@ Reminds an operator, once a day, which listings closed yesterday and which order
   - By grant: the console shows an operator only the rows whose action their grants allow
   - Empty lists: an empty list is left out of the dialog and said so on Today
 - Daily dialog
-  - First entry: opens once per Hong Kong day over the page the operator lands on
+  - Until closed: opens over the page the operator lands on, on each entry with a row, until they close it that Hong Kong day
   - Closed mark: kept in the browser per operator and Hong Kong day, cleared at sign-out, and once per page load where storage is blocked
   - Failed read: a list that fails to load says so and never reads as empty
   - Long lists: each product's list scrolls inside itself past about four and a half rows
@@ -139,7 +139,7 @@ Still Waiting SHALL list each order that has waited 48 hours or more in one of t
 | Check proof | Payment Verifying | The winner's latest proof |
 | Dispatch | Preparing Shipment | The payment that paid it |
 
-An order SHALL be listed from the instant 48 hours have elapsed and on every day after, until it leaves the status. No other order status SHALL be listed. An order with a payment flag not yet cleared SHALL be listed like any other, by the wait of its status, and the flag SHALL NOT start a second clock. A row shows the listing code, the lot, the winner, the action and the exact time the order has waited, and opens the order.
+An order SHALL be listed from the instant 48 hours have elapsed and on every day after, until it leaves the status. No other order status SHALL be listed. An order with a payment flag not yet cleared SHALL be listed like any other, by the wait of its status, and the flag SHALL NOT start a second clock. A row shows the listing code, the lot, the winner, the action and how long the order has waited in days and hours, as `3d 5h`, and `5d` on a whole day, and opens the order.
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-v0i rev=2 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-08 - An invoice not sent for 48 hours is listed
@@ -333,9 +333,9 @@ A list that has no row for an operator who holds reading SHALL read as empty, an
 - **WHEN** they open Today and the dialog
 - **THEN** Still Waiting shows all 14 rows in each place
 
-### Requirement: The daily dialog opens once on the first entry of each Hong Kong day
+### Requirement: The daily dialog opens on each entry until the operator closes it that Hong Kong day
 
-An entry is a full page load of the console by a signed-in operator, or a sign-in that finishes on a console page; returning to the tab and moving between pages are not entries. On an entry the console SHALL open the daily dialog over whichever page the operator lands on, once, in this order:
+An entry is a full page load of the console by a signed-in operator, or a sign-in that finishes on a console page; returning to the tab and moving between pages are not entries. On each entry the console SHALL decide whether to open the daily dialog over whichever page the operator lands on, in this order:
 
 1. The console looks for a closed mark kept in the browser for this operator and today's Hong Kong day. When it finds one, nothing opens.
 2. Otherwise it reads both lists. The dialog opens when at least one list that loaded has a row for the operator, or when a list failed to load.
@@ -522,7 +522,7 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day, and S
 - **GIVEN** nine Still Waiting rows for the operator
 - **WHEN** the dialog opens
 - **THEN** the Auction list shows about four and a half rows, and the rest scroll inside the list
-- **AND** the dialog keeps its size and its Done stays in view
+- **AND** the dialog keeps its size and its close control stays in view
 
 ### Requirement: Today reads in three columns
 
@@ -753,8 +753,8 @@ The daily trigger SHALL send the day's message once, and nothing SHALL record th
 **Serves:** grade10-admin-console-daily-reminder-US-04 - a Slack outage at 08:00 loses that morning's post and nothing more
 
 - **GIVEN** Slack refuses the post at 08:00 and would accept one at 08:05
-- **WHEN** the five-minute passes run from 08:00 to 10:00
-- **THEN** no message posts
+- **WHEN** the worker runs on from 08:00 to 10:00
+- **THEN** no later run posts the day's message
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-6kr rev=2 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-56 - A failed send is logged as an error
@@ -769,7 +769,7 @@ The daily trigger SHALL send the day's message once, and nothing SHALL record th
 **Serves:** Slack message - the trigger after midnight
 
 - **GIVEN** Slack refused the post on Monday 12 October
-- **WHEN** the five-minute passes run on Tuesday 13 October before 08:00 Hong Kong time
+- **WHEN** the worker runs on Tuesday 13 October before 08:00 Hong Kong time
 - **THEN** nothing posts for Monday
 - **AND** Tuesday's message posts at 08:00, naming Tuesday's lists
 
