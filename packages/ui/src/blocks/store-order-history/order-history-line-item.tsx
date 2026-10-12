@@ -63,7 +63,7 @@ function OrderHistoryLineItem({
         hAlign="stretch"
         vAlign="center"
       >
-        <p className="w-full font-medium">{product}</p>
+        <p className="line-clamp-2 w-full font-medium">{product}</p>
         <p className="w-full font-normal">{total}</p>
       </VStack>
     </div>
