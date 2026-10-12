@@ -90,7 +90,8 @@ page asks for the email address, and the order belongs to no account.
 - **The cart** - this browser's cart is emptied when the guest leaves for
   Shopify's page; the invoice holds the basket
 - **Order link** - once the order is paid, Grade10 emails a private link to
-  the order to the address the guest gave -
+  the order to the address the guest gave. Shopify's thank-you page and
+  confirmation email can show the same link -
   [Order Detail](/p/grade10-site/store/order-detail#guest-order-link)
 
 :::detail{title="Design record" for="engineer"}
@@ -107,7 +108,7 @@ page asks for the email address, and the order belongs to no account.
 | --- | --- | --- | --- |
 | Guest checkout | Decided | A collector with no session checks out the browser's cart. Shopify's page takes the email; the order belongs to no account, makes none and earns no points. Supersedes members-only checkout. | Product |
 | Guest tender | Decided | A guest pays the basket alone: no promo code and no points. Every store code is minted to a member. | Product |
-| Guest order link | Decided | Once paid, Grade10 emails the guest a private link to the order, beside Shopify's own confirmation. The link carries its secret and needs no account. | Product |
+| Guest order link | Decided | Once paid, Grade10 emails the guest a private link to the order, beside Shopify's own confirmation. The link carries its secret and needs no account. The order carries the same link for Shopify's thank-you page and confirmation email, so it reaches the guest even when Grade10 cannot read the email. | Product |
 | Current decision | Decided | Cart open provides the early review; Pay makes its own current decision, including when it resumes an invoice. An earlier drawer quote never replaces that decision. | Product |
 | Cart-header integration | Decided | Integrate every backend cart-header change and retain the complete durable requirements. Missing backend guarantees remain delivery dependencies, not scope waivers. | @kinisworking |
 | Repeated purchase | Decided | The store owns invoice reuse and recovery; the frontend keeps the purchase identity across Pay and a same-session reload. | @kinisworking |
