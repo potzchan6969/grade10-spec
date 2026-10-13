@@ -27,8 +27,9 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
   items of the store's collection within the scanner's alternative-print
   window (`alternativePrints`, `MATCH.altWindow` and `altRel`,
   `src/recog/match.ts`) resolves to every such item, closest first.
-  `ItemIndex.resolve` answers `{ how: "photos", items }`; the hosted page
-  draws the pick sheet in `ui-design.md`. Slabs found by cert never pick
+  `ItemIndex.resolve` answers `{ how: "photos", items }`, slabs among them;
+  the hosted page draws the pick sheet in `ui-design.md`. A label read names
+  its one slab and never picks
 - **Open scanner** - `HostedApp.tsx` loads its collections once
   (`HostedApp.tsx:233-261`) and again only after an enrolled photo
 - **Catalogue first** - the scanner ranks a collection's photo hit and a
@@ -91,10 +92,10 @@ what the scanner holds and shows. This section records where each part lands.
   Rejected: running inside the catalogue walk, which ties a scanner fault to
   the listing's net
 - **Follows the copy, not the walk** - reads `storeKeeper(env).sync(null)`.
-  A change the keeper took from the shop's report is in the copy within
-  seconds and on the scanner at the next tick (≤ 5 minutes). A change only
-  the walk finds lands in the copy during a tick and on the scanner at the
-  next (≤ 10 minutes)
+  Both bounds run from the shop's save (Q35). A reported change is in the
+  copy within seconds and on the scanner at the next tick (≤ 5 minutes). A
+  change only the walk finds lands in the copy during the next tick and on
+  the scanner at the one after (≤ 10 minutes)
 - **Version 0 writes nothing** - a keeper that has never walked answers an
   empty copy; the pass returns `{ skipped: "unwalked" }` rather than delete
   every item
@@ -167,7 +168,7 @@ what the scanner holds and shows. This section records where each part lands.
 | `no_item` | graded, and names no item, or a code or id inventory does not hold live |
 | `grader` | the item's grader is PCGS, NGC or PMG |
 | `duplicate` | two products name one item, or one grader and cert |
-| `cert` | the cert does not match the scanner's form |
+| `cert` | the grader is read, and the cert is not 4-24 letters, digits or `-` (Q37) |
 
 ### Scanner
 
@@ -192,7 +193,8 @@ what the scanner holds and shows. This section records where each part lands.
 - **Grade and cert on a label read only** - the hosted label shows the
   item's `<grader> <grade>` and `Cert <cert>` only when the match came from the
   label (`how: "cert"`). A photo match names the product without them, so a
-  raw copy of a card sold only as a slab names the slab's product bare
+  raw copy of a card sold only as one slab names the slab's product bare, and
+  a pick that holds a slab shows it bare too
 - **Store first** - in the identify step, after `routeByLanguage`
   (`src/app/engine/recog.worker.ts:577`), a collection hit that clears the
   scanner's accept threshold (`MATCH`, `src/recog/match.ts`) ranks above
@@ -359,6 +361,12 @@ No column changes: `item_images` keeps its columns, and a retry reads
   the scanner keeps its last state
 - [Two store deploys bind one scanner project] → only staging and production
   bind, one store each
+- [The 5 minutes run from the shop's save] → a report that lands just after
+  a tick waits the whole 5 minutes, plus the report's seconds and the pass's
+  own run, so the worst case overshoots by up to a minute. The pass sends
+  upserts first and finishes well inside the budget at today's size; a
+  trigger from the keeper on a reported change is the fix if the monitor's
+  timings show the bound missed
 - [A shared catalogue card scores above a store photo] → the store product
   wins only when its own hit clears the accept threshold, so a weak store
   photo never takes a name from the catalogue

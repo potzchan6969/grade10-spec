@@ -13,8 +13,8 @@ site's `/scan`; the store keeps what it knows in step with the catalogue.
 | Rule | Value |
 | --- | --- |
 | What the scanner holds | every product the store publishes, sold out included, gift cards excepted |
-| A change the shop reports | on the scanner within 5 minutes |
-| A change only the store's re-read finds | on the scanner within 10 minutes |
+| A change the shop reports | on the scanner within 5 minutes of the shop's save |
+| A change only the store's re-read finds | on the scanner within 10 minutes of the shop's save |
 | A new photo recognisable | within the hour, on staging and production |
 | An open scanner's catalogue | read again every 2 minutes while in view, and when the shopkeeper returns to it |
 | Photos learned per product | the first 8, in the shop's order |
@@ -98,6 +98,9 @@ each
   the slab, so the scan and the store's catalogue may carry them
 - **Graders the scanner does not read** — the scanner reads PSA, BGS, CGC, SGC
   and TAG labels; a PCGS, NGC or PMG slab is recognised by its photos
+- **Cert forms** — for every grader it reads, the scanner reads a cert of 4 to
+  24 letters, digits or hyphens; a cert in any other form is a slab with no
+  known unit
 
 ## Recognition
 
@@ -109,11 +112,12 @@ recognise from its photos — a sealed box, merch, a comic — is held now with
 its title, price and availability, and is recognised once the scanner's box
 detector ships
 
-🚧 **Two listings of one art** — where two store products that are not slabs
-match the same art, the scan shows both, closest first, and the shopkeeper
-picks one
+🚧 **Two listings of one art** — where two or more store products match the
+same art about as closely, slab or not, the scan shows each of them, closest
+first, and the shopkeeper picks one; a slab whose label the scanner read is
+named alone, by its cert
 
-🚧 **A raw copy of a slab-only card** — a raw card the store sells only as a
+🚧 **A raw copy of a slab-only card** — a raw card the store sells only as one
 slab names the slab's product, without grade or cert
 
 - **Scanning it meanwhile** — the scanner shows what it shows for anything it
@@ -196,8 +200,8 @@ scanner can only give it if it holds the store's catalogue.
 | The link | Decided | One fixed scan-only link, bookmarked or printed; retired by rotating its key — decided by the owner, 2026-10-13 | Product |
 | ZZZ | Decided | Grade10's store only — decided by the owner, 2026-10-13 | Product |
 | Certs | Decided | A slab's cert and house label code are public, printed on the slab — decided by the owner, 2026-10-13 | Product |
-| Two listings of one art | Decided | Both shown, closest first; the shopkeeper picks — decided by the owner, 2026-10-13 | Product |
-| Raw copy of a slab-only card | Decided | Names the slab's product without grade or cert — decided by the owner, 2026-10-13 | Product |
+| Two listings of one art | Decided | Each close product shown, slabs included unless a label was read, closest first; the shopkeeper picks — decided by the owner, 2026-10-13 | Product |
+| Raw copy of a slab-only card | Decided | Names the slab's product without grade or cert, or offers the pick where another product matches as closely — decided by the owner, 2026-10-13 | Product |
 | Retired link | Decided | The usual refusal; the shop manager hands out the new QR code — decided by the owner, 2026-10-13 | Product |
 | Discounts | Decided | The price the shopper pays with a Sale badge — decided by the owner, 2026-10-13 | Product |
 | Title language | Decided | The store's default — decided by the owner, 2026-10-13 | Product |

@@ -77,9 +77,9 @@ The scanner SHALL hold one item for each product in the store's copy of the
 shop's catalogue, card, slab, sealed box, comic and merch alike, except a gift
 card, and SHALL hold no other item for the store. A product missing from the
 copy SHALL leave the scanner with the next copy that reaches it. A change the
-store's copy takes from the shop's report SHALL reach the scanner within 5
-minutes of the copy taking it; a change only the store's re-read of the whole
-catalogue finds SHALL reach it within 10 minutes. The store's copy SHALL
+shop reports SHALL reach the scanner within 5 minutes of the shop's save; a
+change only the store's re-read of the whole catalogue finds SHALL reach it
+within 10 minutes of the save. The store's copy SHALL
 decide every field: an item changed on the scanner SHALL be put back with the
 next copy, and an item whose fields and photos match the copy SHALL NOT be
 written again.
@@ -155,18 +155,18 @@ written again.
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper never quotes a price the store has since changed
 
 - **GIVEN** the scanner holds a product priced 120000 HKD minor units
-- **WHEN** a stock keeper reprices it to 110000 HKD minor units in the shop
-  and the store's copy takes the shop's report
-- **THEN** within 5 minutes of the copy taking it, the scanner's item is
-  priced 110000 HKD minor units
+- **WHEN** a stock keeper saves a price of 110000 HKD minor units in the
+  shop, and the shop reports the change
+- **THEN** within 5 minutes of the save, the scanner's item is priced 110000
+  HKD minor units
 
 #### Scenario: g10.store-shelf-scanning.SC9 - A change only the re-read finds reaches the scanner within 10 minutes
 **Serves:** g10.store-shelf-scanning.US1 - a change the shop never reported still reaches the shelf
 
 - **GIVEN** the shop changes a product's price without reporting it
 - **WHEN** the store's next re-read of the whole catalogue finds the change
-- **THEN** within 10 minutes of the change, the scanner's item carries the
-  new price
+- **THEN** within 10 minutes of the shop's save, the scanner's item carries
+  the new price
 
 #### Scenario: g10.store-shelf-scanning.SC10 - Production holds the store's products before the store opens there
 **Serves:** g10.store-shelf-scanning.US1 - the shop floor scans on production while production carries no store
@@ -187,14 +187,16 @@ The store SHALL read the unit's grader, grade and cert from inventory for
 every copy it sends, and the item SHALL carry the grader and cert the scanner
 matches a slab's label to, and show the grade and cert. A graded product with
 no known unit SHALL be held with its other fields and its photos, without
-grader, grade or cert, and Operations SHALL be alerted to it.
+grader, grade or cert, and Operations SHALL be alerted to it. The scanner
+SHALL read a cert of 4 to 24 letters, digits or hyphens from every grader it
+reads; a cert in any other form SHALL leave the product without a known unit.
 
 | No known unit | When |
 | --- | --- |
 | Names no item | The product names no item, or one inventory does not hold as a live slab |
 | Grader not read | The item's grader is PCGS, NGC or PMG; the scanner reads PSA, BGS, CGC, SGC and TAG |
 | Unit carried twice | Two products name one item, or one grader and cert; neither carries it |
-| Cert not read | The item's cert is not 4 to 24 letters, digits or hyphens |
+| Cert not read | The item's grader is one the scanner reads, and its cert is not 4 to 24 letters, digits or hyphens |
 
 #### Scenario: g10.store-shelf-scanning.SC11 - A consigned slab's label names its product
 **Serves:** g10.store-shelf-scanning.US3 - the shopkeeper scans a consigned slab of a card the store lists several times
@@ -255,7 +257,8 @@ grader, grade or cert, and Operations SHALL be alerted to it.
 #### Scenario: g10.store-shelf-scanning.SC34 - A cert the scanner cannot read
 **Serves:** `Slab as its copy` - a cert in another form is held like a grader the scanner does not read
 
-- **GIVEN** a consigned product whose item's cert is 30 characters long
+- **GIVEN** a consigned product whose item is a PSA slab with a cert 30
+  characters long
 - **WHEN** the next copy reaches the scanner
 - **THEN** the scanner holds it without grade or cert, recognised by its
   photos
@@ -266,11 +269,12 @@ grader, grade or cert, and Operations SHALL be alerted to it.
 Where a store product and the scanner's shared card catalogue both match what
 the camera sees, and the store product's match is one the scanner accepts on
 its own, the scanner SHALL name the store product. Where two or more store
-products that are not slabs match one art about as closely, the scan SHALL
+products match one art about as closely, slabs among them, the scan SHALL
 show each of them, closest first, and the shopkeeper SHALL pick one; a scan
-with one close match SHALL show it directly. A slab's grade and cert SHALL
-show only when the scanner read its label, so a raw copy of a card the store
-sells only as a slab SHALL name the slab's product without them. A product the scanner
+with one close match SHALL show it directly. A slab whose label the scanner
+read SHALL be named alone, by its cert. A slab's grade and cert SHALL show
+only when the scanner read its label, so a raw copy of a card the store sells
+only as one slab SHALL name the slab's product without them. A product the scanner
 cannot yet recognise from its photos SHALL still be held with its title,
 price and availability, and scanning it SHALL show what the scanner shows for
 anything it does not recognise.
@@ -336,12 +340,41 @@ anything it does not recognise.
 #### Scenario: g10.store-shelf-scanning.SC39 - A raw copy of a card sold only as a slab
 **Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper scans a raw card the store sells only graded
 
-- **GIVEN** the store sells a card only as a PSA 10 slab, and no listing of it
-  raw
+- **GIVEN** the store sells a card only as a PSA 10 slab, and no other
+  product of its art
 - **WHEN** the shopkeeper scans a raw copy of that card
 - **THEN** the scan names the slab's product with its title, price and
-  availability
+  availability, with no choice to make
 - **AND** shows no grade and no cert
+
+#### Scenario: g10.store-shelf-scanning.SC41 - A raw card beside a slab of its art offers the pick
+**Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - a raw card never shows a slab's price without a choice
+
+- **GIVEN** the store sells a raw listing of a card and a PSA 10 slab of it,
+  and the scanner matches the card in view to both about as closely
+- **WHEN** the shopkeeper scans a raw copy of that card
+- **THEN** the scan names the closest product and says 2 matches
+- **AND** opening it lists both, closest first, each with its title, price
+  and availability, and neither with a grade or cert
+
+#### Scenario: g10.store-shelf-scanning.SC42 - Two slabs of one card with no label read
+**Serves:** `g10.store-shelf-scanning.US3`, `Recognition order` - a slab whose label is not read is picked like any other listing
+
+- **GIVEN** the store sells two PCGS slabs of one card, which the scanner
+  cannot read by label
+- **WHEN** the shopkeeper scans one of them
+- **THEN** the scan names the closest and says 2 matches
+- **AND** opening it lists both slabs' products, closest first, with no
+  grade or cert
+
+#### Scenario: g10.store-shelf-scanning.SC43 - A read label names its slab alone
+**Serves:** `g10.store-shelf-scanning.US3`, `Recognition order` - a cert names one unit, so there is nothing to pick
+
+- **GIVEN** the store sells a raw listing of a card and a PSA 10 slab of it
+  with cert 126956765
+- **WHEN** the shopkeeper scans the slab and the scanner reads its label
+- **THEN** the scan names the slab's product with grade PSA 10 and cert
+  126956765, with no choice to make
 
 ### Requirement: The scanner learns new photos every hour
 

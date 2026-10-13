@@ -53,6 +53,7 @@ New copy, English only: `<n> matches`, `Pick the one in your hand`, `Back`,
 | Two or more close matches | The closest item's title and price, a `<n> matches` chip, no availability chip | `g10.store-shelf-scanning.SC36` |
 | Slab read by its label | A `<grader> <grade>` chip and a `Cert <cert>` chip | `g10.store-shelf-scanning.SC11` |
 | Slab matched by its photos | The slab's title, price and availability; no grade or cert chip | `g10.store-shelf-scanning.SC39` |
+| Slab matched by its label | The slab's title, price and availability, its grade and cert chips; no `<n> matches` | `g10.store-shelf-scanning.SC43` |
 | On sale | A `Sale` chip beside availability; the price is what the shopper pays | `g10.store-shelf-scanning.SC25` |
 | No store page in this build | No `Tap for details ›` | `g10.store-shelf-scanning.SC28` |
 | Not recognised | "Not recognised yet — hold steady" | `g10.store-shelf-scanning.SC19` |
@@ -62,6 +63,7 @@ New copy, English only: `<n> matches`, `Pick the one in your hand`, `Back`,
 | State | Shows | Anchor |
 | --- | --- | --- |
 | List | `Pick the one in your hand`, one row per match closest first: title, price, `Sale` and availability chips, `›`; a close control | `g10.store-shelf-scanning.SC36` |
+| List holding a slab | A slab's row as any other: title, price, `Sale` and availability chips; no grade or cert chip | `g10.store-shelf-scanning.SC41`, `g10.store-shelf-scanning.SC42` |
 | Picked | `‹ Back`, the picked item's chips, title and price, and `Open store page` where the build carries the store | `g10.store-shelf-scanning.SC37` |
 | Dismissed | The sheet closes and the camera view returns; nothing is chosen | `g10.store-shelf-scanning.SC38` |
 | Item leaves the camera while open | The sheet keeps what it shows until dismissed | **Out of suite:** the hosted page's component test in `apps/backend/grade10/tcg-ar/test/app/`, task 3.1 |
