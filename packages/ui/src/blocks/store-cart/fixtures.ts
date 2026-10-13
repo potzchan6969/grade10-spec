@@ -132,6 +132,9 @@ const DEFAULT_CART_COPY: CartDrawerCopy = {
     checkoutButton: "Proceed to Checkout",
     checkoutRedirecting: "Redirecting...",
     checkoutFailed: "Couldn’t open checkout",
+    signInAction: "Sign in",
+    signInSuffix: "for points and rewards",
+    publicPromoCodes: "Promo codes",
   },
   emptyTitle: "Your cart is empty",
   emptyDescription: "Items you add will appear here",
@@ -170,6 +173,33 @@ const SAMPLE_HELD_PROMO_CODES: readonly HeldPromoCode[] = [
     detailLabel: "Use by 15 Apr 2026",
     applicable: false,
     inapplicableReason: "Cannot combine with another promo code on this order",
+  },
+];
+
+/** Codes open to everyone — listed to guests and members under their own
+ * heading, never minted to a member. */
+const SAMPLE_PUBLIC_PROMO_CODES: readonly HeldPromoCode[] = [
+  {
+    id: "public-g10launch",
+    label: "G10LAUNCH",
+    title: "HK$200 discount",
+    detailLabel: "Use by 30 Nov 2026",
+    applicable: true,
+  },
+  {
+    id: "public-holiday",
+    label: "HOLIDAY26",
+    title: "5% discount",
+    detailLabel: "Use by 31 Dec 2026",
+    applicable: true,
+  },
+  {
+    id: "public-bigorder",
+    label: "BIGORDER",
+    title: "HK$1,000 discount",
+    detailLabel: "Use by 31 Mar 2026",
+    applicable: false,
+    inapplicableReason: "Add ~HK$50,000 more to use this promo code",
   },
 ];
 
@@ -413,6 +443,7 @@ export {
   SAMPLE_HELD_PROMO_CODES,
   SAMPLE_HELD_WITH_SITE_SALE_BLOCK,
   SAMPLE_HELD_WITH_SITE_SALE_STACKABLE,
+  SAMPLE_PUBLIC_PROMO_CODES,
   SPECIAL_SALE_CART_ITEMS,
   STORY_CART_SUBTOTAL_HKD,
   STORY_LIST_SUBTOTAL,

@@ -17,7 +17,7 @@ back to that page.
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Estimated total | **Goods − site discounts − code − points**, as the shop's checkout prices them — before shipping and tax |
 | Shop's answer | Within **2.5 s**; past it, or where the shop does not answer, the drawer shows the store's own figures, with no site discount in them |
-| Held codes | The member's own store codes and reward coupons, the ones that fit first, the soonest to expire first; every store code is minted to a member, so the list is complete |
+| Held codes | The member's own store codes and reward coupons, plus codes open to everyone; a guest sees the public codes only. The ones that fit first, the soonest to expire first |
 | Carried to checkout | 🚧 The code and the points, held with the cart; Proceed to Checkout sends them straight to Shopify; paying the invoice clears the cart, them included — [Checkout](/p/grade10-site/store/checkout#integration-readiness) |
 
 ## Reviewing the Cart
@@ -56,6 +56,10 @@ read against the cart as it stands and held nowhere.
   and the total does not move
 - 🚧 **Picked** — a held code applies the same way from the list; one that
   cannot ride this cart is listed apart with its reason
+- 🚧 **Public codes** — codes open to everyone are listed to guests and
+  members alike; a member-only code typed by a guest gets the same refusal
+  as a code nobody minted —
+  [Discounts](/p/grade10-site/store/discounts#public-codes)
 - **Set aside for a site discount** — where the code and a site discount
   cannot both apply and the site discount takes more, the drawer says so and
   the total shows the site discount, the answer the shop's checkout gives;
@@ -104,9 +108,13 @@ The refusals are the coupon's own —
 - 🚧 **Sent** — the order is promised with the same code and points the
   drawer shows —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
-- **Guest** - a guest's drawer offers no code and no points; Proceed to
-  Checkout sends the lines alone, and goods at the bar ask the guest to sign
-  in - [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- 🚧 **Guest** - the signed-out drawer's primary button is Check out as
+  guest; under it a quiet Sign in link for points and rewards. Signing in
+  merges the browser cart and reopens the
+  drawer with points and the wallet; a public code already on the cart
+  stays if it still fits. Goods at the bar replace the guest button with
+  the sign-in ask -
+  [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 
@@ -114,11 +122,17 @@ The refusals are the coupon's own —
 
 ::story{id="store-cart-blocks-cartdrawer--default" title="The cart drawer"}
 
-::story{id="store-cart-blocks-cartdrawerfooter--interactive-member" title="A code and points on the cart"}
+::story{id="store-cart-blocks-cartdrawerfooter-interactive--interactive-member" title="A code and points on the cart"}
 
 ::story{id="store-cart-blocks-cartdrawer--unavailable-items-removed" title="Lines whose product left the shop, leaving"}
 
 ::story{id="store-cart-blocks-cartdrawer--empty-state" title="An empty cart"}
+
+::story{id="store-cart-screens-cart-drawer-guest--guest" title="The drawer's guest checkout"}
+
+::story{id="store-cart-blocks-cartdrawerfooter-guest--guest-with-public-code" title="A guest's codes, public only"}
+
+::story{id="store-cart-blocks-cartdrawerfooter-guest--member-with-public-codes" title="A member's codes beside the public ones"}
 
 :::detail{title="Code map" for="engineer"}
 - **The quote** - `quote.basket`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
@@ -163,13 +177,13 @@ and tax before the invoice. A second code on one cart.
 | Guest cart | Decided | A signed-out collector's cart is kept in this browser and checked out as a guest; signing in moves its lines into the member's cart. Supersedes one session scope. | Product |
 | One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
 | Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
-| Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |
+| Held list | Decided | The member's own store codes and reward coupons, plus public codes, answered before they are picked; a guest's list holds the public codes only. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping | Decided | Unknown until the invoice; the estimated total is the goods after the site discounts and this store's own tender. | Product |
 | Priced by the shop | Decided | The drawer asks the shop to price the basket the way its checkout will, site discounts and the chosen code together, so a code the drawer shows as applied is applied at checkout. The held list is still answered by the store's own rules, because asking the shop once per held code on every edit is too many calls; the chosen code is the one the shop answers. | Product |
 | Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
 | Verification before a session | Decided | Goods of HKD 120,000 or more answer Proceed to Checkout with the verify message, and the account link where the profile page is enabled. No checkout session is created until the member is verified. The identity check still runs only on the account page. Asking Shopify first and showing the gate from its reply is not this drawer. | Product |
-| Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
+| Public codes | Decided | Public codes — codes open to everyone — are listed to guests and members alike — [Discounts](/p/grade10-site/store/discounts#public-codes). Decided 2026-10-13; supersedes the rule that the store mints every code to one member and the cart neither lists nor takes a public code (2026-10-12). | Product |
 | The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
 :::

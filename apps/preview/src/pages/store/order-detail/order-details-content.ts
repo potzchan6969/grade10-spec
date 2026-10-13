@@ -53,7 +53,7 @@ const ORDER_DETAILS_DELIVERY: OrderDetailsDelivery = {
       date: FIXTURE_ORDER_PLACED_DAY,
     },
     {
-      label: "Shipped",
+      label: "Shipping",
       date: FIXTURE_ORDER_SHIPPED_DAY,
     },
     {
@@ -207,7 +207,10 @@ const ORDER_DETAILS_READ_COPY = {
   notFoundTitle: "We couldn’t find this order",
   notFoundDescription:
     "Check the order number, or find the order in your orders.",
+  /** The public link page presumes no account — point at the email. */
+  notFoundLinkDescription: "Check the link in your order email.",
   backToOrders: "Back to Your Orders",
+  backToHome: "Back to Home",
   failed: "We couldn’t load this order.",
   retry: "Retry",
 };

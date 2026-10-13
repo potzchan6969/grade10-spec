@@ -14,6 +14,9 @@ type OrderDetailsHeaderProps = {
   placedOn: ReactNode;
   /** ISO date for the `<time datetime>` attribute. */
   placedOnDateTime?: string;
+  /** A second sentence on the placement line — e.g. "Receipt sent to
+   * ada@example.com" on a guest's return from checkout. */
+  placedOnNote?: ReactNode;
   needHelp?: {
     href: string;
     label: ReactNode;
@@ -35,6 +38,7 @@ function OrderDetailsHeader({
   statusLabel,
   placedOn,
   placedOnDateTime,
+  placedOnNote,
   needHelp,
   className,
 }: OrderDetailsHeaderProps) {
@@ -60,6 +64,11 @@ function OrderDetailsHeader({
         >
           {placedOn}
         </time>
+        {placedOnNote ? (
+          <span className="text-sm leading-5 text-secondary-foreground">
+            {placedOnNote}
+          </span>
+        ) : null}
         {needHelp ? (
           <Link
             href={needHelp.href}

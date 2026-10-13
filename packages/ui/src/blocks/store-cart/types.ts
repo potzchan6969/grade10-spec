@@ -158,6 +158,14 @@ type CartDrawerFooterCopy = {
   checkoutRedirecting: string;
   /** Toast title when checkout redirect fails (e.g. Shopify session error). */
   checkoutFailed: string;
+  /** Quiet text before the sign-in action for a guest — e.g. "Already have an account?". */
+  signInPrompt?: string;
+  /** Sign-in action in that line — e.g. "Sign in". */
+  signInAction?: string;
+  /** Quiet text after the sign-in action — e.g. "for points and rewards". */
+  signInSuffix?: string;
+  /** Section heading above codes open to everyone — e.g. "Promo codes". */
+  publicPromoCodes?: string;
 };
 
 /**

@@ -69,7 +69,29 @@ const PAST_ORDERS: readonly OrderHistoryOrderSummary[] = [
   },
 ];
 
-export { ACTIVE_ORDERS, ORDER_HISTORY_COPY, PAST_ORDERS };
+/** A guest order placed under the member's email, linked by sign-in: listed
+ * with the member's past orders — nothing on the card marks it. */
+const GUEST_ORDER: OrderHistoryOrderSummary = {
+  id: "ord-guest",
+  orderId: "Order #G10-10520",
+  status: "completed",
+  date: FIXTURE_PLACED_ON,
+  total: "Total: HK$210",
+  lines: [{ id: "g1", ...LINE }],
+};
+
+const PAST_ORDERS_WITH_GUEST: readonly OrderHistoryOrderSummary[] = [
+  GUEST_ORDER,
+  ...PAST_ORDERS,
+];
+
+export {
+  ACTIVE_ORDERS,
+  GUEST_ORDER,
+  ORDER_HISTORY_COPY,
+  PAST_ORDERS,
+  PAST_ORDERS_WITH_GUEST,
+};
 
 /** Draft words for the first read and its failure, not yet in `@grade10/i18n`. */
 const ORDER_HISTORY_READ_COPY = {

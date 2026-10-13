@@ -35,9 +35,9 @@ localized Retry without replacing the address
 🚧 **Empty account** - a collector with no purchases gets a shopping path back
 to the Store
 
-**Guest orders** - a paid guest order placed under the email a member signs
-in with is listed with their orders. It stays a guest order: it earns no
-points and belongs to no account -
+🚧 **Guest orders** - every guest order placed under an email is listed
+automatically once a sign-in proves that email; one still in progress earns
+points when it completes, one already Completed earns nothing -
 [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 
 ## Designs
@@ -46,8 +46,10 @@ points and belongs to no account -
 
 ::story{id="store-order-history-blocks-orderhistory--empty" title="An account with no orders"}
 
+::story{id="store-order-history-screens-order-history--with-guest-orders" title="Guest orders under the member's email, listed"}
+
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Guest orders after sign-in | Decided | List a paid guest order under the member whose sign-in proves its email, with no points; the order stays a guest order. Shopify customer accounts and WooCommerce both match past guest orders by a proven email, and Shopify's confirmation with the order link already went to that inbox. Confirmed by the owner 2026-10-12. | Product |
+| Guest orders after sign-in | Decided | Every paid guest order placed under an email appears in the account automatically once a sign-in proves that email — the way Shopify customer accounts and WooCommerce already list a guest's orders under a proven email, and the reason the member is the order's owner rather than a recipient of a saved link. Linking gives the order an owner: one still in progress earns points when it completes, one already Completed earns nothing. Decided 2026-10-13; supersedes prompt-only saving (earlier 2026-10-13), which itself superseded the first email-match row (2026-10-12). | Product |
 :::

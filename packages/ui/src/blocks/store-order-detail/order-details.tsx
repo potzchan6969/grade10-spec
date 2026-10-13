@@ -31,6 +31,9 @@ type OrderDetailsProps = {
   status: OrderDetailsFulfillmentStatus;
   placedOn: ReactNode;
   placedOnDateTime?: string;
+  /** A second sentence on the header's placement line — e.g. "Receipt sent
+   * to ada@example.com" on a guest's return from checkout. */
+  placedOnNote?: ReactNode;
   needHelp?: {
     href: string;
     label?: ReactNode;
@@ -95,6 +98,7 @@ function OrderDetails({
   status,
   placedOn,
   placedOnDateTime,
+  placedOnNote,
   needHelp,
   delivery,
   lines,
@@ -153,6 +157,7 @@ function OrderDetails({
           orderId={orderId}
           placedOn={placedOn}
           placedOnDateTime={placedOnDateTime}
+          placedOnNote={placedOnNote}
           status={status}
           statusLabel={copy.status[status]}
         />

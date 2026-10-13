@@ -1,5 +1,6 @@
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { ReactNode } from "react";
 
 /** The first order read in flight: a skeleton card, announced as loading. */
@@ -48,14 +49,24 @@ function OrderDetailsNotFound({
   title: string;
 }) {
   return (
-    <div className="flex w-full max-w-5xl flex-col gap-6 px-8 py-12">
+    <VStack
+      className="mx-auto w-full max-w-lg px-4 py-20 text-center"
+      gap="lg"
+      hAlign="center"
+    >
       {breadcrumbs}
-      <h1 className="text-3xl font-bold text-foreground">{title}</h1>
-      <p className="text-sm text-secondary-foreground">{description}</p>
-      <Button onClick={onBack} type="button" variant="outline">
+      <VStack className="w-full" gap="sm" hAlign="center">
+        <h1 className="text-4xl font-bold leading-none text-foreground sm:text-5xl">
+          {title}
+        </h1>
+        <p className="text-base leading-6 text-secondary-foreground">
+          {description}
+        </p>
+      </VStack>
+      <Button onClick={onBack} size="md" type="button">
         {backLabel}
       </Button>
-    </div>
+    </VStack>
   );
 }
 

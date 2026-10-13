@@ -48,6 +48,11 @@ Published from `main` at
   Providers
 - **Folders** — a feature holds only `Screens`, `Flows`, `Prototypes`,
   `Parts` and `Blocks`; nothing sits loose beside them
+- **Crowding** — five or more loose stories under one `<Component>` (or one
+  `<Aspect>`) deserve a subgroup: split them into named `<Aspect>` folders
+  by what they vary, so related states sit together — e.g. the drawer's
+  `Header`, `Body` and `Footer` inside `CartDrawer`. Retitle with
+  `pnpm storybook:rename <map>` so every cited id is rewritten with the move
 - **Order** — Start Here, the domains in `docs/prds/manual.yaml` order, then
   Design System; inside a feature, Screens, Flows, Prototypes, Parts and
   Blocks
