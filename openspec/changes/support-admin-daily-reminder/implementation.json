@@ -43,5 +43,89 @@
         "auction-service"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "mason5991",
+    "reviewedAt": "2026-10-13T19:18:08.721Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "QA2 reconciliation and the Q49-Q51 amendment added SC-84 to SC-87 and retargeted SC-83; the suite still covers the four journeys the implementation walks.",
+        "evidence": [
+          "openspec/changes/support-admin-daily-reminder/rounds.md group 5 and 6",
+          "apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts",
+          "apps/admin/grade10/src/pages/dashboard/TodayPage.test.tsx"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Feature set now names first-open product groups, one-height columns and per-product Slack channels; grade10 implements that refined set.",
+        "evidence": [
+          "packages/frontend-console/src/ReminderGroups.test.tsx",
+          "packages/slack/test/dailyReminder.test.ts",
+          "apps/backend/grade10/auction/test/db/reminder/post.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+        "anchors": [
+          "Requirement: Slack posts the day's lists at 08:00 Hong Kong time"
+        ],
+        "classification": "semantic",
+        "reason": "Each product posts to its own channel with a product-headed title; auction's cron posts only auction rows.",
+        "evidence": [
+          "packages/grade10-auction/backend/test/services/reminder/slackMessage.test.ts",
+          "apps/backend/grade10/auction/test/db/reminder/post.spec.ts",
+          "grade10-admin-console-daily-reminder-SC-87"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+        "anchors": [
+          "Requirement: The channel and token come from the environment"
+        ],
+        "classification": "semantic",
+        "reason": "Token and channel are read from auction's own env; unset values log not configured and skip the post.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/worker/scheduled.spec.ts",
+          "packages/grade10-auction/backend/test/services/reminder/reminderDeps.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+        "anchors": [
+          "Requirement: The daily dialog opens on each entry until the operator closes it that Hong Kong day"
+        ],
+        "classification": "semantic",
+        "reason": "Long dialog lists fade the overflow edge (SC-82 rev 2); close mark and sign-out clearing are unchanged.",
+        "evidence": [
+          "packages/frontend-console/src/ReminderGroups.test.tsx",
+          "apps/admin/grade10/src/chrome/DailyReminder.test.tsx",
+          "apps/admin/grade10/src/routes/settings.reminder.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+        "anchors": [
+          "Requirement: Today reads in three columns"
+        ],
+        "classification": "semantic",
+        "reason": "Today opens the first product with rows, one group at a time, fills one column height and shows Nothing yet for empty products.",
+        "evidence": [
+          "apps/admin/grade10/src/pages/dashboard/TodayPage.test.tsx",
+          "packages/frontend-console/src/ReminderGroups.test.tsx",
+          "grade10-admin-console-daily-reminder-SC-83",
+          "grade10-admin-console-daily-reminder-SC-84",
+          "grade10-admin-console-daily-reminder-SC-85",
+          "grade10-admin-console-daily-reminder-SC-86"
+        ]
+      }
+    ]
+  }
 }
