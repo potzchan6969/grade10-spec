@@ -22,7 +22,7 @@
 - [ ] 2.3 Make the order letter previews in `apps/emails` print settlement-currency amounts and no USD bid for an HKD order, and keep `US$` on the won-lot letter (`winner-order-SC-289`, `order-mail-SC-63`, `order-mail-SC-64`, `order-mail-SC-65`, `order-mail-SC-66`, `order-mail-SC-67`, `order-mail-SC-68`)
 - [ ] 2.4 Verify: `pnpm run test`, the `apps/emails` preview build, and `pnpm run typecheck`
 
-## 3. PRD pages (grade10-spec)
+## 3. PRD pages (grade10-spec) (owner: @htonyl)
 
 - [ ] 3.1 Settle the pages the proposal links: in `post-bidding.md` make the Order Setup table's payment method row name the rails and the settlement currency, and replace the buyer's premium row's per-currency minimum with one USD amount; in `management.md` replace the minimum charge row's per-currency wording; in `bidding.md`, `account.md`, `display.md` and `index.md` check that every 🚧 line matches the deltas
 - [ ] 3.2 Verify: `pnpm check:manual` names no line of these pages and no unmarked page
