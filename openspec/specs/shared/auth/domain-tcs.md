@@ -459,8 +459,8 @@
 **I want** the tab I asked from to sign me in and finish what it stopped me doing once I follow the link elsewhere,
 **so that** one sign-in finishes the thing I was in the middle of, on every tab of the brand.
 
-<!-- trace:case id=g10.auth-domain.TC-79b rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z,g10.shared-session.SC-fnz,g10.shared-session.SC-fmt,g10.shared-session.SC-lgf,g10.shared-session.SC-hc7,g10.shared-session.SC-sqp -->
-### shared-auth-e2e-US7-TC1-1: Link followed in a second tab signs the first in and completes its refused add
+<!-- trace:case id=g10.auth-domain.TC-79b rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z,g10.shared-session.SC-fnz,g10.shared-session.SC-fmt,g10.shared-session.SC-lgf,g10.shared-session.SC-hc7,g10.shared-session.SC-sqp -->
+### shared-auth-e2e-US7-TC1-2: Link followed in a second tab signs the first in and opens its refused page
 
 **Classification:**
 
@@ -477,15 +477,15 @@
 
 **Pre-conditions:**
 
-* customer is not signed in, with tab A open on <listing> and tab C open on <grade10 store url>.
-* In tab A, the add to cart on <listing> was refused, and a sign-in link was asked for at <collector email>.
+* customer is not signed in, with tab A refused <signed-in-only page> and tab C open on <grade10 store url>.
+* In tab A, a sign-in link was asked for at <collector email>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | `<collector email>` | An inbox the tester reads, with an account |
-| `<listing>` | A card listing with an add-to-cart control |
+| `<signed-in-only page>` | The collector's orders list, which only they may read |
 
 **Steps:**
 
@@ -496,7 +496,7 @@
 **Expected Results:**
 
 * Step 2 shows no sign-in dialog and names the collector.
-* <listing> is in the collector's cart, without the add being clicked again.
+* Tab A is on <signed-in-only page>, without it being opened again.
 * Step 3 names the collector.
 
 ---
