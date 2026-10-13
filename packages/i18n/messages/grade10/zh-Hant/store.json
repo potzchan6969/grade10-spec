@@ -25,6 +25,11 @@
       "removePromo": "移除",
       "yourPromoCodes": "你的優惠碼",
       "publicPromoCodes": "優惠碼",
+      "publicCodeTitle": {
+        "amount": "{amount} 折扣",
+        "percentage": "{percent}% 折扣",
+        "freeShipping": "免運費"
+      },
       "notValidPromoCodes": "不適用於此訂單",
       "noHeldPromoCodes": "你還沒有任何優惠碼。",
       "browseLoyaltyOffers": "瀏覽會員優惠",

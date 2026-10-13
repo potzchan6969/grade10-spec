@@ -25,6 +25,11 @@
       "removePromo": "Remove",
       "yourPromoCodes": "Your promo codes",
       "publicPromoCodes": "Promo codes",
+      "publicCodeTitle": {
+        "amount": "{amount} discount",
+        "percentage": "{percent}% discount",
+        "freeShipping": "Free shipping"
+      },
       "notValidPromoCodes": "Not valid for this order",
       "noHeldPromoCodes": "You don’t have any promo codes yet.",
       "browseLoyaltyOffers": "Browse loyalty offers",
