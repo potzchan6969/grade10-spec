@@ -4,11 +4,11 @@ import {
   GRADING_IN_PROGRESS_ITEMS,
   VAULT_COMPLETED_ITEMS,
   VAULT_IN_PROGRESS_ITEMS,
-} from "../intake-content";
+} from "../../intake-content";
 import { IntakeItemCard } from "./intake-item-card";
 
 const meta = {
-  title: "Vault/Collector Pages/Parts/IntakeItemCard",
+  title: "Submissions/Intake Tracker/Parts/IntakeItemCard",
   component: IntakeItemCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -54,7 +54,7 @@ export const Vaulted: Story = {
 
 /**
  * Boneyard skeleton while the submissions fetch settles — also the capture
- * target for `boneyard-js build` (story id `vault-collector-pages-parts-intakeitemcard--loading`,
+ * target for `boneyard-js build` (story id `submissions-intake-tracker-parts-intakeitemcard--loading`,
  * at the card's full page width).
  */
 export const Loading: Story = {

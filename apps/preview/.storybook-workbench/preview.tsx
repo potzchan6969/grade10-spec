@@ -24,6 +24,7 @@ const preview: Preview = {
           "Loyalty",
           "Auction",
           "Vault",
+          "Submissions",
           "Grading",
           "Consignment",
           "Appointment",

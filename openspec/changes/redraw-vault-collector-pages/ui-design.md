@@ -25,7 +25,7 @@ The design reference is the Figma file `Grade10-DS-2026` and the Storybook workb
 
 ### Intake Tracker
 
-`awaiting:` figma — no frame drawn; the workbench story `vault-collector-pages-screens-intake-tracker--in-progress` stands in until it is.
+`awaiting:` figma — no frame drawn; the workbench story `submissions-intake-tracker-screens-intake-tracker--in-progress` stands in until it is.
 
 ### Book a Visit
 

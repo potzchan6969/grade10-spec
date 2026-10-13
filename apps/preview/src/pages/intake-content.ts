@@ -1,5 +1,5 @@
 import { formatMediumMoment } from "@grade10/date";
-import { formatHkd, SCAN_IMAGE, SHOP_NAME } from "../vault-content";
+import { formatHkd, SCAN_IMAGE, SHOP_NAME } from "./vault-content";
 
 type IntakeService = "vault" | "grading" | "auction-listing" | "store-listing";
 

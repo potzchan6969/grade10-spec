@@ -12,12 +12,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useMemo, useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
 import {
-  PAGE_ENTER_CLASS,
-  PageHeader,
-  StickyTabBar,
-  VaultPageShell,
-} from "../../vault-shared";
-import {
   COMPLETED_ITEMS,
   filterItems,
   GRADING_IN_PROGRESS_ITEMS,
@@ -26,7 +20,13 @@ import {
   type IntakeItemRow,
   type IntakeListFilter,
   LIST_FILTER_LABELS,
-} from "../intake-content";
+} from "../../intake-content";
+import {
+  PAGE_ENTER_CLASS,
+  PageHeader,
+  StickyTabBar,
+  VaultPageShell,
+} from "../../vault-shared";
 import { IntakeItemCard } from "./intake-item-card";
 
 const FILTERS: IntakeListFilter[] = ["in-progress", "completed", "all"];
@@ -211,7 +211,7 @@ function IntakeTrackerPage({
 }
 
 const meta = {
-  title: "Vault/Collector Pages/Screens/Intake Tracker",
+  title: "Submissions/Intake Tracker/Screens/Intake Tracker",
   component: IntakeTrackerPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
