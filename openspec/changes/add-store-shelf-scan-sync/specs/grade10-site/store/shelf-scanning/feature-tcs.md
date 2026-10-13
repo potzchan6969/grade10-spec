@@ -1083,7 +1083,7 @@ Runs once per row of **Test data**.
 * Step 2's failure names both models, the photo run's and the scanner's.
 * Step 2's run sent the scanner no photo, learned none and rebuilt nothing.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-49c rev=1 covers=g10.store-shelf-scanning.SC-q13 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-49c rev=2 covers=g10.store-shelf-scanning.SC-q13 -->
 ### g10.store-shelf-scanning.US1-TC27: A consigned raw card is held as a raw card, never alerted
 
 **Classification:**
@@ -1103,6 +1103,7 @@ Runs once per row of **Test data**.
 
 * `<card_consigned>` is a consigned raw card published to the staging store, its photos learned.
 * `<card_consigned>`'s inventory item holds it with no grader.
+* A merchandiser set `<card_consigned>`'s collectible type to a graded one.
 * No staging product is held without a unit, and the Datadog monitor on `store.shelf_scan.unit_missing` is not raised.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
 
