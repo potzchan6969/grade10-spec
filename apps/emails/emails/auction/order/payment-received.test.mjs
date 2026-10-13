@@ -38,7 +38,7 @@ const HKD_AFTER_SETUP_LETTERS = [
   [
     "partial payment received",
     () => createElement(PaymentReceivedPartialEmail),
-    "HK$8,000",
+    "HK$800",
   ],
 ];
 
