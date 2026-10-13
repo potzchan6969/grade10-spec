@@ -1,0 +1,138 @@
+{
+  "version": 2,
+  "change": "add-store-cart-thumbnails",
+  "baseline": "490efd66506e46752183d0a3a7003883c4e0e6c2a97723a6cbfac406c133b59a",
+  "fingerprint": "a805b47e9e19c3e22774af9c1986b7061c34c9181682286747fb74e4ba057a06",
+  "reviewedBy": "kinisworking",
+  "acceptedAt": "2026-10-13T09:55:14.487Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart",
+      "sha256": "55f5ffc9ed8ca60ea3131d224bbb9b32858cdaf811ea7e9a924d7581686020fd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-cart.md#product-pictures",
+      "sha256": "9c5c832a3bb115b36137ed4304713fce0454b13f41ef43d982412b2ebf1189b3",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/decisions.md",
+      "sha256": "b4a28742aa81360ed2692353342d357573b360bea89d4966d0f69545b1645432",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/proposal.md",
+      "sha256": "207ea52c78d118d6624a622eaa877e188b0ef305efd9827f0a0df40b1c3218c6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "sha256": "11abc0766e39968647ec8da1b4f34361c46e38008e4fbc8d83a67c253fe532dd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/specs/grade10-site/store/cart-drawer/spec.md",
+      "sha256": "c36c007f6ab2657866914fbd09c51051ddebf8e2e59a8c1464c277d7ded79925",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "sha256": "74106a5a8b0ba8f345f63e7fc0702e1494804a4ea419a9fb4213006a58cac869",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "1a249d0c039fc965b224f02d13b13a0e98ca55d1fb1739d2c4fec76ac2d065d8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/specs/shared/ui/store-cart/spec.md",
+      "sha256": "d420ee1f44048b8fa1323bb7fb21fab4af0cfb2bf9d3de9e7806192068b00656",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "e37ec4a23252e4bb84f54c11381869e3a02c2b1a4458fd3f98e2574054440034",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/tech-design.md",
+      "sha256": "d009750fbe3156db86b6d77aa0a94f3bfffbf1b84081abf2719ad7cb5ba58f99",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/ui-design.md",
+      "sha256": "3cabd95eb9200c673fa5dc3619ab8a089213ac3f464814489b7c435b8843cc78",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "sha256": "11abc0766e39968647ec8da1b4f34361c46e38008e4fbc8d83a67c253fe532dd",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+      "sha256": "db0ae47b49063a0304c6571d0491ead37da303f6b344ee6d61f9bb02acb22a92",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "sha256": "ffe41e0e6335042a2bb895f48e74f720cba0d5a9d524ef81279a3322e2d75b86",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "5193e70d2eb07172e2f411d8d8fc147ba6c954b9be5d1acdb1921862aa5f4f6d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "sha256": "95ab616d3f9e5d43a0d68d239406cef006132b921e58b6c6c416fcf3ea950d17",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "4fc16dc990bcb1510f6c942897e8fb8ea23504f7819dc87cc00b10af914449fc",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-store-cart-thumbnails/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Reviewed picture fields are optional and compatible",
+        "Requirement: Reviewed product pictures follow the current cart"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Existing cart item picture props render supplied content"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
