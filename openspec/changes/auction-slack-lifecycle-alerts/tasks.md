@@ -7,7 +7,7 @@
 - [ ] 1.5 Regenerate API docs if the contracts surface changed (`pnpm --dir packages/api-docs run generate`)
 - [ ] 1.6 Verify: `pnpm run test:backend`, `pnpm run typecheck`, `pnpm run lint`
 
-## 2. Lifecycle Slack alerts (grade10)
+## 2. Lifecycle Slack alerts (grade10) (owner: @mason5991)
 
 Needs group 1's contracts only where a flagged alert reuses flag-reason words. Does not need the widened list read to land first.
 
