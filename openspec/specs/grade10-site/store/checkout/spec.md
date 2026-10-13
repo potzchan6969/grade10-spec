@@ -124,16 +124,6 @@ embedded payment secret.
 - **AND** one Shopify hosted invoice opens with the reviewed variants and quantities
 - **AND** the member is not shown an embedded payment form
 
-<!-- trace:scenario id=g10.store-checkout.SC-f06 rev=4 -->
-#### Scenario: grade10-site-store-checkout-SC-06 - A signed-out buyer checks out as a guest
-**Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
-
-- **GIVEN** a collector has no signed-in session, and a ready basket worth less
-  than the identity bar
-- **WHEN** they continue to payment
-- **THEN** one Grade10 guest order and one Shopify hosted invoice are created
-- **AND** they are not asked to sign in
-
 <!-- trace:scenario id=g10.store-checkout.SC-g07 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-07 - Shopify names a line refused at payment
 **Serves:** grade10-site-store-checkout-US-02 - The collector gets a named provider refusal instead of a paid stale line
@@ -176,6 +166,16 @@ in before any order exists, as `grade10-site/commerce/commerce` states.
 
 **The cart** - This browser's cart SHALL be emptied once the guest's hosted
 invoice opens; the invoice holds the basket.
+
+<!-- trace:scenario id=g10.store-checkout.SC-f06 rev=4 -->
+#### Scenario: grade10-site-store-checkout-SC-06 - A signed-out buyer checks out as a guest
+**Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
+
+- **GIVEN** a collector has no signed-in session, and a ready basket worth less
+  than the identity bar
+- **WHEN** they continue to payment
+- **THEN** one Grade10 guest order and one Shopify hosted invoice are created
+- **AND** they are not asked to sign in
 
 <!-- trace:scenario id=g10.store-checkout.SC-wet rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-66 - A guest pays the basket alone
