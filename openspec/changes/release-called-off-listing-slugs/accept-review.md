@@ -1,6 +1,6 @@
 reviewed: 4114bd352f5acf115ee414982dbb98320b02685e
 source-identity: 4d1498bbb3da42e819e70aa455c3e4da7af8b466ebac02e29836750fff5257ab
-baseline-identity: 00f3d843f851b14f59995ac475f5cd6c5d1e15bcb1f47bbaca6c806283b088f8
+baseline-identity: 1562fda28251b7e2912abb05e918e6621954294a65199c453bd041c25293d5ff (rebased 2026-10-13; main moved only domain suites US13; reviewed sources unchanged)
 verdict: Ready to accept
 
 Working tree: the repair is uncommitted on top of `4114bd352` (10 modified files, plus this ledger). The review covers the working tree, not the commit. Commit the repair before `pnpm spec:accept`, so the accepted digest names a committed state. Acceptance fingerprint printed by the preflight: `07860222602707ac7c6ad7560cc494377260a3e6160186f3025ab825980eacc4`.
