@@ -1,10 +1,11 @@
 {
   "version": 2,
   "change": "support-admin-daily-reminder",
-  "baseline": "ff2fc4fbd2b11ffed7a31f73aa87cea81a6dd44fcc15aed26003bc616e04c678",
-  "fingerprint": "5a83d73195725bc28e1137c2a69de7cf834190c92165fb1579c81b855fc4dd78",
+  "baseline": "4f82a026789c7e0be9da0cd3103cb8701f08e359a05c648542c4ba4bdd262120",
+  "fingerprint": "7fff32525afcd80e405b3a8c0dc91a84da04864bb931b5ce96b9239a6a2a3d91",
   "reviewedBy": "mason5991",
-  "acceptedAt": "2026-10-12T17:24:39.533Z",
+  "acceptedAt": "2026-10-13T14:41:39.442Z",
+  "supersedes": "5a83d73195725bc28e1137c2a69de7cf834190c92165fb1579c81b855fc4dd78",
   "artifacts": [
     {
       "path": "docs/prds/products/grade10-admin/auction/management.md#post-sale-queue",
@@ -13,17 +14,17 @@
     },
     {
       "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#opening",
-      "sha256": "428820c259410072309a13613cad700c6fcbc9a02e49c234e936dd1c5c5bd125",
+      "sha256": "b9b22ab0f48488444c0cc7047a3b85d0f0342d3b864f84fc9716e989611818e2",
       "role": "prd-source"
     },
     {
       "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#rules",
-      "sha256": "a7d2d18472b6fedfa8ce8a92454401dc59919b35e1b1e3107d41288b7a353ff1",
+      "sha256": "81fa3b77ebd53849ed2f99f33ba003c1886d89d17b8ebb2b2da54fe7c3f6616a",
       "role": "prd-source"
     },
     {
       "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#slack",
-      "sha256": "567bdc7fe4c6d0352aa2a6590ef81528b2444e1e633e71acf8476b1fab837f66",
+      "sha256": "aea826d318b6f1f5ff102100f3729128876505ea68d8d3d84284ca510cca1724",
       "role": "prd-source"
     },
     {
@@ -33,7 +34,7 @@
     },
     {
       "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#today",
-      "sha256": "8fcd6fbbec99e72c4d082deb5ba6f78337efa9645ce78fd136ebe1c488885d54",
+      "sha256": "53805ee09a0914a9ba09f11c985da7ac14f37114420c39b197b9afa1129b29f0",
       "role": "prd-source"
     },
     {
@@ -48,22 +49,22 @@
     },
     {
       "path": "openspec/changes/support-admin-daily-reminder/decisions.md",
-      "sha256": "8f4429d75cf2d187bb8a32fccee2bb3758778035d599bd58e689f06a059f42c0",
+      "sha256": "db45e4e075e31f74dff77c72692d553dcba1bf18b94a943ea4647c17f42ee171",
       "role": "change-input"
     },
     {
       "path": "openspec/changes/support-admin-daily-reminder/proposal.md",
-      "sha256": "a9d67d9b3424b05bf144e9578af2b07061052084076ea60c525b0bdb552b883d",
+      "sha256": "9d5e5ea0384bedabe396a1b79aa9b10e2082610cac5a8d18cdc0b760d1991a36",
       "role": "change-input"
     },
     {
       "path": "openspec/changes/support-admin-daily-reminder/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
-      "sha256": "203d859d14b12d3c1e022adc8f3b0b2a12c6a9bfb9f2e73541355d26b2e818ba",
+      "sha256": "99bcab61331309f4827f5a5ae277340ff1d9bd6be6840532caeace28b4b546e7",
       "role": "change-input"
     },
     {
       "path": "openspec/changes/support-admin-daily-reminder/specs/grade10-admin/console/daily-reminder/spec.md",
-      "sha256": "75eabcfff67c1b8d71629f6288c93fb1e1259cde3fd43c600eb66983b61bd459",
+      "sha256": "e209cd1f2b7a913aee3253d3080560f7df9ccf017ff37ce4302785d34476d94d",
       "role": "change-input"
     },
     {
@@ -73,17 +74,17 @@
     },
     {
       "path": "openspec/changes/support-admin-daily-reminder/tech-design.md",
-      "sha256": "c9831625db8ef2efb9c89f11599c0d461558ada77747f220cdebdd40fa093572",
+      "sha256": "32b2881b0ccd8395a587da4abc6e99e1606b592d2df035ad74e92175af500265",
       "role": "change-input"
     },
     {
       "path": "openspec/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
-      "sha256": "203d859d14b12d3c1e022adc8f3b0b2a12c6a9bfb9f2e73541355d26b2e818ba",
+      "sha256": "cbf1d9087c45d1d273f04eff9f177b2d1813fe2ec8600c96d4d6a6b05f0491c0",
       "role": "durable-result"
     },
     {
       "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
-      "sha256": "66e088bd58f2bb7ec82aa112e9c8752872387314ed1b4b59bf24b54ecdde5bbb",
+      "sha256": "032dac09ea3c6236659dbe6a34ea034eb05c143cc7bd7ed6b82ea26cfacde5a4",
       "role": "durable-result"
     },
     {
