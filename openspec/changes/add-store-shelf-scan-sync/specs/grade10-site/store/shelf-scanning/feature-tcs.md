@@ -2153,6 +2153,13 @@ shopkeeper scans that slab.
 
 ## Reconciliation
 
+**Run:** QA2 rerun on 2026-10-13, scoped, at source `7230c711e`. Q38 now
+lets inventory decide a consigned product whatever its collectible type, and
+`g10.store-shelf-scanning.SC51` moved to rev 2 to give the raw card a graded
+type a merchandiser set. US1-TC27 moved to rev 2 with the same setup and
+still fully asserts it. No other case depends on a consigned product's type.
+46 of the 51 cases carry `covers`, and all 51 scenarios are covered.
+
 **Run:** QA2 rerun on 2026-10-13, scoped, at source `e1625c180`. The accept
 review added `g10.store-shelf-scanning.SC51` and Q38: a consigned product is
 graded only when inventory holds its item with a grader. It moved
@@ -2161,7 +2168,7 @@ feature-set lines: Graded product, Store product first and the open
 scanner's 2 minutes. Blind QA added US1-TC27, moved US1-TC11 to rev 2 to wait
 for the first hourly run 6 minutes past the save, and stated the grader in
 the setups of US3-TC1, US3-TC5 and US4-TC3. Every case still agrees with
-Q38. 46 of the 51 cases carry `covers`, and all 51 scenarios are covered.
+Q38.
 
 **Run:** QA2 rerun on 2026-10-13, scoped, at source `59a1c7986`. Tech design
 now says the photo processor learns a photo with no card in it from the whole
@@ -2216,7 +2223,7 @@ gained their `trace:scenario` markers in this run so cases can link them.
 | US1-TC24 | Covers | `g10.store-shelf-scanning.SC41` |
 | US1-TC25 | Covers: an unchanged catalogue version shows no item was written | `g10.store-shelf-scanning.SC7` |
 | US1-TC26 | Covers | `g10.store-shelf-scanning.SC24` |
-| US1-TC27 | Covers | `g10.store-shelf-scanning.SC51` |
+| US1-TC27 | Covers at rev 2, its raw card typed as graded, as `g10.store-shelf-scanning.SC51` rev 2 states | `g10.store-shelf-scanning.SC51` |
 | US2-TC1 | Covers, staging row and production row | `g10.store-shelf-scanning.SC10`, `g10.store-shelf-scanning.SC27`, `g10.store-shelf-scanning.SC28` |
 | US2-TC2 | Covers | `g10.store-shelf-scanning.SC45` |
 | US2-TC3 | Partial: asserts the picked listing's link, not its availability; US1-TC17 covers it | `g10.store-shelf-scanning.SC37` partly |
