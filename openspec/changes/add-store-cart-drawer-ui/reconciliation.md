@@ -35,15 +35,3 @@ The current acceptance preflight determines whether the older dependency
 cluster needs reconciliation before this order can be used. The shared build
 dependency does not add a reverse manifest edge: that would create a cycle
 through the existing product-status dependency.
-
-## Shelf Scan Sync
-
-- **Ownership** - `add-store-shelf-scan-sync` owns the new
-  `grade10-site/store/shelf-scanning` capability and edits no requirement
-  another open change edits; it shares none
-- **Reads** - the keeper's webhook path and 5-minute walk from
-  `refresh-listing-within-seconds`, and the one-item rule from
-  `add-store-product-status`, through `depends_on` only
-- **Decisions** - none open across the cluster
-- **Order** - accepted after `refresh-listing-within-seconds` and
-  `add-store-product-status`; it holds no other change in the cluster

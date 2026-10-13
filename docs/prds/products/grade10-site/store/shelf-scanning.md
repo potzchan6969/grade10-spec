@@ -15,7 +15,7 @@ site's `/scan`; the store keeps what it knows in step with the catalogue.
 | What the scanner holds | every product the store publishes, sold out included, gift cards excepted |
 | A change the shop reports | on the scanner within 6 minutes of the shop's save; on an open scanner within 8 |
 | A change only the store's re-read finds | on the scanner within 11 minutes of the shop's save; on an open scanner within 13 |
-| A new photo recognisable | within the hour, on staging and production |
+| A new photo recognisable | at the next hourly run, on staging and production |
 | An open scanner's catalogue | read again every 2 minutes while in view, and when the shopkeeper returns to it |
 | Photos learned per product | the first 8, in the shop's order |
 | What a scan shows | title in the store's default language, the price the shopper pays, Available or Sold out, a link to the store page |
@@ -74,9 +74,9 @@ product names. Every slab on the shop's shelf is a registered inventory item.
 
 | Product | How the store knows its slab |
 | --- | --- |
-| Consigned slab | the consigned item, in inventory |
+| Consigned slab | the consigned item, which inventory holds with a grader |
 | House-stock slab | the label code the stock keeper writes on the product in the shop, naming its inventory item |
-| Raw card | no slab: recognised by its product photos |
+| Raw card, consigned or not | no slab: recognised by its product photos |
 
 🚧 **The copy, not only the card** — the scanner reading a slab's label names
 the one product that sells that slab, and the result shows its grade and cert
@@ -92,8 +92,8 @@ by its product photos alone, without grade or cert;
 where two products carry one cert, neither carries it. Operations is alerted to
 each
 
-- **Graded is the collectible type** — a house-stock product is a slab when
-  its collectible type is a graded one
+- **What makes a slab** — a graded collectible type, or a consigned item
+  inventory holds with a grader; a consigned raw card raises no alert
 - **Certs are public** — a slab's cert and its house label code are printed on
   the slab, so the scan and the store's catalogue may carry them
 - **Graders the scanner does not read** — the scanner reads PSA, BGS, CGC, SGC
@@ -104,8 +104,8 @@ each
 
 ## Recognition
 
-🚧 **A store product wins** — where a store product and the scanner's shared
-card catalogue match the same art, the scanner names the store product
+🚧 **A store product wins** — where a store product's match is one the scanner
+accepts on its own, it is named over the shared card catalogue's same art
 
 🚧 **Held before they are recognised** — a product the scanner cannot yet
 recognise from its photos — a sealed box, merch, a comic — is held now with
@@ -134,6 +134,10 @@ a product whose details and photos have not moved is not written again
 🚧 **Photos change, the item learns again** — a product's new or replaced
 photo is learned at the next hourly run; a photo the product drops leaves the
 scanner with it
+
+🚧 **Failures wait, never repeat** — a photo that could not be learned is
+tried again 24 hours later; a run on another model than the scanner's learns
+nothing and fails, naming both
 
 ## On the Shelf
 

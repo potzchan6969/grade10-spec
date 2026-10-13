@@ -34,6 +34,8 @@ carry the store page is `grade10-site/site/carried-surfaces`'s.
     names, for a consigned and a house-stock slab alike
   - House-stock label code: a stock keeper writes the slab's label code on the
     house-stock product, naming its inventory item
+  - Graded product: a graded collectible type, or a consigned item inventory
+    holds with a grader; a consigned raw card is a raw card
   - Slab with no known unit: a graded product naming no item, one whose
     grader the scanner does not read, or one whose cert another product
     carries is recognised by its photos without grade or cert, and Operations
@@ -42,7 +44,8 @@ carry the store page is `grade10-site/site/carried-surfaces`'s.
     is recognised by its photos
 - Recognition order
   - Store product first: where a store product and the shared card catalogue
-    match the same art, the scanner names the store product
+    match the same art, and the store product's match is one the scanner
+    accepts on its own, the scanner names the store product
   - Held before recognisable: a sealed box, merch or a comic carries its
     title, price and availability now, and is recognised once the box detector
     ships
@@ -61,7 +64,7 @@ carry the store page is `grade10-site/site/carried-surfaces`'s.
   - Store page link: opens the product's store page, shown only where the
     store is carried
   - Open scanner stays current: an open scanner refreshes its catalogue every
-    few minutes and when the shopkeeper returns to it
+    2 minutes and when the shopkeeper returns to it
 - Shop's scanner link
   - One fixed link: shopkeepers open the scanner from one link, bookmarked or
     printed as a QR code, without signing in
@@ -218,7 +221,10 @@ new handle.
 A graded product's unit SHALL be the inventory item the product names: for a
 consigned product, its consigned item; for a house-stock product, the item
 whose label code a stock keeper writes on the product in the shop. A graded
-product is a consigned product, or one whose collectible type is a graded one.
+product is one whose collectible type is a graded one, or a consigned product
+whose item inventory holds with a grader; a consigned product whose item
+inventory holds with no grader SHALL be held as a raw card, recognised by its
+photos, and SHALL NOT alert Operations.
 The store SHALL read the unit's grader, grade and cert from inventory for
 every copy it sends, and the item SHALL carry the grader and cert the scanner
 matches a slab's label to, and show the grade and cert. A graded product with
@@ -342,6 +348,17 @@ reads; a cert in any other form SHALL leave the product without a known unit.
 - **THEN** scanning the second slab's label names the product with the
   second slab's grade and cert
 - **AND** scanning the first slab's label no longer names the product
+
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-q13 rev=1 -->
+#### Scenario: g10.store-shelf-scanning.SC51 - A consigned raw card is held as a raw card
+**Serves:** `Slab as its copy` - only a real slab raises the alert for a slab without a unit
+
+- **GIVEN** a consigned product whose inventory item is a raw card, with no
+  grader
+- **WHEN** the next copy reaches the scanner
+- **THEN** the scanner holds it with its title, price, availability and
+  photos, recognised by its photos, with no grade or cert
+- **AND** Operations is not alerted
 
 <!-- trace:scenario id=g10.store-shelf-scanning.SC-9sn rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC49 - The alert clears once no slab is held without a unit
@@ -490,14 +507,14 @@ staging and on production, with the model the deployed scanner runs.
 | A photo that could not be learned | Tried again 24 hours after the failure |
 | The run's model differs from the scanner's | Nothing learned; the run fails |
 
-<!-- trace:scenario id=g10.store-shelf-scanning.SC-s7a rev=1 -->
-#### Scenario: g10.store-shelf-scanning.SC20 - A new photo is learned within the hour on production
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-s7a rev=2 -->
+#### Scenario: g10.store-shelf-scanning.SC20 - A new photo is learned at the next hourly run on production
 **Serves:** `Hourly photo learning` - the store adds a photo and the shelf recognises it
 
 - **GIVEN** a product on production gains a photo
 - **WHEN** the next copy reaches production's scanner
-- **THEN** within the hour after, the scanner recognises the product from
-  that photo
+- **THEN** once the next hourly run has finished, the scanner recognises the
+  product from that photo
 
 <!-- trace:scenario id=g10.store-shelf-scanning.SC-i2s rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC21 - An hour with nothing new does no work

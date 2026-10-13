@@ -1,5 +1,2 @@
 schema: grade10-planning
 created: 2026-10-13
-depends_on:
-  - refresh-listing-within-seconds
-  - add-store-product-status

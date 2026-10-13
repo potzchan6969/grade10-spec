@@ -23,13 +23,11 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
   `failed` for good; the queue never serves it again (`routes.ts:1039-1074`)
 - **Photos on staging only** - `tcg-ar-ops.yml`'s `photos` job runs hourly at
   `:17` against staging (`.github/workflows/tcg-ar-ops.yml:24,171`)
-- **Close store matches** - a photo match whose `alternatives` hold other
-  items of the store's collection within the scanner's alternative-print
-  window (`alternativePrints`, `MATCH.altWindow` and `altRel`,
-  `src/recog/match.ts`) resolves to every such item, closest first.
-  `ItemIndex.resolve` answers `{ how: "photos", items }`, slabs among them;
-  the hosted page draws the pick sheet in `ui-design.md`. A label read names
-  its one slab and never picks
+- **One photo match, no pick** - `ItemIndex.resolve` answers one item for a
+  collection photo match, `{ how: "photo", item }`, beside `cert`, `card` and
+  `catalogue` (`src/app/hosted/client.ts:117-122,210-230`). The matcher's
+  `alternatives` are not turned into items, so two store products of one art
+  name the closest alone
 - **Open scanner** - `HostedApp.tsx` loads its collections once
   (`HostedApp.tsx:233-261`) and again only after an enrolled photo
 - **Catalogue first** - the scanner ranks a collection's photo hit and a
@@ -108,16 +106,21 @@ what the scanner holds and shows. This section records where each part lands.
   Rejected: a store-side record of what was sent, a second copy of the
   scanner's rows
 - **Discounts move every item** - a discount that starts or ends changes no
-  product, but the pass prices every product on every tick from
-  `readSiteDiscounts` (60-second memo), so the new price and badge reach the
-  scanner at the next pass
+  product, but the pass prices every product on every tick, so the new price
+  and badge reach the scanner at the next pass. The pass reads the shop's
+  discounts fresh, past the listing's 60-second memo (`readSiteDiscounts`
+  with `{ fresh: true }`, `services/catalog/siteDiscounts.ts`), so a discount
+  made just before a tick is not a minute late. A shop that does not answer
+  fails the pass before it writes, as inventory does, rather than pricing
+  every item without its discount
 - **Budget** - items go 100 per `putItems` call, each call under a 15-second
   deadline, the pass under 60 seconds (`beforeDeadline`). Upserts run before
   deletes. Work left at the budget is done at the next tick, and the pass
   reports `partial`
-- **Inventory first** - the pass reads slab facts before it writes. An
-  inventory fault fails the pass with nothing written, so a slab never loses
-  its cert for one tick and regains it the next
+- **Inventory first** - the pass reads slab facts before it writes, in calls
+  of at most 500 item ids and label codes together, inside the pass's budget.
+  An inventory fault on any call fails the pass with nothing written, so a
+  slab never loses its cert for one tick and regains it the next
 
 ### Product to item
 
@@ -125,7 +128,7 @@ what the scanner holds and shows. This section records where each part lands.
 | --- | --- |
 | id | `shopify-<numeric product id>` (`numericIdOf`) |
 | collection | `store` |
-| kind | `slab` for Collectible Type `graded-card`; `comic` for `graded-magazine`, `graded-manga`; `sealed` for `sealed-*`, `blister-pack`; `other` otherwise |
+| kind | `comic` for Collectible Type `graded-magazine`, `graded-manga`; `slab` for any other graded product (below); `sealed` for `sealed-*`, `blister-pack`; `other` otherwise |
 | title | the product's title as the keeper holds it: the store's default language |
 | data.price | the one item's price lowered by `siteSaleOf`: what the shopper pays |
 | data.badges | `["Sale"]` while `siteSaleOf` lowers the price, else absent |
@@ -137,6 +140,10 @@ what the scanner holds and shows. This section records where each part lands.
 
 - **Held** - every product in the copy except `isGiftCard`
 - **Graded** - Collectible Type `graded-*`, or a row in `consigned_products`
+  whose item `slabsOf` answers, which it does only for a live item with a
+  grader (Q38). A consigned item it does not answer is a raw card: held by
+  its photos, no reason counted. The consigned push sets no collectible type,
+  so a consigned slab is `slab` through its item alone
 - **Shared pricing** - `sellableVariant`, `pricedVariant` and `siteSaleOf`
   move from `store-frontend` into `@grade10/store-contracts`, beside
   `strikeableCompareAt`; the product page and the pass call the same code.
@@ -158,9 +165,10 @@ what the scanner holds and shows. This section records where each part lands.
   identifiers. It must be `PUBLIC_READ`, because the keeper reads the
   storefront API. `CATALOG_BODY_SHAPE` goes to 2, so every keeper rewrites
   its copy with the field on first read
-- **One batch** - a new inventory entrypoint, `StoreItemSlabs`, bound to the
-  store as `INVENTORY_SLABS`, answers `slabsOf({ itemIds, labelCodes })` for
-  live items in one query. It returns label facts only: no owner, no price.
+- **One query per call** - a new inventory entrypoint, `StoreItemSlabs`,
+  bound to the store as `INVENTORY_SLABS`, answers
+  `slabsOf({ itemIds, labelCodes })` for live items with a grader in one
+  query, at most 500 together; the pass splits larger reads. It returns label facts only: no owner, no price.
   Rejected: adding the slab to the consigned push, which leaves an inventory
   correction behind and covers no house stock
 - **No known unit** - the product is held with its photos and no
@@ -175,8 +183,10 @@ what the scanner holds and shows. This section records where each part lands.
 
 ### Scanner
 
-- **No-op upsert** - `upsertItem` already reads the stored row and
-  `setImageUrls` the stored photo sources. It compares the incoming item with
+- **No-op upsert** - `upsertItem` reads only `seq, collection_id` of the
+  stored row today (`worker/platform/routes.ts:470-474`); its `SELECT` widens
+  to `kind, title, data, card_id, grader, cert`, and `setImageUrls` already
+  reads the stored photo sources. It compares the incoming item with
   them - collection, kind, title, `data` as canonical JSON (sorted keys),
   card, grader, cert, and the set of image URLs - and writes nothing when
   all are equal. The batch route collects the collections it changed and
@@ -193,6 +203,15 @@ what the scanner holds and shows. This section records where each part lands.
   `undefined` for an unbound environment. `ScannerPlatform` `implements` the
   API; the app's `src/shared/platform.ts` imports these rather than declaring
   them
+- **The pick** - a photo match whose `alternatives` hold other items of the
+  store's collection within the scanner's alternative-print window
+  (`alternativePrints`, `MATCH.altWindow` and `altRel`, `src/recog/match.ts`)
+  resolves to every such item, slabs among them, closest first: `resolve`
+  gains `{ how: "photos", items }`, and one close item stays
+  `{ how: "photo", item }`. Each alternative maps to its item through
+  `bySeq`, as the top hit does. The hosted page draws the `<n> matches` chip
+  and the pick sheet in `ui-design.md`. A label read stays `how: "cert"`, one
+  slab, never a pick
 - **Grade and cert on a label read only** - the hosted label shows the
   item's `<grader> <grade>` and `Cert <cert>` only when the match came from the
   label (`how: "cert"`). A photo match names the product without them, so a
@@ -262,8 +281,9 @@ Order, each step reading what the last returned:
 
 1. `keeper.sync(null)` → the copy
 2. `consigned_products` rows for the copy's product ids → item ids
-3. `INVENTORY_SLABS.slabsOf` → facts by item id and label code
-4. `readSiteDiscounts` → the shop's automatics
+3. `INVENTORY_SLABS.slabsOf` per 500 item ids and label codes → facts by
+   item id and label code
+4. `readSiteDiscounts({ fresh: true })` → the shop's automatics
 5. `shelfItemsOf(copy, refs, facts, discounts, storePage)` - pure, in
    `services/shelfScan/items.ts` → items and units missing
 6. `SCANNER.putCollection("store")`, then `putItems` per 100
@@ -280,6 +300,7 @@ No store write; nothing to make atomic. Example:
   "variants": [{ "availableForSale": false, "price": { "amountMinor": 98000, "currencyCode": "HKD" } }] }
 { "id": "gid://shopify/Product/9100", "isGiftCard": true }
 // consigned_products: 8812 → item it_7Q; slabsOf: it_7Q → PSA, "10", "126956765"
+// 8812 carries no collectible type: slabsOf answering it_7Q makes it a slab
 // putItems:
 [{ "id": "shopify-8812", "collection": "store", "title": "Pikachu Illustrator", "kind": "slab",
    "grader": "PSA", "cert": "126956765", "images": ["https://cdn.shopify.com/…/front.jpg?v=1"],
@@ -353,7 +374,7 @@ No column changes: `item_images` keeps its columns, and a retry reads
 ## Risks / Trade-offs
 
 - [A product replaces a photo] → the old photo's vectors go at once and the
-  new one is learned within the hour; the item is recognised by its other
+  new one is learned at the next hourly run; the item is recognised by its other
   photos, or its cert, meanwhile
 - [The keeper's copy is empty after a fault] → version 0 writes nothing; a
   walk that fails keeps the last copy
@@ -390,6 +411,10 @@ Rollback: remove the store's `SCANNER` binding and redeploy; the pass is
 silent and the scanner keeps its last items. The migration's column and row
 stay.
 
-The pass needs the keeper's webhook path and its 5-minute walk from
-`refresh-listing-within-seconds`, and the one-item rule from
-`add-store-product-status`; both are named in `depends_on`.
+The pass builds on code already on grade10's `main`, not on another open
+change: the keeper's webhook path (`routes/webhooks.ts`, `handToKeeper`) and
+its 5-minute walk (`services/catalog/pass.ts`, `runCatalogWalk` in
+`sweeps/cron.ts`); the one-item rule (`sellableVariant`, `pricedVariant`,
+`productSummary` in `store-frontend`'s `features/products/product`); and the
+shop's automatics (`readSiteDiscounts`, `readSitePricing`,
+`services/catalog/siteDiscounts.ts`).

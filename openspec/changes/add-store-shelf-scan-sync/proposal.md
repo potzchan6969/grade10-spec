@@ -33,7 +33,7 @@ change.
 - **Products the scanner cannot yet recognise are held now** — sealed boxes,
   merch and comics carry their details today and are recognised once the box
   detector ships
-- **New photos are recognisable within the hour on staging and production** —
+- **New photos are recognisable at the next hourly run on staging and production** —
   an hour with nothing new costs nothing
 - **Production's scanner works before the store opens there** — the store-page
   link appears only where the store is carried
