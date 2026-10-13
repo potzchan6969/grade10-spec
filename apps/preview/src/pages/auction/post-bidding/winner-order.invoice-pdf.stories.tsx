@@ -18,7 +18,7 @@ function InvoicePdfPreview({ data }: { data: InvoicePdfData }) {
 }
 
 const meta = {
-  title: "Auction/Post Bidding/Winner Order/Invoice PDF",
+  title: "Auction/Post Bidding/Screens/Winner Order/Invoice PDF",
   component: InvoicePdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

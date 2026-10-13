@@ -14,7 +14,7 @@ and **Auction/Bidding/My Auctions**. Desktop table remains Figma
 
 ### My Auctions — small viewport
 
-::story{id="auction-bidding-my-auctions--post-auction" title="My Auctions"}
+::story{id="auction-bidding-screens-my-auctions--post-auction" title="My Auctions"}
 
 Below `md`: breadcrumbs, title + count badge, then a vertical list of lot
 cards. No sideways scroll of the lot list. From `md`: existing five-column

@@ -31,7 +31,7 @@ import { PaymentAuthorizationPreview } from "./payment-authorization-demo";
  * in this Docs page are the card's `onX` callbacks.
  */
 const meta = {
-  title: "Auction/Bidding/Bid Panel",
+  title: "Auction/Bidding/Screens/Bid Panel",
   component: ListingAuctionBidCard,
   tags: ["autodocs"],
   parameters: {
@@ -45,29 +45,29 @@ state and every action. The card presents \`view\`, \`history\`, and
 
 Enrollment chrome (linked card, setup sheet, sign-in) sits around the card in
 the preview. The full lot page is
-[Auction Lot Details](?path=/story/auction-display-lot-details--live-auto-leading).
+[Auction Lot Details](?path=/story/auction-display-screens-lot-details--live-auto-leading).
 
 ## Enrollment states
 
 | State | Story | What it shows |
 | --- | --- | --- |
-| Signed out | [Signed Out](?path=/story/auction-bidding-bid-panel--signed-out) | \`bidEnrollment="signed-out"\`. Sign In to Bid. Standing is hidden. |
-| Need a card | [Need Card](?path=/story/auction-bidding-bid-panel--need-card) | \`bidEnrollment="needs-card"\`. Empty linked-card slot. Quick-maximum presets and custom amount are visible but disabled; Link a card to bid opens setup. |
-| Linked card, editable | [Linked Card Editable](?path=/story/auction-bidding-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
-| Linked card, locked | [Linked Card](?path=/story/auction-bidding-bid-panel--linked-card) | Masked card without Change, after the first bid. |
-| Ready | [Ready](?path=/story/auction-bidding-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Set Maximum, and always-on maximum mechanism subtext. |
-| Payment authorization | [Payment Authorization](?path=/story/auction-bidding-bid-panel--payment-authorization) | Optional holds-enabled path only. First launch does not take a bid-time hold; when holds are on, a declined authorization shows an error on the bid CTA. |
+| Signed out | [Signed Out](?path=/story/auction-bidding-screens-bid-panel--signed-out) | \`bidEnrollment="signed-out"\`. Sign In to Bid. Standing is hidden. |
+| Need a card | [Need Card](?path=/story/auction-bidding-screens-bid-panel--need-card) | \`bidEnrollment="needs-card"\`. Empty linked-card slot. Quick-maximum presets and custom amount are visible but disabled; Link a card to bid opens setup. |
+| Linked card, editable | [Linked Card Editable](?path=/story/auction-bidding-screens-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
+| Linked card, locked | [Linked Card](?path=/story/auction-bidding-screens-bid-panel--linked-card) | Masked card without Change, after the first bid. |
+| Ready | [Ready](?path=/story/auction-bidding-screens-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Set Maximum, and always-on maximum mechanism subtext. |
+| Payment authorization | [Payment Authorization](?path=/story/auction-bidding-screens-bid-panel--payment-authorization) | Optional holds-enabled path only. First launch does not take a bid-time hold; when holds are on, a declined authorization shows an error on the bid CTA. |
 
 ## Dialogs
 
 | State | Story | What it shows |
 | --- | --- | --- |
-| Setup | [Setup Modal](?path=/story/auction-bidding-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Link Card stays disabled until both are done. |
-| Setup from Change | [Setup Modal From Change](?path=/story/auction-bidding-bid-panel-dialogs--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
-| Setup linking | [Setup Modal Linking](?path=/story/auction-bidding-bid-panel-dialogs--setup-modal-linking) | Provider link in flight — Linking CTA, locked iframe and attestation, dismiss blocked. |
-| Setup error | [Setup Modal Error](?path=/story/auction-bidding-bid-panel-dialogs--setup-modal-error) | Tiny destructive message under the card field after Link Card fails. |
-| Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-bidding-bid-panel-dialogs--payment-authorization-pending) | Holds-enabled only. Bid CTA busy while Stripe authorizes — no setup modal. |
-| Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-bidding-bid-panel-dialogs--payment-authorization-refused) | Holds-enabled only. Decline error on the bid CTA; collector can Change card before retrying. |
+| Setup | [Setup Modal](?path=/story/auction-bidding-screens-bid-panel-dialogs--setup-modal) | Card-link iframe and age attestation. Link Card stays disabled until both are done. |
+| Setup from Change | [Setup Modal From Change](?path=/story/auction-bidding-screens-bid-panel-dialogs--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
+| Setup linking | [Setup Modal Linking](?path=/story/auction-bidding-screens-bid-panel-dialogs--setup-modal-linking) | Provider link in flight — Linking CTA, locked iframe and attestation, dismiss blocked. |
+| Setup error | [Setup Modal Error](?path=/story/auction-bidding-screens-bid-panel-dialogs--setup-modal-error) | Tiny destructive message under the card field after Link Card fails. |
+| Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-bidding-screens-bid-panel-dialogs--payment-authorization-pending) | Holds-enabled only. Bid CTA busy while Stripe authorizes — no setup modal. |
+| Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-bidding-screens-bid-panel-dialogs--payment-authorization-refused) | Holds-enabled only. Decline error on the bid CTA; collector can Change card before retrying. |
 
 ## Bidding and standing
 
@@ -82,7 +82,7 @@ maximum; there is no manual vs auto mode toggle.
 | Outbid | [Outbid](?path=/story/auction-bidding-blocks-listingauctionbidcard--outbid) | \`standing="outbid"\`. Current bid is above the viewer's maximum. |
 | Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-bidding-flows-bid-panel--bidding) | Bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. |
 | Interactive enrollment | [Flows / Interactive](?path=/story/auction-bidding-flows-bid-panel--interactive) | Walks sign-in → card link → ready on one card. |
-| Closed / won / lost | [Auction Lot Details](?path=/story/auction-display-lot-details--closed-won-payment-due) | Awaiting address, settled, lost, sold, and unsold on the lot page. |
+| Closed / won / lost | [Auction Lot Details](?path=/story/auction-display-screens-lot-details--closed-won-payment-due) | Awaiting address, settled, lost, sold, and unsold on the lot page. |
 
 ## Countdown
 

@@ -2,7 +2,7 @@
 
 ### Winner Order — Order Progress (Shipped / Delivered)
 
-Storybook: `Auction/Post Bidding/Winner Order/Delivery/Shipped` and **Delivered**.
+Storybook: `Auction/Post Bidding/Screens/Winner Order/Delivery/Shipped` and **Delivered**.
 
 Header **Order Progress**. When fulfilment is `fulfilled` with a tracking
 number, the tracking number sits as a secondary Link with an external arrow

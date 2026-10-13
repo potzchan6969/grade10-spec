@@ -65,4 +65,4 @@ See `decisions.md`.
 ## References
 
 - [Compliance and Readiness · Outside the code](/p/grade10-site/vault/compliance-and-readiness#outside-the-code)
-- Storybook: `Site/Carried Surfaces/Legal` → Terms Of Service, Privacy Policy
+- Storybook: `Site/Carried Surfaces/Screens/Legal` → Terms Of Service, Privacy Policy

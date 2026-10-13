@@ -19,7 +19,7 @@ import {
  * All Auctions/Later.
  */
 const meta = {
-  title: "Auction/Display/Auction List/All Auctions",
+  title: "Auction/Display/Screens/Auction List/All Auctions",
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

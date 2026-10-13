@@ -84,26 +84,29 @@ const ORDER_ROW_COPY = {
  */
 const WINNER_ORDER_HREF = {
   awaitingAddress:
-    "?path=/story/auction-post-bidding-winner-order-setup--awaiting-setup",
+    "?path=/story/auction-post-bidding-screens-winner-order-setup--awaiting-setup",
   expiredSetup:
-    "?path=/story/auction-post-bidding-winner-order-setup--expired-setup",
+    "?path=/story/auction-post-bidding-screens-winner-order-setup--expired-setup",
   preparingInvoice:
-    "?path=/story/auction-post-bidding-winner-order-setup--preparing-invoice",
+    "?path=/story/auction-post-bidding-screens-winner-order-setup--preparing-invoice",
   pendingPayment:
-    "?path=/story/auction-post-bidding-winner-order-payment--pending-payment",
+    "?path=/story/auction-post-bidding-screens-winner-order-payment--pending-payment",
   expiredInvoice:
-    "?path=/story/auction-post-bidding-winner-order-payment--expired-invoice",
+    "?path=/story/auction-post-bidding-screens-winner-order-payment--expired-invoice",
   partiallyPaid:
-    "?path=/story/auction-post-bidding-winner-order-payment--partially-paid",
+    "?path=/story/auction-post-bidding-screens-winner-order-payment--partially-paid",
   paymentVerifying:
-    "?path=/story/auction-post-bidding-winner-order-payment--payment-verifying",
+    "?path=/story/auction-post-bidding-screens-winner-order-payment--payment-verifying",
   processing:
-    "?path=/story/auction-post-bidding-winner-order-delivery--processing",
-  shipped: "?path=/story/auction-post-bidding-winner-order-delivery--shipped",
+    "?path=/story/auction-post-bidding-screens-winner-order-delivery--processing",
+  shipped:
+    "?path=/story/auction-post-bidding-screens-winner-order-delivery--shipped",
   delivered:
-    "?path=/story/auction-post-bidding-winner-order-delivery--delivered",
-  cancelled: "?path=/story/auction-post-bidding-winner-order-closed--cancelled",
-  refunded: "?path=/story/auction-post-bidding-winner-order-closed--refunded",
+    "?path=/story/auction-post-bidding-screens-winner-order-delivery--delivered",
+  cancelled:
+    "?path=/story/auction-post-bidding-screens-winner-order-closed--cancelled",
+  refunded:
+    "?path=/story/auction-post-bidding-screens-winner-order-closed--refunded",
 } as const;
 
 function watchingItem(

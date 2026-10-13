@@ -12,6 +12,6 @@ one hours row; the block invents none of them
 
 ## Designs
 
-::story{id="store-store-locator-store-locator--default" title="Store Locator page - composes the block"}
+::story{id="store-store-locator-screens-store-locator--default" title="Store Locator page - composes the block"}
 
 🚧 **Agreed look** - the Storybook assembly; no Figma frame is drawn

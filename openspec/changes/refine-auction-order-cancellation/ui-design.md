@@ -3,7 +3,7 @@
 The admin post-sale surfaces have no Figma frame or published `@grade10/ui`
 block. The application page and the design-system primitives are the layout
 source until a frame lands. Winner Order uses the existing Storybook assembly
-`Auction/Post Bidding/Winner Order/Closed` → Cancelled in
+`Auction/Post Bidding/Screens/Winner Order/Closed` → Cancelled in
 `apps/preview/src/pages/auction/post-bidding/winner-order.closed.stories.tsx`.
 
 Behaviour stays in the capability specs. This file maps surfaces, exports and
@@ -23,7 +23,7 @@ category filter, lot link and Paid after cancel resolution.
 
 ### Winner Order — Cancelled
 
-Storybook: `Auction/Post Bidding/Winner Order/Closed` → **Cancelled**. The existing
+Storybook: `Auction/Post Bidding/Screens/Winner Order/Closed` → **Cancelled**. The existing
 preview assembly is the layout source; it must become the reason-free
 cancelled notice in `winner-order-SC-143`.
 

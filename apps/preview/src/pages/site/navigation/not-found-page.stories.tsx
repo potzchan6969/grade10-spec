@@ -8,7 +8,7 @@ import { NotFoundPage } from "./not-found-page";
  * home. Words match `@grade10/i18n` English `notFound` and `common.backToHome`.
  */
 const meta = {
-  title: "Site/Navigation/Not Found",
+  title: "Site/Navigation/Screens/Not Found",
   component: NotFoundPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

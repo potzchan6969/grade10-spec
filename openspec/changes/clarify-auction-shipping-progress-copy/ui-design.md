@@ -2,7 +2,7 @@
 
 ### Winner Order — status badge and Order Progress
 
-Storybook: `Auction/Post Bidding/Winner Order/Delivery/Preparing Shipment` and
+Storybook: `Auction/Post Bidding/Screens/Winner Order/Delivery/Preparing Shipment` and
 **Shipped**.
 
 Title badge uses design-system `Badge` `size="sm"`, same tones as My Auctions

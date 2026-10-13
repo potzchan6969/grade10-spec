@@ -10,7 +10,7 @@ import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
   ...winnerOrderMeta(),
-  title: "Auction/Post Bidding/Winner Order/Setup",
+  title: "Auction/Post Bidding/Screens/Winner Order/Setup",
   args: { status: "awaiting_address" },
   parameters: {
     ...winnerOrderMeta().parameters,

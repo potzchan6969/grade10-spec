@@ -108,7 +108,7 @@ function VaultPortfolioPage({
 }
 
 const meta = {
-  title: "Vault/Portfolio/Portfolio",
+  title: "Vault/Portfolio/Screens/Portfolio",
   component: VaultPortfolioPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

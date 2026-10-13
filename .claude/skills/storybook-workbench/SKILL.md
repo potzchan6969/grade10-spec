@@ -24,7 +24,7 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
 2. **Read what exists** — the feature's folder in `apps/preview/src/pages/`,
    its Blocks in the sidebar (`pnpm storybook`, or the Storybook MCP's
    `get-stories-by-component`), and the change's `ui-design.md` States table
-3. **Pick the kind** — a whole screen or its state is a Screen story; a
+3. **Pick the kind** — a whole screen or its state is a story under `Screens`; a
    sequence is a Flow; three directions to choose from is a Prototype; a piece
    only this feature draws is a Part; an `@grade10/ui` export's own state is a
    Block story, beside the block. A new block, variant or token is the

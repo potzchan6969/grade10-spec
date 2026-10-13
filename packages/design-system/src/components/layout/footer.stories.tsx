@@ -82,7 +82,7 @@ const STORE_LAUNCH_COLUMNS = [
     links: [
       {
         label: "Store Locator",
-        href: "?path=/story/store-store-locator-store-locator--default",
+        href: "?path=/story/store-store-locator-screens-store-locator--default",
       },
       DOCS_LINK,
     ],

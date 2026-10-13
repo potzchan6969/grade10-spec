@@ -284,7 +284,7 @@ function BookVisitPage({ signedIn: signedInAtStart = true }) {
 }
 
 const meta = {
-  title: "Appointment/Booking/Book Visit",
+  title: "Appointment/Booking/Screens/Book Visit",
   component: BookVisitPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

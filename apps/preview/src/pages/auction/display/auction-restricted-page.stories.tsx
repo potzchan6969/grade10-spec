@@ -9,7 +9,7 @@ import { AuctionRestrictedPage } from "./auction-restricted-page";
  * planned `@grade10/i18n` shared `auctionAvailability` keys.
  */
 const meta = {
-  title: "Auction/Display/Auction Restricted",
+  title: "Auction/Display/Screens/Auction Restricted",
   component: AuctionRestrictedPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

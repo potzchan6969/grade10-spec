@@ -31,7 +31,7 @@ row of cards. Links people already hold still land here.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-11875" title="Merchandised row"}
 
-::story{id="store-home-store-home--default" title="The main page, whole"}
+::story{id="store-home-screens-store-home--default" title="The main page, whole"}
 
 ::story{id="store-home-blocks-storecollectiongrid--default" title="The collection grid"}
 

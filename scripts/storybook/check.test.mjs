@@ -67,7 +67,7 @@ describe("placementErrors", () => {
     assert.deepEqual(
       place(
         "apps/preview/src/pages/store/cart/cart-page.stories.tsx",
-        "Store/Cart/Cart/Empty",
+        "Store/Cart/Screens/Cart/Empty",
       ),
       [],
     );
@@ -119,6 +119,18 @@ describe("placementErrors", () => {
     );
   });
 
+  it("refuses a screen outside Screens", () => {
+    assert.deepEqual(
+      place(
+        "apps/preview/src/pages/store/cart/cart-page.stories.tsx",
+        "Store/Cart/Cart/Empty",
+      ),
+      [
+        '"Store/Cart/Cart/Empty" - a screen sits under Screens: "Store/Cart/Screens/Cart/Empty"',
+      ],
+    );
+  });
+
   it("refuses a feature the manual has no page for", () => {
     const [error] = place(
       "apps/preview/src/pages/store/wishlist/w.stories.tsx",
@@ -130,7 +142,7 @@ describe("placementErrors", () => {
   it("refuses a story in the wrong folder for its kind", () => {
     const [error] = place(
       "apps/preview/src/pages/store/home/cart.stories.tsx",
-      "Store/Cart/Cart",
+      "Store/Cart/Screens/Cart",
     );
     assert.match(error, /lives in apps\/preview\/src\/pages\/store\/cart\//);
     const [block] = place(
@@ -204,10 +216,10 @@ describe("cited ids", () => {
       ],
     );
     const code =
-      'const CART_STORY_ID =\n  "store-cart-cart--empty";\nstoryHref("store-cart-cart--filled");\nclassName="bid--fade"';
+      'const CART_STORY_ID =\n  "store-cart-screens-cart--empty";\nstoryHref("store-cart-screens-cart--filled");\nclassName="bid--fade"';
     assert.deepEqual(
       citedIds("apps/preview/src/pages/nav.ts", code).map(({ id }) => id),
-      ["store-cart-cart--empty", "store-cart-cart--filled"],
+      ["store-cart-screens-cart--empty", "store-cart-screens-cart--filled"],
     );
   });
 
@@ -239,8 +251,9 @@ describe("checkStories", () => {
   before(() => {
     root = repository({
       ...MANUAL,
-      "apps/preview/src/pages/store/cart/cart-page.stories.tsx":
-        story("Store/Cart/Cart"),
+      "apps/preview/src/pages/store/cart/cart-page.stories.tsx": story(
+        "Store/Cart/Screens/Cart",
+      ),
       "apps/preview/src/pages/store/cart/cart-content.ts":
         'import { x } from "../home/home-content";\n',
       "packages/ui/src/blocks/store-cart/cart-item.stories.tsx": story(
@@ -248,7 +261,7 @@ describe("checkStories", () => {
         "CartItem",
       ),
       "docs/prds/products/grade10-site/store/cart.md":
-        '::story{id="store-cart-cart--default"}\n::story{id="store-cart-cart--gone"}\n',
+        '::story{id="store-cart-screens-cart--default"}\n::story{id="store-cart-screens-cart--gone"}\n',
       "openspec/changes/add-x/ui-design.md": "`store-cart-cart--later`\n",
       "apps/preview/.storybook-workbench/preview.tsx":
         'storySort: (a, b) => {\n  const roots = ["Start Here", "Store", "Post Bidding", "Auth", "Design System"];\n}',
@@ -259,9 +272,9 @@ describe("checkStories", () => {
   it("refuses a misplaced story, a sibling import and a missing id; warns on a change", async () => {
     const { errors, warnings } = await checkStories({ root });
     assert.deepEqual(errors, [
-      '"Store Cart/CartItem" - a title reads "<Domain>/<Feature>/<Screen>"',
+      '"Store Cart/CartItem" - a title reads "<Domain>/<Feature>/Screens/<Screen>"',
       "apps/preview/src/pages/store/cart/cart-content.ts - imports ../home/home-content from another feature; move what both use to the nearest folder above them",
-      'docs/prds/products/grade10-site/store/cart.md:2 - no story "store-cart-cart--gone"',
+      'docs/prds/products/grade10-site/store/cart.md:2 - no story "store-cart-screens-cart--gone"',
     ]);
     assert.deepEqual(warnings, [
       'openspec/changes/add-x/ui-design.md:1 - no story "store-cart-cart--later"',

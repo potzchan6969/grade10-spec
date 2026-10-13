@@ -17,7 +17,7 @@ import {
  * Auction/Display/Blocks/FeaturedAuctionsBanner → Carousel banner.
  */
 const meta = {
-  title: "Auction/Display/Auction List/Featured Archived",
+  title: "Auction/Display/Screens/Auction List/Featured Archived",
   beforeEach: pinCatalogueClock,
   parameters: { layout: "fullscreen" },
 } satisfies Meta;

@@ -14,7 +14,7 @@ import { PROOF_SUBMITTED_TOAST } from "./winner-order-proof-feedback";
 
 const meta = {
   ...winnerOrderMeta(),
-  title: "Auction/Post Bidding/Winner Order/Payment",
+  title: "Auction/Post Bidding/Screens/Winner Order/Payment",
   args: { status: "pending_payment" },
   parameters: {
     ...winnerOrderMeta().parameters,

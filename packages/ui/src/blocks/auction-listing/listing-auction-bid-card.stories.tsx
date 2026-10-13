@@ -161,7 +161,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The listing bid card. The consumer owns product state and every action. Enrollment states, countdown, bidding flows, and callback contracts live on [Bid Panel Docs](?path=/docs/auction-bidding-bid-panel--docs).",
+          "The listing bid card. The consumer owns product state and every action. Enrollment states, countdown, bidding flows, and callback contracts live on [Bid Panel Docs](?path=/docs/auction-bidding-screens-bid-panel--docs).",
       },
     },
   },

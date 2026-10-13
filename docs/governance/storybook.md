@@ -23,7 +23,7 @@ Published from `main` at
 
 | Kind | Title | File |
 | --- | --- | --- |
-| **Screen** | `<Domain>/<Feature>/<Screen>[/<Aspect>]` | `apps/preview/src/pages/<domain>/<feature>/` |
+| **Screen** | `<Domain>/<Feature>/Screens/<Screen>[/<Aspect>]` | `apps/preview/src/pages/<domain>/<feature>/` |
 | **Flow** | `<Domain>/<Feature>/Flows/<Name>` | beside the screens |
 | **Prototype** | `<Domain>/<Feature>/Prototypes/<Piece>` | `apps/preview/src/prototypes/<domain>/<feature>/` |
 | **Part** | `<Domain>/<Feature>/Parts/<Component>[/<Aspect>]` | beside the screens |
@@ -38,21 +38,22 @@ Published from `main` at
   feature with no manual page gets one first
 - **Screen** — the name at the top of the screen, or in the change's
   `ui-design.md` Screens; no `Page` suffix. A dialog open on a screen is an
-  aspect of it: `Vault/Portfolio/Asset Detail/Retrieval Dialog`
+  aspect of it: `Vault/Portfolio/Screens/Asset Detail/Retrieval Dialog`
 - **Component** — the meta's `component`, or the file's name in PascalCase.
   A part promoted to `@grade10/ui` swaps `Parts` for `Blocks` and nothing else
 - **Part or Block** — a Block is an `@grade10/ui` export an application can
   import; a Part is drawn for this feature only and lives in `apps/preview`
 - **Group** — the primitive's folder: Display, Forms, Layout, Overlays,
   Providers
-- **Reserved** — `Flows`, `Prototypes`, `Parts` and `Blocks` are never a
-  screen's name
+- **Folders** — a feature holds only `Screens`, `Flows`, `Prototypes`,
+  `Parts` and `Blocks`; nothing sits loose beside them
 - **Order** — Start Here, the domains in `docs/prds/manual.yaml` order, then
-  Design System; inside a feature, its screens, then Flows, Prototypes, Parts
-  and Blocks
+  Design System; inside a feature, Screens, Flows, Prototypes, Parts and
+  Blocks
 
-A story id is its title and export, sanitized: `Appointment/Booking/Book
-Visit` → `appointment-booking-book-visit--default`, which also starts the
+A story id is its title and export, sanitized:
+`Appointment/Booking/Screens/Book Visit` →
+`appointment-booking-screens-book-visit--default`, which starts with the
 manual's route, `/p/grade10-site/appointment/booking`. The application's own
 Storybook titles stories the same way, so an id alone does not say which
 Storybook holds it.

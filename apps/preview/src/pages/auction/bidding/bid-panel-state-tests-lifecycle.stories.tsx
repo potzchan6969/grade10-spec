@@ -6,7 +6,7 @@ import {
 } from "./bid-panel-state-response-story";
 
 const meta = {
-  title: "Auction/Bidding/Bid Panel/State Tests/Lifecycle",
+  title: "Auction/Bidding/Screens/Bid Panel/State Tests/Lifecycle",
   component: BidPanelStateResponsePreview,
   parameters: {
     layout: "padded",

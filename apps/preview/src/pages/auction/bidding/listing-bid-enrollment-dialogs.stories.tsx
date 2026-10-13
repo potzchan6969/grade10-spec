@@ -13,7 +13,7 @@ import {
 } from "./listing-bid-enrollment-snapshots";
 
 const meta = {
-  title: "Auction/Bidding/Bid Panel/Dialogs",
+  title: "Auction/Bidding/Screens/Bid Panel/Dialogs",
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

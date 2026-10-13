@@ -227,7 +227,7 @@ On the same card, locked by the first accepted bid.
   beside the public recent bids — [Bidding
   History](/p/grade10-site/auction/bidding#auction-panel)
 
-::story{id="auction-bidding-bid-panel--signed-out" title="Signed out"}
+::story{id="auction-bidding-screens-bid-panel--signed-out" title="Signed out"}
 
 ::story{id="auction-bidding-blocks-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
 
@@ -247,7 +247,7 @@ On the same card, locked by the first accepted bid.
 - **Enrolled** — an accepted first bid completes enrolment, bookmarks the lot
   on My Auctions and turns its email alerts on
 
-::story{id="auction-bidding-bid-panel-dialogs--setup-modal" title="Setup modal"}
+::story{id="auction-bidding-screens-bid-panel-dialogs--setup-modal" title="Setup modal"}
 
 ::changes{spec="grade10-site/auction/bid-payment-method"}
 

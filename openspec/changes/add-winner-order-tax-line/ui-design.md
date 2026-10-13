@@ -6,10 +6,10 @@ Layout SoT: Storybook under `Auction/Post Bidding/Winner Order/` — Tax already
 on the page assembly (between Insurance and Payment Processing Fee; tip on
 hover, not auto-open):
 
-- pre-invoice TBD: `auction-post-bidding-winner-order-setup--awaiting-setup`,
-  `auction-post-bidding-winner-order-setup--preparing-invoice`
-- post-invoice with Tax: `auction-post-bidding-winner-order-payment--pending-payment`,
-  `auction-post-bidding-winner-order-payment--pending-payment-bank-transfer`
+- pre-invoice TBD: `auction-post-bidding-screens-winner-order-setup--awaiting-setup`,
+  `auction-post-bidding-screens-winner-order-setup--preparing-invoice`
+- post-invoice with Tax: `auction-post-bidding-screens-winner-order-payment--pending-payment`,
+  `auction-post-bidding-screens-winner-order-payment--pending-payment-bank-transfer`
 
 No new Figma frame — Order Summary already lists fee rows with an Info
 tooltip trigger; Tax joins that pattern. The page omits Subtotal; invoice
@@ -19,10 +19,10 @@ and receipt keep it.
 
 Layout SoT: Storybook —
 
-- with Tax: `auction-post-bidding-winner-order-invoice-pdf--default`,
-  `auction-post-bidding-winner-order-invoice-pdf--with-tax`,
-  `auction-post-bidding-winner-order-receipt-pdf--default`,
-  `auction-post-bidding-winner-order-receipt-pdf--with-tax`
+- with Tax: `auction-post-bidding-screens-winner-order-invoice-pdf--default`,
+  `auction-post-bidding-screens-winner-order-invoice-pdf--with-tax`,
+  `auction-post-bidding-screens-winner-order-receipt-pdf--default`,
+  `auction-post-bidding-screens-winner-order-receipt-pdf--with-tax`
 
 Tax is the optional `taxLine` on both PDF data objects, placed before the
 boxed Subtotal summary when supplied. Absence is omitting the row, not a zero amount. No dedicated
