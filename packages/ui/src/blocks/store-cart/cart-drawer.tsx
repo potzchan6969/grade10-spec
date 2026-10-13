@@ -177,7 +177,7 @@ function CartItemContent({
     <HStack
       gap="md"
       vAlign="start"
-      className={cn("w-full py-2", className)}
+      className={cn("w-full flex-wrap py-2 sm:flex-nowrap", className)}
       data-slot="cart-item"
       data-status={item.status || "default"}
     >
@@ -269,8 +269,14 @@ function CartItemContent({
         ) : null}
       </VStack>
 
-      {/* Action: StepperInput or Sold-Out Remove */}
-      <div className={cn("shrink-0", !isSoldOut && "w-28")}>
+      {/* Action: StepperInput or Sold-Out Remove — wraps to a full-width row
+          under the item on narrow drawers. */}
+      <div
+        className={cn(
+          "flex w-full justify-end sm:w-auto sm:shrink-0",
+          !isSoldOut && "sm:w-28",
+        )}
+      >
         {isSoldOut ? (
           <IconButton
             size="sm"
@@ -596,8 +602,8 @@ type CartDrawerFooterProps = {
   promoNotice?: PromoNotice;
   /**
    * Points tender. Pass a state object to show Use points; omit or `null` to
-   * hide (e.g. while balance is loading). Checkout is members-only — there is
-   * no guest checkout path. Does not debit the loyalty ledger; the consumer
+   * hide (e.g. while balance is loading, or for a guest, who earns none).
+   * Does not debit the loyalty ledger; the consumer
    * applies a draft discount only, and the balance moves when the order is paid.
    */
   pointsState?: PointsState | null;
@@ -612,14 +618,21 @@ type CartDrawerFooterProps = {
   onRemovePoints?: () => void;
   /**
    * Starts checkout. May return a promise (e.g. create Shopify session).
-   * Checkout is members-only — the app authenticates before opening this
-   * drawer or before `onCheckout` runs. Attach the one applied promo code
+   * Attach the one applied promo code
    * (typed or held) and any points amount to the draft order, then redirect
    * to Shopify. The button stays on the redirecting label until navigation
    * succeeds. On rejection, the button restores and a toast shows
    * `checkoutFailed`. The shared component does not perform the redirect.
    */
   onCheckout?: () => Promise<void> | void;
+  /**
+   * Sign-in offer for a signed-out shopper. When provided — with
+   * `copy.signInAction` set — a quiet line under the checkout button offers
+   * sign-in, flanked by `copy.signInPrompt` and `copy.signInSuffix`; a guest
+   * checks out with `onCheckout` unchanged. Disabled under the same pending
+   * rules as checkout.
+   */
+  onSignIn?: () => void;
   className?: string;
 };
 
@@ -652,6 +665,7 @@ function CartDrawerFooter({
   onUseMaxPoints,
   onRemovePoints,
   onCheckout,
+  onSignIn,
   className,
 }: CartDrawerFooterProps) {
   const amountsLoading = loading || summaryLoading;
@@ -1099,6 +1113,27 @@ function CartDrawerFooter({
       >
         {isRedirecting ? copy.checkoutRedirecting : copy.checkoutButton}
       </Button>
+
+      {onSignIn && copy.signInAction ? (
+        <div className="flex w-full flex-wrap items-baseline justify-center gap-x-1 text-sm font-normal leading-5 text-secondary-foreground">
+          {copy.signInPrompt ? <span>{copy.signInPrompt}</span> : null}
+          <Link
+            render={<button type="button" />}
+            size="sm"
+            disabled={
+              loading ||
+              summaryLoading ||
+              tenderPending ||
+              checkoutDisabled ||
+              isRedirecting
+            }
+            onClick={onSignIn}
+          >
+            {copy.signInAction}
+          </Link>
+          {copy.signInSuffix ? <span>{copy.signInSuffix}</span> : null}
+        </div>
+      ) : null}
     </VStack>
   );
 }
@@ -1107,8 +1142,13 @@ type CartPromoSheetProps = {
   open: boolean;
   copy: CartDrawerFooterCopy;
   promoState: PromoState;
-  /** Live held codes only — omit expired/void; filtering is consumer-owned. */
+  /** Live held codes only — omit expired/void; filtering is consumer-owned.
+   * `null` hides the member section entirely — no heading, empty state or
+   * loyalty CTA — which is a guest's sheet. */
   heldPromoCodes?: readonly HeldPromoCode[] | null;
+  /** Codes open to everyone, under their own heading after the member
+   * sections; guests and members alike can pick or type one. */
+  publicPromoCodes?: readonly HeldPromoCode[];
   selectedHeldPromoId?: string | null;
   tenderPending?: boolean;
   onClose: () => void;
@@ -1129,6 +1169,7 @@ function CartPromoSheet({
   copy,
   promoState,
   heldPromoCodes = null,
+  publicPromoCodes = [],
   selectedHeldPromoId = null,
   tenderPending = false,
   onClose,
@@ -1317,6 +1358,43 @@ function CartPromoSheet({
             />
           )
         ) : null}
+
+        {publicPromoCodes.length > 0 && copy.publicPromoCodes ? (
+          <VStack gap="sm" className="w-full">
+            <span className="text-xs font-medium leading-4 text-secondary-foreground">
+              {copy.publicPromoCodes}
+            </span>
+            <VStack gap="sm" className="w-full">
+              {publicPromoCodes.map((code) =>
+                code.applicable ? (
+                  <PromoTicket
+                    key={code.id}
+                    code={code}
+                    selected={selectedHeldPromoId === code.id}
+                    action={
+                      onSelectHeldPromo ? (
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          disabled={tenderPending || isVerifying || !open}
+                          onClick={() => {
+                            if (!tenderPending) {
+                              onSelectHeldPromo?.(code.id);
+                            }
+                          }}
+                        >
+                          {copy.applyHeldPromo}
+                        </Button>
+                      ) : null
+                    }
+                  />
+                ) : (
+                  <PromoTicket key={code.id} code={code} muted />
+                ),
+              )}
+            </VStack>
+          </VStack>
+        ) : null}
       </VStack>
     </VStack>
   );
@@ -1340,8 +1418,12 @@ type CartDrawerProps = {
   onFetchStatusAndPrice?: () => Promise<void> | void;
   orderDiscounts?: readonly OrderDiscountRow[];
   promoState?: PromoState;
-  /** Live held codes only — omit expired/void; filtering is consumer-owned. */
+  /** Live held codes only — omit expired/void; filtering is consumer-owned.
+   * `null` hides the member section entirely — a guest's list. */
   heldPromoCodes?: readonly HeldPromoCode[] | null;
+  /** Codes open to everyone, under their own heading after the member
+   * sections; guests and members alike can pick or type one. */
+  publicPromoCodes?: readonly HeldPromoCode[];
   selectedHeldPromoId?: string | null;
   /**
    * When set, the footer shows it once as a toast (promo cleared after cart
@@ -1365,6 +1447,8 @@ type CartDrawerProps = {
   /** Opens Account → Loyalty from the empty held-promo state (new tab when wired). */
   onBrowseLoyalty?: () => void;
   onCheckout?: () => Promise<void> | void;
+  /** Sign-in offer for a signed-out shopper — see `CartDrawerFooterProps`. */
+  onSignIn?: () => void;
   className?: string;
 };
 
@@ -1409,6 +1493,7 @@ function CartDrawer({
   orderDiscounts,
   promoState,
   heldPromoCodes,
+  publicPromoCodes,
   selectedHeldPromoId,
   promoNotice,
   pointsState,
@@ -1426,6 +1511,7 @@ function CartDrawer({
   onItemClick,
   onBrowseLoyalty,
   onCheckout,
+  onSignIn,
   className,
 }: CartDrawerProps) {
   const [isFetching, setIsFetching] = useState(false);
@@ -1575,6 +1661,7 @@ function CartDrawer({
               onUseMaxPoints={onUseMaxPoints}
               onRemovePoints={onRemovePoints}
               onCheckout={onCheckout}
+              onSignIn={onSignIn}
             />
           ) : null}
         </VStack>
@@ -1585,6 +1672,7 @@ function CartDrawer({
           copy={copy.footer}
           promoState={promoState ?? { status: "collapsed" }}
           heldPromoCodes={heldPromoCodes}
+          publicPromoCodes={publicPromoCodes}
           selectedHeldPromoId={selectedHeldPromoId}
           tenderPending={tenderPending}
           onClose={() => onPromoStateChange?.({ status: "collapsed" })}
