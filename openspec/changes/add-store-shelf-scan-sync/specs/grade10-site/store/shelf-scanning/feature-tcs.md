@@ -1,6 +1,6 @@
 # grade10-site/store/shelf-scanning Test Cases
 
-**Status:** pending-review · 0/50
+**Status:** pending-review · 0/51
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
 ## Walk 1: Shopkeeper scans the staging shelf with the shop's link
@@ -447,8 +447,8 @@ Runs once per row of **Test data**.
 * Step 2 shows the scanner's not-recognised message.
 * Step 2 is the same as for the baseline object.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-u71 rev=1 covers=g10.store-shelf-scanning.SC-s7a -->
-### g10.store-shelf-scanning.US1-TC11: A new product's photos are recognisable within the hour
+<!-- trace:case id=g10.store-shelf-scanning.TC-u71 rev=2 covers=g10.store-shelf-scanning.SC-s7a -->
+### g10.store-shelf-scanning.US1-TC11: A new product's photos are recognisable at the next hourly run
 
 Runs once per row of **Test data**.
 
@@ -480,7 +480,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the `<environment>` shop's admin, publish `<card_new>` to the store with a photo; note the time.
-2. 3600s (1h) after the publish, plus 360s (6mins), reload `<g10 scan link>`.
+2. After the first hourly photo run that starts 360s (6mins) or more past the publish, reload `<g10 scan link>`.
 3. Point the camera at `<card_new>`.
 
 **Expected Results:**
@@ -1083,6 +1083,43 @@ Runs once per row of **Test data**.
 * Step 2's failure names both models, the photo run's and the scanner's.
 * Step 2's run sent the scanner no photo, learned none and rebuilt nothing.
 
+<!-- trace:case id=g10.store-shelf-scanning.TC-49c rev=1 -->
+### g10.store-shelf-scanning.US1-TC27: A consigned raw card is held as a raw card, never alerted
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-shelf-scanning.US1
+
+**Pre-conditions:**
+
+* `<card_consigned>` is a consigned raw card published to the staging store, its photos learned.
+* `<card_consigned>`'s inventory item holds it with no grader.
+* No staging product is held without a unit, and the Datadog monitor on `store.shelf_scan.unit_missing` is not raised.
+* admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
+
+**Steps:**
+
+1. Point the camera at `<card_consigned>` and hold it steady.
+2. Read the scan.
+3. Open the Datadog monitor on `store.shelf_scan.unit_missing`.
+4. Search the store's Datadog logs from its last pass for `<card_consigned>`'s product.
+
+**Expected Results:**
+
+* Step 2 names `<card_consigned>`'s product, with title, price and availability.
+* Step 2 shows no grade and no cert.
+* Step 3's monitor is not raised.
+* Step 4's log does not name `<card_consigned>`'s product as held without a unit.
+
 ---
 
 ## g10.store-shelf-scanning.US2: Shopkeeper opens a scanned product's store page
@@ -1240,7 +1277,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The store lists two slabs of one card, `<slab_1>` and `<slab_2>`, at different prices.
-* `<slab_1>` is `<kind>`, and its inventory item carries a PSA grade and cert.
+* `<slab_1>` is `<kind>`, and its inventory item holds it with the PSA grader, a grade and a cert.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
 
 **Test data:**
@@ -1405,6 +1442,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<slab_1>` is a consigned PSA slab published to the staging store, recognised by its label.
+* `<slab_1>`'s inventory item holds it with the PSA grader.
 * Nothing about `<slab_1>`'s product changes in the shop during the case.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
 
@@ -1693,6 +1731,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<slab_1>` is a consigned PSA slab published to the staging store, recognised by its label.
+* `<slab_1>`'s inventory item holds it with the PSA grader.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
 
 **Steps:**
